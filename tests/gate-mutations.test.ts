@@ -5982,20 +5982,24 @@ describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.
    * url ... Does the file exist?"), pa se svaka varijanta izvora ispisuje u privremenu datoteku i
    * pokrece odvojenim `node` procesom, isto kao gore za `gate-preflight.mjs`.
    */
-  async function ocijeni(source: string, path: string, root: string): Promise<boolean> {
+  async function ocijeni(source: string, path: string, root: string, platform: string): Promise<boolean> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
     const { tmpdir } = await import('node:os');
     const { pathToFileURL } = await import('node:url');
     const { spawnSync } = await import('node:child_process');
     // Minimalno skidanje TypeScript tipova: jedini oblici u ovoj datoteci su `: string` i
     // `: boolean` iza parametra ili liste parametara, sto native ESM ne razumije.
-    const plainJs = source.replace(/:\s*(?:string|boolean)\b/g, '');
+    const plainJs = source
+      .replace(/:\s*(?:string|boolean)\b/g, '')
+      .replace(/opts:\s*\{\s*platform\?\s*\}\s*=\s*\{\}/, 'opts = {}');
     const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-graf-'));
     try {
       const file = join(dir, 'entry-graph-boundary.mjs');
       write(file, plainJs);
+      // Platforma se predaje IZRICITO (nikad iz stvarnog `process.platform` procesa koji izvrsava
+      // ovaj test), jer CI Linux runner i lokalni Windows razvoj moraju mjeriti ISTU logiku.
       const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
-        + `process.stdout.write(JSON.stringify(m.zabranjenUGrafuUlaza(${JSON.stringify(path)}, ${JSON.stringify(root)})));`;
+        + `process.stdout.write(JSON.stringify(m.zabranjenUGrafuUlaza(${JSON.stringify(path)}, ${JSON.stringify(root)}, { platform: ${JSON.stringify(platform)} })));`;
       const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
       return JSON.parse(res.stdout) as boolean;
     } finally {
@@ -6010,9 +6014,10 @@ describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.
     const root = 'C:/wt/wf-gate-preflight-lock';
 
     // BASELINE: stvaran predikat mjeri relativno, pa ime checkouta ne utjece na dopusten modul, a
-    // stvaran zabranjen modul u istom checkoutu i dalje pada.
-    expect(await ocijeni(source, `${root}/${dopusteni}`, root)).toBe(false);
-    expect(await ocijeni(source, `${root}/${zabranjeni}`, root)).toBe(true);
+    // stvaran zabranjen modul u istom checkoutu i dalje pada. Platforma je izricito 'win32' da
+    // ishod ne ovisi o stvarnom OS-u na kojem se ovaj test izvrsava.
+    expect(await ocijeni(source, `${root}/${dopusteni}`, root, 'win32')).toBe(false);
+    expect(await ocijeni(source, `${root}/${zabranjeni}`, root, 'win32')).toBe(true);
 
     // MUTACIJA: povratak na stari kvar, regex gleda apsolutnu stazu bez svodenja na korijen, pa ime
     // checkouta koje sadrzi zabranjenu rijec (`preflight`) lazno oznaci i dopusten modul, dok bi
@@ -6022,8 +6027,8 @@ describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.
       'const relativno = posixPath;',
     );
     expect(mutated).not.toBe(source);
-    expect(await ocijeni(mutated, `${root}/${dopusteni}`, root)).toBe(true);
-    expect(await ocijeni(mutated, `${root}/${zabranjeni}`, root)).toBe(true);
+    expect(await ocijeni(mutated, `${root}/${dopusteni}`, root, 'win32')).toBe(true);
+    expect(await ocijeni(mutated, `${root}/${zabranjeni}`, root, 'win32')).toBe(true);
   }, 60_000);
 
   it('(d) preskocena normalizacija velicine slova diska na win32 obara tvrdnju', async () => {
@@ -6032,19 +6037,39 @@ describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.
     const root = 'C:/wt/wf-gate-preflight-lock';
     const stazaDrugimSlovomDiska = `c:/wt/wf-gate-preflight-lock/${dopusteni}`;
 
-    // BASELINE: slovo diska u drugoj velicini i dalje pogadja prefiks, pa dopusten modul ostaje
-    // dopusten.
-    expect(await ocijeni(source, stazaDrugimSlovomDiska, root)).toBe(false);
+    // BASELINE: platforma je izricito 'win32', pa slovo diska u drugoj velicini i dalje pogadja
+    // prefiks i dopusten modul ostaje dopusten. Test predaje platformu kao parametar (ne cita
+    // stvaran `process.platform` runnera) da CI Linux i lokalni Windows mjere istu logiku.
+    expect(await ocijeni(source, stazaDrugimSlovomDiska, root, 'win32')).toBe(false);
 
     // MUTACIJA: usporedba prefiksa vise ne normalizira na mala slova, pa se staza s drugim slovom
     // diska vise ne prepoznaje kao unutar korijena i pada natrag na strozi apsolutni uvjet, koji
-    // dopusteni modul lazno proglasava zabranjenim.
+    // dopusteni modul lazno proglasava zabranjenim. Mutant i dalje pada uz izricit 'win32', dakle
+    // neovisno o platformi runnera koji izvrsava sam vitest.
     const mutated = source.replace(
-      "const podudaraSeSPrefiksom = process.platform === 'win32'\n    ? posixPath.toLowerCase().startsWith(rootPrefix.toLowerCase())\n    : posixPath.startsWith(rootPrefix);",
+      "const podudaraSeSPrefiksom = platform === 'win32'\n    ? posixPath.toLowerCase().startsWith(rootPrefix.toLowerCase())\n    : posixPath.startsWith(rootPrefix);",
       'const podudaraSeSPrefiksom = posixPath.startsWith(rootPrefix);',
     );
     expect(mutated).not.toBe(source);
-    expect(await ocijeni(mutated, stazaDrugimSlovomDiska, root)).toBe(true);
+    expect(await ocijeni(mutated, stazaDrugimSlovomDiska, root, 'win32')).toBe(true);
+  }, 60_000);
+
+  it('(e) na linuxu se velicina slova diska NE normalizira, gard i dalje hvata zabranjen modul', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const zabranjeni = 'src/analysis/run.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    const stazaDrugimSlovomDiska = `c:/wt/wf-gate-preflight-lock/${dopusteni}`;
+
+    // BASELINE (linux): isto slovo diska i dalje pogadja prefiks, dopusten modul ostaje dopusten, a
+    // stvaran zabranjen modul u istom korijenu i dalje pada.
+    expect(await ocijeni(source, `${root}/${dopusteni}`, root, 'linux')).toBe(false);
+    expect(await ocijeni(source, `${root}/${zabranjeni}`, root, 'linux')).toBe(true);
+    // Na linuxu se velicina slova NE normalizira: drugo slovo diska vise ne pogadja prefiks, staza
+    // pada natrag na strozi apsolutni uvjet, isti onaj kojeg opisuje test (c) - a ime checkouta
+    // `wf-gate-preflight-lock` samo po sebi sadrzi zabranjenu rijec `preflight`, pa je ovdje lazno
+    // zabranjen. Ovo je poznato, nepromijenjeno ogranicenje apsolutne grane, ne novi kvar.
+    expect(await ocijeni(source, stazaDrugimSlovomDiska, root, 'linux')).toBe(true);
   }, 60_000);
 });
 

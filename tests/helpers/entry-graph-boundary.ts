@@ -12,11 +12,20 @@
  * stvaran checkout mogu vratiti isto slovo diska u razlicitoj velicini (`C:` naspram `c:`), pa bi
  * osjetljiva usporedba lazno tretirala stazu kao izvan korijena i vratila se na strozi apsolutni
  * uvjet. Sam ostatak staze (nakon prefiksa) zadrzava izvornu velicinu slova.
+ *
+ * Platforma se prima kao parametar (zadano `process.platform`) umjesto da se cita izravno u tijelu
+ * funkcije: gard i test moraju moci ispitati win32 i ne-win32 ponasanje neovisno o stvarnom OS-u na
+ * kojem se test izvrsava (CI Linux runner nasuprot lokalnom Windows razvoju).
  */
-export function zabranjenUGrafuUlaza(path: string, root: string): boolean {
+export function zabranjenUGrafuUlaza(
+  path: string,
+  root: string,
+  opts: { platform?: string } = {},
+): boolean {
+  const platform = opts.platform ?? process.platform;
   const posixPath = path.replace(/\\/g, '/');
   const rootPrefix = `${root.replace(/\\/g, '/')}/`;
-  const podudaraSeSPrefiksom = process.platform === 'win32'
+  const podudaraSeSPrefiksom = platform === 'win32'
     ? posixPath.toLowerCase().startsWith(rootPrefix.toLowerCase())
     : posixPath.startsWith(rootPrefix);
   const relativno = podudaraSeSPrefiksom ? posixPath.slice(rootPrefix.length - 1) : posixPath;

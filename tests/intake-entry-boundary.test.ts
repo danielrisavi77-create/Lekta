@@ -179,13 +179,25 @@ describe('cisti ulaz /', () => {
     expect(zabranjenUGrafuUlaza('D:/drugo/preview/x.ts', 'C:/wt/lekta')).toBe(true);
   });
 
-  it('slovo diska u drugoj velicini slova ne baca mjerenje natrag na apsolutnu stazu', () => {
+  it('slovo diska u drugoj velicini slova ne baca mjerenje natrag na apsolutnu stazu (win32)', () => {
+    // Platforma se predaje izricito jer je normalizacija slova diska win32 ponasanje: gard ne smije
+    // ovisiti o tome izvrsava li se test na Windows razvojnom stroju ili na Linux CI runneru.
     // `resolve()` u testu i stvaran checkout mogu vratiti isto slovo diska razlicite velicine.
     // Bez normalizacije na malo slovo prefiks se ne bi poklopio, staza bi ostala apsolutna, i
     // dopusteni modul (koji sadrzi ime checkouta `wf-gate-preflight-lock`) bio bi lazno zabranjen.
     const root = 'C:/wt/wf-gate-preflight-lock';
-    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/shared/ui-boot.ts', root)).toBe(false);
-    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root)).toBe(true);
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/shared/ui-boot.ts', root, { platform: 'win32' })).toBe(false);
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root, { platform: 'win32' })).toBe(true);
+  });
+
+  it('na linuxu (bez slova diska) velicina slova ostaje neizmijenjena i prefiks i dalje mora tocno pogoditi', () => {
+    // Linux nema slovo diska, pa normalizacija nije potrebna: isti niz znakova u korijenu i stazi
+    // i dalje mora tocno poklopiti prefiks, a dopusteni modul ostaje dopusten.
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    expect(zabranjenUGrafuUlaza(`${root}/src/shared/ui-boot.ts`, root, { platform: 'linux' })).toBe(false);
+    // Kad se slovo diska razlikuje, na linuxu se NE normalizira: staza vise ne pogadja prefiks i
+    // pada natrag na strozi apsolutni uvjet, koji stvaran zabranjen modul i dalje mora uhvatiti.
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root, { platform: 'linux' })).toBe(true);
   });
 
   it('intake gate ostaje dinamicki iza korisnicke akcije', () => {
