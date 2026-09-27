@@ -5,7 +5,7 @@
  * Ovdje prolaze samo unaprijed poznati skalarni podaci koji ne sadrze studentski tekst, ime
  * datoteke, autora, e-mail, IP ili drugi osobni identifikator.
  */
-export const ANALYTICS_DATA_KEYS = new Set([
+export const ANALYTICS_DATA_KEYS: ReadonlySet<string> = new Set([
   'package', 'profileId', 'workType', 'scoreBand', 'provider', 'source',
   'total', 'found', 'missing', 'flagged', 'checked',
   'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount', 'kind',
@@ -17,7 +17,7 @@ export function sanitizeAnalyticsEventData(input: unknown): Record<string, strin
   const out: Record<string, string | number | boolean> = {};
   if (!input || typeof input !== 'object' || Array.isArray(input)) return out;
   for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
-    if (!ANALYTICS_DATA_KEYS.has(key as never)) continue;
+    if (!ANALYTICS_DATA_KEYS.has(key)) continue;
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
     if (typeof value === 'string' && value.length > 200) continue;
     out[key] = value;
