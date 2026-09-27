@@ -13,13 +13,13 @@ function part(xml: string): InspectionXmlPart {
 }
 
 describe('inspectionCoverage T64', () => {
-  it('obican OOXML bez poznatih ogranicenja je complete', () => {
+  it('obican OOXML bez poznatih ogranicenja nema poznatih limita', () => {
     const out = buildInspectionCoverage([
       part('<w:document><w:body><w:p><w:r><w:t>Tekst</w:t></w:r></w:p><w:tbl><w:tr><w:tc/></w:tr></w:tbl></w:body></w:document>'),
     ], {});
     expect(out).toEqual({
       version: 1,
-      status: 'complete',
+      status: 'no-known-limits',
       items: [],
       analyzerSkips: [],
       summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
@@ -83,7 +83,7 @@ describe('inspectionCoverage T64', () => {
     ]);
   });
 
-  it('nedostupan inspection korak je unknown, nikad lazno complete', () => {
+  it('nedostupan inspection korak je unknown, nikad lazno no-known-limits', () => {
     expect(inspectionCoverageUnavailable()).toEqual({
       version: 1,
       status: 'unknown',
