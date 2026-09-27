@@ -10,7 +10,7 @@
  * Fail-open: neocekivana interna greska gatea PROPUSTA datoteku (uz console.warn),
  * jer engine iza ima vlastite sigurnosne capove (zip bomba, DTD, broj odlomaka).
  */
-import { ZipReader, MAX_SCAN_PARAGRAPHS } from './parser';
+import { ZipReader, MAX_SCAN_PARAGRAPHS, cfbKind, cfbMessage } from './parser';
 import { parseAppStats, type DocxQuickStats } from './quick-stats';
 import { docxCapability, type DocxCapability } from '../repair/docx-budget';
 
@@ -40,7 +40,7 @@ export const SUSPICIOUS_WORDS_MAX = 300;
  *  stilova naslova ali s puno teksta prolazi po rijecima. */
 export const POSTRUN_WORDS_MAX = 1000;
 
-export type IntakeRejectCode = 'too-small' | 'not-zip' | 'corrupt' | 'macros' | 'no-document' | 'empty';
+export type IntakeRejectCode = 'too-small' | 'not-zip' | 'encrypted' | 'legacy-doc' | 'corrupt' | 'macros' | 'no-document' | 'empty';
 
 export interface IntakeReject { kind: 'reject'; code: IntakeRejectCode; message: string }
 export interface IntakeOk {
@@ -76,6 +76,15 @@ export async function inspectDocxIntake(file: File): Promise<IntakeVerdict> {
     // 2) Magic bytes: svaki .docx pocinje lokalnim ZIP headerom PK\x03\x04.
     const head = new Uint8Array(await file.slice(0, 4).arrayBuffer());
     if (!(head.length === 4 && head[0] === 0x50 && head[1] === 0x4b && head[2] === 0x03 && head[3] === 0x04)) {
+      // 2a) CFB (OLE) nije ZIP, ali nije ni "preimenovana datoteka drugog tipa": to je .docx
+      // zasticen lozinkom ili stari .doc, i korisnik treba tocnu uputu (audit 22. 9., nalaz #16).
+      if (head[0] === 0xd0 && head[1] === 0xcf) {
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        const kind = cfbKind(bytes);
+        const message = cfbMessage(bytes);
+        if (kind === 'encrypted-docx' && message) return reject('encrypted', message);
+        if (kind === 'legacy-doc' && message) return reject('legacy-doc', message);
+      }
       return reject('not-zip', 'Datoteka nije pravi .docx dokument (nema Word ZIP potpis). Provjeri da nije preimenovana datoteka drugog tipa.');
     }
 

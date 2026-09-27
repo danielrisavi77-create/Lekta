@@ -38,6 +38,9 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
+import { runMetrics } from '../src/audits/metrics';
+import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -407,6 +410,33 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
+function upisnikRitehRootFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '3', executors: [{ componentIds: ['riteh'] }] }],
+    [{ id: 'p', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }],
+    [{ programCode: '3', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikFerFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'FER', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['fer'] }] }],
+    [{ id: 'p', unitId: 'fer', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://fer.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikKbfFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Teologija', izvoditelj: 'KBF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['kbf'] }] }],
+    [{ id: 'p', unitId: 'kbf', programs: ['Teologija'], workTypes: ['final'], sources: [{ url: 'https://kbf.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote: 'Teologija' } }],
+  );
+}
+
 function upisnikInventory(decisions = upisnikProfileDecisions.decisions, integratedGraduateCoverage: typeof upisnikProfileDecisions.integratedGraduateCoverage = upisnikProfileDecisions.integratedGraduateCoverage) {
   return buildUpisnikProfileCandidates(
     upisnikRows.rows,
@@ -550,6 +580,94 @@ function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string
 
 const MUTATIONS: Mutation[] = [
   {
+    id: 'upisnik/b13-korijen-rijeci',
+    imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
+    cleanBefore: () => upisnikGuardFixture('203', 'Studij fizike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      const attacks = [
+        () => upisnikGuardFixture('203', 'Fizikalna terapija'),
+        () => buildUpisnikProfileCandidates(
+          [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+          [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+          [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: 'https://pmf.unizg.hr' }] }],
+          [{ programCode: '1', profileId: 'p', evidence: { sourceUrl: 'https://pmf.unizg.hr', sourceLocator: 'studij', quote: 'Mikrobiologija' } }],
+        ),
+      ];
+      return attacks.every((attack) => { try { attack(); return false; } catch (error) { return /program name/u.test(String(error)); } });
+    },
+  },
+  {
+    id: 'upisnik/b13-razina-svih-studija',
+    imitates: 'Stara iznimka svi studiji prihvaca doktorski citat za prijediplomski program',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi doktorski studiji imaju disertaciju'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-vrsta-uz-studij',
+    imitates: 'Staro ponistavanje obiju osnova propusta strucni studij uz sveucilisnu knjiznicu',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prijediplomski studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prijediplomski studij. Sveucilisna knjiznica.'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-svi-studiji-bez-razine',
+    imitates: 'Iznimka bez razine prihvaca opcenit citat Svi studiji',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi studiji imaju zavrsni rad'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-vrsta-bez-studija',
+    imitates: 'Vrsta studija izvan izraza studij nije procitana',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prvostupnik inzenjer elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-domena-v3',
+    imitates: 'unitId kao kljuc bilo gdje propusta KBF na splitskom sveucilistu',
+    cleanBefore: () => upisnikKbfFixture('https://kbf.unizg.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikKbfFixture('https://kbf.unist.hr/studij'); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-normalizirani-hold',
+    imitates: 'Stara doslovna jednakost i bez minimalne duljine propustaju razmak i kratak dokaz',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      const hold = report.programs[0]!.remainingHold!;
+      hold.missingEvidence = ['Sluzbeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajucim profilom. '];
+      const generic = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('generic evidence request'));
+      hold.missingEvidence = ['Potreban je sluzbeni dokaz.'];
+      const short = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('too short'));
+      return generic && short;
+    },
+  },
+
+  {
     id: 'upisnik/prazan-worktypes-prihvaca-sve',
     imitates: 'Prazan workTypes ponovno nudi profil za svaku razinu',
     cleanBefore: () => {
@@ -578,19 +696,19 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'upisnik/109-domena-druge-ustanove',
-    imitates: 'Veza FHS 109 koristi službeni izvor Hrvatskog katoličkog sveučilišta',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    imitates: 'Goli korijen uniri.hr u profilu propusta dokaz s medri.uniri.hr za RITEH',
+    cleanBefore: () => upisnikRitehRootFixture('https://riteh.uniri.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://www.unicath.hr/povijest' }); return false; }
+      try { upisnikRitehRootFixture('https://medri.uniri.hr/studij'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
   {
-    id: 'upisnik/susjedna-sastavnica-iste-domene',
-    imitates: 'FHS veza koristi izvor FFZG-a na istoj sveučilišnoj domeni',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    id: 'upisnik/unitid-izvan-sveucilista',
+    imitates: 'unitId kao kljuc izvan sveucilisnih korijena propusta fer.com',
+    cleanBefore: () => upisnikFerFixture('https://fer.unizg.hr/x').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://ffzg.unizg.hr/povijest' }); return false; }
+      try { upisnikFerFixture('https://fer.com/x'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
@@ -5374,6 +5492,37 @@ const MUTATIONS: Mutation[] = [
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
+  // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
+  // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
+  // (harness je sinkron, a inspectDocxIntake i analyzeDocx su async). Pune putove pokrivaju
+  // tests/docx-malformed-xml, docx-intake-cfb i docx-hidden-text-scoring; mutacije izvornog koda
+  // izvedene su rucno i zapisane na PR-u #168.
+  {
+    id: 'docx/xml-greska-tiho-boduje',
+    imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',
+    caught: () => { try { parseXml('<t>R&D</t>', 'Glavni Word dokument'); return false; } catch (e) { return String((e as Error).message) === 'Glavni Word dokument nije moguće pročitati.'; } },
+    // Cisti baseline ukljucuje valjan XML na koji xmldom salje warning (U+FFFD, Codex #14a).
+    cleanBefore: () => { try { return parseXml('<t>R&amp;D \uFFFD</t>').documentElement?.textContent === 'R&D \uFFFD'; } catch { return false; } },
+  },
+  {
+    id: 'docx/zasticen-docx-kao-not-zip',
+    imitates: 'docx zasticen lozinkom (CFB s EncryptionInfo i EncryptedPackage) dobiva poruku o neispravnoj ZIP arhivi umjesto upute za uklanjanje lozinke (nalaz #16)',
+    caught: () => {
+      const encrypted = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/intake/encrypted-synthetic.docx')));
+      try { new ZipReader(encrypted.buffer.slice(0) as ArrayBuffer); return false; } catch (e) { return /zaštićena lozinkom/.test(String((e as Error).message)); }
+    },
+    cleanBefore: () => { try { new ZipReader(buildDocx({ paragraphs: [{ text: 'Obican dokument.' }] }).buffer as ArrayBuffer); return true; } catch { return false; } },
+  },
+  {
+    id: 'docx/skriveni-run-bira-font',
+    imitates: 'skriveni tekst odlucuje o fontu, ili se vanish iz stila odlomka i znakovnog stila spaja kao zadnja razina umjesto toggle preokreta, pa je vidljiv tekst proglasen skrivenim (nalaz #17, Codex #17a)',
+    caught: () => effectiveHidden({ paragraphStyle: { hidden: true } }) === true
+      && effectiveHidden({ paragraphStyle: { hidden: true }, runStyle: { hidden: true } }) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
+    cleanBefore: () => effectiveHidden({}) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
+  },
+
 ];
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
