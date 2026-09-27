@@ -4157,6 +4157,66 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
   });
 });
 
+describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
+  type Provjera = (body: string, nove: string[]) => string[];
+  type Nove = (base: unknown, head: unknown) => string[];
+  type Neto = (shortstat: string) => string;
+
+  /** Tvrdnja garda: opis bez redaka ili s "nema" uz stvarno novu ovisnost ne prolazi. */
+  const provjeraGrize = (p: Provjera): boolean =>
+    p('Neto redaka: +1/-1\nNove ovisnosti: nema', []).length === 0
+    && p('Neto redaka: +1/-1\nNove ovisnosti: nema', ['zod']).length > 0
+    && p('Nove ovisnosti: nema', []).length > 0
+    && p('<!-- Neto redaka: +1/-1\nNove ovisnosti: nema -->', []).length > 0;
+  /** Tvrdnja: nova devDependency je nova ovisnost jednako kao dependency. */
+  const noveGrize = (n: Nove): boolean =>
+    n({ dependencies: {} }, { dependencies: {} }).length === 0
+    && n({ dependencies: {} }, { devDependencies: { 'left-pad': '1' } }).join() === 'left-pad';
+  /** Tvrdnja: ulaz koji nije shortstat rusi mjerenje, ne daje +0/-0. */
+  const netoGrize = (f: Neto): boolean => {
+    if (f(' 1 file changed, 2 insertions(+)') !== '+2/-0') return false;
+    try {
+      f('fatal: bad revision');
+      return false;
+    } catch {
+      return true;
+    }
+  };
+
+  it('baseline: stvarne funkcije zadovoljavaju tvrdnje', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    expect(provjeraGrize(m.provjeriOpisPr)).toBe(true);
+    expect(noveGrize(m.noveOvisnosti)).toBe(true);
+    expect(netoGrize(m.netoRedaka)).toBe(true);
+  });
+
+  it('(a) provjera koja gleda samo prisutnost retka, ne i "nema" uz novu ovisnost, obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    expect(provjeraGrize((body) => m.provjeriOpisPr(body, []))).toBe(false);
+  });
+
+  it('(b) usporedba samo sekcije dependencies (devDependencies propustene) obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const samoDeps: Nove = (base, head) => m.noveOvisnosti(
+      { dependencies: (base as { dependencies?: object }).dependencies },
+      { dependencies: (head as { dependencies?: object }).dependencies },
+    );
+    expect(noveGrize(samoDeps)).toBe(false);
+  });
+
+  it('(c) neto koji na neprepoznat ulaz tiho vrati +0/-0 obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const tiho: Neto = (s) => {
+      try {
+        return m.netoRedaka(s);
+      } catch {
+        return '+0/-0';
+      }
+    };
+    expect(netoGrize(tiho)).toBe(false);
+  });
+});
+
 describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {
   it('job koji zove "npm ci" izravno, bez composite akcije, obara gard', () => {
     // BASELINE: stvaran repo nema nijedan job koji zove "npm ci" mimo `setup-deps` (dokazano
