@@ -116,6 +116,7 @@
     "approve-unit-match": "vite-node scripts/approve-unit-match.mts",
     "repair-gap": "vite-node scripts/repair-gap-report.mts",
     "closed-loop": "vite-node scripts/run-closed-loop.mts",
+    "detector-loop": "vite-node scripts/run-detector-loop.mts",
     "seed-declarations": "vite-node scripts/seed-declarations.mts",
     "lint": "oxlint",
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",

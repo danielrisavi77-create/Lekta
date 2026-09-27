@@ -21,6 +21,7 @@ export interface AiEvidenceContextInput {
   snapshotsBySourceId: Readonly<Record<string, AiEvidenceSnapshot>>;
   manifestFilesByProfileId: Readonly<Record<string, AiEvidenceManifestFile | undefined>>;
   currentRepairSourceHash?: string;
+  currentAnalysisSourceHash?: string;
   ruleValueHashesByRule?: Readonly<Record<string, string>>;
 }
 
@@ -30,6 +31,7 @@ export interface ResolvedAiEvidenceContext {
     snapshotTextsBySourceId: Readonly<Record<string, string>>;
     snapshotHashesBySourceId: Readonly<Record<string, string>>;
     currentRepairSourceHash?: string;
+    currentAnalysisSourceHash?: string;
     ruleValueHashesByRule: Readonly<Record<string, string>>;
     manifestsById: Readonly<Record<string, AiEvidenceExecutionManifest>>;
   };
@@ -47,10 +49,14 @@ function isManifest(value: unknown): value is AiEvidenceExecutionManifest {
     manifest.command,
     manifest.inputHash,
     manifest.outputHash,
-    manifest.repairSourceHash,
     manifest.ruleValueHash,
     manifest.ranAt,
   ].every((field) => typeof field === 'string')
+    && (manifest.kind == null || manifest.kind === 'repair' || manifest.kind === 'detector')
+    && (manifest.kind === 'detector'
+      ? [manifest.analysisSourceHash, manifest.ruleCheckId, manifest.checkId,
+        manifest.violatingOutputHash, manifest.correctInputHash].every((field) => typeof field === 'string')
+      : typeof manifest.repairSourceHash === 'string')
     && ['pass', 'fail', 'skipped'].includes(String(manifest.outcome));
 }
 
@@ -107,6 +113,7 @@ export function resolveAiEvidenceContext(
         snapshotBytes: snapshot?.bytes ?? new Uint8Array(),
         snapshotSha256: snapshot?.sha256,
         currentRepairSourceHash: input.currentRepairSourceHash,
+        currentAnalysisSourceHash: input.currentAnalysisSourceHash,
         ruleValueSha256: input.ruleValueHashesByRule?.[ruleEvidenceKey(profile.id, entry.ruleId)],
         snapshotText: snapshot?.text ?? '',
         evidence: entry.aiEvidence ?? undefined,
@@ -117,7 +124,8 @@ export function resolveAiEvidenceContext(
 
   return {
     gateContext: { snapshotBytesBySourceId, snapshotTextsBySourceId, snapshotHashesBySourceId,
-      currentRepairSourceHash: input.currentRepairSourceHash, ruleValueHashesByRule: input.ruleValueHashesByRule ?? {}, manifestsById },
+      currentRepairSourceHash: input.currentRepairSourceHash, currentAnalysisSourceHash: input.currentAnalysisSourceHash,
+      ruleValueHashesByRule: input.ruleValueHashesByRule ?? {}, manifestsById },
     resultsByRule,
   };
 }

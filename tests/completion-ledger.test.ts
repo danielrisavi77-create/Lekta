@@ -135,6 +135,23 @@ describe('completion ledger: drift', () => {
     });
   });
 
+  it('jedno legacy bulk pravilo zadržava profil ispod B uz ostala AI potvrđena pravila', () => {
+    const original = profiles.find((profile) => profile.id === 'efos-doktorski')!;
+    const mixed: ThesisProfile = { ...original, ruleEntries: original.ruleEntries?.map((entry, index) => index === 0
+      ? { ...entry, confirmedVia: 'ai-1pass-batch', verifiedBy: 'legacy-batch', aiEvidence: undefined }
+      : entry) };
+    const worklist = computeWorklist([mixed], SOURCE_REGISTRY as SourceEntry[], [], {
+      aiEvidenceResults: aiEvidenceContext.resultsByRule,
+    });
+    expect(worklist.rows[0].pendingEvidence).toBe(1);
+    const controlled = buildCompletionLedger({ ...inputs, corpusAttestation,
+      worklistRows: inputs.worklistRows.map((row) => row.profileId === mixed.id ? worklist.rows[0] : row),
+    });
+    expect(controlled.rows.find((row) => row.profileId === mixed.id)).toMatchObject({
+      claim: 'C', rules: 'bulk-pending',
+    });
+  });
+
   it('kontrolirani EFOS paket sheme 1 s netočnim GPT-5 metapodacima ne daje B prije ponovnog audita', () => {
     const original = profiles.find((profile) => profile.id === 'efos-doktorski')!;
     expect(original.ruleEntries).toHaveLength(5);

@@ -218,13 +218,13 @@ describe('approveFromAi: dokazni audit bez ljudskog odobrenja', () => {
     expect(res.ledger?.[0]).toMatchObject({ action: 'ai-confirmed', actor: 'ai-evidence-audit' });
   });
 
-  it('valjan AI audit može zamijeniti pojedinačnu ljudsku potvrdu bez ljudskog potpisa', () => {
+  it.each(['human', 'human-audit'] as const)('valjan AI audit može zamijeniti %s potvrdu bez ljudskog potpisa', (confirmedVia) => {
     const fixture = createAiEvidenceAuditFixture();
     const individuallyVerified: RuleEntry = {
       ...fixture.rule,
       status: 'verified',
       verifiedBy: 'reviewer',
-      confirmedVia: 'human',
+      confirmedVia,
     };
     const res = approveFromAi(
       fixture.profileId,

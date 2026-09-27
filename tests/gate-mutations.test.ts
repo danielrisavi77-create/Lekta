@@ -32,7 +32,7 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readdirSync, readFileSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
@@ -96,11 +96,16 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { applyAiEvidenceProfile } from '../src/verification/apply-ai-evidence-profile';
+import { approveFromAi } from '../src/verification/verification-actions';
+import { planAiLedgerReconciliation, unreconciledAiConfirmations } from '../src/verification/reconcile-ai-ledger';
+import { createDetectorExecutionManifest } from '../scripts/closed-loop-execution-manifest';
 import { validateProfiles } from '../src/profiles/profile-validator';
 import { anchorRuleQuotes, validateQuoteAnchorPlan } from '../src/verification/anchor-rule-quotes';
 import { publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
 import { textSnapshotMatchesSource } from '../scripts/ai-evidence-context-loader';
 import { hashRepairSourceTree } from '../scripts/lib/repair-source-hash.mjs';
+import { hashAnalysisSourceTree } from '../scripts/lib/analysis-source-hash.mjs';
 import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 import {
@@ -3579,6 +3584,138 @@ describe('AI evidence audit: baseline i poznate mutacije', () => {
       const result = auditAiEvidence(input);
       expect(result.valid).toBe(false);
       if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain(code);
+    }
+  });
+});
+
+describe('partial AI primjena i detektor: baseline i mutacije', () => {
+  it('novi dokaz prolazi uz legacy pravilo bez dokaza, ali nevaljan kandidat zaustavlja cijeli profil', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const context = {
+      now: '2026-09-27', sourcesById: { [fixture.source.id]: fixture.source },
+      snapshotBytesBySourceId: { [fixture.source.id]: fixture.snapshotBytes },
+      snapshotTextsBySourceId: { [fixture.source.id]: fixture.snapshotText },
+      snapshotHashesBySourceId: { [fixture.source.id]: fixture.snapshotSha256 },
+      currentRepairSourceHash: fixture.currentRepairSourceHash,
+      ruleValueHashesByRule: { [JSON.stringify([fixture.profileId, fixture.rule.ruleId])]: fixture.ruleValueSha256 },
+      manifestsById: { [fixture.manifest.manifestId]: fixture.manifest },
+    };
+    const candidate = { ...fixture.rule, aiEvidence: fixture.evidence };
+    const legacy = { ...candidate, ruleId: 'legacy', scored: true, aiEvidence: undefined };
+    const baseline = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [candidate, legacy] } as ThesisProfile, context);
+    expect(baseline.ok).toBe(true);
+    if (baseline.ok) expect(baseline.ledger).toHaveLength(1);
+    const invalid = { ...candidate, ruleId: 'invalid', scored: false };
+    expect(applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [candidate, invalid] } as ThesisProfile, context).ok).toBe(false);
+  });
+
+  it('human-audit se može ponovno auditirati, retired i advisory ne', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const input = { now: '2026-09-27', snapshotBytes: fixture.snapshotBytes,
+      snapshotSha256: fixture.snapshotSha256, snapshotText: fixture.snapshotText,
+      currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+      manifest: fixture.manifest };
+    expect(approveFromAi(fixture.profileId, { ...fixture.rule, status: 'verified', confirmedVia: 'human-audit' },
+      fixture.source, input, fixture.evidence).ok).toBe(true);
+    for (const status of ['retired', 'advisory'] as const) {
+      const mutated = approveFromAi(fixture.profileId, { ...fixture.rule, status }, fixture.source, input, fixture.evidence);
+      expect(mutated.ok).toBe(false);
+      expect(mutated.errors?.join(' ')).toContain('rule-not-pending');
+    }
+  });
+
+  it('korekcija neutralizira točno izvorni događaj, kriva referenca ostaje siroče', () => {
+    const old = { id: 'old', profileId: 'p', ruleId: 'r', action: 'ai-confirmed' as const,
+      actor: 'ai', timestamp: '2026-09-20', sourceId: null, sourcePage: null, quote: null };
+    const correction = planAiLedgerReconciliation('p', [], [old], '2026-09-27');
+    expect(correction).toHaveLength(1);
+    expect(unreconciledAiConfirmations('p', [], [old, ...correction])).toEqual([]);
+    expect(unreconciledAiConfirmations('p', [], [old, { ...correction[0], revokesLedgerId: 'other' }])).toEqual([old]);
+    expect(unreconciledAiConfirmations('p', [], [old, { ...correction[0], profileId: 'other-profile' }])).toEqual([old]);
+  });
+
+  it('detektor hvata propušteno kršenje i zastarjeli analizni kod', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const base = {
+      profileId: fixture.profileId, ruleId: fixture.rule.ruleId, ruleCheckId: 'font',
+      checkId: 'format.font.dominant', ruleValue: fixture.rule.value,
+      analysisSourceHash: 'a'.repeat(64), testId: 'detector:test', command: 'detector:test',
+      ranAt: fixture.evidence.execution.ranAt,
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'format.font.dominant', earned: 0, max: 5 },
+      correctCheck: { id: 'format.font.dominant', earned: 5, max: 5 },
+    };
+    const manifest = createDetectorExecutionManifest(base);
+    expect(manifest.outcome).toBe('pass');
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: { ...base.violatingCheck, earned: 5 } }).outcome).toBe('fail');
+    const evidence = { ...fixture.evidence, execution: { manifestId: manifest.manifestId,
+      testId: manifest.testId, command: manifest.command, inputHash: manifest.inputHash,
+      outputHash: manifest.outputHash, ranAt: manifest.ranAt } };
+    expect(auditAiEvidence({ ...fixture, evidence, manifest, currentAnalysisSourceHash: base.analysisSourceHash })).toEqual({ valid: true, reasons: [] });
+    const wrongKind = auditAiEvidence({ ...fixture, evidence, manifest,
+      rule: { ...fixture.rule, autoFixable: true, fixerId: 'font-fixer' },
+      currentAnalysisSourceHash: base.analysisSourceHash });
+    expect(wrongKind.valid).toBe(false);
+    if (!wrongKind.valid) expect(wrongKind.reasons.map((reason) => reason.code)).toContain('manifest-kind-mismatch');
+    const wrongCheck = auditAiEvidence({ ...fixture, evidence,
+      manifest: { ...manifest, checkId: 'toc.present' }, currentAnalysisSourceHash: base.analysisSourceHash });
+    expect(wrongCheck.valid).toBe(false);
+    if (!wrongCheck.valid) expect(wrongCheck.reasons.map((reason) => reason.code)).toContain('manifest-check-mismatch');
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: undefined }))
+      .toMatchObject({ outcome: 'fail', failureReason: 'nema detektora' });
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: { ...base.violatingCheck, max: 0 } }))
+      .toMatchObject({ outcome: 'fail', failureReason: 'nema detektora' });
+    const stale = auditAiEvidence({ ...fixture, evidence, manifest, currentAnalysisSourceHash: 'b'.repeat(64) });
+    expect(stale.valid).toBe(false);
+    if (!stale.valid) expect(stale.reasons.map((reason) => reason.code)).toContain('manifest-stale-analysis');
+  });
+
+  it('analizni hash hvata promjenu DOCX parsera, ali ignorira CRLF', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-analysis-hash-'));
+    const folders = ['analysis', 'scoring', 'profiles', 'docx', 'citations', 'utils', 'report'];
+    try {
+      for (const folder of folders) {
+        const directory = join(root, 'src', folder);
+        mkdirSync(directory, { recursive: true });
+        writeFileSync(join(directory, 'module.ts'), 'export const value = 1;\n');
+      }
+      const parser = join(root, 'src', 'docx', 'module.ts');
+      const baseline = hashAnalysisSourceTree(root);
+      const fixture = createAiEvidenceAuditFixture();
+      const detector = createDetectorExecutionManifest({
+        profileId: fixture.profileId, ruleId: fixture.rule.ruleId, ruleCheckId: 'font',
+        checkId: 'format.font.dominant', ruleValue: fixture.rule.value,
+        analysisSourceHash: baseline, testId: 'detector:hash-test', command: 'detector:hash-test',
+        ranAt: fixture.evidence.execution.ranAt,
+        violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+        correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+        violatingCheck: { id: 'format.font.dominant', earned: 0, max: 5 },
+        correctCheck: { id: 'format.font.dominant', earned: 5, max: 5 },
+      });
+      const evidence = { ...fixture.evidence, execution: { ...fixture.evidence.execution,
+        manifestId: detector.manifestId, testId: detector.testId, command: detector.command,
+        inputHash: detector.inputHash, outputHash: detector.outputHash } };
+      expect(auditAiEvidence({ ...fixture, evidence, manifest: detector,
+        currentAnalysisSourceHash: baseline })).toEqual({ valid: true, reasons: [] });
+      writeFileSync(parser, 'export const value = 1;\r\n');
+      expect(hashAnalysisSourceTree(root)).toBe(baseline);
+      writeFileSync(parser, 'export const value = 2;\n');
+      const changed = hashAnalysisSourceTree(root);
+      expect(changed).not.toBe(baseline);
+      const stale = auditAiEvidence({ ...fixture, evidence, manifest: detector, currentAnalysisSourceHash: changed });
+      expect(stale.valid).toBe(false);
+      if (!stale.valid) expect(stale.reasons.map((reason) => reason.code)).toContain('manifest-stale-analysis');
+      const auditDir = join(root, 'src', 'audits');
+      mkdirSync(auditDir, { recursive: true });
+      const imported = join(auditDir, 'check.tsx');
+      writeFileSync(join(root, 'src', 'analysis', 'module.ts'), "import { check } from '../audits/check.js';\nexport const value = check;\n");
+      writeFileSync(imported, 'export const check = 1;\n');
+      const importedBaseline = hashAnalysisSourceTree(root);
+      writeFileSync(imported, 'export const check = 2;\n');
+      expect(hashAnalysisSourceTree(root)).not.toBe(importedBaseline);
+    } finally {
+      if (root.startsWith(join(tmpdir(), 'lekta-analysis-hash-'))) rmSync(root, { recursive: true, force: true });
     }
   });
 });

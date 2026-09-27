@@ -9459,12 +9459,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font",
                 "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:47.478Z"
+                "ranAt": "2026-09-27T16:30:31.509Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9516,12 +9516,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size",
                 "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:47.478Z"
+                "ranAt": "2026-09-27T16:30:31.509Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9569,12 +9569,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing",
                 "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:47.478Z"
+                "ranAt": "2026-09-27T16:30:31.509Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -9632,12 +9632,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins",
                 "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:47.478Z"
+                "ranAt": "2026-09-27T16:30:31.509Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -9685,12 +9685,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size",
                 "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:47.478Z"
+                "ranAt": "2026-09-27T16:30:31.509Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"
@@ -9842,12 +9842,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-doktorski:efos-doktorski--font",
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:21:59.065Z"
+                "ranAt": "2026-09-27T16:30:01.847Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9905,12 +9905,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-doktorski:efos-doktorski--font-size",
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:21:59.065Z"
+                "ranAt": "2026-09-27T16:30:01.847Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9968,12 +9968,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing",
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:21:59.065Z"
+                "ranAt": "2026-09-27T16:30:01.847Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -10041,12 +10041,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-doktorski:efos-doktorski--margins",
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:21:59.065Z"
+                "ranAt": "2026-09-27T16:30:01.847Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -10104,12 +10104,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-doktorski:efos-doktorski--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-doktorski:efos-doktorski--paper-size",
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:21:59.065Z"
+                "ranAt": "2026-09-27T16:30:01.847Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"
@@ -10239,12 +10239,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font",
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:22:25.255Z"
+                "ranAt": "2026-09-27T16:31:04.680Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -10302,12 +10302,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font-size",
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:22:25.255Z"
+                "ranAt": "2026-09-27T16:31:04.680Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -10365,12 +10365,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing",
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:22:25.255Z"
+                "ranAt": "2026-09-27T16:31:04.680Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -10438,12 +10438,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-specijalisticki:efos-specijalisticki--margins",
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:22:25.255Z"
+                "ranAt": "2026-09-27T16:31:04.680Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -10501,12 +10501,12 @@
                 "version": "codex-cli version unavailable"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+                "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
                 "testId": "closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size",
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-27T04:22:25.255Z"
+                "ranAt": "2026-09-27T16:31:04.680Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"
@@ -11729,12 +11729,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87:pass",
                 "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font",
                 "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
                 "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
                 "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
-                "ranAt": "2026-09-26T20:54:43.803Z"
+                "ranAt": "2026-09-27T16:31:41.557Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -11786,12 +11786,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font-size:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font-size:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87:pass",
                 "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font-size",
                 "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
                 "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
                 "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
-                "ranAt": "2026-09-26T20:54:43.803Z"
+                "ranAt": "2026-09-27T16:31:41.557Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -11839,12 +11839,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--justify:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--justify:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87:pass",
                 "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--justify",
                 "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
                 "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
                 "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
-                "ranAt": "2026-09-26T20:54:43.803Z"
+                "ranAt": "2026-09-27T16:31:41.557Z"
               },
               "scored": true,
               "fixerId": "alignment-fixer"
@@ -11892,12 +11892,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--line-spacing:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--line-spacing:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87:pass",
                 "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--line-spacing",
                 "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
                 "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
                 "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
-                "ranAt": "2026-09-26T20:54:43.803Z"
+                "ranAt": "2026-09-27T16:31:41.557Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -11955,12 +11955,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--margins:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+                "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--margins:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87:pass",
                 "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--margins",
                 "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
                 "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
                 "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
-                "ranAt": "2026-09-26T20:54:43.803Z"
+                "ranAt": "2026-09-27T16:31:41.557Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -100343,12 +100343,12 @@
                 "version": "codex-cli unknown"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+                "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0:pass",
                 "testId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size",
                 "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
                 "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
                 "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-                "ranAt": "2026-09-27T04:22:52.103Z"
+                "ranAt": "2026-09-27T16:35:58.052Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -100406,12 +100406,12 @@
                 "version": "codex-cli unknown"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+                "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0:pass",
                 "testId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing",
                 "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
                 "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
                 "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-                "ranAt": "2026-09-27T04:22:52.103Z"
+                "ranAt": "2026-09-27T16:35:58.052Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -100552,12 +100552,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+                "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1:pass",
                 "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size",
                 "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
                 "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
                 "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
-                "ranAt": "2026-09-26T20:56:20.926Z"
+                "ranAt": "2026-09-27T16:35:20.000Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -100605,12 +100605,12 @@
                 "version": "runtime-version-not-exposed"
               },
               "auditExecution": {
-                "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+                "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1:pass",
                 "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size",
                 "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
                 "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
                 "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
-                "ranAt": "2026-09-26T20:56:20.926Z"
+                "ranAt": "2026-09-27T16:35:20.000Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"

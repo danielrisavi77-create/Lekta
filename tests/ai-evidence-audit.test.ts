@@ -6,6 +6,7 @@ import {
   type AiEvidenceAudit,
   type AiEvidenceExecutionManifest,
 } from '../src/verification/ai-evidence-audit';
+import { createClosedLoopExecutionManifest, createDetectorExecutionManifest } from '../scripts/closed-loop-execution-manifest';
 
 const sha256 = (text: string): string => createHash('sha256').update(text, 'utf8').digest('hex');
 
@@ -61,7 +62,7 @@ const evidence: AiEvidenceAudit = {
   summary: 'The three scoped passes agree with the cited official provision.',
   model: { provider: 'test-provider', model: 'test-model', version: '1' },
   execution: {
-    manifestId: `closed-loop:${PROFILE_ID}:${RULE_ID}:${sha256(INPUT)}:${sha256(OUTPUT)}`,
+    manifestId: `closed-loop:${PROFILE_ID}:${RULE_ID}:${sha256(INPUT)}:${sha256(OUTPUT)}:pass`,
     testId: 'closed-loop:profile-a:rule-margins',
     command: 'npm run closed-loop -- --profile profile-a',
     inputHash: sha256(INPUT),
@@ -89,6 +90,70 @@ const audit = (
 ) => auditAiEvidence({ profileId: PROFILE_ID, rule, source, snapshotBytes: Buffer.from(SNAPSHOT, 'utf8'), snapshotSha256: source.snapshotHash!, currentRepairSourceHash: manifest.repairSourceHash, ruleValueSha256: manifest.ruleValueHash, snapshotText: SNAPSHOT, evidence, manifest, ...over });
 
 describe('auditAiEvidence: deterministicki dokazni paket', () => {
+  it('rejects a failed repair manifest relabeled pass without new execution', () => {
+    const failed = createClosedLoopExecutionManifest({
+      profileId: PROFILE_ID, ruleId: RULE_ID, ruleValue: rule.value,
+      repairSourceHash: manifest.repairSourceHash!, testId: evidence.execution.testId,
+      command: evidence.execution.command, ranAt: evidence.execution.ranAt,
+      inputBytes: Buffer.from('bad input'), outputBytes: Buffer.from('bad output'),
+      before: { earned: 5, max: 5 }, after: { earned: 5, max: 5 },
+      textPreserved: true, integrityFailure: null, idempotent: true, regressions: 0,
+    });
+    const linkedEvidence = { ...evidence, execution: { ...evidence.execution,
+      manifestId: failed.manifestId, inputHash: failed.inputHash, outputHash: failed.outputHash } };
+    const flipped = audit({ evidence: linkedEvidence, manifest: { ...failed, outcome: 'pass' } });
+    expect(flipped.valid).toBe(false);
+    if (!flipped.valid) expect(flipped.reasons.map((reason) => reason.code)).toContain('manifest-id-mismatch');
+  });
+
+  it('rejects a failed detector manifest relabeled pass without new execution', () => {
+    const failed = createDetectorExecutionManifest({
+      profileId: PROFILE_ID, ruleId: RULE_ID, ruleCheckId: 'margins', checkId: 'page.margins',
+      ruleValue: rule.value, analysisSourceHash: sha256('analysis-source-fixture'),
+      testId: 'detector:test', command: 'detector:test', ranAt: evidence.execution.ranAt,
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'page.margins', earned: 5, max: 5 },
+      correctCheck: { id: 'page.margins', earned: 5, max: 5 },
+    });
+    const linkedEvidence = { ...evidence, execution: { ...evidence.execution,
+      manifestId: failed.manifestId, testId: failed.testId, command: failed.command,
+      inputHash: failed.inputHash, outputHash: failed.outputHash } };
+    const flipped = audit({ evidence: linkedEvidence, manifest: { ...failed, outcome: 'pass' },
+      currentAnalysisSourceHash: failed.analysisSourceHash });
+    expect(flipped.valid).toBe(false);
+    if (!flipped.valid) expect(flipped.reasons.map((reason) => reason.code)).toContain('manifest-id-mismatch');
+  });
+  it('prihvaća vezani manifest detektora i odbija zastario kod ili drugi check.id', () => {
+    const detector = createDetectorExecutionManifest({
+      profileId: PROFILE_ID, ruleId: RULE_ID, ruleCheckId: 'margins', checkId: 'page.margins', ruleValue: rule.value,
+      analysisSourceHash: sha256('analysis-source-fixture'), testId: 'detector:profile-a:rule-margins',
+      command: 'npm run detector-loop -- --profile profile-a', ranAt: evidence.execution.ranAt,
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'page.margins', earned: 0, max: 5 },
+      correctCheck: { id: 'page.margins', earned: 5, max: 5 },
+    });
+    const detectorEvidence = { ...evidence, execution: {
+      manifestId: detector.manifestId, testId: detector.testId, command: detector.command,
+      inputHash: detector.inputHash, outputHash: detector.outputHash, ranAt: detector.ranAt,
+    } };
+    expect(audit({ evidence: detectorEvidence, manifest: detector,
+      currentAnalysisSourceHash: detector.analysisSourceHash })).toEqual({ valid: true, reasons: [] });
+    const stale = audit({ evidence: detectorEvidence, manifest: detector,
+      currentAnalysisSourceHash: 'f'.repeat(64) });
+    expect(stale.valid).toBe(false);
+    if (!stale.valid) expect(stale.reasons.map((reason) => reason.code)).toContain('manifest-stale-analysis');
+    const wrongCheck = audit({ evidence: detectorEvidence, manifest: { ...detector, checkId: 'toc.present' },
+      currentAnalysisSourceHash: detector.analysisSourceHash });
+    expect(wrongCheck.valid).toBe(false);
+    if (!wrongCheck.valid) expect(wrongCheck.reasons.map((reason) => reason.code)).toContain('manifest-check-mismatch');
+    const repairableRule = audit({ evidence: detectorEvidence, manifest: detector,
+      currentAnalysisSourceHash: detector.analysisSourceHash,
+      rule: { ...rule, autoFixable: true, fixerId: 'margins-fixer' } });
+    expect(repairableRule.valid).toBe(false);
+    if (!repairableRule.valid) expect(repairableRule.reasons.map((reason) => reason.code)).toContain('manifest-kind-mismatch');
+  });
   it('prihvaca cjelovit paket vezan uz sluzbeni snapshot, pravilo i prolazni manifest', () => {
     expect(audit()).toEqual({ valid: true, reasons: [] });
   });
@@ -133,7 +198,7 @@ describe('auditAiEvidence: deterministicki dokazni paket', () => {
   });
 
   it('odbija manifest čiji ID ne veže profil, pravilo i hashove i kad se AI paket uskladi s lažnim ID-jem', () => {
-    const manifestId = `closed-loop:${manifest.profileId}:${manifest.ruleId}:${manifest.inputHash}:${manifest.outputHash}`;
+    const manifestId = `closed-loop:${manifest.profileId}:${manifest.ruleId}:${manifest.inputHash}:${manifest.outputHash}:pass`;
     const evidenceWithBoundId = {
       ...evidence,
       execution: { ...evidence.execution, manifestId },

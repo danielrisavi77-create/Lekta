@@ -42,6 +42,7 @@ export interface VerificationGateOptions {
     snapshotTextsBySourceId: Readonly<Record<string, string>>;
     snapshotHashesBySourceId?: Readonly<Record<string, string>>;
     currentRepairSourceHash?: string;
+    currentAnalysisSourceHash?: string;
     ruleValueHashesByRule?: Readonly<Record<string, string>>;
     manifestsById: Readonly<Record<string, AiEvidenceExecutionManifest>>;
   };
@@ -108,6 +109,7 @@ export function runVerificationGate(
           snapshotBytes: entry.sourceId ? options.aiEvidence?.snapshotBytesBySourceId[entry.sourceId] ?? new Uint8Array() : new Uint8Array(),
           snapshotSha256: entry.sourceId ? options.aiEvidence?.snapshotHashesBySourceId?.[entry.sourceId] : undefined,
           currentRepairSourceHash: options.aiEvidence?.currentRepairSourceHash,
+          currentAnalysisSourceHash: options.aiEvidence?.currentAnalysisSourceHash,
           ruleValueSha256: options.aiEvidence?.ruleValueHashesByRule?.[JSON.stringify([profile.id, entry.ruleId])],
           snapshotText: entry.sourceId ? options.aiEvidence?.snapshotTextsBySourceId[entry.sourceId] ?? '' : '',
           evidence: entry.aiEvidence ?? undefined,

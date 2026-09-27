@@ -6,6 +6,7 @@ import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '..
 import { applyAiEvidenceProfile } from '../src/verification/apply-ai-evidence-profile';
 import { prepareAiEvidenceProfilePersistence, type AiEvidenceDraftDocument } from '../src/verification/ai-evidence-profile-storage';
 import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
+import { unreconciledAiConfirmations } from '../src/verification/reconcile-ai-ledger';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const [profileId, mode] = process.argv.slice(2);
@@ -112,6 +113,7 @@ async function main(): Promise<void> {
     snapshotTextsBySourceId: context.gateContext.snapshotTextsBySourceId,
     snapshotHashesBySourceId: context.gateContext.snapshotHashesBySourceId,
     currentRepairSourceHash: context.gateContext.currentRepairSourceHash,
+    currentAnalysisSourceHash: context.gateContext.currentAnalysisSourceHash,
     ruleValueHashesByRule: context.gateContext.ruleValueHashesByRule,
     manifestsById: context.gateContext.manifestsById,
   });
@@ -127,11 +129,7 @@ async function main(): Promise<void> {
   const ledgerPath = join(root, 'data', 'verification', 'ledger.json');
   const originalLedgerText = readFileSync(ledgerPath, 'utf8');
   const currentLedger = JSON.parse(originalLedgerText) as VerificationLedgerEntry[];
-  const priorAiEvents = currentLedger.filter((event) => event.profileId === profileId && event.action === 'ai-confirmed');
-  const confirmedRuleIds = new Set(application.profile.ruleEntries
-    ?.filter((entry) => entry.confirmedVia === 'ai-evidence-audit')
-    .map((entry) => entry.ruleId));
-  const orphanEvents = priorAiEvents.filter((event) => !confirmedRuleIds.has(event.ruleId));
+  const orphanEvents = unreconciledAiConfirmations(profileId, application.profile.ruleEntries ?? [], currentLedger);
   if (orphanEvents.length) {
     throw new Error(`${profileId}: postoje ${orphanEvents.length} AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom.`);
   }

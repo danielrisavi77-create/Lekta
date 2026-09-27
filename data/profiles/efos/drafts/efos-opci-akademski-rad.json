@@ -68,12 +68,12 @@
           "version": "runtime-version-not-exposed"
         },
         "execution": {
-          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
           "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font",
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:53:47.478Z"
+          "ranAt": "2026-09-27T16:30:31.509Z"
         }
       }
     },
@@ -144,12 +144,12 @@
           "version": "runtime-version-not-exposed"
         },
         "execution": {
-          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
           "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--font-size",
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:53:47.478Z"
+          "ranAt": "2026-09-27T16:30:31.509Z"
         }
       }
     },
@@ -216,12 +216,12 @@
           "version": "runtime-version-not-exposed"
         },
         "execution": {
-          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
           "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--line-spacing",
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:53:47.478Z"
+          "ranAt": "2026-09-27T16:30:31.509Z"
         }
       }
     },
@@ -298,12 +298,12 @@
           "version": "runtime-version-not-exposed"
         },
         "execution": {
-          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
           "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--margins",
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:53:47.478Z"
+          "ranAt": "2026-09-27T16:30:31.509Z"
         }
       }
     },
@@ -370,12 +370,12 @@
           "version": "runtime-version-not-exposed"
         },
         "execution": {
-          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "manifestId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70:pass",
           "testId": "closed-loop:efos-opci-akademski-rad:efos-opci-akademski-rad--paper-size",
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:53:47.478Z"
+          "ranAt": "2026-09-27T16:30:31.509Z"
         }
       }
     },
