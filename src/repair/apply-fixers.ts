@@ -133,6 +133,11 @@ export interface ApplyFixersResult {
    *  radi wire-kompatibilnosti sa serverskim putem); UI ga koristi da "vec uskladjeno" ne izgleda
    *  kao "nije bilo moguce". Bez zapisa za ruleId = razlog nije klasificiran (npr. fixer je bacio). */
   skippedReasons: Record<string, FixerNoOpReason>;
+  /** T65 krug 3: ruleId -> trazene akcije koje fixer namjerno nije proveo (FixerOutput.skippedActions),
+   *  i uz primijenjen i uz preskocen popravak, bez ponavljanja iste napomene. Cisto ADITIVNO polje,
+   *  prisutno samo kad nije prazno. Svjesno izostaje kad vrata integriteta odbiju isporuku: tada nista
+   *  nije primijenjeno, a izvjestaj (renderIntegrityFailure) govori samo o integritetu. */
+  skippedActions?: Record<string, string[]>;
   /** Postavljeno SAMO kad su vrata integriteta odbila isporuku. Tada je docxBytes ULAZNI dokument
    *  bit-identican, changelog je prazan i nista nije primijenjeno. Pozivatelj (UI, Edge funkcija)
    *  mora ovo razlikovati od "nema se sto popraviti", inace tvrdi neistinu. */
@@ -1175,6 +1180,9 @@ export async function applyFixers(
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
   const skippedReasons: Record<string, FixerNoOpReason> = {};
+  const skippedActions: Record<string, string[]> = {};
+  const withSkippedActions = <T extends object>(value: T): T & { skippedActions?: Record<string, string[]> } =>
+    (Object.keys(skippedActions).length ? { ...value, skippedActions } : value);
 
   // RE-46: stabilno rasporedi zahtjeve u dvije faze - prvo oni koji NE mijenjaju broj odlomaka
   // (anchor-osjetljivi), pa tek onda INDEX_SHIFTING_FIXERS. Unutar svake faze cuva se ULAZNI
@@ -1214,6 +1222,7 @@ export async function applyFixers(
       skipped.push(request.ruleId);
       continue;
     }
+    if (result.skippedActions?.length) skippedActions[request.ruleId] = [...new Set([...(skippedActions[request.ruleId] ?? []), ...result.skippedActions])];
     if (!result.applied) {
       // Fail-safe: fixer nije uspio primijeniti popravak (npr. atribut ne
       // postoji u ovom dokumentu), tiho preskoci, ne baca korisniku gresku.
@@ -1300,7 +1309,7 @@ export async function applyFixers(
   // (bez rekompresije, bez re-encode), da "popravljeni" dokument bez popravaka
   // ne bude tiho prepisan.
   if (changelog.length === 0) {
-    return { docxBytes, changelog, skipped, skippedReasons };
+    return withSkippedActions({ docxBytes, changelog, skipped, skippedReasons });
   }
 
   // Rekonstruiraj zip: SAMO stvarno promijenjeni dio (document.xml odnosno
@@ -1413,5 +1422,5 @@ export async function applyFixers(
 
   const newDocxBytes = await writeZip(newEntries);
 
-  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons, removedPackageParts: [...(parts.removedPackageParts ?? [])] };
+  return withSkippedActions({ docxBytes: newDocxBytes, changelog, skipped, skippedReasons, removedPackageParts: [...(parts.removedPackageParts ?? [])] });
 }

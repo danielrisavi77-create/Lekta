@@ -33,7 +33,7 @@ import { isSupported, renderDefectFragment, type DefectClass } from '../src/corp
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
@@ -98,7 +98,8 @@ import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
-import { buildRepairPanelHandle } from '../src/ui/repair-panel';
+import { buildRepairPanelHandle, classifyRepairReport, renderTableFigureRescueControls } from '../src/ui/repair-panel';
+import { tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
@@ -106,6 +107,10 @@ import {
   findPullRequestWithoutConcurrency,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
+import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
+import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
+import { anchorFingerprintForXml } from '../src/analysis/element-structure';
+import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -300,6 +305,75 @@ function sessionBootstrapFalseZeroProblems(source: string): string[] {
     problems.push('testProcessCount u catch grani vraca doslovnu 0 umjesto null');
   }
   return problems;
+}
+
+/**
+ * T65. Gard u table-figure-rescue-fixeru: equalColumns se NE primjenjuje na tablicu sa spojenim
+ * celijama. Nemutirana tablica (bez spajanja) mora dobiti jednake stupce, inace bi "uhvaceno" moglo
+ * znaciti samo da equalColumns vise nikad nista ne radi. Mutacija ubaci gridSpan ili vMerge u istu
+ * tablicu; gard je uhvatio kvar kad su tblGrid i svi tcW ostali bajt-identicni ulazu.
+ */
+const T65_W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+const t65Cell = (extra: string, text: string, width: number) => `<w:tc><w:tcPr><w:tcW w:w="${width}" w:type="dxa"/>${extra}</w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+const t65Table = (first: string, second: string) =>
+  `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="9000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="2000"/><w:gridCol w:w="7000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell(first, 'A', 2000)}${t65Cell('', 'B', 7000)}</w:tr><w:tr>${t65Cell(second, 'C', 2000)}${t65Cell('', 'D', 7000)}</w:tr></w:tbl>`;
+/** Sirine (tblGrid + svi tcW) nakon equalColumns; `null` kad fixer odbije cijeli zahtjev. */
+function t65WidthsAfterEqualColumns(tbl: string): { before: string; after: string } | null {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true } }], figures: [] });
+  if (!out.applied) return null;
+  const widths = (xml: string) => [xml.match(/<w:tblGrid\b[^>]*>[\s\S]*?<\/w:tblGrid>/i)?.[0] ?? '', ...[...xml.matchAll(/<w:tcW\b[^>]*>/gi)].map((m) => m[0])].join('|');
+  return { before: widths(documentXml), after: widths(out.parts.documentXml) };
+}
+const t65Preserved = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.before === r.after; };
+const t65Equalized = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.after.includes('<w:gridCol w:w="4500"/><w:gridCol w:w="4500"/>') && !r.after.includes('w:w="2000"'); };
+/**
+ * T65 krug 2 (M1). Ista tablica, ali spajanje nosi NE-ASCII prefiks vezan uz Wordov namespace.
+ * Analiza (DOM) takvu celiju vidi kao spojenu; fixer ju je vidio kao obicnu jer je prefiks
+ * prihvacao samo iz ASCII klase. Gard hvata kvar kad fixer i ovdje sacuva grid i tcW, a dijeljena
+ * detekcija (ista za analizu i fixer) kaze da je tablica spojena.
+ */
+const t65NonAsciiPrefix = (tbl: string) => tbl
+  .replace(`<w:tbl ${T65_W}>`, `<w:tbl ${T65_W} xmlns:ž="http://schemas.openxmlformats.org/wordprocessingml/2006/main">`)
+  .replace('<w:gridSpan w:val="2"/>', '<ž:gridSpan ž:val="2"/>');
+/** T65 krug 2 (M3): izlaz fixera za mijesani zahtjev (equalColumns + center + repeatHeader). */
+function t65MixedRequest(tbl: string): { applied: boolean; afterLabel: string } {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true, repeatHeader: true } }], figures: [] });
+}
+const T65_SKIP_NOTE = 'ujednačavanje stupaca preskočeno';
+/**
+ * T65 krug 3 (M3, prvi prolaz): tablica kojoj je center vec na cilju. Mijesani zahtjev
+ * (equalColumns + center) tada nista ne mijenja, pa fixer vraca applied:false bez afterLabela.
+ */
+function t65AlreadyCentered(tbl: string): { applied: boolean; reason?: string; skippedActions?: string[] } {
+  const centered = tbl.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+  const documentXml = `<w:document ${T65_W}><w:body>${centered}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', centered), actions: { equalColumns: true, center: true } }], figures: [] });
+}
+/**
+ * T65 krug 2, pregled (M2): oznaka kucice smije tvrditi prilagodbu sirini teksta samo ako fixer nad
+ * ISTIM parametrima stvarno promijeni tblW. Gard usporeduje iscrtane oznake tablicnih akcija s
+ * izlazom fixera. Siroka tablica: tblW 12000 twipa, tekst 9000 twipa (9000 * 635 EMU).
+ */
+const T65_WIDE = `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="12000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="6000"/><w:gridCol w:w="6000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell('', 'A', 6000)}${t65Cell('', 'B', 6000)}</w:tr></w:tbl>`;
+const T65_TEXT_WIDTH_EMU = 9000 * 635;
+/** Iscrtane oznake tablicnih akcija i parametri koje UI stvarno salje za siroku tablicu. */
+function t65RenderedWideTable(): { labels: string[]; params: TableFigureRescueParams } {
+  const structure = { tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', T65_WIDE), rowCount: 1, columnCount: 2, wide: true, mergedCells: false, confidence: 'medium', rowsWithCantSplit: 0, hasHeader: false, evidence: [] }], figures: [] };
+  const item = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] })[0];
+  const li = document.createElement('li');
+  renderTableFigureRescueControls(li, item);
+  return { labels: [...li.querySelectorAll('.lekta-repair-panel__rescue-actions label')].map((node) => node.textContent ?? ''), params: item.params as unknown as TableFigureRescueParams };
+}
+/** Gard: true kad neka oznaka obecava prilagodbu sirini teksta, a fixer tblW ne postavi na sirinu teksta. */
+function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): boolean {
+  const documentXml = `<w:document ${T65_W}><w:body>${T65_WIDE}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
+  const fitted = out.applied && out.parts.documentXml.includes('<w:tblW w:w="9000" w:type="dxa"/>');
+  return labels.some((label) => /širin\w* teksta/i.test(label)) && !fitted;
 }
 
 const MUTATIONS: Mutation[] = [
@@ -1814,6 +1888,121 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  // --- T65: equalColumns i spojene celije --------------------------------------------------------
+  {
+    id: 'tablica/equal-columns-gridspan',
+    imitates:
+      'equalColumns upise sirinu jednog stupca u tcW celije s w:gridSpan, pa se celija preko dva '
+      + 'stupca skupi na jedan i grid vise ne odgovara celijama',
+    caught: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  {
+    id: 'tablica/equal-columns-vmerge',
+    imitates:
+      'equalColumns prepise grid i tcW tablice s okomito spojenim celijama (w:vMerge) iako sirine '
+      + 'spojenog stupca nisu provjerene',
+    caught: () => t65Preserved(t65Table('<w:vMerge w:val="restart"/>', '<w:vMerge/>')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  // Pregled drugog alata (Codex), re-verificirano crvenim testovima u src/analysis/merged-cells.test.ts.
+  {
+    id: 'tablica/equal-columns-val-drugog-prefiksa',
+    imitates:
+      'detekcija uzme PRVI val atribut bilo kojeg prefiksa, pa <w:gridSpan x:val="1" w:val="2"/> proglasi '
+      + 'obicnom celijom i equalColumns prepise tcW celije preko dva stupca',
+    caught: () => t65Preserved(t65Table('<w:gridSpan x:val="1" w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-val-u-vrijednosti',
+    imitates:
+      'detekcija procita val= iz VRIJEDNOSTI drugog atributa (x:note=\' val="1" \'), pa gridSpan bez '
+      + 'pravog val proglasi obicnom celijom i equalColumns prepise njezin tcW',
+    caught: () => t65Preserved(t65Table(`<w:gridSpan x:note=' val="1" '/>`, '')),
+    cleanBefore: () => t65Equalized(t65Table(`<w:gridSpan x:note='val="3"' w:val="1"/>`, '')),
+  },
+  {
+    id: 'tablica/equal-columns-cdata',
+    imitates:
+      'oznaka <w:gridSpan> doslovno u CDATA tekstu odlomka broji se kao spajanje, pa obicna tablica '
+      + 'bez razloga ostane bez ujednacenih stupaca',
+    caught: () => t65Equalized(t65Table('', '').replace('<w:t>A</w:t>', '<w:t><![CDATA[<w:gridSpan w:val="2"/>]]></w:t>')),
+    cleanBefore: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-ne-ascii-prefiks',
+    imitates:
+      'analiza vidi <ž:gridSpan> kao spojenu celiju, a fixer prefiks prihvaca samo iz ASCII klase, '
+      + 'pa istu tablicu tretira kao obicnu i prepise tcW spojene celije sirinom jednog stupca',
+    caught: () => t65Preserved(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', '')))
+      && hasMergedCells(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', ''))),
+    // gridSpan w:val="1" nije spajanje: bez toga bi gard mogao "hvatati" tako da svaki gridSpan gasi equalColumns.
+    cleanBefore: () => t65Equalized(t65Table('', '')) && t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-tihi-preskok',
+    imitates:
+      'mijesani zahtjev (equalColumns + druge akcije) na tablici sa spojenim celijama vrati applied:true '
+      + 'bez traga da equalColumns nije proveden, pa izvjestaj tvrdi da je sve primijenjeno',
+    caught: () => {
+      const out = t65MixedRequest(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return out.applied && out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+    cleanBefore: () => {
+      const out = t65MixedRequest(t65Table('', ''));
+      return out.applied && !out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+  },
+  {
+    id: 'tablica/equal-columns-preskok-bez-izmjene',
+    imitates:
+      'spojena tablica kojoj su ostale trazene akcije vec na cilju vrati vec u PRVOM prolazu '
+      + 'applied:false/already-ok, a jedini trag preskoka (afterLabel) postoji samo uz applied:true, '
+      + 'pa izvjestaj kaze "vec uskladjeno" iako stupci nisu ujednaceni',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return !out.applied && out.reason === 'already-ok' && (out.skippedActions ?? []).some((note) => note.includes(T65_SKIP_NOTE));
+    },
+    // Obicna tablica s istim zahtjevom: equalColumns se stvarno primijeni, bez ikakvog traga preskoka.
+    cleanBefore: () => {
+      const out = t65AlreadyCentered(t65Table('', ''));
+      return out.applied && out.skippedActions === undefined;
+    },
+  },
+  {
+    id: 'izvjestaj/preskok-pod-vec-uskladjeno',
+    imitates:
+      'izvjestaj popravka stavku ciji je fixer vratio already-ok uz preskocen equalColumns svrsta pod '
+      + '"vec uskladjeno" (pregled drugog alata, krug 3), pa korisnik cita da nista nije trebalo mijenjati',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: out.reason as 'already-ok' }, skippedActions: { r: out.skippedActions ?? [] }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 0 && report.skippedNotes.some((line) => line.includes(T65_SKIP_NOTE));
+    },
+    // Isti razlog bez preskoka ostaje "vec uskladjeno" (RE-36): gard ne smije sve micati iz te skupine.
+    cleanBefore: () => {
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: 'already-ok' }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 1 && report.skippedNotes.length === 0;
+    },
+  },
+  {
+    id: 'tablica/oznaka-sirine-teksta',
+    imitates:
+      'predoznacena kucica fitToTextWidth glasi "Prilagodi širini teksta", a UI ne salje textWidthEmu, '
+      + 'pa fixer pise samo tblLayout fixed i siroka tablica ostaje sira od teksta',
+    caught: () => {
+      const { params } = t65RenderedWideTable();
+      return t65LabelOverclaims([' Prilagodi širini teksta'], params);
+    },
+    // Istu tvrdnju gard pusti kad fixer tblW stvarno postavi na sirinu teksta, a iscrtane oznake
+    // produkcijskog UI-ja za iste parametre ne obecavaju vise nego sto fixer napise.
+    cleanBefore: () => {
+      const { labels, params } = t65RenderedWideTable();
+      const withWidth: TableFigureRescueParams = { ...params, tables: params.tables.map((table) => ({ ...table, textWidthEmu: T65_TEXT_WIDTH_EMU })) };
+      return labels.length > 0 && !t65LabelOverclaims(labels, params) && !t65LabelOverclaims([' Prilagodi širini teksta'], withWidth);
+    },
   },
   // ---------------------------------------------------------------------------
   // GATE IZDANJA (plan T19): pet stanja u kojima objavljeni artefakt ne odgovara onome sto je dokazano.
@@ -3389,7 +3578,123 @@ const MUTATIONS: Mutation[] = [
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
+
+  // --- clean-vitest-tmp: gard procesa i starost po najnovijoj datoteci ------------------------
+  // Sve nad datotecnim sustavom U MEMORIJI (pravilo 1 ovog testa); brisanje je ubrizgan `rm` koji
+  // samo biljezi putanju. Baseline je stvarni planCleanup/executePlan iz skripte.
+  {
+    id: 'clean-tmp/gard-procesa-uklonjen',
+    imitates: 'scripts/clean-vitest-tmp.mjs bez garda procesa: dok zivi vitest pise u <nanoid>/web, '
+      + 'ciscenje prije gatea brise njegovu mapu i rusi tudji run (ENOENT ...\\Temp\\<nanoid>\\web\\<sha1>, 26. 9.)',
+    caught: () => {
+      const bezGarda = cleanTmpRun(cleanTmpOldFs(), CT_LIVE_VITEST, { guard: () => ({ ok: true }) });
+      return bezGarda.rmCalls.includes(CT_NANO);
+    },
+    cleanBefore: () => {
+      // Stvarni gard uz ziv vitest: nista se ne brise, mapa je zadrzana.
+      const zivi = cleanTmpRun(cleanTmpOldFs(), CT_LIVE_VITEST);
+      // Ista fixtura bez vitesta SE brise, pa je gard (a ne fixtura) ono sto je cuva.
+      const mirno = cleanTmpRun(cleanTmpOldFs(), CT_QUIET);
+      return zivi.rmCalls.length === 0
+        && zivi.plan.held.some((h) => h.path === CT_NANO)
+        && mirno.rmCalls.length === 1 && mirno.rmCalls[0] === CT_NANO;
+    },
+  },
+  {
+    id: 'clean-tmp/starost-po-mtime-mape',
+    imitates: 'zamka 26. 9.: starost <nanoid> mape racunata po mtime korijena mape, koji se ne osvjezava '
+      + 'dok Vitest pise u postojece podmape, pa je ciscenje obrisalo mapu zivog gatea (466 umjesto 613 test datoteka)',
+    caught: () => {
+      const poMapi = (dir: string, maxEntries: number, fs: CleanTmpFs) => {
+        const m = measureDir(dir, maxEntries, fs);
+        return m.status === 'ok' ? { ...m, newestMs: fs.lstat(dir).mtimeMs } : m;
+      };
+      return cleanTmpRun(cleanTmpTrapFs(), CT_QUIET, { measure: poMapi }).rmCalls.includes(CT_NANO);
+    },
+    cleanBefore: () => {
+      const fs = cleanTmpTrapFs();
+      // Generator dokazuje klasu ulaza: korijen mape i web/ stari, datoteka unutra svjeza.
+      const staro = (p: string) => CT_NOW - fs.lstat(p).mtimeMs >= CT_THRESHOLD;
+      if (!staro(CT_NANO) || !staro(join(CT_NANO, 'web')) || staro(CT_FRESH_FILE)) return false;
+      const stvarni = cleanTmpRun(fs, CT_QUIET);
+      return stvarni.rmCalls.length === 0 && stvarni.plan.young.some((i) => i.path === CT_NANO);
+    },
+  },
 ];
+
+/** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
+type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
+const CT_ROOT = resolve('/lekta-virtualni-tmp');
+const CT_NOW = Date.UTC(2026, 8, 26, 12, 0, 0);
+const CT_HOUR = 3_600_000;
+const CT_THRESHOLD = 2 * CT_HOUR;
+const CT_NANO = join(CT_ROOT, 'abcdefghijABCDEFGHIJ_');
+const CT_FRESH_FILE = join(CT_NANO, 'web', 'ffffffffffffffffffffffffffffffffffffffff');
+const CT_QUIET = [{ pid: 7, ppid: 1, name: 'node.exe', command: 'node npm-cli.js run check' }];
+const CT_LIVE_VITEST = [
+  ...CT_QUIET,
+  { pid: 900, ppid: 1, name: 'node.exe', command: '"node" C:/x/node_modules/vitest/vitest.mjs run' },
+];
+
+/** Sustav u memoriji: kljuc je apsolutna putanja, djeca su unosi ciji je dirname roditelj. */
+function cleanTmpVirtualFs(nodes: Record<string, { dir: boolean; mtimeMs: number; size?: number }>) {
+  const map = new Map(Object.entries(nodes));
+  const lstat = (p: string) => {
+    const n = map.get(p);
+    if (!n) throw Object.assign(new Error(`ENOENT ${p}`), { code: 'ENOENT' });
+    return { mtimeMs: n.mtimeMs, size: n.size ?? 0, isDirectory: () => n.dir, isSymbolicLink: () => false };
+  };
+  const readdir = (p: string) => {
+    lstat(p);
+    return [...map.entries()]
+      .filter(([k]) => k !== p && dirname(k) === p)
+      .map(([k, n]) => ({ name: basename(k), isDirectory: () => n.dir, isSymbolicLink: () => false }));
+  };
+  return { lstat, readdir };
+}
+
+/** Stara Vitest mapa: sve (korijen, web/, datoteka) 9 h staro. */
+function cleanTmpOldFs(): CleanTmpFs {
+  const t = CT_NOW - 9 * CT_HOUR;
+  return cleanTmpVirtualFs({
+    [CT_ROOT]: { dir: true, mtimeMs: t },
+    [CT_NANO]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+  });
+}
+
+/** Zamka 26. 9.: korijen mape i web/ 10 h stari, a jedna datoteka unutra prepisana prije minute. */
+function cleanTmpTrapFs(): CleanTmpFs {
+  const t = CT_NOW - 10 * CT_HOUR;
+  return cleanTmpVirtualFs({
+    [CT_ROOT]: { dir: true, mtimeMs: t },
+    [CT_NANO]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+    [CT_FRESH_FILE]: { dir: false, mtimeMs: CT_NOW - 60_000, size: 6 },
+  });
+}
+
+/** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
+function cleanTmpRun(
+  fs: CleanTmpFs,
+  processes: Array<{ pid: number; ppid: number; name: string; command: string }>,
+  overrides: Partial<Parameters<typeof planCleanup>[0]> = {},
+) {
+  const plan = planCleanup({
+    root: CT_ROOT,
+    nowMs: CT_NOW,
+    thresholdMs: CT_THRESHOLD,
+    listProcesses: () => processes,
+    selfPid: 4242,
+    fs,
+    ...overrides,
+  });
+  const rmCalls: string[] = [];
+  executePlan(plan, { rm: (p: string) => { rmCalls.push(p); } });
+  return { plan, rmCalls };
+}
 
 /** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
 function webhookMorSource(): string {
@@ -4033,5 +4338,135 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
       },
     ];
     expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
+  });
+});
+
+describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
+  type Provjera = (body: string, nove: string[]) => string[];
+  type Nove = (base: unknown, head: unknown) => string[];
+  type Neto = (shortstat: string) => string;
+
+  /** Tvrdnja garda: opis bez redaka ili s "nema" uz stvarno novu ovisnost ne prolazi. */
+  const provjeraGrize = (p: Provjera): boolean =>
+    p('Neto redaka: +1/-1\nNove ovisnosti: nema', []).length === 0
+    && p('Neto redaka: +1/-1\nNove ovisnosti: nema', ['zod']).length > 0
+    && p('Nove ovisnosti: nema', []).length > 0
+    && p('<!-- Neto redaka: +1/-1\nNove ovisnosti: nema -->', []).length > 0;
+  /** Tvrdnja: nova devDependency je nova ovisnost jednako kao dependency. */
+  const noveGrize = (n: Nove): boolean =>
+    n({ dependencies: {} }, { dependencies: {} }).length === 0
+    && n({ dependencies: {} }, { devDependencies: { 'left-pad': '1' } }).join() === 'left-pad';
+  /** Tvrdnja: ulaz koji nije shortstat rusi mjerenje, ne daje +0/-0. */
+  const netoGrize = (f: Neto): boolean => {
+    if (f(' 1 file changed, 2 insertions(+)') !== '+2/-0') return false;
+    try {
+      f('fatal: bad revision');
+      return false;
+    } catch {
+      return true;
+    }
+  };
+
+  it('baseline: stvarne funkcije zadovoljavaju tvrdnje', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    expect(provjeraGrize(m.provjeriOpisPr)).toBe(true);
+    expect(noveGrize(m.noveOvisnosti)).toBe(true);
+    expect(netoGrize(m.netoRedaka)).toBe(true);
+  });
+
+  it('(a) provjera koja gleda samo prisutnost retka, ne i "nema" uz novu ovisnost, obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    expect(provjeraGrize((body) => m.provjeriOpisPr(body, []))).toBe(false);
+  });
+
+  it('(b) usporedba samo sekcije dependencies (devDependencies propustene) obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const samoDeps: Nove = (base, head) => m.noveOvisnosti(
+      { dependencies: (base as { dependencies?: object }).dependencies },
+      { dependencies: (head as { dependencies?: object }).dependencies },
+    );
+    expect(noveGrize(samoDeps)).toBe(false);
+  });
+
+  it('(c) neto koji na neprepoznat ulaz tiho vrati +0/-0 obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const tiho: Neto = (s) => {
+      try {
+        return m.netoRedaka(s);
+      } catch {
+        return '+0/-0';
+      }
+    };
+    expect(netoGrize(tiho)).toBe(false);
+  });
+});
+
+describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {
+  it('job koji zove "npm ci" izravno, bez composite akcije, obara gard', () => {
+    // BASELINE: stvaran repo nema nijedan job koji zove "npm ci" mimo `setup-deps` (dokazano
+    // i uzivo u tests/ci-workflow-cache.test.ts, ali gard ovdje mutira SAMO u memoriji).
+    const cistWorkflow = `
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+      - run: npm run check
+`;
+    expect(jobsWithBareNpmCi(cistWorkflow)).toEqual([]);
+
+    // MUTACIJA: isti job, ali netko je "za brzinu" vratio izravan `npm ci` mimo composite akcije.
+    // Ovo je STVARAN kvar koji je gard smisljen hvatati: kesiranje postoji u action.yml, ali ga
+    // nitko ne poziva, pa je node_modules kes mrtav teret koji nikad ne pogodi.
+    const mutiraniWorkflow = `
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Node 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run check
+`;
+    expect(jobsWithBareNpmCi(mutiraniWorkflow)).toEqual(['build']);
+  });
+
+  it('vanjska akcija pinana na pokretan tag (bez SHA-a) obara gard', () => {
+    // BASELINE: stvaran repo pina sve vanjske akcije na 40-heks SHA uz komentar verzije
+    // (dokazano uzivo u tests/ci-workflow-cache.test.ts nad svih 16 workflowa).
+    const cistWorkflow = `
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+`;
+    expect(unpinnedExternalUses(cistWorkflow)).toEqual([]);
+
+    // MUTACIJA: pomican tag umjesto SHA-a. Ovo je STVARAN nacin na koji je `repair-net.yml`
+    // prije ovog garda referencirao `actions/checkout@v4` i `actions/setup-node@v7`: pomican
+    // tag moze tiho pokazati na drugaciji, i po sadrzaju izmijenjen, kod bez ikakvog diffa u
+    // ovom repozitoriju.
+    const mutiraniWorkflow = `
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+`;
+    const problemi = unpinnedExternalUses(mutiraniWorkflow);
+    expect(problemi.length).toBeGreaterThan(0);
+    expect(problemi[0].text).toContain('actions/checkout@v4');
   });
 });

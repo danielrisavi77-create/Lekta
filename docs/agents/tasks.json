@@ -654,7 +654,77 @@
       "dependsOn": [],
       "note": "Vlasnik 2026-09-26. PR #124 (.claude/skills/intake-analiza, docs/agents/INTAKE.md, predlozak intake-verify-args.json). Preostalo: zivi run izvidjaca kroz skill nad prvom stvarnom analizom; nakon toga done.",
       "owner": "lekta-32"
+    },
+    {
+      "id": "T62",
+      "title": "Word korpus i Word TOC kao obvezne Tier 2 razine; Word oracle ne prolazi na odbijenom popravku",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR #125, master 0cf89607. Codex pregled 2 kruga (0 blockera). Mutacije u tests/gate-mutations.test.ts."
+    },
+    {
+      "id": "T63",
+      "title": "Razdvajanje podataka od koda: data/profiles, data/sources, data/verification i dossieri u zaseban privatni repozitorij",
+      "status": "blocked",
+      "dependsOn": [
+        "T56"
+      ],
+      "note": "Vlasnik 2026-09-26: repo ostaje javan (privatni repo na free planu = 2.000 CI min/mj, Lekta trosi ~25.000). Audit 22.9. bloker #1 (tajna baza pravila javna) rjesava se razdvajanjem: privatni repo lekta-data (bez CI-ja), javni CI i Netlify build dohvacaju podatke jednim korakom kroz deploy token (secret), bundle vec dohvaca pravila s mreze pa korisnici ne vide promjenu; nakon prijenosa jednokratno ciscenje javne povijesti od data/ (vlasnikov OK + GitHub purge). Koraci: (1) popis staza po data/classification.json koje idu u privatni repo, (2) skripta dohvata + gard da build pada bez podataka umjesto tiho, (3) CI/Netlify tajna, (4) migracija povijesti, (5) provjera da nijedan test ne ovisi o javnoj kopiji. Puni workflow (podaci + CI = zasticeno). Preduvjet: PR #127 (CI cache) i wf/ci-single-run-per-pr."
+    },
+    {
+      "id": "T64",
+      "title": "details.inspectionCoverage: sto analiza NIJE provjerila (sdt, txbx, oMath, ins/del, object, ugnijezdene tablice)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Plan: spaja postojece skipped[] iz details.*Structure u analyzeDocx omotacu; ime NE smije biti coverage (vec profilna pokrivenost); golden prvo; UI jedan redak Nije provjereno. Zasticeno (analysis+golden): lekta-no-fable-coding + Codex pregled.",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T65",
+      "title": "equalColumns ne kvari tablice sa spojenim celijama; istinit UI i trag preskoka",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR #142 squash, master f754537c. Otvoreno: serverski put (supabase/functions/repair-docx, src/report/repair-client.ts, src/ui/app.ts) ne nosi skippedActions; charref razilazenje analize i fixera (&#49;)."
+    },
+    {
+      "id": "T66",
+      "title": "Drift dokumentacije: REAL_CORPUS_TESTING.md toc.coverage rijesen (a6be4f47), AUDIT_MASTER upucuje na generirani status",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T67",
+      "title": "Svjez RELEASE_PROOF nad f754537c sa sve cetiri Word razine",
+      "status": "in_review",
+      "dependsOn": [],
+      "note": "PR #143. complete:true, word-corpus 21/21 i word-toc pass, release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 OK."
+    },
+    {
+      "id": "T68",
+      "title": "Word-autorski svjedoci s namjernim prekrsajima i ratchet realnog korpusa (targetedCheckCount > 0)",
+      "status": "ready",
+      "dependsOn": [
+        "T62"
+      ],
+      "note": "Realni skup danas ima targetedCheckCount 0, a tests/real-corpus-vacuity.test.ts CILJANIH_RATCHET = 0 propusta nulu. Generator po uzoru na scripts/corpus-gen/word/make-prose-fixture.ps1, bez studentskog sadrzaja (odluka vlasnika 2026-09-26). Bio je planiran kao T63, preimenovan jer je T63 zauzet.",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T69",
+      "title": "Serverski put popravka prenosi skippedActions (repair-docx Edge, repair-client, app.ts izvjestaj)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Follow-up T65. Trazi dokaz deploya Edge funkcije po supabase/CLAUDE.md."
+    },
+    {
+      "id": "T70",
+      "title": "Flaky mobile-webkit test tests/ux/workspace-entry.spec.ts (profileSheet / wizardView vidljivost)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Vjerojatna utrka registracije handlera u /rad/."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63)."
 }
