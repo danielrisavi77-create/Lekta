@@ -118,7 +118,7 @@ as $$
         'structureGapAnalyses', structure_gap_analyses,
         'structureGapItems', structure_gap_items,
         'structureBreakdownItems', structure_breakdown_items,
-        'profileEvents', profile_events;
+        'profileEvents', profile_events,
         'nonVerifiedProfileEvents', nonverified_profile_events,
         'repairRuns', repair_runs,
         'repairGapRuns', repair_gap_runs,
@@ -197,11 +197,13 @@ as $$
     ),
     'previous', (
       select jsonb_build_object(
+        'analysisCompletedEvents', analysis_completed_events,
         'opportunityEvents', opportunity_events,
         'manualAnalyses', manual_analyses,
         'unmeasurableAnalyses', unmeasurable_analyses,
         'structureGapAnalyses', structure_gap_analyses,
         'structureGapItems', structure_gap_items,
+        'structureBreakdownItems', structure_breakdown_items,
         'profileEvents', profile_events,
         'nonVerifiedProfileEvents', nonverified_profile_events,
         'repairRuns', repair_runs,
