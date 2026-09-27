@@ -21,6 +21,7 @@ import { fetchRetailCatalog, mapProductRow, type Product } from '../src/catalog/
 import { decideReportAccess, type EntitlementRow } from '../src/report/slot-logic';
 import { computeFingerprint } from '../src/fingerprint/fingerprint';
 import { resolveCheckout } from '../src/report/checkout';
+import { isBillableWorkType } from '../src/report/billable-work-type';
 
 /** Ciljno stanje iz 0206 (prozor slota po proizvodu), parsirano, ne prepisano. */
 const V1 = (() => {
@@ -114,7 +115,9 @@ describe('"Final Pass ne moze se primijeniti na drugi rad" i "prihvaca novu verz
 
   it.each(['pass_diplomski', 'pass_specijalisticki', 'pass_doktorski'])('%s: vezan rad, druga verzija je recheck, drugi rad placa', (id) => {
     const pass = CATALOG.find((p) => p.id === id)!;
-    const workType = pass.workType as EntitlementRow['workType'];
+    // Vrsta rada prolazi ISTI validator kao generate-report i repair-docx, bez casta.
+    const workType = pass.workType;
+    if (!isBillableWorkType(workType)) throw new Error(`${id}: vrsta rada ${String(workType)} nije prodajna`);
     const ent: EntitlementRow = {
       id: 'ent-pass', workType, status: 'active', slotsUsed: 0, slotsTotal: pass.slotsTotal,
       purchaseExpiresAt: at(pass.purchaseWindowDays), slotWindowDays: pass.slotWindowDays,

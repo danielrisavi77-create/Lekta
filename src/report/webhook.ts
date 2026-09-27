@@ -443,6 +443,8 @@ export interface EntitlementProduct {
   workType: string | null;
   slotsTotal: number;
   purchaseWindowDays: number;
+  /** Prozor slota proizvoda u trenutku kupnje; snapshotira se na pravo (0206). */
+  slotWindowDays: number;
   /** Verzionirana ponuda (products.offer_code, migracija 0206). */
   offerCode: string;
   /** Prava ponude (offer_codes.capabilities) u trenutku kupnje. */
@@ -461,6 +463,11 @@ export interface EntitlementInsert {
   offer_code: string;
   /** SNAPSHOT prava pri kupnji: kopija, ne referenca na katalog. */
   capabilities: string[];
+  /**
+   * SNAPSHOT prozora slota pri kupnji. Ovo je stvarno provedeno pravo: odluka o pristupu ga cita
+   * prije zivog products retka (src/report/entitlement-access.ts).
+   */
+  slot_window_days: number;
   /** Stvarno naplaceno u centima; jedino ono smije umanjiti cijenu nadogradnje (odjeljak 14). */
   paid_amount_cents: number | null;
 }
@@ -503,6 +510,7 @@ export function buildEntitlementInsert(
     purchase_expires_at: isoAfterDays(nowMs, product.purchaseWindowDays),
     offer_code: product.offerCode,
     capabilities: [...product.capabilities],
+    slot_window_days: product.slotWindowDays,
     paid_amount_cents: typeof paid === 'number' && Number.isInteger(paid) && paid >= 0 ? paid : null,
   };
 }

@@ -45,9 +45,21 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    `pricing_changelog`. Oba `*_do_obrane` proizvoda su ugašena (`active = false`, ne obrisana), pa
    odjeljak 3.1 niže vrijedi kao povijest. Svaki proizvod nosi `offer_code` (`repair_v1`,
    `final_pass_v1`, `semester_pass_v1`, `expert_v1`; prava u tablici `offer_codes`), a webhook ih pri
-   kupnji snapshotira na entitlement (`offer_code`, `capabilities`, `paid_amount_cents`), pa kasnija
-   promjena kataloga ne mijenja već kupljeno. **Migraciju 0206 primijeni PRIJE deploya funkcija iz
-   ovog izdanja**: webhook upisuje nove stupce, a bez njih bi svaki upis prava pao.
+   kupnji snapshotira na entitlement (`offer_code`, `capabilities`, `slot_window_days`,
+   `paid_amount_cents`), pa kasnija promjena kataloga ne mijenja već kupljeno. Prozor slota koji
+   `generate-report` i `repair-docx` stvarno primjenjuju čita se iz `entitlements.slot_window_days`
+   (živi `products.slot_window_days` samo za stariji redak bez snapshota). Postojeća prava dobivaju
+   snapshot prozora pod kojim su kupljena (backfill ide PRIJE promjene prozora u istoj migraciji), a
+   trigger `entitlements_snapshot_offer` popunjava prazna polja snapshota i za prava koja ne upisuje
+   webhook (nagrade, kuponi, ručno vezivanje). **Migraciju 0206 primijeni PRIJE deploya funkcija iz
+   ovog izdanja**: webhook upisuje nove stupce, a `generate-report` i `repair-docx` čitaju
+   `slot_window_days`; bez migracije bi upit prava pao, a te funkcije tada odgovaraju 500 (ne 402).
+   `entitlements` ima TOČNO jedan strani ključ prema `products` (`product_id`);
+   `upgraded_from_product_id` je namjerno bez ključa, jer bi drugi ključ ugradnju `products(...)`
+   učinio dvosmislenom (PostgREST PGRST201). Gard: `tests/monetizacija-v1-migracija.test.ts`.
+   `specijalisticki` je od 0206 prodajna vrsta rada i serverski je prihvaćaju i potrošači prava
+   (`src/report/billable-work-type.ts`); klijentski izbornik i cjenik (`src/report/pricing.ts`) su
+   M3 i ovdje se ne mijenjaju.
 4. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
    id Merchant of Record providera i bio uvjet za checkout (`409 product_not_mapped`); prelaskom
    na Stripe taj uvjet je uklonjen. Iznos se računa iz `products.price_eur`, a webhook proizvod
@@ -444,8 +456,9 @@ uplate** prava koje je već nadograđeno gasi i Final Pass, uz ERROR redak
 upisuje ih uz entitlement. Lektin proizvod bez `offer_code` ili bez prava ne knjiži se s praznim
 snapshotom: ishod `failed` uz `product_without_offer: <id>` i ERROR redak
 `webhook-mor product_without_offer`; popravi katalog (migracija 0206), Stripe ponovi dostavu. Pravo
-upisano ručnim vezivanjem (5.1) nema snapshot ni `paid_amount_cents`, pa nije kandidat za
-nadogradnju dok ih operater ne upiše.
+upisano ručnim vezivanjem (5.1) dobiva `offer_code`, prava i prozor iz kataloga preko triggera
+`entitlements_snapshot_offer`, ali nema `paid_amount_cents`, pa nije kandidat za nadogradnju dok
+operater ne upiše stvarno naplaćeni iznos.
 
 **F21 (povrat i obveze bonusa).** Puni povrat otkazuje obveze iz `bonus_outbox` za isti
 PaymentIntent koje još čekaju (`status = 'cancelled'`, `last_error = 'refunded'`), a radnik

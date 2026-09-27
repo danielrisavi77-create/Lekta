@@ -8,6 +8,8 @@
  */
 import type { buildEntitlementInsert } from '../../src/report/webhook';
 import type { quoteUpgrade, UpgradeSource, UpgradeTarget } from '../../src/report/upgrade';
+import type { entitlementRowFromDb } from '../../src/report/entitlement-access';
+import { decideReportAccess } from '../../src/report/slot-logic';
 
 type BuildFn = typeof buildEntitlementInsert;
 type QuoteFn = typeof quoteUpgrade;
@@ -20,7 +22,7 @@ export function entitlementSnapshotProblems(build: BuildFn): string[] {
   const problems: string[] = [];
   const katalog = ['full_report', 'repair', 'repair_diff', 'recheck'];
   const row = build(
-    { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: katalog },
+    { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, slotWindowDays: 14, offerCode: 'repair_v1', capabilities: katalog },
     { userId: 'u1', orderId: 'pi_1', amountReceivedCents: 999 },
     'stripe',
     0,
@@ -34,6 +36,9 @@ export function entitlementSnapshotProblems(build: BuildFn): string[] {
   katalog.push('buduce_pravo');
   if (Array.isArray(caps) && caps.includes('buduce_pravo')) {
     problems.push('snapshot prava dijeli niz s katalogom (promjena kataloga mijenja vec kupljeno pravo)');
+  }
+  if (row.slot_window_days !== 14) {
+    problems.push('entitlement ne snapshotira prozor slota pri kupnji (prozor bi se citao iz zivog kataloga)');
   }
   if (row.paid_amount_cents !== 999) problems.push('entitlement ne biljezi stvarno naplaceni iznos (nadogradnja ga ne bi mogla priznati)');
   return problems;
@@ -159,4 +164,88 @@ export function bonusOutboxWorkerProblems(moduleSrc: string, indexSrc: string): 
     problems.push('radnik oznacava obvezu izvrsenom i kad ju je povrat vec otkazao (done bez uvjeta pending)');
   }
   return problems;
+}
+
+/**
+ * ODLUKA O PRISTUPU CITA SNAPSHOT (odjeljci 13 i 29, "promjena buduceg kataloga ne oduzima staro
+ * pravo"). Mjeri se na mjestu koje pravo stvarno provodi: mapiranje retka iz baze u EntitlementRow i
+ * odluka decideReportAccess nad njim, s kupljenim prozorom 180 i danasnjim katalogom 90.
+ */
+export function entitlementAccessProblems(fromDb: typeof entitlementRowFromDb, select: string): string[] {
+  const problems: string[] = [];
+  const now = '2026-09-27T12:00:00.000Z';
+  const base = { id: 'ent-1', status: 'active', slots_used: 0, slots_total: 1, purchase_expires_at: '2027-09-27T12:00:00.000Z' };
+  const kupljeno = fromDb({ ...base, work_type: 'diplomski', slot_window_days: 180, products: { slot_window_days: 90 } });
+  if (!kupljeno || kupljeno.slotWindowDays !== 180) {
+    problems.push('odluka o pristupu cita prozor iz zivog kataloga umjesto snapshota prava (promjena kataloga mijenja kupljeno)');
+  } else {
+    const fp = { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 };
+    const d = decideReportAccess({ now, workType: 'diplomski', fingerprint: fp, activeSlots: [], entitlements: [kupljeno], recentGenerationCount: 0 });
+    const ocekivano = new Date(Date.parse(now) + 180 * 86_400_000).toISOString();
+    if (d.decision !== 'new_slot' || d.newSlot.slotExpiresAt !== ocekivano) {
+      problems.push('vezani slot ne dobiva kupljeni prozor (180 dana) nego drugi');
+    }
+  }
+  const stari = fromDb({ ...base, work_type: 'diplomski', slot_window_days: null, products: { slot_window_days: 120 } });
+  if (!stari || stari.slotWindowDays !== 120) {
+    problems.push('stariji redak bez snapshota gubi prozor svog proizvoda');
+  }
+  const spec = fromDb({ ...base, work_type: 'specijalisticki', slot_window_days: 21, products: null });
+  if (!spec || spec.workType !== 'specijalisticki') {
+    problems.push('pravo za specijalisticki se ispusta ili prepisuje u drugu vrstu rada pri citanju');
+  }
+  if (!/(^|,\s*)slot_window_days\s*(,|$)/.test(select)) {
+    problems.push('upit prava ne cita snapshot prozora (entitlements.slot_window_days)');
+  }
+  if (/(^|[\s,])products\(/.test(select) || !select.includes('products!product_id(')) {
+    problems.push('ugradnja products nema eksplicitan hint veze (drugi FK prema products bi dao PGRST201)');
+  }
+  return problems;
+}
+
+/**
+ * OZICENJE POTROSNJE PRAVA: generate-report i repair-docx prihvacaju svaku prodajnu vrstu rada
+ * (specijalisticki iz 0206), citaju pravo zajednickim upitom i mapiranjem, i gresku upita NE
+ * tumace kao "nema prava" (to bi placenom korisniku vratilo 402).
+ */
+export function entitlementConsumerProblems(sources: Record<string, string>): string[] {
+  const problems: string[] = [];
+  for (const [ime, raw] of Object.entries(sources)) {
+    const src = raw.replace(/\r\n/g, '\n');
+    if (/isReportWorkType\(/.test(src) || !/isBillableWorkType\((body|meta)\.workType\)/.test(src)) {
+      problems.push(`${ime}: vrsta rada se provjerava klijentskim popisom (specijalisticki pravo nije moguce potrositi)`);
+    }
+    if (!src.includes('.select(ENTITLEMENT_ACCESS_SELECT)') || !src.includes('entitlementRowsFromDb(entitlements')) {
+      problems.push(`${ime}: pravo se ne cita zajednickim upitom i mapiranjem (snapshot prozora)`);
+    }
+    if (/products\(slot_window_days\)/.test(src)) {
+      problems.push(`${ime}: ugradnja products(...) bez hinta veze`);
+    }
+    const upit = src.indexOf('.select(ENTITLEMENT_ACCESS_SELECT)');
+    const err = src.indexOf('if (slotsError || entitlementsError)', upit);
+    const odluka = src.indexOf('decideReportAccess(', upit);
+    if (!/\{ data: entitlements, error: entitlementsError \}/.test(src) || upit < 0 || err < 0 || odluka < 0 || err > odluka) {
+      problems.push(`${ime}: greska upita prava se guta prije odluke (PGRST201 postaje 402 za placenog korisnika)`);
+    }
+  }
+  return problems;
+}
+
+/**
+ * JEDAN STRANI KLJUC entitlements -> products kroz sve migracije. Drugi (npr.
+ * upgraded_from_product_id references products) cini ugradnju products(...) dvosmislenom.
+ * Parsira naredbe koje stvaraju ili mijenjaju entitlements i broji `references products`.
+ */
+export function entitlementProductFkCount(migrations: readonly { name: string; sql: string }[]): { count: number; where: string[] } {
+  const where: string[] = [];
+  let count = 0;
+  for (const m of migrations) {
+    const sql = m.sql.replace(/\r\n/g, '\n').replace(/--[^\n]*/g, '');
+    for (const stmt of sql.split(';')) {
+      if (!/\b(create\s+table(\s+if\s+not\s+exists)?|alter\s+table(\s+if\s+exists)?(\s+only)?)\s+(public\.)?entitlements\b/i.test(stmt)) continue;
+      const n = [...stmt.matchAll(/references\s+(public\.)?products\s*\(/gi)].length;
+      if (n > 0) { count += n; where.push(`${m.name} (${n})`); }
+    }
+  }
+  return { count, where };
 }

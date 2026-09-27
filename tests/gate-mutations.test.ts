@@ -93,10 +93,14 @@ import {
 import { quoteUpgrade } from '../src/report/upgrade';
 import {
   bonusOutboxWorkerProblems,
+  entitlementAccessProblems,
+  entitlementConsumerProblems,
+  entitlementProductFkCount,
   entitlementSnapshotProblems,
   upgradeQuoteProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
+import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb } from '../src/report/entitlement-access';
 import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
@@ -4886,6 +4890,79 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
   },
+  // --- naplata: Monetizacija V1 (M2) krug 2, potrosnja kupljenog prava --------------------------------
+  {
+    id: 'naplata/snapshot-bez-prozora',
+    imitates: 'buildEntitlementInsert iz kruga 1: offer_code i prava se snapshotiraju, ali prozor slota ne, pa ga odluka o pristupu i dalje cita iz zivog kataloga',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.slot_window_days;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('ne snapshotira prozor slota'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/pristup-cita-zivi-katalog',
+    imitates: 'krug 1: generate-report i repair-docx citaju slot_window_days iz products uzivo, pa buduce skracenje prozora Final Passa skrati vec kupljeno pravo (odjeljak 29)',
+    caught: () => {
+      const mutant: typeof entitlementRowFromDb = (e) => {
+        const row = entitlementRowFromDb(e);
+        return row ? { ...row, slotWindowDays: e.products?.slot_window_days ?? row.slotWindowDays } : row;
+      };
+      return entitlementAccessProblems(mutant, ENTITLEMENT_ACCESS_SELECT).some((p) => p.includes('iz zivog kataloga umjesto snapshota'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/ugradnja-products-bez-hinta',
+    imitates: 'upit prava s golom ugradnjom products(slot_window_days): uz drugi FK entitlements -> products PostgREST vraca PGRST201 i placeno pravo nestaje iz odluke',
+    caught: () => {
+      const mutated = ENTITLEMENT_ACCESS_SELECT.replace('products!product_id(', 'products(');
+      if (mutated === ENTITLEMENT_ACCESS_SELECT) return false;
+      return entitlementAccessProblems(entitlementRowFromDb, mutated).some((p) => p.includes('nema eksplicitan hint'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/drugi-fk-entitlements-products',
+    imitates: '0206 iz kruga 1: upgraded_from_product_id references products dodaje drugi FK prema products, pa ugradnja products(...) u generate-report i repair-docx postaje dvosmislena (PGRST201)',
+    caught: () => {
+      const migracije = migrationsForFkGuard();
+      const idx = migracije.findIndex((m) => m.name === '0206_monetizacija_v1.sql');
+      if (idx < 0) return false;
+      const sql = migracije[idx].sql;
+      const mutated = sql.replace('add column if not exists upgraded_from_product_id text,', 'add column if not exists upgraded_from_product_id text references public.products(id),');
+      if (mutated === sql) return false;
+      const kopija = migracije.map((m, i) => (i === idx ? { ...m, sql: mutated } : m));
+      return entitlementProductFkCount(kopija).count === 2;
+    },
+    cleanBefore: () => entitlementProductFkCount(migrationsForFkGuard()).count === 1,
+  },
+  {
+    id: 'naplata/pristup-guta-gresku-upita',
+    imitates: 'krug 1: `{ data: entitlements }` bez provjere greske; PGRST201 ili pad baze postaju "nema prava" i placeni korisnik dobiva 402 s ponudom da plati ponovno',
+    caught: () => {
+      const src = generateReportSource();
+      const mutated = src.replace('{ data: entitlements, error: entitlementsError }', '{ data: entitlements }');
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'generate-report': mutated }).some((p) => p.includes('greska upita prava se guta'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-odbijen-pri-potrosnji',
+    imitates: 'krug 1: repair-docx vrstu rada provjerava klijentskim isReportWorkType, pa kupljeni slot_specijalisticki (16,99) na svaki popravak dobiva 400 bad_request',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('!isBillableWorkType(meta.workType)', '!isReportWorkType(meta.workType)');
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('klijentskim popisom'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
   // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
   {
     id: 'naplata/f21-povrat-ne-otkazuje-obvezu',
@@ -5398,6 +5475,23 @@ function webhookMorSource(): string {
 
 function createCheckoutSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+}
+
+function generateReportSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+}
+
+function repairDocxSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+}
+
+/** Sve migracije, za gard jednog FK entitlements -> products (mutira se kopija u memoriji). */
+function migrationsForFkGuard(): { name: string; sql: string }[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((name) => ({ name, sql: readTextLf(resolve(dir, name)) }));
 }
 
 function bonusOutboxModuleSource(): string {

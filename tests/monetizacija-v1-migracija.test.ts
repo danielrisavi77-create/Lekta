@@ -10,10 +10,11 @@
  * do_obrane gasi a ne brise, i da su konstrukcije idempotentne.
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { seededProducts } from './helpers/product-seeds';
+import { entitlementProductFkCount } from './helpers/monetizacija-v1-guards';
 import { mapProductRow } from '../src/catalog/products-catalog';
 
 const FILE = '0206_monetizacija_v1.sql';
@@ -188,7 +189,8 @@ describe('0206: disciplina cijene i idempotencija', () => {
   });
 
   it('snapshot prava postojecih entitlementa ne izmislja placeni iznos', () => {
-    const backfill = /update public\.entitlements e\s*set([\s\S]*?)where e\.product_id = p\.id\s*and e\.offer_code is null;/.exec(SQL);
+    // Jedna naredba ([^;]), da se ne uhvati raspon preko backfilla prozora iznad.
+    const backfill = /update public\.entitlements e\s*set([^;]*?)where e\.product_id = p\.id\s*and e\.offer_code is null;/.exec(SQL);
     expect(backfill).not.toBeNull();
     expect(backfill?.[1]).not.toMatch(/paid_amount_cents/);
   });
@@ -232,5 +234,39 @@ describe('0206: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', 
 
   it('funkciju ne smije zvati klijent', () => {
     expect(SQL).toMatch(/revoke all on function public\.apply_entitlement_upgrade\([^)]*\)\s*from public, anon, authenticated/);
+  });
+});
+
+describe('0206: snapshot prozora i jedan strani kljuc prema products (krug 2)', () => {
+  const MIGRATIONS = readdirSync(resolve(process.cwd(), 'supabase', 'migrations'))
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((name) => ({ name, sql: readFileSync(resolve(process.cwd(), 'supabase', 'migrations', name), 'utf8') }));
+
+  it('generator: parser vidi postojeci kljuc iz 0002 (entitlements.product_id references products)', () => {
+    const { where } = entitlementProductFkCount(MIGRATIONS);
+    expect(where.some((w) => w.startsWith('0002_products_catalog.sql'))).toBe(true);
+  });
+
+  it('kroz sve migracije postoji TOCNO jedan FK entitlements -> products (inace PGRST201 na products(...))', () => {
+    const { count, where } = entitlementProductFkCount(MIGRATIONS);
+    expect(count, where.join(', ')).toBe(1);
+    expect(SQL).toMatch(/add column if not exists upgraded_from_product_id text,/);
+    expect(SQL).toMatch(/drop constraint if exists entitlements_upgraded_from_product_id_fkey/);
+  });
+
+  it('entitlements.slot_window_days je snapshot: stupac, backfill PRIJE promjene prozora, trigger i nadogradnja', () => {
+    expect(SQL).toMatch(/add column if not exists slot_window_days integer check \(slot_window_days is null or slot_window_days > 0\)/);
+    const backfill = SQL.indexOf('set slot_window_days = p.slot_window_days');
+    const promjenaProzora = SQL.indexOf('set slot_window_days = v.slot_window_days');
+    expect(backfill).toBeGreaterThan(0);
+    expect(promjenaProzora).toBeGreaterThan(0);
+    expect(backfill, 'postojece pravo mora zadrzati prozor pod kojim je kupljeno').toBeLessThan(promjenaProzora);
+    expect(SQL).toMatch(/and e\.slot_window_days is null/);
+    expect(SQL).toMatch(/drop trigger if exists entitlements_snapshot_offer on public\.entitlements;\s*create trigger entitlements_snapshot_offer\s*before insert on public\.entitlements/);
+    // Trigger popunjava samo prazno: eksplicitan snapshot iz webhooka ostaje.
+    expect(SQL).toMatch(/if new\.slot_window_days is null then\s*new\.slot_window_days := v_product\.slot_window_days;/);
+    expect(SQL).toMatch(/if new\.offer_code is null then\s*new\.offer_code := v_product\.offer_code;/);
+    expect(SQL).toMatch(/slot_window_days = v_target\.slot_window_days,/);
   });
 });

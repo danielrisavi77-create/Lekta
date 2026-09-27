@@ -229,7 +229,7 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
   const REPAIR = ['full_report', 'repair', 'repair_diff', 'recheck'];
   it('slot proizvod: tocan product_id/work_type/slots_total + rok = now + purchase_window_days', () => {
     const row = buildEntitlementInsert(
-      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, slotWindowDays: 14, offerCode: 'repair_v1', capabilities: REPAIR },
       { userId: 'u1', orderId: 'pi_123', amountReceivedCents: 999 },
       'stripe',
       now,
@@ -244,12 +244,13 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
       purchase_expires_at: new Date(now + 90 * 86400000).toISOString(),
       offer_code: 'repair_v1',
       capabilities: REPAIR,
+      slot_window_days: 14,
       paid_amount_cents: 999,
     });
   });
   it('pass proizvod nosi 6 seminarskih slotova', () => {
     const row = buildEntitlementInsert(
-      { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180, offerCode: 'semester_pass_v1', capabilities: ['multi_document_slots'] },
+      { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180, slotWindowDays: 7, offerCode: 'semester_pass_v1', capabilities: ['multi_document_slots'] },
       { userId: 'u1', orderId: 'pi_2' },
       'stripe',
       now,
@@ -260,7 +261,7 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
   });
   it('specijalisticki Repair je jedan slot vlastite vrste rada, ne diplomski ni doktorski', () => {
     const row = buildEntitlementInsert(
-      { id: 'slot_specijalisticki', workType: 'specijalisticki', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { id: 'slot_specijalisticki', workType: 'specijalisticki', slotsTotal: 1, purchaseWindowDays: 90, slotWindowDays: 21, offerCode: 'repair_v1', capabilities: REPAIR },
       { userId: 'u1', orderId: 'pi_s', amountReceivedCents: 1699 },
       'stripe',
       now,
@@ -270,7 +271,7 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
   it('snapshot je KOPIJA: kasnija promjena kataloga ne mijenja kupljeno pravo', () => {
     const katalog = ['full_report', 'repair'];
     const row = buildEntitlementInsert(
-      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: katalog },
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, slotWindowDays: 14, offerCode: 'repair_v1', capabilities: katalog },
       { userId: 'u1', orderId: 'pi_3', totalCents: 999 },
       'stripe',
       now,
@@ -285,7 +286,7 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
     ['NaN', Number.NaN],
   ])('neispravan naplaceni iznos (%s) je null, ne broj', (_ime, cents) => {
     const row = buildEntitlementInsert(
-      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, slotWindowDays: 14, offerCode: 'repair_v1', capabilities: REPAIR },
       { userId: 'u1', orderId: 'pi_4', amountReceivedCents: cents },
       'stripe',
       now,

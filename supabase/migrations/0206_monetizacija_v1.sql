@@ -12,8 +12,10 @@
 --     Katedrine tablice iz 0035 (academic_projects, katedra_projects) imaju VLASTITI imenski prostor
 --     i ovdje se namjerno ne diraju.
 --  2. Verzionirani skupovi prava (`offer_codes`, odjeljak 13) i `products.offer_code`.
---  3. Snapshot prava na entitlementu (`offer_code`, `capabilities`, `paid_amount_cents`) i stupci
---     nadogradnje Repair -> Final Pass (odjeljak 14).
+--  3. Snapshot prava na entitlementu (`offer_code`, `capabilities`, `slot_window_days`,
+--     `paid_amount_cents`) i stupci nadogradnje Repair -> Final Pass (odjeljak 14). Snapshot prozora
+--     je ono sto odluka o pristupu stvarno cita (src/report/entitlement-access.ts), a trigger ga
+--     upisuje i za prava koja ne dolaze kroz webhook (nagrade, kuponi).
 --  4. Novi proizvodi: slot_specijalisticki, pass_specijalisticki, pass_doktorski.
 --  5. Ciljne cijene i prozori V1. Cijena se mijenja ISKLJUCIVO kroz set_product_price (0020), i to
 --     samo kad se razlikuje, pa drugi prolaz ne dopisuje pricing_changelog.
@@ -98,18 +100,76 @@ alter table public.products add column if not exists offer_code text references 
 -- ---------------------------------------------------------------------------------------------
 -- 3. Snapshot prava na entitlementu i nadogradnja
 -- ---------------------------------------------------------------------------------------------
--- offer_code i capabilities se upisuju PRI KUPNJI (webhook-mor, buildEntitlementInsert), pa buduca
--- promjena kataloga ne oduzima kupljeno. paid_amount_cents je stvarno naplacen iznos (Stripe
--- amount_received); jedino on smije umanjiti cijenu nadogradnje. NULL = nepoznato, pa nadogradnja
--- za takvo pravo NIJE dopustena (fail-closed), umjesto da se iznos pogadja iz danasnjeg cjenika.
+-- offer_code, capabilities i slot_window_days se upisuju PRI KUPNJI (webhook-mor,
+-- buildEntitlementInsert), pa buduca promjena kataloga ne oduzima kupljeno. slot_window_days je
+-- stvarno provedeno pravo: generate-report i repair-docx ga citaju prije zivog products retka.
+-- paid_amount_cents je stvarno naplacen iznos (Stripe amount_received); jedino on smije umanjiti
+-- cijenu nadogradnje. NULL = nepoznato, pa nadogradnja za takvo pravo NIJE dopustena (fail-closed),
+-- umjesto da se iznos pogadja iz danasnjeg cjenika.
+--
+-- JEDAN STRANI KLJUC entitlements -> products (product_id iz 0002). upgraded_from_product_id je
+-- NAMJERNO bez references: drugi kljuc prema products cini ugradnju `products(...)` dvosmislenom
+-- (PostgREST PGRST201), a generate-report i repair-docx bi tada svako placeno pravo vidjeli kao
+-- nepostojece. Gard: tests/monetizacija-v1-migracija.test.ts (jedan FK) i gate-mutations.
 alter table public.entitlements
   add column if not exists offer_code text references public.offer_codes(code),
   add column if not exists capabilities text[],
+  add column if not exists slot_window_days integer check (slot_window_days is null or slot_window_days > 0),
   add column if not exists paid_amount_cents integer check (paid_amount_cents is null or paid_amount_cents >= 0),
   add column if not exists upgrade_order_id text,
   add column if not exists upgrade_paid_cents integer check (upgrade_paid_cents is null or upgrade_paid_cents >= 0),
-  add column if not exists upgraded_from_product_id text references public.products(id),
+  add column if not exists upgraded_from_product_id text,
   add column if not exists upgraded_at timestamptz;
+
+-- Ako je raniji nacrt ove migracije ikad dodao kljuc na upgraded_from_product_id, ukloni ga.
+alter table public.entitlements drop constraint if exists entitlements_upgraded_from_product_id_fkey;
+
+-- Snapshot prozora za postojeca prava: prozor proizvoda PRIJE promjena iz odjeljka 5 nize, jer je
+-- pravo kupljeno pod tim uvjetima (odjeljak 13: staro pravo zadrzava snapshot).
+update public.entitlements e
+   set slot_window_days = p.slot_window_days
+  from public.products p
+ where e.product_id = p.id
+   and e.slot_window_days is null
+   and p.slot_window_days is not null;
+
+-- Snapshot pri svakom upisu prava, i kad ga ne pise webhook (friend referral, rulebook nagrada,
+-- kuponi): popunjava SAMO prazna polja iz kataloga u trenutku upisa, pa eksplicitan snapshot
+-- iz webhooka ostaje netaknut.
+create or replace function public.entitlements_snapshot_offer()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+declare
+  v_product public.products;
+  v_caps text[];
+begin
+  if new.product_id is null then
+    return new;
+  end if;
+  select * into v_product from public.products where id = new.product_id;
+  if not found then
+    return new;
+  end if;
+  if new.slot_window_days is null then
+    new.slot_window_days := v_product.slot_window_days;
+  end if;
+  if new.offer_code is null then
+    new.offer_code := v_product.offer_code;
+  end if;
+  if new.capabilities is null and new.offer_code is not null then
+    select o.capabilities into v_caps from public.offer_codes o where o.code = new.offer_code;
+    new.capabilities := v_caps;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists entitlements_snapshot_offer on public.entitlements;
+create trigger entitlements_snapshot_offer
+  before insert on public.entitlements
+  for each row execute function public.entitlements_snapshot_offer();
 
 -- Jedna uplata nadogradnje pretvara NAJVISE jedno pravo; retry iste uplate ne moze pretvoriti drugo.
 create unique index if not exists entitlements_upgrade_order_uidx
@@ -119,6 +179,8 @@ comment on column public.entitlements.offer_code is
   'Snapshot products.offer_code u trenutku kupnje (MONETIZACIJA_V1.md odjeljak 13, Snapshot prava).';
 comment on column public.entitlements.capabilities is
   'Snapshot offer_codes.capabilities u trenutku kupnje; promjena kataloga ga ne mijenja.';
+comment on column public.entitlements.slot_window_days is
+  'Snapshot products.slot_window_days u trenutku kupnje; odluka o pristupu ga cita prije zivog kataloga.';
 comment on column public.entitlements.paid_amount_cents is
   'Stvarno naplaceno pri kupnji (Stripe amount_received). NULL = nepoznato, nadogradnja tada nije dopustena.';
 comment on column public.entitlements.upgrade_order_id is
@@ -349,6 +411,7 @@ begin
          product_id = v_target.id,
          offer_code = v_target.offer_code,
          capabilities = v_caps,
+         slot_window_days = v_target.slot_window_days,
          upgrade_order_id = p_upgrade_order_id,
          upgrade_paid_cents = p_upgrade_paid_cents,
          upgraded_at = now(),

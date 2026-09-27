@@ -12,7 +12,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
-import { isReportWorkType } from '../../../src/report/pricing.ts';
+import { isBillableWorkType } from '../../../src/report/billable-work-type.ts';
+import { ENTITLEMENT_ACCESS_SELECT, entitlementRowsFromDb } from '../../../src/report/entitlement-access.ts';
 import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
@@ -64,7 +65,7 @@ Deno.serve(async (req: Request) => {
   if (raw.length > MAX_BODY) return json({ error: 'payload_too_large' }, 413);
   let body: any = null;
   try { body = JSON.parse(raw); } catch { body = null; }
-  if (!body || !isReportWorkType(body.workType) || !body.parsedStructure || !body.analysisResult) {
+  if (!body || !isBillableWorkType(body.workType) || !body.parsedStructure || !body.analysisResult) {
     return json({ error: 'bad_request' }, 400);
   }
   // kapiraj velicinu nizova (predimenzioniran payload -> 413, ne rusi funkciju)
@@ -98,7 +99,7 @@ Deno.serve(async (req: Request) => {
 
   // dohvat konteksta + odluka; re-runnable jer friend referral moze stvoriti entitlement pa se ponovi
   const decide = async () => {
-  const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
+  const [{ data: slots, error: slotsError }, { data: entitlements, error: entitlementsError }, { count: recent }] = await Promise.all([
     admin
       .from('document_slots')
       .select('id, work_type, fingerprint, slot_expires_at')
@@ -107,8 +108,8 @@ Deno.serve(async (req: Request) => {
       .gt('slot_expires_at', now),
     admin
       .from('entitlements')
-      // products join preko product_id: slot_window_days s proizvoda (npr. Do obrane SKU 120d)
-      .select('id, work_type, status, slots_used, slots_total, purchase_expires_at, products(slot_window_days)')
+      // Snapshot prozora s prava, a proizvod samo za stariji redak bez snapshota (entitlement-access.ts).
+      .select(ENTITLEMENT_ACCESS_SELECT)
       .eq('user_id', user.id)
       .eq('work_type', workType)
       .eq('status', 'active'),
@@ -118,6 +119,12 @@ Deno.serve(async (req: Request) => {
       .eq('user_id', user.id)
       .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
   ]);
+
+  // Greska upita NIJE "nema prava": bez ove provjere bi npr. dvosmislena ugradnja (PGRST201)
+  // placenom korisniku vratila 402 i ponudila mu da plati ponovno.
+  if (slotsError || entitlementsError) {
+    throw new Error(`entitlement_lookup_failed: ${(slotsError ?? entitlementsError)?.message ?? 'nepoznato'}`);
+  }
 
   return decideReportAccess(
     {
@@ -130,15 +137,7 @@ Deno.serve(async (req: Request) => {
         fingerprint: s.fingerprint,
         slotExpiresAt: s.slot_expires_at,
       })),
-      entitlements: (entitlements ?? []).map((e: any) => ({
-        id: e.id,
-        workType: e.work_type,
-        status: e.status,
-        slotsUsed: e.slots_used,
-        slotsTotal: e.slots_total,
-        purchaseExpiresAt: e.purchase_expires_at,
-        slotWindowDays: e.products?.slot_window_days ?? undefined,
-      })),
+      entitlements: entitlementRowsFromDb(entitlements as any),
       recentGenerationCount: recent ?? 0,
     },
     { dailyCap },
