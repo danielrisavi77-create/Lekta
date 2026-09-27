@@ -30,7 +30,7 @@ korisnike, ni po ponasanju ni po udjelu; stopa privole se ne mjeri (nema dogadja
 
 `opportunity_summary` nije dodatni korak lijevka nego dijagnosticki dogadjaj nakon uspjesne analize.
 Nosi samo interne dimenzije i brojace: `profileId`, `profileStatus`, `workType`, `auto`,
-`assisted`, `manual`, `unknown`, `total` i `kind`. `unknown` je broj provjera sa statusom
+`assisted`, `manual`, `unknown`, `structureGaps`, `total` i `kind`. `unknown` je broj provjera sa statusom
 `unmeasurable`. Ne nosi naslov, autora, naziv datoteke, tekst nalaza ni isjecak rada.
 
 Control Center sekcija **Prilike** kombinira taj signal s postojecim `profile_completed`,
@@ -39,8 +39,15 @@ Rangiranje nije kompozitni score: prvo idu signali s najmanje 20 opažanja, zati
 zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count proxy** jer tablica nema
 session/user identifikator; ne smije se zvati cohort abandonmentom.
 
-`unsupported_structure` i `fixer_noop_reason` v1 jos ne instrumentira. Izvjestaj ih navodi pod
-`missingSignals`; odsutnost mjerenja nikad se ne prikazuje kao nula.
+V2 dodatno salje `analysis_structure_gap` samo za postojeci `skipped[]` iz poznatih strukturiranih
+analizatora. Izvorni `reason` nikad se ne salje: svodi se na `unsupported-structure`, `stale-anchor`,
+`no-target` ili `other`, uz `category` i `count`. To NIJE potpuni OOXML inspection coverage.
+
+`repair_noop_reason` grupira postojeci `skippedReasons` iz repair enginea po sigurnom enumu
+(`already-ok`, `no-target`, `invalid-params`, `unsupported-structure`, `stale-anchor`, `unclassified`)
+i salje samo `kind` + `count`, bez `ruleId`-a. `inspection_coverage_global` ostaje u `missingSignals`
+dok T64 ne uvede zasebni dokaz sto cijeli analizator nije pregledao; odsutnost mjerenja nikad se
+ne prikazuje kao nula.
 
 Postojeci dogadjaji (`file_selected`, `profile_completed`, `analysis_completed`) su zadrzani pod svojim imenima:
 drugo ime za isti korak mjerilo bi ga dvaput.
