@@ -383,6 +383,9 @@ export async function analyzeDocx(file: File, profile: any, settings: any, onPro
   }
   // T64: tek ovdje postoje svih pet izvora. Polje zivi samo na klijentskom `details` (kao
   // `details.measurements`): nije u golden normalizaciji i sanitizeAnalysisResult ga ne salje.
-  if (result?.details) result.details.inspectionCoverage = computeInspectionCoverage({ details: result.details, census: inspectionSink.census, unavailableSources });
+  // `scoredCheckIds` odlucuje smije li status tvrditi "potrebna je rucna provjera": samo kad je
+  // slijepa provjera u ovom rezultatu bodovana. Bodovanje se ovdje samo cita, ne mijenja.
+  const scoredCheckIds: string[] = Array.isArray(result?.checks) ? result.checks.filter((check: any) => check?.scored === true && typeof check.id === 'string').map((check: any) => check.id) : [];
+  if (result?.details) result.details.inspectionCoverage = computeInspectionCoverage({ details: result.details, census: inspectionSink.census, unavailableSources, scoredCheckIds });
   return result;
 }

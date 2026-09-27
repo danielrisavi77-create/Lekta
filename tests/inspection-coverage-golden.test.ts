@@ -12,7 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { allCheckIds } from '../src/scoring/check-id-registry';
-import type { InspectionCoverage } from '../src/analysis/inspection-coverage';
+import { censusInspectionContainers, type InspectionCoverage } from '../src/analysis/inspection-coverage';
+import { analyzeTypographyStructure } from '../src/analysis/typography-structure';
+import { ZipReader, parseXml } from '../src/docx/parser';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
@@ -57,5 +59,22 @@ describe('T64 inspectionCoverage nad golden fixturama', () => {
       out[fileName] = coverage;
     }
     expect(out).toMatchSnapshot();
+  }, 300000);
+
+  it('popis zrcali tipografsku provjeru na svakoj fixturi (unakrsna kontrola, ne isti kod)', async () => {
+    let protectedTotal = 0;
+    for (const fileName of fixtures) {
+      const bytes = readFileSync(join(FIXTURE_DIR, fileName));
+      const zip = new ZipReader(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+      const xml = await zip.text('word/document.xml');
+      expect(xml, fileName).toBeTruthy();
+      if (!xml) continue;
+      const census = censusInspectionContainers(parseXml(xml, fileName));
+      const typography = analyzeTypographyStructure(xml);
+      expect(census.typographyProtectedTopLevel, fileName).toBe(typography.skipped.length);
+      protectedTotal += census.typographyProtectedTopLevel;
+    }
+    // Kontrola nije vakuumska: barem jedna fixtura ima zasticene odlomke.
+    expect(protectedTotal).toBeGreaterThan(0);
   }, 300000);
 });

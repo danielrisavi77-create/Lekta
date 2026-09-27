@@ -105,7 +105,10 @@ import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
-import { computeInspectionCoverage, type InspectionCensus } from '../src/analysis/inspection-coverage';
+import { censusInspectionContainers, computeInspectionCoverage, TYPOGRAPHY_CHECK_ID, type InspectionCensus, type ParagraphSkipKind } from '../src/analysis/inspection-coverage';
+import { analyzeTypographyStructure } from '../src/analysis/typography-structure';
+import { inspectionCoverageText } from '../src/ui/results/inspection-coverage-line';
+import { parseXml } from '../src/docx/parser';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -3597,10 +3600,57 @@ const MUTATIONS: Mutation[] = [
       details: inspectionDetails(),
       census: cleanInspectionCensus(),
       unavailableSources: ['requiredSectionsStructure', 'linkDoiStructure'],
-    }).status === 'manualReviewRequired',
+    }).skippedParts.some((part) => part.kind === 'analysisUnavailable' && part.count === 2),
     cleanBefore: () => computeInspectionCoverage({ details: inspectionDetails(), census: cleanInspectionCensus(), unavailableSources: [] }).status === 'fullyChecked',
   },
+  {
+    id: 'inspection-coverage/rucna-provjera-bez-bodovane-provjere',
+    imitates: 'T64 krug 2: rad s 30 od 90 Zotero odlomaka dobije "Potrebna je rucna provjera" iako '
+      + 'te odlomke preskace samo informativna tipografska provjera, a bodovane provjere fonta, '
+      + 'velicine, proreda i poravnanja ih citaju; lazna tvrdnja suprotnog smjera',
+    caught: () => {
+      const out = computeInspectionCoverage({ details: inspectionDetails(), census: inspectionCensusWith(90, 'citationField', 30), scoredCheckIds: [] });
+      return out.status === 'partiallyChecked' && !(inspectionCoverageText(out) ?? '').includes('Potrebna je ručna provjera');
+    },
+    // Prag nije mrtav: ista slika uz BODOVANU tipografsku provjeru trazi rucnu provjeru.
+    cleanBefore: () => computeInspectionCoverage({ details: inspectionDetails(), census: inspectionCensusWith(90, 'citationField', 30), scoredCheckIds: [TYPOGRAPHY_CHECK_ID] }).status === 'manualReviewRequired',
+  },
+  {
+    id: 'inspection-coverage/popis-broji-procitan-odlomak',
+    imitates: 'T64 krug 2: popis prijavi kao preskocen odlomak koji tipografska provjera ipak cita '
+      + '(srednji odlomak Zotero bibliografije, odlomak oko ugradjenog objekta), pa "nije obuhvatila" '
+      + 'preuvelicava; popis mora brojati tocno ono sto analyzeTypographyStructure odbaci',
+    caught: () => {
+      const run = (text: string) => `<w:r><w:t>${text}</w:t></w:r>`;
+      const body = `<w:p><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText> ADDIN ZOTERO_BIBL CSL_BIBLIOGRAPHY </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r>${run('A.')}</w:p>`
+        + `<w:p>${run('B.')}</w:p>`
+        + `<w:p>${run('C.')}<w:r><w:fldChar w:fldCharType="end"/></w:r></w:p>`
+        + `<w:p>${run('Slika')}<w:r><w:object/></w:r></w:p>`;
+      const xml = inspectionXml(body);
+      const census = censusInspectionContainers(parseXml(xml));
+      const reported = Object.values(census.byKind).reduce((sum, n) => sum + n, 0);
+      return reported === 2 && census.typographyProtectedTopLevel === analyzeTypographyStructure(xml).skipped.length && census.embeddedObjects === 1;
+    },
+    cleanBefore: () => {
+      const xml = inspectionXml('<w:p><w:r><w:t>A.</w:t></w:r></w:p>');
+      const census = censusInspectionContainers(parseXml(xml));
+      return Object.values(census.byKind).every((n) => n === 0) && census.typographyProtectedTopLevel === 0 && analyzeTypographyStructure(xml).skipped.length === 0;
+    },
+  },
 ];
+
+/** T64: minimalni document.xml s deklariranim prefiksom `w:`. */
+function inspectionXml(body: string): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr/></w:body></w:document>`;
+}
+
+/** T64: popis s jednom vrstom preskocenih odlomaka. */
+function inspectionCensusWith(total: number, kind: ParagraphSkipKind, n: number): InspectionCensus {
+  const census = cleanInspectionCensus();
+  census.totalParagraphs = total;
+  census.byKind[kind] = n;
+  return census;
+}
 
 /** T64: potpun skup izvora kakav vanjski omotac analyzeDocx sastavlja nad cistim dokumentom. */
 function inspectionDetails(): Record<string, unknown> {
@@ -3617,7 +3667,9 @@ function inspectionDetails(): Record<string, unknown> {
 function cleanInspectionCensus(): InspectionCensus {
   return {
     totalParagraphs: 40,
-    byKind: { citationField: 0, textBox: 0, nestedTable: 0, tableCell: 0, contentControl: 0, trackedChange: 0, equation: 0, embeddedObject: 0, fieldOrHyperlink: 0 },
+    byKind: { citationField: 0, textBox: 0, nestedTable: 0, tableCell: 0, contentControl: 0, trackedChange: 0, equation: 0, fieldOrHyperlink: 0, otherStructure: 0 },
+    embeddedObjects: 0,
+    typographyProtectedTopLevel: 0,
   };
 }
 
