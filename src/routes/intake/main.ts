@@ -2,6 +2,7 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
+import { mountIntakeLive } from './intake-live';
 import { prikaziUlazniListBroj } from './list-number';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
@@ -96,8 +97,12 @@ function start(): void {
   // iskljucivo `opacity` i `transform`.
   playIntakeEntry(document);
   const store = openStore();
+  // ZIVI LIST (Z32): pribor uz list i vrata ubacivanja montiraju se PRIJE kontrolera, jer
+  // kontroler od prvog klika pita smije li primiti dokument. Isti `location.search` koji putuje
+  // na `/rad/` odlucuje i o predodabiru fakulteta, pa kartica i odrediste ne mogu tvrditi razlicito.
+  const live = mountIntakeLive(document, { search: window.location.search });
 
-  mountIntakeController(document, {
+  const controller = mountIntakeController(document, {
     maxUploadBytes,
     async inspectFile(file) {
       const { inspectDocxIntake } = await import('../../docx/intake-gate');
@@ -109,7 +114,13 @@ function start(): void {
     // gdje ga `urlSelection` vec zna procitati. Bijelu listu i granice drzi `handoff-query.ts`.
     handoffSearch: window.location.search,
     navigate(path) { window.location.assign(path); },
+    canAccept: live.canAccept,
+    onBlocked: live.onBlocked,
+    onFileChosen: live.onFileChosen,
+    onSessionStored: live.onSessionStored,
   });
+  // Ispustanje bilo gdje na ekranu (Z32 tocka 4) ide istim tokom kao ispustanje na list.
+  live.poveziOdabir((file) => { void controller.selectFile(file); });
 
   void offerContinuation(document, store);
 }
