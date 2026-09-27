@@ -216,9 +216,9 @@ pokušan i doslovna poruka providera**, da se "nisam prijavljen" ne pomiješa s 
 
 Svaki potpisan događaj upisuje se u `webhook_events` PRIJE obrade, a ishod se upiše u `outcome`.
 Djelomični indeks `webhook_events_unresolved` (migracija 0092) pokriva samo
-`outcome is null or outcome in ('failed','unknown_product')`, pa **ishodi `ignored`, `refused` i
-`needs_manual_link` u njega ne ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao
-service role):
+`outcome is null or outcome in ('failed','unknown_product')`, pa **ishodi `ignored`, `refused`,
+`needs_manual_link`, `needs_manual_review` i `conflict_other_user` u njega ne ulaze**. Njih se
+traži izravnim upitom po stupcu `outcome` (kao service role):
 
 | `outcome` | Što znači | Što napraviti |
 |---|---|---|
@@ -227,28 +227,31 @@ service role):
 | `ignored` uz `outcome_detail` koji počinje s `povrat_bez_charge_refunded:` | stigao je događaj koji **nosi vraćen novac**, a ne zove se `charge.refunded` | provjeri u Stripe sučelju o kojoj se uplati radi i povrat obradi ručno; handler namjerno **ne** piše po tom događaju. Ako ovo stiže redovito, provjeri pretplatu (korak 4.4) |
 | `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | pretplaćen je događaj koji nam ne treba i ne nosi novac (ime događaja je iza dvotočke) | makni ga iz pretplate (korak 4.4) |
 | `needs_manual_link` uz `outcome_detail` `missing_user_metadata` | `payment_intent.succeeded` s **potvrđenom naplatom** (`status` `succeeded`, `amount_received` > 0), ali bez `metadata[user_id]`: novac je naplaćen, a pravo nema kome pripasti (ručni Payment Link za Lektin proizvod ili izgubljena metadata) | veži ručno (postupak niže), isti dan; ERROR redak `webhook-mor needs_manual_link` je signal |
+| `needs_manual_review` uz `outcome_detail` koji počinje s `amount_below_catalog` ili `currency_not_eur` | potvrđena naplata čiji iznos je **manji od kataloške cijene** (`round(products.price_eur * 100)`), ili je naplaćena u valuti koja nije EUR. Po odluci vlasnika (2026-09-27) takva uplata **ne daje pravo**: nema entitlementa ni ručne narudžbe. `outcome_detail` nosi oba iznosa i valutu (`ocekivano=`, `naplaceno=`, `valuta=`) | isti dan, uz ERROR redak `webhook-mor needs_manual_review`. Prvo provjeri povrat (upit niže, „Prije ručnog vezivanja"): ako je PaymentIntent već vraćen, samo zatvori trag. Inače odluči: **povrat** u Stripe sučelju (puni povrat, pa `charge.refunded` zatvori ostatak), ili, ako je niži iznos opravdan (npr. dogovoren popust), **ručno vezivanje** (postupak niže) |
+| `conflict_other_user` | `payment_intent.succeeded` čiji insert entitlementa je pao na `unique (provider, order_id)` (23505), a postojeći redak pripada **drugom** korisniku nego `metadata[user_id]` događaja. Pravo se ne dodjeljuje i nijedan bonus se ne izdaje; `outcome_detail` nosi oba korisnika i id postojećeg retka | isti dan, uz ERROR redak `webhook-mor conflict_other_user`. Provjeri tko je stvarno platio (Stripe sučelje, `receipt_email`) i kako je postojeći redak nastao (npr. ručno vezivanje na krivi račun). Ispravi vlasnika postojećeg retka ili napravi povrat; ne upisuj drugi redak za isti `order_id` |
 | `ignored` uz `outcome_detail` `missing_payment_intent` | naplata ili povrat bez PaymentIntenta (naslijeđena izravna naplata iz dashboarda) | provjeri u Stripe sučelju; ako je to ipak kupnja Lektinog proizvoda, veži je ručno |
 | `ignored` uz `outcome_detail` koji počinje s `foreign_product:` | proizvod koji Lekta ne prodaje (npr. Katedra pass na istom računu) | ništa; Katedra ga knjiži sama |
 | `refused` | testni način rada ili događaj povezanog računa (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE`; kod `account_mismatch` provjeri da endpoint sluša vlastiti račun, ne povezane račune (korak 4.4) |
 | `unknown_product` | `metadata[product_id]` nije u `products` | popravi katalog pa replayaj |
-| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `refund_pending`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
-| `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak) | ništa |
+| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `entitlement_owner_lookup`, `refund_pending`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni. Tekst greške baze je SAMO ovdje i u logu; odgovor Stripeu nosi generički kod | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
+| `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak). Puni povrat (`refunded`) uz entitlement otkazuje i ručnu narudžbu istog PaymentIntenta (`manual_orders.status = 'refunded'`) i povlači pass kupon iz iste kupnje (`coupon_grants.expires_at` postaje trenutak povrata); djelomični povrat (`partial_refund_noted`) ne dira ništa od toga. Redoslijed nije bitan: uplata koja stigne nakon punog povrata (Stripe ne jamči redoslijed, a prvi pokušaj uplate može čekati retry) upiše pa odmah zatvori i entitlement i ručnu narudžbu (`refunded_before_payment`) | ništa |
 
 ```sql
 -- Neriješeni događaji koje indeks NE pokriva (pokreni barem jednom dnevno u tjednu lansiranja).
 select id, received_at, event_name, order_id, outcome, outcome_detail
 from webhook_events
-where outcome in ('ignored', 'refused', 'needs_manual_link')
+where outcome in ('ignored', 'refused', 'needs_manual_link', 'needs_manual_review', 'conflict_other_user')
 order by received_at desc
 limit 100;
 
--- Uplate koje čekaju ručno vezivanje ili nisu potvrdile naplatu. Uplata čiji je PaymentIntent
--- već vraćen (isti order_id s oznakom punog povrata, REFUND_MARKERS u webhook-mor/handler.ts)
--- ne čeka vezivanje nego je zatvorena povratom, pa je upit namjerno izostavlja.
+-- Uplate koje čekaju ručno vezivanje, ručni pregled (iznos ili vlasnik) ili nisu potvrdile
+-- naplatu. Uplata čiji je PaymentIntent već vraćen (isti order_id s oznakom punog povrata,
+-- REFUND_MARKERS u webhook-mor/handler.ts) ne čeka vezivanje nego je zatvorena povratom, pa je
+-- upit namjerno izostavlja.
 select w.id, w.received_at, w.order_id, w.outcome, w.outcome_detail,
        w.raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
 from webhook_events as w
-where w.outcome in ('needs_manual_link', 'ignored')
+where w.outcome in ('needs_manual_link', 'needs_manual_review', 'conflict_other_user', 'ignored')
   and w.event_name = 'payment_intent.succeeded'
   and not exists (
     select 1
@@ -260,8 +263,15 @@ where w.outcome in ('needs_manual_link', 'ignored')
 order by w.received_at asc;
 ```
 
+**Prije ručnog vezivanja provjeri povrat.** Uplata je mogla biti vraćena dok je čekala: u Stripe
+sučelju otvori PaymentIntent i pogledaj ima li povrat, a u bazi pokreni
+`select id, received_at, outcome, outcome_detail from webhook_events where order_id = '<order_id>' and outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded')`.
+Ako upit vrati redak ili Stripe pokazuje puni povrat, **ne veži** nego samo zatvori trag (korak 6
+niže, s `outcome_detail = 'vraceno_prije_vezivanja'`). Ista provjera je obavezni korak 4 postupka niže.
+
 **Ručno vezivanje** (uplata koja je stvarno naplaćena Lektin proizvod, a nije dobila pravo pristupa,
-prije svega ishod `needs_manual_link`), kao service role:
+prije svega ishodi `needs_manual_link` i, nakon odluke da se niži iznos prihvaća,
+`needs_manual_review`), kao service role:
 
 1. Iz `raw_payload` pročitaj PaymentIntent id (`data.object.id`, to je `order_id`), e-mail kupca
    (`data.object.receipt_email`) i, ako postoji, `data.object.metadata.product_id`.
@@ -313,6 +323,10 @@ prije svega ishod `needs_manual_link`), kao service role:
 U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor ignored_needs_attention`
 (ERROR, tiče se novca: uplata bez potvrđene naplate ili povrat pod imenom koje nije
 `charge.refunded`), `webhook-mor needs_manual_link` (ERROR, potvrđena naplata bez korisnika),
+`webhook-mor needs_manual_review` (ERROR, naplaćeno manje od kataloške cijene ili u valuti koja
+nije EUR), `webhook-mor conflict_other_user` (ERROR, pravo za isti PaymentIntent već pripada
+drugom korisniku), `webhook-mor refund_consequences_failed` (ERROR, puni povrat nije uspio
+otkazati ručnu narudžbu ili povući kupon; Stripe ponavlja),
 `webhook-mor ignored_foreign_event` (WARN, pretplaćen događaj koji ne nosi novac),
 `webhook-mor event_refused` (ERROR, testni način ili tuđi račun) i
 `webhook-mor foreign_event_ignored` (WARN, povrat bez PaymentIntenta ili tuđi proizvod).

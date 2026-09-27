@@ -24,8 +24,11 @@ import {
   isNotableIgnore,
   IGNORE_REASON_PREFIXES,
   NOTABLE_IGNORE_PREFIXES,
+  chargedAmountVerdict,
+  MANUAL_REVIEW_REASONS,
   type StripeWebhookPayload,
 } from '../src/report/webhook';
+import { chargedAmountProblems, responseLeakProblems } from './helpers/webhook-handler-source';
 
 describe('parseStripeEvent', () => {
   it('payment_intent.succeeded: orderId je PaymentIntent id, metadata daje korisnika i proizvod', () => {
@@ -751,5 +754,101 @@ describe('webhook-mor izvor: odluka je u coreu, ne u handleru', () => {
     const mutated = SRC.replace("await settle('refused', gate.reason);", "await settle('ignored', 'event_ignored');");
     expect(mutated).not.toBe(SRC);
     expect(webhookHandlerProblems(mutated).join('; ')).toContain('event_ignored');
+  });
+
+  // Cetiri popravka naplate (odluka vlasnika 2026-09-27): gard nad izvorom grize svaki od njih.
+  it('gard grize: grana needs_manual_review koja ne izlazi (logira pa nastavi do prava) se prijavi', () => {
+    const mutated = SRC.replace(/return json\(\{ ok: true, action: 'needs_manual_review'[^\n]*\n/, '\n');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('needs_manual_review ne izlazi');
+  });
+
+  it('gard grize: povrat bez zatvaranja rucne narudzbe i kupona se prijavi', () => {
+    const mutated = SRC.replace(/const posljedice = await closeRefundConsequences\(admin, ev\.orderId[^\n]*\n/, '\n');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('ne zove closeRefundConsequences');
+  });
+
+  it('gard grize: 23505 bez usporedbe vlasnika se prijavi', () => {
+    const mutated = SRC.replace("String(postojece.user_id ?? '') !== ev.userId", 'false');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('bez usporedbe vlasnika');
+  });
+
+  it('gard grize: tekst greske baze vracen u 500 odgovor se prijavi', () => {
+    const mutated = SRC.replace("json({ error: 'insert_failed' }, 500)", "json({ error: 'insert_failed', detail: error.message }, 500)");
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('odgovor nosi tekst greske');
+  });
+});
+
+describe('chargedAmountVerdict: uplata ispod kataloga ne daje pravo (odluka vlasnika 2026-09-27)', () => {
+  it('BASELINE: odluka pokriva sve klase ulaza (ispod, cent ispod, tocno, iznad, nepoznato, tudja valuta)', () => {
+    expect(chargedAmountProblems(chargedAmountVerdict)).toEqual([]);
+  });
+
+  it('ispod kataloga: needs_manual_review s oba iznosa i valutom u detalju', () => {
+    expect(chargedAmountVerdict({ totalCents: 500, currency: 'EUR' }, 999)).toEqual({
+      kind: 'needs_manual_review',
+      reason: 'amount_below_catalog',
+      detail: 'amount_below_catalog ocekivano=999 naplaceno=500 valuta=EUR',
+    });
+  });
+
+  it('valuta koja nije EUR ima prednost pred usporedbom centi', () => {
+    expect(chargedAmountVerdict({ totalCents: 5000, currency: 'USD' }, 999)).toMatchObject({
+      kind: 'needs_manual_review',
+      reason: 'currency_not_eur',
+      detail: 'currency_not_eur ocekivano=999 naplaceno=5000 valuta=USD',
+    });
+  });
+
+  it('iznad kataloga: pravo uz trag amount_mismatch (postojeci format)', () => {
+    expect(chargedAmountVerdict({ totalCents: 1200, currency: 'EUR' }, 999)).toEqual({
+      kind: 'above_catalog',
+      detail: 'amount_mismatch ocekivano=999 naplaceno=1200 valuta=EUR',
+    });
+  });
+
+  it('svaki razlog iz MANUAL_REVIEW_REASONS je dohvatljiv', () => {
+    const vidjeni = new Set([
+      chargedAmountVerdict({ totalCents: 1, currency: 'EUR' }, 999),
+      chargedAmountVerdict({ totalCents: 999, currency: 'GBP' }, 999),
+    ].map((v) => (v.kind === 'needs_manual_review' ? v.reason : '')));
+    expect([...vidjeni].sort()).toEqual([...MANUAL_REVIEW_REASONS].sort());
+  });
+
+  it('gard grize: stara odluka (samo trag, pravo uvijek) se prijavi', () => {
+    const stara = (ev: { totalCents: number | null; currency: string }, exp: number) =>
+      ev.totalCents !== exp || ev.currency !== 'EUR' ? { kind: 'above_catalog' } : { kind: 'ok' };
+    expect(chargedAmountProblems(stara).join('; ')).toContain('ispod kataloga daje pravo');
+  });
+
+  it('gard grize: obrnut smjer (i veci iznos na rucni pregled) se prijavi', () => {
+    const preStroga = (ev: { totalCents: number | null; currency: string }, exp: number) =>
+      ev.totalCents !== exp || ev.currency !== 'EUR' ? { kind: 'needs_manual_review' } : { kind: 'ok' };
+    expect(chargedAmountProblems(preStroga).join('; ')).toContain('iznad kataloga');
+  });
+});
+
+describe('create-checkout izvor: 5xx odgovori ne nose tekst greske baze', () => {
+  const CHECKOUT = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '..', 'supabase/functions/create-checkout/handler.ts'),
+    'utf8',
+  );
+
+  it('BASELINE: nijedan json(...) odgovor ne nosi .message, String(e) ni detail', () => {
+    expect(CHECKOUT.length).toBeGreaterThan(2000);
+    expect((CHECKOUT.match(/\bjson\(/g) ?? []).length).toBeGreaterThan(10);
+    expect(responseLeakProblems(CHECKOUT, 'create-checkout')).toEqual([]);
+  });
+
+  it('gard grize: poruka greske upisa privole vracena klijentu se prijavi', () => {
+    const mutated = CHECKOUT.replace(
+      "return json({ error: 'consent_not_recorded' }, 500);",
+      "return json({ error: 'consent_not_recorded', detail: consentErr.message }, 500);",
+    );
+    expect(mutated).not.toBe(CHECKOUT);
+    expect(responseLeakProblems(mutated, 'create-checkout').join('; ')).toContain('consent_not_recorded');
   });
 });
