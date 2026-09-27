@@ -56,7 +56,7 @@ Stroj:
    $w = New-Object -ComObject Word.Application; try { $w.Version } finally { $w.Quit() }
    ```
 
-   Ocekivano: broj verzije, npr. `16.0`. Otvori Word jednom rucno i zatvori sve dijaloge prvog
+   Ocekivano: `14.0` (Word 2010, referentni oracle na kojem su nastali svi Tier 2 dokazi). Otvori Word jednom rucno i zatvori sve dijaloge prvog
    pokretanja (licenca, privatnost), inace ih COM automatizacija ceka zauvijek.
 4. Iskljuci spavanje i hibernaciju: Postavke > Sustav > Napajanje > Zaslon i spavanje > Nikad.
 5. Za razine `sve` workflow sam instalira Deno, Python 3.12, `lxml` i Playwright chromium.
@@ -91,7 +91,8 @@ Stroj:
 ## 4. Pokretanje
 
 - **Automatski:** svaki push na `master` ili `release/**` vrti cetiri Word razine
-  (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta; uz
+  (`release:check --only=word,word-worst,word-corpus,word-toc`, pozvan izravno kroz `node` jer
+  npm.ps1 na Windowsu proguta `--`; oko 10 minuta; uz
   checkout i `npm ci` bez kesa prvi run traje oko 30 minuta, a timeout joba je 60 minuta).
 - **Rucno:** Actions > word-proof > Run workflow, s workflowom s grane `master`:
   - `ref`: `master` ili `release/<ime>`; mora biti tocan trenutni vrh te grane;
