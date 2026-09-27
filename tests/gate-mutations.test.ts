@@ -38,6 +38,9 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
+import { runMetrics } from '../src/audits/metrics';
+import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -5464,6 +5467,37 @@ const MUTATIONS: Mutation[] = [
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
+  // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
+  // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
+  // (harness je sinkron, a inspectDocxIntake i analyzeDocx su async). Pune putove pokrivaju
+  // tests/docx-malformed-xml, docx-intake-cfb i docx-hidden-text-scoring; mutacije izvornog koda
+  // izvedene su rucno i zapisane na PR-u #168.
+  {
+    id: 'docx/xml-greska-tiho-boduje',
+    imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',
+    caught: () => { try { parseXml('<t>R&D</t>', 'Glavni Word dokument'); return false; } catch (e) { return String((e as Error).message) === 'Glavni Word dokument nije moguće pročitati.'; } },
+    // Cisti baseline ukljucuje valjan XML na koji xmldom salje warning (U+FFFD, Codex #14a).
+    cleanBefore: () => { try { return parseXml('<t>R&amp;D \uFFFD</t>').documentElement?.textContent === 'R&D \uFFFD'; } catch { return false; } },
+  },
+  {
+    id: 'docx/zasticen-docx-kao-not-zip',
+    imitates: 'docx zasticen lozinkom (CFB s EncryptionInfo i EncryptedPackage) dobiva poruku o neispravnoj ZIP arhivi umjesto upute za uklanjanje lozinke (nalaz #16)',
+    caught: () => {
+      const encrypted = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/intake/encrypted-synthetic.docx')));
+      try { new ZipReader(encrypted.buffer.slice(0) as ArrayBuffer); return false; } catch (e) { return /zaštićena lozinkom/.test(String((e as Error).message)); }
+    },
+    cleanBefore: () => { try { new ZipReader(buildDocx({ paragraphs: [{ text: 'Obican dokument.' }] }).buffer as ArrayBuffer); return true; } catch { return false; } },
+  },
+  {
+    id: 'docx/skriveni-run-bira-font',
+    imitates: 'skriveni tekst odlucuje o fontu, ili se vanish iz stila odlomka i znakovnog stila spaja kao zadnja razina umjesto toggle preokreta, pa je vidljiv tekst proglasen skrivenim (nalaz #17, Codex #17a)',
+    caught: () => effectiveHidden({ paragraphStyle: { hidden: true } }) === true
+      && effectiveHidden({ paragraphStyle: { hidden: true }, runStyle: { hidden: true } }) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
+    cleanBefore: () => effectiveHidden({}) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
+  },
+
 ];
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
