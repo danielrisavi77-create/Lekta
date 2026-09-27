@@ -90,8 +90,6 @@ const CORE = new Set(['formatting', 'structure', 'citations', 'elements']);
  * gap-backlogu, a ne samo da provjera nije pokrivena. Oba registra su zato izvezena.
  */
 export const KNOWN_HARD: Record<string, { reason: string; desiredTest: string }> = {
-  'citation.style-automation': { reason: 'Savjetodavna, uvijek-warn provjera (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail; eventualno valid-control da ostaje info.' },
-  'manual.checks': { reason: 'Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail.' },
 };
 
 /**

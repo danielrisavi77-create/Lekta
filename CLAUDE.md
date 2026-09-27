@@ -67,6 +67,8 @@ povijest dok druga sesija radi. Autorstvo se ne izvodi iz zajednickog Git identi
 Generirane artefakte regeneriraj samo u cistom izoliranom stablu. Izvor, artefakt
 i njegov ratchet moraju biti u istom commitu.
 
+Teski alati zive samo na radnoj stanici, laptop ostaje lagan; vidi `docs/agents/RADNE_STANICE.md`.
+
 ## Tvrdi gate
 
 Svaka promjena prije commita mora proci:
@@ -98,6 +100,11 @@ ne tumaci kao zeleno.
 - Podatke parsiraj, ne greppaj. Djelomican pad pipelinea mora oboriti mjerenje.
 - Tekstualne usporedbe normaliziraju CR; binarne fixture usporeduju sirove bajtove.
 - Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
+- Popravni krug nakon pregleda je razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali
+  lokalni nalaz mjeri doseg, regenerira samo pogodjene artefakte u dva prolaza i ide mehanicki
+  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate i jedan pregled drugog providera
+  ostaju obvezni prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
+  Detalji: `docs/agents/no-fable-workflow.md`.
 
 Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 `docs/incidents/`.

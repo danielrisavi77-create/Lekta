@@ -1064,446 +1064,6 @@
     ]
   },
   {
-    "id": "fpzg-novinarstvo-diplomski",
-    "unitId": "fpzg",
-    "programs": [
-      "Diplomski studij Novinarstvo"
-    ],
-    "workTypes": [
-      "graduate"
-    ],
-    "status": "verified",
-    "profileLabel": "FPZG · diplomsko Novinarstvo · diplomski rad",
-    "verifiedAt": "2026-06-28",
-    "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
-    "rules": {
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      },
-      "checkMargins": false,
-      "justify": true,
-      "checkJustify": true,
-      "requireToc": true,
-      "requirePageNumbers": true,
-      "requireA4": true,
-      "recommendedCitation": "fpzg",
-      "accessDate": true,
-      "requiredSections": [
-        {
-          "key": "declaration",
-          "label": "izjava o autorstvu",
-          "terms": [
-            "izjava o autorstvu",
-            "izjava o izvornosti",
-            "izjava o akademskoj cestitosti"
-          ]
-        },
-        {
-          "key": "toc",
-          "label": "sadržaj",
-          "terms": [
-            "sadrzaj",
-            "contents",
-            "table of contents"
-          ]
-        },
-        {
-          "key": "intro",
-          "label": "uvod",
-          "terms": [
-            "uvod",
-            "introduction"
-          ]
-        },
-        {
-          "key": "conclusion",
-          "label": "zaključak",
-          "terms": [
-            "zakljucak",
-            "conclusion"
-          ]
-        },
-        {
-          "key": "refs",
-          "label": "literatura",
-          "terms": [
-            "literatura",
-            "popis literature",
-            "izvori i literatura",
-            "bibliografija",
-            "references"
-          ]
-        },
-        {
-          "key": "abstract",
-          "label": "sažetak / abstract",
-          "terms": [
-            "sazetak",
-            "abstract"
-          ]
-        },
-        {
-          "key": "keywords",
-          "label": "ključne riječi / keywords",
-          "terms": [
-            "kljucne rijeci",
-            "keywords"
-          ]
-        }
-      ],
-      "requireElementSources": true,
-      "requireListsWhenElements": true,
-      "manualChecks": [
-        "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
-        "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
-        "Sažetak treba biti u jednom odlomku, bez citatnica, a ključne riječi navedene neposredno uz njega.",
-        "Najviše četiri razine decimalnog numeriranja naslova.",
-        "Svaka slika, grafikon i tablica trebaju imati naslov i izvor; kada postoje, potreban je i odgovarajući popis ilustracija.",
-        "Posebne upute mentora, nositelja kolegija ili studijskog programa imaju prednost kada su izričito zadane.",
-        "Među najmanje 15 klasičnih znanstvenih izvora trebaju biti najmanje tri knjige.",
-        "Za praktične, novinarske ili multimedijske dodatke provjeriti posebne zahtjeve mentora."
-      ],
-      "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": true,
-      "maxDecimalLevels": 4,
-      "checkSectionShares": true,
-      "checkTitlePage": true,
-      "quoteLocatorRequired": true,
-      "checkAlphabeticalRefs": true,
-      "checkDuplicateYears": true,
-      "titleWorkTerms": [
-        "diplomski rad"
-      ],
-      "wordMin": 12000,
-      "wordMax": 15000,
-      "minReferences": 15,
-      "checkFont": true,
-      "checkSize": true,
-      "checkSpacing": true,
-      "scoreStructure": true,
-      "scoreElements": true
-    },
-    "facts": [
-      "12.000–15.000 riječi",
-      "najmanje 15 znanstvenih izvora",
-      "najmanje 3 knjige",
-      "FPZG autor–godina"
-    ],
-    "note": "Potvrđeni profil diplomskog rada na studiju Novinarstva. Poseban praktični ili multimedijski element rada treba dodatno provjeriti prema uputama mentora.",
-    "sources": [
-      {
-        "title": "Odluka o rokovima prijave i obrane diplomskih radova 2025./2026.",
-        "url": "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf"
-      },
-      {
-        "title": "FPZG – Diplomski i završni radovi (aktualna službena stranica)",
-        "url": "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
-      },
-      {
-        "title": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf"
-      },
-      {
-        "title": "Pravila navođenja bibliografskih jedinica i citatnica na FPZG-u",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Pravila_navodenja_bibliografskih_jedinica_i_citatnica_na_Fakultetu_politickih_znanosti.pdf"
-      },
-      {
-        "title": "Ocjena kvalitete akademskog pisanja – smjernice za nastavnike i studente",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Akademsko%20pisanje__smjernice%20za%20nastavnike%20i%20studente.pdf"
-      }
-    ],
-    "sourceHierarchy": [
-      "Aktualna odluka ili pravilnik za akademsku godinu i vrstu rada",
-      "Aktualna službena stranica studija ili obrana",
-      "Opće FPZG upute za akademske radove i citiranje",
-      "Posebna pisana uputa mentora ili kolegija",
-      "Repozitorijski radovi — samo regresijski test parsera, nikada izvor pravila"
-    ],
-    "submissionFacts": [
-      "Konačna verzija diplomskog rada učitava se u PDF/A formatu najmanje 24 sata prije obrane.",
-      "Provjeri aktualni kalendar prijava i obrana za 2025./2026. te posebne zahtjeve mentora."
-    ],
-    "fieldValidation": {
-      "status": "field-sampled",
-      "validatedAt": "2026-07-02",
-      "scope": "Sintetički golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih DOCX + 3 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
-      "sample": {
-        "syntheticDocxAudits": 1,
-        "docxAudits": 1,
-        "publicPdfAudits": 3,
-        "metadataSpotChecks": 0,
-        "years": [
-          2022,
-          2023,
-          2024,
-          2025,
-          2026
-        ]
-      },
-      "publicSources": [
-        {
-          "pid": "fpzg:2370",
-          "repository": "zir.nsk.hr",
-          "pageFormat": "A4",
-          "pages": 91,
-          "sha256": "40f2069b594851a612ed9b4bc12daf56477813098a45a6a49d9862239e16bf76",
-          "level": "diplomski"
-        },
-        {
-          "pid": "fpzg:2490",
-          "repository": "zir.nsk.hr",
-          "pageFormat": "A4",
-          "pages": 45,
-          "sha256": "f17f26b07043146d39b4f6481d634265ee94fb4394c6031e4616daa0fa73dbf0",
-          "level": "diplomski"
-        },
-        {
-          "pid": "fpzg:2650",
-          "repository": "zir.nsk.hr",
-          "pageFormat": "A4",
-          "pages": 49,
-          "sha256": "17e12452bb67e1d027fd035ef48b945845887e0796afe37dfc3b258cead42641",
-          "level": "diplomski"
-        }
-      ],
-      "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "3 stvarnih javnih diplomski radova tog smjera (fpzg:2370, fpzg:2490, fpzg:2650) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
-      ],
-      "observedDeviations": [
-        "Radovi bez PDF/A oznake (info, ne greska)."
-      ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
-    },
-    "validationNote": "Profil je verificiran prema službenim izvorima i ograničeno testiran na stvarnim Word dokumentima; uzorci ne predstavljaju službeni predložak.",
-    "ruleAuthority": "official-sources-only",
-    "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
-    "normativeScope": [
-      "tehničko oblikovanje, struktura, opseg i citiranje prema navedenim službenim izvorima"
-    ],
-    "advisoryScope": [
-      "vizualni raspored i posebne iznimke mentora ostaju za ručnu provjeru"
-    ]
-  },
-  {
-    "id": "fpzg-mes-master-thesis",
-    "unitId": "fpzg",
-    "programs": [
-      "Master of European Studies"
-    ],
-    "workTypes": [
-      "graduate"
-    ],
-    "status": "verified",
-    "profileLabel": "FPZG · Master of European Studies · Master's Thesis",
-    "verifiedAt": "2026-06-28",
-    "documentDate": "Opće FPZG upute za pisanje akademskih radova (studeni 2015.); MES program: Master’s Thesis, 18 ECTS.",
-    "fieldValidation": {
-      "status": "field-sampled",
-      "validatedAt": "2026-07-02",
-      "scope": "Sintetički golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
-      "sample": {
-        "syntheticDocxAudits": 1,
-        "docxAudits": 0,
-        "publicPdfAudits": 1,
-        "metadataSpotChecks": 0,
-        "years": [
-          2020,
-          2026
-        ]
-      },
-      "publicSources": [
-        {
-          "pid": "fpzg:1840",
-          "repository": "zir.nsk.hr",
-          "pageFormat": "US Letter",
-          "pages": 67,
-          "sha256": "bc35b75914606be5ace867b728d7da64c76a402621d60adcd5956fcaaae27edc",
-          "level": "diplomski"
-        }
-      ],
-      "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "1 stvarnih javnih diplomski radova tog smjera (fpzg:1840) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
-      ],
-      "observedDeviations": [
-        "fpzg:1840 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4.",
-        "MES (Master of European Studies) je malen program na engleskom; nadjen 1 otvoreni javni rad u ZIR uzorku, dodatni nisu dostupni."
-      ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
-    },
-    "rules": {
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      },
-      "checkMargins": false,
-      "justify": true,
-      "checkJustify": true,
-      "requireToc": true,
-      "requirePageNumbers": true,
-      "requireA4": true,
-      "recommendedCitation": "fpzg",
-      "accessDate": true,
-      "requiredSections": [
-        {
-          "key": "toc",
-          "label": "sadržaj",
-          "terms": [
-            "sadrzaj",
-            "contents",
-            "table of contents"
-          ]
-        },
-        {
-          "key": "intro",
-          "label": "uvod",
-          "terms": [
-            "uvod",
-            "introduction"
-          ]
-        },
-        {
-          "key": "conclusion",
-          "label": "zaključak",
-          "terms": [
-            "zakljucak",
-            "conclusion"
-          ]
-        },
-        {
-          "key": "refs",
-          "label": "literatura",
-          "terms": [
-            "literatura",
-            "popis literature",
-            "izvori i literatura",
-            "bibliografija",
-            "references"
-          ]
-        },
-        {
-          "key": "abstract",
-          "label": "sažetak / abstract",
-          "terms": [
-            "sazetak",
-            "abstract"
-          ]
-        },
-        {
-          "key": "keywords",
-          "label": "ključne riječi / keywords",
-          "terms": [
-            "kljucne rijeci",
-            "keywords"
-          ]
-        }
-      ],
-      "requireElementSources": true,
-      "requireListsWhenElements": true,
-      "manualChecks": [
-        "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
-        "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
-        "Sažetak treba biti u jednom odlomku, bez citatnica, a ključne riječi navedene neposredno uz njega.",
-        "Najviše četiri razine decimalnog numeriranja naslova.",
-        "Svaka slika, grafikon i tablica trebaju imati naslov i izvor; kada postoje, potreban je i odgovarajući popis ilustracija.",
-        "Posebne upute mentora, nositelja kolegija ili studijskog programa imaju prednost kada su izričito zadane.",
-        "Potvrditi opseg, strukturu, jezik sažetka i eventualni posebni citation guide u aktualnom MES syllabusu."
-      ],
-      "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": true,
-      "maxDecimalLevels": 4,
-      "checkSectionShares": true,
-      "checkTitlePage": true,
-      "quoteLocatorRequired": true,
-      "checkAlphabeticalRefs": true,
-      "checkDuplicateYears": true,
-      "titleWorkTerms": [
-        "masters thesis",
-        "master thesis",
-        "diplomski rad"
-      ],
-      "checkFont": true,
-      "checkSize": true,
-      "checkSpacing": true,
-      "scoreStructure": true,
-      "scoreElements": true
-    },
-    "facts": [
-      "18 ECTS",
-      "program na engleskom",
-      "tehničke postavke nisu javno potvrđene"
-    ],
-    "note": "Potvrđeni profil diplomskog (master) rada: tehničko oblikovanje, struktura, sadržaj i citiranje prema općim FPZG Uputama za pisanje akademskih radova, koje vrijede za sve akademske radove fakulteta, jednako kao i za ostale diplomske profile. Program potvrđuje Master’s Thesis i 18 ECTS. Točan opseg i jezik sažetka potvrditi u aktualnom MES syllabusu.",
-    "sources": [
-      {
-        "title": "FPZG – Studijski programi i službeni dokumenti",
-        "url": "https://www.fpzg.unizg.hr/studiji"
-      },
-      {
-        "title": "FPZG – Diplomski i završni radovi (aktualna službena stranica)",
-        "url": "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
-      },
-      {
-        "title": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf"
-      },
-      {
-        "title": "Pravila navođenja bibliografskih jedinica i citatnica na FPZG-u",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Pravila_navodenja_bibliografskih_jedinica_i_citatnica_na_Fakultetu_politickih_znanosti.pdf"
-      },
-      {
-        "title": "Ocjena kvalitete akademskog pisanja – smjernice za nastavnike i studente",
-        "url": "https://www.fpzg.unizg.hr/images/50442907/Akademsko%20pisanje__smjernice%20za%20nastavnike%20i%20studente.pdf"
-      }
-    ],
-    "sourceHierarchy": [
-      "Aktualna odluka ili pravilnik za akademsku godinu i vrstu rada",
-      "Aktualna službena stranica studija ili obrana",
-      "Opće FPZG upute za akademske radove i citiranje",
-      "Posebna pisana uputa mentora ili kolegija",
-      "Repozitorijski radovi — samo regresijski test parsera, nikada izvor pravila"
-    ],
-    "submissionFacts": [
-      "Konačna verzija diplomskog rada učitava se u PDF/A formatu najmanje 24 sata prije obrane.",
-      "Provjeri aktualni kalendar prijava i obrana za 2025./2026. te posebne zahtjeve mentora."
-    ],
-    "validationNote": "Profil je verificiran prema službenim izvorima. Terenska provjera javnih radova zasad je ograničena i ne zamjenjuje aktualne upute.",
-    "ruleAuthority": "official-sources-only",
-    "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
-    "normativeScope": [
-      "tehničko oblikovanje (Times New Roman 12, prored 1,5, obostrano poravnanje, A4, numeriranje stranica) prema općim FPZG uputama",
-      "struktura, sadržaj, popis ilustracija i popis literature prema općim FPZG uputama",
-      "Master’s Thesis, 18 ECTS",
-      "FPZG pravila citiranja i povezivanja citatnica s literaturom"
-    ],
-    "advisoryScope": [
-      "opseg (broj riječi) prema aktualnom MES syllabusu",
-      "jezik sažetka i eventualni posebni citation guide programa",
-      "margine se prikazuju informativno jer ih opće upute ne navode brojčano",
-      "posebne iznimke mentora ostaju za ručnu provjeru"
-    ]
-  },
-  {
     "id": "fpzg-specijalisticki-odnosi-s-javnoscu",
     "unitId": "fpzg",
     "programs": [
@@ -23543,6 +23103,36 @@
     }
   },
   {
+    "id": "medri-sanitarno-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Sanitarno inženjerstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "MEDRI, Sanitarno inženjerstvo, diplomski rad",
+    "verifiedAt": null,
+    "documentDate": "2025./2026.",
+    "rules": {},
+    "facts": [],
+    "note": "Djelomični profil s aktualnim pravilima iz službenih uputa. RuleEntries su izravno izvučeni i čekaju odobrenje; nema aktivnih bodovanih pravila niti validacije na stvarnom radu.",
+    "sources": [
+      "medri-sanitarno-work-2025-26",
+      "medri-sanitarno-diplomski-2025-26"
+    ],
+    "sourceHierarchy": [
+      "Naputak za prijavu i obranu završnog i diplomskog rada 2025./2026.",
+      "Upute o izradi diplomskog rada na diplomskom studiju Sanitarno inženjerstvo 2025./2026."
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Pravila čekaju odobrenje; profil trenutno nema aktivna bodovana pravila."
+    ]
+  },
+  {
     "id": "fzsri-zavrsni",
     "unitId": "fzsri",
     "programs": [
@@ -44806,5 +44396,883 @@
       "Obvezni dijelovi rada (Sadrzaj, Uvodni dio, Zakljucak, Popis literature)"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "agromed-zavrsni",
+    "unitId": "agromed",
+    "programs": [
+      "Mediteranska poljoprivreda"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Agromediteranski fakultet, završni rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Završni rad, Mediteranska poljoprivreda 2025./2026.",
+        "url": "https://mp.unist.hr/zavrsni-rad/120"
+      }
+    ],
+    "sourceHierarchy": [
+      "Završni rad, Mediteranska poljoprivreda 2025./2026."
+    ],
+    "note": "Službena stranica potvrđuje završne radove na prijediplomskom studiju Mediteranska poljoprivreda. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "geoteh-diplomski",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Geotehnički fakultet, diplomski rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "O diplomskom studiju Inženjerstvo okoliša",
+        "url": "https://www.gfv.unizg.hr/static/diplomski-studij-o-studiju"
+      },
+      {
+        "title": "Upute za pisanje diplomskog rada na diplomskom studiju Geotehničkog fakulteta (2026)",
+        "url": "https://www.gfv.unizg.hr/upload/document/24/Upute%20za%20pisanje%20diplomskog%20rada_2026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada na diplomskom studiju Geotehničkog fakulteta (2026)"
+    ],
+    "note": "Službena stranica i upute potvrđuju diplomski studij Inženjerstvo okoliša i diplomski rad. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "geoteh-doktorski",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Geotehnički fakultet, doktorski rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Doktorski studij Inženjerstvo okoliša",
+        "url": "https://www.gfv.unizg.hr/static/doktorski-studij"
+      },
+      {
+        "title": "Upute za pisanje doktorskoga rada po skandinavskom modelu (2025)",
+        "url": "https://www.gfv.unizg.hr/upload/document/30/Skandinavski_model_-_upute_za_pisanje_25.3.2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje doktorskoga rada po skandinavskom modelu (2025)"
+    ],
+    "note": "Službena stranica potvrđuje doktorski studij Inženjerstvo okoliša, a fakultetske upute pokrivaju doktorski rad po skandinavskom modelu. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "geoteh-zavrsni",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Geotehnički fakultet, završni rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Upute za pisanje završnog rada na prijediplomskom studiju Geotehničkog fakulteta (2026)",
+        "url": "https://www.gfv.unizg.hr/upload/document/23/Upute%20za%20pisanje%20zavr%C5%A1nog%20rada_2026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje završnog rada na prijediplomskom studiju Geotehničkog fakulteta (2026)"
+    ],
+    "note": "Službene upute izričito su za završni rad na prijediplomskom studiju Geotehničkog fakulteta. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "hig-zavrsni",
+    "unitId": "hig",
+    "programs": [
+      "Hotelijerstvo i gastronomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Hotelijerstvo i gastronomija, završni rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Prijediplomski sveučilišni studij Hotelijerstvo i gastronomija",
+        "url": "https://hig.unist.hr/prijediplomski-studij/41"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prijediplomski sveučilišni studij Hotelijerstvo i gastronomija"
+    ],
+    "note": "Službena stranica navodi obvezni završni rad od 12 ECTS na prijediplomskom studiju Hotelijerstvo i gastronomija. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "mvi-diplomski",
+    "unitId": "mvi",
+    "programs": [
+      "Protestantska teologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "TFMVI, diplomski rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Diplomski sveučilišni studij Protestantska teologija",
+        "url": "https://mvi.unizg.hr/studiji/diplomski-sveucilisni-studij-protestantska-teologija/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Diplomski sveučilišni studij Protestantska teologija"
+    ],
+    "note": "Službena stranica potvrđuje diplomski studij Protestantska teologija i diplomski rad. Zbog nesklada o opsegu između trenutačne stranice i starijih uputa nema bodovanih pravila."
+  },
+  {
+    "id": "mvi-prijediplomski",
+    "unitId": "mvi",
+    "programs": [
+      "Protestantska teologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "TFMVI, prijediplomski bakalaurski rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Prijediplomski sveučilišni studij Protestantska teologija",
+        "url": "https://mvi.unizg.hr/studiji/prijediplomski-sveucilisni-studij-protestantska-teologija/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prijediplomski sveučilišni studij Protestantska teologija"
+    ],
+    "note": "Službena stranica potvrđuje prijediplomski studij Protestantska teologija i bakalaurski rad. Ovaj unos povezuje program i vrstu rada; nema bodovanih pravila."
+  },
+  {
+    "id": "vef-specijalisticki",
+    "unitId": "vef",
+    "programs": [
+      "Proizvodnja i zaštita zdravlja svinja",
+      "Higijena i tehnologija hrane životinjskog podrijetla",
+      "Kirurgija, anesteziologija i oftalmologija s veterinarskom stomatologijom",
+      "Uzgoj i patologija egzotičnih kućnih ljubimaca",
+      "Mikrobiologija i epizootiologija",
+      "Teriogenologija domaćih sisavaca",
+      "Uzgoj i patologija divljači",
+      "Sanitacija",
+      "Veterinarska patologija",
+      "Dobrobit životinja",
+      "Sudsko veterinarstvo",
+      "Provedba veterinarskih postupaka sigurnosti hrane u klaoničkom objektu",
+      "Menadžment reprodukcijskog zdravlja mliječnih krava"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "VEF, završni specijalistički rad",
+    "rules": {},
+    "sources": [
+      {
+        "title": "Natječaj za upis na sveučilišni specijalistički studij u ak. god. 2026./2027.",
+        "url": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+      },
+      {
+        "title": "Oblikovanje završnog specijalističkog rada",
+        "url": "https://www.vef.unizg.hr/wp-content/uploads/2018/07/oblikovanje_zavrsnog_specijalistickog_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Aktualni natječaj VEF-a za 2026./2027. godinu utvrđuje 13 programa uključenih u ovaj profil.",
+      "Smjernice za oblikovanje završnog specijalističkog rada daju tehničke i strukturne zahtjeve; ruleEntries su zasad samo nacrti i ne boduju se."
+    ],
+    "note": "Profil pokriva samo 13 naziva koji se točno pojavljuju u aktualnom službenom natječaju VEF-a za 2026./2027. Pravila iz službenih smjernica evidentirana su u data/profiles/vef/drafts/vef-specijalisticki.json kao draft, bez bodovanja i bez uključivanja u rules, dok ih čovjek ne potvrdi i dok se ne provjeri ponašanje pojedinog checkId-ja. Povijesni programi 791 i 800, program 792 s različitim nazivom te engleski zapisi 2692 do 2708 i 4820 namjerno nisu u ovom profilu."
+  },
+  {
+    "id": "pmf-biologija-zavrsni",
+    "unitId": "pmf",
+    "programs": [
+      "Biologija",
+      "Molekularna biologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematički fakultet (Biološki odsjek), prijediplomski završni rad",
+    "verifiedAt": null,
+    "documentDate": "2024",
+    "rules": {
+      "checkFont": false,
+      "size": [
+        11,
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ]
+    },
+    "sources": [
+      "pmf-biol-upute-zavrsni-2024"
+    ],
+    "note": "Službeni izvor potvrđuje primjenu na prijediplomske završne radove Biologije i Molekularne biologije. RuleEntries su izvorno potkrijepljeni nacrti, neocijenjeni dok se ne odobri njihova bodovana uporaba. Nema field-validation dokaza za stvarne DOCX."
+  },
+  {
+    "id": "pmf-geologija-zavrsni",
+    "unitId": "pmf",
+    "programs": [
+      "Geologija"
+    ],
+    "workTypes": [],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematički fakultet (Geološki odsjek), prijediplomski Seminar III",
+    "verifiedAt": null,
+    "documentDate": "2024",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "checkPageNumberStartAtIntro": true
+    },
+    "sources": [
+      "pmf-geol-seminar-iii-2024"
+    ],
+    "note": "Službeni odsjek povezuje izvor s prijediplomskim studijem Geologija. Tehnička pravila iz uputa/predloška pohranjena su kao neocijenjeni nacrti do potvrde njihove normativne snage. Nema field-validation dokaza za stvarne DOCX. Seminar III nije doslovno potvrđen kao završni rad; profil se ne rutira na final."
+  },
+  {
+    "id": "ffzg-svedski-zavrsni",
+    "unitId": "ffzg",
+    "programs": [
+      "Švedski jezik i kultura (dvopredmetni)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFZG, švedski jezik i kultura, prijediplomski završni rad",
+    "verifiedAt": null,
+    "documentDate": null,
+    "rules": {},
+    "facts": [
+      "Godišnje upute 2025./26. opisuju završni rad kao pregledni akademski rad i traže da se piše na švedskom jeziku.",
+      "Opseg: očekivano 20.000 do 27.000 znakova bez popisa literature; dopušteni minimum 18.000 i maksimum 30.000 znakova. Nema odgovarajuće aktivne provjere broja znakova.",
+      "Nakon popisa literature prilažu se sažeci na hrvatskom i engleskom, oko 1.000 znakova svaki; sažeci se ne ubrajaju u opseg.",
+      "Oblikovanje se u načelu veže uz opća pravila pisanja seminarskih radova; stil citiranja treba odgovarati znanstvenom području i preporučuje se savjetovanje s mentorom."
+    ],
+    "note": "Djelomični profil za prijediplomski rad na studiju švedskog jezika i kulture. Najnoviji pronađeni službeni godišnji izvor odnosi se na ak. god. 2025./26.; stranica Katedre još ga povezuje, ali ovo nije dokaz za 2026./27. Oblikovna pravila općih smjernica (2023) ostaju nacrti i neocijenjena jer ih godišnja uputa preuzima samo načelno. Ne postoji aktivno bodovanje.",
+    "sources": [
+      "ffzg-skandi-general-writing-2023",
+      "ffzg-skandi-final-work-2024-25",
+      "ffzg-skandi-final-work-2025-26"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "medri-doktorski",
+    "unitId": "medri",
+    "programs": [
+      "Biomedicina",
+      "Dentalna medicina",
+      "Javno zdravstvo",
+      "Klinička medicina",
+      "Zdravstveno i ekološko inženjerstvo"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "MEDRI · Doktorska škola · doktorski rad",
+    "verifiedAt": null,
+    "documentDate": "Uputa za oblikovanje doktorskog rada, primjena od 20. travnja 2026.",
+    "rules": {},
+    "facts": [],
+    "note": "Djelomični profil s nacrtom uputa za doktorske radove. Nacrt nije aktivan niti bodovan; pravila čekaju ljudsku potvrdu.",
+    "sources": [
+      "medri-doktorski-2026"
+    ]
+  },
+  {
+    "id": "mefst-doktorski",
+    "unitId": "mefst",
+    "programs": [
+      "Biologija novotvorina",
+      "Klinička medicina utemeljena na dokazima"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "MEFST, doktorski rad",
+    "verifiedAt": null,
+    "documentDate": null,
+    "rules": {},
+    "facts": [],
+    "note": "Djelomični profil temeljen na zajedničkom Naputku Doktorske škole. A4 i numeriranje stranica te preporučeni font i prored evidentirani su kao nacrti, bez bodovanja. Tri modela disertacije imaju različite obvezne cjeline, pa struktura rada ostaje otvorena za zasebnu razradu. Ne obuhvaća TRIBE, koji ima zaseban tehnički naputak.",
+    "sources": [
+      {
+        "title": "Naputak za izradu doktorskog rada (MEFST, Doktorska škola)",
+        "url": "https://neuron.mefst.hr/docs/graduate_school/novosti/Naputak_za_izradu_doktorskog_rada.pdf?vel=74197"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za izradu doktorskog rada (MEFST, Doktorska škola)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Font Times New Roman 12 pt",
+      "Prored 1,5",
+      "Format papira A4",
+      "Brojevi stranica"
+    ]
+  },
+  {
+    "id": "mefst-tribe-doktorski",
+    "unitId": "mefst",
+    "programs": [
+      "Translacijska istraživanja u biomedicini"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "MEFST, TRIBE, doktorska disertacija",
+    "verifiedAt": null,
+    "documentDate": null,
+    "rules": {},
+    "facts": [],
+    "note": "Djelomični profil za TRIBE temeljen na zasebnom službenom Naputku za tehničku obradu doktorske disertacije. Svi izdvojeni zahtjevi ostaju nacrti bez bodovanja do ljudske potvrde. Ne nasljeđuje zajednički naputak Doktorske škole jer TRIBE ima zaseban tehnički dokument.",
+    "sources": [
+      {
+        "title": "Naputak za tehničku obradu doktorske disertacije (TRIBE, MEFST)",
+        "url": "https://neuron.mefst.hr/docs/graduate_school/tribe/Nastavni%20materijali/Naputak-za-tehnicku-obradu-doktorske-disertacije.pdf?vel=87282"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za tehničku obradu doktorske disertacije (TRIBE, MEFST)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira A4",
+      "Obvezne cjeline disertacije",
+      "Vancouver stil literature",
+      "Brojevi stranica"
+    ]
+  },
+  {
+    "id": "fpzg-mes-master-thesis",
+    "unitId": "fpzg",
+    "programs": [
+      "Master of European Studies"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "FPZG · Master of European Studies · Master's Thesis",
+    "verifiedAt": "2026-06-28",
+    "documentDate": "Opće FPZG upute za pisanje akademskih radova (studeni 2015.); MES program: Master’s Thesis, 18 ECTS.",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sintetički golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fpzg:1840",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "US Letter",
+          "pages": 67,
+          "sha256": "bc35b75914606be5ace867b728d7da64c76a402621d60adcd5956fcaaae27edc",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
+        "1 stvarnih javnih diplomski radova tog smjera (fpzg:1840) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+      ],
+      "observedDeviations": [
+        "fpzg:1840 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4.",
+        "MES (Master of European Studies) je malen program na engleskom; nadjen 1 otvoreni javni rad u ZIR uzorku, dodatni nisu dostupni."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+    },
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "fpzg",
+      "accessDate": true,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "requireElementSources": true,
+      "requireListsWhenElements": true,
+      "manualChecks": [
+        "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
+        "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
+        "Sažetak treba biti u jednom odlomku, bez citatnica, a ključne riječi navedene neposredno uz njega.",
+        "Najviše četiri razine decimalnog numeriranja naslova.",
+        "Svaka slika, grafikon i tablica trebaju imati naslov i izvor; kada postoje, potreban je i odgovarajući popis ilustracija.",
+        "Posebne upute mentora, nositelja kolegija ili studijskog programa imaju prednost kada su izričito zadane.",
+        "Potvrditi opseg, strukturu, jezik sažetka i eventualni posebni citation guide u aktualnom MES syllabusu."
+      ],
+      "wordCountMode": "fpzg-main-plus-footnotes",
+      "checkPageNumberScheme": true,
+      "maxDecimalLevels": 4,
+      "checkSectionShares": true,
+      "checkTitlePage": true,
+      "quoteLocatorRequired": true,
+      "checkAlphabeticalRefs": true,
+      "checkDuplicateYears": true,
+      "titleWorkTerms": [
+        "masters thesis",
+        "master thesis",
+        "diplomski rad"
+      ],
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": true,
+      "scoreElements": true
+    },
+    "facts": [
+      "18 ECTS",
+      "program na engleskom",
+      "tehničke postavke nisu javno potvrđene"
+    ],
+    "note": "Potvrđeni profil diplomskog (master) rada: tehničko oblikovanje, struktura, sadržaj i citiranje prema općim FPZG Uputama za pisanje akademskih radova, koje vrijede za sve akademske radove fakulteta, jednako kao i za ostale diplomske profile. Program potvrđuje Master’s Thesis i 18 ECTS. Točan opseg i jezik sažetka potvrditi u aktualnom MES syllabusu.",
+    "sources": [
+      {
+        "title": "FPZG – Studijski programi i službeni dokumenti",
+        "url": "https://www.fpzg.unizg.hr/studiji"
+      },
+      {
+        "title": "FPZG – Diplomski i završni radovi (aktualna službena stranica)",
+        "url": "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      },
+      {
+        "title": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf"
+      },
+      {
+        "title": "Pravila navođenja bibliografskih jedinica i citatnica na FPZG-u",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Pravila_navodenja_bibliografskih_jedinica_i_citatnica_na_Fakultetu_politickih_znanosti.pdf"
+      },
+      {
+        "title": "Ocjena kvalitete akademskog pisanja – smjernice za nastavnike i studente",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Akademsko%20pisanje__smjernice%20za%20nastavnike%20i%20studente.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Aktualna odluka ili pravilnik za akademsku godinu i vrstu rada",
+      "Aktualna službena stranica studija ili obrana",
+      "Opće FPZG upute za akademske radove i citiranje",
+      "Posebna pisana uputa mentora ili kolegija",
+      "Repozitorijski radovi — samo regresijski test parsera, nikada izvor pravila"
+    ],
+    "submissionFacts": [
+      "Konačna verzija diplomskog rada učitava se u PDF/A formatu najmanje 24 sata prije obrane.",
+      "Provjeri aktualni kalendar prijava i obrana za 2025./2026. te posebne zahtjeve mentora."
+    ],
+    "validationNote": "Profil je verificiran prema službenim izvorima. Terenska provjera javnih radova zasad je ograničena i ne zamjenjuje aktualne upute.",
+    "ruleAuthority": "official-sources-only",
+    "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
+    "normativeScope": [
+      "tehničko oblikovanje (Times New Roman 12, prored 1,5, obostrano poravnanje, A4, numeriranje stranica) prema općim FPZG uputama",
+      "struktura, sadržaj, popis ilustracija i popis literature prema općim FPZG uputama",
+      "Master’s Thesis, 18 ECTS",
+      "FPZG pravila citiranja i povezivanja citatnica s literaturom"
+    ],
+    "advisoryScope": [
+      "opseg (broj riječi) prema aktualnom MES syllabusu",
+      "jezik sažetka i eventualni posebni citation guide programa",
+      "margine se prikazuju informativno jer ih opće upute ne navode brojčano",
+      "posebne iznimke mentora ostaju za ručnu provjeru"
+    ]
+  },
+  {
+    "id": "fpzg-novinarstvo-diplomski",
+    "unitId": "fpzg",
+    "programs": [
+      "Diplomski studij Novinarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "FPZG · diplomsko Novinarstvo · diplomski rad",
+    "verifiedAt": "2026-06-28",
+    "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "fpzg",
+      "accessDate": true,
+      "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o autorstvu",
+          "terms": [
+            "izjava o autorstvu",
+            "izjava o izvornosti",
+            "izjava o akademskoj cestitosti"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "requireElementSources": true,
+      "requireListsWhenElements": true,
+      "manualChecks": [
+        "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
+        "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
+        "Sažetak treba biti u jednom odlomku, bez citatnica, a ključne riječi navedene neposredno uz njega.",
+        "Najviše četiri razine decimalnog numeriranja naslova.",
+        "Svaka slika, grafikon i tablica trebaju imati naslov i izvor; kada postoje, potreban je i odgovarajući popis ilustracija.",
+        "Posebne upute mentora, nositelja kolegija ili studijskog programa imaju prednost kada su izričito zadane.",
+        "Među najmanje 15 klasičnih znanstvenih izvora trebaju biti najmanje tri knjige.",
+        "Za praktične, novinarske ili multimedijske dodatke provjeriti posebne zahtjeve mentora."
+      ],
+      "wordCountMode": "fpzg-main-plus-footnotes",
+      "checkPageNumberScheme": true,
+      "maxDecimalLevels": 4,
+      "checkSectionShares": true,
+      "checkTitlePage": true,
+      "quoteLocatorRequired": true,
+      "checkAlphabeticalRefs": true,
+      "checkDuplicateYears": true,
+      "titleWorkTerms": [
+        "diplomski rad"
+      ],
+      "wordMin": 12000,
+      "wordMax": 15000,
+      "minReferences": 15,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": true,
+      "scoreElements": true
+    },
+    "facts": [
+      "12.000–15.000 riječi",
+      "najmanje 15 znanstvenih izvora",
+      "najmanje 3 knjige",
+      "FPZG autor–godina"
+    ],
+    "note": "Potvrđeni profil diplomskog rada na studiju Novinarstva. Poseban praktični ili multimedijski element rada treba dodatno provjeriti prema uputama mentora.",
+    "sources": [
+      {
+        "title": "Odluka o rokovima prijave i obrane diplomskih radova 2025./2026.",
+        "url": "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf"
+      },
+      {
+        "title": "FPZG – Diplomski i završni radovi (aktualna službena stranica)",
+        "url": "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      },
+      {
+        "title": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf"
+      },
+      {
+        "title": "Pravila navođenja bibliografskih jedinica i citatnica na FPZG-u",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Pravila_navodenja_bibliografskih_jedinica_i_citatnica_na_Fakultetu_politickih_znanosti.pdf"
+      },
+      {
+        "title": "Ocjena kvalitete akademskog pisanja – smjernice za nastavnike i studente",
+        "url": "https://www.fpzg.unizg.hr/images/50442907/Akademsko%20pisanje__smjernice%20za%20nastavnike%20i%20studente.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Aktualna odluka ili pravilnik za akademsku godinu i vrstu rada",
+      "Aktualna službena stranica studija ili obrana",
+      "Opće FPZG upute za akademske radove i citiranje",
+      "Posebna pisana uputa mentora ili kolegija",
+      "Repozitorijski radovi — samo regresijski test parsera, nikada izvor pravila"
+    ],
+    "submissionFacts": [
+      "Konačna verzija diplomskog rada učitava se u PDF/A formatu najmanje 24 sata prije obrane.",
+      "Provjeri aktualni kalendar prijava i obrana za 2025./2026. te posebne zahtjeve mentora."
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sintetički golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih DOCX + 3 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 1,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fpzg:2370",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 91,
+          "sha256": "40f2069b594851a612ed9b4bc12daf56477813098a45a6a49d9862239e16bf76",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fpzg:2490",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "f17f26b07043146d39b4f6481d634265ee94fb4394c6031e4616daa0fa73dbf0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fpzg:2650",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "17e12452bb67e1d027fd035ef48b945845887e0796afe37dfc3b258cead42641",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
+        "3 stvarnih javnih diplomski radova tog smjera (fpzg:2370, fpzg:2490, fpzg:2650) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska)."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+    },
+    "validationNote": "Profil je verificiran prema službenim izvorima i ograničeno testiran na stvarnim Word dokumentima; uzorci ne predstavljaju službeni predložak.",
+    "ruleAuthority": "official-sources-only",
+    "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
+    "normativeScope": [
+      "tehničko oblikovanje, struktura, opseg i citiranje prema navedenim službenim izvorima"
+    ],
+    "advisoryScope": [
+      "vizualni raspored i posebne iznimke mentora ostaju za ručnu provjeru"
+    ]
+  },
+  {
+    "id": "efri-specijalisticki",
+    "unitId": "efri",
+    "programs": [
+      "Ekonomija energetskog sektora-MBA",
+      "Financije",
+      "Inteligentno elektroničko poslovanje",
+      "Kontroling",
+      "Marketing menadžment",
+      "Menadžment sigurnosti u EU",
+      "Menadžment u javnom sektoru",
+      "Poslovanje s Europskom unijom",
+      "Računovodstvo",
+      "Upravljanje poslovnim uspjehom"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "EFRI · sveučilišni specijalistički rad",
+    "verifiedAt": null,
+    "documentDate": "Pravilnik donesen 22. srpnja 2024.",
+    "rules": {},
+    "facts": [],
+    "note": "Djelomični profil iz važećeg zajedničkog Pravilnika o specijalističkom radu EFRI-ja. Opseg pravila iz čl. 1 pokriva sve sveučilišne specijalističke studije EFRI-ja koji završavaju izradom i obranom rada; nacrt pokriva čl. 3 i 6. Nema aktivnog bodovanja dok se ruleEntries ne potvrde ljudskim pregledom. Združene programe mapirati samo ako nemaju poseban pravilnik.",
+    "sources": [
+      {
+        "title": "Pravilnik o specijalističkom radu na Sveučilišnim specijalističkim studijima EFRI (22. 7. 2024.)",
+        "url": "https://arhiva.efri.uniri.hr/upload/SSS/SSS_EFRI-Pravilnik_rad_22_07_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o specijalističkom radu na Sveučilišnim specijalističkim studijima EFRI (22. 7. 2024.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg rada 50 do 100 stranica",
+      "A4, Times New Roman 12 pt, prored 1,5, obostrano poravnanje i margine 3 cm",
+      "Harvard sustav citiranja",
+      "Obvezni dijelovi iz čl. 3"
+    ]
   }
 ]
