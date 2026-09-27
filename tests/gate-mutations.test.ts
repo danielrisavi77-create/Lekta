@@ -7019,8 +7019,9 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
 });
 
 describe('mutacije: read-only faze lean workflowa idu kroz lean-citac (run wf_c810022a-a05)', () => {
-  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8');
-  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8');
+  // CR normaliziran pri citanju: na Windows checkoutu (CRLF) regex mutacije nad recima inace tiho promasi.
+  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8').replace(/\r/g, '');
+  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8').replace(/\r/g, '');
   const samoCitanje = (md: string): boolean => {
     try {
       return JSON.stringify(agentTools(md)) === JSON.stringify([...LEAN_READER_TOOLS]);
