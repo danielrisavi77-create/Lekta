@@ -98,9 +98,12 @@ import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
-import { buildRepairPanelHandle } from '../src/ui/repair-panel';
+import { buildRepairPanelHandle, classifyRepairReport, renderTableFigureRescueControls } from '../src/ui/repair-panel';
+import { tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
+import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -296,6 +299,75 @@ function sessionBootstrapFalseZeroProblems(source: string): string[] {
     problems.push('testProcessCount u catch grani vraca doslovnu 0 umjesto null');
   }
   return problems;
+}
+
+/**
+ * T65. Gard u table-figure-rescue-fixeru: equalColumns se NE primjenjuje na tablicu sa spojenim
+ * celijama. Nemutirana tablica (bez spajanja) mora dobiti jednake stupce, inace bi "uhvaceno" moglo
+ * znaciti samo da equalColumns vise nikad nista ne radi. Mutacija ubaci gridSpan ili vMerge u istu
+ * tablicu; gard je uhvatio kvar kad su tblGrid i svi tcW ostali bajt-identicni ulazu.
+ */
+const T65_W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+const t65Cell = (extra: string, text: string, width: number) => `<w:tc><w:tcPr><w:tcW w:w="${width}" w:type="dxa"/>${extra}</w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+const t65Table = (first: string, second: string) =>
+  `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="9000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="2000"/><w:gridCol w:w="7000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell(first, 'A', 2000)}${t65Cell('', 'B', 7000)}</w:tr><w:tr>${t65Cell(second, 'C', 2000)}${t65Cell('', 'D', 7000)}</w:tr></w:tbl>`;
+/** Sirine (tblGrid + svi tcW) nakon equalColumns; `null` kad fixer odbije cijeli zahtjev. */
+function t65WidthsAfterEqualColumns(tbl: string): { before: string; after: string } | null {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true } }], figures: [] });
+  if (!out.applied) return null;
+  const widths = (xml: string) => [xml.match(/<w:tblGrid\b[^>]*>[\s\S]*?<\/w:tblGrid>/i)?.[0] ?? '', ...[...xml.matchAll(/<w:tcW\b[^>]*>/gi)].map((m) => m[0])].join('|');
+  return { before: widths(documentXml), after: widths(out.parts.documentXml) };
+}
+const t65Preserved = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.before === r.after; };
+const t65Equalized = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.after.includes('<w:gridCol w:w="4500"/><w:gridCol w:w="4500"/>') && !r.after.includes('w:w="2000"'); };
+/**
+ * T65 krug 2 (M1). Ista tablica, ali spajanje nosi NE-ASCII prefiks vezan uz Wordov namespace.
+ * Analiza (DOM) takvu celiju vidi kao spojenu; fixer ju je vidio kao obicnu jer je prefiks
+ * prihvacao samo iz ASCII klase. Gard hvata kvar kad fixer i ovdje sacuva grid i tcW, a dijeljena
+ * detekcija (ista za analizu i fixer) kaze da je tablica spojena.
+ */
+const t65NonAsciiPrefix = (tbl: string) => tbl
+  .replace(`<w:tbl ${T65_W}>`, `<w:tbl ${T65_W} xmlns:ž="http://schemas.openxmlformats.org/wordprocessingml/2006/main">`)
+  .replace('<w:gridSpan w:val="2"/>', '<ž:gridSpan ž:val="2"/>');
+/** T65 krug 2 (M3): izlaz fixera za mijesani zahtjev (equalColumns + center + repeatHeader). */
+function t65MixedRequest(tbl: string): { applied: boolean; afterLabel: string } {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true, repeatHeader: true } }], figures: [] });
+}
+const T65_SKIP_NOTE = 'ujednačavanje stupaca preskočeno';
+/**
+ * T65 krug 3 (M3, prvi prolaz): tablica kojoj je center vec na cilju. Mijesani zahtjev
+ * (equalColumns + center) tada nista ne mijenja, pa fixer vraca applied:false bez afterLabela.
+ */
+function t65AlreadyCentered(tbl: string): { applied: boolean; reason?: string; skippedActions?: string[] } {
+  const centered = tbl.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+  const documentXml = `<w:document ${T65_W}><w:body>${centered}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', centered), actions: { equalColumns: true, center: true } }], figures: [] });
+}
+/**
+ * T65 krug 2, pregled (M2): oznaka kucice smije tvrditi prilagodbu sirini teksta samo ako fixer nad
+ * ISTIM parametrima stvarno promijeni tblW. Gard usporeduje iscrtane oznake tablicnih akcija s
+ * izlazom fixera. Siroka tablica: tblW 12000 twipa, tekst 9000 twipa (9000 * 635 EMU).
+ */
+const T65_WIDE = `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="12000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="6000"/><w:gridCol w:w="6000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell('', 'A', 6000)}${t65Cell('', 'B', 6000)}</w:tr></w:tbl>`;
+const T65_TEXT_WIDTH_EMU = 9000 * 635;
+/** Iscrtane oznake tablicnih akcija i parametri koje UI stvarno salje za siroku tablicu. */
+function t65RenderedWideTable(): { labels: string[]; params: TableFigureRescueParams } {
+  const structure = { tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', T65_WIDE), rowCount: 1, columnCount: 2, wide: true, mergedCells: false, confidence: 'medium', rowsWithCantSplit: 0, hasHeader: false, evidence: [] }], figures: [] };
+  const item = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] })[0];
+  const li = document.createElement('li');
+  renderTableFigureRescueControls(li, item);
+  return { labels: [...li.querySelectorAll('.lekta-repair-panel__rescue-actions label')].map((node) => node.textContent ?? ''), params: item.params as unknown as TableFigureRescueParams };
+}
+/** Gard: true kad neka oznaka obecava prilagodbu sirini teksta, a fixer tblW ne postavi na sirinu teksta. */
+function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): boolean {
+  const documentXml = `<w:document ${T65_W}><w:body>${T65_WIDE}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
+  const fitted = out.applied && out.parts.documentXml.includes('<w:tblW w:w="9000" w:type="dxa"/>');
+  return labels.some((label) => /širin\w* teksta/i.test(label)) && !fitted;
 }
 
 const MUTATIONS: Mutation[] = [
@@ -1810,6 +1882,121 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  // --- T65: equalColumns i spojene celije --------------------------------------------------------
+  {
+    id: 'tablica/equal-columns-gridspan',
+    imitates:
+      'equalColumns upise sirinu jednog stupca u tcW celije s w:gridSpan, pa se celija preko dva '
+      + 'stupca skupi na jedan i grid vise ne odgovara celijama',
+    caught: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  {
+    id: 'tablica/equal-columns-vmerge',
+    imitates:
+      'equalColumns prepise grid i tcW tablice s okomito spojenim celijama (w:vMerge) iako sirine '
+      + 'spojenog stupca nisu provjerene',
+    caught: () => t65Preserved(t65Table('<w:vMerge w:val="restart"/>', '<w:vMerge/>')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  // Pregled drugog alata (Codex), re-verificirano crvenim testovima u src/analysis/merged-cells.test.ts.
+  {
+    id: 'tablica/equal-columns-val-drugog-prefiksa',
+    imitates:
+      'detekcija uzme PRVI val atribut bilo kojeg prefiksa, pa <w:gridSpan x:val="1" w:val="2"/> proglasi '
+      + 'obicnom celijom i equalColumns prepise tcW celije preko dva stupca',
+    caught: () => t65Preserved(t65Table('<w:gridSpan x:val="1" w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-val-u-vrijednosti',
+    imitates:
+      'detekcija procita val= iz VRIJEDNOSTI drugog atributa (x:note=\' val="1" \'), pa gridSpan bez '
+      + 'pravog val proglasi obicnom celijom i equalColumns prepise njezin tcW',
+    caught: () => t65Preserved(t65Table(`<w:gridSpan x:note=' val="1" '/>`, '')),
+    cleanBefore: () => t65Equalized(t65Table(`<w:gridSpan x:note='val="3"' w:val="1"/>`, '')),
+  },
+  {
+    id: 'tablica/equal-columns-cdata',
+    imitates:
+      'oznaka <w:gridSpan> doslovno u CDATA tekstu odlomka broji se kao spajanje, pa obicna tablica '
+      + 'bez razloga ostane bez ujednacenih stupaca',
+    caught: () => t65Equalized(t65Table('', '').replace('<w:t>A</w:t>', '<w:t><![CDATA[<w:gridSpan w:val="2"/>]]></w:t>')),
+    cleanBefore: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-ne-ascii-prefiks',
+    imitates:
+      'analiza vidi <ž:gridSpan> kao spojenu celiju, a fixer prefiks prihvaca samo iz ASCII klase, '
+      + 'pa istu tablicu tretira kao obicnu i prepise tcW spojene celije sirinom jednog stupca',
+    caught: () => t65Preserved(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', '')))
+      && hasMergedCells(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', ''))),
+    // gridSpan w:val="1" nije spajanje: bez toga bi gard mogao "hvatati" tako da svaki gridSpan gasi equalColumns.
+    cleanBefore: () => t65Equalized(t65Table('', '')) && t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-tihi-preskok',
+    imitates:
+      'mijesani zahtjev (equalColumns + druge akcije) na tablici sa spojenim celijama vrati applied:true '
+      + 'bez traga da equalColumns nije proveden, pa izvjestaj tvrdi da je sve primijenjeno',
+    caught: () => {
+      const out = t65MixedRequest(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return out.applied && out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+    cleanBefore: () => {
+      const out = t65MixedRequest(t65Table('', ''));
+      return out.applied && !out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+  },
+  {
+    id: 'tablica/equal-columns-preskok-bez-izmjene',
+    imitates:
+      'spojena tablica kojoj su ostale trazene akcije vec na cilju vrati vec u PRVOM prolazu '
+      + 'applied:false/already-ok, a jedini trag preskoka (afterLabel) postoji samo uz applied:true, '
+      + 'pa izvjestaj kaze "vec uskladjeno" iako stupci nisu ujednaceni',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return !out.applied && out.reason === 'already-ok' && (out.skippedActions ?? []).some((note) => note.includes(T65_SKIP_NOTE));
+    },
+    // Obicna tablica s istim zahtjevom: equalColumns se stvarno primijeni, bez ikakvog traga preskoka.
+    cleanBefore: () => {
+      const out = t65AlreadyCentered(t65Table('', ''));
+      return out.applied && out.skippedActions === undefined;
+    },
+  },
+  {
+    id: 'izvjestaj/preskok-pod-vec-uskladjeno',
+    imitates:
+      'izvjestaj popravka stavku ciji je fixer vratio already-ok uz preskocen equalColumns svrsta pod '
+      + '"vec uskladjeno" (pregled drugog alata, krug 3), pa korisnik cita da nista nije trebalo mijenjati',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: out.reason as 'already-ok' }, skippedActions: { r: out.skippedActions ?? [] }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 0 && report.skippedNotes.some((line) => line.includes(T65_SKIP_NOTE));
+    },
+    // Isti razlog bez preskoka ostaje "vec uskladjeno" (RE-36): gard ne smije sve micati iz te skupine.
+    cleanBefore: () => {
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: 'already-ok' }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 1 && report.skippedNotes.length === 0;
+    },
+  },
+  {
+    id: 'tablica/oznaka-sirine-teksta',
+    imitates:
+      'predoznacena kucica fitToTextWidth glasi "Prilagodi širini teksta", a UI ne salje textWidthEmu, '
+      + 'pa fixer pise samo tblLayout fixed i siroka tablica ostaje sira od teksta',
+    caught: () => {
+      const { params } = t65RenderedWideTable();
+      return t65LabelOverclaims([' Prilagodi širini teksta'], params);
+    },
+    // Istu tvrdnju gard pusti kad fixer tblW stvarno postavi na sirinu teksta, a iscrtane oznake
+    // produkcijskog UI-ja za iste parametre ne obecavaju vise nego sto fixer napise.
+    cleanBefore: () => {
+      const { labels, params } = t65RenderedWideTable();
+      const withWidth: TableFigureRescueParams = { ...params, tables: params.tables.map((table) => ({ ...table, textWidthEmu: T65_TEXT_WIDTH_EMU })) };
+      return labels.length > 0 && !t65LabelOverclaims(labels, params) && !t65LabelOverclaims([' Prilagodi širini teksta'], withWidth);
+    },
   },
   // ---------------------------------------------------------------------------
   // GATE IZDANJA (plan T19): pet stanja u kojima objavljeni artefakt ne odgovara onome sto je dokazano.
