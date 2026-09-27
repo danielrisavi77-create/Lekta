@@ -179,6 +179,26 @@ describe('with-gate-lock: lock oko naredbe', { timeout: 90_000 }, () => {
   });
 });
 
+/**
+ * Provjerava da `check:inner` (a) pocinje ciscenjem privremenih vitest datoteka i (b) sadrzi,
+ * tim redom, svih sest koraka nekadasnjeg gatea. Ne trazi doslovni niz jer master (PR #128)
+ * smije mijenjati samo prefiks; identitet koraka i njihov redoslijed ostaju obvezni.
+ */
+function checkInnerStepsValid(script: string): boolean {
+  const prefix = 'node scripts/clean-vitest-tmp.mjs && ';
+  if (!script.startsWith(prefix)) return false;
+  const steps = script.slice(prefix.length).split(' && ');
+  const expected = [
+    'npm run check:claude-context',
+    'oxlint',
+    'tsc --noEmit',
+    'npm run check:edge',
+    'vitest run',
+    'vite build',
+  ];
+  return steps.length === expected.length && steps.every((step, i) => step === expected[i]);
+}
+
 describe('package.json: gate skripte idu kroz omotac', () => {
   const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { scripts: Record<string, string> };
 
@@ -186,8 +206,28 @@ describe('package.json: gate skripte idu kroz omotac', () => {
     expect(pkg.scripts[name]).toMatch(new RegExp(`^node scripts/with-gate-lock\\.mjs ${name} (--env \\S+ )*-- `));
   });
 
-  it('check:inner nosi cijeli nekadasnji gate (lint, TS, edge, vitest, build)', () => {
-    expect(pkg.scripts['check:inner']).toBe('npm run check:claude-context && oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build');
+  it('check:inner pocinje ciscenjem privremenih datoteka i nosi svih sest koraka nekadasnjeg gatea, tim redom', () => {
+    expect(checkInnerStepsValid(pkg.scripts['check:inner']), pkg.scripts['check:inner']).toBe(true);
     expect(pkg.scripts.check).toBe('node scripts/with-gate-lock.mjs check -- npm run check:inner');
+  });
+
+  it('MUTACIJA: check:inner bez jednog koraka obara provjeru koraka', () => {
+    const mutated = pkg.scripts['check:inner'].replace(' && vitest run', '');
+    expect(mutated).not.toBe(pkg.scripts['check:inner']);
+    expect(checkInnerStepsValid(mutated)).toBe(false);
+  });
+
+  it('MUTACIJA: check:inner s premjestenim koracima obara provjeru redoslijeda', () => {
+    const steps = pkg.scripts['check:inner'].replace('node scripts/clean-vitest-tmp.mjs && ', '').split(' && ');
+    const reordered = [...steps].reverse();
+    const mutated = `node scripts/clean-vitest-tmp.mjs && ${reordered.join(' && ')}`;
+    expect(mutated).not.toBe(pkg.scripts['check:inner']);
+    expect(checkInnerStepsValid(mutated)).toBe(false);
+  });
+
+  it('MUTACIJA: check:inner bez prefiksa za ciscenje obara provjeru', () => {
+    const mutated = pkg.scripts['check:inner'].replace('node scripts/clean-vitest-tmp.mjs && ', '');
+    expect(mutated).not.toBe(pkg.scripts['check:inner']);
+    expect(checkInnerStepsValid(mutated)).toBe(false);
   });
 });
