@@ -406,7 +406,8 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
   it.each([
     ['tudje ili nepostojece pravo', { source: null }, 404, 'upgrade_source_not_found'],
     ['vec nadogradjeno pravo (jednom)', { source: { ...SOURCE_ROW, upgrade_order_id: 'pi_prije' } }, 409, 'upgrade_already_applied'],
-    ['istekao rok prava', { source: { ...SOURCE_ROW, purchase_expires_at: new Date(NOW_MS - 1000).toISOString() } }, 409, 'upgrade_source_expired'],
+    // Rok potrosnje je rok vezivanja: vrijedi za nevezan Repair (vezani: test nize).
+    ['nevezano pravo izvan roka potrosnje', { source: { ...SOURCE_ROW, slots_used: 0, purchase_expires_at: new Date(NOW_MS - 1000).toISOString() } }, 409, 'upgrade_source_expired'],
     ['druga vrsta rada', { source: { ...SOURCE_ROW, work_type: 'zavrsni' } }, 409, 'upgrade_work_type_mismatch'],
     ['staro pravo bez placenog iznosa', { source: { ...SOURCE_ROW, paid_amount_cents: null } }, 409, 'upgrade_paid_amount_unknown'],
     ['djelomicno vracena izvorna uplata', { partial: [{ id: 'evt' }] }, 409, 'upgrade_source_partially_refunded'],
@@ -428,6 +429,20 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     expect(out).toEqual({ error });
     expect(stripeCalls).toHaveLength(0);
     expect(calls.some((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')).toBe(false);
+  });
+
+  it('krug 4: vezan Repair izvan roka potrosnje s netaknutim otiskom se nadogradjuje (granica je anonimizacija)', async () => {
+    // slot_diplomski kupljen dan 0 (kupovni prozor 90), vezan dan 85, slot ziv do dana 99; provjera dan 92.
+    const { res, out, stripeCalls } = await run(
+      { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+      {
+        resolve: upgradeResolve({ source: { ...SOURCE_ROW, slots_used: 1, purchase_expires_at: new Date(NOW_MS - 2 * 86_400_000).toISOString() } }),
+        stripe: { status: 200, json: { id: 'pi_up', client_secret: FAKE_CLIENT_SECRET, amount: 1000, currency: 'eur' } },
+      },
+    );
+    expect(res.status, JSON.stringify(out)).toBe(200);
+    expect(stripeCalls).toHaveLength(1);
+    expect(stripeCalls[0].body.get('amount')).toBe('1000');
   });
 
   it('id prava koji nije uuid je 400 prije ikakvog upita prava', async () => {

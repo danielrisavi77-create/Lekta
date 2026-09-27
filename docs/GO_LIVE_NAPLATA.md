@@ -430,11 +430,15 @@ Log ističe, baza ne, pa je upit iznad mjerodavan.
 `create-checkout` samo namjeru: `productId` Final Passa i `upgradeFromEntitlementId` (id vlastitog
 Repair prava). Iznos računa server: `products.price_eur` Final Passa minus `paid_amount_cents`
 istog prava (stvarno naplaćeno pri kupnji Repaira). Nadogradnja je dopuštena samo za plaćeno
-(`provider = 'stripe'`), aktivno Repair pravo s jednim slotom, iste vrste rada, unutar roka
-(`purchase_expires_at`), koje još nije nadograđeno i čija izvorna uplata nije djelomično vraćena.
+(`provider = 'stripe'`), aktivno Repair pravo s jednim slotom, iste vrste rada, koje još nije
+nadograđeno i čija izvorna uplata nije djelomično vraćena. Rok potrošnje (`purchase_expires_at`) je
+rok vezivanja uz rad, pa vrijedi samo za Repair koji još nije vezan (`slots_used = 0`); izvan njega
+je 409 `upgrade_source_expired`, a u bazi `unavailable`.
 Ako je Repair već vezan uz rad (`slots_used > 0`), otisak njegova slota mora biti još netaknut, tj.
-neanonimiziran. Istek prozora slota **nije** granica (odjeljak 14: korisnik koji je prvo kupio
-Repair ne smije biti kažnjen): nadogradnja tada isti slot oživi na prozor Final Passa. Granica je
+neanonimiziran. Ni istek prozora slota ni istek roka potrošnje **nisu** granica (odjeljak 14:
+korisnik koji je prvo kupio Repair ne smije biti kažnjen; npr. `slot_diplomski` kupljen dan 0 i vezan
+dan 85 smije se nadograditi i na dan 92): nadogradnja tada isti slot oživi na prozor Final Passa i
+produlji rok potrošnje. Granica je
 anonimizacija: `purge_document_slots` (0016) 30 dana nakon isteka briše naslov, autora i poglavlja
 iz otiska, pa bi nadograđeni Final Pass produljio otisak koji ne prepoznaje nijednu verziju rada.
 Takav zahtjev je 409 `upgrade_slot_anonymized`, a `apply_entitlement_upgrade` istu provjeru

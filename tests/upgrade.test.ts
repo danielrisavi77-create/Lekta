@@ -95,7 +95,8 @@ describe('quoteUpgrade: pravila (isti rad, jednom, rok, samo placeno)', () => {
     ['specijalisticki se ne nadogradjuje na diplomski', target('diplomski', 19.99), source('specijalisticki', 1699), 'upgrade_work_type_mismatch'],
     ['vec nadogradjeno (jednom)', target('diplomski', 19.99), source('diplomski', 999, { upgradeOrderId: 'pi_prije' }), 'upgrade_already_applied'],
     ['vraceno pravo', target('diplomski', 19.99), source('diplomski', 999, { status: 'refunded' }), 'upgrade_source_inactive'],
-    ['isteklo pravo (rok)', target('diplomski', 19.99), source('diplomski', 999, { purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'upgrade_source_expired'],
+    // Rok potrosnje vrijedi samo za NEVEZAN Repair (vezani: vidi 'krug 4: rok potrosnje' nize).
+    ['nevezano pravo izvan roka potrosnje', target('diplomski', 19.99), source('diplomski', 999, { slotsUsed: 0, boundSlotIntact: undefined, purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'upgrade_source_expired'],
     ['nepoznat placeni iznos', target('diplomski', 19.99), source('diplomski', null), 'upgrade_paid_amount_unknown'],
     ['djelomicno vracena izvorna uplata', target('diplomski', 19.99), source('diplomski', 999, { partiallyRefunded: true }), 'upgrade_source_partially_refunded'],
     ['placeno jednako cilju', target('diplomski', 19.99), source('diplomski', 1999), 'upgrade_amount_invalid'],
@@ -219,6 +220,40 @@ describe('krug 4: vezani slot je prepoznatljiv dok ga purge ne anonimizira (odje
   it('pad citanja slota je greska, ne "netaknut" ni "anonimiziran"', async () => {
     expect(await readBoundSlotIntact(fakeDb({ data: null, error: { message: 'timeout' } }).db as never, 'ent-1'))
       .toEqual({ ok: false, error: 'timeout' });
+  });
+});
+
+describe('krug 4: rok potrosnje ne vrijedi za vec vezan Repair (granica je samo anonimizacija)', () => {
+  const DAN = 86_400_000;
+  // Kupnja na dan 0; NOW je dan provjere. Kupovni i slot prozori iz odjeljka 5 (slot_diplomski 90/14,
+  // slot_zavrsni 90/7, slot_doktorski 120/30); purge_document_slots (0016) anonimizira 30 dana nakon
+  // isteka slota, pa je otisak u svim slucajevima nize jos netaknut.
+  it.each([
+    // [opis, vrsta, placeno, cilj EUR, kupovni prozor, dan vezivanja, prozor slota, dan provjere]
+    ['slot_diplomski vezan dan 85, slot ziv do 99, provjera dan 92', 'diplomski', 999, 19.99, 90, 85, 14, 92],
+    ['slot_zavrsni vezan dan 85, slot istekao dan 92, provjera dan 95', 'zavrsni', 599, 12.99, 90, 85, 7, 95],
+    ['slot_zavrsni vezan dan 89, slot ziv do 96, provjera dan 91', 'zavrsni', 599, 12.99, 90, 89, 7, 91],
+    ['slot_doktorski vezan dan 110, slot ziv do 140, provjera dan 125', 'doktorski', 2499, 39.99, 120, 110, 30, 125],
+  ] as const)('%s: nadogradnja prolazi', (_opis, vrsta, placeno, ciljEur, kupovni, vezan, slotDana, dan) => {
+    const dan0 = NOW - dan * DAN;
+    const purchaseExpiresAt = new Date(dan0 + kupovni * DAN).toISOString();
+    // Generator mora proizvesti ciljanu klasu ulaza: rok potrosnje je istekao, a otisak nije purgan.
+    expect(Date.parse(purchaseExpiresAt)).toBeLessThan(NOW);
+    expect(dan0 + (vezan + slotDana + 30) * DAN).toBeGreaterThan(NOW);
+    const q = quoteUpgrade(target(vrsta, ciljEur), source(vrsta, placeno, { slotsUsed: 1, boundSlotIntact: true, purchaseExpiresAt }), 'user-1', NOW);
+    expect(q).toEqual({ ok: true, amountCents: Math.round(ciljEur * 100) - placeno, targetCents: Math.round(ciljEur * 100), creditCents: placeno });
+  });
+
+  it('vezan Repair izvan roka potrosnje s anonimiziranim otiskom je i dalje odbijen', () => {
+    const isteklo = new Date(NOW - 40 * DAN).toISOString();
+    expect(quoteUpgrade(target('zavrsni', 12.99), source('zavrsni', 599, { slotsUsed: 1, boundSlotIntact: false, purchaseExpiresAt: isteklo }), 'user-1', NOW))
+      .toEqual({ ok: false, error: 'upgrade_slot_anonymized' });
+  });
+
+  it('nevezan Repair izvan roka potrosnje je odbijen (rok vezivanja)', () => {
+    const isteklo = new Date(NOW - 1).toISOString();
+    expect(quoteUpgrade(target('zavrsni', 12.99), source('zavrsni', 599, { slotsUsed: 0, boundSlotIntact: undefined, purchaseExpiresAt: isteklo }), 'user-1', NOW))
+      .toEqual({ ok: false, error: 'upgrade_source_expired' });
   });
 });
 

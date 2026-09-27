@@ -14,11 +14,18 @@
  *    Final Pass iste vrste rada. Pretvara se ISTI redak, pa vezani slot (otisak dokumenta) ostaje isti.
  *  - NIKAD PUNA CIJENA PONOVNO: odbija se stvarno placeni iznos istog prava.
  *  - JEDNOM: pravo koje je vec nadogradjeno ne moze se nadograditi ponovno.
- *  - ROK: pravo mora biti aktivno i unutar roka potrosnje (`purchase_expires_at`). Odjeljak 14 drugi
- *    rok ne propisuje, pa ga ovaj modul ne izmislja.
+ *  - AKTIVNO: pravo mora biti aktivno (nije vraceno ni ponisteno).
+ *  - ROK OVISI O TOME JE LI PRAVO VEC VEZANO:
+ *     * Nevezan Repair (`slots_used = 0`) mora biti unutar roka potrosnje (`purchase_expires_at`):
+ *       to je rok do kojeg se pravo uopce smije vezati uz rad.
+ *     * Vezan Repair (`slots_used > 0`) je rok potrosnje vec iskoristio (vezao je rad), pa
+ *       `purchase_expires_at` za njega NIJE granica (krug 4, nalaz pregleda): slot_diplomski kupljen
+ *       na dan 0 (kupovni prozor 90) i vezan na dan 85 zivi do dana 99, a anonimizira se tek nakon
+ *       dana 129; odbijanje na dan 92 kaznilo bi Repair kupca. Jedina granica je sljedeca stavka.
  *  - VEZANI RAD JE JOS PREPOZNATLJIV: ako je Repair vec vezan uz rad (`slots_used > 0`), otisak
- *    njegova slota mora biti netaknut, tj. jos neanonimiziran. Istek prozora slota NIJE granica
- *    (krug 4, odjeljak 14: korisnik koji je prvo kupio Repair ne smije biti kaznjen). Granica je
+ *    njegova slota mora biti netaknut, tj. jos neanonimiziran. Ni istek prozora slota ni istek roka
+ *    potrosnje NISU granica (krug 4, odjeljak 14: korisnik koji je prvo kupio Repair ne smije biti
+ *    kaznjen); pretvorba tada produlji i rok potrosnje (greatest(...)). Granica je
  *    anonimizacija: purge_document_slots (0016) 30 dana nakon isteka brise naslov, autora i
  *    poglavlja iz otiska, i tek bi tada nadogradnja produljila prazan otisak koji ne prepoznaje
  *    nijednu verziju rada (placen Final Pass bez ijedne upotrebe, nalaz pregleda kruga 3). Do tada
@@ -128,10 +135,15 @@ export function quoteUpgrade(
   if (source.workType !== target.workType) return { ok: false, error: 'upgrade_work_type_mismatch' };
   if (source.upgradeOrderId) return { ok: false, error: 'upgrade_already_applied' };
   if (source.status !== 'active') return { ok: false, error: 'upgrade_source_inactive' };
-  const expires = Date.parse(source.purchaseExpiresAt);
-  if (!Number.isFinite(expires) || expires <= nowMs) return { ok: false, error: 'upgrade_source_expired' };
   if (!Number.isInteger(source.slotsUsed) || source.slotsUsed < 0) return { ok: false, error: 'upgrade_source_not_repair' };
-  if (source.slotsUsed > 0 && source.boundSlotIntact !== true) return { ok: false, error: 'upgrade_slot_anonymized' };
+  if (source.slotsUsed > 0) {
+    // Vezan Repair: granica je samo anonimizacija otiska, ne rok potrosnje ni istek prozora slota.
+    if (source.boundSlotIntact !== true) return { ok: false, error: 'upgrade_slot_anonymized' };
+  } else {
+    // Nevezan Repair: rok potrosnje je rok do kojeg se pravo smije vezati uz rad.
+    const expires = Date.parse(source.purchaseExpiresAt);
+    if (!Number.isFinite(expires) || expires <= nowMs) return { ok: false, error: 'upgrade_source_expired' };
+  }
 
   const paid = source.paidAmountCents;
   if (typeof paid !== 'number' || !Number.isInteger(paid) || paid <= 0) {

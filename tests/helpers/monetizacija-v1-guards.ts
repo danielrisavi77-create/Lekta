@@ -90,8 +90,14 @@ export function upgradeQuoteProblems(quote: QuoteFn): string[] {
     problems.push('nepoznat placeni iznos se pogadja umjesto da se nadogradnja odbije');
   }
   if (quote(target(), source(), 'u2', NOW).ok) problems.push('tudje pravo se moze nadograditi');
-  if (quote(target(), source({ purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'u1', NOW).ok) {
+  // Rok potrosnje je rok VEZIVANJA: vrijedi za nevezan Repair, a vezanom nije granica (krug 4).
+  if (quote(target(), source({ slotsUsed: 0, boundSlotIntact: undefined, purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'u1', NOW).ok) {
     problems.push('isteklo pravo se moze nadograditi (rok)');
+  }
+  // slot_diplomski kupljen dan 0 (kupovni prozor 90), vezan dan 85, slot ziv do dana 99; provjera dan 92.
+  const vezanIzvanRoka = quote(target(), source({ slotsUsed: 1, boundSlotIntact: true, purchaseExpiresAt: new Date(NOW - 2 * 86_400_000).toISOString() }), 'u1', NOW);
+  if (!vezanIzvanRoka.ok || vezanIzvanRoka.amountCents !== 1000) {
+    problems.push('vezan Repair s netaknutim otiskom odbijen jer je istekao rok potrosnje (Repair kupac kaznjen, granica je anonimizacija)');
   }
   // Vezani rad mora biti prepoznatljiv (krug 3 i 4): anonimiziran otisak (purge_document_slots, 0016)
   // bi dao placen Final Pass koji ne prepoznaje nijednu verziju rada. Istek prozora nije granica.

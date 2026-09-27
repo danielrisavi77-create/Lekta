@@ -354,11 +354,16 @@ comment on column public.bonus_outbox.status is
 --  * ISTA VRSTA RADA: ciljni proizvod mora imati isti work_type kao pravo.
 --  * JEDNOM: pravo koje je vec nadogradjeno (upgrade_order_id) se ne pretvara ponovno; ista uplata
 --    (retry) vraca `duplicate`, a druga uplata `unavailable` (webhook je salje na rucni pregled).
---  * ROK: pravo mora biti aktivno i unutar roka potrosnje (purchase_expires_at).
+--  * AKTIVNO: pravo mora biti aktivno (nije vraceno ni ponisteno).
+--  * ROK POTROSNJE (purchase_expires_at) vrijedi SAMO za nevezano pravo (slots_used = 0): to je rok
+--    do kojeg se pravo smije vezati uz rad. Vezano pravo ga je vec iskoristilo, pa za njega nije
+--    granica (krug 4): slot_diplomski kupljen na dan 0 (kupovni prozor 90) i vezan na dan 85 zivi
+--    do dana 99, a purge ga anonimizira tek nakon dana 129; odbijanje na dan 92 kaznilo bi Repair
+--    kupca. Pretvorba rok potrosnje produlji (greatest nize).
 --  * VEZANI RAD JE JOS PREPOZNATLJIV: pravo koje je vec vezano uz rad (slots_used > 0) mora imati
---    slot ciji otisak NIJE anonimiziran. Istek prozora slota nije granica (odjeljak 14: korisnik
---    koji je prvo kupio Repair ne smije biti kaznjen); pretvorba tada ISTI slot ozivi na prozor
---    Final Passa (greatest nize). Granica je purge_document_slots (0016): 30 dana nakon isteka brise
+--    slot ciji otisak NIJE anonimiziran. Ni istek prozora slota ni istek roka potrosnje nisu granica
+--    (odjeljak 14: korisnik koji je prvo kupio Repair ne smije biti kaznjen); pretvorba tada ISTI
+--    slot ozivi na prozor Final Passa (greatest nize). Granica je purge_document_slots (0016): 30 dana nakon isteka brise
 --    naslov, autora i poglavlja iz otiska, i produljenje takvog slota dalo bi placen Final Pass koji
 --    ne prepoznaje nijednu verziju rada. Kriterij je tocno obrat purgea: otisak ima barem jedan od
 --    kljuceva koje purge brise (src/report/upgrade.ts ANONYMIZED_FINGERPRINT_KEYS, isti popis).
@@ -397,9 +402,12 @@ begin
   end if;
   if v_ent.upgrade_order_id is not null
      or v_ent.status <> 'active'
-     or v_ent.purchase_expires_at <= now()
      or v_ent.offer_code is distinct from 'repair_v1'
      or v_ent.slots_total <> 1 then
+    return 'unavailable';
+  end if;
+  -- Rok potrosnje vrijedi samo dok pravo nije vezano uz rad (vidi komentar iznad funkcije).
+  if v_ent.slots_used = 0 and v_ent.purchase_expires_at <= now() then
     return 'unavailable';
   end if;
 

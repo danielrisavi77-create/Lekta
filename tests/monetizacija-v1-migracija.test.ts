@@ -217,7 +217,8 @@ describe('0207: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', 
 
   it('rok, vlasnik, Repair ponuda, jedan slot i ista vrsta rada', () => {
     expect(fn).toMatch(/v_ent\.user_id is distinct from p_user_id/);
-    expect(fn).toMatch(/v_ent\.purchase_expires_at <= now\(\)/);
+    // Krug 4: rok potrosnje vrijedi samo za nevezano pravo; vezanom je granica anonimizacija otiska.
+    expect(fn).toMatch(/if v_ent\.slots_used = 0 and v_ent\.purchase_expires_at <= now\(\) then\s*return 'unavailable';/);
     expect(fn).toMatch(/v_ent\.status <> 'active'/);
     expect(fn).toMatch(/v_ent\.offer_code is distinct from 'repair_v1'/);
     expect(fn).toMatch(/v_ent\.slots_total <> 1/);

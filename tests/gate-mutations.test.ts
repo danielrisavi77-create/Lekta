@@ -5476,6 +5476,25 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
   },
   {
+    id: 'naplata/nadogradnja-rok-potrosnje-za-vezani',
+    imitates: 'krug 4 (nalaz pregleda): quoteUpgrade odbija vezan Repair cim istekne purchase_expires_at, iako otisak nije anonimiziran; slot_diplomski vezan dan 85 odbijen na dan 92 dok mu slot jos zivi',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) =>
+        s && Date.parse(s.purchaseExpiresAt) <= n ? { ok: false, error: 'upgrade_source_expired' } : quoteUpgrade(t, s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('rok potrosnje'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-nevezan-bez-roka',
+    imitates: 'krug 4: presiroko olabavljen rok, pa se i NEVEZAN Repair nadogradjuje nakon isteka roka potrosnje (rok vezivanja uz rad nestaje)',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, purchaseExpiresAt: new Date(n + 86_400_000).toISOString() } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('(rok)'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
     id: 'naplata/m3-prekidac-specijalisticki-ukljucen-prije-m3',
     imitates: 'krug 4: SPECIALIST_TIER_ENABLED zadano true prije M3, pa server specijalisticku naslovnicu na seminarskom, zavrsnom i diplomskom blokira s prijedlogom specijalisticki koji klijent ne nudi',
     caught: () => {
@@ -6402,6 +6421,26 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     const run = await runV1(mutated);
     try {
       expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade s rokom potrosnje i za vezano pravo odbija vezan Repair izvan roka i obara gard', async () => {
+    const mutated = mutirajRe(/(or v_ent\.status <> 'active')/, '$1 or v_ent.purchase_expires_at <= now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('rok potrosnje istekao'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade bez roka potrosnje za nevezano pravo obara gard', async () => {
+    const mutated = mutirajRe(/if v_ent\.slots_used = 0 and v_ent\.purchase_expires_at <= now\(\) then/, 'if false then');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('nevezan izvan roka potrosnje'))).toBe(true);
     } finally {
       await run.db.close();
     }

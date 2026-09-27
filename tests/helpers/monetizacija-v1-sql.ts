@@ -259,6 +259,8 @@ interface UpgradeCase {
   slotDays: number | null;
   /** Prije nadogradnje pokreni STVARNI purge_document_slots(30) iz 0016 (cron anonimizacije). */
   purge?: boolean;
+  /** Pomak roka potrosnje (purchase_expires_at) u danima; zadano +60 (unutar roka). */
+  purchaseDays?: number;
   user?: string;
   targetId: string;
   ocekivano: string;
@@ -266,8 +268,8 @@ interface UpgradeCase {
 
 async function seedRepair(db: PGlite, c: UpgradeCase, n: number): Promise<string> {
   const e = await one(db, `insert into public.entitlements (user_id, work_type, slots_total, slots_used, order_id, provider, purchase_expires_at, product_id, paid_amount_cents)
-                           values ($1, $2, 1, $3, $4, 'stripe', now() + interval '60 days', $5, 999) returning id`,
-  [USER_A, c.workType, c.slotsUsed, `pi_repair_${n}`, c.productId]);
+                           values ($1, $2, 1, $3, $4, 'stripe', now() + make_interval(days => $6), $5, 999) returning id`,
+  [USER_A, c.workType, c.slotsUsed, `pi_repair_${n}`, c.productId, c.purchaseDays ?? 60]);
   const id = String(e?.id);
   if (c.slotDays !== null) {
     await db.query(`insert into public.document_slots (entitlement_id, user_id, work_type, fingerprint, slot_expires_at)
@@ -325,6 +327,11 @@ export async function upgradeSqlProblems(db: PGlite): Promise<string[]> {
     { opis: 'anonimiziran vezani slot (stvarni purge 0016)', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: -40, purge: true, targetId: 'pass_zavrsni', ocekivano: 'slot_anonymized' },
     { opis: 'vezano pravo bez retka slota', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: null, targetId: 'pass_zavrsni', ocekivano: 'slot_anonymized' },
     { opis: 'nevezan Repair', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 0, slotDays: null, targetId: 'pass_zavrsni', ocekivano: 'upgraded' },
+    // Krug 4 (nalaz pregleda): rok potrosnje je rok VEZIVANJA. Vezanom Repairu nije granica, nevezanom jest.
+    { opis: 'vezan, rok potrosnje istekao prije 5 dana, slot istekao prije 3 dana, otisak netaknut', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: -3, purchaseDays: -5, targetId: 'pass_zavrsni', ocekivano: 'upgraded' },
+    { opis: 'vezan, rok potrosnje istekao, slot jos ziv', productId: 'slot_diplomski', workType: 'diplomski', slotsUsed: 1, slotDays: 7, purchaseDays: -2, targetId: 'pass_diplomski', ocekivano: 'upgraded' },
+    { opis: 'vezan izvan roka potrosnje, anonimiziran (stvarni purge 0016)', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: -40, purchaseDays: -45, purge: true, targetId: 'pass_zavrsni', ocekivano: 'slot_anonymized' },
+    { opis: 'nevezan izvan roka potrosnje', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 0, slotDays: null, purchaseDays: -1, targetId: 'pass_zavrsni', ocekivano: 'unavailable' },
     { opis: 'specijalisticki', productId: 'slot_specijalisticki', workType: 'specijalisticki', slotsUsed: 1, slotDays: 10, targetId: 'pass_specijalisticki', ocekivano: 'upgraded' },
   ];
   let n = 1;
@@ -344,6 +351,11 @@ export async function upgradeSqlProblems(db: PGlite): Promise<string[]> {
       // Isti slot ozivljen na prozor Final Passa (ne novi redak).
       const s = await one(db, "select count(*)::int as n, bool_and(slot_expires_at > now() + interval '170 days') as ziv from public.document_slots where entitlement_id = $1", [eid]);
       if (s?.n !== 1 || s?.ziv !== true) problems.push(`${c.opis}: nadogradnja ne ozivi isti vezani slot na prozor Final Passa (${JSON.stringify(s)})`);
+    }
+    if (c.ocekivano === 'upgraded') {
+      // Pretvorba produlji i rok potrosnje (greatest), pa nadogradjeno pravo nije odmah isteklo.
+      const r = await one(db, "select (purchase_expires_at > now() + interval '170 days') as produljen from public.entitlements where id = $1", [eid]);
+      if (r?.produljen !== true) problems.push(`${c.opis}: nadogradnja ne produljuje rok potrosnje na prozor Final Passa`);
     }
   }
   return problems;
