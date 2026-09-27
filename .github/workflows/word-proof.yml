@@ -92,8 +92,9 @@ jobs:
           [IO.File]::AppendAllText($env:GITHUB_ENV, "WORD_PROOF_START=$([DateTime]::UtcNow.ToString('o'))`n")
 
       # Word koji vec radi u sesiji runnera znaci zaostali proces prethodnog runa ili korisnikov
-      # otvoreni dokument. Run tada STAJE i nista ne gasi (Codex F8). Zatim: Word COM, bash, git.
-      - name: Preflight (zaostali Word, Word COM, bash, git)
+      # otvoreni dokument. Run tada STAJE i nista ne gasi (Codex F8). Zatim: Word COM, git.
+      # Bash/WSL nije potreban: setup-deps na Windowsu koristi powershell (WSL stub pada).
+      - name: Preflight (zaostali Word, Word COM, git)
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
@@ -105,7 +106,6 @@ jobs:
           }
           $word = New-Object -ComObject Word.Application
           try { Write-Output "Word verzija: $($word.Version)" } finally { $word.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($word) }
-          Write-Output "bash: $((Get-Command bash).Source)"
           git --version
           if ($LASTEXITCODE -ne 0) { throw 'git nije dostupan.' }
 
@@ -194,7 +194,7 @@ jobs:
           $cisti = foreach ($r in $retci) {
             foreach ($p in @($env:GITHUB_WORKSPACE, $env:RUNNER_TEMP, $env:USERPROFILE)) { if ($p) { $r = $r.Replace($p, '<put>') } }
             if ($env:USERNAME) { $r = $r.Replace($env:USERNAME, '<korisnik>') }
-            $r -replace '[A-Za-z]:\\[^\s"'']*', '<put>'
+            $r -replace '[A-Za-z]:\\[^\s'\"'\'']*', '<put>'
           }
           $zaglavlje = @("commit: $sha", "dogadjaj: $env:GITHUB_EVENT_NAME", "svjez dokaz ovog runa: $svjez", '')
           ($zaglavlje + $cisti) | Set-Content -Path (Join-Path $izlaz 'sazetak.txt') -Encoding UTF8
