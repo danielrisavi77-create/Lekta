@@ -1,13 +1,12 @@
-# Routing modela: korak 1
+# Routing modela: korak 1 i 2
 
 Ovaj dokument opisuje kako sesija bira providera, model i effort za zadatak, bez ijednog
 modela hardkodiranog u SessionStart hooku. Izvor istine za cijene, tezine i pravila routinga
 je `config/agent-routing.json`. Ovaj dokument ne ponavlja brojke iz tog fajla osim kao
 ilustrativan primjer s izricitom napomenom da je primjer, ne obveza.
 
-Ovo je korak 1 globalnog workflowa (data-driven routing, jedan ulaz po sesiji). Korak 2
-(spajanje na `.claude/workflows/lekta-lean.js`) je poseban zadatak i ovim dokumentom se ne
-mijenja.
+Korak 1 je data-driven routing s jednim ulazom po sesiji; korak 2 je `.claude/workflows/lekta-lean.js`
+koji model i effort po fazi cita iz istog configa (odjeljak "Korak 2: lean workflow cita routing").
 
 ## Session bootstrap
 
@@ -37,6 +36,8 @@ samo koordinacijska oznaka u redu zadataka, ne brava nad datotekama.
   nize).
 - **Gate**: automatska provjera (lint, testovi, build); polje `gate.provider` u routingu je
   `"none"` jer gate ne zove model.
+- **Kriticar plana** (uloga `critic`): najjeftiniji verificirani model na effortu `low`, samo cita
+  brief prije implementacije i zaustavlja run kad je plan los, da se ne potrosi skupi implementator.
 
 ## Cijena i tezina modela
 
@@ -74,6 +75,29 @@ sandbox lokalno je read-only/review, Codex implementacija ide u cloud), routing 
 Claude, ali s DRUGIM modelom od implementatora; to je eksplicitno polje `reviewFallback` uz
 svaki `review` unos. Test `tests/agent-routing-config.test.ts` provjerava da svaka kombinacija
 ima ili razlicitog providera ili valjan `reviewFallback` s razlicitim modelom.
+
+## Korak 2: lean workflow cita routing
+
+`.claude/workflows/lekta-lean.js` vise ne hardkodira model i effort po fazi. Za svaku fazu (`brief`,
+`critic`, `implement`, `review`, `gate`) zove `selectRoute` iz `scripts/agents/select-route.mjs`:
+velicina dolazi iz `mode` (light=S, standard=M, full=L) ili iz `args.size`, a zasticenost iz toga
+dira li ijedna datoteka iz `args.files` stazu iz `protectedPaths`. Workflow skripte nemaju pristup
+datotekama ni importima, zato pozivatelj preda sadrzaj configa kao `args.routingConfig` (JSON.parse
+datoteke), a lean skripta nosi doslovnu kopiju bloka `DIJELJENO:select-route`;
+`tests/select-route.test.ts` pada cim se dvije kopije razidju.
+
+- **Faza critic**: nakon briefa (u light modu nad `files` i kriterijima), prije implementatora. Vraca
+  `{ ok, problemi }`: nejasan kriterij prihvacanja, dodir zasticene staze bez `args.protected: true`
+  (ovaj dio je deterministicki, ne model) i plan koji ne kaze sto nece biti dokazano. Kad je
+  `ok=false`, run staje sa `STATUS: ZAUSTAVLJENO (kriticar)` i implementator se ne pokrece.
+- **Pregled**: primarni recenzent je drugi provider (danas Codex). Lean skripta pokrece samo Claude
+  agente, pa koristi `reviewFallback`, koji mora biti drugi model od implementatora.
+- **Config nedostaje ili je neispravan**: lean skripta koristi zadane vrijednosti iz `select-route`
+  (vrijednosti lean skripte prije koraka 2) i upisuje `UPOZORENJE routing` u report. Run se ne rusi.
+- **Neverificiran model**: `selectRoute` baca gresku s imenom modela i run staje. Neverificiran
+  model se nikad ne pokrece, ni kao fallback.
+- **Report** navodi za svaku fazu stvarno koristen model i effort, te retke `Neto redaka` i
+  `Nove ovisnosti` (racuna ih agent u worktreeu kroz `scripts/agents/pr-lines.mjs`).
 
 ## Zasticena podrucja
 

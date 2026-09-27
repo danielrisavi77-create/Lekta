@@ -30,6 +30,9 @@ describe('sanitizacija dogadjaja', () => {
     expect(sanitizeEventData({ category: 'formatting', documentText: 'privatno' })).toEqual({ category: 'formatting' });
     expect(sanitizeEventData({ fileName: 'diplomski-ivan-horvat.docx', title: 'Naslov rada', author: 'I. H.', comment: 'mentor', count: 3 })).toEqual({ count: 3 });
     expect(sanitizeEventData({ count: { nested: 1 }, kind: ['a'], ms: 12 })).toEqual({ ms: 12 });
+    expect(sanitizeEventData({ auto: 4, assisted: 2, manual: 3, unknown: 1, structureGaps: 2, excerpt: 'privatno' })).toEqual({
+      auto: 4, assisted: 2, manual: 3, unknown: 1, structureGaps: 2,
+    });
     expect(sanitizeEventData(null)).toEqual({});
   });
 });
