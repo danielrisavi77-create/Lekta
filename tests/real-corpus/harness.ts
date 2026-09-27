@@ -166,6 +166,11 @@ export interface RealCorpusReport {
     contentStored: false;
     localDocumentCount?: number;
     /**
+     * Koliko je dokumenata izbaceno jer se isti `documentId` s istim bajtovima pojavio u vise korijena
+     * (T83). Samo za mjerenje s lokalnim korpusom; vidi `dedupeManifest`.
+     */
+    duplicateDocumentCount?: number;
+    /**
      * Zbroj CILJANIH provjera nad cijelim skupom, i izricita tvrdnja mjeri li ovaj izvjestaj uopce
      * ucinkovitost popravka.
      *
@@ -612,29 +617,106 @@ function summarizeResults(results: RealCorpusResult[]): RealCorpusReport['summar
   };
 }
 
+export interface ManifestDuplicate {
+  documentId: string;
+  /** Korijen cija je kopija zadrzana, pa korijeni izbacenih kopija, tim redom. */
+  roots: string[];
+}
+
+/**
+ * JEDAN DOKUMENT, JEDAN GLAS (T83).
+ *
+ * Zasto postoji, izmjereno 2026-09-27 na radnoj stanici: `tests/fixtures/docx-local` (127 radova) i
+ * vanjski korpus iz `LEKTA_CORPUS_SOURCE` (`03-ingest`, 187) dijele 102 ista `documentId`-a, i sva
+ * 102 su bajt po bajt ista datoteka. Manifest je bio obican spoj triju popisa, pa se svaki od njih
+ * mjerio dvaput: mjerenje je javljalo 321 dokument, a razlicitih je 219. Potpisana ovjera od 10. 9.
+ * nosi isti zbroj 321, dakle i ona je dvostruko brojala; `documentCount` i `cleanCount` po skupini
+ * bili su napuhani, a da nista nije palo.
+ *
+ * Pravilo: zadrzava se prva pojava (redom commitani, `docx-local`, vanjski korijen). Kopija s istim
+ * bajtovima i istim metapodacima (profil, izdvojeni skup, porijeklo ocekivanja) je duplikat i broji se
+ * u `duplicates`. Sve ostalo nije duplikat nego kvar podataka, pa BACA:
+ * - isti `documentId` s razlicitim sadrzajem ili metapodacima: tiho odabrati jednu verziju znacilo bi
+ *   mjeriti dokument koji mozda nije onaj na koji se ovjera poziva, a redoslijed korijena bi odlucivao
+ *   je li rad izdvojen (Codex #185, T83-02);
+ * - isti bajtovi pod razlicitim `documentId`-ovima: isti rad bi opet ulazio dvaput, samo pod drugim
+ *   imenom (Codex #185, T83-01). U korpusu 27. 9. takvih nema (0 od 335 datoteka), gard je preventivan.
+ */
+export function dedupeManifest(
+  entries: RealCorpusManifestEntry[],
+  readBytes: (entry: RealCorpusManifestEntry) => Uint8Array = (entry) =>
+    readFileSync(join(entry.root ?? REAL_CORPUS_ROOT, entry.fileName)),
+): { entries: RealCorpusManifestEntry[]; duplicates: ManifestDuplicate[] } {
+  const kept = new Map<string, { entry: RealCorpusManifestEntry; digest: string }>();
+  const byDigest = new Map<string, string>();
+  const duplicates = new Map<string, ManifestDuplicate>();
+  const out: RealCorpusManifestEntry[] = [];
+  const digestOf = (entry: RealCorpusManifestEntry) => createHash('sha256').update(readBytes(entry)).digest('hex');
+  for (const entry of entries) {
+    const digest = digestOf(entry);
+    const first = kept.get(entry.documentId);
+    if (!first) {
+      const otherId = byDigest.get(digest);
+      if (otherId !== undefined) {
+        throw new Error(
+          `Korpus: isti sadrzaj postoji pod documentId ${otherId} i ${entry.documentId}; ` +
+          'isti rad pod dva imena broji se dvaput, pa se mjerenje ne izvodi.',
+        );
+      }
+      byDigest.set(digest, entry.documentId);
+      kept.set(entry.documentId, { entry, digest });
+      out.push(entry);
+      continue;
+    }
+    const a = first.entry;
+    if (
+      digest !== first.digest ||
+      entry.profileId !== a.profileId ||
+      entry.holdout !== a.holdout ||
+      entry.expectationProvenance !== a.expectationProvenance
+    ) {
+      throw new Error(
+        `Korpus: documentId ${entry.documentId} postoji u vise korijena s razlicitim sadrzajem ili metapodacima ` +
+        '(profil, izdvojeni skup, porijeklo ocekivanja); mjerenje se ne izvodi dok se ne razrijesi koja je verzija prava.',
+      );
+    }
+    const dup = duplicates.get(entry.documentId) ?? { documentId: entry.documentId, roots: [first.entry.root ?? ''] };
+    dup.roots.push(entry.root ?? '');
+    duplicates.set(entry.documentId, dup);
+  }
+  return { entries: out, duplicates: [...duplicates.values()] };
+}
+
 export async function runRealCorpus(
   root = REAL_CORPUS_ROOT,
-  options: { outputDir?: string; includeLocal?: boolean } = {},
+  options: {
+    outputDir?: string;
+    includeLocal?: boolean;
+    /** Za test kroz stvarno mjerenje (T83-06); produkcija koristi `LOCAL_CORPUS_ROOT` i `LEKTA_CORPUS_SOURCE`. */
+    localRoot?: string;
+    externalRoot?: string | null;
+  } = {},
 ): Promise<RealCorpusReport> {
   // Lokalni korpus se DODAJE commitanom, ne zamjenjuje ga: mjerenje mora obuhvatiti i anonimne
   // fixture koje CI vidi i stvarne radove koji nikad ne napustaju disk.
+  const localRoot = options.localRoot ?? LOCAL_CORPUS_ROOT;
+  const externalRoot = options.externalRoot === undefined ? EXTERNAL_CORPUS_ROOT : options.externalRoot;
   await ensureRepairMapHeavy();
-  const manifest = [
+  const { entries: manifest, duplicates } = dedupeManifest([
     ...discoverRealCorpus(root),
-    ...(options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT) : []),
-    ...(options.includeLocal && EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT) : []),
-  ];
+    ...(options.includeLocal ? discoverRealCorpus(localRoot) : []),
+    ...(options.includeLocal && externalRoot ? discoverRealCorpus(externalRoot) : []),
+  ]);
   if (options.outputDir) mkdirSync(options.outputDir, { recursive: true });
   const results = await mapLimited(manifest, (entry) => runOne(entry, entry.root ?? root, options.outputDir));
   // Iskljuceni (sinteticki) idu ZASEBNO i bez `outputDir`: sluze detekciji regresije, ne dokazu.
-  const excluded = [
+  const { entries: excluded } = dedupeManifest([
     ...discoverExcludedCorpus(root),
-    ...(options.includeLocal ? discoverExcludedCorpus(LOCAL_CORPUS_ROOT) : []),
-  ];
+    ...(options.includeLocal ? discoverExcludedCorpus(localRoot) : []),
+  ]);
   const syntheticResults = await mapLimited(excluded, (entry) => runOne(entry, entry.root ?? root));
   const localCount = options.includeLocal
-    ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length +
-      (EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT).length : 0)
+    ? manifest.filter((entry) => entry.root !== undefined && resolve(entry.root) !== resolve(root)).length
     : 0;
   return {
     schemaVersion: 1,
@@ -643,6 +725,9 @@ export async function runRealCorpus(
       excludesSynthetic: true,
       contentStored: false,
       ...(localCount ? { localDocumentCount: localCount } : {}),
+      ...(options.includeLocal
+        ? { duplicateDocumentCount: duplicates.reduce((n, d) => n + d.roots.length - 1, 0) }
+        : {}),
       targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
       measuresRepairEffectiveness: results.some((result) => result.targetedCheckCount > 0),
       /**
