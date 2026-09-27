@@ -4,18 +4,18 @@
     "totalPrograms": 1312,
     "mappedPrograms": 1312,
     "unmappedPrograms": 0,
-    "exactCandidatePrograms": 160,
-    "noExactCandidatePrograms": 1152,
-    "candidatePrograms": 362,
-    "noCandidatePrograms": 950,
+    "exactCandidatePrograms": 161,
+    "noExactCandidatePrograms": 1151,
+    "candidatePrograms": 363,
+    "noCandidatePrograms": 949,
     "evidenceBackedCandidatePrograms": 341,
     "notApplicablePrograms": 28,
     "evidenceConflictPrograms": 2,
     "coverageByStatus": {
       "verified": 341,
       "component-unresolved": 0,
-      "profile-missing-for-component-level": 330,
-      "exact-name-candidate-needs-evidence": 21,
+      "profile-missing-for-component-level": 329,
+      "exact-name-candidate-needs-evidence": 22,
       "identity-evidence-needed": 590,
       "not-applicable": 28,
       "evidence-conflict": 2
@@ -14847,15 +14847,21 @@
       "componentIds": [
         "vef"
       ],
-      "candidateProfileIds": [],
+      "candidateProfileIds": [
+        "vef-diplomski"
+      ],
       "profileDecisionEvidence": [],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
-      "exactCandidateProfileIds": [],
-      "componentWorkTypeProfileIds": [],
-      "coverageStatus": "profile-missing-for-component-level",
+      "exactCandidateProfileIds": [
+        "vef-diplomski"
+      ],
+      "componentWorkTypeProfileIds": [
+        "vef-diplomski"
+      ],
+      "coverageStatus": "exact-name-candidate-needs-evidence",
       "remainingHold": {
-        "code": "profile-for-study-level-needed",
+        "code": "exact-candidate-evidence-needed",
         "reason": "Identitet je samo iz Upisnika; citat i lokator ne imenuju program niti izričito pokrivaju sve studije.",
         "missingEvidence": [
           "Službeni aktualni izvor sastavnice koji imenuje program Veterinarska medicina, potvrđuje vrstu studija i primjenu uputa profila vef-diplomski."
@@ -36257,7 +36263,7 @@
       }
     }
   ],
-  "generatedAt": "2026-09-27T07:05:58.091Z",
-  "generatedFromCommit": "59cc82e212d6015ac8ee14a6c782e6a355fea5ba",
+  "generatedAt": "2026-09-27T13:53:15.068Z",
+  "generatedFromCommit": "6198faf847d99f9f55d132e10462806db069c27c",
   "generator": "npm run match-upisnik-program-components"
 }
