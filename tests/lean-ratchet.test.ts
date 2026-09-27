@@ -5,6 +5,7 @@
  * spremljeni broj bez ponovnog mjerenja ne bi uhvatio nista. Nista se ne brise: kad broj padne,
  * `npm run lean:report` spusti baseline (nikad ga ne dize).
  */
+import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
@@ -16,6 +17,7 @@ import {
   ratchetProblems,
   summarizeJscpd,
   summarizeKnip,
+  toolInvocation,
 } from '../scripts/lean-report.mjs';
 
 type Metrike = Record<string, number>;
@@ -103,5 +105,33 @@ describe('lean ratchet: djelomican pad pipelinea rusi mjerenje', () => {
     });
     expect(j.counts).toEqual({ jscpdDupliciraniRetci: 10, jscpdKlonovi: 1 });
     expect(j.top).toHaveLength(2);
+  });
+});
+
+describe('lean ratchet: pokretanje alata po platformi', () => {
+  const root = path.join('X:', 'repo');
+  const pkg: Record<string, string> = {
+    [path.join(root, 'node_modules', 'knip', 'package.json')]: JSON.stringify({ bin: { knip: 'bin/knip.js', 'knip-bun': 'bin/knip-bun.js' } }),
+    [path.join(root, 'node_modules', 'jscpd', 'package.json')]: JSON.stringify({ bin: { jscpd: './run-jscpd.js' } }),
+  };
+  const opts = (platform: string) => ({ platform, root, exists: () => true, readText: (p: string) => pkg[p] });
+
+  it('win32: node kroz process.execPath nad JS ulazom iz bin polja, nikad .cmd (EINVAL bez shella)', () => {
+    expect(toolInvocation('knip', opts('win32'))).toEqual({
+      command: process.execPath,
+      argsPrefix: [path.join(root, 'node_modules', 'knip', 'bin', 'knip.js')],
+    });
+    const jscpd = toolInvocation('jscpd', opts('win32'));
+    expect(jscpd.argsPrefix).toEqual([path.join(root, 'node_modules', 'jscpd', 'run-jscpd.js')]);
+    expect(jscpd.command.toLowerCase().endsWith('.cmd')).toBe(false);
+  });
+
+  it('linux: nepromijenjeno .bin/<ime> bez prefiksa', () => {
+    expect(toolInvocation('knip', opts('linux'))).toEqual({ command: path.join(root, 'node_modules', '.bin', 'knip'), argsPrefix: [] });
+  });
+
+  it('nedostajuci paket ili bin ulaz je glasna greska, ne tihi pad na .cmd', () => {
+    expect(() => toolInvocation('knip', { ...opts('win32'), exists: () => false })).toThrow(/nije instaliran/);
+    expect(() => toolInvocation('knip', { ...opts('win32'), readText: () => '{}' })).toThrow(/nema bin ulaz/);
   });
 });
