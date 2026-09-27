@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "programCount": 1312,
+    "programsWithBlockers": 0,
+    "blockerCount": 0,
+    "exactAwaitingApproval": 0,
+    "strongAwaitingApproval": 0,
+    "weakAwaitingApproval": 0,
+    "noProposal": 0,
+    "manualOverrideNeedsProgramEvidence": 0,
+    "wholeInstitutionNeedsResearch": 0,
+    "unitNotInCatalog": 0,
+    "ambiguousUnit": 0,
+    "outsideScopeExecutorCount": 15
+  },
+  "blockers": [],
+  "outsideScope": [
+    {
+      "programCode": "2357",
+      "programName": "Združeni doktorski studijski program Upravljanje i ekonomika javnog sektora",
+      "executor": "Fakulteta za upravo, Univerza v Ljubljani"
+    },
+    {
+      "programCode": "2402",
+      "programName": "Međunarodni program košarke i menadžmenta (International Basketball Coaching and Management)",
+      "executor": "Lithuanian Sports University, Faculty of Sports Biomedicine"
+    },
+    {
+      "programCode": "2668",
+      "programName": "Marine Biotechnology / Biotehnologija mora",
+      "executor": "Agricultural University of Athens, Helenska Republika"
+    },
+    {
+      "programCode": "2668",
+      "programName": "Marine Biotechnology / Biotehnologija mora",
+      "executor": "Klaipedos Universitetas, Republika Litva"
+    },
+    {
+      "programCode": "2668",
+      "programName": "Marine Biotechnology / Biotehnologija mora",
+      "executor": "La Rochelle Universite, Francuska Republika"
+    },
+    {
+      "programCode": "2668",
+      "programName": "Marine Biotechnology / Biotehnologija mora",
+      "executor": "Universidad Catolica de Valencia Vicente Marir (koordinator) Kraljevina Španjolska"
+    },
+    {
+      "programCode": "2668",
+      "programName": "Marine Biotechnology / Biotehnologija mora",
+      "executor": "Universitatea Tehnica de Constructii Bucuresti, Rumunjska"
+    },
+    {
+      "programCode": "2853",
+      "programName": "Digitalna lingvistika",
+      "executor": "Masarykova univerzita (Brno, Češka)"
+    },
+    {
+      "programCode": "2853",
+      "programName": "Digitalna lingvistika",
+      "executor": "Univerza v Ljubljani (Ljubljana, Slovenija)"
+    },
+    {
+      "programCode": "2891",
+      "programName": "Master of Sustainable Outdoor Hospitality Management",
+      "executor": "Breda University of Applied Sciences"
+    },
+    {
+      "programCode": "2891",
+      "programName": "Master of Sustainable Outdoor Hospitality Management",
+      "executor": "Universitat de Girona"
+    },
+    {
+      "programCode": "4729",
+      "programName": "Maritime Management",
+      "executor": "Flensburg University of Applied Sciences"
+    },
+    {
+      "programCode": "4729",
+      "programName": "Maritime Management",
+      "executor": "University of Ljubljana, Faculty of Maritime Studies and Transport in Portorož"
+    },
+    {
+      "programCode": "4811",
+      "programName": "Digital Linguistics",
+      "executor": "Masarykova univerzita (Brno, Češka)"
+    },
+    {
+      "programCode": "4811",
+      "programName": "Digital Linguistics",
+      "executor": "Univerza v Ljubljani (Ljubljana, Slovenija)"
+    }
+  ],
+  "generatedAt": "2026-09-27T07:05:55.951Z",
+  "generatedFromCommit": "59cc82e212d6015ac8ee14a6c782e6a355fea5ba",
+  "generator": "npm run match-upisnik-program-components"
+}

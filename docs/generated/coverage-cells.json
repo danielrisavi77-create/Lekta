@@ -7,17 +7,17 @@
     "realCorpusSource": "docs/generated/repair-real-corpus.json"
   },
   "summary": {
-    "cellCount": 12617,
-    "coveredCount": 4758,
-    "uncoveredCount": 7859,
-    "resolvedCount": 1877,
+    "cellCount": 13113,
+    "coveredCount": 4886,
+    "uncoveredCount": 8227,
+    "resolvedCount": 1893,
     "byReason": {
-      "profil-ne-propisuje-os": 6107,
+      "profil-ne-propisuje-os": 6408,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 124,
-      "ceka-ljudski-odabir": 814,
-      "trazi-ulaz-izvan-dokumenta": 814
+      "nema-dokaza": 127,
+      "ceka-ljudski-odabir": 846,
+      "trazi-ulaz-izvan-dokumenta": 846
     }
   },
   "cells": [
@@ -1303,536 +1303,6 @@
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
-      "fixerId": "submission-metadata-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "margins-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "paper-size-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": [
-          "paper-size"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "font-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": [
-          "font",
-          "font-size"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "line-spacing-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": [
-          "line-spacing"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "alignment-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": [
-          "justify"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "page-numbering-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "footer-page-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "section-insert-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "empty-paragraph-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "footnote-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "page-number-alignment-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "toc-field-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "heading-style-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "title-page-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "element-caption-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "citation-bibliography-sync-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "legal-footnote-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "final-document-inspector-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "table-figure-rescue-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "section-surgery-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "field-integrity-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "croatian-typography-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "consistency-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "required-section-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "link-doi-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "fixerId": "submission-metadata-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "margins-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "paper-size-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": [
-          "paper-size"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "font-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": [
-          "font",
-          "font-size"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "line-spacing-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": [
-          "line-spacing"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "alignment-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": [
-          "justify"
-        ]
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "page-numbering-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "footer-page-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "section-insert-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "empty-paragraph-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "footnote-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "page-number-alignment-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "toc-field-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "heading-style-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "title-page-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "element-caption-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "citation-bibliography-sync-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "legal-footnote-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "final-document-inspector-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "table-figure-rescue-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "section-surgery-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "field-integrity-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "croatian-typography-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "consistency-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "required-section-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "fixerId": "link-doi-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-mes-master-thesis",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
       "fixerId": "submission-metadata-fixer",
       "status": "nepokriveno",
       "reason": "trazi-ulaz-izvan-dokumenta"
@@ -46127,6 +45597,232 @@
       "reason": "trazi-ulaz-izvan-dokumenta"
     },
     {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-sanitarno-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
       "profileId": "fzsri-zavrsni",
       "fixerId": "margins-fixer",
       "status": "pokriveno",
@@ -102478,6 +102174,3926 @@
     },
     {
       "profileId": "effectus-seminarski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agromed-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geoteh-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hig-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mvi-prijediplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-svedski-zavrsni",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "medri-doktorski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-tribe-doktorski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "paper-size-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": [
+          "paper-size"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "font-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": [
+          "font",
+          "font-size"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "line-spacing-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": [
+          "line-spacing"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "alignment-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": [
+          "justify"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "toc-field-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "required-section-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": [
+          "paper-size"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "font-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": [
+          "font",
+          "font-size"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": [
+          "line-spacing"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "alignment-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": [
+          "justify"
+        ]
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "required-section-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "margins-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "paper-size-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "font-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "line-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "bibliography-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-specijalisticki",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "efri-specijalisticki",
       "fixerId": "submission-metadata-fixer",
       "status": "nepokriveno",
       "reason": "trazi-ulaz-izvan-dokumenta"

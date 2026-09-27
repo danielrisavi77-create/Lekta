@@ -48,7 +48,7 @@ describe('data loaderi: faithfulness (deep-equal s JSON-om)', () => {
 });
 
 describe('data loaderi: brojevi se slazu s manifestom', () => {
-  it('verificirani profili (26)', () => {
+  it('verificirani profili (415)', () => {
     expect(VERIFIED_PROFILE_REGISTRY).toHaveLength(manifestEntries('VERIFIED_PROFILE_REGISTRY'));
   });
   it('pravne katedre (3)', () => {
