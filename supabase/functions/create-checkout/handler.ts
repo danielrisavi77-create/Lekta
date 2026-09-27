@@ -176,7 +176,11 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
     consented_at: consentedAt,
     client_claimed_at: clientClaimedAt,
   });
-  if (consentErr) return json({ error: 'consent_not_recorded' }, 500);
+  if (consentErr) {
+    // Detalj greske baze ide SAMO u log, klijent dobiva genericki kod (odluka vlasnika 2026-09-27).
+    console.error('[create-checkout] consent_insert_failed', { error: consentErr.message ?? String(consentErr) });
+    return json({ error: 'consent_not_recorded' }, 500);
+  }
 
   // Stripe PaymentIntent. Iznos je serverski (products.price_eur), metadata nosi katalozni
   // products.id po kojem webhook nalazi proizvod.

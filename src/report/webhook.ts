@@ -94,6 +94,49 @@ export function isFullRefund(ev: Pick<StripeEvent, 'refunded' | 'totalCents' | '
 }
 
 /**
+ * Razlozi uz ishod `needs_manual_review`: naplacen iznos ne dokazuje da je kataloska cijena
+ * placena. Runbook (docs/GO_LIVE_NAPLATA.md, 5.1) mora opisati svaki.
+ */
+export const MANUAL_REVIEW_REASONS = Object.freeze(['amount_below_catalog', 'currency_not_eur'] as const);
+export type ManualReviewReason = (typeof MANUAL_REVIEW_REASONS)[number];
+
+export type ChargedAmountVerdict =
+  | { kind: 'ok' }
+  /** Naplaceno VISE od kataloga (npr. cjenik snizen izmedju checkouta i naplate): pravo se daje, uz trag. */
+  | { kind: 'above_catalog'; detail: string }
+  /** Naplaceno MANJE od kataloga ili u drugoj valuti: pravo se NE daje, ceka se covjek. */
+  | { kind: 'needs_manual_review'; reason: ManualReviewReason; detail: string };
+
+/**
+ * Pokriva li naplaceni iznos katalosku cijenu (odluka vlasnika 2026-09-27).
+ *
+ * Do tada je handler svako odstupanje samo logirao i pravo svejedno upisivao. Uplata MANJA od
+ * kataloske cijene (ili u valuti koja nije EUR, pa se centi ne mogu ni usporediti) sada NE daje
+ * pravo: ishod je `needs_manual_review`, a operater odlucuje o povratu ili rucnom vezivanju.
+ * Uplata VECA od kataloske cijene i dalje daje pravo, jer je kupac platio barem ono sto se trazi;
+ * razlika ostaje zapisana kao `amount_mismatch`.
+ *
+ * Nepoznat naplaceni iznos se ne tumaci kao dovoljan: bez broja nema dokaza da je cijena placena.
+ * Obje vrijednosti i valuta idu u `detail`, da operater iz inboxa vidi razliku bez Stripe sucelja.
+ */
+export function chargedAmountVerdict(
+  ev: Pick<StripeEvent, 'totalCents' | 'currency'>,
+  expectedCents: number,
+): ChargedAmountVerdict {
+  const detail =
+    `ocekivano=${expectedCents} naplaceno=${ev.totalCents === null ? 'nepoznato' : ev.totalCents} ` +
+    `valuta=${ev.currency || 'nepoznata'}`;
+  if (ev.currency !== 'EUR') {
+    return { kind: 'needs_manual_review', reason: 'currency_not_eur', detail: `currency_not_eur ${detail}` };
+  }
+  if (ev.totalCents === null || ev.totalCents < expectedCents) {
+    return { kind: 'needs_manual_review', reason: 'amount_below_catalog', detail: `amount_below_catalog ${detail}` };
+  }
+  if (ev.totalCents > expectedCents) return { kind: 'above_catalog', detail: `amount_mismatch ${detail}` };
+  return { kind: 'ok' };
+}
+
+/**
  * Dolazi li dogadjaj iz NASEG okruzenja, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
  *
  * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj dolazi iz NASEG okruzenja.

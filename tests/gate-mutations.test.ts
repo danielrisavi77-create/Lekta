@@ -57,7 +57,7 @@ import {
   readTextLf,
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
-import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import { webhookHandlerProblems, chargedAmountProblems, responseLeakProblems } from './helpers/webhook-handler-source';
 import { wordOracleIntegrityProblems } from './helpers/word-oracle-integrity';
 import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
@@ -74,6 +74,7 @@ import {
 import {
   acceptEvent,
   classifyStripeEvent,
+  chargedAmountVerdict,
   parseStripeEvent,
   IGNORE_REASON_PREFIXES,
   NOTABLE_IGNORE_PREFIXES,
@@ -3873,6 +3874,96 @@ const MUTATIONS: Mutation[] = [
       return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'needs_manual_link' nema ERROR redak"));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  // --- naplata: cetiri popravka koje je vlasnik odobrio 2026-09-27 ("Može") -------------------
+  {
+    id: 'naplata/uplata-ispod-kataloga-daje-pravo',
+    imitates: 'stanje handlera do 2026-09-27: payment_intent.succeeded s amount_received manjim od round(price_eur*100), ili u valuti koja nije EUR, samo je logirao amount_mismatch i svejedno upisao entitlement. Odluka vlasnika: takva uplata ne daje pravo nego ide na rucni pregled',
+    caught: () => {
+      // MUTACIJA: vrati staru ODLUKU (svako odstupanje je samo trag, pravo uvijek).
+      const stara = (ev: { totalCents: number | null; currency: string }, exp: number) =>
+        ev.totalCents !== exp || ev.currency !== 'EUR' ? { kind: 'above_catalog' } : { kind: 'ok' };
+      const problemi = chargedAmountProblems(stara);
+      return problemi.some((p) => p.includes('ispod kataloga daje pravo'))
+        && problemi.some((p) => p.includes('valuta koja nije EUR daje pravo'));
+    },
+    cleanBefore: () => chargedAmountProblems(chargedAmountVerdict).length === 0,
+  },
+  {
+    id: 'naplata/needs-manual-review-logira-pa-nastavi',
+    imitates: 'isti kvar u IZVORU handlera: odluka vrati needs_manual_review, handler zapise ishod u inbox, ali ne izade, pa uplata ispod kataloga ipak nastavi do rucne narudzbe ili entitlementa (inbox kaze rucni pregled, baza kaze placeno)',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(/return json\(\{ ok: true, action: 'needs_manual_review'[^\n]*\n/, '\n');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('needs_manual_review ne izlazi'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/puni-povrat-ne-zatvara-narudzbu-ni-kupon',
+    imitates: 'stanje handlera do 2026-09-27: puni povrat (isFullRefund) gasi samo entitlement i referral nagrade. Rucna narudzba premium_human istog PaymentIntenta ostaje pending (covjek odradi placen posao za vracen novac), a pass kupon iz te kupnje ostaje upotrebljiv',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(/const posljedice = await closeRefundConsequences\(admin, ev\.orderId[^\n]*\n/, '\n');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne zove closeRefundConsequences'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/djelomicni-povrat-otkazuje-narudzbu',
+    imitates: 'druga krajnost istog popravka: zatvaranje posljedica premjesteno na ulaz refund grane, PRIJE izlaza za djelomicni povrat (PAY-09), pa bi korisnik koji je dobio natrag dio iznosa izgubio rucnu narudzbu i kupon za koje je i dalje platio',
+    caught: () => {
+      const src = webhookMorSource();
+      const poziv = src.match(/ {4}const posljedice = await closeRefundConsequences\(admin, ev\.orderId[^\n]*\n/)?.[0];
+      if (!poziv) return false;
+      const ulaz = "if (decision.kind === 'refund') {\n";
+      const mutated = src.replace(poziv, '').replace(ulaz, ulaz + poziv);
+      if (mutated === src || !mutated.includes(ulaz + poziv)) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('prije izlaza za djelomicni povrat'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/23505-bez-provjere-vlasnika',
+    imitates: 'stanje handlera do 2026-09-27: insert entitlementa koji padne na unique(provider, order_id) (23505) tumacio se kao vec obradjeno i nastavljao na duplicate_ignored i obveze bonusa, bez provjere da postojeci redak pripada istom korisniku kao dogadjaj',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("String(postojece.user_id ?? '') !== ev.userId", 'false');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('bez usporedbe vlasnika'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/tekst-greske-baze-u-odgovoru-webhooka',
+    imitates: 'stanje handlera do 2026-09-27: 500 za pad upisa rucne narudzbe i entitlementa vracao je { error, detail: error.message }, dakle tekst greske baze (imena relacija i ogranicenja) svakome tko posalje potpisan dogadjaj',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.split("json({ error: 'insert_failed' }, 500)").join("json({ error: 'insert_failed', detail: error.message }, 500)");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('odgovor nosi tekst greske'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/tekst-greske-baze-u-odgovoru-checkouta',
+    imitates: 'isti kvar u create-checkout: pad upisa privole vrati klijentu poruku greske baze (consentErr.message) umjesto generickog consent_not_recorded',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+      const mutated = src.replace(
+        "return json({ error: 'consent_not_recorded' }, 500);",
+        "return json({ error: 'consent_not_recorded', detail: consentErr.message }, 500);",
+      );
+      if (mutated === src) return false;
+      return responseLeakProblems(mutated, 'create-checkout').some((p) => p.includes('consent_not_recorded'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+      return src.length > 2000 && responseLeakProblems(src, 'create-checkout').length === 0;
+    },
   },
 
   {

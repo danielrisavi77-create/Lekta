@@ -7,7 +7,7 @@
  * klijentskog tijela ili vracen uvjet na mor_product_id prosli bi sve ostale provjere. Ovdje se
  * handler vrti nad laznom bazom i laznim Stripeom i tvrdi se sto je stvarno poslano i vraceno.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 import { createCheckoutHandler } from '../supabase/functions/create-checkout/handler';
 import { CHECKOUT_CONSENT_TEXTS } from '../src/legal/consent-text';
@@ -221,5 +221,53 @@ describe('create-checkout handler', () => {
     const { res, stripeCalls } = await run({ productId: 'slot_diplomski' });
     expect(res.status).toBe(400);
     expect(stripeCalls).toHaveLength(0);
+  });
+});
+
+/**
+ * TEKST GRESKE BAZE NIKAD U ODGOVORU (odluka vlasnika 2026-09-27). create-checkout je vec bio cist;
+ * ovo zakljucava to stanje: svaka 5xx grana koja dolazi od baze ili iznimke izaziva se s
+ * prepoznatljivom porukom, a odgovor nosi samo genericki kod. Detalj ostaje u logu.
+ */
+describe('create-checkout handler: 5xx odgovori ne nose tekst greske baze', () => {
+  const TAJNA = 'relation checkout_consents violates tajni_detalj_baze';
+
+  it('pad upisa privole: 500 consent_not_recorded, detalj samo u logu', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, out, stripeCalls } = await run(
+        { productId: 'slot_diplomski', consent: CONSENT },
+        {
+          resolve: (c) =>
+            c.table === 'checkout_consents' && writeOp(c) === 'insert' ? { error: { message: TAJNA } } : undefined,
+        },
+      );
+      expect(res.status).toBe(500);
+      expect(out).toEqual({ error: 'consent_not_recorded' });
+      expect(JSON.stringify(out)).not.toContain('tajni_detalj_baze');
+      expect(stripeCalls).toHaveLength(0);
+      expect(err.mock.calls.some((c) => JSON.stringify(c[1] ?? '').includes('tajni_detalj_baze'))).toBe(true);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('iznimka baze usred obrade: 500 internal, bez poruke iznimke', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, out } = await run(
+        { productId: 'slot_diplomski', consent: CONSENT },
+        {
+          resolve: (c) => {
+            if (c.table === 'products') throw new Error(TAJNA);
+            return undefined;
+          },
+        },
+      );
+      expect(res.status).toBe(500);
+      expect(out).toEqual({ error: 'internal' });
+    } finally {
+      vi.restoreAllMocks();
+    }
   });
 });
