@@ -180,7 +180,7 @@ Veza s `trackEvent` u `src/ui/telemetry.ts`:
   privola se cita pri svakom pozivu, pa povlacenje djeluje odmah.
 - Uz naziv dogadjaja uvijek salje samo `version`, `path` (`location.pathname`, bez query stringa i
   hasha) i `timestamp`; sve ostalo prolazi kroz `sanitizeEventData`.
-- `DOPUSTENI_KLJUCEVI` je bijela lista: kljuc izvan nje ispada, a i dopusteni kljuc prolazi samo
+- `ANALYTICS_DATA_KEYS` je bijela lista: kljuc izvan nje ispada, a i dopusteni kljuc prolazi samo
   ako je vrijednost string, broj ili boolean (objekti i nizovi ispadaju). Kljucevi po skupinama:
   - identitet dogadjaja i ponude: `event`, `package`, `product`, `provider`, `source`, `method`,
     `kind`, `category`, `pick`, `demo`, `manual`;
