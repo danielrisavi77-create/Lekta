@@ -83,7 +83,8 @@
             "provider": "codex",
             "model": null,
             "effort": "medium",
-            "reviewFallback": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "medium" }
+            "reviewFallback": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "medium" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -98,7 +99,8 @@
             "provider": "codex",
             "model": null,
             "effort": "high",
-            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -115,7 +117,8 @@
             "provider": "codex",
             "model": null,
             "effort": "medium",
-            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -130,7 +133,8 @@
             "provider": "codex",
             "model": null,
             "effort": "high",
-            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -148,7 +152,8 @@
             "provider": "codex",
             "model": null,
             "effort": "medium",
-            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" },
           "design": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
@@ -164,13 +169,58 @@
             "provider": "codex",
             "model": null,
             "effort": "high",
-            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
+            "reviewAlternatives": ["grok-review"]
           },
           "gate": { "provider": "none" }
         }
       }
     }
   },
+  "botsNote": "Grok botovi (odluka vlasnika 27. 9.). Samo pretplata (--subscription, grok login), nikad naplata po pozivu. Bot je uloga nad providerom grok iz config/agent-providers.json; runner ga bira s --bot. Nijedan bot nije jedini pregled zasticenog diffa i nijedan ne implementira nad protectedPaths.",
+  "bots": {
+    "grok-review": {
+      "provider": "grok",
+      "agent": "grok",
+      "phases": ["review"],
+      "runnerPhase": "review",
+      "effort": "medium",
+      "sandbox": "read-only",
+      "purpose": "Drugi provider za M/L nezasticene diffove; trece misljenje na zasticenima.",
+      "soleReviewerOfProtected": false
+    },
+    "grok-scout": {
+      "provider": "grok",
+      "agent": "grok",
+      "phases": ["scout", "critic"],
+      "runnerPhase": "review",
+      "effort": "low",
+      "sandbox": "read-only",
+      "purpose": "Intake izvidjac i kriticar briefa; samo cita."
+    },
+    "grok-docs": {
+      "provider": "grok",
+      "agent": "build",
+      "phases": ["implement"],
+      "runnerPhase": "implement",
+      "effort": "medium",
+      "sandbox": "workspace",
+      "alwaysApprove": true,
+      "purpose": "Implementacija samo nad dokumentacijom.",
+      "allowedPaths": ["docs/**", "**/*.md", "docs/agents/tasks.json"],
+      "forbiddenPaths": ["src/**", "supabase/**", "data/**", "scripts/**", "security/**"]
+    },
+    "grok-triage": {
+      "provider": "grok",
+      "agent": "grok",
+      "phases": ["review"],
+      "runnerPhase": "review",
+      "effort": "low",
+      "sandbox": "read-only",
+      "purpose": "Trijaza CI padova iz gh api anotacija: vraca flaky ili stvarno, s dokazom."
+    }
+  },
+  "protectedReviewNote": "Za protectedPaths grok-review je samo trece misljenje uz codex (ili claude reviewFallback); nikad jedini recenzent.",
   "protectedPaths": [
     "src/repair",
     "src/citations",
