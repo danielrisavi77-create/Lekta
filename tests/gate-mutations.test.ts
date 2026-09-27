@@ -840,6 +840,96 @@ function z15bTintaProblemi(ts: string): string[] {
   return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
+/**
+ * scripts/register-clean-task.ps1, vlasnistvo (Codex nalaz, M1): Test-LektaCleanTaskOwned mora
+ * provjeriti da je LEAF Actions[0].Execute tocno 'node' ili 'node.exe' (bez razlike velikih i malih
+ * slova), ne bilo koju putanju koja zavrsava na .exe niti Arguments/WorkingDirectory. Bez ove
+ * provjere tudji Scheduled Task s istim Arguments i WorkingDirectory, ali Execute npr.
+ * 'powershell.exe' ili 'cmd.exe', bio bi prihvacen kao nas: -Unregister bi ga obrisao, a registracija
+ * bi tiho preuzela njegovo mjesto umjesto da odbije.
+ */
+function registerCleanTaskExecuteGuardProblems(ps1: string): string[] {
+  const code = ps1.replace(/\r/g, '').split('\n').filter((l) => !l.trimStart().startsWith('#')).join('\n');
+  const problems: string[] = [];
+  if (!code.includes('function Test-LektaCleanTaskOwned {')) {
+    problems.push('nema funkcije Test-LektaCleanTaskOwned');
+    return problems;
+  }
+  if (!code.includes('$execute = ([string]$akcije[0].Execute).Trim()')) {
+    problems.push('vlasnistvo ne cita Actions[0].Execute');
+  }
+  if (!code.includes('$leafExecute = [System.IO.Path]::GetFileName($execute).ToLower()')) {
+    problems.push('vlasnistvo ne svodi Execute na leaf ime datoteke');
+  }
+  if (!code.includes("if ($leafExecute -ne 'node' -and $leafExecute -ne 'node.exe') { return $false }")) {
+    problems.push('vlasnistvo ne odbija Execute koji nije tocno node ili node.exe');
+  }
+  return problems;
+}
+
+/** Granice `executePlan` u stvarnom izvoru clean-vitest-tmp.mjs: od potpisa do sljedece top-level funkcije. */
+function executePlanSourceSlice(src: string): string {
+  const start = src.indexOf('export function executePlan(plan, opts = {}) {');
+  const end = src.indexOf('\nfunction errCode(err) {', start);
+  if (start < 0 || end < 0 || end <= start) throw new Error('executePlan (ili errCode iza njega) nije pronadjen u izvoru');
+  return src.slice(start, end);
+}
+
+/**
+ * clean-vitest-tmp.mjs M3 (Codex krug 3): executePlan mora, NEPOSREDNO PRIJE svakog rmSync, ponovno
+ * izracunati realpath korijena i svakog kandidata i odbiti brisanje ako se realpath korijena
+ * promijenio izmedju planiranja i izvrsenja, ako kandidat po realpathu lezi pod Temp/claude ili vise
+ * nije izravno dijete korijena. planCleanup te vrijednosti mjeri SAMO pri planiranju; bez ove ponovne
+ * provjere TOCTOU (korijen ili kandidat zamijenjen junctionom prema Temp/claude izmedju planiranja i
+ * brisanja) obrise tudji radni prostor sesije ili worktree workflow runa.
+ */
+function executePlanRecheckProblems(src: string): string[] {
+  let plan: string;
+  try {
+    plan = executePlanSourceSlice(src);
+  } catch (err) {
+    return [(err as Error).message];
+  }
+  const rmIdx = plan.indexOf('rm(resolve(item.path)');
+  if (rmIdx < 0) return ['poziv rm(...) nad kandidatom nije pronadjen'];
+  const pre = plan.slice(0, rmIdx);
+  const problems: string[] = [];
+  if (!pre.includes('rootRealpathNow = resolve(realpath(plan.root))')) {
+    problems.push('korijenov realpath se ne racuna ponovno neposredno prije brisanja');
+  }
+  if (!pre.includes('plan.rootRealpath != null && rootRealpathNow !== plan.rootRealpath')) {
+    problems.push('ne odbija kad se realpath korijena promijenio izmedju planiranja i izvrsenja');
+  }
+  if (!pre.includes('isProtected(rootRealpathNow)')) {
+    problems.push('ne odbija korijen koji je pri izvrsenju po realpathu pod Temp/claude');
+  }
+  if (!pre.includes('isDirectChildOf(plan.root, item.path)')) {
+    problems.push('ne provjerava da je kandidat (tekstualno) izravno dijete korijena');
+  }
+  if (!pre.includes('candidateLinkReason(item.path, fs,')) {
+    problems.push('ne provjerava kandidata na simbolicku vezu neposredno prije brisanja');
+  }
+  if (!pre.includes('candRealpathNow = resolve(realpath(item.path))')) {
+    problems.push('kandidatov realpath se ne racuna ponovno neposredno prije brisanja');
+  }
+  if (!pre.includes('isProtected(candRealpathNow)')) {
+    problems.push('ne odbija kandidata koji je pri izvrsenju po realpathu pod Temp/claude');
+  }
+  if (!pre.includes('isDirectChildOf(rootRealpathNow, candRealpathNow)')) {
+    problems.push('ne provjerava da je kandidat pri izvrsenju po realpathu izravno dijete korijena');
+  }
+  return problems;
+}
+
+/** Ukloni sve izmedju (ali ne ukljucujuci) `startMarker` i sljedeceg `endMarker`; oba moraju postojati. */
+function removeBetweenMarkers(src: string, startMarker: string, endMarker: string): string {
+  const i = src.indexOf(startMarker);
+  if (i < 0) throw new Error(`marker nije pronadjen: ${startMarker}`);
+  const j = src.indexOf(endMarker, i);
+  if (j < 0 || j <= i) throw new Error(`kraj marker nije pronadjen iza pocetka: ${endMarker}`);
+  return src.slice(0, i) + src.slice(j);
+}
+
 const MUTATIONS: Mutation[] = [
   {
     id: 'upisnik/b13-korijen-rijeci',
@@ -6120,6 +6210,44 @@ const MUTATIONS: Mutation[] = [
       return stvarni.plan.blocked !== null && /realpath/.test(stvarni.plan.blocked) && stvarni.rmCalls.length === 0
         && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === dir;
     },
+  },
+  {
+    id: 'register-clean-task/execute-provjera-uklonjena',
+    imitates: 'Test-LektaCleanTaskOwned bez provjere leaf Execute (Codex nalaz, M1): tudji Scheduled Task s '
+      + 'istim Arguments i WorkingDirectory ali Execute=powershell.exe ili cmd.exe se prihvaca kao nas, pa '
+      + '-Unregister obrise tudji task ili registracija tiho preuzme njegovo mjesto',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/register-clean-task.ps1'));
+      const bezProvjere = izvorno.replace(
+        "  if ($leafExecute -ne 'node' -and $leafExecute -ne 'node.exe') { return $false }\n",
+        '',
+      );
+      return bezProvjere !== izvorno && registerCleanTaskExecuteGuardProblems(bezProvjere).length > 0;
+    },
+    cleanBefore: () => registerCleanTaskExecuteGuardProblems(
+      readTextLf(resolve(process.cwd(), 'scripts/register-clean-task.ps1')),
+    ).length === 0,
+  },
+  {
+    id: 'clean-tmp/executeplan-bez-ponovne-realpath-provjere',
+    imitates: 'clean-vitest-tmp.mjs M3 (Codex krug 3): executePlan bez ponovne realpath provjere neposredno '
+      + 'prije rmSync, pa korijen ili kandidat zamijenjen junctionom prema Temp/claude izmedju planiranja i '
+      + 'izvrsenja (TOCTOU) brise tudji radni prostor sesije ili worktree workflow runa',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/clean-vitest-tmp.mjs'));
+      const bezRootProvjere = removeBetweenMarkers(
+        izvorno,
+        '  let rootRealpathNow;',
+        '\n\n  for (const item of plan.remove) {\n',
+      );
+      const bezSvega = removeBetweenMarkers(
+        bezRootProvjere,
+        '    if (!isDirectChildOf(plan.root, item.path)) {',
+        '\n    if (result.dryRun) {',
+      );
+      return bezSvega !== izvorno && executePlanRecheckProblems(bezSvega).length > 0;
+    },
+    cleanBefore: () => executePlanRecheckProblems(readTextLf(resolve(process.cwd(), 'scripts/clean-vitest-tmp.mjs'))).length === 0,
   },
   // --- Word check skripte: izlazni direktorij se brise SAMO na uspjehu (stavka G) ---
   {
