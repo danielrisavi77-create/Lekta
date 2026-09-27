@@ -6940,6 +6940,30 @@ describe('mutacije: lean ratchet (T56)', () => {
     expect(mutant).not.toBe(fnBlok);
     expect(hvataRast(izvedi(mutant))).toBe(false);
   });
+
+  // Windows: Node odbija execFile nad `.cmd` bez shella (EINVAL), pa win32 put nikad ne smije vratiti .cmd.
+  const invStart = src.indexOf('export function toolInvocation');
+  const invBlok = src.slice(invStart, src.indexOf('\n}\n', invStart) + 3);
+  type Invocation = (name: string, o: object) => { command: string; argsPrefix: string[] };
+  const izvediInv = (fn: string): Invocation =>
+    new Function('path', 'existsSync', 'readFileSync', 'ROOT', `${fn.replace('export ', '')}\nreturn toolInvocation;`)(
+      { join }, () => true, () => '', 'X:/repo',
+    ) as Invocation;
+  const win32Opts = { platform: 'win32', exists: () => true, readText: () => JSON.stringify({ bin: { knip: 'bin/knip.js' } }) };
+  const bezCmd = (inv: Invocation): boolean => !inv('knip', win32Opts).command.toLowerCase().endsWith('.cmd');
+
+  it('baseline: stvarni toolInvocation na win32 ne vraca .cmd', () => {
+    expect(bezCmd(izvediInv(invBlok))).toBe(true);
+  });
+
+  it('mutant koji na win32 vrati .bin/<ime>.cmd (stari EINVAL put) obara tvrdnju', () => {
+    const mutant = invBlok.replace(
+      'return { command: process.execPath, argsPrefix: [entry] };',
+      "return { command: path.join(root, 'node_modules', '.bin', `${name}.cmd`), argsPrefix: [] };",
+    );
+    expect(mutant).not.toBe(invBlok);
+    expect(bezCmd(izvediInv(mutant))).toBe(false);
+  });
 });
 
 describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => {
