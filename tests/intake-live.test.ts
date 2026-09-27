@@ -203,6 +203,7 @@ describe('Z32 pohrana izbora na ulazu', () => {
 });
 
 describe('Z32 potvrda na /rad/', () => {
+  beforeEach(ocistiPohranu);
   const potvrda: PotvrdaUlaza = { unit: 'fpzg', program: 'Politologija', workType: 'graduate', sesija: 's-1', at: 42 };
   const obrazac: SelectionIds = {
     institution: 'unizg', unit: 'fpzg', program: 'Politologija', workType: 'graduate',
@@ -286,6 +287,43 @@ describe('Z32 potvrda na /rad/', () => {
     applyFaculty.mockClear();
     expect(primijeniPotvrduUlaza({ ...base, sessionId: 's-1', read: () => ({ rok, potvrda: { ...potvrda, unit: 'nepostoji', program: null } }) })).toBe('none');
     expect(applyFaculty).not.toHaveBeenCalled();
+  });
+
+  it('kraj do kraja preko STVARNE pohrane: /rad/#session=S1 primjenjuje FER i nakon sto je S2 potvrdio FPZG', () => {
+    // Rad 1 (S1) na ulazu: potvrdjen FER, bez studija (?unit=), pa vezan za sesiju S1.
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    // Rad 2 (S2) na ISTOM ulazu: novi klik "Potvrdi" pregazi tekuci slot potvrdom FPZG, vezan za S2.
+    zapisiPotvrdu({ unit: 'fpzg', program: 'Politologija', workType: 'graduate', sesija: null, at: 2 });
+    veziPotvrduZaSesiju('s-2');
+    const applyFacultyS1 = vi.fn(() => true);
+    const applyFacultyS2 = vi.fn(() => true);
+    // /rad/#session=S1: citanje ide STVARNIM putem primijeniPotvrduUlaza (bez `read` mocka), pa
+    // mora vratiti FER, ne FPZG od S2 koji je pregazio tekuci slot.
+    expect(primijeniPotvrduUlaza({
+      sessionId: 's-1', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty: applyFacultyS1, confirm: vi.fn(),
+    })).toBe('faculty');
+    expect(applyFacultyS1).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    // /rad/#session=S2 i dalje ispravno primjenjuje FPZG (cijeli profil, jer S2 nosi studij).
+    expect(primijeniPotvrduUlaza({
+      sessionId: 's-2', sessionHasProfile: false, readForm: () => obrazac,
+      apply: vi.fn(() => 'fpzg-politologija-diplomski'), applyFaculty: applyFacultyS2, confirm: vi.fn(),
+    })).toBe('applied');
+  });
+
+  it('STARA pohrana (jos bez zapisa u mapi po sesiji): stari jedini slot vrijedi za svoju sesiju', () => {
+    // Simulira zapis prije Z32 popravka: `potvrdaSesije` mapa je prazna, samo tekuci slot postoji.
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: 's-1', at: 9 });
+    expect(potvrdaZaSesiju('s-1'), 'mapa jos nema zapis').toBeNull();
+    const applyFaculty = vi.fn(() => true);
+    expect(primijeniPotvrduUlaza({
+      sessionId: 's-1', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty, confirm: vi.fn(),
+    })).toBe('faculty');
+    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    // Za drugu sesiju stari slot ne vrijedi.
+    expect(primijeniPotvrduUlaza({
+      sessionId: 's-2', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty: vi.fn(), confirm: vi.fn(),
+    })).toBe('none');
   });
 });
 

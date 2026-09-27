@@ -32,7 +32,8 @@
  */
 import { ZAGREB_CATALOG } from '../../catalog/catalog-loader';
 import {
-  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, procitajIzborUlaza, type IzborUlaza, type PotvrdaUlaza,
+  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, procitajIzborUlaza,
+  type IzborUlaza, type PotvrdaUlaza,
 } from '../../shared/intake-choice';
 import type { ProfileConfirmed } from '../../ui/profile-confirmed-events';
 import type { SelectionIds } from '../../ui/profile-selection-ids';
@@ -54,6 +55,22 @@ export interface IntakeConfirmationDeps {
   /** `profil.onConfirmed`: snimka ide pisacu sesije. */
   confirm: (event: ProfileConfirmed) => void;
   read?: () => IzborUlaza;
+  /** `potvrdaZaSesiju` iz `intake-choice.ts`: potvrda vezana za `sessionId` iz mape po sesiji. */
+  readSesiju?: (sessionId: string) => PotvrdaUlaza | null;
+}
+
+/**
+ * Potvrda za OVU sesiju. Prvo mapa po id-u sesije (`potvrdaZaSesiju`), koja NE gubi ranije vezanu
+ * sesiju kad sljedeci klik "Potvrdi" na ulazu prepiše tekuci slot za drugi rad (nalaz pregleda
+ * Z32, vidi `intake-choice.ts`). Kad mapa nema zapis, pada na STARI jedini slot
+ * (`procitajIzborUlaza().potvrda`), za pohranu iz prije ovog popravka koja jos nema zapis u mapi;
+ * koristi ga SAMO ako pripada ovoj sesiji (`potvrdaVrijediZaSesiju` bi ga inace ipak odbio).
+ */
+function potvrdaZaOvuSesiju(deps: IntakeConfirmationDeps): PotvrdaUlaza | null {
+  const izMape = (deps.readSesiju ?? potvrdaZaSesiju)(deps.sessionId);
+  if (izMape) return izMape;
+  const { potvrda } = (deps.read ?? procitajIzborUlaza)();
+  return potvrda && potvrda.sesija === deps.sessionId ? potvrda : null;
 }
 
 /**
@@ -66,7 +83,7 @@ export interface IntakeConfirmationDeps {
  *   faculty     primijenjen je samo potvrdjen fakultet; studij prepoznaje detekcija iz dokumenta
  */
 export function primijeniPotvrduUlaza(deps: IntakeConfirmationDeps): IntakeConfirmationOutcome {
-  const { potvrda } = (deps.read ?? procitajIzborUlaza)();
+  const potvrda = potvrdaZaOvuSesiju(deps);
   if (!potvrdaVrijediZaSesiju(potvrda, { id: deps.sessionId, imaProfil: deps.sessionHasProfile })) return 'none';
   let obrazac: SelectionIds;
   try { obrazac = deps.readForm(); } catch { return 'none'; }
