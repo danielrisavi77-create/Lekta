@@ -26,6 +26,22 @@ korisnike, ni po ponasanju ni po udjelu; stopa privole se ne mjeri (nema dogadja
 | preuzimanje poceto | `repair_download_started` | korisnik kliknuo preuzimanje popravljene kopije | `kind` |
 | verzije usporedjene | `revision_compared` | usporedba dviju verzija istog rada prikazana | `count` rijeseno, `total` uvedeno, `kind` comparable/not-comparable |
 
+### Opportunity signal
+
+`opportunity_summary` nije dodatni korak lijevka nego dijagnosticki dogadjaj nakon uspjesne analize.
+Nosi samo interne dimenzije i brojace: `profileId`, `profileStatus`, `workType`, `auto`,
+`assisted`, `manual`, `unknown`, `total` i `kind`. `unknown` je broj provjera sa statusom
+`unmeasurable`. Ne nosi naslov, autora, naziv datoteke, tekst nalaza ni isjecak rada.
+
+Control Center sekcija **Prilike** kombinira taj signal s postojecim `profile_completed`,
+`repair_completed`, `paywall_viewed`, `checkout_started` i `purchase_completed` dogadjajima.
+Rangiranje nije kompozitni score: prvo idu signali s najmanje 20 opažanja, zatim veci udio
+zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count proxy** jer tablica nema
+session/user identifikator; ne smije se zvati cohort abandonmentom.
+
+`unsupported_structure` i `fixer_noop_reason` v1 jos ne instrumentira. Izvjestaj ih navodi pod
+`missingSignals`; odsutnost mjerenja nikad se ne prikazuje kao nula.
+
 Postojeci dogadjaji (`file_selected`, `profile_completed`, `analysis_completed`) su zadrzani pod svojim imenima:
 drugo ime za isti korak mjerilo bi ga dvaput.
 
