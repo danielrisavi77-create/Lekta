@@ -247,7 +247,7 @@
         "T23",
         "T48"
       ],
-      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo order_created/paid i order_refunded, inbox prije provjere korisnika, needs_manual_link; #4 jedno ime varijable za store ID (webhook-mor cita LS_STORE_ID, create-checkout LEMONSQUEEZY_STORE_ID) + preflight; #7 PDV ukljucen; #26 tekst garancije."
+      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo payment_intent.succeeded i charge.refunded (Stripe; ranije LS order_created/paid i order_refunded), inbox prije provjere korisnika, needs_manual_link; #4 dosljedna imena Stripe tajni (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PUBLISHABLE_KEY) u webhook-mor i create-checkout + preflight (ranije LS store ID pod dva imena); #7 PDV ukljucen; #26 tekst garancije. AUDIT 27.9.: #6 Lemon Squeezy formulacije zamijenjene Stripeom (odluka vlasnika 2026-09-23)."
     },
     {
       "id": "T25",
@@ -516,9 +516,10 @@
       "dependsOn": [
         "T17",
         "T44",
-        "T45"
+        "T45",
+        "T72"
       ],
-      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu."
+      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu. AUDIT 27.9.: #4 dodana ovisnost T72 (svjez RELEASE_PROOF nad masterom)."
     },
     {
       "id": "T47",
@@ -533,12 +534,12 @@
     },
     {
       "id": "T48",
-      "title": "Pravni subjekt i naplata: obrt, OIB, isplatni racun kod Lemon Squeezyja, DPA sa Supabaseom",
+      "title": "Pravni subjekt i naplata: obrt, OIB, Stripe racun za isplatu, DPA sa Supabaseom",
       "status": "ready",
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB."
+      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
     },
     {
       "id": "T49",
@@ -624,9 +625,9 @@
     {
       "id": "T58",
       "title": "PR opis: neto redaka i nove ovisnosti kao obvezan redak",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
-      "note": "PR predlozak i gard (test ili CI korak) koji trazi retke 'Neto redaka: +x/-y' i 'Nove ovisnosti: nema|popis' u opisu; workflow skripte (lekta-lean, lekta-no-fable-coding) dodaju ih automatski iz git diff --shortstat i package.json diff-a; light."
+      "note": "PR predlozak i gard (test ili CI korak) koji trazi retke 'Neto redaka: +x/-y' i 'Nove ovisnosti: nema|popis' u opisu; workflow skripte (lekta-lean, lekta-no-fable-coding) dodaju ih automatski iz git diff --shortstat i package.json diff-a; light. AUDIT 27.9.: #5 PR #133 spojen u master (ecddae96); status sinkroniziran."
     },
     {
       "id": "T59",
@@ -669,7 +670,7 @@
       "dependsOn": [
         "T56"
       ],
-      "note": "Vlasnik 2026-09-26: repo ostaje javan (privatni repo na free planu = 2.000 CI min/mj, Lekta trosi ~25.000). Audit 22.9. bloker #1 (tajna baza pravila javna) rjesava se razdvajanjem: privatni repo lekta-data (bez CI-ja), javni CI i Netlify build dohvacaju podatke jednim korakom kroz deploy token (secret), bundle vec dohvaca pravila s mreze pa korisnici ne vide promjenu; nakon prijenosa jednokratno ciscenje javne povijesti od data/ (vlasnikov OK + GitHub purge). Koraci: (1) popis staza po data/classification.json koje idu u privatni repo, (2) skripta dohvata + gard da build pada bez podataka umjesto tiho, (3) CI/Netlify tajna, (4) migracija povijesti, (5) provjera da nijedan test ne ovisi o javnoj kopiji. Puni workflow (podaci + CI = zasticeno). Preduvjet: PR #127 (CI cache) i wf/ci-single-run-per-pr."
+      "note": "Vlasnik 2026-09-26: repo ostaje javan (privatni repo na free planu = 2.000 CI min/mj, Lekta trosi ~25.000). Audit 22.9. bloker #1 (tajna baza pravila javna) rjesava se razdvajanjem: privatni repo lekta-data (bez CI-ja), javni CI i Netlify build dohvacaju podatke jednim korakom kroz deploy token (secret), bundle vec dohvaca pravila s mreze pa korisnici ne vide promjenu; nakon prijenosa jednokratno ciscenje javne povijesti od data/ (vlasnikov OK + GitHub purge). Koraci: (1) popis staza po data/classification.json koje idu u privatni repo, (2) skripta dohvata + gard da build pada bez podataka umjesto tiho, (3) CI/Netlify tajna, (4) migracija povijesti, (5) provjera da nijedan test ne ovisi o javnoj kopiji. Puni workflow (podaci + CI = zasticeno). Preduvjet: PR #127 (CI cache) i wf/ci-single-run-per-pr. AUDIT 27.9.: #12 ne pokretati dok T73 ne odluci o stacku #132, #146, #147 (iste putanje data/profiles, data/sources, data/verification)."
     },
     {
       "id": "T64",
@@ -697,9 +698,9 @@
     {
       "id": "T67",
       "title": "Svjez RELEASE_PROOF nad f754537c sa sve cetiri Word razine",
-      "status": "in_review",
+      "status": "done",
       "dependsOn": [],
-      "note": "PR #143. complete:true, word-corpus 21/21 i word-toc pass, release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 OK."
+      "note": "PR #143. complete:true, word-corpus 21/21 i word-toc pass, release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 OK. AUDIT 27.9.: #5 PR #143 spojen (56d25c8); dokaz vrijedi samo za f754537c, svjez dokaz nad aktualnim masterom je T72."
     },
     {
       "id": "T68",
@@ -724,7 +725,29 @@
       "status": "ready",
       "dependsOn": [],
       "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Vjerojatna utrka registracije handlera u /rad/."
+    },
+    {
+      "id": "T71",
+      "title": "Deterministicki gate preflight i lock na i3 stroju",
+      "status": "in_review",
+      "dependsOn": [],
+      "note": "PR #141, grana wf/gate-preflight-lock. scripts/gate-preflight.mjs, scripts/with-gate-lock.mjs, omotac za check, test:ux i release:check, Playwright lokalno na chromiumu. PR je ranije nosio oznaku T62, koja pripada zavrsenom zadatku Word korpus/TOC. AUDIT 27.9.: #5 (kolizija ID-ja) i #9 (PR nije mergeable, treba razrijesiti).",
+      "owner": "lekta-32"
+    },
+    {
+      "id": "T72",
+      "title": "Svjez RELEASE_PROOF nad aktualnim masterom",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Blokira T46. RELEASE_PROOF.json iz T67 (PR #143) vezan je uz f754537c; origin/master cc9df523 je 37 commita i 315 datoteka dalje (git rev-list --count, git diff --shortstat), ukljucujuci #145 (Stripe i dizajn). Dokaz: sve cetiri Word razine (word, word worst-case, word-corpus, word-toc) i release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 nad commitom koji je tada HEAD mastera. AUDIT 27.9.: #4"
+    },
+    {
+      "id": "T73",
+      "title": "GO/NO-GO audit dokaznog AI stacka #132/#146/#147",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Read-only izvjestaj docs/agents/reports/T73_AI_STACK_GO_NO_GO.md: rule-claims pad na sva tri PR-a, dva HIGH nalaza iz pregleda #132 (repairSourceHash u real-corpus-attestation, opseg repair-source-hash.mjs), zastarjelost claim-modality-proposals.json i podatkovni nalazi iz #147 (15 modaliteta, 10 proturjecnih izvora, 2 PRAVO pravila). Ishod GO ili NO-GO; T63 ceka ovu odluku. AUDIT 27.9.: #1, #2, #3"
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe."
 }
