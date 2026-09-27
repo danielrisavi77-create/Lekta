@@ -938,4 +938,68 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
     expect(isGeneralRepairEntry({ kind: 'repair', findingId: 'nalaz-1' })).toBe(false);
     expect(isGeneralRepairEntry({ kind: 'preview', findingId: 'nalaz-1' })).toBe(false);
   });
+
+  it('prikazuje jedan redak Nije provjereno samo kad inspection coverage nije complete', () => {
+    const partialMount = document.createElement('section');
+    const partial = buildVisualResultModel(result({
+      details: {
+        ruleAuthority: 'official-source',
+        inspectionCoverage: {
+          version: 1,
+          status: 'partial',
+          items: [
+            { kind: 'text-box', count: 1 },
+            { kind: 'nested-table', count: 2 },
+          ],
+          analyzerSkips: [{ analyzer: 'consistency', count: 2 }],
+          summary: { limitedKinds: 2, limitedOccurrences: 3, analyzerSkips: 2 },
+        },
+      },
+    }));
+    renderResultsCockpit(partialMount, partial, { repairAvailable: false });
+
+    const row = partialMount.querySelector('[data-cockpit-inspection-limit]');
+    expect(row).toBeTruthy();
+    expect(partialMount.querySelectorAll('[data-cockpit-inspection-limit]')).toHaveLength(1);
+    expect(row?.textContent).toContain('Nije provjereno u cijelosti');
+    expect(row?.textContent).toContain('tekstualni okviri');
+    expect(row?.textContent).toContain('ugniježđene tablice');
+    expect(row?.textContent).toContain('2 strukturiranih preskoka');
+
+    const completeMount = document.createElement('section');
+    const complete = buildVisualResultModel(result({
+      details: {
+        ruleAuthority: 'official-source',
+        inspectionCoverage: {
+          version: 1,
+          status: 'complete',
+          items: [],
+          analyzerSkips: [],
+          summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
+        },
+      },
+    }));
+    renderResultsCockpit(completeMount, complete, { repairAvailable: false });
+    expect(completeMount.querySelector('[data-cockpit-inspection-limit]')).toBeNull();
+  });
+
+  it('unknown inspection coverage priznaje da opseg nije bilo moguce utvrditi', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({
+      details: {
+        ruleAuthority: 'official-source',
+        inspectionCoverage: {
+          version: 1,
+          status: 'unknown',
+          items: [],
+          analyzerSkips: [],
+          summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
+        },
+      },
+    }));
+    renderResultsCockpit(mount, model, { repairAvailable: false });
+    expect(mount.querySelector('[data-cockpit-inspection-limit]')?.textContent)
+      .toContain('nije bilo moguće utvrditi opseg');
+  });
+
 });
