@@ -145,6 +145,7 @@ import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
@@ -6124,6 +6125,95 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
       },
     ];
     expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
+  });
+});
+
+describe('mutacije: self-hosted Word runner na javnom repou (T80, Codex F1, F3, F5 na #162)', () => {
+  const IF = "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'";
+  const RAW = 'name: word-proof\npermissions:\n  contents: read\n';
+  const wordProof = (): NamedWorkflow => ({
+    file: 'word-proof.yml',
+    raw: RAW,
+    doc: {
+      on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
+      permissions: { contents: 'read' },
+      jobs: {
+        'word-proof': {
+          'runs-on': ['self-hosted', 'windows', 'word'],
+          if: IF,
+          steps: [
+            { name: 'Checkout', uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' },
+            { name: 'Porijeklo commita (samo tocan vrh)', run: 'git for-each-ref --format=x refs/remotes/origin/master' },
+            { name: 'release:check', run: 'npm run release:check' },
+          ],
+        },
+      },
+    },
+  });
+  const drugi = (runsOn: unknown): NamedWorkflow => ({
+    file: 'drugi.yml',
+    raw: 'name: drugi\n',
+    doc: { on: { push: { branches: ['master'] } }, jobs: { posao: { 'runs-on': runsOn } } },
+  });
+  const nalazi = (...w: NamedWorkflow[]) => findSelfHostedProblems(w);
+
+  it('BASELINE: tocan word-proof i drugi workflow na ubuntu-latest su cisti', () => {
+    expect(nalazi(wordProof(), drugi('ubuntu-latest'))).toEqual([]);
+  });
+
+  it('F1: drugi workflow s golom oznakom word, windows, self-hosted, izrazom ili grupom se hvata', () => {
+    for (const runsOn of ['word', 'windows', 'self-hosted', ['self-hosted'], '${{ matrix.os }}', { group: 'default' }]) {
+      expect(nalazi(drugi(runsOn)), JSON.stringify(runsOn)).toHaveLength(1);
+    }
+  });
+
+  it('F5: slabiji if (|| umjesto &&) se hvata', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof'].if = IF.replace('&&', '||');
+    expect(nalazi(m)).toEqual([`word-proof.yml: job word-proof if mora biti tocno: ${IF}`]);
+  });
+
+  it('F5: push.tags uz dopustene grane se hvata', () => {
+    const m = wordProof();
+    (m.doc.on as Record<string, unknown>).push = { branches: ['master', 'release/**'], tags: ['v*'] };
+    expect(nalazi(m)).toEqual(['word-proof.yml: push smije imati samo branches (ima: branches, tags)']);
+  });
+
+  it('F5: workflow_call i pull_request trigeri se hvataju', () => {
+    for (const trigger of ['workflow_call', 'pull_request']) {
+      const m = wordProof();
+      (m.doc.on as Record<string, unknown>)[trigger] = {};
+      expect(nalazi(m)[0], trigger).toMatch(/^word-proof\.yml: trigeri moraju biti tocno push, workflow_dispatch/);
+    }
+  });
+
+  it('F5: secrets: inherit, secrets[ i secrets. se hvataju', () => {
+    for (const dodatak of ['    secrets: inherit\n', "    env:\n      K: ${{ secrets['K'] }}\n", '      K: ${{ secrets.K }}\n']) {
+      const m = wordProof();
+      m.raw = RAW + dodatak;
+      expect(nalazi(m), dodatak).toEqual(['word-proof.yml: spominje secrets (secrets., secrets[ ili secrets: inherit)']);
+    }
+  });
+
+  it('F5: prosireni runs-on i pravo pisanja se hvataju', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof']['runs-on'] = ['self-hosted', 'windows', 'word', 'x64'];
+    m.doc.permissions = { contents: 'write' };
+    expect(nalazi(m)).toEqual([
+      'word-proof.yml: job word-proof runs-on mora biti tocno [self-hosted, windows, word]',
+      'word-proof.yml: job word-proof nema permissions samo contents: read',
+    ]);
+  });
+
+  it('F3: provjera porijekla s --contains ili korak koji izvrsava kod prije nje se hvata', () => {
+    const contains = wordProof();
+    contains.doc.jobs!['word-proof'].steps![1].run = 'git branch -r --contains HEAD';
+    expect(nalazi(contains)).toEqual([
+      'word-proof.yml: job word-proof Porijeklo commita mora usporedjivati tocne vrhove grana, ne --contains',
+    ]);
+    const prije = wordProof();
+    prije.doc.jobs!['word-proof'].steps!.splice(1, 0, { name: 'npm ci', run: 'npm ci' });
+    expect(nalazi(prije)).toEqual(['word-proof.yml: job word-proof izvrsava nesto prije koraka Porijeklo commita']);
   });
 });
 
