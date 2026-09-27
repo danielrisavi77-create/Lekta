@@ -9,7 +9,7 @@
 //   2. redak u `admin_users` (0031). Bez njega -> 403, bez obzira na valjanu prijavu.
 // Klijentska zastavica `localStorage.lekta.admin` otvara samo UI i ovdje ne znaci nista.
 //
-// Jedan dispatcher umjesto sedam Edge funkcija: gate se pise i pregledava JEDNOM (svaka kopija
+// Jedan dispatcher umjesto zasebne Edge funkcije po pogledu: gate se pise i pregledava JEDNOM (svaka kopija
 // je prilika da fail-closed ponasanje regresira), postojeci productionConfig.adminStatsEndpoint
 // i CORS allowlist ostaju netaknuti. buildAdminRpcCall (src/admin/admin-dispatch.ts) odlucuje
 // KOJU rpc pozvati - sve su security definer, grant samo service_role (0031/0038), pa nijedan
