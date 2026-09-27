@@ -89,7 +89,8 @@ import {
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
 } from '../src/report/webhook';
-import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
+import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
+import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
@@ -6380,5 +6381,30 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => {
+  const config = JSON.parse(readFileSync(resolve(process.cwd(), 'config/agent-routing.json'), 'utf8')) as {
+    bots: Record<string, BotSpec>; protectedPaths: string[];
+  };
+
+  it('baseline: stvarni config nema bota koji implementira nad zasticenom stazom', () => {
+    expect(findBotsImplementingProtected(config.bots, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+
+  it('mutant: grok-docs dobije src/repair/** u allowlist i izgubi zabranu src/** (se hvata)', () => {
+    const mutiran = JSON.parse(JSON.stringify(config.bots)) as Record<string, BotSpec>;
+    mutiran['grok-docs'].allowedPaths = [...(mutiran['grok-docs'].allowedPaths ?? []), 'src/repair/**'];
+    mutiran['grok-docs'].forbiddenPaths = (mutiran['grok-docs'].forbiddenPaths ?? []).filter((p) => p !== 'src/**');
+    const problems = findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations);
+    expect(problems).toContain('grok-docs smije implementirati src/repair/x.ts');
+  });
+
+  it('mutant: read-only bot premjesten u implement bez allowliste ne prolazi ni gard ni resolver', () => {
+    const mutiran = JSON.parse(JSON.stringify(config.bots)) as Record<string, BotSpec>;
+    mutiran['grok-review'].phases = ['review', 'implement'];
+    // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
+    expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
   });
 });

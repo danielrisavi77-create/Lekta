@@ -487,7 +487,9 @@ describe('resolveProviderInvocation: mapa provider prema paketnoj ulaznoj tocki'
     // Obje pozivne strane zovu razrjesavanje; ako jedna otpadne, ENOENT se vraca samo ondje.
     const calls = source.match(/resolveProviderInvocation\(/g) ?? [];
     expect(calls.length).toBeGreaterThanOrEqual(3);
-    expect(source).toContain('const invocation = resolveProviderInvocation(cli, { cwd: root });');
+    // Doctor ide kroz `probeCli`; njegov Windows put ponasajno mjeri `tests/agent-workflow-cli.test.ts`.
+    expect(source).toContain('console.log(probeCli(cli, { cwd: root }))');
+    expect(source).toContain('const invocation = resolveProviderInvocation(cli, {');
     expect(source).toContain('const invocation = resolveProviderInvocation(job.command, { cwd: root });');
     // Lijek nikad nije ljuska.
     expect(source).not.toContain('shell: true');
