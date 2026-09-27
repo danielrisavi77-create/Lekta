@@ -47,7 +47,8 @@ Odstupanje, prihvaceno 2026-09-27: runner `DESKTOP-LJMIVR9` radi pod vlasnikovim
 `Daniel`, na kojem su aktivne Claude prijave (u runu 36336507818 preflight je zabiljezio 14
 `claude.exe` procesa). Kod koji se izvrsi na runneru vidi te prijave i datoteke racuna. Vlasnik je
 2026-09-27 izravno odlucio da runner ostaje na tom racunu i prihvatio rizik; granica ostaju mjere 1
-do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena.
+do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrijedi do lansiranja
+(go/no-go 19. 10. 2026.), nakon toga ponovna odluka (T81); vlasnik je to izravno potvrdio 27. 9. 2026.
 
 ## 2. Priprema stroja
 
