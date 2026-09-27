@@ -10,13 +10,14 @@ import { renderAdminAuthGate, renderSetPasswordStep } from './admin-auth-gate';
 import { fetchSectionStats, type AdminApiConfig } from './admin-api';
 import { ADMIN_CONFIG } from './admin-config';
 import { SECTION_IDS, type Period, type PeriodKind, type SectionId } from './admin-types';
-import type { CoverageStats, FunnelStats, OperationsStats, OverviewStats, RevenueStats, UsageStats } from './admin-types';
+import type { CoverageStats, FunnelStats, OperationsStats, OpportunityStats, OverviewStats, RevenueStats, UsageStats } from './admin-types';
 import { renderOverviewSection } from './admin-section-overview';
 import { renderFunnelSection } from './admin-section-funnel';
 import { renderRevenueSection } from './admin-section-revenue';
 import { renderOperationsSection } from './admin-section-operations';
 import { renderUsageSection } from './admin-section-usage';
 import { renderCoverageSection } from './admin-section-coverage';
+import { renderOpportunitiesSection } from './admin-section-opportunities';
 import { setupPalettePicker, toggleMode } from './admin-theme';
 import { icon as chartIcon } from './admin-charts';
 
@@ -30,6 +31,7 @@ function dispatchRender(id: SectionId, container: HTMLElement, stats: unknown): 
     case 'operations': renderOperationsSection(container, stats as OperationsStats); return;
     case 'usage': renderUsageSection(container, stats as UsageStats); return;
     case 'coverage': renderCoverageSection(container, stats as CoverageStats); return;
+    case 'opportunities': renderOpportunitiesSection(container, stats as OpportunityStats); return;
   }
 }
 
