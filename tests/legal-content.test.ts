@@ -121,6 +121,39 @@ describe('legal-content', () => {
   });
 
   /**
+   * Odluka vlasnika 2026-09-27 ("Jamstvo za sve profile"): naslov garancijske stranice
+   * ne smije vezati garanciju samo za T2/T3, jer tocka 10 (jamstvo za popravak) vrijedi
+   * za SVAKI placeni automatski popravak, ne samo za verificirane profile. Tocka 9 mora
+   * to izricito razdvojiti, a iskljucenje T0/T1 u tocki 8 mora jasno reci da se odnosi
+   * samo na garanciju tocnosti izvjestaja (tocke 1 do 9), ne na tocku 10.
+   */
+  it('naslov garancijske stranice ne vezuje jamstvo samo za T2/T3', () => {
+    expect(docs.guarantee.title).toBe('Garancijski uvjeti');
+    expect(docs.guarantee.title).not.toContain('(T2/T3)');
+  });
+
+  it('guarantee tocka 9 razdvaja opseg: tocke 1-9 za T2/T3, tocka 10 za svaki popravak', () => {
+    const html = docs.guarantee.html;
+    const od9 = html.indexOf('<h4>9. Pokriveni fakulteti</h4>');
+    const od10 = html.indexOf('<h4>10. Jamstvo za automatski popravak</h4>');
+    expect(od9).toBeGreaterThan(-1);
+    expect(od10).toBeGreaterThan(od9);
+    const tocka9 = html.slice(od9, od10);
+    expect(tocka9).toContain(
+      'Točke 1 do 9 vrijede za profile razine T2 i T3; točka 10 vrijedi za svaki plaćeni automatski popravak.'
+    );
+  });
+
+  it('guarantee tocka 8 oznacava iskljucenje T0/T1 kao ograniceno na tocke 1 do 9', () => {
+    const html = docs.guarantee.html;
+    const od8 = html.indexOf('<h4>8. Što je isključeno</h4>');
+    const od9 = html.indexOf('<h4>9. Pokriveni fakulteti</h4>');
+    expect(od8).toBeGreaterThan(-1);
+    const tocka8 = html.slice(od8, od9);
+    expect(tocka8).toContain('profile koji nisu verificirani (razine T0 i T1, za točke 1 do 9)');
+  });
+
+  /**
    * Tocka 10 (odobrio vlasnik 2026-09-27, uvjeti 2026-09-27): jamstvo za PLACENI automatski
    * popravak. Cuva se doslovno jer je to obecanje povrata novca: rok, uvjet da vrijedi tek nakon
    * besplatne bete, dokaz bez dopisa referade, ljudska odluka u 5 radnih dana i iskljucenja.
