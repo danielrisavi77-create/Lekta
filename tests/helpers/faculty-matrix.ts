@@ -18,7 +18,7 @@ export type FacultyAutomaticStatus = 'pass' | 'review' | 'not-run';
 
 /**
  * Ishod `npm run closed-loop` za profil. Do 2026-08-29 je bio prikovan na `'not-run'` iako
- * `docs/generated/closed-loop.json` ima redak za svih 407 profila: matrica ga jednostavno nije
+ * `docs/generated/closed-loop.json` ima redak za svih 415 profila: matrica ga jednostavno nije
  * citala, pa je najjeftiniji dio pokrivenosti koji vec postoji izvjestavan kao neodradjen.
  */
 export type ClosedLoopStatus = 'pass' | 'no-repair' | 'no-rules' | 'not-run';

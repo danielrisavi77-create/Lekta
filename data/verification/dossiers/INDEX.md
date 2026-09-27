@@ -3,7 +3,7 @@
 Audit masovno odobrenih (owner-bulk-approval) scored pravila. Otvori dosje profila, provjeri svako pravilo protiv izvora na lokatoru, pa u konzoli/rucno postavi verifiedBy=svoje ime.
 
 Profila sa scored: 369. Scored ukupno: 2218.
-Vec ljudski potvrdjeno: 2180. Za audit (bulk): 38. Needs-recheck: 12. Dosjea zapisano: 20.
+Vec ljudski potvrdjeno: 2180. Za audit (bulk): 38. Needs-recheck: 19. Dosjea zapisano: 21.
 
 | Profil | Za audit (bulk) | Ljudski OK | Scored | Recheck | Dosje |
 |---|---:|---:|---:|---:|---|
@@ -17,6 +17,7 @@ Vec ljudski potvrdjeno: 2180. Za audit (bulk): 38. Needs-recheck: 12. Dosjea zap
 | effectus-zavrsni | 1 | 8 | 9 | 0 | [effectus-zavrsni.md](effectus-zavrsni.md) |
 | ffst-diplomski | 0 | 6 | 6 | 1 | [ffst-diplomski.md](ffst-diplomski.md) |
 | ffst-zavrsni | 0 | 6 | 6 | 1 | [ffst-zavrsni.md](ffst-zavrsni.md) |
+| medri-sanitarno-diplomski | 0 | 0 | 0 | 7 | [medri-sanitarno-diplomski.md](medri-sanitarno-diplomski.md) |
 | unisb-btho-diplomski | 0 | 4 | 4 | 1 | [unisb-btho-diplomski.md](unisb-btho-diplomski.md) |
 | unisb-btho-zavrsni | 0 | 4 | 4 | 1 | [unisb-btho-zavrsni.md](unisb-btho-zavrsni.md) |
 | unisb-odhz-diplomski | 0 | 4 | 4 | 1 | [unisb-odhz-diplomski.md](unisb-odhz-diplomski.md) |

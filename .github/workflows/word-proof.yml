@@ -50,10 +50,13 @@ jobs:
   word-proof:
     if: github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'
     runs-on: [self-hosted, windows, word]
-    # Trajanja iz docs/generated/RELEASE_PROOF.json (f754537c): cetiri Word razine zajedno
-    # oko 9 min (word 62 s, word-worst 37 s, word-corpus 399 s, word-toc 25 s); puni
-    # release:check oko 70 min (check 1470 s, ux 1725 s, ostalo manje). Rezerva je dvostruka.
-    timeout-minutes: ${{ inputs.razine == 'sve' && 150 || 30 }}
+    # Timeout pokriva CIJELI job, ne samo release:check. Izmjereno na runneru (run 36325565241):
+    # checkout s punom povijescu 4 min 22 s, `npm ci` bez kesa 15 min 57 s; tek onda razine.
+    # Razine iz docs/generated/RELEASE_PROOF.json (f754537c): cetiri Word razine oko 9 min
+    # (word 62 s, word-worst 37 s, word-corpus 399 s, word-toc 25 s), puni release:check oko
+    # 70 min. Prijasnjih 30 min je ubilo run #8 usred release:check, pa se ni kes ni ciscenje
+    # nisu izvrsili. word: 21 + 9 = 30 min, uz dvostruku rezervu 60; sve: 21 + 70 = 91, rezerva 180.
+    timeout-minutes: ${{ inputs.razine == 'sve' && 180 || 60 }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -92,8 +95,9 @@ jobs:
           [IO.File]::AppendAllText($env:GITHUB_ENV, "WORD_PROOF_START=$([DateTime]::UtcNow.ToString('o'))`n")
 
       # Word koji vec radi u sesiji runnera znaci zaostali proces prethodnog runa ili korisnikov
-      # otvoreni dokument. Run tada STAJE i nista ne gasi (Codex F8). Zatim: Word COM, bash, git.
-      - name: Preflight (zaostali Word, Word COM, bash, git)
+      # otvoreni dokument. Run tada STAJE i nista ne gasi (Codex F8). Zatim: Word COM i git.
+      # bash se vise ne trazi: setup-deps na Windowsu koristi powershell (#177).
+      - name: Preflight (zaostali Word, Word COM, git)
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
@@ -105,7 +109,6 @@ jobs:
           }
           $word = New-Object -ComObject Word.Application
           try { Write-Output "Word verzija: $($word.Version)" } finally { $word.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($word) }
-          Write-Output "bash: $((Get-Command bash).Source)"
           git --version
           if ($LASTEXITCODE -ne 0) { throw 'git nije dostupan.' }
 

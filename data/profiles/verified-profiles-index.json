@@ -144,61 +144,6 @@
     }
   },
   {
-    "id": "fpzg-novinarstvo-diplomski",
-    "unitId": "fpzg",
-    "programs": [
-      "Diplomski studij Novinarstvo"
-    ],
-    "workTypes": [
-      "graduate"
-    ],
-    "status": "verified",
-    "fieldValidation": {
-      "sample": {
-        "syntheticDocxAudits": 1,
-        "docxAudits": 1,
-        "publicPdfAudits": 3,
-        "metadataSpotChecks": 0,
-        "years": [
-          2022,
-          2023,
-          2024,
-          2025,
-          2026
-        ]
-      }
-    },
-    "rules": {
-      "recommendedCitation": "fpzg"
-    }
-  },
-  {
-    "id": "fpzg-mes-master-thesis",
-    "unitId": "fpzg",
-    "programs": [
-      "Master of European Studies"
-    ],
-    "workTypes": [
-      "graduate"
-    ],
-    "status": "verified",
-    "fieldValidation": {
-      "sample": {
-        "syntheticDocxAudits": 1,
-        "docxAudits": 0,
-        "publicPdfAudits": 1,
-        "metadataSpotChecks": 0,
-        "years": [
-          2020,
-          2026
-        ]
-      }
-    },
-    "rules": {
-      "recommendedCitation": "fpzg"
-    }
-  },
-  {
     "id": "fpzg-specijalisticki-odnosi-s-javnoscu",
     "unitId": "fpzg",
     "programs": [
@@ -4285,6 +4230,17 @@
     "rules": {
       "recommendedCitation": "vancouver"
     }
+  },
+  {
+    "id": "medri-sanitarno-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Sanitarno inženjerstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   },
   {
     "id": "fzsri-zavrsni",
@@ -8720,5 +8676,250 @@
     "rules": {
       "recommendedCitation": "chicago-notes"
     }
+  },
+  {
+    "id": "agromed-zavrsni",
+    "unitId": "agromed",
+    "programs": [
+      "Mediteranska poljoprivreda"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "geoteh-diplomski",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "geoteh-doktorski",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "geoteh-zavrsni",
+    "unitId": "geoteh",
+    "programs": [
+      "Inženjerstvo okoliša"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "hig-zavrsni",
+    "unitId": "hig",
+    "programs": [
+      "Hotelijerstvo i gastronomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "mvi-diplomski",
+    "unitId": "mvi",
+    "programs": [
+      "Protestantska teologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "mvi-prijediplomski",
+    "unitId": "mvi",
+    "programs": [
+      "Protestantska teologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vef-specijalisticki",
+    "unitId": "vef",
+    "programs": [
+      "Proizvodnja i zaštita zdravlja svinja",
+      "Higijena i tehnologija hrane životinjskog podrijetla",
+      "Kirurgija, anesteziologija i oftalmologija s veterinarskom stomatologijom",
+      "Uzgoj i patologija egzotičnih kućnih ljubimaca",
+      "Mikrobiologija i epizootiologija",
+      "Teriogenologija domaćih sisavaca",
+      "Uzgoj i patologija divljači",
+      "Sanitacija",
+      "Veterinarska patologija",
+      "Dobrobit životinja",
+      "Sudsko veterinarstvo",
+      "Provedba veterinarskih postupaka sigurnosti hrane u klaoničkom objektu",
+      "Menadžment reprodukcijskog zdravlja mliječnih krava"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "pmf-biologija-zavrsni",
+    "unitId": "pmf",
+    "programs": [
+      "Biologija",
+      "Molekularna biologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "pmf-geologija-zavrsni",
+    "unitId": "pmf",
+    "programs": [
+      "Geologija"
+    ],
+    "workTypes": [],
+    "status": "partial"
+  },
+  {
+    "id": "ffzg-svedski-zavrsni",
+    "unitId": "ffzg",
+    "programs": [
+      "Švedski jezik i kultura (dvopredmetni)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "medri-doktorski",
+    "unitId": "medri",
+    "programs": [
+      "Biomedicina",
+      "Dentalna medicina",
+      "Javno zdravstvo",
+      "Klinička medicina",
+      "Zdravstveno i ekološko inženjerstvo"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "mefst-doktorski",
+    "unitId": "mefst",
+    "programs": [
+      "Biologija novotvorina",
+      "Klinička medicina utemeljena na dokazima"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "mefst-tribe-doktorski",
+    "unitId": "mefst",
+    "programs": [
+      "Translacijska istraživanja u biomedicini"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "fpzg-mes-master-thesis",
+    "unitId": "fpzg",
+    "programs": [
+      "Master of European Studies"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-novinarstvo-diplomski",
+    "unitId": "fpzg",
+    "programs": [
+      "Diplomski studij Novinarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 1,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "efri-specijalisticki",
+    "unitId": "efri",
+    "programs": [
+      "Ekonomija energetskog sektora-MBA",
+      "Financije",
+      "Inteligentno elektroničko poslovanje",
+      "Kontroling",
+      "Marketing menadžment",
+      "Menadžment sigurnosti u EU",
+      "Menadžment u javnom sektoru",
+      "Poslovanje s Europskom unijom",
+      "Računovodstvo",
+      "Upravljanje poslovnim uspjehom"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial"
   }
 ]

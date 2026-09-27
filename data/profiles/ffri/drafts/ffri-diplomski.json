@@ -151,6 +151,23 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "ffri-diplomski--page-numbers",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11., stavak 2.",
+      "quote": "Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Brojevi stranica",
+      "machineCheckable": true,
+      "authority": "binding",
+      "status": "draft",
+      "scored": false
     }
   ],
   "generatedAt": "2026-07-02"

@@ -9,8 +9,11 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { botPathViolations, pathMatches, resolveBot } from '../scripts/agents/grok-bots.mjs';
 import {
   allRoutingRoleEntries,
+  findBotsImplementingProtected,
+  type BotSpec,
   findSameProviderWithoutFallback,
   findUnverifiedModelUsages,
   ROUTING_PROTECTED_KEYS,
@@ -213,5 +216,88 @@ describe('config/agent-routing.json: korak 2, faza critic', () => {
 
   it('effortPolicy ima critic: low', () => {
     expect(readConfig().effortPolicy.critic).toBe('low');
+  });
+});
+
+describe('config/agent-routing.json: Grok botovi (odluka vlasnika 27. 9.)', () => {
+  const raw = () => JSON.parse(readFileSync(CONFIG_PATH, 'utf8')) as RoutingConfig & { bots: Record<string, BotSpec & { effort: string }> };
+  const providers = JSON.parse(readFileSync(fileURLToPath(new URL('../config/agent-providers.json', import.meta.url)), 'utf8')) as {
+    agents: Record<string, { command: string; role: string }>;
+  };
+  const EXPECTED: Record<string, { phases: string[]; runnerPhase: string; sandbox: string; effort: string }> = {
+    'grok-review': { phases: ['review'], runnerPhase: 'review', sandbox: 'read-only', effort: 'medium' },
+    'grok-scout': { phases: ['scout', 'critic'], runnerPhase: 'review', sandbox: 'read-only', effort: 'low' },
+    'grok-docs': { phases: ['implement'], runnerPhase: 'implement', sandbox: 'workspace', effort: 'medium' },
+    'grok-triage': { phases: ['review'], runnerPhase: 'review', sandbox: 'read-only', effort: 'low' },
+  };
+
+  it('postoje tocno cetiri bota, svaki na provideru grok s ocekivanim fazama, sandboxom i effortom', () => {
+    const { bots } = raw();
+    expect(Object.keys(bots).sort()).toEqual(Object.keys(EXPECTED).sort());
+    expect(raw().providers.grok.status).toBe('verified');
+    for (const [name, exp] of Object.entries(EXPECTED)) {
+      const bot = bots[name];
+      expect(bot.provider, name).toBe('grok');
+      expect(bot.phases, name).toEqual(exp.phases);
+      expect(bot.runnerPhase, name).toBe(exp.runnerPhase);
+      expect(bot.sandbox, name).toBe(exp.sandbox);
+      expect(bot.effort, name).toBe(exp.effort);
+      expect(providers.agents[bot.agent!]?.command, `${name}.agent mora biti grok agent`).toBe('grok');
+    }
+  });
+
+  it('bot bez implement je read-only i nema allowedPaths', () => {
+    for (const [name, bot] of Object.entries(raw().bots)) {
+      if (bot.runnerPhase === 'implement') continue;
+      expect(bot.sandbox, name).toBe('read-only');
+      expect(bot.allowedPaths, name).toBeUndefined();
+    }
+  });
+
+  it('grok-docs ima allowlist samo za dokumentaciju i zabranjuje src, supabase, data i scripts', () => {
+    const docs = raw().bots['grok-docs'];
+    expect(docs.allowedPaths).toEqual(['docs/**', '**/*.md', 'docs/agents/tasks.json']);
+    for (const zabrana of ['src/**', 'supabase/**', 'data/**', 'scripts/**']) expect(docs.forbiddenPaths).toContain(zabrana);
+    expect(botPathViolations(docs, ['docs/agents/ROUTING.md', 'README.md', 'docs/agents/tasks.json'])).toEqual([]);
+    expect(botPathViolations(docs, ['src/repair/CLAUDE.md', 'scripts/x.mjs', 'package.json', 'data/a.json']))
+      .toEqual(['data/a.json', 'package.json', 'scripts/x.mjs', 'src/repair/CLAUDE.md']);
+    expect(pathMatches('**/*.md', 'a/b/c.md')).toBe(true);
+    expect(pathMatches('docs/**', 'docsx/a.md')).toBe(false);
+  });
+
+  it('nijedan bot ne implementira nad protectedPaths', () => {
+    const config = raw();
+    expect(findBotsImplementingProtected(config.bots, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+
+  it('runner protectedPaths bez kose crte hvata segment bilo gdje, kao selectRoute', () => {
+    const config = raw();
+    const docs = config.bots['grok-docs'];
+    const probe = ['docs/security/NOTES.md', 'docs/agents/ROUTING.md'];
+    expect(botPathViolations(docs, probe)).toEqual([]);
+    expect(botPathViolations(docs, probe, config.protectedPaths)).toEqual(['docs/security/NOTES.md']);
+  });
+
+  it('review u svakoj celiji ostaje codex s claude fallbackom, a grok-review je samo alternativa', () => {
+    const config = raw();
+    for (const size of SIZES) {
+      for (const flag of PROTECTED_KEYS) {
+        const review = config.routing[size][flag].roles.review as RoutingRole & { reviewAlternatives?: string[] };
+        expect(review.provider).toBe('codex');
+        expect(review.reviewFallback?.provider).toBe('claude');
+        expect(review.reviewAlternatives).toEqual(['grok-review']);
+      }
+    }
+    expect((config as unknown as { protectedReviewNote: string }).protectedReviewNote).toMatch(/nikad jedini recenzent/);
+  });
+
+  it('resolveBot vezuje bot za agenta, fazu i provider', () => {
+    const config = raw();
+    expect(resolveBot(config, 'grok-review', { agentName: 'grok', agentCommand: 'grok', runnerPhase: 'review' }).name).toBe('grok-review');
+    expect(resolveBot(config, 'grok-docs', { agentName: 'build', agentCommand: 'grok', runnerPhase: 'implement' }).name).toBe('grok-docs');
+    expect(() => resolveBot(config, 'grok-docs', { agentName: 'build', agentCommand: 'grok', runnerPhase: 'review' })).toThrow(/--phase implement/);
+    expect(() => resolveBot(config, 'grok-docs', { agentName: 'grok', agentCommand: 'grok', runnerPhase: 'implement' })).toThrow(/--agent build/);
+    expect(() => resolveBot(config, 'grok-review', { agentName: 'sol', agentCommand: 'codex', runnerPhase: 'review' })).toThrow(/provider grok/);
+    expect(() => resolveBot(config, 'nepostoji', { agentName: 'grok', agentCommand: 'grok', runnerPhase: 'review' })).toThrow(/Unknown bot/);
   });
 });

@@ -22,14 +22,6 @@
       "offeredOptionCount": 5
     },
     {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "offeredOptionCount": 5
-    },
-    {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
       "offeredOptionCount": 5
     },
@@ -724,6 +716,10 @@
     {
       "profileId": "medri-medicina-diplomski",
       "offeredOptionCount": 4
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "offeredOptionCount": 0
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -1628,6 +1624,74 @@
     {
       "profileId": "effectus-seminarski",
       "offeredOptionCount": 6
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geoteh-diplomski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "medri-doktorski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "offeredOptionCount": 0
     }
   ],
   "rows": [
@@ -1786,86 +1850,6 @@
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
-      "fixerId": "alignment-fixer",
-      "checkId": "justify",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "ruleId": "fpzg-novinarstvo-diplomski--font",
-      "fixerId": "font-fixer",
-      "checkId": "font",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "ruleId": "fpzg-novinarstvo-diplomski--font-size",
-      "fixerId": "font-fixer",
-      "checkId": "font-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
-      "fixerId": "line-spacing-fixer",
-      "checkId": "line-spacing",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "ruleId": "fpzg-novinarstvo-diplomski--justify",
-      "fixerId": "alignment-fixer",
-      "checkId": "justify",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "ruleId": "fpzg-mes-master-thesis--font",
-      "fixerId": "font-fixer",
-      "checkId": "font",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "ruleId": "fpzg-mes-master-thesis--font-size",
-      "fixerId": "font-fixer",
-      "checkId": "font-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "ruleId": "fpzg-mes-master-thesis--line-spacing",
-      "fixerId": "line-spacing-fixer",
-      "checkId": "line-spacing",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "ruleId": "fpzg-mes-master-thesis--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
-      "ruleId": "fpzg-mes-master-thesis--justify",
       "fixerId": "alignment-fixer",
       "checkId": "justify",
       "templateId": "basic-text-styles",
@@ -15638,6 +15622,86 @@
       "checkId": "line-spacing",
       "templateId": "basic-text-styles",
       "recommended": false
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "ruleId": "fpzg-mes-master-thesis--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "ruleId": "fpzg-mes-master-thesis--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "ruleId": "fpzg-mes-master-thesis--line-spacing",
+      "fixerId": "line-spacing-fixer",
+      "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "ruleId": "fpzg-mes-master-thesis--paper-size",
+      "fixerId": "paper-size-fixer",
+      "checkId": "paper-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "ruleId": "fpzg-mes-master-thesis--justify",
+      "fixerId": "alignment-fixer",
+      "checkId": "justify",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "ruleId": "fpzg-novinarstvo-diplomski--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "ruleId": "fpzg-novinarstvo-diplomski--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
+      "fixerId": "line-spacing-fixer",
+      "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
+      "fixerId": "paper-size-fixer",
+      "checkId": "paper-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "ruleId": "fpzg-novinarstvo-diplomski--justify",
+      "fixerId": "alignment-fixer",
+      "checkId": "justify",
+      "templateId": "basic-text-styles",
+      "recommended": false
     }
   ],
   "surface": [
@@ -16014,7 +16078,7 @@
     }
   ],
   "summary": {
-    "profileCount": 407,
+    "profileCount": 423,
     "profileOptionCount": 1751,
     "rowCount": 1751,
     "fixerCount": 6,
