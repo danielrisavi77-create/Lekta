@@ -149,7 +149,7 @@ export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel:
 export type RepairOutcome =
   // storagePending: pohrana ("Moji popravci") se dovrsava u pozadini nakon odgovora, pa jobId JEST
   // dodijeljen, ali posao jos ne mora biti vidljiv. Sucelje tada ne smije tvrditi da je spremljeno.
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; unknownFixers: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null; localRepair: LocalRepairLaunchV1 | null }
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; skippedReasons?: Record<string, string>; unknownFixers: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null; localRepair: LocalRepairLaunchV1 | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
@@ -246,17 +246,28 @@ export function buildRepairMeta(input: {
  * koji je i nastao kao "podatak koji server salje a klijent ne cita"). Ovako je razlika izmedju
  * oblika iskljucivo u tome KAKO su bajtovi stigli.
  */
+function parseSkippedReasons(value: unknown): Record<string, string> | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const out: Record<string, string> = {};
+  for (const [ruleId, reason] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof reason === 'string' && reason.length <= 80) out[ruleId] = reason;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 function okFromMeta(meta: Record<string, unknown>, docxBytes: Uint8Array): RepairOutcome {
   const m = meta as {
-    fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: unknown[];
+    fileName?: string; changelog?: RepairChange[]; skipped?: string[]; skippedReasons?: unknown; unknownFixers?: unknown[];
     slotId?: string; jobId?: string | null; storagePending?: boolean; sourceCheck?: unknown; localRepair?: unknown;
   };
+  const skippedReasons = parseSkippedReasons(m.skippedReasons);
   return {
     kind: 'ok',
     docxBytes,
     fileName: m.fileName || 'rad-popravljeno.docx',
     changelog: Array.isArray(m.changelog) ? m.changelog : [],
     skipped: Array.isArray(m.skipped) ? m.skipped : [],
+    ...(skippedReasons ? { skippedReasons } : {}),
     // Stavke koje server nije prepoznao kao zive (audit DOCX-13). Prije su se tiho gubile, pa je
     // korisnik dobivao dokument uvjeren da su primijenjene.
     unknownFixers: Array.isArray(m.unknownFixers) ? m.unknownFixers.map(String) : [],
@@ -332,7 +343,7 @@ export async function uploadRepair(
     }
 
     const data = (await res.json().catch(() => ({}))) as {
-      docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: string[]; slotId?: string; jobId?: string | null;
+      docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; skippedReasons?: unknown; unknownFixers?: string[]; slotId?: string; jobId?: string | null;
       storagePending?: boolean; sourceCheck?: unknown; localRepair?: unknown;
       error?: string; integrityFailure?: { part?: unknown; problem?: unknown; preexisting?: unknown };
     };
