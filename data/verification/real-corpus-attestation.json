@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "8e5bd529d4f2b596ccf8fa0ef58c029d",
-  "measuredAt": "2026-09-10T08:28:07.311Z",
-  "measuredFromCommit": "59adbc8cc3b1cdecba6ef0487e8a26b7424cdd06",
+  "fingerprintVersion": 2,
+  "corpusFingerprint": "33768c3c7c8212f9f06609300b23441c",
+  "measuredAt": "2026-09-27T21:25:25.312Z",
+  "measuredFromCommit": "6daa68e94b15767f1f12975b9720bcdb576ca9a0",
+  "repairSourceHash": "8d6309fdc992502c10f824e32004cd7a98ad233e5337dd2681e9596deb7685b7",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
@@ -11,13 +13,14 @@
   },
   "protocol": {
     "holdoutExcluded": true,
-    "holdoutDocumentCount": 63,
+    "holdoutDocumentCount": 41,
     "independentlyConfirmedCount": 0,
-    "derivedExpectationCount": 321
+    "derivedExpectationCount": 219,
+    "duplicateDocumentCount": 0,
+    "uniqueDocumentCount": 219,
+    "rawDocumentCount": 321,
+    "countedDocumentCount": 178
   },
-  "signedBy": "Daniel",
-  "signedAt": "2026-09-12T22:00:26.856Z",
-  "signatureNote": "Potpis unesen po izricitoj uputi vlasnika 2026-09-12 (rijec: dajem ti dopustenje), kroz Claude Code; mjerenje 2026-09-10 nad 321 dokumentom, holdout skup ISKLJUCEN (nema --holdout-confirmed), Word verzija nije upisana jer izlaz korpusa nije otvoren u Wordu",
   "entries": [
     {
       "unitId": "efzg",
@@ -25,8 +28,8 @@
       "profileIds": [
         "efzg-zavrsni"
       ],
-      "documentCount": 16,
-      "cleanCount": 16,
+      "documentCount": 10,
+      "cleanCount": 10,
       "regressedChecks": []
     },
     {
@@ -35,8 +38,8 @@
       "profileIds": [
         "efzg-seminarski"
       ],
-      "documentCount": 10,
-      "cleanCount": 10,
+      "documentCount": 6,
+      "cleanCount": 6,
       "regressedChecks": []
     },
     {
@@ -65,8 +68,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 78,
-      "cleanCount": 78,
+      "documentCount": 49,
+      "cleanCount": 49,
       "regressedChecks": []
     },
     {
@@ -75,8 +78,8 @@
       "profileIds": [
         "fpzg-politologija-zavrsni"
       ],
-      "documentCount": 33,
-      "cleanCount": 33,
+      "documentCount": 22,
+      "cleanCount": 22,
       "regressedChecks": []
     },
     {
@@ -85,8 +88,8 @@
       "profileIds": [
         "fpzg-politologija-diplomski"
       ],
-      "documentCount": 76,
-      "cleanCount": 76,
+      "documentCount": 55,
+      "cleanCount": 55,
       "regressedChecks": []
     },
     {
@@ -95,8 +98,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 78,
-      "cleanCount": 78,
+      "documentCount": 49,
+      "cleanCount": 49,
       "regressedChecks": []
     },
     {
@@ -105,8 +108,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 78,
-      "cleanCount": 78,
+      "documentCount": 49,
+      "cleanCount": 49,
       "regressedChecks": []
     },
     {
@@ -125,8 +128,8 @@
       "profileIds": [
         "hks-diplomski"
       ],
-      "documentCount": 15,
-      "cleanCount": 15,
+      "documentCount": 11,
+      "cleanCount": 11,
       "regressedChecks": []
     },
     {
@@ -135,8 +138,8 @@
       "profileIds": [
         "libertas-diplomski"
       ],
-      "documentCount": 3,
-      "cleanCount": 3,
+      "documentCount": 2,
+      "cleanCount": 2,
       "regressedChecks": []
     },
     {
@@ -165,8 +168,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 9,
-      "cleanCount": 9,
+      "documentCount": 7,
+      "cleanCount": 7,
       "regressedChecks": []
     },
     {
@@ -175,8 +178,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 9,
-      "cleanCount": 9,
+      "documentCount": 7,
+      "cleanCount": 7,
       "regressedChecks": []
     },
     {
@@ -185,8 +188,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 9,
-      "cleanCount": 9,
+      "documentCount": 7,
+      "cleanCount": 7,
       "regressedChecks": []
     },
     {
@@ -205,9 +208,13 @@
       "profileIds": [
         "zvu-zavrsni"
       ],
-      "documentCount": 9,
-      "cleanCount": 9,
+      "documentCount": 7,
+      "cleanCount": 7,
       "regressedChecks": []
     }
-  ]
+  ],
+  "signedBy": "Daniel",
+  "signedAt": "2026-09-27T21:46:57.970Z",
+  "signatureNote": "Potpis unesen po izricitoj uputi vlasnika u sesiji lekta-19 (naredba poslana kao poruka jer se ! prefiks nije izvrsio), 2026-09-27.",
+  "signedContentDigest": "bff8cc33f76f1d58f9dc134c52bd4192521e38334d1c405383bfacaf4fea3ed5"
 }
