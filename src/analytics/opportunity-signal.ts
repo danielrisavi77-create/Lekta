@@ -45,7 +45,7 @@ interface StructureGapSource {
 
 export type OpportunityGapKind = 'unsupported-structure' | 'stale-anchor' | 'no-target' | 'other';
 
-export interface OpportunityGapSignal {
+export interface OpportunityGapSignal extends Record<string, unknown> {
   category?: string;
   kind: OpportunityGapKind | 'already-ok' | 'invalid-params' | 'unclassified';
   count: number;
