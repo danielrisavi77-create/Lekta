@@ -5,8 +5,8 @@ import { izracunajStatus } from '../scripts/generate-status.mjs';
 /**
  * Gard nad `docs/generated/STATUS.json`.
  *
- * Artefakt postoji da nazivnici prestanu biti nagadjanje: registar ima 407 profila, ledger 436
- * redaka, a jedinstvenih profila u njima 410. Dok se to ne imenuje, svaki postotak nad "brojem
+ * Artefakt postoji da nazivnici prestanu biti nagadjanje: registar ima 415 profila, ledger 444
+ * redaka, a jedinstvenih profila u njima 418. Dok se to ne imenuje, svaki postotak nad "brojem
  * profila" znaci nesto drugo ovisno o tome tko ga racuna.
  *
  * Vremenski pecat i commit se NE usporedjuju: oni se mijenjaju svakim pecenjem i ne govore nista o

@@ -12,6 +12,7 @@
 import { describe, it, expect } from 'vitest';
 import bakedAdvisory from '../data/profiles/advisory-map.json';
 import bakedRepair from '../data/profiles/repair-map.json';
+import verifiedProfiles from '../data/profiles/verified-profiles.json';
 import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
 import { computeDemotedAdvisory, applyScoredAdvisory, driftDemotedFor } from '../src/profiles/advisory-demotion';
 import { applyBakedAdvisory } from '../src/profiles/profile-runtime-maps';
@@ -111,6 +112,40 @@ const freshBase = () =>
   }) as Record<string, unknown>;
 
 describe('pecene runtime mape: drift i faithfulness', () => {
+  it('keeps the missing FFRI pagination rules source-backed and unscored until reviewed', () => {
+    const expected = [
+      ['ffri-diplomski', 'ffri-pravilnik-diplomski-2023', 'Članak 11., stavak 2.', 'Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda'],
+      ['ffri-povum-zavrsni', 'ffri-pravilnik-zavrsni-2026', 'Članak 8., stavak 2.', 'Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda.'],
+      ['ffri-povum-diplomski', 'ffri-povum-upute-diplomski', 'str. 2, odjeljak o izgledu diplomskog rada', 'Numeracija stranica stavlja se u donji desni kut, stranice se numeriraju od uvoda do kraja rada;'],
+    ] as const;
+
+    for (const [profileId, sourceId, sourcePage, quote] of expected) {
+      expect(draftRuleEntriesFor(profileId)).toContainEqual(expect.objectContaining({
+        checkId: 'page-numbers',
+        sourceId,
+        sourcePage,
+        quote,
+        status: 'draft',
+        scored: false,
+      }));
+    }
+  });
+
+  it('keeps the new PMF profiles informational until their draft rules are approved', () => {
+    const definitions = verifiedProfiles as Array<{ id: string; rules: Record<string, unknown> }>;
+    const biology = definitions.find((profile) => profile.id === 'pmf-biologija-zavrsni');
+    const geology = definitions.find((profile) => profile.id === 'pmf-geologija-zavrsni');
+    expect(biology?.rules.pageMin).toBeUndefined();
+    expect(biology?.rules.pageMax).toBeUndefined();
+    for (const id of ['pmf-biologija-zavrsni', 'pmf-geologija-zavrsni']) {
+      expect((bakedAdvisory as Record<string, string[]>)[id]).toEqual(expect.arrayContaining([
+        'font', 'font-size', 'line-spacing', 'margins', 'paper-size', 'page-numbers',
+      ]));
+      expect((bakedRepair as Record<string, unknown[]>)[id]).toBeUndefined();
+    }
+    expect(geology).toBeDefined();
+  });
+
   it('advisory-map.json == izracun iz izvora (drafts + source-registry)', () => {
     expect(bakedAdvisory).toEqual(expectedMaps().advisory);
   });

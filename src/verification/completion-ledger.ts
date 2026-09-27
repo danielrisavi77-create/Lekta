@@ -238,7 +238,8 @@ export interface LedgerInputs {
   corpusAttestation?: CorpusAttestation | null;
   /**
    * Autoritativan popis profila. Ledger se NE smije voditi po `faculties` (fakultetskoj matrici):
-   * ona pokriva 407 verificiranih profila, ali NE i 3 katedarska profila iz
+   * njezin aktualni broj profila je u `faculty-matrix.json.summary.profileCount`,
+   * ali matrica NE obuhvaca 3 katedarska profila iz
    * `data/profiles/legal-departments.json`, koji ipak nose po 6 bodovanih pravila i uredan
    * coverage redak. Da je matrica bila pokretac, ledger bi tiho izgubio tri profila - tocno onaj
    * obrazac zbog kojeg ledger uopce postoji.

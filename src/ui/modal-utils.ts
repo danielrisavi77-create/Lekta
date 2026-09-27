@@ -40,16 +40,18 @@ let _modalDepth = 0;
  * klik i kad ga ciljni rukovatelj poslije zaustavi (`stopPropagation`).
  */
 let _lastPointerTarget: HTMLElement | null = null;
-document.addEventListener(
-  'pointerdown',
-  (e) => {
-    if (e.target instanceof HTMLElement) _lastPointerTarget = e.target;
-  },
-  true,
-);
-document.addEventListener('focusin', () => {
-  _lastPointerTarget = null;
-});
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'pointerdown',
+    (e) => {
+      if (e.target instanceof HTMLElement) _lastPointerTarget = e.target;
+    },
+    true,
+  );
+  document.addEventListener('focusin', () => {
+    _lastPointerTarget = null;
+  });
+}
 
 export function modalFocusables(el: HTMLElement): HTMLElement[] {
   return [
