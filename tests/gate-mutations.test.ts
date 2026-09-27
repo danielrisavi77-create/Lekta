@@ -5978,3 +5978,39 @@ jobs:
     expect(problemi[0].text).toContain('actions/checkout@v4');
   });
 });
+
+describe('mutacije: routing korak 2 (select-route)', () => {
+  const blok = (() => {
+    const src = readFileSync(resolve(process.cwd(), 'scripts/agents/select-route.mjs'), 'utf8').replace(/\r/g, '');
+    const a = src.indexOf('// >>> DIJELJENO:select-route\n');
+    const b = src.indexOf('// <<< DIJELJENO:select-route\n');
+    if (a < 0 || b < a) throw new Error('blok DIJELJENO:select-route nije pronadjen');
+    return src.slice(a, b);
+  })();
+  type SelectRoute = (input: Record<string, unknown>) => { model: string | null };
+  const izvedi = (code: string): SelectRoute => new Function(`${code}\nreturn selectRoute;`)() as SelectRoute;
+  const configSUnverified = () => {
+    const cfg = JSON.parse(readFileSync(resolve(process.cwd(), 'config/agent-routing.json'), 'utf8'));
+    cfg.routing.S.false.roles.implement.model = 'claude-opus-5-5';
+    return cfg;
+  };
+  /** Tvrdnja garda: neverificiran model iz configa nikad ne izlazi iz selectRoute. */
+  const odbijaUnverified = (fn: SelectRoute): boolean => {
+    try {
+      const r = fn({ config: configSUnverified(), size: 'S', files: [], phase: 'implement' });
+      return r.model !== 'claude-opus-5-5';
+    } catch {
+      return true;
+    }
+  };
+
+  it('baseline: stvarni selectRoute odbija neverificiran model', () => {
+    expect(odbijaUnverified(izvedi(blok))).toBe(true);
+  });
+
+  it('mutant koji preskoci provjeru statusa vraca claude-opus-5-5 i gard ga hvata', () => {
+    const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
+    expect(mutant).not.toBe(blok);
+    expect(odbijaUnverified(izvedi(mutant))).toBe(false);
+  });
+});
