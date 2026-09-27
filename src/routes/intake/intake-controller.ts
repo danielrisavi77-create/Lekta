@@ -46,6 +46,25 @@ export interface IntakeControllerDependencies {
   handoffSearch?: string;
   /** Koliko se ceka izmedju "spremno" i navigacije, da prijelaz bude vidljiv; testovi daju 0. */
   transitionDelayMs?: number;
+  /**
+   * PRIBOR UZ LIST (Z32): smije li se korisnicka radnja (klik, tipka, ispustanje) pretvoriti u
+   * odabir. Vrata otvara SAMO rok (odluka vlasnika 2026-09-27: fakultet nije uvjet, aplikacija ga
+   * prepoznaje iz rada, a korisnik moze odabrati sam, `src/shared/intake-choice.ts`). Dok rok nije
+   * odlucen, odgovor je `false` i kontroler ne otvara odabir datoteke ni ne prima ispusteni
+   * dokument, nego zove `onBlocked`. Izostavljeno znaci "uvijek smije", pa kontroler bez pribora
+   * (testovi, stari DOM) radi tocno kao prije.
+   * Programski `selectFile` se NE gata: vrata su korisnicka radnja, ne tok provjere.
+   */
+  canAccept?(): boolean;
+  /** Korisnik je pokusao ubaciti dokument prije nego je pribor spreman. */
+  onBlocked?(): void;
+  /** Ime odabrane datoteke, za zaglavlje lista (Z32 tocka 4). Zove se prije provjere. */
+  onFileChosen?(name: string): void;
+  /**
+   * Sesija je POTVRDJENO zapisana i ovaj odabir je jos zivi; zove se prije prijelaza i navigacije.
+   * Ulaz ovdje veze potvrdu fakulteta za id sesije, pa `/rad/` zna da je potvrda za ovaj rad.
+   */
+  onSessionStored?(sessionId: string): void;
 }
 
 export interface IntakeController {
@@ -141,6 +160,7 @@ export function mountIntakeController(
     clearError();
     elements.stage.classList.remove('intake-leaving');
     elements.fileName.textContent = file.name;
+    dependencies.onFileChosen?.(file.name);
     // Velicina je NEOBAVEZNA meta: kontroler mora raditi i nad minimalnim DOM-om iz testova, gdje
     // je kartica dokumenta ne postoji. Ime ide kroz `textContent` kao i dosad, nikad kroz HTML.
     const fileSize = doc.getElementById('intakeFileSize');
@@ -204,6 +224,14 @@ export function mountIntakeController(
       return;
     }
 
+    // Veza potvrde i sesije ide PRIJE prijelaza: navigacija moze krenuti cim prijelaz istekne, a
+    // `/rad/` cita vezu pri prvom ucitavanju. Kvar pisaca ne smije zaustaviti dokument koji je
+    // vec siguran u pohrani; `/rad/` tada samo ne zna za potvrdu i pita kao i dosad.
+    try {
+      dependencies.onSessionStored?.(session.id);
+    } catch {
+      // Best effort: potvrda je udobnost, zapis dokumenta je ugovor.
+    }
     clearError();
     setState('ready', 'Dokument je spreman. Otvaram korektorski stol.');
     elements.stage.classList.add('intake-leaving');
@@ -222,7 +250,14 @@ export function mountIntakeController(
     dependencies.navigate(`${WORKSPACE_WITHOUT_SESSION}${handoffQuery}${sessionFragment(session.id)}`);
   };
 
+  const accepts = (): boolean => {
+    if (!dependencies.canAccept || dependencies.canAccept()) return true;
+    dependencies.onBlocked?.();
+    return false;
+  };
+
   const openPicker = (): void => {
+    if (!accepts()) return;
     elements.input.click();
   };
 
@@ -252,7 +287,7 @@ export function mountIntakeController(
     event.preventDefault();
     elements.dropzone.classList.remove('is-dragging');
     const file = event.dataTransfer?.files[0];
-    if (file) void selectFile(file);
+    if (file && accepts()) void selectFile(file);
   };
 
   const onMemoryAction = (): void => {
