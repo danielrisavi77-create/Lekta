@@ -24,6 +24,16 @@ export interface Product {
   manualFulfillment: boolean;
   active: boolean;
   sort: number;
+  /**
+   * Verzionirani skup prava (migracija 0206, MONETIZACIJA_V1.md odjeljak 13), npr. `repair_v1`.
+   * NULL u starijem retku ili kod proizvoda koji Lekta ne prodaje; mapiranje zbog toga ne baca.
+   */
+  offerCode: string | null;
+  /**
+   * Prava ponude, samo kad upit ugradi `offer_codes(capabilities)` (webhook pri kupnji). Paywall
+   * ih ne cita, pa je ondje null. Webhook ih SNAPSHOTIRA na entitlement.
+   */
+  capabilities: readonly string[] | null;
 }
 
 /**
@@ -58,7 +68,21 @@ export function mapProductRow(row: Record<string, unknown>): Product {
     manualFulfillment: row.manual_fulfillment === true,
     active: row.active !== false && priceUsable && id !== '',
     sort: Number(row.sort ?? 0),
+    offerCode: typeof row.offer_code === 'string' && row.offer_code !== '' ? row.offer_code : null,
+    capabilities: embeddedCapabilities(row.offer_codes),
   };
+}
+
+/**
+ * `offer_codes(capabilities)` iz PostgREST ugradnje (to-one veza preko products.offer_code). Sve sto
+ * nije neprazan niz nizova znakova je null: snapshot prava se ne smije sloziti iz djelomicnog odgovora.
+ */
+function embeddedCapabilities(embed: unknown): readonly string[] | null {
+  if (typeof embed !== 'object' || embed === null || Array.isArray(embed)) return null;
+  const caps = (embed as { capabilities?: unknown }).capabilities;
+  if (!Array.isArray(caps) || caps.length === 0) return null;
+  if (!caps.every((c): c is string => typeof c === 'string' && c !== '')) return null;
+  return Object.freeze([...caps]);
 }
 
 /**
