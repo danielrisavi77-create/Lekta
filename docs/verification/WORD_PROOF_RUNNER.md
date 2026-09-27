@@ -46,9 +46,9 @@ Stroj:
 ## 2. Priprema stroja
 
 1. Instaliraj **Node.js 24** (https://nodejs.org, LTS instalacijski paket).
-2. Instaliraj **Git for Windows** (https://git-scm.com). Nakon instalacije dodaj
-   `C:\Program Files\Git\bin` u PATH korisnika (Postavke sustava > Varijable okruzenja > Path).
-   Workflow koristi `bash` iz te mape; preflight korak javlja gresku ako ga nema.
+2. Instaliraj **Git for Windows** (https://git-scm.com) tako da je `git` u PATH-u korisnika
+   runnera. **WSL / bash nisu potrebni**: `setup-deps` na Windowsu koristi `powershell`
+   (WindowsApps `bash.exe` bez WSL-a pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED`).
 3. Provjeri Word iz PowerShella (prijavljen kao korisnik runnera). Primjer sam gasi Word, da ne
    ostavi proces:
 
@@ -113,7 +113,8 @@ Stroj:
 | "Word vec radi u sesiji runnera" | u sesiji je otvoren Word (zaostali proces ili tvoj dokument). Run nista ne gasi: spremi i zatvori Word, u Task Manageru provjeri da nema `WINWORD.EXE`, pa pokreni ponovno |
 | "Word proces iz ovog runa nije zavrsio" | automatizacija je zapela; zatvori `WINWORD.EXE` u Task Manageru prije sljedeceg runa |
 | Preflight pada na `New-Object -ComObject Word.Application` | Word nije instaliran ili aktiviran za tog korisnika, ili ceka dijalog prvog pokretanja |
-| Preflight pada na `Get-Command bash` | `C:\Program Files\Git\bin` nije u PATH-u korisnika runnera |
+| Preflight pada na `git --version` | Git for Windows nije u PATH-u korisnika runnera |
+| `Ovisnosti` pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED` | Stari `setup-deps` zvao je `bash`; na masteru mora biti verzija s `shell: powershell` na Windowsu |
 | "nije tocan vrh origin/master ni origin/release/*" | `ref` pokazuje na stari commit, tag ili commit izvan ovog repozitorija; namjerno odbijeno |
 | Job skipped | pokrenut je u forku ili drugom repozitoriju; namjerno |
 
