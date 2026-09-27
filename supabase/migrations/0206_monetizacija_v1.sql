@@ -18,7 +18,8 @@
 --  5. Ciljne cijene i prozori V1. Cijena se mijenja ISKLJUCIVO kroz set_product_price (0020), i to
 --     samo kad se razlikuje, pa drugi prolaz ne dopisuje pricing_changelog.
 --  6. Deaktivacija slot_zavrsni_do_obrane i slot_diplomski_do_obrane (active=false, NE brisanje).
---  7. `bonus_outbox.status` dobiva `cancelled`: puni povrat otkazuje obvezu koja jos ceka (F21).
+--  7. `bonus_outbox.status` dobiva `cancelled`: puni povrat otkazuje obvezu koja jos ceka (F21), a
+--     `webhook_events.outcome_note` nosi korak i gresku sporednog pada povrata (F21).
 --  8. apply_entitlement_upgrade: atomska pretvorba Repair prava u Final Pass za ISTI entitlement.
 --
 -- IDEMPOTENTNO: if not exists, on conflict do nothing, drop constraint prije add, i uvjetni upisi
@@ -269,6 +270,12 @@ end $$;
 
 alter table public.bonus_outbox add constraint bonus_outbox_status_check
   check (status in ('pending', 'done', 'failed', 'cancelled'));
+
+-- Korak i greska sporednog pada povrata (F21, stavka 2). outcome_detail ostaje TOCNO oznaka iz
+-- REFUND_MARKERS (webhook-mor je cita doslovnom usporedbom), pa detalj ide u zaseban stupac.
+alter table public.webhook_events add column if not exists outcome_note text;
+comment on column public.webhook_events.outcome_note is
+  'Dijagnostika uz outcome_detail (npr. korak i greska sporednog pada povrata). Nikad se ne vraca klijentu.';
 
 comment on column public.bonus_outbox.status is
   'pending = ceka ili se ponavlja; done = izvrseno; failed = odustalo nakon max pokusaja; cancelled = otkazano punim povratom izvorne uplate (F21).';

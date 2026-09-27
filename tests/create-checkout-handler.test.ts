@@ -11,7 +11,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 import { createCheckoutHandler } from '../supabase/functions/create-checkout/handler';
 import { CHECKOUT_CONSENT_TEXTS } from '../src/legal/consent-text';
-import { fakeAdmin, argOf, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
+import { fakeAdmin, argOf, eqs, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
 
 const NOW_MS = Date.UTC(2026, 8, 26, 10, 0, 0);
 // Sinteticke vrijednosti sastavljene iz dijelova: gitleaks generic-api-key hvata literal oblika
@@ -269,5 +269,164 @@ describe('create-checkout handler: 5xx odgovori ne nose tekst greske baze', () =
     } finally {
       vi.restoreAllMocks();
     }
+  });
+});
+
+/**
+ * Monetizacija V1 (M2): nadogradnja Repair -> Final Pass i katalog V1 na izvrsenom handleru.
+ * Kriteriji iz docs/decisions/MONETIZACIJA_V1.md odjeljka 29: "upgrade ne naplacuje ponovno vec
+ * placeni Repair iznos", "Stripe iznos dolazi samo iz serverskog products.price_eur" i
+ * "deaktivirani *_do_obrane proizvodi vise se ne nude".
+ */
+describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
+  const SOURCE_ID = '11111111-2222-4333-8444-555555555555';
+  const PASS_ROW = {
+    id: 'pass_diplomski',
+    kind: 'pass',
+    audience: 'retail',
+    work_type: 'diplomski',
+    slots_total: 1,
+    slot_window_days: 180,
+    purchase_window_days: 180,
+    price_eur: 19.99,
+    offer_code: 'final_pass_v1',
+    manual_fulfillment: false,
+    active: true,
+  };
+  const SOURCE_ROW = {
+    id: SOURCE_ID,
+    user_id: 'user-1',
+    work_type: 'diplomski',
+    status: 'active',
+    provider: 'stripe',
+    slots_total: 1,
+    offer_code: 'repair_v1',
+    paid_amount_cents: 999,
+    purchase_expires_at: new Date(NOW_MS + 30 * 86_400_000).toISOString(),
+    upgrade_order_id: null,
+    order_id: 'pi_repair',
+  };
+
+  function upgradeResolve(over: { source?: unknown; product?: unknown; partial?: unknown[] } = {}) {
+    return (c: FakeCall): FakeResult | undefined => {
+      if (c.table === 'products') return { data: 'product' in over ? over.product : PASS_ROW };
+      if (c.table === 'entitlements') return { data: 'source' in over ? over.source : SOURCE_ROW };
+      if (c.table === 'webhook_events') return { data: over.partial ?? [] };
+      return undefined;
+    };
+  }
+
+  it('naplacuje razliku (19,99 - placenih 9,99 = 10,00), a iznos iz tijela zahtjeva ignorira', async () => {
+    const { res, out, stripeCalls, calls } = await run(
+      { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT, amount: 1, alreadyPaidCents: 1999, priceEur: 0.01, referralCode: 'PART-1' },
+      { resolve: upgradeResolve(), stripe: { status: 200, json: { id: 'pi_up', client_secret: FAKE_CLIENT_SECRET, amount: 1000, currency: 'eur' } } },
+    );
+    expect(res.status, JSON.stringify(out)).toBe(200);
+    expect(stripeCalls).toHaveLength(1);
+    const body = stripeCalls[0].body;
+    expect(body.get('amount')).toBe('1000');
+    expect(body.get('metadata[product_id]')).toBe('pass_diplomski');
+    expect(body.get('metadata[upgrade_from_entitlement_id]')).toBe(SOURCE_ID);
+    expect(body.get('metadata[referral_code]'), 'referral vrijedi za prvu kupnju, ne nadogradnju').toBeNull();
+    // Kljuc bez vremena privole: drugi klik na istu nadogradnju daje isti PaymentIntent.
+    expect(stripeCalls[0].headers['Idempotency-Key']).toBe(`lekta:pi:upgrade:user-1:${SOURCE_ID}:pass_diplomski`);
+    // Pravo se trazi SAMO medju pravima prijavljenog korisnika.
+    const lookup = calls.find((c) => c.table === 'entitlements')!;
+    expect(eqs(lookup)).toEqual({ id: SOURCE_ID, user_id: 'user-1' });
+    // Provjera djelomicnog povrata ide po PaymentIntentu izvorne uplate.
+    const partial = calls.find((c) => c.table === 'webhook_events')!;
+    expect(eqs(partial)).toEqual({ provider: 'stripe', order_id: 'pi_repair', outcome_detail: 'partial_refund_noted' });
+  });
+
+  it('specijalisticki: 29,99 - 16,99 = 13,00', async () => {
+    const { res, stripeCalls } = await run(
+      { productId: 'pass_specijalisticki', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+      {
+        resolve: upgradeResolve({
+          product: { ...PASS_ROW, id: 'pass_specijalisticki', work_type: 'specijalisticki', price_eur: 29.99 },
+          source: { ...SOURCE_ROW, work_type: 'specijalisticki', paid_amount_cents: 1699 },
+        }),
+      },
+    );
+    expect(res.status).toBe(200);
+    expect(stripeCalls[0].body.get('amount')).toBe('1300');
+  });
+
+  it.each([
+    ['tudje ili nepostojece pravo', { source: null }, 404, 'upgrade_source_not_found'],
+    ['vec nadogradjeno pravo (jednom)', { source: { ...SOURCE_ROW, upgrade_order_id: 'pi_prije' } }, 409, 'upgrade_already_applied'],
+    ['istekao rok prava', { source: { ...SOURCE_ROW, purchase_expires_at: new Date(NOW_MS - 1000).toISOString() } }, 409, 'upgrade_source_expired'],
+    ['druga vrsta rada', { source: { ...SOURCE_ROW, work_type: 'zavrsni' } }, 409, 'upgrade_work_type_mismatch'],
+    ['staro pravo bez placenog iznosa', { source: { ...SOURCE_ROW, paid_amount_cents: null } }, 409, 'upgrade_paid_amount_unknown'],
+    ['djelomicno vracena izvorna uplata', { partial: [{ id: 'evt' }] }, 409, 'upgrade_source_partially_refunded'],
+    [
+      'cilj je Semester Pass',
+      { product: { ...PASS_ROW, id: 'pass_semestralni', work_type: 'seminarski', offer_code: 'semester_pass_v1' }, source: { ...SOURCE_ROW, work_type: 'seminarski' } },
+      409,
+      'upgrade_target_invalid',
+    ],
+  ])('%s: odbijeno bez PaymentIntenta i bez privole', async (_ime, over, status, error) => {
+    const { res, out, stripeCalls, calls } = await run(
+      { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+      { resolve: upgradeResolve(over) },
+    );
+    expect(res.status).toBe(status);
+    expect(out).toEqual({ error });
+    expect(stripeCalls).toHaveLength(0);
+    expect(calls.some((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')).toBe(false);
+  });
+
+  it('id prava koji nije uuid je 400 prije ikakvog upita prava', async () => {
+    const { res, calls, stripeCalls } = await run(
+      { productId: 'pass_diplomski', upgradeFromEntitlementId: 'ent-1 or 1=1', consent: CONSENT },
+      { resolve: upgradeResolve() },
+    );
+    expect(res.status).toBe(400);
+    expect(calls.some((c) => c.table === 'entitlements')).toBe(false);
+    expect(stripeCalls).toHaveLength(0);
+  });
+
+  it('pad citanja prava je 500 bez teksta greske', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, out, stripeCalls } = await run(
+        { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+        { resolve: (c) => (c.table === 'entitlements' ? { error: { message: 'tajni_detalj_baze' } } : upgradeResolve()(c)) },
+      );
+      expect(res.status).toBe(500);
+      expect(out).toEqual({ error: 'internal' });
+      expect(stripeCalls).toHaveLength(0);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+});
+
+describe('create-checkout handler: katalog V1', () => {
+  it('specijalisticki Repair prolazi checkout s iznosom iz products.price_eur (16,99)', async () => {
+    const SPEC = {
+      id: 'slot_specijalisticki', kind: 'slot', audience: 'retail', work_type: 'specijalisticki', slots_total: 1,
+      slot_window_days: 21, purchase_window_days: 90, price_eur: 16.99, offer_code: 'repair_v1', manual_fulfillment: false, active: true,
+    };
+    const { res, stripeCalls } = await run(
+      { productId: 'slot_specijalisticki', consent: CONSENT, amount: 1 },
+      { resolve: (c) => (c.table === 'products' ? { data: SPEC } : undefined) },
+    );
+    expect(res.status).toBe(200);
+    expect(stripeCalls[0].body.get('amount')).toBe('1699');
+    expect(stripeCalls[0].body.get('metadata[upgrade_from_entitlement_id]'), 'obicna kupnja nije nadogradnja').toBeNull();
+  });
+
+  it('deaktivirani do_obrane SKU: upit trazi active=true, a neaktivan redak je 404 bez PaymentIntenta', async () => {
+    const DO_OBRANE = { ...PRODUCT_ROW, id: 'slot_zavrsni_do_obrane', work_type: 'zavrsni', price_eur: 9.99, active: false };
+    const { res, out, stripeCalls, calls } = await run(
+      { productId: 'slot_zavrsni_do_obrane', consent: CONSENT },
+      { resolve: (c) => (c.table === 'products' ? { data: DO_OBRANE } : undefined) },
+    );
+    const upit = calls.find((c) => c.table === 'products')!;
+    expect(eqs(upit)).toEqual({ id: 'slot_zavrsni_do_obrane', active: true });
+    expect(res.status).toBe(404);
+    expect(out).toEqual({ error: 'unknown_product' });
+    expect(stripeCalls).toHaveLength(0);
   });
 });

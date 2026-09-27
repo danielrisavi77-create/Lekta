@@ -18,6 +18,7 @@ import {
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
+  entitlementSnapshotOf,
   acceptEvent,
   isFullRefund,
   classifyStripeEvent,
@@ -56,6 +57,7 @@ describe('parseStripeEvent', () => {
       userId: 'u1',
       productId: 'slot_diplomski',
       referralCode: '',
+      upgradeFromEntitlementId: '',
       refunded: false,
       livemode: true,
       testMode: false,
@@ -64,6 +66,15 @@ describe('parseStripeEvent', () => {
       refundedCents: null,
       currency: 'EUR',
     });
+  });
+
+  it('izvlaci upgrade_from_entitlement_id iz metadata (nadogradnja, Monetizacija V1)', () => {
+    const payload: StripeWebhookPayload = {
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_up', metadata: { user_id: 'u1', product_id: 'pass_diplomski', upgrade_from_entitlement_id: ' ent-1 ' } } },
+    };
+    expect(parseStripeEvent(payload).upgradeFromEntitlementId).toBe('ent-1');
   });
 
   it('izvlaci referral_code iz metadata', () => {
@@ -215,10 +226,11 @@ describe('verifyStripeSignature (HMAC-SHA256 nad `t.tijelo`)', () => {
 
 describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
   const now = Date.UTC(2026, 0, 1);
+  const REPAIR = ['full_report', 'repair', 'repair_diff', 'recheck'];
   it('slot proizvod: tocan product_id/work_type/slots_total + rok = now + purchase_window_days', () => {
     const row = buildEntitlementInsert(
-      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90 },
-      { userId: 'u1', orderId: 'pi_123' },
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { userId: 'u1', orderId: 'pi_123', amountReceivedCents: 999 },
       'stripe',
       now,
     );
@@ -230,17 +242,65 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
       order_id: 'pi_123',
       provider: 'stripe',
       purchase_expires_at: new Date(now + 90 * 86400000).toISOString(),
+      offer_code: 'repair_v1',
+      capabilities: REPAIR,
+      paid_amount_cents: 999,
     });
   });
   it('pass proizvod nosi 6 seminarskih slotova', () => {
     const row = buildEntitlementInsert(
-      { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180 },
+      { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180, offerCode: 'semester_pass_v1', capabilities: ['multi_document_slots'] },
       { userId: 'u1', orderId: 'pi_2' },
       'stripe',
       now,
     );
     expect(row.slots_total).toBe(6);
     expect(row.work_type).toBe('seminarski');
+    expect(row.paid_amount_cents, 'nepoznat naplaceni iznos se ne izmislja').toBeNull();
+  });
+  it('specijalisticki Repair je jedan slot vlastite vrste rada, ne diplomski ni doktorski', () => {
+    const row = buildEntitlementInsert(
+      { id: 'slot_specijalisticki', workType: 'specijalisticki', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { userId: 'u1', orderId: 'pi_s', amountReceivedCents: 1699 },
+      'stripe',
+      now,
+    );
+    expect(row).toMatchObject({ work_type: 'specijalisticki', slots_total: 1, product_id: 'slot_specijalisticki', paid_amount_cents: 1699 });
+  });
+  it('snapshot je KOPIJA: kasnija promjena kataloga ne mijenja kupljeno pravo', () => {
+    const katalog = ['full_report', 'repair'];
+    const row = buildEntitlementInsert(
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: katalog },
+      { userId: 'u1', orderId: 'pi_3', totalCents: 999 },
+      'stripe',
+      now,
+    );
+    katalog.splice(0, katalog.length, 'nesto_drugo');
+    expect(row.capabilities).toEqual(['full_report', 'repair']);
+    expect(row.paid_amount_cents, 'bez amount_received vrijedi ukupni iznos').toBe(999);
+  });
+  it.each([
+    ['negativan', -1],
+    ['razlomak', 9.5],
+    ['NaN', Number.NaN],
+  ])('neispravan naplaceni iznos (%s) je null, ne broj', (_ime, cents) => {
+    const row = buildEntitlementInsert(
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90, offerCode: 'repair_v1', capabilities: REPAIR },
+      { userId: 'u1', orderId: 'pi_4', amountReceivedCents: cents },
+      'stripe',
+      now,
+    );
+    expect(row.paid_amount_cents).toBeNull();
+  });
+});
+
+describe('entitlementSnapshotOf', () => {
+  it('daje snapshot samo uz offer_code i neprazna prava', () => {
+    expect(entitlementSnapshotOf({ offerCode: 'repair_v1', capabilities: ['repair'] })).toEqual({ offerCode: 'repair_v1', capabilities: ['repair'] });
+    expect(entitlementSnapshotOf({ offerCode: null, capabilities: ['repair'] })).toBeNull();
+    expect(entitlementSnapshotOf({ offerCode: 'repair_v1', capabilities: null })).toBeNull();
+    expect(entitlementSnapshotOf({ offerCode: 'repair_v1', capabilities: [] })).toBeNull();
+    expect(entitlementSnapshotOf({ offerCode: '', capabilities: ['repair'] })).toBeNull();
   });
 });
 

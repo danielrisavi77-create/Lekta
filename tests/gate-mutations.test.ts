@@ -88,7 +88,15 @@ import {
   IGNORE_REASON_PREFIXES,
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
+  buildEntitlementInsert,
 } from '../src/report/webhook';
+import { quoteUpgrade } from '../src/report/upgrade';
+import {
+  bonusOutboxWorkerProblems,
+  entitlementSnapshotProblems,
+  upgradeQuoteProblems,
+  upgradeWiringProblems,
+} from './helpers/monetizacija-v1-guards';
 import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
@@ -4754,7 +4762,7 @@ const MUTATIONS: Mutation[] = [
     imitates: 'pad sporednih posljedica zapisan u inbox kao detalj koji nije oznaka punog povrata: uplata koja stigne prije Stripeova retryja povrata ne vidi povrat i otvori ili ostavi rucnu narudzbu za vracen novac',
     caught: () => {
       const src = webhookMorSource();
-      const mutated = src.replace("await settle('failed', 'refund_consequences_failed');", "await settle('failed', 'posljedice_povrata_pale');");
+      const mutated = src.replace("await settle('failed', 'refund_consequences_failed', ", "await settle('failed', 'posljedice_povrata_pale', ");
       if (mutated === src) return false;
       return webhookHandlerProblems(mutated).some((p) => p.includes('ne ostavlja oznaku punog povrata'));
     },
@@ -4772,6 +4780,196 @@ const MUTATIONS: Mutation[] = [
         && webhookHandlerProblems(b).some((p) => p.includes('(x as any).code'));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2), snapshot prava i nadogradnja Repair -> Final Pass -----------
+  {
+    id: 'naplata/snapshot-bez-offer-code',
+    imitates: 'buildEntitlementInsert kakav je bio do Monetizacije V1: redak bez offer_code i prava, pa buduca promjena kataloga mijenja ono sto je korisnik vec kupio (MONETIZACIJA_V1.md odjeljak 13)',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.offer_code;
+        delete row.capabilities;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      const problems = entitlementSnapshotProblems(mutant);
+      return problems.some((p) => p.includes('ne snapshotira offer_code')) && problems.some((p) => p.includes('ne snapshotira prava'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/snapshot-dijeli-niz-s-katalogom',
+    imitates: 'pola snapshota: prava se upisuju kao referenca na niz iz kataloga umjesto kopije, pa izmjena kataloga u istom procesu tiho mijenja upisano pravo',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => ({
+        ...buildEntitlementInsert(p, ev, prov, now),
+        capabilities: p.capabilities as string[],
+      });
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('dijeli niz s katalogom'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/webhook-snapshot-iz-drugog-upita',
+    imitates: 'webhook cita proizvod kao select(*) bez offer_codes(capabilities): prava ostaju null, pa se svaka kupnja zaustavi na product_without_offer ili bi se snapshot slagao iz drugog izvora nego cijena',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const mutated = webhook.replace(".select('*, offer_codes(capabilities)')", ".select('*')");
+      if (mutated === webhook) return false;
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('prava ponude u istom upitu'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-naplacuje-punu-cijenu',
+    imitates: 'nadogradnja bez odbitka: korisnik koji je vec platio Repair placa puni Final Pass ponovno (MONETIZACIJA_V1.md odjeljak 14, "nikad ne naplatiti puni Final Pass ponovno")',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => {
+        const q = quoteUpgrade(t, s, u, n);
+        return q.ok ? { ...q, amountCents: q.targetCents } : q;
+      };
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('punu cijenu Final Passa'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-dvaput',
+    imitates: 'izracun nadogradnje koji ne gleda upgrade_order_id: vec nadogradjeno pravo daje drugi PaymentIntent s istim odbitkom, pa se isti Repair iznos priznaje dvaput',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, upgradeOrderId: null } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije jednom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-druga-vrsta-rada',
+    imitates: 'nadogradnja bez usporedbe vrste rada: diplomski Repair postaje doktorski Final Pass uz odbitak diplomskog iznosa',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s && t ? { ...s, workType: t.workType ?? s.workType } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('drugu vrstu rada'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-klijentski-iznos',
+    imitates: 'create-checkout koji iznos nadogradnje uzima iz tijela zahtjeva (klijent salje "vec placeno" ili iznos), pa izmijenjen klijent placa 1 cent za Final Pass',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace('amountCents = quote.amountCents;', 'amountCents = Number(body.amountCents);');
+      if (mutated === checkout) return false;
+      const problems = upgradeWiringProblems(mutated, webhookMorSource());
+      return problems.some((p) => p.includes('ne uzima iz quoteUpgrade')) && problems.some((p) => p.includes('iz tijela zahtjeva'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-tudje-pravo',
+    imitates: 'create-checkout cita pravo za nadogradnju samo po id-u: tudji entitlement id (npr. iz loga) daje odbitak tudje uplate',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace(".eq('id', upgradeFrom)\n      .eq('user_id', user.id)", ".eq('id', upgradeFrom)");
+      if (mutated === checkout) return false;
+      return upgradeWiringProblems(mutated, webhookMorSource()).some((p) => p.includes('bez filtra na prijavljenog korisnika'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-kroz-punu-cijenu-u-webhooku',
+    imitates: 'webhook bez grane nadogradnje: uplata razlike (10,00) se usporedjuje s punom cijenom Final Passa (19,99) i zavrsi na rucnom pregledu, ili bi uz popusten gard stvorila DRUGO pravo za isti rad',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const od = webhook.indexOf('  if (ev.upgradeFromEntitlementId) {');
+      const _do = webhook.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = webhook.slice(0, od) + webhook.slice(_do + 4);
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('usporedbu s punom cijenom'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
+  {
+    id: 'naplata/f21-povrat-ne-otkazuje-obvezu',
+    imitates: 'F21 (1) stanje do 2026-09-27: closeRefundConsequences ne dira bonus_outbox, pa obveza referrer_reward ostaje pending i radnik je kasnije isplati za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf("    const { data: obveze, error: obvezeErr } = await admin\n      .from('bonus_outbox')");
+      const _do = src.indexOf('    return {\n      ok: true,\n      manualOrderFound', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne otkazuje obvezu iz bonus_outbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-korak-povrata-samo-u-logu',
+    imitates: 'F21 (2) stanje do 2026-09-27: pad sporednog koraka povrata upisuje u inbox samo refund_consequences_failed, a korak i greska ostaju samo u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "await settle('failed', 'refund_consequences_failed', `${posljedice.step}: ${posljedice.error}`);",
+        "await settle('failed', 'refund_consequences_failed');",
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne zapisuje korak i gresku u inbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-any-u-zatvaranju-placanja',
+    imitates: 'F21 (3) stanje do 2026-09-27: closePaymentAfterRefund(admin: any, ...), pa krivo ime tablice ili stupca pri opozivu prolazi tsc i deno check',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('async function closePaymentAfterRefund(\n  admin: PaymentRefundDb,', 'async function closePaymentAfterRefund(\n  admin: any,');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('closePaymentAfterRefund prima admin: any'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-catalog-price-unusable-odluka-ne-gleda-cijenu',
+    imitates: 'F21 (4): druga grana garda catalog_price_unusable. cijenaUpotrebljiva se izracuna, ali odluka o iznosu je ne gleda, pa neupotrebljiva cijena (0 centi) i dalje ide u chargedAmountVerdict i daje pravo',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('    cijenaUpotrebljiva\n      ? chargedAmountVerdict(ev, ocekivanoCenti)', '    true\n      ? chargedAmountVerdict(ev, ocekivanoCenti)');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('odluka o iznosu ne ovisi o upotrebljivoj cijeni'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-bez-provjere-povrata',
+    imitates: 'F21 (1) strana radnika do 2026-09-27: process-bonus-outbox zove tryGrantReferrerReward izravno, bez citanja oznake povrata, pa isplacuje nagradu za vracen novac',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace('await runReferrerRewardObligation(admin as unknown as ReferrerRewardDb, row);', "await tryGrantReferrerReward(admin, row.user_id, 'diplomski', row.order_id);");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('mimo runReferrerRewardObligation'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-samo-prvo-citanje',
+    imitates: 'pola popravka F21 na strani radnika: povrat se cita samo prije dodjele. Povrat koji stigne izmedju citanja i dodjele procita referral_signups prije nagrade, pa nagrada ostaje isplacena',
+    caught: () => {
+      const mod = bonusOutboxModuleSource();
+      const od = mod.indexOf('  if (await orderFullyRefunded(admin, row.order_id)) {\n    // Povrat je stigao izmedju');
+      const _do = mod.indexOf("  return 'granted';", od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = mod.slice(0, od) + mod.slice(_do);
+      return bonusOutboxWorkerProblems(mutated, bonusOutboxIndexSource()).some((p) => p.includes('ne cita povrat ponovno'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-pregazi-otkazano',
+    imitates: 'radnik koji zavrsni status pise bez uvjeta: obvezu koju je webhook upravo otkazao (cancelled) vrati u done, pa trag otkazivanja nestane',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace("          .eq('id', row.id)\n          .eq('status', 'pending');\n        done++;", "          .eq('id', row.id);\n        done++;");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('done bez uvjeta pending'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
   },
   {
     id: 'naplata/rucno-vezivanje-bez-provjere-postojeceg-zapisa',
@@ -5196,6 +5394,18 @@ function builtHeaders(): string {
  */
 function webhookMorSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'handler.ts'));
+}
+
+function createCheckoutSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+}
+
+function bonusOutboxModuleSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'referrer-reward.ts'));
+}
+
+function bonusOutboxIndexSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'index.ts'));
 }
 
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */

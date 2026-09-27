@@ -91,6 +91,11 @@ export interface StripePaymentIntentContext {
   referralCode?: string | null;
   /** E-mail iz JWT-a; Stripe na njega salje potvrdu o placanju. */
   receiptEmail?: string | null;
+  /**
+   * Nadogradnja Repair -> Final Pass (Monetizacija V1, odjeljak 14): id prava koje se pretvara.
+   * Webhook po njemu pretvara ISTO pravo umjesto da stvara drugo.
+   */
+  upgradeFromEntitlementId?: string | null;
 }
 
 /** Iznos u centima iz cijene u eurima. Zaokruzuje se, jer Stripe prima samo cijele cente. */
@@ -120,6 +125,7 @@ export function buildStripePaymentIntentParams(ctx: StripePaymentIntentContext):
   params.set('metadata[user_id]', ctx.userId);
   params.set('metadata[product_id]', ctx.productId);
   if (ctx.referralCode) params.set('metadata[referral_code]', ctx.referralCode);
+  if (ctx.upgradeFromEntitlementId) params.set('metadata[upgrade_from_entitlement_id]', ctx.upgradeFromEntitlementId);
   if (ctx.receiptEmail) params.set('receipt_email', ctx.receiptEmail);
   return params.toString();
 }
