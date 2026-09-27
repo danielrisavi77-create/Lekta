@@ -141,6 +141,25 @@ import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import {
+  backdropFilterProblems,
+  chromeGraph,
+  deskStateSourceProblems,
+  footerCopyFromTemplate,
+  footerLinkProblems,
+  fullFooterBlock,
+  fullFooterProblems,
+  lazyFooterProblems,
+  markerMotionProblems,
+  scrolledBarProblems,
+  shortStepperProblems,
+  type ChromeMetafile,
+  type FooterCopy,
+} from './helpers/site-footer-guards';
+import { releasedPublicRouteGroups } from '../src/routes/shared/public-route-directory';
+import { SITE_CHROME_DESTINATIONS } from '../src/shared/site-chrome';
+import { legalDocuments } from '../src/legal/legal-content';
+import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -443,6 +462,76 @@ function izvrsenaMutacijaUhvacena(mutated: string, ciljevi: readonly string[], c
 function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string[]): boolean {
   return preflightExecutionProblems(preflightIzvor(), [...ciljevi, ...cisti]).length === 0
     && preflightSourceProblems(preflightIzvor()).length === 0;
+}
+
+/** Z15 drugi krug: puno podnozje sa stvarne stranice, LF, za mutacije u memoriji. */
+function z15bPodnozje(): string {
+  return fullFooterBlock(readTextLf(resolve(process.cwd(), 'alati.html'))) ?? '';
+}
+
+/** Copy punog podnozja iz predloska (prizor 05). */
+function z15bPredlozak(): FooterCopy | null {
+  return footerCopyFromTemplate(readTextLf(resolve(process.cwd(), 'design/templates/chrome/Chrome.dc.html')));
+}
+
+/** Poznata odredista: javni direktorij, odredista trake, pravne stranice koje generator pece. */
+function z15bPoznate(): Set<string> {
+  return new Set<string>([
+    ...releasedPublicRouteGroups.flatMap((g) => g.destinations.map((d) => d.href)),
+    ...SITE_CHROME_DESTINATIONS.map((d) => d.href),
+    ...Object.values(legalDocuments()).map((d) => `/${d.slug}.html`),
+  ]);
+}
+
+/** Pecene vrijednosti "Stanja stola" iz `site-stats.json`. */
+function z15bPeceno(): { profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null } {
+  return JSON.parse(readTextLf(resolve(process.cwd(), 'data/coverage/site-stats.json'))) as {
+    profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null;
+  };
+}
+
+/** Zatecena zamucenja u javnim listovima (F22); traka mora imati nula. */
+const Z15B_BACKDROP_DOPUSTENO: Readonly<Record<string, number>> = { 'src/shared/page-app.css': 3 };
+
+/** Svi CSS listovi pod `src/` osim admina (nije javna stranica). */
+function z15bJavniListovi(): Array<{ ime: string; css: string }> {
+  const out: Array<{ ime: string; css: string }> = [];
+  const hodaj = (dir: string): void => {
+    for (const e of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+      const rel = `${dir}/${e.name}`;
+      if (e.isDirectory()) { if (rel !== 'src/admin') hodaj(rel); continue; }
+      if (e.name.endsWith('.css')) out.push({ ime: rel, css: readTextLf(resolve(process.cwd(), rel)) });
+    }
+  };
+  hodaj('src');
+  return out;
+}
+
+/**
+ * Metafile u OBLIKU koji esbuild sa `splitting` stvarno vraca za traku (izmjereno 2026-09-27:
+ * ulaz, zajednicki komad, lijeni komad podnozja). `staticki` imitira kvar: podnozje uvezeno
+ * staticki zavrsi u ulaznom izlazu. Stvarni metafile mjeri `tests/route-shell-budget.test.ts`.
+ */
+function z15bMetafile(staticki: boolean): ChromeMetafile {
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const komad = 'site-chrome-budget/chunk-A.js';
+  const lijeni = 'site-chrome-budget/site-footer-full-B.js';
+  const podnozje = { 'src/shared/site-footer-full.ts': {} };
+  if (staticki) {
+    return {
+      outputs: {
+        [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {}, ...podnozje }, imports: [{ path: komad, kind: 'import-statement' }] },
+        [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+      },
+    };
+  }
+  return {
+    outputs: {
+      [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {} }, imports: [{ path: komad, kind: 'import-statement' }, { path: lijeni, kind: 'dynamic-import' }] },
+      [lijeni]: { entryPoint: 'src/shared/site-footer-full.ts', inputs: podnozje, imports: [{ path: komad, kind: 'import-statement' }] },
+      [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+    },
+  };
 }
 
 const MUTATIONS: Mutation[] = [
@@ -4907,6 +4996,169 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => sessionBootstrapFalseZeroProblems(
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
+  },
+  // ---------------------------------------------------------------------------------------------
+  // Z15, DRUGI KRUG: puno podnozje, traka nakon skrola, putujuca kvacica, kratki stepper, lijeno
+  // podnozje. Gardovi su u `tests/helpers/site-footer-guards.ts`; baseline je STVARNA datoteka.
+  // ---------------------------------------------------------------------------------------------
+  {
+    id: 'z15b/podnozje-stupac-izgubljen',
+    imitates:
+      'Pribor stupac ispadne iz punog podnozja pri preslagivanju markupa: kolofon ima tri stupca, ' +
+      'a numeracija preskace 06 do 11, pa stranica tvrdi manje pribora nego sto postoji.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const bez = foot.replace(/<nav class="site-footer__stupac" aria-label="Pribor">[\s\S]*?<\/nav>\n\s*/, '');
+      return bez !== foot && fullFooterProblems(bez, z15bPredlozak()).some((p) => p.startsWith('kolofon ima 3 stupaca'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-copy-nije-doslovan',
+    imitates:
+      'Moto se "popravi" bez dijakritika ("Mjeri, ne pise.") ili se broj stavke pomakne: copy vise ' +
+      'nije doslovan iz predloska, a nijedan vizualni test to ne vidi.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const moto = foot.replace('Mjeri, ne piše.', 'Mjeri, ne pise.');
+      const broj = foot.replace('<small>12</small>', '<small>21</small>');
+      return moto !== foot && broj !== foot
+        && fullFooterProblems(moto, z15bPredlozak()).some((p) => p.startsWith('moto'))
+        && fullFooterProblems(broj, z15bPredlozak()).some((p) => p.startsWith('numeracija'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-vidljivo-bez-js',
+    imitates:
+      '`hidden` se izgubi sa "Stanja stola": bez JavaScripta stranica ispisuje prazne retke ' +
+      '"Zadnji rad", "Pravila", "Izvori", dakle tvrdnje koje nije mogla procitati.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const vidljivo = foot.replace('data-site-footer-stanje hidden>', 'data-site-footer-stanje>');
+      return vidljivo !== foot && fullFooterProblems(vidljivo, z15bPredlozak()).some((p) => p.includes('nije skriveno'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-mrtva-poveznica',
+    imitates:
+      'Garancija se preimenuje u /jamstvo.html koju generator ne pece, ili kontakt dobije adresu ' +
+      'mimo produkcijske konfiguracije: podnozje vodi u 404 ili na krivi sanducic.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const mrtva = foot.replace('href="/garancija.html"', 'href="/jamstvo.html"');
+      const mail = foot.replace(`mailto:${DEFAULT_PRODUCTION_CONFIG.contactEmail}`, 'mailto:info@lekta.hr');
+      return mrtva !== foot && mail !== foot
+        && footerLinkProblems(mrtva, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('/jamstvo.html'))
+        && footerLinkProblems(mail, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('info@lekta.hr'));
+    },
+    cleanBefore: () => footerLinkProblems(z15bPodnozje(), z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-prepisane-brojke',
+    imitates:
+      'Stanje stola dobije rucno upisanu brojku profila umjesto uvoza iz site-stats.json, ili ' +
+      'povijest cita izravno iz localStorage mimo sigurnog omotaca (novi localStorage hack).',
+    caught: () => {
+      const izvor = readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+      const baked = z15bPeceno();
+      const rucno = izvor.replace('profiles: PROFILA,', `profiles: ${baked.profiles},`);
+      const golo = izvor.replace('safeStorageGet(STORAGE_KEYS.history, null)', "JSON.parse(localStorage.getItem('lekta.history.v2') ?? 'null')");
+      return rucno !== izvor && golo !== izvor
+        && deskStateSourceProblems(rucno, baked).some((p) => p.includes(`${baked.profiles} je prepisana`))
+        && deskStateSourceProblems(golo, baked).some((p) => p.includes('localStorage'));
+    },
+    cleanBefore: () => deskStateSourceProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts')), z15bPeceno()).length === 0,
+  },
+  {
+    id: 'z15b/zamucenje-na-javnoj-stranici',
+    imitates:
+      'Tanko stanje trake vrati `backdrop-filter: blur(14px)` iz naloga (Z31 ga zabranjuje), ili ' +
+      'novi javni list dobije zamucenje: svaki okvir skrola se tada racuna iznova.',
+    caught: () => {
+      const listovi = z15bJavniListovi();
+      const traka = listovi.map((l) => (l.ime === 'src/shared/site-chrome.css'
+        ? { ...l, css: l.css.replace('background: var(--desk);\n}', 'background: var(--desk);\n  backdrop-filter: blur(14px);\n}') }
+        : l));
+      const mutiranaTraka = traka.find((l) => l.ime === 'src/shared/site-chrome.css')!.css
+        !== listovi.find((l) => l.ime === 'src/shared/site-chrome.css')!.css;
+      const novi = [...listovi, { ime: 'src/shared/novi-list.css', css: '.x{-webkit-backdrop-filter:blur(4px)}' }];
+      return mutiranaTraka
+        && backdropFilterProblems(traka, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/site-chrome.css:'))
+        && backdropFilterProblems(novi, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/novi-list.css:'));
+    },
+    cleanBefore: () => backdropFilterProblems(z15bJavniListovi(), Z15B_BACKDROP_DOPUSTENO).length === 0,
+  },
+  {
+    id: 'z15b/tanko-stanje-prozirno',
+    imitates:
+      'Tanko stanje dobije prozirnu mjesavinu (color-mix 82%) kao u prvom krugu, ali bez zamucenja: ' +
+      'sadrzaj prosijava kroz traku, a gard zamucenja to ne vidi.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const prozirno = css.replace(/(header\.site-chrome--scrolled \{[^}]*)background: var\(--desk\);/, '$1background: color-mix(in srgb, var(--desk) 82%, transparent);');
+      return prozirno !== css && scrolledBarProblems(prozirno).includes('tanko stanje nema punu pozadinu var(--desk)');
+    },
+    cleanBefore: () => scrolledBarProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-animira-left',
+    imitates:
+      'Kvacica se vrati na `left` iz predloska (Z31 trazi transform): u listu `transition: left`, ' +
+      'u kodu `marker.style.left`, pa svaki pomak radi reflow trake.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const ts = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+      const leftCss = css.replace('transition: transform .45s var(--ease-spring);', 'transition: left .45s var(--ease-spring);');
+      const leftTs = ts.replace('marker.style.transform = `translateX(${x}px)`;', 'marker.style.left = `${x}px`;');
+      return leftCss !== css && leftTs !== ts
+        && markerMotionProblems(leftCss, ts).includes('kvacica animira left')
+        && markerMotionProblems(css, leftTs).includes('kod pomice kvacicu kroz style.left');
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-view-transition',
+    imitates:
+      '`view-transition-name: nav-marker` se vrati na kvacicu (F23): cross-document prijelazi su ' +
+      'ugaseni zbog zamrznutog rAF-a, a imenovan element ulijece u prijelaze unutar dokumenta.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const vt = css.replace('transition: transform .45s var(--ease-spring);\n}', 'transition: transform .45s var(--ease-spring);\n  view-transition-name: nav-marker;\n}');
+      return vt !== css && markerMotionProblems(vt, readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'))).some((p) => p.includes('view-transition-name'));
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/stepper-bez-kratkog-oblika',
+    imitates:
+      'Kratki oblik steppera za tanko stanje se izbrise ili natpis sakrije `display: none`: na ' +
+      '1180px pilula opet pokazuje 6 znakova imena, ili natpis nestane i citacu ekrana.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const bez = css.replace('@container site-chrome-mid (max-width: 599px) {', '@container site-chrome-mid (max-width: 1px) {');
+      const skriven = css.replace(/(@container site-chrome-mid \(max-width: 599px\) \{[\s\S]*?)clip-path: inset\(50%\);/, '$1display: none;');
+      return bez !== css && skriven !== css
+        && shortStepperProblems(bez).includes('nema kratkog steppera za tanko stanje (599px)')
+        && shortStepperProblems(skriven).includes('natpis koraka (599px) se ne skriva clip-pathom');
+    },
+    cleanBefore: () => shortStepperProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-u-statickom-grafu',
+    imitates:
+      'Traka puno podnozje uveze staticki (`import { mountFullFooter }` umjesto `import()`): svih ' +
+      'trinaest stranica skida njegov kod i pecene brojke, a proracun od 8 KB to ne razdvaja.',
+    caught: () => lazyFooterProblems(chromeGraph(z15bMetafile(true), 'src/shared/site-chrome.ts'))
+      .includes('src/shared/site-footer-full.ts je u statickom grafu trake'),
+    cleanBefore: () => lazyFooterProblems(chromeGraph(z15bMetafile(false), 'src/shared/site-chrome.ts')).length === 0,
   },
 ];
 
