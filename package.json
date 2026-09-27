@@ -34,6 +34,7 @@
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",
     "gen:worktype-scope": "node scripts/generate-work-type-scope.mjs",
     "docx-smoke": "vite-node scripts/docx-smoke.mts",
+    "measure:false-findings": "vite-node scripts/false-findings-corpus.mts",
     "corpus:inventory": "vite-node tests/corpus/cli/inventory.ts",
     "corpus:coverage": "vite-node tests/corpus/cli/coverage.ts",
     "corpus:export": "vite-node tests/corpus/cli/export.ts",

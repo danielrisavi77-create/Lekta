@@ -42,10 +42,31 @@ const KNIP_POLJA = {
   knipNerazrijesene: ['unresolved'],
 };
 
-function bin(name) {
-  const p = path.join(ROOT, 'node_modules', '.bin', process.platform === 'win32' ? `${name}.cmd` : name);
-  if (!existsSync(p)) throw new Error(`lean-report: ${name} nije instaliran (node_modules/.bin/${name}); pokreni npm ci`);
-  return p;
+/**
+ * Kako pokrenuti alat iz node_modules. Na Windowsu NE preko `.bin/<ime>.cmd`: Node od CVE-2024-27980
+ * odbija `execFile` nad `.cmd` bez shella (EINVAL), pa bi mjerenje na svakom Windows stroju palo.
+ * Isti recept kao `resolveProviderInvocation` u scripts/agents/cli.mjs: JS ulaz iz `bin` polja paketa
+ * kroz `process.execPath`, bez shella. Na ostalim platformama ostaje `.bin/<ime>`.
+ */
+export function toolInvocation(name, options = {}) {
+  const platform = options.platform ?? process.platform;
+  const root = options.root ?? ROOT;
+  const exists = options.exists ?? existsSync;
+  const readText = options.readText ?? ((p) => readFileSync(p, 'utf8'));
+  if (platform !== 'win32') {
+    const p = path.join(root, 'node_modules', '.bin', name);
+    if (!exists(p)) throw new Error(`lean-report: ${name} nije instaliran (node_modules/.bin/${name}); pokreni npm ci`);
+    return { command: p, argsPrefix: [] };
+  }
+  const pkgDir = path.join(root, 'node_modules', name);
+  const pkgPath = path.join(pkgDir, 'package.json');
+  if (!exists(pkgPath)) throw new Error(`lean-report: ${name} nije instaliran (node_modules/${name}); pokreni npm ci`);
+  const pkgBin = JSON.parse(readText(pkgPath)).bin;
+  const rel = typeof pkgBin === 'string' ? pkgBin : pkgBin && pkgBin[name];
+  if (typeof rel !== 'string') throw new Error(`lean-report: ${name}/package.json nema bin ulaz "${name}"`);
+  const entry = path.join(pkgDir, rel);
+  if (!exists(entry)) throw new Error(`lean-report: ${name} bin ulaz ne postoji (${entry})`);
+  return { command: process.execPath, argsPrefix: [entry] };
 }
 
 /** Cisti sazetak knip JSON izvjestaja (knip 6: { issues: [{ file, files, exports, ... }] }). */
@@ -133,7 +154,8 @@ export function lowerBaseline(baseline, current) {
 }
 
 export function measure() {
-  const knipRaw = execFileSync(bin('knip'), ['--reporter', 'json', '--no-exit-code', '--no-progress'], {
+  const knipInv = toolInvocation('knip');
+  const knipRaw = execFileSync(knipInv.command, [...knipInv.argsPrefix, '--reporter', 'json', '--no-exit-code', '--no-progress'], {
     cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'],
   });
   let knipJson;
@@ -144,7 +166,8 @@ export function measure() {
   }
   const out = mkdtempSync(path.join(tmpdir(), 'lean-jscpd-'));
   try {
-    execFileSync(bin('jscpd'), ['--config', '.jscpd.json', '--output', out, '--reporters', 'json', '--silent'], {
+    const jscpdInv = toolInvocation('jscpd');
+    execFileSync(jscpdInv.command, [...jscpdInv.argsPrefix, '--config', '.jscpd.json', '--output', out, '--reporters', 'json', '--silent'], {
       cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
     });
     const jscpdJson = JSON.parse(readFileSync(path.join(out, 'jscpd-report.json'), 'utf8'));
