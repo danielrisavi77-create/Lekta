@@ -1,6 +1,6 @@
 # scripts/register-clean-task.ps1
 #
-# Stavka G (odluka vlasnika 2026-09-26): registrira Windows Scheduled Task 'Lekta clean:tmp' koji
+# Stavka G (odluka vlasnika 2026-09-26): registrira Windows Scheduled Task 'Lekta clean-tmp' koji
 # dnevno i pri prijavi pokrece `node <repo>/scripts/clean-vitest-tmp.mjs` (isto sto `npm run
 # clean:tmp`), s radnim direktorijem korijena repozitorija.
 #
@@ -29,7 +29,10 @@ param(
   [switch]$DryRun
 )
 $ErrorActionPreference = 'Stop'
-$TaskName = 'Lekta clean:tmp'
+# Ime ne smije sadrzavati ':' ni druge znakove nedopustene za ime Windows Scheduled Taska
+# (isti skup kao za nazive datoteka: \ / : * ? " < > |); Register-ScheduledTask s ':' u imenu
+# pada s 'The parameter is incorrect' (HRESULT 0x80070057). Vidi tests/register-clean-task.test.ts.
+$TaskName = 'Lekta clean-tmp'
 
 function Test-LektaCleanTaskOwned {
   param($Task, [string]$Root)

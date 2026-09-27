@@ -1,5 +1,5 @@
 /**
- * scripts/register-clean-task.ps1 (stavka G): Windows Scheduled Task 'Lekta clean:tmp'.
+ * scripts/register-clean-task.ps1 (stavka G): Windows Scheduled Task 'Lekta clean-tmp'.
  *
  * Task se u testu NIKAD ne registrira. Dokazuje se oblik datoteke (bez BOM-a, samo ASCII, bez
  * S4U, s -Unregister i Interactive) i, na Windowsu, stvarna definicija koju skripta gradi u
@@ -33,7 +33,7 @@ describe('register-clean-task.ps1: oblik datoteke', () => {
     expect(code).toMatch(/New-ScheduledTaskTrigger -AtLogOn -User \$korisnik/);
     expect(code).toContain("Join-Path $RepoRoot 'scripts\\clean-vitest-tmp.mjs'");
     expect(code).toMatch(/New-ScheduledTaskAction -Execute \$node .*-WorkingDirectory \$RepoRoot/);
-    expect(code).toContain("$TaskName = 'Lekta clean:tmp'");
+    expect(code).toContain("$TaskName = 'Lekta clean-tmp'");
   });
 
   it('ima -Unregister i na kraju ispisuje Get-ScheduledTaskInfo (LastRunTime, LastTaskResult)', () => {
@@ -43,6 +43,29 @@ describe('register-clean-task.ps1: oblik datoteke', () => {
     const info = code.indexOf('Get-ScheduledTaskInfo -TaskName $TaskName');
     expect(info).toBeGreaterThan(lastRegister);
     expect(code.slice(info)).toMatch(/LastRunTime, LastTaskResult/);
+  });
+});
+
+/**
+ * Izmjereno 2026-09-28: Register-ScheduledTask s ':' u imenu taska pada u redku ~106 s
+ * 'The parameter is incorrect' (HRESULT 0x80070057). Ime Scheduled Taska ne smije sadrzavati
+ * nijedan od znakova nedopustenih za ime, isti skup kao za nazive datoteka: \ / : * ? " < > |.
+ * `npm run clean:tmp` je zaseban, nepromijenjen npm skript naziv i ne prolazi kroz ovaj gard.
+ */
+const TASK_NAME_FORBIDDEN_CHARS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+
+function taskNameFromSource(src: string): string | null {
+  const m = src.match(/\$TaskName\s*=\s*'([^']*)'/);
+  return m ? m[1] : null;
+}
+
+describe('register-clean-task.ps1: ime taska bez znakova nedopustenih u Task Scheduleru', () => {
+  it('$TaskName parsiran iz izvora ne sadrzi nijedan od \\ / : * ? " < > |', () => {
+    const ime = taskNameFromSource(text);
+    expect(ime).not.toBeNull();
+    for (const znak of TASK_NAME_FORBIDDEN_CHARS) {
+      expect(ime, `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`).not.toContain(znak);
+    }
   });
 });
 
@@ -123,14 +146,14 @@ function powershell(args: string[]) {
 describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: -DryRun na Windowsu', () => {
   it('gradi Interactive task s node akcijom u korijenu repozitorija i nista ne registrira', () => {
     const exists = () => powershell(['-Command',
-      "if (Get-ScheduledTask -TaskName 'Lekta clean:tmp' -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }"]).stdout.trim();
+      "if (Get-ScheduledTask -TaskName 'Lekta clean-tmp' -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }"]).stdout.trim();
     const prije = exists();
     const repo = process.cwd();
     const r = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-DryRun']);
     expect(r.status, r.stderr).toBe(0);
     const line = r.stdout.replace(/\r/g, '').split('\n').find((l) => l.startsWith('{')) ?? '';
     const def = JSON.parse(line) as Record<string, unknown>;
-    expect(def.TaskName).toBe('Lekta clean:tmp');
+    expect(def.TaskName).toBe('Lekta clean-tmp');
     expect(String(def.Execute)).toMatch(/node(\.exe)?$/i);
     expect(def.Arguments).toBe(`"${resolve(repo, 'scripts', 'clean-vitest-tmp.mjs')}"`);
     expect(String(def.WorkingDirectory).toLowerCase()).toBe(resolve(repo).toLowerCase());

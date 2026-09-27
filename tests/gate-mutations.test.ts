@@ -6138,6 +6138,18 @@ const MUTATIONS: Mutation[] = [
         && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === dir;
     },
   },
+  // --- register-clean-task.ps1 stavka G: ime Scheduled Taska bez ':' i drugih nedopustenih znakova ---
+  {
+    id: 'register-clean-task/ime-taska-nedopusteni-znak',
+    imitates: "izmjereno 2026-09-28: ':' u imenu Scheduled Taska ('Lekta clean:tmp') obara "
+      + "Register-ScheduledTask s 'The parameter is incorrect' (HRESULT 0x80070057); -DryRun to ne otkriva",
+    cleanBefore: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace("$TaskName = 'Lekta clean-tmp'", "$TaskName = 'Lekta clean:tmp'"),
+    ).length > 0,
+  },
   // --- Word check skripte: izlazni direktorij se brise SAMO na uspjehu (stavka G) ---
   {
     id: 'word-verify/outdir-brisan-i-na-padu',
@@ -6430,6 +6442,23 @@ const CT_VIEW_ROOT = resolve('/lekta-pogled');
 function ctViewFs(dir: string) {
   const base = ctLeftoverFs(dir, 90 * CT_HOUR, CT_VIEW_ROOT);
   return { ...base, realpath: (p: string) => (p.startsWith(CT_VIEW_ROOT) ? CT_CLAUDE_ROOT + p.slice(CT_VIEW_ROOT.length) : p) };
+}
+
+/**
+ * Stavka G: ime Scheduled Taska (`$TaskName` u scripts/register-clean-task.ps1) ne smije sadrzavati
+ * nijedan znak nedopusten u imenu Windows Scheduled Taska, isti skup kao za nazive datoteka.
+ * `npm run clean:tmp` je zaseban npm skript naziv i nije obuhvacen ovim gardom.
+ */
+const REGISTER_CLEAN_TASK_SCRIPT = resolve(process.cwd(), 'scripts/register-clean-task.ps1');
+const REGISTER_CLEAN_TASK_FORBIDDEN_CHARS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+
+function registerCleanTaskNameProblems(src: string): string[] {
+  const m = src.match(/\$TaskName\s*=\s*'([^']*)'/);
+  if (!m) return ['nema $TaskName u izvoru'];
+  const ime = m[1];
+  return REGISTER_CLEAN_TASK_FORBIDDEN_CHARS
+    .filter((znak) => ime.includes(znak))
+    .map((znak) => `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`);
 }
 
 /** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
