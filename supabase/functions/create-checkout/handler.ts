@@ -174,7 +174,7 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
   //   ciljna cijena (products.price_eur) - stvarno placeno za ISTO pravo (entitlements.paid_amount_cents),
   // oboje procitano ovdje, na serveru. Pravo se cita SAMO medju pravima prijavljenog korisnika.
   // Pravila (isti rad i vrsta rada, jednom, rok, priznaje se samo placeno) provodi quoteUpgrade;
-  // webhook istu odluku ponavlja prije pretvorbe, a apply_entitlement_upgrade (0206) je atomska.
+  // webhook istu odluku ponavlja prije pretvorbe, a apply_entitlement_upgrade (0207) je atomska.
   if (upgradeFrom !== null) {
     const { data: srow, error: sourceErr } = await admin
       .from('entitlements')

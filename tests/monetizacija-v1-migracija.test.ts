@@ -1,5 +1,5 @@
 /**
- * Migracija 0206 (Monetizacija V1, M2) mjerena nad TEKSTOM, jer se migracije u ovom toku ne
+ * Migracija 0207 (Monetizacija V1, M2) mjerena nad TEKSTOM, jer se migracije u ovom toku ne
  * primjenjuju ni na jednu bazu. Kriterij je IZVAN diffa: tablice iz
  * docs/decisions/MONETIZACIJA_V1.md (odjeljci 5, 6, 7, 10, 13, 24, 25) prepisane su ovdje kao
  * ocekivanje, a migracija se parsira i usporedjuje s njima.
@@ -17,7 +17,7 @@ import { seededProducts } from './helpers/product-seeds';
 import { entitlementProductFkCount } from './helpers/monetizacija-v1-guards';
 import { mapProductRow } from '../src/catalog/products-catalog';
 
-const FILE = '0206_monetizacija_v1.sql';
+const FILE = '0207_monetizacija_v1.sql';
 const RAW = readFileSync(resolve(process.cwd(), 'supabase', 'migrations', FILE), 'utf8').replace(/\r\n/g, '\n');
 /** SQL bez komentara, da tekst komentara ne moze zadovoljiti ni oboriti tvrdnju. */
 const SQL = RAW.replace(/--[^\n]*/g, '');
@@ -53,10 +53,10 @@ const OFFER_CAPABILITIES: Record<string, string[]> = {
 /** Popis ciljnog stanja iz DO bloka (odjeljak 5 migracije). Baca ako ga nema, ne vraca prazno. */
 function parseTargetValues(sql: string): Record<string, { price: number; slotWindow: number; purchaseWindow: number; offer: string }> {
   const m = /select \* from \(values([\s\S]*?)\)\s*as t\(id, price_eur, slot_window_days, purchase_window_days, offer_code\)/.exec(sql);
-  if (!m) throw new Error('0206: popis ciljnog stanja V1 nije pronadjen');
+  if (!m) throw new Error('0207: popis ciljnog stanja V1 nije pronadjen');
   const out: Record<string, { price: number; slotWindow: number; purchaseWindow: number; offer: string }> = {};
   for (const t of m[1].matchAll(/\('([a-z_]+)',\s*([\d.]+),\s*(\d+),\s*(\d+),\s*'([a-z_0-9]+)'\)/g)) {
-    if (out[t[1]]) throw new Error(`0206: ${t[1]} dvaput u popisu ciljnog stanja`);
+    if (out[t[1]]) throw new Error(`0207: ${t[1]} dvaput u popisu ciljnog stanja`);
     out[t[1]] = { price: Number(t[2]), slotWindow: Number(t[3]), purchaseWindow: Number(t[4]), offer: t[5] };
   }
   return out;
@@ -65,7 +65,7 @@ function parseTargetValues(sql: string): Record<string, { price: number; slotWin
 /** `insert into public.offer_codes ... values (...)`: kod -> prava. */
 function parseOfferCodes(sql: string): Record<string, string[]> {
   const m = /insert into public\.offer_codes \(code, capabilities, note\) values([\s\S]*?)on conflict \(code\) do nothing/.exec(sql);
-  if (!m) throw new Error('0206: insert u offer_codes nije pronadjen');
+  if (!m) throw new Error('0207: insert u offer_codes nije pronadjen');
   const out: Record<string, string[]> = {};
   for (const t of m[1].matchAll(/\('([a-z_0-9]+)',\s*array\[([^\]]*)\]/g)) {
     out[t[1]] = [...t[2].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
@@ -73,7 +73,7 @@ function parseOfferCodes(sql: string): Record<string, string[]> {
   return out;
 }
 
-describe('0206: generator (parser vidi cijelu migraciju)', () => {
+describe('0207: generator (parser vidi cijelu migraciju)', () => {
   it('popis ciljnog stanja ima tocno 10 proizvoda iz odjeljka 25', () => {
     expect(Object.keys(parseTargetValues(SQL)).sort()).toEqual(Object.keys(V1_CATALOG).sort());
   });
@@ -83,7 +83,7 @@ describe('0206: generator (parser vidi cijelu migraciju)', () => {
   });
 });
 
-describe('0206: ciljno stanje odgovara dokumentu', () => {
+describe('0207: ciljno stanje odgovara dokumentu', () => {
   it('cijena, prozor slota, rok kupnje i offer_code svakog proizvoda su iz odjeljka 25', () => {
     expect(parseTargetValues(SQL)).toEqual(V1_CATALOG);
   });
@@ -117,7 +117,7 @@ describe('0206: ciljno stanje odgovara dokumentu', () => {
   });
 });
 
-describe('0206: specijalisticki u svakom Lektinom work_type CHECK-u', () => {
+describe('0207: specijalisticki u svakom Lektinom work_type CHECK-u', () => {
   const tables = ['entitlements', 'products', 'faculty_requests', 'repair_jobs', 'corpus_contributions'];
 
   it.each(tables)('%s: ogranicenje se prvo trazi po stvarnom imenu, pa dodaje s pet vrsta', (table) => {
@@ -150,7 +150,7 @@ describe('0206: specijalisticki u svakom Lektinom work_type CHECK-u', () => {
   });
 });
 
-describe('0206: disciplina cijene i idempotencija', () => {
+describe('0207: disciplina cijene i idempotencija', () => {
   it('cijena postojeceg proizvoda se ne mijenja golim UPDATE-om, nego set_product_price uz usporedbu', () => {
     expect(SQL).not.toMatch(/update\s+(public\.)?products\s+set[^;]*price_eur/i);
     expect(SQL).toMatch(/if p\.price_eur is distinct from v\.price_eur::numeric then\s*perform public\.set_product_price\(/);
@@ -196,11 +196,11 @@ describe('0206: disciplina cijene i idempotencija', () => {
   });
 });
 
-describe('0206: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', () => {
+describe('0207: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', () => {
   const fn = (() => {
     const start = SQL.indexOf('create or replace function public.apply_entitlement_upgrade(');
     const end = SQL.indexOf('$$;', start);
-    if (start < 0 || end < 0) throw new Error('0206: apply_entitlement_upgrade nije pronadjena');
+    if (start < 0 || end < 0) throw new Error('0207: apply_entitlement_upgrade nije pronadjena');
     return SQL.slice(start, end);
   })();
 
@@ -237,7 +237,7 @@ describe('0206: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', 
   });
 });
 
-describe('0206: snapshot prozora i jedan strani kljuc prema products (krug 2)', () => {
+describe('0207: snapshot prozora i jedan strani kljuc prema products (krug 2)', () => {
   const MIGRATIONS = readdirSync(resolve(process.cwd(), 'supabase', 'migrations'))
     .filter((f) => f.endsWith('.sql'))
     .sort()

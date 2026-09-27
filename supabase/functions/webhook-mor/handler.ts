@@ -310,7 +310,7 @@ function couponGrantRows(data: unknown): CouponGrantRow[] {
  *    tako da istekne SADA. Tablica nema stupac statusa, a redak se ne brise: unique
  *    (source_order_id, reason) iz 0024 tako i dalje sprjecava da ga ponovljena uplata izda iznova.
  *  - obveze iz `bonus_outbox` za isti PaymentIntent koje jos cekaju (`pending`) se otkazuju
- *    (`cancelled`, migracija 0206; F21 stavka 1). Bez toga bi radnik process-bonus-outbox kasnije
+ *    (`cancelled`, migracija 0207; F21 stavka 1). Bez toga bi radnik process-bonus-outbox kasnije
  *    izvrsio nagradu preporucitelju za vracen novac. Radnik uz to i sam cita oznaku povrata prije i
  *    poslije izvrsenja (process-bonus-outbox/referrer-reward.ts), pa se prozor zatvara s obje strane.
  *
@@ -556,7 +556,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
    * uplate, pa ga taj put mora znati (Codex pregled kruga 3).
    */
   //
-  // `note` (F21, stavka 2): korak i greska sporednog pada idu u `outcome_note` (migracija 0206), a
+  // `note` (F21, stavka 2): korak i greska sporednog pada idu u `outcome_note` (migracija 0207), a
   // `outcome_detail` ostaje TOCNO oznaka iz REFUND_MARKERS, jer je citanje oznake doslovna usporedba.
   const settle = async (outcome: string | null, detail?: string, note?: string): Promise<boolean> => {
     if (!eventRowId) return false;
@@ -1320,7 +1320,7 @@ type Settle = (outcome: string | null, detail?: string) => Promise<boolean>;
  *     products.price_eur minus paid_amount_cents istog prava) i chargedAmountVerdict. Pravo koje
  *     nije kandidat (tudje, vec nadogradjeno, isteklo, druga vrsta rada) ili uplata ispod razlike
  *     ide na rucni pregled: novac je naplacen, a pretvorba nije dopustena.
- *  3. apply_entitlement_upgrade (0206) pretvara pravo atomski i jednom; `unavailable` znaci da ga
+ *  3. apply_entitlement_upgrade (0207) pretvara pravo atomski i jednom; `unavailable` znaci da ga
  *     je u medjuvremenu promijenilo nesto drugo (npr. druga uplata nadogradnje), pa rucni pregled.
  *  4. Pisi pa citaj, kao i obicna uplata: tek nakon pretvorbe se cita oznaka punog povrata ISTE
  *     uplate; ako je tu, nadogradjeno pravo se gasi.

@@ -443,9 +443,9 @@ export interface EntitlementProduct {
   workType: string | null;
   slotsTotal: number;
   purchaseWindowDays: number;
-  /** Prozor slota proizvoda u trenutku kupnje; snapshotira se na pravo (0206). */
+  /** Prozor slota proizvoda u trenutku kupnje; snapshotira se na pravo (0207). */
   slotWindowDays: number;
-  /** Verzionirana ponuda (products.offer_code, migracija 0206). */
+  /** Verzionirana ponuda (products.offer_code, migracija 0207). */
   offerCode: string;
   /** Prava ponude (offer_codes.capabilities) u trenutku kupnje. */
   capabilities: readonly string[];

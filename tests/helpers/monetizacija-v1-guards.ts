@@ -220,7 +220,7 @@ export function entitlementAccessProblems(fromDb: typeof entitlementRowFromDb, s
 
 /**
  * OZICENJE POTROSNJE PRAVA: generate-report i repair-docx prihvacaju svaku prodajnu vrstu rada
- * (specijalisticki iz 0206), citaju slotove i pravo ZAJEDNICKIM citanjem (readAccessRows, izvrsno
+ * (specijalisticki iz 0207), citaju slotove i pravo ZAJEDNICKIM citanjem (readAccessRows, izvrsno
  * testirano u accessRowsProblems), i neuspjelo citanje NE tumace kao "nema prava" (to bi placenom
  * korisniku vratilo 402).
  */

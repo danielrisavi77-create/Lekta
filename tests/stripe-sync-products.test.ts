@@ -94,7 +94,7 @@ describe('stripe-sync-products: katalog', () => {
     expect(iz).toEqual(test);
   });
 
-  it('SKU-ovi V1 s iznosom u centima iz products.price_eur (ciljno stanje 0206)', () => {
+  it('SKU-ovi V1 s iznosom u centima iz products.price_eur (ciljno stanje 0207)', () => {
     const amount = (id: string) => desired.find((d) => d.productId === id)?.unitAmount;
     expect(amount('slot_seminarski')).toBe(399);
     expect(amount('slot_zavrsni')).toBe(599);

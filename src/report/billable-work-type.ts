@@ -1,7 +1,7 @@
 /**
  * Naplatne vrste rada na SERVERSKOJ strani (Monetizacija V1, M2).
  *
- * `specijalisticki` je od migracije 0206 prodajna vrsta rada (slot_specijalisticki,
+ * `specijalisticki` je od migracije 0207 prodajna vrsta rada (slot_specijalisticki,
  * pass_specijalisticki). Server koji trosi pravo (generate-report, repair-docx) mora je prihvatiti,
  * inace kupljeno pravo nije moguce potrositi (400 bad_request nakon placanja).
  *
@@ -16,7 +16,7 @@ import { unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate.
 /** Vrsta rada koju server prodaje i trosi. Nadskup klijentskog `ReportWorkType`. */
 export type BillableWorkType = ReportWorkType | 'specijalisticki';
 
-/** Redoslijed razine (rastuca cijena), isti kao work_type CHECK u 0206. */
+/** Redoslijed razine (rastuca cijena), isti kao work_type CHECK u 0207. */
 export const BILLABLE_WORK_TYPES: readonly BillableWorkType[] = [
   'seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski',
 ];

@@ -1,4 +1,4 @@
--- 0206_monetizacija_v1.sql
+-- 0207_monetizacija_v1.sql
 --
 -- Monetizacija V1, serverska strana (M2). Izvor istine: docs/decisions/MONETIZACIJA_V1.md
 -- (odjeljci 3, 5, 6, 7, 10, 11, 13, 14, 24, 25 i 29), odluka vlasnika 2026-09-27.

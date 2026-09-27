@@ -27,7 +27,7 @@ export interface EntitlementRow {
   slotsTotal: number;
   purchaseExpiresAt: string; // ISO
   /**
-   * Prozor slota za ovo pravo: snapshot iz trenutka kupnje (entitlements.slot_window_days, 0206),
+   * Prozor slota za ovo pravo: snapshot iz trenutka kupnje (entitlements.slot_window_days, 0207),
    * a za stariji redak bez snapshota prozor proizvoda (vidi entitlementRowFromDb u
    * entitlement-access.ts). Izostavljeno pada na windowDaysFor(workType).
    */

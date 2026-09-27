@@ -25,7 +25,7 @@ export interface Product {
   active: boolean;
   sort: number;
   /**
-   * Verzionirani skup prava (migracija 0206, MONETIZACIJA_V1.md odjeljak 13), npr. `repair_v1`.
+   * Verzionirani skup prava (migracija 0207, MONETIZACIJA_V1.md odjeljak 13), npr. `repair_v1`.
    * NULL u starijem retku ili kod proizvoda koji Lekta ne prodaje; mapiranje zbog toga ne baca.
    */
   offerCode: string | null;

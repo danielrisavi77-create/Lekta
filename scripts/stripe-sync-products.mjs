@@ -19,7 +19,7 @@
 // iskljucena i skripta se NE pokrece protiv ijednog racuna.
 //
 // Izvor kataloga:
-//   --from=migrations (zadano)  sjeme iz supabase/migrations + ciljno stanje V1 iz 0206; offline
+//   --from=migrations (zadano)  sjeme iz supabase/migrations + ciljno stanje V1 iz 0207; offline
 //   --from=db                   zivi `products` preko PostgREST-a (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 //
 // Pokretanje: node scripts/stripe-sync-products.mjs [--from=migrations|db] [--apply [--live]] [--json]
@@ -80,7 +80,7 @@ function splitTuple(body, file) {
 
 /**
  * Katalog kakav migracije ostavljaju: `insert into products` iz svih migracija, zatim ciljno stanje
- * V1 (popis iz 0206) i gasenje do_obrane. Nepoznat oblik BACA: djelomican katalog ne smije izgledati
+ * V1 (popis iz 0207) i gasenje do_obrane. Nepoznat oblik BACA: djelomican katalog ne smije izgledati
  * kao manji katalog.
  */
 export function catalogFromMigrations(dir = join(ROOT, 'supabase', 'migrations')) {
@@ -100,16 +100,16 @@ export function catalogFromMigrations(dir = join(ROOT, 'supabase', 'migrations')
       }
     }
   }
-  const v1 = readFileSync(join(dir, '0206_monetizacija_v1.sql'), 'utf8').replace(/\r\n/g, '\n');
+  const v1 = readFileSync(join(dir, '0207_monetizacija_v1.sql'), 'utf8').replace(/\r\n/g, '\n');
   const target = /select \* from \(values([\s\S]*?)\)\s*as t\(id, price_eur, slot_window_days, purchase_window_days, offer_code\)/.exec(v1);
-  if (!target) throw new Error('0206: ciljno stanje V1 nije pronadjeno');
+  if (!target) throw new Error('0207: ciljno stanje V1 nije pronadjeno');
   for (const t of target[1].matchAll(/\('([a-z_]+)',\s*([\d.]+),\s*(\d+),\s*(\d+),\s*'([a-z_0-9]+)'\)/g)) {
     const row = byId.get(t[1]);
-    if (!row) throw new Error(`0206: ${t[1]} nije sijan`);
+    if (!row) throw new Error(`0207: ${t[1]} nije sijan`);
     Object.assign(row, { price_eur: Number(t[2]), slot_window_days: Number(t[3]), purchase_window_days: Number(t[4]), offer_code: t[5] });
   }
   const off = /set active = false\s*where id in \(([^)]*)\)/.exec(v1.replace(/--[^\n]*/g, ''));
-  if (!off) throw new Error('0206: deaktivacija do_obrane nije pronadjena');
+  if (!off) throw new Error('0207: deaktivacija do_obrane nije pronadjena');
   for (const id of [...off[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1])) {
     const row = byId.get(id);
     if (row) row.active = false;

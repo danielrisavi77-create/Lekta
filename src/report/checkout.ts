@@ -70,7 +70,7 @@ export function checkoutMismatch(
   confirmed: boolean,
 ): CheckoutMismatchDecision {
   if (confirmed || !signals) return { block: false };
-  // Prodajne vrste rada ukljucuju specijalisticki (0206): odluka je ista kao u repair-docx
+  // Prodajne vrste rada ukljucuju specijalisticki (0207): odluka je ista kao u repair-docx
   // (billableMismatch), pa specijalisticka naslovnica ne kupuje diplomski slot (odjeljak 18).
   if (!selectedWorkType || !isBillableWorkType(selectedWorkType)) return { block: false };
   const sig: WorkTypeSignals = {

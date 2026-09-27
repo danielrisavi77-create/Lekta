@@ -5,7 +5,7 @@
  * Dva zahtjeva iz Monetizacije V1 (M2):
  *
  * 1. SNAPSHOT PRAVA JE MJERODAVAN. Prozor slota se cita iz `entitlements.slot_window_days`, koji
- *    se upisuje pri kupnji (webhook-mor, buildEntitlementInsert; trigger iz 0206 za ostale putove).
+ *    se upisuje pri kupnji (webhook-mor, buildEntitlementInsert; trigger iz 0207 za ostale putove).
  *    Zivi `products.slot_window_days` vrijedi samo za stariji redak koji snapshot nema. Tako buduca
  *    promjena kataloga (npr. kraci prozor Final Passa) ne mijenja vec kupljeno pravo
  *    (odjeljci 13 i 29).

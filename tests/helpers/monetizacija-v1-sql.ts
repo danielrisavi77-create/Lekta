@@ -1,8 +1,8 @@
 /**
- * Monetizacija V1 (M2): migracija 0206 IZVRSENA u stvarnom Postgresu (PGlite, WASM build Postgresa),
+ * Monetizacija V1 (M2): migracija 0207 IZVRSENA u stvarnom Postgresu (PGlite, WASM build Postgresa),
  * ne regexima nad tekstom (nalaz pregleda kruga 3).
  *
- * Baza se slaze iz STVARNIH migracija na kojima 0206 stoji (tablice koje dira i proizvodi koje
+ * Baza se slaze iz STVARNIH migracija na kojima 0207 stoji (tablice koje dira i proizvodi koje
  * mijenja). Jedine zamjene su okolina koju Supabase daje, a PGlite nema: shema `auth`, uloge,
  * `storage.buckets/objects` i `cron.schedule`. Tekst migracija se ne mijenja, osim jedne izricito
  * provjerene zamjene: fail-closed provjera pg_crona u 0011 (PGlite ekstenziju nema, a cron raspored
@@ -17,7 +17,7 @@ import { join } from 'node:path';
 
 const MIGRATIONS_DIR = join(process.cwd(), 'supabase', 'migrations');
 
-/** Migracije ispod 0206 koje stvaraju tablice, funkcije i proizvode koje 0206 dira. */
+/** Migracije ispod 0207 koje stvaraju tablice, funkcije i proizvode koje 0207 dira. */
 export const BASE_MIGRATIONS = [
   '0001_monetization.sql',
   '0002_products_catalog.sql',
@@ -34,7 +34,7 @@ export const BASE_MIGRATIONS = [
   '0204_stripe_provider_defaults.sql',
 ] as const;
 
-export const V1_MIGRATION = '0206_monetizacija_v1.sql';
+export const V1_MIGRATION = '0207_monetizacija_v1.sql';
 
 const PG_CRON_GUARD = "if not exists (select 1 from pg_extension where extname = 'pg_cron') then";
 
@@ -62,7 +62,7 @@ const SUPABASE_ENV = `
   create function cron.unschedule(a text) returns boolean language sql as $$ select true $$;
 `;
 
-/** Baza sa svim BASE_MIGRATIONS; 0206 se primjenjuje zasebno (applyV1), da se moze mjeriti prije i poslije. */
+/** Baza sa svim BASE_MIGRATIONS; 0207 se primjenjuje zasebno (applyV1), da se moze mjeriti prije i poslije. */
 export async function baseDatabase(): Promise<PGlite> {
   const db = new PGlite();
   await db.exec(SUPABASE_ENV);
@@ -94,7 +94,7 @@ async function one(db: PGlite, sql: string, params: unknown[] = []): Promise<Row
   return (await rows(db, sql, params))[0];
 }
 
-/** Stanje koje drugi prolaz 0206 ne smije promijeniti. */
+/** Stanje koje drugi prolaz 0207 ne smije promijeniti. */
 async function stateFingerprint(db: PGlite): Promise<string> {
   const dijelovi = await Promise.all([
     rows(db, 'select * from public.products order by id'),
@@ -111,7 +111,7 @@ async function stateFingerprint(db: PGlite): Promise<string> {
 
 /**
  * Ciljno stanje kataloga po MONETIZACIJA_V1.md (odjeljci 3, 5, 6, 7, 10 i 25), kako ga baza STVARNO
- * ima nakon 0206. [id, cijena, prozor slota, rok kupnje, offer_code, aktivan, broj slotova]
+ * ima nakon 0207. [id, cijena, prozor slota, rok kupnje, offer_code, aktivan, broj slotova]
  */
 export const V1_CATALOG: ReadonlyArray<readonly [string, string, number, number, string, boolean, number]> = [
   ['slot_seminarski', '3.99', 7, 90, 'repair_v1', true, 1],
@@ -132,11 +132,11 @@ const LEKTA_WORK_TYPE_TABLES = ['entitlements', 'products', 'faculty_requests', 
 
 export interface V1Run {
   db: PGlite;
-  /** Pravo upisano PRIJE 0206 (slot_doktorski s tadasnjim prozorom 14). */
+  /** Pravo upisano PRIJE 0207 (slot_doktorski s tadasnjim prozorom 14). */
   staroPravoId: string;
 }
 
-/** Baza, jedno pravo kupljeno prije 0206, pa 0206 (po zelji s izmijenjenim tekstom za mutaciju). */
+/** Baza, jedno pravo kupljeno prije 0207, pa 0207 (po zelji s izmijenjenim tekstom za mutaciju). */
 export async function runV1(v1Sql: string = readMigration(V1_MIGRATION)): Promise<V1Run> {
   const db = await baseDatabase();
   await db.query('insert into auth.users (id) values ($1), ($2)', [USER_A, USER_B]);
@@ -153,19 +153,19 @@ export async function idempotencyProblems(run: V1Run, v1Sql: string = readMigrat
   try {
     await run.db.exec(v1Sql);
   } catch (e) {
-    return [`drugi prolaz 0206 pada: ${e instanceof Error ? e.message : String(e)}`];
+    return [`drugi prolaz 0207 pada: ${e instanceof Error ? e.message : String(e)}`];
   }
   const poslije = await stateFingerprint(run.db);
   const changelogPoslije = await one(run.db, 'select count(*)::int as n from public.pricing_changelog');
   const problems: string[] = [];
   if (changelogPrije?.n !== changelogPoslije?.n) {
-    problems.push(`drugi prolaz 0206 dopisuje pricing_changelog (${String(changelogPrije?.n)} -> ${String(changelogPoslije?.n)})`);
+    problems.push(`drugi prolaz 0207 dopisuje pricing_changelog (${String(changelogPrije?.n)} -> ${String(changelogPoslije?.n)})`);
   }
-  if (prije !== poslije) problems.push('drugi prolaz 0206 mijenja katalog, prava ili ogranicenja (nije no-op)');
+  if (prije !== poslije) problems.push('drugi prolaz 0207 mijenja katalog, prava ili ogranicenja (nije no-op)');
   return problems;
 }
 
-/** Katalog, cjenovni trag, CHECK-ovi vrste rada i status bonus_outboxa nakon 0206. */
+/** Katalog, cjenovni trag, CHECK-ovi vrste rada i status bonus_outboxa nakon 0207. */
 export async function catalogProblems(db: PGlite): Promise<string[]> {
   const problems: string[] = [];
   for (const [id, cijena, prozor, rok, offer, aktivan, slotova] of V1_CATALOG) {
@@ -218,12 +218,12 @@ export async function snapshotProblems(run: V1Run): Promise<string[]> {
   const problems: string[] = [];
   const staro = await one(db, 'select slot_window_days, offer_code, capabilities, paid_amount_cents from public.entitlements where id = $1', [run.staroPravoId]);
   if (staro?.slot_window_days !== 14) {
-    problems.push(`pravo kupljeno prije 0206 dobiva prozor ${String(staro?.slot_window_days)} umjesto kupljenih 14 (backfill poslije promjene kataloga)`);
+    problems.push(`pravo kupljeno prije 0207 dobiva prozor ${String(staro?.slot_window_days)} umjesto kupljenih 14 (backfill poslije promjene kataloga)`);
   }
   if (staro?.offer_code !== 'repair_v1' || JSON.stringify(staro?.capabilities) !== JSON.stringify(REPAIR_CAPS)) {
-    problems.push('pravo kupljeno prije 0206 nema snapshot ponude');
+    problems.push('pravo kupljeno prije 0207 nema snapshot ponude');
   }
-  if (staro?.paid_amount_cents !== null) problems.push('0206 izmislja placeni iznos starog prava');
+  if (staro?.paid_amount_cents !== null) problems.push('0207 izmislja placeni iznos starog prava');
 
   const novo = await one(db, `insert into public.entitlements (user_id, work_type, slots_total, order_id, provider, purchase_expires_at, product_id)
                               values ($1, 'diplomski', 1, 'pi_novo', 'internal', now() + interval '180 days', 'pass_diplomski')

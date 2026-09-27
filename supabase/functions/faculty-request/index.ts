@@ -40,7 +40,7 @@ function ipSalt(): Promise<string> {
   return _ipSalt;
 }
 
-// Naplatne vrste rada; specijalisticki od Monetizacije V1 (0206 prosiruje CHECK na faculty_requests).
+// Naplatne vrste rada; specijalisticki od Monetizacije V1 (0207 prosiruje CHECK na faculty_requests).
 const WORK_TYPES = ['seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski'];
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 

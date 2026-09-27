@@ -167,7 +167,7 @@ export const UPGRADE_SOURCE_COLUMNS =
 
 /**
  * Upit "ima li ovo pravo vezani slot koji jos nije istekao". Obje strane (create-checkout i
- * webhook-mor) ga zovu istim oblikom; apply_entitlement_upgrade (0206) istu provjeru ponavlja
+ * webhook-mor) ga zovu istim oblikom; apply_entitlement_upgrade (0207) istu provjeru ponavlja
  * atomski u bazi.
  */
 export interface BoundSlotQuery extends PromiseLike<{ data: unknown; error: unknown }> {
@@ -200,7 +200,7 @@ export async function readBoundSlotLive(
  * Deterministican `Idempotency-Key` za PaymentIntent nadogradnje. Za razliku od obicne kupnje ne
  * ovisi o vremenu privole: dva klika na nadogradnju istog prava unutar Stripeova prozora
  * idempotencije (24 h) vracaju ISTI PaymentIntent, pa se ista nadogradnja ne moze platiti dvaput.
- * Protiv uplate izvan tog prozora stoji apply_entitlement_upgrade (0206), koja pravo pretvara jednom.
+ * Protiv uplate izvan tog prozora stoji apply_entitlement_upgrade (0207), koja pravo pretvara jednom.
  */
 export function upgradeIdempotencyKey(userId: string, sourceEntitlementId: string, targetProductId: string): string {
   return `lekta:pi:upgrade:${userId}:${sourceEntitlementId}:${targetProductId}`;

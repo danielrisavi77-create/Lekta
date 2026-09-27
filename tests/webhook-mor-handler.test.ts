@@ -34,7 +34,7 @@ const PRODUCT_ROW = {
   mor_product_id: null,
   manual_fulfillment: false,
   active: true,
-  // Monetizacija V1 (0206): ponuda i ugradjena prava, iz kojih webhook snapshotira pravo.
+  // Monetizacija V1 (0207): ponuda i ugradjena prava, iz kojih webhook snapshotira pravo.
   offer_code: 'repair_v1',
   offer_codes: { capabilities: ['full_report', 'repair', 'repair_diff', 'recheck'] },
 };

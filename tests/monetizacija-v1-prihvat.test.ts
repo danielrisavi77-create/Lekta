@@ -23,11 +23,11 @@ import { computeFingerprint } from '../src/fingerprint/fingerprint';
 import { resolveCheckout } from '../src/report/checkout';
 import { isBillableWorkType } from '../src/report/billable-work-type';
 
-/** Ciljno stanje iz 0206 (prozor slota po proizvodu), parsirano, ne prepisano. */
+/** Ciljno stanje iz 0207 (prozor slota po proizvodu), parsirano, ne prepisano. */
 const V1 = (() => {
-  const sql = readFileSync(resolve(process.cwd(), 'supabase', 'migrations', '0206_monetizacija_v1.sql'), 'utf8').replace(/\r\n/g, '\n');
+  const sql = readFileSync(resolve(process.cwd(), 'supabase', 'migrations', '0207_monetizacija_v1.sql'), 'utf8').replace(/\r\n/g, '\n');
   const m = /select \* from \(values([\s\S]*?)\)\s*as t\(id, price_eur, slot_window_days, purchase_window_days, offer_code\)/.exec(sql);
-  if (!m) throw new Error('0206: ciljno stanje nije pronadjeno');
+  if (!m) throw new Error('0207: ciljno stanje nije pronadjeno');
   const out = new Map<string, { price: number; slotWindow: number; purchaseWindow: number; offer: string }>();
   for (const t of m[1].matchAll(/\('([a-z_]+)',\s*([\d.]+),\s*(\d+),\s*(\d+),\s*'([a-z_0-9]+)'\)/g)) {
     out.set(t[1], { price: Number(t[2]), slotWindow: Number(t[3]), purchaseWindow: Number(t[4]), offer: t[5] });
@@ -35,7 +35,7 @@ const V1 = (() => {
   return out;
 })();
 
-/** Katalog kakav je nakon 0206: sjeme iz svih migracija uz ciljno stanje i gasenje do_obrane. */
+/** Katalog kakav je nakon 0207: sjeme iz svih migracija uz ciljno stanje i gasenje do_obrane. */
 const CATALOG: Product[] = (() => {
   const byId = new Map<string, Product>();
   for (const s of seededProducts()) byId.set(String(s.row.id), mapProductRow(s.row));
@@ -151,7 +151,7 @@ describe('"Final Pass ne moze se primijeniti na drugi rad" i "prihvaca novu verz
 });
 
 describe('"deaktivirani *_do_obrane proizvodi vise se ne nude"', () => {
-  it('katalog nakon 0206: oba do_obrane postoje (povijest), a neaktivni su', () => {
+  it('katalog nakon 0207: oba do_obrane postoje (povijest), a neaktivni su', () => {
     const doObrane = CATALOG.filter((p) => p.id.endsWith('_do_obrane'));
     expect(doObrane.map((p) => [p.id, p.active])).toEqual([
       ['slot_zavrsni_do_obrane', false],

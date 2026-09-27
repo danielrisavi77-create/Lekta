@@ -1,9 +1,9 @@
 /**
- * Monetizacija V1 (M2), krug 3: migracija 0206 IZVRSENA u stvarnom Postgresu (PGlite), dvaput.
+ * Monetizacija V1 (M2), krug 3: migracija 0207 IZVRSENA u stvarnom Postgresu (PGlite), dvaput.
  *
  * Nalaz pregleda kruga 3: kljucna SQL logika (apply_entitlement_upgrade, trigger snapshota,
  * backfill prije promjene prozora, drugi prolaz kao no-op) bila je dokazana samo regexima nad
- * tekstom migracije. Ovdje se izvrsava: stvarne migracije na kojima 0206 stoji, pa 0206, pa 0206
+ * tekstom migracije. Ovdje se izvrsava: stvarne migracije na kojima 0207 stoji, pa 0207, pa 0207
  * ponovno. Tvrdnje i baza su u tests/helpers/monetizacija-v1-sql.ts; mutacije koje dokazuju da
  * tvrdnje grizu su u tests/gate-mutations.test.ts.
  */
@@ -20,7 +20,7 @@ import {
 
 const ROK = 120_000;
 
-describe('0206 u stvarnom Postgresu', () => {
+describe('0207 u stvarnom Postgresu', () => {
   let run: V1Run | null = null;
 
   afterEach(async () => {

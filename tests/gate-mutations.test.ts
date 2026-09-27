@@ -5402,10 +5402,10 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/drugi-fk-entitlements-products',
-    imitates: '0206 iz kruga 1: upgraded_from_product_id references products dodaje drugi FK prema products, pa ugradnja products(...) u generate-report i repair-docx postaje dvosmislena (PGRST201)',
+    imitates: '0207 iz kruga 1: upgraded_from_product_id references products dodaje drugi FK prema products, pa ugradnja products(...) u generate-report i repair-docx postaje dvosmislena (PGRST201)',
     caught: () => {
       const migracije = migrationsForFkGuard();
-      const idx = migracije.findIndex((m) => m.name === '0206_monetizacija_v1.sql');
+      const idx = migracije.findIndex((m) => m.name === '0207_monetizacija_v1.sql');
       if (idx < 0) return false;
       const sql = migracije[idx].sql;
       const mutated = sql.replace('add column if not exists upgraded_from_product_id text,', 'add column if not exists upgraded_from_product_id text references public.products(id),');
@@ -6176,7 +6176,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
 });
 
 /**
- * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0206 se
+ * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0207 se
  * izvrsava u stvarnom Postgresu (PGlite, tests/helpers/monetizacija-v1-sql.ts). Isti ugovor kao
  * MUTATIONS: cisti baseline, pa mutacija koja mora oboriti gard.
  */
@@ -6192,7 +6192,7 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
   });
 
-  it('0206 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
+  it('0207 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
     const run = await runV1();
     try {
       // Nadogradnja prva: snapshotProblems mijenja katalog (namjerno, da dokaze da kupljeno ostaje).

@@ -37,7 +37,7 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
 2. Za promjenu cijene koristi atomski `set_product_price` (upisuje `products` + `pricing_changelog`
    u istoj transakciji). Ručni `UPDATE price_eur` bez changeloga je prekršaj procesa (kriterij 14.12).
 3. **Katalog Monetizacije V1** (odluka vlasnika 27.9.2026., `docs/decisions/MONETIZACIJA_V1.md`)
-   postavlja migracija `0206_monetizacija_v1.sql`: Repair (`slot_*`) 3,99 / 5,99 / 9,99 / 16,99 /
+   postavlja migracija `0207_monetizacija_v1.sql`: Repair (`slot_*`) 3,99 / 5,99 / 9,99 / 16,99 /
    24,99 € uz prozore 7 / 7 / 14 / 21 / 30 dana, Final Pass (`pass_zavrsni`, `pass_diplomski`,
    `pass_specijalisticki`, `pass_doktorski`) 12,99 / 19,99 / 29,99 / 39,99 € uz 180 / 180 / 240 /
    365 dana, i `pass_semestralni` 14,99 € (6 seminarskih slotova, 180 dana). Cijene mijenja
@@ -51,13 +51,13 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    (živi `products.slot_window_days` samo za stariji redak bez snapshota). Postojeća prava dobivaju
    snapshot prozora pod kojim su kupljena (backfill ide PRIJE promjene prozora u istoj migraciji), a
    trigger `entitlements_snapshot_offer` popunjava prazna polja snapshota i za prava koja ne upisuje
-   webhook (nagrade, kuponi, ručno vezivanje). **Migraciju 0206 primijeni PRIJE deploya funkcija iz
+   webhook (nagrade, kuponi, ručno vezivanje). **Migraciju 0207 primijeni PRIJE deploya funkcija iz
    ovog izdanja**: webhook upisuje nove stupce, a `generate-report` i `repair-docx` čitaju
    `slot_window_days`; bez migracije bi upit prava pao, a te funkcije tada odgovaraju 500 (ne 402).
    `entitlements` ima TOČNO jedan strani ključ prema `products` (`product_id`);
    `upgraded_from_product_id` je namjerno bez ključa, jer bi drugi ključ ugradnju `products(...)`
    učinio dvosmislenom (PostgREST PGRST201). Gard: `tests/monetizacija-v1-migracija.test.ts`.
-   `specijalisticki` je od 0206 prodajna vrsta rada i serverski je prihvaćaju i potrošači prava
+   `specijalisticki` je od 0207 prodajna vrsta rada i serverski je prihvaćaju i potrošači prava
    (`src/report/billable-work-type.ts`); klijentski izbornik i cjenik (`src/report/pricing.ts`) su
    M3 i ovdje se ne mijenjaju.
 4. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
@@ -434,7 +434,7 @@ Takav zahtjev je 409 `upgrade_slot_expired`, a `apply_entitlement_upgrade` istu 
 atomski i vraća `slot_expired`. Repair koji još nije vezan uz rad smije se nadograditi.
 Odbijanje je 409 (`upgrade_*`) ili 404 za tuđe ili nepostojeće pravo, bez PaymentIntenta.
 PaymentIntent nosi `metadata[upgrade_from_entitlement_id]`, a webhook tada **pretvara isto
-pravo** (`apply_entitlement_upgrade`, migracija 0206) umjesto da stvara drugo: isti vezani slot i
+pravo** (`apply_entitlement_upgrade`, migracija 0207) umjesto da stvara drugo: isti vezani slot i
 otisak dokumenta, dulji prozor, novi snapshot prava, `upgrade_order_id` = PaymentIntent
 nadogradnje. Nadogradnja ne izdaje bonuse (pass kupon, nagrada preporučitelju).
 
@@ -446,7 +446,7 @@ Ishodi nadogradnje u `webhook_events`:
 | `processed` uz `upgrade_duplicate` | ponovljena dostava iste uplate nadogradnje | ništa |
 | `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, vezani slot istekao (`upgrade:upgrade_slot_expired`), ili ga je u međuvremenu promijenila druga uplata ili je slot istekao između checkouta i uplate (`upgrade:upgrade_source_unavailable ... ishod=unavailable` ili `ishod=slot_expired`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
 | `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju: pravo je ugašeno, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate ili ručno vraćanje Repair prava |
-| `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0206 |
+| `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0207 |
 
 Ako je puni povrat uplate nadogradnje zabilježen PRIJE same uplate (Stripe ne jamči redoslijed),
 pravo se uopće ne pretvara i Repair ostaje netaknut (`processed` uz `refunded_before_payment`). Samo
@@ -464,7 +464,7 @@ iznad). Zato ih dnevni upit iz 5.1 (`outcome in (..., 'needs_manual_review', ...
 **Snapshot prava.** Webhook proizvod čita zajedno s pravima ponude (`offer_codes(capabilities)`) i
 upisuje ih uz entitlement. Lektin proizvod bez `offer_code` ili bez prava ne knjiži se s praznim
 snapshotom: ishod `failed` uz `product_without_offer: <id>` i ERROR redak
-`webhook-mor product_without_offer`; popravi katalog (migracija 0206), Stripe ponovi dostavu. Pravo
+`webhook-mor product_without_offer`; popravi katalog (migracija 0207), Stripe ponovi dostavu. Pravo
 upisano ručnim vezivanjem (5.1) dobiva `offer_code`, prava i prozor iz kataloga preko triggera
 `entitlements_snapshot_offer`, ali nema `paid_amount_cents`, pa nije kandidat za nadogradnju dok
 operater ne upiše stvarno naplaćeni iznos.
@@ -475,7 +475,7 @@ PaymentIntent koje još čekaju (`status = 'cancelled'`, `last_error = 'refunded
 (`REFUND_MARKERS`) i stanje kupčeva prava: nagrada za vraćen novac se ne isplaćuje, a ona izdana u
 prozoru povrata se povlači. Pad sporednog koraka povrata (ručna narudžba, pass kupon, obveze) i
 dalje ostavlja oznaku `refund_consequences_failed`, a korak i greška su sada i u stupcu
-`webhook_events.outcome_note` (migracija 0206), ne samo u logu.
+`webhook_events.outcome_note` (migracija 0207), ne samo u logu.
 
 ## 6. Klijentska konfiguracija (bez rebuilda)
 

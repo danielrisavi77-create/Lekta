@@ -30,7 +30,7 @@ const lekta = seeded.filter((s) => isSoldByLektaCheckout(s.product.id));
 
 describe('katalog iz migracija (generator)', () => {
   it('parser nalazi cijeli sijani katalog, ne djelomican', () => {
-    // 0002 (16 redaka), 0010 (2), 0017 (2), 0071 (3), 0206 (3). Pad ovog broja znaci da je parser
+    // 0002 (16 redaka), 0010 (2), 0017 (2), 0071 (3), 0207 (3). Pad ovog broja znaci da je parser
     // nesto preskocio, sto bi ostatak ovog testa ucinilo praznim.
     expect(seeded.length).toBeGreaterThanOrEqual(26);
     expect(new Set(seeded.map((s) => s.file))).toEqual(
@@ -39,7 +39,7 @@ describe('katalog iz migracija (generator)', () => {
         '0010_do_obrane_sku.sql',
         '0017_thesis_pass.sql',
         '0071_katedra_pass_products.sql',
-        '0206_monetizacija_v1.sql',
+        '0207_monetizacija_v1.sql',
       ]),
     );
   });

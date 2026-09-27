@@ -399,7 +399,7 @@ Deno.serve(async (req: Request) => {
     // 3. WS-2 enforcement: nedvosmislen nesklad vrste rada -> 409 (osim ako je korisnik potvrdio).
     //    Signali su sanitizirani (broj rijeci + enum marker), nikad doslovni tekst.
     const signals = { words: Number(meta.signals?.words) || null, titleMarker: meta.signals?.titleMarker ?? null };
-    // specijalisticki (0206) nema izvedenog raspona opsega, pa ga blokira samo doktorska naslovnica
+    // specijalisticki (0207) nema izvedenog raspona opsega, pa ga blokira samo doktorska naslovnica
     // (billable-work-type.ts); za ostale vrste odluka je doslovno unambiguousMismatch.
     const mismatch = billableMismatch(workType, signals, (s) => estimateWorkType(s).workType);
     if (meta.confirmedMismatch !== true && mismatch.block) {
