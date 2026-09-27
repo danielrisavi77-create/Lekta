@@ -32,7 +32,7 @@ const ALLOWED_DATA_KEYS = new Set([
   'total', 'found', 'missing', 'flagged', 'checked',
   'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount', 'kind',
   'manual', 'count', 'score', 'demo', 'method', 'product', 'ruleId',
-  'changes', 'stored', 'ms', 'auto', 'assisted', 'unknown',
+  'changes', 'stored', 'ms', 'auto', 'assisted', 'unknown', 'structureGaps',
 ]);
 
 function sanitizeData(input: any): Record<string, string | number | boolean> {
