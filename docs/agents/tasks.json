@@ -606,7 +606,7 @@
         "T44",
         "T53"
       ],
-      "note": "Lijevak upload -> analiza -> profil (unit) -> popravak -> kupnja iz postojeceg trackEvent toka (src/ui/telemetry.ts, inertan bez privole, samo DOPUSTENI_KLJUCEVI); skript po uzoru na usage-report (tekstualni izvjestaj) ili Metabase self-host; zaseban mali zadatak: utm_source uz privolu u isti tok jer PR #117 nosi utm_* do /rad/ ali ih nitko ne cita."
+      "note": "Lijevak upload -> analiza -> profil (unit) -> popravak -> kupnja iz postojeceg trackEvent toka (src/ui/telemetry.ts, inertan bez privole, samo ANALYTICS_DATA_KEYS iz src/analytics/event-sanitizer.ts); skript po uzoru na usage-report (tekstualni izvjestaj) ili Metabase self-host; zaseban mali zadatak: utm_source uz privolu u isti tok jer PR #117 nosi utm_* do /rad/ ali ih nitko ne cita."
     },
     {
       "id": "T56",
