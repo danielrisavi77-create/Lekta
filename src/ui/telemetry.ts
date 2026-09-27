@@ -38,7 +38,7 @@ export interface TelemetryDeps {
  *                                                 preglednik ne potvrdjuje spremanje na disk)
  *   revision_compared                             usporedjene dvije verzije istog rada (novo, T12)
  *
- * Atributi ostaju unutar `DOPUSTENI_KLJUCEVI` (profil, vrsta rada, kategorija, brojevi, trajanje); nikad naslov,
+ * Atributi ostaju unutar zajednickog `ANALYTICS_DATA_KEYS` allowlista (profil, vrsta rada, kategorija, brojevi, trajanje); nikad naslov,
  * autor, naziv datoteke, komentar ni isjecak rada. `tests/product-journey-telemetry.test.ts` tvrdi da se svaki
  * dogadjaj iz ovog popisa stvarno emitira u `src/` i da sanitizacija odbacuje sve izvan bijele liste.
  */
