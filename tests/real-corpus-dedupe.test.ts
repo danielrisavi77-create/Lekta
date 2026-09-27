@@ -17,6 +17,7 @@ import { attestationContentDigestSync, sha256HexSync } from '../src/verification
 import {
   FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
 } from '../scripts/lib/corpus-attestation-core.mjs';
+import { repairSourceHashAtCommit } from '../scripts/lib/repair-source-hash.mjs';
 
 const entry = (documentId: string, root: string, extra: Partial<RealCorpusManifestEntry> = {}): RealCorpusManifestEntry => ({
   documentId,
@@ -272,6 +273,8 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(potpisana.fingerprintVersion).toBe(2);
       expect(potpisana.protocol).toMatchObject({ duplicateDocumentCount: 0, uniqueDocumentCount: 3, rawDocumentCount: 3, countedDocumentCount: 2 });
       expect(potpisana.signedContentDigest).toMatch(/^[0-9a-f]{64}$/);
+      // T75: skripta upisuje otisak koda popravka commita MJERENJA, ne s diska.
+      expect(potpisana.repairSourceHash).toBe(repairSourceHashAtCommit(potpisana.measuredFromCommit).hash);
       expect(attestationProblems(potpisana)).toEqual([]);
 
       // Ista ovjera ponovljena nad ISTIM mjerenjem zadrzava potpis.
