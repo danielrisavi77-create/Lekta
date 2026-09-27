@@ -102,7 +102,7 @@ describe('Opportunity Report wiring', () => {
 
   it('oba repair puta nose profil/vrstu rada u Opportunity kontekst', () => {
     expect(app).toContain("opportunityContext:{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''}");
-    expect(app).toContain("const _noopCtx={profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''}");
+    expect(app).toContain("emitRepairNoOpSignals(trackEvent,out.skippedReasons,{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''})");
   });
 
   it('analysis structure gap ostaje izveden iz sanitiziranog helpera, ne iz sirovog reasona', () => {
