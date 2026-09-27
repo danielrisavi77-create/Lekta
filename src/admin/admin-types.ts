@@ -218,19 +218,30 @@ export interface OpportunityRow {
   basis: OpportunityBasis;
 }
 
+export interface OpportunityGapBreakdown {
+  category?: string;
+  kind: string;
+  count: number;
+}
+
 export interface OpportunityBucket {
   opportunityEvents: number;
   manualAnalyses: number;
   unmeasurableAnalyses: number;
+  structureGapAnalyses: number;
+  structureGapItems: number;
   profileEvents: number;
   nonVerifiedProfileEvents: number;
   repairRuns: number;
   repairGapRuns: number;
   repairUnresolvedChecks: number;
+  repairNoOpItems: number;
   paywallEvents: number;
   checkoutEvents: number;
   purchaseEvents: number;
   opportunities: OpportunityRow[];
+  structureGaps: OpportunityGapBreakdown[];
+  repairNoOpReasons: OpportunityGapBreakdown[];
 }
 
 export interface OpportunityStats {
