@@ -30,4 +30,24 @@ describe('gitleaks allowlist za repair release fixturu', () => {
     expect(paths).not.toMatch(/tests/i);
     expect(workflow).not.toContain("'''MIGHAgEAMBMGByqGSM49");
   });
+
+  it('allowlista naziv localStorage kljuca lekta.orders.v1 kao literal, ne putanju', () => {
+    expect(workflow).toContain("'''lekta\\.orders\\.v1'''");
+
+    const regexesBlock = workflow.match(/regexes = \[([\s\S]*?)\n\s*\]/)?.[1] ?? '';
+    const pathsBlock = workflow.match(/paths = \[([\s\S]*?)\n\s*\]/)?.[1] ?? '';
+
+    expect(regexesBlock).toContain('lekta\\.orders\\.v1');
+    expect(pathsBlock).not.toContain('lekta.orders.v1');
+  });
+
+  it('regex za lekta.orders.v1 iz konfiguracije pogadja tocan literal, ne slicne varijante', () => {
+    const raw = workflow.match(/'''(lekta\\\.orders\\\.v1)'''/)?.[1];
+    expect(raw).toBeDefined();
+
+    const pattern = new RegExp(raw as string);
+
+    expect(pattern.test('lekta.orders.v1')).toBe(true);
+    expect(pattern.test('lekta.ordersXv1')).toBe(false);
+  });
 });
