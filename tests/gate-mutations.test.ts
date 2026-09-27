@@ -122,6 +122,7 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -257,6 +258,26 @@ interface Mutation {
   cleanBefore: () => boolean;
 }
 
+/**
+ * Tvrdnja garda T74: otisak koda popravka ne mijenja se kad se promijeni samo dokumentacija ili test
+ * u src/repair, a mijenja se kad se promijeni produkcijski .ts. Obje polovice, inace bi konstantni
+ * otisak prolazio.
+ */
+function otisakPratiSamoProdukciju(hash: (files: { path: string; content: string }[]) => string): boolean {
+  const base = [
+    { path: 'src/repair/apply-fixers.ts', content: 'export const a = 1;\n' },
+    { path: 'src/repair/apply-fixers.test.ts', content: 'it("x", () => {});\n' },
+    { path: 'src/repair/CLAUDE.md', content: '# Popravak\n' },
+  ];
+  const s = (p: string, content: string) => base.map((f) => (f.path === p ? { ...f, content } : f));
+  const h = hash(base);
+  return (
+    hash(s('src/repair/CLAUDE.md', '# Popravak\n<!-- T73 mutacija: samo dokumentacija -->\n')) === h &&
+    hash(s('src/repair/apply-fixers.test.ts', 'it("y", () => {});\n')) === h &&
+    hash(s('src/repair/apply-fixers.ts', 'export const a = 2;\n')) !== h
+  );
+}
+
 /** Potpisana metoda: dva neovisna orakula. Bez nje nijedan dokument nije dokaz, i to je namjerno. */
 const PROOF_METHOD: ProofMethod = {
   signedBy: 'Daniel',
@@ -342,7 +363,7 @@ const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
 const buildUpisnikProfileCandidates: typeof buildRawUpisnikProfileCandidates = (...args) =>
-  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry);
+  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry, args[8]);
 
 function upisnikEvidenceFixture(over: Partial<{ sourceUrl: string; sourceLocator: string; quote: string }> = {}) {
   return buildUpisnikProfileCandidates(
@@ -369,7 +390,7 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
-function upisnikInventory(decisions = upisnikProfileDecisions.decisions) {
+function upisnikInventory(decisions = upisnikProfileDecisions.decisions, integratedGraduateCoverage: typeof upisnikProfileDecisions.integratedGraduateCoverage = upisnikProfileDecisions.integratedGraduateCoverage) {
   return buildUpisnikProfileCandidates(
     upisnikRows.rows,
     upisnikComponents.decisions,
@@ -378,6 +399,7 @@ function upisnikInventory(decisions = upisnikProfileDecisions.decisions) {
     upisnikProfileDecisions.exclusions as Parameters<typeof buildUpisnikProfileCandidates>[4],
     upisnikProfileDecisions.blockers as Parameters<typeof buildUpisnikProfileCandidates>[5],
     upisnikProfileDecisions.holds,
+    sourceRegistry, integratedGraduateCoverage,
   );
 }
 
@@ -602,6 +624,35 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       try { upisnikGuardFixture('3', 'Prijediplomski program stručnog studija elektrotehnike'); return false; }
       catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/izbrisana-integrirana-odluka',
+    imitates: 'Brisanje iznimke za integrirani studij uklanja kandidata 917',
+    cleanBefore: () => upisnikInventory(undefined, upisnikProfileDecisions.integratedGraduateCoverage).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === true,
+    caught: () => upisnikInventory(undefined, []).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === false,
+  },
+  {
+    id: 'upisnik/globalna-kompatibilnost-integriranog',
+    imitates: 'Globalno dopustenje diplomskih profila dodaje kandidata kontrolnom integriranom programu',
+    cleanBefore: () => ['900', '915', '919', '2018', '2229', '2236', '2237', '2585'].every((code) => upisnikInventory().programs.find((row) => row.programCode === code)?.componentWorkTypeProfileIds.length === 0),
+    caught: () => {
+      const controls = new Set(['900', '915', '919', '2018', '2229', '2236', '2237', '2585']);
+      const report = upisnikInventory();
+      const atRisk = report.programs.filter((row) => controls.has(row.programCode) &&
+        Object.values(upisnikProfiles).some((profile) => row.componentIds.includes(profile.unitId) && profile.workTypes?.includes('graduate')));
+      return atRisk.length > 0 && atRisk.every((row) =>
+        row.exactCandidateProfileIds.length === 0 && row.componentWorkTypeProfileIds.length === 0);
+    },
+  },
+  {
+    id: 'upisnik/bez-registrirane-url-veze',
+    imitates: 'Neregistrirani URL na ispravnoj domeni prolazi bez provjere prema registru',
+    cleanBefore: () => upisnikInventory(undefined, upisnikProfileDecisions.integratedGraduateCoverage).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === true,
+    caught: () => {
+      const coverage = upisnikProfileDecisions.integratedGraduateCoverage[0]!;
+      try { upisnikInventory(undefined, [{ ...coverage, evidence: { ...coverage.evidence, sourceUrl: 'https://www.vef.unizg.hr/nepostojeci.pdf' } }]); return false; }
+      catch (error) { return /source registry/u.test(String(error)); }
     },
   },
   {
@@ -964,6 +1015,15 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       computeCoverageCell(profileWith(goodEntry({ status: 'advisory', scored: false })), SOURCES, {}).state ===
       'advisory-only',
+  },
+
+  // --- otisak koda popravka (T74) ----------------------------------------------------------------
+  {
+    id: 'repair-hash/claude-md-zastarijeva-manifeste',
+    imitates:
+      'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
+    caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
+    cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
