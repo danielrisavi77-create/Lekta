@@ -939,3 +939,23 @@ Datum: 2026-07-11.
   BL-P0-01-4), ali tvrdnja o zivoj/commitanoj SEO steti je osporena (dist u .gitignore,
   netlify.toml postavlja LEKTA_SITE_ORIGIN). Realni prioritet stavke je P3 higijena, no
   rjesava se u P0-01 jer je dio konfiguracijskog paketa.
+
+## Program nakon lansiranja (P-A do P-G), odluka vlasnika 2026-09-27
+
+Ideje iz vanjske analize, prihvacene tim redom, pokrecu se tek nakon T47 (objava izdanja);
+nista od ovoga ne mijenja granicu proizvoda (Lekta analizira i popravlja FORMU, nikad sadrzaj).
+
+| oznaka | naziv | sto vec postoji | sto nedostaje | velicina (S/M/L) | glavni rizik | preduvjet |
+| --- | --- | --- | --- | --- | --- | --- |
+| P-A | Verification Passport | RELEASE_PROOF, provenijencija korpusa, changelog popravaka, hash ulaza/izlaza popravka, Word verifikacija | korisnicki artefakt (JSON + citljiv HTML) s verzijom Lekte, profilom i revizijom pravila, popisom provjerenog i NEPROVJERENOG, potpisom i stranicom za provjeru hasha | S do M | formulacija nikad "fakultet odobrava", izostavljanje "nije provjereno" = laz | T47 |
+| P-B | Rule Time Machine, faza podataka | ruleEntries s izvorom/lokatorom/citatom, source drift, akademska godina | polja effectiveFrom/effectiveTo u ruleEntries i gard "nepotvrdjen datum = null, nikad pogadjanje", bez UI-ja | M (podaci L jer stare verzije pravilnika treba nabaviti) | vakuumsko zeleno (pravilo bez datuma vrijedi "oduvijek") | P-A; UI tek kad bar 20 profila ima dvije verzije |
+| P-C | Headless ugovor motora (CLI i tipovi) | lokalni motor u pregledniku i compose-profile kao jedini ulaz | stabilan interni ugovor lekta analyze/verify/repair, semver, dokumentacija | M | javni bundle pravila (klasifikacija), popravak bez naplate iza tudjih klijenata | javni SDK tek uz odluku o licenci pravila |
+| P-D | Rule -> Word Template Compiler (.dotx) | 198 predlozaka naslovnice, docx-writer, repair engine zna stilove | .dotx generator (styles.xml, sectPr, TOC, caption/footnote stilovi) i gard da predlozak zastari s verzijom pravila | M | docx-writer je vec proizveo datoteku bez rels na styles pa je Word ignorirao TNR 12, svaki predlozak treba Tier 2 Word dokaz | P-C |
+| P-E | Povratna informacija bez sadrzaja | check.id i trackEvent inertan bez privole | gumb "jest/nije problem" i statistika po check.id bez teksta | S | pseudonimizirani primjeri (M) tek uz DPA i posebnu odluku vlasnika; tok podataka samo Lekta -> Laya | T55 |
+| P-F | Word Add-in i OOXML Fuzzing Lab | lokalni motor, OOXML parser, error corpus, mutacijski gateovi, Word oracle | Office.js klijent i mapiranje nalaza na raspon u zivom dokumentu; generator cudnih valjanih struktura i automatsko smanjivanje na minimalni primjer | L | Office.js daje OOXML sporo i nepotpuno, "Popravi" u zivom dokumentu nema Word oracle; fuzzing bez Word oracla = lazno zeleno, trosi lokalni stroj | P-C i korisnici, odnosno drugi stroj ili CI s Wordom |
+| P-G | Institutional Rule Publisher | "Donesi pravilnik", ledger, verified-profiles.json privatno | racuni ustanova, tok odobrenja, potpis, verzioniranje po ustanovi, pravni okvir | L | prebacuje mjerodavnost na ustanovu, dug prodajni ciklus | zahtjev bar jedne ustanove; proba interesa = izvoz machine readable pravila po profilu (S) |
+
+### Redoslijed i razlog
+
+P-A je najjeftinija i prodaje se odmah. P-B nosi najjacu pricu, ali je skupa za podatke.
+P-C je temelj za P-D, P-F i P-G.
