@@ -54,7 +54,7 @@ drugo ime za isti korak mjerilo bi ga dvaput.
 
 ## Sto se NE salje
 
-Sve izvan bijele liste `DOPUSTENI_KLJUCEVI` ispada u `sanitizeEventData`: naslov, autor, naziv datoteke, komentar,
+Sve izvan zajednicke bijele liste `ANALYTICS_DATA_KEYS` (`src/analytics/event-sanitizer.ts`) ispada u `sanitizeEventData`: naslov, autor, naziv datoteke, komentar,
 isjecak rada, tekst nalaza. Vrijednosti smiju biti samo skalari (string, broj, boolean). Gard:
 `tests/product-journey-telemetry.test.ts` (sanitizacija, privola, emitiranje).
 
