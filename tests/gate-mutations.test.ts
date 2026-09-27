@@ -122,6 +122,7 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -255,6 +256,26 @@ interface Mutation {
   imitates: string;
   caught: () => boolean;
   cleanBefore: () => boolean;
+}
+
+/**
+ * Tvrdnja garda T74: otisak koda popravka ne mijenja se kad se promijeni samo dokumentacija ili test
+ * u src/repair, a mijenja se kad se promijeni produkcijski .ts. Obje polovice, inace bi konstantni
+ * otisak prolazio.
+ */
+function otisakPratiSamoProdukciju(hash: (files: { path: string; content: string }[]) => string): boolean {
+  const base = [
+    { path: 'src/repair/apply-fixers.ts', content: 'export const a = 1;\n' },
+    { path: 'src/repair/apply-fixers.test.ts', content: 'it("x", () => {});\n' },
+    { path: 'src/repair/CLAUDE.md', content: '# Popravak\n' },
+  ];
+  const s = (p: string, content: string) => base.map((f) => (f.path === p ? { ...f, content } : f));
+  const h = hash(base);
+  return (
+    hash(s('src/repair/CLAUDE.md', '# Popravak\n<!-- T73 mutacija: samo dokumentacija -->\n')) === h &&
+    hash(s('src/repair/apply-fixers.test.ts', 'it("y", () => {});\n')) === h &&
+    hash(s('src/repair/apply-fixers.ts', 'export const a = 2;\n')) !== h
+  );
 }
 
 /** Potpisana metoda: dva neovisna orakula. Bez nje nijedan dokument nije dokaz, i to je namjerno. */
@@ -964,6 +985,15 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       computeCoverageCell(profileWith(goodEntry({ status: 'advisory', scored: false })), SOURCES, {}).state ===
       'advisory-only',
+  },
+
+  // --- otisak koda popravka (T74) ----------------------------------------------------------------
+  {
+    id: 'repair-hash/claude-md-zastarijeva-manifeste',
+    imitates:
+      'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
+    caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
+    cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
