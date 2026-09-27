@@ -1,0 +1,441 @@
+SVEUČILIŠTE U ZAGREBU VETERINARSKI FAKULTET
+SVEUČILIŠNI INTEGRIRANI PRIJEDIPLOMSKI I DIPLOMSKI STUDIJ VETERINARSKA MEDICINA
+
+Veterinarski fakultet Sveučilišta u Zagrebu
+
+NAPUTAK ZA PRIJAVU, PISANJE I OBLIKOVANJE DIPLOMSKOG RADA
+
+Povjerenstvo za integrirani preddiplomski i diplomski studij
+
+Članovi: • •
+
+prof. dr. sc. Ksenija Vlahović, predsjednica izv. prof. dr. sc. Marko Pećin
+
+• prof. dr. sc. Anamaria Ekert Kabalin
+
+Veterinarski fakultet:
+
+Naputak
+
+za prijavu,
+
+pisanje
+
+i
+
+oblikovanje
+
+• prof. dr. sc. Andrea
+diplomskog rada
+
+Gudan
+
+Ku1rilj
+
+• prof. dr. sc. Andreja Prevendar Crnić
+
+URL: https://www.vef.unizg.hr/
+
+• prof. dr. sc. Tajana Trbojević Vukičević
+
+• izv. prof. dr. sc. Gordana Gregurić Gračner
+
+Poštovani studenti,
+prijava, izrada i obrana diplomskog rada sastavni je i zaključni dio Sveučilišnog integriranog prijediplomskog i diplomskog studija Veterinarska medicina Veterinarskog fakulteta Sveučilišta u Zagrebu. Svi su studenti obvezni obraniti diplomski rad na upisanom studijskom programu kako bi stekli titulu doktor/doktorica veterinarske medicine.
+Obranom diplomskog rada studenti stječu 10 ECTS bodova.
+U pisanju diplomskog rada iznimno je važno slijediti etička načela i korektno navoditi tuđe ideje, pretpostavke, rezultate ili zaključke, bez obzira na to u kojem se obliku one u diplomskom radu preuzimaju (citiranje / doslovno navođenje, parafraziranje, sažimanje tuđih rezultata).
+Veterinarski fakultet iskazuje nultu tolerantnost na sve oblike plagiranja i neetičkoga korištenja literature i izvora.
+Izrazi koji se u Naputku koriste za osobe u muškom su rodu, neutralni su i odnose se jednako na muške i ženske osobe, te se ni u kojem smislu ne mogu tumačiti kao osnova za spolnu odnosno rodnu diskriminaciju ili privilegiranje.
+Izrada diplomskog rada složen je i odgovoran proces koji treba kvalitetno provesti kako bi rezultat bio što uspješniji.
+Na temelju vaših iskustava sa studija te vaših interesa i preferencija odlučit ćete kojeg biste nastavnika htjeli zamoliti da vodi izradu vašeg diplomskog rada.
+Ako je mentor spreman prihvatiti suradnju s vama, naći ćete se na prvim konzultacijama te ćete raspraviti o odabiru teme s objavljenog popisa, dogovoriti procedure i način izrade diplomskog rada.
+Nadamo se da će vam upute i smjernice koje se nalaze u ovom naputku biti razumljive i korisne. Želimo vam puno uspjeha u radu, a ako imate bilo kakvih dodatnih pitanja, slobodno se obratite Referadi za integrirani studij.
+Urednici
+prof. dr. sc. Ksenija Vlahović, predsjednica izv. prof. dr. sc. Marko Pećin prof. dr. sc. Anamaria Ekert Kabalin prof. dr. sc. Andrea Gudan Kurilj prof. dr. sc. Andreja Prevendar Crnić prof. dr. sc. Tajana Trbojević Vukičević izv. prof. dr. sc. Gordana Gregurić Gračner
+Iz Pravilnika o integriranom preddiplomskom i diplomskom studiju (iz god. 2022.) o obrani diplomskog rada čl. 78. st. 1., 2. i 3.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+2
+
+VETERINARSKI FAKULTET SVEUČILIŠTA U ZAGREBU
+NAPUTAK ZA PRIJAVU, PISANJE I OBLIKOVANJE DIPLOMSKOG RADA
+
+Sadržaj
+
+Dopune i izmjene potrebno je pratiti na mrežnoj stranici Fakulteta Ažurirano 17. prosinca 2023.
+
+1. OPĆE NAPOMENE
+
+4
+
+2. IZBOR MENTORA, PRIJAVA TEME I PREDAJA DIPLOMSKOG RADA
+
+4
+
+3. OBRANA DIPLOMSKOG RADA
+
+5
+
+4. TEHNIČKE UPUTE ZA IZRADU DIPLOMSKOG RADA
+
+6
+
+5. OBLIKOVANJE NASLOVNICE DIPLOMSKOG RADA
+
+6
+
+Primjer izgleda prve stranice
+
+6
+
+6. DRUGA STRANICA
+
+7
+
+Primjer izgleda druge stranice
+
+7
+
+7. ZAHVALA
+
+7
+
+8. POPIS PRILOGA
+
+7
+
+9. KRATICE
+
+7
+
+10. SADRŽAJ
+
+7
+
+11. POGLAVLJA DIPLOMSKOG RADA
+
+8
+
+12. ZNANSTVENI DIPLOMSKI RAD
+
+Primjer izgleda znanstvenog diplomskog rada
+
+1. UVOD
+
+2. PREGLED REZULTATA DOSADAŠNJIH ISTRAŽIVANJA
+
+3. MATERIJAL I METODE
+
+4. REZULTATI 5. RASPRAVA
+
+8
+
+6. ZAKLJUČCI
+
+7. LITERATURA
+
+8. SAŽETAK
+
+9. SUMMARY
+
+10. ŽIVOTOPIS
+
+13. PREGLEDNI DIPLOMSKI RAD
+
+Primjer izgleda preglednog diplomskog rada
+
+1. UVOD
+
+2. PREGLED REZULTATA DOSADAŠNJIH ISTRAŽIVANJA
+
+3. RASPRAVA (ne mora sadržavati poglavlje Rasprava) 4. ZAKLJUČCI
+
+9
+
+5. LITERATURA
+
+6. SAŽETAK
+
+7. SUMMARY
+
+8. ŽIVOTOPIS
+
+14. STRUČNI DIPLOMSKI RAD
+
+9
+
+15. SAŽETAK/ SUMMARY
+
+9
+
+16. PRILOZI
+
+9
+
+17. VAŽNA NAPOMENA
+
+10
+
+18. ŽIVOTOPIS
+
+10
+
+19. LITERATURA (reference)
+
+10
+
+20. NAČIN PISANJA LITERATURE
+
+10
+
+21. ZAVRŠNE BILJEŠKE
+
+12
+
+22. UPUTA STUDENTIMA ZA KORIŠTENJE PROGRAMOM TURNITIN
+
+12
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+3
+
+NAPUTAK ZA PRIJAVU, PISANJE I OBLIKOVANJE DIPLOMSKOG RADA
+
+Cilj je ove informacije usklađivanje postupaka pri tehničkom opremanju i izradi diplomskog rada
+
+1. OPĆE NAPOMENE
+2. IZBOR MENTORA, PRIJAVA TEME I
+PREDAJA DIPLOMSKOG
+RADA
+
+• Sveučilišni integrirani prijediplomski i diplomski studij Veterinarska medicina završava pisanjem i obranom diplomskog rada.
+• Za proceduru izrade diplomskog rada zaduženo je Povjerenstvo za integrirani preddiplomski i diplomski studij.
+• Diplomski rad može se pisati na hrvatskom ili engleskom jeziku. • Student je odgovoran i zadužen za uređivanje teksta. Tekst mora biti gramatički ispravan i
+mora sadržavati sve elemente navedene u Naputku za prijavu, pisanje i oblikovanje diplomskog rada. • Diplomski rad može biti samostalni znanstveni, stručni ili pregledni rad kojim student dokazuje da raspolaže znanjem iz specifičnog područja, a izrađuje ga pod nadzorom i uz pomoć mentora. • Studentu se kao ekvivalent za znanstveni diplomski rad može priznati i znanstveni rad koji je nagrađen Rektorovom nagradom kao i rad koji je objavljen u indeksiranom časopisu, a na kojemu je student suautor ili prvi autor, uz obrazloženje konkretnog doprinosa studenta tom radu (obrasci DVM-06 i DVM-07). Ako rad ima više autora, samo se jednom studentu autoru može priznati to pravo na temelju mišljenja mentora i glavnog autora. • Mentor za diplomski rad može biti nastavnik Veterinarskoga fakulteta Sveučilišta u Zagrebu izabran na znanstveno-nastavno radno mjesto ili viši asistent Fakulteta s akademskim stupnjem doktora znanosti upisan u Upisnik znanstvenika Republike Hrvatske. Uz nastavnika Veterinarskog fakulteta komentor za diplomski rad može biti nastavnik ili znanstvenik visokoškolske i znanstveno istraživačke ustanove s akademskim stupnjem doktora znanosti. • U obrazloženim slučajevima potrebe za multidisciplinarnim vođenjem studenata tijekom izrade i pisanja diplomskog rada Povjerenstvo za integrirani preddiplomski i diplomski studij može odobriti dvojno mentorstvo iz različitih područja kojima pripada tema diplomskog rada. • Mentor pomaže pristupniku pri izradi diplomskog rada objašnjavajući mu pobliže zadatke i dajući savjete u pogledu načina odabira i obrade materijala, odabira sredstava za rad, dokumentacije i literature, te je zadužen da konačna verzija diplomskog rada koja se predaje za postupak obrane bude napisana u skladu s ovim naputkom. • Tijekom pisanja diplomskog rada mentor je dužan studentu pružiti stručnu pomoć i savjetovanje.
+• Uz slobodno odabrane teme, nastavnici na početku akademske godine predlažu teme diplomskih radova. Na temelju tih prijedloga oblikuje se digitalni popis tema diplomskih radova (katalog tema diplomskih radova) koji se objavljuju na mrežnoj stranici Fakulteta do upisa u drugi semestar tekuće akademske godine.
+• Student treba prijaviti temu diplomskog rada najkasnije do upisa 12. semestra. • Student dostavlja Povjerenstvu za integrirani preddiplomski i diplomski studij (dalje u tekstu:
+Povjerenstvo) molbu za odobrenje prijedloga teme i mentora diplomskog rada (obrazac DVM-01) koju, u znak suglasnosti i potvrđenog dogovora, potpisuju student i mentor studenta, bez odluke Fakultetskog vijeća. • Studenti čiji rad ima znanstveno-istraživački karakter obvezan je kod prijave teme diplomskog rada zatražiti i odobrenje od Povjerenstva za etiku u veterinarstvu. Rješenje o prihvaćanju teme diplomskog rada Referada izdaje po pristiglom odobrenju Povjerenstva za etiku u veterinarstvu. Povjerenstvo za etiku u veterinarstvu zaprima prijavu teme diplomskog rada do svakog 5-og u mjesecu. • Povjerenstvo na propisanom obrascu sastavlja Odluku o prihvaćanju/neprihvaćanju prijedloga teme i mentora diplomskog rada (obrazac DVM-02), koju dostavlja studentu i mentoru.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+4
+
+3. OBRANA DIPLOMSKOG
+RADA
+
+• U slučaju negativne odluke o prijavi prijedloga teme i mentora diplomskog rada Povjerenstvo uz odluku dostavlja pisano obrazloženje i preporuku studentu i mentoru.
+• Temu za diplomski rad odobrava Povjerenstvo na prijedlog mentora i studenta. • Student može jedanput promijeniti temu diplomskog rada i/ili mentora diplomskog rada
+(obrasci DVM-04 i DVM-05). • Prosudbu završne verzije diplomskog rada obavlja mentor, te je odgovaran za njegovo
+strukturno, sadržajno i tehničko oblikovanje. • Kad student završi diplomski rad, dostavlja ga u .doc ili .docx obliku datoteke Word
+skeniranom i od strane mentora potpisanom (na prvoj stranici) istovjetnom PDF obliku do 15. u mjesecu. • Verzija diplomskog rada koji se predaje treba biti .doc ili .docx obliku datoteke Word bez označenih ispravaka (track changes), bez oznaka Turnitin podudarnosti unutar teksta te treba biti u konačnoj verziji koja odgovara naputku za prijavu, pisanje i izradu diplomskog rada. • Uz završnu verziju diplomskog rada potrebno je priložiti i potvrdu o autentičnosti diplomskog rada generiranu iz programa Turnitin i potpisanu od strane mentora i studenta te prijedlog članova Povjerenstva za obranu diplomskog rada. Mentor može biti član povjerenstva, ali ne smije biti predsjednik. • Povjerenstvo za integrirani preddiplomski i diplomski studij donosi odluku o prihvaćanju diplomskog rada (bez odluke Fakultetskog vijeća) i Povjerenstva za obranu, a o tome dostavlja obavijest studentu, mentoru i izabranom povjerenstvu (obrazac DVM-03). • Ako Povjerenstvo za integrirani preddiplomski i diplomski studij traži određene ispravke i/ili dopune rada, student je dužan dostaviti ga ispravljenog u Wordu te skeniranom i od strane mentora potpisanog (na prvoj stranici) istovjetnog PDF oblika do 15. u mjesecu.
+• Nakon odluke Povjerenstva o prihvaćanju diplomskog rada student je dužan dostaviti diplomski rad u četiri uvezena primjerka i u elektroničkom obliku u Referadu za integrirani studij najkasnije 8 dana prije roka za obranu diplomskog rada, zajedno s ocjenom/mišljenjem mentora i prijedlogom datuma obrane.
+• Uvjeti za obranu diplomskog rada su: svi položeni ispiti, obavljen kolegij Terensko-stručni i Stručno-klinički rad, dostavljen ovjereni Dnevnik stručne prakse i potvrda Središnje knjižnice da su vraćene sve posuđene knjige.
+• Odluka o obrani diplomskog rada s uvezenim primjercima dostavlja se članovima Povjerenstva za obranu najkasnije 5 dana prije obrane diplomskog rada.
+• Članovi Povjerenstva za obranu diplomskog rada mogu biti nastavnici u znanstvenonastavnom zvanju i viši asistenti. U slučaju dvojnog mentorstva jedan mentor postaje član povjerenstva, a drugi mentor zamjenski član istoga Povjerenstva.
+• Termin javne obrane diplomskog rada utvrđuje resorni prodekan zajedno s prethodno određenim tročlanim povjerenstvom.
+• Predsjednik povjerenstva dužan je organizirati mjesto i vrijeme obrane diplomskog rada, o čemu posebno obavještava studenta pristupnika i članove povjerenstva.
+• Predsjednik povjerenstva otvara postupak obrane diplomskog rada, konstatira da je student pristupnik ispunio sve uvjete za pristupanje obrani rada te navodi naslov diplomskog rada i ime mentora.
+• Obrana diplomskog rada sastoji se od studentova usmenog izlaganja s preporukom trajanja do 15 minuta, nakon čega svaki član ispitnog povjerenstva ima mogućnost postavljanja pitanja. Nakon što student odgovori na postavljena pitanja, članovi povjerenstva napuštaju prostoriju i vijećaju o ocjeni. Svaki član povjerenstva ocjenjuje izradu diplomskog rada, kao i javnu obranu diplomskog rada. Predsjednik tročlanog povjerenstva ispunjava propisani zapisnik te ga odmah nakon završetka diplomskog ispita potpisuju svi članovi povjerenstva. Potpisani zapisnik i popis pitanja postavljenih kandidatu dostavljaju se u Referadu za integrirani studij.
+• Student bez studentskih prava uz dokumentaciju prilaže i priznanicu o uplati troškova za obranu diplomskog rada.
+• U slučaju da student ne obrani diplomski rad, ponovni pristup obrani, uz prijavu istoga, moguć je najranije 30 dana od prethodnog pristupanja obrani.
+• Središnja knjižnica na svojoj mrežnoj podstranici održava elektroničku bazu diplomskih radova, u skladu s postojećim propisima o javnom pristupu te zaštiti autorskih prava
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+5
+
+4. TEHNIČKE UPUTE
+ZA IZRADU DIPLOMSKOG
+RADA
+
+objavljenih radova. Diplomski radovi objavljuju se u cijelosti ili dijelu, u svrhu informiranja javnosti. Prilikom predaje gotovog diplomskog rada student i mentor potpisuju Izjavu (obrazac OB-K-26) o javnom pristupu diplomskom radu koji se u roku od 30 dana od dana obrane objavljuje na nacionalnom repozitoriju odnosno repozitoriju Fakulteta. • Diplomski rad treba biti pisan na računalu i tiskan u standardnoj veličini (A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Diplomski rad u pravilu treba imati minimalno 25 stranica. Sve stranice teksta (počevši od Uvoda) trebaju biti numerirane u donjem desnom kutu. Tekst treba biti pisan hrvatskim ili engleskim jezikom, prema svim gramatičkim i pravopisnim pravilima, te ga je poželjno lektorirati. • Latinski, engleski i drugi strani nazivi pišu se kurzivom. • Kratica za engleski je engl. kurziv, npr. FDA od engl. Food and Drug Administration. • Prva se stranica (naslovnica) ne označava brojem, druga i ostale stranice do Uvoda označavaju se rimskim brojevima, a ostale arapskim brojevima. • Uvlaka odlomka (engl. paragraph indent)
+o Svaki odlomak započinje uvlakom o Nazivi odjeljaka i pododjeljaka diplomskog rada se ne uvlače o Uvlaka prvog odlomka treba biti 1,25 cm o Kada je to moguće, treba izbjeći prelamanje odlomaka na više stranica. • Uvez diplomskog rada ne treba imati tvrde korice. • Primjer naslovne stranice:
+SVEUČILIŠTE U ZAGREBU VETERINARSKI FAKULTET
+(Times New Roman, 14pt, centrirano)
+SVEUČILIŠNI INTEGRIRANI PRIJEDIPLOMSKI I DIPLOMSKI STUDIJ VETERINARSKA MEDICINA
+(Times New Roman, 12pt, centrirano)
+
+5. OBLIKOVANJE NASLOVNICE DIPLOMSKOG
+RADA
+
+Ime i prezime studenta
+(Times New Roman, 12pt, centrirano)
+Naziv diplomskog rada
+(Times New Roman, 14pt, centrirano)
+
+Zagreb, godina.
+(Times New Roman, 12pt, centrirano)
+
+Napomena: Navedeni podaci trebaju se ravnomjerno rasporediti na cijelu stranicu kako bi ona imala uredan izgled.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+6
+
+• Primjer izgleda druge stranice: Ime i prezime studenta: (Times New Roman, 12pt)
+Naziv odjela, zavoda ili klinike: (Times New Roman, 12pt)
+Predstojnik/ca (Ime i prezime predstojnika, akademska titula i znanstveno-nastavno radno mjesto): (Times New Roman, 12pt) Mentor/ica (Ime i prezime mentora, akademska titula i znanstveno-nastavno radno mjesto): (Times New Roman, 12pt)
+
+6. DRUGA STRANICA
+
+Članovi Povjerenstva za obranu diplomskog rada (Ime i prezime članova, akademska titula i znanstveno-nastavno radno mjesto): (Times New Roman, 12pt) 1.
+2.
+3.
+4. (zamjena) (Times New Roman, 12pt)
+Rad sadržava _____ stranica, _____ slika, ____ tablica,____ literaturnih navoda. (Times New Roman, 12pt)
+
+7. ZAHVALA
+8. POPIS PRILOGA (Neobvezni list)
+9. KRATICE (Neobvezni list)
+10. SADRŽAJ
+11. POGLAVLJA DIPLOMSKOG
+RADA
+
+Skraćene titule mentora navode se ispred imena: (između pojedinih kratica titula potrebno je staviti razmak)
+doktor znanosti – dr. sc. biomed. (ili iz drugih područja) docent – doc. dr. sc. izvanredni profesor – izv. prof. dr. sc. redoviti profesor ili redoviti profesor u trajnom izboru – prof. dr. sc. • Na sljedećoj stranici slijedi dio teksta u kojemu autor želi nekome zahvaliti na pomoći ili za koju drugu uslugu.
+• Popis priloga
+• Na sljedećoj stranici slijedi popis i objašnjenje kratica korištenih u radu. Potrebno je navesti sve pojmove za koje će se u radu koristiti skraćenice. U naslovu se diplomskog rada ne smiju koristiti skraćenice, osim ako njihovo značenje nije općepoznato. Kratice, slike i tablice ne navode se u kurzivu niti podebljanim slovima.
+• Na sljedećoj stranici slijedi sadržaj, prema primjeru (ili ovisno o vrsti diplomskog rada)
+Diplomski rad sastoji se od didaktički razrađenih poglavlja Znanstveni diplomski rad treba sadržavati: 1. UVOD: razmatra problematiku diplomskog rada s osvrtima na literaturu koja obrađuje sličnu
+problematiku. U uvodu se sažeto objašnjava cilj diplomskog rada i obrazlaže tema. 2. PREGLED REZULTATA DOSADAŠNJIH ISTRAŽIVANJA: obrađuje se samo literatura u
+neposrednoj vezi s temom. Ovo poglavlje može imati više potpoglavlja s jasno izdvojenim naslovom koji obrađuju zasebnu cjelinu. Literatura u tekstu navodi se prema Uputstvu za pisanje članka u Veterinarskom arhivu prilagođeno standardnom hrvatskom jeziku.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+7
+
+3. MATERIJAL I METODE: redom se obrađuju supstrat diplomskog rada, način izvođenja pokusa i obrade rezultata.
+4. REZULTATI: obuhvaćaju predočene rezultate koji mogu biti prikazani tablicama, slikama, crtežima i sl. Rezultati se predočavaju redoslijedom kako je istraživanje izvedeno. U ovom se poglavlju ne ulazi u raspravu već se samo iznose činjenice. Tablice i slikovni prilozi trebaju biti razumljivi, imati svoj broj i naslov, tako da su jasni i bez čitanja teksta.
+5. RASPRAVA: to je poglavlje u kojemu se uspoređuju vlastiti rezultati s već poznatim navodima iz literature, a s ciljem obrazloženja vlastitih rezultata.
+6. ZAKLJUČCI: temelje se na postignutim rezultatima. Poglavlje treba biti izdvojeno. Zaključci mogu biti opisani ili navedeni (nabrojeni).
+7. LITERATURA: sva korištena literatura, ali i osobna priopćenja, navode se abecednim redom prezimena prvog autora. U literaturi se ne obrađuju citati koji nisu spomenuti u tekstu.
+8. SAŽETAK: sadržava 150 – 300 riječi i 3 – 5 ključnih riječi. 9. SUMMARY: na engleskom jeziku sadržava 150 – 300 riječi, i 3 – 5 key words, a sadržajem je
+jednak sažetku na hrvatskom. 10.ŽIVOTOPIS: ukratko se navode najvažniji podaci iz života i rada kandidata.
+
+A) Primjer izgleda ZNANSTVENOG DIPLOMSKOG RADA:
+
+Svi naslovi trebaju biti napisani fontom Times New Roman 12, s tim da se naslovi poglavlja pišu velikim tiskanim slovima, a red s naslovom poglavlja treba biti podebljan (bold). Sadržaj treba vizualno odražavati višerazinsku strukturu naslova i podnaslova uz pomoć uvlačenja, tako da svaka niža razina bude uvučena ispod prethodne razine. Brojevi stranica od teksta naslova poglavlja/potpoglavlja trebaju biti odijeljeni tabulatorom s točkama koji ima desno poravnanje i smješten je uz desnu marginu.
+
+Znanstveni diplomski rad treba sadržavati sljedeće:
+
+12. ZNANSTVENI DIPLOMSKI RAD
+
+PRVA STRANICA (NASLOVNICA) DRUGA STRANICA ZAHVALE KRATICE (neobvezan list) POPIS PRILOGA (neobvezan list) SADRŽAJ 1. UVOD --------------------------------------------------------------------------------------------------------------------1 2. PREGLED REZULTATA DOSADAŠNJIH ISTRAŽIVANJA -------------------------------------------------------2
+2.1. Svojstva virusa zaraznog bronhitisa ----------------------------------------------------------------3 2.1.1. Kemijska svojstva -------------------------------------------------------------------------3 2.1.2. Fizikalna svojstva -------------------------------------------------------------------------5 2.1.3. Biološka svojstva --------------------------------------------------------------------------5
+3. MATERIJAL I METODE -----------------------------------------------------------------------------------------------8 3.1. Vrsta životinja ------------------------------------------------------------------------------------------10 3.2. Način izdvajanja virusa ------------------------------------------------------------------------------11 3.3. Određivanje kemijskih svojstava ------------------------------------------------------------------12 3.4. Određivanje fizikalnih svojstava -------------------------------------------------------------------13 3.5. Određivanje bioloških svojstava -------------------------------------------------------------------14
+4. REZULTATI ------------------------------------------------------------------------------------------------------------14 4.1. Kemijska svojstva izloženog virusa ----------------------------------------------------------------15 4.2. Fizikalna svojstva izloženog virusa ----------------------------------------------------------------17 4.3. Biološka svojstva izloženog virusa ----------------------------------------------------------------19
+5. RASPRAVA ------------------------------------------------------------------------------------------------------------21 6. ZAKLJUČCI ------------------------------------------------------------------------------------------------------------25 7. LITERATURA ----------------------------------------------------------------------------------------------------------27 8. SAŽETAK --------------------------------------------------------------------------------------------------------------29 9. SUMMARY -----------------------------------------------------------------------------------------------------------30 10. ŽIVOTOPIS ----------------------------------------------------------------------------------------------------------31
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+8
+
+13. PREGLEDNI DIPLOMSKI RAD
+14. STRUČNI DIPLOMSKI RAD
+15. SAŽETAK /SUMMARY
+16. PRILOZI
+
+A) Prikaz izgleda PREGLEDNOG DIPLOMSKOG RADA Diplomski rad koji odgovara preglednom radu razlikuje se od diplomskog rada obrađenog kao znanstveni rad po tome što ne sadržava poglavlja 3. i 4. i ne treba sadržavati 5. poglavlje. Pregledni diplomski rada treba sadržavati sljedeće: PRVA STRANICA (NASLOVNA) DRUGA STRANICA ZAHVALE KRATICE (neobvezan list) POPIS PRILOGA (neobvezan list) SADRŽAJ 1. UVOD 2. PREGLED REZULTATA DOSADAŠNJIH ISTRAŽIVANJA 3. ZAKLJUČCI 4. LITERATURA 5. SAŽETAK 6. SUMMARY 7. ŽIVOTOPIS
+Ostale podnaslove odredit će zajednički student i mentor, u skladu s naravi i sadržajem rada.
+Diplomski rad koji odgovara stručnom radu ne razlikuje se od diplomskog rada obrađenog kao znanstveni rad, osim što se poglavlja Materijali, Metode i Rezultati mogu zamijeniti Opisom slučaja.
+Sažetak se piše na hrvatskom jeziku i treba sadržavati: naslov diplomskog rada, ime i prezime autora, tekst sažetka, ključne riječi (tri do pet ključnih riječi). Summary se nalazi iza hrvatskog sažetka. To je doslovan prijevod sažetka na engleskom jeziku i treba sadržavati: naslov diplomskog rada, ime i prezime autora, tekst sažetka, ključne riječi (tri do pet ključnih riječi) (key words). Dopušteni prilozi uz tekst diplomskog rada jesu tablice i slike. Svi ostali prilozi (sheme, grafikoni, dijagrami, prikazi i sl.) trebaju se uvrstiti u skupinu slike. Na tablice se treba pozvati u tekstu, kao sastavni dio rečenice, npr.… prikazano u Tablici 1, ili u zagradi, npr. … prevalencija XY bila je veća u ispitivanoj skupini u usporedbi s kontrolnom skupinom (Tablica 1). Na slike se treba pozvati u tekstu, kao sastavni dio rečenice, npr. … prikazano na Slici 1, ili u zagradi, npr. … prevalencija XY bila je veća u ispitivanoj skupini u usporedbi s kontrolnom skupinom (Slika 1). Uz glavni tekst prilažu se numerirane slike (Slika 1, itd.) i/ili tablice (Tablica 1, itd.) koje mogu biti uključene u tekst ili tiskane na zasebnim listovima. Pritom se nazivi i opisi slika uvijek pišu ispod slike, a nazivi i opisi tablica iznad tablice. Slike i tablice trebaju biti objašnjene i jasne same za sebe, pa se u njima ne smiju upotrebljavati kratice i oznake koje na istom mjestu, tj. u njima samima ili odmah ispod (za tablice), nisu tumačene. Slike i tablice u pravilu se stavljaju u poglavlje Rezultati diplomskog rada, no u opravdanom slučaju mogu se uključiti i u poglavlje Uvod ili u poglavlje koje opisuje materijal i metode, odnosno uz odgovarajući dio teksta ako je riječ o preglednom radu. Primjer izgleda tablice:
+
+Napomena: Prikazana tablica samo je u svrhu primjera, prikazani parametri nužno ne slijede logičan slijed jer su mnogi izostavljeni.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+9
+
+17. VAŽNA NAPOMENA
+18. ŽIVOTOPIS
+19. LITERATURA
+
+Ako se u radu koriste ilustracije ili tablice preuzete iz publikacija drugih autora, a s obzirom na to da su ti materijali legalno zaštićeni (autorska, izdavačka i srodna prava – copyright), NUŽNO je navesti točan izvor (zaštita autorskih prava), a u većini slučajeva i prethodno pribaviti dopuštenje izdavača za korištenje tog materijala (zaštita izdavačkih prava). Životopis treba biti napisan u prvom licu jednine i ne treba prelaziti više od jedne stranice, pisano stilom diplomskog rada (font Times New Roman, veličina 12, prored 1,5). Životopis treba uključivati osobne podatke, podatke o obrazovanju i drugim aktivnostima i znanjima (npr. strani jezik). U PDF verziji diplomskog rada koja se tiska na elektronički medij (npr. CD) za repozitorij Središnje knjižnice životopis se izostavlja. Literatura sadržava sve literaturne izvore kojima se autor koristio tijekom izrade diplomskog rada. To mogu biti članci, knjige, mrežne stranice, pravni propisi itd. Sva literatura pripada pod autorsko djelo, stoga je student dužan navesti svaku korištenu literaturu. Korištene reference u radu navode se: - prilikom doslovnog navođenja ili parafraziranja tuđeg teksta - pri preuzimanju slika, tablica i ostalog vizualnog materijala - u popisu korištene literature na kraju diplomskog rada. Referenca na kraju diplomskog rada donosi niz podataka koji precizno opisuju korišteno autorsko djelo: - podatke o autorstvu: autori djela, urednici, prevoditelji, ilustratori - podatke o izdanju, mjestu izdanja, mediju - brojčane podatke: godina izdanja knjige ili časopisa, volumen, broj i stranica članka
+u časopisu, datum zadnjeg ažuriranja i citiranja mrežne stranice - lokacijske podatke: mrežna stranica i DOI.
+Popis literature treba biti potpun, točan, svaka bibliografska jedinica treba imati sve bitne elemente.
+Literatura se u tekstu navodi prilagođeno standardnom hrvatskom jeziku (rad na hrvatskom jeziku – s točkom iza godine, a rad na engleskom jeziku bez točke).
+
+20. NAČIN PISANJA
+LITERATURE
+
+Navođenje izvora unutar teksta diplomskog rada
+Jedan autor BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava. ili Opaženo je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava (BLACK, 2021.).
+Dva autora BLACK i BROWN (2022.) opazili su da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava. ili Opaženo je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava (BLACK i BROWN, 2022.).
+Tri i više autora BLACK i sur. (2023.) opazili su da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava. ili Opaženo je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava (BLACK i sur., 2023.).
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+10
+
+Citiranje većeg broja različitih izvora Opaženo je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava (BLACK, 2021.; BLACK i BROWN, 2022.; BLACK i sur., 2023.). – reference navesti kronološkim redom.
+Citiranje radova istih autora koji su objavljeni u istoj godini Više istraživanja potvrdilo je hipotezu da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog sustava (BLACK, 2021.a; BLACK, 2021.b).
+Citiranje rada koji nema autora, već se navodi organizacija/institucija Zakonom o državnoj potpori u poljoprivredi, ribarstvu i šumarstvu (NN 87/2002.) definirana su četiri modela potpora u poljoprivredi.
+U popisu literature Zakon o državnoj potpori u poljoprivredi, ribarstvu i šumarstvu (Narodne novine, br. 87/02).
+Tematska radna skupina Europske evaluacijske mreže za ruralni razvoj (EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT, 2010.) navodi …
+U popisu literature EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT (2010): Working paper on Approaches for assessing the impacts of the Rural Development Programmes in the context of multiple intervening factors. European Commission, Bruxselles, Belgium. https://enrd.ec.europa.eu/enrd-static/fms/pdf/EB43A527-C292-F36CFC51-9EA5B47CEDAE.pdf (17.7.2019.)
+Trenutno programsko razdoblje ocjenjuje se na osnovi deset pokazatelja, a prijedlogom reforme za novo programsko razdoblje predviđa se daljnje smanjenje njihova broja na ukupno sedam pokazatelja (EUROPSKA KOMISIJA, 2018.).
+U popisu literature EUROPSKA KOMISIJA (2018): Izvješće komisije Europskom parlamentu i Vijeću o provedbi zajedničkog okvira za praćenje i evaluaciju i prvim rezultatima u pogledu uspješnosti zajedničke poljoprivredne politike, Bruxelles, Belgija. https://op.europa.eu/en/publication-detail//publication/fe3c8f74-f894-11e8-9982- 01aa75ed71a1/language-en/format-PDF/source-search (25.02.2020.)
+Popis literature navodi se abecednim redom prezimena prvog autora tako da svaki rad dolazi u
+novi red. Između bibliografskih jedinica nema praznih redaka. Radove istog autora treba složiti
+kronološkim redom, od ranijih prema novijima. Radove jednog autora objavljene u istoj godini treba obilježiti malim slovima a, b, c (npr. 1998a; 1998b). Primjeri: Knjiga: AITKEN, I. D. (2007): Diseases of Sheep. 4. izd., Blackwell Publishing, Oxford, str. 602- 603. Poglavlje u knjizi:
+LAMMLER, C. H., G. HAHN (1994): Streptokokken. U: Hanbdbuch der bakteriellen Infektionen bei Tieren. Band II. Teil 2. (Blobel, H., T. Schliesser, Ur.), Gustav Fischer Verlag Jena, Stuttgart, str. 15 – 141. Rad u časopisu: LEVETT, P. N. (2001): Leptospirosis. Clin. Microbiol. Rev. 14, 296 – 326. ROUX, V., D. RAOULT (2000): Phylogenetic analysis of members of the genus Rickettsia using the gene encoding the outer – membrane protein rOmpB (ompB). Int. J. Evol. Microbiol. 50, 1449 – 1455. Kongresno priopćenje: ANTUNOVIĆ, Z., B. MARKOVIĆ, J. NOVOSELEC,M. MARKOVIĆ, Ž. KLIR, D. RADONJIĆ (2014): Hematological parameters endangered of sheep breeds – Dubrovnik ruda and Zetska zuja.
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+11
+
+Proceedings of the 49th Croatian & 9th International Symposium on Agriculture, 16.-21. veljače,
+
+Dubrovnik, str. 537-541.
+
+Diplomski rad, Magistarski rad, Disertacija:
+
+TELEBAR, P. (2023): Patofiziologija hiperadrenokorticizma i hipoadrenokorticizma u pasa i
+
+mačaka. Diplomski rad, Sveučilište u Zagrebu, Veterinarski fakultet, Zagreb, Hrvatska.
+
+VITLOV ULJEVIĆ, M. (2023): Utjecaj nadomjesne prehrane višestruko nezasićenim masnim
+
+kiselinama na masno kiselinski sastav fosfolipida, stupanj oštećenja i izražaj vegf, nf-κb i satb1
+
+u bubregu dijabetičnih štakora. Disertacija, Sveučilište u Splitu, Medicinski fakultet, Split,
+
+Hrvatska.
+
+• Savjetujemo da prije ispisa diplomskog rada sačuvate dokument u PDF obliku kako bi se format
+
+21.
+
+zadržao u onom obliku u kojemu je posložen. Obranjeni diplomski radovi dostupni su na
+
+ZAVRŠNE BILJEŠKE poveznici https://repozitorij.vef.unizg.hr// (objavljeni diplomski radovi možda nisu u
+
+potpunosti podudarni s ovim smjernicama).
+
+• U svrhu podizanja kvalitete akademskog rada Veterinarski fakultet Sveučilišta u Zagrebu prešao
+
+je na nacionalnu licenciju sustava za provjeru izvornosti radova Turnitin. Ovaj je sustav
+
+namijenjen nastavnicima i mentorima kao alat za olakšavanje provjere izvornosti studentskih i
+
+drugih radova, te samim studentima kao alat za samoprovjeru vlastitih radova. Sustav Turnitin
+
+22. UPUTA STUDENTIMA ZA KORIŠTENJE PROGRAMA TURNITIN
+
+uspoređuje vlastite radove s radovima objavljenim u javno dostupnim i komercijalnim bazama podataka, trenutačno dostupnim i arhiviranim mrežnim mjestima te s bazom već pregledanih radova unutar sustava Turnitin. • Link za stranicu Turnitin: https://www.turnitin.com/ , detaljne upute od Srca: https://www.unizd.hr/Portals/20/srce_korisnicke_upute_turnitin_20191212.pdf • Kreiranje novog računa: • Koristeći se službenom domenom @vef.unizg.hr, student može napraviti korisnički račun na
+
+stranici Turnitin. Mailovi s drugih domena neće raditi! Trebate imati pristup službenom mailu da
+
+možete napraviti račun.
+
+• UPUTA STUDENTIMA ZA KORIŠTENJE PROGRAMA TURNITIN NA
+
+VETERINARSKOM FAKULTETU vidi na web stranici Fakulteta pod Diplomski radovi
+
+Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada
+
+12
+
+

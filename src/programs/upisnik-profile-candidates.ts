@@ -30,6 +30,10 @@ export interface ProgramProfileDecision {
   evidence: ProgramProfileDecisionEvidence;
 }
 
+export interface IntegratedGraduateCoverageDecision extends ProgramProfileDecision {
+  sourceId: string;
+}
+
 export interface ProgramProfileExclusionDecision {
   programCode: string;
   reasonCode: 'no-written-final-work' | 'no-required-written-work';
@@ -369,11 +373,31 @@ export function buildUpisnikProfileCandidates(
   programProfileExclusions: ProgramProfileExclusionDecision[] = [],
   programProfileBlockers: ProgramProfileBlockerDecision[] = [],
   programProfileHolds: ProgramProfileHoldDecision[] = [],
-  sourceRegistry: Array<{ url: string; snapshotPath?: string }> = [],
+  sourceRegistry: Array<{ id?: string; url: string; snapshotPath?: string }> = [],
+  integratedGraduateCoverage: IntegratedGraduateCoverageDecision[] = [],
 ): UpisnikProfileCandidateReport {
   const decisions = new Map(componentDecisions.map((decision) => [decision.programCode, decision]));
   const rowByCode = new Map(rows.map((row) => [row.sifraUpisnik, row]));
   const profileById = new Map(profiles.map((profile) => [profile.id, profile]));
+  const integratedPairs = new Set<string>();
+  for (const coverage of integratedGraduateCoverage) {
+    const pair = coverage.programCode + '/' + coverage.profileId;
+    if (integratedPairs.has(pair)) throw new Error('duplicate integrated graduate coverage: ' + pair);
+    integratedPairs.add(pair);
+    const row = rowByCode.get(coverage.programCode);
+    const profile = profileById.get(coverage.profileId);
+    if (!row || studyCycleForStudyType(row.vrsta ?? '') !== 'integrated') throw new Error('integrated graduate coverage ' + pair + ' has unknown or non-integrated program');
+    if (!profile) throw new Error('integrated graduate coverage ' + pair + ' has unknown profile');
+    const componentIds = decisions.get(coverage.programCode)?.executors.flatMap((executor) => executor.componentIds) ?? [];
+    if (!componentIds.includes(profile.unitId)) throw new Error('integrated graduate coverage ' + pair + ' has component mismatch');
+    if (!profile.workTypes?.includes('graduate')) throw new Error('integrated graduate coverage ' + pair + ' has no graduate work type');
+    const { sourceUrl, sourceLocator, quote } = coverage.evidence;
+    if (!/^https:\/\//u.test(sourceUrl.trim()) || !sourceLocator.trim() || !quote.trim()) throw new Error('integrated graduate coverage ' + pair + ' has incomplete evidence');
+    if (!sourceRegistry.some((source) => source.id === coverage.sourceId && source.url === sourceUrl)) throw new Error('integrated graduate coverage ' + pair + ' has source registry mismatch');
+    if (!sourceBelongsToUnit(sourceUrl, profile.unitId, profiles, sourceRegistry)) throw new Error('integrated graduate coverage ' + pair + ' has source domain mismatch');
+    if (!evidenceNamesProgram(row.naziv, coverage.evidence)) throw new Error('integrated graduate coverage ' + pair + ' lacks program name');
+    if (!profileSupportsStudyType(profile, studyKindForStudyType(row.vrsta ?? ''), 'graduate', quote)) throw new Error('integrated graduate coverage ' + pair + ' has study type mismatch');
+  }
   const explicitByCode = new Map<string, ProgramProfileDecision[]>();
   const seenPairs = new Set<string>();
   for (const explicit of programProfileDecisions) {
@@ -512,7 +536,9 @@ export function buildUpisnikProfileCandidates(
       .filter((profile) => {
         if (!componentIds.includes(profile.unitId)) return false;
         if (profile.workTypes?.length === 0) return false;
-        if (!profileSupportsStudyType(profile, studyKind, studyCycle)) return false;
+        if (!profileSupportsStudyType(profile, studyKind, studyCycle)
+          && !(studyCycle === 'integrated' && integratedPairs.has(row.sifraUpisnik + '/' + profile.id)
+            && profileSupportsStudyType(profile, studyKind, 'graduate'))) return false;
         if (!profile.programs.some((name) => normalizedProgramTitle(name) === programName)) return false;
         if (row.vrsta == null) return true;
         if (expectedWorkType == null) return profile.workTypes == null;
@@ -524,7 +550,9 @@ export function buildUpisnikProfileCandidates(
       .filter((profile) => {
         if (!componentIds.includes(profile.unitId)) return false;
         if (profile.workTypes?.length === 0) return false;
-        if (!profileSupportsStudyType(profile, studyKind, studyCycle)) return false;
+        if (!profileSupportsStudyType(profile, studyKind, studyCycle)
+          && !(studyCycle === 'integrated' && integratedPairs.has(row.sifraUpisnik + '/' + profile.id)
+            && profileSupportsStudyType(profile, studyKind, 'graduate'))) return false;
         if (row.vrsta == null || expectedWorkType == null) return true;
         return profile.workTypes == null || profile.workTypes.includes(expectedWorkType);
       })
