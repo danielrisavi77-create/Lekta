@@ -60,6 +60,14 @@ if (rezultati.length === 0) {
   console.error('[ovjera] FAIL: mjerenje nema nijedan rezultat; prazan skup nije ovjera.');
   process.exit(1);
 }
+// JEDAN DOKUMENT, JEDAN GLAS (T83). Mjerenje prije `dedupeManifest` brojalo je istu datoteku iz
+// `docx-local` i iz `LEKTA_CORPUS_SOURCE` dvaput (izmjereno 2026-09-27: 321 rezultat, 219 razlicitih),
+// pa su `documentCount` i `cleanCount` po skupini bili napuhani. Takvo mjerenje se ne ovjerava.
+const dvostruki = rezultati.length - new Set(rezultati.map((r) => r.documentId)).size;
+if (dvostruki > 0) {
+  console.error(`[ovjera] FAIL: mjerenje ima ${dvostruki} dvostrukih documentId; ponovi mjerenje harnessom s dedupeManifest.`);
+  process.exit(1);
+}
 
 // Otisak SKUPA, ne sadrzaja: imena dokumenata i njihov broj. Mijenja se kad se korpus mijenja, pa
 // ovjera prestaje odgovarati stanju i to se vidi.
@@ -123,6 +131,8 @@ const ovjera = {
     holdoutDocumentCount: rezultati.filter((r) => r.holdout === true).length,
     independentlyConfirmedCount: neovisnoPotvrdjeno,
     derivedExpectationCount: rezultati.length - neovisnoPotvrdjeno,
+    // T83: ovjera je provjerila da nijedan dokument nije brojan dvaput (gore se inace prekida).
+    duplicateDocumentCount: dvostruki,
   },
   // Potpis se NE nasljedjuje kad se korpus promijeni: tada je rijec o drugom mjerenju.
   signedBy: potpis ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedBy : null),

@@ -71,6 +71,12 @@ export interface CorpusAttestation {
     holdoutDocumentCount: number;
     independentlyConfirmedCount: number;
     derivedExpectationCount: number;
+    /**
+     * T83: koliko je rezultata mjerenja dijelilo `documentId` s drugim. Nova skripta ovjere pise 0 ili
+     * prekida; broj veci od nule znaci da je ovjera nastala nad mjerenjem koje je iste radove brojalo
+     * vise puta. Starije ovjere polje nemaju; obveza polja uvodi se zajedno sa svjezom ovjerom (T75).
+     */
+    duplicateDocumentCount?: number;
   };
   entries: CorpusAttestationEntry[];
 }
@@ -89,6 +95,9 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
   if (!a.measuredAt || !Number.isFinite(Date.parse(a.measuredAt))) p.push('nema vremena mjerenja');
   if (!Array.isArray(a.entries) || a.entries.length === 0) p.push('nema nijednog mjerenog profila');
+  // T83: mjerenje koje je isti rad brojalo vise puta napuhuje documentCount i cleanCount po skupini.
+  const dvostruki = a.protocol?.duplicateDocumentCount;
+  if (typeof dvostruki === 'number' && dvostruki > 0) p.push('mjerenje je iste dokumente brojalo vise puta');
 
   // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
   //

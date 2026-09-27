@@ -124,6 +124,7 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
+import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -257,6 +258,21 @@ interface Mutation {
   imitates: string;
   caught: () => boolean;
   cleanBefore: () => boolean;
+}
+
+/**
+ * Tvrdnja garda T83: spoj korijena korpusa u kojem se isti rad pojavljuje dvaput daje manifest s
+ * jednim unosom po `documentId`, a izbacena kopija je zabiljezena.
+ */
+function jedanDokumentJedanGlas(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[]; duplicates: unknown[] },
+): boolean {
+  const e = (documentId: string, root: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root, holdout: false, expectationProvenance: 'derived',
+  });
+  const { entries, duplicates } = dedupe([e('corpus-a', 'docx-local'), e('corpus-b', 'docx-local'), e('corpus-a', '03-ingest')]);
+  const ids = entries.map((x) => x.documentId);
+  return ids.length === 2 && new Set(ids).size === 2 && duplicates.length === 1;
 }
 
 /**
@@ -1025,6 +1041,15 @@ const MUTATIONS: Mutation[] = [
       'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
     caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
     cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
+  },
+
+  // --- jedan dokument, jedan glas (T83) ----------------------------------------------------------
+  {
+    id: 'korpus/isti-rad-iz-dva-korijena-broji-se-dvaput',
+    imitates:
+      'manifest je obican spoj docx-local i LEKTA_CORPUS_SOURCE, pa 102 bajt-identicna rada ulaze dvaput (321 umjesto 219, 2026-09-27)',
+    caught: () => !jedanDokumentJedanGlas((entries) => ({ entries, duplicates: [] })),
+    cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, () => new Uint8Array([1]))),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
