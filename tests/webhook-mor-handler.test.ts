@@ -1633,11 +1633,12 @@ describe('webhook-mor handler: povrat stigne dok uplata izdaje bonuse', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const w = bonusWorld();
     let citanjaUplate = 0;
-    // Pada SAMO drugo citanje oznake u prvom pokusaju uplate; povrat i retry citaju normalno.
+    // Pada SAMO citanje oznake NAKON bonusa u prvom pokusaju uplate; povrat i retry citaju normalno.
+    // Citanja uplate: 1. prije prava, 2. prije nagrade preporucitelju (krug 4), 3. nakon bonusa.
     const uplataBoom = (c: FakeCall): FakeResult | undefined => {
       if (c.table === 'webhook_events' && writeOp(c) === 'select') {
         citanjaUplate += 1;
-        if (citanjaUplate === 2) return { error: { message: 'tajni_detalj_baze' } };
+        if (citanjaUplate === 3) return { error: { message: 'tajni_detalj_baze' } };
       }
       return w.resolve(c);
     };
@@ -1672,6 +1673,75 @@ describe('webhook-mor handler: povrat stigne dok uplata izdaje bonuse', () => {
     expect(w.state.signup?.status).toBe('converted');
     // Obveze se ne upisuju; citanje radi closeRefundConsequences (F21: otkazivanje obveze koja ceka).
     expect(retry.calls.some((c) => c.table === 'bonus_outbox' && writeOp(c) !== 'select')).toBe(false);
+  });
+
+  /**
+   * KRUG 4, nalaz 6a. Obveza `referrer_reward` u bonus_outbox, s uvjetnim UPDATE-om kao u Postgresu:
+   * redak se mijenja samo ako prolazi SVE .eq filtre (pa `status = 'pending'` stiti `cancelled`).
+   */
+  function outboxResolve(w: ReturnType<typeof bonusWorld>, outbox: { status: string }) {
+    return (c: FakeCall): FakeResult | undefined => {
+      if (c.table === 'bonus_outbox' && writeOp(c) === 'update') {
+        const e = eqs(c);
+        if (e.kind === 'referrer_reward' && (e.status === undefined || e.status === outbox.status)) {
+          outbox.status = String((argOf(c, 'update') as Record<string, unknown>).status);
+        }
+        return { data: null };
+      }
+      if (c.table === 'bonus_outbox') return { data: [] };
+      return w.resolve(c);
+    };
+  }
+
+  it('krug 4 (6a): povrat stigne izmedju upisa obveza i nagrade: nagrada se inline NE izdaje, obveza ostaje otkazana', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = bonusWorld();
+    const outbox = { status: 'pending' };
+    let citanja = 0;
+    const resolve = (c: FakeCall): FakeResult | undefined => {
+      // Obveze su upisane (upsert), a zatim puni povrat obradi i otkaze obvezu te upise oznaku.
+      if (c.table === 'bonus_outbox' && writeOp(c) === 'upsert') {
+        outbox.status = 'cancelled';
+        return { data: null };
+      }
+      if (c.table === 'webhook_events' && writeOp(c) === 'select') {
+        citanja += 1;
+        // Prvo citanje (prije prava) oznake nema; citanje prije nagrade je vec vidi.
+        if (citanja >= 2) return { data: [{ id: 'inbox-refund' }] };
+      }
+      return outboxResolve(w, outbox)(c);
+    };
+    let dodijeljeno = 0;
+    const { res } = await runIn(passPayment(), resolve, async () => { dodijeljeno += 1; });
+    expect(res.status).toBe(200);
+    expect(dodijeljeno, 'nagrada preporucitelju izdana inline za vracen novac').toBe(0);
+    expect(outbox.status, 'otkazana obveza prepisana u done').toBe('cancelled');
+  });
+
+  it('krug 4 (6a): obveza otkazana DOK se nagrada izdaje: markBonusDone ne prepisuje cancelled (uvjet pending)', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = bonusWorld();
+    const outbox = { status: 'pending' };
+    const { res, calls } = await runIn(passPayment(), outboxResolve(w, outbox), async () => {
+      // Povrat u prozoru dodjele otkaze obvezu (closeRefundConsequences).
+      outbox.status = 'cancelled';
+    });
+    expect(res.status).toBe(200);
+    expect(outbox.status).toBe('cancelled');
+    const done = calls.filter((c) => c.table === 'bonus_outbox' && writeOp(c) === 'update'
+      && (argOf(c, 'update') as Record<string, unknown>).status === 'done');
+    expect(done.length).toBeGreaterThan(0);
+    for (const d of done) expect(eqs(d).status).toBe('pending');
+  });
+
+  it('krug 4 (6a) BASELINE: bez povrata obveza prelazi pending -> done i nagrada se izdaje jednom', async () => {
+    const w = bonusWorld();
+    const outbox = { status: 'pending' };
+    let dodijeljeno = 0;
+    const { res } = await runIn(passPayment(), outboxResolve(w, outbox), async () => { dodijeljeno += 1; });
+    expect(res.status).toBe(200);
+    expect(dodijeljeno).toBe(1);
+    expect(outbox.status).toBe('done');
   });
 });
 
@@ -1834,14 +1904,18 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
   }
 
   /** `markerFrom`: od kojeg citanja oznake (0 = prvog) je povrat vec zabiljezen; null = nikad. */
-  function upgradeResolve(over: { source?: unknown; rpc?: FakeResult; markerFrom?: number | null; slot?: FakeResult } = {}) {
+  function upgradeResolve(over: { source?: unknown; rpc?: FakeResult; markerFrom?: number | null; slot?: FakeResult; partial?: FakeResult } = {}) {
     let citanja = 0;
     return baseResolver((c) => {
       if (c.table === 'products') return { data: PASS_ROW };
-      // Zadano: vezani slot je jos ziv.
-      if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1' }] };
+      // Zadano: vezani slot ima netaknut otisak (nije anonimiziran).
+      if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1', fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 } }] };
       if (c.table === 'entitlements' && writeOp(c) === 'select') return { data: 'source' in over ? over.source : SOURCE_ROW };
       if (c.table === 'rpc:apply_entitlement_upgrade') return over.rpc ?? { data: 'upgraded' };
+      // Oznaka djelomicnog povrata izvorne uplate (krug 4) je zasebno citanje, ne oznaka punog povrata.
+      if (c.table === 'webhook_events' && writeOp(c) === 'select' && eqs(c).outcome_detail === 'partial_refund_noted') {
+        return over.partial ?? { data: [] };
+      }
       if (c.table === 'webhook_events' && writeOp(c) === 'select') {
         const povrat = over.markerFrom != null && citanja >= over.markerFrom;
         citanja += 1;
@@ -1898,8 +1972,11 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
     ['tudje pravo', 1000, { source: { ...SOURCE_ROW, user_id: 'user-2' } }, 'upgrade_source_not_found'],
     ['pravo ne postoji', 1000, { source: null }, 'upgrade_source_not_found'],
     ['pravo vraceno u medjuvremenu', 1000, { source: { ...SOURCE_ROW, status: 'refunded' } }, 'upgrade_source_inactive'],
-    // Nalaz pregleda kruga 3: slot je istekao izmedju checkouta i uplate (ili je vec anonimiziran).
-    ['vezani slot istekao', 1000, { slot: { data: [] } }, 'upgrade_slot_expired'],
+    // Krug 4: cron je anonimizirao otisak izmedju checkouta i uplate (istek prozora nije granica).
+    ['vezani slot anonimiziran', 1000, { slot: { data: [{ id: 'slot-1', fingerprint: { sectionCount: 1 } }] } }, 'upgrade_slot_anonymized'],
+    // Krug 4 (6b): djelomican povrat izvorne uplate zabiljezen izmedju checkouta i uplate; odluka
+    // se ponavlja nad STVARNOM oznakom, ne nad nepoznatim partiallyRefunded.
+    ['izvorna uplata djelomicno vracena u medjuvremenu', 1000, { partial: { data: [{ id: 'inbox-partial' }] } }, 'upgrade_source_partially_refunded'],
   ])('%s: needs_manual_review, bez pretvorbe', async (_ime, amount, over, reason) => {
     const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     try {
@@ -1916,13 +1993,35 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
     }
   });
 
-  it('apply_entitlement_upgrade vrati slot_expired (slot istekao u medjuvremenu): rucni pregled s ishodom u detalju', async () => {
+  it('apply_entitlement_upgrade vrati slot_anonymized (purge u medjuvremenu): rucni pregled s ishodom u detalju', async () => {
     const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     try {
-      const { body, calls } = await run(upgradeEvent(1000), upgradeResolve({ rpc: { data: 'slot_expired' } }));
+      const { body, calls } = await run(upgradeEvent(1000), upgradeResolve({ rpc: { data: 'slot_anonymized' } }));
       expect(body).toEqual({ ok: true, action: 'needs_manual_review', reason: 'upgrade_source_unavailable' });
       expect(settled(calls).at(-1)).toMatchObject({ outcome: 'needs_manual_review' });
-      expect(String(settled(calls).at(-1)?.outcome_detail)).toContain('ishod=slot_expired');
+      expect(String(settled(calls).at(-1)?.outcome_detail)).toContain('ishod=slot_anonymized');
+    } finally {
+      err.mockRestore();
+    }
+  });
+
+  it('krug 4 (6b): oznaka djelomicnog povrata se cita po PaymentIntentu IZVORNE uplate, prije pretvorbe', async () => {
+    const { body, calls } = await run(upgradeEvent(1000), upgradeResolve());
+    expect(body).toEqual({ ok: true, action: 'entitlement_upgraded' });
+    const i = calls.findIndex((c) => c.table === 'webhook_events' && writeOp(c) === 'select' && eqs(c).outcome_detail === 'partial_refund_noted');
+    expect(i).toBeGreaterThan(-1);
+    expect(eqs(calls[i])).toEqual({ provider: 'stripe', order_id: 'pi_repair', outcome_detail: 'partial_refund_noted' });
+    expect(i).toBeLessThan(calls.findIndex((c) => c.table === 'rpc:apply_entitlement_upgrade'));
+  });
+
+  it('krug 4 (6b): pad citanja oznake djelomicnog povrata je 500 (Stripe ponovi), bez pretvorbe', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, body, calls } = await run(upgradeEvent(1000), upgradeResolve({ partial: { error: { message: 'tajni_detalj_baze' } } }));
+      expect(res.status).toBe(500);
+      expect(body).toEqual({ error: 'internal' });
+      expect(rpcCalls(calls)).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed' });
     } finally {
       err.mockRestore();
     }

@@ -14,7 +14,7 @@
 
 import { isSoldByLektaCheckout, type Product } from '../catalog/products-catalog.ts';
 import { estimateWorkType, type WorkTypeSignals } from './work-type-estimate.ts';
-import { billableMismatch, isBillableWorkType, type BillableWorkType } from './billable-work-type.ts';
+import { billableMismatch, isBillableWorkType, SPECIALIST_TIER_ENABLED, type BillableWorkType } from './billable-work-type.ts';
 
 /** Ishod serverske provjere prava na checkout za dani proizvod i kontekst korisnika. */
 export type CheckoutResolution =
@@ -68,16 +68,18 @@ export function checkoutMismatch(
   selectedWorkType: string | null | undefined,
   signals: CheckoutMismatchSignals | null | undefined,
   confirmed: boolean,
+  specialistTier: boolean = SPECIALIST_TIER_ENABLED,
 ): CheckoutMismatchDecision {
   if (confirmed || !signals) return { block: false };
   // Prodajne vrste rada ukljucuju specijalisticki (0207): odluka je ista kao u repair-docx
-  // (billableMismatch), pa specijalisticka naslovnica ne kupuje diplomski slot (odjeljak 18).
+  // (billableMismatch). Uz prekidac M3 (SPECIALIST_TIER_ENABLED) specijalisticka naslovnica ne kupuje
+  // diplomski slot (odjeljak 18); do M3 vrijedi ponasanje prije M2.
   if (!selectedWorkType || !isBillableWorkType(selectedWorkType)) return { block: false };
   const sig: WorkTypeSignals = {
     words: signals.words,
     titleMarker: (signals.titleMarker ?? null) as WorkTypeSignals['titleMarker'],
   };
-  const mm = billableMismatch(selectedWorkType, sig, (s) => estimateWorkType(s).workType);
+  const mm = billableMismatch(selectedWorkType, sig, (s) => estimateWorkType(s).workType, specialistTier);
   return mm.block && mm.suggestedWorkType ? { block: true, suggestedWorkType: mm.suggestedWorkType } : { block: false };
 }
 

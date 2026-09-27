@@ -10,9 +10,11 @@
  *     SERVERSKI dio: potrosaci su vrstu rada provjeravali klijentskim popisom (isReportWorkType) i
  *     odbijali je s 400. Signal: cijeli serverski tok od resolveCheckout do vezanog slota, s vrstom
  *     rada provjerenom ISTIM validatorom kao handler (isBillableWorkType), bez casta. Krug 3: server
- *     vise ne dopusta fallback specijalisticki -> diplomski (odjeljak 18) ni na kupnji ni na popravku.
- *     KLIJENTSKI dio kriterija (pricing selector, WORK_TYPE_TIERS/ORDER, picker) NIJE ispunjen u M2:
- *     pripada M3, pa je kriterij u izvjestaju "djelomicno, ceka M3", ne "ispunjeno".
+ *     vise ne dopusta fallback specijalisticki -> diplomski (odjeljak 18) ni na kupnji ni na popravku,
+ *     ALI tek uz prekidac M3 (krug 4, SPECIALIST_TIER_ENABLED): do M3 klijent specijalisticki ne nudi,
+ *     pa server prema njemu ni ne predlaze ni ne blokira. KRITERIJ JE DJELOMICAN DO M3: klijentski dio
+ *     (pricing selector, WORK_TYPE_TIERS/ORDER, picker) i blokada fallbacka nisu ukljuceni u M2, pa je
+ *     kriterij u izvjestaju "djelomicno, ceka M3", ne "ispunjeno". Testovi ispod to stanje ZAKLJUCAVAJU.
  *  3. "promjena buduceg kataloga ne oduzima staro pravo": prozor slota se citao iz zivog products.
  *     Signal: odluka o pristupu nad retkom sa snapshotom 180 i katalogom 90 veze slot na 180.
  *
@@ -29,6 +31,7 @@ import {
   entitlementAccessProblems,
   entitlementConsumerProblems,
   specialistFallbackProblems,
+  specialistTierGateProblems,
 } from './helpers/monetizacija-v1-guards';
 import { mapProductRow } from '../src/catalog/products-catalog';
 import { resolveCheckout } from '../src/report/checkout';
@@ -36,7 +39,7 @@ import { buildEntitlementInsert } from '../src/report/webhook';
 import { decideReportAccess } from '../src/report/slot-logic';
 import { computeFingerprint } from '../src/fingerprint/fingerprint';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, isReportWorkType } from '../src/report/pricing';
-import { BILLABLE_WORK_TYPES, billableMismatch, isBillableWorkType } from '../src/report/billable-work-type';
+import { BILLABLE_WORK_TYPES, SPECIALIST_TIER_ENABLED, billableMismatch, isBillableWorkType } from '../src/report/billable-work-type';
 import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, entitlementRowsFromDb, readAccessRows } from '../src/report/entitlement-access';
 import { checkoutMismatch } from '../src/report/checkout';
 import { estimateWorkType } from '../src/report/work-type-estimate';
@@ -80,10 +83,12 @@ describe('nalaz 1: ugradnja proizvoda je jednoznacna i greska upita nije "nema p
   });
 });
 
-describe('nalaz 2: "specijalisticki prolazi kroz cijeli pricing/catalog/checkout/entitlement tok"', () => {
+describe('nalaz 2, kriterij DJELOMICAN do M3: "specijalisticki prolazi kroz cijeli pricing/catalog/checkout/entitlement tok"', () => {
   const products = new Map(seededProducts().map((s) => [String(s.row.id), s]));
 
-  it('server prihvaca specijalisticki; klijentski izbornik i cjenik JOS nemaju specijalisticki (M3, kriterij djelomican)', () => {
+  it('kriterij je DJELOMICAN do M3: serverski dio (katalog, checkout, pravo, potrosnja) prihvaca specijalisticki, klijentski izbornik i cjenik ga ne nude, a prekidac M3 je iskljucen', () => {
+    // Ovaj test NE tvrdi da je kriterij ispunjen. Tvrdi tocno stanje prije M3; M3 ga mora promijeniti.
+    expect(SPECIALIST_TIER_ENABLED).toBe(false);
     expect(BILLABLE_WORK_TYPES).toEqual(['seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski']);
     expect(isBillableWorkType('specijalisticki')).toBe(true);
     expect(isBillableWorkType('specialist')).toBe(false);
@@ -150,25 +155,47 @@ describe('nalaz 2: "specijalisticki prolazi kroz cijeli pricing/catalog/checkout
     const suggest = (s: Parameters<typeof estimateWorkType>[0]) => estimateWorkType(s).workType;
     expect(billableMismatch('specijalisticki', { words: 40_000, titleMarker: 'doctoral' }, suggest)).toEqual({ block: true, suggestedWorkType: 'doktorski' });
     expect(billableMismatch('specijalisticki', { words: 40_000, titleMarker: 'specialist' }, suggest)).toEqual({ block: false });
-    // Krug 3 (odjeljak 18): specijalisticka naslovnica na diplomskom slotu se blokira i predlaze specijalisticki.
-    expect(billableMismatch('diplomski', { words: 20_000, titleMarker: 'specialist' }, suggest)).toEqual({ block: true, suggestedWorkType: 'specijalisticki' });
+    // Krug 3 (odjeljak 18) UZ prekidac M3: specijalisticka naslovnica na diplomskom slotu se blokira.
+    expect(billableMismatch('diplomski', { words: 20_000, titleMarker: 'specialist' }, suggest, true)).toEqual({ block: true, suggestedWorkType: 'specijalisticki' });
+    // Krug 4, prije M3 (zadano): isto kao prije M2.
+    expect(billableMismatch('diplomski', { words: 20_000, titleMarker: 'specialist' }, suggest)).toEqual({ block: false });
     expect(billableMismatch('specijalisticki', { words: 500_000, titleMarker: null }, suggest)).toEqual({ block: false });
     expect(billableMismatch('seminarski', { words: 5000, titleMarker: 'doctoral' }, suggest)).toEqual({ block: true, suggestedWorkType: 'doktorski' });
     expect(billableMismatch('doktorski', { words: 5000, titleMarker: 'seminar' }, suggest)).toEqual({ block: false });
   });
 });
 
-describe('krug 3: bez fallbacka specijalisticki -> diplomski na serveru (odjeljak 18)', () => {
-  it('repair-docx (billableMismatch) i create-checkout (checkoutMismatch) blokiraju nizu vrstu za specijalisticku naslovnicu', () => {
+describe('krug 4: prekidac M3 (SPECIALIST_TIER_ENABLED), oba stanja', () => {
+  it('ISKLJUCEN (zadano, prije M3): server ni ne predlaze ni ne blokira prema specijalistickom; odluka kao prije M2', () => {
+    expect(specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED)).toEqual([]);
+  });
+
+  it('ISKLJUCEN: specijalisticka naslovnica na seminarskom daje prijedlog iz klijentske procjene, nikad specijalisticki', () => {
+    const suggest = (s: Parameters<typeof estimateWorkType>[0]) => estimateWorkType(s).workType;
+    for (const nize of ['seminarski', 'zavrsni', 'diplomski'] as const) {
+      const d = billableMismatch(nize, { words: 25_000, titleMarker: 'specialist' }, suggest);
+      expect(d.suggestedWorkType, nize).not.toBe('specijalisticki');
+    }
+    expect(checkoutMismatch('diplomski', { words: 25_000, titleMarker: 'specialist' }, false)).toEqual({ block: false });
+  });
+
+  it('prekidac i klijent su uskladjeni: server predlaze specijalisticki tocno onda kad ga klijent nudi', () => {
+    expect(SPECIALIST_TIER_ENABLED).toBe(isReportWorkType('specijalisticki'));
+    expect(SPECIALIST_TIER_ENABLED).toBe((WORK_TYPE_ORDER as readonly string[]).includes('specijalisticki'));
+  });
+
+  it('UKLJUCEN (M3): bez fallbacka specijalisticki -> nize na kupnji i popravku (odjeljak 18)', () => {
     expect(specialistFallbackProblems(billableMismatch, checkoutMismatch)).toEqual([]);
   });
 
-  it('scenarij iz pregleda: specijalisticki rad + odabran diplomski -> 409 s prijedlogom specijalisticki, potvrda i dalje prolazi', () => {
-    expect(checkoutMismatch('diplomski', { words: 25_000, titleMarker: 'specialist' }, false)).toEqual({ block: true, suggestedWorkType: 'specijalisticki' });
-    expect(checkoutMismatch('diplomski', { words: 25_000, titleMarker: 'specialist' }, true)).toEqual({ block: false });
-    // Ostale vrste doslovno kao prije kruga 3.
-    expect(checkoutMismatch('diplomski', { words: 20_000, titleMarker: 'graduate' }, false)).toEqual({ block: false });
-    expect(checkoutMismatch('seminarski', { words: 2000, titleMarker: 'graduate' }, false)).toMatchObject({ block: true });
+  it('UKLJUCEN (M3), scenarij iz pregleda kruga 3: specijalisticki rad + odabran diplomski -> 409 s prijedlogom specijalisticki, potvrda prolazi', () => {
+    expect(checkoutMismatch('diplomski', { words: 25_000, titleMarker: 'specialist' }, false, true)).toEqual({ block: true, suggestedWorkType: 'specijalisticki' });
+    expect(checkoutMismatch('diplomski', { words: 25_000, titleMarker: 'specialist' }, true, true)).toEqual({ block: false });
+    // Ostale vrste doslovno kao prije kruga 3, u oba stanja.
+    for (const tier of [false, true]) {
+      expect(checkoutMismatch('diplomski', { words: 20_000, titleMarker: 'graduate' }, false, tier)).toEqual({ block: false });
+      expect(checkoutMismatch('seminarski', { words: 2000, titleMarker: 'graduate' }, false, tier)).toMatchObject({ block: true });
+    }
   });
 });
 

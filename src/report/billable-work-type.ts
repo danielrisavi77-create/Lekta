@@ -34,6 +34,18 @@ export interface BillableMismatch {
   suggestedWorkType?: BillableWorkType;
 }
 
+/**
+ * PREKIDAC ZA M3 (krug 4). Klijent (izbornik vrste rada, cjenik u src/report/pricing.ts) do M3 ne
+ * nudi `specijalisticki`, pa server do tada ne smije NI predlagati NI blokirati prema toj vrsti:
+ * odgovor `tier_mismatch` s prijedlogom koji korisnik ne moze odabrati je slijepa ulica, a blokada
+ * seminarskog, zavrsnog ili diplomskog zbog specijalisticke naslovnice mijenja ponasanje kakvo je
+ * bilo prije M2. Dok je `false`, billableMismatch za cetiri klijentske vrste radi DOSLOVNO kao prije
+ * M2 (unambiguousMismatch). M3 ga u istom PR-u koji dodaje specijalisticki u klijent postavlja na
+ * `true`; gard tests/monetizacija-v1-potrosnja.test.ts trazi da prekidac i klijent budu uskladjeni.
+ * Server i dalje PRIHVACA i trosi specijalisticko pravo (kupljeno se mora moci potrositi).
+ */
+export const SPECIALIST_TIER_ENABLED = false;
+
 /** Rang vrste rada po razini (isti redoslijed kao BILLABLE_WORK_TYPES). */
 function billableRank(wt: BillableWorkType): number {
   return BILLABLE_WORK_TYPES.indexOf(wt);
@@ -42,9 +54,10 @@ function billableRank(wt: BillableWorkType): number {
 /**
  * Serverska blokada jeftinije vrste rada (WS-2) prosirena na specijalisticki.
  *
- * ODJELJAK 18 (bez fallbacka specijalisticki -> diplomski): naslovnica specijalistickog rada
- * (`specialist`) nedvosmisleno kaze specijalisticki, pa se svaka NIZA vrsta (seminarski, zavrsni,
- * diplomski) blokira i predlaze se `specijalisticki`. Dijeljeni `work-type-estimate.ts` tu oznaku i
+ * ODJELJAK 18 (bez fallbacka specijalisticki -> diplomski), SAMO uz `specialistTier` (M3,
+ * SPECIALIST_TIER_ENABLED): naslovnica specijalistickog rada (`specialist`) nedvosmisleno kaze
+ * specijalisticki, pa se svaka NIZA vrsta (seminarski, zavrsni, diplomski) blokira i predlaze se
+ * `specijalisticki`. Bez prekidaca ta se grana preskace i vrijedi ponasanje prije M2. Dijeljeni `work-type-estimate.ts` tu oznaku i
  * dalje mapira na diplomski, jer njime hrani klijentski izbornik bez specijalistickog (M3); zato se
  * pravilo provodi OVDJE, prije nego dijeljena odluka uopce dodje na red. Bez toga je
  * specijalisticki rad trosio jeftiniji diplomski slot i na kupnji i na popravku.
@@ -59,8 +72,9 @@ export function billableMismatch(
   selected: BillableWorkType,
   signals: WorkTypeSignals,
   suggest: (signals: WorkTypeSignals) => ReportWorkType,
+  specialistTier: boolean = SPECIALIST_TIER_ENABLED,
 ): BillableMismatch {
-  if (signals.titleMarker === 'specialist' && billableRank(selected) < billableRank('specijalisticki')) {
+  if (specialistTier && signals.titleMarker === 'specialist' && billableRank(selected) < billableRank('specijalisticki')) {
     return { block: true, suggestedWorkType: 'specijalisticki' };
   }
   if (isClientWorkType(selected)) {

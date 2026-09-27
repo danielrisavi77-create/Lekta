@@ -11,6 +11,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 import { createCheckoutHandler } from '../supabase/functions/create-checkout/handler';
 import { CHECKOUT_CONSENT_TEXTS } from '../src/legal/consent-text';
+import { SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
 import { fakeAdmin, argOf, eqs, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
 
 const NOW_MS = Date.UTC(2026, 8, 26, 10, 0, 0);
@@ -313,8 +314,8 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
       if (c.table === 'products') return { data: 'product' in over ? over.product : PASS_ROW };
       if (c.table === 'entitlements') return { data: 'source' in over ? over.source : SOURCE_ROW };
       if (c.table === 'webhook_events') return { data: over.partial ?? [] };
-      // Zadano: vezani slot je jos ziv (unutar prozora).
-      if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1' }] };
+      // Zadano: vezani slot ima netaknut otisak (nije anonimiziran); istek prozora nije bitan.
+      if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1', fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 } }] };
       return undefined;
     };
   }
@@ -331,18 +332,35 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     expect(body.get('metadata[product_id]')).toBe('pass_diplomski');
     expect(body.get('metadata[upgrade_from_entitlement_id]')).toBe(SOURCE_ID);
     expect(body.get('metadata[referral_code]'), 'referral vrijedi za prvu kupnju, ne nadogradnju').toBeNull();
-    // Kljuc bez vremena privole: drugi klik na istu nadogradnju daje isti PaymentIntent.
-    expect(stripeCalls[0].headers['Idempotency-Key']).toBe(`lekta:pi:upgrade:user-1:${SOURCE_ID}:pass_diplomski`);
+    // Kljuc bez vremena privole: drugi klik na istu nadogradnju daje isti PaymentIntent. Krug 4:
+    // kljuc nosi i iznos u centima (1000), pa nova ciljna cijena ne vraca stari PaymentIntent.
+    expect(stripeCalls[0].headers['Idempotency-Key']).toBe(`lekta:pi:upgrade:user-1:${SOURCE_ID}:pass_diplomski:1000`);
     // Pravo se trazi SAMO medju pravima prijavljenog korisnika.
     const lookup = calls.find((c) => c.table === 'entitlements')!;
     expect(eqs(lookup)).toEqual({ id: SOURCE_ID, user_id: 'user-1' });
     // Provjera djelomicnog povrata ide po PaymentIntentu izvorne uplate.
     const partial = calls.find((c) => c.table === 'webhook_events')!;
     expect(eqs(partial)).toEqual({ provider: 'stripe', order_id: 'pi_repair', outcome_detail: 'partial_refund_noted' });
-    // Vezani rad se provjerava po ISTOM pravu i po isteku slota u trenutku zahtjeva.
+    // Vezani rad se provjerava po ISTOM pravu i po otisku, NE po isteku prozora slota (krug 4).
     const slot = calls.find((c) => c.table === 'document_slots')!;
     expect(eqs(slot)).toEqual({ entitlement_id: SOURCE_ID });
-    expect(slot.ops.find((o) => o.op === 'gt')?.args).toEqual(['slot_expires_at', new Date(NOW_MS).toISOString()]);
+    expect(slot.ops.some((o) => o.op === 'gt')).toBe(false);
+  });
+
+  it('krug 4: vezani slot istekao prije 5 dana, otisak netaknut -> nadogradnja zavrsni 12,99 - 5,99 = 7,00', async () => {
+    const { res, stripeCalls } = await run(
+      { productId: 'pass_zavrsni', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+      {
+        resolve: upgradeResolve({
+          product: { ...PASS_ROW, id: 'pass_zavrsni', work_type: 'zavrsni', price_eur: 12.99 },
+          source: { ...SOURCE_ROW, work_type: 'zavrsni', paid_amount_cents: 599 },
+          slot: { data: [{ id: 'slot-1', slot_expires_at: new Date(NOW_MS - 5 * 86_400_000).toISOString(), fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: [], sectionCount: 0 } }] },
+        }),
+        stripe: { status: 200, json: { id: 'pi_up', client_secret: FAKE_CLIENT_SECRET, amount: 700, currency: 'eur' } },
+      },
+    );
+    expect(res.status).toBe(200);
+    expect(stripeCalls[0].body.get('amount')).toBe('700');
   });
 
   it('nevezan Repair (slots_used 0, bez slota) se smije nadograditi: slot nastaje tek pri upotrebi, s prozorom Final Passa', async () => {
@@ -392,8 +410,9 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     ['druga vrsta rada', { source: { ...SOURCE_ROW, work_type: 'zavrsni' } }, 409, 'upgrade_work_type_mismatch'],
     ['staro pravo bez placenog iznosa', { source: { ...SOURCE_ROW, paid_amount_cents: null } }, 409, 'upgrade_paid_amount_unknown'],
     ['djelomicno vracena izvorna uplata', { partial: [{ id: 'evt' }] }, 409, 'upgrade_source_partially_refunded'],
-    // Nalaz pregleda kruga 3: istekao slot cron 30 dana kasnije anonimizira, pa bi Final Pass bio neupotrebljiv.
-    ['vezani slot istekao ili anonimiziran', { slot: { data: [] } }, 409, 'upgrade_slot_expired'],
+    // Krug 4: granica je anonimizacija otiska (purge 0016), ne istek prozora slota.
+    ['vezani slot anonimiziran', { slot: { data: [{ id: 'slot-1', fingerprint: { sectionCount: 1 } }] } }, 409, 'upgrade_slot_anonymized'],
+    ['vezanog slota nema', { slot: { data: [] } }, 409, 'upgrade_slot_anonymized'],
     [
       'cilj je Semester Pass',
       { product: { ...PASS_ROW, id: 'pass_semestralni', work_type: 'seminarski', offer_code: 'semester_pass_v1' }, source: { ...SOURCE_ROW, work_type: 'seminarski' } },
@@ -438,16 +457,18 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
 });
 
 describe('create-checkout handler: katalog V1', () => {
-  it('specijalisticka naslovnica ne kupuje diplomski slot (odjeljak 18): 409 s prijedlogom specijalisticki, bez PaymentIntenta', async () => {
-    const { res, out, stripeCalls, calls } = await run({
+  it('prije M3 (SPECIALIST_TIER_ENABLED iskljucen): specijalisticka naslovnica na diplomskom slotu prolazi kao prije M2, bez tier_mismatch prema specijalistickom', async () => {
+    // Blokada iz odjeljka 18 (409 s prijedlogom specijalisticki) ukljucuje se tek s M3, kad klijent
+    // specijalisticki nudi; oba stanja prekidaca mjeri tests/monetizacija-v1-potrosnja.test.ts.
+    expect(SPECIALIST_TIER_ENABLED).toBe(false);
+    const { res, out, stripeCalls } = await run({
       productId: 'slot_diplomski',
       consent: CONSENT,
       signals: { words: 25_000, titleMarker: 'specialist' },
     });
-    expect(res.status).toBe(409);
-    expect(out).toEqual({ error: 'tier_mismatch', suggestedWorkType: 'specijalisticki' });
-    expect(stripeCalls).toHaveLength(0);
-    expect(calls.some((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')).toBe(false);
+    expect(res.status, JSON.stringify(out)).toBe(200);
+    expect(out).not.toMatchObject({ suggestedWorkType: 'specijalisticki' });
+    expect(stripeCalls[0].body.get('amount')).toBe('999');
   });
 
   it('svjesna potvrda nize vrste (confirmedMismatch) i dalje prolazi, kao za ostale vrste', async () => {

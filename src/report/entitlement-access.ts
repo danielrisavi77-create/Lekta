@@ -14,6 +14,13 @@
  *    buduci drugi strani kljuc s entitlements na products ne cini upit dvosmislenim (PostgREST
  *    PGRST201). Pozivatelj MORA provjeriti gresku upita: prazan rezultat zbog greske nije
  *    "nema prava" (to bi placenom korisniku vratilo 402).
+ *
+ * Krug 4: SLOT VRIJEDI SAMO UZ AKTIVNO PRAVO. Besplatan re-check (decideReportAccess) daje svaki
+ * zivi slot ciji se otisak poklapa. Slot se dotad citao bez veze na status prava, pa je puni povrat
+ * (npr. uplate nadogradnje, koja je slot_expires_at produljila na prozor Final Passa) ostavljao
+ * besplatne provjere do isteka slota. Sada se slot vraca samo ako je njegov `entitlement_id` medju
+ * aktivnim pravima istog citanja; povrat ili ponistenje prava odmah gasi i re-check, bez ikakvog
+ * upisa u document_slots i bez pamcenja prijasnjeg isteka.
  */
 import type { EntitlementRow, SlotRow } from './slot-logic.ts';
 import type { DocumentFingerprint } from '../fingerprint/fingerprint.ts';
@@ -62,8 +69,8 @@ export function entitlementRowsFromDb(rows: readonly EntitlementAccessDbRow[] | 
   return (rows ?? []).map(entitlementRowFromDb).filter((r): r is EntitlementRow => r !== null);
 }
 
-/** Stupci aktivnih slotova za odluku o pristupu. */
-export const ACTIVE_SLOT_SELECT = 'id, work_type, fingerprint, slot_expires_at';
+/** Stupci aktivnih slotova za odluku o pristupu; entitlement_id veze slot uz status prava. */
+export const ACTIVE_SLOT_SELECT = 'id, entitlement_id, work_type, fingerprint, slot_expires_at';
 
 /** Najuzi oblik supabase-js upita koji citanje pristupa treba (thenable koji se dalje suzava). */
 export interface AccessQuery extends PromiseLike<{ data: unknown; error: unknown }> {
@@ -85,17 +92,23 @@ function errorMessage(error: unknown): string {
   return String(error);
 }
 
-function slotRowFromDb(row: unknown): SlotRow | null {
+/**
+ * Redak slota -> SlotRow, samo ako pripada jednom od `activeEntitlementIds`. Slot bez
+ * `entitlement_id` (stupac je NOT NULL od 0001, pa to znaci krivi upit) se ispusta: fail-closed.
+ */
+function slotRowFromDb(row: unknown, activeEntitlementIds: ReadonlySet<string>): SlotRow | null {
   if (typeof row !== 'object' || row === null) return null;
   const r = row as Record<string, unknown>;
   if (typeof r.id !== 'string' || !isBillableWorkType(r.work_type) || typeof r.slot_expires_at !== 'string') return null;
   if (typeof r.fingerprint !== 'object' || r.fingerprint === null) return null;
+  if (typeof r.entitlement_id !== 'string' || !activeEntitlementIds.has(r.entitlement_id)) return null;
   return { id: r.id, workType: r.work_type, fingerprint: r.fingerprint as DocumentFingerprint, slotExpiresAt: r.slot_expires_at };
 }
 
 /**
  * Citanje ulaza za decideReportAccess, ZAJEDNICKO za generate-report i repair-docx: aktivni slotovi
  * korisnika za vrstu rada i njegova aktivna prava (ENTITLEMENT_ACCESS_SELECT, snapshot prozora).
+ * Slot ulazi samo ako mu je pravo medju aktivnima (vidi zaglavlje, krug 4).
  *
  * Greska BILO kojeg od dva upita vraca `ok: false`. Pozivatelj tada odgovara 500 i nista ne trosi:
  * prazan rezultat zbog greske nije "nema prava" (placeni korisnik bi inace dobio 402 i ponudu da
@@ -127,9 +140,12 @@ export async function readAccessRows(
   }
   const slotRows = Array.isArray(slots.data) ? slots.data : [];
   const entitlementRows = Array.isArray(entitlements.data) ? (entitlements.data as EntitlementAccessDbRow[]) : [];
+  const prava = entitlementRowsFromDb(entitlementRows);
+  // Upit prava je vec suzen na status 'active'; provjera ovdje ne vjeruje samo filtru upita.
+  const aktivna = new Set(prava.filter((e) => e.status === 'active').map((e) => e.id));
   return {
     ok: true,
-    activeSlots: slotRows.map(slotRowFromDb).filter((r): r is SlotRow => r !== null),
-    entitlements: entitlementRowsFromDb(entitlementRows),
+    activeSlots: slotRows.map((r) => slotRowFromDb(r, aktivna)).filter((r): r is SlotRow => r !== null),
+    entitlements: prava,
   };
 }

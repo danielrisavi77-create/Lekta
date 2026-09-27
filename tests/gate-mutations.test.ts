@@ -93,26 +93,32 @@ import {
   STRIPE_HANDLED_EVENTS,
   buildEntitlementInsert,
 } from '../src/report/webhook';
-import { quoteUpgrade } from '../src/report/upgrade';
+import { quoteUpgrade, readBoundSlotIntact } from '../src/report/upgrade';
 import {
   accessRowsProblems,
   bonusOutboxWorkerProblems,
+  boundSlotReadProblems,
   entitlementAccessProblems,
   entitlementConsumerProblems,
   entitlementProductFkCount,
   entitlementSnapshotProblems,
   specialistFallbackProblems,
+  specialistTierGateProblems,
+  stripeSyncSafetyProblems,
   upgradeQuoteProblems,
   upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
-import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
-import { billableMismatch } from '../src/report/billable-work-type';
+import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
+import type { SlotRow } from '../src/report/slot-logic';
+import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
+import { applyGuard as stripeSyncApplyGuard, parseArgs as stripeSyncParseArgs } from '../scripts/stripe-sync-products.mjs';
 import { checkoutMismatch } from '../src/report/checkout';
 import { estimateWorkType, unambiguousMismatch } from '../src/report/work-type-estimate';
 import { isReportWorkType } from '../src/report/pricing';
 import {
   V1_MIGRATION,
+  catalogProblems,
   idempotencyProblems,
   readMigration,
   runV1,
@@ -5452,22 +5458,97 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
   },
   {
-    id: 'naplata/nadogradnja-istekao-slot',
-    imitates: 'krug 2: quoteUpgrade gleda samo purchase_expires_at, pa se Repair ciji je slot istekao (i cron ga anonimizirao) nadogradi u Final Pass koji ne prepoznaje nijednu verziju rada',
+    id: 'naplata/nadogradnja-anonimiziran-slot',
+    imitates: 'krug 2: quoteUpgrade gleda samo purchase_expires_at, pa se Repair ciji je slot cron anonimizirao (purge 0016) nadogradi u Final Pass koji ne prepoznaje nijednu verziju rada',
     caught: () => {
-      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotLive: true } : s, u, n);
-      return upgradeQuoteProblems(mutant).some((p) => p.includes('isteklim vezanim slotom'));
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('anonimiziranim vezanim slotom'));
     },
     cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
   },
   {
-    id: 'naplata/nadogradnja-slot-neprocitan-kao-ziv',
-    imitates: 'fail-open citanje slota: pozivatelj koji zaboravi procitati vezani slot (boundSlotLive undefined) dobiva nadogradnju kao da je slot ziv',
+    id: 'naplata/nadogradnja-slot-neprocitan-kao-netaknut',
+    imitates: 'fail-open citanje slota: pozivatelj koji zaboravi procitati vezani slot (boundSlotIntact undefined) dobiva nadogradnju kao da je otisak netaknut',
     caught: () => {
-      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotLive: s.boundSlotLive ?? true } : s, u, n);
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: s.boundSlotIntact ?? true } : s, u, n);
       return upgradeQuoteProblems(mutant).some((p) => p.includes('nije fail-closed'));
     },
     cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-specijalisticki-ukljucen-prije-m3',
+    imitates: 'krug 4: SPECIALIST_TIER_ENABLED zadano true prije M3, pa server specijalisticku naslovnicu na seminarskom, zavrsnom i diplomskom blokira s prijedlogom specijalisticki koji klijent ne nudi',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug, tier = true) => billableMismatch(sel, sig, sug, tier);
+      const c: typeof checkoutMismatch = (sel, sig, conf, tier = true) => checkoutMismatch(sel, sig, conf, tier);
+      const p = specialistTierGateProblems(b, c, true);
+      return p.some((x) => x.includes('ukljucen prije M3')) && p.some((x) => x.includes('predlaze specijalisticki'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-ignoriran-u-billable',
+    imitates: 'pola prekidaca: konstanta je false, ali billableMismatch granu specijalisticke naslovnice i dalje primjenjuje bezuvjetno (stanje kruga 3)',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug) => billableMismatch(sel, sig, sug, true);
+      return specialistTierGateProblems(b, checkoutMismatch, SPECIALIST_TIER_ENABLED).some((x) => x.includes('ne odlucuje kao prije M2'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-zadano',
+    imitates: 'krug 4: parseArgs bez argumenata vraca apply=true, pa obicno pokretanje skripte salje zahtjeve Stripeu umjesto dry-runa',
+    caught: () => {
+      const mutant: typeof stripeSyncParseArgs = (argv) => ({ ...stripeSyncParseArgs(argv), apply: !argv.includes('--dry-run') });
+      return stripeSyncSafetyProblems(mutant, stripeSyncApplyGuard, stripeSyncSource()).some((p) => p.includes('zadano nije dry-run'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-bez-kljuca',
+    imitates: 'krug 4: --apply bez STRIPE_SECRET_KEY se ne odbija nego nastavlja s praznim kljucem prema Stripeu',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => (opts.apply ? String(env.STRIPE_SECRET_KEY ?? '') : null);
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez STRIPE_SECRET_KEY'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-live-bez-zastavice',
+    imitates: 'krug 4: sk_live_ kljuc prolazi bez --live, pa se tijekom bete s iskljucenom naplatom dira live Stripe racun',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez --live'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-sjeme-migracija',
+    imitates: 'krug 4 (6d): --apply bez --from zrcali sjeme cijena iz migracija u Stripe umjesto zivog kataloga',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => stripeSyncApplyGuard({ ...opts, fromExplicit: true }, env);
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez eksplicitnog --from'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-zastita-poslije-mreze',
+    imitates: 'krug 4: main cita zivi katalog (mreza, service role) PRIJE provjere kljuca, pa odbijen --apply ipak zove Supabase',
+    caught: () => {
+      const src = stripeSyncSource();
+      const guard = '  const secret = applyGuard(opts, env);\n';
+      const read = "  const rows = opts.from === 'db' ? await catalogFromDb(env, fetchImpl) : catalogFromMigrations();\n";
+      const mutated = src.replace(guard + read, read + guard);
+      if (mutated === src) return false;
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, mutated).some((p) => p.includes('prije provjere'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
   },
   {
     id: 'naplata/specijalisticki-fallback-na-diplomski-popravak',
@@ -6055,6 +6136,10 @@ function webhookMorSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'handler.ts'));
 }
 
+function stripeSyncSource(): string {
+  return readTextLf(resolve(process.cwd(), 'scripts', 'stripe-sync-products.mjs'));
+}
+
 function createCheckoutSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
 }
@@ -6192,6 +6277,84 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
   });
 
+  it('krug 4: citanje pristupa koje slot uzima bez obzira na status prava (stanje kruga 3) obara gard povrata nadogradnje', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      if (!r.ok) return r;
+      // Slotovi kao prije kruga 4: svaki zivi slot, bez veze na entitlement_id i status prava.
+      const raw = await db.from('document_slots').select(ACTIVE_SLOT_SELECT).eq('user_id', u).eq('work_type', w).gt('slot_expires_at', n);
+      const activeSlots = (Array.isArray(raw.data) ? raw.data : []).map((x) => {
+        const s = x as Record<string, unknown>;
+        return { id: String(s.id), workType: w, fingerprint: s.fingerprint, slotExpiresAt: String(s.slot_expires_at) } as SlotRow;
+      });
+      return { ...r, activeSlots };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('povrat nadogradnje') && p.includes('umjesto 402'))).toBe(true);
+  });
+
+  it('krug 4: citanje vezanog slota po isteku prozora (stara granica) obara gard kredita za popravak', async () => {
+    expect(await boundSlotReadProblems(readBoundSlotIntact, quoteUpgrade)).toEqual([]);
+    const staro: typeof readBoundSlotIntact = async (admin, id) => {
+      const q = admin.from('document_slots').select('id, fingerprint, slot_expires_at').eq('entitlement_id', id);
+      const { data, error } = await q;
+      if (error) return { ok: false, error: String(error) };
+      const zivi = (Array.isArray(data) ? data : []).filter((r) => Date.parse(String((r as Record<string, unknown>).slot_expires_at)) > Date.UTC(2026, 8, 27));
+      return { ok: true, intact: zivi.length > 0 };
+    };
+    expect((await boundSlotReadProblems(staro, quoteUpgrade)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    const bezOtiska: typeof readBoundSlotIntact = async (admin, id) => {
+      const r = await readBoundSlotIntact(admin, id);
+      return r.ok ? { ok: true, intact: true } : r;
+    };
+    expect((await boundSlotReadProblems(bezOtiska, quoteUpgrade)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+  });
+
+  it('catalogProblems: baseline cist nad 0207', async () => {
+    const run = await runV1();
+    try {
+      expect(await catalogProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: do_obrane ostaje active=true -> gard obara', async () => {
+    const mutated = mutirajRe(/set active = false(\r?\n\s+where id in \('slot_zavrsni_do_obrane')/, 'set active = true$1');
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('slot_zavrsni_do_obrane:') || p.startsWith('slot_diplomski_do_obrane:'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: cijena mimo set_product_price (bez pricing_changelog traga) -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /perform public\.set_product_price\(v\.id, v\.price_eur::numeric,\s*'[^']*'\);/,
+      'update public.products set price_eur = v.price_eur::numeric where id = v.id;',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.includes('nije u pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: specijalisticki izostavljen iz work_type CHECK-a repair_jobs -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /(add constraint repair_jobs_work_type_check\r?\n\s+check \(work_type in \('seminarski', 'zavrsni', 'diplomski', )'specijalisticki', /,
+      '$1',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('repair_jobs: work_type CHECK'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
   it('0207 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
     const run = await runV1();
     try {
@@ -6216,11 +6379,29 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     return mutated;
   }
 
-  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja isteklog rada obara gard', async () => {
-    const mutated = mutiraj('  if v_ent.slots_used > 0 and not exists (', '  if false and not exists (');
+  /** Kao mutiraj, ali regexom (neovisno o CRLF-u radne kopije). */
+  function mutirajRe(od: RegExp, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.source.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja anonimiziranog rada obara gard', async () => {
+    const mutated = mutiraj('  if v_ent.slots_used > 0 and not found then', '  if false then');
     const run = await runV1(mutated);
     try {
-      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao vezani slot'))).toBe(true);
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade sa starom granicom (slot_expires_at > now) odbija istekao, a netaknut slot i obara gard', async () => {
+    const mutated = mutirajRe(/and s\.fingerprint \?\| array\['authorNorm', 'titleNorm', 'headings'\]/, 'and s.slot_expires_at > now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
     } finally {
       await run.db.close();
     }

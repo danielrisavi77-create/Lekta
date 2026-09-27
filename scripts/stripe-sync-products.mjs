@@ -15,14 +15,21 @@
 //
 // ZADANO JE --dry-run. Bez `--apply` skripta ne salje nijedan zahtjev Stripeu: ispise plan nad
 // katalogom i (ako se ne zada stanje) pretpostavi prazan Stripe racun. `--apply` trazi
-// STRIPE_SECRET_KEY, a live kljuc (`sk_live_`) dodatno i `--live`. Tijekom bete je naplata
-// iskljucena i skripta se NE pokrece protiv ijednog racuna.
+// STRIPE_SECRET_KEY, a live kljuc (`sk_live_`) dodatno i `--live`. `--apply` bez eksplicitnog
+// `--from` se odbija i trazi `--from=db`: zrcali se zivi katalog, ne sjeme cijena iz migracija
+// (krug 4). Sve tri provjere idu PRIJE ikakvog mreznog poziva. Tijekom bete je naplata iskljucena i
+// skripta se NE pokrece protiv ijednog racuna.
+//
+// NEAKTIVAN SKU SE ARHIVIRA (krug 4). Lektin retail proizvod s `active = false` (npr. *_do_obrane)
+// u planu dobiva `archive_product` (Stripe Product active=false) i `archive_price` (aktivna Price se
+// gasi i ostaje BEZ lookup_key, pa je dinamicko trazenje po products.id vise ne nalazi). Ako ga u
+// Stripeu nema ili je vec arhiviran, plan ga navodi kao `noop_archived`.
 //
 // Izvor kataloga:
-//   --from=migrations (zadano)  sjeme iz supabase/migrations + ciljno stanje V1 iz 0207; offline
-//   --from=db                   zivi `products` preko PostgREST-a (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+//   --from=migrations (zadano za dry-run)  sjeme iz supabase/migrations + ciljno stanje V1 iz 0207; offline
+//   --from=db                              zivi `products` preko PostgREST-a (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 //
-// Pokretanje: node scripts/stripe-sync-products.mjs [--from=migrations|db] [--apply [--live]] [--json]
+// Pokretanje: node scripts/stripe-sync-products.mjs [--from=migrations|db] [--apply --from=db [--live]] [--json]
 
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
@@ -139,10 +146,24 @@ export async function catalogFromDb(env = process.env, fetchImpl = fetch) {
  * Sto Stripe treba imati: aktivni retail proizvodi koje Lekta prodaje, s pozitivnom cijenom. Iznos je
  * `round(price_eur * 100)`, isto zaokruzivanje kao stripeAmountCents u src/report/checkout.ts.
  */
+function lektaRetail(r) {
+  return r && (r.audience ?? 'retail') === 'retail' && !FOREIGN_PREFIXES.some((p) => String(r.id).startsWith(p));
+}
+
+/**
+ * Lektini retail SKU-ovi koji se vise ne prodaju (`active = false`): u Stripeu se arhiviraju, a ne
+ * brisu, jer povijesne uplate i izvjestaji na njih upucuju.
+ */
+export function retiredStripeCatalog(rows) {
+  return rows
+    .filter((r) => lektaRetail(r) && r.active === false)
+    .map((r) => String(r.id))
+    .sort((a, b) => a.localeCompare(b));
+}
+
 export function desiredStripeCatalog(rows) {
   return rows
-    .filter((r) => r && r.active !== false && (r.audience ?? 'retail') === 'retail')
-    .filter((r) => !FOREIGN_PREFIXES.some((p) => String(r.id).startsWith(p)))
+    .filter((r) => lektaRetail(r) && r.active !== false)
     .map((r) => ({
       productId: String(r.id),
       name: `Lekta ${String(r.id)}`,
@@ -163,8 +184,21 @@ export function desiredStripeCatalog(rows) {
  * `product` Stripe Product (id, name, active, metadata), a `price` aktivna Price s tim lookup_key
  * (id, unit_amount, currency). Cista funkcija: isti ulaz, isti plan.
  */
-export function planStripeSync(desired, existing = new Map()) {
+export function planStripeSync(desired, existing = new Map(), retired = []) {
   const plan = [];
+  for (const productId of retired) {
+    const cur = existing.get(productId) ?? {};
+    const stripeId = stripeProductId(productId);
+    if (cur.product && cur.product.active !== false) {
+      plan.push({ action: 'archive_product', productId, stripeProductId: stripeId });
+    }
+    if (cur.price) {
+      plan.push({ action: 'archive_price', productId, stripeProductId: stripeId, previousPriceId: cur.price.id });
+    }
+    if (!(cur.product && cur.product.active !== false) && !cur.price) {
+      plan.push({ action: 'noop_archived', productId, stripeProductId: stripeId });
+    }
+  }
   for (const d of desired) {
     const cur = existing.get(d.productId) ?? {};
     const stripeId = stripeProductId(d.productId);
@@ -223,17 +257,17 @@ async function stripe(fetchImpl, secret, method, path, body, idempotencyKey) {
   return { status: res.status, data };
 }
 
-/** Trenutno stanje Stripea za zeljene SKU-ove (samo citanje). */
-export async function readStripeState(desired, secret, fetchImpl = fetch) {
+/** Trenutno stanje Stripea za zeljene i arhivirane SKU-ove (samo citanje). */
+export async function readStripeState(desired, secret, fetchImpl = fetch, retired = []) {
   const state = new Map();
-  for (const d of desired) {
-    const p = await stripe(fetchImpl, secret, 'GET', `/products/${encodeURIComponent(stripeProductId(d.productId))}`);
+  for (const productId of [...desired.map((d) => d.productId), ...retired]) {
+    const p = await stripe(fetchImpl, secret, 'GET', `/products/${encodeURIComponent(stripeProductId(productId))}`);
     const product = p.status === 200 ? p.data : undefined;
-    if (p.status !== 200 && p.status !== 404) throw new Error(`Stripe product ${d.productId}: ${p.status}`);
-    const q = await stripe(fetchImpl, secret, 'GET', `/prices?active=true&lookup_keys[]=${encodeURIComponent(stripeLookupKey(d.productId))}`);
-    if (q.status !== 200) throw new Error(`Stripe price ${d.productId}: ${q.status}`);
+    if (p.status !== 200 && p.status !== 404) throw new Error(`Stripe product ${productId}: ${p.status}`);
+    const q = await stripe(fetchImpl, secret, 'GET', `/prices?active=true&lookup_keys[]=${encodeURIComponent(stripeLookupKey(productId))}`);
+    if (q.status !== 200) throw new Error(`Stripe price ${productId}: ${q.status}`);
     const price = Array.isArray(q.data?.data) ? q.data.data[0] : undefined;
-    state.set(d.productId, { product, price });
+    state.set(productId, { product, price });
   }
   return state;
 }
@@ -254,6 +288,11 @@ export async function applyStripePlan(plan, secret, fetchImpl = fetch) {
       r = await stripe(fetchImpl, secret, 'POST', '/products', { id: step.stripeProductId, name: step.name, metadata: step.metadata }, key);
     } else if (step.action === 'update_product') {
       r = await stripe(fetchImpl, secret, 'POST', `/products/${encodeURIComponent(step.stripeProductId)}`, { name: step.name, active: true, metadata: step.metadata }, key);
+    } else if (step.action === 'archive_product') {
+      r = await stripe(fetchImpl, secret, 'POST', `/products/${encodeURIComponent(step.stripeProductId)}`, { active: false }, key);
+    } else if (step.action === 'archive_price') {
+      // Prazan lookup_key ga uklanja: arhivirana cijena se po products.id vise ne nalazi.
+      r = await stripe(fetchImpl, secret, 'POST', `/prices/${encodeURIComponent(step.previousPriceId)}`, { active: false, lookup_key: '' }, key);
     } else if (step.action === 'create_price' || step.action === 'replace_price') {
       r = await stripe(fetchImpl, secret, 'POST', '/prices', {
         product: step.stripeProductId, currency: 'eur', unit_amount: step.unitAmount,
@@ -275,17 +314,34 @@ export async function applyStripePlan(plan, secret, fetchImpl = fetch) {
 // ---------------------------------------------------------------------------------------------
 
 export function parseArgs(argv) {
-  const opts = { apply: false, live: false, from: 'migrations', json: false };
+  const opts = { apply: false, live: false, from: 'migrations', fromExplicit: false, json: false };
   for (const a of argv) {
     if (a === '--apply') opts.apply = true;
     else if (a === '--dry-run') opts.apply = false;
     else if (a === '--live') opts.live = true;
     else if (a === '--json') opts.json = true;
-    else if (a.startsWith('--from=')) opts.from = a.slice('--from='.length);
-    else throw new Error(`nepoznat argument: ${a}`);
+    else if (a.startsWith('--from=')) {
+      opts.from = a.slice('--from='.length);
+      opts.fromExplicit = true;
+    } else throw new Error(`nepoznat argument: ${a}`);
   }
   if (!['migrations', 'db'].includes(opts.from)) throw new Error(`--from mora biti migrations ili db, ne ${opts.from}`);
   return opts;
+}
+
+/**
+ * Zastite prije ikakvog mreznog poziva: bez `--apply` nista; `--apply` trazi eksplicitan izvor
+ * kataloga (`--from=db`), STRIPE_SECRET_KEY, a live kljuc i `--live`. Vraca tajni kljuc za --apply.
+ */
+export function applyGuard(opts, env) {
+  if (!opts.apply) return null;
+  if (!opts.fromExplicit) {
+    throw new Error('--apply trazi --from=db: zrcali se zivi katalog, ne sjeme cijena iz migracija');
+  }
+  const secret = String(env.STRIPE_SECRET_KEY ?? '');
+  if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+  if (secret.startsWith('sk_live_') && !opts.live) throw new Error('live kljuc trazi i --live (naplata je u beti iskljucena)');
+  return secret;
 }
 
 /**
@@ -294,18 +350,17 @@ export function parseArgs(argv) {
  */
 export async function main(argv = process.argv.slice(2), env = process.env, fetchImpl = fetch, log = console.log) {
   const opts = parseArgs(argv);
+  const secret = applyGuard(opts, env);
   const rows = opts.from === 'db' ? await catalogFromDb(env, fetchImpl) : catalogFromMigrations();
   const desired = desiredStripeCatalog(rows);
+  const retired = retiredStripeCatalog(rows);
   if (!opts.apply) {
-    const plan = planStripeSync(desired);
+    const plan = planStripeSync(desired, new Map(), retired);
     log(opts.json ? JSON.stringify({ mode: 'dry-run', plan }, null, 2) : formatPlan('dry-run', plan));
     return { mode: 'dry-run', plan };
   }
-  const secret = String(env.STRIPE_SECRET_KEY ?? '');
-  if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
-  if (secret.startsWith('sk_live_') && !opts.live) throw new Error('live kljuc trazi i --live (naplata je u beti iskljucena)');
-  const state = await readStripeState(desired, secret, fetchImpl);
-  const plan = planStripeSync(desired, state);
+  const state = await readStripeState(desired, secret, fetchImpl, retired);
+  const plan = planStripeSync(desired, state, retired);
   const done = await applyStripePlan(plan, secret, fetchImpl);
   log(opts.json ? JSON.stringify({ mode: 'apply', plan, applied: done.length }, null, 2) : formatPlan('apply', plan));
   return { mode: 'apply', plan, applied: done.length };

@@ -18,7 +18,8 @@ import {
   mapUpgradeSourceRow,
   quoteUpgrade,
   upgradeIdempotencyKey,
-  readBoundSlotLive,
+  readBoundSlotIntact,
+  readSourcePartiallyRefunded,
   UPGRADE_SOURCE_COLUMNS,
 } from '../../../src/report/upgrade.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
@@ -189,29 +190,23 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
     const source = mapUpgradeSourceRow(srow);
     if (source) {
       // Djelomican povrat izvorne uplate: entitlement ne biljezi vraceni dio, pa se priznati iznos
-      // vise ne zna. Pad citanja je 500, ne "nema povrata".
-      const { data: partial, error: partialErr } = await admin
-        .from('webhook_events')
-        .select('id')
-        .eq('provider', 'stripe')
-        .eq('order_id', String(srow?.order_id ?? ''))
-        .eq('outcome_detail', 'partial_refund_noted')
-        .limit(1);
-      if (partialErr) {
-        console.error('[create-checkout] upgrade_refund_lookup_failed', { error: partialErr.message ?? String(partialErr) });
+      // vise ne zna. Isto citanje radi i webhook prije pretvorbe. Pad citanja je 500, ne "nema povrata".
+      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');
+      if (!partial.ok) {
+        console.error('[create-checkout] upgrade_refund_lookup_failed', { error: partial.error });
         return json({ error: 'internal' }, 500);
       }
-      source.partiallyRefunded = Array.isArray(partial) && partial.length > 0;
-      // Vezani rad mora biti jos ziv (istekao slot cron anonimizira, pa bi Final Pass bio prazan).
-      // Cita se samo za vezano pravo (nevezanom slot ne treba). Pad citanja je 500, ne "slot
-      // istekao" ni "slot ziv".
+      source.partiallyRefunded = partial.partial;
+      // Vezani rad mora biti jos prepoznatljiv: otisak slota netaknut (nije anonimiziran). Istek
+      // prozora slota nije granica (krug 4, odjeljak 14); nadogradnja isti slot ozivi. Cita se samo
+      // za vezano pravo (nevezanom slot ne treba). Pad citanja je 500, ne "anonimiziran" ni "netaknut".
       if (source.slotsUsed > 0) {
-        const slot = await readBoundSlotLive(admin, source.id, new Date(nowMs).toISOString());
+        const slot = await readBoundSlotIntact(admin, source.id);
         if (!slot.ok) {
           console.error('[create-checkout] upgrade_slot_lookup_failed', { error: slot.error });
           return json({ error: 'internal' }, 500);
         }
-        source.boundSlotLive = slot.live;
+        source.boundSlotIntact = slot.intact;
       }
     }
     const quote = quoteUpgrade(product, source, user.id, nowMs);
@@ -263,9 +258,10 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
       // Deterministican kljuc: mrezni retry istog pokusaja ne stvara drugi PaymentIntent.
       // Ne pokriva dva odvojena klika (vidi komentar uz stripeIdempotencyKey).
       // Nadogradnja ima kljuc BEZ vremena privole: dva klika na nadogradnju istog prava vracaju isti
-      // PaymentIntent, pa se ista nadogradnja ne placa dvaput (upgradeIdempotencyKey).
+      // PaymentIntent, pa se ista nadogradnja ne placa dvaput (upgradeIdempotencyKey). Kljuc nosi
+      // i iznos: nova ciljna cijena daje novi PaymentIntent, ne stari iznos pod istim kljucem.
       'Idempotency-Key': upgradeFrom !== null
-        ? upgradeIdempotencyKey(user.id, upgradeFrom, productId)
+        ? upgradeIdempotencyKey(user.id, upgradeFrom, productId, amountCents)
         : stripeIdempotencyKey(user.id, productId, consentedAt),
     },
     body: buildStripePaymentIntentParams({

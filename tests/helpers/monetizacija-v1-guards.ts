@@ -7,8 +7,9 @@
  * tests/webhook-mor-handler.test.ts; ovo je jeftin sloj za mutacije.
  */
 import type { buildEntitlementInsert } from '../../src/report/webhook';
-import type { quoteUpgrade, UpgradeSource, UpgradeTarget } from '../../src/report/upgrade';
+import type { quoteUpgrade, readBoundSlotIntact, UpgradeSource, UpgradeTarget } from '../../src/report/upgrade';
 import type { billableMismatch } from '../../src/report/billable-work-type';
+import { unambiguousMismatch } from '../../src/report/work-type-estimate';
 import type { checkoutMismatch } from '../../src/report/checkout';
 import type { entitlementRowFromDb, readAccessRows } from '../../src/report/entitlement-access';
 import { decideReportAccess } from '../../src/report/slot-logic';
@@ -57,7 +58,7 @@ function source(over: Partial<UpgradeSource> = {}): UpgradeSource {
   return {
     id: 'ent-1', userId: 'u1', workType: 'diplomski', status: 'active', provider: 'stripe', slotsTotal: 1,
     offerCode: 'repair_v1', paidAmountCents: 999, purchaseExpiresAt: LATER, upgradeOrderId: null,
-    slotsUsed: 1, boundSlotLive: true, ...over,
+    slotsUsed: 1, boundSlotIntact: true, ...over,
   };
 }
 
@@ -92,17 +93,65 @@ export function upgradeQuoteProblems(quote: QuoteFn): string[] {
   if (quote(target(), source({ purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'u1', NOW).ok) {
     problems.push('isteklo pravo se moze nadograditi (rok)');
   }
-  // Vezani rad mora biti ziv (nalaz pregleda kruga 3): istekao slot cron anonimizira, pa bi placen
-  // Final Pass produljio prazan otisak koji ne prepoznaje nijednu verziju rada.
-  if (quote(target(), source({ boundSlotLive: false }), 'u1', NOW).ok) {
-    problems.push('pravo s isteklim vezanim slotom se moze nadograditi (Final Pass bez upotrebljivog otiska)');
+  // Vezani rad mora biti prepoznatljiv (krug 3 i 4): anonimiziran otisak (purge_document_slots, 0016)
+  // bi dao placen Final Pass koji ne prepoznaje nijednu verziju rada. Istek prozora nije granica.
+  if (quote(target(), source({ boundSlotIntact: false }), 'u1', NOW).ok) {
+    problems.push('pravo s anonimiziranim vezanim slotom se moze nadograditi (Final Pass bez upotrebljivog otiska)');
   }
-  if (quote(target(), source({ boundSlotLive: undefined }), 'u1', NOW).ok) {
-    problems.push('neprocitano stanje vezanog slota se tumaci kao ziv slot (nije fail-closed)');
+  if (quote(target(), source({ boundSlotIntact: undefined }), 'u1', NOW).ok) {
+    problems.push('neprocitano stanje vezanog slota se tumaci kao netaknut otisak (nije fail-closed)');
   }
-  const nevezano = quote(target(), source({ slotsUsed: 0, boundSlotLive: undefined }), 'u1', NOW);
+  const nevezano = quote(target(), source({ slotsUsed: 0, boundSlotIntact: undefined }), 'u1', NOW);
   if (!nevezano.ok || nevezano.amountCents !== 1000) {
     problems.push('nevezan Repair (slots_used 0) se ne moze nadograditi');
+  }
+  return problems;
+}
+
+type BoundSlotReadFn = typeof readBoundSlotIntact;
+
+/** Lazan klijent za readBoundSlotIntact: vraca zadane retke slota i biljezi filtre. */
+function boundSlotDb(data: unknown) {
+  const filtri: string[] = [];
+  const q = {
+    eq(c: string, _v: string) { filtri.push(`eq:${c}`); return q; },
+    gt(c: string, _v: string) { filtri.push(`gt:${c}`); return q; },
+    lt(c: string, _v: string) { filtri.push(`lt:${c}`); return q; },
+    limit(_n: number) { return q; },
+    // oxlint-disable-next-line unicorn/no-thenable
+    then<A = Odgovor, B = never>(ok?: ((v: Odgovor) => A | PromiseLike<A>) | null, fail?: ((e: unknown) => B | PromiseLike<B>) | null): PromiseLike<A | B> {
+      return Promise.resolve({ data, error: null }).then(ok, fail);
+    },
+  };
+  return { db: { from: (_t: 'document_slots') => ({ select: (_c: string) => q }) }, filtri };
+}
+
+/**
+ * KREDIT ZA POPRAVAK (krug 4, odjeljak 14: korisnik koji je prvo kupio Repair ne smije biti
+ * kaznjen). Citanje vezanog slota za nadogradnju: slot_zavrsni istekao prije 5 dana, otisak
+ * netaknut -> nadogradnja 12,99 - 5,99 prolazi; purgan otisak (0016) -> odbijeno. Granica je
+ * anonimizacija, ne istek prozora.
+ */
+export async function boundSlotReadProblems(read: BoundSlotReadFn, quote: QuoteFn): Promise<string[]> {
+  const problems: string[] = [];
+  const otisak = { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 };
+  const istekao = new Date(NOW - 5 * 86_400_000).toISOString();
+  const zavrsni = target({ id: 'pass_zavrsni', workType: 'zavrsni', priceEur: 12.99 });
+  const repair = (intact: boolean) => source({ workType: 'zavrsni', paidAmountCents: 599, boundSlotIntact: intact });
+
+  const ziv = boundSlotDb([{ id: 's1', fingerprint: otisak, slot_expires_at: istekao }]);
+  const r1 = await read(ziv.db as never, 'ent-1');
+  const q1 = quote(zavrsni, repair(r1.ok && r1.intact), 'u1', NOW);
+  if (!q1.ok || q1.amountCents !== 700) {
+    problems.push('slot istekao prije 5 dana s netaknutim otiskom odbija nadogradnju 12,99 - 5,99 (Repair kupac kaznjen)');
+  }
+  if (ziv.filtri.some((f) => f.includes('slot_expires_at'))) {
+    problems.push('citanje vezanog slota za nadogradnju filtrira po isteku prozora (granica je anonimizacija)');
+  }
+  const purgan = boundSlotDb([{ id: 's1', fingerprint: { sectionCount: 1 }, slot_expires_at: new Date(NOW - 40 * 86_400_000).toISOString() }]);
+  const r2 = await read(purgan.db as never, 'ent-1');
+  if (!r2.ok || r2.intact || quote(zavrsni, repair(r2.ok && r2.intact), 'u1', NOW).ok) {
+    problems.push('anonimiziran vezani slot (purge 0016) se moze nadograditi (Final Pass bez otiska)');
   }
   return problems;
 }
@@ -298,7 +347,7 @@ export async function accessRowsProblems(read: ReadAccessFn): Promise<string[]> 
     purchase_expires_at: '2027-01-01T00:00:00.000Z', slot_window_days: 21, products: { slot_window_days: 90 },
   };
   const slot = {
-    id: 'slot-1', work_type: 'specijalisticki', slot_expires_at: '2026-10-10T00:00:00.000Z',
+    id: 'slot-1', entitlement_id: 'ent-1', work_type: 'specijalisticki', slot_expires_at: '2026-10-10T00:00:00.000Z',
     fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 },
   };
 
@@ -333,6 +382,32 @@ export async function accessRowsProblems(read: ReadAccessFn): Promise<string[]> 
     'u1', 'specijalisticki', now,
   );
   if (padSlota.ok) problems.push('pad upita slotova se cita kao "nema slota" (recheck bi potrosio novo pravo)');
+
+  // KRUG 4, POVRAT NADOGRADNJE: nadogradnja je slot produljila na prozor Final Passa (dan 240),
+  // puni povrat je pravo ugasio. Dan 60, isti rad: re-check NE smije biti besplatan. Dva oblika
+  // odgovora: upit prava filtrira status (prazno) ili vrati i vraceni redak.
+  const dan = (d: number) => new Date(Date.parse(now) + d * 86_400_000).toISOString();
+  const produljen = { ...slot, slot_expires_at: dan(240) };
+  const vraceno = { ...pravo, status: 'refunded', slots_used: 1 };
+  for (const [opis, prava] of [['upit filtrira status', []], ['upit vrati vraceni redak', [vraceno]]] as const) {
+    const r = await read(accessDb({ document_slots: { data: [produljen], error: null }, entitlements: { data: prava, error: null } }).db, 'u1', 'specijalisticki', dan(60));
+    if (!r.ok) {
+      problems.push(`povrat nadogradnje (${opis}): citanje pristupa vraca gresku`);
+      continue;
+    }
+    const d = decideReportAccess({ now: dan(60), workType: 'specijalisticki', fingerprint: slot.fingerprint, activeSlots: r.activeSlots, entitlements: r.entitlements, recentGenerationCount: 0 });
+    if (d.decision !== 'payment_required') {
+      problems.push(`povrat nadogradnje (${opis}): dan 60 daje ${d.decision} umjesto 402 (vraceno pravo i dalje otvara vezani slot)`);
+    }
+  }
+  // Regresijski par: isto, ali pravo aktivno (nije vraceno) -> besplatan re-check ostaje.
+  const aktivno = await read(accessDb({ document_slots: { data: [produljen], error: null }, entitlements: { data: [{ ...pravo, slots_used: 1 }], error: null } }).db, 'u1', 'specijalisticki', dan(60));
+  const dAktivno = aktivno.ok
+    ? decideReportAccess({ now: dan(60), workType: 'specijalisticki', fingerprint: slot.fingerprint, activeSlots: aktivno.activeSlots, entitlements: aktivno.entitlements, recentGenerationCount: 0 })
+    : null;
+  if (dAktivno?.decision !== 'recheck') {
+    problems.push('aktivno nadogradjeno pravo vise ne daje besplatan re-check vezanog slota (regresija)');
+  }
   return problems;
 }
 
@@ -363,28 +438,125 @@ export function entitlementProductFkCount(migrations: readonly { name: string; s
 export function specialistFallbackProblems(billable: typeof billableMismatch, checkout: typeof checkoutMismatch): string[] {
   const problems: string[] = [];
   const suggest = () => 'diplomski' as const;
+  // Ponasanje UZ prekidac M3 (SPECIALIST_TIER_ENABLED = true), izricito ukljucen.
   for (const nize of ['seminarski', 'zavrsni', 'diplomski'] as const) {
-    const d = billable(nize, { words: 20_000, titleMarker: 'specialist' }, suggest);
+    const d = billable(nize, { words: 20_000, titleMarker: 'specialist' }, suggest, true);
     if (!d.block || d.suggestedWorkType !== 'specijalisticki') {
       problems.push(`repair-docx: specijalisticka naslovnica trosi ${nize} slot (fallback specijalisticki -> nize)`);
     }
   }
-  if (billable('specijalisticki', { words: 20_000, titleMarker: 'specialist' }, suggest).block) {
+  if (billable('specijalisticki', { words: 20_000, titleMarker: 'specialist' }, suggest, true).block) {
     problems.push('specijalisticki rad na specijalistickom pravu je blokiran');
   }
-  if (billable('doktorski', { words: 20_000, titleMarker: 'specialist' }, suggest).block) {
+  if (billable('doktorski', { words: 20_000, titleMarker: 'specialist' }, suggest, true).block) {
     problems.push('visa vrsta rada (doktorski) je blokirana za specijalisticku naslovnicu');
   }
-  const kupnja = checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, false);
+  const kupnja = checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, false, true);
   if (!kupnja.block || kupnja.suggestedWorkType !== 'specijalisticki') {
     problems.push('create-checkout: specijalisticka naslovnica kupuje diplomski slot (fallback specijalisticki -> diplomski)');
   }
-  if (checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, true).block) {
+  if (checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, true, true).block) {
     problems.push('create-checkout: svjesna potvrda nize vrste vise ne prolazi');
   }
   const specKupnja = checkout('specijalisticki', { words: 40_000, titleMarker: 'doctoral' }, false);
   if (!specKupnja.block || specKupnja.suggestedWorkType !== 'doktorski') {
     problems.push('create-checkout: doktorska naslovnica kupuje specijalisticki proizvod');
+  }
+  return problems;
+}
+
+/**
+ * PRIJE M3 (krug 4): klijent jos ne nudi `specijalisticki`, pa server po ZADANOM prekidacu ne smije
+ * ni predlagati ni blokirati prema toj vrsti. Za cetiri klijentske vrste odluka je doslovno ona
+ * prije M2 (unambiguousMismatch uz prijedlog iz klijentske procjene). `enabled` je izvezena
+ * vrijednost SPECIALIST_TIER_ENABLED; M3 je mijenja zajedno s klijentom.
+ */
+export function specialistTierGateProblems(
+  billable: typeof billableMismatch,
+  checkout: typeof checkoutMismatch,
+  enabled: boolean,
+): string[] {
+  const problems: string[] = [];
+  if (enabled !== false) problems.push('SPECIALIST_TIER_ENABLED je ukljucen prije M3 (klijent specijalisticki jos ne nudi)');
+  const suggest = () => 'diplomski' as const;
+  for (const nize of ['seminarski', 'zavrsni', 'diplomski'] as const) {
+    for (const words of [2_000, 12_000, 20_000]) {
+      const sig = { words, titleMarker: 'specialist' as const };
+      const d = billable(nize, sig, suggest);
+      if (d.suggestedWorkType === 'specijalisticki') {
+        problems.push(`prije M3 server predlaze specijalisticki za ${nize} (prijedlog koji klijent ne moze odabrati)`);
+      }
+      const prije = unambiguousMismatch(nize, sig) ? { block: true, suggestedWorkType: 'diplomski' } : { block: false };
+      if (JSON.stringify(d) !== JSON.stringify(prije)) {
+        problems.push(`prije M3 ${nize} (${words} rijeci, specijalisticka naslovnica) ne odlucuje kao prije M2`);
+      }
+    }
+  }
+  const kupnja = checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, false);
+  if (kupnja.block) problems.push('prije M3 create-checkout blokira diplomski zbog specijalisticke naslovnice');
+  return problems;
+}
+
+interface StripeSyncOpts {
+  apply: boolean;
+  live: boolean;
+  from: string;
+  fromExplicit: boolean;
+  json: boolean;
+}
+type StripeSyncParse = (argv: string[]) => StripeSyncOpts;
+type StripeSyncGuard = (opts: StripeSyncOpts, env: Record<string, string | undefined>) => string | null;
+
+function throwsWith(fn: () => unknown, re: RegExp): boolean {
+  try {
+    fn();
+    return false;
+  } catch (e) {
+    return re.test(e instanceof Error ? e.message : String(e));
+  }
+}
+
+/**
+ * ZASTITE scripts/stripe-sync-products.mjs (krug 4): zadano je dry-run bez mreze; `--apply` bez
+ * STRIPE_SECRET_KEY, `sk_live_` bez `--live` i `--apply` bez eksplicitnog `--from` se odbijaju; a
+ * `main` provjeru radi PRIJE citanja kataloga iz baze (mreza). Izvrseno nad parseArgs i applyGuard,
+ * a redoslijed u `main` nad izvorom skripte. Behavior main-a mjeri tests/stripe-sync-products.test.ts.
+ */
+export function stripeSyncSafetyProblems(parse: StripeSyncParse, guard: StripeSyncGuard, scriptSrc: string): string[] {
+  const problems: string[] = [];
+  const test = ['sk', 'test', 'gard'].join('_');
+  const live = ['sk', 'live', 'gard'].join('_');
+  const zadano = parse([]);
+  if (zadano.apply !== false) problems.push('stripe-sync: zadano nije dry-run (bez argumenata salje zahtjeve Stripeu)');
+  try {
+    if (guard(zadano, { STRIPE_SECRET_KEY: live }) !== null) problems.push('stripe-sync: dry-run trazi ili vraca kljuc');
+  } catch {
+    problems.push('stripe-sync: pokretanje bez argumenata prolazi zastite za --apply (nije dry-run)');
+  }
+  if (!throwsWith(() => guard(parse(['--apply', '--from=db']), {}), /STRIPE_SECRET_KEY/)) {
+    problems.push('stripe-sync: --apply bez STRIPE_SECRET_KEY se ne odbija');
+  }
+  if (!throwsWith(() => guard(parse(['--apply', '--from=db']), { STRIPE_SECRET_KEY: live }), /--live/)) {
+    problems.push('stripe-sync: sk_live_ kljuc prolazi bez --live');
+  }
+  if (!throwsWith(() => guard(parse(['--apply']), { STRIPE_SECRET_KEY: test }), /--from=db/)) {
+    problems.push('stripe-sync: --apply bez eksplicitnog --from zrcali sjeme cijena iz migracija');
+  }
+  try {
+    if (guard(parse(['--apply', '--from=db', '--live']), { STRIPE_SECRET_KEY: live }) !== live) {
+      problems.push('stripe-sync: ispravan --apply --from=db --live ne vraca kljuc');
+    }
+  } catch {
+    problems.push('stripe-sync: ispravan --apply --from=db --live se odbija');
+  }
+  const src = scriptSrc.replace(/\r\n/g, '\n');
+  const start = src.indexOf('export async function main(');
+  const end = start >= 0 ? src.indexOf('\n}\n', start) : -1;
+  const body = start >= 0 && end > start ? src.slice(start, end) : '';
+  const g = body.indexOf('applyGuard(opts, env)');
+  const net = body.search(/catalogFromDb\(|readStripeState\(|applyStripePlan\(/);
+  if (!body.includes('parseArgs(argv)') || g < 0 || net < 0 || g > net) {
+    problems.push('stripe-sync: main cita katalog ili Stripe prije provjere zastita (odbijen --apply ipak ide na mrezu)');
   }
   return problems;
 }

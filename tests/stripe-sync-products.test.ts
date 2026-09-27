@@ -14,6 +14,7 @@ import {
   catalogFromMigrations,
   desiredStripeCatalog,
   planStripeSync,
+  retiredStripeCatalog,
   stripeLookupKey,
   stripeProductId,
 } from '../scripts/stripe-sync-products.mjs';
@@ -50,7 +51,12 @@ function fakeStripe() {
     }
     if (path.startsWith('/products/')) {
       const id = decodeURIComponent(path.slice('/products/'.length));
-      products.set(id, { ...(products.get(id) ?? {}), id, name: body.get('name'), active: true, metadata: metadataOf(body) });
+      const prije = products.get(id) ?? {};
+      products.set(id, {
+        ...prije, id,
+        ...(body.has('name') ? { name: body.get('name'), metadata: metadataOf(body) } : {}),
+        active: body.get('active') !== 'false',
+      });
       return ok(products.get(id));
     }
     if (path === '/prices') {
@@ -64,6 +70,7 @@ function fakeStripe() {
       const id = decodeURIComponent(path.slice('/prices/'.length));
       const p = prices.find((x) => x.id === id);
       if (p) p.active = body.get('active') !== 'false';
+      if (p && body.has('lookup_key')) p.lookup_key = body.get('lookup_key') || null;
       return ok(p ?? {});
     }
     return ok({ error: {} }, 400);
@@ -126,28 +133,74 @@ describe('stripe-sync-products: dry-run je zadan i ne dira mrezu', () => {
     expect(() => parseArgs(['--nesto'])).toThrow();
   });
 
-  it('dry-run s kljucem u okolini i dalje ne zove Stripe', async () => {
+  it('dry-run s kljucem u okolini i dalje ne zove Stripe; neaktivni SKU-ovi su u planu', async () => {
     const out = await main([], { STRIPE_SECRET_KEY: LIVE_KEY }, zabranjenFetch, quiet);
     expect(out.mode).toBe('dry-run');
-    expect(out.plan.every((s: { action: string }) => s.action.startsWith('create_'))).toBe(true);
+    const akcije = out.plan.map((s: { action: string }) => s.action);
+    expect(akcije.every((a: string) => a.startsWith('create_') || a === 'noop_archived')).toBe(true);
+    expect(out.plan.filter((s: { action: string }) => s.action === 'noop_archived').map((s: { productId: string }) => s.productId))
+      .toEqual(['slot_diplomski_do_obrane', 'slot_zavrsni_do_obrane']);
   });
 
-  it('--apply bez kljuca i live kljuc bez --live se odbijaju prije ikakvog poziva', async () => {
-    await expect(main(['--apply'], {}, zabranjenFetch, quiet)).rejects.toThrow(/STRIPE_SECRET_KEY/);
-    await expect(main(['--apply'], { STRIPE_SECRET_KEY: LIVE_KEY }, zabranjenFetch, quiet)).rejects.toThrow(/--live/);
+  it('--apply bez kljuca i live kljuc bez --live se odbijaju prije ikakvog poziva (i uz --from=db)', async () => {
+    await expect(main(['--apply', '--from=db'], {}, zabranjenFetch, quiet)).rejects.toThrow(/STRIPE_SECRET_KEY/);
+    await expect(main(['--apply', '--from=db'], { STRIPE_SECRET_KEY: LIVE_KEY }, zabranjenFetch, quiet)).rejects.toThrow(/--live/);
+  });
+
+  it('krug 4: --apply bez eksplicitnog --from se odbija i trazi --from=db, prije ikakvog poziva', async () => {
+    await expect(main(['--apply'], { STRIPE_SECRET_KEY: TEST_KEY }, zabranjenFetch, quiet)).rejects.toThrow(/--from=db/);
+    expect(parseArgs(['--apply']).fromExplicit).toBe(false);
+    expect(parseArgs(['--apply', '--from=db']).fromExplicit).toBe(true);
+  });
+});
+
+describe('stripe-sync-products: neaktivan SKU se arhivira (krug 4)', () => {
+  it('generator: katalog iz migracija ima neaktivne Lektine SKU-ove (do_obrane), ne Katedrine', () => {
+    expect(retiredStripeCatalog(catalogFromMigrations())).toEqual(['slot_diplomski_do_obrane', 'slot_zavrsni_do_obrane']);
+  });
+
+  it('plan: aktivan Product i Price s lookup_key -> archive_product i archive_price; vec arhiviran -> noop_archived', () => {
+    const aktivan = new Map([['slot_zavrsni_do_obrane', {
+      product: { id: 'lekta_slot_zavrsni_do_obrane', name: 'x', active: true, metadata: {} },
+      price: { id: 'price_old', unit_amount: 999, currency: 'eur' },
+    }]]);
+    expect(planStripeSync([], aktivan, ['slot_zavrsni_do_obrane'])).toEqual([
+      { action: 'archive_product', productId: 'slot_zavrsni_do_obrane', stripeProductId: 'lekta_slot_zavrsni_do_obrane' },
+      { action: 'archive_price', productId: 'slot_zavrsni_do_obrane', stripeProductId: 'lekta_slot_zavrsni_do_obrane', previousPriceId: 'price_old' },
+    ]);
+    const arhiviran = new Map([['slot_zavrsni_do_obrane', { product: { id: 'lekta_slot_zavrsni_do_obrane', name: 'x', active: false, metadata: {} } }]]);
+    expect(planStripeSync([], arhiviran, ['slot_zavrsni_do_obrane'])).toEqual([
+      { action: 'noop_archived', productId: 'slot_zavrsni_do_obrane', stripeProductId: 'lekta_slot_zavrsni_do_obrane' },
+    ]);
+  });
+
+  it('--apply: Product active=false, Price neaktivna i bez lookup_key; drugi prolaz ne salje nijedan POST', async () => {
+    const s = fakeStripe();
+    s.products.set('lekta_slot_zavrsni_do_obrane', { id: 'lekta_slot_zavrsni_do_obrane', name: 'Lekta slot_zavrsni_do_obrane', active: true, metadata: {} });
+    s.prices.push({ id: 'price_obrana', product: 'lekta_slot_zavrsni_do_obrane', unit_amount: 999, currency: 'eur', lookup_key: 'slot_zavrsni_do_obrane', active: true });
+    const prvi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    expect(prvi.plan.map((st: { action: string; productId: string }) => `${st.action}:${st.productId}`))
+      .toEqual(expect.arrayContaining(['archive_product:slot_zavrsni_do_obrane', 'archive_price:slot_zavrsni_do_obrane', 'noop_archived:slot_diplomski_do_obrane']));
+    expect(s.products.get('lekta_slot_zavrsni_do_obrane')?.active).toBe(false);
+    const cijena = s.prices.find((p) => p.id === 'price_obrana');
+    expect(cijena).toMatchObject({ active: false, lookup_key: null });
+    const postova = s.posts.length;
+    const drugi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    expect(drugi.applied).toBe(0);
+    expect(s.posts.length).toBe(postova);
   });
 });
 
 describe('stripe-sync-products: idempotencija (dva prolaza, drugi je no-op)', () => {
   it('prvi --apply stvori Product i Price po SKU-u; drugi ne salje nijedan POST', async () => {
     const s = fakeStripe();
-    const prvi = await main(['--apply'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const prvi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
     const broj = desiredStripeCatalog(catalogFromMigrations()).length;
     expect(prvi.applied).toBe(broj * 2);
     expect(s.products.size).toBe(broj);
     const postsPrvi = s.posts.length;
 
-    const drugi = await main(['--apply'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const drugi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
     expect(drugi.applied).toBe(0);
     expect(drugi.plan.every((st: { action: string }) => st.action.startsWith('noop'))).toBe(true);
     expect(s.posts.length).toBe(postsPrvi);
@@ -166,5 +219,16 @@ describe('stripe-sync-products: idempotencija (dva prolaza, drugi je no-op)', ()
         lookupKey: 'pass_diplomski', previousPriceId: 'price_old', previousUnitAmount: 1499,
       },
     ]);
+  });
+});
+
+describe('stripe-sync-products: gard zastita (krug 4, baseline za gate-mutations)', () => {
+  it('parseArgs, applyGuard i redoslijed u main su cisti', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { resolve } = await import('node:path');
+    const { applyGuard } = await import('../scripts/stripe-sync-products.mjs');
+    const { stripeSyncSafetyProblems } = await import('./helpers/monetizacija-v1-guards');
+    const src = readFileSync(resolve(process.cwd(), 'scripts', 'stripe-sync-products.mjs'), 'utf8');
+    expect(stripeSyncSafetyProblems(parseArgs, applyGuard, src)).toEqual([]);
   });
 });
