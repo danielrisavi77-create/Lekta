@@ -3,20 +3,24 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   buildLocalRepairSecretChildEnvironment,
   buildWindowsAclArguments,
   stageLocalRepairSecrets,
 } from '../scripts/local-repair-secret-staging';
+import { removeTrackedTempDirs, trackTempDir, trackedTempDir } from './helpers/temp-dirs';
 
 const PROJECT_REF = 'zrrjttizjyfcxmcpgzml';
 const PRIVATE_KEY = 'private_key_fixture_without_padding';
 
 describe('Lekta local-repair secret staging', () => {
+  // Stavka G: korijeni testa i mapa koju namjerno pokvaren cleanup ostavi brisu se nakon svakog testa.
+  afterEach(removeTrackedTempDirs);
+
   it('predaje vrijednosti samo kroz ograniceni env-file i brise ga nakon jedne naredbe', () => {
-    const temporaryRoot = mkdtempSync(join(tmpdir(), 'lekta-secret-test-root-'));
+    const temporaryRoot = trackedTempDir('lekta-secret-test-root-');
     let observedPath = '';
     let observed = '';
     const hardenPath = vi.fn();
@@ -127,7 +131,11 @@ describe('Lekta local-repair secret staging', () => {
       runSupabase,
     }, {
       hardenPath() {},
-      removeDirectory() { throw new Error('cleanup failure'); },
+      removeDirectory(path) {
+        // Kod pod testom je mapu stvorio i ne smije je obrisati; test je brise sam.
+        trackTempDir(path);
+        throw new Error('cleanup failure');
+      },
     })).toThrow(/cleanup failure/);
     expect(runSupabase).toHaveBeenCalledTimes(1);
   });

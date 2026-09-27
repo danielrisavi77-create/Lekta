@@ -74,6 +74,15 @@ import {
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems, chargedAmountProblems, responseLeakProblems } from './helpers/webhook-handler-source';
 import { wordOracleIntegrityProblems } from './helpers/word-oracle-integrity';
+import {
+  WORD_VERIFY_ALLOWLIST_LINE,
+  WORD_VERIFY_CLEANUP_HELPER,
+  WORD_VERIFY_CLEANUP_SCRIPTS,
+  WORD_VERIFY_EMPTY_SET_SCRIPTS,
+  wordVerifyCleanupProblems,
+  wordVerifyEmptySetGuardProblems,
+  wordVerifyHelperProblems,
+} from './helpers/word-verify-cleanup';
 import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
   naplataSecretsVerdict,
@@ -6046,6 +6055,174 @@ const MUTATIONS: Mutation[] = [
       return stvarni.rmCalls.length === 0 && stvarni.plan.young.some((i) => i.path === CT_NANO);
     },
   },
+  // --- clean-vitest-tmp stavka G: ostaci testova i alata (24 h, gard po vrsti, Temp/claude) ---
+  {
+    id: 'clean-tmp/ostaci-vitestovim-pragom',
+    imitates: 'stavka G s pragom od 2 h umjesto 24 h: profil preglednika zivog Playwright e2e runa ili mkdtemp mapa '
+      + 'testa koji traje dulje od 2 h bez pisanja (release gate fixture) obrise se usred runa',
+    caught: () => cleanTmpRun(ctLeftoverFs(CT_PROFILE, 3 * CT_HOUR), CT_QUIET, { leftoverThresholdMs: CT_THRESHOLD })
+      .rmCalls.includes(CT_PROFILE),
+    cleanBefore: () => {
+      // Stvarni prag: 3 h star profil je mlad, 30 h star se brise (pa fixtura nije vakuumski mlada).
+      const mlad = cleanTmpRun(ctLeftoverFs(CT_PROFILE, 3 * CT_HOUR), CT_QUIET);
+      const star = cleanTmpRun(ctLeftoverFs(CT_PROFILE, 30 * CT_HOUR), CT_QUIET);
+      return mlad.rmCalls.length === 0 && mlad.plan.young.some((i) => i.path === CT_PROFILE)
+        && star.rmCalls.length === 1 && star.rmCalls[0] === CT_PROFILE;
+    },
+  },
+  {
+    id: 'clean-tmp/ostaci-bez-garda-procesa',
+    imitates: 'stavka G bez garda po vrsti: preglednik koji Playwright drzi otvorenim s --user-data-dir na '
+      + 'profilu kojemu se datoteke dugo ne mijenjaju izgubi profil ispod sebe',
+    caught: () => cleanTmpRun(ctLeftoverFs(CT_PROFILE, 30 * CT_HOUR), CT_LIVE_BROWSER, { guard: () => ({ ok: true }) })
+      .rmCalls.includes(CT_PROFILE),
+    cleanBefore: () => {
+      const zivi = cleanTmpRun(ctLeftoverFs(CT_PROFILE, 30 * CT_HOUR), CT_LIVE_BROWSER);
+      const mirno = cleanTmpRun(ctLeftoverFs(CT_PROFILE, 30 * CT_HOUR), CT_QUIET);
+      return zivi.rmCalls.length === 0 && zivi.plan.held.some((h) => h.path === CT_PROFILE)
+        && mirno.rmCalls.length === 1;
+    },
+  },
+  {
+    id: 'clean-tmp/temp-claude-nije-izuzet',
+    imitates: 'ciscenje kojemu os.tmpdir() pokazuje u Temp/claude: brise stare lekta-* mape radnog prostora sesija '
+      + 'i worktreeova workflow runova (Temp/claude/lekta-wf), koje cisti drugi proces',
+    caught: () => {
+      const dir = join(CT_CLAUDE_ROOT, 'lekta-release-gate-valid-0aZUKz');
+      const fs = ctLeftoverFs(dir, 90 * CT_HOUR, CT_CLAUDE_ROOT);
+      return cleanTmpRun(fs, CT_QUIET, { root: CT_CLAUDE_ROOT, protectedRoot: () => false }).rmCalls.includes(dir);
+    },
+    cleanBefore: () => {
+      const dir = join(CT_CLAUDE_ROOT, 'lekta-release-gate-valid-0aZUKz');
+      const stvarni = cleanTmpRun(ctLeftoverFs(dir, 90 * CT_HOUR, CT_CLAUDE_ROOT), CT_QUIET, { root: CT_CLAUDE_ROOT });
+      // Isti sadrzaj izvan Temp/claude se brise: zastita korijena, a ne fixtura, je ono sto cuva.
+      const izvanDir = join(CT_ROOT, 'lekta-release-gate-valid-0aZUKz');
+      const izvan = cleanTmpRun(ctLeftoverFs(izvanDir, 90 * CT_HOUR), CT_QUIET);
+      return stvarni.plan.blocked !== null && stvarni.rmCalls.length === 0
+        && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === izvanDir;
+    },
+  },
+  {
+    id: 'clean-tmp/temp-claude-samo-po-tekstu',
+    imitates: 'Codex krug 2 (M1): izuzece Temp/claude/** provjereno samo po tekstu putanje; korijen koji je junction '
+      + 'u Temp/claude/lekta-wf (tekst ga ne odaje) izgubi radni prostor sesija i worktreeove runova',
+    // Mutacija: sustav bez realpatha (kao prije popravka) vidi samo tekst putanje korijena.
+    caught: () => {
+      const dir = join(CT_VIEW_ROOT, 'lekta-release-gate-valid-0aZUKz');
+      const { lstat, readdir } = ctViewFs(dir);
+      return cleanTmpRun({ lstat, readdir }, CT_QUIET, { root: CT_VIEW_ROOT }).rmCalls.includes(dir);
+    },
+    cleanBefore: () => {
+      const dir = join(CT_VIEW_ROOT, 'lekta-release-gate-valid-0aZUKz');
+      const stvarni = cleanTmpRun(ctViewFs(dir), CT_QUIET, { root: CT_VIEW_ROOT });
+      // Isti korijen s realpathom izvan Temp/claude se cisti: realpath (a ne fixtura) je ono sto cuva.
+      const izvan = cleanTmpRun({ ...ctViewFs(dir), realpath: (p: string) => p }, CT_QUIET, { root: CT_VIEW_ROOT });
+      return stvarni.plan.blocked !== null && /realpath/.test(stvarni.plan.blocked) && stvarni.rmCalls.length === 0
+        && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === dir;
+    },
+  },
+  // --- Word check skripte: izlazni direktorij se brise SAMO na uspjehu (stavka G) ---
+  {
+    id: 'word-verify/outdir-brisan-i-na-padu',
+    imitates: 'Word check skripta brise .tmp-word-verify/.tmp-word-corpus i kad padne, pa nestanu popravljeni '
+      + 'paketi koje Word nije otvorio, jedini dokaz za dijagnozu Tier 2 pada',
+    // Mutacija u SVAKOJ skripti: uz poziv na uspjehu doda isti poziv u prvu granu pada (ispred exit 1).
+    caught: () => WORD_VERIFY_CLEANUP_SCRIPTS.every((rel) => {
+      const lines = readTextLf(resolve(process.cwd(), rel)).split('\n');
+      const pad = lines.findIndex((l) => /\bexit 1\b/.test(l));
+      if (pad < 0 || !lines.some((l) => /^Remove-WordVerifyOutDir -Dir/.test(l))) return false;
+      const indent = /^\s*/.exec(lines[pad] ?? '')?.[0] ?? '';
+      const mutirano = [...lines];
+      mutirano.splice(pad, 0, `${indent}Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root`);
+      return wordVerifyCleanupProblems(mutirano.join('\n')).length > 0;
+    }),
+    cleanBefore: () => WORD_VERIFY_CLEANUP_SCRIPTS.every(
+      (rel) => wordVerifyCleanupProblems(readTextLf(resolve(process.cwd(), rel))).length === 0,
+    ),
+  },
+  {
+    id: 'word-verify/outdir-bez-granice-repozitorija',
+    imitates: 'Word check skripta pozvana s -OutDir tests/fixtures/docx (ili putanjom izvan repozitorija) na uspjehu '
+      + 'rekurzivno obrise commitani korpus ili tudju mapu',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      const bezGranice = izvorno.replace('if (-not $roditelj.Equals($korijen, $cmp)) {', 'if ($false) {');
+      return bezGranice !== izvorno && wordVerifyHelperProblems(bezGranice).length > 0;
+    },
+    cleanBefore: () => wordVerifyHelperProblems(readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER))).length === 0,
+  },
+  {
+    id: 'word-verify/outdir-bez-allowliste',
+    imitates: 'Codex krug 2 (B1): `check.ps1 -SkipMake -OutDir node_modules` bez ijednog DOCX-a ima $fail = 0, a '
+      + 'node_modules je git-ignoriran i bez pracenih datoteka, pa ga funkcija bez allowliste imena rekurzivno obrise',
+    // Mutacija: uklonjena allowlista (uvjet imena nikad ne odustaje) ili prosirena na tudje ime.
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      const bezAllowliste = izvorno.replace('if (-not $dozvoljeno) {', 'if ($false) {');
+      const sira = izvorno.replace(WORD_VERIFY_ALLOWLIST_LINE, WORD_VERIFY_ALLOWLIST_LINE.replace(')', ", 'node_modules')"));
+      return bezAllowliste !== izvorno && sira !== izvorno
+        && wordVerifyHelperProblems(bezAllowliste).length > 0 && wordVerifyHelperProblems(sira).length > 0;
+    },
+    cleanBefore: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      return wordVerifyHelperProblems(izvorno).length === 0 && izvorno.includes(WORD_VERIFY_ALLOWLIST_LINE);
+    },
+  },
+  {
+    id: 'word-verify/outdir-bez-broja-provjerenih',
+    imitates: 'Codex krug 2 (B1): Word check skripta koja nije provjerila nijedan dokument ($fail = 0 nad praznim '
+      + 'skupom) brise izlazni direktorij kao da je uspjela',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      const bezBroja = izvorno.replace('if ($CheckedCount -le 0) {', 'if ($false) {');
+      const skripte = WORD_VERIFY_CLEANUP_SCRIPTS.every((rel) => {
+        const src = readTextLf(resolve(process.cwd(), rel));
+        const bezBrojanja = src.replace(/\n\s+\$provjereno\+\+\n/, '\n');
+        return bezBrojanja !== src && wordVerifyCleanupProblems(bezBrojanja).length > 0;
+      });
+      return bezBroja !== izvorno && wordVerifyHelperProblems(bezBroja).length > 0 && skripte;
+    },
+    cleanBefore: () => wordVerifyHelperProblems(readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER))).length === 0
+      && WORD_VERIFY_CLEANUP_SCRIPTS.every((rel) => wordVerifyCleanupProblems(readTextLf(resolve(process.cwd(), rel))).length === 0),
+  },
+  {
+    id: 'word-verify/outdir-kroz-junction',
+    imitates: 'Codex krug 2 (B1): .tmp-word-verify je junction na tudju mapu (ili sadrzi junction), a rekurzivno '
+      + 'brisanje na uspjehu obrise sadrzaj cilja',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      const bezReparsea = izvorno.replace('if ($null -ne $reparse) {', 'if ($false) {');
+      return bezReparsea !== izvorno && wordVerifyHelperProblems(bezReparsea).length > 0;
+    },
+    cleanBefore: () => wordVerifyHelperProblems(readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER))).length === 0,
+  },
+  {
+    id: 'word-verify/outdir-bez-git-provjere',
+    imitates: 'Word check skripta pozvana s -OutDir docs (unutar repozitorija, pracen) na uspjehu rekurzivno obrise '
+      + 'commitanu mapu jer gard gleda samo granicu repozitorija i tests/fixtures',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER));
+      const bezGita = izvorno.replace('if (-not $ignoriran -or $praceno.Count -gt 0) {', 'if ($false) {');
+      return bezGita !== izvorno && wordVerifyHelperProblems(bezGita).length > 0;
+    },
+    cleanBefore: () => wordVerifyHelperProblems(readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER))).length === 0,
+  },
+  {
+    id: 'word-verify/prazan-skup-nije-crveno',
+    imitates: 'Codex krug 3, M2: check skripta koja nije stvarno otvorila nijedan dokument ($provjereno '
+      + 'ostaje 0, npr. jer je $rows prazan ili je Word.Documents.Open pao prije brojanja) i dalje ispise '
+      + '"SVE PROSLO" i obrise izlazni direktorij kao da je uspjeh, umjesto da prazan skup tretira kao pad',
+    caught: () => WORD_VERIFY_EMPTY_SET_SCRIPTS.every((rel) => {
+      const izvorno = readTextLf(resolve(process.cwd(), rel));
+      const bezProvjere = izvorno.replace(
+        /[ \t]*if \(\$provjereno -eq 0\) \{\n(?:.*\n)*?[ \t]*exit 1\n[ \t]*\}\n/,
+        '',
+      );
+      return bezProvjere !== izvorno && wordVerifyEmptySetGuardProblems(bezProvjere).length > 0;
+    }),
+    cleanBefore: () => WORD_VERIFY_EMPTY_SET_SCRIPTS.every((rel) =>
+      wordVerifyEmptySetGuardProblems(readTextLf(resolve(process.cwd(), rel))).length === 0),
+  },
   // --- Laya v2 (docs/laya/LAYA_V2_SPEC.md): savjetodavni procjenitelj nikad ne ulazi u istinu Lekte ---
   {
     id: 'laya/src-uvozi-layu',
@@ -6204,9 +6381,43 @@ function cleanTmpTrapFs(): CleanTmpFs {
   });
 }
 
+/** Stavka G: Playwright profil kao izravno dijete virtualnog korijena. */
+const CT_PROFILE = join(CT_ROOT, 'playwright_chromiumdev_profile-3gUVVg');
+/** Korijen unutar Temp/claude (radni prostor sesija i worktreeovi runova). */
+const CT_CLAUDE_ROOT = resolve('/Temp/claude/lekta-wf');
+const CT_LIVE_BROWSER = [
+  ...CT_QUIET,
+  {
+    pid: 804,
+    ppid: 1,
+    name: 'chrome.exe',
+    command: `chrome.exe --headless --user-data-dir=${CT_PROFILE}`,
+  },
+];
+
+/** Jedna ostatak-mapa `dir` (s datotekom unutra) u korijenu `root`, sve `ageMs` staro. */
+function ctLeftoverFs(dir: string, ageMs: number, root: string = CT_ROOT): CleanTmpFs {
+  const t = CT_NOW - ageMs;
+  return cleanTmpVirtualFs({
+    [root]: { dir: true, mtimeMs: t },
+    [dir]: { dir: true, mtimeMs: t },
+    [join(dir, 'Default')]: { dir: true, mtimeMs: t },
+    [join(dir, 'Default', 'Preferences')]: { dir: false, mtimeMs: t, size: 2 },
+  });
+}
+
+/** Korijen ciji tekst ne odaje Temp/claude, a realpath vodi u Temp/claude/lekta-wf (junction). */
+const CT_VIEW_ROOT = resolve('/lekta-pogled');
+
+/** Ostatak-mapa pod CT_VIEW_ROOT; `realpath` preslikava pogled na stvarni korijen u Temp/claude. */
+function ctViewFs(dir: string) {
+  const base = ctLeftoverFs(dir, 90 * CT_HOUR, CT_VIEW_ROOT);
+  return { ...base, realpath: (p: string) => (p.startsWith(CT_VIEW_ROOT) ? CT_CLAUDE_ROOT + p.slice(CT_VIEW_ROOT.length) : p) };
+}
+
 /** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
 function cleanTmpRun(
-  fs: CleanTmpFs,
+  fs: CleanTmpFs & { realpath?: (p: string) => string },
   processes: Array<{ pid: number; ppid: number; name: string; command: string }>,
   overrides: Partial<Parameters<typeof planCleanup>[0]> = {},
 ) {
