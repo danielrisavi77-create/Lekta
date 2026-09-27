@@ -98,7 +98,7 @@ import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
-import { buildRepairPanelHandle, renderTableFigureRescueControls } from '../src/ui/repair-panel';
+import { buildRepairPanelHandle, classifyRepairReport, renderTableFigureRescueControls } from '../src/ui/repair-panel';
 import { tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
@@ -337,6 +337,15 @@ function t65MixedRequest(tbl: string): { applied: boolean; afterLabel: string } 
   return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true, repeatHeader: true } }], figures: [] });
 }
 const T65_SKIP_NOTE = 'ujednačavanje stupaca preskočeno';
+/**
+ * T65 krug 3 (M3, prvi prolaz): tablica kojoj je center vec na cilju. Mijesani zahtjev
+ * (equalColumns + center) tada nista ne mijenja, pa fixer vraca applied:false bez afterLabela.
+ */
+function t65AlreadyCentered(tbl: string): { applied: boolean; reason?: string; skippedActions?: string[] } {
+  const centered = tbl.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+  const documentXml = `<w:document ${T65_W}><w:body>${centered}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', centered), actions: { equalColumns: true, center: true } }], figures: [] });
+}
 /**
  * T65 krug 2, pregled (M2): oznaka kucice smije tvrditi prilagodbu sirini teksta samo ako fixer nad
  * ISTIM parametrima stvarno promijeni tblW. Gard usporeduje iscrtane oznake tablicnih akcija s
@@ -1938,6 +1947,38 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => {
       const out = t65MixedRequest(t65Table('', ''));
       return out.applied && !out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+  },
+  {
+    id: 'tablica/equal-columns-preskok-bez-izmjene',
+    imitates:
+      'spojena tablica kojoj su ostale trazene akcije vec na cilju vrati vec u PRVOM prolazu '
+      + 'applied:false/already-ok, a jedini trag preskoka (afterLabel) postoji samo uz applied:true, '
+      + 'pa izvjestaj kaze "vec uskladjeno" iako stupci nisu ujednaceni',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return !out.applied && out.reason === 'already-ok' && (out.skippedActions ?? []).some((note) => note.includes(T65_SKIP_NOTE));
+    },
+    // Obicna tablica s istim zahtjevom: equalColumns se stvarno primijeni, bez ikakvog traga preskoka.
+    cleanBefore: () => {
+      const out = t65AlreadyCentered(t65Table('', ''));
+      return out.applied && out.skippedActions === undefined;
+    },
+  },
+  {
+    id: 'izvjestaj/preskok-pod-vec-uskladjeno',
+    imitates:
+      'izvjestaj popravka stavku ciji je fixer vratio already-ok uz preskocen equalColumns svrsta pod '
+      + '"vec uskladjeno" (pregled drugog alata, krug 3), pa korisnik cita da nista nije trebalo mijenjati',
+    caught: () => {
+      const out = t65AlreadyCentered(t65Table('<w:gridSpan w:val="2"/>', ''));
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: out.reason as 'already-ok' }, skippedActions: { r: out.skippedActions ?? [] }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 0 && report.skippedNotes.some((line) => line.includes(T65_SKIP_NOTE));
+    },
+    // Isti razlog bez preskoka ostaje "vec uskladjeno" (RE-36): gard ne smije sve micati iz te skupine.
+    cleanBefore: () => {
+      const report = classifyRepairReport({ skipped: ['r'], skippedReasons: { r: 'already-ok' }, changelog: [] }, () => 'Tablice');
+      return report.alreadyOk.length === 1 && report.skippedNotes.length === 0;
     },
   },
   {

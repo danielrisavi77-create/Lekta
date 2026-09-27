@@ -48,8 +48,8 @@ interface BodyChild { tag: 'p' | 'tbl' | 'sectPr' | 'sdt'; start: number; end: n
 
 const W_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 
-function noOp(parts: DocxXmlParts, reason: FixerOutput['reason']): FixerOutput {
-  return { parts, applied: false, beforeLabel: '', afterLabel: '', reason };
+function noOp(parts: DocxXmlParts, reason: FixerOutput['reason'], skippedActions?: string[]): FixerOutput {
+  return { parts, applied: false, beforeLabel: '', afterLabel: '', reason, ...(skippedActions?.length ? { skippedActions } : {}) };
 }
 
 function escapeXml(value: string): string {
@@ -110,7 +110,11 @@ export function hasMergedCells(tableXml: string): boolean {
   return hasMergedCellsXml(tableXml);
 }
 
-/** T65 krug 2 (M3): trag u izlazu kad equalColumns nije proveden; izvjestaj prikazuje afterLabel. */
+/**
+ * T65 krug 2 (M3): trag u izlazu kad equalColumns nije proveden. Uz applied:true ide u afterLabel
+ * (izvjestaj ga prikazuje po stavci changeloga); krug 3: UVIJEK i u FixerOutput.skippedActions,
+ * jer bez izmjene afterLabela nema.
+ */
 export const EQUAL_COLUMNS_SKIPPED_NOTE = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
 
 function patchTable(xml: string, table: TableFigureRescueTable): string {
@@ -346,14 +350,16 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
   // T65: kad je equalColumns bio jedina akcija tablice i preskocen je zbog spojenih celija, istina
   // je da tu akciju Lekta ne moze sigurno izvesti ('unsupported-structure', izvjestaj: "nije bilo
   // moguce"). Krug 2: ako je ista tablica trazila i druge akcije, a nista se nije promijenilo, te
-  // su akcije vec na cilju (drugi prolaz nad vec popravljenom tablicom), pa je odgovor 'already-ok';
-  // preskok equalColumns vec je prijavljen u izlazu prvog prolaza (afterLabel dolje).
-  if (!changed) return noOp(parts, skippedWithoutOtherActions ? 'unsupported-structure' : 'already-ok');
+  // su akcije vec na cilju, pa je odgovor 'already-ok'. Krug 3: fixer ne razlikuje prvi prolaz od
+  // drugog (ostale akcije mogu biti na cilju vec u ulaznom dokumentu), pa preskok equalColumns ide
+  // u skippedActions i uz applied:false; bez toga 'already-ok' ne bi nosio nikakav trag preskoka.
+  const skippedActions = skippedEqualColumns ? [EQUAL_COLUMNS_SKIPPED_NOTE] : undefined;
+  if (!changed) return noOp(parts, skippedWithoutOtherActions ? 'unsupported-structure' : 'already-ok', skippedActions);
   let inner = layout.children.map((child, index) => `${insertBefore.get(index) ?? ''}${replacements.get(index) ?? child.xml}${insertAfter.get(index) ?? ''}`).join('');
   const nextDocument = parts.documentXml.slice(0, layout.innerStart) + inner + parts.documentXml.slice(layout.innerEnd);
   // T65 krug 2 (M3): mijesani zahtjev s preskocenim equalColumns ne smije izgledati kao potpuno
   // primijenjen. afterLabel ide u changelog, a renderSummary u repair-panelu ga prikazuje po stavci
   // (isti obrazac kao napomena o ponovljenom tekstu u apply-fixers.ts). FixerOutput se ne siri.
   const afterLabel = skippedEqualColumns ? `spašene tablice i slike; ${EQUAL_COLUMNS_SKIPPED_NOTE}` : 'spašene tablice i slike';
-  return { parts: { ...parts, documentXml: nextDocument }, applied: true, beforeLabel: 'tablice i slike', afterLabel };
+  return { parts: { ...parts, documentXml: nextDocument }, applied: true, beforeLabel: 'tablice i slike', afterLabel, ...(skippedActions ? { skippedActions } : {}) };
 }

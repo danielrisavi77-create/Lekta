@@ -15,7 +15,7 @@ import {
   tableFigureRescueRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
-import { renderTableFigureRescueControls, splitSkippedByReason } from './repair-panel';
+import { renderRepairOutcomeSummary, renderTableFigureRescueControls, skippedActionNotes, splitSkippedByReason, classifyRepairReport } from './repair-panel';
 import { tableFigureRescueFixer, type TableFigureRescueParams } from '../repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../analysis/element-structure';
 import { detectIntegrityFailure } from '../repair/apply-fixers';
@@ -750,6 +750,58 @@ describe('tableFigureRescueRepairableItem: istinit tekst i onemogucen equalColum
     expect(second.applied).toBe(false);
     const split = splitSkippedByReason(['table-figure-rescue-assisted'], { 'table-figure-rescue-assisted': second.reason! }, () => 'Prelamanje tablica i slika');
     expect(split).toEqual({ alreadyOk: ['Prelamanje tablica i slika'], cannotFix: [] });
+  });
+
+  /**
+   * T65 krug 3 (pregled: M3 napola zatvoren). Spojena tablica kojoj su ostale akcije vec na cilju:
+   * fixer u PRVOM prolazu vraca 'already-ok' i skippedActions. Izvjestaj ne smije reci samo
+   * "Odabrano je već usklađeno": preskoceno ujednacavanje stupaca mora biti ispisano.
+   */
+  it('M3 (krug 3): izvjestaj bez primijenjenog popravka ispisuje preskoceno ujednacavanje stupaca', () => {
+    const centered = wideMerged.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+    const doc = `<w:document ${W}><w:body>${centered}</w:body></w:document>`;
+    const params: TableFigureRescueParams = { version: 1, figures: [], tables: [{ id: 't1', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', centered), actions: { equalColumns: true, center: true } }] };
+    const out = tableFigureRescueFixer({ documentXml: doc, stylesXml: '' }, params);
+    expect(out.applied).toBe(false);
+    expect(out.reason).toBe('already-ok');
+    const ruleId = 'table-figure-rescue-assisted';
+    const labelOf = () => 'Prelamanje tablica i slika';
+    // Isti oblik koji applyFixers vraca za taj ishod (dokazano u table-figure-rescue-fixer.test.ts).
+    const summary = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: out.reason! }, skippedActions: { [ruleId]: out.skippedActions ?? [] }, changelog: [] }, labelOf);
+    // Pregled drugog alata (Codex, krug 3): stavka s preskocenom akcijom ne smije stajati pod "vec uskladjeno".
+    expect(summary).toEqual({ alreadyOk: [], cannotFix: [], skippedNotes: ['Prelamanje tablica i slika: ujednačavanje stupaca preskočeno (spojene ćelije)'] });
+    const el = document.createElement('div');
+    renderRepairOutcomeSummary(el, [], summary.alreadyOk, summary.cannotFix, summary.skippedNotes);
+    const text = el.textContent ?? '';
+    expect(text).toContain('Nije provedeno: Prelamanje tablica i slika: ujednačavanje stupaca preskočeno (spojene ćelije).');
+    expect(text).not.toContain('Već usklađeno');
+    expect(text).not.toMatch(/nije (bilo potrebno|trebalo) (ništa )?mijenjati/i);
+    expect(text).toContain('Dokument nije mijenjan.');
+    // Bez preskoka isti razlog ostaje "vec uskladjeno" (RE-36 se ne mijenja).
+    const plain = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: 'already-ok' }, changelog: [] }, labelOf);
+    expect(plain).toEqual({ alreadyOk: ['Prelamanje tablica i slika'], cannotFix: [], skippedNotes: [] });
+    // 'unsupported-structure' s preskokom ostaje "nije moguce", uz napomenu zasto.
+    const only = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: 'unsupported-structure' }, skippedActions: { [ruleId]: out.skippedActions ?? [] }, changelog: [] }, labelOf);
+    expect(only.cannotFix).toEqual(['Prelamanje tablica i slika']);
+    expect(only.skippedNotes).toHaveLength(1);
+  });
+
+  it('M3 (krug 3): ista napomena se ne ispisuje dvaput', () => {
+    const note = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
+    expect(skippedActionNotes({ r: [note, note] }, [], () => 'Prelamanje')).toEqual([`Prelamanje: ${note}`]);
+  });
+
+  it('M3 (krug 3): uz primijenjen popravak napomena se ne ponavlja ako je vec u changelogu', () => {
+    const ruleId = 'table-figure-rescue-assisted';
+    const note = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
+    const changelog = [{ ruleId, beforeLabel: 'tablice i slike', afterLabel: `spašene tablice i slike; ${note}` }];
+    expect(skippedActionNotes({ [ruleId]: [note] }, changelog, () => 'Prelamanje')).toEqual([]);
+    expect(skippedActionNotes({ [ruleId]: [note] }, [], () => 'Prelamanje')).toEqual([`Prelamanje: ${note}`]);
+    expect(skippedActionNotes(undefined, changelog, () => 'Prelamanje')).toEqual([]);
+    const el = document.createElement('div');
+    renderRepairOutcomeSummary(el, changelog, [], [], []);
+    expect(el.textContent).toContain(note);
+    expect(el.textContent).toContain('Primijenjeno 1 popravak');
   });
 
   /**

@@ -152,8 +152,9 @@ describe('table-figure-rescue fixer: equalColumns i spojene celije (T65)', () =>
  *      spojeno, a fixer nije i prepisao je tcW.
  *  m   gridSpan w:val="1" nije spajanje.
  *  M3  preskoceni equalColumns u mijesanom zahtjevu mora biti vidljiv u izlazu (afterLabel, koji
- *      izvjestaj popravka vec prikazuje), a drugi prolaz nad vec popravljenom tablicom javlja
- *      'already-ok', ne 'unsupported-structure'.
+ *      izvjestaj popravka vec prikazuje; od kruga 3 i FixerOutput.skippedActions, koji postoji i
+ *      uz applied:false), a drugi prolaz nad vec popravljenom tablicom javlja 'already-ok', ne
+ *      'unsupported-structure'.
  *  m   bez stvarne izmjene reda (trPr) obicna tablica vraca applied:false vec u PRVOM pozivu.
  */
 const WORD_MAIN = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
@@ -242,6 +243,41 @@ describe('table-figure-rescue fixer: T65 krug 2', () => {
     expect(second.reason).toBe('unsupported-structure');
   });
 
+  /**
+   * T65 krug 3 (pregled: M3 samo napola zatvoren). Napomena u afterLabel postoji samo uz
+   * applied:true. Spojena tablica kojoj su OSTALE trazene akcije vec na cilju vracala je vec u
+   * PRVOM prolazu applied:false/'already-ok' bez ikakvog traga da stupci nisu ujednaceni; fixer ne
+   * razlikuje prvi prolaz od drugog. Zato preskok nosi zasebno polje izlaza (skippedActions), koje
+   * postoji i uz applied:false.
+   */
+  for (const [name, tbl] of [['gridSpan', gridSpanTable], ['vMerge', vMergeTable]] as const) {
+    it(`M3 (krug 3): ${name}, ostale akcije vec na cilju, PRVI prolaz: already-ok, ali preskok je u izlazu`, () => {
+      const centered = tbl.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+      const input = wrapDoc(centered);
+      const result = tableFigureRescueFixer({ documentXml: input, stylesXml: '' }, rescueParams(centered, { equalColumns: true, center: true }));
+      expect(result.applied).toBe(false);
+      expect(result.reason).toBe('already-ok');
+      expect(result.parts.documentXml).toBe(input);
+      expect(result.skippedActions).toEqual(['ujednačavanje stupaca preskočeno (spojene ćelije)']);
+    });
+  }
+
+  it('M3 (krug 3): skippedActions je prisutan i uz applied:true, i samo kad je equalColumns stvarno preskocen', () => {
+    const mixed = tableFigureRescueFixer({ documentXml: wrapDoc(gridSpanTable), stylesXml: '' }, rescueParams(gridSpanTable, { equalColumns: true, center: true }));
+    expect(mixed.applied).toBe(true);
+    expect(mixed.skippedActions).toEqual(['ujednačavanje stupaca preskočeno (spojene ćelije)']);
+    const only = tableFigureRescueFixer({ documentXml: wrapDoc(gridSpanTable), stylesXml: '' }, rescueParams(gridSpanTable, { equalColumns: true }));
+    expect(only.reason).toBe('unsupported-structure');
+    expect(only.skippedActions).toEqual(['ujednačavanje stupaca preskočeno (spojene ćelije)']);
+    const plain = threeColumns('');
+    const clean = tableFigureRescueFixer({ documentXml: wrapDoc(plain), stylesXml: '' }, rescueParams(plain, { equalColumns: true, center: true }));
+    expect(clean.applied).toBe(true);
+    expect(clean.skippedActions).toBeUndefined();
+    const merged = tableFigureRescueFixer({ documentXml: wrapDoc(gridSpanTable), stylesXml: '' }, rescueParams(gridSpanTable, { center: true }));
+    expect(merged.applied).toBe(true);
+    expect(merged.skippedActions).toBeUndefined();
+  });
+
   it('m (trPr gard): obicna tablica kojoj trazena akcija vec vrijedi vraca already-ok u PRVOM pozivu, bez praznog w:trPr', () => {
     // Razlikuje se od idempotencijskog testa gore: tamo je prvi prolaz stvarno mijenjao tablicu.
     // Ovdje je tablica vec centrirana i nijedna akcija reda nije trazena; prije garda
@@ -280,5 +316,20 @@ describe('table-figure-rescue kroz applyFixers: preskok je u changelogu (T65 kru
     const clean = await applyFixers(await pack(wrapDoc(plain)), request(plain));
     expect(clean.changelog).toHaveLength(1);
     expect(clean.changelog[0].afterLabel).not.toContain('preskočeno');
+  });
+
+  it('krug 3: preskok stize do rezultata i kad fixer vrati already-ok (nista nije primijenjeno)', async () => {
+    const centered = gridSpanTable.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+    const result = await applyFixers(await pack(wrapDoc(centered)), request(centered));
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['table-figure-rescue-assisted']);
+    expect(result.skippedReasons).toEqual({ 'table-figure-rescue-assisted': 'already-ok' });
+    expect(result.skippedActions).toEqual({ 'table-figure-rescue-assisted': ['ujednačavanje stupaca preskočeno (spojene ćelije)'] });
+    // Dva zahtjeva s istim ruleId: napomena se ne udvostrucuje (pregled drugog alata, krug 3).
+    const twice = await applyFixers(await pack(wrapDoc(centered)), [...request(centered), ...request(centered)]);
+    expect(twice.skippedActions).toEqual({ 'table-figure-rescue-assisted': ['ujednačavanje stupaca preskočeno (spojene ćelije)'] });
+    const plain = threeColumns('').replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+    const clean = await applyFixers(await pack(wrapDoc(plain)), [{ ...request(plain)[0], params: rescueParams(plain, { center: true }) as unknown as Record<string, unknown> }]);
+    expect(clean.skippedActions).toBeUndefined();
   });
 });

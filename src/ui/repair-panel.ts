@@ -736,9 +736,10 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
       // identicno kad se ne razdvoje, pa uredan rad u "uskladi sve" toku djeluje kao kvar.
-      const { alreadyOk, cannotFix } = splitSkippedByReason(
-        result.skipped,
-        result.skippedReasons ?? {},
+      // T65 krug 3: namjerno preskocene akcije (npr. ujednacavanje stupaca na spojenim celijama)
+      // moraju biti vidljive i kad fixer vrati 'already-ok', ne samo kroz afterLabel changeloga.
+      const { alreadyOk, cannotFix, skippedNotes } = classifyRepairReport(
+        result,
         (ruleId) => ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId,
       );
       // Vrata integriteta su odbila isporuku: popravak bi proizveo neispravan paket. NIJE isto
@@ -747,13 +748,10 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         renderIntegrityFailure(summary, result.integrityFailure);
         return;
       }
-      if (result.changelog.length === 0) {
-        // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
-        // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
-        renderNothingApplied(summary, alreadyOk, cannotFix);
-        return;
-      }
-      renderSummary(summary, result.changelog, alreadyOk, cannotFix);
+      // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
+      // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
+      renderRepairOutcomeSummary(summary, result.changelog, alreadyOk, cannotFix, skippedNotes);
+      if (result.changelog.length === 0) return;
       repairedBytes = result.docxBytes;
       latestRepairedBytes = result.docxBytes;
     } catch (err) {
@@ -1709,6 +1707,56 @@ export function splitSkippedByReason(
   return { alreadyOk, cannotFix };
 }
 
+/**
+ * T65 krug 3: ruleId -> namjerno preskocene akcije (ApplyFixersResult.skippedActions) u retke
+ * "oznaka: napomena". Napomena koja je vec u afterLabelu changeloga iste stavke se ne ponavlja, jer
+ * je renderSummary vec ispisuje po stavci.
+ */
+export function skippedActionNotes(
+  skippedActions: ApplyFixersResult['skippedActions'],
+  changelog: readonly { ruleId: string; afterLabel: string }[],
+  labelOf: (ruleId: string) => string,
+): string[] {
+  const lines: string[] = [];
+  for (const [ruleId, notes] of Object.entries(skippedActions ?? {})) {
+    const shown = changelog.filter((entry) => entry.ruleId === ruleId).map((entry) => entry.afterLabel);
+    for (const note of notes) if (!shown.some((label) => label.includes(note))) lines.push(`${labelOf(ruleId)}: ${note}`);
+  }
+  return [...new Set(lines)];
+}
+
+/**
+ * T65 krug 3: razvrstavanje ishoda za izvjestaj. Stavka s namjerno preskocenom akcijom NE ide u
+ * "vec uskladjeno" ni kad fixer vrati 'already-ok' (ostale akcije jesu na cilju, ali preskocena
+ * nije); prikazuje se samo kroz napomenu "Nije provedeno". Isti put koristi performRepair.
+ */
+export function classifyRepairReport(
+  result: Pick<ApplyFixersResult, 'skipped' | 'skippedReasons' | 'skippedActions' | 'changelog'>,
+  labelOf: (ruleId: string) => string,
+): { alreadyOk: string[]; cannotFix: string[]; skippedNotes: string[] } {
+  const partial = new Set(Object.keys(result.skippedActions ?? {}));
+  const reasons = result.skippedReasons ?? {};
+  const skipped = result.skipped.filter((ruleId) => !(partial.has(ruleId) && reasons[ruleId] === 'already-ok'));
+  const { alreadyOk, cannotFix } = splitSkippedByReason(skipped, reasons, labelOf);
+  return { alreadyOk, cannotFix, skippedNotes: skippedActionNotes(result.skippedActions, result.changelog, labelOf) };
+}
+
+/** Izvjestaj lokalnog popravka: primijenjeno, vec uskladjeno, nije moguce i namjerno preskoceno. */
+export function renderRepairOutcomeSummary(
+  el: HTMLElement,
+  changelog: { ruleId: string; beforeLabel: string; afterLabel: string }[],
+  alreadyOk: string[],
+  cannotFix: string[],
+  skippedNotes: string[],
+): void {
+  if (changelog.length === 0) renderNothingApplied(el, alreadyOk, cannotFix, skippedNotes);
+  else renderSummary(el, changelog, alreadyOk, cannotFix, skippedNotes);
+}
+
+function skippedNotesHtml(notes: string[]): string {
+  return notes.length ? `<p>Nije provedeno: ${notes.map(escapeHtml).join('; ')}.</p>` : '';
+}
+
 // Hrvatska sklonidba uz broj: 1 popravak, 2-4 popravka, 5+ popravaka
 // (iznimka 11-14 -> popravaka). Isti obrazac kao renderIssues drugdje u appu.
 function pluralRepairs(n: number): string {
@@ -1724,6 +1772,7 @@ function renderSummary(
   changelog: { ruleId: string; beforeLabel: string; afterLabel: string }[],
   alreadyOk: string[],
   cannotFix: string[],
+  skippedNotes: string[],
 ): void {
   el.hidden = false;
   el.innerHTML = `
@@ -1735,6 +1784,7 @@ function renderSummary(
     </ul>
     ${alreadyOk.length ? `<p>Već usklađeno, nije trebalo mijenjati: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
     ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}. Za to i dalje vrijede ručne upute iznad.</p>` : ''}
+    ${skippedNotesHtml(skippedNotes)}
   `;
 }
 
@@ -2056,15 +2106,22 @@ function renderIntegrityFailure(
   `;
 }
 
-function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[]): void {
+function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[], skippedNotes: string[]): void {
   el.hidden = false;
   // RE-36: kad je SVE odabrano vec uskladjeno, "nista nije primijenjeno" izgleda kao kvar iako je
-  // rad uredan; naslov se preokrene u pozitivnu poruku samo u tom slucaju.
-  const allAlreadyOk = alreadyOk.length > 0 && cannotFix.length === 0;
+  // rad uredan; naslov se preokrene u pozitivnu poruku samo u tom slucaju. T65 krug 3: ako je neka
+  // odabrana akcija namjerno preskocena, ni "sve je vec uskladjeno" ni "nista nije trebalo
+  // mijenjati" nije istina.
+  const headline = cannotFix.length === 0 && skippedNotes.length > 0
+    ? 'Nijedna izmjena nije primijenjena, a dio odabranog nije proveden.'
+    : alreadyOk.length > 0 && cannotFix.length === 0
+      ? 'Odabrano je već usklađeno, nije bilo potrebno ništa mijenjati.'
+      : 'Nijedan odabrani popravak nije bilo moguće automatski primijeniti.';
   el.innerHTML = `
-    <strong>${allAlreadyOk ? 'Odabrano je već usklađeno, nije bilo potrebno ništa mijenjati.' : 'Nijedan odabrani popravak nije bilo moguće automatski primijeniti.'}</strong>
+    <strong>${headline}</strong>
     ${alreadyOk.length ? `<p>Već usklađeno: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
     ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}.</p>` : ''}
+    ${skippedNotesHtml(skippedNotes)}
     <p>Dokument nije mijenjan. Ručne upute iznad i dalje vrijede.</p>
   `;
 }
