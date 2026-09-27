@@ -72,6 +72,23 @@ describe('opportunitySignalForEvent', () => {
     expect(JSON.stringify(signals)).not.toContain('odlomak 42');
   });
 
+  it('prepoznaje stvarni hrvatski vokabular capability gapova iz analizatora', () => {
+    const signals = structureGapSignalsForEvent({
+      details: {
+        typographyStructure: { skipped: [{ reason: 'složena Word struktura (polje, poveznica, tablica, SDT ili revizija)' }] },
+        consistencyStructure: { skipped: [{ reason: 'odlomci unutar tablice nisu podržani u V1' }] },
+        linkDoiStructure: { skipped: [{ reason: 'složena Word struktura ili polje' }] },
+        requiredSectionsStructure: { skipped: [{ reason: 'dokument sadrži tekstualne okvire ili customXml strukture; analizirana su samo izravna body-level sidra' }] },
+      },
+    });
+    expect(signals).toEqual([
+      { category: 'typography', kind: 'unsupported-structure', count: 1 },
+      { category: 'consistency', kind: 'unsupported-structure', count: 1 },
+      { category: 'link-doi', kind: 'unsupported-structure', count: 1 },
+      { category: 'required-sections', kind: 'unsupported-structure', count: 1 },
+    ]);
+  });
+
   it('repair no-op razloge grupira bez ruleId-a i odbacuje nepoznatu vrijednost u unclassified', () => {
     expect(repairNoOpSignals({
       'rule-1': 'unsupported-structure',
