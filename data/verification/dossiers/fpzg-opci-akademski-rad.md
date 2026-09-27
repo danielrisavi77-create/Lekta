@@ -74,7 +74,10 @@ Pravila za rad: 10.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `true`
-- Citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+- Citat: "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New
+Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se
+numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni
+tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
 
 ## Prored
 - Pravilo: `fpzg-opci-akademski-rad--line-spacing`

@@ -14,7 +14,9 @@ Pravila za rad: 4.
 - Lokator: Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)
 - Snapshot: `data/sources/unidu/unidu-marikultura-upute-diplomski.pdf`
 - Vrijednost: `["Times New Roman","Arial"]`
-- Citat: "Diplomski rad je potrebno pisati racunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan."
+- Citat: "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po
+stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili
+Arial. Tekst mora biti obostrano poravnan."
 
 ## Velicina slova
 - Pravilo: `unidu-marikultura-diplomski--font-size`
@@ -26,7 +28,9 @@ Pravila za rad: 4.
 - Lokator: Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)
 - Snapshot: `data/sources/unidu/unidu-marikultura-upute-diplomski.pdf`
 - Vrijednost: `[12]`
-- Citat: "Diplomski rad je potrebno pisati racunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan."
+- Citat: "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po
+stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili
+Arial. Tekst mora biti obostrano poravnan."
 
 ## Poravnanje
 - Pravilo: `unidu-marikultura-diplomski--justify`
@@ -38,7 +42,9 @@ Pravila za rad: 4.
 - Lokator: Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)
 - Snapshot: `data/sources/unidu/unidu-marikultura-upute-diplomski.pdf`
 - Vrijednost: `true`
-- Citat: "Diplomski rad je potrebno pisati racunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan."
+- Citat: "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po
+stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili
+Arial. Tekst mora biti obostrano poravnan."
 
 ## Prored
 - Pravilo: `unidu-marikultura-diplomski--line-spacing`
@@ -50,5 +56,7 @@ Pravila za rad: 4.
 - Lokator: Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)
 - Snapshot: `data/sources/unidu/unidu-marikultura-upute-diplomski.pdf`
 - Vrijednost: `1.5`
-- Citat: "Diplomski rad je potrebno pisati racunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan."
+- Citat: "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po
+stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili
+Arial. Tekst mora biti obostrano poravnan."
 

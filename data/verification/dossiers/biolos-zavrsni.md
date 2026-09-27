@@ -62,7 +62,9 @@ Pravila za rad: 6.
 - Lokator: Prilog "Upute za izradu zavrsnog rada", odjeljak 6. Sadrzaj rada (str. 6 PDF-a)
 - Snapshot: `data/sources/biolos/biolos-pravilnik-zavrsni-2023.pdf`
 - Vrijednost: `true`
-- Citat: "Numeriranje stranica započinje na prvoj stranici Uvoda završnog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu."
+- Citat: "Numeriranje
+stranica započinje na prvoj stranici Uvoda završnog rada, a numeriraju se sve stranice s tekstom,
+slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu."
 
 ## Format papira A4
 - Pravilo: `biolos-zavrsni--paper-size`

@@ -117,7 +117,7 @@
       "authority": "program-page",
       "sourceId": "effectus-pravilnik-2023",
       "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
-      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
@@ -141,7 +141,7 @@
       "authority": "program-page",
       "sourceId": "effectus-pravilnik-2023",
       "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
-      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
@@ -168,7 +168,7 @@
       "authority": "program-page",
       "sourceId": "effectus-pravilnik-2023",
       "sourcePage": "Upute (Prilog 1), tč. 3 (str. 4-5)",
-      "quote": "Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+      "quote": "Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava\nse         naslovna         stranica,          sadržaj         i          popis         literature).",
       "status": "verified",
       "scored": true,
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
@@ -190,7 +190,7 @@
       "authority": "program-page",
       "sourceId": "effectus-pravilnik-2023",
       "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
-      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word\ndokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert\nFootnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju\nbrojčanim redoslijedom.",
       "status": "verified",
       "scored": true,
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
@@ -206,12 +206,52 @@
       "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+        {
+          "key": "sazetak",
+          "label": "sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "abstract",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
       ],
       "category": "structure",
       "label": "Obvezni dijelovi rada (Tablica 1: Korice, Sažetak, Abstract, Sadržaj, Uvodni dio, Zaključak, Popis literature su \"Obavezno\" za završni rad)",

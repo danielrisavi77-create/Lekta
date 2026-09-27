@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../src/profiles/profile-schema';
 import { anchorRuleQuotes, validateQuoteAnchorPlan } from '../src/verification/anchor-rule-quotes';
+import { validateProfiles } from '../src/profiles/profile-validator';
 
 const HASH = 'a'.repeat(64);
 const SOURCE: SourceEntry = { id: 'source-a', kind: 'guidelines', title: 'Source A', url: 'https://example.test/a', snapshotPath: 'a.txt', snapshotHash: HASH };
@@ -19,8 +20,71 @@ describe('anchorRuleQuotes', () => {
     const before = profile();
     const result = anchorRuleQuotes(before, sources, snapshots, NOW);
     expect(result.decisions).toEqual([{ ruleId: 'rule-a', code: 'anchored' }]);
-    expect(result.profile.ruleEntries?.[0]).toMatchObject({ quote: 'Veličine je stranice A4', value: 'A4', modality: 'obligation', scope: 'whole', sourcePage: 'page 2', status: 'needs-recheck', scored: false });
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({ quote: 'Veličine je stranice A4', value: 'A4', modality: 'obligation', scope: 'whole', sourcePage: 'page 2', status: 'verified', scored: true });
     expect(result.ledger).toMatchObject([{ action: 'quote-anchored', oldQuote: 'Velicine je stranice A4', newQuote: 'Veličine je stranice A4', sourceId: 'source-a', snapshotHash: HASH }]);
+    expect(validateQuoteAnchorPlan(before, result, sources, snapshots)).toEqual([]);
+  });
+
+  it('ljudski verified zadrzava status, bodovanje i fixer uz ASCII sidrenje', () => {
+    const before = profile({ ...RULE, autoFixable: true, fixerId: 'paper-size-fixer',
+      confirmedVia: 'human', verifiedBy: 'human-reviewer', reviewedBy: 'human-reviewer' });
+    const first = anchorRuleQuotes(before, sources, snapshots, NOW);
+    expect(first.profile.ruleEntries?.[0]).toMatchObject({
+      quote: 'Veličine je stranice A4', status: 'verified', scored: true,
+      autoFixable: true, fixerId: 'paper-size-fixer', confirmedVia: 'human',
+      verifiedBy: 'human-reviewer', reviewedBy: 'human-reviewer',
+    });
+    expect(validateProfiles([first.profile])).toEqual([]);
+    expect(validateQuoteAnchorPlan(before, first, sources, snapshots)).toEqual([]);
+    const second = anchorRuleQuotes(first.profile, sources, snapshots, NOW);
+    expect(second.profile).toEqual(first.profile);
+    expect(second.ledger).toEqual([]);
+  });
+
+  it('CRLF i LF snimke daju isti LF citat, a drugi prolaz je no-op', () => {
+    const before = profile({ ...RULE, quote: 'Velicine je stranice A4' });
+    const crlf = { [SOURCE.id]: { text: 'Uvod. Veličine je\r\nstranice A4. Kraj.', sha256: HASH } };
+    const cr = { [SOURCE.id]: { text: 'Uvod. Veličine je\rstranice A4. Kraj.', sha256: HASH } };
+    const lf = { [SOURCE.id]: { text: 'Uvod. Veličine je\nstranice A4. Kraj.', sha256: HASH } };
+    const fromCrLf = anchorRuleQuotes(before, sources, crlf, NOW);
+    const fromCr = anchorRuleQuotes(before, sources, cr, NOW);
+    const fromLf = anchorRuleQuotes(before, sources, lf, NOW);
+    expect(fromCrLf.profile.ruleEntries?.[0].quote).toBe('Veličine je\nstranice A4');
+    expect(fromCrLf.profile.ruleEntries?.[0].quote).toBe(fromLf.profile.ruleEntries?.[0].quote);
+    expect(fromCr.profile.ruleEntries?.[0].quote).toBe(fromLf.profile.ruleEntries?.[0].quote);
+    expect(fromCrLf.ledger[0].newQuote).toBe(fromLf.ledger[0].newQuote);
+    expect(validateQuoteAnchorPlan(before, fromCrLf, sources, crlf)).toEqual([]);
+    expect(validateQuoteAnchorPlan(before, fromCr, sources, cr)).toEqual([]);
+    expect(validateQuoteAnchorPlan(before, fromLf, sources, lf)).toEqual([]);
+    const second = anchorRuleQuotes(fromCrLf.profile, sources, crlf, NOW);
+    expect(second.profile).toEqual(fromCrLf.profile);
+    expect(second.ledger).toEqual([]);
+    expect(second.decisions).toEqual([{ ruleId: 'rule-a', code: 'already-literal' }]);
+  });
+
+  it('AI dokaz se invalidira zajedno s potvrdom i autoFixable, uz ledger trag', () => {
+    const before = profile({ ...RULE, autoFixable: true, fixerId: 'paper-size-fixer',
+      confirmedVia: 'ai-evidence-audit', aiEvidence: { schemaVersion: 1 } as RuleEntry['aiEvidence'],
+      aiEvidenceApprovedCanonical: 'old-evidence' });
+    const result = anchorRuleQuotes(before, sources, snapshots, NOW);
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({
+      status: 'needs-recheck', scored: false, autoFixable: false, aiEvidence: null,
+      confirmedVia: null,
+    });
+    expect(result.profile.ruleEntries?.[0].aiEvidenceApprovedCanonical).toBeUndefined();
+    expect(result.ledger[0].note).toContain('AI');
+    expect(validateProfiles([result.profile])).toEqual([]);
+    expect(validateQuoteAnchorPlan(before, result, sources, snapshots)).toEqual([]);
+    expect(anchorRuleQuotes(result.profile, sources, snapshots, NOW).ledger).toEqual([]);
+  });
+
+  it.each(['draft', 'needs-recheck'] as const)('%s pravilo gubi autoFixable nakon sidrenja', (status) => {
+    const before = profile({ ...RULE, status, scored: false, autoFixable: true,
+      fixerId: 'paper-size-fixer' });
+    const result = anchorRuleQuotes(before, sources, snapshots, NOW);
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({ status: 'needs-recheck',
+      scored: false, autoFixable: false });
+    expect(validateProfiles([result.profile])).toEqual([]);
     expect(validateQuoteAnchorPlan(before, result, sources, snapshots)).toEqual([]);
   });
 

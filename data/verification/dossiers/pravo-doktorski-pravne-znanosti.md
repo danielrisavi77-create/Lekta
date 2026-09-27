@@ -14,7 +14,8 @@ Pravila za rad: 10.
 - Lokator: odjeljak 5. Navodenje bibliografskih podataka (citiranje)
 - Snapshot: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf`
 - Vrijednost: `"pravo-fusnote"`
-- Citat: "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane."
+- Citat: "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju
+biti numerirane."
 
 ## Font glavnog teksta
 - Pravilo: `pravo-doktorski-pravne-znanosti--font`
@@ -50,7 +51,8 @@ Pravila za rad: 10.
 - Lokator: odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)
 - Snapshot: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf`
 - Vrijednost: `["Times New Roman"]`
-- Citat: "Biljeske (fusnote) - font: Times New Roman"
+- Citat: "Bilješke (fusnote)
+   -   font: Times New Roman"
 
 ## Velicina fonta fusnota
 - Pravilo: `pravo-doktorski-pravne-znanosti--footnote-size`
@@ -122,5 +124,6 @@ Pravila za rad: 10.
 - Lokator: odjeljak 4. Oblikovanje i uredenje teksta
 - Snapshot: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf`
 - Vrijednost: `true`
-- Citat: "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice."
+- Citat: "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti
+automatski umetnut broj stranice."
 

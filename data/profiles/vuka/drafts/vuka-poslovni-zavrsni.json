@@ -3,9 +3,6 @@
   "entries": [
     {
       "ruleId": "vuka-poslovni-zavrsni--font-size",
-      "modality": "directive",
-      "scope": "body",
-      "modalitySource": "mechanical",
       "modality": "obligation",
       "scope": "body",
       "modalitySource": "mechanical",
@@ -32,9 +29,6 @@
     },
     {
       "ruleId": "vuka-poslovni-zavrsni--line-spacing",
-      "modality": "directive",
-      "scope": "body",
-      "modalitySource": "mechanical",
       "modality": "obligation",
       "scope": "body",
       "modalitySource": "mechanical",
@@ -46,7 +40,7 @@
       "authority": "general",
       "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
-      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s\nproredom 1,5.",
       "autoFixable": true,
       "fixerId": "line-spacing-fixer",
       "machineCheckable": true,
@@ -59,9 +53,6 @@
     },
     {
       "ruleId": "vuka-poslovni-zavrsni--footnote-size",
-      "modality": "directive",
-      "scope": "footnote",
-      "modalitySource": "mechanical",
       "modality": "obligation",
       "scope": "footnote",
       "modalitySource": "agent-read",
@@ -86,9 +77,6 @@
     },
     {
       "ruleId": "vuka-poslovni-zavrsni--heading-rules",
-      "modality": "directive",
-      "scope": "heading",
-      "modalitySource": "mechanical",
       "modality": "obligation",
       "scope": "heading",
       "modalitySource": "agent-read",
@@ -118,7 +106,7 @@
       "authority": "general",
       "sourceId": "vuka-poslovni-upute",
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
-      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a\n       naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold,\n       a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

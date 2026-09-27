@@ -100,7 +100,7 @@ async function main(): Promise<void> {
   else (document.profiles as Record<string, unknown>)[profileId] = plan.profile.ruleEntries;
   writePairSafely(draft.path, draft.text, `${JSON.stringify(document, null, 2)}\n`, ledgerPath, originalLedger,
     `${JSON.stringify([...ledger, ...plan.ledger], null, 2)}\n`);
-  console.log('Draft i append-only ledger upisani; pravila čekaju novi AI audit.');
+  console.log('Draft i append-only ledger upisani; status pravila zabilježen prema vrsti potvrde.');
 }
 
 main().catch((error: unknown) => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });

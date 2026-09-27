@@ -14,7 +14,10 @@ Pravila za rad: 10.
 - Lokator: Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)
 - Snapshot: `data/sources/effectus/effectus-pravilnik-2023.pdf`
 - Vrijednost: `"chicago-notes"`
-- Citat: "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom."
+- Citat: "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word
+dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert
+Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju
+brojčanim redoslijedom."
 
 ## Vrsta slova
 - Pravilo: `effectus-seminarski--font`
@@ -50,7 +53,8 @@ Pravila za rad: 10.
 - Lokator: Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)
 - Snapshot: `data/sources/effectus/effectus-pravilnik-2023.pdf`
 - Vrijednost: `true`
-- Citat: "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen."
+- Citat: "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba
+biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen."
 
 ## Prored
 - Pravilo: `effectus-seminarski--line-spacing`
@@ -62,7 +66,8 @@ Pravila za rad: 10.
 - Lokator: Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)
 - Snapshot: `data/sources/effectus/effectus-pravilnik-2023.pdf`
 - Vrijednost: `1.15`
-- Citat: "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen."
+- Citat: "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba
+biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen."
 
 ## Margine
 - Pravilo: `effectus-seminarski--margins`

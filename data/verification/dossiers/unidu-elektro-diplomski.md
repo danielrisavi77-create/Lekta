@@ -14,5 +14,6 @@ Pravila za rad: 1.
 - Lokator: Tocka o opsegu rada
 - Snapshot: `data/sources/unidu/unidu-elektro-upute-diplomski-eir.pdf`
 - Vrijednost: `{"min":50}`
-- Citat: "Opsega je od najmanje 50 stranica i formata sukladno uobicajenim standardima publikacija."
+- Citat: "Opsega je od najmanje
+      50 stranica i formata sukladno uobičajenim standardima publikacija."
 

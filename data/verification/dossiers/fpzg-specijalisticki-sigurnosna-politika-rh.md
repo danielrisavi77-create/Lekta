@@ -14,7 +14,10 @@ Pravila za rad: 14.
 - Lokator: str. 18, odjeljak 'Popis literature'
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `{"sort":"alphabetical","authorYearSuffixes":true}`
-- Citat: "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja."
+- Citat: "Popis
+literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim
+redom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu
+izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja."
 
 ## Stil citiranja
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--citation-style`
@@ -50,7 +53,8 @@ Pravila za rad: 14.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `["Times New Roman"]`
-- Citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
+- Citat: "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New
+Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
 
 ## Velicina slova
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--font-size`
@@ -62,7 +66,8 @@ Pravila za rad: 14.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `[12]`
-- Citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
+- Citat: "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New
+Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
 
 ## Poravnanje
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--justify`
@@ -74,7 +79,10 @@ Pravila za rad: 14.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `true`
-- Citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+- Citat: "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New
+Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se
+numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni
+tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
 
 ## Prored
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing`
@@ -86,7 +94,8 @@ Pravila za rad: 14.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `1.5`
-- Citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
+- Citat: "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New
+Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."
 
 ## Brojevi stranica
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers`
@@ -98,7 +107,9 @@ Pravila za rad: 14.
 - Lokator: str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `true`
-- Citat: "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+- Citat: "Stranice rada se
+numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni
+tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
 
 ## Format papira A4
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--paper-size`
@@ -146,7 +157,9 @@ Pravila za rad: 14.
 - Lokator: str. 15, odjeljak 'Format rada'
 - Snapshot: `data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf`
 - Vrijednost: `{"frontMatter":{"numbering":"roman","removePageNumberFromTitlePage":true},"mainMatter":{"numbering":"decimal","startAt":1}}`
-- Citat: "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+- Citat: "Stranice rada se
+numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni
+tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
 
 ## Sadrzaj
 - Pravilo: `fpzg-specijalisticki-sigurnosna-politika-rh--toc`

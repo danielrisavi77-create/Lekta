@@ -6869,7 +6869,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -6892,7 +6892,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -6982,7 +6982,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7005,7 +7005,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7095,7 +7095,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7118,7 +7118,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7424,7 +7424,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7447,7 +7447,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7650,7 +7650,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7673,7 +7673,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7763,7 +7763,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7786,7 +7786,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7876,7 +7876,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -7899,7 +7899,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",
@@ -7989,7 +7989,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 18, odjeljak 'Popis literature'",
-      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "quote": "Popis\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
       "value": {
         "sort": "alphabetical",
         "authorYearSuffixes": true
@@ -8012,7 +8012,7 @@
       "status": "verified",
       "sourceId": "fpzg-upute-akademski-radovi",
       "sourcePage": "str. 15, odjeljak 'Format rada'",
-      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "quote": "Stranice rada se\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
       "value": {
         "frontMatter": {
           "numbering": "roman",

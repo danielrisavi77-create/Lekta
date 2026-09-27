@@ -4295,6 +4295,15 @@ describe('sidrenje citata: baseline i mutacije', () => {
     expect(validateQuoteAnchorPlan(before, mutated, sources, snapshots))
       .toContain(`${before.ruleEntries![0].ruleId}: protected-claim-changed`);
   });
+
+  it('spustanje ljudski potvrdjenog statusa pri sidrenju pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    const mutated = { ...plan, profile: { ...plan.profile,
+      ruleEntries: [{ ...plan.profile.ruleEntries![0], status: 'needs-recheck' as const, scored: false }],
+    } };
+    expect(validateQuoteAnchorPlan(before, mutated, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: human-status-changed`);
+  });
 });
 
 describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {

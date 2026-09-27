@@ -14,7 +14,8 @@ Pravila za rad: 3.
 - Lokator: str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)
 - Snapshot: `data/sources/pravo/pravo-scsr-upute-diplomski-2021.pdf`
 - Vrijednost: `[10]`
-- Citat: "biljeske (fusnote) se ispisuju na dnu svake stranice - oznacavaju se od rednog broja 1 i nadalje, velicina slova je 10"
+- Citat: "bilješke (fusnote) se ispisuju na dnu svake stranice - označavaju se od rednog broja 1 i
+       nadalje, veličina slova je 10"
 
 ## Poravnanje
 - Pravilo: `pravo-socijalna-politika-diplomski--justify`

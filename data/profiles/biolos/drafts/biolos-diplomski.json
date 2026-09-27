@@ -144,7 +144,7 @@
       "authority": "general",
       "sourceId": "biolos-pravilnik-diplomski-2023",
       "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", odjeljak 6. Sadrzaj rada (str. 7 PDF-a)",
-      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
+      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju\n       se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem\n       desnom kutu.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

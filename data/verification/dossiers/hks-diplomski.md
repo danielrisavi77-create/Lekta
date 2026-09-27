@@ -14,7 +14,8 @@ Pravila za rad: 3.
 - Lokator: Opce upute, dio I. (Diplomski rad pise se), str. 1
 - Snapshot: `data/sources/hks/hks-opce-upute-diplomski-2023.pdf`
 - Vrijednost: `true`
-- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem"
+- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored
+      jednostruk s obostranim poravnanjem"
 
 ## Veličina slova u bilješkama
 - Pravilo: `hks-diplomski--footnote-size`
@@ -26,7 +27,8 @@ Pravila za rad: 3.
 - Lokator: Opce upute, dio I. (Diplomski rad pise se), str. 1
 - Snapshot: `data/sources/hks/hks-opce-upute-diplomski-2023.pdf`
 - Vrijednost: `[10]`
-- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem"
+- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored
+      jednostruk s obostranim poravnanjem"
 
 ## Prored u bilješkama
 - Pravilo: `hks-diplomski--footnote-spacing`
@@ -38,5 +40,6 @@ Pravila za rad: 3.
 - Lokator: Opce upute, dio I. (Diplomski rad pise se), str. 1
 - Snapshot: `data/sources/hks/hks-opce-upute-diplomski-2023.pdf`
 - Vrijednost: `1`
-- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem"
+- Citat: "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored
+      jednostruk s obostranim poravnanjem"
 

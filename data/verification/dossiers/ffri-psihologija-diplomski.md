@@ -26,7 +26,8 @@ Pravila za rad: 5.
 - Lokator: str. 9 (temeljem Clanka 11 Pravilnika)
 - Snapshot: `data/sources/ffri/ffri-psihologija-brosura-2022.pdf`
 - Vrijednost: `[12]`
-- Citat: "Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10 pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm."
+- Citat: "Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10
+    pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm."
 
 ## Poravnanje
 - Pravilo: `ffri-psihologija-diplomski--justify`

@@ -14,5 +14,7 @@ Pravila za rad: 1.
 - Lokator: Clanak 49 (Graficki odsjek)
 - Snapshot: `data/sources/alu/alu-pravilnik-diplomski-2014.pdf`
 - Vrijednost: `{"min":15,"max":25}`
-- Citat: "Pisano obrazlozenje sastoji se od najmanje 15 a najvise 25 kartica teksta uz slikovni materijal koji ukljucuje i reprodukcije rada. Pisano obrazlozenje treba biti ispisano u maksimalnoj velicini formata A4 i tvrdo uvezano."
+- Citat: "Pisano obrazloženje sastoji se od
+najmanje 15 a najviše 25 kartica teksta uz slikovni materijal koji uključuje i reprodukcije rada.
+Pisano obrazloženje treba biti ispisano u maksimalnoj veličini formata A4 i tvrdo uvezano."
 

@@ -14,7 +14,15 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `["Times New Roman"]`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 
 ## Velicina slova
 - Pravilo: `adu-montaza-diplomski--font-size`
@@ -26,7 +34,15 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `[12]`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 
 ## Prored
 - Pravilo: `adu-montaza-diplomski--line-spacing`
@@ -38,7 +54,15 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `1.5`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 
 ## Margine
 - Pravilo: `adu-montaza-diplomski--margins`
@@ -50,7 +74,15 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `{"top":2.5,"right":2.5,"bottom":2.5,"left":4}`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 
 ## Numeracija stranica
 - Pravilo: `adu-montaza-diplomski--page-numbers`
@@ -62,7 +94,15 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `true`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 
 ## Format papira A4
 - Pravilo: `adu-montaza-diplomski--paper-size`
@@ -74,5 +114,13 @@ Pravila za rad: 6.
 - Lokator: str. 5
 - Snapshot: `data/sources/adu/adu-pravilnik-montaza-2018.pdf`
 - Vrijednost: `true`
-- Citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pisati slovima Times New Roman, velicine 12 tocaka s proredom 1,5. Naziv pojedinih poglavlja treba biti ispisan slovima velicine 14 tocaka. Sve stranice moraju biti numerirane."
+- Citat: "Pisani diplomski rad piše se računalnim programom za pisanje i obradu teksta. Veličine je stranice
+A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti
+širok 40 mm.
+
+Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.
+
+Naziv pojedinih poglavlja treba biti ispisan slovima veličine 14 točaka.
+
+Sve stranice moraju biti numerirane."
 

@@ -74,7 +74,8 @@ Pravila za rad: 9.
 - Lokator: str. 8, opce - oblikovanje
 - Snapshot: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf`
 - Vrijednost: `{"top":2.5,"bottom":2.5,"left":2.5,"right":2.5}`
-- Citat: "Margine 2,5 cm sa svake strane"
+- Citat: "Margine
+                                                                                                                                                      2,5 cm sa svake strane"
 
 ## Numeracija stranica
 - Pravilo: `kif-specijalisticki--page-numbers`
@@ -86,7 +87,8 @@ Pravila za rad: 9.
 - Lokator: str. 26, odjeljak 7 sadrzaj, UVOD
 - Snapshot: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf`
 - Vrijednost: `true`
-- Citat: "Uvod je prva stranica na kojoj se mora naći napisana numeracija"
+- Citat: "Uvod je prva
+       stranica na kojoj se mora naći napisana numeracija"
 
 ## Najmanji broj referenci
 - Pravilo: `kif-specijalisticki--reference-count`

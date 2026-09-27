@@ -50,7 +50,8 @@ Pravila za rad: 5.
 - Lokator: str. 3, odjeljak 2
 - Snapshot: `data/sources/pravo/pravo-katedra-radno-socijalno-upute-2021.pdf`
 - Vrijednost: `true`
-- Citat: "Stranice trebaju biti oznacene arapskim brojevima (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda."
+- Citat: "Stranice trebaju biti označene arapskim brojevima (dolje desno), pri čemu se prva
+brojčana oznaka stavlja na prvu stranicu uvoda."
 
 ## Sadrzaj
 - Pravilo: `radno-socijalno-pravo--toc`
@@ -62,5 +63,6 @@ Pravila za rad: 5.
 - Lokator: str. 2, odjeljak 1 (Opce napomene)
 - Snapshot: `data/sources/pravo/pravo-katedra-radno-socijalno-upute-2021.pdf`
 - Vrijednost: `true`
-- Citat: "Svi radovi moraju imati sadrzaj, uvod, razradu teme po smislenim cjelinama i zakljucak."
+- Citat: "Svi radovi moraju imati sadržaj, uvod, razradu teme po smislenim cjelinama i
+zaključak."
 

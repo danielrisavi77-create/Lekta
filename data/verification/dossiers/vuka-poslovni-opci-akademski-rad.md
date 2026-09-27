@@ -38,7 +38,9 @@ Pravila za rad: 4.
 - Lokator: odjeljak o oblikovanju (seminarski/zavrsni radovi)
 - Snapshot: `data/sources/vuka/vuka-poslovni-upute.pdf`
 - Vrijednost: `{"levels":{"1":{"size":16,"bold":true,"uppercase":true},"2":{"size":14,"bold":true,"uppercase":false},"3":{"size":12,"bold":true,"uppercase":false}}}`
-- Citat: "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima"
+- Citat: "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a
+       naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold,
+       a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima"
 
 ## Prored
 - Pravilo: `vuka-poslovni-opci-akademski-rad--line-spacing`
@@ -50,5 +52,6 @@ Pravila za rad: 4.
 - Lokator: odjeljak o oblikovanju (seminarski/zavrsni radovi)
 - Snapshot: `data/sources/vuka/vuka-poslovni-upute.pdf`
 - Vrijednost: `1.5`
-- Citat: "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5."
+- Citat: "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s
+proredom 1,5."
 

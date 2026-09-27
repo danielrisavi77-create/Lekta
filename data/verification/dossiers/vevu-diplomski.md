@@ -26,7 +26,7 @@ Pravila za rad: 6.
 - Lokator: Prilog 4, odjeljak "OBRADA TEKSTA"
 - Snapshot: `data/sources/vevu/vevu-prilog4-diplomski.docx`
 - Vrijednost: `[12]`
-- Citat: "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvucen."
+- Citat: "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvučen."
 
 ## Poravnanje
 - Pravilo: `vevu-diplomski--justify`

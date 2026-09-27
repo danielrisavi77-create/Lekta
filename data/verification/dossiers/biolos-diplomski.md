@@ -62,7 +62,9 @@ Pravila za rad: 6.
 - Lokator: Prilog "Upute za izradu diplomskog rada", odjeljak 6. Sadrzaj rada (str. 7 PDF-a)
 - Snapshot: `data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf`
 - Vrijednost: `true`
-- Citat: "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu."
+- Citat: "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju
+       se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem
+       desnom kutu."
 
 ## Format papira A4
 - Pravilo: `biolos-diplomski--paper-size`
