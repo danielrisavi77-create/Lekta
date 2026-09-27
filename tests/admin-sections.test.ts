@@ -12,6 +12,7 @@ import { renderRevenueSection } from '../src/admin/admin-section-revenue';
 import { renderOperationsSection } from '../src/admin/admin-section-operations';
 import { renderUsageSection } from '../src/admin/admin-section-usage';
 import { renderCoverageSection } from '../src/admin/admin-section-coverage';
+import { renderOpportunitiesSection } from '../src/admin/admin-section-opportunities';
 import type {
   OverviewStats,
   FunnelStats,
@@ -19,6 +20,7 @@ import type {
   OperationsStats,
   UsageStats,
   CoverageStats,
+  OpportunityStats,
 } from '../src/admin/admin-types';
 
 function container(): HTMLElement {
@@ -132,6 +134,67 @@ const USAGE: UsageStats = {
   retention: [{ table: 'document_slots', retentionDays: null, note: 'test' }],
 };
 
+const OPPORTUNITIES: OpportunityStats = {
+  generatedAt: '2026-08-03T10:00:00.000Z',
+  basis: 'mixed_anonymous_event_count',
+  range: RANGE,
+  current: {
+    analysisCompletedEvents: 100,
+    opportunityEvents: 100,
+    manualAnalyses: 42,
+    unmeasurableAnalyses: 13,
+    structureGapAnalyses: 17,
+    structureGapItems: 23,
+    structureBreakdownItems: 23,
+    profileEvents: 90,
+    nonVerifiedProfileEvents: 18,
+    repairRuns: 20,
+    repairGapRuns: 5,
+    repairUnresolvedChecks: 9,
+    repairNoOpItems: 14,
+    paywallEvents: 60,
+    checkoutEvents: 20,
+    purchaseEvents: 12,
+    opportunities: [
+      { id: 'manual_gap', affected: 42, denominator: 100, ratePct: 42, basis: 'analysis_event' },
+      { id: 'structure_gap', affected: 17, denominator: 100, ratePct: 17, basis: 'analysis_event' },
+      { id: 'repair_gap', affected: 5, denominator: 20, ratePct: 25, basis: 'repair_event' },
+      { id: 'paywall_checkout_gap_proxy', affected: 40, denominator: 60, ratePct: 66.7, basis: 'event_count_proxy' },
+    ],
+    structureGaps: [
+      { category: 'typography', kind: 'unsupported-structure', count: 12 },
+      { category: 'link-doi', kind: 'stale-anchor', count: 11 },
+    ],
+    repairNoOpReasons: [
+      { kind: 'already-ok', count: 8 },
+      { kind: 'unsupported-structure', count: 6 },
+    ],
+  },
+  previous: {
+    analysisCompletedEvents: 80,
+    opportunityEvents: 80,
+    manualAnalyses: 36,
+    unmeasurableAnalyses: 10,
+    structureGapAnalyses: 14,
+    structureGapItems: 18,
+    structureBreakdownItems: 18,
+    profileEvents: 70,
+    nonVerifiedProfileEvents: 20,
+    repairRuns: 15,
+    repairGapRuns: 6,
+    repairUnresolvedChecks: 11,
+    repairNoOpItems: 10,
+    paywallEvents: 50,
+    checkoutEvents: 18,
+    purchaseEvents: 10,
+    opportunities: [],
+    structureGaps: [],
+    repairNoOpReasons: [],
+  },
+  missingSignals: ['inspection_coverage_global'],
+  retention: [{ table: 'analytics_events', retentionDays: 180, note: 'test' }],
+};
+
 const COVERAGE: CoverageStats = {
   generatedAt: '2026-08-03T10:00:00.000Z',
   range: RANGE,
@@ -223,6 +286,19 @@ describe('admin-section render moduli: ne ruse se, proizvode razuman DOM', () =>
     const rows = c.querySelectorAll('.tw table tbody tr');
     expect(rows.length).toBe(2);
     expect(rows[1].textContent).toContain('Nepoznat fakultet');
+  });
+
+  it('opportunities: rangirana tablica + caveat o event-count proxyju', () => {
+    const c = container();
+    renderOpportunitiesSection(c, OPPORTUNITIES);
+    expect(c.querySelector('.hero')).toBeTruthy();
+    expect(c.querySelectorAll('.tile').length).toBe(4);
+    expect(c.querySelectorAll('.tw table tbody tr').length).toBe(8);
+    expect(c.textContent).toContain('nije cohort');
+    expect(c.textContent).toContain('inspection_coverage_global');
+    expect(c.textContent).toContain('unsupported-structure');
+    expect(c.textContent).toContain('Zdravlje mjerenja');
+    expect(c.textContent).toContain('Exact parity');
   });
 
   it('coverage: prazan topCells prikazuje prazno stanje, ne praznu tablicu', () => {

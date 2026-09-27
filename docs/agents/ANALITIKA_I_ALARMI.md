@@ -178,16 +178,17 @@ Veza s `trackEvent` u `src/ui/telemetry.ts`:
 
 - `trackEvent` ne salje nista ako `analyticsEndpoint` nije postavljen ili privola nije `granted`;
   privola se cita pri svakom pozivu, pa povlacenje djeluje odmah.
-- Uz naziv dogadjaja uvijek salje samo `version`, `path` (`location.pathname`, bez query stringa i
-  hasha) i `timestamp`; sve ostalo prolazi kroz `sanitizeEventData`.
-- `DOPUSTENI_KLJUCEVI` je bijela lista: kljuc izvan nje ispada, a i dopusteni kljuc prolazi samo
+- Naziv dogadjaja je zaseban top-level `event`; uz njega se salju `version`, `path` (`location.pathname`, bez query stringa i
+  hasha) i `timestamp`. Ta cetiri polja nisu dio `ANALYTICS_DATA_KEYS`; samo dodatni `data` prolazi kroz `sanitizeEventData`.
+- `ANALYTICS_DATA_KEYS` je bijela lista: kljuc izvan nje ispada, a i dopusteni kljuc prolazi samo
   ako je vrijednost string, broj ili boolean (objekti i nizovi ispadaju). Kljucevi po skupinama:
-  - identitet dogadjaja i ponude: `event`, `package`, `product`, `provider`, `source`, `method`,
+  - identitet ponude i tip signala: `package`, `product`, `provider`, `source`, `method`,
     `kind`, `category`, `pick`, `demo`, `manual`;
   - profil i vrsta rada: `profileId`, `profileStatus`, `workType`, `ruleId`;
   - brojevi i ishodi provjere: `total`, `found`, `missing`, `flagged`, `checked`, `issueCount`,
     `count`, `changes`, `stored`, `score`, `scoreBand`;
   - velicina i trajanje: `sizeBucket` (razred velicine, ne tocna velicina), `ms`.
+- Opportunity Report dodatno koristi brojcane kljuceve `auto`, `assisted`, `unknown` i `structureGaps`; structure/no-op detalji koriste samo postojece dopustene `category`, `kind` i `count`. Svi ostaju anonimni agregati bez teksta rada, izvornog skip razloga ili `ruleId`-a.
 - Nijedan kljuc ne nosi tekst rada ni ime datoteke; `tests/product-journey-telemetry.test.ts` tvrdi
   da sanitizacija odbacuje sve izvan bijele liste. T53 skript ne zove `trackEvent` i ne salje
   produktne dogadjaje, pa sloj bez privole ne moze procuriti u sloj s privolom ni obrnuto.
