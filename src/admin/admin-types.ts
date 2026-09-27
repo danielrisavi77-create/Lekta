@@ -14,7 +14,7 @@ export interface Period {
 }
 
 /**
- * Sest sekcija u v1. Growth (cohorts/retention) i Academic Suite su NAMJERNO izostavljene -
+ * Sedam sekcija u v1. Growth (cohorts/retention) i Academic Suite su NAMJERNO izostavljene -
  * vidi plan implementacije, odjeljak "Odgođeno s uvjetom povratka": prvo nema dovoljno
  * korisnika da retention grafovi nose signal, drugo cross-product event vokabular
  * (AcademicSuiteEventName) je deklariran ali ga nijedan producer jos ne emitira. Dodavanje
