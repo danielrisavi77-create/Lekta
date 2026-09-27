@@ -141,7 +141,7 @@ import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
-import { signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { measuredCodeProblem, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
@@ -350,6 +350,16 @@ function istiSadrzajPodDvaImenaPada(
   } catch {
     return true;
   }
+}
+
+/** Tvrdnja garda T75: v2 ovjera s otiskom koda popravka prolazi, bez njega ili s neispravnim ne prolazi. */
+function mjereniKodSeTrazi(check: (a: CorpusAttestation) => string | null): boolean {
+  const s = { fingerprintVersion: 2, repairSourceHash: 'e'.repeat(64) } as unknown as CorpusAttestation;
+  return (
+    check(s) === null &&
+    check({ ...s, repairSourceHash: null }) !== null &&
+    check({ ...s, repairSourceHash: 'nije-otisak' }) !== null
+  );
 }
 
 /**
@@ -1586,6 +1596,13 @@ const MUTATIONS: Mutation[] = [
       'citac je provjeravao samo oblik signedContentDigest, pa je cleanCount 1 -> 2 nakon potpisa ostajao priznat (Codex #185, runda 3, NOVO-01)',
     caught: () => !izmjenaNakonPotpisaPada((a) => signedContentProblem(a, (x) => String(x.signedContentDigest))),
     cleanBefore: () => izmjenaNakonPotpisaPada((a) => signedContentProblem(a)),
+  },
+  {
+    id: 'korpus/ovjera-bez-otiska-koda-popravka-je-dokaz',
+    imitates:
+      'ovjera realnog korpusa nije navodila nad kojim je kodom popravka mjereno (T73 nalaz a/b, T75), pa se nije znalo koji je kod dokazan',
+    caught: () => !mjereniKodSeTrazi((a) => measuredCodeProblem(a, () => true)),
+    cleanBefore: () => mjereniKodSeTrazi((a) => measuredCodeProblem(a)),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
