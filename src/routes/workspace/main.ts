@@ -16,8 +16,7 @@ import {
 import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
-import { mountDisplaySettings } from '../../shared/display-settings';
-import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
+import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
@@ -62,11 +61,18 @@ function detectStorage(): StorageAvailability {
  * Ime se namjerno pojavljuje tek NA PRIHVAT, ne na odabir: traka govori na cemu Lekta radi, a
  * ne koju je datoteku korisnik dotaknuo. Odbijen dokument tako nikad ne provede trenutak u
  * zaglavlju kao da je prihvacen.
+ *
+ * DVA CVORA, JEDAN UVJET (Z15, KRUG POPRAVKA). `#radDocBar` (pilula u traci: tocka, ime, ocjena)
+ * i `#radDocMeta` (spremanje, znacka, gumb nove verzije, u tijelu ispod trake) se pokazuju i
+ * skrivaju ZAJEDNO, jer opisuju isti dokument; razdvojeni su samo zato sto pilula u traci ima
+ * ogranicenu visinu, a tijelo nema. Bez ovog drugog cvora bi znacka i gumb ostali trajno skriveni
+ * nakon preseljenja iz pilule (Z15 popravak F-preseljenje).
  */
 function wireDocumentBar(onNewVersion: (file: File) => void): void {
   const bar = document.getElementById('radDocBar');
   const name = document.getElementById('radDocName');
   if (!bar || !name) return;
+  const meta = document.getElementById('radDocMeta');
   const newVersionBtn = document.getElementById('radDocNewVersion') as HTMLButtonElement | null;
   const newVersionInput = document.getElementById('radDocNewVersionInput') as HTMLInputElement | null;
   subscribeAnalyzerDocumentSettled((event) => {
@@ -75,6 +81,7 @@ function wireDocumentBar(onNewVersion: (file: File) => void): void {
     name.textContent = file ? file.name : '';
     name.title = file ? file.name : '';
     bar.classList.toggle('hidden', !file);
+    meta?.classList.toggle('hidden', !file);
     // T12: nova verzija ima smisla tek kad postoji dokument s kojim se usporedjuje.
     newVersionBtn?.classList.toggle('hidden', !file);
   });
@@ -97,9 +104,10 @@ function showStatus(text: string | null): void {
 }
 
 async function start(): Promise<void> {
-  // Panel "Prilagodi prikaz" prije analizatora: postavke prikaza ne ovise ni o dokumentu ni o
-  // pohrani, pa nema razloga da korisnik ceka na njih.
-  mountDisplaySettings(document);
+  // PANEL "PRILAGODI PRIKAZ" SE OD F10 (2026-09-23) MONTIRA U `shared/ui-boot.ts`, JEDNIM POZIVOM
+  // ZA SVE RUTE, pa poziva odavde vise nema. Uvjet zbog kojeg je stajao prvi (postavke prikaza ne
+  // ovise ni o dokumentu ni o pohrani, pa korisnik ne mora cekati na njih) je ocuvan: `ui-boot` se
+  // uvozi IZNAD ovog modula, a njegov `boot()` se izvrsi prije nego `start()` dotakne analizator.
   // Montaza ide PRVA: radna povrsina mora biti upotrebljiva i kad pohrana zakaze. Vezanje
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);
@@ -192,6 +200,14 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
+    // Z15 popravak: faza u traci prati tok analize, ne stoji zauvijek na "01 Nalazi". Prihvacen
+    // dokument (prvi ili nova verzija) znaci da citanje POCINJE, pa traka gubi korake dok
+    // `renderResultsCockpit` (results-cockpit.ts) ne javi da su nalazi stvarno nacrtani.
+    setSiteChromeStage(document, 'scanning');
+    // Ocjena starog dokumenta se prazni OVDJE, ne cim kokpit nacrta novu: bez ovoga traka
+    // pokazuje tudju ocjenu (proslog dokumenta) dok Lekta cita novi, sto je tvrdnja koja u tom
+    // trenutku nije istinita.
+    setSiteChromeScore(document, null);
     upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
       upisi(afterPersist(context, true));

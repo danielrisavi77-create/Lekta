@@ -1,4 +1,4 @@
-<!-- @dsCard group="Osnove" name="Gumbi" subtitle="primarni (stol/obrazac), ghost, tekstualni, disabled Uskoro, velicine, fokus prsten" width="1040" height="560" -->
+<!-- @dsCard group="Osnove" name="Gumbi" subtitle="jezik pecata: pritisak, otisak, potpis; Geist Mono za radnje, Instrument Serif za tekstualne veze" width="960" height="720" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,80 +7,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.btn{border:0;font-family:var(--ui);font-weight:650;letter-spacing:.01em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
-.btn-desk-primary{background:var(--paper);color:var(--paper-ink);border-radius:2px;padding:12px 20px;box-shadow:4px 4px 0 var(--red);font-size:.9rem}
-.btn-desk-primary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--red)}
-.btn-form-primary{background:var(--red);color:var(--on-red);border-radius:9px;padding:12px 20px;font-size:.9rem}
-.btn-form-primary:hover{background:var(--red-deep);transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--red);border-radius:9px;padding:11px 16px;font-size:.88rem}
-.btn-ghost:hover{background:var(--red-soft)}
-.btn-text{background:none;border:0;color:var(--desk-ink);text-decoration:underline;text-underline-offset:4px;font:600 .88rem var(--ui);padding:0;cursor:pointer}
-.btn-disabled{background:var(--desk-line);color:var(--desk-faint);border-radius:9px;padding:12px 20px;font-size:.9rem;cursor:not-allowed}
-.btn-sm{padding:8px 13px;font-size:.78rem;border-radius:8px}
-.btn-focus{outline:none;box-shadow:0 0 0 2px var(--desk),0 0 0 4px var(--red)}
-.lbl{margin-top:8px;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;color:var(--desk-faint)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--red-on-soft:#A62B23;--on-red:#F7F3E8;--pass:#176243;--paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1);--ease-press:cubic-bezier(.34,1.4,.5,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0 0 22px;color:var(--desk-muted);font-size:.82rem;max-width:64ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint)}
+.row{display:flex;flex-wrap:wrap;gap:22px 28px;align-items:flex-start}
+.item{display:grid;gap:10px;justify-items:start}
+.paper{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--paper-sh);padding:22px 26px;transform:rotate(-.4deg);display:grid;gap:18px}
+.paper .cap{color:var(--paper-muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:22px;align-items:start}
+
+/* ===== Osnova ===== */
+.btn{--ink:var(--paper-ink);--bg:var(--red-deep);--fg:var(--on-red);position:relative;border:0;border-radius:2px;padding:14px 22px;font:500 13px/1 var(--mono);letter-spacing:.02em;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:var(--fg);background:var(--bg);white-space:nowrap;transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .18s,color .18s}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--red-deep)}
+.desk .btn:focus-visible{box-shadow:0 0 0 2px var(--desk),0 0 0 4px var(--red)}
+.btn .arr{display:inline-block;transition:transform .18s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn .n{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.18);display:inline-grid;place-items:center;font-size:11px}
+
+/* PECAT: primarni. Miruje kao otisak; hover ga podigne s tintom, pritisak ga utisne. */
+.btn-pecat{box-shadow:0 1px 0 rgba(0,0,0,.25),0 8px 20px rgba(196,55,46,.28)}
+.btn-pecat:hover{transform:translateY(-2px);box-shadow:0 2px 0 rgba(0,0,0,.25),0 14px 28px rgba(196,55,46,.36)}
+.btn-pecat:active{transform:translateY(1px) scale(.985);box-shadow:inset 0 3px 8px rgba(0,0,0,.35),0 0 0 rgba(0,0,0,0);transition-timing-function:var(--ease-press)}
+.desk .btn-pecat{--bg:var(--red);--fg:#1A1512}
+
+/* POTPIS: sekundarni. Tanka tinta koja se na hover ispuni. */
+.btn-potpis{--bg:transparent;--fg:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-potpis:hover{--bg:var(--ink);--fg:var(--paper)}
+.btn-potpis:active{transform:scale(.985)}
+.desk .btn-potpis{--ink:var(--desk-ink)}
+.desk .btn-potpis:hover{--fg:var(--desk)}
+
+/* BILJESKA: tekstualna veza. Kurziv display serifa, crvena crta koja se iscrta. */
+.btn-biljeska{--bg:transparent;--fg:var(--red-on-soft);padding:4px 0;border-radius:0;font:italic 18px/1.1 var(--display);letter-spacing:0;background-image:linear-gradient(var(--red-deep),var(--red-deep));background-repeat:no-repeat;background-size:0 2px;background-position:0 100%;transition:background-size .28s var(--ease),color .18s}
+.btn-biljeska:hover{background-size:100% 2px}
+.desk .btn-biljeska{--fg:var(--red)}
+.desk .btn-biljeska{background-image:linear-gradient(var(--red),var(--red))}
+
+/* TIHI: ghost za sporedne radnje u kartici. */
+.btn-tihi{--bg:transparent;--fg:var(--paper-muted);padding:10px 12px}
+.btn-tihi:hover{--fg:var(--paper-ink);--bg:var(--paper-2)}
+.desk .btn-tihi{--fg:var(--desk-muted)}
+.desk .btn-tihi:hover{--fg:var(--desk-ink);--bg:rgba(237,231,220,.08)}
+
+/* Velicine */
+.btn-sm{padding:9px 14px;font-size:12px}
+.btn-lg{padding:18px 30px;font-size:14px}
+
+/* STANJA */
+.btn[disabled],.btn.is-soon{--bg:transparent;--fg:var(--paper-muted);box-shadow:none;border:1.5px dashed var(--paper-line);cursor:not-allowed;transform:none}
+.desk .btn[disabled],.desk .btn.is-soon{--fg:var(--desk-faint);border-color:var(--desk-line)}
+/* Ucitavanje: tinta putuje po donjem rubu, tekst ostaje citljiv. */
+.btn.is-loading{cursor:progress;pointer-events:none;overflow:hidden}
+.btn.is-loading::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:40%;background:rgba(255,255,255,.7);animation:ink 1.1s var(--ease) infinite}
+@keyframes ink{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+/* Otisnuto: nakon uspjeha gumb postane utisnuti pecat, blago nagnut, bez pozadine. */
+.btn.is-done{--bg:transparent;--fg:var(--pass);box-shadow:inset 0 0 0 2.5px var(--pass);transform:rotate(-3deg);cursor:default;letter-spacing:.12em;text-transform:uppercase}
+.desk .btn.is-done{--fg:#34996A;box-shadow:inset 0 0 0 2.5px #34996A}
+@media(prefers-reduced-motion:reduce){.btn,.btn .arr{transition:none}.btn.is-loading::after{animation:none;width:100%}}
 </style>
 </head>
 <body>
 <h1 class="dsc-h">Gumbi</h1>
-<p class="dsc-sub">Crvena je jedina brand boja gumba. Dvije primarne varijante postoje jer papir na stolu nosi potpisnu offset sjenu (2px oštar rub), dok gumb unutar obrasca/kartice koristi zaobljeni 9px radius.</p>
+<p class="dsc-sub">Četiri uloge, jedan jezik pečata. <b style="color:var(--desk-ink)">Pečat</b> (crven, jedini brand akcent) je jedina primarna radnja na ekranu; hover ga podigne, pritisak utisne, nakon uspjeha ostaje kao otisak. <b style="color:var(--desk-ink)">Potpis</b> je tanka tinta za drugu radnju. <b style="color:var(--desk-ink)">Bilješka</b> je tekstualna veza u kurzivu display serifa s crtom koja se iscrta. <b style="color:var(--desk-ink)">Tihi</b> je za sporedno. Radijus 2px svugdje, kao na papiru; pill ostaje samo za značke.</p>
 
-<div class="dsc-row">
-  <div class="dsc-item"><button class="btn btn-desk-primary">Provjeri rad</button><div class="lbl">Primarni · na stolu (offset sjena)</div></div>
-  <div class="dsc-item"><button class="btn btn-form-primary">Naruči popravak</button><div class="lbl">Primarni · u obrascu/kartici</div></div>
-  <div class="dsc-item"><button class="btn btn-ghost">Prikaži detalje</button><div class="lbl">Ghost</div></div>
-  <div class="dsc-item"><button class="btn btn-text">Sam ću ispraviti</button><div class="lbl">Tekstualni link</div></div>
-  <div class="dsc-item"><button class="btn btn-disabled" disabled aria-disabled="true">Uskoro</button><div class="lbl">Disabled (soft-launch)</div></div>
-</div>
+<div class="grid2">
+<section class="paper" aria-label="Na papiru">
+  <span class="cap">Na papiru</span>
+  <div class="row">
+    <div class="item"><button class="btn btn-pecat">Napravi plan popravka <span class="arr" aria-hidden="true">→</span></button><span class="cap">Pečat · primarni</span></div>
+    <div class="item"><button class="btn btn-potpis">Pregledaj nalaze</button><span class="cap">Potpis · sekundarni</span></div>
+  </div>
+  <div class="row">
+    <div class="item"><button class="btn btn-biljeska">Pokaži u dokumentu</button><span class="cap">Bilješka · tekstualna veza</span></div>
+    <div class="item"><button class="btn btn-tihi">Zanemari</button><span class="cap">Tihi · sporedno</span></div>
+    <div class="item"><button class="btn btn-pecat">Popravi <span class="n">3</span></button><span class="cap">S brojačem</span></div>
+  </div>
+  <div class="row">
+    <div class="item"><button class="btn btn-pecat btn-sm">Uključi u plan</button><span class="cap">sm</span></div>
+    <div class="item"><button class="btn btn-pecat">Uključi u plan</button><span class="cap">md</span></div>
+    <div class="item"><button class="btn btn-pecat btn-lg">Plati 9,99 €</button><span class="cap">lg</span></div>
+  </div>
+  <div class="row">
+    <div class="item"><button class="btn btn-pecat is-loading">Popravljam…</button><span class="cap">Učitavanje · tinta putuje</span></div>
+    <div class="item"><button class="btn is-done">✓ Uključeno</button><span class="cap">Otisnuto · nakon uspjeha</span></div>
+    <div class="item"><button class="btn is-soon" disabled>Uskoro</button><span class="cap">Onemogućen · soft launch</span></div>
+  </div>
+</section>
 
-<div class="dsc-row" style="margin-top:26px">
-  <div class="dsc-item"><button class="btn btn-form-primary btn-sm">Potvrdi</button><div class="lbl">Veličina: sm</div></div>
-  <div class="dsc-item"><button class="btn btn-form-primary">Potvrdi</button><div class="lbl">Veličina: default</div></div>
-  <div class="dsc-item"><button class="btn btn-form-primary btn-focus">Fokusiran gumb</button><div class="lbl">:focus-visible prsten (dvotonski, WCAG 1.4.11)</div></div>
+<section class="desk" aria-label="Na stolu" style="display:grid;gap:18px;padding:22px 6px">
+  <span class="cap">Na stolu (tamna ploha)</span>
+  <div class="row">
+    <div class="item"><button class="btn btn-pecat">Ubaci novi rad <span class="arr" aria-hidden="true">↓</span></button><span class="cap">Pečat · svjetlija crvena, tamna slova</span></div>
+    <div class="item"><button class="btn btn-potpis">Moji radovi</button><span class="cap">Potpis</span></div>
+  </div>
+  <div class="row">
+    <div class="item"><button class="btn btn-biljeska">Kako radi?</button><span class="cap">Bilješka</span></div>
+    <div class="item"><button class="btn btn-tihi">Natrag na presudu</button><span class="cap">Tihi</span></div>
+  </div>
+  <div class="row">
+    <div class="item"><button class="btn btn-pecat" style="box-shadow:0 0 0 2px var(--desk),0 0 0 4px var(--red)">Fokusiran</button><span class="cap">:focus-visible · dvotonski prsten</span></div>
+    <div class="item"><button class="btn btn-pecat" style="transform:translateY(1px) scale(.985);box-shadow:inset 0 3px 8px rgba(0,0,0,.35)">Pritisnut</button><span class="cap">:active · utisnut</span></div>
+    <div class="item"><button class="btn is-done">✓ Poslano</button><span class="cap">Otisnuto</span></div>
+  </div>
+  <p class="cap" style="max-width:40ch;line-height:1.6;text-transform:none;letter-spacing:0;font-size:11px">Pravilo: jedan Pečat po ekranu. Ako treba drugi crveni gumb, prvi nije bio primaran.</p>
+</section>
 </div>
 </body>
 </html>

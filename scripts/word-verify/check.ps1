@@ -50,9 +50,18 @@ foreach ($d in $docs) {
   } finally { Pop-Location }
   $start = $json.IndexOf('{')
   $res = ($json.Substring($start) | ConvertFrom-Json)
+  # VRATA INTEGRITETA: kad odbiju popravak, izlaz je bit-identican ULAZU i Word bi mjerio original.
+  # src/repair/CLAUDE.md trazi izricito `integrityFailure === null`; polje koje nedostaje je isto PAD.
+  $integritet = $null
+  if (-not ($res.PSObject.Properties.Name -contains 'integrityFailure')) {
+    $integritet = 'repair.mts nije javio integrityFailure'
+  } elseif ($null -ne $res.integrityFailure) {
+    $integritet = "VRATA INTEGRITETA ODBILA: $($res.integrityFailure.part): $($res.integrityFailure.problem)"
+  }
   $rows += [pscustomobject]@{
     Dokument = $d.BaseName
     Izlaz = $out
+    Integritet = $integritet
     Primijenjeno = ($res.primijenjeno -join ',')
     Preskoceno = ($res.preskoceno -join ',')
     Izgubljeno = ($res.izgubljeniDijelovi -join ',')
@@ -68,6 +77,14 @@ $fail = 0
 $report = @()
 try {
   foreach ($r in $rows) {
+    if ($r.Integritet) {
+      $fail++
+      $report += [pscustomobject]@{
+        Dokument = $r.Dokument; Otvara = 'PAD: ' + $r.Integritet
+        Font=''; Velicina=''; Prored=''; Poravnanje=''; Margine=''; Dijelovi=''; Izgubljeno=''
+      }
+      continue
+    }
     try {
       # OpenAndRepair = $false (zadnji parametri): ostecen dokument baca gresku umjesto tihog oporavka
       $doc = $word.Documents.Open($r.Izlaz, $false, $true, $false, '', '', $true, '', '', 0, 0, $false, $true, $false, $false)

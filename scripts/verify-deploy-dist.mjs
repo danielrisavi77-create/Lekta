@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
+import { cspHeaderProblems } from './lib/csp-headers.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
@@ -457,23 +458,12 @@ if (fs.existsSync(naslovnicaDir)) {
   const headersPath = path.join(DIST, '_headers');
   if (!fs.existsSync(headersPath)) fail('dist/_headers ne postoji (CSP se ne bi primijenio)');
   const headers = fs.readFileSync(headersPath, 'utf8');
-
-  for (const token of ['__CSP_SUPABASE__', '__CSP_LS__']) {
-    if (headers.includes(token)) fail(`dist/_headers sadrzi nesupstituiran token ${token} (cspAllowlist plugin nije odradio)`);
-  }
-
-  const csp = (headers.match(/^\s*Content-Security-Policy:\s*(.+)$/m) || [])[1] ?? '';
-  if (!csp) fail('dist/_headers nema Content-Security-Policy');
-
-  const directive = (name) => (csp.match(new RegExp(`${name} ([^;]*)`)) || [])[1] ?? '';
-  for (const name of ['connect-src', 'form-action']) {
-    const value = directive(name);
-    if (!value) fail(`CSP nema direktivu ${name}`);
-    if (/https:\/\/\*\./.test(value)) fail(`CSP ${name} sadrzi wildcard host: "${value.trim()}"`);
-    if (!/https:\/\/[a-z0-9-]+\.supabase\.co/.test(value)) {
-      fail(`CSP ${name} nema konkretan Supabase origin: "${value.trim()}"`);
-    }
-  }
+  // Logika zivi u scripts/lib/csp-headers.mjs da ima baseline i mutacije u
+  // tests/gate-mutations.test.ts; ovdje se samo izvrsi nad stvarnim dist/_headers. Trazi SVAKI
+  // `__CSP_*__` token (i u komentaru), wildcard i konkretan Supabase origin na connect-src i
+  // form-action, Stripe hostove na tocnim direktivama (F18) i da form-action nema Stripe hosta.
+  const problems = cspHeaderProblems(headers);
+  if (problems.length) fail(`dist/_headers CSP: ${problems.join('; ')}`);
 }
 
 // DOKAZ O IZVEDENIM RAZINAMA PROVJERE (audit P0-13, P0-12) se od 2026-09-13 izvodi u koraku 0 na vrhu

@@ -24,7 +24,6 @@
     { "pattern": "data/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },
 
     { "pattern": "data/classification.json", "class": "PRIVATE-IP", "bundle": "forbidden" },
-    { "pattern": "data/packages.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/work-type-labels.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/work-type-scope.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/checks/**", "class": "PUBLIC", "bundle": "allowed" },
@@ -102,7 +101,8 @@
     { "pattern": "src/corpus/tool-evals.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Slaganje eval slucajeva za katedra-lite iz kataloga i mjerenja. Test i build sloj; nema je u pregledniku." },
     { "pattern": "src/corpus/defect-catalog.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Autorski katalog kvarova u tudjem alatu, s doslovnim ispisima. Podatak za izvoz prema katedri, nikad za bundle." },
     { "pattern": "src/corpus/eval-catalog.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Autorski katalog eval slucajeva. Isti razred kao defect-catalog.ts." },
-    { "pattern": "src/routes/shared/public-route-directory.json", "class": "PUBLIC", "bundle": "allowed", "note": "Javni direktorij ruta (natpisi, opisi i root-relative putanje javnih stranica). Jedini PODATAK u src/ koji route shell isporucuje pregledniku, pa dobiva izricitu presudu umjesto oslanjanja na src/** catch-all. Postojanje odredista NIJE stvar manifesta: cuva ga tests/public-route-directory.test.ts." }
+    { "pattern": "src/routes/shared/public-route-directory.json", "class": "PUBLIC", "bundle": "allowed", "note": "Javni direktorij ruta (natpisi, opisi i root-relative putanje javnih stranica). Jedini PODATAK u src/ koji route shell isporucuje pregledniku, pa dobiva izricitu presudu umjesto oslanjanja na src/** catch-all. Postojanje odredista NIJE stvar manifesta: cuva ga tests/public-route-directory.test.ts." },
+    { "pattern": "src/assets/fonts/**", "class": "PUBLIC", "bundle": "allowed", "note": "Vendorirani webfontovi proizvoda (Z7 opcija a, 2026-09-26): Instrument Serif i Geist Mono kao woff2 (latin + latin-ext), OFL licence i list s @font-face pravilima. Javno po naravi (preglednik ih skida), a izricito pravilo stoji zato sto src/** catch-all ne bi zabiljezio da je presuda za binarne priloge DONESENA; nestanak pravila cuva tests/classification.test.ts." }
   ],
   "canaries": [
     {

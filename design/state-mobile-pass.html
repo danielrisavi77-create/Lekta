@@ -1,0 +1,37 @@
+<!-- @dsCard group="Stanja" name="Mobilni prolaz" subtitle="svi predlosci na 390px: ulaz, saznaj vise, rezultat, faksimil, profil, cjenik, moji radovi, pribor, alati, traka" width="1400" height="1000" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobilni prolaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#191512;color:#EDE7DC;font:12px/1.5 'Geist Mono',monospace;padding:26px}
+h1{font:400 2rem/1 'Instrument Serif',Georgia,serif;margin:0 0 6px}
+p{margin:0 0 22px;color:rgba(237,231,220,.72);max-width:66ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px}
+figure{margin:0;display:grid;gap:8px}
+figcaption{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(237,231,220,.6)}
+.frame{width:300px;height:640px;border:1px solid rgba(237,231,220,.16);border-radius:2px;overflow:hidden;background:#111}
+iframe{width:390px;height:832px;border:0;transform:scale(.769);transform-origin:0 0}
+</style>
+</head>
+<body>
+<h1>Mobilni prolaz</h1>
+<p>Svaki predložak na 390px. Kartica služi za pregled; popravci idu u same predloške.</p>
+<div class="grid">
+<figure><figcaption>Ulaz</figcaption><div class="frame"><iframe src="templates/intake/Intake.dc.html" title="Ulaz"></iframe></div></figure>
+<figure><figcaption>Saznaj više</figcaption><div class="frame"><iframe src="templates/learn-more/LearnMore.dc.html" title="Saznaj više"></iframe></div></figure>
+<figure><figcaption>Rezultat</figcaption><div class="frame"><iframe src="templates/results/Results.dc.html" title="Rezultat"></iframe></div></figure>
+<figure><figcaption>Faksimil</figcaption><div class="frame"><iframe src="templates/facsimile/Facsimile.dc.html" title="Faksimil"></iframe></div></figure>
+<figure><figcaption>Profil</figcaption><div class="frame"><iframe src="templates/profile-picker/ProfilePicker.dc.html" title="Profil"></iframe></div></figure>
+<figure><figcaption>Cjenik</figcaption><div class="frame"><iframe src="templates/pricing/Pricing.dc.html" title="Cjenik"></iframe></div></figure>
+<figure><figcaption>Moji radovi</figcaption><div class="frame"><iframe src="templates/my-works/MyWorks.dc.html" title="Moji radovi"></iframe></div></figure>
+<figure><figcaption>Pribor</figcaption><div class="frame"><iframe src="templates/tool-hub/Hub.dc.html" title="Pribor"></iframe></div></figure>
+<figure><figcaption>Alat: naslovnica</figcaption><div class="frame"><iframe src="templates/tools/ToolCover.dc.html" title="Naslovnica"></iframe></div></figure>
+<figure><figcaption>Alat: kartice</figcaption><div class="frame"><iframe src="templates/tool-kartice/ToolKartice.dc.html" title="Kartice"></iframe></div></figure>
+<figure><figcaption>Traka i podnožje</figcaption><div class="frame"><iframe src="templates/chrome/Chrome.dc.html" title="Traka"></iframe></div></figure>
+</div>
+</body>
+</html>

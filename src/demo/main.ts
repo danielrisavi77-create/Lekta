@@ -1,5 +1,4 @@
-import '@fontsource-variable/inter-tight';
-import '@fontsource-variable/newsreader/opsz.css';
+import '../shared/fonts-core'; // vendorirani Instrument Serif + Geist Mono (Z7 opcija a)
 import './demo.css';
 import {
   advanceDemo,

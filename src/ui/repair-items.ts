@@ -1067,6 +1067,43 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
   }];
 }
 
+const TABLE_MERGED_EQUAL_COLUMNS_REASON = 'nije moguće: tablica ima spojene ćelije, širine stupaca ostaju kakve jesu';
+
+/**
+ * T65 krug 2 (M2): potvrdni tekst sastavljen iz STVARNO odabranih akcija, i to samo od onoga sto
+ * table-figure-rescue-fixer stvarno pise uz parametre koje salje ovaj obrazac (bez textWidthEmu):
+ * fitToTextWidth je fiksni raspored stupaca, equalColumns dijeli postojeci zbroj stupaca, a tablica
+ * sa spojenim celijama zadrzava svoje sirine. Slika se ogranicava na sirinu teksta jer se njoj
+ * maxWidthEmu salje.
+ */
+function tableFigureRescueText(form: TableFigureRescueFormDefinition, universal: boolean): string {
+  const tables = form.tables.filter((table) => table.selected);
+  const figures = form.figures.filter((figure) => figure.selected);
+  const tableOn = (key: string) => tables.some((table) => table.actions[key] === true && !table.disabledActions?.[key]);
+  const figureOn = (key: string) => figures.some((figure) => figure.actions[key] === true);
+  const effects: string[] = [];
+  if (tableOn('fitToTextWidth')) effects.push('tablica dobiva fiksni raspored stupaca, pa ih Word ne širi prema sadržaju');
+  if (tableOn('equalColumns')) effects.push('stupci dobivaju jednaku širinu unutar postojeće ukupne širine stupaca');
+  if (tables.some((table) => table.disabledActions?.equalColumns)) effects.push('tablica sa spojenim ćelijama zadržava postojeće širine stupaca');
+  // Bez textWidthEmu nijedna akcija ne sužava tablicu: siroka tablica bez polozene stranice ostaje siroka.
+  if (tables.some((table) => table.wide && !table.landscape?.selected)) effects.push('široka tablica zadržava svoju širinu');
+  if (tableOn('repeatHeader')) effects.push('zaglavlje se ponavlja kroz stranice');
+  if (tableOn('preventRowSplit')) effects.push('redak se ne lomi preko dviju stranica');
+  if (tableOn('center')) effects.push('tablica se centrira');
+  if (tables.some((table) => table.actions.applyProfileTypography === true && table.typography)) effects.push('tablica dobiva profilnu tipografiju');
+  if (tables.some((table) => table.actions.separateSource === true && table.source?.selected)) effects.push('izvor tablice postaje zaseban odlomak');
+  if (tables.some((table) => table.landscape?.selected)) effects.push('tablica dobiva vlastitu položenu stranicu');
+  if (figures.some((figure) => figure.actions.constrainToTextWidth === true && figure.maxWidthEmu)) effects.push('preširoka slika se razmjerno ograničava na širinu teksta');
+  if (figureOn('center') || figureOn('keepWithCaption')) effects.push('slika se centrira');
+  if (figureOn('keepWithCaption')) effects.push('slika se drži uz natpis');
+  if (figureOn('removeWrapping')) effects.push('uklanja se prelamanje teksta oko usidrene slike');
+  if (figures.some((figure) => figure.altText.trim())) effects.push('upisani alt tekst se sprema');
+  const list = effects.length ? effects.join(', ') : 'nijedan zahvat nije odabran';
+  return universal
+    ? `Ovo nije zahtjev fakulteta nego prelamanje dokumenta: ${list}. Tekst se ne dira, alt tekst se ne izmišlja, preniska rezolucija se ne povećava. Ocjena se ne mijenja.`
+    : `Potvrdi geometrijske zahvate i izradu nove popravljene kopije: ${list}. Preniska rezolucija se ne povećava, alt tekst se ne izmišlja, a original ostaje nepromijenjen.`;
+}
+
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
   const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'table-figure-rescue-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const structure = result?.details?.tableFigureRescue;
@@ -1090,7 +1127,10 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
     id: String(table.id), bodyChildIndex: Number(table.bodyChildIndex), anchorFingerprint: String(table.anchorFingerprint),
     summary: `${table.rowCount || 0} redaka × ${table.columnCount || 0} stupaca${table.wide ? ', široka tablica' : ''}`,
     wide: table.wide === true, selected: table.unsupported !== true && table.confidence !== 'low',
-    actions: { fitToTextWidth: true, equalColumns: true, repeatHeader: !table.hasHeader, preventRowSplit: table.rowsWithCantSplit < table.rowCount, center: true, applyProfileTypography: !!rules.table, separateSource: !!table.source },
+    actions: { fitToTextWidth: true, equalColumns: table.mergedCells !== true, repeatHeader: !table.hasHeader, preventRowSplit: table.rowsWithCantSplit < table.rowCount, center: true, applyProfileTypography: !!rules.table, separateSource: !!table.source },
+    // T65 krug 2 (M3): fixer equalColumns na spojenim celijama ne izvodi, pa je kucica vidljiva,
+    // ali onemogucena s objasnjenjem, a buildParams je ne salje ni kad bi bila ukljucena.
+    ...(table.mergedCells === true ? { disabledActions: { equalColumns: TABLE_MERGED_EQUAL_COLUMNS_REASON } } : {}),
     ...(table.source && table.sourceAnchorFingerprint ? { source: { paragraphIndex: Number(table.source.paragraphIndex), anchorFingerprint: String(table.sourceAnchorFingerprint), text: String(table.source.text || ''), selected: true } } : {}),
     ...(table.landscapeAnchors ? { landscape: { beforeFingerprint: String(table.landscapeAnchors.beforeFingerprint), afterFingerprint: String(table.landscapeAnchors.afterFingerprint), selected: false } } : {}),
     ...(rules.table ? { typography: { ...(rules.table.font ? { font: rules.table.font } : {}), ...(Number.isFinite(rules.table.sizePt) ? { sizePt: Number(rules.table.sizePt) } : {}), ...(Number.isFinite(rules.table.beforePt) ? { beforePt: Number(rules.table.beforePt) } : {}), ...(Number.isFinite(rules.table.afterPt) ? { afterPt: Number(rules.table.afterPt) } : {}) } } : {}),
@@ -1103,7 +1143,15 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
     actions: { constrainToTextWidth: true, preserveAspectRatio: true, center: true, removeWrapping: figure.wrapsText === true, keepWithCaption: !!rules.figure?.keepWithCaption }, altText: '', evidence: Array.isArray(figure.evidence) ? figure.evidence.map(String) : [],
   }));
   const form: TableFigureRescueFormDefinition = { tables, figures, summary: `Pronađeno je ${tables.length} tablica i ${figures.length} slika/grafikona. Sigurni geometrijski zahvati su predodabrani, a niska rezolucija ostaje upozorenje.`, buildParams: () => ({}) };
-  form.buildParams = (current) => ({ version: 1, tables: current.tables.filter((table) => table.selected).map((table) => ({ id: table.id, bodyChildIndex: table.bodyChildIndex, anchorFingerprint: table.anchorFingerprint, actions: table.actions, ...(table.typography ? { typography: table.typography } : {}), ...(table.source?.selected ? { source: { paragraphIndex: table.source.paragraphIndex, anchorFingerprint: table.source.anchorFingerprint } } : {}), ...(table.landscape?.selected ? { landscape: { enabled: true as const, beforeFingerprint: table.landscape.beforeFingerprint, afterFingerprint: table.landscape.afterFingerprint, confirmed: true as const } } : {}) })), figures: current.figures.filter((figure) => figure.selected).map((figure) => ({ id: figure.id, paragraphIndex: figure.paragraphIndex, drawingIndex: figure.drawingIndex, anchorFingerprint: figure.anchorFingerprint, ...(figure.maxWidthEmu ? { maxWidthEmu: figure.maxWidthEmu } : {}), actions: figure.actions, ...(figure.altText.trim() ? { altText: figure.altText.trim() } : {}) })) });
+  /**
+   * T65 krug 2 (M2), svjesna odluka: textWidthEmu se NE salje. Bez njega fitToTextWidth pise samo
+   * <w:tblLayout w:type="fixed"/>, a equalColumns dijeli postojeci zbroj stupaca. Slanje sirine
+   * bi na tablici sa spojenim celijama postavilo tblW uzi od zbroja netaknutih stupaca, a kako Word
+   * takvu tablicu iscrta bez Word oraklja nije dokazivo. Zato ni potvrdni tekst (tableFigureRescueText)
+   * ne tvrdi da se tablica skuplja na sirinu teksta; tvrdi samo ono sto fixer stvarno pise.
+   */
+  form.buildParams = (current) => ({ version: 1, tables: current.tables.filter((table) => table.selected).map((table) => ({ id: table.id, bodyChildIndex: table.bodyChildIndex, anchorFingerprint: table.anchorFingerprint, actions: Object.fromEntries(Object.entries(table.actions).filter(([key]) => !table.disabledActions?.[key])), ...(table.typography ? { typography: table.typography } : {}), ...(table.source?.selected ? { source: { paragraphIndex: table.source.paragraphIndex, anchorFingerprint: table.source.anchorFingerprint } } : {}), ...(table.landscape?.selected ? { landscape: { enabled: true as const, beforeFingerprint: table.landscape.beforeFingerprint, afterFingerprint: table.landscape.afterFingerprint, confirmed: true as const } } : {}) })), figures: current.figures.filter((figure) => figure.selected).map((figure) => ({ id: figure.id, paragraphIndex: figure.paragraphIndex, drawingIndex: figure.drawingIndex, anchorFingerprint: figure.anchorFingerprint, ...(figure.maxWidthEmu ? { maxWidthEmu: figure.maxWidthEmu } : {}), actions: figure.actions, ...(figure.altText.trim() ? { altText: figure.altText.trim() } : {}) })) });
+  form.describe = (current) => tableFigureRescueText(current, universal);
   return [{
     ruleId: 'table-figure-rescue-assisted',
     fixerId: 'table-figure-rescue-fixer',
@@ -1112,9 +1160,7 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
     violated: !universal,
     ...(universal ? { recommended: true as const } : {}),
     requiresConfirmation: true,
-    confirmationText: universal
-      ? 'Ovo nije zahtjev fakulteta nego prelamanje dokumenta: široka tablica se skuplja na širinu teksta, zaglavlje se ponavlja kroz stranice, slika se ograničava na širinu teksta. Tekst se ne dira, alt tekst se ne izmišlja, preniska rezolucija se ne povećava. Ocjena se ne mijenja.'
-      : 'Potvrdi geometrijske zahvate i izradu nove popravljene kopije. Preniska rezolucija se ne povećava, alt tekst se ne izmišlja, a original ostaje nepromijenjen.',
+    confirmationText: form.describe(form),
     tableFigureRescueForm: form,
     ...(universal ? {} : { matchKeys: ['Popisi slika i tablica', 'Oblik poveznica'] }),
   }];

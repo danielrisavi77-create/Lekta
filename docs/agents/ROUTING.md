@@ -112,6 +112,8 @@ vrijedi jedno pravilo za lokalni rad:
   `npm run check`.
 - U svakom trenutku smije biti u tijeku NAJVISE jedan puni gate (lokalno ili na CI-ju) po
   stroju; drugi puni gate ceka da prvi zavrsi.
+- Opis svakog PR-a mora sadrzavati retke `Neto redaka: +<dodano>/-<uklonjeno>` i `Nove ovisnosti: nema | <popis paketa>`
+  (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); CI job `pr-opis` ih provjerava i nije obvezna provjera.
 - Mjerodavan dokaz da promjena prolazi je CI na PR-u, ne lokalni izlazni kod. Ovo je vec
   uobicajena praksa iz nuzde; ovaj odjeljak je tu praksu pretvara u pisano pravilo koje vrijedi
   za svaku sesiju, ne samo kad je stroj vidljivo pretrpan.

@@ -234,7 +234,8 @@ aktualnom headu i nepomaknut master; `propose` otvara PR i staje. Uklanjanje dat
 - Pouzdani loader (`gate.load_evidence`) SAM racuna `signature_verified`, `hashes_verified`,
   `policy_current`; polja iz datoteke se ignoriraju. `promotion_allowed` trazi sve to, `complete:true`,
   `proofComplete:true`, svjez `treeDigest`, tocan `candidateSha`, nula kontrolnih datoteka i `pass` na
-  svakoj obveznoj razini (`requiredReleaseTiers`: check, conformance, slow, ux, strict-open, word, word-worst).
+  svakoj obveznoj razini (`requiredReleaseTiers`: check, conformance, slow, ux, strict-open, word, word-worst, word-corpus,
+  word-toc; isti popis kao `requiredTierIds()` iz `scripts/release-tiers.mjs`).
   `skipped`, `unavailable` i nedostajuca razina su `unknown` i blokiraju.
 - Izdavac (`publisher.publish_verified`): idempotency kljuc iz (repo, candidateSha, policyVersion); prvo
   cita udaljeno stanje (pad izmedju mergea i lokalnog zapisa ne ponavlja objavu), zatim zastitu grane,

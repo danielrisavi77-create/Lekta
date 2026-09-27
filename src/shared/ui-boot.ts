@@ -1,13 +1,14 @@
 // Zajednicki boot za sve stranice (index, citat, usporedba):
-//  1. dva glasa koja nosi SVAKA stranica (Newsreader + Inter Tight; vidi `fonts-core.ts`),
+//  1. dva glasa koja nosi SVAKA stranica (Instrument Serif + Geist Mono; vidi `fonts-core.ts`),
 //  2. Lucide ikone: zamjenjuje <i data-lucide="..."> jedinstvenim stroke setom.
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
 //
-// PODATKOVNI GLASOVI (Source Serif 4, IBM Plex Mono) OVDJE NAMJERNO VISE NISU: zive u
-// `fonts-document.ts` i uvozi ih stranica koja im ima mete. Do 2026-09-05 su stajali ovdje, pa
-// je i cisti ulaz `/` skidao mono koji na njemu nema nijednu metu. Stranice koje su ovaj modul
-// bootale IZRAVNO idu preko `page-boot.ts`, koji oba skupa spaja.
+// PODATKOVNIH GLASOVA KAO ZASEBNOG SKUPA VISE NEMA. Do Z7 opcije a su dvije obitelji zivjele u
+// `fonts-document.ts` i isle samo na rute s dokumentom, da cisti ulaz `/` ne skida mono bez mete.
+// Nakon Z7 su obje uklonjene iz proizvoda: glas tudjeg rada je sistemska Georgia koja se ne
+// ucitava, a Geist Mono nosi mete na svakoj ruti, ulaz ukljucen. Stranice koje su ovaj modul
+// bootale IZRAVNO i dalje idu preko `page-boot.ts`.
 import './fonts-core';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
@@ -18,14 +19,22 @@ import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 // UCINAK POSTAVKI PRIKAZA (Z6) IDE OVDJE, NE UZ PANEL. Pre-paint skripta u <head> upisuje
 // `data-reading-font`, `data-contrast` i `data-motion` na SVAKOJ stranici, pa
-// bi bez ovog uvoza ti atributi na rutama koje panel ne montiraju (/saznaj-vise/, /moji-radovi/,
+// bi bez ovog uvoza ti atributi na rutama koje panel nisu montirale (/saznaj-vise/, /moji-radovi/,
 // alat-stranice preko page-boot) stajali MRTVI: postavka koju je korisnik izabrao na `/` ondje ne
-// bi radila nista. Sam panel (JS) i dalje zivi samo na `/` i `/rad/`; ovdje ide iskljucivo stil.
+// bi radila nista. Od F10 (2026-09-23) ovaj modul montira i SAM PANEL (vidi `boot()` nize), pa
+// stil i kontrola dolaze istim putem na sve rute; do tada je panel zivio samo na `/` i `/rad/`.
 // Uvoz je NAMJERNO posljednji u nizu listova ovog modula, da ucinak dodje poslije primitiva iz
 // `design-system.css`. Specificnost je pritom mjerena, ne pretpostavljena (vidi zaglavlje tog
 // lista): `page-chrome.css` se ucitava JOS kasnije, pa ucinak ne smije ovisiti o redoslijedu.
 import './display-settings.css';
+// TRAKA I PODNOZJE KAO SUSTAV (Z15). List je JEDINI izvor izgleda trake i pravnog podnozja na
+// svim stranicama, a `site-chrome.ts` jedini izvor njihova ponasanja. Uvoz stoji POSLIJE
+// `tool-page.css`, jer taj list nosi zatecene `.topbar`/`.nav` ostatke; kolizija se ipak ne
+// rjesava redoslijedom nego specificnoscu (`header.site-chrome`), da ucinak ne ovisi o poretku.
+import './site-chrome.css';
 import { setupSkipLink } from './skip-link';
+import { mountSiteChrome } from './site-chrome';
+import { mountDisplaySettings } from './display-settings';
 import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from './display-prefs';
 import { setupPremiumVisuals } from './premium-visuals';
 import { createFrameCoalescer } from './frame-coalescer';
@@ -191,31 +200,6 @@ function setupTilt() {
   });
 }
 
-// "Alati" padajuci izbornik kao disclosure: gumb otvara/zatvara klikom i tipkovnicom
-// (Enter/Space okidaju click na <button>), sto radi na touchu gdje hover ne postoji.
-// Na tool stranicama CSS otvara popis preko [aria-expanded="true"]; :hover ostaje za misa.
-function setupNavTools() {
-  const navs = [...document.querySelectorAll<HTMLElement>('.nav-tools')];
-  navs.forEach((nav) => {
-    const btn = nav.querySelector<HTMLElement>('.nav-tools-btn');
-    if (!btn) return;
-    btn.setAttribute('aria-expanded', 'false');
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // ne daj document-klik listeneru da odmah zatvori
-      btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
-    });
-    nav.addEventListener('keydown', (e) => {
-      if ((e as KeyboardEvent).key === 'Escape') { btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
-    });
-  });
-  // Klik izvan zatvara sve otvorene izbornike.
-  if (navs.length) {
-    document.addEventListener('click', () => {
-      navs.forEach((nav) => nav.querySelector('.nav-tools-btn')?.setAttribute('aria-expanded', 'false'));
-    });
-  }
-}
-
 // Prebacivanje teme (svijetla/tamna) + sprema u lekta.theme. Pre-paint restore ostaje inline
 // u <head> svake stranice (izbjegava bljesak); ovdje je samo klik-ponasanje, jedan izvor za sve
 // stranice (prije duplicirano inline u svakom tool HTML-u i u app.ts za index).
@@ -250,34 +234,36 @@ function setupThemeToggle() {
   });
 }
 
-// Mobilni hamburger izbornik: #mobileMenuBtn otvara/zatvara #mobileNav, klik na link zatvara.
-function setupMobileNav() {
-  const btn = document.getElementById('mobileMenuBtn');
-  const nav = document.getElementById('mobileNav');
-  if (!btn || !nav) return;
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  nav.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).closest('a')) {
-      nav.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
-
-// Topbar dobiva hairline + blur tek nakon 24px scrolla (na vrhu je proziran, stopljen s papirom).
-function setupTopbarScroll() {
-  const bar = document.querySelector<HTMLElement>('header.topbar');
-  if (!bar) return;
-  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 24);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-}
+// MOBILNI IZBORNIK I STANJE SKROLA SU OD Z15 U `site-chrome.ts`, NE OVDJE.
+//
+// `setupMobileNav` je otvarao `#mobileNav` bez upravljanja fokusom, bez Escapea i bez klika
+// izvan, a `setupTopbarScroll` je ukljucivao hairline na 24px. Traka Z15 ima jedan prag (40px),
+// jednu crvenu nit i jedan list koji pada na stol; dva ziva ozicenja istog gumba preklopila bi
+// izbornik dvaput, pa su ova dva ovdje UKLONJENA, a ne zadrzana kao rezerva.
+// Isto vrijedi za `setupNavTools`: padajuci "Alati" je nestao jer je Pribor sad odrediste trake.
 
 function boot() {
-  setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
+  // TRAKA IDE PRVA: ona preuzima `#themeBtn` (vidi `wireSiteLamp`), pa `setupThemeToggle` nize
+  // zatim ustupa. Ispravnost ne ovisi o ovom poretku (oznaka se cita UNUTAR rukovatelja), ali
+  // aria stanje lampe je time tocno od prvog kadra.
+  mountSiteChrome(document);
+  // PANEL "PRILAGODI PRIKAZ" (Z6) SE MONTIRA OVDJE, JEDNIM POZIVOM ZA SVE RUTE (F10, 2026-09-23).
+  //
+  // Do F10 su ga zvale `routes/intake/main.ts` i `routes/workspace/main.ts`, dakle tocno dvije
+  // rute, pa je kontrola postojala samo na `/` i `/rad/`, a gumb "Aa · Prikaz" u mobilnom listu
+  // ostalih 11 stranica se pri montazi UKLANJAO. Odluka F10(a) panel stavlja na sve rute.
+  //
+  // ZASTO OVDJE, A NE U `site-chrome.ts`: traka panel NE SMIJE uvoziti. `tests/display-settings.test.ts`
+  // to izricito mjeri ("modul NE ulazi u dijeljenu traku"), a razlog je proracun trake:
+  // `tests/route-shell-budget.test.ts` mjeri cijeli import graf `site-chrome.ts` uz granicu od 8 KB
+  // gzip, i panel bi u nju uvukao svoj graf. `ui-boot.ts` je jedini modul koji SVE rute vec bootaju
+  // a nije mjeren tim proracunom, pa je to jedino mjesto s kojeg jedan poziv pokriva sve rute.
+  //
+  // POZIV IDE POSLIJE trake, jer panel oznaku vlasnistva nad `#themeBtn` prepise na sebe; ispravnost
+  // o poretku ne ovisi (oznaka se cita unutar rukovatelja), ali ishod je time isti kao prije F10.
+  // Bez otvaraca na stranici je no-op koji vraca `null`, pa provjera po ruti nije potrebna.
+  mountDisplaySettings(document);
+  setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupThemeToggle();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);

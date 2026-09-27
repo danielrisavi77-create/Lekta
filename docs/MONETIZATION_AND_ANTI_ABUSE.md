@@ -153,9 +153,14 @@ RLS (obavezno):
 - Pisanje u entitlements, slots_used, document_slots i report_generations radi ISKLJUČIVO server (Edge Function preko service role ili security definer funkcija). Klijent nikad ne piše entitlemente niti dodjeljuje slotove.
 - Korisnik A ne smije vidjeti ni koristiti entitlement ni slot korisnika B.
 
-## 7. Webhook (Merchant of Record)
+## 7. Webhook (pružatelj naplate)
 
-- Koristi Merchant of Record (Paddle ili Lemon Squeezy), ne goli Stripe, jer MoR rješava EU PDV za prodaju po EU. Goli Stripe znači da PDV compliance pada na tebe.
+- ~~Koristi Merchant of Record (Paddle ili Lemon Squeezy), ne goli Stripe, jer MoR rješava EU PDV za prodaju po EU. Goli Stripe znači da PDV compliance pada na tebe.~~
+  **NADIĐENO 23.9.2026.** Vlasnik je odabrao Stripe, svjestan posljedice koju je ova preporuka
+  opisivala: Stripe nije Merchant of Record, pa obračun i prijavu PDV-a (HR 25 %, izvan HR po
+  OSS-u) radi vlasnik, ne provider. Stripe Tax može izračunati iznos, ali ne prijavljuje ga.
+  Cijene se do drukčije odluke tretiraju kao bruto (s PDV-om). Odluka i njezin trag su u
+  `docs/agents/orchestrator-backlog.md`, redak F18.
 - Na uspješno plaćanje: kreiraj entitlement { user_id, work_type, slots_total, order_id, provider, purchase_expires_at }.
 - Idempotentno preko unique (provider, order_id). Ponovljeni webhook ne smije udvostručiti slotove.
 - Na refund: postavi status 'refunded' i blokiraj daljnje vezivanje slotova iz tog entitlementa.

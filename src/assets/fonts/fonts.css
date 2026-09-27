@@ -1,0 +1,158 @@
+/*
+ * DVA GLASA PROIZVODA, SAMOSTALNO POSLUZENA (Z7 opcija a, odluka vlasnika 2026-09-26; Z31).
+ *
+ *   Instrument Serif  GOVORI: naslovi, presuda, dugi opisi. Postoji SAMO rez 400 i kurziv.
+ *   Geist Mono        OZNACAVA I MJERI: gumbi, navigacija, eyebrow, brojevi, sifre pravila.
+ *
+ * Georgia je treci, GOSTUJUCI glas (tudji tekst u faksimilu i isjecku pravilnika). Ona se NE
+ * ucitava, zato je ovdje nema.
+ *
+ * PODRIJETLO DATOTEKA. Rezovi su doslovne kopije iz npm paketa, bez ikakve obrade:
+ *   @fontsource/instrument-serif@5.3.0           files/instrument-serif-latin{,-ext}-400-{normal,italic}.woff2
+ *   @fontsource-variable/geist-mono@5.3.0        files/geist-mono-latin{,-ext}-wght-normal.woff2
+ * Licenca je SIL OFL 1.1 (`OFL-instrument-serif.txt`, `OFL-geist-mono.txt` uz datoteke).
+ * Paketi NISU ovisnosti projekta: vendorirani su jer je node_modules dijeljen izmedju sesija, a
+ * izmjena ovisnosti ondje bi drugima srusila build (pitanje F19 u docs/agents/orchestrator-backlog.md).
+ *
+ * ZASTO VARIJABILNI GEIST MONO. Predlosci u design/templates traze Geist Mono 400, 500 i 600, a
+ * proizvod ima tezinsku hijerarhiju sucelja do 900. Staticki rezovi 400+500+600 (latin + latin-ext)
+ * imaju oko 51 KB; jedan varijabilni rez po podskupu ima 37.824 B i nosi SVE tezine stvarno, pa
+ * `font-synthesis: none` nigdje ne ostaje bez reza.
+ *
+ * PODSKUPOVI. Samo latin i latin-ext: hrvatska dijakritika (c s kvacicom, d s crtom, s, z) zivi u
+ * latin-ext, pa bez njega naslov "Ubaci rad." na slovu s kvacicom pada na zamjenski glas.
+ * `unicode-range` je doslovno onaj iz paketa, pa preglednik latin-ext skida tek kad ga tekst trazi.
+ *
+ * METRICKI ZAMJENSKI GLASOVI. `font-display: swap` znaci da se prvo crta lokalni font, a zatim
+ * webfont. Bez korekcije je zamjena pomicala raspored: Instrument Serif je uzak (prosjecna sirina
+ * 0,339 em naspram 0,440 em za Georgiju), pa bi naslov iz dva retka nakon ucitavanja skocio u jedan.
+ * Zato zamjenski glas dobiva `size-adjust` (omjer prosjecnih sirina) i `ascent/descent/line-gap-
+ * override` (metrike webfonta podijeljene s tim omjerom), da i sirina i visina retka ostanu iste.
+ *
+ * Vrijednosti su IZRACUNATE, ne procijenjene: iz tablica head/hhea/hmtx/cmap webfonta i lokalnih
+ * fontova sa sustava (C:/Windows/Fonts georgia.ttf, georgiai.ttf, times.ttf, timesi.ttf,
+ * consola.ttf, cour.ttf), prosjek sirine nad hrvatskim tekstom od 275 znakova (samo ASCII,
+ * jer je to podskup latin).
+ *   Instrument Serif    upm 1000, ascender 990, descender -310, lineGap 0
+ *   Geist Mono          upm 1000, ascender 1005, descender -295, lineGap 0, sirina 0,6 em
+ * Gard: tests/entry-fonts.test.ts ponovno racuna override iz size-adjusta i metrika webfonta.
+ */
+
+/* ---- Instrument Serif, uspravni rez ------------------------------------------------------ */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./instrument-serif-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./instrument-serif-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---- Instrument Serif, kurziv (nadnaslov, biljeska korektora, tekstualna veza) ------------ */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./instrument-serif-latin-ext-400-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./instrument-serif-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---- Geist Mono, varijabilan (tezine 100 do 900) ----------------------------------------- */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./geist-mono-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./geist-mono-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---- Metricki zamjenski glasovi ----------------------------------------------------------
+   Jedna obitelj po lokalnom fontu, jer `size-adjust` vrijedi za tocno jedan lokalni font: Georgia
+   i Times New Roman imaju razlicitu sirinu, pa bi zajednicka vrijednost jednome od njih pomaknula
+   raspored. U tokenima stoje redom; nedostupan `local()` preglednik preskace i ide na sljedeci. */
+@font-face {
+  font-family: "Instrument Serif Fallback";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Georgia");
+  size-adjust: 77.02%;
+  ascent-override: 128.54%;
+  descent-override: 40.25%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Instrument Serif Fallback";
+  font-style: italic;
+  font-weight: 400;
+  src: local("Georgia Italic"), local("Georgia-Italic");
+  size-adjust: 80.68%;
+  ascent-override: 122.7%;
+  descent-override: 38.42%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Instrument Serif Fallback Times";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Times New Roman"), local("TimesNewRomanPSMT");
+  size-adjust: 84.8%;
+  ascent-override: 116.74%;
+  descent-override: 36.56%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Instrument Serif Fallback Times";
+  font-style: italic;
+  font-weight: 400;
+  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+  size-adjust: 90.43%;
+  ascent-override: 109.48%;
+  descent-override: 34.28%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Mono Fallback";
+  font-style: normal;
+  font-weight: 100 900;
+  src: local("Consolas");
+  size-adjust: 109.13%;
+  ascent-override: 92.09%;
+  descent-override: 27.03%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Mono Fallback Courier";
+  font-style: normal;
+  font-weight: 100 900;
+  src: local("Courier New"), local("CourierNewPSMT");
+  size-adjust: 99.98%;
+  ascent-override: 100.52%;
+  descent-override: 29.5%;
+  line-gap-override: 0%;
+}
