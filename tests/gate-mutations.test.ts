@@ -45,6 +45,7 @@ import {
   preflightSourceProblems,
   preflightExecutionProblems,
   runbookRefundCheckProblems,
+  runbookManualLinkProblems,
   handlerRefundMarkers,
   paidClassificationProblems,
   refundClassificationProblems,
@@ -4419,7 +4420,8 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
-      return handlerRefundMarkers(webhookMorSource()).length === 3
+      // Cetiri oznake: refund_consequences_failed dodana 2026-09-27 (pad sporednih posljedica povrata).
+      return handlerRefundMarkers(webhookMorSource()).length === 4
         && runbookRefundCheckProblems(runbook, webhookMorSource()).length === 0;
     },
   },
@@ -4451,6 +4453,187 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () =>
       runbookRefundCheckProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md')), webhookMorSource()).length === 0,
+  },
+
+  // --- naplata: nalazi pregleda nakon spajanja design/naplata-4 u design/pack3 (2026-09-27) -------
+  {
+    id: 'naplata/kataloska-cijena-nula-daje-pravo',
+    imitates: 'stanje handlera do 2026-09-27: mapProductRow cijenu null ili neispravnu pretvara u 0, a cijena 0 ostaje aktivna. Ocekivani iznos je 0 centi, pa svaka pozitivna uplata prolazi kao above_catalog i dobiva pravo za proizvod koji create-checkout ne bi prodao',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        'const cijenaUpotrebljiva = product.active && Number.isFinite(ocekivanoCenti) && ocekivanoCenti > 0;',
+        'const cijenaUpotrebljiva = true;',
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('neupotrebljiva kataloska cijena'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/neaktivan-proizvod-daje-pravo',
+    imitates: 'pola popravka catalog_price_unusable: provjerava se samo pozitivan iznos, ne i je li proizvod aktivan. Uplata za povucen proizvod (active=false uz staru cijenu) i dalje dobiva pravo',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('const cijenaUpotrebljiva = product.active && ', 'const cijenaUpotrebljiva = ');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('neupotrebljiva kataloska cijena'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/ponovljena-dostava-na-rucni-pregled',
+    imitates: 'stanje handlera iz design/naplata-4: Stripe retry vec proknjizene uplate nakon promjene cijene zavrsi kao needs_manual_review, pa duplicate_ignored (tocka oporavka obveza bonusa, audit P1-07) nikad ne dodje na red',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "if (iznos.kind === 'needs_manual_review' && !vecProknjizeno) {",
+        "if (iznos.kind === 'needs_manual_review') {",
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ponovljena dostava vec proknjizene uplate'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/ponovljena-dostava-tudjeg-korisnika',
+    imitates: 'preiroka provjera ponovljene dostave: svaki postojeci zapis za PaymentIntent (i tudji) preskoci rucni pregled, pa uplata ispod kataloga uz sukob vlasnika zavrsi kao duplikat umjesto kod covjeka',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "vecProknjizeno = redak !== null && String(redak.user_id ?? '') === ev.userId;",
+        'vecProknjizeno = redak !== null;',
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne usporedjuje korisnika postojeceg zapisa'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/bonusi-bez-drugog-citanja-oznake',
+    imitates: 'stanje handlera iz design/naplata-4: oznaka povrata cita se samo PRIJE bonusa. Puni povrat u prozoru izmedju tog citanja i upisa kupona procita praznu coupon_grants, pa pass kupon i nagrada preporucitelju ostanu aktivni za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf('  // PROZOR ISTODOBNOG POVRATA ZA BONUSE');
+      const _do = src.indexOf("  await settle(\n    'processed',\n    iznos.kind === 'above_catalog'", od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('oznaka povrata se ne cita ponovno'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/opoziv-bez-nagrade-preporucitelju',
+    imitates: 'pola popravka prozora povrata: uplata ponovno procita oznaku i povuce kupon, ali ne i nagradu preporucitelju (referral_signups, 0013) koju je izdala u istom prozoru',
+    caught: () => {
+      const src = webhookMorSource();
+      const pomocnik = src.indexOf('async function closePaymentAfterRefund(');
+      const poziv = src.indexOf('  await pullReferralSignupReward(admin, ev.orderId);\n', pomocnik);
+      if (pomocnik < 0 || poziv < 0) return false;
+      const mutated = src.slice(0, poziv) + src.slice(poziv + '  await pullReferralSignupReward(admin, ev.orderId);\n'.length);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne opoziva nagradu preporucitelju'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/posljedice-povrata-prije-prava',
+    imitates: 'stanje handlera iz design/naplata-4: closeRefundConsequences se izvodi prije gasenja entitlementa, pa pad upisa u manual_orders ili coupon_grants vrati 500 dok je pravo jos aktivno (kupac ima novac natrag i pristup)',
+    caught: () => {
+      const src = webhookMorSource();
+      const blokOd = src.indexOf('    // SPOREDNE POSLJEDICE (odluka vlasnika 2026-09-27)');
+      const blokDo = src.indexOf('    // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio', blokOd);
+      const pravo = src.indexOf('    // PRAVO SE GASI PRIJE SPOREDNIH POSLJEDICA');
+      if (blokOd < 0 || blokDo < 0 || pravo < 0 || !(pravo < blokOd)) return false;
+      const blok = src.slice(blokOd, blokDo);
+      const mutated = src.slice(0, pravo) + blok + src.slice(pravo, blokOd) + src.slice(blokDo);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('prije gasenja prava'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/pad-posljedica-brise-oznaku-povrata',
+    imitates: 'pad sporednih posljedica zapisan u inbox kao detalj koji nije oznaka punog povrata: uplata koja stigne prije Stripeova retryja povrata ne vidi povrat i otvori ili ostavi rucnu narudzbu za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("await settle('failed', 'refund_consequences_failed');", "await settle('failed', 'posljedice_povrata_pale');");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne ostavlja oznaku punog povrata'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/any-u-posljedicama-povrata',
+    imitates: 'stanje handlera iz design/naplata-4: closeRefundConsequences(admin: any, ...) uz retke any[] i (error as any).code, pa krivo ime stupca ili metode prolazi tsc i deno check',
+    caught: () => {
+      const src = webhookMorSource();
+      const a = src.replace('  admin: RefundConsequencesDb,\n', '  admin: any,\n');
+      const b = src.replace('dbErrorCode(error) === UNIQUE_VIOLATION;', "(error as any).code === '23505';");
+      if (a === src || b === src) return false;
+      return webhookHandlerProblems(a).some((p) => p.includes('closeRefundConsequences koristi any'))
+        && webhookHandlerProblems(b).some((p) => p.includes('(x as any).code'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/rucno-vezivanje-bez-provjere-postojeceg-zapisa',
+    imitates: 'runbook 5.1 iz design/naplata-4: postupak ne provjerava postoji li vec pravo ili rucna narudzba za isti order_id, pa operater upisuje drugi zapis ili vezuje uplatu koja je vec proknjizena drugom korisniku',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pocetak = runbook.indexOf('```sql', runbook.indexOf('**Obavezno prvo: postoji li'));
+      const kraj = runbook.indexOf('```', pocetak + 6);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      return runbookManualLinkProblems(mutated).some((p) => p.includes('postoji li vec pravo ili rucna narudzba'));
+    },
+    cleanBefore: () => runbookManualLinkProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'))).length === 0,
+  },
+  {
+    id: 'naplata/rucni-pregled-premium-kao-entitlement',
+    imitates: 'runbook 5.1 iz design/naplata-4: jedini upis u postupku je insert into entitlements, pa premium_human (work_type null) nakon rucnog pregleda dobije pravo bez work_type umjesto rucne narudzbe',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const upis = runbook.indexOf('insert into manual_orders');
+      const pocetak = runbook.lastIndexOf('```sql', upis);
+      const kraj = runbook.indexOf('```', upis);
+      if (upis < 0 || pocetak < 0 || kraj < 0) return false;
+      const bezNarudzbe = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      const bezIskljucenja = runbook.replace(" and not p.manual_fulfillment\n", '\n');
+      if (bezIskljucenja === runbook) return false;
+      return runbookManualLinkProblems(bezNarudzbe).some((p) => p.includes('ne otvara rucnu narudzbu'))
+        && runbookManualLinkProblems(bezIskljucenja).some((p) => p.includes('ne iskljucuje proizvod s rucnom obradom'));
+    },
+    cleanBefore: () => runbookManualLinkProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'))).length === 0,
+  },
+  {
+    id: 'naplata/izvor-project-ref-se-ne-prosljedjuje',
+    imitates: 'preflight koji --project-ref <ref> (oblik iz runbooka, projekt nije povezan) ne prosljedi Supabase CLI-ju: mjeri tajne povezanog ili nijednog projekta, a deploya u krivi projekt',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "return i >= 0 && argv[i + 1] ? ['--project-ref', argv[i + 1]] : [];",
+        'return [];',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['ref-cisto'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['ref-cisto'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-zabrane-preskocene-uz-project-ref',
+    imitates: 'grane zabranjene tajne i testnog nacina uvjetovane izostankom --project-ref: deploy bez povezanog projekta (oblik iz runbooka) prolazi s postavljenim STRIPE_ACCOUNT_ID ili STRIPE_ALLOW_TEST_MODE=1, a zadani slucajevi to ne vide',
+    caught: () => {
+      const src = preflightIzvor();
+      const mutated = zamijeniPojavu(src, 'if (!zabranjene.ok) {', 'if (!zabranjene.ok && projectRef.length === 0) {', 2).replace(
+        "testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')",
+        "testModeVerdict(read.rows) && projectRef.length === 0 && !argv.includes('--dopusti-testni-nacin')",
+      );
+      if (!mutated.includes('projectRef.length === 0 && !argv')) return false;
+      return izvrsenaMutacijaUhvacena(mutated, ['ref-zabranjena-tajna', 'ref-testni-ukljucen'], ['ref-cisto'])
+        // Zadani slucajevi bez zastavice tu mutaciju NE vide; zato postoje slucajevi s refom.
+        && preflightExecutionProblems(mutated, ['zadano-zabranjena-tajna', 'zadano-testni-ukljucen']).length === 0;
+    },
+    cleanBefore: () => izvrseniBaselineCist(
+      ['ref-zabranjena-tajna', 'ref-testni-ukljucen', 'zadano-zabranjena-tajna', 'zadano-testni-ukljucen'],
+      ['ref-cisto'],
+    ),
   },
 
   // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
@@ -4683,9 +4866,17 @@ function c6Panel() {
   return { handle, applyThroughOldBinding: (ids: string[]) => binding.applySelection(ids) };
 }
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
-  // 60 s umjesto zadanih 15 s: mutacije `naplata/izvor-*` izvode skriptu preflighta u podprocesima
-  // (baseline i mutacija, 2 do 4 slucaja, izmjereno do 10 s na opterecenom stroju). Zaglavljena
-  // mutacija i dalje pada, samo kasnije.
+  // TIMEOUT OVDJE NISTA NE PREKIDA. Tijelo testa je SINKRONO (mutation.cleanBefore/caught), a
+  // vitest rok mjeri timerom koji ne moze okinuti dok sinkroni kod drzi petlju dogadjaja; kad tijelo
+  // zavrsi, rezultat stigne prije timera i test PROLAZI iako je trajao dulje od roka (izmjereno
+  // 2026-09-27: sinkroni test od 1,5 s uz rok od 200 ms prolazi). Zaglavljena mutacija zato NE pada
+  // "samo kasnije" nego visi. Stvarna granica je `timeout` spawnSync-a u izvrsenom gardu
+  // (ROK_SLUCAJA_MS, 30 s po slucaju, tests/helpers/naplata-env.ts): zaglavljena skripta se ubija i
+  // postaje nalaz, a pokretac slucajeva ima rok ROK_SLUCAJA_MS + 15 s. 60 s ostaje samo za slucaj da
+  // tijelo jednom postane asinkrono. Slucajevi jednog poziva izvrsenog garda idu ISTODOBNO kroz jedan
+  // pokretac, svaki i dalje kao zaseban proces stvarne skripte (izmjereno 2026-09-27 na 4 jezgre,
+  // naizmjenicno: baseline svih 13 slucajeva 4,1 do 4,9 s serijski, 1,7 do 2,4 s istodobno;
+  // 11 mutacija `naplata/izvor-*` zajedno 14,9 do 16,4 s serijski, 13,2 do 14,6 s istodobno).
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);
     expect(mutation.caught(), `mutacija NIJE uhvacena: ${mutation.imitates}`).toBe(true);

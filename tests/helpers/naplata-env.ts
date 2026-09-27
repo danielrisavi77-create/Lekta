@@ -169,6 +169,9 @@ const PUNI_POPIS: readonly string[] = Object.freeze([
   'STRIPE_WEBHOOK_SECRET | 33cc',
 ]);
 
+/** Lazni projekt za slucajeve s `--project-ref <ref>` (oblik iz runbooka, odjeljak 5). */
+export const PROJECT_REF = 'lazniref0000';
+
 /** Iste tri tajne u lokalnoj ljusci (`--env`). */
 const PUNA_LJUSKA: Readonly<Record<string, string>> = Object.freeze({
   STRIPE_SECRET_KEY: 'sk_lazni',
@@ -241,6 +244,20 @@ export const PREFLIGHT_SLUCAJEVI: readonly PreflightSlucaj[] = Object.freeze([
     id: 'env-testni-ukljucen', args: ['--env'], popis: null,
     ljuska: { ...PUNA_LJUSKA, STRIPE_ALLOW_TEST_MODE: '1' }, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
   },
+  // Oblik iz runbooka kad projekt nije povezan (`npm run deploy:naplata -- --project-ref <ref>`):
+  // grana uvjetovana tom zastavicom, ili zastavica koja se ne prosljedjuje CLI-ju, bila bi zelena
+  // bas u deployu koji operater pokrece rucno. Cisti slucaj dokazuje da se ref prosljedjuje i
+  // popisu i deployu (lazni CLI biljezi argumente).
+  { id: 'ref-cisto', args: ['--deploy', '--project-ref', PROJECT_REF], popis: PUNI_POPIS, ljuska: {}, pada: false },
+  {
+    id: 'ref-zabranjena-tajna', args: ['--deploy', '--project-ref', PROJECT_REF],
+    popis: [...PUNI_POPIS, 'STRIPE_ACCOUNT_ID | 5f5e'], ljuska: {}, pada: true, razlog: 'STRIPE_ACCOUNT_ID',
+  },
+  {
+    id: 'ref-testni-ukljucen', args: ['--deploy', '--project-ref', PROJECT_REF],
+    popis: [...PUNI_POPIS, `STRIPE_ALLOW_TEST_MODE | ${createHash('sha256').update('1').digest('hex')}`],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
+  },
 ]);
 
 /** Lazni Supabase CLI za Windows (`supabase.cmd`): biljezi poziv, na `secrets list` vraca popis. */
@@ -290,58 +307,174 @@ function okolinaPodprocesa(binDir: string, dodatak: Readonly<Record<string, stri
 /** Nalazi po (slucaj, izvor): isti slucaj nad istim izvorom izvodi se jednom po procesu testa. */
 const izvrseniPreflight = new Map<string, readonly string[]>();
 
-/** Izvedi jedan slucaj nad vec pripremljenim direktorijem i vrati njegove nalaze. */
-function izvrsiSlucaj(korijen: string, binDir: string, skripta: string, slucaj: PreflightSlucaj): string[] {
+/** Rok jednog slucaja: zaglavljena skripta se ubija i postaje nalaz, ne vjecno cekanje. */
+const ROK_SLUCAJA_MS = 30_000;
+
+/**
+ * Pokretac slucajeva (ESM, zapisuje se u privremeni direktorij). Pokrece SVE zadane slucajeve
+ * ISTODOBNO, svaki kao zaseban `node` proces stvarne skripte nad vlastitim dnevnikom i popisom,
+ * i zapisuje izlazni kod i stderr svakog. Mjerenje je isto kao kad su slucajevi isli jedan po
+ * jedan kroz spawnSync; mijenja se samo raspored (nalaz pregleda 2026-09-27: serijsko vrijeme
+ * izvrsenog garda). Zaglavljen slucaj se ubija nakon roka i vraca `greska`.
+ */
+const POKRETAC = [
+  "import { spawn } from 'node:child_process';",
+  "import { readFileSync, writeFileSync } from 'node:fs';",
+  'const [ulaz, izlaz] = process.argv.slice(2);',
+  "const poslovi = JSON.parse(readFileSync(ulaz, 'utf8'));",
+  'const jedan = (p) => new Promise((gotovo) => {',
+  "  let stderr = '';",
+  '  let zavrseno = false;',
+  '  let rok;',
+  '  const zavrsi = (ishod) => {',
+  '    if (zavrseno) return;',
+  '    zavrseno = true;',
+  '    clearTimeout(rok);',
+  '    gotovo({ id: p.id, stderr, ...ishod });',
+  '  };',
+  '  let dijete;',
+  '  try {',
+  "    dijete = spawn(process.execPath, [p.skripta, ...p.args], { cwd: p.cwd, env: p.env, windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] });",
+  '  } catch (e) {',
+  '    zavrsi({ status: null, greska: String(e && e.message ? e.message : e) });',
+  '    return;',
+  '  }',
+  '  rok = setTimeout(() => {',
+  '    dijete.kill();',
+  '    zavrsi({ status: null, greska: `slucaj nije zavrsio u ${p.rokMs} ms` });',
+  '  }, p.rokMs);',
+  "  dijete.stderr.setEncoding('utf8');",
+  "  dijete.stderr.on('data', (d) => { stderr += d; });",
+  "  dijete.on('error', (e) => zavrsi({ status: null, greska: e.message }));",
+  "  dijete.on('close', (status) => zavrsi({ status, greska: null }));",
+  '});',
+  'const rezultati = await Promise.all(poslovi.map(jedan));',
+  "writeFileSync(izlaz, JSON.stringify(rezultati), 'utf8');",
+  '',
+].join('\n');
+
+/** Ishod jednog podprocesa slucaja, kako ga vraca pokretac. */
+interface IshodSlucaja {
+  status: number | null;
+  stderr: string;
+  greska: string | null;
+}
+
+/** `--project-ref <ref>` iz argumenata slucaja (oblik iz runbooka), ili prazno. */
+function projectRefArgs(args: readonly string[]): string[] {
+  const i = args.indexOf('--project-ref');
+  return i >= 0 && args[i + 1] ? ['--project-ref', args[i + 1]] : [];
+}
+
+/** Ocijeni jedan izvedeni slucaj: izlazni kod, imenovan razlog i pozive laznog CLI-ja. */
+function ocijeniSlucaj(slucaj: PreflightSlucaj, ishod: IshodSlucaja, dnevnik: string): string[] {
   const problems: string[] = [];
   const oznaka = `[${slucaj.id}]`;
-  const dnevnik = join(korijen, `dnevnik-${slucaj.id}.txt`);
-  const popis = join(korijen, `popis-${slucaj.id}.txt`);
-  writeFileSync(dnevnik, '', 'utf8');
-  if (slucaj.popis) {
-    const tablica = ['  NAME | DIGEST', '  -----|-------', ...slucaj.popis.map((r) => `  ${r}`)];
-    writeFileSync(popis, `${tablica.join('\n')}\n`, 'utf8');
-  }
-  const res = spawnSync(process.execPath, [skripta, ...slucaj.args], {
-    cwd: korijen,
-    encoding: 'utf8',
-    env: okolinaPodprocesa(binDir, {
-      ...slucaj.ljuska,
-      LEKTA_LAZNI_DNEVNIK: dnevnik,
-      LEKTA_LAZNI_POPIS: popis,
-    }),
-    timeout: 30_000,
-    windowsHide: true,
-  });
-  if (res.error) return [`${oznaka} podproces se nije pokrenuo: ${res.error.message}`];
+  if (ishod.greska !== null) return [`${oznaka} podproces se nije pokrenuo ili nije zavrsio: ${ishod.greska}`];
   const pozivi = readFileSync(dnevnik, 'utf8').split(/\r?\n/).map((l) => l.trim()).filter((l) => l !== '');
   const deployi = pozivi.filter((l) => l.startsWith('functions deploy'));
-  const stderr = String(res.stderr ?? '');
-  if (slucaj.popis && !pozivi.includes('secrets list')) {
-    problems.push(`${oznaka} lazni CLI nije pitan za popis tajni (mjerena je druga okolina)`);
+  const stderr = ishod.stderr;
+  // Slucaj s `--project-ref` mora pitati popis TOG projekta i deployati u njega; bez zastavice
+  // poziv je goli `secrets list` (povezan projekt).
+  const ref = projectRefArgs(slucaj.args);
+  const ocekivanPopis = ['secrets', 'list', ...ref].join(' ');
+  if (slucaj.popis && !pozivi.includes(ocekivanPopis)) {
+    problems.push(`${oznaka} lazni CLI nije pitan \`${ocekivanPopis}\` (mjerena je druga okolina): ${pozivi.join('; ')}`);
   }
   if (!slucaj.popis && pozivi.length > 0) {
     problems.push(`${oznaka} --env grana je zvala Supabase CLI (${pozivi.join('; ')})`);
   }
   if (slucaj.pada) {
-    if (res.status === 0 || res.status === null) {
-      problems.push(`${oznaka} preflight NIJE srusio proces (izlazni kod ${String(res.status)})`);
+    if (ishod.status === 0 || ishod.status === null) {
+      problems.push(`${oznaka} preflight NIJE srusio proces (izlazni kod ${String(ishod.status)})`);
     } else if (slucaj.razlog && !stderr.includes(slucaj.razlog)) {
       problems.push(`${oznaka} preflight je pao bez imenovanog razloga ${slucaj.razlog}: ${stderr.slice(0, 200)}`);
     }
     if (deployi.length > 0) problems.push(`${oznaka} preflight je deployao unatoc odbijanju (${deployi.join('; ')})`);
     return problems;
   }
-  if (res.status !== 0) {
-    problems.push(`${oznaka} cista okolina nije prosla (izlazni kod ${String(res.status)}): ${stderr.slice(0, 300)}`);
+  if (ishod.status !== 0) {
+    problems.push(`${oznaka} cista okolina nije prosla (izlazni kod ${String(ishod.status)}): ${stderr.slice(0, 300)}`);
   }
   if (slucaj.args.includes('--deploy')) {
     for (const fn of ['create-checkout', 'webhook-mor']) {
-      if (!deployi.some((l) => l.split(/\s+/)[2] === fn)) {
-        problems.push(`${oznaka} cista okolina nije deployala ${fn} kroz lazni CLI`);
+      const cilj = ['functions', 'deploy', fn, ...ref].join(' ');
+      if (!deployi.includes(cilj)) {
+        problems.push(`${oznaka} cista okolina nije deployala \`${cilj}\` kroz lazni CLI (${deployi.join('; ')})`);
       }
     }
   }
   return problems;
+}
+
+/**
+ * Izvedi zadane slucaje nad vec pripremljenim direktorijem, SVE ISTODOBNO kroz jedan pokretac, i
+ * vrati nalaze po slucaju. Pad samog pokretaca (ili ishod koji nedostaje) je nalaz za svaki
+ * slucaj: nepoznato nije zeleno.
+ */
+function izvrsiSlucajeve(
+  korijen: string,
+  binDir: string,
+  skripta: string,
+  slucajevi: readonly PreflightSlucaj[],
+): Map<string, string[]> {
+  const pripremljeni = slucajevi.map((slucaj) => {
+    const dnevnik = join(korijen, `dnevnik-${slucaj.id}.txt`);
+    const popis = join(korijen, `popis-${slucaj.id}.txt`);
+    writeFileSync(dnevnik, '', 'utf8');
+    if (slucaj.popis) {
+      const tablica = ['  NAME | DIGEST', '  -----|-------', ...slucaj.popis.map((r) => `  ${r}`)];
+      writeFileSync(popis, `${tablica.join('\n')}\n`, 'utf8');
+    }
+    return { slucaj, dnevnik, popis };
+  });
+  const ulaz = join(korijen, 'poslovi.json');
+  const izlaz = join(korijen, 'rezultati.json');
+  const pokretac = join(korijen, 'pokretac.mjs');
+  writeFileSync(pokretac, POKRETAC, 'utf8');
+  writeFileSync(ulaz, JSON.stringify(pripremljeni.map(({ slucaj, dnevnik, popis }) => ({
+    id: slucaj.id,
+    skripta,
+    args: slucaj.args,
+    cwd: korijen,
+    rokMs: ROK_SLUCAJA_MS,
+    env: okolinaPodprocesa(binDir, { ...slucaj.ljuska, LEKTA_LAZNI_DNEVNIK: dnevnik, LEKTA_LAZNI_POPIS: popis }),
+  }))), 'utf8');
+  const res = spawnSync(process.execPath, [pokretac, ulaz, izlaz], {
+    cwd: korijen,
+    encoding: 'utf8',
+    env: okolinaPodprocesa(binDir, {}),
+    // Slucajevi idu istodobno, pa je rok pokretaca rok jednog slucaja uz rezervu za pokretanje.
+    timeout: ROK_SLUCAJA_MS + 15_000,
+    windowsHide: true,
+  });
+  const ishodi = new Map<string, IshodSlucaja>();
+  let razlogPada = '';
+  if (res.error || res.status !== 0) {
+    razlogPada = `pokretac slucajeva nije uspio (${res.error ? res.error.message : `izlazni kod ${String(res.status)}`}): ${String(res.stderr ?? '').slice(0, 200)}`;
+  } else {
+    try {
+      const procitano = JSON.parse(readFileSync(izlaz, 'utf8')) as unknown;
+      if (!Array.isArray(procitano)) throw new Error('rezultat nije niz');
+      for (const r of procitano as Array<Record<string, unknown>>) {
+        ishodi.set(String(r.id), {
+          status: typeof r.status === 'number' ? r.status : null,
+          stderr: typeof r.stderr === 'string' ? r.stderr : '',
+          greska: typeof r.greska === 'string' ? r.greska : null,
+        });
+      }
+    } catch (e) {
+      razlogPada = `rezultat pokretaca se ne moze procitati: ${String(e)}`;
+    }
+  }
+  const nalazi = new Map<string, string[]>();
+  for (const { slucaj, dnevnik } of pripremljeni) {
+    const ishod = ishodi.get(slucaj.id);
+    nalazi.set(slucaj.id, ishod
+      ? ocijeniSlucaj(slucaj, ishod, dnevnik)
+      : [`[${slucaj.id}] ${razlogPada || 'pokretac nije vratio ishod ovog slucaja'}`]);
+  }
+  return nalazi;
 }
 
 /**
@@ -356,9 +489,10 @@ function izvrsiSlucaj(korijen: string, binDir: string, skripta: string, slucaj: 
  * pri odbijanju nijedna funkcija nije deployala (lazni CLI biljezi svaki poziv).
  *
  * Mutacija se radi nad TEKSTOM u memoriji; disk repozitorija se ne dira. `slucajevi` suzava mjerenje
- * na imenovane slucajeve (jedan podproces traje oko pola sekunde do sekunde, a mutacija gasi jednu
- * granu); bez njega se izvode svi. Nalaz se pamti po slucaju i izvoru, pa isti slucaj nad istim
- * izvorom u vise garda ne pokrece proces ponovno.
+ * na imenovane slucajeve (mutacija gasi jednu granu); bez njega se izvode svi. Svaki slucaj je i
+ * dalje ZASEBAN proces stvarne skripte, ali svi zadani slucajevi idu ISTODOBNO kroz jedan pokretac
+ * (izvrsiSlucajeve), pa serijsko vrijeme poziva vise ne raste sa zbrojem slucajeva. Nalaz se pamti
+ * po slucaju i izvoru, pa isti slucaj nad istim izvorom u vise garda ne pokrece proces ponovno.
  *
  * Granica tvrdnje: pravi Supabase CLI i zivi projekt se ovdje ne pokrecu. Dokazuje se da skripta
  * na zadani ulaz CLI-ja reagira ispravno, ne da pravi CLI daje taj ulaz.
@@ -386,8 +520,9 @@ export function preflightExecutionProblems(
       writeFileSync(join(binDir, 'supabase.cmd'), LAZNI_CLI_CMD, 'utf8');
       writeFileSync(join(binDir, 'supabase'), LAZNI_CLI_SH, 'utf8');
       chmodSync(join(binDir, 'supabase'), 0o755);
+      const nalazi = izvrsiSlucajeve(korijen, binDir, skripta, neizvedeni);
       for (const slucaj of neizvedeni) {
-        izvrseniPreflight.set(kljuc(slucaj.id), Object.freeze(izvrsiSlucaj(korijen, binDir, skripta, slucaj)));
+        izvrseniPreflight.set(kljuc(slucaj.id), Object.freeze([...(nalazi.get(slucaj.id) ?? [`[${slucaj.id}] bez ishoda`])]));
       }
     } finally {
       rmSync(korijen, { recursive: true, force: true });
@@ -805,6 +940,45 @@ export function runbookRefundCheckProblems(runbook: string, handlerSrc: string):
         problems.push(`popis oznaka povrata u runbooku (${popis.join(', ')}) nije REFUND_MARKERS iz handlera (${oznake.join(', ')})`);
       }
     }
+  }
+  return problems;
+}
+
+/**
+ * Nalazi o RUCNOM VEZIVANJU za proizvod s rucnom obradom i o postojecem zapisu (odjeljak 5.1).
+ *
+ * Kvar koji se ovim gasi (nalaz pregleda 2026-09-27): za `needs_manual_review` runbook je vodio
+ * ravno na `insert into entitlements`. Za proizvod s rucnom obradom (`premium_human`, `work_type`
+ * null) to je kriva tablica: pravo bez `work_type` ne otkljucava nista, a narudzba koju covjek treba
+ * odraditi ne nastaje. Ni provjere postoji li vec pravo ili narudzba za isti `order_id` nije bilo.
+ *
+ * Mjeri se: (1) ogradjeni blok koji cita i `entitlements` i `manual_orders` za
+ * `order_id = '<order_id>'` stoji PRIJE prvog upisa u bilo koju od njih; (2) postoji upis u
+ * `manual_orders` uvjetovan s `manual_fulfillment`; (3) upis u `entitlements` iskljucuje proizvod s
+ * rucnom obradom (`not p.manual_fulfillment`).
+ *
+ * Granica tvrdnje: nije SQL parser; da upiti rade nad zivom bazom nije provjereno.
+ */
+export function runbookManualLinkProblems(runbook: string): string[] {
+  const blokovi = [...runbook.matchAll(/```[a-z]*\r?\n([\s\S]*?)```/g)].map((m) => ({ index: m.index ?? 0, sql: m[1] }));
+  const problems: string[] = [];
+  const prviUpis = blokovi.find((b) => /insert into (entitlements|manual_orders)\b/i.test(b.sql));
+  if (!prviUpis) return ['runbook nema upis za rucno vezivanje (nema sto mjeriti)'];
+  const provjeraZapisa = blokovi.some((b) =>
+    b.index < prviUpis.index
+    && /\bfrom entitlements\b/i.test(b.sql)
+    && /\bfrom manual_orders\b/i.test(b.sql)
+    && (b.sql.match(/order_id\s*=\s*'<order_id>'/g) ?? []).length >= 2);
+  if (!provjeraZapisa) {
+    problems.push('rucno vezivanje ne provjerava postoji li vec pravo ili rucna narudzba za isti order_id prije upisa');
+  }
+  const narudzba = blokovi.find((b) => /insert into manual_orders\b/i.test(b.sql));
+  if (!narudzba || !/\bp\.manual_fulfillment\b/.test(narudzba.sql) || /\bnot p\.manual_fulfillment\b/.test(narudzba.sql)) {
+    problems.push('runbook ne otvara rucnu narudzbu (manual_orders) za proizvod s rucnom obradom (premium_human)');
+  }
+  const pravo = blokovi.find((b) => /insert into entitlements\b/i.test(b.sql));
+  if (!pravo || !/\bnot p\.manual_fulfillment\b/.test(pravo.sql)) {
+    problems.push('upis prava u rucnom vezivanju ne iskljucuje proizvod s rucnom obradom (premium_human dobio bi entitlement)');
   }
   return problems;
 }

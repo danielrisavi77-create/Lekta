@@ -19,6 +19,7 @@ import {
   isNotableIgnore,
   isFullRefund,
   chargedAmountVerdict,
+  type ChargedAmountVerdict,
   type StripeEvent,
   type StripeWebhookPayload,
 } from '../../../src/report/webhook.ts';
@@ -40,8 +41,10 @@ const PROVIDER = 'stripe';
  * koja stigne nakon (ili istodobno s) takvim zapisom ne smije ostaviti aktivno pravo ni otvorenu
  * rucnu narudzbu (premium_human): obje grane uplate prvo pisu, pa citaju oznaku.
  * `refund_pending` se upisuje PRIJE citanja prava i ostaje i kad obrada povrata padne.
+ * `refund_consequences_failed` znaci da je pravo vec ugaseno, a sporedne posljedice (rucna narudzba,
+ * pass kupon) jos nisu zatvorene i Stripe povrat ponavlja; i to je zabiljezen puni povrat.
  */
-const REFUND_MARKERS = ['refund_pending', 'refund_without_entitlement', 'refunded'];
+const REFUND_MARKERS = ['refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded'];
 
 /**
  * Sve sto handler dobiva izvana. Okolina (`Deno.env`) i Supabase klijent se citaju SAMO u
@@ -68,6 +71,33 @@ export interface WebhookDeps {
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+}
+
+/** Postgres kod za povredu unique ogranicenja. */
+const UNIQUE_VIOLATION = '23505';
+
+/**
+ * Kod greske baze (npr. `23505`) bez `any`: PostgREST gresku vraca kao objekt nepoznatog oblika,
+ * pa se `code` cita tek nakon provjere da postoji i da je niz znakova.
+ */
+function dbErrorCode(error: unknown): string | null {
+  if (typeof error !== 'object' || error === null || !('code' in error)) return null;
+  const code = (error as { code?: unknown }).code;
+  return typeof code === 'string' ? code : null;
+}
+
+/** Tekst greske baze (samo za log i inbox, nikad za odgovor). */
+function dbErrorMessage(error: unknown): string {
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    return String((error as { message?: unknown }).message);
+  }
+  return String(error);
+}
+
+/** Retci odgovora baze kao zapisi; sve sto nije niz objekata je prazan popis. */
+function dbRows(data: unknown): Array<Record<string, unknown>> {
+  if (!Array.isArray(data)) return [];
+  return data.filter((r): r is Record<string, unknown> => typeof r === 'object' && r !== null);
 }
 
 // Razrijesi referrer iz koda. Partner kodovi u partner_accounts.referral_code.
@@ -148,8 +178,8 @@ async function attributeReferral(admin: any, ev: StripeEvent): Promise<void> {
     purchase_expires_at: isoAfterDays(Date.now(), 90),
   });
   // 23505 = nagrada za ovaj referral vec postoji (retry): idempotentno, nastavi na kupon.
-  if (rewardErr && (rewardErr as any).code !== '23505') {
-    console.error('webhook-mor referral_reward_failed', { orderId: ev.orderId, code: (rewardErr as any).code });
+  if (rewardErr && dbErrorCode(rewardErr) !== UNIQUE_VIOLATION) {
+    console.error('webhook-mor referral_reward_failed', { orderId: ev.orderId, code: dbErrorCode(rewardErr) });
   }
 
   // welcome kupon za referred (zapis; primjena -20% pri naplati je integracija). AUD-28:
@@ -207,6 +237,52 @@ type RefundConsequences =
   | { ok: true; manualOrderFound: boolean; manualOrdersClosed: number; couponsRevoked: number }
   | { ok: false; step: string; error: string };
 
+/** Odgovor PostgREST upita, onoliko koliko ga posljedice povrata citaju. */
+interface DbResponse {
+  data: unknown;
+  error: unknown;
+}
+
+/** Lanac filtera supabase-js: thenable koji se moze dalje suziti. */
+interface DbFilter extends PromiseLike<DbResponse> {
+  eq(column: string, value: string): DbFilter;
+  in(column: string, values: readonly string[]): DbFilter;
+}
+
+/**
+ * Najuzi oblik Supabase klijenta koji `closeRefundConsequences` treba. Tipiziran umjesto `any`, pa
+ * tsc i deno check vide krivo ime metode ili krivi oblik argumenta (nalaz pregleda 2026-09-27).
+ */
+interface RefundConsequencesDb {
+  from(table: 'manual_orders' | 'coupon_grants'): {
+    select(columns: string): DbFilter;
+    update(values: Record<string, string>): DbFilter;
+  };
+}
+
+/** Redak `manual_orders` kakvog posljedice citaju. */
+interface ManualOrderRow {
+  id: string;
+  status: string | null;
+}
+
+/** Redak `coupon_grants` kakvog posljedice citaju; `expiresAt` null znaci bez roka. */
+interface CouponGrantRow {
+  id: string;
+  expiresAt: string | null;
+}
+
+function manualOrderRows(data: unknown): ManualOrderRow[] {
+  return dbRows(data).map((r) => ({ id: String(r.id), status: typeof r.status === 'string' ? r.status : null }));
+}
+
+function couponGrantRows(data: unknown): CouponGrantRow[] {
+  return dbRows(data).map((r) => ({
+    id: String(r.id),
+    expiresAt: r.expires_at === null || r.expires_at === undefined ? null : String(r.expires_at),
+  }));
+}
+
 /**
  * POSLJEDICE PUNOG POVRATA IZVAN `entitlements` (odluka vlasnika 2026-09-27). Do tada je puni
  * povrat gasio samo entitlement i referral nagrade: rucna narudzba (premium_human, bez
@@ -221,18 +297,23 @@ type RefundConsequences =
  *
  * IDEMPOTENTNO U STROGOM SMISLU: prvo se cita, a pise se samo ono sto jos nije zatvoreno. Drugi isti
  * povrat ne salje nijedan upis u ove dvije tablice. Nikad ne baca; pad citanja ili upisa vraca
- * `ok: false`, a pozivatelj odgovara 500 uz ocuvanu oznaku `refund_pending` (Stripe ponovi).
+ * `ok: false`. Refund grana je zove TEK NAKON gasenja prava, pa pad ovdje ne ostavlja aktivno
+ * pravo; pozivatelj odgovara 500 uz oznaku `refund_consequences_failed` (Stripe ponovi).
  */
-async function closeRefundConsequences(admin: any, orderId: string, nowMs: number): Promise<RefundConsequences> {
+async function closeRefundConsequences(
+  admin: RefundConsequencesDb,
+  orderId: string,
+  nowMs: number,
+): Promise<RefundConsequences> {
   try {
     const { data: orders, error: ordersErr } = await admin
       .from('manual_orders')
       .select('id, status')
       .eq('provider', PROVIDER)
       .eq('order_id', orderId);
-    if (ordersErr) return { ok: false, step: 'manual_orders_lookup', error: String(ordersErr.message) };
-    const orderRows: any[] = Array.isArray(orders) ? orders : [];
-    const openOrderIds = orderRows.filter((r: any) => r?.status !== 'refunded').map((r: any) => String(r.id));
+    if (ordersErr) return { ok: false, step: 'manual_orders_lookup', error: dbErrorMessage(ordersErr) };
+    const orderRows = manualOrderRows(orders);
+    const openOrderIds = orderRows.filter((r) => r.status !== 'refunded').map((r) => r.id);
     if (openOrderIds.length > 0) {
       const { error: closeErr } = await admin
         .from('manual_orders')
@@ -240,7 +321,7 @@ async function closeRefundConsequences(admin: any, orderId: string, nowMs: numbe
         .eq('provider', PROVIDER)
         .eq('order_id', orderId)
         .in('id', openOrderIds);
-      if (closeErr) return { ok: false, step: 'manual_orders_update', error: String(closeErr.message) };
+      if (closeErr) return { ok: false, step: 'manual_orders_update', error: dbErrorMessage(closeErr) };
     }
 
     const { data: coupons, error: couponsErr } = await admin
@@ -248,12 +329,11 @@ async function closeRefundConsequences(admin: any, orderId: string, nowMs: numbe
       .select('id, expires_at')
       .eq('source_order_id', orderId)
       .eq('reason', 'pass_bonus');
-    if (couponsErr) return { ok: false, step: 'coupon_grants_lookup', error: String(couponsErr.message) };
-    const couponRows: any[] = Array.isArray(coupons) ? coupons : [];
+    if (couponsErr) return { ok: false, step: 'coupon_grants_lookup', error: dbErrorMessage(couponsErr) };
     // Kupon bez roka (null) nikad ne istjece, pa je aktivan; povlaci se kao i onaj s rokom u buducnosti.
-    const activeCouponIds = couponRows
-      .filter((c: any) => c?.expires_at === null || c?.expires_at === undefined || Date.parse(String(c.expires_at)) > nowMs)
-      .map((c: any) => String(c.id));
+    const activeCouponIds = couponGrantRows(coupons)
+      .filter((c) => c.expiresAt === null || Date.parse(c.expiresAt) > nowMs)
+      .map((c) => c.id);
     if (activeCouponIds.length > 0) {
       const { error: revokeErr } = await admin
         .from('coupon_grants')
@@ -261,7 +341,7 @@ async function closeRefundConsequences(admin: any, orderId: string, nowMs: numbe
         .eq('source_order_id', orderId)
         .eq('reason', 'pass_bonus')
         .in('id', activeCouponIds);
-      if (revokeErr) return { ok: false, step: 'coupon_grants_update', error: String(revokeErr.message) };
+      if (revokeErr) return { ok: false, step: 'coupon_grants_update', error: dbErrorMessage(revokeErr) };
     }
     return {
       ok: true,
@@ -272,6 +352,37 @@ async function closeRefundConsequences(admin: any, orderId: string, nowMs: numbe
   } catch (e) {
     return { ok: false, step: 'threw', error: String(e) };
   }
+}
+
+/**
+ * Sve sto uplata mora zatvoriti kad NAKON svog upisa vidi oznaku punog povrata istog
+ * PaymentIntenta: pravo, referral nagrade i sporedne posljedice (pass kupon, rucna narudzba).
+ *
+ * Zove se na oba mjesta gdje grana entitlementa cita oznaku: prije bonusa (povrat je stigao prije
+ * uplate) i NAKON bonusa (povrat je stigao dok su se bonusi upisivali). Drugo mjesto zatvara
+ * prozor u kojem je povrat procitao `coupon_grants` i `referral_signups` prije nego ih je uplata
+ * upisala, pa bi kupon i nagrada preporucitelju ostali aktivni za vracen novac (nalaz pregleda
+ * 2026-09-27). Isti dogovor pisi-pa-citaj kao za entitlement i manual_orders. Idempotentno: vec
+ * zatvoreno se ne dira, pa ponovljena dostava uplate ne mijenja nista.
+ */
+async function closePaymentAfterRefund(
+  admin: any,
+  ev: StripeEvent,
+  productId: string,
+  nowMs: number,
+): Promise<{ ok: true } | { ok: false; step: string; error: string }> {
+  const { error: voidErr } = await admin
+    .from('entitlements')
+    .update({ status: 'refunded' })
+    .eq('provider', PROVIDER)
+    .eq('order_id', ev.orderId)
+    .eq('product_id', productId);
+  if (voidErr) return { ok: false, step: 'entitlement_update', error: dbErrorMessage(voidErr) };
+  await pullReferralReward(admin, ev.orderId);
+  await pullReferralSignupReward(admin, ev.orderId);
+  const sporedno = await closeRefundConsequences(admin, ev.orderId, nowMs);
+  if (!sporedno.ok) return { ok: false, step: sporedno.step, error: sporedno.error };
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------------
@@ -568,77 +679,81 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       await settle('failed', 'refund_pending');
       return json({ error: 'refund_failed' }, 500);
     }
-    const targets: any[] = Array.isArray(refundTargets) ? refundTargets : [];
-    const foreignTarget = targets.find((r: any) => !isSoldByLektaCheckout(String(r?.product_id ?? '')));
+    const targets = dbRows(refundTargets).map((r) => ({ id: String(r.id), productId: String(r.product_id ?? '') }));
+    const foreignTarget = targets.find((r) => !isSoldByLektaCheckout(r.productId));
     if (foreignTarget) {
       console.warn('webhook-mor foreign_event_ignored', {
         orderId: ev.orderId,
         reason: 'foreign_product',
-        productId: foreignTarget.product_id,
+        productId: foreignTarget.productId,
       });
-      await settle('ignored', `foreign_product: ${String(foreignTarget.product_id)}`);
+      await settle('ignored', `foreign_product: ${foreignTarget.productId}`);
       return json({ ok: true, action: 'ignored', reason: 'foreign_product' }, 200);
     }
     // Update ide SAMO po id-ovima Lektinih redaka procitanih gore. Redak koji bi se izmedju
     // citanja i upisa pojavio pod istim PaymentIntentom (npr. Katedrin) tako ostaje netaknut.
-    const ownIds: string[] = targets.map((r: any) => String(r.id));
+    const ownIds: string[] = targets.map((r) => r.id);
 
-    // POSLJEDICE IZVAN ENTITLEMENTA (odluka vlasnika 2026-09-27): rucna narudzba istog
-    // PaymentIntenta se otkazuje, pass kupon iz iste kupnje se povlaci. Ide PRIJE provjere
-    // `ownIds`, jer rucna narudzba (premium_human) nema entitlement, pa bi je rani izlaz
-    // `refund_without_entitlement` preskocio. Samo PUNI povrat dolazi dovde; djelomicni je izasao
-    // gore kao `partial_refund_noted`. Pad je 500 uz ocuvanu oznaku, a ponovljen poziv je no-op
-    // za ono sto je vec zatvoreno.
+    // PRAVO SE GASI PRIJE SPOREDNIH POSLJEDICA (nalaz pregleda 2026-09-27). Dotad je
+    // closeRefundConsequences isla prva, pa je pad upisa u manual_orders ili coupon_grants vracao
+    // 500 PRIJE gasenja entitlementa: kupac je imao vracen novac i aktivno pravo dok Stripe ne
+    // ponovi, a nakon iscrpljenog retryja zauvijek. Opoziv prava sada ne ovisi o sporednim
+    // tablicama. Pad OVOG upisa je 500 uz ocuvanu oznaku `refund_pending`: korisnik bi inace dobio
+    // novac natrag i ZADRZAO pravo, bez traga da je gasenje palo (adversarijalni pregled 2026-09-23).
+    let pravoUgaseno = false;
+    if (ownIds.length > 0) {
+      const { data: refundedRows, error: refundErr } = await admin
+        .from('entitlements')
+        .update({ status: 'refunded' })
+        .eq('provider', PROVIDER)
+        .eq('order_id', ev.orderId)
+        .in('id', ownIds)
+        .select('id');
+      if (refundErr) {
+        console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: dbErrorMessage(refundErr) });
+        await settle('failed', 'refund_pending');
+        return json({ error: 'refund_failed' }, 500);
+      }
+      pravoUgaseno = dbRows(refundedRows).length > 0;
+      if (pravoUgaseno) {
+        await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (0005, 6.7)
+        await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
+      }
+    }
+
+    // SPOREDNE POSLJEDICE (odluka vlasnika 2026-09-27): rucna narudzba istog PaymentIntenta se
+    // otkazuje, pass kupon iz iste kupnje se povlaci. Ide i kad entitlementa nema, jer rucna
+    // narudzba (premium_human) pravo nema, pa bi je izlaz `refund_without_entitlement` inace
+    // preskocio. Samo PUNI povrat dolazi dovde; djelomicni je izasao gore kao
+    // `partial_refund_noted`. Pad je 500 (Stripe ponovi) uz oznaku `refund_consequences_failed` u
+    // inboxu: pravo je vec ugaseno, a otvoreno je samo sporedno. I ta je oznaka u REFUND_MARKERS,
+    // pa uplata koja stigne u medjuvremenu i dalje vidi puni povrat. Ponovljen povrat je no-op za
+    // ono sto je vec zatvoreno (gasenje prava, povlacenje nagrada i posljedice su idempotentni).
     const posljedice = await closeRefundConsequences(admin, ev.orderId, deps.now?.() ?? Date.now());
     if (!posljedice.ok) {
       console.error('webhook-mor refund_consequences_failed', {
         orderId: ev.orderId,
         step: posljedice.step,
         error: posljedice.error,
+        entitlementRefunded: pravoUgaseno,
       });
-      await settle('failed', 'refund_pending');
+      await settle('failed', 'refund_consequences_failed');
       return json({ error: 'refund_failed' }, 500);
     }
 
-    // Povrat za PaymentIntent bez naseg entitlementa: ili tudja naplata (Payment Link, fakture),
-    // ili povrat koji je stigao PRIJE uplate. 200 jer retry tudju naplatu ne popravlja; oznaka
-    // ostaje u REFUND_MARKERS, pa uplata koja stigne kasnije pravo odmah gasi.
-    // Iznimka je rucna narudzba: ona nema entitlement, a povrat ju je upravo zatvorio (ili je vec
-    // bila zatvorena), pa je ishod `refunded`, isti kao za entitlement.
-    if (ownIds.length === 0 && posljedice.manualOrderFound) {
+    // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio (ili je vec bila zatvorena),
+    // pa je ishod `refunded`, isti kao za entitlement.
+    if (pravoUgaseno || posljedice.manualOrderFound) {
       await settle('processed', 'refunded');
       return json({ ok: true, action: 'refunded' });
     }
-    if (ownIds.length === 0) {
-      console.error('webhook-mor refund_without_entitlement', { orderId: ev.orderId });
-      await settle('processed', 'refund_without_entitlement');
-      return json({ ok: true, action: 'refund_without_entitlement' }, 200);
-    }
 
-    // Pad ovog upisa se dotad progutao, a dogadjaj se javljao kao obradjen: korisnik bi dobio
-    // novac natrag i ZADRZAO pravo pristupa, bez traga da je gasenje palo (nalaz adversarijalnog
-    // pregleda, 2026-09-23). 500 je ovdje ispravan odgovor: Stripe ponovi dostavu.
-    const { data: refundedRows, error: refundErr } = await admin
-      .from('entitlements')
-      .update({ status: 'refunded' })
-      .eq('provider', PROVIDER)
-      .eq('order_id', ev.orderId)
-      .in('id', ownIds)
-      .select('id');
-    if (refundErr) {
-      console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: refundErr.message });
-      await settle('failed', 'refund_pending');
-      return json({ error: 'refund_failed' }, 500);
-    }
-    if (!Array.isArray(refundedRows) || refundedRows.length === 0) {
-      console.error('webhook-mor refund_without_entitlement', { orderId: ev.orderId });
-      await settle('processed', 'refund_without_entitlement');
-      return json({ ok: true, action: 'refund_without_entitlement' }, 200);
-    }
-    await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (0005, 6.7)
-    await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
-    await settle('processed', 'refunded');
-    return json({ ok: true, action: 'refunded' });
+    // Povrat za PaymentIntent bez naseg entitlementa i bez rucne narudzbe: ili tudja naplata
+    // (Payment Link, fakture), ili povrat koji je stigao PRIJE uplate. 200 jer retry tudju naplatu
+    // ne popravlja; oznaka ostaje u REFUND_MARKERS, pa uplata koja stigne kasnije pravo odmah gasi.
+    console.error('webhook-mor refund_without_entitlement', { orderId: ev.orderId });
+    await settle('processed', 'refund_without_entitlement');
+    return json({ ok: true, action: 'refund_without_entitlement' }, 200);
   }
 
   // Od ovdje nadalje se knjizi pravo pristupa. Vlasnik dogadjaja je sigurno poznat: potvrdjena
@@ -692,9 +807,52 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // Provjera ide PRIJE svakog upisa (rucna narudzba, entitlement, bonusi) i pise samo u VLASTITI
   // redak inboxa, pa oznaku punog povrata istog PaymentIntenta (REFUND_MARKERS) ne dira.
   // Uplata VECA od kataloske cijene i dalje daje pravo; razlika ostaje zapisana (amount_mismatch).
+  //
+  // NEUPOTREBLJIVA KATALOSKA CIJENA (nalaz pregleda 2026-09-27). mapProductRow cijenu null ili
+  // neispravnu pretvara u 0 i proizvod oznacava neaktivnim. Ocekivani iznos je tada bio 0 centi, pa
+  // je SVAKA pozitivna uplata prolazila kao `above_catalog` i dobivala pravo. create-checkout takav
+  // proizvod ne prodaje (resolveCheckout odbija neaktivan, `invalid_price` odbija iznos <= 0), pa
+  // uplata za njega nije nastala iz naseg cjenika. FAIL-CLOSED: neaktivan proizvod ili cijena koja
+  // ne daje pozitivan iznos u centima ne daje pravo nego ide na rucni pregled
+  // (`catalog_price_unusable`).
   const ocekivanoCenti = stripeAmountCents(Number(product.priceEur));
-  const iznos = chargedAmountVerdict(ev, ocekivanoCenti);
+  const cijenaUpotrebljiva = product.active && Number.isFinite(ocekivanoCenti) && ocekivanoCenti > 0;
+  const iznos: ChargedAmountVerdict | { kind: 'needs_manual_review'; reason: 'catalog_price_unusable'; detail: string } =
+    cijenaUpotrebljiva
+      ? chargedAmountVerdict(ev, ocekivanoCenti)
+      : {
+        kind: 'needs_manual_review',
+        reason: 'catalog_price_unusable',
+        detail: `catalog_price_unusable aktivan=${product.active} ocekivano=${Number.isFinite(ocekivanoCenti) ? ocekivanoCenti : 'nepoznato'} ` +
+          `naplaceno=${ev.totalCents === null ? 'nepoznato' : ev.totalCents} valuta=${ev.currency || 'nepoznata'}`,
+      };
+
+  // PONOVLJENA DOSTAVA VEC PROKNJIZENE UPLATE (nalaz pregleda 2026-09-27). Iznos se usporedjuje s
+  // cjenikom u trenutku OBRADE, ne kupnje. Stripe retry iste uplate nakon promjene cijene (ili nakon
+  // sto je proizvod povucen) zavrsio bi kao `needs_manual_review`, iako je pravo vec upisano, a
+  // obveze bonusa mozda cekaju oporavak kroz `duplicate_ignored` (audit P1-07). Zato se PRIJE
+  // odluke o rucnom pregledu provjeri postoji li vec zapis ISTE uplate: entitlement (rucna narudzba
+  // za premium_human) s istim PaymentIntentom i ISTIM korisnikom. Ako postoji, dogadjaj ide putem
+  // duplikata, gdje se i dalje cita oznaka povrata i zapisuju obveze bonusa. Zapis drugog korisnika
+  // nije ponavljanje nego sukob, pa uplata ispod kataloga i tada ide na rucni pregled. Citanje se
+  // radi samo kad bi odluka inace bila rucni pregled, pa put uobicajene kupnje ostaje isti.
+  let vecProknjizeno = false;
   if (iznos.kind === 'needs_manual_review') {
+    const { data: zapis, error: zapisErr } = await admin
+      .from(product.manualFulfillment ? 'manual_orders' : 'entitlements')
+      .select('id, user_id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId)
+      .maybeSingle();
+    if (zapisErr) {
+      console.error('webhook-mor replay_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(zapisErr) });
+      await settle('failed', `replay_lookup: ${dbErrorMessage(zapisErr)}`);
+      return json({ error: 'internal' }, 500);
+    }
+    const redak = typeof zapis === 'object' && zapis !== null && !Array.isArray(zapis) ? (zapis as Record<string, unknown>) : null;
+    vecProknjizeno = redak !== null && String(redak.user_id ?? '') === ev.userId;
+  }
+  if (iznos.kind === 'needs_manual_review' && !vecProknjizeno) {
     console.error('webhook-mor needs_manual_review', {
       reason: iznos.reason,
       orderId: ev.orderId,
@@ -709,14 +867,17 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
 
   // rucni fulfillment (premium_human): otvori manual_orders, bez entitlementa (6.3)
   if (product.manualFulfillment) {
-    const { error } = await admin
-      .from('manual_orders')
-      .insert({ user_id: ev.userId, product_id: product.id, order_id: ev.orderId, provider: PROVIDER });
-    const narudzbaVecPostoji = Boolean(error && (error as any).code === '23505');
+    // Ponovljena dostava vec otvorene narudzbe (vecProknjizeno, gore) ne pise nista novo.
+    const { error } = vecProknjizeno
+      ? { error: null }
+      : await admin
+        .from('manual_orders')
+        .insert({ user_id: ev.userId, product_id: product.id, order_id: ev.orderId, provider: PROVIDER });
+    const narudzbaVecPostoji = vecProknjizeno || dbErrorCode(error) === UNIQUE_VIOLATION;
     if (error && !narudzbaVecPostoji) {
       // Tekst greske baze ide SAMO u log i inbox, nikad u odgovor (odluka vlasnika 2026-09-27).
-      console.error('webhook-mor manual_order_insert_failed', { orderId: ev.orderId, error: error.message });
-      await settle('failed', `manual_order_insert: ${error.message}`);
+      console.error('webhook-mor manual_order_insert_failed', { orderId: ev.orderId, error: dbErrorMessage(error) });
+      await settle('failed', `manual_order_insert: ${dbErrorMessage(error)}`);
       return json({ error: 'insert_failed' }, 500);
     }
 
@@ -738,8 +899,8 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       .in('outcome_detail', REFUND_MARKERS)
       .limit(1);
     if (oznakaErr) {
-      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: oznakaErr.message });
-      await settle('failed', `refund_marker_lookup: ${oznakaErr.message}`);
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(oznakaErr) });
+      await settle('failed', `refund_marker_lookup: ${dbErrorMessage(oznakaErr)}`);
       return json({ error: 'refund_marker_lookup_failed' }, 500);
     }
     if (Array.isArray(oznakaPovrata) && oznakaPovrata.length > 0) {
@@ -789,61 +950,68 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     });
   }
 
-  // entitlement (6.4); idempotentno preko unique (provider, order_id)
-  const { error } = await admin
-    .from('entitlements')
-    .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
-  if (error && (error as any).code !== '23505') {
-    // Tekst greske baze ide SAMO u log i inbox, nikad u odgovor (odluka vlasnika 2026-09-27).
-    console.error('webhook-mor entitlement_insert_failed', {
-      orderId: ev.orderId,
-      code: (error as any).code ?? null,
-      error: error.message,
-    });
-    await settle('failed', `entitlement_insert: ${error.message}`);
-    return json({ error: 'insert_failed' }, 500);
-  }
-
-  // 23505 NIJE DOKAZ DA JE TO ISTA KUPNJA (odluka vlasnika 2026-09-27). unique(provider, order_id)
-  // kaze samo da za ovaj PaymentIntent redak VEC postoji, ne i ciji je. Dotad se svaki 23505 tumacio
-  // kao "vec obradjeno" i dogadjaj je nastavljao na bonuse i `duplicate_ignored`, iako pravo mozda
-  // pripada drugom korisniku (npr. rucno vezivanje na krivi racun ili podmetnuta metadata). Zato se
-  // postojeci redak cita i vlasnik usporedjuje PRIJE citanja oznake povrata i prije ikakvog bonusa.
-  // Nepodudaran vlasnik: `conflict_other_user`, ERROR redak, 200 bez novog prava i bez bonusa.
-  // Pad citanja je 500 (retry); redak koji nakon 23505 ne postoji ne dokazuje nista, pa je i to 500.
-  if (error) {
-    const { data: postojece, error: vlasnikErr } = await admin
+  // entitlement (6.4); idempotentno preko unique (provider, order_id). Ponovljena dostava vec
+  // proknjizene uplate (vecProknjizeno, gore) ne pokusava upis: redak istog korisnika vec postoji.
+  let vecPostoji = vecProknjizeno;
+  if (!vecPostoji) {
+    const { error } = await admin
       .from('entitlements')
-      .select('id, user_id')
-      .eq('provider', PROVIDER)
-      .eq('order_id', ev.orderId)
-      .maybeSingle();
-    if (vlasnikErr || !postojece) {
-      const razlog = vlasnikErr ? String(vlasnikErr.message) : 'redak_ne_postoji';
-      console.error('webhook-mor entitlement_owner_lookup_failed', { orderId: ev.orderId, error: razlog });
-      await settle('failed', `entitlement_owner_lookup: ${razlog}`);
-      return json({ error: 'internal' }, 500);
-    }
-    if (String(postojece.user_id ?? '') !== ev.userId) {
-      console.error('webhook-mor conflict_other_user', {
+      .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
+    if (error && dbErrorCode(error) !== UNIQUE_VIOLATION) {
+      // Tekst greske baze ide SAMO u log i inbox, nikad u odgovor (odluka vlasnika 2026-09-27).
+      console.error('webhook-mor entitlement_insert_failed', {
         orderId: ev.orderId,
-        productId: product.id,
-        eventUserId: ev.userId,
-        existingUserId: postojece.user_id ?? null,
-        existingEntitlementId: postojece.id ?? null,
+        code: dbErrorCode(error),
+        error: dbErrorMessage(error),
       });
-      await settle(
-        'conflict_other_user',
-        `entitlement=${String(postojece.id ?? '')} postojeci_korisnik=${String(postojece.user_id ?? '')} korisnik_dogadjaja=${ev.userId}`,
-      );
-      return json({ ok: true, action: 'conflict_other_user' }, 200);
+      await settle('failed', `entitlement_insert: ${dbErrorMessage(error)}`);
+      return json({ error: 'insert_failed' }, 500);
+    }
+
+    // 23505 NIJE DOKAZ DA JE TO ISTA KUPNJA (odluka vlasnika 2026-09-27). unique(provider, order_id)
+    // kaze samo da za ovaj PaymentIntent redak VEC postoji, ne i ciji je. Dotad se svaki 23505
+    // tumacio kao "vec obradjeno" i dogadjaj je nastavljao na bonuse i `duplicate_ignored`, iako
+    // pravo mozda pripada drugom korisniku (npr. rucno vezivanje na krivi racun ili podmetnuta
+    // metadata). Zato se postojeci redak cita i vlasnik usporedjuje PRIJE citanja oznake povrata i
+    // prije ikakvog bonusa. Nepodudaran vlasnik: `conflict_other_user`, ERROR redak, 200 bez novog
+    // prava i bez bonusa. Pad citanja je 500 (retry); redak koji nakon 23505 ne postoji ne dokazuje
+    // nista, pa je i to 500.
+    if (error) {
+      const { data: postojece, error: vlasnikErr } = await admin
+        .from('entitlements')
+        .select('id, user_id')
+        .eq('provider', PROVIDER)
+        .eq('order_id', ev.orderId)
+        .maybeSingle();
+      if (vlasnikErr || !postojece) {
+        const razlog = vlasnikErr ? dbErrorMessage(vlasnikErr) : 'redak_ne_postoji';
+        console.error('webhook-mor entitlement_owner_lookup_failed', { orderId: ev.orderId, error: razlog });
+        await settle('failed', `entitlement_owner_lookup: ${razlog}`);
+        return json({ error: 'internal' }, 500);
+      }
+      if (String(postojece.user_id ?? '') !== ev.userId) {
+        console.error('webhook-mor conflict_other_user', {
+          orderId: ev.orderId,
+          productId: product.id,
+          eventUserId: ev.userId,
+          existingUserId: postojece.user_id ?? null,
+          existingEntitlementId: postojece.id ?? null,
+        });
+        await settle(
+          'conflict_other_user',
+          `entitlement=${String(postojece.id ?? '')} postojeci_korisnik=${String(postojece.user_id ?? '')} korisnik_dogadjaja=${ev.userId}`,
+        );
+        return json({ ok: true, action: 'conflict_other_user' }, 200);
+      }
+      vecPostoji = true;
     }
   }
 
   // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM (Codex pregled kruga 3). Pravo je upisano (ili je
   // vec postojalo), pa se TEK SADA cita oznaka punog povrata istog PaymentIntenta. Povrat radi
   // zrcalno (oznaka pa citanje prava), pa barem jedna strana vidi drugu. Ako je oznaka tu, pravo
-  // se gasi i ne izdaje se nijedan bonus. Greska citanja je 500: retry prolazi kroz 23505 i
+  // se gasi i ne izdaje se nijedan bonus; ono sto je izdao raniji pokusaj iste uplate (pass kupon,
+  // nagrade) zatvara closePaymentAfterRefund. Greska citanja je 500: retry prolazi kroz 23505 i
   // ponovno dolazi ovamo, a bonusi se ne izdaju naslijepo za mozda vraceni novac.
   {
     const { data: marker, error: markerErr } = await admin
@@ -854,19 +1022,15 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       .in('outcome_detail', REFUND_MARKERS)
       .limit(1);
     if (markerErr) {
-      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: markerErr.message });
-      await settle('failed', `refund_marker_lookup: ${markerErr.message}`);
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(markerErr) });
+      await settle('failed', `refund_marker_lookup: ${dbErrorMessage(markerErr)}`);
       return json({ error: 'refund_marker_lookup_failed' }, 500);
     }
     if (Array.isArray(marker) && marker.length > 0) {
-      const { error: voidErr } = await admin
-        .from('entitlements')
-        .update({ status: 'refunded' })
-        .eq('provider', PROVIDER)
-        .eq('order_id', ev.orderId)
-        .eq('product_id', product.id);
-      if (voidErr) {
-        await settle('failed', `refunded_before_payment: ${voidErr.message}`);
+      const zatvoreno = await closePaymentAfterRefund(admin, ev, product.id, deps.now?.() ?? Date.now());
+      if (!zatvoreno.ok) {
+        console.error('webhook-mor refund_consequences_failed', { orderId: ev.orderId, step: zatvoreno.step, error: zatvoreno.error });
+        await settle('failed', `refunded_before_payment: ${zatvoreno.step}: ${zatvoreno.error}`);
         return json({ error: 'refund_failed' }, 500);
       }
       console.error('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id });
@@ -875,7 +1039,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     }
   }
 
-  if (error && (error as any).code === '23505') {
+  if (vecPostoji) {
     // TOCKA OPORAVKA (audit P1-07). Dosad je ovaj put izlazio PRIJE bonusa, pa je obveza koja je
     // pri prvom pokusaju pala ostajala izgubljena zauvijek. Sada retry jos jednom osigura da
     // obveze postoje; radnik ih preuzme i izvrsi.
@@ -929,6 +1093,40 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     } catch (e) {
       // Redak ostaje `pending`: radnik ga ponovi.
       console.error('webhook-mor attribute_referral_failed', { orderId: ev.orderId, error: String(e) });
+    }
+  }
+
+  // PROZOR ISTODOBNOG POVRATA ZA BONUSE (nalaz pregleda 2026-09-27). Oznaka povrata je gore
+  // procitana PRIJE bonusa. Puni povrat koji stigne izmedju tog citanja i upisa kupona (ili nagrade
+  // preporucitelju) upise oznaku, ugasi pravo i procita coupon_grants i referral_signups dok su
+  // jos prazni, pa kupon i nagrada nastanu tek nakon njegova citanja i ostanu aktivni za vracen
+  // novac. Isti dogovor pisi-pa-citaj kao za entitlement i manual_orders: bonusi su upisani, pa se
+  // oznaka cita PONOVNO. Ako je tu, opoziva se sve sto je ova uplata izdala (closePaymentAfterRefund,
+  // idempotentno). Greska citanja je 500: retry prolazi kroz 23505 i citanje prije bonusa, koje
+  // tada isto zatvara sve izdano.
+  {
+    const { data: kasniPovrat, error: kasniErr } = await admin
+      .from('webhook_events')
+      .select('id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId)
+      .in('outcome_detail', REFUND_MARKERS)
+      .limit(1);
+    if (kasniErr) {
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(kasniErr) });
+      await settle('failed', `refund_marker_recheck: ${dbErrorMessage(kasniErr)}`);
+      return json({ error: 'refund_marker_lookup_failed' }, 500);
+    }
+    if (dbRows(kasniPovrat).length > 0) {
+      const zatvoreno = await closePaymentAfterRefund(admin, ev, product.id, deps.now?.() ?? Date.now());
+      if (!zatvoreno.ok) {
+        console.error('webhook-mor refund_consequences_failed', { orderId: ev.orderId, step: zatvoreno.step, error: zatvoreno.error });
+        await settle('failed', `refunded_during_payment: ${zatvoreno.step}: ${zatvoreno.error}`);
+        return json({ error: 'refund_failed' }, 500);
+      }
+      console.error('webhook-mor refunded_during_payment', { orderId: ev.orderId, productId: product.id });
+      await settle('processed', 'refunded_during_payment');
+      return json({ ok: true, action: 'refunded_during_payment' }, 200);
     }
   }
 

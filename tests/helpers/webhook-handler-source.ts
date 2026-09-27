@@ -85,6 +85,7 @@ export function webhookHandlerProblems(src: string): string[] {
     problems.push('refund grana ide prije klasifikacije');
   }
   problems.push(...ownerDecisionProblems(src));
+  problems.push(...refundWindowProblems(src));
   problems.push(...responseLeakProblems(src, 'webhook-mor'));
   return problems;
 }
@@ -187,6 +188,86 @@ function ownerDecisionProblems(raw: string): string[] {
     if ((markerRead >= 0 && !(conflict < markerRead)) || !(conflict < duplicate)) {
       problems.push('provjera vlasnika ide nakon citanja oznake povrata ili nakon bonusa za duplikat');
     }
+  }
+  return problems;
+}
+
+/**
+ * Nalazi pregleda nakon spajanja design/naplata-4 u design/pack3 (2026-09-27), kao staticke tvrdnje
+ * nad izvorom. Izvrseni handler ih mjeri u tests/webhook-mor-handler.test.ts; ovo je jeftin sloj
+ * za mutacije u tests/gate-mutations.test.ts.
+ *  a. neupotrebljiva kataloska cijena (null, 0, neaktivan proizvod) ne daje pravo:
+ *     `catalog_price_unusable`, odluka o iznosu tek uz upotrebljivu cijenu;
+ *  b. ponovljena dostava vec proknjizene uplate istog korisnika ne ide na rucni pregled;
+ *  c. nakon upisa bonusa oznaka povrata se cita PONOVNO i izdano se opoziva;
+ *  d. refund grana gasi pravo PRIJE sporednih posljedica, a pad posljedica ostavlja oznaku punog
+ *     povrata (clan REFUND_MARKERS);
+ *  h. closeRefundConsequences i citanje koda greske bez `any`.
+ */
+export function refundWindowProblems(raw: string): string[] {
+  const src = raw.replace(/\r\n/g, '\n');
+  const problems: string[] = [];
+  const at = (needle: string, from = 0): number => src.indexOf(needle, from);
+
+  // a. kataloska cijena
+  const usable = /const cijenaUpotrebljiva = ([^;]*);/.exec(src)?.[1] ?? '';
+  if (!/\bproduct\.active\b/.test(usable) || !/ocekivanoCenti > 0\b/.test(usable)) {
+    problems.push('neupotrebljiva kataloska cijena (null, 0 ili neaktivan proizvod) ne ide na rucni pregled (catalog_price_unusable)');
+  } else if (!/cijenaUpotrebljiva\s*\?\s*chargedAmountVerdict\(ev, ocekivanoCenti\)/.test(src)
+    || !src.includes("reason: 'catalog_price_unusable'")) {
+    problems.push('odluka o iznosu ne ovisi o upotrebljivoj cijeni (catalog_price_unusable)');
+  }
+
+  // b. ponovljena dostava
+  if (!/if \(iznos\.kind === 'needs_manual_review' && !vecProknjizeno\)/.test(src)) {
+    problems.push('ponovljena dostava vec proknjizene uplate zavrsi na rucnom pregledu (izlaz ne gleda vecProknjizeno)');
+  }
+  if (!/vecProknjizeno = redak !== null && String\(redak\.user_id \?\? ''\) === ev\.userId;/.test(src)) {
+    problems.push('ponovljena dostava ne usporedjuje korisnika postojeceg zapisa (tudji zapis bi preskocio rucni pregled)');
+  }
+
+  // c. drugo citanje oznake nakon bonusa
+  const insert = at('buildEntitlementInsert(');
+  const grant = insert >= 0 ? at('tryGrantReferrerReward)(admin', insert) : -1;
+  const kupon = insert >= 0 ? at("from('coupon_grants').upsert(", insert) : -1;
+  const recheck = kupon >= 0 ? at(".in('outcome_detail', REFUND_MARKERS)", kupon) : -1;
+  const opoziv = recheck >= 0 ? at('await closePaymentAfterRefund(admin, ev, product.id', recheck) : -1;
+  const kraj = at("iznos.kind === 'above_catalog' ? `entitlement_created");
+  if (grant < 0 || kupon < 0 || recheck < 0 || opoziv < 0 || kraj < 0 || !(grant < recheck && opoziv < kraj)) {
+    problems.push('nakon upisa kupona i nagrade preporucitelju oznaka povrata se ne cita ponovno (povrat u prozoru ostavlja aktivan kupon)');
+  }
+  const helperStart = at('async function closePaymentAfterRefund(');
+  const helperEnd = helperStart >= 0 ? at('\n}\n', helperStart) : -1;
+  const helper = helperStart >= 0 && helperEnd > helperStart ? src.slice(helperStart, helperEnd) : '';
+  if (!/await pullReferralSignupReward\(admin, ev\.orderId\);/.test(helper)
+    || !/await closeRefundConsequences\(admin, ev\.orderId/.test(helper)) {
+    problems.push('closePaymentAfterRefund ne opoziva nagradu preporucitelju ili pass kupon');
+  }
+
+  // d. pravo prije sporednih posljedica
+  const refundBranch = at("decision.kind === 'refund'");
+  const refundEnd = refundBranch >= 0 ? at("from('products')", refundBranch) : -1;
+  const branch = refundBranch >= 0 && refundEnd > refundBranch ? src.slice(refundBranch, refundEnd) : '';
+  const ugasi = branch.search(/from\('entitlements'\)\s*\.update\(\{ status: 'refunded' \}\)/);
+  const posljedice = branch.indexOf('await closeRefundConsequences(admin, ev.orderId');
+  if (ugasi < 0 || posljedice < 0 || !(ugasi < posljedice)) {
+    problems.push('refund grana zatvara sporedne posljedice prije gasenja prava (pad manual_orders ili coupon_grants ostavlja aktivno pravo)');
+  }
+  const markers = /const REFUND_MARKERS\s*=\s*\[([^\]]*)\]/.exec(src)?.[1] ?? '';
+  const padPosljedica = posljedice >= 0 ? /settle\('failed', '([a-z_]+)'\)/.exec(branch.slice(posljedice))?.[1] ?? '' : '';
+  if (!padPosljedica || !markers.includes(`'${padPosljedica}'`)) {
+    problems.push('pad sporednih posljedica povrata ne ostavlja oznaku punog povrata iz REFUND_MARKERS (uplata u medjuvremenu ne bi vidjela povrat)');
+  }
+
+  // h. bez any
+  const fnStart = at('async function closeRefundConsequences(');
+  const fnEnd = fnStart >= 0 ? at('\n}\n', fnStart) : -1;
+  const fnBody = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+  if (!fnBody || /\bany\b/.test(fnBody)) {
+    problems.push('closeRefundConsequences koristi any (retci i klijent nisu tipizirani)');
+  }
+  if (/as any\)\.code/.test(src)) {
+    problems.push('kod greske baze se cita kroz (x as any).code umjesto tipiziranog dbErrorCode');
   }
   return problems;
 }

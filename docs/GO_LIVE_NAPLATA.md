@@ -227,14 +227,14 @@ traži izravnim upitom po stupcu `outcome` (kao service role):
 | `ignored` uz `outcome_detail` koji počinje s `povrat_bez_charge_refunded:` | stigao je događaj koji **nosi vraćen novac**, a ne zove se `charge.refunded` | provjeri u Stripe sučelju o kojoj se uplati radi i povrat obradi ručno; handler namjerno **ne** piše po tom događaju. Ako ovo stiže redovito, provjeri pretplatu (korak 4.4) |
 | `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | pretplaćen je događaj koji nam ne treba i ne nosi novac (ime događaja je iza dvotočke) | makni ga iz pretplate (korak 4.4) |
 | `needs_manual_link` uz `outcome_detail` `missing_user_metadata` | `payment_intent.succeeded` s **potvrđenom naplatom** (`status` `succeeded`, `amount_received` > 0), ali bez `metadata[user_id]`: novac je naplaćen, a pravo nema kome pripasti (ručni Payment Link za Lektin proizvod ili izgubljena metadata) | veži ručno (postupak niže), isti dan; ERROR redak `webhook-mor needs_manual_link` je signal |
-| `needs_manual_review` uz `outcome_detail` koji počinje s `amount_below_catalog` ili `currency_not_eur` | potvrđena naplata čiji iznos je **manji od kataloške cijene** (`round(products.price_eur * 100)`), ili je naplaćena u valuti koja nije EUR. Po odluci vlasnika (2026-09-27) takva uplata **ne daje pravo**: nema entitlementa ni ručne narudžbe. `outcome_detail` nosi oba iznosa i valutu (`ocekivano=`, `naplaceno=`, `valuta=`) | isti dan, uz ERROR redak `webhook-mor needs_manual_review`. Prvo provjeri povrat (upit niže, „Prije ručnog vezivanja"): ako je PaymentIntent već vraćen, samo zatvori trag. Inače odluči: **povrat** u Stripe sučelju (puni povrat, pa `charge.refunded` zatvori ostatak), ili, ako je niži iznos opravdan (npr. dogovoren popust), **ručno vezivanje** (postupak niže) |
+| `needs_manual_review` uz `outcome_detail` koji počinje s `amount_below_catalog`, `currency_not_eur` ili `catalog_price_unusable` | potvrđena naplata čiji iznos je **manji od kataloške cijene** (`round(products.price_eur * 100)`), ili je naplaćena u valuti koja nije EUR, ili proizvod **nema upotrebljivu katalošku cijenu** (`catalog_price_unusable`: cijena null, 0 ili se zaokruži na 0 centi, ili je proizvod neaktivan; `aktivan=` u detalju). Po odluci vlasnika (2026-09-27) takva uplata **ne daje pravo**: nema entitlementa ni ručne narudžbe. `outcome_detail` nosi oba iznosa i valutu (`ocekivano=`, `naplaceno=`, `valuta=`). Ponovljena dostava već proknjižene uplate istog korisnika ovamo ne dolazi: webhook je knjiži kao duplikat i ponovno osigura obveze bonusa | isti dan, uz ERROR redak `webhook-mor needs_manual_review`. Prvo koraci 4 i 5 postupka ručnog vezivanja niže (postojeće pravo ili narudžba, pa povrat): ako zapis već postoji ili je PaymentIntent već vraćen, samo zatvori trag. Inače odluči: **povrat** u Stripe sučelju (puni povrat, pa `charge.refunded` zatvori ostatak), ili, ako je niži iznos opravdan (npr. dogovoren popust), **ručno vezivanje** (postupak niže). Za proizvod s ručnom obradom (`premium_human`, `work_type` null) vezivanje otvara **ručnu narudžbu** (`manual_orders`), ne entitlement (korak 6) |
 | `conflict_other_user` | `payment_intent.succeeded` čiji insert entitlementa je pao na `unique (provider, order_id)` (23505), a postojeći redak pripada **drugom** korisniku nego `metadata[user_id]` događaja. Pravo se ne dodjeljuje i nijedan bonus se ne izdaje; `outcome_detail` nosi oba korisnika i id postojećeg retka | isti dan, uz ERROR redak `webhook-mor conflict_other_user`. Provjeri tko je stvarno platio (Stripe sučelje, `receipt_email`) i kako je postojeći redak nastao (npr. ručno vezivanje na krivi račun). Ispravi vlasnika postojećeg retka ili napravi povrat; ne upisuj drugi redak za isti `order_id` |
 | `ignored` uz `outcome_detail` `missing_payment_intent` | naplata ili povrat bez PaymentIntenta (naslijeđena izravna naplata iz dashboarda) | provjeri u Stripe sučelju; ako je to ipak kupnja Lektinog proizvoda, veži je ručno |
 | `ignored` uz `outcome_detail` koji počinje s `foreign_product:` | proizvod koji Lekta ne prodaje (npr. Katedra pass na istom računu) | ništa; Katedra ga knjiži sama |
 | `refused` | testni način rada ili događaj povezanog računa (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE`; kod `account_mismatch` provjeri da endpoint sluša vlastiti račun, ne povezane račune (korak 4.4) |
 | `unknown_product` | `metadata[product_id]` nije u `products` | popravi katalog pa replayaj |
-| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `entitlement_owner_lookup`, `refund_pending`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni. Tekst greške baze je SAMO ovdje i u logu; odgovor Stripeu nosi generički kod | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
-| `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak). Puni povrat (`refunded`) uz entitlement otkazuje i ručnu narudžbu istog PaymentIntenta (`manual_orders.status = 'refunded'`) i povlači pass kupon iz iste kupnje (`coupon_grants.expires_at` postaje trenutak povrata); djelomični povrat (`partial_refund_noted`) ne dira ništa od toga. Redoslijed nije bitan: uplata koja stigne nakon punog povrata (Stripe ne jamči redoslijed, a prvi pokušaj uplate može čekati retry) upiše pa odmah zatvori i entitlement i ručnu narudžbu (`refunded_before_payment`) | ništa |
+| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `entitlement_owner_lookup`, `replay_lookup`, `refund_marker_lookup`, `refund_marker_recheck`, `refund_pending`, `refund_consequences_failed`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni do kraja. `refund_consequences_failed` znači da je pravo VEĆ ugašeno, a otkazivanje ručne narudžbe ili povlačenje kupona čeka Stripeov retry; i ta oznaka vrijedi kao puni povrat (`REFUND_MARKERS`). Tekst greške baze je SAMO ovdje i u logu; odgovor Stripeu nosi generički kod | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
+| `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak). Puni povrat (`refunded`) uz entitlement otkazuje i ručnu narudžbu istog PaymentIntenta (`manual_orders.status = 'refunded'`) i povlači pass kupon iz iste kupnje (`coupon_grants.expires_at` postaje trenutak povrata); djelomični povrat (`partial_refund_noted`) ne dira ništa od toga. Redoslijed nije bitan: uplata koja stigne nakon punog povrata (Stripe ne jamči redoslijed, a prvi pokušaj uplate može čekati retry) upiše pa odmah zatvori i entitlement i ručnu narudžbu (`refunded_before_payment`). Puni povrat koji stigne DOK uplata izdaje bonuse zatvara `refunded_during_payment`: uplata nakon upisa kupona i nagrade preporučitelju ponovo čita oznaku povrata i opoziva izdano | ništa |
 
 ```sql
 -- Neriješeni događaji koje indeks NE pokriva (pokreni barem jednom dnevno u tjednu lansiranja).
@@ -258,16 +258,15 @@ where w.outcome in ('needs_manual_link', 'needs_manual_review', 'conflict_other_
     from webhook_events as r
     where r.provider = w.provider
       and r.order_id = w.order_id
-      and r.outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded')
+      and r.outcome_detail in ('refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded')
   )
 order by w.received_at asc;
 ```
 
-**Prije ručnog vezivanja provjeri povrat.** Uplata je mogla biti vraćena dok je čekala: u Stripe
-sučelju otvori PaymentIntent i pogledaj ima li povrat, a u bazi pokreni
-`select id, received_at, outcome, outcome_detail from webhook_events where order_id = '<order_id>' and outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded')`.
-Ako upit vrati redak ili Stripe pokazuje puni povrat, **ne veži** nego samo zatvori trag (korak 6
-niže, s `outcome_detail = 'vraceno_prije_vezivanja'`). Ista provjera je obavezni korak 4 postupka niže.
+**Prije ručnog vezivanja provjeri postojeći zapis i povrat.** Za isti `order_id` možda već postoji
+pravo ili ručna narudžba (ranije vezivanje, ponovljena dostava), a uplata je mogla biti vraćena dok
+je čekala. Obje provjere su obavezni koraci 4 i 5 postupka niže i idu PRIJE svakog upisa; ako
+korak 4 nađe zapis ili korak 5 nađe povrat, **ne veži** nego samo zatvori trag (korak 8).
 
 **Ručno vezivanje** (uplata koja je stvarno naplaćena Lektin proizvod, a nije dobila pravo pristupa,
 prije svega ishodi `needs_manual_link` i, nakon odluke da se niži iznos prihvaća,
@@ -276,11 +275,32 @@ prije svega ishodi `needs_manual_link` i, nakon odluke da se niži iznos prihva�
 1. Iz `raw_payload` pročitaj PaymentIntent id (`data.object.id`, to je `order_id`), e-mail kupca
    (`data.object.receipt_email`) i, ako postoji, `data.object.metadata.product_id`.
 2. Nađi ili otvori Supabase korisnika za taj e-mail i zabilježi njegov `user_id`.
-3. Nađi proizvod: `select id as product_id, work_type, slots_total, purchase_window_days from products
-   where id = '<product_id>'`. Taj `id` je `products.id`, isti `product_id` koji čita
-   `generate-report` (spaja se na `products(slot_window_days)` preko view-a iz migracije 0008), pa
-   mora ući u entitlement, ne ostati samo u ovom koraku.
-4. **Obavezno prije upisa: provjeri je li isti PaymentIntent već vraćen.** Povrat (`charge.refunded`)
+3. Nađi proizvod: `select id as product_id, work_type, slots_total, purchase_window_days,
+   manual_fulfillment from products where id = '<product_id>'`. Taj `id` je `products.id`, isti
+   `product_id` koji čita `generate-report` (spaja se na `products(slot_window_days)` preko view-a iz
+   migracije 0008), pa mora ući u zapis, ne ostati samo u ovom koraku. Stupac `manual_fulfillment`
+   odlučuje o koraku 6: proizvod s ručnom obradom (`manual_fulfillment = true`, npr. `premium_human`,
+   `work_type` je null) **nema entitlement** nego ručnu narudžbu, isto kao kad ga knjiži webhook.
+4. **Obavezno prvo: postoji li već pravo ili narudžba za taj `order_id`.** Obje tablice imaju
+   `unique (provider, order_id)`, a webhook ponovljenu dostavu već proknjižene uplate istog korisnika
+   ne šalje na ručni pregled nego je knjiži kao duplikat (`entitlement_duplicate`,
+   `manual_order_duplicate`). Redak ovdje zato znači raniji upis (ručno vezivanje ili prva dostava).
+
+   ```sql
+   select 'entitlement' as vrsta, id, user_id, status
+   from entitlements
+   where provider = 'stripe' and order_id = '<order_id>'
+   union all
+   select 'manual_order' as vrsta, id, user_id, status
+   from manual_orders
+   where provider = 'stripe' and order_id = '<order_id>';
+   ```
+
+   Redak s istim `user_id` znači da je uplata već proknjižena: **ništa ne upisuj**, preskoči korake
+   5 do 7 i u koraku 8 zatvori trag s `outcome_detail = 'vec_proknjizeno'`. Redak s drugim
+   `user_id` je sukob vlasnika: ne upisuj drugi redak nego postupi kao za `conflict_other_user`
+   (tablica iznad). Samo prazan rezultat vodi dalje.
+5. **Obavezno prije upisa: provjeri je li isti PaymentIntent već vraćen.** Povrat (`charge.refunded`)
    u `webhook_events` nosi isti `order_id` kao uplata (PaymentIntent), a handler oznaku punog
    povrata piše u `outcome_detail` (`REFUND_MARKERS` u `supabase/functions/webhook-mor/handler.ts`).
    Uplata bez korisnika nema pravo koje bi povrat ugasio, pa povrat završi kao
@@ -291,42 +311,68 @@ prije svega ishodi `needs_manual_link` i, nakon odluke da se niži iznos prihva�
    from webhook_events
    where provider = 'stripe'
      and order_id = '<order_id>'
-     and outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded');
+     and outcome_detail in ('refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded');
    ```
 
-   Vrati li upit ijedan redak, novac je vraćen ili se povrat još obrađuje (`refund_pending`):
-   **ne upisuj pravo**, preskoči korak 5 i u koraku 6 zatvori trag s
-   `outcome_detail = 'vraceno_prije_vezivanja'`. Djelomični povrat (`partial_refund_noted`) nije
-   oznaka punog povrata i ne priječi vezivanje. Upit vidi samo povrate koje je webhook već zabilježio:
-   prije upisa zato i u Stripe sučelju otvori taj PaymentIntent i potvrdi da nema povrata (povrat
-   čiji `charge.refunded` kasni, ili redak `ignored` s `povrat_bez_charge_refunded:`, upit ne vidi).
-   Isti upit ponovi odmah nakon koraka 5: povrat koji stigne između provjere i upisa možda ne vidi
-   ručno upisano pravo; vrati li upit tada redak, ugasi pravo ručno
-   (`update entitlements set status = 'refunded' where provider = 'stripe' and order_id = '<order_id>'`).
-5. Upiši redak s `product_id` iz koraka 3 i rokom izračunatim iz `purchase_window_days` istog retka:
+   Vrati li upit ijedan redak, novac je vraćen ili se povrat još obrađuje (`refund_pending`,
+   `refund_consequences_failed`): **ne upisuj ništa**, preskoči korake 6 i 7 i u koraku 8 zatvori
+   trag s `outcome_detail = 'vraceno_prije_vezivanja'`. Djelomični povrat (`partial_refund_noted`)
+   nije oznaka punog povrata i ne priječi vezivanje. Upit vidi samo povrate koje je webhook već
+   zabilježio: prije upisa zato i u Stripe sučelju otvori taj PaymentIntent i potvrdi da nema
+   povrata (povrat čiji `charge.refunded` kasni, ili redak `ignored` s `povrat_bez_charge_refunded:`,
+   upit ne vidi).
+6. Upiši zapis prema vrsti proizvoda iz koraka 3.
+
+   Proizvod s `work_type` (`manual_fulfillment = false`): entitlement s `product_id` iz koraka 3 i
+   rokom izračunatim iz `purchase_window_days` istog retka.
 
    ```sql
    insert into entitlements (user_id, work_type, slots_total, product_id, order_id, provider, purchase_expires_at)
    select '<user_id>', p.work_type, p.slots_total, p.id, '<order_id>', 'stripe',
           now() + (p.purchase_window_days * interval '1 day')
    from products p
-   where p.id = '<product_id>'
+   where p.id = '<product_id>' and not p.manual_fulfillment
    on conflict (provider, order_id) do nothing;
    ```
 
    `unique (provider, order_id)` u migraciji 0001 je pravi unique constraint (ne samo indeks), pa
    `on conflict` cilja izravno na njega i drugi pokušaj za isti `order_id` ne udvostručuje redak.
    Stupci ovdje su isti koje pri kupnji piše `buildEntitlementInsert` u `src/report/webhook.ts`.
-6. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
-   where id = '<id>'`, pa taj redak više ne ispada u upitu iznad.
+
+   Proizvod s ručnom obradom (`manual_fulfillment = true`, npr. `premium_human`): **ne upisuj u
+   `entitlements`** (pravo bez `work_type` ne otključava ništa, a webhook takav proizvod nikad ne
+   knjiži kao pravo). Otvori ručnu narudžbu, isto kao grana `manual_orders` u handleru; `status`
+   ostaje zadani `pending`, pa narudžba ulazi u red za ljudsku obradu.
+
+   ```sql
+   insert into manual_orders (user_id, product_id, order_id, provider)
+   select '<user_id>', p.id, '<order_id>', 'stripe'
+   from products p
+   where p.id = '<product_id>' and p.manual_fulfillment
+   on conflict (provider, order_id) do nothing;
+   ```
+
+   Uvjet `manual_fulfillment` u oba upisa sprječava krivu tablicu: upis za pogrešnu vrstu proizvoda
+   ne upiše nijedan redak.
+7. Ponovi upit iz koraka 5 odmah nakon koraka 6: povrat koji stigne između provjere i upisa možda
+   ne vidi ručno upisan zapis. Vrati li upit tada redak, ugasi upisano ručno:
+   `update entitlements set status = 'refunded' where provider = 'stripe' and order_id = '<order_id>'`
+   ili, za ručnu narudžbu,
+   `update manual_orders set status = 'refunded' where provider = 'stripe' and order_id = '<order_id>'`.
+8. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
+   where id = '<id>'` (ili s `vec_proknjizeno` odnosno `vraceno_prije_vezivanja`, ovisno o koraku 4
+   ili 5), pa taj redak više ne ispada u upitu iznad.
 
 U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor ignored_needs_attention`
 (ERROR, tiče se novca: uplata bez potvrđene naplate ili povrat pod imenom koje nije
 `charge.refunded`), `webhook-mor needs_manual_link` (ERROR, potvrđena naplata bez korisnika),
-`webhook-mor needs_manual_review` (ERROR, naplaćeno manje od kataloške cijene ili u valuti koja
-nije EUR), `webhook-mor conflict_other_user` (ERROR, pravo za isti PaymentIntent već pripada
-drugom korisniku), `webhook-mor refund_consequences_failed` (ERROR, puni povrat nije uspio
-otkazati ručnu narudžbu ili povući kupon; Stripe ponavlja),
+`webhook-mor needs_manual_review` (ERROR, naplaćeno manje od kataloške cijene, u valuti koja
+nije EUR ili za proizvod bez upotrebljive kataloške cijene), `webhook-mor conflict_other_user`
+(ERROR, pravo za isti PaymentIntent već pripada drugom korisniku),
+`webhook-mor refund_consequences_failed` (ERROR, pravo je već ugašeno, ali puni povrat nije uspio
+otkazati ručnu narudžbu ili povući kupon; Stripe ponavlja), `webhook-mor refunded_during_payment`
+(ERROR, puni povrat stigao dok je uplata izdavala bonuse; kupon i nagrade su opozvani),
+`webhook-mor replay_lookup_failed` (ERROR, provjera ponovljene dostave nije uspjela; Stripe ponavlja),
 `webhook-mor ignored_foreign_event` (WARN, pretplaćen događaj koji ne nosi novac),
 `webhook-mor event_refused` (ERROR, testni način ili tuđi račun) i
 `webhook-mor foreign_event_ignored` (WARN, povrat bez PaymentIntenta ili tuđi proizvod).

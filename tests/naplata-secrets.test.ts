@@ -51,6 +51,7 @@ import {
   preflightSourceProblems,
   preflightExecutionProblems,
   PREFLIGHT_SLUCAJEVI,
+  PROJECT_REF,
   naplataDeployPathProblems,
   readTextLf,
   normalizeLf,
@@ -405,8 +406,21 @@ describe('preflight naplate: izvrsena skripta rusi proces na svakoj grani', () =
     // Svaka grana koja rusi proces ima vlastiti slucaj; dva cista slucaja stite od vakuuma.
     expect(forbiddenSecretsVerdict(redci('provjera-zabranjena-tajna')).present).toEqual(['STRIPE_ACCOUNT_ID']);
     expect(testModeVerdict(redci('provjera-testni-ukljucen'))).toBe(true);
-    expect(PREFLIGHT_SLUCAJEVI.filter((s) => s.pada)).toHaveLength(8);
-    expect(PREFLIGHT_SLUCAJEVI.filter((s) => !s.pada).map((s) => s.id)).toEqual(['zadano-cisto', 'env-cisto']);
+    // Oblik iz runbooka (`-- --project-ref <ref>`): isti popisi kao zadani put, uz ref u argumentima.
+    for (const id of ['ref-cisto', 'ref-zabranjena-tajna', 'ref-testni-ukljucen']) {
+      const args = byId.get(id)?.args ?? [];
+      expect(args.slice(args.indexOf('--project-ref'), args.indexOf('--project-ref') + 2), id).toEqual(['--project-ref', PROJECT_REF]);
+      expect(args, id).toContain('--deploy');
+    }
+    expect(supabaseSecretsVerdict(redci('ref-cisto')).ok).toBe(true);
+    expect(forbiddenSecretsVerdict(redci('ref-cisto')).ok).toBe(true);
+    expect(testModeVerdict(redci('ref-cisto'))).toBe(false);
+    expect(forbiddenSecretsVerdict(redci('ref-zabranjena-tajna')).present).toEqual(['STRIPE_ACCOUNT_ID']);
+    expect(supabaseSecretsVerdict(redci('ref-zabranjena-tajna')).ok).toBe(true);
+    expect(testModeVerdict(redci('ref-testni-ukljucen'))).toBe(true);
+    expect(forbiddenSecretsVerdict(redci('ref-testni-ukljucen')).ok).toBe(true);
+    expect(PREFLIGHT_SLUCAJEVI.filter((s) => s.pada)).toHaveLength(10);
+    expect(PREFLIGHT_SLUCAJEVI.filter((s) => !s.pada).map((s) => s.id)).toEqual(['zadano-cisto', 'env-cisto', 'ref-cisto']);
   });
 
   it('BASELINE: stvarna skripta prolazi sve slucajeve (cisto zeleno, svaka grana pada imenovano, bez deploya)', () => {
@@ -422,6 +436,39 @@ describe('preflight naplate: izvrsena skripta rusi proces na svakoj grani', () =
     const problems = preflightExecutionProblems(mutated, ['env-zabranjena-tajna', 'env-cisto']);
     expect(problems.join('; ')).toContain('[env-zabranjena-tajna] preflight NIJE srusio proces');
     expect(problems.some((p) => p.startsWith('[env-cisto]'))).toBe(false);
+  }, 60_000);
+
+  it('gard grize: --project-ref koji se ne prosljedjuje CLI-ju se prijavi (mjeri se tudji, povezan projekt)', () => {
+    const src = source('scripts/verify-naplata-secrets.mjs');
+    const mutated = src.replace(
+      "return i >= 0 && argv[i + 1] ? ['--project-ref', argv[i + 1]] : [];",
+      'return [];',
+    );
+    expect(mutated).not.toBe(src);
+    const problems = preflightExecutionProblems(mutated, ['ref-cisto', 'ref-zabranjena-tajna', 'zadano-cisto']);
+    expect(problems.join('; ')).toContain(`[ref-cisto] lazni CLI nije pitan \`secrets list --project-ref ${PROJECT_REF}\``);
+    expect(problems.some((p) => p.startsWith('[ref-zabranjena-tajna]'))).toBe(true);
+    expect(problems.some((p) => p.startsWith('[zadano-cisto]'))).toBe(false);
+  }, 60_000);
+
+  it('gard grize: zabranjena tajna i testni nacin propusteni samo uz --project-ref se prijave', () => {
+    const src = source('scripts/verify-naplata-secrets.mjs');
+    const drugi = src.indexOf('if (!zabranjene.ok) {', src.indexOf('if (!zabranjene.ok) {') + 1);
+    expect(drugi).toBeGreaterThan(0);
+    const mutated = (src.slice(0, drugi) + 'if (!zabranjene.ok && projectRef.length === 0) {'
+      + src.slice(drugi + 'if (!zabranjene.ok) {'.length))
+      .replace(
+        "testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')",
+        "testModeVerdict(read.rows) && projectRef.length === 0 && !argv.includes('--dopusti-testni-nacin')",
+      );
+    expect(mutated).not.toContain("testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')");
+    const problems = preflightExecutionProblems(mutated, [
+      'ref-zabranjena-tajna', 'ref-testni-ukljucen', 'zadano-zabranjena-tajna', 'zadano-testni-ukljucen', 'ref-cisto',
+    ]);
+    expect(problems.join('; ')).toContain('[ref-zabranjena-tajna] preflight NIJE srusio proces');
+    expect(problems.join('; ')).toContain('[ref-testni-ukljucen] preflight NIJE srusio proces');
+    // Bez zastavice iste grane i dalje grizu, a cisti slucaj s refom prolazi: mutacija gasi granu, ne skriptu.
+    expect(problems.some((p) => /^\[(zadano-zabranjena-tajna|zadano-testni-ukljucen|ref-cisto)\]/.test(p))).toBe(false);
   }, 60_000);
 
   it('nepoznat slucaj ili prazan odabir nije zeleno', () => {
