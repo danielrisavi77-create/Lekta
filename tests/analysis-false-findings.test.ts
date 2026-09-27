@@ -13,6 +13,7 @@ import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { analyzeFixture } from '../src/analysis/golden-entry';
+import { ZipReader } from '../src/docx/parser';
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { ALLOWED_FINDINGS, WITHOUT_PROFILE, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 
@@ -44,6 +45,29 @@ describe('lazni nalazi na poznato ispravnim fixturima (T26)', () => {
     }
     expect(analyzed).toBe(KNOWN_CORRECT.length - WITHOUT_PROFILE.length);
     expect(falseFindingProblems(observed)).toEqual([]);
+  }, 120000);
+
+  it('razlog svakog dopustenog nalaza stoji u samom paketu (Codex #184 F5)', async () => {
+    for (const a of ALLOWED_FINDINGS) {
+      const bytes = new Uint8Array(readFileSync(join(DIR, `${a.doc}.docx`)));
+      const xml = await new ZipReader(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer).text(a.evidence.part);
+      expect(xml.length, `${a.doc}: ${a.evidence.part} prazan ili ne postoji`).toBeGreaterThan(0);
+      expect(a.evidence.contains ?? a.evidence.lacks, `${a.doc}: dokaz bez tvrdnje`).toBeTruthy();
+      if (a.evidence.contains) expect(xml, `${a.doc}|${a.checkId}`).toContain(a.evidence.contains);
+      if (a.evidence.lacks) expect(xml, `${a.doc}|${a.checkId}`).not.toContain(a.evidence.lacks);
+    }
+  });
+
+  // Codex #184 F4: matrica pokriva 11 fixtura s profilom; tvrdnja o stavkama literature mjeri se na
+  // svih 14. Heuristika word-styles ne ovisi o profilu, pa se fixturi bez profila vrte sa zadanim.
+  it('nijedan od 14 poznato ispravnih fixtura nema kandidata za rucno oblikovan naslov', async () => {
+    expect(KNOWN_CORRECT.length).toBeGreaterThanOrEqual(14);
+    for (const doc of KNOWN_CORRECT) {
+      const profileId = JSON.parse(readFileSync(join(DIR, `${doc}.json`), 'utf8')).profileId as string | null;
+      const result: any = await analyzeFixture(new File([readFileSync(join(DIR, `${doc}.docx`))], `${doc}.docx`), profileId ? { profileId } : {});
+      const check = result.checks.find((c: any) => c.id === 'structure.heading.word-styles');
+      expect(check?.detail, doc).toMatch(/Nisu pronađeni očiti ručno oblikovani naslovi$/);
+    }
   }, 120000);
 });
 
@@ -78,9 +102,24 @@ describe('stavke literature nisu rucno oblikovani naslovi (T26)', () => {
     expect(check.issue.detail).not.toContain('Aston');
   });
 
-  it('granica: bez naslova Literatura numerirane stavke ostaju kandidati (zateceno ponasanje)', async () => {
-    const check = await wordStyles([heading('Uvod'), body(TEXT), ...ENTRIES.map(body)]);
-    expect([check.status, check.earned]).toEqual(['warn', 2]);
-    expect(check.detail).toBe('3 numeriranih kratkih odlomaka bez Heading stila');
+  // Codex #184 F1, F2: clanstvo u zapisima literature nije dovoljno za izuzece.
+  it.each([
+    ['numerirani podnaslov literature', [heading('Uvod'), body(TEXT), heading('Literatura'), body('1. Knjige'), ...ENTRIES.slice(1).map(body)], '1. Knjige'],
+    ['naslov iza zalutalog odlomka Literatura', [heading('Uvod'), body(TEXT), body('Literatura'), body('2. Metodologija istraživanja'), body(TEXT)], '2. Metodologija istraživanja'],
+    ['naslov s godinom iza zalutalog odlomka Literatura', [heading('Uvod'), body(TEXT), body('Literatura'), body('2. Razvoj novinarstva od 1990. do 2000. godine'), body(TEXT)], '2. Razvoj novinarstva od 1990. do 2000. godine'],
+  ] as const)('%s ostaje kandidat', async (_name, paragraphs, expected) => {
+    const check = await wordStyles([...paragraphs]);
+    expect([check.status, check.earned, check.detail]).toEqual(['warn', 2, '1 numeriranih kratkih odlomaka bez Heading stila']);
+    expect(check.issue.detail).toContain(expected);
+  });
+
+  // Codex #184 F3: izvan prepoznate literature nista se ne izuzima; to je zateceno ponasanje, ne popravak.
+  it.each([
+    ['bez naslova Literatura', [heading('Uvod'), body(TEXT), ...ENTRIES.map(body)]],
+    ['iza zavrsnog dijela Prilozi', [heading('Uvod'), body(TEXT), heading('Prilozi'), ...ENTRIES.map(body)]],
+    ['iza sljedeceg Heading naslova', [heading('Uvod'), body(TEXT), heading('Literatura'), body('0. Ranić, A. (2019). Mediji i javnost. Zagreb: Naklada.'), heading('Dodatak'), ...ENTRIES.map(body)]],
+  ] as const)('granica, %s: numerirane stavke ostaju kandidati (zateceno ponasanje)', async (_name, paragraphs) => {
+    const check = await wordStyles([...paragraphs]);
+    expect([check.status, check.earned, check.detail]).toEqual(['warn', 2, '3 numeriranih kratkih odlomaka bez Heading stila']);
   });
 });

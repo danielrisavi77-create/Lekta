@@ -43,6 +43,7 @@ import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
+import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -5394,6 +5395,17 @@ const MUTATIONS: Mutation[] = [
       return extra.length === 1 && extra[0].startsWith('lazni nalaz:') && stale.length === 1 && stale[0].startsWith('zastarjeli unos:');
     },
     cleanBefore: () => falseFindingProblems(new Set(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey))).length === 0,
+  },
+  {
+    id: 'docx/stavka-literature-kao-naslov',
+    imitates: 'granica izuzeca stavki literature pogresna: numerirana stavka "1. Aston ... (1991). ..." postane kandidat za rucni naslov (12 od 14 uskladjenih fixtura), ili samo clanstvo u zapisima izuzme pravi naslov "1. Knjige" ili naslov iza zalutalog odlomka "Literatura" (Codex #184 F1, F2)',
+    // Doseg: stvarni ulaz analize (odlomci) kroz istu funkciju koju zove analyze-docx.
+    caught: () => {
+      const texts = (ps: { text: string; headingLevel?: number }[]) => manualHeadingCandidates(ps, 'hr').candidates.map((p) => p.text).join('|');
+      return texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura', headingLevel: 1 }, { text: '1. Knjige' }, { text: '2. Aston, E. i Savona, G. (1991). Theatre as Sign System. London: Routledge.' }]) === '1. Knjige'
+        && texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura' }, { text: '2. Metodologija istraživanja' }]) === '2. Metodologija istraživanja';
+    },
+    cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
 
 ];
