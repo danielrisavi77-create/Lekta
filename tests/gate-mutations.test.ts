@@ -131,6 +131,7 @@ import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
@@ -5959,5 +5960,44 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', () => {
+  const cist: NamedWorkflow[] = [
+    {
+      file: 'pr-opis.yml',
+      doc: { on: { pull_request: { types: ['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review'] } }, jobs: { 'pr-opis': {} } },
+    },
+    { file: 'foundation-check.yml', doc: { on: { pull_request: { branches: ['master'] } }, jobs: { check: {} } } },
+  ];
+
+  it('baseline: samo pr-opis', () => {
+    expect(findJobsRunningOnEdited(cist)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('mutant: edited dodan workflowu s punim checkom (stvaran kvar: pr-opis je prije bio job u foundation-check.yml) se hvata', () => {
+    const mutiran: NamedWorkflow[] = [
+      cist[0],
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { branches: ['master'], types: ['opened', 'synchronize', 'edited'] } }, jobs: { check: {}, 'pr-opis': {} } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(mutiran)).toEqual([
+      'foundation-check.yml#check',
+      'foundation-check.yml#pr-opis',
+      'pr-opis.yml#pr-opis',
+    ]);
+  });
+
+  it('job s if koji iskljucuje edited se ne broji', () => {
+    const sIf: NamedWorkflow[] = [
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { types: ['opened', 'edited'] } }, jobs: { check: { if: "github.event.action != 'edited'" } } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(sIf)).toEqual([]);
   });
 });

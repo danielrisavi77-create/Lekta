@@ -4,7 +4,7 @@
 //
 // Ciste funkcije (`netoRedaka`, `noveOvisnosti`, `retciOpisa`, `provjeriOpisPr`) ne pokrecu git ni
 // mrezu; testira ih `tests/pr-lines.test.ts`. CLI (`--provjeri`) koristi CI job `pr-opis` u
-// `.github/workflows/foundation-check.yml`: tijelo PR-a cita iz okoline (PR_BODY), a package.json
+// `.github/workflows/pr-opis.yml`: tijelo PR-a cita iz okoline (PR_BODY), a package.json
 // baze i heada iz gita, pa nijedan korisnicki tekst ne prolazi kroz shell.
 //
 // Spajanje u `.claude/workflows/lekta-lean.js` i `lekta-no-fable-coding.js` ide zasebno: te skripte
