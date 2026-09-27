@@ -6,6 +6,8 @@ import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../u
 import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
+import { primijeniPotvrduUlaza } from './intake-confirmation';
+import { readSelectionIds } from '../../ui/profile-selection-ids';
 import { createRepairSelectionMemory } from './repair-selection';
 import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
@@ -253,6 +255,16 @@ async function start(): Promise<void> {
     // `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke, koje bi ga inace
     // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
     profil.restore(outcome.session.profile);
+    // Z32: fakultet potvrdjen uz list na `/` za OVU sesiju ide ISTIM putem kao obnova (C4), pa ga
+    // `/rad/` ne pita ponovo. Isti redoslijedni ugovor: poslije postavki, prije detekcije iz
+    // dokumenta (gard: tests/intake-live.test.ts). Bez vazece potvrde je no-op.
+    primijeniPotvrduUlaza({
+      sessionId: outcome.session.id,
+      sessionHasProfile: Boolean(outcome.session.profile),
+      readForm: () => readSelectionIds(document),
+      apply: applyConfirmedProfileSelection,
+      confirm: (event) => profil.onConfirmed(event),
+    });
     odabir.restore(outcome.session.workspace?.repairSelection);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
     if (restored.kind === 'refused') { odabir.forget(); showStatus(restored.notice); }

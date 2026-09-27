@@ -25,6 +25,10 @@
  *
  * Citanje s diska normalizira CR: repo ima `core.autocrlf` (CLAUDE.md), pa ista datoteka iz istog
  * commita ima dvije velicine ovisno o tome kako je stablo materijalizirano.
+ *
+ * Z32 (ALIGNMENT, varijanta B) ZAMJENJUJE RASPORED Z7, a copy lista (naslov, podnaslov, podnozje)
+ * ostavlja. Tvrdnje koje je Z32 legitimno promijenio nose biljesku "Z32:" s razlogom; nova
+ * ponasanja (pribor, vrata, pecati, tragovi) mjeri `tests/intake-live.test.ts`.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -100,18 +104,18 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     expect(CSS, 'ljestvica se ne smije redefinirati u pilot listu').not.toMatch(/--fs-display\s*:/);
   });
 
-  it('tri koraka nose DOSLOVNE tekstove predloska, redom 01/02/03', () => {
-    const stavke = [...doc.querySelectorAll('.intake-koraci li')];
-    expect(stavke).toHaveLength(3);
-    expect(stavke.map((li) => tekst(li.querySelector('.intake-korak-br')))).toEqual(['01', '02', '03']);
-    expect(stavke.map((li) => tekst(li.querySelector('.intake-korak-t')))).toEqual([
-      'Ubaciš .docx. Ne treba prijava.',
-      'Provjera radi u tvom pregledniku. Dokument ne odlazi.',
-      'Dobiješ ocjenu i popis što popraviti prije predaje.',
-    ]);
-    // Koraci su NA papiru (unutar poziva), ne ispod njega: obecanje "dokument ne odlazi" vrijedi
-    // samo ako ga korisnik procita prije nego klikne.
-    expect(doc.querySelector('.intake-poziv .intake-koraci'), 'koraci su ispali s papira').not.toBeNull();
+  it('Z32: tri koraka Z7 su UKLONJENA, a obecanje o uredjaju ostaje na listu PRIJE klika', () => {
+    // Z32 mijenja ovu tvrdnju, ne kvar: predlozak B (`design/templates/intake-live/IntakeLive.dc.html`)
+    // tri koraka nema, a nalog Z32 od copyja Z7 izricito cuva samo naslov, podnaslov i podnozje.
+    // Razlog zbog kojeg su koraci bili NA papiru (obecanje se cita prije klika) i dalje vrijedi, pa
+    // se mjeri na onome sto ga sada nosi: podnozje lista, koje je unutar poziva, iznad svakog klika.
+    expect(bezHtmlKomentara(HTML), 'koraci Z7 su se vratili na list').not.toContain('intake-koraci');
+    expect(bezCssKomentara(CSS), 'stil koraka Z7 je ostao bez markupa').not.toContain('.intake-koraci');
+    const foot = doc.querySelector('.intake-poziv [data-intake-foot]');
+    expect(foot, 'obecanje o uredjaju je ispalo s lista').not.toBeNull();
+    expect(tekst(foot)).toContain('Dokument ostaje na uređaju');
+    // KONTROLA: gard bi koracima nasao ime da ga ima; tvrdnja o odsutnosti bez ovoga ne dokazuje nista.
+    expect(`${HTML}<ol class="intake-koraci"></ol>`).toContain('intake-koraci');
   });
 
   it('podnozje papira ZAMJENJUJE bravu, s obje polovice obecanja', () => {
@@ -133,7 +137,11 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     const cta = doc.querySelector('.intake-cta');
     expect(cta, 'nema CTA-a').not.toBeNull();
     expect(tekst(cta)).toBe('Odaberi .docx');
-    expect(tekst(doc.querySelector('.intake-hint'))).toBe('ili ispusti dokument ovdje');
+    // Z32: STATICKI natpis je natpis ZATVORENIH vrata (predlozak: "Prvo potvrdi fakultet i rok"), a
+    // gumb je `aria-disabled`, jer dok JS ne procita pribor nista nije potvrdjeno. "ili ispusti
+    // dokument ovdje" upisuje `intake-live.ts` kad je pribor spreman (tests/intake-live.test.ts).
+    expect(tekst(doc.querySelector('.intake-hint'))).toBe('Prvo potvrdi fakultet i rok');
+    expect(doc.querySelector('.intake-paper__gumb')!.getAttribute('aria-disabled')).toBe('true');
     // Isti redak: oboje su ista radnja izvedena na dva nacina.
     const akcija = doc.querySelector('.intake-akcija');
     expect(akcija, 'nema retka radnje').not.toBeNull();
@@ -186,8 +194,9 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     }
     // Ime mora govoriti o radnji koja se izvodi klikom, inace je krace ali netocno.
     expect(ime.toLowerCase()).toContain('.docx');
-    // KONTROLA: sadrzaj papira i dalje STOJI, samo vise nije natpis gumba.
-    expect(tekst(doc.querySelector('.intake-koraci'))).toContain('Ne treba prijava');
+    // KONTROLA: sadrzaj papira i dalje STOJI, samo vise nije natpis gumba. Z32: koraka vise nema,
+    // pa kontrolu nosi podnozje lista.
+    expect(tekst(doc.querySelector('[data-intake-foot]'))).toContain('Provjeravamo formu');
   });
 });
 
@@ -287,17 +296,15 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
     // OVO JE IZMJENA ODLUKE IZ PAKETA 1, NE ISPRAVAK KVARA. Tada je ovdje stajala obrnuta tvrdnja
     // (list ne smije referencirati `var(--mono)`), jer ulaz mono nije ucitavao pa bi token pao na
     // sustavni `ui-monospace`. Sada ga ucitava, pa mete idu na mono kako predlozak i trazi.
-    const MONO = ['.intake-zaglavlje', '.intake-pecat', '.intake-korak-br', '.intake-foot',
-      '.intake-cta'];
+    // Z32: `.intake-korak-br` je otisao s koracima; `.intake-rok-pecat` je nova meta iste vrste.
+    const MONO = ['.intake-zaglavlje', '.intake-pecat', '.intake-foot', '.intake-cta'];
     for (const selektor of MONO) {
       expect(blokZa(CSS, selektor), selektor).toContain('var(--mono)');
     }
-    // TEKST KORAKA NIJE OZNAKA nego recenica koja se na uskom ekranu lomi u dva retka, a
-    // `design/README.md` mono za takve izricito zabranjuje. Ovo je druga polovica iste odluke:
-    // bez nje bi "mete idu na mono" tiho progutalo i prozu.
-    expect(blokZa(CSS, '.intake-korak-t'), 'tekst koraka je recenica, ne oznaka')
-      .toContain('var(--display-serif)');
-    expect(blokZa(CSS, '.intake-korak-t')).not.toContain('var(--mono)');
+    // RECENICA NIJE OZNAKA: `design/README.md` mono za recenice izricito zabranjuje. Ovo je druga
+    // polovica iste odluke; do Z32 ju je nosio tekst koraka, koji je otisao, pa je nosi uvod lista.
+    expect(blokZa(CSS, '.intake-lead'), 'uvod je recenica, ne oznaka').toContain('var(--display-serif)');
+    expect(blokZa(CSS, '.intake-lead')).not.toContain('var(--mono)');
     // MUTACIJA: mono vracen na glas sucelja gard mora VIDJETI. Bez ovoga bi tvrdnja prosla i da
     // `blokZa` gleda krivu datoteku ili krivi selektor.
     const bezMonoa = CSS.replace('font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);\n  letter-spacing:.08em;text-align:left;',
@@ -306,7 +313,7 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
     expect(blokZa(bezMonoa, '.intake-zaglavlje'), 'gard ne vidi vracanje na glas sucelja')
       .not.toContain('var(--mono)');
     // KONTROLA SMJERA: spomen u KOMENTARU nije deklaracija (list `--mono` spominje u obrazlozenju).
-    expect(blokZa('/* var(--mono) */.intake-korak-t{font-family:var(--display-serif)}', '.intake-korak-t'))
+    expect(blokZa('/* var(--mono) */.intake-lead{font-family:var(--display-serif)}', '.intake-lead'))
       .not.toContain('var(--mono)');
   });
 
@@ -458,7 +465,8 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
   it('mete obrasca nose MJERU oznake (--fs-mono-label), jer glas nije na raspolaganju', () => {
     // Ovo je druga polovica odluke o dva glasa: mono se ne ucitava, pa se oznaka gradi mjerom,
     // razmakom slova i rezom. Ako mjera odluta, mete prestaju izgledati kao oznake obrasca.
-    for (const selektor of ['.intake-zaglavlje', '.intake-pecat', '.intake-foot', '.intake-korak-br']) {
+    // Z32: broj koraka je otisao s koracima; mali pecat roka je nova oznaka na listu iste mjere.
+    for (const selektor of ['.intake-zaglavlje', '.intake-pecat', '.intake-foot', '.intake-rok-pecat:not([hidden])']) {
       expect(blokZa(CSS, selektor), selektor).toContain('font-size:var(--fs-mono-label)');
     }
     // Vrijednost se CITA iz jedinog izvora istine za tokene, ne prepisuje ovdje.
@@ -605,7 +613,7 @@ describe('Z7 broj ulaznog lista', () => {
  * ali `<p>` (ciji child `<em>` ga NE nosi u cijelosti) da. Gard vrijedi i ako se markup preslozi
  * drukcije nego danas, i pada cim se uloga vrati na plohu.
  */
-describe('Z7 a11y: zaglavlje, kicker, naslov, uvod, koraci i podnozje nisu u gumbu', () => {
+describe('Z7 a11y: zaglavlje, kicker, naslov, uvod i podnozje nisu u gumbu', () => {
   const doc = ulaz();
 
   /** Najdublji predak zadanog teksta koji ga skriva citacu ekrana, ili `null` ako takvog nema. */
@@ -631,9 +639,11 @@ describe('Z7 a11y: zaglavlje, kicker, naslov, uvod, koraci i podnozje nisu u gum
     'Provjerit ćemo formu',
     'Nepregledano',
     'Ulazni list',
-    'Ubaciš .docx. Ne treba prijava.',
-    'Provjera radi u tvom pregledniku. Dokument ne odlazi.',
-    'Dobiješ ocjenu i popis što popraviti prije predaje.',
+    // Z32: tri recenice koraka su otisle s koracima (vidi prvi describe); pribor uz list je nova
+    // proza na ekranu i ne smije zavrsiti ni u gumbu ni pod aria-hidden.
+    'Pribor · prije ubacivanja',
+    'Rok predaje',
+    'Još ne znam rok',
     'Dokument ostaje na uređaju',
     'Provjeravamo formu, ne sadržaj',
   ];
@@ -687,7 +697,9 @@ describe('Z7 a11y: zaglavlje, kicker, naslov, uvod, koraci i podnozje nisu u gum
     expect(gumb!.querySelector('.intake-kicker'), 'kicker je u gumbu').toBeNull();
     expect(gumb!.querySelector('#intakeTitle'), 'naslov je u gumbu').toBeNull();
     expect(gumb!.querySelector('.intake-lead'), 'uvod je u gumbu').toBeNull();
-    expect(papir!.querySelector('.intake-poziv .intake-koraci'), 'koraci su ispali s papira').not.toBeNull();
+    // Z32: PRIBOR JE NA STOLU, NE NA LISTU (varijanta B): ni u gumbu ni u papiru.
+    expect(papir!.querySelector('[data-intake-pribor]'), 'pribor je na listu; varijanta B ga drzi uz list').toBeNull();
+    expect(doc.querySelector('.intake-stol > [data-intake-pribor]'), 'pribor nije uz list na stolu').not.toBeNull();
     expect(papir!.querySelector('.intake-poziv [data-intake-foot]'), 'podnozje je ispalo s papira').not.toBeNull();
     expect(papir!.querySelector('.intake-poziv .intake-zaglavlje'), 'zaglavlje je ispalo s papira').not.toBeNull();
     expect(papir!.querySelector('.intake-poziv .intake-pecat'), 'pecat je ispao s papira').not.toBeNull();

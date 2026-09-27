@@ -5961,3 +5961,104 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
   });
 });
+
+describe('mutacije: zivi list na ulazu (Z32)', () => {
+  const procitaj = (f: string): string => readFileSync(resolve(__dirname, '..', f), 'utf8').replace(/\r/g, '');
+  type Rok = { datum: string | null; neznam: boolean };
+  type Vrata = { fakultetPotvrden: boolean; rok: Rok };
+
+  it('baseline: stvarni kod prolazi sve gardove zivog lista', async () => {
+    const g = await import('./helpers/intake-live-guards');
+    const { spremnostUlaza, potvrdaVrijediZaSesiju } = await import('../src/shared/intake-choice');
+    const { pecatRoka } = await import('../src/routes/intake/deadline-stamp');
+    expect(g.vrataProblemi(spremnostUlaza)).toEqual([]);
+    expect(g.pecatRokaProblemi(pecatRoka)).toEqual([]);
+    expect(g.potvrdaSesijeProblemi(potvrdaVrijediZaSesiju)).toEqual([]);
+    expect(g.ozicenjeUlazaProblemi(procitaj('src/routes/intake/main.ts'))).toEqual([]);
+    expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
+    expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
+  });
+
+  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili preskoce fakultet, obaraju gard', async () => {
+    const { vrataProblemi } = await import('./helpers/intake-live-guards');
+    const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
+    const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
+    const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' };
+    // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
+    const samoDatum = (s: Vrata) => (s.fakultetPotvrden && !s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
+    // Kvar: fakultet se ne trazi.
+    const bezFakulteta = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(bezFakulteta).length).toBeGreaterThan(0);
+  });
+
+  it('(b) pecat roka po SATIMA (ljetno vrijeme, ponoc) i sklonidba "21 dana" obaraju gard', async () => {
+    const { pecatRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { pecatRoka, razloziDatum, daniRijecju } = await import('../src/routes/intake/deadline-stamp');
+    const poSatima = (s: Rok, danas: Date): string | null => {
+      if (s.neznam) return 'Rok nije zadan';
+      const r = s.datum ? razloziDatum(s.datum) : null;
+      if (!r || !s.datum) return null;
+      const dana = Math.floor((new Date(`${s.datum}T00:00`).getTime() - danas.getTime()) / 864e5);
+      return `Rok ${r.dan}. ${r.mjesec}. · ${dana < 0 ? 'prošao' : dana === 0 ? 'danas' : daniRijecju(dana)}`;
+    };
+    expect(pecatRokaProblemi(poSatima).length).toBeGreaterThan(0);
+    const uvijekDana = (s: Rok, danas: Date) => pecatRoka(s, danas)?.replace(/ dan$/, ' dana') ?? null;
+    expect(pecatRokaProblemi(uvijekDana).length).toBeGreaterThan(0);
+  });
+
+  it('(c) potvrda koja ne gleda id sesije ili studij obara gard', async () => {
+    const { potvrdaSesijeProblemi } = await import('./helpers/intake-live-guards');
+    type P = { unit: string; program: string | null; workType: string | null; sesija: string | null } | null;
+    type O = { unit: string; program: string; workType: string };
+    const bezSesije = (p: P, s: { imaProfil: boolean }, o: O) =>
+      Boolean(p && !s.imaProfil && p.program && p.unit === o.unit && p.program === o.program && p.workType === o.workType);
+    expect(potvrdaSesijeProblemi(bezSesije)).toContain('potvrda vrijedi za TUDJU sesiju');
+    const bezStudija = (p: P, s: { id: string; imaProfil: boolean }, o: O) =>
+      Boolean(p && !s.imaProfil && p.sesija === s.id && p.unit === o.unit);
+    expect(potvrdaSesijeProblemi(bezStudija)).toContain('potvrda bez studija zakljucava fallback');
+  });
+
+  it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {
+    const { ozicenjeUlazaProblemi } = await import('./helpers/intake-live-guards');
+    const main = procitaj('src/routes/intake/main.ts');
+    const bezKuke = main.replace('    canAccept: live.canAccept,\n', '');
+    expect(bezKuke).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezKuke)).toContain('kontroler ne dobiva kuku canAccept');
+    const bezVeze = main.replace('live.poveziOdabir((file) => { void controller.selectFile(file); });', '');
+    expect(bezVeze).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezVeze).length).toBeGreaterThan(0);
+  });
+
+  it('(e) tragovi bez gasenja pod prigusenim pokretom, beskonacno skeniranje ili linija bez opt-ina obaraju gard', async () => {
+    const { pokretProblemi } = await import('./helpers/intake-live-guards');
+    const css = procitaj('src/routes/intake/intake.css');
+    const html = procitaj('index.html');
+    const boot = procitaj('src/shared/ui-boot.ts');
+    const bezUpita = css.replace('  .intake-tragovi{display:none}\n', '');
+    expect(bezUpita).not.toBe(css);
+    expect(pokretProblemi(bezUpita, html, boot)).toContain('tragovi olovke se prikazuju pod prefers-reduced-motion');
+    const bezRucnog = css.replace(':root[data-motion="reduce"] .intake-tragovi{display:none}', '');
+    expect(bezRucnog).not.toBe(css);
+    expect(pokretProblemi(bezRucnog, html, boot).length).toBeGreaterThan(0);
+    const beskonacno = css.replace('animation:intake-sken 1.2s linear 14', 'animation:intake-sken 1.2s linear infinite');
+    expect(beskonacno).not.toBe(css);
+    expect(pokretProblemi(beskonacno, html, boot)).toContain('beskonacna animacija na ulazu');
+    const bezOptIna = html.replace('class="intake-sken" aria-hidden="true" data-motion-offscreen', 'class="intake-sken" aria-hidden="true"');
+    expect(bezOptIna).not.toBe(html);
+    expect(pokretProblemi(css, bezOptIna, boot).length).toBeGreaterThan(0);
+    const bootBez = boot.replace("'.ks-priv-scena, [data-motion-offscreen]'", "'.ks-priv-scena'");
+    expect(bootBez).not.toBe(boot);
+    expect(pokretProblemi(css, html, bootBez)).toContain('ui-boot ne promatra [data-motion-offscreen]');
+  });
+
+  it('(f) potvrda s ulaza primijenjena POSLIJE restoreDocument obara gard', async () => {
+    const { redoslijedPotvrdeProblemi } = await import('./helpers/intake-live-guards');
+    const src = procitaj('src/routes/workspace/main.ts');
+    const mutant = src.replace('primijeniPotvrduUlaza({', '__A__({')
+      .replace('const restored = await restoreDocument(', 'const restored = await primijeniPotvrduUlaza(')
+      .replace('__A__({', 'restoreDocument({');
+    expect(mutant).not.toBe(src);
+    expect(redoslijedPotvrdeProblemi(mutant).length).toBeGreaterThan(0);
+  });
+});
