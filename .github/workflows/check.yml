@@ -135,3 +135,36 @@ jobs:
 
       - name: Kriticni put nad dist/ (vite preview)
         run: npm run test:ux:dist
+
+  # T56: mrtvi kod i duplikati kao MJERENJE. Job samo izvjestava (knip + jscpd u job summary i kao
+  # artefakt); nije u popisu obveznih provjera i ne smije se tamo dodati. Ratchet koji smije oboriti
+  # gate je `tests/lean-ratchet.test.ts` unutar `npm run check`, ne ovaj job.
+  lean-report:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+
+      - name: Lean izvjestaj (knip + jscpd)
+        run: npm run lean:report
+
+      - name: Sazetak u job summary
+        if: always()
+        run: |
+          if [ -f docs/generated/LEAN_REPORT.md ]; then cat docs/generated/LEAN_REPORT.md >> "$GITHUB_STEP_SUMMARY"; fi
+          npm run --silent lean:report -- --check >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
+
+      - name: Artefakt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: lean-report
+          path: docs/generated/LEAN_REPORT.md
+          if-no-files-found: ignore
