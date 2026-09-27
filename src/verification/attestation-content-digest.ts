@@ -14,7 +14,7 @@
 const POLJA_POTPISA = new Set(['signedBy', 'signedAt', 'signatureNote', 'signedContentDigest']);
 
 /** JSON s kljucevima sortiranim na svakoj razini; `undefined` kao `null`, kao u skripti. */
-export function canonicalJson(value: unknown): string {
+function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
   if (value && typeof value === 'object') {
     const o = value as Record<string, unknown>;
