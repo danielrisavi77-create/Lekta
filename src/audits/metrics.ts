@@ -10,6 +10,9 @@ import { sectionName } from '../utils/helpers.ts';
 export function modeWeighted(map: any): any{let best=null,max=-1,total=0;for(const[k,v]of map){total+=v;if(v>max){best=k;max=v}}return{value:best,weight:max,total,share:total?max/total:0}}
 export function addWeight(map: any, key: any, w: any): any{if(key==null||key===''||!w)return;map.set(String(key),(map.get(String(key))||0)+w)}
 export function near(a: any, b: any, t: any=.12): any{return Math.abs(Number(a)-Number(b))<=t}
+/** Metrike VIDLJIVIH runova. `total` 0 znaci da odlomak nema vidljivog teksta (npr. svi runovi su
+ *  skriveni, w:vanish): tada se oblikovanje ne ocjenjuje ni na jednoj osi (font, velicina, bold,
+ *  italic), jer Word taj tekst ne prikazuje (Codex pregled #168, #17b). */
 export function runMetrics(runs: any=[]): any{const fontMap=new Map(),sizeMap=new Map();let total=0,bold=0,italic=0;for(const r of runs){const w=Math.max(1,String(r.text||'').trim().length);if(!String(r.text||'').trim()||r.hidden===true)continue;total+=w;addWeight(fontMap,r.font,w);addWeight(sizeMap,r.size,w);if(r.bold)bold+=w;if(r.italic)italic+=w}return{font:modeWeighted(fontMap).value,size:Number(modeWeighted(sizeMap).value)||null,boldShare:total?bold/total:0,italicShare:total?italic/total:0,total}}
 export function lettersOnly(s: any): any{return(String(s||'').match(/\p{L}+/gu)||[]).join('')}
 export function isUppercaseText(s: any): any{const x=lettersOnly(String(s||'').replace(/^\s*(?:(?:[IVXLCDM]+)|(?:\d+(?:\.\d+)*))\.?\s+/i,''));return x.length>1&&x===x.toLocaleUpperCase('hr-HR')}

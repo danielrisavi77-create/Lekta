@@ -15,7 +15,10 @@ import { buildDocxFile, documentXml, type ParaSpec } from './helpers/docx-builde
 import { analyzeDocx } from '../src/analysis/analyze-docx';
 import { resolveProfile } from '../src/analysis/golden-entry';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
-import { readRPr, parseXml } from '../src/docx/parser';
+import { readRPr, parseXml, effectiveHidden, paragraphText, ZipReader } from '../src/docx/parser';
+import { buildDocx } from './helpers/docx-builder';
+import { auditHeadingRules } from '../src/audits/structure';
+import { anchorTextOfXml, normalizeAnchorText } from '../src/repair/anchor-text';
 import { runMetrics } from '../src/audits/metrics';
 
 const TNR = 'Times New Roman';
@@ -75,5 +78,77 @@ describe('skriveni tekst u bodovanju oblikovanja (nalaz #17)', () => {
       { text: 'skriveni dugi tekst '.repeat(20), font: 'Arial', size: 9, bold: false, hidden: true },
     ]);
     expect(m).toMatchObject({ font: TNR, size: 14, boldShare: 1 });
+  });
+});
+
+const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+
+/** Zadani stilovi buildera uz stil odlomka i znakovni stil koji oba ukljucuju w:vanish. */
+async function stylesWithVanish(): Promise<string> {
+  const base = await new ZipReader(buildDocx({ paragraphs: [{ text: 'x' }] }).buffer as ArrayBuffer).text('word/styles.xml');
+  const extra = '<w:style w:type="paragraph" w:styleId="SkriveniOdlomak"><w:name w:val="Skriveni odlomak"/><w:rPr><w:vanish/></w:rPr></w:style>'
+    + '<w:style w:type="character" w:styleId="SkriveniZnak"><w:name w:val="Skriveni znak"/><w:rPr><w:vanish/></w:rPr></w:style>';
+  expect(base).toContain('</w:styles>');
+  return base.replace('</w:styles>', `${extra}</w:styles>`);
+}
+
+async function dominantWithStyles(runProps: string, paragraphStyle = true) {
+  const pPr = paragraphStyle ? '<w:pPr><w:pStyle w:val="SkriveniOdlomak"/></w:pPr>' : '';
+  const raw = `<w:p>${pPr}<w:r><w:rPr>${runProps}<w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="40"/></w:rPr><w:t xml:space="preserve">${HIDDEN_TEXT}</w:t></w:r></w:p>`;
+  const paras: ParaSpec[] = [paragraphs('')[0], paragraphs('')[1], { text: '', raw }, paragraphs('')[3]];
+  const profile = resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id);
+  const settings = { profileId: VERIFIED_PROFILE_REGISTRY[0].id, workType: profile.selection.workType, citationStyle: 'fpzg',
+    language: 'hr', strictness: 'standard', methodology: 'auto', selectionIds: {} };
+  const result: any = await analyzeDocx(buildDocxFile({ paragraphs: paras, stylesXml: await stylesWithVanish() }), profile, settings, () => {});
+  return result.stats.dominantFont;
+}
+
+describe('toggle pravilo za w:vanish kroz stilove (Codex #17a)', () => {
+  it('samo stil odlomka s vanish: skriveno', async () => {
+    expect(await dominantWithStyles('')).toBe(TNR);
+  });
+  it('stil odlomka i znakovni stil s vanish, bez izravnog: dva preokreta, VIDLJIVO', async () => {
+    expect(await dominantWithStyles('<w:rStyle w:val="SkriveniZnak"/>')).toBe('Arial');
+  });
+  it('stil odlomka i izravni vanish: izravno je apsolutno, skriveno', async () => {
+    expect(await dominantWithStyles('<w:vanish/>')).toBe(TNR);
+  });
+  it('stil odlomka i izravni vanish w:val="0": izravno otkriva, vidljivo', async () => {
+    expect(await dominantWithStyles('<w:vanish w:val="0"/>')).toBe('Arial');
+  });
+  it('bez ikakvog vanish: vidljivo (kontrola)', async () => {
+    expect(await dominantWithStyles('', false)).toBe('Arial');
+  });
+  it('effectiveHidden tablica', () => {
+    const on = { hidden: true }, off = { hidden: false }, none = {};
+    expect(effectiveHidden({ paragraphStyle: on })).toBe(true);
+    expect(effectiveHidden({ paragraphStyle: on, runStyle: on })).toBe(false);
+    expect(effectiveHidden({ defaults: on, paragraphStyle: on })).toBe(false);
+    expect(effectiveHidden({ paragraphStyle: on, runStyle: on, direct: on })).toBe(true);
+    expect(effectiveHidden({ paragraphStyle: on, direct: off })).toBe(false);
+    expect(effectiveHidden({ paragraphStyle: off, runStyle: none })).toBe(false);
+  });
+});
+
+describe('odlomak bez vidljivog teksta (Codex #17b)', () => {
+  const heading = (hidden: boolean) => ({ headingLevel: 1, text: '1. Uvod', pProps: {},
+    runs: [{ text: '1. Uvod', font: 'Arial', size: 9, bold: false, italic: false, hidden }] });
+  const rules = { maxLevel: 3, levels: { '1': { size: 14, bold: true } } };
+
+  it('kontrola: vidljiv naslov koji krsi pravilo pada na oblikovanju', () => {
+    expect(auditHeadingRules([heading(false)], rules)[0].status).toBe('warn');
+  });
+  it('potpuno skriven naslov se ne ocjenjuje ni na jednoj osi oblikovanja', () => {
+    expect(auditHeadingRules([heading(true)], rules)[0].status).toBe('pass');
+  });
+});
+
+describe('sidra popravka ostaju ista (Codex #17b)', () => {
+  it('tekst analize i sidro popravka ukljucuju skriveni run jednako', () => {
+    const xml = `<w:p ${W}><w:r><w:t>Vidljivo </w:t></w:r><w:r><w:rPr><w:vanish/></w:rPr><w:t>skriveno</w:t></w:r></w:p>`;
+    const analysis = normalizeAnchorText(paragraphText(parseXml(xml).documentElement));
+    const repair = normalizeAnchorText(anchorTextOfXml(xml));
+    expect(analysis).toBe(repair);
+    expect(analysis).toContain('skriveno');
   });
 });

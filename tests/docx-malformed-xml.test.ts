@@ -6,15 +6,21 @@
  * nepoznati entitet, atribut bez navodnika. Takav dokument se tiho bodovao, dok ga preglednikov
  * DOMParser (inline put) odbija kao ne-well-formed. Isti ulaz tako je davao dva ishoda.
  *
- * Mjereno prije ispravka: na 50 .docx fixtura (584 XML/rels dijela) xmldom nije javio nijednu
- * dijagnostiku ni jedne razine, pa strogo odbijanje ne mijenja nijedan postojeci rezultat.
+ * Mjereno prije ispravka: na 50 .docx fixtura u tests/fixtures/** (docx 21, docx-authored 24,
+ * docx-word 5; 584 XML/rels dijela) xmldom nije javio nijednu dijagnostiku ni jedne razine. To nije
+ * dokaz za sve pisace (Word, LibreOffice, Google Docs); mjerenje po razini i dijelu nad stvarnim
+ * korpusom radi se odvojeno na radnoj stanici.
+ *
+ * Codex pregled #168, #14a: `warning` za znak U+FFFD je VALJAN XML i ne smije srusiti analizu.
+ * #14b: strogo odbijanje vrijedi samo za dijelove bez kojih analiza nema smisla; politika po
+ * dijelu je zakljucana testom ispod.
  */
 import { describe, expect, it } from 'vitest';
-import { buildDocxFile, documentXml, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, documentXml, type DocSpec, type ParaSpec } from './helpers/docx-builder';
 import { analyzeDocx } from '../src/analysis/analyze-docx';
 import { resolveProfile } from '../src/analysis/golden-entry';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
-import { parseXml } from '../src/docx/parser';
+import { parseXml, xmlDiagnosticRejects } from '../src/docx/parser';
 
 const TNR = 'Times New Roman';
 const PARAGRAPHS: ParaSpec[] = [
@@ -60,6 +66,9 @@ describe('neispravan XML (nalaz #14)', () => {
     ['goli manji-od u tekstu', (xml) => xml.replace('1 &lt; 2', '1 < 2')],
     ['nepoznati entitet', (xml) => xml.replace('R&amp;D', 'R&nbsp;D')],
     ['atribut bez navodnika', (xml) => xml.replace(/w:val="(\d+)"/, 'w:val=$1')],
+    // xmldom za ova dva oblika ne javlja NIKAKVU dijagnostiku (koordinator lekta-32 na #168).
+    ['goli ampersand s razmakom', (xml) => xml.replace('R&amp;D', 'R & D')],
+    ['goli ampersand na kraju teksta', (xml) => xml.replace('R&amp;D', 'R&')],
   ];
 
   it.each(corruptions)('%s: analiza odbija dokument umjesto da ga boduje', async (_name, corrupt) => {
@@ -78,9 +87,63 @@ describe('neispravan XML (nalaz #14)', () => {
     expect(doc.documentElement?.textContent).toBe('R&D < čč "\'>');
   });
 
+  it('& unutar CDATA i komentara je valjan i prolazi', () => {
+    expect(parseXml('<a><![CDATA[x & y]]><!-- R & D --></a>').documentElement?.textContent).toBe('x & y');
+  });
+
   it('teske greske i dalje padaju s istom porukom', () => {
     for (const bad of ['<a><b></a>', 'nije xml', '<a x="1" x="2"/>']) {
       expect(() => parseXml(bad, 'Oznaka')).toThrow('Oznaka nije moguće pročitati.');
     }
+  });
+});
+
+describe('U+FFFD je valjan XML (Codex #14a)', () => {
+  it('doslovni U+FFFD u tekstu i atributu prolazi parseXml', () => {
+    expect(parseXml('<a x="\uFFFD">R\uFFFDD</a>').documentElement?.textContent).toBe('R\uFFFDD');
+  });
+
+  it('dokument s U+FFFD u tekstu se analizira i boduje', async () => {
+    const file = fileWithDocumentXml((xml) => xml.replace('R&amp;D', 'R\uFFFDD'));
+    const result = await analyze(file);
+    expect(typeof result.score).toBe('number');
+  });
+
+  it('politika dijagnostika: error i fatalError uvijek, warning osim zamjenskog znaka', () => {
+    expect(xmlDiagnosticRejects('fatalError', 'Opening and ending tag mismatch')).toBe(true);
+    expect(xmlDiagnosticRejects('error', 'entity not found:&nbsp;')).toBe(true);
+    expect(xmlDiagnosticRejects('warning', 'attribute "1" missed quot(")!')).toBe(true);
+    expect(xmlDiagnosticRejects('warning', 'attribute space is required"x"!!')).toBe(true);
+    expect(xmlDiagnosticRejects('warning', 'Unicode replacement character detected, source encoding issues?')).toBe(false);
+  });
+});
+
+/**
+ * Politika po dijelu paketa (Codex #14b). Dijelovi bez kojih analiza nema smisla rusi analizu;
+ * sporedni dijelovi se na gresci preskacu kao da ih nema (tako je bilo i prije #14 za teske
+ * greske; sada isto vrijedi i za `error` razinu). comments.xml i customXml analiza ne parsira.
+ */
+describe('neispravan XML po dijelu paketa (Codex #14b)', () => {
+  const BROKEN = '<?xml version="1.0"?><x>R&D</x>';
+  const withPart = (name: string, spec: Partial<DocSpec> = {}) => buildDocxFile({ paragraphs: PARAGRAPHS, ...spec }, 'dio.docx', [{ name, data: enc.encode(BROKEN) }]);
+
+  it.each([
+    ['word/document.xml', 'Glavni Word dokument', {}],
+    ['word/styles.xml', 'Word stilovi', {}],
+    ['word/footnotes.xml', 'Word fusnote', { footnotes: ['Fusnota.'] }],
+    ['word/_rels/document.xml.rels', 'Word veze', {}],
+  ] as const)('%s ruši analizu', async (name, label, spec) => {
+    await expect(analyze(withPart(name, spec))).rejects.toThrow(`${label} nije moguće pročitati.`);
+  });
+
+  it.each([
+    ['docProps/core.xml', {}],
+    ['docProps/app.xml', {}],
+    ['word/endnotes.xml', { endnotes: ['Endnota.'] }],
+    ['word/theme/theme1.xml', {}],
+    ['word/numbering.xml', {}],
+  ] as const)('%s se preskace i analiza se boduje', async (name, spec) => {
+    const result = await analyze(withPart(name, spec));
+    expect(typeof result.score).toBe('number');
   });
 });

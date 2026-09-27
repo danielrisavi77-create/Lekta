@@ -49,33 +49,73 @@ export class ZipLimitError extends Error {}
 /** OLE/CFB potpis (D0 CF 11 E0 A1 B1 1A E1). Nije ZIP: takav je stari .doc i .docx zasticen lozinkom. */
 const CFB_MAGIC = [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
 
-function hasUtf16Le(bytes: Uint8Array, text: string): boolean {
-  const needle = new Uint8Array(text.length * 2);
-  for (let i = 0; i < text.length; i++) needle[i * 2] = text.charCodeAt(i);
-  outer: for (let i = 0; i + needle.length <= bytes.length; i++) {
-    for (let j = 0; j < needle.length; j++) if (bytes[i + j] !== needle[j]) continue outer;
-    return true;
+const CFB_END_OF_CHAIN = 0xfffffffe;
+const CFB_MAX_REGULAR_SECTOR = 0xfffffffa;
+
+/**
+ * Imena tokova iz STVARNIH zapisa CFB direktorija (MS-CFB 2.6), ne pretraga bajtova bilo gdje u
+ * datoteci (Codex pregled #168, #16). Cita zaglavlje, FAT iz prvih 109 DIFAT unosa i lanac
+ * direktorijskih sektora. Sve granice su provjerene; neocekivan oblik vraca `null`, pa se datoteka
+ * tada ne klasificira specificno. Vece datoteke s prosirenim DIFAT-om (vise od 109 FAT sektora)
+ * takodjer vracaju `null`: to je pad na neutralnu poruku, ne pogresna dijagnoza.
+ */
+export function cfbStreamNames(bytes: Uint8Array): Set<string> | null {
+  if (bytes.length < 512 || CFB_MAGIC.some((b, i) => bytes[i] !== b)) return null;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const shift = view.getUint16(0x1e, true);
+  if (shift !== 9 && shift !== 12) return null;
+  const sectorSize = 1 << shift;
+  const sectorOffset = (sector: number) => (sector + 1) * sectorSize;
+  const fatSectorCount = view.getUint32(0x2c, true);
+  if (fatSectorCount === 0 || fatSectorCount > 109) return null;
+  const fat: number[] = [];
+  for (let i = 0; i < fatSectorCount; i++) {
+    const fatSector = view.getUint32(0x4c + i * 4, true);
+    if (fatSector >= CFB_MAX_REGULAR_SECTOR) return null;
+    const base = sectorOffset(fatSector);
+    if (base + sectorSize > bytes.length) return null;
+    for (let j = 0; j < sectorSize; j += 4) fat.push(view.getUint32(base + j, true));
   }
-  return false;
+  const names = new Set<string>();
+  const maxSectors = Math.ceil(bytes.length / sectorSize);
+  let sector = view.getUint32(0x30, true);
+  for (let steps = 0; sector !== CFB_END_OF_CHAIN; steps++) {
+    if (steps > maxSectors || sector >= CFB_MAX_REGULAR_SECTOR || sector >= fat.length) return null;
+    const base = sectorOffset(sector);
+    if (base + sectorSize > bytes.length) return null;
+    for (let entry = base; entry < base + sectorSize; entry += 128) {
+      const nameBytes = view.getUint16(entry + 0x40, true);
+      const type = bytes[entry + 0x42];
+      if (type !== 2 || nameBytes < 2 || nameBytes > 64 || nameBytes % 2) continue; // 2 = tok
+      let name = '';
+      for (let k = 0; k < nameBytes - 2; k += 2) name += String.fromCharCode(view.getUint16(entry + k, true));
+      names.add(name);
+    }
+    sector = fat[sector];
+  }
+  return names;
 }
 
 /**
- * Sto je CFB datoteka, ako to jest (audit 22. 9., nalaz #16). Word dokument zasticen lozinkom
- * sprema se kao CFB s tokovima `EncryptionInfo` i `EncryptedPackage`; stari Word 97-2003 .doc
- * ima tok `WordDocument`. Imena tokova su u CFB direktoriju zapisana kao UTF-16LE.
- * `null` znaci da datoteka nema CFB potpis.
+ * Sto je CFB datoteka, ako to jest (audit 22. 9., nalaz #16). OOXML zasticen lozinkom sprema se
+ * kao CFB s tokovima `EncryptionInfo` I `EncryptedPackage` (oba moraju postojati kao zapisi
+ * direktorija); stari Word 97-2003 .doc ima tok `WordDocument`. Isti par tokova ima i sifrirani
+ * XLSX ili PPTX, pa poruka govori o zasticenoj datoteci, ne tvrdi da je to Word rad.
+ * `null` znaci da datoteka nema CFB potpis; `other` da je CFB, ali bez prepoznatog para tokova.
  */
 export function cfbKind(bytes: Uint8Array): 'encrypted-docx' | 'legacy-doc' | 'other' | null {
   if (bytes.length < CFB_MAGIC.length || CFB_MAGIC.some((b, i) => bytes[i] !== b)) return null;
-  if (hasUtf16Le(bytes, 'EncryptedPackage') || hasUtf16Le(bytes, 'EncryptionInfo')) return 'encrypted-docx';
-  if (hasUtf16Le(bytes, 'WordDocument')) return 'legacy-doc';
+  const names = cfbStreamNames(bytes);
+  if (!names) return 'other';
+  if (names.has('EncryptionInfo') && names.has('EncryptedPackage')) return 'encrypted-docx';
+  if (names.has('WordDocument')) return 'legacy-doc';
   return 'other';
 }
 
 /** Korisnicka poruka za CFB datoteku; `null` za sve ostalo. */
 export function cfbMessage(bytes: Uint8Array): string | null {
   const kind = cfbKind(bytes);
-  if (kind === 'encrypted-docx') return 'Dokument je zaštićen lozinkom pa ga nije moguće pročitati. U Wordu otvori Datoteka > Informacije > Zaštiti dokument > Šifriraj lozinkom, obriši lozinku i spremi ponovno kao .docx.';
+  if (kind === 'encrypted-docx') return 'Datoteka je zaštićena lozinkom pa je nije moguće pročitati. Ako je to tvoj rad, u Wordu otvori Datoteka > Informacije > Zaštiti dokument > Šifriraj lozinkom, obriši lozinku i spremi ponovno kao .docx.';
   if (kind === 'legacy-doc') return 'Datoteka je u starom Word formatu (.doc). U Wordu je otvori i spremi kao .docx (Spremi kao > Word dokument).';
   return null;
 }
@@ -218,6 +258,22 @@ export class ZipReader {
   }
 }
 
+const BARE_AMPERSAND = /&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/;
+const CDATA_OR_COMMENT = /<!\[CDATA\[[\s\S]*?\]\]>|<!--[\s\S]*?-->/g;
+
+/**
+ * Odbacuje li xmldom dijagnostika dokument (audit 22. 9., nalaz #14; Codex pregled #168, #14a).
+ * `error` i `fatalError` uvijek znace da XML nije well-formed. `warning` u xmldomu 0.9 pokriva
+ * neispravne oblike atributa (bez navodnika, bez razmaka, bez vrijednosti), ali i JEDNU pojavu
+ * koja je valjan XML: znak U+FFFD, koji XML 1.0 dopusta i koji u tekst lako udje kopiranjem.
+ * Zato se samo ta poruka propusta; test s doslovnim U+FFFD pada ako xmldom promijeni tekst poruke.
+ */
+export function xmlDiagnosticRejects(level: string, message: unknown): boolean {
+  if (level === 'error' || level === 'fatalError') return true;
+  if (level === 'warning') return !/unicode replacement character/i.test(String(message ?? ''));
+  return false;
+}
+
 /** Parsiraj XML string u dokument; baci gresku ako ima parsererror cvor.
  *  Odbija dokumente s DTD-om (`<!DOCTYPE`): preglednicki DOMParser ne siri vanjske entitete,
  *  ali interni ugnijezdeni entiteti (billion laughs) su nepotreban rizik u .docx dijelovima
@@ -225,6 +281,10 @@ export class ZipReader {
 export function parseXml(s: string, label = 'XML'): Document {
   if (/<!DOCTYPE/i.test(s)) throw new Error(`${label} sadrži DTD deklaraciju i odbijen je iz sigurnosnih razloga.`);
   const unreadable = () => new Error(`${label} nije moguće pročitati.`);
+  // xmldom goli `&` iza kojeg slijedi razmak ili kraj teksta (`x & y`, `a&`) prihvaca BEZ ikakve
+  // dijagnostike, pa ga `onError` ne vidi (koordinator lekta-32 na #168). Bez DTD-a (odbijen gore)
+  // `&` smije zapoceti samo predefiniranu ili numericku referencu; CDATA i komentari se preskacu.
+  if (BARE_AMPERSAND.test(s.replace(CDATA_OR_COMMENT, ''))) throw unreadable();
   // @xmldom/xmldom (worker i testovi) greske razine `error` i `warning` (goli `&` ili `<` u tekstu,
   // nepoznati entitet, atribut bez navodnika) samo ispise i vrati djelomican DOM, pa se osteceni
   // dokument tiho bodovao (audit 22. 9., nalaz #14). `onError` svaku dijagnostiku pretvara u
@@ -233,13 +293,32 @@ export function parseXml(s: string, label = 'XML'): Document {
   let diagnosed = false;
   let x: Document;
   try {
-    const Parser = DOMParser as unknown as new (options?: { onError?: (level: string) => void }) => DOMParser;
-    x = new Parser({ onError: () => { diagnosed = true; } }).parseFromString(s, 'application/xml');
+    const Parser = DOMParser as unknown as new (options?: { onError?: (level: string, message: unknown) => void }) => DOMParser;
+    x = new Parser({ onError: (level, message) => { if (xmlDiagnosticRejects(level, message)) diagnosed = true; } }).parseFromString(s, 'application/xml');
   } catch {
     throw unreadable();
   }
   if (diagnosed || first(x as any, 'parsererror')) throw unreadable();
   return x;
+}
+
+/**
+ * Efektivno skrivanje runa po OOXML pravilu za toggle svojstva (ECMA-376 dio 1, 17.7.3; Codex
+ * pregled #168, #17a). `readRPr` samo cita `w:vanish` na jednoj razini; `merge` bi zadnju razinu
+ * uzeo kao istinu, sto je krivo za stilove:
+ *  - izravno oblikovanje na runu je APSOLUTNO (`<w:vanish/>` skriva, `w:val="0"` otkriva);
+ *  - inace svaka razina stila koja ukljucuje `vanish` PREOKRECE stanje: stil odlomka i znakovni
+ *    stil s `vanish` zajedno daju VIDLJIV tekst, jedan od njih skriven;
+ *  - `docDefaults` daje polaziste. `vanish w:val="0"` u stilu ne preokrece nista.
+ * Ogranicenje: lanac `basedOn` unutar jednog stila razrjesava se kao i dosad (zadnja definicija),
+ * ne preokretanjem po svakoj razini lanca.
+ */
+export function effectiveHidden(levels: { defaults?: any; paragraphStyle?: any; runStyle?: any; direct?: any }): boolean {
+  if (levels.direct && typeof levels.direct.hidden === 'boolean') return levels.direct.hidden;
+  let hidden = levels.defaults?.hidden === true;
+  if (levels.paragraphStyle?.hidden === true) hidden = !hidden;
+  if (levels.runStyle?.hidden === true) hidden = !hidden;
+  return hidden;
 }
 
 /** Procitaj run (znakovna) svojstva: font, velicina, bold, italic. */
