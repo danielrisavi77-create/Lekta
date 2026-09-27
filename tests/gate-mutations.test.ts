@@ -173,7 +173,7 @@ import { OZNAKA_404, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfon
 import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
-import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import { forwardsNpmCacheInput, jobsWithBareNpmCi, npmCacheProblems, unpinnedExternalUses } from './helpers/ci-workflow-cache';
 import {
   falseGreenParityProblems, opportunitySqlScopeProblems, opportunityWiringProblems,
 } from './helpers/opportunity-wiring';
@@ -7419,6 +7419,42 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
       }
     };
     expect(netoGrize(tiho)).toBe(false);
+  });
+});
+
+describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
+  const poziv = (npmCache?: string) => `
+jobs:
+  j:
+    steps:
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24${npmCache === undefined ? '' : `
+          npm-cache: '${npmCache}'`}
+`;
+
+  it('baseline: word-proof gasi, check ne gasi; mutant bez gasenja u word-proof se hvata', () => {
+    expect(npmCacheProblems([{ file: 'word-proof.yml', text: poziv('false') }, { file: 'check.yml', text: poziv() }])).toEqual([]);
+    expect(npmCacheProblems([{ file: 'word-proof.yml', text: poziv() }])).toEqual(['word-proof.yml#j: npm kes nije ugasen']);
+  });
+
+  it('mutant koji gasi npm kes u hostanom workflowu se hvata', () => {
+    expect(npmCacheProblems([{ file: 'check.yml', text: poziv('false') }])).toEqual(['check.yml#j: npm kes ugasen izvan word-proof.yml']);
+  });
+
+  it('mutant akcije koja ne prosljedjuje ulaz u setup-node se hvata', () => {
+    const akcija = (withBlok: string) => `
+inputs:
+  npm-cache:
+    default: 'true'
+runs:
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: 24${withBlok}
+`;
+    expect(forwardsNpmCacheInput(akcija('\n        package-manager-cache: ${{ inputs.npm-cache }}'))).toBe(true);
+    expect(forwardsNpmCacheInput(akcija(''))).toBe(false);
   });
 });
 
