@@ -12,10 +12,12 @@
 import { spawnSync } from 'node:child_process';
 import {
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   rmSync,
   statSync,
+  symlinkSync,
   utimesSync,
   writeFileSync,
 } from 'node:fs';
@@ -521,4 +523,132 @@ describe('clean-vitest-tmp: dry-run, greske i izlazni kod', () => {
     expect(bad.stdout).toMatch(/neispravan --older-than-hours: --older-than-hours=-1; nista nije obrisano/);
     expect(existsSync(dir)).toBe(true);
   }, 120_000);
+});
+
+/**
+ * Codex krug 2 (M1): junctioni i simbolicke veze. Na Windowsu Node junction prijavljuje kao
+ * simbolicku vezu (lstat), pa se stvaraju junctioni (bez administratora); drugdje obicne veze.
+ */
+const LINK_TYPE = process.platform === 'win32' ? 'junction' : 'dir';
+
+describe('clean-vitest-tmp: junctioni i simbolicke veze (Codex krug 2, M1)', () => {
+  const extra: string[] = [];
+  afterEach(() => {
+    for (const d of extra.splice(0)) rmSync(d, { recursive: true, force: true });
+  });
+
+  /** Stari cilj izvan korijena s jednom datotekom; vraca [cilj, datoteka]. */
+  function oldTarget(): [string, string] {
+    const cilj = mkdtempSync(join(tmpdir(), 'lekta-clean-tmp-cilj-'));
+    extra.push(cilj);
+    mkdirSync(join(cilj, 'web'));
+    const f = join(cilj, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709');
+    writeFileSync(f, 'tudje');
+    for (const p of [f, join(cilj, 'web'), cilj]) setTime(p, NOW - 90 * HOUR);
+    return [cilj, f];
+  }
+
+  it('kandidat koji je sam junction ne brise se, ni on ni njegov cilj, i odbijen je s razlogom', () => {
+    const [cilj, f] = oldTarget();
+    const vezaNano = join(root, NANO_A);
+    const vezaLekta = join(root, 'lekta-runner-publish-0aZUKz');
+    symlinkSync(cilj, vezaNano, LINK_TYPE);
+    symlinkSync(cilj, vezaLekta, LINK_TYPE);
+    // Generator proizvodi ciljanu klasu ulaza: oba kandidata su veze, a cilj je star.
+    expect(lstatSync(vezaNano).isSymbolicLink()).toBe(true);
+    expect(lstatSync(vezaLekta).isSymbolicLink()).toBe(true);
+
+    const p = plan();
+    expect(p.remove).toEqual([]);
+    expect(p.refused.map((r) => r.path).sort()).toEqual([vezaNano, vezaLekta].sort());
+    for (const r of p.refused) expect(r.reason).toMatch(/simbolicka veza ili junction/);
+    const lines: string[] = [];
+    runCli({ argv: [], root, nowMs: NOW, listProcesses: () => QUIET, selfPid: SELF, log: (l: string) => lines.push(l) });
+    expect(lines.join('\n')).toContain('obrisano: 0 mapa');
+    expect(lstatSync(vezaNano).isSymbolicLink()).toBe(true);
+    expect(lstatSync(vezaLekta).isSymbolicLink()).toBe(true);
+    expect(existsSync(f)).toBe(true);
+  });
+
+  it('lstat kandidata je mjerodavan i kad unos direktorija ne kaze da je veza', () => {
+    // Sustav u memoriji: readdir tvrdi da je unos obicna mapa, lstat kaze da je veza.
+    const r = resolve('/lekta-virtualni-m1');
+    const cand = join(r, 'lekta-runner-publish-0aZUKz');
+    const old = NOW - 90 * HOUR;
+    const fs = {
+      readdir: (p: string) => (p === r
+        ? [{ name: 'lekta-runner-publish-0aZUKz', isDirectory: () => true, isSymbolicLink: () => false }]
+        : []),
+      lstat: (p: string) => ({ mtimeMs: old, size: 0, isDirectory: () => true, isSymbolicLink: () => p === cand }),
+    };
+    const p = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs });
+    expect(p.remove).toEqual([]);
+    expect(p.refused.map((x) => x.path)).toEqual([cand]);
+    // Baseline: isti sustav bez veze ide u brisanje, pa lstat (a ne fixtura) cuva kandidata.
+    const bezVeze = {
+      ...fs,
+      lstat: (_p: string) => ({ mtimeMs: old, size: 0, isDirectory: () => true, isSymbolicLink: () => false }),
+    };
+    const p2 = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs: bezVeze });
+    expect(p2.remove.map((x) => x.path)).toEqual([cand]);
+  });
+
+  it('korijen koji je junction u Temp/claude/** blokiran je po realpathu, iako tekst putanje nije', () => {
+    const base = mkdtempSync(join(tmpdir(), 'lekta-clean-tmp-realpath-'));
+    extra.push(base);
+    const sesija = join(base, 'Temp', 'claude', 'sesija');
+    mkdirSync(sesija, { recursive: true });
+    const stavka = join(sesija, 'lekta-runner-publish-0aZUKz');
+    mkdirSync(join(stavka, 'Default'), { recursive: true });
+    writeFileSync(join(stavka, 'Default', 'Preferences'), '{}');
+    for (const p of [join(stavka, 'Default', 'Preferences'), join(stavka, 'Default'), stavka]) setTime(p, NOW - 90 * HOUR);
+    const pogled = join(base, 'pogled');
+    symlinkSync(sesija, pogled, LINK_TYPE);
+
+    const p = planCleanup({ root: pogled, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF });
+    expect(p.blocked).toMatch(/realpath/);
+    executePlan(p);
+    expect(existsSync(join(stavka, 'Default', 'Preferences'))).toBe(true);
+    // Baseline: isti sadrzaj pod korijenom izvan Temp/claude se brise.
+    const izvan = join(base, 'izvan');
+    mkdirSync(join(izvan, 'lekta-runner-publish-0aZUKz', 'Default'), { recursive: true });
+    setTime(join(izvan, 'lekta-runner-publish-0aZUKz', 'Default'), NOW - 90 * HOUR);
+    setTime(join(izvan, 'lekta-runner-publish-0aZUKz'), NOW - 90 * HOUR);
+    const p2 = planCleanup({ root: izvan, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF });
+    expect(p2.remove).toHaveLength(1);
+  });
+
+  it('kandidat ciji je realpath pod Temp/claude/** odbijen je i kad korijen nije', () => {
+    const r = resolve('/lekta-virtualni-m1b');
+    const cand = join(r, 'lekta-runner-publish-0aZUKz');
+    const old = NOW - 90 * HOUR;
+    const base = {
+      readdir: (p: string) => (p === r
+        ? [{ name: 'lekta-runner-publish-0aZUKz', isDirectory: () => true, isSymbolicLink: () => false }]
+        : []),
+      lstat: (_p: string) => ({ mtimeMs: old, size: 0, isDirectory: () => true, isSymbolicLink: () => false }),
+    };
+    const fs = { ...base, realpath: (p: string) => (p === cand ? resolve('/Temp/claude/lekta-wf/x') : p) };
+    const p = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs });
+    expect(p.remove).toEqual([]);
+    expect(p.refused.map((x) => [x.path, x.reason])).toEqual([[cand, expect.stringMatching(/realpath/)]]);
+    const ravno = { ...base, realpath: (p: string) => p };
+    const p2 = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs: ravno });
+    expect(p2.remove.map((x) => x.path)).toEqual([cand]);
+  });
+
+  it('kandidat zamijenjen junctionom izmedju plana i brisanja ne brise se (ponovni lstat)', () => {
+    const [cilj, f] = oldTarget();
+    const dir = makeVitestDir(NANO_A, 9 * HOUR);
+    const p = plan();
+    expect(p.remove.map((i) => i.path)).toEqual([dir]);
+    rmSync(dir, { recursive: true, force: true });
+    symlinkSync(cilj, dir, LINK_TYPE);
+    const calls: string[] = [];
+    const res = executePlan(p, { rm: (path: string) => { calls.push(path); } });
+    expect(calls).toEqual([]);
+    expect(res.removed).toBe(0);
+    expect(res.refused.map((x) => x.path)).toEqual([dir]);
+    expect(existsSync(f)).toBe(true);
+  });
 });

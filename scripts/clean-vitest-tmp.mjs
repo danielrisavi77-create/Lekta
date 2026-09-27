@@ -22,18 +22,24 @@
  * Stavka G (odluka vlasnika 2026-09-26): ostaci testova i alata koji nisu Vitest, izmjereni u
  * %TEMP% 2026-09-27, po istom obrascu (izravno dijete korijena, gard po vrsti, starost po
  * najnovijoj datoteci, rmSync nad tocnom putanjom), ali s pragom od 24 h:
- *   - `tmp<8>.docx`: Python `tempfile.mkstemp(suffix=".docx")` (40 datoteka od 24. 9.);
  *   - `lekta-<poznati prefiks>-...-<6>`: `mkdtemp` iz testova i pomocnika (release gate, runner
  *     publish, repair secrets, ...); samo MAPE s poznatim prefiksom i mkdtemp sufiksom, jer se u
  *     %TEMP% nalaze i rucno ostavljeni `lekta-t21-*.sql`, `lekta-gradri-pdf-check` i slicno;
  *   - `lekta-oracle-<8>`: `tempfile.mkdtemp(prefix="lekta-oracle-")` iz scripts/corpus-oracle.py;
  *   - `playwright_<preglednik>dev_profile-<6>`: profil preglednika koji Playwright stvara po
  *     pokretanju (14 do 59 MB svaki).
- * Korijen pod `Temp/claude/**` (radni prostor sesija i worktreeovi runova) se NIKAD ne cisti.
+ * Korijen pod `Temp/claude/**` (radni prostor sesija i worktreeovi runova) se NIKAD ne cisti, ni
+ * kad je tamo samo po realpathu (junction). Kandidat koji je sam reparse point (junction ili
+ * simbolicka veza; Node ih na Windowsu oba prijavljuje kao isSymbolicLink) se nikad ne brise ni
+ * slijedi, i provjerava se ponovno lstatom neposredno prije brisanja.
+ *
+ * Python `tmp<8>.docx` (tempfile.mkstemp) NAMJERNO NIJE kategorija (Codex nalaz, krug 2, B2): oblik
+ * imena ne dokazuje da je datoteku ostavio Lektin alat, a ne neki drugi program korisnika, a
+ * izmjereno je samo 1,5 MB takvih datoteka. Nedokazivo vlasnistvo = ne brisi.
  *
  * Izlazni kod je UVIJEK 0: ciscenje je higijena, ne gate, i ne smije srusiti `npm run check`.
  */
-import { lstatSync, readdirSync, rmSync } from 'node:fs';
+import { lstatSync, readdirSync, realpathSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve, sep } from 'node:path';
@@ -54,14 +60,18 @@ export const DEFAULT_THRESHOLD_HOURS = 2;
  */
 export const LEFTOVER_THRESHOLD_HOURS = 24;
 export const DEFAULT_MAX_ENTRIES = 20_000;
-/** Python `tempfile.mkstemp(suffix=".docx")`: `tmp` + 8 znakova iz [a-z0-9_]. */
-export const PY_TMP_DOCX_NAME = /^tmp[a-z0-9_]{8}\.docx$/i;
 /**
  * Mape koje testovi i pomocnici stvaraju s `mkdtemp(join(tmpdir(), 'lekta-...-'))`: poznati
  * prefiks, proizvoljni srednji segmenti i Nodeov mkdtemp sufiks od tocno 6 znakova. Prefiksi su
  * izvedeni iz `grep mkdtemp tests/ scripts/` (2026-09-27); `lekta-repair-secrets-` stvara
  * scripts/local-repair-secret-staging.mts. `lekta-projverify-` (scripts/projection-verify.mjs) je
  * NAMJERNO izostavljen: to je git worktree, a brisanje mape ostavilo bi visecu registraciju.
+ *
+ * Rizik tudjeg vlasnistva je prihvacen (Codex krug 2, odluka koordinatora): prefiks `lekta-` je
+ * prostor imena ovog projekta, prefiksi su tocno nabrojani, a sufiks je tocno Nodeov mkdtemp od 6
+ * znakova. Isto obrazlozenje vrijedi za uske uzorke LEKTA_ORACLE_NAME i PLAYWRIGHT_PROFILE_NAME
+ * (vlastiti prefiks i sufiks tocne duljine). Za razliku od `tmp<8>.docx`, ovdje ime nosi prostor
+ * imena vlasnika.
  */
 export const LEKTA_TEST_TMP_NAME =
   /^lekta-(?:release|runner|repair-secrets|secret|migration|real-migration-executor-test|agents|build-production|clean-tmp|preflight|word-outdir)-(?:[A-Za-z0-9]+-)*[A-Za-z0-9]{6}$/;
@@ -70,11 +80,9 @@ export const LEKTA_ORACLE_NAME = /^lekta-oracle-[a-z0-9_]{8}$/i;
 /** Playwright profil preglednika: `playwright_chromiumdev_profile-XXXXXX` (i firefox, webkit). */
 export const PLAYWRIGHT_PROFILE_NAME = /^playwright_[a-z]+dev_profile-[A-Za-z0-9]{6}$/;
 /** Vrste s pragom od 24 h; ostale (vitest, word-replica) zadrzavaju prag iz `--older-than-hours`. */
-export const LEFTOVER_KINDS = new Set(['tmp-docx', 'lekta-test', 'lekta-oracle', 'playwright-profile']);
-/** Vrste koje su datoteke, ne mape. */
-export const FILE_KINDS = new Set(['tmp-docx']);
+export const LEFTOVER_KINDS = new Set(['lekta-test', 'lekta-oracle', 'playwright-profile']);
 /**
- * @typedef {'vitest' | 'word-replica' | 'tmp-docx' | 'lekta-test' | 'lekta-oracle' | 'playwright-profile'} Kind
+ * @typedef {'vitest' | 'word-replica' | 'lekta-test' | 'lekta-oracle' | 'playwright-profile'} Kind
  */
 /**
  * Vrsta mape -> procesi koji je smiju drzati zivom. `name` filtrira po imenu procesa kad ga popis
@@ -88,11 +96,6 @@ export const RUNNER_RULES = {
     label: 'pytest/word_replica',
     name: /^(python|pythonw|py|pytest)[0-9.]*(\.exe)?$/i,
     command: /pytest|word_replica/i,
-  },
-  'tmp-docx': {
-    label: 'python docx',
-    name: /^(python|pythonw|py|pytest)[0-9.]*(\.exe)?$/i,
-    command: /pytest|word_replica|corpus[-_]oracle|katedra|rad-docx|docx/i,
   },
   'lekta-test': {
     label: 'vitest/repair-local',
@@ -111,7 +114,7 @@ export const RUNNER_RULES = {
   },
 };
 /** @type {Kind[]} */
-export const GUARD_KINDS = ['vitest', 'word-replica', 'tmp-docx', 'lekta-test', 'lekta-oracle', 'playwright-profile'];
+export const GUARD_KINDS = ['vitest', 'word-replica', 'lekta-test', 'lekta-oracle', 'playwright-profile'];
 
 /**
  * Je li korijen unutar `Temp/claude/**` (ili `tmp/claude/**`)? Tamo zive radni prostori Claude
@@ -126,6 +129,8 @@ export function isInsideClaudeTemp(root) {
   }
   return false;
 }
+/** Razlog odbijanja kandidata koji je sam junction ili simbolicka veza (Codex krug 2, M1). */
+const LINK_REFUSED = 'kandidat je simbolicka veza ili junction, ne brisem ga ni ne slijedim';
 /** Ime ove skripte: pozivatelj (ljuska `npm run check`) ga nosi u naredbenom retku. */
 const SELF_SCRIPT = 'clean-vitest-tmp.mjs';
 
@@ -134,12 +139,15 @@ const SELF_SCRIPT = 'clean-vitest-tmp.mjs';
  * ubrizgava sustav u memoriji da nista na disku ne dira.
  * @typedef {{ name: string, isDirectory(): boolean, isSymbolicLink(): boolean }} EntryLike
  * @typedef {{ mtimeMs: number, size: number, isDirectory(): boolean, isSymbolicLink(): boolean }} StatLike
- * @typedef {{ readdir(path: string): EntryLike[], lstat(path: string): StatLike }} FsLike
+ * `realpath` razrjesava junctione i simbolicke veze (za izuzece Temp/claude/**). Stvarni sustav ga
+ * uvijek ima; sustav u memoriji koji ga ne preda nema veza, pa je tamo realpath sama putanja.
+ * @typedef {{ readdir(path: string): EntryLike[], lstat(path: string): StatLike, realpath?(path: string): string }} FsLike
  */
 /** @type {FsLike} */
 export const REAL_FS = {
   readdir: (p) => readdirSync(p, { withFileTypes: true }),
   lstat: (p) => lstatSync(p),
+  realpath: (p) => realpathSync.native(p),
 };
 
 /**
@@ -235,6 +243,7 @@ export function runnerGuard(processes, selfPid, kind) {
  */
 export function measureDir(dir, maxEntries = DEFAULT_MAX_ENTRIES, fs = REAL_FS) {
   const rootStat = fs.lstat(dir);
+  if (rootStat.isSymbolicLink()) return { status: 'symlink', path: dir };
   let newestMs = rootStat.mtimeMs;
   let bytes = 0;
   let entries = 0;
@@ -270,7 +279,8 @@ export function classifyEntry(full, ent, fs = REAL_FS) {
   const isWord = ent.name.startsWith(WORD_REPLICA_PREFIX);
   const isNanoid = NANOID_NAME.test(ent.name);
   if (!isWord && !isNanoid) return null;
-  if (ent.isSymbolicLink() || !ent.isDirectory()) return null;
+  if (ent.isSymbolicLink()) return { refused: LINK_REFUSED, kind: isWord ? 'word-replica' : 'vitest' };
+  if (!ent.isDirectory()) return null;
   if (isWord) return { kind: 'word-replica' };
   const inner = fs.readdir(full);
   if (inner.length === 0) return { refused: 'prazna mapa (nije Vitest oblik)', kind: 'vitest' };
@@ -283,36 +293,22 @@ export function classifyEntry(full, ent, fs = REAL_FS) {
 }
 
 /**
- * Vrste iz stavke G. `undefined` znaci da ime ne pripada nijednoj od njih (klasifikacija ide dalje
- * na Vitest i WordReplicu); `null` da ime odgovara, ali oblik ne (simbolicka veza, mapa umjesto
- * datoteke ili obrnuto), pa unos nije kandidat.
+ * Vrste iz stavke G (sve su mape). `undefined` znaci da ime ne pripada nijednoj od njih
+ * (klasifikacija ide dalje na Vitest i WordReplicu); `null` da ime odgovara, ali je unos datoteka,
+ * pa nije kandidat. Simbolicka veza ili junction s imenom kategorije je odbijena s razlogom.
  * @param {EntryLike} ent
- * @returns {undefined | null | { kind: Kind }}
+ * @returns {undefined | null | { kind: Kind } | { refused: string, kind: Kind }}
  */
 export function classifyLeftover(ent) {
   /** @type {Kind | null} */
   let kind = null;
-  if (PY_TMP_DOCX_NAME.test(ent.name)) kind = 'tmp-docx';
-  else if (LEKTA_ORACLE_NAME.test(ent.name)) kind = 'lekta-oracle';
+  if (LEKTA_ORACLE_NAME.test(ent.name)) kind = 'lekta-oracle';
   else if (LEKTA_TEST_TMP_NAME.test(ent.name)) kind = 'lekta-test';
   else if (PLAYWRIGHT_PROFILE_NAME.test(ent.name)) kind = 'playwright-profile';
   if (kind === null) return undefined;
-  if (ent.isSymbolicLink()) return null;
-  if (FILE_KINDS.has(kind) === ent.isDirectory()) return null;
+  if (ent.isSymbolicLink()) return { refused: LINK_REFUSED, kind };
+  if (!ent.isDirectory()) return null;
   return { kind };
-}
-
-/**
- * Mjeri jednu datoteku (vrste iz FILE_KINDS): starost je njezin mtime, velicina njezina velicina.
- * @param {string} path
- * @param {FsLike} fs
- * @returns {{ status: 'ok', newestMs: number, bytes: number, entries: number } | { status: 'symlink', path: string }}
- */
-export function measureFile(path, fs = REAL_FS) {
-  const st = fs.lstat(path);
-  if (st.isSymbolicLink()) return { status: 'symlink', path };
-  if (st.isDirectory()) throw Object.assign(new Error(`EISDIR ${path}`), { code: 'EISDIR' });
-  return { status: 'ok', newestMs: st.mtimeMs, bytes: st.size, entries: 1 };
 }
 
 /**
@@ -354,9 +350,12 @@ export function planCleanup(opts) {
    *   held: Array<{ path: string, kind: Kind }>,
    *   refused: Array<{ path: string, reason: string, kind?: Kind }>,
    *   errors: Array<{ path: string, code: string }>,
+   *   fs: FsLike,
    * }}
    */
-  const plan = { root, blocked: null, guards: {}, remove: [], young: [], held: [], refused: [], errors: [] };
+  const plan = { root, blocked: null, guards: {}, remove: [], young: [], held: [], refused: [], errors: [], fs };
+  const isProtected = opts.protectedRoot ?? isInsideClaudeTemp;
+  const realpath = fs.realpath ?? ((p) => p);
 
   if (!Number.isFinite(opts.thresholdMs) || opts.thresholdMs <= 0) {
     plan.blocked = `neispravan prag starosti (${opts.thresholdMs} ms)`;
@@ -366,8 +365,18 @@ export function planCleanup(opts) {
     plan.blocked = `neispravan prag starosti ostataka (${leftoverThresholdMs} ms)`;
     return plan;
   }
-  if ((opts.protectedRoot ?? isInsideClaudeTemp)(root)) {
+  if (isProtected(root)) {
     plan.blocked = 'korijen je pod Temp/claude (radni prostor sesija i worktreeovi runova), ne diram nista';
+    return plan;
+  }
+  // Isto i po realpathu: korijen moze biti junction ili simbolicka veza u Temp/claude/**.
+  try {
+    if (isProtected(resolve(realpath(root)))) {
+      plan.blocked = 'korijen je po realpathu pod Temp/claude (junction ili veza), ne diram nista';
+      return plan;
+    }
+  } catch (err) {
+    plan.blocked = `realpath korijena nije izmjeren (${errCode(err)}), nepoznato = ne brisi`;
     return plan;
   }
   let processes;
@@ -407,6 +416,13 @@ export function planCleanup(opts) {
       plan.refused.push({ path: full, reason: 'putanja izvan korijena', kind: cls.kind });
       continue;
     }
+    // Kandidat se mjeri SAM (lstat), ne po unosu direktorija: junction ili simbolicka veza se ne
+    // brise ni ne slijedi, a ni kandidat koji po realpathu vodi u Temp/claude/**.
+    const linkReason = candidateLinkReason(full, fs, realpath, isProtected);
+    if (linkReason !== null) {
+      plan.refused.push({ path: full, reason: linkReason, kind: cls.kind });
+      continue;
+    }
     // Gard procesa PRIJE mjerenja: mapu koju zivi pisac njezine vrste moze drzati ne diramo ni
     // citanjem, i ne ovisi o tome koliko je stara.
     if (!plan.guards[cls.kind].ok) {
@@ -415,7 +431,7 @@ export function planCleanup(opts) {
     }
     let m;
     try {
-      m = FILE_KINDS.has(cls.kind) ? measureFile(full, fs) : measure(full, maxEntries, fs);
+      m = measure(full, maxEntries, fs);
     } catch (err) {
       plan.errors.push({ path: full, code: errCode(err) });
       continue;
@@ -437,13 +453,35 @@ export function planCleanup(opts) {
 }
 
 /**
- * Izvrsava plan. Svaka putanja se prije brisanja ponovno provjerava prema korijenu; greske se
- * zbrajaju po kodu (EBUSY, EPERM, ...) i nikad ne bacaju.
+ * Razlog zbog kojeg se kandidat ne smije dirati, ili `null`. Kvar mjerenja je razlog (nepoznato =
+ * ne brisi).
+ * @param {string} full
+ * @param {FsLike} fs
+ * @param {(p: string) => string} realpath
+ * @param {(root: string) => boolean} isProtected
+ * @returns {string | null}
+ */
+function candidateLinkReason(full, fs, realpath, isProtected) {
+  try {
+    if (fs.lstat(full).isSymbolicLink()) return LINK_REFUSED;
+    if (isProtected(resolve(realpath(full)))) return 'kandidat je po realpathu pod Temp/claude, ne diram ga';
+  } catch (err) {
+    return `stanje kandidata nije izmjereno (${errCode(err)}), nepoznato = ne brisi`;
+  }
+  return null;
+}
+
+/**
+ * Izvrsava plan. Svaka putanja se prije brisanja ponovno provjerava prema korijenu i ponovno
+ * lstatom istog sustava kojim je plan izmjeren (kandidat zamijenjen junctionom
+ * izmedju plana i brisanja se ne dira); greske se zbrajaju po kodu (EBUSY, EPERM, ...) i nikad ne
+ * bacaju.
  * @param {ReturnType<typeof planCleanup>} plan
  * @param {{ dryRun?: boolean, rm?: (p: string, o: { recursive: true, force: true }) => void }} [opts]
  */
 export function executePlan(plan, opts = {}) {
   const rm = opts.rm ?? rmSync;
+  const fs = plan.fs ?? REAL_FS;
   const result = {
     dryRun: Boolean(opts.dryRun),
     removed: 0,
@@ -456,6 +494,12 @@ export function executePlan(plan, opts = {}) {
   for (const item of plan.remove) {
     if (!isDirectChildOf(plan.root, item.path)) {
       result.refused.push({ path: item.path, reason: 'putanja izvan korijena' });
+      continue;
+    }
+    // Realpath i Temp/claude su izmjereni u planu (istim injektiranim gardom); ovdje samo lstat.
+    const linkReason = candidateLinkReason(item.path, fs, (p) => p, () => false);
+    if (linkReason !== null) {
+      result.refused.push({ path: item.path, reason: linkReason });
       continue;
     }
     if (result.dryRun) {

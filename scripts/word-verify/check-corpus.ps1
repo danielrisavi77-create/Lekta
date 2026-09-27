@@ -28,7 +28,8 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $fixtures = Join-Path $root 'tests\fixtures\docx'
 # Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
-# samo unutar repozitorija, izvan tests/fixtures i kad ga git ignorira (vidi outdir-cleanup.ps1).
+# samo kad je Word stvarno provjerio barem jedan dokument ($provjereno), ime je .tmp-word-verify ili
+# .tmp-word-corpus u korijenu repozitorija, nije junction i git ga ignorira (vidi outdir-cleanup.ps1).
 # Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
 . (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
 trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
@@ -92,6 +93,7 @@ function Open-Strict {
 }
 
 $fail = 0
+$provjereno = 0
 $report = @()
 try {
   foreach ($r in $rows) {
@@ -115,6 +117,7 @@ try {
       $doc = Open-Strict $r.Izlaz
       $odlomciPoslije = [int]$doc.Paragraphs.Count
       $doc.Close($false)
+      $provjereno++
 
       $izgubljeno = $r.Izgubljeno
       if ($izgubljeno) { $fail++ }
@@ -150,5 +153,5 @@ if ($fail -gt 0) {
 Write-Output "SVE PROSLO: svih $($rows.Count) popravljenih paketa otvara pravi Word, nijedan dio nije izgubljen."
 
 # Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
-Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root -CheckedCount $provjereno
 exit 0

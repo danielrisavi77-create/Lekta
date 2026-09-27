@@ -46,6 +46,69 @@ describe('register-clean-task.ps1: oblik datoteke', () => {
   });
 });
 
+/**
+ * Codex krug 2 (M2): task istog imena koji nije nas (druga akcija ili drugi radni direktorij) se ne
+ * uklanja i ne prepisuje. Tekstualni gard nad obje grane (uklanjanje i registracija).
+ */
+function registerOwnershipProblems(src: string): string[] {
+  const c = src.replace(/\r/g, '').split('\n').filter((l) => !l.trimStart().startsWith('#')).join('\n');
+  const problems: string[] = [];
+  if (!/^function Test-LektaCleanTaskOwned \{$/m.test(c)) problems.push('nema funkcije Test-LektaCleanTaskOwned');
+  if (!c.includes('$akcije.Count -ne 1')) problems.push('vlasnistvo ne trazi tocno jednu akciju');
+  if (!c.includes('[string]$akcije[0].Arguments') || !c.includes('[string]$akcije[0].WorkingDirectory')) {
+    problems.push('vlasnistvo ne usporedjuje Actions[0].Arguments i WorkingDirectory');
+  }
+  if (/-Force\b/.test(c)) problems.push('skripta koristi -Force (prepisuje tudji task)');
+  const refuse = /if \(-not \(Test-LektaCleanTaskOwned [^\n]*\)\) \{\n[^\n]*Odbijam[^\n]*\n\s+exit 1\n/;
+  const unreg = c.indexOf('if ($Unregister) {');
+  const unregEnd = unreg < 0 ? -1 : c.indexOf('\n}\n', unreg);
+  const unregBlock = unreg < 0 || unregEnd < 0 ? '' : c.slice(unreg, unregEnd);
+  const unregCall = unregBlock.indexOf('Unregister-ScheduledTask');
+  const unregCheck = unregBlock.indexOf('Test-LektaCleanTaskOwned');
+  if (unregCall < 0 || unregCheck < 0 || unregCheck > unregCall || !refuse.test(unregBlock)) {
+    problems.push('-Unregister ne odbija tudji task prije Unregister-ScheduledTask');
+  }
+  const rest = unregEnd < 0 ? c : c.slice(unregEnd);
+  const reg = rest.indexOf('Register-ScheduledTask -TaskName');
+  const regCheck = rest.indexOf('Test-LektaCleanTaskOwned');
+  if (reg < 0 || regCheck < 0 || regCheck > reg || !refuse.test(rest)) {
+    problems.push('registracija ne odbija postojeci tudji task istog imena');
+  }
+  return problems;
+}
+
+describe('register-clean-task.ps1: vlasnistvo nad taskom (Codex krug 2, M2)', () => {
+  it('baseline: skripta zadovoljava gard vlasnistva', () => {
+    expect(registerOwnershipProblems(text)).toEqual([]);
+  });
+
+  it('gard hvata -Unregister koji brise bez provjere vlasnistva', () => {
+    const mutirano = text.replace(
+      /(if \(\$Unregister\) \{[\s\S]*?)if \(-not \(Test-LektaCleanTaskOwned [^\n]*\)\) \{\n[^\n]*\n\s+exit 1\n\s+\}\n/,
+      '$1',
+    );
+    expect(mutirano).not.toBe(text);
+    expect(registerOwnershipProblems(mutirano)).toContain('-Unregister ne odbija tudji task prije Unregister-ScheduledTask');
+  });
+
+  it('gard hvata registraciju s -Force i bez provjere postojeceg taska', () => {
+    const sForce = text.replace(
+      "-Description 'Lekta: npm run clean:tmp (scripts/clean-vitest-tmp.mjs)'",
+      "-Description 'Lekta: npm run clean:tmp (scripts/clean-vitest-tmp.mjs)' -Force",
+    );
+    expect(sForce).not.toBe(text);
+    expect(registerOwnershipProblems(sForce)).toContain('skripta koristi -Force (prepisuje tudji task)');
+    const zadnjaProvjera = text.lastIndexOf('if (-not (Test-LektaCleanTaskOwned');
+    expect(zadnjaProvjera).toBeGreaterThan(text.indexOf('if ($Unregister) {'));
+    const bezProvjere = text.slice(0, zadnjaProvjera) + text.slice(zadnjaProvjera).replace(
+      /if \(-not \(Test-LektaCleanTaskOwned [^\n]*\)\) \{\n[^\n]*\n\s+exit 1\n\s+\}\n/,
+      '',
+    );
+    expect(bezProvjere).not.toBe(text);
+    expect(registerOwnershipProblems(bezProvjere)).toContain('registracija ne odbija postojeci tudji task istog imena');
+  });
+});
+
 function powershell(args: string[]) {
   return spawnSync('powershell', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', ...args], {
     encoding: 'utf8',
@@ -71,5 +134,39 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: -DryRun 
     expect(def.LogonType).toBe('Interactive');
     expect(def.Triggers).toEqual(['MSFT_TaskDailyTrigger', 'MSFT_TaskLogonTrigger']);
     expect(exists()).toBe(prije);
+  });
+});
+
+describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-LektaCleanTaskOwned stvarno izvedena (M2)', () => {
+  it('prihvaca samo nasu akciju iz predanog korijena, odbija tudju akciju i tudji radni direktorij', () => {
+    const repo = resolve(process.cwd());
+    const nasArg = `"${resolve(repo, 'scripts', 'clean-vitest-tmp.mjs')}"`;
+    const q = (s: string) => `'${s.replace(/'/g, "''")}'`;
+    const task = (args: string, wd: string, n = 1) =>
+      `[pscustomobject]@{ Actions = @(1..${n} | ForEach-Object { [pscustomobject]@{ Execute = 'node.exe'; Arguments = ${q(args)}; WorkingDirectory = ${q(wd)} } }) }`;
+    const cases: Array<[string, string]> = [
+      ['NAS', task(nasArg, repo)],
+      ['NAS_VELIKA', task(nasArg.toUpperCase(), `${repo.toUpperCase()}\\`)],
+      ['TUDJA_AKCIJA', task('"C:\\drugi\\backup.ps1"', repo)],
+      ['TUDJI_WD', task(nasArg, 'C:\\drugi-repo')],
+      ['DRUGI_REPO', task('"C:\\drugi-repo\\scripts\\clean-vitest-tmp.mjs"', 'C:\\drugi-repo')],
+      ['DVIJE_AKCIJE', task(nasArg, repo, 2)],
+    ];
+    const cmd = [
+      `$ast = [System.Management.Automation.Language.Parser]::ParseFile(${q(SCRIPT)}, [ref]$null, [ref]$null)`,
+      "$fn = $ast.Find({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq 'Test-LektaCleanTaskOwned' }, $true)",
+      'if ($null -eq $fn) { throw "nema funkcije Test-LektaCleanTaskOwned" }',
+      '. ([scriptblock]::Create($fn.Extent.Text))',
+      ...cases.map(([ime, t]) => `"${ime}=$(Test-LektaCleanTaskOwned -Task (${t}) -Root ${q(repo)})"`),
+    ].join('; ');
+    const r = powershell(['-Command', cmd]);
+    expect(r.status, r.stderr).toBe(0);
+    const out = r.stdout.replace(/\r/g, '');
+    expect(out).toContain('NAS=True');
+    expect(out).toContain('NAS_VELIKA=True');
+    expect(out).toContain('TUDJA_AKCIJA=False');
+    expect(out).toContain('TUDJI_WD=False');
+    expect(out).toContain('DRUGI_REPO=False');
+    expect(out).toContain('DVIJE_AKCIJE=False');
   });
 });

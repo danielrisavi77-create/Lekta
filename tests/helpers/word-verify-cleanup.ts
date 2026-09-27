@@ -10,8 +10,12 @@
  *      svakog `exit 1`, i odmah iza poziva slijedi `exit 0`;
  *   2. u skripti nema rekurzivnog `Remove-Item` (brise samo funkcija iz pomocne datoteke);
  *   3. svaki `exit 1` i trap za iznimke ispisuju putanju koja ostaje ("ostavljen za dijagnozu");
- *   4. pomocna funkcija odustaje izvan korijena repozitorija, pod tests/fixtures i kad git
- *      direktorij ne ignorira ili u njemu prati datoteke (`wordVerifyHelperProblems`).
+ *   4. skripta broji stvarno provjerene dokumente (`$provjereno = 0`, `$provjereno++`) i predaje ih
+ *      kao `-CheckedCount $provjereno`;
+ *   5. pomocna funkcija (`wordVerifyHelperProblems`) odustaje kad je broj provjerenih 0, kad ime
+ *      nije iz allowliste (.tmp-word-verify, .tmp-word-corpus), kad roditelj nije korijen
+ *      repozitorija, kad je direktorij ili ista ispod njega reparse point i kad ga git ne ignorira
+ *      ili u njemu prati datoteke (Codex nalaz, krug 2: bez allowliste `-OutDir node_modules`).
  */
 
 /** Skripte koje stvaraju izlazni direktorij i nakon uspjeha ga brisu. */
@@ -25,7 +29,7 @@ export const WORD_VERIFY_CLEANUP_SCRIPTS = [
 /** Pomocna datoteka s jedinom funkcijom koja brise. */
 export const WORD_VERIFY_CLEANUP_HELPER = 'scripts/word-verify/outdir-cleanup.ps1';
 
-const CALL = /^Remove-WordVerifyOutDir\s+-Dir\s+\$OutDir\s+-RepoRoot\s+\$root\s*$/;
+const CALL = /^Remove-WordVerifyOutDir\s+-Dir\s+\$OutDir\s+-RepoRoot\s+\$root\s+-CheckedCount\s+\$provjereno\s*$/;
 const INCLUDE = /^\. \(Join-Path \$PSScriptRoot 'outdir-cleanup\.ps1'\)\s*$/;
 const KEPT = 'ostavljen za dijagnozu';
 
@@ -70,6 +74,13 @@ export function wordVerifyCleanupProblems(ps1: string): string[] {
     if (next?.trim() !== 'exit 0') problems.push('iza poziva brisanja ne slijedi exit 0');
   }
 
+  if (lines.filter((l) => /^\$provjereno = 0\s*$/.test(l)).length !== 1) {
+    problems.push('skripta ne inicijalizira $provjereno = 0 tocno jednom na vrhu');
+  }
+  if (!lines.some((l) => /^\s+\$provjereno\+\+\s*$/.test(l))) {
+    problems.push('skripta nigdje ne broji provjereni dokument ($provjereno++)');
+  }
+
   lines.forEach((l, i) => {
     if (!/\bexit 1\b/.test(l)) return;
     const prev = lines.slice(0, i).reverse().find((x) => x.trim() !== '') ?? '';
@@ -83,23 +94,42 @@ export function wordVerifyCleanupProblems(ps1: string): string[] {
   return problems;
 }
 
-/** Prazan popis znaci da pomocna funkcija brise samo ignoriran direktorij unutar repozitorija. */
+/** Tocan uvjet (tekst unutar `if (...)`) nakon kojeg funkcija ispise razlog i odustane (`return`). */
+function givesUp(code: string, condition: string): boolean {
+  const lines = code.split('\n');
+  return lines.some((l, i) => l === `  if (${condition}) {` && lines[i + 2] === '    return');
+}
+
+/** Allowlista imena koja smiju biti obrisana; sve drugo (npr. node_modules) ostaje. */
+export const WORD_VERIFY_ALLOWLIST_LINE = "$dozvoljenaImena = @('.tmp-word-verify', '.tmp-word-corpus')";
+
+/** Prazan popis znaci da pomocna funkcija brise samo provjeren, dopusten direktorij u korijenu. */
 export function wordVerifyHelperProblems(ps1: string): string[] {
   const code = executableLines(ps1).join('\n');
   const problems: string[] = [];
   if (!/^function Remove-WordVerifyOutDir \{$/m.test(code)) problems.push('nema funkcije Remove-WordVerifyOutDir');
-  if (!code.includes('$uRepou = $full.StartsWith($korijen + $sep, $cmp)')) {
-    problems.push('funkcija ne provjerava da je direktorij unutar korijena repozitorija');
+  if (!code.includes('[Parameter(Mandatory = $true)][int]$CheckedCount')) {
+    problems.push('funkcija nema obavezan parametar -CheckedCount');
   }
-  if (!code.includes("Join-Path $korijen 'tests\\fixtures'")
-    || !code.includes('$podFixturama = $full.Equals($fixtures, $cmp) -or $full.StartsWith($fixtures + $sep, $cmp)')) {
-    problems.push('funkcija ne izuzima tests/fixtures');
+  if (!givesUp(code, '$CheckedCount -le 0')) {
+    problems.push('funkcija ne odustaje kad nijedan dokument nije provjeren (CheckedCount 0)');
   }
-  if (!/^ {2}if \(-not \$uRepou -or \$podFixturama\) \{\n[^\n]*\n {4}return\n/m.test(code)) {
-    problems.push('funkcija ne odustaje (return) izvan repozitorija ili pod tests/fixtures');
+  if (!code.includes(WORD_VERIFY_ALLOWLIST_LINE)
+    || !code.includes('$dozvoljeno = @($dozvoljenaImena | Where-Object { $_.Equals($ime, $cmp) }).Count -eq 1')
+    || !givesUp(code, '-not $dozvoljeno')) {
+    problems.push('funkcija nema allowlistu imena (.tmp-word-verify, .tmp-word-corpus)');
+  }
+  if (!code.includes("$roditelj = (Split-Path -Path $full -Parent).TrimEnd('\\', '/')")
+    || !givesUp(code, '-not $roditelj.Equals($korijen, $cmp)')) {
+    problems.push('funkcija ne provjerava da je roditelj tocno korijen repozitorija');
+  }
+  if (!code.includes('$item.Attributes -band [System.IO.FileAttributes]::ReparsePoint')
+    || !code.includes('$c.Attributes -band [System.IO.FileAttributes]::ReparsePoint')
+    || !givesUp(code, '$null -ne $reparse')) {
+    problems.push('funkcija ne odustaje kad je direktorij ili unos ispod njega reparse point');
   }
   if (!code.includes('check-ignore -q -- $full') || !code.includes('ls-files -- $full')
-    || !/^ {2}if \(-not \$ignoriran -or \$praceno\.Count -gt 0\) \{\n[^\n]*\n {4}return\n/m.test(code)) {
+    || !givesUp(code, '-not $ignoriran -or $praceno.Count -gt 0')) {
     problems.push('funkcija ne odustaje kad git direktorij ne ignorira ili u njemu prati datoteke');
   }
   const recursive = code.split('\n').filter((l) => /Remove-Item\b/i.test(l) && /-Recurse\b/i.test(l));

@@ -1,6 +1,7 @@
 /**
  * scripts/clean-vitest-tmp.mjs, stavka G (odluka vlasnika 2026-09-26): ostaci testova i alata koji
- * nisu Vitest (tmp*.docx, lekta-* mkdtemp mape, lekta-oracle-*, playwright_*dev_profile-*).
+ * nisu Vitest (lekta-* mkdtemp mape, lekta-oracle-*, playwright_*dev_profile-*). Kategorija
+ * tmp*.docx je izbacena u Codex krugu 2 (B2): oblik imena ne dokazuje vlasnistvo.
  *
  * Kao i tests/clean-vitest-tmp.test.ts: sve se mjeri nad `mkdtemp` korijenom, NIKAD nad stvarnim
  * os.tmpdir(), a popis procesa se ubrizgava. Imena fixtura su stvarni oblici izmjereni u %TEMP%
@@ -42,7 +43,6 @@ const PLAYWRIGHT_TEST_SERVER =
 
 /** Stvarni oblici imena po kategoriji (izmjereno u %TEMP% 2026-09-27). */
 const CASES = [
-  { kind: 'tmp-docx', name: 'tmp0a6bn673.docx', file: true },
   { kind: 'lekta-test', name: 'lekta-runner-publish-0aZUKz', file: false },
   { kind: 'lekta-test', name: 'lekta-release-gate-WrongSigner-3003h6', file: false },
   { kind: 'lekta-test', name: 'lekta-release-bad-pkcs8-1tyrvW', file: false },
@@ -53,7 +53,6 @@ const CASES = [
 
 /** Zivi pisac po kategoriji: proces koji mora zadrzati TU kategoriju. */
 const LIVE_WRITER: Record<string, Proc> = {
-  'tmp-docx': { pid: 801, ppid: 1, name: 'python.exe', command: 'python .claude/katedra-pkg/rad-docx/scripts/arhiva.py x' },
   'lekta-test': { pid: 802, ppid: 1, name: 'node.exe', command: VITEST_CMD },
   'lekta-oracle': { pid: 803, ppid: 1, name: 'python.exe', command: 'python scripts/corpus-oracle.py --all' },
   'playwright-profile': {
@@ -176,6 +175,23 @@ describe('clean-vitest-tmp stavka G: sto se brise', () => {
 });
 
 describe('clean-vitest-tmp stavka G: sto se NE dira', () => {
+  it('Codex krug 2 (B2): tudji tmp*.docx u korijenu se ne dira (oblik imena ne dokazuje vlasnistvo)', async () => {
+    // Stvarni oblici Python `tempfile.mkstemp(suffix=".docx")`, stari 90 h, bez ijednog zivog pisca.
+    const tudji = ['tmp0a6bn673.docx', 'tmp4segemrf.docx', 'tmpzzzzzzzz.docx'].map((n) => make(root, n, true, 90 * HOUR));
+    const kontrola = make(root, 'lekta-runner-publish-0aZUKz', false, 90 * HOUR);
+    const p = plan();
+    expect(p.remove.map((i) => i.path)).toEqual([kontrola]);
+    const lines: string[] = [];
+    runCli({ argv: [], root, nowMs: NOW, listProcesses: () => QUIET, selfPid: SELF, log: (l: string) => lines.push(l) });
+    for (const t of tudji) expect(existsSync(t)).toBe(true);
+    expect(existsSync(kontrola)).toBe(false);
+    expect(lines.join('\n')).not.toMatch(/tmp-docx/);
+    const mod: Record<string, unknown> = await import('../scripts/clean-vitest-tmp.mjs');
+    expect(Object.keys(mod).filter((k) => /DOCX/i.test(k))).toEqual([]);
+    expect([...(mod.LEFTOVER_KINDS as Set<string>)].sort()).toEqual(['lekta-oracle', 'lekta-test', 'playwright-profile']);
+    expect(mod.GUARD_KINDS).not.toContain('tmp-docx');
+  });
+
   it('ne dira rucne lekta-* datoteke i mape bez poznatog prefiksa ili mkdtemp sufiksa', () => {
     const keep = [
       make(root, 'lekta-t21-prod-policies.sql', true, 90 * HOUR),
@@ -203,13 +219,13 @@ describe('clean-vitest-tmp stavka G: sto se NE dira', () => {
     expect(p.remove.map((i) => i.path)).toEqual([full]);
   });
 
-  it('gard je po vrsti: ziv vitest zadrzava lekta-test mape, ne i tmp*.docx ni Playwright profil', () => {
+  it('gard je po vrsti: ziv vitest zadrzava lekta-test mape, ne i lekta-oracle ni Playwright profil', () => {
     const lekta = make(root, 'lekta-release-rsa-private-5FOfuf', false, 30 * HOUR);
-    const docx = make(root, 'tmp4segemrf.docx', true, 30 * HOUR);
+    const oracle = make(root, 'lekta-oracle-4segemrf', false, 30 * HOUR);
     const prof = make(root, 'playwright_chromiumdev_profile-JYnmWk', false, 30 * HOUR);
     const p = plan(() => [...QUIET, { pid: 900, ppid: 1, name: 'node.exe', command: VITEST_CMD }]);
     expect(p.held.map((h) => h.path)).toEqual([lekta]);
-    expect(p.remove.map((i) => i.path).sort()).toEqual([docx, prof].sort());
+    expect(p.remove.map((i) => i.path).sort()).toEqual([oracle, prof].sort());
   });
 
   it('necitljiv naredbeni redak pisca iste vrste znaci nepoznato, dakle ne brisi', () => {
@@ -287,7 +303,7 @@ describe('clean-vitest-tmp stavka G: sto se NE dira', () => {
 describe('clean-vitest-tmp stavka G: dry-run ispis', () => {
   it('dry-run ispisuje kategoriju i razlog za SVAKU stavku i nista ne brise', () => {
     const stare = CASES.map(({ name, file }) => make(root, name, file, 30 * HOUR));
-    const mlada = make(root, 'tmpzzzzzzzz.docx', true, 3 * HOUR);
+    const mlada = make(root, 'lekta-runner-publish-zzzzzz', false, 3 * HOUR);
     const lines: string[] = [];
     const rmCalls: string[] = [];
     runCli({
@@ -302,10 +318,12 @@ describe('clean-vitest-tmp stavka G: dry-run ispis', () => {
     const out = lines.join('\n').replace(/\r/g, '');
     expect(out).toContain(`bi se obrisalo (dry-run): ${CASES.length} mapa`);
     expect(out).toMatch(/po kategoriji: .*lekta-test=4/);
+    // Codex krug 2 (B2): kategorija tmp-docx ne postoji, pa je dry-run ne navodi ni u jednom retku.
+    expect(out).not.toMatch(/tmp-docx/);
     for (const { kind, name } of CASES) {
       expect(out).toContain(`brisem [${kind}] ${name}: najnovija datoteka stara 30.0 h, prag 24.0 h`);
     }
-    expect(out).toContain('ostavljam [tmp-docx] tmpzzzzzzzz.docx: mlade od praga (3.0 h < 24.0 h)');
+    expect(out).toContain('ostavljam [lekta-test] lekta-runner-publish-zzzzzz: mlade od praga (3.0 h < 24.0 h)');
     expect(rmCalls).toEqual([]);
     for (const s of [...stare, mlada]) expect(existsSync(s)).toBe(true);
   });

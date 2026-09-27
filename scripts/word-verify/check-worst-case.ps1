@@ -11,7 +11,8 @@ param([string]$OutDir = '.tmp-word-verify', [switch]$SkipMake)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 # Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
-# samo unutar repozitorija, izvan tests/fixtures i kad ga git ignorira (vidi outdir-cleanup.ps1).
+# samo kad je Word stvarno provjerio barem jedan dokument ($provjereno), ime je .tmp-word-verify ili
+# .tmp-word-corpus u korijenu repozitorija, nije junction i git ga ignorira (vidi outdir-cleanup.ps1).
 # Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
 . (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
 trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
@@ -114,11 +115,13 @@ if ($null -ne $res.integrityFailure) {
   exit 1
 }
 
+$provjereno = 0
 $word = New-Object -ComObject Word.Application
 $word.Visible = $false; $word.DisplayAlerts = 0
 try {
   $prije = Measure-Doc $word $src
   $poslije = Measure-Doc $word $dst
+  $provjereno++
 } finally {
   $word.Quit(); [System.Runtime.InteropServices.Marshal]::ReleaseComObject($word) | Out-Null
 }
@@ -198,5 +201,5 @@ if ($script:fail -gt 0) {
 Write-Output 'SVE PROSLO.'
 
 # Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
-Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root -CheckedCount $provjereno
 exit 0
