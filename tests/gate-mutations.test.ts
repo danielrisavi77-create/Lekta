@@ -130,6 +130,10 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
+import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -269,6 +273,117 @@ interface Mutation {
   imitates: string;
   caught: () => boolean;
   cleanBefore: () => boolean;
+}
+
+/**
+ * Tvrdnja garda T83: spoj korijena korpusa u kojem se isti rad pojavljuje dvaput daje manifest s
+ * jednim unosom po `documentId`, a izbacena kopija je zabiljezena.
+ */
+function jedanDokumentJedanGlas(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[]; duplicates: unknown[] },
+): boolean {
+  const e = (documentId: string, root: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root, holdout: false, expectationProvenance: 'derived',
+  });
+  const { entries, duplicates } = dedupe([e('corpus-a', 'docx-local'), e('corpus-b', 'docx-local'), e('corpus-a', '03-ingest')]);
+  const ids = entries.map((x) => x.documentId);
+  return ids.length === 2 && new Set(ids).size === 2 && duplicates.length === 1;
+}
+
+/** Razliciti radovi imaju razlicite bajtove, kao u stvarnom korpusu (inace T83-01 s pravom baca). */
+const bajtoviPoIdu = (e: RealCorpusManifestEntry) => new TextEncoder().encode(`sadrzaj-${e.documentId}`);
+
+/** Stara izvedba dedupea (prije T83-01): kljuc je samo documentId, sadrzaj se ne usporeduje medu id-ovima. */
+function dedupeManifestSamoPoIdu(entries: RealCorpusManifestEntry[]) {
+  const seen = new Set<string>();
+  const out = entries.filter((e) => (seen.has(e.documentId) ? false : (seen.add(e.documentId), true)));
+  return { entries: out, duplicates: [] as unknown[] };
+}
+
+/** Tvrdnja garda T83-01: isti bajtovi pod dva razlicita id-a ne prolaze kao dva rada. */
+function istiSadrzajPodDvaImenaPada(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[] },
+): boolean {
+  const e = (documentId: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root: 'r', holdout: false, expectationProvenance: 'derived',
+  });
+  try {
+    return dedupe([e('corpus-a'), e('corpus-kopija-a')]).entries.length < 2;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Tvrdnja garda NOVO-01: potpisana v2 ovjera bez izmjene nema problem potpisa, a ista ovjera s brojkom
+ * promijenjenom nakon potpisa ga ima. Otisak se racuna citacevom funkcijom, ne skriptom.
+ */
+function izmjenaNakonPotpisaPada(check: (a: CorpusAttestation) => string | null): boolean {
+  const bez = {
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'f'.repeat(32), measuredAt: '2026-09-20T09:00:00.000Z',
+    measuredFromCommit: 'c'.repeat(40), oracles: ['scripts/repair-real-corpus.mts'], environment: { wordVersion: null },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, uniqueDocumentCount: 2, rawDocumentCount: 2, countedDocumentCount: 2, duplicateDocumentCount: 0 },
+    entries: [{ unitId: 'fpzg', workType: 'final', profileIds: ['p'], documentCount: 2, cleanCount: 1, regressedChecks: [] }],
+  };
+  const potpisana = { ...bez, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigestSync(bez) } as unknown as CorpusAttestation;
+  const izmijenjena = { ...potpisana, entries: [{ ...potpisana.entries[0], cleanCount: 2 }] } as CorpusAttestation;
+  return check(potpisana) === null && check(izmijenjena) !== null;
+}
+
+/** Tvrdnja garda T83-03: mjerenje s ijednim palim ili pogresnim dokumentom se ne ovjerava. */
+function paloMjerenjeSeNeOvjerava(refuse: (results: Array<Record<string, unknown>>) => string[]): boolean {
+  const r = (documentId: string, extra: Record<string, unknown> = {}) => ({ documentId, outcome: 'review', error: null, integrityFailure: null, ...extra });
+  return (
+    refuse([r('a'), r('b', { outcome: 'pass' })]).length === 0 &&
+    refuse([r('a'), r('b', { outcome: 'fail' })]).length > 0 &&
+    refuse([r('a', { error: 'analysis crashed' })]).length > 0
+  );
+}
+
+/**
+ * Mutant garda `attestationRefusals` izveden iz STVARNOG izvora (blok GARD u
+ * scripts/lib/corpus-attestation-core.mjs) zamjenom jednog izraza; mutacija ne filtrira izlaz nego
+ * mijenja sam gard (Codex #185, T83-06).
+ */
+function gardIzIzvora(staro: string, novo: string): (results: Array<Record<string, unknown>>) => string[] {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lib/corpus-attestation-core.mjs'), 'utf8').replace(/\r/g, '');
+  const a = src.indexOf('// >>> GARD:attestationRefusals');
+  const b = src.indexOf('// <<< GARD:attestationRefusals');
+  if (a < 0 || b < a) throw new Error('blok GARD:attestationRefusals nije pronadjen');
+  const blok = src.slice(a, b).replace('export function', 'function');
+  if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
+  return new Function(`${blok.replace(staro, novo)}\nreturn attestationRefusals;`)() as (results: Array<Record<string, unknown>>) => string[];
+}
+
+type PotpisFn = (
+  existing: Record<string, unknown> | null,
+  next: Record<string, unknown>,
+) => { signedBy: string; signedAt: string } | null;
+
+/**
+ * Tvrdnja garda T83-05: potpis ostaje uz ovjeru samo kad je SADRZAJ ovjere isti kao potpisani; v1
+ * ovjera s istim otiskom, novo mjerenje istog skupa i isto mjerenje s --holdout-confirmed gube potpis.
+ */
+function potpisOstajeSamoUzIstiSadrzaj(inherit: PotpisFn): boolean {
+  const otisak = '8e5bd529d4f2b596ccf8fa0ef58c029d';
+  const sadrzaj = (over: Record<string, unknown> = {}) => ({
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: otisak,
+    measuredAt: '2026-09-20T09:00:00.000Z', measuredFromCommit: 'c'.repeat(40),
+    protocol: { holdoutExcluded: true, countedDocumentCount: 2 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 2, cleanCount: 2 }],
+    ...over,
+  });
+  const s = sadrzaj();
+  const potpisana = { ...s, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigest(s) };
+  const v1 = { corpusFingerprint: otisak, measuredAt: s.measuredAt, measuredFromCommit: s.measuredFromCommit, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+  const isto = inherit(potpisana, s);
+  const prekoVerzije = inherit(v1, s);
+  const novoIzmedju = inherit(potpisana, sadrzaj({ measuredAt: '2026-09-20T09:30:00.000Z' }));
+  const holdoutPotvrdjen = inherit(potpisana, sadrzaj({
+    protocol: { holdoutExcluded: false, countedDocumentCount: 3 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 3, cleanCount: 3 }],
+  }));
+  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoIzmedju === null && holdoutPotvrdjen === null;
 }
 
 /**
@@ -1152,6 +1267,81 @@ const MUTATIONS: Mutation[] = [
       'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
     caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
     cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
+  },
+
+  // --- jedan dokument, jedan glas (T83) ----------------------------------------------------------
+  {
+    id: 'korpus/isti-rad-iz-dva-korijena-broji-se-dvaput',
+    imitates:
+      'manifest je obican spoj docx-local i LEKTA_CORPUS_SOURCE, pa 102 bajt-identicna rada ulaze dvaput (321 umjesto 219, 2026-09-27)',
+    caught: () => !jedanDokumentJedanGlas((entries) => ({ entries, duplicates: [] })),
+    cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, bajtoviPoIdu)),
+  },
+  {
+    id: 'korpus/isti-sadrzaj-pod-dva-imena-prolazi',
+    imitates:
+      'dedupe po documentId cita bajtove tek kad se id ponovi, pa isti rad pod drugim imenom ulazi dvaput (Codex #185, T83-01)',
+    caught: () => !istiSadrzajPodDvaImenaPada((entries) => dedupeManifestSamoPoIdu(entries)),
+    cleanBefore: () => istiSadrzajPodDvaImenaPada((entries) => dedupeManifest(entries, () => new Uint8Array([7]))),
+  },
+  {
+    id: 'korpus/potpis-v1-ovjere-prelazi-na-v2-mjerenje',
+    imitates:
+      'attest-real-corpus.mjs je potpis prenosio cim je otisak isti; ponovljeno mjerenje 27. 9. dalo je isti v1 otisak kao ovjera potpisana 12. 9.',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.corpusFingerprint === n.corpusFingerprint
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-noviji-od-drugog-mjerenja-istog-skupa',
+    imitates:
+      'uvjet "potpis nije stariji od mjerenja" bez identiteta mjerenja: mjerenje 09:00, potpis 10:00, novo mjerenje 09:30 nasljeduje (Codex #185, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        Date.parse(String(e.signedAt)) >= Date.parse(String(n.measuredAt))
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-prelazi-na-holdout-confirmed-ovjeru',
+    imitates:
+      'potpis vezan uz otisak, vrijeme i commit mjerenja prelazi na istu ovjeru s --holdout-confirmed, iako se opseg dokaza i brojke mijenjaju (Codex #185, runda 2, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        e.measuredAt === n.measuredAt && e.measuredFromCommit === n.measuredFromCommit
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/skupina-s-palim-radom-ostaje-dokaziva',
+    imitates:
+      'pali dokument samo nije ulazio u cleanCount, pa je skupina s jednim cistim i jednim palim radom ostajala dokaziva (Codex #185, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', 'false')),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', '!DOPUSTENI_ISHODI.has(r.outcome)')),
+  },
+  {
+    id: 'korpus/rezultat-s-greskom-i-ishodom-review-prolazi',
+    imitates:
+      'attestationRefusals je gledao samo ishod, pa je rezultat { outcome: "review", error: "analysis crashed" } prolazio (Codex #185, runda 2, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora("r.error !== null && r.error !== undefined && String(r.error).trim() !== ''", 'false')),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(attestationRefusals),
+  },
+  {
+    id: 'korpus/brojka-promijenjena-nakon-potpisa-ostaje-priznata',
+    imitates:
+      'citac je provjeravao samo oblik signedContentDigest, pa je cleanCount 1 -> 2 nakon potpisa ostajao priznat (Codex #185, runda 3, NOVO-01)',
+    caught: () => !izmjenaNakonPotpisaPada((a) => signedContentProblem(a, (x) => String(x.signedContentDigest))),
+    cleanBefore: () => izmjenaNakonPotpisaPada((a) => signedContentProblem(a)),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
@@ -6907,6 +7097,161 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: zivi list na ulazu (Z32)', () => {
+  const procitaj = (f: string): string => readFileSync(resolve(__dirname, '..', f), 'utf8').replace(/\r/g, '');
+  type Rok = { datum: string | null; neznam: boolean };
+  type Vrata = { rok: Rok; fakultetPotvrden?: boolean };
+
+  it('baseline: stvarni kod prolazi sve gardove zivog lista', async () => {
+    const g = await import('./helpers/intake-live-guards');
+    const { spremnostUlaza, potvrdaVrijediZaSesiju, potvrdaNosiCijeliProfil, rokZaPovratak } = await import('../src/shared/intake-choice');
+    const { pecatRoka } = await import('../src/routes/intake/deadline-stamp');
+    expect(g.vrataProblemi(spremnostUlaza)).toEqual([]);
+    expect(g.povratakRokaProblemi(rokZaPovratak)).toEqual([]);
+    expect(g.pecatRokaProblemi(pecatRoka)).toEqual([]);
+    expect(g.potvrdaSesijeProblemi(potvrdaVrijediZaSesiju)).toEqual([]);
+    expect(g.cijeliProfilProblemi(potvrdaNosiCijeliProfil)).toEqual([]);
+    expect(g.ozicenjeUlazaProblemi(procitaj('src/routes/intake/main.ts'))).toEqual([]);
+    expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
+    expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
+    expect(g.ispustanjeProblemi(procitaj('src/routes/intake/intake-controller.ts'), procitaj('src/routes/intake/intake-live.ts'))).toEqual([]);
+    expect(g.detekcijaFakultetaProblemi(procitaj('src/ui/app.ts'))).toEqual([]);
+  });
+
+  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
+    const { vrataProblemi } = await import('./helpers/intake-live-guards');
+    const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
+    const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
+    const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi rok' };
+    // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
+    const samoDatum = (s: Vrata) => (!s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
+    // Kvar (izvedba prije odluke vlasnika 2026-09-27): vrata traze i potvrdjen fakultet.
+    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(traziFakultet)).toContain('fakultet nepotvrdjen, "Još ne znam rok": spremno=false, ocekivano true');
+    // Kvar: natpis zatvorenih vrata i dalje trazi fakultet.
+    const stariNatpis = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' });
+    expect(vrataProblemi(stariNatpis).length).toBeGreaterThan(0);
+  });
+
+  it('(a2) istekao rok koji se vraca na ulaz obara gard', async () => {
+    const { povratakRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { rokZaPovratak } = await import('../src/shared/intake-choice');
+    // Kvar: zapamcen rok se vraca kakav jest, pa rok proslog rada sam otvara vrata.
+    const vratiSve = (rok: Rok) => rok;
+    expect(povratakRokaProblemi(vratiSve)).toContain('rok jucer: {"datum":"2026-09-26","neznam":false}, ocekivano {"datum":null,"neznam":false}');
+    // Kvar: brise i rok danas (usporedba po satima, ne po kalendaru).
+    const strogo = (rok: Rok, danas: Date) => (rok.datum && new Date(`${rok.datum}T00:00`).getTime() < danas.getTime() ? { datum: null, neznam: false } : rokZaPovratak(rok, danas));
+    expect(povratakRokaProblemi(strogo).length).toBeGreaterThan(0);
+  });
+
+  it('(b) pecat roka po SATIMA (ljetno vrijeme, ponoc) i sklonidba "21 dana" obaraju gard', async () => {
+    const { pecatRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { pecatRoka, razloziDatum, daniRijecju } = await import('../src/routes/intake/deadline-stamp');
+    const poSatima = (s: Rok, danas: Date): string | null => {
+      if (s.neznam) return 'Rok nije zadan';
+      const r = s.datum ? razloziDatum(s.datum) : null;
+      if (!r || !s.datum) return null;
+      const dana = Math.floor((new Date(`${s.datum}T00:00`).getTime() - danas.getTime()) / 864e5);
+      return `Rok ${r.dan}. ${r.mjesec}. · ${dana < 0 ? 'prošao' : dana === 0 ? 'danas' : daniRijecju(dana)}`;
+    };
+    expect(pecatRokaProblemi(poSatima).length).toBeGreaterThan(0);
+    const uvijekDana = (s: Rok, danas: Date) => pecatRoka(s, danas)?.replace(/ dan$/, ' dana') ?? null;
+    expect(pecatRokaProblemi(uvijekDana).length).toBeGreaterThan(0);
+  });
+
+  it('(c) potvrda koja ne gleda id sesije, odbija fakultet bez studija ili bez studija nosi profil obara gard', async () => {
+    const { potvrdaSesijeProblemi, cijeliProfilProblemi } = await import('./helpers/intake-live-guards');
+    type P = { unit: string; program: string | null; workType: string | null; sesija: string | null };
+    type O = { unit: string; program: string; workType: string };
+    const bezSesije = (p: P | null, s: { imaProfil: boolean }) => Boolean(p && !s.imaProfil);
+    expect(potvrdaSesijeProblemi(bezSesije)).toContain('potvrda vrijedi za TUDJU sesiju');
+    // Nalaz pregleda Z32: prva izvedba odbijala potvrdu s `program=null` (fakultet iz `?unit=`).
+    const trazStudij = (p: P | null, s: { id: string; imaProfil: boolean }) => Boolean(p && !s.imaProfil && p.sesija === s.id && p.program);
+    expect(potvrdaSesijeProblemi(trazStudij)).toContain('potvrda fakulteta bez studija (?unit=) ne vrijedi');
+    const bezStudija = (p: P, o: O) => p.unit === o.unit;
+    expect(cijeliProfilProblemi(bezStudija)).toContain('potvrda bez studija zakljucava fallback');
+  });
+
+  it('(g) ispustanje bez provjere vrata (kontroler ili zivi list) obara gard', async () => {
+    const { ispustanjeProblemi } = await import('./helpers/intake-live-guards');
+    const kontroler = procitaj('src/routes/intake/intake-controller.ts');
+    const live = procitaj('src/routes/intake/intake-live.ts');
+    // Kvar: kontroler prima ispusteni dokument bez `accepts()`.
+    const kontrolerBez = kontroler.replace('if (file && accepts()) void selectFile(file);', 'if (file) void selectFile(file);');
+    expect(kontrolerBez).not.toBe(kontroler);
+    expect(ispustanjeProblemi(kontrolerBez, live)).toContain('kontroler prima ispusten dokument bez provjere vrata');
+    // Kvar: zivi list predaje ispustanje izvan lista bez provjere spremnosti.
+    const liveBez = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n', '');
+    expect(liveBez).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, liveBez)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+    // Kvar: provjera ostane, ali tek POSLIJE predaje.
+    const kasno = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n    odabir?.(file);', '    odabir?.(file);\n    if (!spremnost().spremno) { onBlocked(); return; }');
+    expect(kasno).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, kasno)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+  });
+
+  it('(h) detekcija na /rad/ koja gazi fakultet potvrdjen na ulazu obara gard', async () => {
+    const { detekcijaFakultetaProblemi } = await import('./helpers/intake-live-guards');
+    const app = procitaj('src/ui/app.ts');
+    // Kvar: detekcija ne pita bravu.
+    const bez = app.replace('||!detekcijaSmije(ctx.unitId))return;', ')return;');
+    expect(bez).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bez)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
+    // Kvar: primjena fakulteta ne postavlja bravu.
+    const bezBrave = app.replace('return zakljucajFakultet(ids.unit,$(\'#unitSelect\')?.value)', 'return true');
+    expect(bezBrave).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bezBrave)).toContain('primjena fakulteta ne postavlja bravu');
+    // Kvar: fakultet bez studija ostavi `_profileConfirmed` iz postavki, pa nepotvrdjen studij prolazi kao potvrdjen.
+    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false;', 'applySelectionIds(ids);');
+    expect(potvrden).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(potvrden)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+  });
+
+  it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {
+    const { ozicenjeUlazaProblemi } = await import('./helpers/intake-live-guards');
+    const main = procitaj('src/routes/intake/main.ts');
+    const bezKuke = main.replace('    canAccept: live.canAccept,\n', '');
+    expect(bezKuke).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezKuke)).toContain('kontroler ne dobiva kuku canAccept');
+    const bezVeze = main.replace('live.poveziOdabir((file) => { void controller.selectFile(file); });', '');
+    expect(bezVeze).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezVeze).length).toBeGreaterThan(0);
+  });
+
+  it('(e) tragovi bez gasenja pod prigusenim pokretom, beskonacno skeniranje ili linija bez opt-ina obaraju gard', async () => {
+    const { pokretProblemi } = await import('./helpers/intake-live-guards');
+    const css = procitaj('src/routes/intake/intake.css');
+    const html = procitaj('index.html');
+    const boot = procitaj('src/shared/ui-boot.ts');
+    const bezUpita = css.replace('  .intake-tragovi{display:none}\n', '');
+    expect(bezUpita).not.toBe(css);
+    expect(pokretProblemi(bezUpita, html, boot)).toContain('tragovi olovke se prikazuju pod prefers-reduced-motion');
+    const bezRucnog = css.replace(':root[data-motion="reduce"] .intake-tragovi{display:none}', '');
+    expect(bezRucnog).not.toBe(css);
+    expect(pokretProblemi(bezRucnog, html, boot).length).toBeGreaterThan(0);
+    const beskonacno = css.replace('animation:intake-sken 1.2s linear 14', 'animation:intake-sken 1.2s linear infinite');
+    expect(beskonacno).not.toBe(css);
+    expect(pokretProblemi(beskonacno, html, boot)).toContain('beskonacna animacija na ulazu');
+    const bezOptIna = html.replace('class="intake-sken" aria-hidden="true" data-motion-offscreen', 'class="intake-sken" aria-hidden="true"');
+    expect(bezOptIna).not.toBe(html);
+    expect(pokretProblemi(css, bezOptIna, boot).length).toBeGreaterThan(0);
+    const bootBez = boot.replace("'.ks-priv-scena, [data-motion-offscreen]'", "'.ks-priv-scena'");
+    expect(bootBez).not.toBe(boot);
+    expect(pokretProblemi(css, html, bootBez)).toContain('ui-boot ne promatra [data-motion-offscreen]');
+  });
+
+  it('(f) potvrda s ulaza primijenjena POSLIJE restoreDocument obara gard', async () => {
+    const { redoslijedPotvrdeProblemi } = await import('./helpers/intake-live-guards');
+    const src = procitaj('src/routes/workspace/main.ts');
+    const mutant = src.replace('primijeniPotvrduUlaza({', '__A__({')
+      .replace('const restored = await restoreDocument(', 'const restored = await primijeniPotvrduUlaza(')
+      .replace('__A__({', 'restoreDocument({');
+    expect(mutant).not.toBe(src);
+    expect(redoslijedPotvrdeProblemi(mutant).length).toBeGreaterThan(0);
   });
 });
 
