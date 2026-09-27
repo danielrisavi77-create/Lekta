@@ -120,6 +120,37 @@ describe('legal-content', () => {
     expect(html.toLowerCase()).toContain('mentor'); // iskljucenje mentorskih zahtjeva
   });
 
+  /**
+   * Tocka 10 (odobrio vlasnik 2026-09-27, uvjeti 2026-09-27): jamstvo za PLACENI automatski
+   * popravak. Cuva se doslovno jer je to obecanje povrata novca: rok, uvjet da vrijedi tek nakon
+   * besplatne bete, dokaz bez dopisa referade, ljudska odluka u 5 radnih dana i iskljucenja.
+   * Tvrdnje se provjeravaju UNUTAR odjeljka tocke 10, ne bilo gdje na stranici, jer tocke 3 i 6
+   * vec sadrze "30 dana" i "5 radnih dana" pa bi provjera cijele stranice bila vakuumski zelena.
+   */
+  it('guarantee tocka 10: jamstvo za automatski popravak, 30 dana, tek nakon besplatne bete', () => {
+    const d = docs.guarantee;
+    expect(d.slug).toBe('garancija');
+    expect(d.description).toContain('jamstva za automatski popravak');
+    const naslov = '<h4>10. Jamstvo za automatski popravak</h4>';
+    const od = d.html.indexOf(naslov);
+    expect(od, 'tocka 10 postoji').toBeGreaterThan(-1);
+    // tocka 10 dolazi poslije tocke 9 i zadnja je na stranici
+    expect(od).toBeGreaterThan(d.html.indexOf('<h4>9. Pokriveni fakulteti</h4>'));
+    const t10 = d.html.slice(od);
+    expect(t10.indexOf('<h4>', naslov.length), 'nema tocke iza 10').toBe(-1);
+    expect(t10).toContain('<p>Vrijedi za plaćeni automatski popravak, nakon završetka besplatne bete.</p>');
+    expect(t10).toContain('<p><strong>Rok.</strong> Zahtjev se podnosi u roku od 30 dana od popravka, kroz obrazac u aplikaciji.</p>');
+    expect(t10).toContain('vraćamo cijeli iznos plaćen za taj popravak');
+    expect(t10).toContain('kako je preuzeta iz Lekte');
+    expect(t10).toContain('dopis referade nije potreban');
+    expect(t10).toContain('najkasnije u 5 radnih dana, s obrazloženjem');
+    expect(t10).toContain('nalazi označeni "Ovo radiš sam"');
+    expect(t10).toContain('zahtjevi mentora te izmjene pravilnika nakon popravka');
+    expect(t10).toContain('<p>Ponovna provjera je uvijek besplatna jer se analiza radi u pregledniku.</p>');
+    const uvodi = [...t10.matchAll(/<p><strong>([^<]+)<[/]strong>/g)].map((m) => m[1]);
+    expect(uvodi).toEqual(['Što pokriva.', 'Nad kojom datotekom.', 'Rok.', 'Dokaz.', 'Tko odlučuje.', 'Isključeno.']);
+  });
+
   it('purchase referencira garancijske uvjete dual-mode linkom (modal + stranica)', () => {
     expect(docs.purchase.html).toContain('data-legal="guarantee"');
     expect(docs.purchase.html).toContain('href="/garancija.html"');
