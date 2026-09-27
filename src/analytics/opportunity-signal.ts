@@ -45,10 +45,32 @@ interface StructureGapSource {
 
 export type OpportunityGapKind = 'unsupported-structure' | 'stale-anchor' | 'no-target' | 'other';
 
+export interface OpportunityGapContext {
+  profileId?: string;
+  workType?: string;
+}
+
 export interface OpportunityGapSignal extends Record<string, unknown> {
+  profileId?: string;
+  workType?: string;
   category?: string;
   kind: OpportunityGapKind | 'already-ok' | 'invalid-params' | 'unclassified';
   count: number;
+}
+
+/** Anonimni Opportunity kontekst rezultata analize: interni profil i vrsta rada, bez identiteta. */
+export function opportunityContextFor(result: OpportunityAnalysisLike | null | undefined): OpportunityGapContext {
+  return {
+    profileId: typeof result?.details?.profileDefinitionId === 'string' ? result.details.profileDefinitionId : '',
+    workType: typeof result?.settings?.workType === 'string' ? result.settings.workType : '',
+  };
+}
+
+function gapContext(context: OpportunityGapContext): OpportunityGapContext {
+  return {
+    ...(typeof context.profileId === 'string' && context.profileId ? { profileId: context.profileId } : {}),
+    ...(typeof context.workType === 'string' && context.workType ? { workType: context.workType } : {}),
+  };
 }
 
 const STRUCTURE_SOURCES = [
@@ -85,6 +107,7 @@ export function structureGapSignalsForEvent(
 ): OpportunityGapSignal[] {
   const details = result?.details as Record<string, unknown> | null | undefined;
   if (!details) return [];
+  const context = gapContext(opportunityContextFor(result));
   const out: OpportunityGapSignal[] = [];
   for (const [category, key] of STRUCTURE_SOURCES) {
     const source = details[key] as StructureGapSource | null | undefined;
@@ -94,7 +117,7 @@ export function structureGapSignalsForEvent(
       const kind = structureReasonBucket(item?.reason);
       counts.set(kind, (counts.get(kind) ?? 0) + 1);
     }
-    for (const [kind, n] of counts) if (n > 0) out.push({ category, kind, count: n });
+    for (const [kind, n] of counts) if (n > 0) out.push({ ...context, category, kind, count: n });
   }
   return out;
 }
@@ -103,8 +126,12 @@ const SAFE_NOOP_REASONS = new Set([
   'already-ok', 'no-target', 'invalid-params', 'unsupported-structure', 'stale-anchor',
 ]);
 
-export function repairNoOpSignals(skippedReasons: unknown): OpportunityGapSignal[] {
+export function repairNoOpSignals(
+  skippedReasons: unknown,
+  context: OpportunityGapContext = {},
+): OpportunityGapSignal[] {
   if (!skippedReasons || typeof skippedReasons !== 'object' || Array.isArray(skippedReasons)) return [];
+  const safeContext = gapContext(context);
   const counts = new Map<string, number>();
   for (const value of Object.values(skippedReasons as Record<string, unknown>)) {
     const raw = typeof value === 'string' ? value : '';
@@ -112,9 +139,21 @@ export function repairNoOpSignals(skippedReasons: unknown): OpportunityGapSignal
     counts.set(kind, (counts.get(kind) ?? 0) + 1);
   }
   return [...counts].map(([kind, n]) => ({
+    ...safeContext,
     kind: kind as OpportunityGapSignal['kind'],
     count: n,
   }));
+}
+
+export function repairNoOpSummarySignal(
+  skippedReasons: unknown,
+  context: OpportunityGapContext = {},
+): Record<string, unknown> {
+  const signals = repairNoOpSignals(skippedReasons, context);
+  return {
+    ...gapContext(context),
+    count: signals.reduce((sum, signal) => sum + signal.count, 0),
+  };
 }
 
 function count(value: unknown): number {

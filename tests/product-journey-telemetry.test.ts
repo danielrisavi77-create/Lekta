@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createTelemetry, PRODUCT_JOURNEY_EVENTS } from '../src/ui/telemetry';
+import { opportunityWiringProblems } from './helpers/opportunity-wiring';
 
 /**
  * T14 (plan razvoja): mjerenje toka uz postojecu privolu i ogranicene podatke.
@@ -85,5 +86,23 @@ describe('dogadjaji toka su stvarno emitirani', () => {
 
   it('MUTACIJA: izmisljeno ime u registru bi palo na prvoj tvrdnji', () => {
     expect(/(trackEvent|track)(\?\.)?\(\s*'dogadjaj_koji_ne_postoji'/.test(izvor)).toBe(false);
+  });
+});
+
+
+describe('Opportunity Report wiring', () => {
+  const app = readFileSync(join(KORIJEN, 'src/ui/app.ts'), 'utf8');
+  const panel = readFileSync(join(KORIJEN, 'src/ui/repair-panel.ts'), 'utf8');
+  const emitter = readFileSync(join(KORIJEN, 'src/analytics/opportunity-emit.ts'), 'utf8');
+  const result = readFileSync(join(KORIJEN, 'src/analytics/repair-result.ts'), 'utf8');
+
+  it('jedna emisija po putu, neovisni repair_result_ok, isti kontekst, nakon integrity gatea', () => {
+    expect(opportunityWiringProblems({ app, panel, emitter, result })).toEqual([]);
+  });
+
+  it('analysis structure gap ostaje izveden iz sanitiziranog helpera, ne iz sirovog reasona', () => {
+    expect(app).toContain("emitAnalysisOpportunitySignals(trackEvent,result");
+    expect(emitter).toContain("structureGapSignalsForEvent(result)");
+    expect(emitter).toContain("track('analysis_structure_gap'");
   });
 });
