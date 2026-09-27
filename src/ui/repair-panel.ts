@@ -19,6 +19,7 @@ import { repairCeiling } from './result-readiness';
 import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
 import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
+import { repairNoOpSignals } from '../analytics/opportunity-signal';
 
 export interface TitlePageFormField {
   key: string;
@@ -732,6 +733,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         if (state.phase === 'running' || state.phase === 'verifying') return; // vec traje: nista ne prikazuj dvaput
         throw new Error(state.lastError ?? 'popravak nije pokrenut');
       }
+      for (const signal of repairNoOpSignals(result.skippedReasons)) ctx.trackEvent?.('repair_noop_reason', signal);
       execution = { skippedRuleIds: result.skipped, appliedChangeCount: result.changelog.length, integrity: result.integrityFailure ? 'failed' : 'passed' };
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
