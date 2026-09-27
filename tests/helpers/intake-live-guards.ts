@@ -178,19 +178,35 @@ export function ispustanjeProblemi(kontrolerIzvor: string, liveIzvor: string): s
 /**
  * DETEKCIJA NA `/rad/` NE GAZI FAKULTET POTVRDJEN NA ULAZU (Z32 popravak). `applyDetectedContext`
  * mora, prije nego dira izbornik fakulteta, pitati `detekcijaSmije` (`src/ui/confirmed-faculty.ts`)
- * i odustati kad ne smije; `applyConfirmedFacultySelection` mora bravu postaviti
- * (`zakljucajFakultet`) i spustiti `_profileConfirmed`, jer studij nije potvrdjen. Kvar koji
+ * i odustati kad ne smije; `applyFacultyIds` mora spustiti `_profileConfirmed`, jer studij nije
+ * potvrdjen; `primijeniFakultetUlaza` (`confirmed-faculty.ts`) mora POSLIJE postavljanja obrasca
+ * postaviti bravu (`zakljucajFakultet`); a `/rad/` (`src/routes/workspace/main.ts`) mora potvrdu
+ * bez studija voditi kroz `primijeniFakultetUlaza`, ne ravno na `applyFacultyIds`. Kvar koji
  * imitira: provjera ispadne, pa student koji je na `/` potvrdio FER na `/rad/` dobije fakultet koji
  * je detekcija pogodila iz teksta; ili se fakultet bez studija oznaci kao potvrdjen profil.
+ *
+ * Nalaz pregleda Z32: brava je prije zivjela u `app.ts`, koji je time prerastao ratchet velicine,
+ * pa je presla u `confirmed-faculty.ts`; gard zato cita tri izvora umjesto jednog.
  */
-export function detekcijaFakultetaProblemi(appIzvor: string): string[] {
+export function detekcijaFakultetaProblemi(appIzvor: string, fakultetIzvor: string, workspaceMain: string): string[] {
   const problemi: string[] = [];
   const cist = appIzvor.replace(/^[ \t]*\/\/.*$/gm, ' ');
-  const primjena = /export function applyConfirmedFacultySelection\([^)]*\)[^{]*\{([^\n]*)\}\n/.exec(cist)?.[1] ?? null;
-  if (primjena === null) problemi.push('app.ts nema applyConfirmedFacultySelection');
+  const primjena = /export function applyFacultyIds\([^)]*\)[^{]*\{([^\n]*)\}\n/.exec(cist)?.[1] ?? null;
+  if (primjena === null) problemi.push('app.ts nema applyFacultyIds');
+  else if (!/_profileConfirmed=false/.test(primjena)) problemi.push('fakultet bez studija oznacen kao potvrdjen profil');
+  const fak = fakultetIzvor.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^[ \t]*\/\/.*$/gm, ' ');
+  const odFak = fak.indexOf('export function primijeniFakultetUlaza(');
+  if (odFak < 0) problemi.push('confirmed-faculty.ts nema primijeniFakultetUlaza');
   else {
-    if (!/zakljucajFakultet\(/.test(primjena)) problemi.push('primjena fakulteta ne postavlja bravu');
-    if (!/_profileConfirmed=false/.test(primjena)) problemi.push('fakultet bez studija oznacen kao potvrdjen profil');
+    const tijeloFak = fak.slice(odFak, fak.indexOf('\n}', odFak));
+    const obrazac = tijeloFak.indexOf('postaviObrazac(ids)');
+    const brava = tijeloFak.search(/return zakljucajFakultet\(ids\.unit,/);
+    if (brava < 0) problemi.push('primjena fakulteta ne postavlja bravu');
+    else if (obrazac < 0 || obrazac > brava) problemi.push('brava se postavlja prije nego obrazac prihvati fakultet');
+  }
+  const main = workspaceMain.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^[ \t]*\/\/.*$/gm, ' ');
+  if (!/applyFaculty:\s*\(ids\)\s*=>\s*primijeniFakultetUlaza\(ids,\s*applyFacultyIds\)/.test(main)) {
+    problemi.push('/rad/ primjenjuje fakultet s ulaza bez brave');
   }
   const pocetak = cist.indexOf('async function applyDetectedContext(');
   if (pocetak < 0) return [...problemi, 'app.ts nema applyDetectedContext'];

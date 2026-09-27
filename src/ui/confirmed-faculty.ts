@@ -21,7 +21,11 @@
  * brava: ista detekcija za isti rad je vise ne vraca. Pamti se u memoriji modula, ne u pohrani.
  *
  * ZASTO ZASEBAN MODUL: `app.ts` ima ratchet velicine (`tests/ui-module-budget.test.ts`), pa u
- * njemu ostaju samo dvije kuke; stanje, vezanje za dokument i tekst znacke zive ovdje.
+ * njemu ostaju samo dvije kuke: straza `detekcijaSmije` u `applyDetectedContext` i
+ * `applyFacultyIds` (postavi obrazac i spusti `_profileConfirmed`). Brava, stanje, vezanje za
+ * dokument i tekst znacke zive ovdje. Nalaz pregleda Z32: prva izvedba je i bravu postavljala u
+ * `app.ts` (`applyConfirmedFacultySelection`), pa je datoteka prerasla budzet; brava je zato
+ * presla u `primijeniFakultetUlaza`, a `app.ts` daje samo ono sto jedino on moze.
  *
  * VRIJEDI ZA PRVI PRIHVACENI DOKUMENT SESIJE, istim pravilom kao potvrdjen profil sesije (C4,
  * `profile-confirmed-events.ts`): drugi dokument u istoj kartici je drugi rad, pa brava pada.
@@ -75,6 +79,23 @@ export function zakljucajFakultet(trazeno: string | undefined, uObrascu: string 
   datoteka = null;
   zaboraviIzbor();
   return jedinica !== null;
+}
+
+/**
+ * Primjena fakulteta potvrdjenog na ulazu, bez studija (`applyFaculty` u `primijeniPotvrduUlaza`,
+ * `src/routes/workspace/intake-confirmation.ts`). `postaviObrazac` je `applyFacultyIds` iz
+ * `app.ts`: postavi ustanovu, fakultet i razinu u obrazac i spusti `_profileConfirmed`, jer
+ * studij nije potvrdjen. Brava se postavlja TEK POSLIJE, prema onome sto je obrazac stvarno
+ * prihvatio; obrazac koji jedinicu ne zna prikazati ne ostavlja bravu i vraca `false`.
+ */
+export function primijeniFakultetUlaza(
+  ids: Record<string, string>,
+  postaviObrazac: (ids: Record<string, string>) => void,
+  doc: Document = document,
+): boolean {
+  postaviObrazac(ids);
+  const uObrascu = (doc.getElementById('unitSelect') as HTMLSelectElement | null)?.value;
+  return zakljucajFakultet(ids.unit, uObrascu);
 }
 
 /** Zakljucan fakultet ili `null`. */

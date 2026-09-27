@@ -6897,7 +6897,9 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
     expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
     expect(g.ispustanjeProblemi(procitaj('src/routes/intake/intake-controller.ts'), procitaj('src/routes/intake/intake-live.ts'))).toEqual([]);
-    expect(g.detekcijaFakultetaProblemi(procitaj('src/ui/app.ts'))).toEqual([]);
+    expect(g.detekcijaFakultetaProblemi(
+      procitaj('src/ui/app.ts'), procitaj('src/ui/confirmed-faculty.ts'), procitaj('src/routes/workspace/main.ts'),
+    )).toEqual([]);
   });
 
   it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
@@ -6976,18 +6978,29 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
   it('(h) detekcija na /rad/ koja gazi fakultet potvrdjen na ulazu obara gard', async () => {
     const { detekcijaFakultetaProblemi } = await import('./helpers/intake-live-guards');
     const app = procitaj('src/ui/app.ts');
+    const fak = procitaj('src/ui/confirmed-faculty.ts');
+    const main = procitaj('src/routes/workspace/main.ts');
+    expect(detekcijaFakultetaProblemi(app, fak, main), 'cist baseline').toEqual([]);
     // Kvar: detekcija ne pita bravu.
     const bez = app.replace('||!detekcijaSmije(ctx.unitId))return;', ')return;');
     expect(bez).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(bez)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
+    expect(detekcijaFakultetaProblemi(bez, fak, main)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
     // Kvar: primjena fakulteta ne postavlja bravu.
-    const bezBrave = app.replace('return zakljucajFakultet(ids.unit,$(\'#unitSelect\')?.value)', 'return true');
-    expect(bezBrave).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(bezBrave)).toContain('primjena fakulteta ne postavlja bravu');
+    const bezBrave = fak.replace('  return zakljucajFakultet(ids.unit, uObrascu);', '  return true;');
+    expect(bezBrave).not.toBe(fak);
+    expect(detekcijaFakultetaProblemi(app, bezBrave, main)).toContain('primjena fakulteta ne postavlja bravu');
+    // Kvar: obrazac se ne postavi prije brave, pa brava cita stari izbornik (iz postavki).
+    const rano = fak.replace('  postaviObrazac(ids);\n  const uObrascu', '  const uObrascu');
+    expect(rano).not.toBe(fak);
+    expect(detekcijaFakultetaProblemi(app, rano, main)).toContain('brava se postavlja prije nego obrazac prihvati fakultet');
     // Kvar: fakultet bez studija ostavi `_profileConfirmed` iz postavki, pa nepotvrdjen studij prolazi kao potvrdjen.
-    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false;', 'applySelectionIds(ids);');
+    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false}', 'applySelectionIds(ids)}');
     expect(potvrden).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(potvrden)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+    expect(detekcijaFakultetaProblemi(potvrden, fak, main)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+    // Kvar: /rad/ potvrdu bez studija vodi ravno na obrazac, pa brava nikad ne nastane.
+    const ravno = main.replace('applyFaculty: (ids) => primijeniFakultetUlaza(ids, applyFacultyIds),', 'applyFaculty: (ids) => { applyFacultyIds(ids); return true; },');
+    expect(ravno).not.toBe(main);
+    expect(detekcijaFakultetaProblemi(app, fak, ravno)).toContain('/rad/ primjenjuje fakultet s ulaza bez brave');
   });
 
   it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {

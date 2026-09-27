@@ -99,7 +99,7 @@ import { profileFingerprint } from '../profiles/profile-fingerprint';
 import { readSelectionIds } from './profile-selection-ids';
 import { facultyContextSelection, urlSelection } from './selection-entry';
 import { emitProfileConfirmed } from './profile-confirmed-events';
-import { detekcijaSmije, zakljucajFakultet } from './confirmed-faculty';
+import { detekcijaSmije } from './confirmed-faculty';
 import { createTelemetry } from './telemetry';
 import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
@@ -312,8 +312,7 @@ function potvrdiProfil(){_profileConfirmed=true;updateProfile();if(_restoringSes
 // bi u tom trenutku sama pomaknula izbornik zamijenila bi jednu neizrecenu odluku drugom.
 export function applyConfirmedProfileSelection(ids: Record<string,string>): string|null{_restoringSessionProfile=true;try{_sessionProfileApplied=true;_sessionProfileFile=null;_profileConfirmed=true;applySelectionIds(ids)}finally{_restoringSessionProfile=false}return currentDefinitionId()}
 subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.kind!=='accepted'){if(!_sessionProfileFile)_sessionProfileApplied=false;return}if(!_sessionProfileFile)_sessionProfileFile=e.file;else if(e.file!==_sessionProfileFile)_sessionProfileApplied=false});
-// Z32: fakultet s ulaza bez studija; studij ostaje nepotvrdjen (./confirmed-faculty)
-export function applyConfirmedFacultySelection(ids: Record<string,string>): boolean{applySelectionIds(ids);_profileConfirmed=false;return zakljucajFakultet(ids.unit,$('#unitSelect')?.value)}
+export function applyFacultyIds(ids: object){applySelectionIds(ids);_profileConfirmed=false}
 /* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
 /* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
 /* SOCIAL_METHOD_REGISTRY i SOCIAL_METHOD_SOURCE se uvoze iz methodology-loader (data/methodology) */
