@@ -37,3 +37,28 @@ jobs:
           deno-version: v2.x
 
       - run: npm run check
+
+  # T58: opis PR-a mora imati `Neto redaka: +x/-y` i `Nove ovisnosti: nema | <popis>`, a "nema" ne
+  # smije stajati kad package.json dodaje paket. Job samo izvjestava: nije u branch protection
+  # popisu obveznih provjera i ne smije se tamo dodati. Uredjivanje opisa ne okida novi run
+  # (`edited` bi zbog concurrency otkazao puni check), pa nakon ispravka opisa pokreni job ponovno.
+  # Tijelo PR-a ide kroz env, nikad izravno u `run:` (injekcija kroz opis PR-a).
+  pr-opis:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Provjeri obvezne retke opisa PR-a
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/agents/pr-lines.mjs --provjeri "$BASE_SHA" "$HEAD_SHA"
