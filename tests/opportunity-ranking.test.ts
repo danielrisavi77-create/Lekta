@@ -46,7 +46,10 @@ describe('opportunityMeasurementHealth', () => {
       opportunityEvents: 100,
       structureGapItems: 12,
       structureBreakdownItems: 12,
-    })).toEqual({ kind: 'healthy', analysisDelta: 0, structureDelta: 0 });
+      repairNoOpSummaryEvents: 5,
+      repairNoOpSummaryItems: 7,
+      repairNoOpItems: 7,
+    })).toEqual({ kind: 'healthy', analysisDelta: 0, structureDelta: 0, repairNoOpDelta: 0 });
   });
 
   it('mismatch nije tiho zelen: označava nepotpuno mjerenje', () => {
@@ -55,7 +58,10 @@ describe('opportunityMeasurementHealth', () => {
       opportunityEvents: 97,
       structureGapItems: 12,
       structureBreakdownItems: 10,
-    })).toEqual({ kind: 'partial', analysisDelta: -3, structureDelta: -2 });
+      repairNoOpSummaryEvents: 5,
+      repairNoOpSummaryItems: 7,
+      repairNoOpItems: 5,
+    })).toEqual({ kind: 'partial', analysisDelta: -3, structureDelta: -2, repairNoOpDelta: -2 });
   });
 
   it('bez baznih analiza govori no-data, ne healthy', () => {
@@ -64,6 +70,33 @@ describe('opportunityMeasurementHealth', () => {
       opportunityEvents: 0,
       structureGapItems: 0,
       structureBreakdownItems: 0,
+      repairNoOpSummaryEvents: 0,
+      repairNoOpSummaryItems: 0,
+      repairNoOpItems: 0,
     }).kind).toBe('no-data');
+  });
+
+  it('structure breakdown bez summary/baznih eventa je partial, ne no-data', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 0,
+      opportunityEvents: 0,
+      structureGapItems: 0,
+      structureBreakdownItems: 2,
+      repairNoOpSummaryEvents: 0,
+      repairNoOpSummaryItems: 0,
+      repairNoOpItems: 0,
+    })).toEqual({ kind: 'partial', analysisDelta: 0, structureDelta: 2, repairNoOpDelta: 0 });
+  });
+
+  it('repair no-op parity moze samostalno uciniti mjerenje partial', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 0,
+      opportunityEvents: 0,
+      structureGapItems: 0,
+      structureBreakdownItems: 0,
+      repairNoOpSummaryEvents: 3,
+      repairNoOpSummaryItems: 4,
+      repairNoOpItems: 3,
+    })).toEqual({ kind: 'partial', analysisDelta: 0, structureDelta: 0, repairNoOpDelta: -1 });
   });
 });

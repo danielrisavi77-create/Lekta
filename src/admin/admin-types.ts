@@ -219,6 +219,8 @@ export interface OpportunityRow {
 }
 
 export interface OpportunityGapBreakdown {
+  profileId?: string;
+  workType?: string;
   category?: string;
   kind: string;
   count: number;
@@ -240,6 +242,11 @@ export interface OpportunityBucket {
   repairRuns: number;
   repairGapRuns: number;
   repairUnresolvedChecks: number;
+  /** Jedan summary event po uspješnom repair pokušaju (lokalni ili serverski). */
+  repairNoOpSummaryEvents: number;
+  /** Zbroj count iz repair_noop_summary; neovisni parity izvor. */
+  repairNoOpSummaryItems: number;
+  /** Zbroj detaljnih repair_noop_reason count vrijednosti. */
   repairNoOpItems: number;
   paywallEvents: number;
   checkoutEvents: number;

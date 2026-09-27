@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { opportunitySignalForEvent, repairNoOpSignals, structureGapSignalsForEvent } from '../src/analytics/opportunity-signal';
+import { opportunitySignalForEvent, repairNoOpSignals, repairNoOpSummarySignal, structureGapSignalsForEvent } from '../src/analytics/opportunity-signal';
 
 describe('opportunitySignalForEvent', () => {
   it('izvodi samo agregirane brojace bez teksta rada', () => {
@@ -100,5 +100,37 @@ describe('opportunitySignalForEvent', () => {
       { kind: 'invalid-params', count: 1 },
       { kind: 'unclassified', count: 1 },
     ]);
+  });
+
+  it('structure gap nosi samo interni profil i vrstu rada kao kontekst', () => {
+    expect(structureGapSignalsForEvent({
+      details: {
+        profileDefinitionId: 'fpzg-diplomski',
+        typographyStructure: { skipped: [{ reason: 'unsupported run' }] },
+      },
+      settings: { workType: 'diplomski' },
+    })).toEqual([
+      { profileId: 'fpzg-diplomski', workType: 'diplomski', category: 'typography', kind: 'unsupported-structure', count: 1 },
+    ]);
+  });
+
+  it('repair no-op summary i breakdown imaju isti agregirani count i isti sigurni kontekst', () => {
+    const reasons = {
+      'rule-1': 'unsupported-structure',
+      'rule-2': 'already-ok',
+      'rule-3': 'unsupported-structure',
+    };
+    const context = { profileId: 'pravo-diplomski', workType: 'diplomski' };
+    const breakdown = repairNoOpSignals(reasons, context);
+    expect(breakdown).toEqual([
+      { profileId: 'pravo-diplomski', workType: 'diplomski', kind: 'unsupported-structure', count: 2 },
+      { profileId: 'pravo-diplomski', workType: 'diplomski', kind: 'already-ok', count: 1 },
+    ]);
+    expect(repairNoOpSummarySignal(reasons, context)).toEqual({
+      profileId: 'pravo-diplomski',
+      workType: 'diplomski',
+      count: 3,
+    });
+    expect(breakdown.reduce((sum, x) => sum + x.count, 0)).toBe(3);
   });
 });

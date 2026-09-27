@@ -151,6 +151,8 @@ const OPPORTUNITIES: OpportunityStats = {
     repairRuns: 20,
     repairGapRuns: 5,
     repairUnresolvedChecks: 9,
+    repairNoOpSummaryEvents: 6,
+    repairNoOpSummaryItems: 14,
     repairNoOpItems: 14,
     paywallEvents: 60,
     checkoutEvents: 20,
@@ -162,12 +164,12 @@ const OPPORTUNITIES: OpportunityStats = {
       { id: 'paywall_checkout_gap_proxy', affected: 40, denominator: 60, ratePct: 66.7, basis: 'event_count_proxy' },
     ],
     structureGaps: [
-      { category: 'typography', kind: 'unsupported-structure', count: 12 },
-      { category: 'link-doi', kind: 'stale-anchor', count: 11 },
+      { profileId: 'fpzg-diplomski', workType: 'diplomski', category: 'typography', kind: 'unsupported-structure', count: 12 },
+      { profileId: 'pravo-diplomski', workType: 'diplomski', category: 'link-doi', kind: 'stale-anchor', count: 11 },
     ],
     repairNoOpReasons: [
-      { kind: 'already-ok', count: 8 },
-      { kind: 'unsupported-structure', count: 6 },
+      { profileId: 'fpzg-diplomski', workType: 'diplomski', kind: 'already-ok', count: 8 },
+      { profileId: 'pravo-diplomski', workType: 'diplomski', kind: 'unsupported-structure', count: 6 },
     ],
   },
   previous: {
@@ -183,6 +185,8 @@ const OPPORTUNITIES: OpportunityStats = {
     repairRuns: 15,
     repairGapRuns: 6,
     repairUnresolvedChecks: 11,
+    repairNoOpSummaryEvents: 4,
+    repairNoOpSummaryItems: 10,
     repairNoOpItems: 10,
     paywallEvents: 50,
     checkoutEvents: 18,
@@ -297,7 +301,9 @@ describe('admin-section render moduli: ne ruse se, proizvode razuman DOM', () =>
     expect(c.textContent).toContain('nije cohort');
     expect(c.textContent).toContain('inspection_coverage_global');
     expect(c.textContent).toContain('unsupported-structure');
+    expect(c.textContent).toContain('fpzg-diplomski');
     expect(c.textContent).toContain('Zdravlje mjerenja');
+    expect(c.textContent).toContain('repair no-op summary 14 = breakdown 14');
     expect(c.textContent).toContain('Exact parity');
   });
 
