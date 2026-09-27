@@ -138,6 +138,9 @@ vrijedi jedno pravilo za lokalni rad:
   stroju; drugi puni gate ceka da prvi zavrsi.
 - Opis svakog PR-a mora sadrzavati retke `Neto redaka: +<dodano>/-<uklonjeno>` i `Nove ovisnosti: nema | <popis paketa>`
   (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); CI job `pr-opis` ih provjerava i nije obvezna provjera.
+- Word dokaz (Tier 2) vrti self-hosted runner kroz `.github/workflows/word-proof.yml` (T80,
+  `docs/verification/WORD_PROOF_RUNNER.md`); puni lokalni gate s Word razinama na laptopu obvezan je
+  samo kad word-proof runner nije dostupan.
 - Mjerodavan dokaz da promjena prolazi je CI na PR-u, ne lokalni izlazni kod. Ovo je vec
   uobicajena praksa iz nuzde; ovaj odjeljak je tu praksu pretvara u pisano pravilo koje vrijedi
   za svaku sesiju, ne samo kad je stroj vidljivo pretrpan.

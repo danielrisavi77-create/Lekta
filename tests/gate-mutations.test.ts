@@ -132,6 +132,7 @@ import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
@@ -5793,6 +5794,68 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
       },
     ];
     expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
+  });
+});
+
+describe('mutacije: self-hosted Word runner na javnom repou (T80)', () => {
+  const DOPUSTENI = new Set(['word-proof.yml']);
+  const RAW_CIST = "name: word-proof\npermissions:\n  contents: read\njobs:\n  word-proof:\n    runs-on: [self-hosted, windows, word]\n";
+  const cist = (): NamedWorkflow => ({
+    file: 'word-proof.yml',
+    raw: RAW_CIST,
+    doc: {
+      on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
+      permissions: { contents: 'read' },
+      jobs: {
+        'word-proof': {
+          'runs-on': ['self-hosted', 'windows', 'word'],
+          if: "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'",
+        },
+      },
+    },
+  });
+
+  it('BASELINE: word-proof s fork uvjetom, samo contents: read i bez tajni prolazi', () => {
+    expect(findSelfHostedProblems([cist()], DOPUSTENI)).toEqual([]);
+  });
+
+  it('mutant bez fork uvjeta se hvata', () => {
+    const m = cist();
+    m.doc.jobs!['word-proof'].if = "github.repository == 'danielrisavi77-create/Lekta'";
+    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+      'word-proof.yml: job word-proof nema if koji odbija fork i drugi repozitorij',
+    ]);
+  });
+
+  it('mutant koji cita tajnu se hvata', () => {
+    const m = cist();
+    m.raw = RAW_CIST + '    env:\n      KLJUC: ${{ secrets.STRIPE_SECRET_KEY }}\n';
+    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+      'word-proof.yml: spominje secrets. uz self-hosted runner',
+    ]);
+  });
+
+  it('mutant s pull_request trigerom (fork PR kod na stroju) se hvata', () => {
+    const m = cist();
+    (m.doc.on as Record<string, unknown>).pull_request = {};
+    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+      'word-proof.yml: trigger pull_request uz self-hosted runner',
+    ]);
+  });
+
+  it('mutant s pravom pisanja se hvata', () => {
+    const m = cist();
+    m.doc.permissions = { contents: 'write' };
+    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+      'word-proof.yml: job word-proof nema permissions samo contents: read',
+    ]);
+  });
+
+  it('self-hosted u workflowu izvan popisa dopustenih se hvata', () => {
+    const m = { ...cist(), file: 'drugi.yml' };
+    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+      'drugi.yml: self-hosted runner izvan popisa dopustenih workflowa',
+    ]);
   });
 });
 

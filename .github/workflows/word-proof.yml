@@ -1,0 +1,141 @@
+# Word dokaz (Tier 2) na vlasnikovom Windows stroju s aktiviranim Microsoft Wordom (T80).
+#
+# GitHubovi runneri nemaju Word, pa su `verify:word*` razine iz `scripts/release-tiers.mjs` dosad
+# isle samo rucno na laptopu. Ovaj workflow ih vrti na self-hosted runneru s oznakama
+# `self-hosted, windows, word`. Upute za registraciju: docs/verification/WORD_PROOF_RUNNER.md.
+#
+# SIGURNOST (repo je JAVAN): tudji kod nikad ne smije doci na taj stroj.
+#  - Nema `pull_request` ni `pull_request_target` trigera: fork PR ga ne moze pokrenuti.
+#  - `push` samo na master i release/** (pisati mogu samo suradnici s pravom pisanja);
+#    `workflow_dispatch` takodjer trazi pravo pisanja.
+#  - Job ima `if` koji odbija fork i bilo koji drugi repozitorij.
+#  - Nula tajni, token samo za citanje. Gard: tests/ci-workflow-triggers.test.ts
+#    (`findSelfHostedProblems`) i mutacija u tests/gate-mutations.test.ts.
+#
+# Nije obvezna provjera: dok runner nije registriran, job stoji u stanju "Queued".
+name: word-proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Grana, tag ili commit za Word dokaz'
+        required: false
+        default: master
+      razine:
+        description: 'word = cetiri Word razine (oko 10 min); sve = puni release:check (oko 70 min)'
+        required: false
+        default: word
+        type: choice
+        options:
+          - word
+          - sve
+  push:
+    branches: [master, 'release/**']
+
+permissions:
+  contents: read
+
+# Jedan Word na stroju: dva paralelna runa bi se borila za isti COM objekt.
+concurrency:
+  group: word-proof
+  cancel-in-progress: false
+
+jobs:
+  word-proof:
+    if: github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'
+    runs-on: [self-hosted, windows, word]
+    # Trajanja iz docs/generated/RELEASE_PROOF.json (f754537c): cetiri Word razine zajedno
+    # oko 9 min (word 62 s, word-worst 37 s, word-corpus 399 s, word-toc 25 s); puni
+    # release:check oko 70 min (check 1470 s, ux 1725 s, ostalo manje). Rezerva je dvostruka.
+    timeout-minutes: ${{ inputs.razine == 'sve' && 150 || 30 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+          # Puna povijest svih grana, da bi korak ispod mogao dokazati porijeklo commita.
+          fetch-depth: 0
+
+      # Ulaz `ref` smije biti bilo sto (i SHA commita iz fork PR-a, koji GitHub posluzuje iz
+      # ovog repozitorija). Prije ijednog koraka koji izvrsava kod iz stabla (npm ci, lokalna
+      # akcija, release:check) commit mora biti sadrzan u nekoj grani OVOG repozitorija.
+      - name: Porijeklo commita (samo grane ovog repozitorija)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sha = git rev-parse HEAD
+          $grane = git branch -r --contains $sha
+          if (-not $grane) { throw "Commit $sha nije ni na jednoj grani ovog repozitorija; Word dokaz se ne pokrece." }
+          Write-Output "Commit $sha je na granama:"; $grane
+
+      # Rana, jasna greska umjesto pada usred verify:word: Word mora biti instaliran i aktiviran,
+      # a bash (Git for Windows) mora biti u PATH-u jer ga koristi composite akcija setup-deps.
+      - name: Preflight (Word COM, bash, git)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $word = New-Object -ComObject Word.Application
+          try { Write-Output "Word verzija: $($word.Version)" } finally { $word.Quit() }
+          Get-Command bash | Select-Object -ExpandProperty Source
+          git --version
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+          npm-version: 11.11.0
+
+      # Samo za puni release:check: Edge typecheck (Deno), Tier 1 (lxml) i Playwright.
+      - name: Deno setup (samo razine=sve)
+        if: inputs.razine == 'sve'
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: v2.x
+      - name: Python setup (samo razine=sve)
+        if: inputs.razine == 'sve'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: lxml i Playwright chromium (samo razine=sve)
+        if: inputs.razine == 'sve'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m pip install python-docx lxml
+          npx playwright install chromium
+
+      # Postojeca naredba iz scripts/release-check.mjs; razine su iz scripts/release-tiers.mjs.
+      # Izbor ide kroz env, ne kroz interpolaciju u skriptu, i provjerava se protiv popisa.
+      - name: release:check
+        shell: powershell
+        env:
+          RAZINE: ${{ inputs.razine || 'word' }}
+        # Log ide u RUNNER_TEMP, ne u radno stablo: release:check biljezi `dirtyWorkingTree`, a
+        # neprateni log u stablu bi dokaz pogresno oznacio prljavim.
+        # Continue, ne Stop: Windows PowerShell 5.1 uz `2>&1` pretvara svaki stderr redak
+        # nativne naredbe u gresku, pa bi Stop srusio korak na prvom upozorenju npm-a.
+        # Ishod nosi izlazni kod release:check.
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $log = Join-Path $env:RUNNER_TEMP 'release-check.log'
+          if ($env:RAZINE -eq 'sve') {
+            npm run release:check 2>&1 | Tee-Object -FilePath $log
+          } elseif ($env:RAZINE -eq 'word') {
+            npm run release:check -- --only=word,word-worst,word-corpus,word-toc 2>&1 | Tee-Object -FilePath $log
+          } else {
+            throw "Nepoznata vrijednost razine: $env:RAZINE"
+          }
+          exit $LASTEXITCODE
+
+      - name: Artefakt (RELEASE_PROOF.json i log)
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: word-proof-${{ github.run_id }}
+          path: |
+            docs/generated/RELEASE_PROOF.json
+            ${{ runner.temp }}/release-check.log
+          if-no-files-found: warn
+          retention-days: 30

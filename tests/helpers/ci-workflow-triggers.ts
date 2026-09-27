@@ -6,6 +6,12 @@ export interface WorkflowTrigger {
   tags?: string[];
 }
 
+export interface WorkflowJobShape {
+  'runs-on'?: unknown;
+  if?: unknown;
+  permissions?: unknown;
+}
+
 export interface WorkflowFile {
   name?: string;
   on?: Record<string, WorkflowTrigger | null> | string[] | string;
@@ -13,11 +19,15 @@ export interface WorkflowFile {
     group?: string;
     'cancel-in-progress'?: unknown;
   };
+  permissions?: unknown;
+  jobs?: Record<string, WorkflowJobShape>;
 }
 
 export interface NamedWorkflow {
   file: string;
   doc: WorkflowFile;
+  /** Sirovi tekst datoteke; treba ga samo `findSelfHostedProblems` (trazenje `secrets.`). */
+  raw?: string;
 }
 
 function hasKey(on: WorkflowFile['on'], key: string): boolean {
@@ -76,4 +86,72 @@ export function findPullRequestWithoutConcurrency(
     }
   }
   return problems;
+}
+
+/** Trigeri koji mogu pokrenuti kod koji nije napisao suradnik s pravom pisanja (fork PR i slicno). */
+const UNTRUSTED_TRIGGERS = ['pull_request', 'pull_request_target', 'issue_comment', 'workflow_run'];
+
+function runsOnLabels(runsOn: unknown): string[] {
+  if (typeof runsOn === 'string') return [runsOn];
+  if (Array.isArray(runsOn)) return runsOn.map(String);
+  if (runsOn && typeof runsOn === 'object') {
+    const labels = (runsOn as { labels?: unknown }).labels;
+    const group = (runsOn as { group?: unknown }).group;
+    // `group:` bez labela je runner grupa, a grupe drze self-hosted runnere.
+    return [...runsOnLabels(labels), ...(group ? ['self-hosted'] : [])];
+  }
+  return [];
+}
+
+function isContentsReadOnly(permissions: unknown): boolean {
+  if (!permissions || typeof permissions !== 'object' || Array.isArray(permissions)) return false;
+  const entries = Object.entries(permissions as Record<string, unknown>);
+  return entries.length === 1 && entries[0][0] === 'contents' && entries[0][1] === 'read';
+}
+
+/**
+ * Self-hosted runner na JAVNOM repozitoriju (T80, Word dokaz na vlasnikovom stroju). Vraca
+ * probleme oblika `datoteka: razlog` za svaki workflow ciji job trazi `self-hosted`:
+ *  - datoteka nije na popisu dopustenih (`allowed`);
+ *  - workflow ima trigger kojim tudji kod moze doci na stroj (pull_request i slicni);
+ *  - job nema `if` koji odbija fork i drugi repozitorij;
+ *  - token nije samo `contents: read`;
+ *  - tekst datoteke spominje `secrets.`.
+ */
+export function findSelfHostedProblems(
+  workflows: NamedWorkflow[],
+  allowed: ReadonlySet<string>,
+): string[] {
+  const problems: string[] = [];
+  for (const { file, doc, raw } of workflows) {
+    const selfHostedJobs = Object.entries(doc.jobs ?? {}).filter(([, job]) =>
+      runsOnLabels(job['runs-on']).some((label) => label.trim().toLowerCase() === 'self-hosted'),
+    );
+    if (selfHostedJobs.length === 0) continue;
+    if (!allowed.has(file)) problems.push(`${file}: self-hosted runner izvan popisa dopustenih workflowa`);
+    for (const trigger of UNTRUSTED_TRIGGERS) {
+      if (hasKey(doc.on, trigger)) problems.push(`${file}: trigger ${trigger} uz self-hosted runner`);
+    }
+    for (const [jobName, job] of selfHostedJobs) {
+      const condition = typeof job.if === 'string' ? job.if.replace(/\s+/g, ' ') : '';
+      if (!condition.includes('github.event.repository.fork == false') || !condition.includes('github.repository ==')) {
+        problems.push(`${file}: job ${jobName} nema if koji odbija fork i drugi repozitorij`);
+      }
+      const permissions = job.permissions ?? doc.permissions;
+      if (!isContentsReadOnly(permissions)) {
+        problems.push(`${file}: job ${jobName} nema permissions samo contents: read`);
+      }
+    }
+    if (raw === undefined) problems.push(`${file}: nema sirovog teksta za provjeru tajni`);
+    else if (/secrets\./.test(raw)) problems.push(`${file}: spominje secrets. uz self-hosted runner`);
+  }
+  return problems;
+}
+
+/** Grane iz `push.branches` koje nisu na dopustenom popisu (tocna usporedba uzorka). */
+export function pushBranchesOutside(doc: WorkflowFile, allowed: readonly string[]): string[] {
+  const push = triggerValue(doc.on, 'push');
+  const branches = push?.branches ?? [];
+  if (hasKey(doc.on, 'push') && branches.length === 0) return ['(push bez branches filtra)'];
+  return branches.filter((b) => !allowed.includes(b));
 }

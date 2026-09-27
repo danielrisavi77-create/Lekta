@@ -7,6 +7,8 @@ import { describe, expect, it } from 'vitest';
 import {
   findBarePushWorkflows,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
+  pushBranchesOutside,
   type NamedWorkflow,
   type WorkflowFile,
 } from './helpers/ci-workflow-triggers';
@@ -24,7 +26,7 @@ function loadWorkflows(): NamedWorkflow[] {
     .map((file) => {
       const raw = readFileSync(join(workflowsDir, file), 'utf8');
       const doc = parse(raw) as WorkflowFile;
-      return { file, doc };
+      return { file, doc, raw };
     });
 }
 
@@ -33,7 +35,15 @@ const PUSH_EXCEPTIONS = new Set<string>([
   'foundation-check.yml',
   // push je vezan iskljucivo uz gransku spike-granu
   // (architecture/lekta-katedra-foundation-v0.1), ne uz master; pull_request grana pokriva master.
+  'word-proof.yml',
+  // push na master i release/** (T80): Word dokaz na self-hosted runneru nema pull_request
+  // trigera, pa nema ni dvostrukog runa; dopustene grane provjerava zaseban test ispod.
 ]);
+
+// Jedini workflowi koji smiju traziti self-hosted runner (repo je javan; vidi
+// docs/verification/WORD_PROOF_RUNNER.md). Svaki novi mora proci findSelfHostedProblems.
+const SELF_HOSTED_ALLOWED = new Set<string>(['word-proof.yml']);
+const WORD_PROOF_PUSH_BRANCHES = ['master', 'release/**'];
 
 // Workflowi bez pull_request trigera uopce (samo schedule/workflow_dispatch/druga grana push),
 // pa im koncurencija po PR-u nije primjenjiva.
@@ -69,6 +79,24 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
       expect(workflows.some((w) => w.file === exceptionFile)).toBe(true);
     });
   }
+
+  it('self-hosted runner samo u dopustenim workflowima, bez fork trigera, fork uvjeta i tajni', () => {
+    const problems = findSelfHostedProblems(workflows, SELF_HOSTED_ALLOWED);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('word-proof.yml stvarno trazi self-hosted runner (gard iznad nije vakuumski)', () => {
+    const wordProof = workflows.find((w) => w.file === 'word-proof.yml');
+    expect(wordProof).toBeDefined();
+    const runsOn = wordProof?.doc.jobs?.['word-proof']?.['runs-on'];
+    expect(runsOn).toEqual(['self-hosted', 'windows', 'word']);
+  });
+
+  it('word-proof.yml push ide samo na master i release/**', () => {
+    const wordProof = workflows.find((w) => w.file === 'word-proof.yml');
+    expect(wordProof).toBeDefined();
+    expect(pushBranchesOutside(wordProof!.doc, WORD_PROOF_PUSH_BRANCHES)).toEqual([]);
+  });
 
   it('required job imena postoje: conformance-matrix, build-gate/ux-gate, unittest', () => {
     const check = readFileSync(join(workflowsDir, 'check.yml'), 'utf8');
