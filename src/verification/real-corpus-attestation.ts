@@ -59,6 +59,8 @@ export interface CorpusAttestation {
   measuredAt: string;
   /** Commit nad kojim je mjereno; bez njega se ne zna sto je tocno dokazano. */
   measuredFromCommit: string | null;
+  /** T75: sha256 produkcijskog `src/repair` u `measuredFromCommit` (scripts/lib/repair-source-hash.mjs); obvezan za v2. */
+  repairSourceHash?: string | null;
   /** Alati kojima je mjereno. Prazno = ovjera ne vrijedi. */
   oracles: string[];
   /** Tko jamci za mjerenje. `null` dok covjek ne potpise, i tada ovjera NE vrijedi. */
@@ -111,6 +113,19 @@ export function signedContentProblem(
   return null;
 }
 
+/**
+ * T75: v2 ovjera mora navesti otisak koda popravka nad kojim je mjereno (T74, sha256 produkcijskog
+ * `src/repair` u `measuredFromCommit`), inace se ne zna koji je kod dokazan. `isHash` postoji samo za
+ * mutacijski test.
+ */
+export function measuredCodeProblem(
+  a: CorpusAttestation,
+  isHash: (value: string) => boolean = (value) => /^[0-9a-f]{64}$/.test(value),
+): string | null {
+  if (a.fingerprintVersion !== 2) return null;
+  return isHash(String(a.repairSourceHash ?? '')) ? null : 'nema otiska koda popravka nad kojim je mjereno';
+}
+
 export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
@@ -128,9 +143,16 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   const dvostruki = a.protocol?.duplicateDocumentCount;
   if (typeof dvostruki === 'number' && dvostruki > 0) p.push('mjerenje je iste dokumente brojalo vise puta');
   // T83 (Codex #185, T83-04): v2 ovjera mora nositi uskladjena brojcana polja; nepoznata verzija otiska
-  // se ne tumaci. Bez polja je v1 (ovjere prije T83) i ostaje citljiva.
+  // se ne tumaci.
+  //
+  // T75: v1 ovjera (bez polja, otisak s ponavljanjima) VISE NIJE DOKAZ. Potpisana v1 ovjera a74d93d5
+  // brojala je 102 rada dvaput; T75 je u istom commitu zamjenjuje v2 ovjerom istog skupa. v2 mora nositi
+  // i otisak koda popravka nad kojim je mjereno (T74), inace se ne zna koji je kod dokazan.
   const verzija = a.fingerprintVersion;
-  if (verzija !== undefined && verzija !== 1 && verzija !== 2) p.push('nepoznata verzija otiska korpusa');
+  if (verzija === undefined || verzija === 1) p.push('ovjera v1 (otisak s ponavljanjima) vise nije dokaz');
+  else if (verzija !== 2) p.push('nepoznata verzija otiska korpusa');
+  const kod = measuredCodeProblem(a);
+  if (kod) p.push(kod);
   if (verzija === 2) {
     const pr = a.protocol;
     const cijeli = (x: unknown): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0;

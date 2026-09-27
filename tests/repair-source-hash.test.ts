@@ -12,8 +12,64 @@ import {
   isRepairProductionSource,
   repairSourceFreshness,
   repairSourceHash,
+  repairSourceHashAtCommit,
   repairSourceHashFromFiles,
 } from '../scripts/lib/repair-source-hash.mjs';
+
+describe('repair-source-hash: otisak iz git stabla commita (T75)', () => {
+  it('na HEAD-u je jednak otisku s diska, a nepostojeci ili neispravan commit baca', () => {
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const status = execFileSync('git', ['status', '--porcelain', '--', 'src/repair'], { encoding: 'utf8' }).trim();
+    const izGita = repairSourceHashAtCommit(head);
+    expect(izGita.hash).toMatch(/^[0-9a-f]{64}$/);
+    // Usporedba s diskom vrijedi samo nad cistim src/repair (inace disk i commit legitimno odstupaju).
+    if (status === '') expect(izGita).toEqual(repairSourceHash());
+    expect(() => repairSourceHashAtCommit('0'.repeat(40))).toThrow();
+    expect(() => repairSourceHashAtCommit('HEAD --output=x')).toThrow(/nije commit/);
+  });
+
+  it('F3 (Codex T75): tree i blob OID nisu commit i bacaju', () => {
+    const stablo = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { encoding: 'utf8' }).trim();
+    const blob = execFileSync('git', ['rev-parse', 'HEAD:package.json'], { encoding: 'utf8' }).trim();
+    // Generator proizvodi ciljanu klasu: git za te OID-ove stvarno javlja tree i blob.
+    expect(execFileSync('git', ['cat-file', '-t', stablo], { encoding: 'utf8' }).trim()).toBe('tree');
+    expect(execFileSync('git', ['cat-file', '-t', blob], { encoding: 'utf8' }).trim()).toBe('blob');
+    expect(() => repairSourceHashAtCommit(stablo)).toThrow(/je tree, a ne commit/);
+    expect(() => repairSourceHashAtCommit(blob)).toThrow(/je blob, a ne commit/);
+  });
+
+  it('F2 (Codex T75): podmodul (gitlink 160000) i simbolicka veza (120000) u src/repair bacaju', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'lekta-rsh-git-'));
+    const git = (...args: string[]) =>
+      execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', '-c', 'commit.gpgsign=false', ...args], { cwd: repo, encoding: 'utf8' }).trim();
+    try {
+      git('init', '-q');
+      mkdirSync(join(repo, 'src', 'repair'), { recursive: true });
+      writeFileSync(join(repo, 'src', 'repair', 'fixers.ts'), 'export const f = 1;\n');
+      git('add', '-A');
+      git('commit', '-q', '-m', 'baseline');
+      const baseline = git('rev-parse', 'HEAD');
+      // Baseline: cisto stablo daje otisak jednak onom s diska.
+      expect(repairSourceHashAtCommit(baseline, repo)).toEqual(repairSourceHash(repo));
+
+      git('update-index', '--add', '--cacheinfo', `160000,${baseline},src/repair/podmodul`);
+      git('commit', '-q', '-m', 'gitlink');
+      const sPodmodulom = git('rev-parse', 'HEAD');
+      expect(git('ls-tree', sPodmodulom, 'src/repair/podmodul')).toMatch(/^160000 commit /);
+      expect(() => repairSourceHashAtCommit(sPodmodulom, repo)).toThrow(/podmodul src\/repair\/podmodul/);
+
+      git('rm', '-q', '--cached', 'src/repair/podmodul');
+      const blobVeze = execFileSync('git', ['hash-object', '-w', '--stdin'], { cwd: repo, encoding: 'utf8', input: 'fixers.ts' }).trim();
+      git('update-index', '--add', '--cacheinfo', `120000,${blobVeze},src/repair/veza.ts`);
+      git('commit', '-q', '-m', 'symlink');
+      const sVezom = git('rev-parse', 'HEAD');
+      expect(git('ls-tree', sVezom, 'src/repair/veza.ts')).toMatch(/^120000 blob /);
+      expect(() => repairSourceHashAtCommit(sVezom, repo)).toThrow(/simbolicka veza src\/repair\/veza\.ts/);
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
+  });
+});
 
 const BASE = [
   { path: 'src/repair/apply-fixers.ts', content: 'export const a = 1;\n' },

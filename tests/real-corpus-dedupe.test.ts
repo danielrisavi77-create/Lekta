@@ -4,7 +4,7 @@
  * potpis ostaje samo uz ISTO potpisano mjerenje. Nalazi Codex pregleda #185 (T83-01 do T83-06).
  */
 import { describe, expect, it } from 'vitest';
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -17,6 +17,7 @@ import { attestationContentDigestSync, sha256HexSync } from '../src/verification
 import {
   FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
 } from '../scripts/lib/corpus-attestation-core.mjs';
+import { repairSourceHashAtCommit } from '../scripts/lib/repair-source-hash.mjs';
 
 const entry = (documentId: string, root: string, extra: Partial<RealCorpusManifestEntry> = {}): RealCorpusManifestEntry => ({
   documentId,
@@ -235,7 +236,8 @@ describe('T83-06: stvarna skripta ovjere', () => {
   })();
   const mjerenje = (ids: string[], generatedAt: string, extra: Record<string, unknown> = {}, holdoutIds: string[] = []) => ({
     generatedAt,
-    generatedFromCommit: 'c'.repeat(40),
+    // T75: skripta racuna otisak koda popravka iz git objekata commita mjerenja, pa commit mora postojati.
+    generatedFromCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     scope: { duplicateDocumentCount: 0 },
     results: ids.map((documentId) => ({
       documentId, profileId: profil, holdout: holdoutIds.includes(documentId), expectationProvenance: 'derived', outcome: 'review',
@@ -271,6 +273,8 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(potpisana.fingerprintVersion).toBe(2);
       expect(potpisana.protocol).toMatchObject({ duplicateDocumentCount: 0, uniqueDocumentCount: 3, rawDocumentCount: 3, countedDocumentCount: 2 });
       expect(potpisana.signedContentDigest).toMatch(/^[0-9a-f]{64}$/);
+      // T75: skripta upisuje otisak koda popravka commita MJERENJA, ne s diska.
+      expect(potpisana.repairSourceHash).toBe(repairSourceHashAtCommit(potpisana.measuredFromCommit).hash);
       expect(attestationProblems(potpisana)).toEqual([]);
 
       // Ista ovjera ponovljena nad ISTIM mjerenjem zadrzava potpis.
@@ -314,12 +318,12 @@ describe('attestationProblems: dvostruko brojanje, verzija otiska i dosljednost 
   } as unknown as CorpusAttestation);
   /** Potpisana v2 ovjera s ISPRAVNIM otiskom sadrzaja; `extra` moze ga prepisati. */
   const v2 = (protocol: Record<string, unknown> = cista, extra: Record<string, unknown> = {}) => {
-    const bez = ovjera({ fingerprintVersion: 2 }, protocol);
+    const bez = ovjera({ fingerprintVersion: 2, repairSourceHash: 'e'.repeat(64) }, protocol);
     return { ...bez, signedContentDigest: attestationContentDigestSync(bez), ...extra } as CorpusAttestation;
   };
 
-  it('v1 ovjera (bez verzije) ostaje citljiva; dvostruko brojanje je problem', () => {
-    expect(attestationProblems(ovjera())).toEqual([]);
+  it('T75: v1 ovjera (bez verzije) vise nije dokaz; dvostruko brojanje je problem', () => {
+    expect(attestationProblems(ovjera())).toEqual(['ovjera v1 (otisak s ponavljanjima) vise nije dokaz']);
     expect(attestationProblems(ovjera({}, { duplicateDocumentCount: 3 }))).toContain('mjerenje je iste dokumente brojalo vise puta');
   });
 
