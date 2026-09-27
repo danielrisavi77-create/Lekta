@@ -151,6 +151,7 @@ import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
   type NamedWorkflow,
@@ -396,6 +397,33 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
+function upisnikRitehRootFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '3', executors: [{ componentIds: ['riteh'] }] }],
+    [{ id: 'p', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }],
+    [{ programCode: '3', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikFerFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'FER', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['fer'] }] }],
+    [{ id: 'p', unitId: 'fer', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://fer.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikKbfFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Teologija', izvoditelj: 'KBF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['kbf'] }] }],
+    [{ id: 'p', unitId: 'kbf', programs: ['Teologija'], workTypes: ['final'], sources: [{ url: 'https://kbf.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote: 'Teologija' } }],
+  );
+}
+
 function upisnikInventory(decisions = upisnikProfileDecisions.decisions, integratedGraduateCoverage: typeof upisnikProfileDecisions.integratedGraduateCoverage = upisnikProfileDecisions.integratedGraduateCoverage) {
   return buildUpisnikProfileCandidates(
     upisnikRows.rows,
@@ -539,6 +567,94 @@ function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string
 
 const MUTATIONS: Mutation[] = [
   {
+    id: 'upisnik/b13-korijen-rijeci',
+    imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
+    cleanBefore: () => upisnikGuardFixture('203', 'Studij fizike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      const attacks = [
+        () => upisnikGuardFixture('203', 'Fizikalna terapija'),
+        () => buildUpisnikProfileCandidates(
+          [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+          [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+          [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: 'https://pmf.unizg.hr' }] }],
+          [{ programCode: '1', profileId: 'p', evidence: { sourceUrl: 'https://pmf.unizg.hr', sourceLocator: 'studij', quote: 'Mikrobiologija' } }],
+        ),
+      ];
+      return attacks.every((attack) => { try { attack(); return false; } catch (error) { return /program name/u.test(String(error)); } });
+    },
+  },
+  {
+    id: 'upisnik/b13-razina-svih-studija',
+    imitates: 'Stara iznimka svi studiji prihvaca doktorski citat za prijediplomski program',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi doktorski studiji imaju disertaciju'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-vrsta-uz-studij',
+    imitates: 'Staro ponistavanje obiju osnova propusta strucni studij uz sveucilisnu knjiznicu',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prijediplomski studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prijediplomski studij. Sveucilisna knjiznica.'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-svi-studiji-bez-razine',
+    imitates: 'Iznimka bez razine prihvaca opcenit citat Svi studiji',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi studiji imaju zavrsni rad'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-vrsta-bez-studija',
+    imitates: 'Vrsta studija izvan izraza studij nije procitana',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prvostupnik inzenjer elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-domena-v3',
+    imitates: 'unitId kao kljuc bilo gdje propusta KBF na splitskom sveucilistu',
+    cleanBefore: () => upisnikKbfFixture('https://kbf.unizg.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikKbfFixture('https://kbf.unist.hr/studij'); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-normalizirani-hold',
+    imitates: 'Stara doslovna jednakost i bez minimalne duljine propustaju razmak i kratak dokaz',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      const hold = report.programs[0]!.remainingHold!;
+      hold.missingEvidence = ['Sluzbeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajucim profilom. '];
+      const generic = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('generic evidence request'));
+      hold.missingEvidence = ['Potreban je sluzbeni dokaz.'];
+      const short = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('too short'));
+      return generic && short;
+    },
+  },
+
+  {
     id: 'upisnik/prazan-worktypes-prihvaca-sve',
     imitates: 'Prazan workTypes ponovno nudi profil za svaku razinu',
     cleanBefore: () => {
@@ -567,19 +683,19 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'upisnik/109-domena-druge-ustanove',
-    imitates: 'Veza FHS 109 koristi službeni izvor Hrvatskog katoličkog sveučilišta',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    imitates: 'Goli korijen uniri.hr u profilu propusta dokaz s medri.uniri.hr za RITEH',
+    cleanBefore: () => upisnikRitehRootFixture('https://riteh.uniri.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://www.unicath.hr/povijest' }); return false; }
+      try { upisnikRitehRootFixture('https://medri.uniri.hr/studij'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
   {
-    id: 'upisnik/susjedna-sastavnica-iste-domene',
-    imitates: 'FHS veza koristi izvor FFZG-a na istoj sveučilišnoj domeni',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    id: 'upisnik/unitid-izvan-sveucilista',
+    imitates: 'unitId kao kljuc izvan sveucilisnih korijena propusta fer.com',
+    cleanBefore: () => upisnikFerFixture('https://fer.unizg.hr/x').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://ffzg.unizg.hr/povijest' }); return false; }
+      try { upisnikFerFixture('https://fer.com/x'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
@@ -6788,6 +6904,45 @@ describe('mutacije: routing korak 2 (select-route)', () => {
   });
 });
 
+describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', () => {
+  const cist: NamedWorkflow[] = [
+    {
+      file: 'pr-opis.yml',
+      doc: { on: { pull_request: { types: ['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review'] } }, jobs: { 'pr-opis': {} } },
+    },
+    { file: 'foundation-check.yml', doc: { on: { pull_request: { branches: ['master'] } }, jobs: { check: {} } } },
+  ];
+
+  it('baseline: samo pr-opis', () => {
+    expect(findJobsRunningOnEdited(cist)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('mutant: edited dodan workflowu s punim checkom (stvaran kvar: pr-opis je prije bio job u foundation-check.yml) se hvata', () => {
+    const mutiran: NamedWorkflow[] = [
+      cist[0],
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { branches: ['master'], types: ['opened', 'synchronize', 'edited'] } }, jobs: { check: {}, 'pr-opis': {} } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(mutiran)).toEqual([
+      'foundation-check.yml#check',
+      'foundation-check.yml#pr-opis',
+      'pr-opis.yml#pr-opis',
+    ]);
+  });
+
+  it('job s if koji iskljucuje edited se ne broji', () => {
+    const sIf: NamedWorkflow[] = [
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { types: ['opened', 'edited'] } }, jobs: { check: { if: "github.event.action != 'edited'" } } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(sIf)).toEqual([]);
+  });
+});
+
 describe('mutacije: lean ratchet (T56)', () => {
   const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
   const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
@@ -6809,6 +6964,30 @@ describe('mutacije: lean ratchet (T56)', () => {
     const mutant = fnBlok.replace('if (c > b)', 'if (c > b + 1)');
     expect(mutant).not.toBe(fnBlok);
     expect(hvataRast(izvedi(mutant))).toBe(false);
+  });
+
+  // Windows: Node odbija execFile nad `.cmd` bez shella (EINVAL), pa win32 put nikad ne smije vratiti .cmd.
+  const invStart = src.indexOf('export function toolInvocation');
+  const invBlok = src.slice(invStart, src.indexOf('\n}\n', invStart) + 3);
+  type Invocation = (name: string, o: object) => { command: string; argsPrefix: string[] };
+  const izvediInv = (fn: string): Invocation =>
+    new Function('path', 'existsSync', 'readFileSync', 'ROOT', `${fn.replace('export ', '')}\nreturn toolInvocation;`)(
+      { join }, () => true, () => '', 'X:/repo',
+    ) as Invocation;
+  const win32Opts = { platform: 'win32', exists: () => true, readText: () => JSON.stringify({ bin: { knip: 'bin/knip.js' } }) };
+  const bezCmd = (inv: Invocation): boolean => !inv('knip', win32Opts).command.toLowerCase().endsWith('.cmd');
+
+  it('baseline: stvarni toolInvocation na win32 ne vraca .cmd', () => {
+    expect(bezCmd(izvediInv(invBlok))).toBe(true);
+  });
+
+  it('mutant koji na win32 vrati .bin/<ime>.cmd (stari EINVAL put) obara tvrdnju', () => {
+    const mutant = invBlok.replace(
+      'return { command: process.execPath, argsPrefix: [entry] };',
+      "return { command: path.join(root, 'node_modules', '.bin', `${name}.cmd`), argsPrefix: [] };",
+    );
+    expect(mutant).not.toBe(invBlok);
+    expect(bezCmd(izvediInv(mutant))).toBe(false);
   });
 });
 
