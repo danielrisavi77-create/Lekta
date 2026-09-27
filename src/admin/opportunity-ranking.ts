@@ -2,12 +2,14 @@ import type { OpportunityRow } from './admin-types';
 
 export interface RankedOpportunityRow extends OpportunityRow {
   sample: 'enough' | 'low';
+  evidence: 'direct' | 'proxy';
 }
 
 /**
  * Ne izmisljamo kompozitni "AI priority score". Redoslijed je dokaziv:
- * 1) signali s barem 20 opažanja, 2) veci udio zahvacenih, 3) veci broj zahvacenih.
- * Mali uzorak ostaje vidljiv, ali ide iza stabilnijeg signala.
+ * 1) izravna mjerenja prije event-count proxyja, 2) barem 20 opažanja,
+ * 3) veci udio zahvacenih, 4) veci broj zahvacenih.
+ * Proxy nikad ne postaje "najveca prilika" samo zato sto mu je sirovi postotak veci.
  */
 export function rankOpportunityRows(rows: readonly OpportunityRow[]): RankedOpportunityRow[] {
   return rows
