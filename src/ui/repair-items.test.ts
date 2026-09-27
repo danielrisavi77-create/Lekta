@@ -15,6 +15,10 @@ import {
   tableFigureRescueRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
+import { renderRepairOutcomeSummary, renderTableFigureRescueControls, skippedActionNotes, splitSkippedByReason, classifyRepairReport } from './repair-panel';
+import { tableFigureRescueFixer, type TableFigureRescueParams } from '../repair/table-figure-rescue-fixer';
+import { anchorFingerprintForXml } from '../analysis/element-structure';
+import { detectIntegrityFailure } from '../repair/apply-fixers';
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 
@@ -547,6 +551,16 @@ describe('tableFigureRescueRepairableItem: preporuka bez profilnog pravila (RE-6
     expect(params.figures?.every((figure) => figure.altText === undefined), 'alt tekst se ne smije slati').toBe(true);
   });
 
+  it('T65: tablica sa spojenim celijama nema predodabran equalColumns, ostale akcije iste', () => {
+    const merged = { ...structure, tables: [{ ...structure.tables[0], mergedCells: true }] };
+    const plainTable = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] })[0].tableFigureRescueForm!.tables[0];
+    const mergedTable = tableFigureRescueRepairableItem({ details: { tableFigureRescue: merged } }, { ruleEntries: [] })[0].tableFigureRescueForm!.tables[0];
+    expect(plainTable.actions.equalColumns).toBe(true);
+    expect(mergedTable.actions.equalColumns).toBe(false);
+    expect({ ...mergedTable.actions, equalColumns: true }).toEqual(plainTable.actions);
+    expect(mergedTable.selected).toBe(plainTable.selected);
+  });
+
   it('s verificiranim pravilom ostaje prekrsaj', () => {
     const ruleEntries = [{
       checkId: 'table-figure-rescue-rules', status: 'verified', sourceId: 'izvor', sourcePage: 'str. 7', quote: 'citat',
@@ -642,5 +656,179 @@ describe('velicina fusnote: vrijednost dolazi u dva oblika i oba moraju raditi',
   it('besmislena vrijednost ne proizvodi ponudu', () => {
     expect(params(0)).toBeUndefined();
     expect(params('deset')).toBeUndefined();
+  });
+});
+
+/**
+ * T65 krug 2 (M2, M3). Potvrdni tekst popravka tablica tvrdio je bezuvjetno da se "siroka tablica
+ * skuplja na sirinu teksta". UI ne salje textWidthEmu, pa fitToTextWidth pise samo
+ * <w:tblLayout w:type="fixed"/>, a na tablici sa spojenim celijama fixer ne dira ni tblGrid ni tcW.
+ * Odluka (opcija A): tekst se sastavlja iz STVARNO odabranih akcija i tvrdi samo ono sto fixer pise.
+ * textWidthEmu se svjesno ne salje (vidi komentar u repair-items.ts).
+ */
+describe('tableFigureRescueRepairableItem: istinit tekst i onemogucen equalColumns (T65 krug 2)', () => {
+  const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+  const tc = (width: number, text: string, extra = '') => `<w:tc><w:tcPr><w:tcW w:w="${width}" w:type="dxa"/>${extra}</w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+  // Siroka tablica (12000 twipa, tekst je 9000): prva celija se proteze preko dva stupca.
+  const wideMerged = `<w:tbl ${W}><w:tblPr><w:tblW w:w="12000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="3000"/><w:gridCol w:w="4000"/><w:gridCol w:w="5000"/></w:tblGrid><w:tr>${tc(7000, 'Spojeno', '<w:gridSpan w:val="2"/>')}${tc(5000, 'Desno')}</w:tr><w:tr>${tc(3000, 'a')}${tc(4000, 'b')}${tc(5000, 'c')}</w:tr></w:tbl>`;
+  const documentXml = `<w:document ${W}><w:body>${wideMerged}</w:body></w:document>`;
+  const structureFor = (mergedCells: boolean) => ({
+    tables: [{ id: 't1', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', wideMerged), rowCount: 2, columnCount: 3, wide: true, mergedCells, confidence: 'medium', rowsWithCantSplit: 0, hasHeader: false, evidence: [] }],
+    figures: [],
+  });
+  const itemFor = (mergedCells: boolean) => tableFigureRescueRepairableItem({ details: { tableFigureRescue: structureFor(mergedCells) } }, { ruleEntries: [] })[0];
+  const widths = (xml: string) => [xml.match(/<w:tblW\b[^>]*>/)?.[0], xml.match(/<w:tblGrid\b[^>]*>[\s\S]*?<\/w:tblGrid>/)?.[0], ...[...xml.matchAll(/<w:tcW\b[^>]*>/g)].map((m) => m[0])];
+
+  it('M2: siroka tablica sa spojenim celijama: tekst ne tvrdi skupljanje ni ujednacavanje, a fixer sirine stvarno ne dira', () => {
+    const item = itemFor(true);
+    const text = String(item.confirmationText);
+    const params = item.params as unknown as TableFigureRescueParams;
+    // Stvarni ucinak fixera nad ISTIM parametrima koje salje UI.
+    const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
+    expect(out.applied).toBe(true);
+    expect(widths(out.parts.documentXml)).toEqual(widths(documentXml));
+    expect(params.tables[0].textWidthEmu).toBeUndefined();
+    // Tekst ne smije tvrditi nista sto se nije dogodilo.
+    expect(text).not.toMatch(/skuplja|sužava|smanjuje/i);
+    expect(text).not.toContain('jednaku širinu');
+    expect(text).toContain('spojenim ćelijama zadržava postojeće širine stupaca');
+    expect(text).toContain('fiksni raspored stupaca');
+    expect(text).toContain('Ocjena se ne mijenja');
+  });
+
+  it('M2: ni tablica bez spajanja ne dobiva tvrdnju o skupljanju, jer se textWidthEmu ne salje', () => {
+    const item = itemFor(false);
+    const text = String(item.confirmationText);
+    expect((item.params as unknown as TableFigureRescueParams).tables[0].textWidthEmu).toBeUndefined();
+    expect(text).not.toMatch(/skuplja|sužava|smanjuje/i);
+    expect(text).toContain('stupci dobivaju jednaku širinu unutar postojeće ukupne širine');
+  });
+
+  it('M3: kucica "Ujednaci stupce" je za spojenu tablicu onemogucena s objasnjenjem i ne ulazi u params', () => {
+    const item = itemFor(true);
+    const form = item.tableFigureRescueForm!;
+    expect(form.tables[0].disabledActions?.equalColumns).toContain('spojene ćelije');
+    // I kad bi netko zaobisao kucicu, params ne nose equalColumns za spojenu tablicu.
+    form.tables[0].actions.equalColumns = true;
+    const params = form.buildParams(form) as unknown as TableFigureRescueParams;
+    expect(params.tables[0].actions.equalColumns).toBeFalsy();
+    form.tables[0].actions.equalColumns = false;
+    const li = document.createElement('li');
+    renderTableFigureRescueControls(li, item);
+    const label = [...li.querySelectorAll('label')].find((node) => node.textContent?.includes('Ujednači stupce'));
+    expect(label, 'kucica postoji i vidljiva je').toBeTruthy();
+    const box = label!.querySelector('input') as HTMLInputElement;
+    expect(box.disabled).toBe(true);
+    expect(box.checked).toBe(false);
+    expect(label!.textContent).toContain('spojene ćelije');
+    // Obicna tablica: kucica radi kao i prije.
+    const plainItem = itemFor(false);
+    const plainLi = document.createElement('li');
+    renderTableFigureRescueControls(plainLi, plainItem);
+    const plainBox = [...plainLi.querySelectorAll('label')].find((node) => node.textContent?.includes('Ujednači stupce'))!.querySelector('input') as HTMLInputElement;
+    expect(plainBox.disabled).toBe(false);
+    expect(plainBox.checked).toBe(true);
+  });
+
+  it('M2: potvrdni tekst prati promjenu odabira u obrascu', () => {
+    const item = itemFor(false);
+    const li = document.createElement('li');
+    renderTableFigureRescueControls(li, item);
+    expect(String(item.confirmationText)).toContain('zaglavlje se ponavlja kroz stranice');
+    const header = [...li.querySelectorAll('label')].find((node) => node.textContent?.includes('Ponavljaj zaglavlje'))!.querySelector('input') as HTMLInputElement;
+    header.checked = false;
+    header.dispatchEvent(new Event('change'));
+    expect(String(item.confirmationText)).not.toContain('zaglavlje se ponavlja');
+    expect((item.params as unknown as TableFigureRescueParams).tables[0].actions.repeatHeader).toBeFalsy();
+  });
+
+  it('M3 (m): drugi prolaz nad vec popravljenom spojenom tablicom zavrsava u "vec uskladjeno", ne u "nije moguce"', () => {
+    const params: TableFigureRescueParams = { version: 1, figures: [], tables: [{ id: 't1', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', wideMerged), actions: { equalColumns: true, center: true, repeatHeader: true } }] };
+    const first = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
+    expect(first.applied).toBe(true);
+    const second = tableFigureRescueFixer(first.parts, params);
+    expect(second.applied).toBe(false);
+    const split = splitSkippedByReason(['table-figure-rescue-assisted'], { 'table-figure-rescue-assisted': second.reason! }, () => 'Prelamanje tablica i slika');
+    expect(split).toEqual({ alreadyOk: ['Prelamanje tablica i slika'], cannotFix: [] });
+  });
+
+  /**
+   * T65 krug 3 (pregled: M3 napola zatvoren). Spojena tablica kojoj su ostale akcije vec na cilju:
+   * fixer u PRVOM prolazu vraca 'already-ok' i skippedActions. Izvjestaj ne smije reci samo
+   * "Odabrano je već usklađeno": preskoceno ujednacavanje stupaca mora biti ispisano.
+   */
+  it('M3 (krug 3): izvjestaj bez primijenjenog popravka ispisuje preskoceno ujednacavanje stupaca', () => {
+    const centered = wideMerged.replace('<w:tblPr>', '<w:tblPr><w:jc w:val="center"/>');
+    const doc = `<w:document ${W}><w:body>${centered}</w:body></w:document>`;
+    const params: TableFigureRescueParams = { version: 1, figures: [], tables: [{ id: 't1', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', centered), actions: { equalColumns: true, center: true } }] };
+    const out = tableFigureRescueFixer({ documentXml: doc, stylesXml: '' }, params);
+    expect(out.applied).toBe(false);
+    expect(out.reason).toBe('already-ok');
+    const ruleId = 'table-figure-rescue-assisted';
+    const labelOf = () => 'Prelamanje tablica i slika';
+    // Isti oblik koji applyFixers vraca za taj ishod (dokazano u table-figure-rescue-fixer.test.ts).
+    const summary = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: out.reason! }, skippedActions: { [ruleId]: out.skippedActions ?? [] }, changelog: [] }, labelOf);
+    // Pregled drugog alata (Codex, krug 3): stavka s preskocenom akcijom ne smije stajati pod "vec uskladjeno".
+    expect(summary).toEqual({ alreadyOk: [], cannotFix: [], skippedNotes: ['Prelamanje tablica i slika: ujednačavanje stupaca preskočeno (spojene ćelije)'] });
+    const el = document.createElement('div');
+    renderRepairOutcomeSummary(el, [], summary.alreadyOk, summary.cannotFix, summary.skippedNotes);
+    const text = el.textContent ?? '';
+    expect(text).toContain('Nije provedeno: Prelamanje tablica i slika: ujednačavanje stupaca preskočeno (spojene ćelije).');
+    expect(text).not.toContain('Već usklađeno');
+    expect(text).not.toMatch(/nije (bilo potrebno|trebalo) (ništa )?mijenjati/i);
+    expect(text).toContain('Dokument nije mijenjan.');
+    // Bez preskoka isti razlog ostaje "vec uskladjeno" (RE-36 se ne mijenja).
+    const plain = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: 'already-ok' }, changelog: [] }, labelOf);
+    expect(plain).toEqual({ alreadyOk: ['Prelamanje tablica i slika'], cannotFix: [], skippedNotes: [] });
+    // 'unsupported-structure' s preskokom ostaje "nije moguce", uz napomenu zasto.
+    const only = classifyRepairReport({ skipped: [ruleId], skippedReasons: { [ruleId]: 'unsupported-structure' }, skippedActions: { [ruleId]: out.skippedActions ?? [] }, changelog: [] }, labelOf);
+    expect(only.cannotFix).toEqual(['Prelamanje tablica i slika']);
+    expect(only.skippedNotes).toHaveLength(1);
+  });
+
+  it('M3 (krug 3): ista napomena se ne ispisuje dvaput', () => {
+    const note = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
+    expect(skippedActionNotes({ r: [note, note] }, [], () => 'Prelamanje')).toEqual([`Prelamanje: ${note}`]);
+  });
+
+  it('M3 (krug 3): uz primijenjen popravak napomena se ne ponavlja ako je vec u changelogu', () => {
+    const ruleId = 'table-figure-rescue-assisted';
+    const note = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
+    const changelog = [{ ruleId, beforeLabel: 'tablice i slike', afterLabel: `spašene tablice i slike; ${note}` }];
+    expect(skippedActionNotes({ [ruleId]: [note] }, changelog, () => 'Prelamanje')).toEqual([]);
+    expect(skippedActionNotes({ [ruleId]: [note] }, [], () => 'Prelamanje')).toEqual([`Prelamanje: ${note}`]);
+    expect(skippedActionNotes(undefined, changelog, () => 'Prelamanje')).toEqual([]);
+    const el = document.createElement('div');
+    renderRepairOutcomeSummary(el, changelog, [], [], []);
+    expect(el.textContent).toContain(note);
+    expect(el.textContent).toContain('Primijenjeno 1 popravak');
+  });
+
+  /**
+   * T65 krug 2, pregled: potvrdni tekst je bio istinit, ali predoznacena kucica za fitToTextWidth
+   * i dalje je glasila "Prilagodi širini teksta". Bez textWidthEmu fixer pise samo tblLayout fixed,
+   * pa tblW, tblGrid i tcW ostaju isti i siroka tablica ostaje sira od teksta. Test usporeduje
+   * ISCRTANE oznake kucica sa stvarnim izlazom fixera nad istim parametrima.
+   */
+  it('M2: oznaka kucice tvrdi samo ono sto fixer stvarno pise (fiksni raspored, sirina ista)', () => {
+    for (const mergedCells of [true, false]) {
+      const item = itemFor(mergedCells);
+      const li = document.createElement('li');
+      renderTableFigureRescueControls(li, item);
+      const actionTexts = [...li.querySelectorAll('.lekta-repair-panel__rescue-actions label')].map((node) => node.textContent ?? '');
+      const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, item.params as unknown as TableFigureRescueParams);
+      expect(out.applied).toBe(true);
+      expect(detectIntegrityFailure([{ name: 'word/document.xml', xml: out.parts.documentXml }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': documentXml })).toBeNull();
+      // Ono sto fixer stvarno napise: fiksni raspored stupaca, a tblW ostaje 12000 (sira od teksta).
+      expect(out.parts.documentXml).toContain('<w:tblLayout w:type="fixed"/>');
+      expect(out.parts.documentXml.match(/<w:tblW\b[^>]*>/)?.[0]).toBe('<w:tblW w:w="12000" w:type="dxa"/>');
+      // Zato nijedna oznaka tablicne akcije ne smije obecavati prilagodbu sirini teksta.
+      expect(actionTexts.filter((text) => /širin\w* teksta/i.test(text)), `mergedCells=${mergedCells}`).toEqual([]);
+      const layoutLabel = actionTexts.find((text) => text.includes('Fiksni raspored stupaca'));
+      expect(layoutLabel, 'kucica fitToTextWidth ima istinitu oznaku').toBeTruthy();
+      expect(layoutLabel).toContain('širina tablice se ne mijenja');
+      // Siroka tablica bez landscapea: tekst izricito kaze da ostaje siroka.
+      expect(String(item.confirmationText)).toContain('široka tablica zadržava svoju širinu');
+    }
   });
 });
