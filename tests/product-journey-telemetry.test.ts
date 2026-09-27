@@ -105,6 +105,13 @@ describe('Opportunity Report wiring', () => {
     expect(app).toContain("emitRepairNoOpSignals(trackEvent,out.skippedReasons,{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''})");
   });
 
+  it('lokalni no-op signal nastaje tek nakon integrity gatea', () => {
+    const integrity = panel.indexOf('if (result.integrityFailure)');
+    const noop = panel.indexOf('emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext)');
+    expect(integrity).toBeGreaterThan(-1);
+    expect(noop).toBeGreaterThan(integrity);
+  });
+
   it('analysis structure gap ostaje izveden iz sanitiziranog helpera, ne iz sirovog reasona', () => {
     expect(app).toContain("emitAnalysisOpportunitySignals(trackEvent,result");
     expect(emitter).toContain("structureGapSignalsForEvent(result)");
