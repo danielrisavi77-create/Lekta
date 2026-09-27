@@ -110,7 +110,7 @@ pregled ostavi male, lokalne nalaze, prije svakog popravnog kruga:
 Puni ciklus (sve projekcije, puni pregled, puni Vitest u pregledu) ostaje samo za siroke
 promjene. Razlog: popravni krug koji trosi puni ciklus na sitan nalaz je najskuplji dio ovog
 workflowa (vidi "Izmjereno na `lekta-no-fable-coding`" gore); razmjeran krug drzi trosak
-razmjernim rizku bez gubljenja obveznog gatea i drugog misljenja.
+razmjernim riziku bez gubljenja obveznog gatea i drugog misljenja.
 
 ## Prvi zadatak za probu
 
