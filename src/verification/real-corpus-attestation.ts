@@ -96,28 +96,51 @@ export interface CorpusAttestation {
   };
   entries: CorpusAttestationEntry[];
   /**
-   * Odakle su mjereni dokumenti (odluka vlasnika 2026-09-28). Bez polja: izvorni Word dokumenti, jedini
-   * put do razine A. `public-pdf-converted`: javni radovi iz PDF repozitorija (Dabar, ZIR) pretvoreni u
-   * DOCX; takva ovjera daje ZASEBNU razinu `A-pdf` i nikad ne dize `claim`. Polje je dio potpisanog
-   * sadrzaja (otisak pokriva sve osim polja potpisa), pa se ne moze dopisati nakon potpisa.
+   * Odakle su mjereni dokumenti (odluka vlasnika 2026-09-28), iz zatvorenog skupa `SOURCE_KINDS`.
+   * `source-docx`: izvorni Word dokumenti, jedini put do razine A. `public-pdf-converted`: javni radovi iz
+   * PDF repozitorija (Dabar, ZIR) pretvoreni u DOCX; takva ovjera daje ZASEBNU razinu `A-pdf` i nikad ne
+   * dize `claim`. Polje je dio potpisanog sadrzaja (otisak pokriva sve osim polja potpisa), pa se ne moze
+   * dopisati nakon potpisa. Bez polja smije biti SAMO ovjera mjerena prije `LEGACY_UNMARKED_BEFORE`.
    */
-  sourceKind?: typeof PDF_SOURCE_KIND;
+  sourceKind?: SourceKind;
 }
+
+/** Zatvoren skup vrsta izvora ovjere; svaka druga vrijednost je problem, ne izvorni DOCX. */
+const SOURCE_KINDS = ['source-docx', 'public-pdf-converted'] as const;
+type SourceKind = (typeof SOURCE_KINDS)[number];
 
 /** Vrsta izvora ovjere nad javnim radovima pretvorenim iz PDF-a u DOCX (razina `A-pdf`). */
 const PDF_SOURCE_KIND = 'public-pdf-converted' as const;
 
 /**
+ * Granica kompatibilnosti (Codex #225, nalaz 1). Ovjera bez `sourceKind` do ovog PR-a je znacila izvorni
+ * DOCX; jedina takva potpisana ovjera (otisak korpusa 33768c3c..., mjerena 2026-09-27T21:25Z) ostaje
+ * valjana. Svaka ovjera mjerena od ove granice MORA navesti `sourceKind`, inace bi PDF pretvoren u DOCX,
+ * izmjeren postojecim putem i potpisan, tiho postao pravi A.
+ */
+const LEGACY_UNMARKED_BEFORE = '2026-09-28T00:00:00.000Z';
+
+/**
  * PDF KONVERZIJA NIJE DOKAZ RAZINE A (odluka vlasnika 2026-09-28). Pretvorba iz PDF-a nagadja
  * strukturu koju izvorni Word dokument ima (stilovi, polja, sekcije), pa popravak takvog dokumenta ne
- * dokazuje da popravak radi na radu kakav student predaje. Prava ovjera koja nosi `sourceKind` PDF
- * konverzije zato ne vrijedi. `isPdf` postoji samo za mutacijski test.
+ * dokazuje da popravak radi na radu kakav student predaje. Prava ovjera vrijedi samo sa `sourceKind:
+ * 'source-docx'`, ili bez polja ako je mjerena prije `LEGACY_UNMARKED_BEFORE`. `isPdf` i `legacyBefore`
+ * postoje samo za mutacijski test.
  */
 export function realSourceKindProblem(
   a: CorpusAttestation,
   isPdf: (attestation: CorpusAttestation) => boolean = (x) => x.sourceKind === PDF_SOURCE_KIND,
+  legacyBefore: string = LEGACY_UNMARKED_BEFORE,
 ): string | null {
-  return isPdf(a) ? 'ovjera nad radovima pretvorenim iz PDF-a nije dokaz na izvornom Word dokumentu' : null;
+  if (isPdf(a)) return 'ovjera nad radovima pretvorenim iz PDF-a nije dokaz na izvornom Word dokumentu';
+  if (a.sourceKind === undefined) {
+    const mjereno = Date.parse(String(a.measuredAt ?? ''));
+    return Number.isFinite(mjereno) && mjereno < Date.parse(legacyBefore)
+      ? null
+      : 'ovjera bez sourceKind vrijedi samo za mjerenja prije 2026-09-28; nova ovjera mora navesti "source-docx"';
+  }
+  if (!(SOURCE_KINDS as readonly string[]).includes(a.sourceKind)) return `nepoznat sourceKind "${String(a.sourceKind)}"`;
+  return a.sourceKind === 'source-docx' ? null : `prava ovjera ne prihvaca sourceKind "${a.sourceKind}"`;
 }
 
 /** Razlozi zbog kojih ovjera ne vrijedi. Prazan niz znaci da vrijedi. */

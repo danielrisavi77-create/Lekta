@@ -84,6 +84,15 @@ export function proofSourceProblems(
  */
 export function pdfSeparationProblems(bez: CompletionLedger, sa: CompletionLedger): string[] {
   const out: string[] = [];
+  // Codex #225, nalaz 3: usporeduju se SVA polja retka i sazetka osim triju PDF polja i `byPdfClaim`, a ne
+  // samo odabrana; inace bi PDF ovjera mogla pomaknuti npr. `summary.byProof` bez ijednog nalaza.
+  const PDF_POLJA_RETKA = new Set(['pdfProof', 'pdfClaim', 'pdfClaimLabel']);
+  const razlikeObjekta = (b: object, s: object, preskoci: Set<string>): string[] => {
+    const bo = b as Record<string, unknown>;
+    const so = s as Record<string, unknown>;
+    const kljucevi = [...new Set([...Object.keys(bo), ...Object.keys(so)])].filter((k) => !preskoci.has(k)).sort();
+    return kljucevi.filter((k) => JSON.stringify(bo[k]) !== JSON.stringify(so[k]));
+  };
   if (bez.rows.length !== sa.rows.length) out.push(`broj redaka se promijenio: ${bez.rows.length} -> ${sa.rows.length}`);
   const n = Math.min(bez.rows.length, sa.rows.length);
   for (let i = 0; i < n; i++) {
@@ -91,15 +100,17 @@ export function pdfSeparationProblems(bez: CompletionLedger, sa: CompletionLedge
     const s = sa.rows[i];
     const id = `${s.profileId ?? '?'}::${s.workType ?? '?'}`;
     if (b.profileId !== s.profileId || b.workType !== s.workType) out.push(`${id}: redoslijed redaka se promijenio`);
-    for (const k of ['claim', 'claimLabel', 'proof', 'proofSource'] as const) {
-      if (b[k] !== s[k]) out.push(`${id}: PDF ovjera je promijenila ${k} (${String(b[k])} -> ${String(s[k])})`);
+    for (const k of razlikeObjekta(b, s, PDF_POLJA_RETKA)) {
+      const bv = (b as unknown as Record<string, unknown>)[k];
+      const sv = (s as unknown as Record<string, unknown>)[k];
+      out.push(`${id}: PDF ovjera je promijenila ${k} (${JSON.stringify(bv)} -> ${JSON.stringify(sv)})`);
     }
-    if (JSON.stringify(b.blockedReasons) !== JSON.stringify(s.blockedReasons)) out.push(`${id}: PDF ovjera je promijenila blockedReasons`);
     if (s.pdfClaim && (s.claim === 'A' || s.proof === 'real-docx-pass')) out.push(`${id}: A-pdf uz dokaz na izvornom Word dokumentu`);
     if (s.pdfClaim && s.pdfProof == null) out.push(`${id}: A-pdf bez PDF dokaza`);
     if (s.pdfClaimLabel !== (s.pdfClaim ? CLAIM_LABEL_A_PDF : null)) out.push(`${id}: label razine A-pdf nije doslovan`);
   }
-  if (JSON.stringify(bez.summary.byClaim) !== JSON.stringify(sa.summary.byClaim)) out.push('PDF ovjera je promijenila byClaim');
+  for (const k of razlikeObjekta(bez.summary, sa.summary, new Set(['byPdfClaim']))) out.push(`PDF ovjera je promijenila ${k}`);
+  for (const k of razlikeObjekta(bez, sa, new Set(['rows', 'summary']))) out.push(`PDF ovjera je promijenila ${k}`);
   const pdfRedaka = sa.rows.filter((r) => r.pdfClaim === 'A-pdf').length;
   if (sa.summary.byPdfClaim['A-pdf'] !== pdfRedaka) out.push('byPdfClaim ne odgovara redcima');
   return out;

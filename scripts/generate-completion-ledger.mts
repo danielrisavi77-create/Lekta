@@ -20,7 +20,7 @@ import {
 } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { computeWorklist } from '../src/verification/worklist';
-import { buildCompletionLedger, type LedgerInputs } from '../src/verification/completion-ledger';
+import { buildCompletionLedger, pdfSeparationProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -65,6 +65,14 @@ const pdfCorpusAttestation = existsSync(pdfOvjeraPut)
   : null;
 
 const ledger = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation });
+
+// Codex #225, nalaz 3: gard odvojenosti A-pdf radi nad STVARNIM ulazima generatora, ne samo u testu. Ledger
+// bez PDF ovjere mora biti isti u svemu osim PDF polja; inace se artefakt ne pise.
+const problemiPdf = pdfSeparationProblems(buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation: null }), ledger);
+if (problemiPdf.length) {
+  console.error(`[completion-ledger] FAIL: PDF ovjera dira ljestvicu:\n  ${problemiPdf.join('\n  ')}`);
+  process.exit(1);
+}
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(

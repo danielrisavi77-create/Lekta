@@ -11,7 +11,7 @@
  * ljestvicu i tiho promakne 400 profila u razinu B.
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
@@ -75,7 +75,13 @@ const inputs: LedgerInputs = {
 const corpusAttestation = readJson<Parameters<typeof buildCompletionLedger>[0]['corpusAttestation']>(
   'data/verification/real-corpus-attestation.json',
 );
-const fresh = buildCompletionLedger({ ...inputs, corpusAttestation });
+// Codex #225, nalaz 2: i PDF ovjera se ucitava kao u generatoru (neobavezno), inace prva stvarna PDF ovjera
+// obara drift test na razlici koja nije regresija.
+const PDF_OVJERA = 'data/verification/pdf-corpus-attestation.json';
+const pdfCorpusAttestation = existsSync(resolve(process.cwd(), PDF_OVJERA))
+  ? readJson<Parameters<typeof buildCompletionLedger>[0]['pdfCorpusAttestation']>(PDF_OVJERA)
+  : null;
+const fresh = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation });
 
 describe('completion ledger: drift', () => {
   it('commitani izlaz === svjezi izracun (inace: npm run completion-ledger)', () => {
@@ -298,13 +304,28 @@ describe('completion ledger: razina A-pdf je odvojena od ljestvice', () => {
       ...over,
     });
 
-  it('bez PDF ovjere nijedan redak nema A-pdf ni PDF dokaz (svjeze i commitano)', () => {
-    for (const l of [fresh, baked as unknown as CompletionLedger]) {
-      expect(l.summary.byPdfClaim).toEqual({ 'A-pdf': 0 });
-      expect(l.rows.filter((r) => r.pdfProof !== null || r.pdfClaim !== null || r.pdfClaimLabel !== null)).toEqual([]);
+  it('gard odvojenosti vidi SVA polja osim PDF polja: promjena summary.byProof ili osi retka je nalaz (Codex #225, nalaz 3)', () => {
+    const sazetak = structuredClone(fresh);
+    sazetak.summary.byProof = { ...sazetak.summary.byProof, review: sazetak.summary.byProof.review + 1 };
+    expect(pdfSeparationProblems(fresh, sazetak)).toContain('PDF ovjera je promijenila byProof');
+    const redak = structuredClone(fresh);
+    redak.rows[0] = { ...redak.rows[0], program: redak.rows[0].program === 'missing' ? 'official' : 'missing' };
+    expect(pdfSeparationProblems(fresh, redak).some((p) => p.includes('PDF ovjera je promijenila program'))).toBe(true);
+    // Samo PDF polja smiju se razlikovati.
+    const pdfSamo = structuredClone(fresh);
+    pdfSamo.summary.byPdfClaim = { 'A-pdf': 0 };
+    expect(pdfSeparationProblems(fresh, pdfSamo)).toEqual([]);
+  });
+
+  it('commitana PDF ovjera ne dira ljestvicu; bez datoteke nijedan redak nema A-pdf (svjeze i commitano)', () => {
+    const bezPdf = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation: null });
+    expect(pdfSeparationProblems(bezPdf, fresh)).toEqual([]);
+    if (pdfCorpusAttestation === null) {
+      for (const l of [fresh, baked as unknown as CompletionLedger]) {
+        expect(l.summary.byPdfClaim).toEqual({ 'A-pdf': 0 });
+        expect(l.rows.filter((r) => r.pdfProof !== null || r.pdfClaim !== null || r.pdfClaimLabel !== null)).toEqual([]);
+      }
     }
-    // Razine ostaju zatecene (izmjereno na c4d442e0), PDF ih ne dira.
-    expect(fresh.summary.byClaim).toEqual({ A: 38, B: 300, C: 8, D: 42, E: 64 });
   });
 
   it('valjana PDF ovjera daje A-pdf SAMO ovjerenom paru koji bi s dokazom bio A; claim i byClaim su identicni', () => {
