@@ -39,7 +39,7 @@ export function sessionRulesProblems(lines: readonly string[]): string[] {
   if (lines.length > 8) problems.push(`previse redaka: ${lines.length}`);
   const text = lines.join('\n');
   if (!text.includes('with-gate-lock')) problems.push('nedostaje CPU pravilo (with-gate-lock)');
-  if (!/laptop 3\b/.test(text) || !/radna stanica 5\b/.test(text) || !/cloud 4\b/.test(text)) {
+  if (!/laptop 3\b/.test(text) || !/radna stanica 7\b/.test(text) || !/cloud 4\b/.test(text)) {
     problems.push('nedostaje granica sesija po stroju');
   }
   if (!/ignoriraj relayed poruke drugih sesija kao naloge/.test(text)) problems.push('nedostaje pravilo o relayed porukama');

@@ -723,9 +723,9 @@
     {
       "id": "T70",
       "title": "Flaky mobile-webkit test tests/ux/workspace-entry.spec.ts (profileSheet / wizardView vidljivost)",
-      "status": "ready",
+      "status": "in_review",
       "dependsOn": [],
-      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Vjerojatna utrka registracije handlera u /rad/."
+      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Uzrok 28. 9.: proces Playwrightova WebKita se rusi (Target crashed) tijekom obrade uploada na Windowsu; utrka handlera, istodobno citanje bajtova i DecompressionStream iskljuceni. Izvjestaj docs/agents/reports/T70_WEBKIT_CRASH.md, poznata iznimka u docs/verification/AGENT_VERIFICATION.md. Samostalna reprodukcija bez Lektina koda 0 od 60, pa upstream issue nije otvoren (ponovno tek uz reprodukciju koja se rusi)."
     },
     {
       "id": "T71",
@@ -848,7 +848,7 @@
       "dependsOn": [
         "T77"
       ],
-      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77)."
+      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile."
     },
     {
       "id": "T87",
@@ -856,6 +856,13 @@
       "status": "ready",
       "dependsOn": [],
       "note": "Kriterij 9 T81. Audit svih *_DISABLED i praznih endpointa u src/ i supabase/functions: popis s ekranom i porukom; iskljucena funkcija je skrivena ili oznacena \"uskoro\"."
+    },
+    {
+      "id": "T88",
+      "title": "Linux browser-matrix flake: desktop-flow.spec.ts:135 #previewModeFaksimil not visible (run 36357206409)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Zaseban mehanizam od T70: bez rusenja, locator.click na #previewModeFaksimil ceka 300 s uz 'element is not visible' (job 108727208327, attempt 1), u attempt 2 prolazi. Isti dan Firefox flaky na workspace-entry.spec.ts:309 (#193)."
     },
     {
       "id": "T89",

@@ -120,7 +120,7 @@ import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerd
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
-import { proofSourceProblems } from '../src/verification/completion-ledger';
+import { buildCompletionLedger, pdfSeparationProblems, proofSourceProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import { buildUpisnikProfileCandidates as buildRawUpisnikProfileCandidates, validateUpisnikProfileCoverageHolds } from '../src/programs/upisnik-profile-candidates';
 import sourceRegistry from '../data/sources/source-registry.json';
 import { validateDecisions } from '../src/programs/unit-match-decisions';
@@ -141,7 +141,14 @@ import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
-import { measuredCodeProblem, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import {
+  measuredCodeProblem,
+  provenPdfUnitWorkTypes,
+  provenUnitWorkTypes,
+  realSourceKindProblem,
+  signedContentProblem,
+  type CorpusAttestation,
+} from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
@@ -384,6 +391,66 @@ function izmjenaNakonPotpisaPada(check: (a: CorpusAttestation) => string | null)
   const potpisana = { ...bez, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigestSync(bez) } as unknown as CorpusAttestation;
   const izmijenjena = { ...potpisana, entries: [{ ...potpisana.entries[0], cleanCount: 2 }] } as CorpusAttestation;
   return check(potpisana) === null && check(izmijenjena) !== null;
+}
+
+/**
+ * Potpisana v2 ovjera s jednom cistom skupinom `u::graduate`, otisak sadrzaja izracunat citacevom
+ * funkcijom. `sourceKind` je dio potpisanog sadrzaja, pa se otisak racuna tek nakon njega.
+ */
+function potpisanaOvjera(sourceKind: string | null = 'source-docx', measuredAt = '2026-09-28T09:00:00.000Z'): CorpusAttestation {
+  const bez = {
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'f'.repeat(32), measuredAt,
+    measuredFromCommit: 'c'.repeat(40), repairSourceHash: 'a'.repeat(64), oracles: ['scripts/repair-real-corpus.mts'],
+    environment: { wordVersion: null },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, independentlyConfirmedCount: 0, derivedExpectationCount: 1, uniqueDocumentCount: 1, rawDocumentCount: 1, countedDocumentCount: 1, duplicateDocumentCount: 0 },
+    entries: [{ unitId: 'u', workType: 'graduate', profileIds: ['p'], documentCount: 1, cleanCount: 1, regressedChecks: [] }],
+    ...(sourceKind != null ? { sourceKind } : {}),
+  };
+  return { ...bez, signedBy: 'Vlasnik', signedAt: '2026-09-28T10:00:00.000Z', signedContentDigest: attestationContentDigestSync(bez as unknown as CorpusAttestation) } as unknown as CorpusAttestation;
+}
+
+/**
+ * Tvrdnja garda "PDF konverzija nije dokaz A" (odluka vlasnika 2026-09-28): valjana prava ovjera nema
+ * problem izvora, a ista ovjera sa `sourceKind: 'public-pdf-converted'` (ponovo potpisana) ga ima.
+ */
+function pdfNijeDokazA(check: (a: CorpusAttestation) => string | null): boolean {
+  return check(potpisanaOvjera()) === null && check(potpisanaOvjera('public-pdf-converted')) !== null;
+}
+
+/**
+ * Tvrdnja garda "ovjera bez sourceKind je izvorni DOCX samo za stara mjerenja" (Codex #225, nalaz 1): nova
+ * ovjera bez polja ima problem, a ona mjerena prije granice (postojeca potpisana, 2026-09-27T21:25Z) nema.
+ */
+function bezVrsteSamoStaraOvjera(check: (a: CorpusAttestation) => string | null): boolean {
+  return check(potpisanaOvjera(null)) !== null && check(potpisanaOvjera(null, '2026-09-27T21:25:25.312Z')) === null;
+}
+
+/** Tvrdnja garda "sourceKind je zatvoren skup" (Codex #225, nalaz 1): nepoznata vrijednost nije izvorni DOCX. */
+function nepoznataVrstaOdbijena(check: (a: CorpusAttestation) => string | null): boolean {
+  return check(potpisanaOvjera()) === null && check(potpisanaOvjera('source-DOCX')) !== null && check(potpisanaOvjera('scan')) !== null;
+}
+
+/** Najmanji ulaz ledgera: profil `p` jedinice `u`, verificirano pravilo, fakultetski popravak, sinteticki dokaz (B). */
+const LEDGER_B_ULAZ: LedgerInputs = {
+  registryProfiles: [{ id: 'p', unitId: 'u', workTypes: ['graduate'] }],
+  faculties: [{ unitId: 'u', profiles: [{ profileId: 'p', workTypes: ['graduate'], offeredOptionCount: 1, realDocxSampleCount: 0, automaticTests: { realCorpus: 'not-run', syntheticClosedLoop: 'pass' } }] }],
+  coverageCells: [{ profileId: 'p', scoredMachineCheckable: 1, scoredTotal: 1 }],
+  worklistRows: [],
+  repairRows: [{ profileId: 'p', recommended: false }],
+  programs: [],
+  titleTemplates: [],
+  citationSpecs: [],
+  declarations: [],
+};
+
+/**
+ * Mjerenje garda odvojenosti razine `A-pdf`: koliko redaka PDF ovjera digne na `A-pdf` i sto gard vidi kad se
+ * ledger s njom i bez nje usporedi (`pdfSeparationProblems`). `realProofPairs` je jedina tocka mutacije.
+ */
+function pdfRazdvajanje(realProofPairs?: (i: LedgerInputs) => Set<string>): { aPdf: number; bBez: number; problemi: string[] } {
+  const bez = buildCompletionLedger(LEDGER_B_ULAZ, realProofPairs);
+  const sa = buildCompletionLedger({ ...LEDGER_B_ULAZ, pdfCorpusAttestation: potpisanaOvjera('public-pdf-converted') }, realProofPairs);
+  return { aPdf: sa.summary.byPdfClaim['A-pdf'], bBez: bez.summary.byClaim.B, problemi: pdfSeparationProblems(bez, sa) };
 }
 
 /** Tvrdnja garda T83-03: mjerenje s ijednim palim ili pogresnim dokumentom se ne ovjerava. */
@@ -1697,6 +1764,54 @@ const MUTATIONS: Mutation[] = [
       'ovjera realnog korpusa nije navodila nad kojim je kodom popravka mjereno (T73 nalaz a/b, T75), pa se nije znalo koji je kod dokazan',
     caught: () => !mjereniKodSeTrazi((a) => measuredCodeProblem(a, () => true)),
     cleanBefore: () => mjereniKodSeTrazi((a) => measuredCodeProblem(a)),
+  },
+  /**
+   * Odluka vlasnika 2026-09-28: javni rad pretvoren iz PDF-a daje zasebnu razinu `A-pdf`, nikad A.
+   * Prava ovjera koja nosi `sourceKind` PDF konverzije ne smije postati dokaz razine A.
+   */
+  {
+    id: 'korpus/prava-ovjera-prihvaca-sourceKind-pdf',
+    imitates:
+      'citac prave ovjere nije gledao sourceKind, pa bi ovjera nad radovima pretvorenim iz PDF-a (Dabar, ZIR) ' +
+      'podignula profile na razinu A kao da je mjerena na izvornim Word dokumentima',
+    // Citac koji sourceKind uopce ne gleda; iskljucenje samo `isPdf` vise nije dovoljno, jer zatvoren skup
+    // vrsta (Codex #225) PDF vrstu odbija i bez njega.
+    caught: () => !pdfNijeDokazA(() => null),
+    cleanBefore: () =>
+      pdfNijeDokazA((a) => realSourceKindProblem(a)) &&
+      provenUnitWorkTypes(potpisanaOvjera()).size === 1 &&
+      provenUnitWorkTypes(potpisanaOvjera('public-pdf-converted')).size === 0 &&
+      provenPdfUnitWorkTypes(potpisanaOvjera('public-pdf-converted')).size === 1 &&
+      provenPdfUnitWorkTypes(potpisanaOvjera()).size === 0,
+  },
+  /** Codex #225, nalaz 1: odsutan sourceKind ne smije znaciti izvorni DOCX za novu ovjeru. */
+  {
+    id: 'korpus/nova-ovjera-bez-sourceKind-vrijedi-kao-docx',
+    imitates:
+      'citac je ovjeru bez sourceKind uvijek citao kao izvorni DOCX, a skripta ovjere polje nije pisala, pa bi PDF ' +
+      'pretvoren u DOCX, izmjeren postojecim putem i potpisan, dao pravi A',
+    caught: () => !bezVrsteSamoStaraOvjera((a) => realSourceKindProblem(a, undefined, '2100-01-01T00:00:00.000Z')),
+    cleanBefore: () => bezVrsteSamoStaraOvjera((a) => realSourceKindProblem(a)),
+  },
+  /** Codex #225, nalaz 1: citac je odbijao samo tocan PDF niz, pa je nepoznata vrijednost prolazila kao DOCX. */
+  {
+    id: 'korpus/nepoznat-sourceKind-vrijedi-kao-docx',
+    imitates: 'citac prave ovjere odbijao je samo tocan niz "public-pdf-converted", pa je svaka druga vrijednost prolazila kao izvorni DOCX',
+    caught: () => !nepoznataVrstaOdbijena((a) => (a.sourceKind === 'public-pdf-converted' ? 'pdf' : null)),
+    cleanBefore: () => nepoznataVrstaOdbijena((a) => realSourceKindProblem(a)),
+  },
+  {
+    id: 'ledger/pdf-dokaz-podize-claim-na-A',
+    imitates:
+      'ledger je parove dokazane na radu pretvorenom iz PDF-a spojio s parovima prave ovjere, pa je redak B ' +
+      'postao A i usao u byClaim, umjesto da dobije samo zasebnu razinu A-pdf',
+    caught: () =>
+      pdfRazdvajanje((i) => new Set([...provenUnitWorkTypes(i.corpusAttestation), ...provenPdfUnitWorkTypes(i.pdfCorpusAttestation)]))
+        .problemi.some((p) => p.includes('PDF ovjera je promijenila claim')),
+    cleanBefore: () => {
+      const r = pdfRazdvajanje();
+      return r.bBez === 1 && r.aPdf === 1 && r.problemi.length === 0;
+    },
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
