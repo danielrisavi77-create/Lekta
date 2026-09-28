@@ -8522,6 +8522,33 @@ describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', ()
   });
 });
 
+describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/agents/usage-daily.mjs'), 'utf8').replace(/\r/g, '');
+  const blok = (pocetak: string) => {
+    const i = src.indexOf(pocetak);
+    return src.slice(i, src.indexOf('\n}\n', i) + 3);
+  };
+  const numBlok = blok('function num(');
+  const tokensBlok = blok('export function claudeTokens(');
+  type Tokens = (u: Record<string, number>) => { input: number; cacheRead: number };
+  const izvedi = (fn: string): Tokens => new Function(`${numBlok}\n${fn.replace('export ', '')}\nreturn claudeTokens;`)() as Tokens;
+  // Tvrdnja: ulaz je samo input_tokens; citanje kesa ide u zaseban stupac i ne dize tezinu.
+  const cisto = (t: Tokens) => {
+    const r = t({ input_tokens: 3, output_tokens: 4, cache_read_input_tokens: 500, cache_creation_input_tokens: 7 });
+    return r.input === 3 && r.cacheRead === 500;
+  };
+
+  it('baseline: stvarni claudeTokens odvaja citanje kesa od ulaza', () => {
+    expect(cisto(izvedi(tokensBlok))).toBe(true);
+  });
+
+  it('mutant koji zbraja cache_read u ulaz se hvata', () => {
+    const mutant = tokensBlok.replace('input: num(usage?.input_tokens),', 'input: num(usage?.input_tokens) + num(usage?.cache_read_input_tokens),');
+    expect(mutant).not.toBe(tokensBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+});
+
 describe('mutacije: lean ratchet (T56)', () => {
   const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
   const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
