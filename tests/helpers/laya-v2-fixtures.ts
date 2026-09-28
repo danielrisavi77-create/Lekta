@@ -12,6 +12,8 @@ export const DOC = '11111111-1111-4111-8111-111111111111';
 export const GROUP = '22222222-2222-4222-8222-222222222222';
 export const PROFILE_REV = 'a'.repeat(64);
 export const ENGINE_REV = '9'.repeat(40);
+/** Ime testnog unosa Laya registra; uvijek preko konstante, nikad kao literal uz polje registra. */
+export const LAYA_FIXTURE_MODEL = 'laya-fixture-registry-fp32';
 export const REFERENCE_TEXT = 'Institut Primjer. (2024). Testni izvjestaj. Zagreb.';
 
 export function makeCase(): LayaDecisionCaseV2 {
