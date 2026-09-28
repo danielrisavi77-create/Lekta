@@ -73,11 +73,23 @@ describe('legal-content', () => {
     const odlomak = html.slice(html.indexOf('<h4>1d. Zaštita od zlouporabe (captcha)</h4>'), html.indexOf('<h4>2. Ručna usluga</h4>'));
     expect(odlomak.length).toBeGreaterThan(100);
     expect(odlomak).toContain('Cloudflare, Inc.');
-    expect(odlomak).toContain('IP adresu');
+    expect(odlomak).toContain('IP adresu, TLS otisak, User-Agent zaglavlje te site key i domenu Lekte');
+    expect(odlomak).toContain('ne postavlja kolačiće i ne pristupa unosima u obrasce');
     expect(odlomak).toContain('ne čita sadržaj korisnikovih dokumenata');
+    // Cl. 13 GDPR: uloge, prijenos u trecu zemlju i rok cuvanja.
+    expect(odlomak).toContain('Za samu provjeru Cloudflare djeluje kao izvršitelj obrade');
+    expect(odlomak).toContain('kao samostalni voditelj');
+    expect(odlomak).toContain('EU-U.S. Data Privacy Frameworku');
+    expect(odlomak).toContain('standardnim ugovornim klauzulama');
+    expect(odlomak).toContain('Cloudflare ne objavljuje rok čuvanja tih signala; Lekta ih ne prima ni ne pohranjuje');
     expect(odlomak).toContain('legitimni interes (čl. 6. st. 1. t. f)');
+    expect(odlomak).toContain('href="https://www.cloudflare.com/turnstile-privacy-policy/"');
     expect(odlomak).toContain('href="https://www.cloudflare.com/privacypolicy/"');
     expect(odlomak).toContain('Od dana uključivanja');
+    expect(odlomak).not.toContain('npr. vrstu preglednika');
+    // Izvrsitelj za samu provjeru mora biti i u popisu izvrsitelja (odjeljak 5).
+    const izvrsitelji = html.slice(html.indexOf('<h4>5. Izvršitelji obrade</h4>'), html.indexOf('<h4>6. Rok čuvanja</h4>'));
+    expect(izvrsitelji).toContain('<strong>Cloudflare, Inc.</strong> (Turnstile, zaštita od zlouporabe pri prijavi; obrada i u Sjedinjenim Američkim Državama)');
   });
 
   it('WS-6: privacy i processing objavljuju server-side popravak s pohranom-do-brisanja i pravom brisanja', () => {
