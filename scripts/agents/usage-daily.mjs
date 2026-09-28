@@ -85,7 +85,10 @@ function readJsonl(path, stats) {
   return out;
 }
 
-const label = (id, cwd) => `${String(id ?? '?').slice(0, 8)} ${cwd ? basename(String(cwd).replace(/[\\/]+$/, '')) : '?'}`;
+// Ime zadnje mape neovisno o platformi: transkript s Windowsa cita se i na Linuxu (CI), gdje
+// `path.basename` ne dijeli po `\`.
+const lastDir = (p) => String(p).replace(/[\\/]+$/, '').split(/[\\/]/).pop() || '?';
+export const sessionLabel = (id, cwd) => `${String(id ?? '?').slice(0, 8)} ${cwd ? lastDir(cwd) : '?'}`;
 
 /** @returns {{ records: object[], stats: { malformedLines: number, unreadableFiles: number } }} */
 export function collectRecords({ home = homedir(), repo = ROOT, sinceDay = null } = {}) {
@@ -114,14 +117,14 @@ export function collectRecords({ home = homedir(), repo = ROOT, sinceDay = null 
     }
   }
   for (const { sessionId, cwd, ...r } of claudeRecords) {
-    records.push({ ...r, session: label(sessionId, firstCwd.get(sessionId)?.cwd ?? cwd) });
+    records.push({ ...r, session: sessionLabel(sessionId, firstCwd.get(sessionId)?.cwd ?? cwd) });
   }
 
   for (const file of walkJsonl(join(home, '.codex', 'sessions'), minMtimeMs)) {
-    let model = null, session = label(basename(file, '.jsonl').slice(-36), null), prev = null;
+    let model = null, session = sessionLabel(basename(file, '.jsonl').slice(-36), null), prev = null;
     for (const j of readJsonl(file, stats)) {
       const pl = j?.payload;
-      if (j?.type === 'session_meta' && pl) session = label(pl.id ?? pl.session_id, pl.cwd);
+      if (j?.type === 'session_meta' && pl) session = sessionLabel(pl.id ?? pl.session_id, pl.cwd);
       if (j?.type === 'turn_context' && pl?.model) model = pl.model;
       if (pl?.type !== 'token_count' || !pl.info?.total_token_usage) continue;
       const cur = pl.info.total_token_usage;
@@ -144,7 +147,7 @@ export function collectRecords({ home = homedir(), repo = ROOT, sinceDay = null 
       provider: 'grok',
       model: (Array.isArray(r.reportedModels) && r.reportedModels[0]) || r.requestedModel || 'nepoznat',
       day,
-      session: label(r.task ?? r.agent, null).replace(/ \?$/, ''),
+      session: sessionLabel(r.task ?? r.agent, null).replace(/ \?$/, ''),
       input: num(u.inputTokens),
       output: num(u.outputTokens),
       cacheRead: num(u.cachedInputTokens),

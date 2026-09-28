@@ -12,6 +12,7 @@ import {
   claudeTokens,
   codexDelta,
   collectRecords,
+  sessionLabel,
   renderMarkdown,
   summarizeDay,
 } from '../scripts/agents/usage-daily.mjs';
@@ -81,6 +82,13 @@ describe('usage-daily: tokeni po izvoru', () => {
   it('Claude: citanje kesa NIJE ulaz', () => {
     expect(claudeTokens({ input_tokens: 3, output_tokens: 4, cache_read_input_tokens: 500, cache_creation_input_tokens: 7 }))
       .toEqual({ input: 3, output: 4, cacheRead: 500, cacheWrite: 7 });
+  });
+
+  it('oznaka sesije: ime zadnje mape za Windows i POSIX putanju, na svakoj platformi', () => {
+    expect(sessionLabel('aaaaaaaa-1111', 'X:\\radno\\Lekta')).toBe('aaaaaaaa Lekta');
+    expect(sessionLabel('aaaaaaaa-1111', 'X:\\radno\\Lekta\\')).toBe('aaaaaaaa Lekta');
+    expect(sessionLabel('bbbbbbbb-2222', '/home/korisnik/lekta-worktrees/t82')).toBe('bbbbbbbb t82');
+    expect(sessionLabel('cccccccc', null)).toBe('cccccccc ?');
   });
 
   it('Codex: razlika kumulativa, kes se oduzima od ulaza', () => {
