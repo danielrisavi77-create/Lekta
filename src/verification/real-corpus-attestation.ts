@@ -20,6 +20,8 @@
  * je netko pokrenuo skriptu.
  */
 
+import { attestationContentDigestSync } from './attestation-content-digest';
+
 /**
  * Jedna mjerena skupina, bez ijednog podatka o dokumentima.
  *
@@ -47,16 +49,25 @@ export interface CorpusAttestationEntry {
 
 export interface CorpusAttestation {
   schemaVersion: 1;
+  /**
+   * T83: verzija otiska. 2 = nad jedinstvenim documentId-ovima s oznakom verzije u ulazu
+   * (scripts/lib/corpus-attestation-core.mjs). Bez polja je v1, koji je brojao ponavljanja.
+   */
+  fingerprintVersion?: number;
   /** Otisak SKUPA mjerenih radova (imena i velicine), nikad sadrzaja. Mijenja se kad se korpus mijenja. */
   corpusFingerprint: string;
   measuredAt: string;
   /** Commit nad kojim je mjereno; bez njega se ne zna sto je tocno dokazano. */
   measuredFromCommit: string | null;
+  /** T75: sha256 produkcijskog `src/repair` u `measuredFromCommit` (scripts/lib/repair-source-hash.mjs); obvezan za v2. */
+  repairSourceHash?: string | null;
   /** Alati kojima je mjereno. Prazno = ovjera ne vrijedi. */
   oracles: string[];
   /** Tko jamci za mjerenje. `null` dok covjek ne potpise, i tada ovjera NE vrijedi. */
   signedBy: string | null;
   signedAt: string | null;
+  /** T83-05: sha256 kanonskog sadrzaja ovjere (bez polja potpisa) koji potpis pokriva; samo v2. */
+  signedContentDigest?: string | null;
   /**
    * T06 (protokol 2.4): u kojoj je verziji Worda izlaz vizualno provjeren. `null` znaci "nije", ne "nepoznato".
    * Neobavezno, jer starije ovjere polje nemaju; njihova valjanost se time ne mijenja.
@@ -71,11 +82,50 @@ export interface CorpusAttestation {
     holdoutDocumentCount: number;
     independentlyConfirmedCount: number;
     derivedExpectationCount: number;
+    /**
+     * T83: koliko je rezultata mjerenja dijelilo `documentId` s drugim. Nova skripta ovjere pise 0 ili
+     * prekida; broj veci od nule znaci da je ovjera nastala nad mjerenjem koje je iste radove brojalo
+     * vise puta. Starije ovjere polje nemaju; obveza polja uvodi se zajedno sa svjezom ovjerom (T75).
+     */
+    duplicateDocumentCount?: number;
+    /** T83: rezultata u ovjeri (jedinstveni id-ovi) i koliko ih je bilo prije nego sto je harness izbacio kopije. */
+    uniqueDocumentCount?: number;
+    rawDocumentCount?: number;
+    /** T83-07: jedinstveni dokumenti koji su usli u bar jednu skupinu (bez izdvojenih i bez jedinice). */
+    countedDocumentCount?: number;
   };
   entries: CorpusAttestationEntry[];
 }
 
 /** Razlozi zbog kojih ovjera ne vrijedi. Prazan niz znaci da vrijedi. */
+/**
+ * Pokriva li potpis v2 ovjere njen STVARNI sadrzaj (Codex #185, runda 3, NOVO-01). Citac sam racuna
+ * kanonski otisak sadrzaja i usporeduje ga sa `signedContentDigest`; brojka promijenjena nakon potpisa
+ * (npr. `cleanCount` 1 -> 2) je problem. `digest` postoji samo za mutacijski test.
+ */
+export function signedContentProblem(
+  a: CorpusAttestation,
+  digest: (attestation: CorpusAttestation) => string = attestationContentDigestSync,
+): string | null {
+  if (a.fingerprintVersion !== 2 || !a.signedBy) return null;
+  if (!/^[0-9a-f]{64}$/.test(String(a.signedContentDigest ?? ''))) return 'potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva';
+  if (a.signedContentDigest !== digest(a)) return 'sadrzaj ovjere je promijenjen nakon potpisa';
+  return null;
+}
+
+/**
+ * T75: v2 ovjera mora navesti otisak koda popravka nad kojim je mjereno (T74, sha256 produkcijskog
+ * `src/repair` u `measuredFromCommit`), inace se ne zna koji je kod dokazan. `isHash` postoji samo za
+ * mutacijski test.
+ */
+export function measuredCodeProblem(
+  a: CorpusAttestation,
+  isHash: (value: string) => boolean = (value) => /^[0-9a-f]{64}$/.test(value),
+): string | null {
+  if (a.fingerprintVersion !== 2) return null;
+  return isHash(String(a.repairSourceHash ?? '')) ? null : 'nema otiska koda popravka nad kojim je mjereno';
+}
+
 export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
@@ -89,6 +139,49 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
   if (!a.measuredAt || !Number.isFinite(Date.parse(a.measuredAt))) p.push('nema vremena mjerenja');
   if (!Array.isArray(a.entries) || a.entries.length === 0) p.push('nema nijednog mjerenog profila');
+  // T83: mjerenje koje je isti rad brojalo vise puta napuhuje documentCount i cleanCount po skupini.
+  const dvostruki = a.protocol?.duplicateDocumentCount;
+  if (typeof dvostruki === 'number' && dvostruki > 0) p.push('mjerenje je iste dokumente brojalo vise puta');
+  // T83 (Codex #185, T83-04): v2 ovjera mora nositi uskladjena brojcana polja; nepoznata verzija otiska
+  // se ne tumaci.
+  //
+  // T75: v1 ovjera (bez polja, otisak s ponavljanjima) VISE NIJE DOKAZ. Potpisana v1 ovjera a74d93d5
+  // brojala je 102 rada dvaput; T75 je u istom commitu zamjenjuje v2 ovjerom istog skupa. v2 mora nositi
+  // i otisak koda popravka nad kojim je mjereno (T74), inace se ne zna koji je kod dokazan.
+  const verzija = a.fingerprintVersion;
+  if (verzija === undefined || verzija === 1) p.push('ovjera v1 (otisak s ponavljanjima) vise nije dokaz');
+  else if (verzija !== 2) p.push('nepoznata verzija otiska korpusa');
+  const kod = measuredCodeProblem(a);
+  if (kod) p.push(kod);
+  if (verzija === 2) {
+    const pr = a.protocol;
+    const cijeli = (x: unknown): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0;
+    if (
+      !pr ||
+      pr.duplicateDocumentCount !== 0 ||
+      !cijeli(pr.uniqueDocumentCount) ||
+      !cijeli(pr.rawDocumentCount) ||
+      !cijeli(pr.countedDocumentCount) ||
+      pr.rawDocumentCount < pr.uniqueDocumentCount ||
+      pr.countedDocumentCount > pr.uniqueDocumentCount ||
+      pr.holdoutDocumentCount > pr.uniqueDocumentCount
+    ) {
+      p.push('ovjera v2 nema uskladjene brojeve dokumenata');
+    } else {
+      // T83-07 (Codex #185, runda 2): agregati moraju biti dosljedni medjusobno. Zbroj `documentCount`
+      // po skupinama NIJE jednak broju jedinstvenih (dokument profila s vise vrsta rada ulazi u svaku;
+      // izmjereno 27. 9.: 290 prema 219), ali nijedna skupina ne smije imati vise dokumenata od
+      // uracunatih, ni vise cistih od mjerenih, a dokazna skupina trazi bar jedan uracunat dokument.
+      const counted = pr.countedDocumentCount as number;
+      const dokazne = Array.isArray(a.entries) ? a.entries.filter((e) => e.documentCount > 0) : [];
+      const neskladne = (Array.isArray(a.entries) ? a.entries : []).some(
+        (e) => e.cleanCount > e.documentCount || e.documentCount > counted || e.cleanCount < 0 || e.documentCount < 0,
+      );
+      if (neskladne || (dokazne.length > 0 && counted === 0)) p.push('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
+    }
+    const potpis = signedContentProblem(a);
+    if (potpis) p.push(potpis);
+  }
 
   // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
   //

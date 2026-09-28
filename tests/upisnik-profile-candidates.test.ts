@@ -911,7 +911,9 @@ describe('committed Upisnik profile decisions', () => {
     }
   });
 
-  it('blocks AGR graduate profiles while exact thesis-guide applicability is unresolved', () => {
+  // Vlasnikovo pravilo (2026-09-27): u sukobu izdanja vrijedi najnovije izdanje ZA TU VRSTU RADA. Za diplomski rad AGR-a
+  // najnovije su upute iz 2019. (izvor profila agr-diplomski), pa su diplomski programi povezani; 2463 ostaje na holdu.
+  it('links AGR graduate programmes to agr-diplomski under the newest-edition rule and keeps 2463 on hold', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows,
       programComponents.decisions,
@@ -920,18 +922,17 @@ describe('committed Upisnik profile decisions', () => {
       profileDecisions.exclusions,
       profileDecisions.blockers,
       profileDecisions.holds,
+      sourceRegistry,
+      profileDecisions.integratedGraduateCoverage,
     );
-    for (const programCode of ['313', '314', '567', '568', '569', '570', '571', '572', '573', '574', '575', '576', '577', '2463']) {
+    for (const programCode of ['313', '314', '567', '568', '569', '570', '571', '572', '573', '574', '575', '576', '577']) {
       const program = report.programs.find((row) => row.programCode === programCode);
-      expect(program?.coverageStatus, programCode).toBe('identity-evidence-needed');
-      expect(program?.profileDecisionEvidence, programCode).toEqual([]);
-      expect(program?.remainingHold?.reason, programCode).not.toContain('nema točnog naziva');
-      expect(program?.remainingHold?.sources.length, programCode).toBeGreaterThanOrEqual(2);
+      expect(program?.coverageStatus, programCode).toBe('verified');
+      expect(program?.profileDecisionEvidence.map((evidence) => evidence.profileId), programCode).toEqual(['agr-diplomski']);
     }
-    for (const programCode of ['314', '567', '569', '572', '573', '574', '575', '577']) {
-      expect(report.programs.find((row) => row.programCode === programCode)?.remainingHold?.sources)
-        .toEqual(expect.arrayContaining([expect.objectContaining({ quote: expect.stringContaining('2017') })]));
-    }
+    const program2463 = report.programs.find((row) => row.programCode === '2463');
+    expect(program2463?.coverageStatus).toBe('identity-evidence-needed');
+    expect(program2463?.profileDecisionEvidence).toEqual([]);
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
@@ -2078,7 +2079,7 @@ describe('doktorski program VEF-a', () => {
 
 describe('zajednički profil specijalističkih radova VEF-a', () => {
   it('uključuje samo 13 aktualno raspisanih naziva u djelomični profil bez bodovanja nacrta pravila', () => {
-    expect(vefSpecialistDraft.entries).toHaveLength(7);
+    expect(vefSpecialistDraft.entries).toHaveLength(8);
     expect(vefSpecialistDraft.entries.every((entry) => entry.status === 'draft' && entry.scored === false)).toBe(true);
     const specialistProfile = Object.values(verifiedProfiles).find((profile) => profile.id === 'vef-specijalisticki');
     expect(specialistProfile).toEqual(expect.objectContaining({
@@ -2423,7 +2424,7 @@ describe('Upisnik heuristic guard redesign', () => {
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
-  it('preserves all 341 evidence links and every coverage status in the committed inventory', () => {
+  it('preserves all 354 evidence links and every coverage status in the committed inventory', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
       profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
@@ -2431,7 +2432,8 @@ describe('Upisnik heuristic guard redesign', () => {
     );
     const links = (programs: typeof report.programs) => programs.flatMap((row) =>
       row.profileDecisionEvidence.map((evidence) => [row.programCode, evidence.profileId]));
-    expect(links(report.programs)).toHaveLength(341);
+    // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27).
+    expect(links(report.programs)).toHaveLength(354);
     expect(links(report.programs)).toEqual(links(generatedProfileCandidates.programs));
     expect(report.programs.map((row) => [row.programCode, row.coverageStatus]))
       .toEqual(generatedProfileCandidates.programs.map((row) => [row.programCode, row.coverageStatus]));

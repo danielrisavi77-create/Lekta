@@ -51,6 +51,12 @@ export const PROJECTIONS = [
       'data/profiles/verified-profiles-index.json',
       'data/catalog/zagreb-catalog.json',
       'data/coverage/corpus-stats.json',
+      // Z15 (2026-09-27): rulesVersion i sourcesCheckedAt u SiteStats citaju ova dva artefakta
+      // (rulesVersionFromDisk i uvoz SCORED_COVERAGE u src/coverage/site-stats.ts), pa i njih
+      // pomak zaostaje bez ove dvije linije: "Stanje stola" bi nosilo pecenu vrijednost koja
+      // vise ne odgovara stvarnom stanju izvora.
+      'data/generated/profile-rules-server.json',
+      'data/coverage/scored-coverage.json',
       'src/coverage/site-stats.ts',
       'scripts/gen-site-stats.mts',
     ],

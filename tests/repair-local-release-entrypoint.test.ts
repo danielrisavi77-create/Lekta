@@ -1,15 +1,18 @@
 import { createHash, generateKeyPairSync } from 'node:crypto';
-import { mkdtempSync } from 'node:fs';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+
+import { removeTrackedTempDirs, trackedTempDir } from './helpers/temp-dirs';
 
 describe('local-repair release stvarni CLI entrypoint', () => {
+  // Stavka G: mkdtemp mapa ovog testa se brise, i nakon pada tvrdnje.
+  afterEach(removeTrackedTempDirs);
+
   it('fail-closed vraca non-zero kad runner artefakt ne postoji', () => {
     const root = join(import.meta.dirname, '..');
-    const missing = join(mkdtempSync(join(tmpdir(), 'lekta-release-entry-')), 'missing.exe');
+    const missing = join(trackedTempDir('lekta-release-entry-'), 'missing.exe');
     const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
     const privateKeyPkcs8Base64Url = privateKey
       .export({ format: 'der', type: 'pkcs8' })

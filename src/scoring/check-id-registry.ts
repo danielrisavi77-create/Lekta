@@ -32,6 +32,7 @@ export const CHECK_ID_BY_TITLE: Record<string, string> = {
   'Dominantni font': 'format.font.dominant',
   'Veličina osnovnog teksta': 'format.size.body',
   'Prored osnovnog teksta': 'format.spacing.body',
+  'Redaka po stranici (kapacitet)': 'format.lines-per-page',
   'Razmak prije i poslije odlomka': 'format.spacing.paragraph',
   'Poravnanje osnovnog teksta': 'format.justify.body',
   'Tehničko-tipografska dosljednost': 'format.typography.consistency',

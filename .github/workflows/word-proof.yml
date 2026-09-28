@@ -117,6 +117,9 @@ jobs:
         with:
           node-version: 24
           npm-version: 11.11.0
+          # Bez setup-node npm kesa: na ovom stroju to je 3,6 GB korisnikova npm-cache (restore oko
+          # 23 min, run 36348083630); node_modules kes (hit, npm ci preskocen) je dovoljan.
+          npm-cache: 'false'
 
       # Samo za puni release:check: Edge typecheck (Deno), Tier 1 (lxml) i Playwright.
       - name: Deno setup (samo razine=sve)

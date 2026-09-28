@@ -139,9 +139,13 @@ function setupReveal() {
 // važno na rezultatu analize: landing i privatnost ostaju u DOM-u ispod njega, ali korisniku nisu
 // vidljivi i ne trebaju trošiti frameove. Obuhvaćamo i CSS i WAAPI animacije, jer hero-demo koristi
 // element.animate(), koji `animation-play-state` sam po sebi ne zaustavlja.
+const MOTION_OFFSCREEN_SELECTOR = '.ks-priv-scena, [data-motion-offscreen]';
+
 function pauseOffscreenMotion() {
   if (prefersReduced() || typeof IntersectionObserver === 'undefined') return;
-  const targets = [...document.querySelectorAll<HTMLElement>('.ks-priv-scena')];
+  // `[data-motion-offscreen]` je opt-in za sve ostalo sto se vrti (Z31): npr. linija skeniranja
+  // na ulaznom listu. Element sam ne mora znati za promatrac, dovoljno je da nosi atribut.
+  const targets = [...document.querySelectorAll<HTMLElement>(MOTION_OFFSCREEN_SELECTOR)];
   if (!targets.length) return;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
