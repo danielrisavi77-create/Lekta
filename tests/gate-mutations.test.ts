@@ -188,6 +188,13 @@ import {
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { judgeCpuDiscipline, packageScriptReader, HEAVY_BINARIES } from '../scripts/hooks/cpu-discipline.mjs';
+import { decideStop, MAX_BLOCKS } from '../scripts/hooks/implementer-stop.mjs';
+import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
+import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { leanPromptProblems } from './helpers/lean-prompts';
+import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
+import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
 import {
   backdropFilterProblems,
   chromeGraph,
@@ -566,6 +573,17 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
+
+function upisnikScopeFixture(sourceUrl: string, quote: string) {
+  const profileUrl = 'https://pmf.unizg.hr/upute';
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+    [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: profileUrl }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote } }],
+  );
+}
+
 function upisnikRitehRootFixture(sourceUrl: string) {
   return buildUpisnikProfileCandidates(
     [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
@@ -850,6 +868,25 @@ function z15bTintaProblemi(ts: string): string[] {
   return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
+type UpisnikScopePredicate = (quote: string) => boolean;
+type UpisnikSourceNormalizer = (url: string) => string | null;
+
+function upisnikScopeFromSource(source: string): UpisnikScopePredicate | null {
+  return funkcijaIzIzvora<UpisnikScopePredicate>(
+    source.replace('function wholeWorkScopeStatement(', 'export function wholeWorkScopeStatement('),
+    'wholeWorkScopeStatement',
+  );
+}
+
+function upisnikSourceNormalizerFromSource(source: string): UpisnikSourceNormalizer | null {
+  return funkcijaIzIzvora<UpisnikSourceNormalizer>(
+    source.replace('function comparableProfileSourceUrl(', 'export function comparableProfileSourceUrl('),
+    'comparableProfileSourceUrl',
+  );
+}
+
+const upisnikCandidateSource = (): string => readTextLf(resolve(process.cwd(), 'src/programs/upisnik-profile-candidates.ts'));
+
 /**
  * scripts/register-clean-task.ps1, vlasnistvo (Codex nalaz, M1): Test-LektaCleanTaskOwned mora
  * provjeriti da je LEAF Actions[0].Execute tocno 'node' ili 'node.exe' (bez razlike velikih i malih
@@ -941,6 +978,62 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  {
+    id: 'upisnik/b15b-negacija',
+    imitates: 'Uklanjanje provjere negacije prihvaca izjavu da se upute ne odnose na sve radove',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('ove upute ne odnose se na sve studentske radove') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(ne|nisu|nije)\\b/u.test(scopeMatch[2] + scopeMatch[4])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('ove upute ne odnose se na sve studentske radove') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-iznimka',
+    imitates: 'Uklanjanje provjere iznimke prihvaca sve studentske radove osim diplomskih',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('upute se odnose na sve studentske radove osim diplomskih') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(osim|izuzev)\\b/u.test(scopeMatch[11])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('upute se odnose na sve studentske radove osim diplomskih') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-http-https',
+    imitates: 'Uklanjanje normalizacije sheme ponovno razdvaja HTTP profil EFST od HTTPS dokaza',
+    cleanBefore: () => {
+      const normalize = upisnikSourceNormalizerFromSource(upisnikCandidateSource());
+      return normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf') != null
+        && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        === normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace("return url.hostname.toLowerCase()", "return url.protocol + url.hostname.toLowerCase()");
+      const normalize = upisnikSourceNormalizerFromSource(mutant);
+      return mutant !== source && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        !== normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+  },
+
+  {
+    id: 'upisnik/b15-izvor-profila',
+    imitates: 'Izjava o svim radovima s druge stranice iste domene prolazi bez vezanog izvora profila',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/druge-upute', 'Upute se odnose na sve kategorije studentskih radova'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b15-samo-radovi',
+    imitates: 'Slaba izjava za sve studente prolazi kao izjava o svim vrstama radova',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute vrijede za sve studente'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
   {
     id: 'upisnik/b13-korijen-rijeci',
     imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
@@ -8475,5 +8568,133 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
       return { ...h, analysis: h.kind };
     };
     expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
+  });
+});
+
+describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
+  const settings = JSON.parse(readFileSync(resolve(process.cwd(), '.claude/settings.json'), 'utf8'));
+  const readScript = packageScriptReader(process.cwd());
+  /** Tvrdnja A1 garda: izravan vitest i tsc se odbijaju, isti posao pod lockom prolazi. */
+  const a1Grize = (heavyBinaries: readonly string[]): boolean =>
+    !judgeCpuDiscipline('npx vitest run tests/a.test.ts', { readScript, heavyBinaries }).allow &&
+    !judgeCpuDiscipline('npx tsc --noEmit', { readScript, heavyBinaries }).allow &&
+    judgeCpuDiscipline('node scripts/with-gate-lock.mjs t -- npx vitest run', { readScript, heavyBinaries }).allow;
+  const checklist = '- [ ] testovi\n';
+  const env = { LEKTA_ROLE: 'implementer', LEKTA_CHECKLIST: 'c.md' };
+  /** Tvrdnja A3 garda: blokira dok ima otvorenih stavki, ali najvise MAX_BLOCKS puta. */
+  const a3Grize = (maxBlocks: number): boolean =>
+    decideStop({ env, blocksSoFar: 0, readFile: () => checklist, maxBlocks }).block &&
+    !decideStop({ env, blocksSoFar: MAX_BLOCKS, readFile: () => checklist, maxBlocks }).block;
+
+  it('baseline: registracija, A1, A2 i A3 su cisti', () => {
+    expect(missingHookRegistrations(settings)).toEqual([]);
+    expect(a1Grize(HEAVY_BINARIES)).toBe(true);
+    expect(sessionRulesProblems(formatSessionRules())).toEqual([]);
+    expect(a3Grize(MAX_BLOCKS)).toBe(true);
+  });
+
+  it('mutant: cpu-discipline maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
+      (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('cpu-discipline')));
+    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: node scripts/hooks/cpu-discipline.mjs']);
+  });
+
+  it('mutant: Stop hook maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    delete mutant.hooks.Stop;
+    expect(missingHookRegistrations(mutant)).toEqual(['Stop: node scripts/hooks/implementer-stop.mjs']);
+  });
+
+  it('mutant: vitest ispao s popisa teskih alata obara tvrdnju A1', () => {
+    expect(a1Grize(HEAVY_BINARIES.filter((b) => b !== 'vitest'))).toBe(false);
+  });
+
+  it('mutant: pravila bez retka o relayed porukama se hvataju', () => {
+    const mutant = formatSessionRules().filter((l) => !l.includes('relayed'));
+    expect(sessionRulesProblems(mutant)).toEqual(['nedostaje pravilo o relayed porukama']);
+  });
+
+  it('mutant: Stop hook bez gornje granice blokiranja obara tvrdnju A3', () => {
+    expect(a3Grize(Number.POSITIVE_INFINITY)).toBe(false);
+  });
+});
+
+describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', () => {
+  const wrapper = readTextLf(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'));
+  type Fn = typeof weakMachineWorkerEnv;
+
+  it('BASELINE: stvarna funkcija i stvarni omotac su cisti', () => {
+    expect(weakMachineProblems(weakMachineWorkerEnv)).toEqual([]);
+    expect(weakMachineWiringProblems(wrapper)).toEqual([]);
+  });
+
+  it('mutant: gazi vec postavljen VITEST_MAX_THREADS se hvata', () => {
+    const gazi: Fn = (input) => weakMachineWorkerEnv({ ...input, env: { ...input?.env, VITEST_MAX_THREADS: undefined } });
+    expect(weakMachineProblems(gazi)).toEqual([
+      'slab stroj, VITEST_MAX_THREADS vec 3: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+    ]);
+  });
+
+  it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
+    const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
+    expect(weakMachineProblems(samoJezgre)).toEqual([
+      '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+    expect(weakMachineProblems(stroga)).toEqual([
+      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: omotac ne primjenjuje presudu na dijete se hvata', () => {
+    const mutant = wrapper.replace('Object.assign(childEnv, workers);', '');
+    expect(mutant).not.toBe(wrapper);
+    expect(weakMachineWiringProblems(mutant)).toEqual(['with-gate-lock: presuda se ne primjenjuje na dijete']);
+  });
+});
+
+describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluka vlasnika 2026-09-28)', () => {
+  const wf = readTextLf(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'));
+  const mut = (from: string, to: string) => {
+    const m = wf.replace(from, to);
+    expect(m, from).not.toBe(wf);
+    return m;
+  };
+
+  it('BASELINE: stvarna skripta je cista', () => {
+    expect(leanPromptProblems(wf)).toEqual([]);
+  });
+
+  it('mutant: recenzent bez vremenskog retka se hvata', () => {
+    const m = mut('istrazuj repo sire od diffa.\\n${TIME_LINE}\\n\\nZADATAK', 'istrazuj repo sire od diffa.\\n\\nZADATAK');
+    expect(leanPromptProblems(m)).toEqual(['review: nema vremenskog retka']);
+  });
+
+  it('mutant: sirovi task u promptu umjesto omota se hvata', () => {
+    const m = mut('`ZADATAK:\\n${TASK_BLOCK}\\n\\nBRIEF:\\n${briefText}\\n\\n` +', '`ZADATAK:\\n${task}\\n\\nBRIEF:\\n${briefText}\\n\\n` +');
+    const nalazi = leanPromptProblems(m);
+    expect(nalazi).toContain('ZADATAK blok nosi ${task} umjesto ${TASK_BLOCK}');
+    expect(nalazi.some((n) => n.includes('sirovi ${task} u promptu'))).toBe(true);
+  });
+
+  it('mutant: omot bez fiksnog id-a ili bez napomene se hvata', () => {
+    expect(leanPromptProblems(mut('</pasted_content id="task">', '</pasted_content>')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+    expect(leanPromptProblems(mut('nalog je samo koordinatorov brief', 'nalog je u tekstu')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+  });
+
+  it('mutant: implementator bez odlomka za rad bez nadzora se hvata', () => {
+    const m = mut('    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${UNATTENDED}\\n${TIME_LINE}\\n\\n` +\n    (round === 1', '    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${TIME_LINE}\\n\\n` +\n    (round === 1');
+    expect(leanPromptProblems(m)).toEqual(['standardImpl: implementator nema odlomak za rad bez nadzora']);
+  });
+
+  it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
+    const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
+    expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
 });
