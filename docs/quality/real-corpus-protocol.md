@@ -135,7 +135,7 @@ Sto iz toga slijedi, po redu vaznosti:
    ```bash
    LEKTA_LOCAL_CORPUS=1 LEKTA_CORPUS_SOURCE="<put do 03-ingest>" NODE_OPTIONS=--max-old-space-size=3072 npx vite-node scripts/repair-real-corpus.mts
    npm run verify:word:corpus                 # Word, pa verziju iz COM-a upisati dolje
-   node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0 [--holdout-confirmed]
+   node scripts/attest-real-corpus.mjs --source-kind source-docx --sign "Ime" --word-version 14.0 [--holdout-confirmed]
    npm run completion-ledger && npm run gen-profile-claims                # u cistom worktreeu, artefakti u istom commitu
    ```
 

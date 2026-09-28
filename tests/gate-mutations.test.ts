@@ -142,7 +142,7 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
-import { attestationContentDigest, attestationRefusals, ingestSourceKindProblem, inheritedSignature, sourceKindRefusals } from '../scripts/lib/corpus-attestation-core.mjs';
+import { attestInvocationProblems, attestationContentDigest, attestationRefusals, ingestSourceKindProblem, inheritedSignature, sourceKindRefusals } from '../scripts/lib/corpus-attestation-core.mjs';
 import {
   measuredCodeProblem,
   provenPdfUnitWorkTypes,
@@ -525,6 +525,25 @@ function vrstaIzvoraSeProvjerava(refuse: VrstaFn): boolean {
     refuse([r('a', pdf), r('b', 'source-docx')], pdf).length > 0 &&
     refuse([r('a'), r('b', 'source-docx')], 'source-docx').length === 0 &&
     refuse([r('a'), r('b', pdf)], 'source-docx').length > 0
+  );
+}
+
+type PozivOvjereFn = (text: string, source: string) => string[];
+
+/**
+ * Tvrdnja garda poziva ovjere (Codex #229, krug popravka): stvarni package.json i protokol nemaju poziv bez
+ * vrste, a poziv bez `--source-kind` ili s vrstom izvan zatvorenog skupa se prijavljuje.
+ */
+function poziviOvjereSeProvjeravaju(problemi: PozivOvjereFn): boolean {
+  const stvarno = ['package.json', 'docs/quality/real-corpus-protocol.md'].every(
+    (p) => problemi(readFileSync(resolve(process.cwd(), p), 'utf8'), p).length === 0,
+  );
+  return (
+    stvarno &&
+    problemi('"attest-corpus": "node scripts/attest-real-corpus.mjs",', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --source-kind nepoznato', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --source-kind public-pdf-converted --sign "Ime"', 'p').length === 0
   );
 }
 
@@ -1920,6 +1939,17 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) !== 'public-pdf-converted'", "vrsta(r) !== 'public-pdf-converted'")) &&
       vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+  {
+    id: 'korpus/npm-skripta-ovjere-bez-vrste-izvora',
+    imitates:
+      'npm run attest-corpus i naredba iz docs/quality/real-corpus-protocol.md nisu prosljedjivali --source-kind, ' +
+      'pa je ovjera (od #225 obavezna vrsta) uvijek padala i vlasnikov tok ovjere A profila bio je slomljen',
+    caught: () =>
+      !poziviOvjereSeProvjeravaju(
+        gardBlokIzIzvora<PozivOvjereFn>('attestInvocationProblems', 'const imaVrstu = /--source-kind', 'const imaVrstu = true || /--source-kind'),
+      ),
+    cleanBefore: () => poziviOvjereSeProvjeravaju(attestInvocationProblems),
   },
   {
     id: 'korpus/ovjera-docx-vrste-prihvaca-pdf-rezultat',

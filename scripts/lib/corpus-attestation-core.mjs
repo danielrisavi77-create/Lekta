@@ -140,3 +140,21 @@ export function ingestSourceKindProblem(kind, marker) {
   return null;
 }
 // <<< GARD:ingestSourceKindProblem
+
+// >>> GARD:attestInvocationProblems (mutacijski test cita ovaj blok kao izvor)
+/**
+ * Pozivi ovjere bez `--source-kind` u npm skriptama i protokolu (Codex #229, krug popravka). Ovjera od #225
+ * ODBIJA pisati bez vrste izvora, pa bi `npm run attest-corpus` ili prepisana naredba iz protokola uvijek pala.
+ * Vraca po jedan problem za svaki redak `node scripts/attest-real-corpus.mjs` bez vrste iz zatvorenog skupa.
+ */
+export function attestInvocationProblems(text, source) {
+  const out = [];
+  String(text).replace(/\r/g, '').split('\n').forEach((line, i) => {
+    const poziv = /\bnode\s+scripts\/attest-real-corpus\.mjs\b(.*)$/.exec(line);
+    if (!poziv) return;
+    const imaVrstu = /--source-kind\s+(source-docx|public-pdf-converted)(?![\w-])/.test(poziv[1]);
+    if (!imaVrstu) out.push(`${source}:${i + 1}: poziv ovjere bez --source-kind source-docx|public-pdf-converted`);
+  });
+  return out;
+}
+// <<< GARD:attestInvocationProblems
