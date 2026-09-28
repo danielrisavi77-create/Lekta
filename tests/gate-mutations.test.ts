@@ -117,7 +117,6 @@ import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet, compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import { textContractPreserved } from '../scripts/closed-loop-text-contract';
 import { documentText } from '../src/verification/docx-visible-text.ts';
-import { buildDocx } from './helpers/docx-builder';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
