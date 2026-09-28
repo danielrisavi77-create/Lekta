@@ -52,7 +52,7 @@ gleda config, ne ovaj redak): `costWeight = (input + output) / (input + output z
 claude-sonnet-5)`, pa je claude-sonnet-5 uvijek tezina 1.
 
 Model ulazi u routing tek kad ima `status: "verified"` u configu (doctor probe + fixture).
-Neverificiran model (npr. trenutno `claude-opus-5-5`) ne smije se pojaviti ni u jednoj ulozi
+Neverificiran model ne smije se pojaviti ni u jednoj ulozi
 dok status ne postane `verified`; to provjerava `tests/agent-routing-config.test.ts`.
 
 ## Effort politika
@@ -369,10 +369,13 @@ optimizacije izvedene iz brojeva (`docs/agents/USAGE_DAILY.md`).
 ## Kako dodati novi model
 
 1. Pokreni doctor provjeru za taj model/provider (potvrdi da je CLI ili API stvarno dostupan
-   i da vraca ocekivan JSON ugovor).
+   i da vraca ocekivan JSON ugovor). Za Claude model: `node scripts/agents/cli.mjs doctor --model <id>`.
 2. Napravi fixture koji dokazuje da model stvarno izvrsava zadanu ulogu (npr. implement na
    poznatom malom zadatku) i da izlaz zadovoljava isti ugovor kao postojeci verificirani
-   modeli.
+   modeli. Za Claude model:
+   `node scripts/agents/cli.mjs model-fixture --model <id> --effort <razina>` (jedan run po pozivu,
+   privremena mapa izvan repozitorija, ocjenjivac sam pokrece izvorni test). Usporedba ide uz
+   postojeci verificirani model; primjer je `docs/agents/reports/OPUS55_VERIFIKACIJA.md`.
 3. Tek nakon toga promijeni `status` modela u `config/agent-routing.json` na `"verified"` i
    dodaj ga u `routing` uloge gdje je prikladno. Prije tog koraka model smije postojati u
    `models` s `status: "unverified"` (kao dokumentacija namjere), ali ne smije biti dodijeljen
