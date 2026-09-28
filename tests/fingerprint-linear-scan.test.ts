@@ -57,6 +57,18 @@ describe('otisak: linearni skener daje isto sto i regex', () => {
     expect(extractFingerprintInputFromDocx(doc, styles).headings).toEqual([{ level: 1, text: 'Uvod' }]);
   });
 
+  // Samozatvarajuca i otvorena alternativa biraju RAZLICITE pojave styleId u istom tagu: prvi `>`
+  // je unutar vrijednosti "Heading2/>", pa je za pojavu Heading1 tag samozatvarajuci, a za kasniju
+  // pojavu otvoren (zatvara ga </w:style>). Regex iscrpi prvu alternativu prije druge i bira
+  // Heading1; skener koji bi uzeo zadnju pojavu (otvorenu) izgubio bi naslov.
+  it('samozatvarajuca alternativa ima prednost i kad bira raniju pojavu', () => {
+    const styles = '<w:style w:styleId="Heading1"w:styleId="Heading2/>"></w:style>';
+    const doc = '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>';
+    const stari = legacyExtractFingerprintInputFromDocx(doc, styles);
+    expect(stari.headings).toEqual([{ level: 1, text: 'Uvod' }]);
+    expect(extractFingerprintInputFromDocx(doc, styles)).toEqual(stari);
+  });
+
   it('na svim commitanim .docx fixturama', async () => {
     const files = docxFixtures('tests/fixtures');
     let usporedjeno = 0;
@@ -144,16 +156,42 @@ describe('otisak: napadacki ulazi su linearni (ratchet)', () => {
     expect(linearnostProblemi(extractFingerprintInputFromDocx, 20000)).toEqual([]);
   });
 
-  it('generator napada pokriva sve ciljane oblike', () => {
-    expect(adversarialInputs(1).length).toBe(11);
+  // Generator mora dokazati da proizvodi ciljanu klasu: svaki imenovani napad ima vlastiti uvjet
+  // nad svojim oblikom (Codex R3 runda 2), ne samo broj napada.
+  it('generator napada: svaki od 11 napada stvarno ima svoj oblik', () => {
+    const n = 50;
+    const broj = (s: string, x: string) => s.split(x).length - 1;
+    const bezGt = (s: string, od: string, doIsk: string) => !s.slice(s.indexOf(od), s.lastIndexOf(doIsk)).includes('>');
+    const svojstva: Record<string, (d: string, s: string) => boolean> = {
+      'styles: <w:style bez >': (_d, s) => broj(s, '<w:style ') === n && !s.includes('>'),
+      'styles: <w:style styleId bez zatvaranja': (_d, s) => broj(s, '<w:style w:styleId="a">') === n && !s.includes('</w:style>'),
+      'styles: <w:name bez > u stilu': (_d, s) => broj(s, '<w:name ') === n && broj(s, '<w:style ') === 1 && bezGt(s, '<w:name ', '</w:style>'),
+      'document: <w:p bez >': (d) => broj(d, '<w:p ') === n && !d.includes('>'),
+      'document: <w:p> bez zatvaranja': (d) => broj(d, '<w:p>') === n && !d.includes('</w:p>'),
+      'document: <w:pStyle bez > u odlomku': (d) => broj(d, '<w:pStyle ') === n && bezGt(d, '<w:pStyle ', '</w:p>'),
+      'document: <w:t bez > u odlomku': (d) => broj(d, '<w:t ') === n && bezGt(d, '<w:t ', '</w:p>'),
+      'styles: dug atribut bez navodnika i bez >': (_d, s) => s.startsWith('<w:style w:x=a') && !s.includes('"') && !s.includes('>') && s.length > 9 * n,
+      'styles i document: niz <': (d, s) => /^<+$/.test(d) && /^<+$/.test(s) && d.length === 9 * n,
+      'styles: vise styleId u tagu, jedan > na kraju': (_d, s) => broj(s, '<w:style ') === n && broj(s, 'w:styleId="') === n && broj(s, '>') === 1 && s.endsWith('>'),
+      'styles: > u navodnicima bez zatvaranja': (_d, s) => broj(s, 'w:styleId="a>b"') === n && !s.includes('</w:style>'),
+    };
+    const napadi = adversarialInputs(n);
+    expect(napadi.map((a) => a.name)).toEqual(Object.keys(svojstva));
+    for (const a of napadi) expect(svojstva[a.name](a.documentXml, a.stylesXml), a.name).toBe(true);
   });
+});
 
-  // Grubi alarm, ne dokaz: margina 1 s da spor CI ne pada lazno; regex je trebao 7,2 s na 176 KB.
+// DIJAGNOSTIKA, NE GARD (Codex N1 na #230): vrijeme ovisi o stroju, pa ne smije lazno rusiti CI.
+// Gard je brojac rada iznad. Ovdje se iznad 1 s samo upozorava, a pada tek na 10 s, sto znaci
+// povratak kvadratnog ponasanja (regex je na istom ulazu trebao 7,2 s na 176 KB).
+describe('otisak: dijagnostika vremena na napadima (nije gard)', () => {
   for (const { name, documentXml, stylesXml } of adversarialInputs(20000)) {
-    it(`alarm vremena: ${name}, ~${Math.round((documentXml.length + stylesXml.length) / 1024)} KB ispod 1 s`, () => {
+    it(`${name}, ~${Math.round((documentXml.length + stylesXml.length) / 1024)} KB`, () => {
       const t0 = performance.now();
       extractFingerprintInputFromDocx(documentXml, stylesXml);
-      expect(performance.now() - t0).toBeLessThan(1000);
+      const ms = performance.now() - t0;
+      if (ms > 1000) console.warn(`[otisak dijagnostika] ${name}: ${Math.round(ms)} ms`);
+      expect(ms).toBeLessThan(10_000);
     });
   }
 });

@@ -8920,7 +8920,7 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
       'styles: <w:name bez > u stilu',
       'document: <w:pStyle bez > u odlomku',
       'document: <w:t bez > u odlomku',
-      'styles: vise styleId u tagu bez >',
+      'styles: vise styleId u tagu, jedan > na kraju',
     ]);
   });
 
@@ -8928,7 +8928,7 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
     const mutant = mutiraniSkener('        if (lastClose === null) {', '        if (true) {');
     expect(linearnostProblemi(mutant, 2000)).toEqual([
       'styles: <w:style styleId bez zatvaranja',
-      'styles: vise styleId u tagu bez >',
+      'styles: vise styleId u tagu, jedan > na kraju',
       'styles: > u navodnicima bez zatvaranja',
     ]);
   });

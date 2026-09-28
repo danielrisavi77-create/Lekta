@@ -76,7 +76,7 @@ export function adversarialInputs(n: number): Array<{ name: string; documentXml:
     { name: 'document: <w:t bez > u odlomku', documentXml: `<w:p>${'<w:t '.repeat(n)}</w:p>`, stylesXml: okStyles },
     { name: 'styles: dug atribut bez navodnika i bez >', documentXml: okDoc, stylesXml: `<w:style w:x=${'a'.repeat(9 * n)}` },
     { name: 'styles i document: niz <', documentXml: '<'.repeat(9 * n), stylesXml: '<'.repeat(9 * n) },
-    { name: 'styles: vise styleId u tagu bez >', documentXml: okDoc, stylesXml: `${'<w:style '.repeat(n)}${'w:styleId="a" '.repeat(n)}>` },
+    { name: 'styles: vise styleId u tagu, jedan > na kraju', documentXml: okDoc, stylesXml: `${'<w:style '.repeat(n)}${'w:styleId="a" '.repeat(n)}>` },
     { name: 'styles: > u navodnicima bez zatvaranja', documentXml: okDoc, stylesXml: '<w:style w:styleId="a>b">'.repeat(n) },
   ];
 }
