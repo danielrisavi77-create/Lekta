@@ -20,9 +20,28 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Putanje se mogu preusmjeriti SAMO za test kroz stvarnu skriptu (T83-06): tests/real-corpus-dedupe.test.ts
 // je pokrece nad privremenim datotekama, da ne dira gitignorirano mjerenje ni commitanu ovjeru.
 const ULAZ = process.env.LEKTA_ATTEST_INPUT || path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
-const IZLAZ = process.env.LEKTA_ATTEST_OUTPUT || path.join(ROOT, 'data', 'verification', 'real-corpus-attestation.json');
-
 const args = process.argv.slice(2);
+// VRSTA IZVORA JE OBVEZNA (Codex #225, nalaz 1). Artefakt mjerenja ne zna iz kojeg je korijena korpusa
+// dosao (harness spaja vise korijena), pa je vrsta izricit ulaz ovjere: bez `--source-kind` skripta ODBIJA
+// pisati, umjesto da ovjera bez polja tiho znaci izvorni DOCX. `public-pdf-converted` (javni rad pretvoren
+// iz PDF-a) nikad ne ide u datoteku prave ovjere; pise se u zasebnu PDF ovjeru (razina A-pdf).
+const VRSTE_IZVORA = ['source-docx', 'public-pdf-converted'];
+const vrstaIzvora = (() => {
+  const i = args.indexOf('--source-kind');
+  return i >= 0 ? args[i + 1] : null;
+})();
+if (!VRSTE_IZVORA.includes(vrstaIzvora)) {
+  console.error(`[ovjera] FAIL: obavezno --source-kind ${VRSTE_IZVORA.join('|')} (dobiveno: ${String(vrstaIzvora)}).`);
+  process.exit(1);
+}
+const pdfIzvor = vrstaIzvora === 'public-pdf-converted';
+const IZLAZ = process.env.LEKTA_ATTEST_OUTPUT
+  || path.join(ROOT, 'data', 'verification', pdfIzvor ? 'pdf-corpus-attestation.json' : 'real-corpus-attestation.json');
+if (pdfIzvor && path.basename(IZLAZ) === 'real-corpus-attestation.json') {
+  console.error('[ovjera] FAIL: ovjera nad radovima pretvorenim iz PDF-a ne smije u datoteku prave ovjere.');
+  process.exit(1);
+}
+
 const potpis = (() => {
   const i = args.indexOf('--sign');
   return i >= 0 ? args[i + 1] : null;
@@ -136,6 +155,7 @@ const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8
 const sadrzaj = {
   schemaVersion: 1,
   fingerprintVersion: FINGERPRINT_VERSION,
+  sourceKind: vrstaIzvora,
   corpusFingerprint: otisak,
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,

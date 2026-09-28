@@ -69,11 +69,14 @@
 # frame-src je NOVA direktiva i mora postojati izricito: `default-src 'self'` bi inace zatvorio
 # Stripe iframe i polje za karticu ne bi se nacrtalo. `frame-ancestors 'none'` ostaje, to je
 # obrnuti smjer (tko smije ugraditi NAS) i s ovim nema veze.
+# Cloudflare Turnstile (T89, 2026-09-28): captcha za Supabase Auth. Skripta api.js (script-src)
+# crta widget u svom iframeu (frame-src); provjeru tokena radi GoTrue na serveru, pa connect-src
+# ne treba novi host. Bez VITE_TURNSTILE_SITE_KEY klijent skriptu uopce ne ucitava.
 # VAZNO: ako se doda NOVI vanjski endpoint (npr. druga analitika), dodaj mu host OVDJE, inace ga
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://js.stripe.com https://*.js.stripe.com 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org https://api.stripe.com; frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://js.stripe.com https://*.js.stripe.com https://challenges.cloudflare.com 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org https://api.stripe.com; frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

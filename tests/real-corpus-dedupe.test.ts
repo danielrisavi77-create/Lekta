@@ -12,7 +12,7 @@ import { join, resolve } from 'node:path';
 import {
   dedupeManifest, discoverRealCorpus, REAL_CORPUS_ROOT, runRealCorpus, type RealCorpusManifestEntry,
 } from './real-corpus/harness';
-import { attestationProblems, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationProblems, pdfAttestationProblems, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync, sha256HexSync } from '../src/verification/attestation-content-digest';
 import {
   FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
@@ -244,7 +244,9 @@ describe('T83-06: stvarna skripta ovjere', () => {
       statusChanges: [], integrityFailure: null, error: null, ...extra,
     })),
   });
-  const pokreni = (dir: string, args: string[] = []) => spawnSync(process.execPath, ['scripts/attest-real-corpus.mjs', ...args], {
+  // Codex #225, nalaz 1: vrsta izvora je obvezan ulaz ovjere; zadano izvorni DOCX, `bezVrste` ga izostavlja.
+  const pokreni = (dir: string, args: string[] = [], vrsta: string | null = 'source-docx') =>
+    spawnSync(process.execPath, ['scripts/attest-real-corpus.mjs', ...(vrsta ? ['--source-kind', vrsta] : []), ...args], {
     encoding: 'utf8',
     env: { ...process.env, LEKTA_ATTEST_INPUT: join(dir, 'mjerenje.json'), LEKTA_ATTEST_OUTPUT: join(dir, 'ovjera.json') },
   });
@@ -294,6 +296,29 @@ describe('T83-06: stvarna skripta ovjere', () => {
       upisi(mjerenje(['corpus-a', 'corpus-b', 'corpus-c'], '2026-09-20T09:30:00.000Z', {}, ['corpus-c']));
       expect(pokreni(dir).status).toBe(0);
       expect(procitaj(dir).signedBy).toBeNull();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }, 60_000);
+
+  it('bez --source-kind odbija pisati; PDF izvor upisuje sourceKind i nije prava ovjera (Codex #225, nalaz 1)', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-225-attest-'));
+    try {
+      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z')));
+      const bez = pokreni(dir, ['--sign', 'Vlasnik'], null);
+      expect(bez.status).toBe(1);
+      expect(bez.stderr).toMatch(/--source-kind/);
+      expect(pokreni(dir, ['--sign', 'Vlasnik'], 'nepoznato').status).toBe(1);
+
+      expect(pokreni(dir, ['--sign', 'Vlasnik']).status).toBe(0);
+      expect(procitaj(dir).sourceKind).toBe('source-docx');
+      expect(attestationProblems(procitaj(dir))).toEqual([]);
+
+      expect(pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted').status).toBe(0);
+      const pdf = procitaj(dir);
+      expect(pdf.sourceKind).toBe('public-pdf-converted');
+      expect(pdfAttestationProblems(pdf)).toEqual([]);
+      expect(attestationProblems(pdf)).toContain('ovjera nad radovima pretvorenim iz PDF-a nije dokaz na izvornom Word dokumentu');
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
