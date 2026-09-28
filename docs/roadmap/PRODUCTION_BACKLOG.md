@@ -960,3 +960,15 @@ nista od ovoga ne mijenja granicu proizvoda (Lekta analizira i popravlja FORMU, 
 P-A je najjeftinija i prodaje se odmah. P-B nosi najjacu pricu, ali je skupa za podatke.
 M5 Final Pass funkcije i M6 Expert idu uz P-A (`docs/decisions/MONETIZACIJA_V1_ODLUKA.md`, odluka vlasnika 2026-09-27).
 P-C je temelj za P-D, P-F i P-G.
+
+## T26 nakon lansiranja, odluka vlasnika 2026-09-28
+
+T26 je zatvoren kao kriterij 1 go/no-go bete (T81). Stavke ispod su iz odjeljka 6 dosjea
+`docs/agents/reports/T26_ZATVARANJE.md` i ne blokiraju betu; pokrecu se nakon lansiranja.
+
+| oznaka | stavka | izvor u dosjeu |
+| --- | --- | --- |
+| T26-N1 | Tablica podrzanih svojstava (sekcije, margine, stilovi i nasljedjivanje, tablice, zaglavlja, fusnote i endnote, brojanje, bibliografija) kao dokument | odj. 6, tocka 1 |
+| T26-N2 | Vrijeme obrade kao gard u pregledniku ili workeru; mjera iz odjeljka 5 je jednokratna, u Nodeu, bez praga u CI-ju | odj. 6, tocka 3 |
+| T26-N3 | Skriveni tekst u broju rijeci i pregledu (#17, drugi dio) | odj. 6, tocka 4 |
+| T26-N4 | Rupa iz Codex F2 na #184: naslov s godinom koji zavrsava tockom, odmah iza zalutalog odlomka "Literatura", bio bi izuzet | odj. 6, tocka 5 |

@@ -1446,6 +1446,18 @@ a.mw-item-name:hover{text-decoration:underline}
 .ap-akcije{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 /* Nesiguran profil: ton nosi statusna oznaka, ne lijevi rub (Z3); paper-safe crvena za tekst. */
 .ap-nesigurno .profile-status{color:var(--red-on-soft)}
+/* NAPOMENA O DRUGOM PREPOZNATOM FAKULTETU (Z32, "Da, sama"): vidljivi red uz karticu profila,
+ * izvan lista `#profileSheet` (src/ui/confirmed-faculty.ts). Ton nosi tocka uz oznaku (Z3), ne
+ * lijevi rub; oznaka je mono, recenica serif (Z7 opcija a). Prazan red ostaje u stablu
+ * pristupacnosti kao zivo podrucje (`role="status"`), ali izlazi iz toka, pa ne dodaje razmak. */
+.faculty-conflict{display:grid;gap:8px;padding:11px 13px;border:1px solid var(--paper-line);border-radius:var(--radius);background:var(--paper-2);color:var(--paper-ink)}
+.faculty-conflict:empty{position:absolute;padding:0;border:0}
+.fc-oznaka{display:inline-flex;align-items:center;gap:7px;font:700 var(--fs-mono-label)/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--red-on-soft)}
+.fc-oznaka::before{content:"";flex:none;width:7px;height:7px;border-radius:var(--radius-pill);background:var(--red-deep)}
+.fc-tekst{margin:0;font:400 .9rem/1.5 var(--display-serif);color:var(--paper-ink);--emph-weight:400;--emph-style:italic}
+.fc-akcije{display:flex;flex-wrap:wrap;gap:8px}
+/* Gumbi napomene nose puno crnilo papira: prigusen gumb uz odluku koju student mora donijeti je kvar. */
+.fc-akcije .btn-ghost{color:var(--paper-ink)}.fc-akcije .btn-ghost:hover{color:var(--red-deep)}
 
 /* KONTEKST JE POTVRDA, NE FORMULAR (UX_PRINCIPLES.md 2; brif vlasnika 2026-09-07).
  *

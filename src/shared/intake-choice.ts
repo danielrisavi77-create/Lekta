@@ -31,6 +31,12 @@
  *            SLJEDECI rad pregazio vezanje prethodnog; `potvrdaZaSesiju` cita iz mape i ne gubi
  *            raniju sesiju.
  *
+ *   napomenaSesije  Odluka studenta o napomeni "drugi fakultet u dokumentu" na `/rad/` ("Zadrži"
+ *            ili "Prebaci", `src/ui/confirmed-faculty.ts`), mapa po id-u sesije, isto kao
+ *            `rokSesije` i `potvrdaSesije`. NALAZ PREGLEDA (Codex): odluka se prije pamtila samo u
+ *            memoriji modula, pa je ponovno otvaranje iste sesije napomenu vratilo. Odluka pripada
+ *            radu, ne posjetu, pa zivi uz njegovu sesiju.
+ *
  * NEPOZNATI KLJUCEVI ZAPISA SE CUVAJU: pisac spaja, ne prepisuje, pa kasniji zadatak (Z34, Z36)
  * moze dodati svoje polje bez da ga ulaz pri sljedecem upisu izbrise.
  */
@@ -101,7 +107,7 @@ export function procitajIzborUlaza(): IzborUlaza {
  * Upis jednog polja zapisa uz cuvanje ostalih. Vraca `false` kad je vrijednost vec ista, pa drugi
  * upis iste vrijednosti NE dira pohranu (idempotencija se mjeri, ne pretpostavlja).
  */
-function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije' | 'potvrdaSesije', vrijednost: unknown): boolean {
+function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije' | 'potvrdaSesije' | 'napomenaSesije', vrijednost: unknown): boolean {
   const z = zapis();
   if (JSON.stringify(z[kljuc] ?? null) === JSON.stringify(vrijednost ?? null)) return false;
   z[kljuc] = vrijednost;
@@ -110,7 +116,7 @@ function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije' | 'potvrdaSesije', vr
 }
 
 /** Mapa po id-u sesije iz zapisa; pokvaren ili stari (predz32) oblik daje praznu mapu. */
-function mapaSesija(kljuc: 'rokSesije' | 'potvrdaSesije'): Record<string, unknown> {
+function mapaSesija(kljuc: 'rokSesije' | 'potvrdaSesije' | 'napomenaSesije'): Record<string, unknown> {
   const v = zapis()[kljuc];
   return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
@@ -178,6 +184,31 @@ export function veziPotvrduZaSesiju(sesija: string): boolean {
  */
 export function potvrdaZaSesiju(sesija: string): PotvrdaUlaza | null {
   return normalizirajPotvrdu(mapaSesija('potvrdaSesije')[sesija]);
+}
+
+/** Odluka o napomeni o drugom prepoznatom fakultetu (`src/ui/confirmed-faculty.ts`). */
+interface OdlukaNapomeneSesije {
+  odluka: 'zadrzi' | 'prebaci';
+  prepoznato: string;
+}
+
+/**
+ * Pamti odluku o napomeni za sesiju `sesija`, u mapi po id-u sesije, pa odluka jednog rada ne
+ * gazi odluku drugog. Drugi upis iste odluke za istu sesiju je no-op.
+ */
+export function zapisiOdlukuNapomene(sesija: string, odluka: OdlukaNapomeneSesije): boolean {
+  const mapa = mapaSesija('napomenaSesije');
+  return upisiPolje('napomenaSesije', { ...mapa, [sesija]: { odluka: odluka.odluka, prepoznato: odluka.prepoznato } });
+}
+
+/** Odluka o napomeni za sesiju `sesija`; `null` kad je nema ili je zapis pokvaren. */
+export function odlukaNapomeneZaSesiju(sesija: string): OdlukaNapomeneSesije | null {
+  const v = mapaSesija('napomenaSesije')[sesija];
+  if (typeof v !== 'object' || v === null) return null;
+  const z = v as Record<string, unknown>;
+  const prepoznato = tekstIli(z.prepoznato);
+  if (!prepoznato || (z.odluka !== 'zadrzi' && z.odluka !== 'prebaci')) return null;
+  return { odluka: z.odluka, prepoznato };
 }
 
 /**

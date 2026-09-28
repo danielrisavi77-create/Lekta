@@ -2307,6 +2307,70 @@ describe('Upisnik heuristic guard redesign', () => {
       [decision('1', 'profile', sourceUrl, quote)],
     );
 
+
+  it('accepts a whole-work scope statement only from the bound profile source', () => {
+    const url = 'https://pmf.unizg.hr/upute';
+    const otherUrl = 'https://pmf.unizg.hr/druge-upute';
+    const quote = 'Upute se odnose na sve kategorije studentskih radova';
+    const build = (evidenceUrl: string, evidenceQuote: string, profileWorkTypes = ['final'], vrsta = 'Sveucilisni prijediplomski studij') =>
+      buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta }],
+        [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+        [{ id: 'profile', unitId: 'pmf', programs: ['Biologija'], workTypes: profileWorkTypes, sources: [{ url }] }],
+        [decision('1', 'profile', evidenceUrl, evidenceQuote)],
+      );
+    expect(build(url, quote).programs[0]?.coverageStatus).toBe('verified');
+    expect(() => build(otherUrl, quote)).toThrow(/program name/u);
+    expect(() => build(url, 'Upute vrijede za sve studente')).toThrow(/program name/u);
+    expect(() => build(url, 'Upute se odnose na sve kategorije studentskih obveza')).toThrow(/program name/u);
+    expect(() => build('https://medri.uniri.hr/upute', quote)).toThrow(/source domain/u);
+    expect(() => build(url, quote, ['graduate'])).toThrow(/work type/u);
+  });
+
+  it.each([
+    ['Upute se odnose na sve kategorije studentskih radova, a posebice na:', true],
+    ['Ove uputa se odnose na sve kategorije studentskih radova', true],
+    ['Pravila akademskog pisanja iz ove upute vrijede za sve studentske radove.', true],
+    ['Upute se odnose na sve pisane radove studenata', true],
+    ['Ove upute ne odnose se na sve studentske radove', false],
+    ['Upute se odnose na sve studentske radove osim diplomskih', false],
+    ['Upute se odnose na sve studentske radove na kolegiju Seminar iz ekonomije', false],
+    ['Pravila se primjenjuju na sve studentske radnike', false],
+    ['Komisija je napravila tablicu koja se primjenjuje na sve studentske radove', false],
+    ['Upute vrijede za sve studente', false],
+    ['Upute se odnose na sve studentske obveze', false],
+  ] as const)('whole-work scope: %s', (quote, accepted) => {
+    const run = () => fixture('Biologija', 'pmf', 'https://pmf.unizg.hr/upute', quote);
+    if (accepted) expect(run().summary.evidenceBackedCandidatePrograms).toBe(1);
+    else expect(run).toThrow(/program name/u);
+  });
+
+  it('normalizes source host and trailing slash but preserves query and fragment', () => {
+    const quote = 'Upute se odnose na sve kategorije studentskih radova';
+    const run = (evidenceUrl: string) => buildUpisnikProfileCandidates(
+      [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+      [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+      [{ id: 'profile', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: 'https://pmf.unizg.hr/upute/?v=1#dio' }] }],
+      [decision('1', 'profile', evidenceUrl, quote)],
+    );
+    expect(run('https://WWW.PMF.UNIZG.HR/upute?v=1#dio').summary.evidenceBackedCandidatePrograms).toBe(1);
+    expect(() => run('https://pmf.unizg.hr/upute?v=2#dio')).toThrow(/program name/u);
+    expect(() => run('https://pmf.unizg.hr/upute?v=1#drugi')).toThrow(/program name/u);
+  });
+
+  it('accepts HTTPS evidence for an EFST profile with the original HTTP source', () => {
+    const profileUrl = 'http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf';
+    const evidenceUrl = 'https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf';
+    const run = (url: string) => buildUpisnikProfileCandidates(
+      [{ sifraUpisnik: '1', naziv: 'Ekonomija', izvoditelj: 'EFST', vrsta: 'Sveucilisni prijediplomski studij' }],
+      [{ programCode: '1', executors: [{ componentIds: ['efst'] }] }],
+      [{ id: 'profile', unitId: 'efst', programs: ['Ekonomija'], workTypes: ['final'], sources: [{ url: profileUrl }] }],
+      [decision('1', 'profile', url, 'Upute se odnose na sve kategorije studentskih radova')],
+    );
+    expect(run(evidenceUrl).summary.evidenceBackedCandidatePrograms).toBe(1);
+    expect(() => run('https://www.efst.unist.hr/portals/0/drugi-dokument.pdf')).toThrow(/program name/u);
+  });
+
   it('matches inflected whole word roots and rejects embedded or merely similar names', () => {
     const url = 'https://pmf.unizg.hr/studij';
     expect(fixture('Biologija', 'pmf', url, 'Studij biologije').programs[0]?.coverageStatus).toBe('verified');
@@ -2424,7 +2488,7 @@ describe('Upisnik heuristic guard redesign', () => {
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
-  it('preserves all 354 evidence links and every coverage status in the committed inventory', () => {
+  it('preserves all 364 evidence links and every coverage status in the committed inventory', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
       profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
@@ -2432,8 +2496,18 @@ describe('Upisnik heuristic guard redesign', () => {
     );
     const links = (programs: typeof report.programs) => programs.flatMap((row) =>
       row.profileDecisionEvidence.map((evidence) => [row.programCode, evidence.profileId]));
-    // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27).
-    expect(links(report.programs)).toHaveLength(354);
+    // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27)
+    // plus 10 EFOS programa kroz izricitu izjavu o opsegu iz izvora profila (#206, 2026-09-28).
+    expect(links(report.programs)).toHaveLength(364);
+    const efos = new Map(report.programs.filter((row) => row.profileDecisionEvidence.some((e) => e.profileId.startsWith('efos-')))
+      .map((row) => [row.programCode, row.profileDecisionEvidence.map((e) => e.profileId)]));
+    for (const [code, profileId] of [['595', 'efos-diplomski'], ['597', 'efos-diplomski'], ['4780', 'efos-diplomski'], ['690', 'efos-doktorski'],
+      ['775', 'efos-specijalisticki'], ['812', 'efos-specijalisticki'], ['846', 'efos-specijalisticki'], ['892', 'efos-specijalisticki'],
+      ['1691', 'efos-specijalisticki'], ['2291', 'efos-specijalisticki']] as const) {
+      expect(efos.get(code)).toEqual([profileId]);
+    }
+    // 1835 (Poduzetnistvo i inovativnost) ostaje hold: jedini dokaz bila je opca stranica sveucilista.
+    expect(report.programs.find((row) => row.programCode === '1835')?.coverageStatus).toBe('identity-evidence-needed');
     expect(links(report.programs)).toEqual(links(generatedProfileCandidates.programs));
     expect(report.programs.map((row) => [row.programCode, row.coverageStatus]))
       .toEqual(generatedProfileCandidates.programs.map((row) => [row.programCode, row.coverageStatus]));
