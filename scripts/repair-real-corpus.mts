@@ -80,8 +80,14 @@ const izlaz = localArtifact
         : 'LEKTA_LOCAL_CORPUS=1 vite-node scripts/repair-real-corpus.mts',
     )
   : report;
-mkdirSync(dirname(reportFile), { recursive: true });
-writeFileSync(reportFile, JSON.stringify(izlaz, null, 2) + '\n');
+// Zadani put ostaje doslovan poziv: scripts/autonomy/tests/test_gate.py cita ovaj redak kao dokaz da tier
+// strict-open regenerira ratchet korpusa u docs/generated. `--report` je zaseban, iskljucivo lokalni izlaz.
+if (reportArg) {
+  mkdirSync(dirname(reportFile), { recursive: true });
+  writeFileSync(reportFile, JSON.stringify(izlaz, null, 2) + '\n');
+} else {
+  writeFileSync(join(root, 'docs', 'generated', reportPath), JSON.stringify(izlaz, null, 2) + '\n');
+}
 
 if (outputDir) {
   const reviewManifest = report.results
