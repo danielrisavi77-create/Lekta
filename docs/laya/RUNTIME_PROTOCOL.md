@@ -80,8 +80,14 @@ položaju. Redoslijed opcija prati `labelOrder` iz zahtjeva.
 Upstream `build_sequence` (`laya/common.py`) cijelo pitanje slaže u `head_max_len` tokena (zadano
 192), svaku opciju reže na 48 tokena, a kad opcijama ostane manje od 16 tokena, dodatno ih skraćuje.
 Upute zatim dobivaju samo ostatak, najmanje 8 tokena. Prvo pitanje (dvojezično, `a43dd62`) po tom
-računu nije stalo, pa je model odgovarao na odrezano pitanje. D1 na #203 dao je točnost 0,044 i
-nestabilnost redoslijeda 0,79.
+računu vjerojatno nije stalo, pa je model mogao odgovarati na odrezano pitanje. D1 na #203 dao je
+točnost 0,044 i nestabilnost redoslijeda 0,79, uz izbor zadnje ponuđene oznake u 69 % slučajeva.
+
+**Status dijagnoze: neprovjereno.** Račun je napravljen iz koda upstreama, bez stvarnog tokenizera
+modela. Potvrda je korak 0 na radnoj stanici (#203): brojanje tokena starog pitanja tokenizerom
+revizije `55cf4c4e`. Rezanje je potvrđeno ako je zbroj opcija veći od `head_max_len - 16` ili ako
+ijedna opcija ima više od 49 tokena (48 i razmak ispred). Dok ta brojka nije upisana ovdje, NO-GO
+iz prvog D1 mjerenja mjeri možda odrezano pitanje, a ne model.
 
 Zato runtime pri startu broji tokene pitanja **tokenizerom učitanog modela** (`agent.tok`), istim
 računom kao upstream. Start odbija ako vrijedi išta od ovoga:
