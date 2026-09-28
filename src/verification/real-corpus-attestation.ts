@@ -95,6 +95,52 @@ export interface CorpusAttestation {
     countedDocumentCount?: number;
   };
   entries: CorpusAttestationEntry[];
+  /**
+   * Odakle su mjereni dokumenti (odluka vlasnika 2026-09-28), iz zatvorenog skupa `SOURCE_KINDS`.
+   * `source-docx`: izvorni Word dokumenti, jedini put do razine A. `public-pdf-converted`: javni radovi iz
+   * PDF repozitorija (Dabar, ZIR) pretvoreni u DOCX; takva ovjera daje ZASEBNU razinu `A-pdf` i nikad ne
+   * dize `claim`. Polje je dio potpisanog sadrzaja (otisak pokriva sve osim polja potpisa), pa se ne moze
+   * dopisati nakon potpisa. Bez polja smije biti SAMO ovjera mjerena prije `LEGACY_UNMARKED_BEFORE`.
+   */
+  sourceKind?: SourceKind;
+}
+
+/** Zatvoren skup vrsta izvora ovjere; svaka druga vrijednost je problem, ne izvorni DOCX. */
+const SOURCE_KINDS = ['source-docx', 'public-pdf-converted'] as const;
+type SourceKind = (typeof SOURCE_KINDS)[number];
+
+/** Vrsta izvora ovjere nad javnim radovima pretvorenim iz PDF-a u DOCX (razina `A-pdf`). */
+const PDF_SOURCE_KIND = 'public-pdf-converted' as const;
+
+/**
+ * Granica kompatibilnosti (Codex #225, nalaz 1). Ovjera bez `sourceKind` do ovog PR-a je znacila izvorni
+ * DOCX; jedina takva potpisana ovjera (otisak korpusa 33768c3c..., mjerena 2026-09-27T21:25Z) ostaje
+ * valjana. Svaka ovjera mjerena od ove granice MORA navesti `sourceKind`, inace bi PDF pretvoren u DOCX,
+ * izmjeren postojecim putem i potpisan, tiho postao pravi A.
+ */
+const LEGACY_UNMARKED_BEFORE = '2026-09-28T00:00:00.000Z';
+
+/**
+ * PDF KONVERZIJA NIJE DOKAZ RAZINE A (odluka vlasnika 2026-09-28). Pretvorba iz PDF-a nagadja
+ * strukturu koju izvorni Word dokument ima (stilovi, polja, sekcije), pa popravak takvog dokumenta ne
+ * dokazuje da popravak radi na radu kakav student predaje. Prava ovjera vrijedi samo sa `sourceKind:
+ * 'source-docx'`, ili bez polja ako je mjerena prije `LEGACY_UNMARKED_BEFORE`. `isPdf` i `legacyBefore`
+ * postoje samo za mutacijski test.
+ */
+export function realSourceKindProblem(
+  a: CorpusAttestation,
+  isPdf: (attestation: CorpusAttestation) => boolean = (x) => x.sourceKind === PDF_SOURCE_KIND,
+  legacyBefore: string = LEGACY_UNMARKED_BEFORE,
+): string | null {
+  if (isPdf(a)) return 'ovjera nad radovima pretvorenim iz PDF-a nije dokaz na izvornom Word dokumentu';
+  if (a.sourceKind === undefined) {
+    const mjereno = Date.parse(String(a.measuredAt ?? ''));
+    return Number.isFinite(mjereno) && mjereno < Date.parse(legacyBefore)
+      ? null
+      : 'ovjera bez sourceKind vrijedi samo za mjerenja prije 2026-09-28; nova ovjera mora navesti "source-docx"';
+  }
+  if (!(SOURCE_KINDS as readonly string[]).includes(a.sourceKind)) return `nepoznat sourceKind "${String(a.sourceKind)}"`;
+  return a.sourceKind === 'source-docx' ? null : `prava ovjera ne prihvaca sourceKind "${a.sourceKind}"`;
 }
 
 /** Razlozi zbog kojih ovjera ne vrijedi. Prazan niz znaci da vrijedi. */
@@ -126,7 +172,32 @@ export function measuredCodeProblem(
   return isHash(String(a.repairSourceHash ?? '')) ? null : 'nema otiska koda popravka nad kojim je mjereno';
 }
 
+/**
+ * Razlozi zbog kojih PRAVA ovjera (izvorni Word dokumenti) ne vrijedi. Prazan niz znaci da vrijedi.
+ * Uz zajednicke provjere oblika i potpisa odbija ovjeru nad radovima pretvorenim iz PDF-a.
+ */
 export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
+  const p = sharedAttestationProblems(a);
+  if (!a) return p;
+  const izvor = realSourceKindProblem(a);
+  if (izvor) p.push(izvor);
+  return p;
+}
+
+/**
+ * Razlozi zbog kojih ovjera nad javnim radovima pretvorenim iz PDF-a ne vrijedi: iste provjere oblika,
+ * potpisa i brojki kao za pravu ovjeru, plus obvezni `sourceKind: 'public-pdf-converted'`. Namjerno ne
+ * zove `attestationProblems`, jer ta odbija upravo takav `sourceKind`.
+ */
+export function pdfAttestationProblems(a: CorpusAttestation | null | undefined): string[] {
+  const p = sharedAttestationProblems(a);
+  if (!a) return p;
+  if (a.sourceKind !== PDF_SOURCE_KIND) p.push(`PDF ovjera mora nositi sourceKind "${PDF_SOURCE_KIND}"`);
+  return p;
+}
+
+/** Provjere oblika, potpisa i brojki zajednicke pravoj i PDF ovjeri. */
+function sharedAttestationProblems(a: CorpusAttestation | null | undefined): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
   if (a.schemaVersion !== 1) p.push('nepoznata verzija sheme');
@@ -211,8 +282,22 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
  */
 export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
   if (attestationProblems(a).length > 0) return new Set();
+  return cleanUnitWorkTypes(a!);
+}
+
+/**
+ * Parovi `unitId::workType` kojima PDF ovjera daje dokaz na javnom radu pretvorenom iz PDF-a (razina
+ * `A-pdf`). Isti uvjet cistoce kao `provenUnitWorkTypes`, ali preko `pdfAttestationProblems`. Rezultat
+ * NIKAD ne ulazi u os `proof` ni u `claim`; ledger ga biljezi zasebno (`pdfProof`, `pdfClaim`).
+ */
+export function provenPdfUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
+  if (pdfAttestationProblems(a).length > 0) return new Set();
+  return cleanUnitWorkTypes(a!);
+}
+
+function cleanUnitWorkTypes(a: CorpusAttestation): Set<string> {
   const out = new Set<string>();
-  for (const e of a!.entries) {
+  for (const e of a.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
       out.add(`${e.unitId}::${e.workType}`);
     }

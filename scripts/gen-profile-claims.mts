@@ -24,7 +24,15 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { CLAIM_LADDER, PROOF_SOURCE_NOTE, type ClaimLevel, type ProofAxis, type ProofSource } from '../src/verification/completion-ledger';
+import {
+  CLAIM_LADDER,
+  CLAIM_LABEL_A_PDF,
+  PROOF_SOURCE_NOTE,
+  type ClaimLevel,
+  type PdfClaimLevel,
+  type ProofAxis,
+  type ProofSource,
+} from '../src/verification/completion-ledger';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -36,6 +44,8 @@ interface LedgerRow {
   claimLabel: string;
   proof: ProofAxis;
   proofSource: ProofSource | null;
+  pdfClaim: PdfClaimLevel | null;
+  pdfClaimLabel: string | null;
 }
 
 const ledger = JSON.parse(
@@ -49,6 +59,8 @@ const sourcesByProfile: Record<string, Set<ProofSource | 'none'>> = {};
 /** Parovi `unitId::workType` po profilu i profili na kojima je dokaz stvarno IZMJEREN po paru (T05). */
 const pairsByProfile: Record<string, Set<string>> = {};
 const measuredByPair: Record<string, Set<string>> = {};
+/** Razina `A-pdf` po retku profila; profil je dobiva samo ako je nose SVI njegovi redci. */
+const pdfRowsByProfile: Record<string, Array<PdfClaimLevel | null>> = {};
 
 for (const row of ledger.rows) {
   if (!row.profileId) continue;
@@ -57,6 +69,13 @@ for (const row of ledger.rows) {
   if (row.claimLabel !== CLAIM_LADDER[row.claim]) {
     throw new Error(`ledger label ne odgovara ljestvici za ${row.profileId}: ${row.claimLabel}`);
   }
+  // Ista provjera za zasebnu razinu `A-pdf`: label je doslovno CLAIM_LABEL_A_PDF ili ga nema, a
+  // `A-pdf` nikad ne stoji uz `claim` A (PDF dokaz ne smije glumiti dokaz na izvornom dokumentu).
+  if (row.pdfClaimLabel !== (row.pdfClaim === 'A-pdf' ? CLAIM_LABEL_A_PDF : null)) {
+    throw new Error(`ledger label razine A-pdf ne odgovara za ${row.profileId}: ${String(row.pdfClaimLabel)}`);
+  }
+  if (row.pdfClaim && row.claim === 'A') throw new Error(`redak ${row.profileId} nosi i A i A-pdf`);
+  (pdfRowsByProfile[row.profileId] ??= []).push(row.pdfClaim ?? null);
   const seen = byProfile[row.profileId];
   if (seen && seen !== row.claim) conflicts.push(row.profileId);
   byProfile[row.profileId] = row.claim;
@@ -116,6 +135,17 @@ if (conflicts.length) {
 const counts: Record<string, number> = {};
 for (const claim of Object.values(byProfile)) counts[claim] = (counts[claim] ?? 0) + 1;
 
+/**
+ * Zasebna razina `A-pdf` (odluka vlasnika 2026-09-28), prepisana iz ledgera. Nikad ne dira `byProfile`
+ * ni `counts`. Profil je dobiva samo kad je nose svi njegovi redci: redak bez PDF dokaza (druga vrsta
+ * rada) znaci da tvrdnja za cijeli profil nije izmjerena, pa se ne pece jaca od najslabijeg retka.
+ */
+const byPdfProfile: Record<string, PdfClaimLevel> = {};
+for (const [id, claims] of Object.entries(pdfRowsByProfile).sort(([a], [b]) => a.localeCompare(b))) {
+  if (claims.length && claims.every((c) => c === 'A-pdf')) byPdfProfile[id] = 'A-pdf';
+}
+const pdfCounts: Record<PdfClaimLevel, number> = { 'A-pdf': Object.keys(byPdfProfile).length };
+
 const out = {
   schemaVersion: 1,
   napomena:
@@ -134,6 +164,12 @@ const out = {
   /** Za svaki naslijedjeni A profil: profili na kojima je dokaz izmjeren (T05, `testedProfileIds`). */
   inheritedFrom,
   byProfile,
+  /** Tekst zasebne razine `A-pdf`, doslovno CLAIM_LABEL_A_PDF iz ledgera. */
+  pdfLadder: { 'A-pdf': CLAIM_LABEL_A_PDF },
+  /** Broj profila razine `A-pdf`; ne zbraja se u `counts`. */
+  pdfCounts,
+  /** Profili razine `A-pdf` (dokaz samo na javnom radu pretvorenom iz PDF-a); `byProfile` ostaje nepromijenjen. */
+  byPdfProfile,
 };
 
 writeFileSync(join(root, 'data/profiles/profile-claims.json'), JSON.stringify(out, null, 2) + '\n');

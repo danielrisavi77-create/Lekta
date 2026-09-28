@@ -848,7 +848,7 @@
       "dependsOn": [
         "T77"
       ],
-      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77)."
+      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile."
     },
     {
       "id": "T87",
