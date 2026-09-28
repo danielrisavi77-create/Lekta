@@ -45,14 +45,25 @@
  *
  * FOKUS PRI ZATVARANJU (nalaz pregleda, WCAG 2.4.3): gumb koji zatvara napomenu nestaje s njom
  * (red se prazni, znacka skriva), pa bi fokus pao na `<body>` i sljedeci Tab krenuo s vrha
- * stranice. Zato ga `vratiFokus` vraca na smislen element: iz vidljivog reda na gumb
- * "Analiziraj dokument" (sljedeci korak, stalan cvor koji se ne crta ponovo kao kartica profila),
- * a iz znacke u listu profila na izbornik fakulteta, da fokus ostane u modalu.
+ * stranice. Zato ga `vratiFokus` (u `faculty-conflict-notice.ts`) vraca na smislen element: iz
+ * vidljivog reda na gumb "Analiziraj dokument" (sljedeci korak, stalan cvor koji se ne crta ponovo
+ * kao kartica profila), a iz znacke u listu profila na izbornik fakulteta, da fokus ostane u modalu.
  *
  * ZASTO ZASEBAN MODUL: `app.ts` ima ratchet velicine (`tests/ui-module-budget.test.ts`), pa u
  * njemu ostaju samo kuke: straza `detekcijaSmije` u `applyDetectedContext`, `skrijNapomenu` u
  * `setFile` i `applyFacultyIds` (postavi obrazac i spusti `_profileConfirmed`). Brava, stanje,
- * vezanje za dokument i tekst znacke zive ovdje.
+ * vezanje za dokument i odluka o napomeni zive ovdje.
+ *
+ * IZGRADNJA NAPOMENE JE LIJENA (bundle-guard "rad" u `vite.config.ts`, budzet 960 KB). Tekst
+ * (`napomenaDrugiFakultet`), DOM na oba mjesta i oba gumba sada zive u
+ * `src/ui/faculty-conflict-notice.ts`, ucitanom DINAMICKI (`await import(...)`) tek kad
+ * `detekcijaSmije` stvarno nade sukob bez postojece odluke (`ucitajNapomenu`). Ovaj modul u
+ * statickom grafu ostaje mala provjera; nema `findUnit` niti izgradnje DOM-a napomene.
+ *
+ * UTRKA UCITAVANJA: `ucitajNapomenu` snima brojac `generacija` i prateci dokument PRIJE `await`-a,
+ * pa zamjena dokumenta ili nova/pala brava dok se modul jos ucitavao (obje mijenjaju `generacija`
+ * kroz `zaboraviIzbor`) ostavlja rezultat uvoza da se jednostavno ne primijeni: zastarjela
+ * napomena se ne crta (test u `tests/intake-live.test.ts`, "utrka ucitavanja").
  *
  * VRIJEDI ZA PRVI PRIHVACENI DOKUMENT SESIJE, istim pravilom kao potvrdjen profil sesije (C4,
  * `profile-confirmed-events.ts`): drugi dokument u istoj kartici je drugi rad, pa brava pada.
@@ -71,7 +82,6 @@
  * dira odluku, jer je vec dosljedna. Bez rucne potvrde odluka ostaje netaknuta i "Prebaci" se pri
  * ponovnom otvaranju ponovi kao i prije ovog popravka.
  */
-import { findUnit } from '../catalog/catalog-loader';
 import { subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
 import { subscribeProfileConfirmed } from './profile-confirmed-events';
 
@@ -92,19 +102,14 @@ let datoteka: File | null = null;
 /** Odluka za rad pod ovom bravom; vrijedi dok vrijedi brava. */
 let odluka: OdlukaNapomene | null = null;
 let pamcenje: PamcenjeOdluke | null = null;
+/** Raste na svaku promjenu brave ili odluke; `ucitajNapomenu` njime otkriva zastarjeli uvoz. */
+let generacija = 0;
+/** Uvoz `faculty-conflict-notice.ts` u tijeku, ako postoji; `cekajNapomenuTest` ga cita u testu. */
+let ucitavanjeNapomene: Promise<void> | null = null;
 
-/** Id vidljivog reda napomene na `/rad/` (izvan `#profileSheet`, u `.analyze-row`). */
+/** Id vidljivog reda napomene na `/rad/` (izvan `#profileSheet`, u `.analyze-row`); vidi i istoimenu
+ *  konstantu u `faculty-conflict-notice.ts` (namjerno dvije kopije, ne uvoz radi lijenog grafa). */
 const NAPOMENA_FAKULTETA_ID = 'facultyConflict';
-
-/** Puni naziv jedinice iz kataloga; nepoznat id (ne bi se trebao dogoditi) vraca sam id. */
-function nazivJedinice(unitId: string): string {
-  return findUnit(unitId)?.name ?? unitId;
-}
-
-/** Tekst znacke kad dokument pokazuje drugi fakultet od potvrdjenog. */
-export function napomenaDrugiFakultet(prepoznatoId: string, potvrdjenoId: string): string {
-  return `Dokument izgleda kao rad koji pripada fakultetu ${nazivJedinice(prepoznatoId)}. Na ulazu je potvrđen ${nazivJedinice(potvrdjenoId)}.`;
-}
 
 /**
  * Skriva napomenu na oba mjesta: znacku u listu profila i vidljivi red. Zove je i `setFile` u
@@ -118,16 +123,22 @@ export function skrijNapomenu(doc: Document = document): void {
   doc.getElementById(NAPOMENA_FAKULTETA_ID)?.replaceChildren();
 }
 
-/** Nova brava ili pad brave: odluka pripadala je staroj, pa se zaboravlja, a napomena gasi. */
+/**
+ * Nova brava ili pad brave: odluka pripadala je staroj, pa se zaboravlja, a napomena gasi.
+ * Diže `generacija`, pa uvoz `faculty-conflict-notice.ts` pokrenut PRIJE ove promjene (za stari
+ * prepoznati fakultet) po povratku vidi da je zastario i ne crta nista (utrka ucitavanja).
+ */
 function zaboraviIzbor(): void {
   odluka = null;
   pamcenje = null;
+  generacija += 1;
   if (typeof document !== 'undefined') skrijNapomenu(document);
 }
 
 /** Odluka ide u memoriju i, kad sesija postoji, u pamcenje; kvar pohrane ne rusi klik. */
 function zapamti(nova: OdlukaNapomene): void {
   odluka = nova;
+  generacija += 1;
   try { pamcenje?.zapisi(nova); } catch { /* pohrana nedostupna: vrijedi barem do ponovnog ucitavanja */ }
 }
 
@@ -221,77 +232,43 @@ function zadrziPotvrdjeno(prepoznato: string, doc: Document): void {
   skrijNapomenu(doc);
 }
 
-/** Mjesto napomene: znacka u listu profila (`#detectBadge`) ili vidljivi red (`#facultyConflict`). */
-type MjestoNapomene = 'list' | 'red';
-
 /**
- * Kamo ide fokus kad se napomena zatvori. Iz lista: izbornik fakulteta (fokus ostaje u modalu).
- * Iz vidljivog reda: "Analiziraj dokument" dok je omogucen (uz sukob je rad vec ucitan), inace
- * prvi omoguceni gumb kartice profila. `null` samo kad na stranici nema nicega od toga.
+ * Ucitava `faculty-conflict-notice.ts` DINAMICKI i, ako odluka za `prepoznato` jos vrijedi (nista
+ * se u medjuvremenu nije promijenilo, provjereno preko `generacija` i identiteta brave/datoteke),
+ * trazi od njega da nacrta napomenu na oba mjesta. Klik na gumbe zove `prebaciNaPrepoznato`
+ * odnosno `zadrziPotvrdjeno` (ovdje, ne u lijenom modulu): odluka i brava su izvor istine ovog
+ * modula, lijeni modul samo crta i vraca fokus.
+ *
+ * Pad modula (npr. mrezna greska pri dinamickom uvozu) ne rusi tok: napomena se jednostavno ne
+ * pokaze, a `detekcijaSmije` je vec vratio `false` (detekcija ne primjenjuje prepoznati fakultet).
  */
-function ciljFokusa(mjesto: MjestoNapomene, doc: Document): HTMLElement | null {
-  if (mjesto === 'list') {
-    const izbornik = doc.getElementById('unitSelect');
-    if (izbornik) return izbornik;
-  }
-  const analiziraj = doc.getElementById('analyzeBtn') as HTMLButtonElement | null;
-  if (analiziraj && !analiziraj.disabled) return analiziraj;
-  return doc.getElementById('analyzeProfile')?.querySelector<HTMLElement>('button:not([disabled])') ?? null;
+function ucitajNapomenu(prepoznato: string, potvrdjeno: string, doc: Document, naPrebaci?: () => void): void {
+  const ocekivanaGeneracija = generacija;
+  const ocekivanaDatoteka = datoteka;
+  ucitavanjeNapomene = import('./faculty-conflict-notice')
+    .then((modul) => {
+      if (generacija !== ocekivanaGeneracija || jedinica !== potvrdjeno || datoteka !== ocekivanaDatoteka) return;
+      if (odluka?.prepoznato === prepoznato) return; // odluka za TAJ prepoznati fakultet je stigla dok se modul ucitavao
+      modul.prikaziNapomenu({
+        prepoznato, potvrdjeno, doc,
+        prebaci: () => prebaciNaPrepoznato(prepoznato, doc, naPrebaci),
+        zadrzi: () => zadrziPotvrdjeno(prepoznato, doc),
+      });
+    })
+    .catch(() => { /* modul se nije ucitao: napomena se jednostavno ne prikazuje */ });
 }
 
-/**
- * Nakon zatvaranja napomene: ako je fokus bio na zatvorenom gumbu (ili je vec pao na `<body>`, ili
- * stoji na odspojenom cvoru), premjesta ga na `ciljFokusa`. Fokus koji je u medjuvremenu otisao
- * drugamo se ne otima.
- */
-function vratiFokus(gumb: HTMLElement, mjesto: MjestoNapomene, doc: Document): void {
-  const aktivan = doc.activeElement;
-  const izgubljen = !aktivan || aktivan === doc.body || aktivan === gumb || !aktivan.isConnected;
-  if (izgubljen) ciljFokusa(mjesto, doc)?.focus();
-}
-
-/** Oba gumba napomene; svako mjesto dobiva vlastiti par (cvor ne moze stajati na dva mjesta). */
-function gumbiNapomene(
-  prepoznato: string, potvrdjeno: string, mjesto: MjestoNapomene, doc: Document, naPrebaci?: () => void,
-): HTMLButtonElement[] {
-  const prebaci = doc.createElement('button');
-  prebaci.type = 'button';
-  prebaci.className = 'btn btn-ghost btn-sm';
-  prebaci.textContent = `Prebaci na ${nazivJedinice(prepoznato)}`;
-  prebaci.addEventListener('click', () => { prebaciNaPrepoznato(prepoznato, doc, naPrebaci); vratiFokus(prebaci, mjesto, doc); });
-  const zadrzi = doc.createElement('button');
-  zadrzi.type = 'button';
-  zadrzi.className = 'btn btn-ghost btn-sm';
-  zadrzi.textContent = `Zadrži ${nazivJedinice(potvrdjeno)}`;
-  zadrzi.addEventListener('click', () => { zadrziPotvrdjeno(prepoznato, doc); vratiFokus(zadrzi, mjesto, doc); });
-  return [prebaci, zadrzi];
-}
-
-/**
- * Vidljivi red napomene (`#facultyConflict`): oznaka s tockom (Z3), recenica i oba gumba.
- * Sadrzaj se mijenja UNUTAR reda koji je vec `role="status"`, pa ga citac procita; fokus pri
- * pojavi ostaje gdje jest (nema `focus()` ni `scrollIntoView`), a pri zatvaranju ga vraca `vratiFokus`.
- */
-function nacrtajVidljivuNapomenu(
-  red: HTMLElement, prepoznato: string, potvrdjeno: string, doc: Document, naPrebaci?: () => void,
-): void {
-  const oznaka = doc.createElement('span');
-  oznaka.className = 'fc-oznaka';
-  oznaka.textContent = 'Drugi fakultet u dokumentu';
-  const tekst = doc.createElement('p');
-  tekst.className = 'fc-tekst';
-  tekst.textContent = napomenaDrugiFakultet(prepoznato, potvrdjeno);
-  const akcije = doc.createElement('div');
-  akcije.className = 'fc-akcije';
-  akcije.append(...gumbiNapomene(prepoznato, potvrdjeno, 'red', doc, naPrebaci));
-  red.replaceChildren(oznaka, tekst, akcije);
+/** SAMO ZA TESTOVE (`tests/intake-live.test.ts`): ceka dinamicki uvoz napomene, ako je u tijeku. */
+export function cekajNapomenuTest(): Promise<void> {
+  return ucitavanjeNapomene ?? Promise.resolve();
 }
 
 /**
  * Smije li detekcija iz dokumenta primijeniti prepoznati fakultet. Kad ne smije (fakultet je
- * potvrdjen, a dokument pokazuje drugi), napomena imenuje prepoznati fakultet i nudi jednim
- * klikom prebacivanje na njega (`naPrebaci`) ili zadrzavanje potvrdjenog, i to na dva mjesta: u
- * znacki lista profila i u vidljivom redu `#facultyConflict`; vraca `false`.
+ * potvrdjen, a dokument pokazuje drugi), napomena (ucitana lijeno, `ucitajNapomenu`) imenuje
+ * prepoznati fakultet i nudi jednim klikom prebacivanje na njega (`naPrebaci`) ili zadrzavanje
+ * potvrdjenog, i to na dva mjesta: u znacki lista profila i u vidljivom redu `#facultyConflict`;
+ * vraca `false` ODMAH, prije nego se napomena stigne nacrtati.
  *
  * Odluka za ovaj rad (iz memorije ili iz sesije) se postuje bez napomene: "Zadrži" za taj
  * prepoznati fakultet vraca `false`, a "Prebaci" na njega ponovi prebacivanje (brava na prepoznati,
@@ -307,18 +284,7 @@ export function detekcijaSmije(prepoznato: string, naPrebaci?: () => void, doc: 
     return false;
   }
   const potvrdjeno = jedinica;
-  const znacka = doc.getElementById('detectBadge');
-  if (znacka) {
-    const ikona = doc.createElement('i');
-    ikona.setAttribute('data-lucide', 'info');
-    const tekst = doc.createElement('span');
-    tekst.textContent = ` ${napomenaDrugiFakultet(prepoznato, potvrdjeno)} `;
-    znacka.replaceChildren(ikona, tekst, ...gumbiNapomene(prepoznato, potvrdjeno, 'list', doc, naPrebaci));
-    znacka.classList.remove('hidden');
-    doc.defaultView?.__lektaIcons?.();
-  }
-  const red = doc.getElementById(NAPOMENA_FAKULTETA_ID);
-  if (red) nacrtajVidljivuNapomenu(red, prepoznato, potvrdjeno, doc, naPrebaci);
+  ucitajNapomenu(prepoznato, potvrdjeno, doc, naPrebaci);
   return false;
 }
 
