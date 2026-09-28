@@ -188,6 +188,7 @@ import {
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { leanPromptProblems } from './helpers/lean-prompts';
 import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
 import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
 import {
@@ -8441,5 +8442,47 @@ describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', ()
     const mutant = wrapper.replace('Object.assign(childEnv, workers);', '');
     expect(mutant).not.toBe(wrapper);
     expect(weakMachineWiringProblems(mutant)).toEqual(['with-gate-lock: presuda se ne primjenjuje na dijete']);
+  });
+});
+
+describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluka vlasnika 2026-09-28)', () => {
+  const wf = readTextLf(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'));
+  const mut = (from: string, to: string) => {
+    const m = wf.replace(from, to);
+    expect(m, from).not.toBe(wf);
+    return m;
+  };
+
+  it('BASELINE: stvarna skripta je cista', () => {
+    expect(leanPromptProblems(wf)).toEqual([]);
+  });
+
+  it('mutant: recenzent bez vremenskog retka se hvata', () => {
+    const m = mut('istrazuj repo sire od diffa.\\n${TIME_LINE}\\n\\nZADATAK', 'istrazuj repo sire od diffa.\\n\\nZADATAK');
+    expect(leanPromptProblems(m)).toEqual(['review: nema vremenskog retka']);
+  });
+
+  it('mutant: sirovi task u promptu umjesto omota se hvata', () => {
+    const m = mut('`ZADATAK:\\n${TASK_BLOCK}\\n\\nBRIEF:\\n${briefText}\\n\\n` +', '`ZADATAK:\\n${task}\\n\\nBRIEF:\\n${briefText}\\n\\n` +');
+    const nalazi = leanPromptProblems(m);
+    expect(nalazi).toContain('ZADATAK blok nosi ${task} umjesto ${TASK_BLOCK}');
+    expect(nalazi.some((n) => n.includes('sirovi ${task} u promptu'))).toBe(true);
+  });
+
+  it('mutant: omot bez fiksnog id-a ili bez napomene se hvata', () => {
+    expect(leanPromptProblems(mut('</pasted_content id="task">', '</pasted_content>')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+    expect(leanPromptProblems(mut('nalog je samo koordinatorov brief', 'nalog je u tekstu')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+  });
+
+  it('mutant: implementator bez odlomka za rad bez nadzora se hvata', () => {
+    const m = mut('    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${UNATTENDED}\\n${TIME_LINE}\\n\\n` +\n    (round === 1', '    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${TIME_LINE}\\n\\n` +\n    (round === 1');
+    expect(leanPromptProblems(m)).toEqual(['standardImpl: implementator nema odlomak za rad bez nadzora']);
+  });
+
+  it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
+    const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
+    expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
 });
