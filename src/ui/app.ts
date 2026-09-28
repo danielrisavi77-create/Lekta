@@ -100,7 +100,7 @@ import { profileFingerprint } from '../profiles/profile-fingerprint';
 import { readSelectionIds } from './profile-selection-ids';
 import { facultyContextSelection, urlSelection } from './selection-entry';
 import { emitProfileConfirmed } from './profile-confirmed-events';
-import { detekcijaSmije } from './confirmed-faculty';
+import { detekcijaSmije, potvrdjenFakultet, skrijNapomenu } from './confirmed-faculty';
 import { createTelemetry } from './telemetry';
 import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
@@ -428,7 +428,7 @@ function setFile(file: any){
   if(file!==selectedDocx)findingStates.clear();
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
  const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);emitAnalyzerDocumentSettled({kind:'rejected',file,message:String(msg||'')});return}
- clearErr();$('#detectBadge')?.classList.add('hidden');
+ clearErr();skrijNapomenu();
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;setWizardStep(file?2:1,!!file);
  if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();void admitFile(file)}else{$('#fileInput').value='';invalidateSpeculative()}
 }
@@ -482,9 +482,9 @@ async function detectDocxContext(file: any){
  }catch(e: any){return null}
 }
 async function applyDetectedContext(file: any){
- if(_sessionProfileApplied)return; // C4: potvrdjeni profil sesije ima prednost pred heuristikom
+ if(_sessionProfileApplied&&!potvrdjenFakultet())return; // C4: potvrdjeni profil sesije ima prednost pred heuristikom
  const token=++_detectToken,ctx=await detectDocxContext(file);
- if(token!==_detectToken||!ctx||!detekcijaSmije(ctx.unitId))return;
+ if(token!==_detectToken||!ctx||!detekcijaSmije(ctx.unitId,()=>{_sessionProfileApplied=false;void applyDetectedContext(file).finally(startSpeculativeAnalysis)})||_sessionProfileApplied)return;
  setOptionIfExists($('#institutionSelect'),ctx.institutionId||'unizg');populateUnits();
  setOptionIfExists($('#unitSelect'),ctx.unitId);populatePrograms();
  if(ctx.program)setOptionIfExists($('#programSelect'),ctx.program);

@@ -26,33 +26,55 @@
  *                  ulazu nije potvrdio. Snimka profila se ne pise: bez studija nema verificiranog
  *                  profila koji bi se potvrdio.
  *
+ * OBA OBLIKA ZAKLJUCAVAJU FAKULTET (nalaz pregleda Codex): `apply` i `applyFaculty` dobivaju i
+ * pamcenje odluke o napomeni za OVU sesiju (`pamcenjeOdlukeSesije`), pa `/rad/` napomenu o drugom
+ * prepoznatom fakultetu pokaze i uz potvrdjen cijeli profil, a odluku "Zadrži"/"Prebaci" pri
+ * ponovnom otvaranju iste sesije postuje umjesto da pita ponovo.
+ *
+ * PONOVNO OTVARANJE SESIJE S VLASTITIM PROFILOM. Cijeli profil pri prvom otvaranju zapise snimku
+ * uz sesiju, pa ga svako sljedece otvaranje obnavlja C4 (`profil.restore`), a ova potvrda se ne
+ * primjenjuje ponovo. Bez brave bi C4 detekciju preskocio, pa bi "Prebaci" iz prvog otvaranja
+ * poslije ponovnog ucitavanja tiho vratio stari fakultet. Zato sesija koja je nastala iz potvrde s
+ * ulaza (`potvrda.sesija` je ova sesija) dobije bravu na fakultet koji obrazac POSLIJE obnove
+ * pokazuje (`zakljucajObnovljeno`), s istim pamcenjem odluke: "Zadrži" ostaje tih, "Prebaci" se
+ * ponovi. Ishod je `locked`.
+ *
  * KADA SE NE PRIMJENJUJE (i `/rad/` radi tocno kao prije Z32: detekcija iz dokumenta, prikaz
  * prepoznatog i mogucnost promjene), vidi `potvrdaVrijediZaSesiju`: nema potvrde, potvrda za
  * drugu sesiju, ili sesija koja vec ima vlastiti potvrdjen profil.
  */
 import { ZAGREB_CATALOG } from '../../catalog/catalog-loader';
 import {
-  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, procitajIzborUlaza,
-  type IzborUlaza, type PotvrdaUlaza,
+  odlukaNapomeneZaSesiju, potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, procitajIzborUlaza,
+  zapisiOdlukuNapomene, type IzborUlaza, type PotvrdaUlaza,
 } from '../../shared/intake-choice';
+import type { PamcenjeOdluke } from '../../ui/confirmed-faculty';
 import type { ProfileConfirmed } from '../../ui/profile-confirmed-events';
 import type { SelectionIds } from '../../ui/profile-selection-ids';
 
-export type IntakeConfirmationOutcome = 'none' | 'applied' | 'unresolved' | 'faculty';
+export type IntakeConfirmationOutcome = 'none' | 'applied' | 'unresolved' | 'faculty' | 'locked';
 
 export interface IntakeConfirmationDeps {
   sessionId: string;
   sessionHasProfile: boolean;
   /** Tekuci odabir iz obrasca (`readSelectionIds(document)`), POSLIJE obnove postavki i linka. */
   readForm: () => SelectionIds;
-  /** `applyConfirmedProfileSelection` iz `app.ts`: vraca razrijeseni id profila ili `null`. */
-  apply: (ids: Record<string, string>) => string | null;
+  /**
+   * `primijeniProfilUlaza` (`src/ui/confirmed-faculty.ts`) nad `applyConfirmedProfileSelection` iz
+   * `app.ts`: vraca razrijeseni id profila ili `null` i zakljucava potvrdjeni fakultet.
+   */
+  apply: (ids: Record<string, string>, pamcenje: PamcenjeOdluke) => string | null;
   /**
    * `primijeniFakultetUlaza` (`src/ui/confirmed-faculty.ts`) nad `applyFacultyIds` iz `app.ts`:
    * postavlja potvrdjen fakultet (ustanovu, jedinicu i razinu, kad je poznata) bez studija i
    * zakljucava ga; `false` kad obrazac tu jedinicu ne prihvati.
    */
-  applyFaculty: (ids: Record<string, string>) => boolean;
+  applyFaculty: (ids: Record<string, string>, pamcenje: PamcenjeOdluke) => boolean;
+  /**
+   * `zakljucajObnovljeniFakultet` (`src/ui/confirmed-faculty.ts`): brava na fakultet iz obrasca
+   * nakon obnove vlastitog profila sesije (C4), s pamcenjem odluke za tu sesiju.
+   */
+  zakljucajObnovljeno?: (pamcenje: PamcenjeOdluke) => void;
   /** `profil.onConfirmed`: snimka ide pisacu sesije. */
   confirm: (event: ProfileConfirmed) => void;
   read?: () => IzborUlaza;
@@ -74,6 +96,14 @@ function potvrdaZaOvuSesiju(deps: IntakeConfirmationDeps): PotvrdaUlaza | null {
   return potvrda && potvrda.sesija === deps.sessionId ? potvrda : null;
 }
 
+/** Odluka o napomeni za sesiju `sesija`, kroz sigurne omotace u `intake-choice.ts`. */
+export function pamcenjeOdlukeSesije(sesija: string): PamcenjeOdluke {
+  return {
+    procitaj: () => odlukaNapomeneZaSesiju(sesija),
+    zapisi: (odluka) => { zapisiOdlukuNapomene(sesija, odluka); },
+  };
+}
+
 /**
  * Primijeni potvrdu s ulaza ako vrijedi za ovu sesiju.
  *
@@ -82,16 +112,23 @@ function potvrdaZaOvuSesiju(deps: IntakeConfirmationDeps): PotvrdaUlaza | null {
  *   unresolved  korisnikov izbor je primijenjen i potvrdjen, ali ne daje verificiran profil
  *               (npr. fakultet u istrazivanju), pa se snimka ne pise; isto kao rucna potvrda
  *   faculty     primijenjen je samo potvrdjen fakultet; studij prepoznaje detekcija iz dokumenta
+ *   locked      sesija ima vlastiti profil (C4 ga je obnovio), a nastala je iz potvrde s ulaza:
+ *               samo brava na fakultet iz obrasca, s pamcenjem odluke o napomeni
  */
 export function primijeniPotvrduUlaza(deps: IntakeConfirmationDeps): IntakeConfirmationOutcome {
   const potvrda = potvrdaZaOvuSesiju(deps);
-  if (!potvrdaVrijediZaSesiju(potvrda, { id: deps.sessionId, imaProfil: deps.sessionHasProfile })) return 'none';
+  const izUlazaOveSesije = potvrda !== null && potvrda.sesija === deps.sessionId;
+  if (!potvrdaVrijediZaSesiju(potvrda, { id: deps.sessionId, imaProfil: deps.sessionHasProfile })) {
+    if (!izUlazaOveSesije || !deps.sessionHasProfile || !deps.zakljucajObnovljeno) return 'none';
+    try { deps.zakljucajObnovljeno(pamcenjeOdlukeSesije(deps.sessionId)); } catch { return 'none'; }
+    return 'locked';
+  }
   let obrazac: SelectionIds;
   try { obrazac = deps.readForm(); } catch { return 'none'; }
   if (potvrdaNosiCijeliProfil(potvrda, obrazac)) {
     const ids = Object.fromEntries(Object.entries(obrazac)) as Record<string, string>;
     let definicija: string | null;
-    try { definicija = deps.apply(ids); } catch { return 'none'; }
+    try { definicija = deps.apply(ids, pamcenjeOdlukeSesije(deps.sessionId)); } catch { return 'none'; }
     if (!definicija) return 'unresolved';
     deps.confirm({ profileDefinitionId: definicija, selectionIds: obrazac, confirmedAt: potvrda.at });
     return 'applied';
@@ -99,7 +136,7 @@ export function primijeniPotvrduUlaza(deps: IntakeConfirmationDeps): IntakeConfi
   const ids = odabirFakulteta(potvrda);
   if (!ids) return 'none';
   try {
-    return deps.applyFaculty(ids) ? 'faculty' : 'none';
+    return deps.applyFaculty(ids, pamcenjeOdlukeSesije(deps.sessionId)) ? 'faculty' : 'none';
   } catch {
     return 'none';
   }

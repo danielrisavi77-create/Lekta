@@ -187,6 +187,17 @@ export function ispustanjeProblemi(kontrolerIzvor: string, liveIzvor: string): s
  *
  * Nalaz pregleda Z32: brava je prije zivjela u `app.ts`, koji je time prerastao ratchet velicine,
  * pa je presla u `confirmed-faculty.ts`; gard zato cita tri izvora umjesto jednog.
+ *
+ * Nalazi pregleda Codex (Z32, "Da, sama"), svaki kao zaseban problem:
+ *   - potvrdjen CIJELI profil mora kroz `primijeniProfilUlaza` (brava), a rani povratak C4 u
+ *     `applyDetectedContext` smije preskociti detekciju samo BEZ brave
+ *     (`_sessionProfileApplied&&!potvrdjenFakultet()`), inace napomena nikad ne nastane;
+ *   - C4 i dalje vrijedi: detekcija koja smije ne dira potvrdjeni profil sesije
+ *     (`||_sessionProfileApplied)return;` iza `detekcijaSmije`);
+ *   - `setFile` gasi napomenu (`skrijNapomenu()`), pa zamjena dokumenta ne ostavlja napomenu o
+ *     starom radu;
+ *   - ponovno otvaranje sesije s vlastitim profilom (C4) koja je nastala iz potvrde s ulaza dobije
+ *     bravu (`zakljucajObnovljeno`), inace "Prebaci" iz prvog otvaranja tiho nestane.
  */
 export function detekcijaFakultetaProblemi(appIzvor: string, fakultetIzvor: string, workspaceMain: string): string[] {
   const problemi: string[] = [];
@@ -205,16 +216,29 @@ export function detekcijaFakultetaProblemi(appIzvor: string, fakultetIzvor: stri
     else if (obrazac < 0 || obrazac > brava) problemi.push('brava se postavlja prije nego obrazac prihvati fakultet');
   }
   const main = workspaceMain.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^[ \t]*\/\/.*$/gm, ' ');
-  if (!/applyFaculty:\s*\(ids\)\s*=>\s*primijeniFakultetUlaza\(ids,\s*applyFacultyIds\)/.test(main)) {
+  if (!/applyFaculty:\s*\(ids,\s*pamcenje\)\s*=>\s*primijeniFakultetUlaza\(ids,\s*applyFacultyIds,\s*pamcenje\)/.test(main)) {
     problemi.push('/rad/ primjenjuje fakultet s ulaza bez brave');
   }
+  if (!/apply:\s*\(ids,\s*pamcenje\)\s*=>\s*primijeniProfilUlaza\(ids,\s*applyConfirmedProfileSelection,\s*pamcenje\)/.test(main)) {
+    problemi.push('/rad/ primjenjuje cijeli profil s ulaza bez brave');
+  }
+  if (!/zakljucajObnovljeno:\s*\(pamcenje\)\s*=>\s*\{\s*zakljucajObnovljeniFakultet\(pamcenje\);\s*\}/.test(main)) {
+    problemi.push('/rad/ obnavlja profil sesije s ulaza bez brave');
+  }
+  const odDatoteke = cist.indexOf('function setFile(');
+  const tijeloDatoteke = odDatoteke < 0 ? '' : cist.slice(odDatoteke, cist.indexOf('\n}', odDatoteke));
+  if (!/[;{\s]skrijNapomenu\(\);/.test(tijeloDatoteke)) problemi.push('zamjena dokumenta ostavlja napomenu o starom radu');
   const pocetak = cist.indexOf('async function applyDetectedContext(');
   if (pocetak < 0) return [...problemi, 'app.ts nema applyDetectedContext'];
   const tijelo = cist.slice(pocetak, cist.indexOf('\n}', pocetak));
-  const straza = tijelo.search(/\|\|!detekcijaSmije\(ctx\.unitId\)\)return;/);
+  const straza = tijelo.search(/\|\|!detekcijaSmije\(ctx\.unitId[,)]/);
   const izbornik = tijelo.indexOf("setOptionIfExists($('#unitSelect')");
   if (straza < 0) problemi.push('detekcija ne postuje fakultet potvrdjen na ulazu');
   else if (izbornik >= 0 && straza > izbornik) problemi.push('detekcija dira izbornik fakulteta prije provjere potvrde');
+  const rani = /^\s*if\(_sessionProfileApplied(.*?)\)return;/m.exec(tijelo);
+  if (rani && !/^&&!potvrdjenFakultet\(\)$/.test(rani[1])) problemi.push('potvrdjen profil sesije preskace provjeru potvrdjenog fakulteta');
+  const c4 = tijelo.search(/\|\|_sessionProfileApplied\)return;/);
+  if (c4 < 0 || (izbornik >= 0 && c4 > izbornik)) problemi.push('detekcija gazi potvrdjen profil sesije (C4)');
   return problemi;
 }
 

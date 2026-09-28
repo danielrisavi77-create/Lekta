@@ -1,11 +1,20 @@
 /**
- * FAKULTET POTVRDJEN NA ULAZU, BEZ STUDIJA (Z32 popravak, odluka vlasnika 2026-09-27).
+ * FAKULTET POTVRDJEN NA ULAZU (Z32 popravak, odluka vlasnika 2026-09-27).
  *
  * Student na `/` smije potvrditi fakultet koji mu je ponudjen (zapamcene postavke ili `?unit=`
- * link), a da studij nije potvrdio. `/rad/` tada fakultet postavi i NE PITA PONOVO: detekcija iz
- * dokumenta (`applyDetectedContext` u `app.ts`) ga ne smije promijeniti. Studij i dalje prepoznaje
- * ona, jer ga student nije potvrdio; kad dokument pokazuje drugi fakultet, studij se ne pogadja
- * nego znacka to kaze, a kartica profila ostaje nesigurna (`renderAnalyzeSummary`).
+ * link), sa studijem ili bez njega. `/rad/` tada fakultet postavi i NE PITA PONOVO: detekcija iz
+ * dokumenta (`applyDetectedContext` u `app.ts`) ga ne smije promijeniti. Bez studija studij i
+ * dalje prepoznaje ona, jer ga student nije potvrdio; kad dokument pokazuje drugi fakultet,
+ * studij se ne pogadja nego znacka to kaze, a kartica profila ostaje nesigurna
+ * (`renderAnalyzeSummary`).
+ *
+ * DVA ULAZA U BRAVU. `primijeniFakultetUlaza` (samo fakultet, `applyFacultyIds`) i
+ * `primijeniProfilUlaza` (cijeli profil, `applyConfirmedProfileSelection`, put C4). NALAZ PREGLEDA
+ * (Codex, blocker): cijeli profil prije nije postavljao bravu, a C4 je detekciju preskakao PRIJE
+ * nego je napomena mogla nastati, pa student koji je potvrdio FER · Računarstvo i ubacio rad
+ * FPZG-a napomenu nije vidio. Sada oba puta zakljucaju fakultet, a `app.ts` preskace detekciju
+ * samo kad brave nema (`_sessionProfileApplied&&!potvrdjenFakultet()`); isti fakultet u dokumentu
+ * i dalje ne dira potvrdjeni profil (C4).
  *
  * NALAZ PREGLEDA Z32: znacka je do sada tvrdila da studij "nisam prepoznao", a stvarno stanje je
  * suprotno - detekcija JE prepoznala fakultet, samo drugi od potvrdjenog. Znacka sada IMENUJE taj
@@ -17,9 +26,22 @@
  * unutar lista `#profileSheet`, koji se u toku s ulaza ne otvara, pa student napomenu nije vidio.
  * Isti tekst i ista dva gumba zato se crtaju i u `#facultyConflict`, vidljivi red uz karticu
  * profila na `/rad/` (`.analyze-row`), izvan svakog modala. Red je `role="status"`: citac ga
- * procita uljudno, a fokus se pri POJAVI ne dira. "Zadrzi" zatvara napomenu i PAMTI izbor dok
- * vrijedi brava: ista detekcija za isti rad je vise ne vraca. Pamti se u memoriji modula, ne u
- * pohrani.
+ * procita uljudno, a fokus se pri POJAVI ne dira.
+ *
+ * "PREBACI" PRIMIJENI DETEKCIJU, NE MIJENJA OBRAZAC (nalaz pregleda Codex, major). Prva izvedba je
+ * izbornicima slala `change`, a `app.ts` na svaki `change` izbornika profila oznaci CIJELI profil
+ * potvrdjenim; izmjereno na `lo-fpzg-zavrsni-uskladjen.docx` (prijediplomski Politologija): kartica
+ * je poslije "Prebaci" tvrdila "Pravila potvrđena · Diplomski studij Novinarstvo". Sada "Prebaci"
+ * premjesti bravu i pozove `naPrebaci` iz `app.ts`, koji primijeni prepoznati kontekst istim putem
+ * kao da brave nije bilo (studij i razina iz dokumenta, `_profileConfirmed` po
+ * `isConfidentDetection`). Bez `naPrebaci` se mijenja samo brava.
+ *
+ * ODLUKA SE PAMTI UZ SESIJU (nalaz pregleda Codex, major). "Zadrži" i "Prebaci" su odluke o OVOM
+ * radu, pa ponovno otvaranje iste sesije (`/rad/#session=...`) napomenu ne smije vratiti. Pamcenje
+ * (`PamcenjeOdluke`) daje `intake-confirmation.ts` nad mapom po sesiji u
+ * `src/shared/intake-choice.ts`, istim mehanizmom kao rok i potvrda; ovaj modul ga ne uvozi, jer
+ * je u statickom grafu `app.ts`, a `intake-choice` se na `/rad/` ucitava lijeno (bundle-guard).
+ * Bez pamcenja (brava bez sesije) odluka zivi samo u memoriji modula.
  *
  * FOKUS PRI ZATVARANJU (nalaz pregleda, WCAG 2.4.3): gumb koji zatvara napomenu nestaje s njom
  * (red se prazni, znacka skriva), pa bi fokus pao na `<body>` i sljedeci Tab krenuo s vrha
@@ -28,22 +50,35 @@
  * a iz znacke u listu profila na izbornik fakulteta, da fokus ostane u modalu.
  *
  * ZASTO ZASEBAN MODUL: `app.ts` ima ratchet velicine (`tests/ui-module-budget.test.ts`), pa u
- * njemu ostaju samo dvije kuke: straza `detekcijaSmije` u `applyDetectedContext` i
- * `applyFacultyIds` (postavi obrazac i spusti `_profileConfirmed`). Brava, stanje, vezanje za
- * dokument i tekst znacke zive ovdje. Nalaz pregleda Z32: prva izvedba je i bravu postavljala u
- * `app.ts` (`applyConfirmedFacultySelection`), pa je datoteka prerasla budzet; brava je zato
- * presla u `primijeniFakultetUlaza`, a `app.ts` daje samo ono sto jedino on moze.
+ * njemu ostaju samo kuke: straza `detekcijaSmije` u `applyDetectedContext`, `skrijNapomenu` u
+ * `setFile` i `applyFacultyIds` (postavi obrazac i spusti `_profileConfirmed`). Brava, stanje,
+ * vezanje za dokument i tekst znacke zive ovdje.
  *
  * VRIJEDI ZA PRVI PRIHVACENI DOKUMENT SESIJE, istim pravilom kao potvrdjen profil sesije (C4,
  * `profile-confirmed-events.ts`): drugi dokument u istoj kartici je drugi rad, pa brava pada.
+ * "Prebaci" pracenje dokumenta NE resetira (nalaz pregleda Codex, major): prebaceni fakultet
+ * vrijedi za isti rad, a drugi rad ga otpusta kao i potvrdjeni.
  */
-import { ZAGREB_CATALOG, findUnit } from '../catalog/catalog-loader';
+import { findUnit } from '../catalog/catalog-loader';
 import { subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
+
+/** Odluka studenta o napomeni za JEDAN rad: zadrzao je potvrdjeni ili prebacio na prepoznati. */
+export interface OdlukaNapomene {
+  odluka: 'zadrzi' | 'prebaci';
+  prepoznato: string;
+}
+
+/** Trajno pamcenje odluke za jednu sesiju (`pamcenjeOdlukeSesije` u `intake-confirmation.ts`). */
+export interface PamcenjeOdluke {
+  procitaj: () => OdlukaNapomene | null;
+  zapisi: (odluka: OdlukaNapomene) => void;
+}
 
 let jedinica: string | null = null;
 let datoteka: File | null = null;
-/** Prepoznati fakultet za koji je student rekao "Zadrzi"; vrijedi dok vrijedi ista brava. */
-let zadrzanoProtiv: string | null = null;
+/** Odluka za rad pod ovom bravom; vrijedi dok vrijedi brava. */
+let odluka: OdlukaNapomene | null = null;
+let pamcenje: PamcenjeOdluke | null = null;
 
 /** Id vidljivog reda napomene na `/rad/` (izvan `#profileSheet`, u `.analyze-row`). */
 export const NAPOMENA_FAKULTETA_ID = 'facultyConflict';
@@ -53,40 +88,58 @@ function nazivJedinice(unitId: string): string {
   return findUnit(unitId)?.name ?? unitId;
 }
 
-/** Id ustanove kojoj jedinica pripada, za slucaj da prebacivanje mijenja i ustanovu. */
-function institucijaZaJedinicu(unitId: string): string | undefined {
-  return ZAGREB_CATALOG.find((institucija) => institucija.units.some((u) => u.id === unitId))?.id;
-}
-
 /** Tekst znacke kad dokument pokazuje drugi fakultet od potvrdjenog. */
 export function napomenaDrugiFakultet(prepoznatoId: string, potvrdjenoId: string): string {
   return `Dokument izgleda kao rad koji pripada fakultetu ${nazivJedinice(prepoznatoId)}. Na ulazu je potvrđen ${nazivJedinice(potvrdjenoId)}.`;
 }
 
-/** Skriva napomenu na oba mjesta: znacku u listu profila i vidljivi red. */
-function skrijNapomenu(doc: Document): void {
+/**
+ * Skriva napomenu na oba mjesta: znacku u listu profila i vidljivi red. Zove je i `setFile` u
+ * `app.ts` (nalaz pregleda Codex, minor): zamjena dokumenta napomenu o STAROM radu gasi odmah, a
+ * ne tek kad se novi slegne, jer odbijen novi rad bravu ne otpusta i red bi ostao zauvijek.
+ */
+export function skrijNapomenu(doc: Document = document): void {
   doc.getElementById('detectBadge')?.classList.add('hidden');
   // Vidljivi red se ne skriva klasom nego PRAZNI: ostaje u stablu pristupacnosti kao zivo
   // podrucje, pa sljedeca napomena u njemu bude procitana (prazan red CSS vadi iz toka).
   doc.getElementById(NAPOMENA_FAKULTETA_ID)?.replaceChildren();
 }
 
-/** Nova brava ili pad brave: izbor "Zadrzi" pripadao je staroj, pa se zaboravlja, a napomena gasi. */
+/** Nova brava ili pad brave: odluka pripadala je staroj, pa se zaboravlja, a napomena gasi. */
 function zaboraviIzbor(): void {
-  zadrzanoProtiv = null;
+  odluka = null;
+  pamcenje = null;
   if (typeof document !== 'undefined') skrijNapomenu(document);
+}
+
+/** Odluka ide u memoriju i, kad sesija postoji, u pamcenje; kvar pohrane ne rusi klik. */
+function zapamti(nova: OdlukaNapomene): void {
+  odluka = nova;
+  try { pamcenje?.zapisi(nova); } catch { /* pohrana nedostupna: vrijedi barem do ponovnog ucitavanja */ }
 }
 
 /**
  * Zakljucava fakultet `trazeno` ako ga je obrazac stvarno prihvatio (`uObrascu`). Vraca je li
- * zakljucan; obrazac koji tu jedinicu ne zna prikazati ne ostavlja bravu.
+ * zakljucan; obrazac koji tu jedinicu ne zna prikazati ne ostavlja bravu. Uz `novoPamcenje`
+ * brava cita odluku iz iste sesije (ponovno otvaranje), pa je ne pita ponovo.
  */
-export function zakljucajFakultet(trazeno: string | undefined, uObrascu: string | undefined): boolean {
+export function zakljucajFakultet(
+  trazeno: string | undefined,
+  uObrascu: string | undefined,
+  novoPamcenje: PamcenjeOdluke | null = null,
+): boolean {
   jedinica = trazeno && trazeno === uObrascu ? trazeno : null;
   datoteka = null;
   zaboraviIzbor();
+  if (jedinica !== null && novoPamcenje) {
+    pamcenje = novoPamcenje;
+    try { odluka = novoPamcenje.procitaj(); } catch { odluka = null; }
+  }
   return jedinica !== null;
 }
+
+const jedinicaUObrascu = (doc: Document): string | undefined =>
+  (doc.getElementById('unitSelect') as HTMLSelectElement | null)?.value;
 
 /**
  * Primjena fakulteta potvrdjenog na ulazu, bez studija (`applyFaculty` u `primijeniPotvrduUlaza`,
@@ -98,11 +151,38 @@ export function zakljucajFakultet(trazeno: string | undefined, uObrascu: string 
 export function primijeniFakultetUlaza(
   ids: Record<string, string>,
   postaviObrazac: (ids: Record<string, string>) => void,
+  novoPamcenje: PamcenjeOdluke | null = null,
   doc: Document = document,
 ): boolean {
   postaviObrazac(ids);
-  const uObrascu = (doc.getElementById('unitSelect') as HTMLSelectElement | null)?.value;
-  return zakljucajFakultet(ids.unit, uObrascu);
+  return zakljucajFakultet(ids.unit, jedinicaUObrascu(doc), novoPamcenje);
+}
+
+/**
+ * Primjena CIJELOG profila potvrdjenog na ulazu (`apply` u `primijeniPotvrduUlaza`):
+ * `primijeniProfil` je `applyConfirmedProfileSelection` (put C4). Fakultet se i ovdje zakljucava
+ * TEK POSLIJE, prema obrascu, pa rad drugog fakulteta dobije napomenu (nalaz pregleda Codex).
+ * Vraca ono sto vrati `primijeniProfil` (razrijeseni id profila ili `null`).
+ */
+export function primijeniProfilUlaza(
+  ids: Record<string, string>,
+  primijeniProfil: (ids: Record<string, string>) => string | null,
+  novoPamcenje: PamcenjeOdluke | null = null,
+  doc: Document = document,
+): string | null {
+  const definicija = primijeniProfil(ids);
+  zakljucajFakultet(ids.unit, jedinicaUObrascu(doc), novoPamcenje);
+  return definicija;
+}
+
+/**
+ * Ponovno otvaranje sesije s vlastitim profilom (C4) koja je nastala iz potvrde s ulaza
+ * (`zakljucajObnovljeno` u `intake-confirmation.ts`): brava na fakultet koji obrazac POSLIJE
+ * obnove pokazuje, s pamcenjem odluke, pa "Prebaci" iz prvog otvaranja ne nestane tiho.
+ */
+export function zakljucajObnovljeniFakultet(novoPamcenje: PamcenjeOdluke, doc: Document = document): boolean {
+  const u = jedinicaUObrascu(doc);
+  return zakljucajFakultet(u, u, novoPamcenje);
 }
 
 /** Zakljucan fakultet ili `null`. */
@@ -111,31 +191,20 @@ export function potvrdjenFakultet(): string | null {
 }
 
 /**
- * Prebacuje potvrdjeni fakultet na prepoznati: skida bravu za staru jedinicu, postavlja novu i
- * odrazava odabir na obrazac (ustanova i fakultet), pa ostatak obrasca (studij, razina) i dalje
- * ide postojecim promjenskim rukovateljima nad `#institutionSelect`/`#unitSelect` (`app.ts`).
+ * "Prebaci": brava prelazi na prepoznati fakultet, odluka se pamti uz sesiju, napomena se gasi, a
+ * `naPrebaci` (iz `app.ts`) primijeni prepoznati kontekst. Obrascu se NE salje `change` (vidi
+ * zaglavlje), a praceni dokument ostaje isti: prebacivanje ne otvara novi rad.
  */
-function prebaciNaPrepoznato(prepoznato: string, doc: Document): void {
+function prebaciNaPrepoznato(prepoznato: string, doc: Document, naPrebaci?: () => void): void {
   jedinica = prepoznato;
-  datoteka = null;
-  zadrzanoProtiv = null;
-  const institucija = institucijaZaJedinicu(prepoznato);
-  const institutionSelect = doc.getElementById('institutionSelect') as HTMLSelectElement | null;
-  if (institucija && institutionSelect && institutionSelect.value !== institucija) {
-    institutionSelect.value = institucija;
-    institutionSelect.dispatchEvent(new Event('change', { bubbles: true }));
-  }
-  const unitSelect = doc.getElementById('unitSelect') as HTMLSelectElement | null;
-  if (unitSelect) {
-    unitSelect.value = prepoznato;
-    unitSelect.dispatchEvent(new Event('change', { bubbles: true }));
-  }
+  zapamti({ odluka: 'prebaci', prepoznato });
   skrijNapomenu(doc);
+  naPrebaci?.();
 }
 
 /** "Zadrzi": potvrdjeni fakultet ostaje, napomena se zatvara i za ovaj prepoznati se ne vraca. */
 function zadrziPotvrdjeno(prepoznato: string, doc: Document): void {
-  zadrzanoProtiv = prepoznato;
+  zapamti({ odluka: 'zadrzi', prepoznato });
   skrijNapomenu(doc);
 }
 
@@ -169,12 +238,14 @@ function vratiFokus(gumb: HTMLElement, mjesto: MjestoNapomene, doc: Document): v
 }
 
 /** Oba gumba napomene; svako mjesto dobiva vlastiti par (cvor ne moze stajati na dva mjesta). */
-function gumbiNapomene(prepoznato: string, potvrdjeno: string, mjesto: MjestoNapomene, doc: Document): HTMLButtonElement[] {
+function gumbiNapomene(
+  prepoznato: string, potvrdjeno: string, mjesto: MjestoNapomene, doc: Document, naPrebaci?: () => void,
+): HTMLButtonElement[] {
   const prebaci = doc.createElement('button');
   prebaci.type = 'button';
   prebaci.className = 'btn btn-ghost btn-sm';
   prebaci.textContent = `Prebaci na ${nazivJedinice(prepoznato)}`;
-  prebaci.addEventListener('click', () => { prebaciNaPrepoznato(prepoznato, doc); vratiFokus(prebaci, mjesto, doc); });
+  prebaci.addEventListener('click', () => { prebaciNaPrepoznato(prepoznato, doc, naPrebaci); vratiFokus(prebaci, mjesto, doc); });
   const zadrzi = doc.createElement('button');
   zadrzi.type = 'button';
   zadrzi.className = 'btn btn-ghost btn-sm';
@@ -188,7 +259,9 @@ function gumbiNapomene(prepoznato: string, potvrdjeno: string, mjesto: MjestoNap
  * Sadrzaj se mijenja UNUTAR reda koji je vec `role="status"`, pa ga citac procita; fokus pri
  * pojavi ostaje gdje jest (nema `focus()` ni `scrollIntoView`), a pri zatvaranju ga vraca `vratiFokus`.
  */
-function nacrtajVidljivuNapomenu(red: HTMLElement, prepoznato: string, potvrdjeno: string, doc: Document): void {
+function nacrtajVidljivuNapomenu(
+  red: HTMLElement, prepoznato: string, potvrdjeno: string, doc: Document, naPrebaci?: () => void,
+): void {
   const oznaka = doc.createElement('span');
   oznaka.className = 'fc-oznaka';
   oznaka.textContent = 'Drugi fakultet u dokumentu';
@@ -197,20 +270,29 @@ function nacrtajVidljivuNapomenu(red: HTMLElement, prepoznato: string, potvrdjen
   tekst.textContent = napomenaDrugiFakultet(prepoznato, potvrdjeno);
   const akcije = doc.createElement('div');
   akcije.className = 'fc-akcije';
-  akcije.append(...gumbiNapomene(prepoznato, potvrdjeno, 'red', doc));
+  akcije.append(...gumbiNapomene(prepoznato, potvrdjeno, 'red', doc, naPrebaci));
   red.replaceChildren(oznaka, tekst, akcije);
 }
 
 /**
  * Smije li detekcija iz dokumenta primijeniti prepoznati fakultet. Kad ne smije (fakultet je
  * potvrdjen, a dokument pokazuje drugi), napomena imenuje prepoznati fakultet i nudi jednim
- * klikom prebacivanje na njega ili zadrzavanje potvrdjenog, i to na dva mjesta: u znacki lista
- * profila i u vidljivom redu `#facultyConflict`; vraca `false`. Ako je student za taj prepoznati
- * fakultet vec rekao "Zadrzi", napomena se ne vraca, a brava i dalje drzi.
+ * klikom prebacivanje na njega (`naPrebaci`) ili zadrzavanje potvrdjenog, i to na dva mjesta: u
+ * znacki lista profila i u vidljivom redu `#facultyConflict`; vraca `false`.
+ *
+ * Odluka za ovaj rad (iz memorije ili iz sesije) se postuje bez napomene: "Zadrži" za taj
+ * prepoznati fakultet vraca `false`, a "Prebaci" na njega ponovi prebacivanje (brava na prepoznati,
+ * pa `naPrebaci`; bez `naPrebaci` detekcija smije).
  */
-export function detekcijaSmije(prepoznato: string, doc: Document = document): boolean {
+export function detekcijaSmije(prepoznato: string, naPrebaci?: () => void, doc: Document = document): boolean {
   if (jedinica === null || prepoznato === jedinica) return true;
-  if (zadrzanoProtiv === prepoznato) return false;
+  if (odluka?.prepoznato === prepoznato) {
+    if (odluka.odluka === 'zadrzi') return false;
+    jedinica = prepoznato;
+    if (!naPrebaci) return true;
+    naPrebaci();
+    return false;
+  }
   const potvrdjeno = jedinica;
   const znacka = doc.getElementById('detectBadge');
   if (znacka) {
@@ -218,12 +300,12 @@ export function detekcijaSmije(prepoznato: string, doc: Document = document): bo
     ikona.setAttribute('data-lucide', 'info');
     const tekst = doc.createElement('span');
     tekst.textContent = ` ${napomenaDrugiFakultet(prepoznato, potvrdjeno)} `;
-    znacka.replaceChildren(ikona, tekst, ...gumbiNapomene(prepoznato, potvrdjeno, 'list', doc));
+    znacka.replaceChildren(ikona, tekst, ...gumbiNapomene(prepoznato, potvrdjeno, 'list', doc, naPrebaci));
     znacka.classList.remove('hidden');
     doc.defaultView?.__lektaIcons?.();
   }
   const red = doc.getElementById(NAPOMENA_FAKULTETA_ID);
-  if (red) nacrtajVidljivuNapomenu(red, prepoznato, potvrdjeno, doc);
+  if (red) nacrtajVidljivuNapomenu(red, prepoznato, potvrdjeno, doc, naPrebaci);
   return false;
 }
 

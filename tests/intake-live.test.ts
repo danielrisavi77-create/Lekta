@@ -21,16 +21,17 @@ import {
   danaDoRoka, daniRijecju, normalizirajRok, pecatRoka, razloziDatum, rokOdlucen,
 } from '../src/routes/intake/deadline-stamp';
 import {
-  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, predodabirFakulteta, procitajIzborUlaza,
-  rokZaPovratak, rokZaSesiju, spremnostUlaza, veziPotvrduZaSesiju, veziRokZaSesiju, zapisiPotvrdu, zapisiRok,
-  type PotvrdaUlaza,
+  odlukaNapomeneZaSesiju, potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, predodabirFakulteta,
+  procitajIzborUlaza, rokZaPovratak, rokZaSesiju, spremnostUlaza, veziPotvrduZaSesiju, veziRokZaSesiju,
+  zapisiOdlukuNapomene, zapisiPotvrdu, zapisiRok, type PotvrdaUlaza,
 } from '../src/shared/intake-choice';
 import { safeStorageSet, STORAGE_KEYS } from '../src/shared/browser-storage';
 import { izvorFakulteta, mountIntakeLive, PORUKA_ODBIJENO, tekstPecataProvjere } from '../src/routes/intake/intake-live';
 import { mountIntakeController } from '../src/routes/intake/intake-controller';
 import { odabirFakulteta, primijeniPotvrduUlaza } from '../src/routes/workspace/intake-confirmation';
 import {
-  detekcijaSmije, napomenaDrugiFakultet, potvrdjenFakultet, primijeniFakultetUlaza, zakljucajFakultet,
+  detekcijaSmije, napomenaDrugiFakultet, potvrdjenFakultet, primijeniFakultetUlaza, primijeniProfilUlaza, skrijNapomenu,
+  zakljucajFakultet, zakljucajObnovljeniFakultet,
 } from '../src/ui/confirmed-faculty';
 import { emitAnalyzerDocumentSettled } from '../src/ui/analyzer-document-events';
 import type { SelectionIds } from '../src/ui/profile-selection-ids';
@@ -212,6 +213,8 @@ describe('Z32 potvrda na /rad/', () => {
     variant: 'default', department: 'general', methodology: 'auto', citation: 'apa7',
   };
   const rok = { datum: null, neznam: true };
+  /** Drugi argument `apply`/`applyFaculty`: pamcenje odluke o napomeni za tu sesiju (nalaz pregleda Codex). */
+  const PAMCENJE = expect.objectContaining({ procitaj: expect.any(Function), zapisi: expect.any(Function) });
 
   it('vrijedi SAMO za svoju sesiju i bez vlastitog profila sesije, i BEZ studija (?unit=)', () => {
     const s = { id: 's-1', imaProfil: false };
@@ -243,7 +246,7 @@ describe('Z32 potvrda na /rad/', () => {
       read: () => ({ rok, potvrda }),
     });
     expect(ishod).toBe('applied');
-    expect(apply).toHaveBeenCalledWith({ ...obrazac });
+    expect(apply).toHaveBeenCalledWith({ ...obrazac }, PAMCENJE);
     expect(applyFaculty).not.toHaveBeenCalled();
     expect(confirm).toHaveBeenCalledWith({ profileDefinitionId: 'fpzg-politologija-diplomski', selectionIds: obrazac, confirmedAt: 42 });
   });
@@ -259,7 +262,7 @@ describe('Z32 potvrda na /rad/', () => {
       read: () => ({ rok, potvrda: { unit: 'fer', program: null, workType: null, sesija: 's-1', at: 7 } }),
     });
     expect(ishod).toBe('faculty');
-    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' }, PAMCENJE);
     expect(apply, 'bez studija nema potvrdjenog profila').not.toHaveBeenCalled();
     expect(confirm, 'bez studija nema snimke profila').not.toHaveBeenCalled();
     // Studij iz postavki koji obrazac nije prihvatio (drugi u obrascu): isto samo fakultet.
@@ -268,7 +271,7 @@ describe('Z32 potvrda na /rad/', () => {
       sessionId: 's-1', sessionHasProfile: false, readForm: () => ({ ...obrazac, program: 'Novinarstvo' }), apply, applyFaculty, confirm,
       read: () => ({ rok, potvrda }),
     })).toBe('faculty');
-    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fpzg', workType: 'graduate' });
+    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fpzg', workType: 'graduate' }, PAMCENJE);
     expect(odabirFakulteta({ unit: 'nepostoji', workType: null }), 'nepoznata jedinica').toBeNull();
   });
 
@@ -305,7 +308,7 @@ describe('Z32 potvrda na /rad/', () => {
     expect(primijeniPotvrduUlaza({
       sessionId: 's-1', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty: applyFacultyS1, confirm: vi.fn(),
     })).toBe('faculty');
-    expect(applyFacultyS1).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    expect(applyFacultyS1).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' }, PAMCENJE);
     // /rad/#session=S2 i dalje ispravno primjenjuje FPZG (cijeli profil, jer S2 nosi studij).
     expect(primijeniPotvrduUlaza({
       sessionId: 's-2', sessionHasProfile: false, readForm: () => obrazac,
@@ -321,7 +324,7 @@ describe('Z32 potvrda na /rad/', () => {
     expect(primijeniPotvrduUlaza({
       sessionId: 's-1', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty, confirm: vi.fn(),
     })).toBe('faculty');
-    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    expect(applyFaculty).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' }, PAMCENJE);
     // Za drugu sesiju stari slot ne vrijedi.
     expect(primijeniPotvrduUlaza({
       sessionId: 's-2', sessionHasProfile: false, readForm: () => obrazac, apply: vi.fn(), applyFaculty: vi.fn(), confirm: vi.fn(),
@@ -369,7 +372,8 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     document.body.innerHTML = '<select id="institutionSelect"><option value="unizg" selected>Sveučilište u Zagrebu</option></select><select id="unitSelect"><option value="fer" selected>FER</option><option value="fpzg">FPZG</option></select><div id="detectBadge" class="hidden"></div>';
     expect(zakljucajFakultet('fer', 'fer'), 'FER potvrdjen na ulazu').toBe(true);
     // Dokument (npr. lo-fpzg-zavrsni-uskladjen.docx) detekcija prepoznaje kao FPZG, drugi fakultet.
-    expect(detekcijaSmije('fpzg')).toBe(false);
+    const naPrebaci = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci)).toBe(false);
     const znacka = document.getElementById('detectBadge')!;
     expect(znacka.classList.contains('hidden'), 'znacka se pokazuje').toBe(false);
     const tekst = znacka.textContent ?? '';
@@ -379,8 +383,8 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(prebaciBtn, 'gumb za prebacivanje postoji').toBeTruthy();
     prebaciBtn!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(potvrdjenFakultet(), 'jednim klikom prebaceno na prepoznati fakultet').toBe('fpzg');
-    expect((document.getElementById('unitSelect') as HTMLSelectElement).value).toBe('fpzg');
     expect(znacka.classList.contains('hidden'), 'znacka se skriva nakon prebacivanja').toBe(true);
+    expect(naPrebaci, 'primjenu prepoznatog konteksta radi app.ts').toHaveBeenCalledTimes(1);
   });
 
   it('gumb "Zadrži" samo skriva znacku, potvrdjeni fakultet ostaje', () => {
@@ -457,20 +461,32 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(vidljiviRed().childElementCount).toBe(0);
   });
 
-  it('"Prebaci" iz vidljivog reda mijenja profil kao gumb u listu i prazni red', () => {
+  /**
+   * NALAZ PREGLEDA (Codex, major): "Prebaci" je izbornicima slao `change`, a `app.ts` na svaki
+   * `change` ovih sedam izbornika oznaci CIJELI profil potvrdjenim (`_profileConfirmed=true`), pa bi
+   * analiza krenula pod prvim studijem prepoznatog fakulteta bez potvrde studija. Test zato slusa
+   * isti skup izbornika istim pravilom kao `app.ts` i trazi da primjenu radi `naPrebaci`.
+   */
+  it('"Prebaci" ne salje change obrascu (ne potvrdjuje studij), nego zove primjenu prepoznatog konteksta', () => {
     radDokument();
     const unit = document.getElementById('unitSelect') as HTMLSelectElement;
     unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    const izbornici = ['#institutionSelect', '#unitSelect', '#programSelect', '#workType', '#workVariant', '#departmentSelect', '#methodologySelect'];
+    expect(izbornici.every((s) => document.querySelector(s)), 'svi izbornici postoje u rad/index.html').toBe(true);
+    let profilPotvrdjen = false;
+    izbornici.forEach((s) => document.querySelector(s)!.addEventListener('change', () => { profilPotvrdjen = true; }));
     zakljucajFakultet('fer', 'fer');
-    detekcijaSmije('fpzg');
-    let promjena = 0;
-    unit.addEventListener('change', () => { promjena += 1; });
+    const naPrebaci = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci)).toBe(false);
     gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(potvrdjenFakultet()).toBe('fpzg');
-    expect(unit.value).toBe('fpzg');
-    expect(promjena, 'obrazac dobiva change, kao i iz lista').toBe(1);
+    expect(profilPotvrdjen, 'obrazac nije dobio change, pa studij nije oznacen potvrdjenim').toBe(false);
+    expect(naPrebaci).toHaveBeenCalledTimes(1);
     expect(vidljiviRed().childElementCount).toBe(0);
     expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+    // Poslije prebacivanja detekcija za prepoznati fakultet smije (primjena ide redovnim putem).
+    expect(detekcijaSmije('fpzg', naPrebaci)).toBe(true);
+    expect(naPrebaci).toHaveBeenCalledTimes(1);
   });
 
   it('"Zadrži" zatvara napomenu i pamti izbor za sesiju: ista detekcija je ne vraca, nova brava je zaboravlja', () => {
@@ -493,7 +509,7 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(vidljiviRed().childElementCount, 'nova brava prazni red').toBe(0);
     expect(detekcijaSmije('fpzg')).toBe(false);
     expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
-    // Pamti se u memoriji modula, ne u pohrani preglednika.
+    // Bez pamcenja sesije (brava bez sesije) odluka ostaje u memoriji modula, ne u pohrani.
     const pohrana = JSON.stringify(Object.entries(localStorage)) + JSON.stringify(Object.entries(sessionStorage));
     expect(pohrana).not.toContain('fpzg');
   });
@@ -572,6 +588,191 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     emitAnalyzerDocumentSettled({ kind: 'accepted', file: new File(['b'], 'b.docx'), verdict: { kind: 'ok' } as never });
     expect(potvrdjenFakultet()).toBeNull();
     expect(vidljiviRed().childElementCount, 'napomena o starom radu ne ostaje').toBe(0);
+  });
+
+  /**
+   * NALAZ PREGLEDA (Codex, major): "Prebaci" je resetirao praceni dokument, pa je sljedeci
+   * prihvaceni dokument postao "prvi" pod prebacenom bravom i drugi rad drugog fakulteta dobio je
+   * napomenu prema FPZG-u umjesto da brava padne.
+   */
+  it('"Prebaci" ne resetira praceni dokument: drugi rad otpusta i prebacenu bravu', () => {
+    radDokument();
+    const prvi = new File(['a'], 'a.docx');
+    zakljucajFakultet('fer', 'fer');
+    emitAnalyzerDocumentSettled({ kind: 'accepted', file: prvi, verdict: { kind: 'ok' } as never });
+    detekcijaSmije('fpzg', () => {});
+    gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(potvrdjenFakultet()).toBe('fpzg');
+    // Isti rad ponovo (npr. ponovna detekcija): brava ostaje.
+    emitAnalyzerDocumentSettled({ kind: 'accepted', file: prvi, verdict: { kind: 'ok' } as never });
+    expect(potvrdjenFakultet(), 'isti rad').toBe('fpzg');
+    emitAnalyzerDocumentSettled({ kind: 'accepted', file: new File(['b'], 'b.docx'), verdict: { kind: 'ok' } as never });
+    expect(potvrdjenFakultet(), 'drugi rad otpusta bravu').toBeNull();
+    expect(detekcijaSmije('efzg'), 'drugi rad drugog fakulteta: bez laznog sukoba').toBe(true);
+    expect(vidljiviRed().childElementCount).toBe(0);
+  });
+
+  /**
+   * NALAZ PREGLEDA (Codex, major): "Zadrži" se pamtio samo u memoriji modula. Ponovno otvaranje
+   * iste sesije (`/rad/#session=S1`) prolazi isti put kao `main.ts`: `primijeniPotvrduUlaza` nad
+   * STVARNOM pohranom, s `primijeniFakultetUlaza` kao `applyFaculty`. Novo ucitavanje stranice
+   * prazni memoriju modula; to ovdje radi nova brava (`zakljucajFakultet` zaboravlja odluku iz memorije).
+   */
+  const otvoriSesiju = (sesija: string, naPrebaci?: () => void): boolean => {
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fpzg" selected>FPZG</option><option value="fer">FER</option>';
+    const ishod = primijeniPotvrduUlaza({
+      sessionId: sesija, sessionHasProfile: false,
+      readForm: () => ({ institution: 'unizg', unit: 'fpzg', program: '', workType: '', variant: 'default', department: 'general', methodology: 'auto', citation: 'apa7' }),
+      apply: () => null,
+      applyFaculty: (ids, pamcenje) => primijeniFakultetUlaza(ids, (x) => { unit.value = x.unit; }, pamcenje),
+      confirm: () => {},
+    });
+    expect(ishod).toBe('faculty');
+    return detekcijaSmije('fpzg', naPrebaci);
+  };
+
+  it('"Zadrži" zivi uz sesiju: ponovno otvaranje iste sesije ga postuje, druga sesija ne', () => {
+    ocistiPohranu();
+    radDokument();
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    expect(otvoriSesiju('s-1'), 'prvo otvaranje: sukob').toBe(false);
+    expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+    gumbReda('Zadrži')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(odlukaNapomeneZaSesiju('s-1'), 'odluka je zapisana uz sesiju').toEqual({ odluka: 'zadrzi', prepoznato: 'fpzg' });
+    // Ponovno otvaranje: nova brava (memorija modula prazna), odluka dolazi iz pohrane.
+    expect(otvoriSesiju('s-1'), 'brava i dalje drzi FER').toBe(false);
+    expect(potvrdjenFakultet()).toBe('fer');
+    expect(vidljiviRed().childElementCount, 'napomena se ne vraca').toBe(0);
+    expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+    // KONTROLA: druga sesija s istom potvrdom nema odluku, pa napomenu dobiva.
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: null, at: 2 });
+    veziPotvrduZaSesiju('s-2');
+    expect(otvoriSesiju('s-2')).toBe(false);
+    expect(vidljiviRed().childElementCount, 'odluka S1 ne vrijedi za S2').toBeGreaterThan(0);
+    expect(odlukaNapomeneZaSesiju('s-2')).toBeNull();
+  });
+
+  it('"Prebaci" zivi uz sesiju: ponovno otvaranje ponovi prebacivanje bez napomene', () => {
+    ocistiPohranu();
+    radDokument();
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    const naPrebaci = vi.fn();
+    expect(otvoriSesiju('s-1', naPrebaci)).toBe(false);
+    gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(naPrebaci).toHaveBeenCalledTimes(1);
+    expect(odlukaNapomeneZaSesiju('s-1')).toEqual({ odluka: 'prebaci', prepoznato: 'fpzg' });
+    const ponovo = vi.fn();
+    expect(otvoriSesiju('s-1', ponovo), 'primjenu radi naPrebaci').toBe(false);
+    expect(ponovo, 'prebacivanje se ponovi').toHaveBeenCalledTimes(1);
+    expect(potvrdjenFakultet()).toBe('fpzg');
+    expect(vidljiviRed().childElementCount, 'bez napomene').toBe(0);
+    // Bez `naPrebaci` (npr. drugi pozivatelj) detekcija za prebaceni fakultet jednostavno smije.
+    expect(otvoriSesiju('s-1')).toBe(true);
+  });
+
+  it('zapis odluke o napomeni: mapa po sesiji, drugi upis iste odluke je no-op, pokvaren zapis je null', () => {
+    ocistiPohranu();
+    expect(zapisiOdlukuNapomene('s-1', { odluka: 'zadrzi', prepoznato: 'fpzg' })).toBe(true);
+    expect(zapisiOdlukuNapomene('s-1', { odluka: 'zadrzi', prepoznato: 'fpzg' }), 'drugi prolaz je no-op').toBe(false);
+    expect(zapisiOdlukuNapomene('s-2', { odluka: 'prebaci', prepoznato: 'efzg' })).toBe(true);
+    expect(odlukaNapomeneZaSesiju('s-1')).toEqual({ odluka: 'zadrzi', prepoznato: 'fpzg' });
+    expect(odlukaNapomeneZaSesiju('s-2')).toEqual({ odluka: 'prebaci', prepoznato: 'efzg' });
+    expect(procitajIzborUlaza().potvrda, 'odluka ne dira potvrdu').toBeNull();
+    safeStorageSet(STORAGE_KEYS.intake, { napomenaSesije: { 's-1': { odluka: 'nesto', prepoznato: 'fpzg' }, 's-2': 'x' }, kanarinac: 1 });
+    expect(odlukaNapomeneZaSesiju('s-1')).toBeNull();
+    expect(odlukaNapomeneZaSesiju('s-2')).toBeNull();
+    zapisiOdlukuNapomene('s-3', { odluka: 'zadrzi', prepoznato: 'fer' });
+    const sirovo = JSON.parse(localStorage.getItem(STORAGE_KEYS.intake) ?? '{}') as Record<string, unknown>;
+    expect(sirovo.kanarinac, 'nepoznati kljuc zapisa prezivi upis').toBe(1);
+  });
+
+  /**
+   * NALAZ PREGLEDA (Codex, blocker): potvrdjen CIJELI profil (postavke FER · Računarstvo) nije
+   * postavljao bravu, pa napomena o radu drugog fakulteta nije mogla nastati. `apply` sada ide kroz
+   * `primijeniProfilUlaza`, kao u `main.ts`; `app.ts` stranu (C4 preskace detekciju samo bez brave)
+   * cuva `detekcijaFakultetaProblemi`, a tok u pregledniku `tests/ux/intake-entry.spec.ts`.
+   */
+  it('cijeli profil s ulaza zakljucava fakultet, pa rad drugog fakulteta dobije napomenu', () => {
+    ocistiPohranu();
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="efzg" selected>EFZG</option><option value="fer">FER</option><option value="fpzg">FPZG</option>';
+    const obrazacFer: SelectionIds = {
+      institution: 'unizg', unit: 'fer', program: 'Računarstvo', workType: 'graduate',
+      variant: 'default', department: 'general', methodology: 'auto', citation: 'apa7',
+    };
+    const redoslijed: string[] = [];
+    const primijeniProfil = vi.fn((ids: Record<string, string>) => { redoslijed.push('profil'); unit.value = ids.unit; return 'fer-racunarstvo-diplomski'; });
+    const ishod = primijeniPotvrduUlaza({
+      sessionId: 's-1', sessionHasProfile: false, readForm: () => obrazacFer,
+      apply: (ids, pamcenje) => primijeniProfilUlaza(ids, primijeniProfil, pamcenje),
+      applyFaculty: () => { throw new Error('cijeli profil ne ide putem samo fakulteta'); },
+      confirm: () => { redoslijed.push('snimka'); },
+      read: () => ({ rok: { datum: null, neznam: true }, potvrda: { unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija: 's-1', at: 3 } }),
+    });
+    expect(ishod).toBe('applied');
+    expect(redoslijed).toEqual(['profil', 'snimka']);
+    expect(potvrdjenFakultet(), 'cijeli profil zakljucava fakultet').toBe('fer');
+    expect(detekcijaSmije('fer'), 'isti fakultet: C4 u app.ts odlucuje dalje').toBe(true);
+    expect(detekcijaSmije('fpzg')).toBe(false);
+    expect(vidljiviRed().querySelector('.fc-tekst')?.textContent).toBe(napomenaDrugiFakultet('fpzg', 'fer'));
+    // Obrazac koji fakultet nije prihvatio ne ostavlja bravu, a id profila se svejedno vraca.
+    zakljucajFakultet(undefined, undefined);
+    expect(primijeniProfilUlaza({ unit: 'nepostoji' }, () => 'x')).toBe('x');
+    expect(potvrdjenFakultet()).toBeNull();
+  });
+
+  /**
+   * Ponovno otvaranje sesije koja je pri prvom otvaranju zapisala vlastiti profil (cijeli profil s
+   * ulaza): potvrda se ne primjenjuje ponovo (C4 obnavlja snimku), ali brava na fakultet iz obrasca
+   * mora nastati, inace bi "Prebaci" iz prvog otvaranja tiho nestao.
+   */
+  it('ponovno otvaranje sesije s vlastitim profilom: brava na obnovljeni fakultet, "Prebaci" se ponovi', () => {
+    ocistiPohranu();
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    zapisiPotvrdu({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    zapisiOdlukuNapomene('s-1', { odluka: 'prebaci', prepoznato: 'fpzg' });
+    const baza = {
+      sessionHasProfile: true, readForm: () => { throw new Error('C4 je vec obnovio profil'); },
+      apply: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      applyFaculty: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      confirm: () => { throw new Error('bez nove snimke'); },
+      zakljucajObnovljeno: (pamcenje: Parameters<typeof zakljucajObnovljeniFakultet>[0]) => { zakljucajObnovljeniFakultet(pamcenje); },
+    };
+    // KONTROLA: sesija koja nije nastala iz potvrde s ulaza ostaje netaknuta.
+    expect(primijeniPotvrduUlaza({ ...baza, sessionId: 's-9' })).toBe('none');
+    expect(potvrdjenFakultet()).toBeNull();
+    expect(primijeniPotvrduUlaza({ ...baza, sessionId: 's-1' })).toBe('locked');
+    expect(potvrdjenFakultet(), 'brava na fakultet iz obnovljenog obrasca').toBe('fer');
+    const naPrebaci = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci)).toBe(false);
+    expect(naPrebaci, '"Prebaci" iz prvog otvaranja se ponovi').toHaveBeenCalledTimes(1);
+    expect(potvrdjenFakultet()).toBe('fpzg');
+    expect(vidljiviRed().childElementCount, 'bez napomene').toBe(0);
+    // Bez odluke: brava na obnovljeni fakultet i napomena, kao pri prvom otvaranju.
+    zapisiPotvrdu({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija: null, at: 2 });
+    veziPotvrduZaSesiju('s-2');
+    unit.value = 'fer';
+    expect(primijeniPotvrduUlaza({ ...baza, sessionId: 's-2' })).toBe('locked');
+    expect(detekcijaSmije('fpzg', naPrebaci)).toBe(false);
+    expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+  });
+
+  it('skrijNapomenu (zove je setFile u app.ts) prazni vidljivi red i skriva znacku odmah', () => {
+    radDokument();
+    zakljucajFakultet('fer', 'fer');
+    detekcijaSmije('fpzg');
+    expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+    skrijNapomenu();
+    expect(vidljiviRed().childElementCount).toBe(0);
+    expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+    expect(potvrdjenFakultet(), 'skrivanje ne dira bravu').toBe('fer');
   });
 });
 
