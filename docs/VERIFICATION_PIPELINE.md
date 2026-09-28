@@ -48,6 +48,9 @@ Oznaka: (A) automatski, (H) ljudski.
 3. (A) Ekstrakcija nacrta (Guidelines Ingestion). AI iz svakog izvora predloži DRAFT pravila: vrijednost, doslovni citat, lokator, `authority`, `checkId`, scope i modality. Status ostaje `draft`.
 4. (A) Normalizacija i sukobi. Mapiraj nacrte na shemu (`checkId`), dedupliciraj kroz izvore i provjeri sukobe po hijerarhiji. Nejasan opseg/modalitet ili proturječje znači `insufficient`, ne ljudski red čekanja i ne automatsko prihvaćanje.
 5. (A) AI-evidence audit. Za svako pravilo deterministički veži profil, rule ID, službeni source ID/URL, datum dohvata, SHA-256 izvornih snapshot bajtova, lokator, doslovni citat, ciljnu vrijednost, scope, modality, sva tri prolaza i razriješeni izvršni manifest s ulaznim/izlaznim hashom. Tekst za citat mora doći iz ekstrakcije istih bajtova kroz pouzdani formatni adapter; hash izdvojenog teksta nije zamjena za hash PDF/DOC/DOCX datoteke. Samostalno `agree: true` ili samoprijavljeni `pass` nije dokaz. Valjan paket postavlja `status: verified`, `confirmedVia: ai-evidence-audit`, `verifiedHash`, `lastVerified` i jedan `ai-confirmed` ledger zapis. Nepotpun ili zastario paket ostaje nebodovan s kodiranim razlogom.
+
+   PDF tekst ovisi o vanjskom Popplerovu alatu `pdftotext`; bez njega tekst ostaje prazan i citat pada s `quote-not-found` (fail-closed), pa za podatkovni PR prednost imaju registrirani `*-extract.txt` izvadci povezani sa snapshotom i vlastitim hashom.
+
 6. (H, opcionalno) Legacy ručna potvrda. Postojeća konzola može potvrditi pravilo bez AI paketa; `reviewedBy` ostaje obvezan za obvezujuća pravila na tom putu. Ovaj put nije blocker za automatizirani audit.
 7. (A) Strojna validacija (CI vrata, sekcija 6). Profil se ne objavljuje ako ne prođe sve provjere.
 8. (A) Objava i verzija. Profil je verzioniran, otisak već nosi verziju i datum pa rezultat bilježi po kojoj je verziji rad ocijenjen. Changelog po profilu. Serviran iz Supabasea, verzioniran.

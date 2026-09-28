@@ -98,7 +98,6 @@ export function runVerificationGate(
   for (const profile of profiles) {
     for (const entry of profile.ruleEntries ?? []) {
       const derived = isRuleScored(entry);
-      let aiEvidenceValid = false;
 
       if (entry.confirmedVia === 'ai-evidence-audit') {
         const source = entry.sourceId ? sourceById.get(entry.sourceId) : undefined;
@@ -117,9 +116,7 @@ export function runVerificationGate(
             ? options.aiEvidence?.manifestsById[entry.aiEvidence.execution.manifestId]
             : undefined,
         });
-        if (audit.valid) {
-          aiEvidenceValid = true;
-        } else {
+        if (!audit.valid) {
           push(
             profile.id,
             entry.ruleId,
@@ -198,7 +195,7 @@ export function runVerificationGate(
           push(profile.id, entry.ruleId, 'scored-addsrc-no-quote', `Dopunski izvor "${add.sourceId}" nema quote.`);
         }
       }
-      if (entry.authority === 'binding' && !entry.reviewedBy && !aiEvidenceValid && entry.confirmedVia !== 'ai-evidence-audit') {
+      if (entry.authority === 'binding' && !entry.reviewedBy && entry.confirmedVia !== 'ai-evidence-audit') {
         push(profile.id, entry.ruleId, 'binding-no-review', 'Obvezujuce pravilo nema reviewedBy (drugi par ociju).');
       }
       // Freshness: stabilno bodovano pravilo mora biti potvrdeno unutar roka.

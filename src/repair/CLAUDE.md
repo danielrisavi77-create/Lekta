@@ -61,6 +61,8 @@ cistom izoliranom stablu, a izvor i izvedeni artefakt ulaze u isti commit.
 
 ## Obvezna provjera
 
+Svaka promjena produkcijskog koda popravka u `src/repair` zahtijeva novu potpisanu ovjeru stvarnog korpusa prema postupku T75 prije regeneracije ledgera, jer inače razina A pada na 0.
+
 Za svaku promjenu fixera treba ciljani regresijski test i dokaz idempotencije kroz
 DVIJE primjene; druga mora biti no-op. Test vidljivog teksta cita spojeni tekst
 odlomka, ne sirovi XML.

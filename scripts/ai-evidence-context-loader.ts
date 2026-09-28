@@ -44,6 +44,8 @@ async function extractSnapshotText(path: string, bytes: Uint8Array): Promise<str
     case '.docx':
       return documentText(bytes);
     case '.pdf':
+      // PDF tekst ovisi o vanjskom Poppler pdftotext; bez alata tekst ostaje prazan i citat
+      // pada kao quote-not-found (fail-closed). Za podatkovni PR radije registriraj hashirani *-extract.txt.
       return execFileSync('pdftotext', ['-layout', '-enc', 'UTF-8', '-', '-'], {
         input: Buffer.from(bytes),
         maxBuffer: 64 * 1024 * 1024,
