@@ -81,6 +81,24 @@ Sada svaki u kopiju configa ubacuje eksplicitan sintetički model `claude-neveri
 `status: "unverified"`. Provjera je jednako stroga i više ne ovisi o tome postoji li trenutno
 neki neverificiran model u stvarnom configu.
 
+## 4. B1 mjerenje
+
+B1 (brief koordinatora, grana `wf/opus55-b1-routing`) prebacuje implementatora na
+`claude-opus-5-5`: effort `medium` izvan zaštićenih staza i `high` na zaštićenima, umjesto
+dosadašnjeg `xhigh`. Isti `model-fixture` (ne čita routing config) ponovljen je po jednom za
+obje razine, jedan po jedan, iz cloud sesije na pretplati.
+
+| Model | Effort | Ugovor | Shema izlaza | Test netaknut | Ciljani testovi | Tvrdnja = stvarnost | Izlazni tokeni | Trajanje | Koraci | Vrijeme (UTC) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `claude-opus-5-5` | medium | da | da | da | 5/5 | da | 1382 | 15,9 s | 5 | 09:06:49 |
+| `claude-opus-5-5` | high | da | da | da | 5/5 | da | 1318 | 15,0 s | 5 | 09:07:12 |
+
+Medium prolazi fixture, pa se effort spušta kako je predloženo. Na ovom zadatku high nije
+skuplji od mediuma: razlika od 64 tokena i 0,9 s je unutar raspona dvaju medium runova (1194 u
+odjeljku 2 i 1382 ovdje). Mjerenje zato potvrđuje samo da obje razine prolaze. Ne pokazuje
+uštedu mediuma i ne pokazuje da je high na zaštićenim stazama potreban; to ostaje odluka
+politike, ne izmjereni učinak.
+
 ## Što ovo ne dokazuje
 
 - **Ovo je jedan run po modelu** na malom zadatku. Omjer tokena i trajanja (oko 0,6 i 0,45) je
