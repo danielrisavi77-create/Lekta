@@ -358,6 +358,10 @@ kostao ovaj PR", ne samo "koliko je potroseno ovaj tjedan". Do tada koordinator 
 `config/agent-routing.json` (npr. spustanje efforta ako se pokazalo da nizi dovoljno pokriva
 klasu zadatka).
 
+Dnevni izvjestaj `npm run agents:usage-daily` cita lokalne transkripte Claude Codea i Codexa te
+Grok redke iz `usage.jsonl`, ostaje lokalno na stroju i ponedjeljkom dodaje prijedloge
+optimizacije izvedene iz brojeva (`docs/agents/USAGE_DAILY.md`).
+
 ## Kako dodati novi model
 
 1. Pokreni doctor provjeru za taj model/provider (potvrdi da je CLI ili API stvarno dostupan
