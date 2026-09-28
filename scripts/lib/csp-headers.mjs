@@ -38,6 +38,16 @@ export const STRIPE_CSP_EXPECTATIONS = Object.freeze([
 ]);
 
 /**
+ * Cloudflare Turnstile za Supabase Auth (T89). Bez ovih dozvola preglednik blokira api.js ili
+ * njegov iframe, `getCaptchaToken` vrati undefined, a kad je captcha ukljucen na Authu, GoTrue
+ * odbija svaku prijavu, i anonimnu koja stoji iza popravka.
+ */
+const TURNSTILE_CSP_EXPECTATIONS = Object.freeze([
+  ['script-src', 'https://challenges.cloudflare.com'],
+  ['frame-src', 'https://challenges.cloudflare.com'],
+]);
+
+/**
  * Porijekla koja `payment` u Permissions-Policy MORA dopustiti (F18 krug 4). Apple Pay i Google
  * Pay (Z36) rade kroz Payment Request API u Stripeovu okviru; `payment=()` ga zabranjuje i tom
  * okviru, pa gumbi novcanika tiho nestanu, a placanje karticom i dalje radi, pa kvar nitko ne vidi.
@@ -109,6 +119,10 @@ export function cspHeaderProblems(headers) {
     const value = cspDirective(csp, name);
     if (!value) problems.push(`CSP nema direktivu ${name} (Stripe Payment Element se ne bi ucitao)`);
     else if (!value.split(/\s+/).includes(host)) problems.push(`CSP ${name} ne dopusta ${host}: "${value.trim()}"`);
+  }
+  for (const [name, host] of TURNSTILE_CSP_EXPECTATIONS) {
+    const value = cspDirective(csp, name);
+    if (!value.split(/\s+/).includes(host)) problems.push(`CSP ${name} ne dopusta ${host} (Turnstile captcha za Auth): "${value.trim()}"`);
   }
 
   // Permissions-Policy `payment`: otvoren tocno za vlastito porijeklo i Stripe.js okvire.

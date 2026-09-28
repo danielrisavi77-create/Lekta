@@ -542,3 +542,19 @@ test('Z32: tragovi olovke jednom pri ucitavanju pa izblijede; pod prigusenim pok
   await expect(page.locator('.intake-tragovi')).toBeHidden();
   await expect(page.locator('.intake-trag').first()).toBeHidden();
 });
+
+/**
+ * T89: BEZ `VITE_TURNSTILE_SITE_KEY` CAPTCHA NE SMIJE NI POSTOJATI. UX suite dize build bez tog
+ * kljuca, pa je ovo tocno stanje produkcije prije ukljucivanja: nijedan zahtjev prema Cloudflareu,
+ * nijedan spremnik widgeta, a ulaz predaje rad na /rad/ kao i prije.
+ */
+test('T89: bez site keyja Turnstile se ne ucitava i ne blokira ulaz', async ({ page }) => {
+  const cloudflare: string[] = [];
+  page.on('request', (req) => { if (req.url().includes('challenges.cloudflare.com')) cloudflare.push(req.url()); });
+  await page.goto('/');
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX, 'rad.docx');
+  await page.waitForURL(/\/rad\/#session=/);
+  await expect(page.locator('[data-lekta-captcha]')).toHaveCount(0);
+  expect(cloudflare, 'build bez kljuca je zvao Turnstile').toEqual([]);
+});

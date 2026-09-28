@@ -231,6 +231,7 @@ import { INK_CLASS, wireInkSignature } from '../src/shared/site-footer-full';
 import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
+import { captchaWiringProblems } from './helpers/auth-captcha';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -4467,7 +4468,7 @@ const MUTATIONS: Mutation[] = [
       'csp-hash su u krugu 1 ostali zeleni jer nijedan nije gledao Stripe hostove.',
     caught: () => {
       // Tocan niz iz CSP retka, ne regex: rijec frame-src se javlja i u komentaru iznad njega.
-      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;', '');
+      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com;', '');
       return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src'));
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
@@ -4497,6 +4498,60 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  // T89 (2026-09-28): captcha na Supabase Authu. Kad je captcha ukljucen, GoTrue odbija signup
+  // bez tokena; anonimna prijava je identitet iza popravka, pa bi popravak tiho prestao raditi.
+  {
+    id: 'auth/captcha-token-uklonjen-iz-anonimne-prijave',
+    imitates:
+      'Anonimna prijava salje gole `{}` umjesto withCaptcha: dok captcha nije na Authu sve radi, a ' +
+      'cim se ukljuci, svaki novi korisnik ostaje bez sesije i popravak pada s 401, bez crvenog testa.',
+    caught: () => {
+      const text = readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts'));
+      const mut = text.replace('body: withCaptcha({}, captchaToken),', "body: '{}',");
+      return mut !== text && captchaWiringProblems([{ path: 'src/auth/session.ts', text: mut }])
+        .some((p) => p.includes('/auth/v1/signup salje tijelo mimo withCaptcha'));
+    },
+    cleanBefore: () =>
+      captchaWiringProblems([{ path: 'src/auth/session.ts', text: readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts')) }]).length === 0,
+  },
+  {
+    id: 'auth/captcha-token-izgubljen-u-prijavi-lozinkom',
+    imitates: 'withCaptcha ostane, ali dobije undefined umjesto tokena: tijelo izgleda ispravno, a token nikad ne stigne.',
+    caught: () => {
+      const text = readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts'));
+      const mut = text.replace('withCaptcha({ email: clean, password }, captchaToken)', 'withCaptcha({ email: clean, password }, undefined)');
+      return mut !== text && captchaWiringProblems([{ path: 'src/auth/session.ts', text: mut }])
+        .some((p) => p.includes('grant_type=password zove withCaptcha bez captchaToken'));
+    },
+    cleanBefore: () =>
+      captchaWiringProblems([{ path: 'src/auth/session.ts', text: readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts')) }]).length === 0,
+  },
+  {
+    id: 'auth/supabase-js-prijava-mimo-captche',
+    imitates:
+      'Codex T89-04: novi tok kroz supabase-js (npr. reset lozinke ili anonimna prijava) bez captchaToken; ' +
+      'fetch dio garda ga ne vidi, pa bi uz tri postojeca poziva prosao.',
+    caught: () => {
+      const text = readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts'));
+      return captchaWiringProblems([
+        { path: 'src/auth/session.ts', text },
+        { path: 'src/auth/reset.ts', text: 'await supabase.auth.resetPasswordForEmail(email);\n' },
+      ]).some((p) => p.includes('supabase-js resetPasswordForEmail() mimo withCaptcha'));
+    },
+    cleanBefore: () =>
+      captchaWiringProblems([{ path: 'src/auth/session.ts', text: readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts')) }]).length === 0,
+  },
+  {
+    id: 'csp/turnstile-izbacen-iz-script-src',
+    imitates:
+      'Bez challenges.cloudflare.com u script-src preglednik blokira Turnstile api.js; klijent tada ' +
+      'nema token, pa uz ukljucen captcha na Authu nitko ne moze dobiti sesiju.',
+    caught: () => {
+      const mut = builtHeaders().replace(' https://challenges.cloudflare.com \'sha256', " 'sha256");
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('script-src ne dopusta https://challenges.cloudflare.com'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
   {
     id: 'csp/stripe-host-u-form-action',
     imitates:
@@ -4518,8 +4573,8 @@ const MUTATIONS: Mutation[] = [
       'samo u pregledniku; Vitest, tsc i build to ne vide.',
     caught: () => {
       const mut = builtHeaders().replace(
-        ' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;',
-        ' frame-src https://js.stripe.com https://hooks.stripe.com;',
+        ' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com;',
+        ' frame-src https://js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com;',
       );
       return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src ne dopusta https://*.js.stripe.com'));
     },
