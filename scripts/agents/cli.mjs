@@ -5,6 +5,7 @@ import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 import { botPathViolations, changedPaths, resolveBot } from './grok-bots.mjs';
+import { assertKnownClaudeModel, probeModel, runFixture } from './model-probe.mjs';
 
 export function diagnoseProviderFailure(command, stderr) {
   if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
@@ -168,11 +169,32 @@ function worktreeSnapshot() {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--bot grok-review|grok-scout|grok-docs|grok-triage] [--execute]');
+    console.log('agents doctor [--model claude-...] | model-fixture --model claude-... --effort low|medium|high|xhigh | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--bot grok-review|grok-scout|grok-docs|grok-triage] [--execute]');
+    return;
+  }
+  if (command === 'doctor' && rest.length) {
+    // Doctor za jedan model: stvaran poziv kroz pretplatu (ROUTING.md, "Kako dodati novi model", korak 1).
+    if (rest.length !== 2 || rest[0] !== '--model') throw new Error('doctor takes no arguments or --model <claude model>');
+    assertKnownClaudeModel(JSON.parse(readFileSync(join(root, 'config/agent-routing.json'), 'utf8')), rest[1]);
+    const probe = probeModel(rest[1], { cwd: root });
+    console.log(probe.line);
+    if (!probe.ok) process.exitCode = 1;
+    return;
+  }
+  if (command === 'model-fixture') {
+    // Korak 2: implement na malom zadatku u privremenoj mapi; jedan run po pozivu.
+    if (rest.length !== 4 || rest[0] !== '--model' || rest[2] !== '--effort') throw new Error('model-fixture --model <claude model> --effort <level>');
+    const [, model, , effort] = rest;
+    assertKnownClaudeModel(JSON.parse(readFileSync(join(root, 'config/agent-routing.json'), 'utf8')), model);
+    const report = { observedAt: new Date().toISOString(), ...runFixture(model, effort) };
+    const out = join(root, '.artifacts/agents');
+    mkdirSync(out, { recursive: true });
+    writeFileSync(join(out, `model-fixture-${model}-${effort}-${Date.now()}.json`), JSON.stringify(report, null, 2) + '\n');
+    console.log(JSON.stringify(report, null, 2));
+    if (!report.ok) process.exitCode = 1;
     return;
   }
   if (command === 'doctor') {
-    if (rest.length) throw new Error('doctor takes no arguments');
     for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) console.log(probeCli(cli, { cwd: root }));
     console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
