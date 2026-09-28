@@ -104,24 +104,117 @@ class ServerTest(unittest.TestCase):
             server.shutdown()
 
 
-class MainTest(unittest.TestCase):
-    def test_odbija_host_izvan_loopbacka(self):
-        with tempfile.NamedTemporaryFile(delete=False) as f:
-            f.write(b"w")
-        args = ["--model-revision", "r", "--weights-file", f.name, "--tokenizer-file", f.name, "--calibration-revision", "c", "--host", "0.0.0.0"]
-        self.assertEqual(rt.main(args, load=lambda *a, **k: FakeAgent()), 2)
-        os.unlink(f.name)
+REV = "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851"
 
-    def test_manifest_hashira_stvarne_datoteke(self):
-        with tempfile.TemporaryDirectory() as d:
-            w, t = os.path.join(d, "w.bin"), os.path.join(d, "t.json")
-            open(w, "wb").write(b"tezine")
-            open(t, "wb").write(b"tokenizer")
-            args = rt.parse_args(["--model-revision", "r1", "--weights-file", w, "--tokenizer-file", t, "--calibration-revision", "cal-1"])
-            m = rt.build_manifest(args, "0.3.21")
-            self.assertEqual(m["weightsSha256"], rt.sha256_file(w))
-            self.assertNotEqual(m["weightsSha256"], m["tokenizerSha256"])
-            self.assertEqual(m["modelId"], "convaiinnovations:laya:multilingual")
+
+def checkpoint(root):
+    """Minimalna mapa checkpointa istog oblika kao upstream snapshot (agent.py:352)."""
+    for rel, data in {"model.safetensors": b"tezine", "rl_agent_config.json": b"{}", "encoder/config.json": b"enc",
+                      "tokenizer/tokenizer.json": b"tok", "tokenizer/tokenizer_config.json": b"{}"}.items():
+        path = os.path.join(root, *rel.split("/"))
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(data)
+    return root
+
+
+class RevisionAgent(FakeAgent):
+    def __init__(self, revision):
+        super().__init__()
+        self.revision = revision
+
+
+class PrepareTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = checkpoint(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def args(self, *extra):
+        return rt.parse_args(["--model-revision", REV, "--calibration-revision", "cal-1", *extra])
+
+    def test_prolazi_i_trazi_pinani_commit_od_upstreama(self):
+        calls = []
+        def load(model, **kw):
+            calls.append((model, kw))
+            return RevisionAgent(REV)
+        runtime = rt.prepare(self.args(), load, "0.3.21", locate=lambda a: self.dir)
+        self.assertEqual(calls, [("convaiinnovations/laya", {"subfolder": "multilingual", "revision": REV})])
+        self.assertEqual(runtime.manifest["modelRevision"], REV)
+        self.assertEqual(runtime.manifest["modelId"], "convaiinnovations:laya:multilingual")
+
+    def test_odbija_host_izvan_loopbacka_prije_ucitavanja(self):
+        def load(*a, **k):
+            raise AssertionError("model se ne smije ucitati")
+        with self.assertRaises(rt.StartError):
+            rt.prepare(self.args("--host", "0.0.0.0"), load, "t", locate=lambda a: self.dir)
+
+    def test_odbija_granu_ili_skraceni_commit(self):
+        for rev in ["main", REV[:12], REV.upper()]:
+            args = rt.parse_args(["--model-revision", rev, "--calibration-revision", "c"])
+            with self.assertRaises(rt.StartError):
+                rt.prepare(args, lambda *a, **k: RevisionAgent(rev), "t", locate=lambda a: self.dir)
+
+    def test_odbija_kad_je_ucitan_drugi_commit(self):
+        for loaded in [None, "f" * 40]:
+            with self.assertRaises(rt.StartError):
+                rt.prepare(self.args(), lambda *a, **k: RevisionAgent(loaded), "t", locate=lambda a: self.dir)
+
+
+class ManifestTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = checkpoint(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def digests(self):
+        return rt.checkpoint_digests(self.dir)
+
+    def change(self, rel, data=b"drugo"):
+        with open(os.path.join(self.dir, *rel.split("/")), "wb") as f:
+            f.write(data)
+
+    def test_tezine_pokrivaju_model_konfiguraciju_i_enkoder(self):
+        for rel in ["model.safetensors", "rl_agent_config.json", "encoder/config.json"]:
+            before = self.digests()
+            self.change(rel, rel.encode())
+            after = self.digests()
+            self.assertNotEqual(after[0], before[0], rel)
+            self.assertEqual(after[1], before[1], rel)
+
+    def test_tokenizer_pokriva_cijelu_mapu_i_prepisani_config(self):
+        before = self.digests()
+        self.change("tokenizer/tokenizer_config.json", b'{"tokenizer_class": "PreTrainedTokenizerFast"}')
+        after = self.digests()
+        self.assertEqual(after[0], before[0])
+        self.assertNotEqual(after[1], before[1])
+
+    def test_novi_enkoderski_fajl_mijenja_hash_a_skriveni_tmp_ne(self):
+        before = self.digests()
+        self.change(".tokenizer_config.x.tmp")
+        os.makedirs(os.path.join(self.dir, "tokenizer"), exist_ok=True)
+        self.change("tokenizer/.tokenizer_config.y.tmp")
+        self.assertEqual(self.digests(), before)
+        self.change("encoder/extra.bin")
+        self.assertNotEqual(self.digests()[0], before[0])
+
+    def test_nepotpun_checkpoint_se_odbija(self):
+        os.remove(os.path.join(self.dir, "model.safetensors"))
+        with self.assertRaises(ValueError):
+            self.digests()
+
+    def test_hash_se_racuna_nakon_ucitavanja(self):
+        # Upstream pri ucitavanju prepise tokenizer_config.json; manifest mora opisati stanje poslije.
+        def load(model, **kw):
+            self.change("tokenizer/tokenizer_config.json", b'{"prepisano": true}')
+            return RevisionAgent(REV)
+        args = rt.parse_args(["--model-revision", REV, "--calibration-revision", "cal-1"])
+        runtime = rt.prepare(args, load, "0.3.21", locate=lambda a: self.dir)
+        self.assertEqual(runtime.manifest["tokenizerSha256"], self.digests()[1])
 
 
 if __name__ == "__main__":

@@ -5,15 +5,17 @@ Govori protokol iz docs/laya/RUNTIME_PROTOCOL.md: POST /v2/infer na 127.0.0.1. P
 na radnoj stanici (docs/laya/RADNA_STANICA.md). Ne logira tekst zapisa, ne slusa izvan loopbacka
 i ne vraca prag ni politiku: prag dolazi iz Lektinog registra, nikad iz runtimea.
 
-Upstream (provjereno 27. 9. 2026 u README-u github.com/NandhaKishorM/laya, PyPI laya 0.3.21):
-    agent = laya.load("convaiinnovations/laya", subfolder="multilingual")
+Upstream (provjereno 28. 9. 2026 u sdistu laya-0.3.21, SHA-256 a3ddc55d...f416):
+    agent = laya.load("convaiinnovations/laya", subfolder="multilingual", revision=<commit>)
     result = agent.predict(state, {"ime": {"type": "choice", "instructions": ..., "criteria": {...}}})
-    result["answers"]["ime"] -> {"choice", "confidence", "probabilities"}
+    result["answers"]["ime"] -> {"choice", "probabilities", "confidence", "answer_confidence", ...}
+Checkpoint cine `rl_agent_config.json`, `model.safetensors`, `tokenizer/*` i `encoder/*`
+(agent.py:352). Upstream pri ucitavanju smije prepisati `tokenizer/tokenizer_config.json`
+(`_fix_tokenizer_config`), pa se manifest hashira NAKON ucitavanja, nad istom mapom.
 Nije pokretano s pravim modelom u razvojnoj okolini (Hugging Face nije bio dostupan).
 
 Pokretanje:
-    python scripts/laya/runtime/lekta_laya_runtime.py --model-revision <hf-commit> \
-        --weights-file <putanja tezina> --tokenizer-file <putanja tokenizera> \
+    python scripts/laya/runtime/lekta_laya_runtime.py --model-revision <40-znamenkasti commit> \
         --calibration-revision cal-2026-10-1 [--subfolder multilingual] [--precision fp32] [--port 8765]
 """
 from __future__ import annotations
@@ -22,6 +24,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -34,6 +37,9 @@ MAX_REQUEST_BYTES = 16 * 1024
 MAX_TEXT = 2000
 ID_PATTERN = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$")
 LOOPBACK = {"127.0.0.1"}
+COMMIT = re.compile(r"^[0-9a-f]{40}$")
+# Isti allow_patterns kao upstream `Agent.__init__`; samo te datoteke model ucitava.
+CHECKPOINT_PATTERNS = ("rl_agent_config.json", "model.safetensors", "tokenizer/*", "encoder/*")
 
 QUESTION = "nalaz"
 INSTRUCTIONS = (
@@ -159,10 +165,48 @@ def make_handler(runtime: LektaLayaRuntime) -> type[BaseHTTPRequestHandler]:
     return Handler
 
 
-def build_manifest(args: argparse.Namespace, runtime_version: str) -> dict[str, str]:
+def tree_sha256(root: str, rel_paths: list[str]) -> str:
+    """Jedan SHA-256 za skup datoteka: sortirani retci `putanja NUL sha256(datoteke)`."""
+    digest = hashlib.sha256()
+    for rel in sorted(rel_paths):
+        digest.update(rel.encode("utf-8") + b"\0" + sha256_file(os.path.join(root, *rel.split("/"))).encode("ascii") + b"\n")
+    return digest.hexdigest()
+
+
+def checkpoint_digests(checkpoint_dir: str) -> tuple[str, str]:
+    """(weightsSha256, tokenizerSha256) za mapu checkpointa.
+
+    Tezine pokrivaju `model.safetensors`, `rl_agent_config.json` i cijeli `encoder/`, jer model
+    bez istog enkodera i konfiguracije nije isti model. Tokenizer pokriva cijeli `tokenizer/`.
+    Skrivene datoteke (upstreamov `.tokenizer_config.*.tmp` usred zamjene) ne ulaze.
+    """
+    files = []
+    for dirpath, dirnames, names in os.walk(checkpoint_dir):
+        dirnames[:] = sorted(d for d in dirnames if not d.startswith("."))
+        for name in names:
+            if not name.startswith("."):
+                files.append(os.path.relpath(os.path.join(dirpath, name), checkpoint_dir).replace(os.sep, "/"))
+    weights = [f for f in files if f in ("model.safetensors", "rl_agent_config.json") or f.startswith("encoder/")]
+    tokenizer = [f for f in files if f.startswith("tokenizer/")]
+    if "model.safetensors" not in weights or "rl_agent_config.json" not in weights or not tokenizer:
+        raise ValueError("mapa checkpointa nema model.safetensors, rl_agent_config.json i tokenizer/")
+    return tree_sha256(checkpoint_dir, weights), tree_sha256(checkpoint_dir, tokenizer)
+
+
+def locate_checkpoint(args: argparse.Namespace) -> str:
+    """Mapa pinanog checkpointa u lokalnoj HF predmemoriji; bez mreze (local_files_only)."""
+    from huggingface_hub import snapshot_download
+    prefix = f"{args.subfolder}/" if args.subfolder else ""
+    root = snapshot_download(args.model, revision=args.model_revision, local_files_only=True,
+                             allow_patterns=[prefix + p for p in CHECKPOINT_PATTERNS])
+    return os.path.join(root, args.subfolder) if args.subfolder else root
+
+
+def build_manifest(args: argparse.Namespace, runtime_version: str, checkpoint_dir: str) -> dict[str, str]:
     model_id = check_id(f"{args.model.replace('/', ':')}:{args.subfolder}" if args.subfolder else args.model.replace("/", ":"), "modelId")
+    weights, tokenizer = checkpoint_digests(checkpoint_dir)
     return {"backend": "laya-python", "modelId": model_id, "modelRevision": check_id(args.model_revision, "modelRevision"),
-            "weightsSha256": sha256_file(args.weights_file), "tokenizerSha256": sha256_file(args.tokenizer_file),
+            "weightsSha256": weights, "tokenizerSha256": tokenizer,
             "calibrationRevision": check_id(args.calibration_revision, "calibrationRevision"),
             "runtimeVersion": check_id(runtime_version, "runtimeVersion"), "precision": args.precision}
 
@@ -171,9 +215,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Lekta Laya runtime (lokalni, samo 127.0.0.1)")
     parser.add_argument("--model", default="convaiinnovations/laya")
     parser.add_argument("--subfolder", default="multilingual", help="multilingual za hrvatski; prazno za engleski checkpoint")
-    parser.add_argument("--model-revision", required=True, help="commit Hugging Face repozitorija modela")
-    parser.add_argument("--weights-file", required=True)
-    parser.add_argument("--tokenizer-file", required=True)
+    parser.add_argument("--model-revision", required=True, help="40-znamenkasti commit Hugging Face repozitorija modela")
     parser.add_argument("--calibration-revision", required=True)
     parser.add_argument("--precision", default="fp32", choices=["fp32", "fp16", "bf16", "int8", "int4"])
     parser.add_argument("--host", default="127.0.0.1")
@@ -181,19 +223,33 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def main(argv: list[str], load: Callable[..., Any] | None = None) -> int:
-    args = parse_args(argv)
+class StartError(Exception):
+    """Runtime se ne smije pokrenuti; poruka ide operateru."""
+
+
+def prepare(args: argparse.Namespace, load: Callable[..., Any], runtime_version: str,
+            locate: Callable[[argparse.Namespace], str] = locate_checkpoint) -> LektaLayaRuntime:
     if args.host not in LOOPBACK:
-        print("Runtime smije slusati samo na 127.0.0.1.", file=sys.stderr)
-        return 2
-    if load is None:
+        raise StartError("Runtime smije slusati samo na 127.0.0.1.")
+    if not COMMIT.match(args.model_revision):
+        raise StartError("--model-revision mora biti 40-znamenkasti commit (mala slova), ne grana ni oznaka.")
+    agent = load(args.model, subfolder=args.subfolder or None, revision=args.model_revision)
+    # Upstream biljezi commit na koji snapshot stvarno pokazuje; drugi commit znaci drugi model.
+    loaded = getattr(agent, "revision", None)
+    if loaded != args.model_revision:
+        raise StartError(f"Ucitan je commit {loaded!r}, a trazen {args.model_revision}.")
+    return LektaLayaRuntime(agent, build_manifest(args, runtime_version, locate(args)))
+
+
+def main(argv: list[str]) -> int:
+    args = parse_args(argv)
+    try:
         import laya  # sluzbeni paket: python -m pip install "laya"
         from importlib.metadata import version
-        load, runtime_version = laya.load, version("laya")
-    else:
-        runtime_version = "test"
-    agent = load(args.model, subfolder=args.subfolder) if args.subfolder else load(args.model)
-    runtime = LektaLayaRuntime(agent, build_manifest(args, runtime_version))
+        runtime = prepare(args, laya.load, version("laya"))
+    except StartError as error:
+        print(error, file=sys.stderr)
+        return 2
     print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest}, indent=2))
     HTTPServer((args.host, args.port), make_handler(runtime)).serve_forever()
     return 0

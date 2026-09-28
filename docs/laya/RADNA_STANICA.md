@@ -41,36 +41,39 @@ python -m pip install laya
 python -m unittest discover -s scripts\laya\runtime -p "test_*.py"
 ```
 
-Paket povlači PyTorch, pa instalacija i prvo preuzimanje modela traju. Prvi `laya.load` sprema model
-u Hugging Face predmemoriju (zadano `%USERPROFILE%\.cache\huggingface\hub`; na disk s više mjesta
-preusmjeri je varijablom `HF_HOME`, npr. `D:\laya\hf`). Ispiši što je preuzeto:
+Paket povlači PyTorch, pa instalacija i prvo preuzimanje modela traju. Model se preuzima u Hugging
+Face predmemoriju (zadano `%USERPROFILE%\.cache\huggingface\hub`); na disk s više mjesta
+preusmjeri je varijablom `HF_HOME`, npr. `D:\laya\hf`.
+
+**Revizija se pina od prvog preuzimanja.** Upstream u `laya/revisions.py` drži svoj pregledani commit
+za `convaiinnovations/laya` (u 0.3.21: `55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851`). Preuzmi točno
+taj commit:
 
 ```powershell
 $env:HF_HOME = "D:\laya\hf"
-python -c "import laya; laya.load('convaiinnovations/laya', subfolder='multilingual')"
-Get-ChildItem -Recurse "$env:HF_HOME\hub\models--convaiinnovations--laya\snapshots" | Select-Object FullName, Length
+$rev = python -c "from laya.revisions import PINNED_REVISIONS as P; print(P['convaiinnovations/laya'])"
+python -c "import laya, sys; a = laya.load('convaiinnovations/laya', subfolder='multilingual', revision=sys.argv[1]); print(a.revision)" $rev
 ```
 
-Ime mape pod `snapshots` je commit modela (`--model-revision`). U podmapi `multilingual` odaberi
-datoteku težina (najveća datoteka, obično `.safetensors`) i datoteku tokenizera (obično
-`tokenizer.json`). Točna imena provjeri u ispisu, jer ih ovdje nismo mogli vidjeti.
+Ako taj commit nema podmapu `multilingual` (`FileNotFoundError: Subfolder 'multilingual' not found`),
+uzmi trenutni commit repozitorija. To zapiši u PR s registrom, jer tada revizija nije upstreamov
+pregledani commit:
 
-Pokretanje runtimea (sluša samo na 127.0.0.1):
+```powershell
+$rev = python -c "from huggingface_hub import HfApi; print(HfApi().model_info('convaiinnovations/laya').sha)"
+```
+
+Pokretanje runtimea (sluša samo na 127.0.0.1; do modela dolazi samo iz lokalne predmemorije):
 
 ```powershell
 python scripts\laya\runtime\lekta_laya_runtime.py `
-  --model-revision <ime mape pod snapshots> `
-  --weights-file <puna putanja datoteke tezina> `
-  --tokenizer-file <puna putanja tokenizera> `
+  --model-revision $rev `
   --calibration-revision cal-2026-10-1 --precision fp32 --port 8765
 ```
 
-Runtime pri pokretanju ispiše svoj manifest s hashovima. Taj ispis ide u registar (korak 3). Hash
-možeš i neovisno provjeriti:
-
-```powershell
-(Get-FileHash -Algorithm SHA256 <putanja>).Hash.ToLower()
-```
+Runtime pinani commit predaje upstreamu i odbija start ako je učitan drugi commit. Zatim hashira
+cijeli checkpoint **nakon** učitavanja (`RUNTIME_PROTOCOL.md`: težine s konfiguracijom i
+enkoderom, tokenizer kao cijela mapa) i ispiše manifest. Taj ispis ide u registar (korak 3).
 
 Preciznost u manifestu mora odgovarati stvarnom izvršavanju. Upstream na CUDA karticama s
 compute capability 8+ koristi bf16; na CPU-u je fp32.
