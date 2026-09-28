@@ -30,7 +30,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
@@ -61,7 +64,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-gluma-diplomski",
@@ -92,7 +98,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
@@ -123,7 +132,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-montaza-diplomski",
@@ -153,7 +165,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-opci-diplomski",
@@ -184,7 +199,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-produkcija-diplomski",
@@ -214,7 +232,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "adu-snimanje-diplomski",
@@ -245,7 +266,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "agr-diplomski",
@@ -275,7 +299,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "agr-doktorski",
@@ -305,7 +332,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "agr-zavrsni",
@@ -335,7 +365,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "agromed-zavrsni",
@@ -366,7 +399,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "algebra-diplomski",
@@ -396,7 +432,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -426,7 +465,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "algebra-specijalisticki",
@@ -456,7 +498,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "algebra-zavrsni",
@@ -486,7 +531,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-diplomski",
@@ -517,7 +565,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-doktorski",
@@ -547,7 +598,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-grafika-diplomski",
@@ -577,7 +631,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-kiparstvo-diplomski",
@@ -607,7 +664,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -637,7 +697,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
@@ -668,7 +731,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
@@ -699,7 +765,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
@@ -729,7 +798,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "apuri-diplomski",
@@ -759,7 +831,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "apuri-zavrsni",
@@ -789,7 +864,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "arca-zavrsni",
@@ -819,7 +897,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "arh-diplomski",
@@ -849,7 +930,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "arh-doktorski",
@@ -879,7 +963,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "aspira-diplomski",
@@ -909,7 +996,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -939,7 +1029,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "aspira-zavrsni",
@@ -969,7 +1062,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -999,7 +1095,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "bak-diplomski",
@@ -1029,7 +1128,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "bak-zavrsni",
@@ -1059,7 +1161,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "biolos-diplomski",
@@ -1089,7 +1194,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "biolos-zavrsni",
@@ -1119,7 +1227,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "biotech-diplomski",
@@ -1149,7 +1260,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "biotech-zavrsni",
@@ -1179,7 +1293,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "dizajn-diplomski",
@@ -1209,7 +1326,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "effectus-diplomski",
@@ -1239,7 +1359,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "effectus-seminarski",
@@ -1269,7 +1392,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "effectus-zavrsni",
@@ -1299,7 +1425,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-diplomski",
@@ -1329,7 +1458,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-doktorski",
@@ -1359,7 +1491,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -1389,7 +1524,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -1419,7 +1557,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -1449,7 +1590,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-specijalisticki",
@@ -1479,7 +1623,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efos-zavrsni",
@@ -1509,7 +1656,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efri-diplomski",
@@ -1539,7 +1689,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efri-specijalisticki",
@@ -1570,7 +1723,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efri-zavrsni",
@@ -1600,7 +1756,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efst-diplomski",
@@ -1630,7 +1789,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -1660,7 +1822,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -1690,7 +1855,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -1720,7 +1888,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efst-zavrsni",
@@ -1750,7 +1921,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-diplomski",
@@ -1780,7 +1954,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-doktorski",
@@ -1810,7 +1987,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-seminarski",
@@ -1841,7 +2021,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -1871,7 +2054,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -1901,7 +2087,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "efzg-zavrsni",
@@ -1929,7 +2118,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "erf-diplomski",
@@ -1959,7 +2151,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "erf-doktorski",
@@ -1989,7 +2184,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "evtos-diplomski",
@@ -2019,7 +2217,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "evtos-zavrsni",
@@ -2049,7 +2250,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fazos-diplomski",
@@ -2079,7 +2283,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fazos-zavrsni",
@@ -2109,7 +2316,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fbf-doktorski",
@@ -2139,7 +2349,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -2169,7 +2382,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fdmri-diplomski",
@@ -2199,7 +2415,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fdmri-zavrsni",
@@ -2229,7 +2448,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fdmz-diplomski",
@@ -2259,7 +2481,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fer-diplomski",
@@ -2290,7 +2515,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fer-doktorski",
@@ -2320,7 +2548,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fer-zavrsni",
@@ -2351,7 +2582,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ferit-diplomski",
@@ -2381,7 +2615,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ferit-zavrsni",
@@ -2411,7 +2648,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fesb-diplomski",
@@ -2441,7 +2681,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fesb-zavrsni",
@@ -2471,7 +2714,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fetpu-diplomski",
@@ -2501,7 +2747,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fetpu-zavrsni",
@@ -2531,7 +2780,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-diplomski",
@@ -2561,7 +2813,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -2591,7 +2846,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -2621,7 +2879,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -2652,7 +2913,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -2683,7 +2947,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-povijest-diplomski",
@@ -2713,7 +2980,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-povijest-zavrsni",
@@ -2743,7 +3013,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -2773,7 +3046,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -2803,7 +3079,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffos-zavrsni",
@@ -2833,7 +3112,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffpu-diplomski",
@@ -2863,7 +3145,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -2893,7 +3178,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-diplomski",
@@ -2923,7 +3211,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -2953,7 +3244,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -2983,7 +3277,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -3013,7 +3310,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -3043,7 +3343,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -3073,7 +3376,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -3103,7 +3409,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -3133,7 +3442,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffri-zavrsni",
@@ -3163,7 +3475,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -3193,7 +3508,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffrz-diplomski",
@@ -3223,7 +3541,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffrz-doktorski",
@@ -3253,7 +3574,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffst-diplomski",
@@ -3283,7 +3607,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffst-zavrsni",
@@ -3313,7 +3640,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-arheologija-graduate",
@@ -3341,7 +3671,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -3369,7 +3702,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -3397,7 +3733,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -3427,7 +3766,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
@@ -3455,7 +3797,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -3483,7 +3828,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -3511,7 +3859,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -3539,7 +3890,10 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -3567,7 +3921,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -3595,7 +3952,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ffzg-svedski-zavrsni",
@@ -3626,7 +3986,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fgag-diplomski",
@@ -3656,7 +4019,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fgag-zavrsni",
@@ -3686,7 +4052,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fhs-diplomski",
@@ -3716,7 +4085,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fhs-doktorski",
@@ -3746,7 +4118,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fhs-zavrsni",
@@ -3776,7 +4151,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fipu-diplomski",
@@ -3806,7 +4184,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fipu-zavrsni",
@@ -3836,7 +4217,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fizos-diplomski",
@@ -3866,7 +4250,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fizri-diplomski",
@@ -3896,7 +4283,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fizri-zavrsni",
@@ -3926,7 +4316,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fkit-diplomski",
@@ -3956,7 +4349,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fkit-doktorski",
@@ -3986,7 +4382,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fkit-zavrsni",
@@ -4016,7 +4415,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fmtu-diplomski",
@@ -4046,7 +4448,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fmtu-zavrsni",
@@ -4076,7 +4481,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "foi-diplomski",
@@ -4106,7 +4514,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "foi-zavrsni",
@@ -4136,7 +4547,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "foozos-diplomski",
@@ -4167,7 +4581,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "foozpu-diplomski",
@@ -4197,7 +4614,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "foozpu-zavrsni",
@@ -4227,7 +4647,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "forenzika-diplomski",
@@ -4257,7 +4680,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpz-diplomski",
@@ -4287,7 +4713,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpz-zavrsni",
@@ -4317,7 +4746,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -4349,7 +4781,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -4379,7 +4814,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -4409,7 +4847,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -4439,7 +4880,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -4471,7 +4915,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -4501,7 +4948,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4529,7 +4979,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4557,7 +5010,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4585,7 +5041,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -4615,7 +5074,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -4645,7 +5107,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -4677,7 +5142,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -4709,7 +5177,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -4741,7 +5212,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -4773,7 +5247,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -4803,7 +5280,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -4833,7 +5313,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-diplomski",
@@ -4864,7 +5347,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-doktorski",
@@ -4894,7 +5380,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -4925,7 +5414,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -4956,7 +5448,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -4987,7 +5482,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fsb-zavrsni",
@@ -5018,7 +5516,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ftrr-diplomski",
@@ -5048,7 +5549,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -5078,7 +5582,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fzsri-diplomski",
@@ -5106,7 +5613,10 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -5136,7 +5646,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geof-diplomski",
@@ -5166,7 +5679,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geof-doktorski",
@@ -5196,7 +5712,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -5227,7 +5746,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -5258,7 +5780,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -5289,7 +5814,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geoteh-diplomski",
@@ -5320,7 +5848,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geoteh-doktorski",
@@ -5351,7 +5882,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "geoteh-zavrsni",
@@ -5382,7 +5916,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grad-diplomski",
@@ -5412,7 +5949,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grad-doktorski",
@@ -5442,7 +5982,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grad-zavrsni",
@@ -5472,7 +6015,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "gradri-diplomski",
@@ -5502,7 +6048,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "gradri-zavrsni",
@@ -5532,7 +6081,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grafos-diplomski",
@@ -5562,7 +6114,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grafos-zavrsni",
@@ -5592,7 +6147,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grf-diplomski",
@@ -5622,7 +6180,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grf-doktorski",
@@ -5652,7 +6213,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "grf-zavrsni",
@@ -5682,7 +6246,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "hig-zavrsni",
@@ -5713,7 +6280,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "hks-diplomski",
@@ -5741,7 +6311,10 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "inf-diplomski",
@@ -5771,7 +6344,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "inf-zavrsni",
@@ -5801,7 +6377,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "iv-diplomski",
@@ -5831,7 +6410,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "iv-zavrsni",
@@ -5861,7 +6443,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kbf-diplomski",
@@ -5891,7 +6476,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kbf-doktorski",
@@ -5921,7 +6509,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kbf-zavrsni",
@@ -5951,7 +6542,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kbfdj-diplomski",
@@ -5981,7 +6575,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kbfst-diplomski",
@@ -6011,7 +6608,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kemos-diplomski",
@@ -6041,7 +6641,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kemos-zavrsni",
@@ -6071,7 +6674,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kif-diplomski",
@@ -6101,7 +6707,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kif-doktorski",
@@ -6131,7 +6740,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kif-specijalisticki",
@@ -6161,7 +6773,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kifos-diplomski",
@@ -6191,7 +6806,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kifos-zavrsni",
@@ -6221,7 +6839,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "kifst-diplomski",
@@ -6251,7 +6872,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ktfst-diplomski",
@@ -6281,7 +6905,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ktfst-zavrsni",
@@ -6311,7 +6938,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "libertas-diplomski",
@@ -6339,7 +6969,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "libertas-diplomski-en",
@@ -6367,7 +7000,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "libertas-zavrsni",
@@ -6397,7 +7033,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "libertas-zavrsni-en",
@@ -6427,7 +7066,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "logri-diplomski",
@@ -6457,7 +7099,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -6487,7 +7132,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -6517,7 +7165,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "math-uniri-diplomski",
@@ -6547,7 +7198,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "math-uniri-diplomski-en",
@@ -6577,7 +7231,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "math-uniri-zavrsni",
@@ -6607,7 +7264,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mathos-diplomski",
@@ -6637,7 +7297,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mathos-zavrsni",
@@ -6667,7 +7330,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "medri-doktorski",
@@ -6698,7 +7364,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -6728,7 +7397,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -6758,7 +7430,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "medri-sanitarno-diplomski",
@@ -6789,7 +7464,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mef-diplomski",
@@ -6819,7 +7497,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mef-doktorski",
@@ -6847,7 +7528,10 @@
         "facultySpecificRepairOptions": 1,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mefos-diplomski",
@@ -6877,7 +7561,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mefos-zavrsni",
@@ -6907,7 +7594,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mefst-diplomski",
@@ -6937,7 +7627,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mefst-doktorski",
@@ -6968,7 +7661,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mefst-tribe-doktorski",
@@ -6999,7 +7695,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mev-diplomski",
@@ -7029,7 +7728,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mev-zavrsni",
@@ -7059,7 +7761,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -7089,7 +7794,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mfpu-diplomski",
@@ -7119,7 +7827,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "more-diplomski",
@@ -7149,7 +7860,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "more-zavrsni",
@@ -7179,7 +7893,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "muza-diplomski",
@@ -7210,7 +7927,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "muza-doktorski",
@@ -7240,7 +7960,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mvi-diplomski",
@@ -7271,7 +7994,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "mvi-prijediplomski",
@@ -7302,7 +8028,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": null,
@@ -7334,7 +8063,10 @@
       },
       "blockedReasons": [
         "program \"Sveučilišni prijediplomski studij Vojno vođenje i upravljanje\" je evidentiran, ali nema nijedan profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": null,
@@ -7366,7 +8098,10 @@
       },
       "blockedReasons": [
         "program \"Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi\" je evidentiran, ali nema nijedan profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": null,
@@ -7398,7 +8133,10 @@
       },
       "blockedReasons": [
         "program \"Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)\" je evidentiran, ali nema nijedan profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "oss-diplomski",
@@ -7428,7 +8166,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "oss-zavrsni",
@@ -7458,7 +8199,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ozs-diplomski",
@@ -7488,7 +8232,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ozs-zavrsni",
@@ -7518,7 +8265,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "par-diplomski",
@@ -7548,7 +8298,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "par-zavrsni",
@@ -7578,7 +8331,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pbf-diplomski",
@@ -7608,7 +8364,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pbf-doktorski",
@@ -7638,7 +8397,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pfri-diplomski",
@@ -7668,7 +8430,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pfri-zavrsni",
@@ -7698,7 +8463,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pfst-diplomski",
@@ -7728,7 +8496,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pfst-zavrsni",
@@ -7758,7 +8529,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -7786,7 +8560,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-biologija-zavrsni",
@@ -7817,7 +8594,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -7845,7 +8625,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -7876,7 +8659,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-geografija-diplomski",
@@ -7904,7 +8690,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -7932,7 +8721,10 @@
         "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-geologija-zavrsni",
@@ -7963,7 +8755,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -7991,7 +8786,10 @@
         "facultySpecificRepairOptions": 2,
         "realDocxSamples": 2
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmfst-diplomski",
@@ -8021,7 +8819,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pmfst-zavrsni",
@@ -8051,7 +8852,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -8083,7 +8887,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -8115,7 +8922,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -8147,7 +8957,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -8179,7 +8992,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -8207,7 +9023,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -8235,7 +9054,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -8263,7 +9085,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -8295,7 +9120,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -8327,7 +9155,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -8357,7 +9188,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -8387,7 +9221,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -8415,7 +9252,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -8443,7 +9283,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -8471,7 +9314,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -8503,7 +9349,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -8535,7 +9384,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -8565,7 +9417,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravos-diplomski",
@@ -8595,7 +9450,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravos-zavrsni",
@@ -8625,7 +9483,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-diplomski",
@@ -8655,7 +9516,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -8685,7 +9549,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -8715,7 +9582,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -8745,7 +9615,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-specijalisticki",
@@ -8775,7 +9648,10 @@
       },
       "blockedReasons": [
         "jedno ili više pravila još nema valjan revalidirani dokazni paket"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravri-zavrsni",
@@ -8805,7 +9681,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravst-diplomski",
@@ -8836,7 +9715,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pravst-zavrsni",
@@ -8867,7 +9749,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ptfos-diplomski",
@@ -8897,7 +9782,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pvzg-specijalisticki",
@@ -8927,7 +9815,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "pvzg-zavrsni",
@@ -8957,7 +9848,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "radno-socijalno-pravo",
@@ -8989,7 +9883,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "radno-socijalno-pravo",
@@ -9021,7 +9918,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "radno-socijalno-pravo",
@@ -9053,7 +9953,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "rgnf-diplomski",
@@ -9083,7 +9986,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "rgnf-zavrsni",
@@ -9113,7 +10019,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "riteh-diplomski",
@@ -9143,7 +10052,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "riteh-zavrsni",
@@ -9173,7 +10085,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "rrif-zavrsni",
@@ -9203,7 +10118,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "securus-zavrsni",
@@ -9233,7 +10151,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sfzg-diplomski",
@@ -9263,7 +10184,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sfzg-doktorski",
@@ -9293,7 +10217,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "simet-zavrsni",
@@ -9323,7 +10250,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sociologija",
@@ -9355,7 +10285,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sociologija",
@@ -9387,7 +10320,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sociologija",
@@ -9419,7 +10355,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
@@ -9449,7 +10388,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
@@ -9479,7 +10421,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
@@ -9509,7 +10454,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
@@ -9539,7 +10487,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
@@ -9569,7 +10520,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sumfak-diplomski",
@@ -9599,7 +10553,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -9629,7 +10586,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "tfpu-diplomski",
@@ -9659,7 +10619,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "tfpu-zavrsni",
@@ -9689,7 +10652,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "trgovacko-pravo",
@@ -9721,7 +10687,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "trgovacko-pravo",
@@ -9753,7 +10722,10 @@
         "nijedna repair opcija nije ponudjena za ovaj profil",
         "profil nije u fakultetskoj matrici, pa za njega nema automatskih testova",
         "profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ttf-diplomski",
@@ -9781,7 +10753,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -9809,7 +10784,10 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -9839,7 +10817,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ttf-doktorski",
@@ -9869,7 +10850,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ttf-zavrsni",
@@ -9899,7 +10883,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "uaos-diplomski",
@@ -9929,7 +10916,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "uaos-zavrsni",
@@ -9959,7 +10949,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ufri-diplomski",
@@ -9989,7 +10982,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ufzg-diplomski",
@@ -10019,7 +11015,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ufzg-doktorski",
@@ -10049,7 +11048,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "ufzg-zavrsni",
@@ -10079,7 +11081,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "umas-diplomski",
@@ -10109,7 +11114,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "umas-zavrsni",
@@ -10139,7 +11147,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
@@ -10169,7 +11180,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
@@ -10199,7 +11213,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -10229,7 +11246,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -10260,7 +11280,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -10290,7 +11313,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -10320,7 +11346,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -10350,7 +11379,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-povijest-zavrsni",
@@ -10380,7 +11412,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
@@ -10411,7 +11446,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
@@ -10441,7 +11479,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -10471,7 +11512,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -10501,7 +11545,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -10531,7 +11578,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -10561,7 +11611,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -10591,7 +11644,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -10621,7 +11677,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -10651,7 +11710,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-btho-diplomski",
@@ -10681,7 +11743,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-btho-zavrsni",
@@ -10711,7 +11776,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-odhz-diplomski",
@@ -10741,7 +11809,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-odhz-zavrsni",
@@ -10771,7 +11842,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-sfsb-diplomski",
@@ -10801,7 +11875,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
@@ -10831,7 +11908,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-teho-diplomski",
@@ -10861,7 +11941,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unisb-teho-zavrsni",
@@ -10891,7 +11974,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-anglistika-diplomski",
@@ -10922,7 +12008,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
@@ -10953,7 +12042,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-arheologija-diplomski",
@@ -10983,7 +12075,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-arheologija-zavrsni",
@@ -11013,7 +12108,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -11043,7 +12141,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -11073,7 +12174,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -11104,7 +12208,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -11135,7 +12242,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -11165,7 +12275,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-filozofija-diplomski",
@@ -11196,7 +12309,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-filozofija-zavrsni",
@@ -11227,7 +12343,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-francuski-diplomski",
@@ -11258,7 +12377,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -11288,7 +12410,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -11318,7 +12443,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -11348,7 +12476,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-hispanistika-diplomski",
@@ -11378,7 +12509,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -11408,7 +12542,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -11438,7 +12575,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -11468,7 +12608,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -11498,7 +12641,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -11529,7 +12675,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -11560,7 +12709,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
@@ -11591,7 +12743,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -11622,7 +12777,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -11652,7 +12810,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-pomorski-diplomski",
@@ -11682,7 +12843,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
@@ -11712,7 +12876,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -11742,7 +12909,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -11772,7 +12942,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -11802,7 +12975,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -11832,7 +13008,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -11862,7 +13041,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -11892,7 +13074,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-rusistika-diplomski",
@@ -11923,7 +13108,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -11953,7 +13141,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
@@ -11984,7 +13175,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-talijanistika-diplomski",
@@ -12015,7 +13209,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -12045,7 +13242,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-turizam-diplomski",
@@ -12075,7 +13275,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-turizam-zavrsni",
@@ -12105,7 +13308,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -12135,7 +13341,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -12165,7 +13374,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -12195,7 +13407,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vef-diplomski",
@@ -12225,7 +13440,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vef-doktorski",
@@ -12255,7 +13473,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vef-specijalisticki",
@@ -12286,7 +13507,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "veleknin-diplomski",
@@ -12316,7 +13540,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "veleknin-zavrsni",
@@ -12346,7 +13573,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "veleri-diplomski",
@@ -12376,7 +13606,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "veleri-zavrsni",
@@ -12406,7 +13639,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vevu-diplomski",
@@ -12436,7 +13672,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vevu-zavrsni",
@@ -12466,7 +13705,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vguk-diplomski",
@@ -12496,7 +13738,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vguk-zavrsni",
@@ -12526,7 +13771,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -12556,7 +13804,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vkjs-diplomski",
@@ -12586,7 +13837,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -12616,7 +13870,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vnt-diplomski",
@@ -12646,7 +13903,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vnt-zavrsni",
@@ -12676,7 +13936,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vsig-diplomski",
@@ -12706,7 +13969,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vsig-zavrsni",
@@ -12736,7 +14002,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vsite-diplomski",
@@ -12766,7 +14035,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vsite-zavrsni",
@@ -12796,7 +14068,10 @@
       },
       "blockedReasons": [
         "nijedna repair opcija nije ponudjena za ovaj profil"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vss-diplomski",
@@ -12826,7 +14101,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vss-zavrsni",
@@ -12856,7 +14134,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vub-diplomski",
@@ -12886,7 +14167,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -12916,7 +14200,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -12946,7 +14233,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -12976,7 +14266,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -13006,7 +14299,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -13036,7 +14332,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -13066,7 +14365,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -13096,7 +14398,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -13126,7 +14431,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -13156,7 +14464,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -13186,7 +14497,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -13216,7 +14530,10 @@
       },
       "blockedReasons": [
         "ponudjen je samo popravak opce higijene, bez fakultetskog zahtjeva"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -13247,7 +14564,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -13278,7 +14598,10 @@
       "blockedReasons": [
         "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vus-diplomski",
@@ -13308,7 +14631,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vus-zavrsni",
@@ -13338,7 +14664,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuv-diplomski",
@@ -13368,7 +14697,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vuv-zavrsni",
@@ -13398,7 +14730,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vvg-diplomski",
@@ -13428,7 +14763,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "vvg-zavrsni",
@@ -13458,7 +14796,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "zsem-diplomski",
@@ -13488,7 +14829,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "zsem-zavrsni",
@@ -13518,7 +14862,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "zsem-zavrsni-en",
@@ -13548,7 +14895,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -13578,7 +14928,10 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
-      ]
+      ],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     },
     {
       "profileId": "zvu-zavrsni",
@@ -13606,7 +14959,10 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [],
+      "pdfProof": null,
+      "pdfClaim": null,
+      "pdfClaimLabel": null
     }
   ],
   "summary": {
@@ -13674,6 +15030,9 @@
       "C": 8,
       "D": 42,
       "E": 64
+    },
+    "byPdfClaim": {
+      "A-pdf": 0
     },
     "programGaps": 429,
     "programsWithoutProfile": [

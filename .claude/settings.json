@@ -19,6 +19,25 @@
             "command": "node scripts/agents/tool-guard.mjs"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/cpu-discipline.mjs"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/implementer-stop.mjs"
+          }
+        ]
       }
     ]
   }

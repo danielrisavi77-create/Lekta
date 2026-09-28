@@ -47,6 +47,40 @@ export const THRESHOLDS = Object.freeze({
 
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
+/**
+ * Slab stroj (pravilo vlasnika 2026-09-28, docs/agents/ROUTING.md "Teski poslovi na laptopu"):
+ * najvise 4 logicke jezgre ili manje od 12 GB RAM-a. Na takvom stroju gate pokrece Vitest s
+ * jednim radnikom (`vitest.config.ts` cita `VITEST_MAX_THREADS`).
+ */
+const WEAK_MACHINE = Object.freeze({ maxCpus: 4, minTotalMemBytes: 12 * GB });
+
+/** Logicke jezgre i ukupni RAM; nemjerljivo je `null` (fail-open: ne proglasava stroj slabim). */
+export function measureMachine() {
+  let cpus = null;
+  let totalMemBytes = null;
+  try {
+    const n = typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length;
+    cpus = Number.isFinite(n) && n > 0 ? n : null;
+  } catch { /* nemjerljivo */ }
+  try {
+    const m = os.totalmem();
+    totalMemBytes = Number.isFinite(m) && m > 0 ? m : null;
+  } catch { /* nemjerljivo */ }
+  return { cpus, totalMemBytes };
+}
+
+/**
+ * Env koji gate dodaje djetetu na slabom stroju, ili `null`. Postojeci `VITEST_MAX_THREADS` se
+ * nikad ne dira; na CI-ju se nista ne dodaje (CI runner mjeri svoje, a pravilo je za laptop).
+ */
+export function weakMachineWorkerEnv({ cpus, totalMemBytes, env = process.env } = {}) {
+  if (isCiEnv(env)) return null;
+  if (env.VITEST_MAX_THREADS !== undefined && env.VITEST_MAX_THREADS !== '') return null;
+  const fewCpus = Number.isFinite(cpus) && cpus > 0 && cpus <= WEAK_MACHINE.maxCpus;
+  const lowMem = Number.isFinite(totalMemBytes) && totalMemBytes > 0 && totalMemBytes < WEAK_MACHINE.minTotalMemBytes;
+  return fewCpus || lowMem ? { VITEST_MAX_THREADS: '1' } : null;
+}
+
 /** Je li env oznacen kao CI. `CI=false` i `CI=0` (neki alati ih tako postave) nisu CI. */
 export function isCiEnv(env = process.env) {
   const v = env.CI;

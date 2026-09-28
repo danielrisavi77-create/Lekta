@@ -143,6 +143,8 @@ export const PROJECTIONS = [
       'data/verification/closed-loop-manifests',
       'data/sources',
       'src/repair',
+      // Od 2026-09-28 i zasebnu ovjeru nad radovima pretvorenim iz PDF-a (razina A-pdf); neobavezna.
+      'data/verification/pdf-corpus-attestation.json',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],

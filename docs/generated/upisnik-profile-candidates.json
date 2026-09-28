@@ -6,17 +6,17 @@
     "unmappedPrograms": 0,
     "exactCandidatePrograms": 161,
     "noExactCandidatePrograms": 1151,
-    "candidatePrograms": 376,
-    "noCandidatePrograms": 936,
-    "evidenceBackedCandidatePrograms": 354,
+    "candidatePrograms": 386,
+    "noCandidatePrograms": 926,
+    "evidenceBackedCandidatePrograms": 364,
     "notApplicablePrograms": 28,
     "evidenceConflictPrograms": 2,
     "coverageByStatus": {
-      "verified": 354,
+      "verified": 364,
       "component-unresolved": 0,
       "profile-missing-for-component-level": 329,
       "exact-name-candidate-needs-evidence": 22,
-      "identity-evidence-needed": 577,
+      "identity-evidence-needed": 567,
       "not-applicable": 28,
       "evidence-conflict": 2
     }
@@ -9826,23 +9826,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-diplomski",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 595 kandidat efos-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 595 i potvrđuje primjenu uputa profila efos-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "597",
@@ -9850,23 +9852,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-diplomski",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 597 kandidat efos-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 597 i potvrđuje primjenu uputa profila efos-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "601",
@@ -10811,23 +10815,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-doktorski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-doktorski",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-doktorski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 690 kandidat efos-doktorski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 690 i potvrđuje primjenu uputa profila efos-doktorski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "691",
@@ -12140,23 +12146,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 775 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 775 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "777",
@@ -12789,23 +12797,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 812 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 812 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "813",
@@ -13473,23 +13483,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 846 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 846 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "851",
@@ -14395,23 +14407,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 892 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 892 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "894",
@@ -18420,23 +18434,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 1691 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 1691 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "1705",
@@ -26843,23 +26859,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-specijalisticki"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-specijalisticki",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-specijalisticki"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 2291 kandidat efos-specijalisticki odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 2291 i potvrđuje primjenu uputa profila efos-specijalisticki te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "2294",
@@ -34734,23 +34752,25 @@
       "componentIds": [
         "efos"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efos-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efos-diplomski",
+          "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+          "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+          "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efos-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 4780 kandidat efos-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 4780 i potvrđuje primjenu uputa profila efos-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "4781",
@@ -36146,7 +36166,7 @@
       }
     }
   ],
-  "generatedAt": "2026-09-27T21:12:49.534Z",
-  "generatedFromCommit": "c9a8a7a9cf7e2179f00c48ca6fcf1e1092f257b9",
+  "generatedAt": "2026-09-28T00:57:47.504Z",
+  "generatedFromCommit": "1fd43dcc505c61c96bb0f22a7b7012d0a4db0ff3",
   "generator": "npm run match-upisnik-program-components"
 }

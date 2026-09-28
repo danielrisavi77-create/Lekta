@@ -20,7 +20,7 @@ import {
 } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { computeWorklist } from '../src/verification/worklist';
-import { buildCompletionLedger, type LedgerInputs } from '../src/verification/completion-ledger';
+import { buildCompletionLedger, pdfSeparationProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
 import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
@@ -65,7 +65,23 @@ const corpusAttestation = existsSync(ovjeraPut)
   ? (JSON.parse(readFileSync(ovjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['corpusAttestation'])
   : null;
 
-const ledger = buildCompletionLedger({ ...inputs, corpusAttestation });
+// Ovjera nad javnim radovima pretvorenim iz PDF-a (odluka vlasnika 2026-09-28). Neobavezna kao i prava:
+// bez datoteke nijedan redak nema `A-pdf`. Daje SAMO zasebnu razinu `A-pdf`, nikad `claim`; ovjeru bez
+// `sourceKind: 'public-pdf-converted'` ili bez potpisa `provenPdfUnitWorkTypes` sam odbija.
+const pdfOvjeraPut = join(root, 'data', 'verification', 'pdf-corpus-attestation.json');
+const pdfCorpusAttestation = existsSync(pdfOvjeraPut)
+  ? (JSON.parse(readFileSync(pdfOvjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['pdfCorpusAttestation'])
+  : null;
+
+const ledger = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation });
+
+// Codex #225, nalaz 3: gard odvojenosti A-pdf radi nad STVARNIM ulazima generatora, ne samo u testu. Ledger
+// bez PDF ovjere mora biti isti u svemu osim PDF polja; inace se artefakt ne pise.
+const problemiPdf = pdfSeparationProblems(buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation: null }), ledger);
+if (problemiPdf.length) {
+  console.error(`[completion-ledger] FAIL: PDF ovjera dira ljestvicu:\n  ${problemiPdf.join('\n  ')}`);
+  process.exit(1);
+}
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(
@@ -95,6 +111,7 @@ console.log(`A svi registri: ${ledger.globalA.profilesAtA}/${ledger.globalA.regi
 console.log(`fakulteti A: ${ledger.facultyAllA.facultyAtA}/${ledger.facultyAllA.registeredFacultyCount} | cilj 407/407: ${ledger.facultyAllA.meetsFacultyAllA ? 'GO' : 'NO-GO'}`);
 console.log(`fakulteti >= B: ${ledger.facultyMinimumB.facultyAtLeastB}/${ledger.facultyMinimumB.registeredFacultyCount} | ${ledger.facultyMinimumB.meetsFacultyMinimumB ? 'GO' : 'NO-GO'}`);
 console.log(`pravni profili A: ${ledger.facultyMinimumB.legalProfilesAtA}/${ledger.facultyMinimumB.legalProfileCount} | ispod A: ${ledger.facultyMinimumB.legalProfilesBelowA.join(', ') || 'nema'}`);
+console.log(`A-pdf   : ${s.byPdfClaim['A-pdf']}  (zasebno, ne ulazi u tvrdnju)`);
 console.log('');
 if (s.nationalClaimBlockers.length) {
   console.log('NACIONALNA TVRDNJA: NO-GO');

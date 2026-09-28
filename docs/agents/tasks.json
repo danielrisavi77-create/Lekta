@@ -264,11 +264,11 @@
     {
       "id": "T26",
       "title": "Potvrditi točnost lokalne DOCX analize",
-      "status": "in_progress",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju. STANJE 27.9.: #184 spojen (stavke literature nisu naslovi, matrica laznih nalaza nad 14 fixtura u tests/analysis-false-findings.test.ts, mjerenje nad 314 radova bez novopropustenih naslova prema prijavi koordinatora). Za zatvaranje jos treba: conformance matrica bez sustavnog laznog nalaza i nalazi #14, #16 i #17."
+      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju. STANJE 27.9.: #184 spojen (stavke literature nisu naslovi, matrica laznih nalaza nad 14 fixtura u tests/analysis-false-findings.test.ts, mjerenje nad 314 radova bez novopropustenih naslova prema prijavi koordinatora). DOSJE 27.9. (docs/agents/reports/T26_ZATVARANJE.md, baza cee4751): conformance 10 datoteka, 552 testa, EXIT 0 (441 profil); #14, #16 i #17 zatvoreni u #168 (docx-malformed-xml, docx-intake-cfb, docx-hidden-text-scoring zeleni); measure:false-findings nad 24 fixtura bez greske, na 11 ispravnih s profilom samo 7 nalaza sa strojnim dokazom iz paketa; nemjerljivo ide kao unmeasurable ili informational s max 0. Otvoreno izvan kriterija: tablica podrzanih svojstava, vrijeme obrade kao gard (izmjereno jednokratno u Nodeu: 30k rijeci 1,4 s, 480k 18 s), skriveni tekst u broju rijeci i pregledu. STANJE 28.9.: kriterij 1 T81 ispunjen; dosje docs/agents/reports/T26_ZATVARANJE.md; preostale stavke u backlogu nakon lansiranja (docs/roadmap/PRODUCTION_BACKLOG.md, \"T26 nakon lansiranja\")."
     },
     {
       "id": "T27",
@@ -283,12 +283,12 @@
     {
       "id": "T28",
       "title": "Završiti pravila, programe i dokaze za 407 profila",
-      "status": "blocked",
+      "status": "in_progress",
       "dependsOn": [
         "T16",
         "T26"
       ],
-      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka. STANJE 27.9.: Upisnik radi (#182 i #188 spojeni); status ostaje blocked jer ovisnost T26 nije done (gard statusa ne dopusta in_progress)."
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka. STANJE 27.9.: Upisnik radi (#182 i #188 spojeni); status ostaje blocked jer ovisnost T26 nije done (gard statusa ne dopusta in_progress). STANJE 28.9.: T26 done, pa T28 prelazi iz blocked u in_progress (Upisnik radi, #182 i #188); gard statusa ne dopusta blocked bez nedovrsene ovisnosti."
     },
     {
       "id": "T29",
@@ -723,9 +723,9 @@
     {
       "id": "T70",
       "title": "Flaky mobile-webkit test tests/ux/workspace-entry.spec.ts (profileSheet / wizardView vidljivost)",
-      "status": "ready",
+      "status": "in_review",
       "dependsOn": [],
-      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Vjerojatna utrka registracije handlera u /rad/."
+      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Uzrok 28. 9.: proces Playwrightova WebKita se rusi (Target crashed) tijekom obrade uploada na Windowsu; utrka handlera, istodobno citanje bajtova i DecompressionStream iskljuceni. Izvjestaj docs/agents/reports/T70_WEBKIT_CRASH.md, poznata iznimka u docs/verification/AGENT_VERIFICATION.md. Samostalna reprodukcija bez Lektina koda 0 od 60, pa upstream issue nije otvoren (ponovno tek uz reprodukciju koja se rusi)."
     },
     {
       "id": "T71",
@@ -821,7 +821,8 @@
         "T84",
         "T85",
         "T86",
-        "T87"
+        "T87",
+        "T89"
       ],
       "note": "Datum se pomice samo zbog neispunjenog kriterija, ne zbog novih funkcija; nepoznato je NO-GO. Sigurnosni podskup T21 za zive endpointe je kriterij 4 (T21 nema zaseban podzadatak, pa nije u dependsOn). Javna beta: prije 19. 10. provjeriti troskovne granice i rate-limit besplatnog popravka te zive vrijednosti REPAIR_FREE_MODE i REPAIR_DISABLED. Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. Dosje, 9 kriterija iz odj. 6 prijedloga: (1) T26 zatvoren: conformance matrica prolazi, nalazi #14, #16 i #17 ispravljeni, nema sustavnog laznog nalaza na poznato ispravnim dokumentima; (2) T72: svjez RELEASE_PROOF nad tocnim commitom kandidata; (3) Word oracle zelen na Windowsu za popravljene dokumente (npm run verify:word); (4) sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0; (5) prekidaci provjereni na produkciji: REPAIR_DISABLED stvarno gasi popravak; stvarna vrijednost REPAIR_FREE_MODE procitana; (6) pravni tekstovi bete objavljeni (privatnost, uvjeti, \"tijekom besplatne bete\"); (7) T49: domena i support sanducic rade, SPF/DKIM/DMARC postavljeni; (8) mini pilot: najmanje pet korisnika prolazi glavni tok bez P0 i blokirajuceg P1 (kriterij T15); (9) nijedan *_DISABLED ili prazan endpoint ne vodi korisnika u slijepu ulicu: iskljucene funkcije su skrivene ili jasno oznacene kao \"uskoro\". AUDIT 27.9.: T50 odluka vlasnika",
       "owner": "lekta-32"
@@ -847,7 +848,7 @@
       "dependsOn": [
         "T77"
       ],
-      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77)."
+      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile."
     },
     {
       "id": "T87",
@@ -855,7 +856,36 @@
       "status": "ready",
       "dependsOn": [],
       "note": "Kriterij 9 T81. Audit svih *_DISABLED i praznih endpointa u src/ i supabase/functions: popis s ekranom i porukom; iskljucena funkcija je skrivena ili oznacena \"uskoro\"."
+    },
+    {
+      "id": "T88",
+      "title": "Linux browser-matrix flake: desktop-flow.spec.ts:135 #previewModeFaksimil not visible (run 36357206409)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Zaseban mehanizam od T70: bez rusenja, locator.click na #previewModeFaksimil ceka 300 s uz 'element is not visible' (job 108727208327, attempt 1), u attempt 2 prolazi. Isti dan Firefox flaky na workspace-entry.spec.ts:309 (#193)."
+    },
+    {
+      "id": "T89",
+      "title": "Captcha (Cloudflare Turnstile) na produkcijskom Supabase Authu prije bete",
+      "status": "in_progress",
+      "dependsOn": [],
+      "note": "Odluka vlasnika 2026-09-28 (T84 nalaz: anonimne prijave ukljucene, captcha iskljucen). Kriterij 4 T81. Frontend salje captcha token na signup, otp i prijavu lozinkom; bez VITE_TURNSTILE_SITE_KEY fail-open samo dok captcha nije na Authu. Redoslijed ukljucivanja: docs/deploy/AUTH_CAPTCHA.md. Produkciju ukljucuje vlasnik ili koordinator na njegovu rijec nakon mergea. Razred: full. Zasticeno: security.",
+      "owner": "lekta-00"
+    },
+    {
+      "id": "T90",
+      "title": "Vizualna provjera citata pravila nad slikom stranice snimke (Opus 5.5 + crop alat)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Odluka vlasnika 2026-09-28. Preduvjet ispunjen: claude-opus-5-5 je verified u config/agent-routing.json (PR #212, docs/agents/reports/OPUS55_VERIFIKACIJA.md); dodjela modela ulogama je zaseban PR. Cilj: rijesiti quote-not-found slucajeve nastale normalizacijom PDF teksta (12 u #221). Postupak: stranica snimke pravilnika renderira se u sliku, crop alat izreze trazeno mjesto, model potvrdjuje citat i lokator, rezultat ide u dokazni paket. Nikad tekst studentskih radova, samo pravilnici. Model ne upisuje presudu: potvrda ili odbijanje ide covjeku kao i ostale tvrdnje."
+    },
+    {
+      "id": "T91",
+      "title": "Parser literature: zapis koji pocinje s '(godina).' lijepi se na prethodni zapis (bez-autora prijavljeno 4 od 72); 's. a.', 'u tisku', 'n. d.', 'b.g.' daju lazne reference.completeness nalaze (128 od 144)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Izvor: mjerenje D1 zlatnog skupa Laye na radnoj stanici 28. 9. (owned_synthetic, brojke u komentaru #203). Domena src/citations, zasticena staza: prvo golden koji biljezi zateceno ponasanje, zatim popravak i Codex pregled prije commita."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe. Azurirano 2026-09-27: T73 done (NO-GO, opcija 2, potvrdio vlasnik); dodani T74 (otisak koda popravka), T75 (svjeza ovjera korpusa, blocked iza T74) i T76 (PRAVO opseg); T73 (c), (e) i (f) cekaju identifikatore. Azurirano 2026-09-27: monetizacija V1 prihvacena (docs/decisions/MONETIZACIJA_V1_ODLUKA.md); biljeske uz T23, T24 i T28, dodani T77 (M2 i M3), T78 (M4, blocked iza T77 i T76) i T79 (Laya V2.1, blocked iza T47); M5 i M6 bez zadataka, uz P-A. Azurirano 2026-09-27: dodan T80 (self-hosted Word runner, in_progress, owner lekta-32). Azurirano 2026-09-27: T50 done (odluka vlasnika: opseg A sada, go/no-go 19. 10. 2026.); dodan T81 (Beta go/no-go, blocked iza T26, T72 i T49); biljeske uz T15, T44 i T49. Azurirano 2026-09-27 (T50 uskladjenje): oznaka opsega B/C na T20 do T22, T24, T25, T27, T29 do T40 i T42 do T47; T18 in_review, T23 done (zamijenjen M1), T77 ready, T24 iza T77, T26 i T41 in_progress, T28 ostaje blocked iza T26; dodani T84 do T87 (kriteriji 4, 5, 6 i 9 T81) u dependsOn T81. Azurirano 2026-09-28: T85 in_review (izvjestaj T85_PREKIDACI_PRODUKCIJA.md; preostaje staging dokaz 503). T85 done (staging dokaz 503 u T85_PREKIDACI_PRODUKCIJA.md odj. 3)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe. Azurirano 2026-09-27: T73 done (NO-GO, opcija 2, potvrdio vlasnik); dodani T74 (otisak koda popravka), T75 (svjeza ovjera korpusa, blocked iza T74) i T76 (PRAVO opseg); T73 (c), (e) i (f) cekaju identifikatore. Azurirano 2026-09-27: monetizacija V1 prihvacena (docs/decisions/MONETIZACIJA_V1_ODLUKA.md); biljeske uz T23, T24 i T28, dodani T77 (M2 i M3), T78 (M4, blocked iza T77 i T76) i T79 (Laya V2.1, blocked iza T47); M5 i M6 bez zadataka, uz P-A. Azurirano 2026-09-27: dodan T80 (self-hosted Word runner, in_progress, owner lekta-32). Azurirano 2026-09-27: T50 done (odluka vlasnika: opseg A sada, go/no-go 19. 10. 2026.); dodan T81 (Beta go/no-go, blocked iza T26, T72 i T49); biljeske uz T15, T44 i T49. Azurirano 2026-09-27 (T50 uskladjenje): oznaka opsega B/C na T20 do T22, T24, T25, T27, T29 do T40 i T42 do T47; T18 in_review, T23 done (zamijenjen M1), T77 ready, T24 iza T77, T26 i T41 in_progress, T28 ostaje blocked iza T26; dodani T84 do T87 (kriteriji 4, 5, 6 i 9 T81) u dependsOn T81. Azurirano 2026-09-28: T85 in_review (izvjestaj T85_PREKIDACI_PRODUKCIJA.md; preostaje staging dokaz 503). T85 done (staging dokaz 503 u T85_PREKIDACI_PRODUKCIJA.md odj. 3). Azurirano 2026-09-28: T26 done (dosje T26_ZATVARANJE.md, kriterij 1 T81); T28 in_progress jer mu je T26 bila jedina nedovrsena ovisnost. Azurirano 2026-09-28: dodan T89 (captcha na Supabase Authu, odluka vlasnika, in_progress) i ukljucen u dependsOn T81 (kriterij 4). Azurirano 2026-09-28: dodani T90 (vizualna provjera citata pravila nad slikom stranice snimke, ready jer je claude-opus-5-5 verified u PR #212) i T91 (parser literature: '(godina).' zapis i oznake bez godine, ready)."
 }

@@ -19,7 +19,12 @@
  * fakulteta, pa su posteno `derived`.
  */
 import type { WorkType } from '../profiles/profile-schema';
-import { provenUnitWorkTypes, attestedProfileWorkTypes, type CorpusAttestation } from './real-corpus-attestation';
+import {
+  provenUnitWorkTypes,
+  provenPdfUnitWorkTypes,
+  attestedProfileWorkTypes,
+  type CorpusAttestation,
+} from './real-corpus-attestation';
 
 /** Odakle znamo da program postoji: `official` = sluzbeni Upisnik (jos nedostupno, faza P1). */
 export type ProgramAxis = 'official' | 'derived' | 'missing' | 'unsupported';
@@ -71,6 +76,46 @@ export function proofSourceProblems(
   }
   return out;
 }
+/**
+ * GARD ODVOJENOSTI RAZINE `A-pdf`: PDF ovjera smije dodati SAMO `pdfProof`, `pdfClaim` i
+ * `pdfClaimLabel`. `bez` je ledger izgradjen bez PDF ovjere, `sa` isti ulaz s njom. Svaka razlika u
+ * `claim`, `claimLabel`, `blockedReasons`, `proof`, `proofSource` ili `byClaim` je problem, kao i
+ * `A-pdf` na retku koji je vec A ili ima dokaz na izvornom Word dokumentu, i label koji nije doslovan.
+ */
+export function pdfSeparationProblems(bez: CompletionLedger, sa: CompletionLedger): string[] {
+  const out: string[] = [];
+  // Codex #225, nalaz 3: usporeduju se SVA polja retka i sazetka osim triju PDF polja i `byPdfClaim`, a ne
+  // samo odabrana; inace bi PDF ovjera mogla pomaknuti npr. `summary.byProof` bez ijednog nalaza.
+  const PDF_POLJA_RETKA = new Set(['pdfProof', 'pdfClaim', 'pdfClaimLabel']);
+  const razlikeObjekta = (b: object, s: object, preskoci: Set<string>): string[] => {
+    const bo = b as Record<string, unknown>;
+    const so = s as Record<string, unknown>;
+    const kljucevi = [...new Set([...Object.keys(bo), ...Object.keys(so)])].filter((k) => !preskoci.has(k)).sort();
+    return kljucevi.filter((k) => JSON.stringify(bo[k]) !== JSON.stringify(so[k]));
+  };
+  if (bez.rows.length !== sa.rows.length) out.push(`broj redaka se promijenio: ${bez.rows.length} -> ${sa.rows.length}`);
+  const n = Math.min(bez.rows.length, sa.rows.length);
+  for (let i = 0; i < n; i++) {
+    const b = bez.rows[i];
+    const s = sa.rows[i];
+    const id = `${s.profileId ?? '?'}::${s.workType ?? '?'}`;
+    if (b.profileId !== s.profileId || b.workType !== s.workType) out.push(`${id}: redoslijed redaka se promijenio`);
+    for (const k of razlikeObjekta(b, s, PDF_POLJA_RETKA)) {
+      const bv = (b as unknown as Record<string, unknown>)[k];
+      const sv = (s as unknown as Record<string, unknown>)[k];
+      out.push(`${id}: PDF ovjera je promijenila ${k} (${JSON.stringify(bv)} -> ${JSON.stringify(sv)})`);
+    }
+    if (s.pdfClaim && (s.claim === 'A' || s.proof === 'real-docx-pass')) out.push(`${id}: A-pdf uz dokaz na izvornom Word dokumentu`);
+    if (s.pdfClaim && s.pdfProof == null) out.push(`${id}: A-pdf bez PDF dokaza`);
+    if (s.pdfClaimLabel !== (s.pdfClaim ? CLAIM_LABEL_A_PDF : null)) out.push(`${id}: label razine A-pdf nije doslovan`);
+  }
+  for (const k of razlikeObjekta(bez.summary, sa.summary, new Set(['byPdfClaim']))) out.push(`PDF ovjera je promijenila ${k}`);
+  for (const k of razlikeObjekta(bez, sa, new Set(['rows', 'summary']))) out.push(`PDF ovjera je promijenila ${k}`);
+  const pdfRedaka = sa.rows.filter((r) => r.pdfClaim === 'A-pdf').length;
+  if (sa.summary.byPdfClaim['A-pdf'] !== pdfRedaka) out.push('byPdfClaim ne odgovara redcima');
+  return out;
+}
+
 /** Vjernost pomocnog sadrzaja (naslovnica, citatni spec, izjava). */
 export type AssetAxis = 'exact-official' | 'exact-derived' | 'reused' | 'generic' | 'unknown';
 /** Razina javne tvrdnje; vidi CLAIM_LADDER. */
@@ -92,6 +137,18 @@ export const CLAIM_LADDER: Record<ClaimLevel, string> = {
   D: 'provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta',
   E: 'nema bodovanih pravila iz sluzbenog izvora',
 };
+
+/**
+ * RAZINA `A-pdf` (odluka vlasnika 2026-09-28): dokaz na javnom studentskom radu iz PDF repozitorija
+ * (Dabar, ZIR), pretvorenom u DOCX i popravljenom Lektom. Zivi IZVAN ljestvice `ClaimLevel` NAMJERNO:
+ * pretvorba iz PDF-a nije rad kakav student predaje, pa takav dokaz nikad ne smije promijeniti `claim`,
+ * `byClaim` ni bilo koji agregat "svi na A". Prikazuje se odvojeno, uz vlastitu doslovnu formulaciju.
+ */
+export type PdfClaimLevel = 'A-pdf';
+/** Os dokaza na javnom radu pretvorenom iz PDF-a; odvojena od `ProofAxis`. */
+type PdfProofAxis = 'pdf-docx-pass';
+export const CLAIM_LABEL_A_PDF =
+  'provjereno i popravljano prema sluzbenim uputama, dokazano na javnom radu pretvorenom iz PDF-a, ne na izvornom Word dokumentu';
 
 export interface LedgerRow {
   profileId: string | null;
@@ -127,6 +184,15 @@ export interface LedgerRow {
   };
   /** Zasto redak nije na visoj razini; prazno samo za A. */
   blockedReasons: string[];
+  /** Ovjeren par jedinica x vrsta rada na javnom radu pretvorenom iz PDF-a; ne ulazi u `proof`. */
+  pdfProof: PdfProofAxis | null;
+  /**
+   * `A-pdf` samo kad bi redak s dokazom na stvarnom radu bio A (pravila verificirana, fakultetski
+   * popravak, bez drugih blokatora), a dokaza na izvornom Word dokumentu nema. Nikad ne mijenja `claim`.
+   */
+  pdfClaim: PdfClaimLevel | null;
+  /** Doslovno `CLAIM_LABEL_A_PDF` kad je `pdfClaim` postavljen, inace `null`. */
+  pdfClaimLabel: string | null;
 }
 
 export interface LedgerSummary {
@@ -148,6 +214,8 @@ export interface LedgerSummary {
   byCitation: Record<AssetAxis, number>;
   byDeclaration: Record<AssetAxis, number>;
   byClaim: Record<ClaimLevel, number>;
+  /** Zasebni brojac razine `A-pdf`; nikad se ne zbraja u `byClaim`. */
+  byPdfClaim: Record<PdfClaimLevel, number>;
   /** Redci bez evidentiranog programa: blokiraju nacionalnu tvrdnju. */
   programGaps: number;
   /** Programi iz institucijske matrice koji nemaju nijedan profil. */
@@ -419,6 +487,11 @@ export interface LedgerInputs {
   /** Trenutni fingerprint src/repair izračunat iz sadržaja datoteka u generatoru. */
   currentRepairSourceHash: string | null;
   /**
+   * Potpisana ovjera nad javnim radovima pretvorenim iz PDF-a (`sourceKind: 'public-pdf-converted'`).
+   * Daje samo zasebnu razinu `A-pdf`; bez datoteke je nula redaka `A-pdf`.
+   */
+  pdfCorpusAttestation?: CorpusAttestation | null;
+  /**
    * Autoritativan popis profila. Ledger se NE smije voditi po `faculties` (fakultetskoj matrici):
    * njezin aktualni broj profila je u `faculty-matrix.json.summary.profileCount`,
    * ali matrica NE obuhvaca 3 katedarska profila iz
@@ -520,8 +593,14 @@ function emptyCount<K extends string>(keys: readonly K[]): Record<K, number> {
   return Object.fromEntries(keys.map((k) => [k, 0])) as Record<K, number>;
 }
 
-/** Gradi ledger iz vec generiranih artefakata. Cista funkcija: bez fs, bez mreze, bez vremena. */
-export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
+/**
+ * Gradi ledger iz vec generiranih artefakata. Cista funkcija: bez fs, bez mreze, bez vremena.
+ * `realProofPairs` postoji samo za mutacijski test (PDF dokaz koji procuri u os `proof`).
+ */
+export function buildCompletionLedger(
+  inputs: LedgerInputs,
+  realProofPairs: (inputs: LedgerInputs) => Set<string> = (i) => provenUnitWorkTypes(i.corpusAttestation, i.currentRepairSourceHash),
+): CompletionLedger {
   /**
    * OVJERA DOKAZA NAD STVARNIM RADOVIMA (`inputs.corpusAttestation`).
    *
@@ -533,7 +612,9 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
    * dokazuje popravak za sve profile iste jedinice i iste vrste rada, jer se pravila mijenjaju po vrsti
    * rada a ne po katedri. Isti ustupak vec postoji za citatne specove.
    */
-  const dokazani = provenUnitWorkTypes(inputs.corpusAttestation, inputs.currentRepairSourceHash);
+  const dokazani = realProofPairs(inputs);
+  // Parovi dokazani na javnom radu pretvorenom iz PDF-a: ZASEBNA os, nikad `proof` ni `claim`.
+  const pdfDokazani = provenPdfUnitWorkTypes(inputs.pdfCorpusAttestation);
   // Parovi profil::vrsta na cijim je radovima dokaz STVARNO izmjeren; razlika prema `dokazani` je
   // razlika izmedju izmjerenog i izvedenog (`proofSource`).
   const izmjereni = attestedProfileWorkTypes(inputs.corpusAttestation, inputs.currentRepairSourceHash);
@@ -686,6 +767,17 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
         if (faculty.unitId == null) {
           blockedReasons.push('profil nema jedinicu u registru, pa se pomocni sadrzaji ne mogu vezati');
         }
+        const pdfProof: PdfProofAxis | null = pdfDokazani.has(`${faculty.unitId}::${workType}`) ? 'pdf-docx-pass' : null;
+        // `A-pdf` trazi sve sto bi A trazio, osim izvornog Word dokumenta: isti izvod razine uz dokaz na
+        // stvarnom radu mora dati A, a blokatora izvan ljestvice (matrica, jedinica) ne smije biti.
+        const pdfClaim: PdfClaimLevel | null =
+          pdfProof != null &&
+          proof !== 'real-docx-pass' &&
+          matrix != null &&
+          faculty.unitId != null &&
+          deriveClaim(rules, repair, 'real-docx-pass').claim === 'A'
+            ? 'A-pdf'
+            : null;
 
         rows.push({
           profileId: profile.profileId,
@@ -710,6 +802,9 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
             realDocxSamples: profile.realDocxSampleCount,
           },
           blockedReasons,
+          pdfProof,
+          pdfClaim,
+          pdfClaimLabel: pdfClaim ? CLAIM_LABEL_A_PDF : null,
         });
       }
     }
@@ -751,6 +846,9 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
           realDocxSamples: 0,
         },
         blockedReasons: [`program "${program.name}" je evidentiran, ali nema nijedan profil`],
+        pdfProof: null,
+        pdfClaim: null,
+        pdfClaimLabel: null,
       });
     }
   }
@@ -778,6 +876,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     byCitation: emptyCount(ASSET_ORDER),
     byDeclaration: emptyCount(ASSET_ORDER),
     byClaim: emptyCount(['A', 'B', 'C', 'D', 'E'] as const),
+    byPdfClaim: emptyCount(['A-pdf'] as const),
     programGaps: 0,
     programsWithoutProfile,
     nationalClaimBlockers: [],
@@ -793,6 +892,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     summary.byCitation[row.assetDetail.citation] += 1;
     summary.byDeclaration[row.assetDetail.declaration] += 1;
     summary.byClaim[row.claim] += 1;
+    if (row.pdfClaim) summary.byPdfClaim[row.pdfClaim] += 1;
     if (row.program === 'missing') summary.programGaps += 1;
   }
 
