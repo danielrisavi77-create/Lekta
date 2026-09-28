@@ -5,9 +5,12 @@
 razinu profila. Vlasnik (2026-09-28) je odobrio prijedloge, ali citate nije pojedinacno pregledao, pa se
 pravila ne upisuju kao `human-verified`. Dalje idu kroz AI audit (PR #211, podatkovni PR lekta-0c).
 
-Pravila za citat: doslovan iz snimke ili `null`; `sourcePage` samo kad je tocno lociran, inace `null`.
-`bodovati` znaci obvezujuci jezik uz doslovan citat; `izbaciti` znaci da izvor pravilo ne pokriva za
-tu vrstu rada/odsjek (izbacivanje ceka provjeru preklapanja s run5).
+Citat: agenti su trazili doslovan citat iz snimke ili `null`, ali dio citata je normaliziran (razmaci
+iz tekstnog sloja PDF-a, spojeni retci tablice), pa **citat nije jamceno doslovan**. Prije bodovanja
+svaki se citat mora ponovno usidriti u snimku (vidi "Usporedba s run5"). `sourcePage` samo kad je tocno
+lociran, inace `null`. `bodovati` znaci obvezujuci jezik u izvoru; `izbaciti` znaci da izvor pravilo ne
+pokriva za tu vrstu rada/odsjek. Izbacivanje se primjenjuje iskljucivo po punom `ruleId`, nikad po
+prefiksu profila ili jedinice.
 
 Ukupno: ostaviti-advisory 65, bodovati 47, covjek-odlucuje 32, izbaciti 10 (154 pravila).
 
@@ -73,7 +76,7 @@ Ukupno: ostaviti-advisory 65, bodovati 47, covjek-odlucuje 32, izbaciti 10 (154 
 | `alu-novi-mediji-diplomski--title-page` | covjek-odlucuje | nejasno | alu/alu-pravilnik-diplomski-2014.pdf | 15 | Oprema rada treba navesti da je rad realiziran kao Diplomski rad na Odsjeku za animirani film i nove medije, smjer Novi mediji, Akademija Likovnih Umjetnosti u Zagrebu. | Novi nalaz (cl. 82, str. 15), nije bio u profilu. 'treba' je umjereno obvezujuce; 'oprema rada' nije jasno znaci li naslovnicu dokumenta ili opremu prakticnog rada/izlozbe. Kandidat za advisory provjeru naslovnice. |
 | `alu-novi-mediji-diplomski--word-count` | covjek-odlucuje | obvezujuce | alu/alu-pravilnik-diplomski-2014.pdf | 14 | Pismeni dio iz područja Novih medija sastoji se od najmanje 18000 a najviše 30000 slovnih znakova (do 7000 riječi, odnosno najmanje 10, a najviše 17 kartica). | Fact potvrdjen doslovno (cl. 77, str. 14). Jezik je obvezujuci i vrijednost je strojno mjerljiva, ali nema checkId za znakove (word-count mjeri rijeci; 7000 rijeci je okvirna zagrada), a nije receno broje li se razmaci, literatura i prilozi. Vlasnik odlucuje o mapiranju prije bodovanja. Vrijedi samo |
 | `arh-diplomski--paper-size` | covjek-odlucuje | obvezujuce | arh/arh-pravilnik-diplomski-2013.pdf | str. 3 (PDF), clanak 16. | 2.2. Četiri primjerka knjižice veličine A3 koja sadrži: | Uvod clanka 16.: 'Diplomski rad obvezno sadrži:'. A3 je obvezan za knjizicu diplomskog projekta (s pisanim dijelom), ali uvodni istrazivacki dio smije biti 'knjižica veličine A4 ili A3'; nije jasno koji dio student ucitava kao .docx, pa bi bodovanje A3 moglo krivo kazniti A4 uvodni dio. Pravilnik je |
-| `geof-opci-akademski-rad--citation-style (legacy rules.recommendedCitation)` | covjek-odlucuje | nejasno | geof/geof-naputak-ocjenski-2000.pdf | str. 2 | Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988). | Naputak u naslovu obuhvaca samo OCJENSKE radove (diplomski, magistarski, doktorski), a profil je za seminar/projekt. Obvezujuca odredba postoji, ali njezin doseg na seminarski rad izvor ne potvrduje. Za ostale legacy kljuceve (margine, toc, requiredSections, accessDate) naputak nema odredbe o formi  |
+| `geof-opci-akademski-rad--citation-style` (legacy `rules.recommendedCitation`, nema ruleEntry) | covjek-odlucuje | nejasno | geof/geof-naputak-ocjenski-2000.pdf | str. 2 | Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988). | Naputak u naslovu obuhvaca samo OCJENSKE radove (diplomski, magistarski, doktorski), a profil je za seminar/projekt. Obvezujuca odredba postoji, ali njezin doseg na seminarski rad izvor ne potvrduje. Za ostale legacy kljuceve (margine, toc, requiredSections, accessDate) naputak nema odredbe o formi  |
 | `kif-diplomski--citation-style` | covjek-odlucuje | obvezujuce | kif/kif-upute-diplomski-zavrsni.pdf | PDF str. 15 (tiskani prijelom str. 28-29), Što je plagiranje? | koristi se American Psychological Association APA stil | Izvor propisuje APA bez oznake izdanja; vrijednost 'apa7' (7. izdanje) nije u izvoru. Postojeci quote je skraćen usred rijeci ('ci') zbog prijeloma 'ci-tiranja'. PDF str. 14 dodatno: 'pišu se APA stilu'. |
 | `kif-diplomski--word-count` | covjek-odlucuje | nejasno | kif/kif-upute-diplomski-zavrsni.pdf | PDF str. 14 (tiskani prijelom str. 26-27), OPSEG | Opseg ne smije biti manji od 4000 riječi, odnosno | Uvod odjeljka glasi 'prepo-ručeni je:' pa tek onda 'ne smije biti manji' , preporuka i zabrana u istom odjeljku. 4000 vrijedi samo za znanstveno-istrazivacki diplomski; strucni diplomski ima 6000, a profil ne razlikuje vrstu rada. |
 | `kif-specijalisticki--citation-style` | covjek-odlucuje | obvezujuce | kif/kif-upute-diplomski-zavrsni.pdf | PDF str. 15 (tiskani prijelom str. 28-29), Što je plagiranje? | koristi se American Psychological Association APA stil | Izdanje APA (7) nije navedeno u izvoru. Postojeci quote 'Kinezioloskom ... APA stil citiranja' bez dijakritika i s preskocenim prijelomom 'ci-tiranja' nije doslovan. |
@@ -203,3 +206,31 @@ Ukupno: ostaviti-advisory 65, bodovati 47, covjek-odlucuje 32, izbaciti 10 (154 
 - unidu-elektro-zavrsni: izvor profila 'Predlozak za ocjenske radove' (https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=25910) nema snimku u data/sources/unidu/, pa se IEEE tvrdnja ne moze potvrditi. Jedina elektro snimka (unidu-elektro-upute-diplomski-eir.pdf) vrijedi samo za dipl
 - U okolini nema pdftotext ni pdftoppm (ni python PDF biblioteka), pa Read s parametrom pages ne radi. ALU pravilnik (24 str.) i EIR upute (4 str.) procitani su u cijelosti Readom bez pages. Nijedna datoteka nije stvorena u repou (/tmp/edraft2 je ostao prazan).
 - Nisu otvoreni ostali ALU izvori (okiru-upute, zavrsni-2017, doktorski): odnose se na druge razine ili odsjeke, a ne na nastavnicki ni novi-mediji diplomski.
+
+## Usporedba s run5 (AI audit iz #211, komentar na #221, 2026-09-28)
+
+Izvor: usporedba lekta-0c po `ruleId` nad JSON presudama run5. Ovaj dokument je ne mijenja, samo biljezi
+posljedice za prijedloge iznad.
+
+- **Vec pokriveno run5 dokazom (19 `bodovati`)**: adu-montaza-diplomski (font, font-size, line-spacing,
+  margins, page-numbers), effectus-seminarski (font, font-size, justify, line-spacing, margins,
+  page-count, paper-size, reference-count), kif-diplomski (margins, reference-count, toc),
+  kif-specijalisticki (margins, page-numbers, reference-count). Ne ponavljati u podatkovnom PR-u.
+- **Citat nije nadjen doslovno u snimci (12 `bodovati`)**: effectus-{diplomski,seminarski,zavrsni}--required-sections,
+  geof-{diplomski,doktorski}--toc, kif-diplomski--{font-size,justify,page-numbers},
+  kif-specijalisticki--{font,font-size,justify,line-spacing}. Prijedlog `bodovati` za njih vrijedi tek
+  nakon ponovnog sidrenja citata u snimku.
+- **Izvuceno u run5, ali nije prihvaceno (6 `bodovati`)**: adu-montaza-diplomski--paper-size,
+  effectus-seminarski--citation-style, geof-{diplomski,doktorski}--citation-style,
+  kif-diplomski--{font,line-spacing}. Idu u novi krug s refuteom drugog providera.
+- **Neslaganje**: kif-diplomski--word-count je u run5 prihvacen, ovdje je `covjek-odlucuje`. Do odluke
+  vlasnika ne primjenjivati nijedan od dva prijedloga.
+- **pravri-specijalisticki**: run5 refute je oborio font, line-spacing, margins i paper-size jer uvodne
+  napomene izvora ogranicavaju upute na seminarski, zavrsni i diplomski rad. Za sva pravri-specijalisticki
+  pravila iz ovog dokumenta (ukljucujuci font-size) razlog je zato **opseg vrste rada: izvor ne pokriva
+  specijalisticki rad**, a prijedlog se mijenja iz `covjek-odlucuje` u **ne bodovati**.
+- **unidu**: izbacivanje se odnosi samo na unidu-elektro-zavrsni--font-size i
+  unidu-elektro-zavrsni--page-count. Prihvacena run5 pravila unidu-elektro-diplomski--page-count i
+  unidu-marikultura-diplomski--{font,font-size,justify,line-spacing} ostaju netaknuta.
+- **Izvan run5**: 10 `bodovati` za efos-doktorski i efos-specijalisticki (font, font-size, line-spacing,
+  margins, paper-size) trebaju izvlacenje i refute u podatkovnom PR-u.
