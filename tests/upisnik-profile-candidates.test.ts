@@ -2488,7 +2488,7 @@ describe('Upisnik heuristic guard redesign', () => {
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
-  it('preserves all 354 evidence links and every coverage status in the committed inventory', () => {
+  it('preserves all 364 evidence links and every coverage status in the committed inventory', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
       profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
@@ -2496,8 +2496,18 @@ describe('Upisnik heuristic guard redesign', () => {
     );
     const links = (programs: typeof report.programs) => programs.flatMap((row) =>
       row.profileDecisionEvidence.map((evidence) => [row.programCode, evidence.profileId]));
-    // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27).
-    expect(links(report.programs)).toHaveLength(354);
+    // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27)
+    // plus 10 EFOS programa kroz izricitu izjavu o opsegu iz izvora profila (#206, 2026-09-28).
+    expect(links(report.programs)).toHaveLength(364);
+    const efos = new Map(report.programs.filter((row) => row.profileDecisionEvidence.some((e) => e.profileId.startsWith('efos-')))
+      .map((row) => [row.programCode, row.profileDecisionEvidence.map((e) => e.profileId)]));
+    for (const [code, profileId] of [['595', 'efos-diplomski'], ['597', 'efos-diplomski'], ['4780', 'efos-diplomski'], ['690', 'efos-doktorski'],
+      ['775', 'efos-specijalisticki'], ['812', 'efos-specijalisticki'], ['846', 'efos-specijalisticki'], ['892', 'efos-specijalisticki'],
+      ['1691', 'efos-specijalisticki'], ['2291', 'efos-specijalisticki']] as const) {
+      expect(efos.get(code)).toEqual([profileId]);
+    }
+    // 1835 (Poduzetnistvo i inovativnost) ostaje hold: jedini dokaz bila je opca stranica sveucilista.
+    expect(report.programs.find((row) => row.programCode === '1835')?.coverageStatus).toBe('identity-evidence-needed');
     expect(links(report.programs)).toEqual(links(generatedProfileCandidates.programs));
     expect(report.programs.map((row) => [row.programCode, row.coverageStatus]))
       .toEqual(generatedProfileCandidates.programs.map((row) => [row.programCode, row.coverageStatus]));

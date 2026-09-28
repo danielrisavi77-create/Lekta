@@ -1280,6 +1280,24 @@
       }
     },
     {
+      "programCode": "595",
+      "profileId": "efos-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "597",
+      "profileId": "efos-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "601",
       "profileId": "pravo-socijalni-rad-diplomski",
       "evidence": {
@@ -1331,6 +1349,15 @@
         "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/",
         "sourceLocator": "službena stranica Doktorske škole, popis pet doktorskih studija",
         "quote": "Doktorski studij Biomedicina (180 ECTS)"
+      }
+    },
+    {
+      "programCode": "690",
+      "profileId": "efos-doktorski",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -1433,6 +1460,15 @@
       }
     },
     {
+      "programCode": "775",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "793",
       "profileId": "vef-specijalisticki",
       "evidence": {
@@ -1505,6 +1541,15 @@
       }
     },
     {
+      "programCode": "812",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "842",
       "profileId": "efzg-specijalisticki",
       "evidence": {
@@ -1538,6 +1583,15 @@
         "sourceUrl": "https://www.efzg.unizg.hr/pds-web",
         "sourceLocator": "službeni popis sveučilišnih specijalističkih studija EFZG-a, stavka 17",
         "quote": "Organizacija i menadžment"
+      }
+    },
+    {
+      "programCode": "846",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -1700,6 +1754,15 @@
         "sourceUrl": "https://www.efzg.unizg.hr/pds-web",
         "sourceLocator": "službeni popis sveučilišnih specijalističkih studija EFZG-a, stavka 23",
         "quote": "Računovodstvo i porezi"
+      }
+    },
+    {
+      "programCode": "892",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -2033,6 +2096,15 @@
         "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/",
         "sourceLocator": "službena stranica Doktorske škole, popis pet doktorskih studija",
         "quote": "Doktorski studij Zdravstveno i ekološko inženjerstvo (180 ECTS)"
+      }
+    },
+    {
+      "programCode": "1691",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -2747,6 +2819,15 @@
       }
     },
     {
+      "programCode": "2291",
+      "profileId": "efos-specijalisticki",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "2308",
       "profileId": "unidu-ekonomija-diplomski",
       "evidence": {
@@ -3113,6 +3194,15 @@
         "sourceUrl": "https://www.ffos.unios.hr/wp-content/uploads/2026/02/Web_Povijest-umjetnosti_diplomski-studij_2025-2026.pdf",
         "sourceLocator": "službeni plan i program diplomskog studija Povijest umjetnosti, akademska godina 2025./2026.",
         "quote": "Sveučilišni diplomski dvopredmetni studij Povijest umjetnosti, nastavnički smjer"
+      }
+    },
+    {
+      "programCode": "4780",
+      "profileId": "efos-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "sourceLocator": "Odjeljak „Svrha ovih uputa i vrste studentskih radova“",
+        "quote": "Upute se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
