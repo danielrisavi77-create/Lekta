@@ -10,6 +10,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { runReferrerRewardObligation, orderFullyRefunded, type ReferrerRewardDb } from '../supabase/functions/process-bonus-outbox/referrer-reward';
+import { referrerRewardSettlement, tryGrantReferrerReward } from '../supabase/functions/_shared/grant-referrer-reward';
 import { fakeAdmin, argOf, eqs, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
 import { referrerRewardRetryProblems } from './helpers/monetizacija-v1-guards';
 
@@ -189,5 +190,97 @@ describe('process-bonus-outbox: ishod dodjele nagrade (M2)', () => {
     expect(await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, grant)).toBe('granted');
     expect(granted).toEqual(['pi_1']);
     expect(outboxWrites(db.calls)).toHaveLength(0);
+  });
+});
+
+/**
+ * Nas pregled (M2, Codex popravka referral nagrade): insert prava (unique provider+order_id) moze
+ * pasti na 23505 kad je pravo vec izdano ranijim pokusajem, a referral_signups nikad nije prijesao
+ * u `rewarded` (izgubljen odgovor izmedju uspjesnog inserta i azuriranja). Fiksni slijed poziva
+ * modula testira se laznim klijentom koji odgovara REDOM (bez table/op grananja): tocno onim redom
+ * kojim tryGrantReferrerReward stvarno zove bazu.
+ */
+function sequentialAdmin(odgovori: Array<{ data?: unknown; error?: unknown; count?: number }>) {
+  const pozivi: string[] = [];
+  let i = 0;
+  const lanac = (tablica: string) => {
+    const builder: Record<string, unknown> = {};
+    for (const m of ['select', 'insert', 'update', 'eq', 'not', 'gte', 'maybeSingle', 'single']) {
+      builder[m] = () => builder;
+    }
+    // oxlint-disable-next-line unicorn/no-thenable
+    builder.then = (ok: (v: unknown) => unknown, fail?: (e: unknown) => unknown) => {
+      const r = odgovori[i] ?? { data: null, error: null };
+      i += 1;
+      pozivi.push(tablica);
+      return Promise.resolve({ data: null, error: null, count: null, ...r }).then(ok, fail);
+    };
+    return builder;
+  };
+  return { from: (tablica: string) => lanac(tablica), pozivi };
+}
+
+const SIGNUP = { id: 'signup-1', referrer_user_id: 'ref-1', referred_ip_hash: null };
+const PRIJE_INSERTA = [
+  { data: SIGNUP, error: null }, // referral_signups select (friend_rewarded)
+  { data: [], error: null }, // report_generations (fraud provjera)
+  { data: null, error: null, count: 0 }, // referral_signups count (mjesecni strop)
+];
+
+describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara idempotentno (M2)', () => {
+  it('23505 na insert: postojece pravo se procita i referral_signups dovrsi (granted, idempotentno)', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: null, error: { message: 'duplicate key', code: '23505' } }, // entitlements insert
+      { data: { id: 'ent-postojeci' }, error: null }, // entitlements select po order_id
+      { data: null, error: null }, // referral_signups update (dovrsavanje)
+    ]);
+    const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    expect(ishod).toEqual({ granted: true });
+  });
+
+  it('23505, ali dovrsavanje azuriranja padne: trajni razlog already_granted (zatvara se kao done)', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: null, error: { message: 'duplicate key', code: '23505' } },
+      { data: { id: 'ent-postojeci' }, error: null },
+      { data: null, error: { message: 'db down' } }, // update padne
+    ]);
+    const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    expect(ishod).toEqual({ granted: false, reason: 'already_granted' });
+  });
+
+  it('23505, ali postojece pravo se ne moze naci: already_granted (ne grant_failed u beskonacnost)', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: null, error: { message: 'duplicate key', code: '23505' } },
+      { data: null, error: null }, // lookup ne nadje nista
+    ]);
+    const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    expect(ishod).toEqual({ granted: false, reason: 'already_granted' });
+  });
+
+  it('negativna kontrola: svjez insert uspije, ali azuriranje referral_signups padne -> error (ne tihi granted:true)', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: { id: 'ent-svjez' }, error: null }, // entitlements insert uspije
+      { data: null, error: { message: 'db down' } }, // referral_signups update padne
+    ]);
+    const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    expect(ishod).toEqual({ granted: false, reason: 'error' });
+  });
+
+  it('negativna kontrola: svjez insert i azuriranje oboje uspiju -> granted, bez 23505 grane', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: { id: 'ent-svjez' }, error: null },
+      { data: null, error: null },
+    ]);
+    const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    expect(ishod).toEqual({ granted: true });
+  });
+
+  it('already_granted je trajna odluka: referrerRewardSettlement je zatvara (done), ne ponavlja', () => {
+    expect(referrerRewardSettlement({ granted: false, reason: 'already_granted' })).toEqual({ settled: true, reason: 'already_granted' });
   });
 });

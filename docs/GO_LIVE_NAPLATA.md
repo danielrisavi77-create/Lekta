@@ -545,9 +545,13 @@ dalje ostavlja oznaku `refund_consequences_failed`, a korak i greška su sada i 
 dodjele: prolazan pad (`grant_failed`, `error`) ostavlja obvezu `referrer_reward` u stanju
 `pending` (ERROR redak `webhook-mor referrer_reward_retry`), pa je radnik ponavlja do
 `BONUS_OUTBOX_MAX_ATTEMPTS`, a zatim `failed` čeka čovjeka. Trajna odluka bez dodjele (preporuke
-nema ili je već nagrađena, prijevara po IP-u, mjesečni strop) zatvara obvezu kao `done` uz
-`bonus_outbox.done_reason` (`no_pending_referral`, `ip_match_fraud`, `monthly_cap_reached`);
-`done_reason` NULL znači da je nagrada izdana.
+nema ili je već nagrađena, prijevara po IP-u, mjesečni strop) ili prava koje je već izdao raniji
+pokušaj (insert padne na 23505, dovršavanje `referral_signups` idempotentno pa nema nova dodjela)
+zatvara obvezu kao `done` uz `bonus_outbox.done_reason` (`no_pending_referral`, `ip_match_fraud`,
+`monthly_cap_reached`, `already_granted`). `done_reason` je revizijska bilješka o razlogu
+zatvaranja obveze, NE izvor istine o izdanoj nagradi: nagrada može biti izdana i uz `done_reason`
+koji to ne kaže, ako je kasniji korak (npr. upis u `referral_signups`) tiho pao. Izvor istine je
+`referral_signups.status` (`rewarded`) i `referral_signups.referrer_reward_entitlement_id`.
 
 ## 6. Klijentska konfiguracija (bez rebuilda)
 

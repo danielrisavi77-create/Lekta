@@ -396,11 +396,12 @@ comment on column public.bonus_outbox.status is
   'pending = ceka ili se ponavlja; done = izvrseno; failed = odustalo nakon max pokusaja; cancelled = otkazano punim povratom izvorne uplate (F21).';
 
 -- Trajna odluka bez izvrsenja (Codex pregled PR #217, M2): nagrada preporucitelju se ne dodjeljuje
--- jer preporuke nema ili je vec nagradjena, zbog prijevare po IP-u ili mjesecnog stropa. Obveza je
--- tada `done` uz razlog, a prolazan pad dodjele ostaje `pending` (radnik ga ponovi).
+-- jer preporuke nema ili je vec nagradjena, zbog prijevare po IP-u ili mjesecnog stropa, ili je
+-- pravo vec izdao raniji pokusaj (insert padne na 23505, dovrsavanje referral_signups idempotentno).
+-- Obveza je tada `done` uz razlog, a prolazan pad dodjele ostaje `pending` (radnik ga ponovi).
 alter table public.bonus_outbox add column if not exists done_reason text;
 comment on column public.bonus_outbox.done_reason is
-  'Razlog trajne odluke bez izvrsenja uz status done (npr. ip_match_fraud); NULL = obveza je izvrsena.';
+  'Revizijska biljeska: razlog trajne odluke bez nove dodjele uz status done (npr. ip_match_fraud, already_granted). NULL obicno znaci da je nagrada izdana ovim redom, ali NIJE zajamceno (kasniji korak, npr. upis u referral_signups, mogao je tiho pasti); izvor istine o izdanoj nagradi je referral_signups.status/referrer_reward_entitlement_id.';
 
 -- ---------------------------------------------------------------------------------------------
 -- 8. Nadogradnja Repair -> Final Pass (odjeljak 14)

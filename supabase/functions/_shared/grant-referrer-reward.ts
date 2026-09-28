@@ -25,8 +25,11 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
  * TRAJNE ODLUKE (Codex pregled PR #217, M2): ishod koji se ponovnim pokusajem ne mijenja, pa obveza
  * `referrer_reward` u bonus_outboxu smije zavrsiti kao `done` s tim razlogom. `no_pending_referral`
  * pokriva i kupca bez preporuke i vec nagradjenu preporuku (status vise nije friend_rewarded).
+ * `already_granted` (nas pregled M2): insert prava je pao na 23505 (jedinstveni order_id vec
+ * postoji), a idempotentno dovrsavanje azuriranja referral_signups nije bilo moguce; pravo je vec
+ * izdano, ponovni pokusaj ga ne bi promijenio, pa obveza zavrsava kao done s ovim razlogom.
  */
-const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ip_match_fraud', 'monthly_cap_reached']);
+const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ip_match_fraud', 'monthly_cap_reached', 'already_granted']);
 
 /**
  * Smije li se obveza nagrade zatvoriti. `grant_failed`, `error` i svaki nepoznat oblik rezultata NISU
@@ -93,6 +96,7 @@ export async function tryGrantReferrerReward(
     }
 
     // Interni entitlement = 1 slot kupceva work_typea. Idempotentno preko unique(provider, order_id).
+    const rewardOrderId = `reward:ref-signup:${signup.id}`;
     const { data: ent, error: entError } = await supabase
       .from('entitlements')
       .insert({
@@ -100,16 +104,46 @@ export async function tryGrantReferrerReward(
         work_type: buyerWorkType,
         slots_total: 1,
         product_id: `slot_${buyerWorkType}`,
-        order_id: `reward:ref-signup:${signup.id}`,
+        order_id: rewardOrderId,
         provider: 'internal',
         purchase_expires_at: isoAfterDays(REWARD_WINDOW_DAYS),
       })
       .select('id')
       .single();
 
-    if (entError || !ent) return { granted: false, reason: 'grant_failed' };
+    if (entError) {
+      // 23505 = unique(provider, order_id) je vec pogodjen: pravo je vec izdano (raniji pokusaj),
+      // samo referral_signups nije nuzno dovrsen. Procitaj postojece pravo i dovrsi azuriranje
+      // idempotentno umjesto da javis grant_failed i ponavljas insert zauvijek.
+      if ((entError as { code?: string }).code === '23505') {
+        const { data: existingEnt, error: existingEntError } = await supabase
+          .from('entitlements')
+          .select('id')
+          .eq('provider', 'internal')
+          .eq('order_id', rewardOrderId)
+          .maybeSingle();
 
-    await supabase
+        if (existingEntError || !existingEnt) return { granted: false, reason: 'already_granted' };
+
+        const { error: completeError } = await supabase
+          .from('referral_signups')
+          .update({
+            status: 'rewarded',
+            converted_at: new Date().toISOString(),
+            rewarded_at: new Date().toISOString(),
+            referrer_reward_entitlement_id: existingEnt.id,
+            converted_order_id: buyerOrderId,
+          })
+          .eq('id', signup.id);
+
+        if (completeError) return { granted: false, reason: 'already_granted' };
+        return { granted: true };
+      }
+      return { granted: false, reason: 'grant_failed' };
+    }
+    if (!ent) return { granted: false, reason: 'grant_failed' };
+
+    const { error: updateError } = await supabase
       .from('referral_signups')
       .update({
         status: 'rewarded',
@@ -119,6 +153,10 @@ export async function tryGrantReferrerReward(
         converted_order_id: buyerOrderId,
       })
       .eq('id', signup.id);
+
+    // Pravo je upisano, ali azuriranje signupa nije: NE javljaj tiho granted:true bez traga. Vrati
+    // gresku da se obveza ponovi; ponovni insert tada pada na 23505 i ide kroz gornju granu.
+    if (updateError) return { granted: false, reason: 'error' };
 
     return { granted: true };
   } catch (_e) {
