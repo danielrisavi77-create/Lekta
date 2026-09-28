@@ -112,6 +112,8 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
+import { adversarialInputs, legacyExtractFingerprintInputFromDocx } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
@@ -8696,5 +8698,24 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
   it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
     const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
+  });
+});
+
+describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
+  // Gard je vremenski prag nad ulazom koji je za regex kvadratan. Mutant je doslovna stara regex
+  // izvedba: na ~44 KB `<w:style ` bez `>` treba stotine ms (7,2 s na 176 KB), linearna ispod 100.
+  const [napad] = adversarialInputs(5000);
+  const trajanje = (fn: (d: string, s: string) => unknown) => {
+    const t0 = performance.now();
+    fn(napad.documentXml, napad.stylesXml);
+    return performance.now() - t0;
+  };
+
+  it('BASELINE: linearni skener prolazi ispod 100 ms', () => {
+    expect(trajanje(extractFingerprintInputFromDocx)).toBeLessThan(100);
+  });
+
+  it('mutant: stara regex izvedba probija prag', () => {
+    expect(trajanje(legacyExtractFingerprintInputFromDocx)).toBeGreaterThan(100);
   });
 });
