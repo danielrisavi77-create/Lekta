@@ -114,6 +114,8 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
+import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
@@ -8963,5 +8965,34 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
   it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
     const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
+  });
+});
+
+describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
+  // Gard je brojac rada u skeneru (deterministicki, Codex R2 na #230) nad svih 11 napada, n i 2n.
+  // Mutanti su zamjene u STVARNOM izvoru skenera: forward finder koji ne pamti poziciju, i matcher
+  // stila koji zadnji `</w:style>` trazi iznova za svaku pojavu. Svaki mutant hvataju upravo napadi
+  // koji ciljaju taj pokazivac; ostali napadi ostaju cisti, pa tvrdnja nije "nesto je palo".
+  it('BASELINE: stvarni skener je linearan na svih 11 napada', () => {
+    expect(linearnostProblemi(extractFingerprintInputFromDocx, 2000)).toEqual([]);
+  });
+
+  it('mutant: forward finder bez pamcenja pozicije se hvata', () => {
+    const mutant = mutiraniSkener('    if (cached >= from) return cached;\n', '');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:name bez > u stilu',
+      'document: <w:pStyle bez > u odlomku',
+      'document: <w:t bez > u odlomku',
+      'styles: vise styleId u tagu, jedan > na kraju',
+    ]);
+  });
+
+  it('mutant: matcher stila bez pamcenja zadnjeg </w:style> se hvata', () => {
+    const mutant = mutiraniSkener('        if (lastClose === null) {', '        if (true) {');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:style styleId bez zatvaranja',
+      'styles: vise styleId u tagu, jedan > na kraju',
+      'styles: > u navodnicima bez zatvaranja',
+    ]);
   });
 });
