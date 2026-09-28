@@ -83,3 +83,12 @@ ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-gate.test.ts
 7e0425bda3ddb566aca2926f62ee655290fd8ce8:tests/checkout.test.ts:generic-api-key:202
 # Isti niz je doslovno citiran u komentaru ovog bloka na grani design/pack3 (commit 70548aef, redak 71), pa skeneri hvataju i sam ignore file; ovdje je opisan rijecima, a taj commit se izuzima.
 70548aef4614ae85f63eceba5b2e152c6aec7290:.gitleaksignore:generic-api-key:71
+
+# Grana claude/laya-v21 (Laya, nespojena), commit 271c3817: izmisljeni naziv fixture u testovima Laye pravilo
+# generic-api-key cita kao kljuc. Grana nije u masteru, ali gitleaks skenira sve refove pa obara svaki PR.
+# Kad vlasnik grane prepise povijest (novi sha), ovi redci vise nista ne pokrivaju i mogu se ukloniti.
+271c381704992a72e3dbac64772a52def9ef76d3:tests/gate-mutations.test.ts:generic-api-key:6299
+271c381704992a72e3dbac64772a52def9ef76d3:tests/gate-mutations.test.ts:generic-api-key:6302
+271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/registry.test.ts:generic-api-key:8
+271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/runner.test.ts:generic-api-key:7
+271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/eval-cli.test.ts:generic-api-key:44

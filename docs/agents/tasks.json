@@ -181,11 +181,11 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "in_progress",
+      "status": "in_review",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani."
+      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani. STANJE 27.9.: staging ima migracije do 0204 (Supabase list_migrations, procitano u sesiji lekta-00 27. 9.), Edge webhook-mor v5 i create-checkout v6 aktivni na stagingu (list_edge_functions), naplata inertna; disciplina numeracije ima gard tests/migration-numbering.test.ts. Preostaje dokaz korisnickog toka iz Dokaza iznad."
     },
     {
       "id": "T19",
@@ -204,7 +204,7 @@
         "T18",
         "T19"
       ],
-      "note": "P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak. AUDIT 22.9.: #24 katedra-agent-worker verify_jwt=false."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak. AUDIT 22.9.: #24 katedra-agent-worker verify_jwt=false."
     },
     {
       "id": "T21",
@@ -214,7 +214,7 @@
         "T18",
         "T20"
       ],
-      "note": "P0. Dokaz: nema potvrdjenog citanja ili mutacije tudjih podataka, zaobilaska prava ni neogranicene obrade, a negativni testovi padaju kad se zastita namjerno ukloni. AUDIT 22.9.: #10 drop policy corpus_contributions_update_own (migracija 0203+, RLS test); #23 readTextBounded u 8 javnih Edge funkcija; #25 demo kvota Katedre SECURITY DEFINER."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: nema potvrdjenog citanja ili mutacije tudjih podataka, zaobilaska prava ni neogranicene obrade, a negativni testovi padaju kad se zastita namjerno ukloni. AUDIT 22.9.: #10 drop policy corpus_contributions_update_own (migracija 0203+, RLS test); #23 readTextBounded u 8 javnih Edge funkcija; #25 demo kvota Katedre SECURITY DEFINER."
     },
     {
       "id": "T22",
@@ -226,16 +226,16 @@
         "T21",
         "T49"
       ],
-      "note": "P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
     },
     {
       "id": "T23",
       "title": "Urediti katalog, cijene i prava proizvoda",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga. AUDIT 27.9.: MONETIZACIJA_V1 odj. 3, 5, 6, 10, 11, 13, 14, 24, 25; cijene fiksne odlukom vlasnika 2026-09-27 (docs/decisions/MONETIZACIJA_V1_ODLUKA.md): Repair 3,99/5,99/9,99/16,99/24,99 EUR uz 7/7/14/21/30 dana, Final Pass 12,99/19,99/29,99/39,99 EUR, Semester Pass 14,99 EUR; zamjenjuje raniju odluku iz reda F2 u orchestrator-backlog.md (4,99/9,99/14,99/19,99/24,99 EUR, specijalisticki 14 dana)."
+      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga. AUDIT 27.9.: MONETIZACIJA_V1 odj. 3, 5, 6, 10, 11, 13, 14, 24, 25; cijene fiksne odlukom vlasnika 2026-09-27 (docs/decisions/MONETIZACIJA_V1_ODLUKA.md): Repair 3,99/5,99/9,99/16,99/24,99 EUR uz 7/7/14/21/30 dana, Final Pass 12,99/19,99/29,99/39,99 EUR, Semester Pass 14,99 EUR; zamjenjuje raniju odluku iz reda F2 u orchestrator-backlog.md (4,99/9,99/14,99/19,99/24,99 EUR, specijalisticki 14 dana). STANJE 27.9.: zamijenjen MONETIZACIJA_V1 (M1): docs/decisions/MONETIZACIJA_V1.md i docs/decisions/MONETIZACIJA_V1_ODLUKA.md spojeni (#160). Izvedba cijena i prava ide kroz T77 (M2, M3) i T78 (M4)."
     },
     {
       "id": "T24",
@@ -245,9 +245,10 @@
         "T20",
         "T22",
         "T23",
-        "T48"
+        "T48",
+        "T77"
       ],
-      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo payment_intent.succeeded i charge.refunded (Stripe; ranije LS order_created/paid i order_refunded), inbox prije provjere korisnika, needs_manual_link; #4 dosljedna imena Stripe tajni (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PUBLISHABLE_KEY) u webhook-mor i create-checkout + preflight (ranije LS store ID pod dva imena); #7 PDV ukljucen; #26 tekst garancije. AUDIT 27.9.: #6 Lemon Squeezy formulacije zamijenjene Stripeom (odluka vlasnika 2026-09-23). M2: offer_code, snapshot prava, upgrade, deaktivacija do_obrane, refund otkazuje referral (F21)."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo payment_intent.succeeded i charge.refunded (Stripe; ranije LS order_created/paid i order_refunded), inbox prije provjere korisnika, needs_manual_link; #4 dosljedna imena Stripe tajni (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PUBLISHABLE_KEY) u webhook-mor i create-checkout + preflight (ranije LS store ID pod dva imena); #7 PDV ukljucen; #26 tekst garancije. AUDIT 27.9.: #6 Lemon Squeezy formulacije zamijenjene Stripeom (odluka vlasnika 2026-09-23). M2: offer_code, snapshot prava, upgrade, deaktivacija do_obrane, refund otkazuje referral (F21). STANJE 27.9.: zamijenjen T77 (M2, M3); ostaje blocked iza T77."
     },
     {
       "id": "T25",
@@ -258,16 +259,16 @@
         "T21",
         "T24"
       ],
-      "note": "P0. Dokaz: dvostruki klik, refresh, paralelni poziv i izgubljeni odgovor daju jedan definiran posao i jednu ocekivanu potrosnju prava, a isti posao je ponovno dohvatljiv."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: dvostruki klik, refresh, paralelni poziv i izgubljeni odgovor daju jedan definiran posao i jednu ocekivanu potrosnju prava, a isti posao je ponovno dohvatljiv."
     },
     {
       "id": "T26",
       "title": "Potvrditi točnost lokalne DOCX analize",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju."
+      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju. STANJE 27.9.: #184 spojen (stavke literature nisu naslovi, matrica laznih nalaza nad 14 fixtura u tests/analysis-false-findings.test.ts, mjerenje nad 314 radova bez novopropustenih naslova prema prijavi koordinatora). DOSJE 27.9. (docs/agents/reports/T26_ZATVARANJE.md, baza cee4751): conformance 10 datoteka, 552 testa, EXIT 0 (441 profil); #14, #16 i #17 zatvoreni u #168 (docx-malformed-xml, docx-intake-cfb, docx-hidden-text-scoring zeleni); measure:false-findings nad 24 fixtura bez greske, na 11 ispravnih s profilom samo 7 nalaza sa strojnim dokazom iz paketa; nemjerljivo ide kao unmeasurable ili informational s max 0. Otvoreno izvan kriterija: tablica podrzanih svojstava, vrijeme obrade kao gard (izmjereno jednokratno u Nodeu: 30k rijeci 1,4 s, 480k 18 s), skriveni tekst u broju rijeci i pregledu. STANJE 28.9.: kriterij 1 T81 ispunjen; dosje docs/agents/reports/T26_ZATVARANJE.md; preostale stavke u backlogu nakon lansiranja (docs/roadmap/PRODUCTION_BACKLOG.md, \"T26 nakon lansiranja\")."
     },
     {
       "id": "T27",
@@ -277,17 +278,17 @@
         "T25",
         "T26"
       ],
-      "note": "P0. Dokaz: svaki od 31 registriranog fixera ima pozitivan i negativan dokaz, nula ostecenja i laznih uspjeha, a izvjestaj odvojeno prikazuje rijesene, nerijesene, preskocene i rucne stavke s tocnim nazivnicima. AUDIT 22.9.: #18 fixer koji pukne bez loga."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: svaki od 31 registriranog fixera ima pozitivan i negativan dokaz, nula ostecenja i laznih uspjeha, a izvjestaj odvojeno prikazuje rijesene, nerijesene, preskocene i rucne stavke s tocnim nazivnicima. AUDIT 22.9.: #18 fixer koji pukne bez loga."
     },
     {
       "id": "T28",
       "title": "Završiti pravila, programe i dokaze za 407 profila",
-      "status": "blocked",
+      "status": "in_progress",
       "dependsOn": [
         "T16",
         "T26"
       ],
-      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka."
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka. STANJE 27.9.: Upisnik radi (#182 i #188 spojeni); status ostaje blocked jer ovisnost T26 nije done (gard statusa ne dopusta in_progress). STANJE 28.9.: T26 done, pa T28 prelazi iz blocked u in_progress (Upisnik radi, #182 i #188); gard statusa ne dopusta blocked bez nedovrsene ovisnosti."
     },
     {
       "id": "T29",
@@ -297,7 +298,7 @@
         "T26",
         "T28"
       ],
-      "note": "P1. Dokaz: poznato ispravni i poznato pogresni primjeri daju tocan rezultat, servis u kvaru daje unknown uz oporavak, a sadrzaj reference se ne mijenja po nepouzdanom podudaranju."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: poznato ispravni i poznato pogresni primjeri daju tocan rezultat, servis u kvaru daje unknown uz oporavak, a sadrzaj reference se ne mijenja po nepouzdanom podudaranju."
     },
     {
       "id": "T30",
@@ -309,7 +310,7 @@
         "T27",
         "T28"
       ],
-      "note": "P1. Dokaz: stvarni korisnicki scenariji i snimke relevantnih stanja pokazuju da novi korisnik bez pomoci autora zavrsi tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju. AUDIT 22.9.: #11 unit/work/utm preziveti prijelaz s / na /rad/."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: stvarni korisnicki scenariji i snimke relevantnih stanja pokazuju da novi korisnik bez pomoci autora zavrsi tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju. AUDIT 22.9.: #11 unit/work/utm preziveti prijelaz s / na /rad/."
     },
     {
       "id": "T31",
@@ -319,7 +320,7 @@
         "T25",
         "T30"
       ],
-      "note": "P1. Dokaz: revizije i mentorske zadace ne prelaze na krivi rad, lokalni zivotni ciklus ne gubi podatke bez upozorenja, a korisnik moze pronaci i obrisati sve sto aplikacija tvrdi da je spremila."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: revizije i mentorske zadace ne prelaze na krivi rad, lokalni zivotni ciklus ne gubi podatke bez upozorenja, a korisnik moze pronaci i obrisati sve sto aplikacija tvrdi da je spremila."
     },
     {
       "id": "T32",
@@ -329,7 +330,7 @@
         "T28",
         "T29"
       ],
-      "note": "P1. Dokaz: svaki javno naveden alat ima funkcionalan izlaz, radi na mobitelu i s tipkovnicom, ne gubi unesene podatke i ne tvrdi da je genericki predlozak sluzbeno odobren."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: svaki javno naveden alat ima funkcionalan izlaz, radi na mobitelu i s tipkovnicom, ne gubi unesene podatke i ne tvrdi da je genericki predlozak sluzbeno odobren."
     },
     {
       "id": "T33",
@@ -339,7 +340,7 @@
         "T26",
         "T30"
       ],
-      "note": "P1. Dokaz: tekstualni PDF daje reproducibilan ogranicen rezultat, nepodrzan ulaz ne dobiva lazno preciznu ocjenu, a PDF tok ne obecava automatski DOCX popravak ni nepostojeci OCR."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: tekstualni PDF daje reproducibilan ogranicen rezultat, nepodrzan ulaz ne dobiva lazno preciznu ocjenu, a PDF tok ne obecava automatski DOCX popravak ni nepostojeci OCR."
     },
     {
       "id": "T34",
@@ -352,7 +353,7 @@
         "T29",
         "T36"
       ],
-      "note": "P1. Dokaz: stvarni testni dokument prodje cijeli put do serverski filtriranog rezultata, pogresne ovlasti i tokeni se odbijaju, a privremeni sadrzaj se brise prema ugovoru; nedostupan host ostaje vidljiv blokator, ne status done."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: stvarni testni dokument prodje cijeli put do serverski filtriranog rezultata, pogresne ovlasti i tokeni se odbijaju, a privremeni sadrzaj se brise prema ugovoru; nedostupan host ostaje vidljiv blokator, ne status done."
     },
     {
       "id": "T35",
@@ -363,7 +364,7 @@
         "T27",
         "T52"
       ],
-      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju. AUDIT 22.9.: #15 WordReplica je drugi release track, sada T51 (blocked, dependsOn T47/T48, radi se skroz na kraju)."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju. AUDIT 22.9.: #15 WordReplica je drugi release track, sada T51 (blocked, dependsOn T47/T48, radi se skroz na kraju)."
     },
     {
       "id": "T36",
@@ -374,7 +375,7 @@
         "T22",
         "T25"
       ],
-      "note": "P0. Dokaz: svaki obecani rok i brisanje imaju dokaz na stvarnom objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a tekst rada i e-posta ne zavrsavaju u nepotrebnim logovima. AUDIT 22.9.: #22 purge webhook_events.raw_payload; #27 politika privatnosti field-render."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: svaki obecani rok i brisanje imaju dokaz na stvarnom objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a tekst rada i e-posta ne zavrsavaju u nepotrebnim logovima. AUDIT 22.9.: #22 purge webhook_events.raw_payload; #27 politika privatnosti field-render."
     },
     {
       "id": "T37",
@@ -385,7 +386,7 @@
         "T24",
         "T36"
       ],
-      "note": "P1. Dokaz: testni zahtjev prodje podnosenje, potvrdu, admin obradu, razrjesenje i obavijest korisniku, uz autorizaciju i trag promjena. AUDIT 22.9.: #8 Lemon Squeezy imenovan kao prodavatelj; #9 povrat neiskoristenih slotova 14 dana; #28 Katedra top-upovi preko Stripea."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: testni zahtjev prodje podnosenje, potvrdu, admin obradu, razrjesenje i obavijest korisniku, uz autorizaciju i trag promjena. AUDIT 22.9.: #8 Lemon Squeezy imenovan kao prodavatelj; #9 povrat neiskoristenih slotova 14 dana; #28 Katedra top-upovi preko Stripea."
     },
     {
       "id": "T38",
@@ -396,7 +397,7 @@
         "T24",
         "T36"
       ],
-      "note": "P1. Dokaz: bonus se dodijeli tocno jednom uz kontrolirani retry i vidljiv terminalni kvar, odjava zaustavlja buduce podsjetnike, a svaka ponudjena usluga ima cijeli isporucivi tok."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: bonus se dodijeli tocno jednom uz kontrolirani retry i vidljiv terminalni kvar, odjava zaustavlja buduce podsjetnike, a svaka ponudjena usluga ima cijeli isporucivi tok."
     },
     {
       "id": "T39",
@@ -409,7 +410,7 @@
         "T37",
         "T38"
       ],
-      "note": "P1. Dokaz: admin brojke se podudaraju s pripremljenim DB i payment scenarijima, neovlasteni pristup je odbijen na serveru, a kriticni korisnicki problem je razrjesiv bez rucne izmjene baze."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: admin brojke se podudaraju s pripremljenim DB i payment scenarijima, neovlasteni pristup je odbijen na serveru, a kriticni korisnicki problem je razrjesiv bez rucne izmjene baze."
     },
     {
       "id": "T40",
@@ -421,16 +422,16 @@
         "T24",
         "T36"
       ],
-      "note": "P1. Dokaz: postojeci cross-app tok prodje na kompatibilnim stvarnim testnim servisima uz ocuvanu privolu i vlasnistvo, a kvar Katedre ne unistava lokalni rad."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: postojeci cross-app tok prodje na kompatibilnim stvarnim testnim servisima uz ocuvanu privolu i vlasnistvo, a kvar Katedre ne unistava lokalni rad."
     },
     {
       "id": "T41",
       "title": "Sanirati ovisnosti i dovršiti održivu provjeru koda",
-      "status": "ready",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: ratchet i glavne provjere prolaze na ponovljivoj instalaciji s praznim cacheom, a svaki preostali nalaz ima vlasnika, mitigaciju i rok."
+      "note": "P1. Dokaz: ratchet i glavne provjere prolaze na ponovljivoj instalaciji s praznim cacheom, a svaki preostali nalaz ima vlasnika, mitigaciju i rok. STANJE 27.9.: T56 izveden (#159, #187 spojeni) i T58 done; ostaje T57, T59, T60."
     },
     {
       "id": "T42",
@@ -444,7 +445,7 @@
         "T34",
         "T35"
       ],
-      "note": "P1. Dokaz: nema blokirajuce pristupacne ili mobilne prepreke, nema nekontroliranog zamrzavanja ni rasta memorije, a izmjerene granice odgovaraju stvarnom ponasanju; cilj je WCAG 2.2 AA za javne tokove."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: nema blokirajuce pristupacne ili mobilne prepreke, nema nekontroliranog zamrzavanja ni rasta memorije, a izmjerene granice odgovaraju stvarnom ponasanju; cilj je WCAG 2.2 AA za javne tokove."
     },
     {
       "id": "T43",
@@ -458,7 +459,7 @@
         "T37",
         "T49"
       ],
-      "note": "P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu. AUDIT 22.9.: #12 dijakritici u sucelju + test zabranjenih ASCII oblika; #29 intake eventi; #30 sitemap-usporedba u robots.txt; #31 h1 i OG na /saznaj-vise/; #32 mrtvo sidro #analyzer."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu. AUDIT 22.9.: #12 dijakritici u sucelju + test zabranjenih ASCII oblika; #29 intake eventi; #30 sitemap-usporedba u robots.txt; #31 h1 i OG na /saznaj-vise/; #32 mrtvo sidro #analyzer."
     },
     {
       "id": "T44",
@@ -492,7 +493,7 @@
         "T43",
         "T50"
       ],
-      "note": "P0. Dokaz: sve obavezne grane matrice scenarija E01 do E36 imaju stvarni prolaz i evidenciju bez presucenog mocka; nedostupan servis je oznacen blocked ili unavailable, nikad pass. AUDIT 27.9.: T50 odluka vlasnika: T44 ostaje gate za placeno i puno lansiranje (opsezi B i C); besplatna beta (opseg A) ide kroz T81."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: sve obavezne grane matrice scenarija E01 do E36 imaju stvarni prolaz i evidenciju bez presucenog mocka; nedostupan servis je oznacen blocked ili unavailable, nikad pass. AUDIT 27.9.: T50 odluka vlasnika: T44 ostaje gate za placeno i puno lansiranje (opsezi B i C); besplatna beta (opseg A) ide kroz T81."
     },
     {
       "id": "T45",
@@ -507,7 +508,7 @@
         "T39",
         "T41"
       ],
-      "note": "P0. Dokaz: kontrolirani kvar proizvede vidljiv signal, rollback i restore su stvarno izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu. AUDIT 22.9.: #33 hotfix procedura i tagovi; #34 SECURITY.md i security.txt; #35 incidenti i SLA."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: kontrolirani kvar proizvede vidljiv signal, rollback i restore su stvarno izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu. AUDIT 22.9.: #33 hotfix procedura i tagovi; #34 SECURITY.md i security.txt; #35 incidenti i SLA."
     },
     {
       "id": "T46",
@@ -519,7 +520,7 @@
         "T45",
         "T72"
       ],
-      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu. AUDIT 27.9.: #4 dodana ovisnost T72 (svjez RELEASE_PROOF nad masterom)."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu. AUDIT 27.9.: #4 dodana ovisnost T72 (svjez RELEASE_PROOF nad masterom)."
     },
     {
       "id": "T47",
@@ -530,7 +531,7 @@
         "T46",
         "T48"
       ],
-      "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
     },
     {
       "id": "T48",
@@ -774,11 +775,11 @@
     {
       "id": "T77",
       "title": "Monetizacija V1: naplatna infrastruktura M2+M3",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T23"
       ],
-      "note": "Blocked dok T23 (katalog, cijene i prava) nije done; koordinator je trazio ready, ali gard statusa ne dopusta ready uz nezavrsenu ovisnost. Razred: full. Zasticeno: supabase. M2: migracija od 0205 kroz supabase db push (specijalisticki u products.work_type CHECK; slot_specijalisticki, pass_specijalisticki, pass_semestralni, pass_doktorski ako ne postoji; deaktivacija slot_zavrsni_do_obrane i slot_diplomski_do_obrane; offer_code i snapshot prava uz entitlement), serverski upgrade Repair u Final Pass po cijeni ciljna minus placeno, Stripe proizvodi. M3: ReportWorkType i WORK_TYPE_ORDER sa specijalisticki, picker, checkout i analitika segment, BEZ cijena u klijentskom kodu (priceEur iz odj. 12 se ne prenosi; cijena samo iz products.price_eur). Cijene i prozori iz docs/decisions/MONETIZACIJA_V1_ODLUKA.md. Dosje, prihvatni kriteriji iz odj. 29: (1) Free analiza radi bez naplate; (2) specijalisticki prolazi kroz cijeli pricing, catalog, checkout i entitlement tok; (3) svaki Repair SKU daje tocno jedan slot odgovarajuce vrste rada; (4) Final Pass se ne moze primijeniti na drugi rad; (5) Final Pass prihvaca novu verziju istog rada; (6) upgrade ne naplacuje ponovno vec placeni Repair iznos; (7) offer_code se snapshotira pri kupnji; (8) promjena buduceg kataloga ne oduzima staro pravo; (9) deaktivirani *_do_obrane proizvodi vise se ne nude; (10) Stripe iznos dolazi samo iz serverskog products.price_eur; (11) povrat zatvara entitlement i sve vezane referral i bonus posljedice; (12) specijalisticki ima zaseban analytics segment; (13) nijedan proizvod ne tvrdi da je fakultet sluzbeno odobrio rad; (14) Expert pregled ne obecava akademsko pisanje ni izmjenu sadrzaja. AUDIT 27.9.: MONETIZACIJA_V1 M2, M3",
+      "note": "Blocked dok T23 (katalog, cijene i prava) nije done; koordinator je trazio ready, ali gard statusa ne dopusta ready uz nezavrsenu ovisnost. Razred: full. Zasticeno: supabase. M2: migracija od 0205 kroz supabase db push (specijalisticki u products.work_type CHECK; slot_specijalisticki, pass_specijalisticki, pass_semestralni, pass_doktorski ako ne postoji; deaktivacija slot_zavrsni_do_obrane i slot_diplomski_do_obrane; offer_code i snapshot prava uz entitlement), serverski upgrade Repair u Final Pass po cijeni ciljna minus placeno, Stripe proizvodi. M3: ReportWorkType i WORK_TYPE_ORDER sa specijalisticki, picker, checkout i analitika segment, BEZ cijena u klijentskom kodu (priceEur iz odj. 12 se ne prenosi; cijena samo iz products.price_eur). Cijene i prozori iz docs/decisions/MONETIZACIJA_V1_ODLUKA.md. Dosje, prihvatni kriteriji iz odj. 29: (1) Free analiza radi bez naplate; (2) specijalisticki prolazi kroz cijeli pricing, catalog, checkout i entitlement tok; (3) svaki Repair SKU daje tocno jedan slot odgovarajuce vrste rada; (4) Final Pass se ne moze primijeniti na drugi rad; (5) Final Pass prihvaca novu verziju istog rada; (6) upgrade ne naplacuje ponovno vec placeni Repair iznos; (7) offer_code se snapshotira pri kupnji; (8) promjena buduceg kataloga ne oduzima staro pravo; (9) deaktivirani *_do_obrane proizvodi vise se ne nude; (10) Stripe iznos dolazi samo iz serverskog products.price_eur; (11) povrat zatvara entitlement i sve vezane referral i bonus posljedice; (12) specijalisticki ima zaseban analytics segment; (13) nijedan proizvod ne tvrdi da je fakultet sluzbeno odobrio rad; (14) Expert pregled ne obecava akademsko pisanje ni izmjenu sadrzaja. AUDIT 27.9.: MONETIZACIJA_V1 M2, M3 STANJE 27.9.: T23 done (zamijenjen M1), pa je T77 ready.",
       "owner": "c4"
     },
     {
@@ -816,11 +817,45 @@
       "dependsOn": [
         "T26",
         "T72",
-        "T49"
+        "T49",
+        "T84",
+        "T85",
+        "T86",
+        "T87"
       ],
       "note": "Datum se pomice samo zbog neispunjenog kriterija, ne zbog novih funkcija; nepoznato je NO-GO. Sigurnosni podskup T21 za zive endpointe je kriterij 4 (T21 nema zaseban podzadatak, pa nije u dependsOn). Javna beta: prije 19. 10. provjeriti troskovne granice i rate-limit besplatnog popravka te zive vrijednosti REPAIR_FREE_MODE i REPAIR_DISABLED. Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. Dosje, 9 kriterija iz odj. 6 prijedloga: (1) T26 zatvoren: conformance matrica prolazi, nalazi #14, #16 i #17 ispravljeni, nema sustavnog laznog nalaza na poznato ispravnim dokumentima; (2) T72: svjez RELEASE_PROOF nad tocnim commitom kandidata; (3) Word oracle zelen na Windowsu za popravljene dokumente (npm run verify:word); (4) sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0; (5) prekidaci provjereni na produkciji: REPAIR_DISABLED stvarno gasi popravak; stvarna vrijednost REPAIR_FREE_MODE procitana; (6) pravni tekstovi bete objavljeni (privatnost, uvjeti, \"tijekom besplatne bete\"); (7) T49: domena i support sanducic rade, SPF/DKIM/DMARC postavljeni; (8) mini pilot: najmanje pet korisnika prolazi glavni tok bez P0 i blokirajuceg P1 (kriterij T15); (9) nijedan *_DISABLED ili prazan endpoint ne vodi korisnika u slijepu ulicu: iskljucene funkcije su skrivene ili jasno oznacene kao \"uskoro\". AUDIT 27.9.: T50 odluka vlasnika",
       "owner": "lekta-32"
+    },
+    {
+      "id": "T84",
+      "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase."
+    },
+    {
+      "id": "T85",
+      "title": "Prekidaci na produkciji: REPAIR_DISABLED gasi popravak, stvarna vrijednost REPAIR_FREE_MODE procitana",
+      "status": "done",
+      "dependsOn": [],
+      "note": "Kriterij 5 T81. Ceka izricitu rijec vlasnika za citanje produkcije; bez nje se ne pokrece. Samo citanje, bez izmjena; koordinator uz vlasnika. Status je ready, ne blocked, jer gard statusa ne dopusta blocked bez ovisnosti koja nije done. STANJE 28.9.: produkcija procitana uz rijec vlasnika (koordinator lekta-32, samo citanje): REPAIR_FREE_MODE=true, REPAIR_DISABLED nije postavljen, sonda vraca 401 iz koda, ne 503; izvjestaj docs/agents/reports/T85_PREKIDACI_PRODUKCIJA.md. Preostaje dokaz na stagingu (REPAIR_DISABLED=true daje 503, zatim vracanje i 401), ceka rijec vlasnika. STANJE 27.9. kasnije: staging dokaz izveden (sesija c4, PR #201 issuecomment-5860795538): REPAIR_DISABLED=true daje 503 disabled, uklanjanje vraca 401, tajne prije i poslije identicne; kriterij 5 T81 ispunjen."
+    },
+    {
+      "id": "T86",
+      "title": "Pravni tekstovi bete objavljeni (privatnost, uvjeti, tijekom besplatne bete)",
+      "status": "blocked",
+      "dependsOn": [
+        "T77"
+      ],
+      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77)."
+    },
+    {
+      "id": "T87",
+      "title": "Nijedan *_DISABLED ili prazan endpoint ne vodi u slijepu ulicu",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Kriterij 9 T81. Audit svih *_DISABLED i praznih endpointa u src/ i supabase/functions: popis s ekranom i porukom; iskljucena funkcija je skrivena ili oznacena \"uskoro\"."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe. Azurirano 2026-09-27: T73 done (NO-GO, opcija 2, potvrdio vlasnik); dodani T74 (otisak koda popravka), T75 (svjeza ovjera korpusa, blocked iza T74) i T76 (PRAVO opseg); T73 (c), (e) i (f) cekaju identifikatore. Azurirano 2026-09-27: monetizacija V1 prihvacena (docs/decisions/MONETIZACIJA_V1_ODLUKA.md); biljeske uz T23, T24 i T28, dodani T77 (M2 i M3), T78 (M4, blocked iza T77 i T76) i T79 (Laya V2.1, blocked iza T47); M5 i M6 bez zadataka, uz P-A. Azurirano 2026-09-27: dodan T80 (self-hosted Word runner, in_progress, owner lekta-32). Azurirano 2026-09-27: T50 done (odluka vlasnika: opseg A sada, go/no-go 19. 10. 2026.); dodan T81 (Beta go/no-go, blocked iza T26, T72 i T49); biljeske uz T15, T44 i T49."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe. Azurirano 2026-09-27: T73 done (NO-GO, opcija 2, potvrdio vlasnik); dodani T74 (otisak koda popravka), T75 (svjeza ovjera korpusa, blocked iza T74) i T76 (PRAVO opseg); T73 (c), (e) i (f) cekaju identifikatore. Azurirano 2026-09-27: monetizacija V1 prihvacena (docs/decisions/MONETIZACIJA_V1_ODLUKA.md); biljeske uz T23, T24 i T28, dodani T77 (M2 i M3), T78 (M4, blocked iza T77 i T76) i T79 (Laya V2.1, blocked iza T47); M5 i M6 bez zadataka, uz P-A. Azurirano 2026-09-27: dodan T80 (self-hosted Word runner, in_progress, owner lekta-32). Azurirano 2026-09-27: T50 done (odluka vlasnika: opseg A sada, go/no-go 19. 10. 2026.); dodan T81 (Beta go/no-go, blocked iza T26, T72 i T49); biljeske uz T15, T44 i T49. Azurirano 2026-09-27 (T50 uskladjenje): oznaka opsega B/C na T20 do T22, T24, T25, T27, T29 do T40 i T42 do T47; T18 in_review, T23 done (zamijenjen M1), T77 ready, T24 iza T77, T26 i T41 in_progress, T28 ostaje blocked iza T26; dodani T84 do T87 (kriteriji 4, 5, 6 i 9 T81) u dependsOn T81. Azurirano 2026-09-28: T85 in_review (izvjestaj T85_PREKIDACI_PRODUKCIJA.md; preostaje staging dokaz 503). T85 done (staging dokaz 503 u T85_PREKIDACI_PRODUKCIJA.md odj. 3). Azurirano 2026-09-28: T26 done (dosje T26_ZATVARANJE.md, kriterij 1 T81); T28 in_progress jer mu je T26 bila jedina nedovrsena ovisnost."
 }

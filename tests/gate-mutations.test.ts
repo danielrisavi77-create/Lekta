@@ -141,7 +141,7 @@ import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
-import { signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { measuredCodeProblem, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
@@ -182,12 +182,19 @@ import { OZNAKA_404, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfon
 import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
-import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import { forwardsNpmCacheInput, jobsWithBareNpmCi, npmCacheProblems, unpinnedExternalUses } from './helpers/ci-workflow-cache';
 import {
   falseGreenParityProblems, opportunitySqlScopeProblems, opportunityWiringProblems,
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { judgeCpuDiscipline, packageScriptReader, HEAVY_BINARIES } from '../scripts/hooks/cpu-discipline.mjs';
+import { decideStop, MAX_BLOCKS } from '../scripts/hooks/implementer-stop.mjs';
+import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
+import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { leanPromptProblems } from './helpers/lean-prompts';
+import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
+import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
 import {
   backdropFilterProblems,
   chromeGraph,
@@ -350,6 +357,16 @@ function istiSadrzajPodDvaImenaPada(
   } catch {
     return true;
   }
+}
+
+/** Tvrdnja garda T75: v2 ovjera s otiskom koda popravka prolazi, bez njega ili s neispravnim ne prolazi. */
+function mjereniKodSeTrazi(check: (a: CorpusAttestation) => string | null): boolean {
+  const s = { fingerprintVersion: 2, repairSourceHash: 'e'.repeat(64) } as unknown as CorpusAttestation;
+  return (
+    check(s) === null &&
+    check({ ...s, repairSourceHash: null }) !== null &&
+    check({ ...s, repairSourceHash: 'nije-otisak' }) !== null
+  );
 }
 
 /**
@@ -553,6 +570,17 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
     [{ programCode, executors: [{ componentIds: [unitId] }] }],
     [{ id: profileId, unitId, programs: [name], workTypes: ['final'], sources: [{ url: sourceUrl }] }],
     [{ programCode, profileId, evidence: { sourceUrl, sourceLocator: 'službena stranica', quote } }],
+  );
+}
+
+
+function upisnikScopeFixture(sourceUrl: string, quote: string) {
+  const profileUrl = 'https://pmf.unizg.hr/upute';
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+    [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: profileUrl }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote } }],
   );
 }
 
@@ -840,7 +868,172 @@ function z15bTintaProblemi(ts: string): string[] {
   return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
+type UpisnikScopePredicate = (quote: string) => boolean;
+type UpisnikSourceNormalizer = (url: string) => string | null;
+
+function upisnikScopeFromSource(source: string): UpisnikScopePredicate | null {
+  return funkcijaIzIzvora<UpisnikScopePredicate>(
+    source.replace('function wholeWorkScopeStatement(', 'export function wholeWorkScopeStatement('),
+    'wholeWorkScopeStatement',
+  );
+}
+
+function upisnikSourceNormalizerFromSource(source: string): UpisnikSourceNormalizer | null {
+  return funkcijaIzIzvora<UpisnikSourceNormalizer>(
+    source.replace('function comparableProfileSourceUrl(', 'export function comparableProfileSourceUrl('),
+    'comparableProfileSourceUrl',
+  );
+}
+
+const upisnikCandidateSource = (): string => readTextLf(resolve(process.cwd(), 'src/programs/upisnik-profile-candidates.ts'));
+
+/**
+ * scripts/register-clean-task.ps1, vlasnistvo (Codex nalaz, M1): Test-LektaCleanTaskOwned mora
+ * provjeriti da je LEAF Actions[0].Execute tocno 'node' ili 'node.exe' (bez razlike velikih i malih
+ * slova), ne bilo koju putanju koja zavrsava na .exe niti Arguments/WorkingDirectory. Bez ove
+ * provjere tudji Scheduled Task s istim Arguments i WorkingDirectory, ali Execute npr.
+ * 'powershell.exe' ili 'cmd.exe', bio bi prihvacen kao nas: -Unregister bi ga obrisao, a registracija
+ * bi tiho preuzela njegovo mjesto umjesto da odbije.
+ */
+function registerCleanTaskExecuteGuardProblems(ps1: string): string[] {
+  const code = ps1.replace(/\r/g, '').split('\n').filter((l) => !l.trimStart().startsWith('#')).join('\n');
+  const problems: string[] = [];
+  if (!code.includes('function Test-LektaCleanTaskOwned {')) {
+    problems.push('nema funkcije Test-LektaCleanTaskOwned');
+    return problems;
+  }
+  if (!code.includes('$execute = ([string]$akcije[0].Execute).Trim()')) {
+    problems.push('vlasnistvo ne cita Actions[0].Execute');
+  }
+  if (!code.includes('$leafExecute = [System.IO.Path]::GetFileName($execute).ToLower()')) {
+    problems.push('vlasnistvo ne svodi Execute na leaf ime datoteke');
+  }
+  if (!code.includes("if ($leafExecute -ne 'node' -and $leafExecute -ne 'node.exe') { return $false }")) {
+    problems.push('vlasnistvo ne odbija Execute koji nije tocno node ili node.exe');
+  }
+  return problems;
+}
+
+/** Granice `executePlan` u stvarnom izvoru clean-vitest-tmp.mjs: od potpisa do sljedece top-level funkcije. */
+function executePlanSourceSlice(src: string): string {
+  const start = src.indexOf('export function executePlan(plan, opts = {}) {');
+  const end = src.indexOf('\nfunction errCode(err) {', start);
+  if (start < 0 || end < 0 || end <= start) throw new Error('executePlan (ili errCode iza njega) nije pronadjen u izvoru');
+  return src.slice(start, end);
+}
+
+/**
+ * clean-vitest-tmp.mjs M3 (Codex krug 3): executePlan mora, NEPOSREDNO PRIJE svakog rmSync, ponovno
+ * izracunati realpath korijena i svakog kandidata i odbiti brisanje ako se realpath korijena
+ * promijenio izmedju planiranja i izvrsenja, ako kandidat po realpathu lezi pod Temp/claude ili vise
+ * nije izravno dijete korijena. planCleanup te vrijednosti mjeri SAMO pri planiranju; bez ove ponovne
+ * provjere TOCTOU (korijen ili kandidat zamijenjen junctionom prema Temp/claude izmedju planiranja i
+ * brisanja) obrise tudji radni prostor sesije ili worktree workflow runa.
+ */
+function executePlanRecheckProblems(src: string): string[] {
+  let plan: string;
+  try {
+    plan = executePlanSourceSlice(src);
+  } catch (err) {
+    return [(err as Error).message];
+  }
+  const rmIdx = plan.indexOf('rm(resolve(item.path)');
+  if (rmIdx < 0) return ['poziv rm(...) nad kandidatom nije pronadjen'];
+  const pre = plan.slice(0, rmIdx);
+  const problems: string[] = [];
+  if (!pre.includes('rootRealpathNow = resolve(realpath(plan.root))')) {
+    problems.push('korijenov realpath se ne racuna ponovno neposredno prije brisanja');
+  }
+  if (!pre.includes('plan.rootRealpath != null && rootRealpathNow !== plan.rootRealpath')) {
+    problems.push('ne odbija kad se realpath korijena promijenio izmedju planiranja i izvrsenja');
+  }
+  if (!pre.includes('isProtected(rootRealpathNow)')) {
+    problems.push('ne odbija korijen koji je pri izvrsenju po realpathu pod Temp/claude');
+  }
+  if (!pre.includes('isDirectChildOf(plan.root, item.path)')) {
+    problems.push('ne provjerava da je kandidat (tekstualno) izravno dijete korijena');
+  }
+  if (!pre.includes('candidateLinkReason(item.path, fs,')) {
+    problems.push('ne provjerava kandidata na simbolicku vezu neposredno prije brisanja');
+  }
+  if (!pre.includes('candRealpathNow = resolve(realpath(item.path))')) {
+    problems.push('kandidatov realpath se ne racuna ponovno neposredno prije brisanja');
+  }
+  if (!pre.includes('isProtected(candRealpathNow)')) {
+    problems.push('ne odbija kandidata koji je pri izvrsenju po realpathu pod Temp/claude');
+  }
+  if (!pre.includes('isDirectChildOf(rootRealpathNow, candRealpathNow)')) {
+    problems.push('ne provjerava da je kandidat pri izvrsenju po realpathu izravno dijete korijena');
+  }
+  return problems;
+}
+
+/** Ukloni sve izmedju (ali ne ukljucujuci) `startMarker` i sljedeceg `endMarker`; oba moraju postojati. */
+function removeBetweenMarkers(src: string, startMarker: string, endMarker: string): string {
+  const i = src.indexOf(startMarker);
+  if (i < 0) throw new Error(`marker nije pronadjen: ${startMarker}`);
+  const j = src.indexOf(endMarker, i);
+  if (j < 0 || j <= i) throw new Error(`kraj marker nije pronadjen iza pocetka: ${endMarker}`);
+  return src.slice(0, i) + src.slice(j);
+}
+
 const MUTATIONS: Mutation[] = [
+  {
+    id: 'upisnik/b15b-negacija',
+    imitates: 'Uklanjanje provjere negacije prihvaca izjavu da se upute ne odnose na sve radove',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('ove upute ne odnose se na sve studentske radove') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(ne|nisu|nije)\\b/u.test(scopeMatch[2] + scopeMatch[4])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('ove upute ne odnose se na sve studentske radove') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-iznimka',
+    imitates: 'Uklanjanje provjere iznimke prihvaca sve studentske radove osim diplomskih',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('upute se odnose na sve studentske radove osim diplomskih') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(osim|izuzev)\\b/u.test(scopeMatch[11])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('upute se odnose na sve studentske radove osim diplomskih') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-http-https',
+    imitates: 'Uklanjanje normalizacije sheme ponovno razdvaja HTTP profil EFST od HTTPS dokaza',
+    cleanBefore: () => {
+      const normalize = upisnikSourceNormalizerFromSource(upisnikCandidateSource());
+      return normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf') != null
+        && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        === normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace("return url.hostname.toLowerCase()", "return url.protocol + url.hostname.toLowerCase()");
+      const normalize = upisnikSourceNormalizerFromSource(mutant);
+      return mutant !== source && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        !== normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+  },
+
+  {
+    id: 'upisnik/b15-izvor-profila',
+    imitates: 'Izjava o svim radovima s druge stranice iste domene prolazi bez vezanog izvora profila',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/druge-upute', 'Upute se odnose na sve kategorije studentskih radova'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b15-samo-radovi',
+    imitates: 'Slaba izjava za sve studente prolazi kao izjava o svim vrstama radova',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute vrijede za sve studente'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
   {
     id: 'upisnik/b13-korijen-rijeci',
     imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
@@ -1496,6 +1689,13 @@ const MUTATIONS: Mutation[] = [
       'citac je provjeravao samo oblik signedContentDigest, pa je cleanCount 1 -> 2 nakon potpisa ostajao priznat (Codex #185, runda 3, NOVO-01)',
     caught: () => !izmjenaNakonPotpisaPada((a) => signedContentProblem(a, (x) => String(x.signedContentDigest))),
     cleanBefore: () => izmjenaNakonPotpisaPada((a) => signedContentProblem(a)),
+  },
+  {
+    id: 'korpus/ovjera-bez-otiska-koda-popravka-je-dokaz',
+    imitates:
+      'ovjera realnog korpusa nije navodila nad kojim je kodom popravka mjereno (T73 nalaz a/b, T75), pa se nije znalo koji je kod dokazan',
+    caught: () => !mjereniKodSeTrazi((a) => measuredCodeProblem(a, () => true)),
+    cleanBefore: () => mjereniKodSeTrazi((a) => measuredCodeProblem(a)),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
@@ -6121,6 +6321,72 @@ const MUTATIONS: Mutation[] = [
         && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === dir;
     },
   },
+  // --- register-clean-task.ps1 stavka G: ime Scheduled Taska bez ':' i drugih nedopustenih znakova ---
+  {
+    id: 'register-clean-task/ime-taska-nedopusteni-znak',
+    imitates: "izmjereno 2026-09-28: ':' u imenu Scheduled Taska ('Lekta clean:tmp') obara "
+      + "Register-ScheduledTask s 'The parameter is incorrect' (HRESULT 0x80070057); -DryRun to ne otkriva",
+    cleanBefore: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace("$TaskName = 'Lekta clean-tmp'", "$TaskName = 'Lekta clean:tmp'"),
+    ).length > 0,
+  },
+  // --- register-clean-task.ps1 stavka G: -TaskName kao PARAMETAR odbija nedopustene znakove ---
+  {
+    id: 'register-clean-task/taskname-parametar-nedopusteni-znak',
+    imitates: "prosirenje gard a474690e na -TaskName PARAMETAR: provjera nad $TaskName.Contains($znak) "
+      + 'ispise poruku ali ne izadje s exit 1, pa Register-ScheduledTask ipak dobije ime s nedopustenim '
+      + "znakom i padne tek u OS-u s 'The parameter is incorrect'",
+    cleanBefore: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace(
+        /(\$TaskName\.Contains\(\$znak\)\)\s*\{\r?\n(?:.*\r?\n)*?)\s*exit 1\r?\n/,
+        '$1',
+      ),
+    ).length > 0,
+  },
+  {
+    id: 'register-clean-task/execute-provjera-uklonjena',
+    imitates: 'Test-LektaCleanTaskOwned bez provjere leaf Execute (Codex nalaz, M1): tudji Scheduled Task s '
+      + 'istim Arguments i WorkingDirectory ali Execute=powershell.exe ili cmd.exe se prihvaca kao nas, pa '
+      + '-Unregister obrise tudji task ili registracija tiho preuzme njegovo mjesto',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/register-clean-task.ps1'));
+      const bezProvjere = izvorno.replace(
+        "  if ($leafExecute -ne 'node' -and $leafExecute -ne 'node.exe') { return $false }\n",
+        '',
+      );
+      return bezProvjere !== izvorno && registerCleanTaskExecuteGuardProblems(bezProvjere).length > 0;
+    },
+    cleanBefore: () => registerCleanTaskExecuteGuardProblems(
+      readTextLf(resolve(process.cwd(), 'scripts/register-clean-task.ps1')),
+    ).length === 0,
+  },
+  {
+    id: 'clean-tmp/executeplan-bez-ponovne-realpath-provjere',
+    imitates: 'clean-vitest-tmp.mjs M3 (Codex krug 3): executePlan bez ponovne realpath provjere neposredno '
+      + 'prije rmSync, pa korijen ili kandidat zamijenjen junctionom prema Temp/claude izmedju planiranja i '
+      + 'izvrsenja (TOCTOU) brise tudji radni prostor sesije ili worktree workflow runa',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/clean-vitest-tmp.mjs'));
+      const bezRootProvjere = removeBetweenMarkers(
+        izvorno,
+        '  let rootRealpathNow;',
+        '\n\n  for (const item of plan.remove) {\n',
+      );
+      const bezSvega = removeBetweenMarkers(
+        bezRootProvjere,
+        '    if (!isDirectChildOf(plan.root, item.path)) {',
+        '\n    if (result.dryRun) {',
+      );
+      return bezSvega !== izvorno && executePlanRecheckProblems(bezSvega).length > 0;
+    },
+    cleanBefore: () => executePlanRecheckProblems(readTextLf(resolve(process.cwd(), 'scripts/clean-vitest-tmp.mjs'))).length === 0,
+  },
   // --- Word check skripte: izlazni direktorij se brise SAMO na uspjehu (stavka G) ---
   {
     id: 'word-verify/outdir-brisan-i-na-padu',
@@ -6413,6 +6679,51 @@ const CT_VIEW_ROOT = resolve('/lekta-pogled');
 function ctViewFs(dir: string) {
   const base = ctLeftoverFs(dir, 90 * CT_HOUR, CT_VIEW_ROOT);
   return { ...base, realpath: (p: string) => (p.startsWith(CT_VIEW_ROOT) ? CT_CLAUDE_ROOT + p.slice(CT_VIEW_ROOT.length) : p) };
+}
+
+/**
+ * Stavka G: ime Scheduled Taska (`$TaskName` u scripts/register-clean-task.ps1) ne smije sadrzavati
+ * nijedan znak nedopusten u imenu Windows Scheduled Taska, isti skup kao za nazive datoteka.
+ * `npm run clean:tmp` je zaseban npm skript naziv i nije obuhvacen ovim gardom.
+ */
+const REGISTER_CLEAN_TASK_SCRIPT = resolve(process.cwd(), 'scripts/register-clean-task.ps1');
+const REGISTER_CLEAN_TASK_FORBIDDEN_CHARS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+
+function registerCleanTaskNameProblems(src: string): string[] {
+  const m = src.match(/\$TaskName\s*=\s*'([^']*)'/);
+  if (!m) return ['nema $TaskName u izvoru'];
+  const ime = m[1];
+  return REGISTER_CLEAN_TASK_FORBIDDEN_CHARS
+    .filter((znak) => ime.includes(znak))
+    .map((znak) => `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`);
+}
+
+/**
+ * Stavka G, tocka 2: gard nedopustenih znakova prosiren i na -TaskName kao PARAMETAR (ne samo na
+ * zadano ime u izvoru), provjeren PRIJE bilo kojeg poziva Register-ScheduledTask ili grane
+ * -Unregister. Test: tests/register-clean-task.test.ts.
+ */
+function registerCleanTaskParamNameProblems(src: string): string[] {
+  const c = src.replace(/\r/g, '');
+  const problems: string[] = [];
+  if (!/\[string\]\$TaskName\s*=\s*'Lekta clean-tmp'/.test(c)) {
+    problems.push('nema parametra -TaskName s defaultom Lekta clean-tmp');
+  }
+  const provjeraIdx = c.search(/\$TaskName\.Contains\(\$znak\)/);
+  if (provjeraIdx < 0) {
+    problems.push('nema provjere $TaskName.Contains($znak) nad zabranjenim znakovima');
+  } else if (!/exit 1/.test(c.slice(provjeraIdx, provjeraIdx + 400))) {
+    problems.push('provjera -TaskName ne zavrsava s exit 1 (upozorenje bez odbijanja)');
+  }
+  const prviUnregister = c.indexOf('if ($Unregister)');
+  const prviRegister = c.indexOf('Register-ScheduledTask -TaskName');
+  if (provjeraIdx < 0 || prviUnregister < 0 || provjeraIdx > prviUnregister) {
+    problems.push('provjera -TaskName ne prethodi grani -Unregister');
+  }
+  if (provjeraIdx < 0 || prviRegister < 0 || provjeraIdx > prviRegister) {
+    problems.push('provjera -TaskName ne prethodi Register-ScheduledTask');
+  }
+  return problems;
 }
 
 /** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
@@ -7633,6 +7944,42 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
   });
 });
 
+describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
+  const poziv = (npmCache?: string) => `
+jobs:
+  j:
+    steps:
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24${npmCache === undefined ? '' : `
+          npm-cache: '${npmCache}'`}
+`;
+
+  it('baseline: word-proof gasi, check ne gasi; mutant bez gasenja u word-proof se hvata', () => {
+    expect(npmCacheProblems([{ file: 'word-proof.yml', text: poziv('false') }, { file: 'check.yml', text: poziv() }])).toEqual([]);
+    expect(npmCacheProblems([{ file: 'word-proof.yml', text: poziv() }])).toEqual(['word-proof.yml#j: npm kes nije ugasen']);
+  });
+
+  it('mutant koji gasi npm kes u hostanom workflowu se hvata', () => {
+    expect(npmCacheProblems([{ file: 'check.yml', text: poziv('false') }])).toEqual(['check.yml#j: npm kes ugasen izvan word-proof.yml']);
+  });
+
+  it('mutant akcije koja ne prosljedjuje ulaz u setup-node se hvata', () => {
+    const akcija = (withBlok: string) => `
+inputs:
+  npm-cache:
+    default: 'true'
+runs:
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: 24${withBlok}
+`;
+    expect(forwardsNpmCacheInput(akcija('\n        package-manager-cache: ${{ inputs.npm-cache }}'))).toBe(true);
+    expect(forwardsNpmCacheInput(akcija(''))).toBe(false);
+  });
+});
+
 describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {
   it('job koji zove "npm ci" izravno, bez composite akcije, obara gard', () => {
     // BASELINE: stvaran repo nema nijedan job koji zove "npm ci" mimo `setup-deps` (dokazano
@@ -8255,5 +8602,133 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
       return { ...h, analysis: h.kind };
     };
     expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
+  });
+});
+
+describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
+  const settings = JSON.parse(readFileSync(resolve(process.cwd(), '.claude/settings.json'), 'utf8'));
+  const readScript = packageScriptReader(process.cwd());
+  /** Tvrdnja A1 garda: izravan vitest i tsc se odbijaju, isti posao pod lockom prolazi. */
+  const a1Grize = (heavyBinaries: readonly string[]): boolean =>
+    !judgeCpuDiscipline('npx vitest run tests/a.test.ts', { readScript, heavyBinaries }).allow &&
+    !judgeCpuDiscipline('npx tsc --noEmit', { readScript, heavyBinaries }).allow &&
+    judgeCpuDiscipline('node scripts/with-gate-lock.mjs t -- npx vitest run', { readScript, heavyBinaries }).allow;
+  const checklist = '- [ ] testovi\n';
+  const env = { LEKTA_ROLE: 'implementer', LEKTA_CHECKLIST: 'c.md' };
+  /** Tvrdnja A3 garda: blokira dok ima otvorenih stavki, ali najvise MAX_BLOCKS puta. */
+  const a3Grize = (maxBlocks: number): boolean =>
+    decideStop({ env, blocksSoFar: 0, readFile: () => checklist, maxBlocks }).block &&
+    !decideStop({ env, blocksSoFar: MAX_BLOCKS, readFile: () => checklist, maxBlocks }).block;
+
+  it('baseline: registracija, A1, A2 i A3 su cisti', () => {
+    expect(missingHookRegistrations(settings)).toEqual([]);
+    expect(a1Grize(HEAVY_BINARIES)).toBe(true);
+    expect(sessionRulesProblems(formatSessionRules())).toEqual([]);
+    expect(a3Grize(MAX_BLOCKS)).toBe(true);
+  });
+
+  it('mutant: cpu-discipline maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
+      (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('cpu-discipline')));
+    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: node scripts/hooks/cpu-discipline.mjs']);
+  });
+
+  it('mutant: Stop hook maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    delete mutant.hooks.Stop;
+    expect(missingHookRegistrations(mutant)).toEqual(['Stop: node scripts/hooks/implementer-stop.mjs']);
+  });
+
+  it('mutant: vitest ispao s popisa teskih alata obara tvrdnju A1', () => {
+    expect(a1Grize(HEAVY_BINARIES.filter((b) => b !== 'vitest'))).toBe(false);
+  });
+
+  it('mutant: pravila bez retka o relayed porukama se hvataju', () => {
+    const mutant = formatSessionRules().filter((l) => !l.includes('relayed'));
+    expect(sessionRulesProblems(mutant)).toEqual(['nedostaje pravilo o relayed porukama']);
+  });
+
+  it('mutant: Stop hook bez gornje granice blokiranja obara tvrdnju A3', () => {
+    expect(a3Grize(Number.POSITIVE_INFINITY)).toBe(false);
+  });
+});
+
+describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', () => {
+  const wrapper = readTextLf(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'));
+  type Fn = typeof weakMachineWorkerEnv;
+
+  it('BASELINE: stvarna funkcija i stvarni omotac su cisti', () => {
+    expect(weakMachineProblems(weakMachineWorkerEnv)).toEqual([]);
+    expect(weakMachineWiringProblems(wrapper)).toEqual([]);
+  });
+
+  it('mutant: gazi vec postavljen VITEST_MAX_THREADS se hvata', () => {
+    const gazi: Fn = (input) => weakMachineWorkerEnv({ ...input, env: { ...input?.env, VITEST_MAX_THREADS: undefined } });
+    expect(weakMachineProblems(gazi)).toEqual([
+      'slab stroj, VITEST_MAX_THREADS vec 3: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+    ]);
+  });
+
+  it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
+    const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
+    expect(weakMachineProblems(samoJezgre)).toEqual([
+      '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+    expect(weakMachineProblems(stroga)).toEqual([
+      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: omotac ne primjenjuje presudu na dijete se hvata', () => {
+    const mutant = wrapper.replace('Object.assign(childEnv, workers);', '');
+    expect(mutant).not.toBe(wrapper);
+    expect(weakMachineWiringProblems(mutant)).toEqual(['with-gate-lock: presuda se ne primjenjuje na dijete']);
+  });
+});
+
+describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluka vlasnika 2026-09-28)', () => {
+  const wf = readTextLf(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'));
+  const mut = (from: string, to: string) => {
+    const m = wf.replace(from, to);
+    expect(m, from).not.toBe(wf);
+    return m;
+  };
+
+  it('BASELINE: stvarna skripta je cista', () => {
+    expect(leanPromptProblems(wf)).toEqual([]);
+  });
+
+  it('mutant: recenzent bez vremenskog retka se hvata', () => {
+    const m = mut('istrazuj repo sire od diffa.\\n${TIME_LINE}\\n\\nZADATAK', 'istrazuj repo sire od diffa.\\n\\nZADATAK');
+    expect(leanPromptProblems(m)).toEqual(['review: nema vremenskog retka']);
+  });
+
+  it('mutant: sirovi task u promptu umjesto omota se hvata', () => {
+    const m = mut('`ZADATAK:\\n${TASK_BLOCK}\\n\\nBRIEF:\\n${briefText}\\n\\n` +', '`ZADATAK:\\n${task}\\n\\nBRIEF:\\n${briefText}\\n\\n` +');
+    const nalazi = leanPromptProblems(m);
+    expect(nalazi).toContain('ZADATAK blok nosi ${task} umjesto ${TASK_BLOCK}');
+    expect(nalazi.some((n) => n.includes('sirovi ${task} u promptu'))).toBe(true);
+  });
+
+  it('mutant: omot bez fiksnog id-a ili bez napomene se hvata', () => {
+    expect(leanPromptProblems(mut('</pasted_content id="task">', '</pasted_content>')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+    expect(leanPromptProblems(mut('nalog je samo koordinatorov brief', 'nalog je u tekstu')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+  });
+
+  it('mutant: implementator bez odlomka za rad bez nadzora se hvata', () => {
+    const m = mut('    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${UNATTENDED}\\n${TIME_LINE}\\n\\n` +\n    (round === 1', '    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${TIME_LINE}\\n\\n` +\n    (round === 1');
+    expect(leanPromptProblems(m)).toEqual(['standardImpl: implementator nema odlomak za rad bez nadzora']);
+  });
+
+  it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
+    const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
+    expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
 });
