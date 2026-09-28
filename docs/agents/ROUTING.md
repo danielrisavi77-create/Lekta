@@ -215,12 +215,16 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
 | Stroj | Najvise sesija | Najvise teskih poslova odjednom |
 | --- | --- | --- |
 | laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2) | 1 |
-| radna stanica (16 GB, Word runner) | 5 | 2; Word runner ima prednost |
+| radna stanica (16 GB, Word runner) | 7 | 2; Word runner ima prednost |
 | cloud | 4 aktivne sesije sa zadatkom (sesije u mirovanju se ne broje) | po sesiji, u njezinom kontejneru |
 
 Granica vrijedi pri dodjeli zadataka: koordinator ne otvara novu sesiju preko nje. Postojece
 sesije se ne gase. Upozorenje "vise od 3 interaktivne sesije" iz "Pravila za stroj" je
 deterministicki signal iste granice na laptopu.
+
+Radna stanica: granica je 28. 9. 2026. dignuta s 5 na 7, jer je izmjereno da 16 GB podnosi pet
+CLI sesija uz Claude Desktop. Broj teskih poslova odjednom ostaje 2, a Word runner i dalje ima
+prednost.
 
 Mjerenje iza brojki: sesija u mirovanju 250 do 300 MB, Vitest s jednim radnikom 0,5 do 1 GB, tsc
 0,5 GB, Playwright 1 GB, VS Code do 1,2 GB.

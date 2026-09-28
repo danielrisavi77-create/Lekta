@@ -68,6 +68,18 @@ describe('legal-content', () => {
     expect(html).toContain('Voditelj obrade');
   });
 
+  it('T89: privacy objavljuje Cloudflare Turnstile (tko, sto, cime ne, pravna osnova, poveznica)', () => {
+    const html = docs.privacy.html;
+    const odlomak = html.slice(html.indexOf('<h4>1d. Zaštita od zlouporabe (captcha)</h4>'), html.indexOf('<h4>2. Ručna usluga</h4>'));
+    expect(odlomak.length).toBeGreaterThan(100);
+    expect(odlomak).toContain('Cloudflare, Inc.');
+    expect(odlomak).toContain('IP adresu');
+    expect(odlomak).toContain('ne čita sadržaj korisnikovih dokumenata');
+    expect(odlomak).toContain('legitimni interes (čl. 6. st. 1. t. f)');
+    expect(odlomak).toContain('href="https://www.cloudflare.com/privacypolicy/"');
+    expect(odlomak).toContain('Od dana uključivanja');
+  });
+
   it('WS-6: privacy i processing objavljuju server-side popravak s pohranom-do-brisanja i pravom brisanja', () => {
     for (const kind of ['privacy', 'processing'] as const) {
       const html = docs[kind].html;
