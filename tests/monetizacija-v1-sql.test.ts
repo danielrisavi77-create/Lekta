@@ -12,6 +12,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   catalogProblems,
   idempotencyProblems,
+  partialRefundSqlProblems,
   runV1,
   snapshotProblems,
   upgradeRevertSqlProblems,
@@ -52,5 +53,10 @@ describe('0207 u stvarnom Postgresu', () => {
   it('krug 4: puni povrat uplate nadogradnje vraca placeni Repair (tocno stanje prije), dan 60 nije besplatan, drugi prolaz no-op', async () => {
     run = await runV1();
     expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
+  }, ROK);
+
+  it('Codex PR #217 M1: djelomican povrat se vodi u bazi; povrat prije pretvorbe je odbija, povrat nakon nje trazi rucni pregled', async () => {
+    run = await runV1();
+    expect(await partialRefundSqlProblems(run.db)).toEqual([]);
   }, ROK);
 });

@@ -445,6 +445,29 @@ Takav zahtjev je 409 `upgrade_slot_anonymized`, a `apply_entitlement_upgrade` is
 ponavlja atomski (uz zaključavanje slota protiv istodobnog purgea) i vraća `slot_anonymized`.
 Repair koji još nije vezan uz rad smije se nadograditi. Djelomičan povrat izvorne uplate
 (`partial_refund_noted`) i webhook čita istim upitom kao checkout, prije pretvorbe.
+
+**Djelomičan povrat i nadogradnja** (Codex pregled PR #217, M1). Odbitak nadogradnje je puni
+plaćeni iznos Repaira, pa se vraćeni iznos vodi u bazi i usklađuje s pretvorbom u istoj transakciji.
+Webhook za djelomičan povrat (`charge.refunded` ispod punog iznosa) PRVO upiše oznaku
+`partial_refund_noted` u inbox, pa zove `note_entitlement_partial_refund` (0207, odjeljak 10): pod
+zaključavanjem retka upiše `entitlements.refunded_cents` (kumulativni Stripe `amount_refunded`,
+nikad se ne smanjuje) i javi je li pravo već pretvoreno. `apply_entitlement_upgrade` pod istim
+zaključavanjem odbija pretvorbu (`partially_refunded`) ako je `refunded_cents > 0` ili ako u inboxu
+postoji oznaka djelomičnog povrata izvorne uplate ili uplate same nadogradnje. Redoslijed nije bitan:
+
+- **povrat PRIJE pretvorbe**: pretvorba se odbija, uplata nadogradnje ide na ručni pregled
+  (`needs_manual_review` uz `upgrade:upgrade_source_unavailable ... ishod=partially_refunded`), a
+  plaćeni Repair ostaje netaknut; radnja je povrat uplate nadogradnje u Stripe sučelju;
+- **povrat NAKON pretvorbe** (npr. Repair 9,99 + nadogradnja 10,00, pa povrat 5,00): pravo se
+  **ne dira automatski**. Vraćanje na Repair oduzelo bi Final Pass koji je nadogradnja platila, a
+  automatska naplata razlike ne postoji. Ishod je `needs_manual_review` uz `outcome_detail`
+  `partial_refund_noted` i `outcome_note` `partial_refund_after_upgrade: uplata=<PaymentIntent>
+  vraceno=<centi> naplaceno=<centi> ishod=upgraded_needs_review`, uz ERROR redak
+  `webhook-mor partial_refund_after_upgrade`. Isto vrijedi za djelomičan povrat same uplate
+  nadogradnje nakon pretvorbe.
+
+Djelomičan povrat nikad ne oduzima pristup (PAY-09); pravo koje nije nadograđeno ostaje kakvo jest
+(`processed` uz `partial_refund_noted`), samo više nije kandidat za nadogradnju.
 `Idempotency-Key` PaymentIntenta nadogradnje nosi i iznos u centima, pa nova ciljna cijena daje
 novi PaymentIntent, a ne stari iznos pod istim ključem.
 Odbijanje je 409 (`upgrade_*`) ili 404 za tuđe ili nepostojeće pravo, bez PaymentIntenta.
@@ -463,6 +486,8 @@ Ishodi nadogradnje u `webhook_events`:
 | `processed` uz `outcome_detail` `refunded` i `outcome_note` `upgrade_reverted: ...` | puni povrat **uplate nadogradnje**: pravo je vraćeno na plaćeni Repair (`revert_entitlement_upgrade`), Final Pass je nestao. Bilješka nosi `izvorna_uplata=<PaymentIntent>`, `naplaceno_repair=<centi>` i `ishod=` (`reverted`, `duplicate` za ponovljenu dostavu, `inactive` ako je pravo već bilo ugašeno) | ništa |
 | `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata, pravo je ugašeno; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje, a stanje prije nadogradnje NIJE zapamćeno, `no_snapshot`, pa je pravo ugašeno; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate u Stripe sučelju (vidi napomenu ispod tablice) |
 | `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0207 |
+| `needs_manual_review` uz `outcome_detail` `partial_refund_noted` i `outcome_note` `partial_refund_after_upgrade: ...` | djelomičan povrat izvorne Repair uplate ili uplate nadogradnje stigao je NAKON pretvorbe: Final Pass stoji uz manji neto iznos od cijene. Pravo nije dirano | isti dan, jedno od dvoje: (a) puni povrat uplate nadogradnje u Stripe sučelju, pa `revert_entitlement_upgrade` vrati plaćeni Repair; (b) svjesno zadrži Final Pass (npr. povrat je bio goodwill za drugi razlog) i to zabilježi uz redak. Nikad ne mijenjaj redak ručno u Repair |
+| `failed` uz `outcome_detail` `partial_refund_noted` i `outcome_note` `partial_refund_note: ...` | `note_entitlement_partial_refund` je pao; oznaka u inboxu ostaje (pretvorba je i dalje odbija), Stripe ponavlja | provjeri bazu i migraciju 0207 |
 
 **Nikad ne vraćaj `status = 'active'` na nadograđenom retku** (`upgrade_order_id` postavljen, a
 `upgrade_reverted_at` prazan). Taj redak nosi Final Pass (`offer_code = final_pass_v1`, njegova prava,

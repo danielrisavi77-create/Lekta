@@ -101,6 +101,8 @@ function baseResolver(over: (c: FakeCall) => FakeResult | undefined = () => unde
     // settle potvrdjuje da je update pogodio redak inboxa; prazan odgovor znaci da nije.
     if (c.table === 'webhook_events' && writeOp(c) === 'update') return { data: [{ id: 'inbox-1' }] };
     if (c.table === 'products') return { data: PRODUCT_ROW };
+    // Djelomican povrat (Codex PR #217, M1): zadano pravo nije nadogradjeno.
+    if (c.table === 'rpc:note_entitlement_partial_refund') return { data: 'noted' };
     return undefined;
   };
 }
@@ -407,6 +409,62 @@ describe('webhook-mor handler: povrat', () => {
     expect(body).toEqual({ ok: true, action: 'partial_refund_noted' });
     expect(entitlementWrites(calls)).toHaveLength(0);
     expect(settled(calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'partial_refund_noted' });
+  });
+
+  it('Codex PR #217 M1: djelomicni povrat PRVO upise oznaku, pa note_entitlement_partial_refund vodi vraceni iznos', async () => {
+    const { res, body, calls } = await run(signedRequest(refunded(500)));
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'partial_refund_noted' });
+    const iOznaka = calls.findIndex((c) => c.table === 'webhook_events' && writeOp(c) === 'update'
+      && (argOf(c, 'update') as Record<string, unknown>).outcome_detail === 'partial_refund_noted');
+    const iRpc = calls.findIndex((c) => c.table === 'rpc:note_entitlement_partial_refund');
+    expect(iOznaka).toBeGreaterThan(-1);
+    expect(iRpc, 'oznaka mora biti upisana prije funkcije (pisi pa citaj)').toBeGreaterThan(iOznaka);
+    expect(calls[iRpc].ops[0].args[1]).toEqual({ p_order_id: 'pi_1', p_refunded_cents: 500 });
+    expect(settled(calls)[0]).toMatchObject({ outcome: null, outcome_detail: 'partial_refund_noted' });
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'partial_refund_noted' });
+  });
+
+  it('Codex PR #217 M1: djelomicni povrat NAKON pretvorbe u Final Pass ide na rucni pregled, pravo se ne dira', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const nadogradjeno = baseResolver((c) => (c.table === 'rpc:note_entitlement_partial_refund' ? { data: 'upgraded_needs_review' } : undefined));
+      const { res, body, calls } = await run(signedRequest(refunded(500)), nadogradjeno);
+      expect(res.status).toBe(200);
+      expect(body).toEqual({ ok: true, action: 'partial_refund_noted', review: 'partial_refund_after_upgrade' });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      const zadnji = settled(calls).at(-1);
+      expect(zadnji).toMatchObject({ outcome: 'needs_manual_review', outcome_detail: 'partial_refund_noted' });
+      expect(String(zadnji?.outcome_note)).toContain('partial_refund_after_upgrade: uplata=pi_1 vraceno=500 naplaceno=999');
+      expect(err.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor partial_refund_after_upgrade');
+    } finally {
+      err.mockRestore();
+    }
+  });
+
+  it('Codex PR #217 M1: pad note_entitlement_partial_refund je 500 (Stripe ponovi), oznaka ostaje', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const pad = baseResolver((c) => (c.table === 'rpc:note_entitlement_partial_refund' ? { error: { message: 'tajni_detalj_baze' } } : undefined));
+      const { res, body, calls } = await run(signedRequest(refunded(500)), pad);
+      expect(res.status).toBe(500);
+      expect(JSON.stringify(body)).not.toContain('tajni_detalj_baze');
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed', outcome_detail: 'partial_refund_noted' });
+    } finally {
+      err.mockRestore();
+    }
+  });
+
+  it('Codex PR #217 M1: bez upisane oznake djelomicnog povrata nema poziva funkcije, nego 500', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const bezOznake = baseResolver((c) => (c.table === 'webhook_events' && writeOp(c) === 'update' ? { data: [] } : undefined));
+      const { res, calls } = await run(signedRequest(refunded(500)), bezOznake);
+      expect(res.status).toBe(500);
+      expect(calls.some((c) => c.table === 'rpc:note_entitlement_partial_refund')).toBe(false);
+    } finally {
+      err.mockRestore();
+    }
   });
 
   it('povrat bez nasega entitlementa je 200 s glasnim tragom, ne lazni "refunded"', async () => {
@@ -1129,6 +1187,8 @@ function manualOrderWorld(opts: { failFirstInsert?: boolean } = {}) {
   const resolve = (c: FakeCall): FakeResult | undefined => {
     const op = writeOp(c);
     if (c.table === 'products') return { data: PREMIUM_ROW };
+    // Rucna narudzba nema pravo, pa djelomican povrat (M1) ne nalazi redak.
+    if (c.table === 'rpc:note_entitlement_partial_refund') return { data: 'not_found' };
     if (c.table === 'webhook_events' && op === 'insert') {
       nextInbox += 1;
       const id = `inbox-${nextInbox}`;

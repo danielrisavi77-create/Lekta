@@ -26,6 +26,8 @@
 --     Pretvorba pamti stanje Repair prava prije nje (upgraded_from_*).
 --  9. revert_entitlement_upgrade: puni povrat SAMO uplate nadogradnje vraca pravo na zapamceni
 --     Repair (proizvod, ponuda, prava, prozor, rok potrosnje i istek vezanog slota), ne gasi ga.
+-- 10. note_entitlement_partial_refund: djelomican povrat se vodi u bazi (`refunded_cents`) i
+--     uskladjuje s nadogradnjom pod istim zakljucavanjem kao pretvorba (Codex pregled PR #217, M1).
 --
 -- IDEMPOTENTNO: if not exists, on conflict do nothing, drop constraint prije add, i uvjetni upisi
 -- (is distinct from). Drugi prolaz ne mijenja ni jedan redak.
@@ -130,7 +132,10 @@ alter table public.entitlements
   add column if not exists upgraded_from_slot_window_days integer,
   add column if not exists upgraded_from_purchase_expires_at timestamptz,
   add column if not exists upgraded_from_slot_expires_at timestamptz,
-  add column if not exists upgrade_reverted_at timestamptz;
+  add column if not exists upgrade_reverted_at timestamptz,
+  -- Djelomicno vraceno od IZVORNE uplate (order_id), kumulativno kao Stripe `amount_refunded`
+  -- (M1). Upisuje ga SAMO note_entitlement_partial_refund (odjeljak 10), pod zakljucavanjem retka.
+  add column if not exists refunded_cents integer not null default 0 check (refunded_cents >= 0);
 
 -- Ako je raniji nacrt ove migracije ikad dodao kljuc na upgraded_from_product_id, ukloni ga.
 alter table public.entitlements drop constraint if exists entitlements_upgraded_from_product_id_fkey;
@@ -200,6 +205,8 @@ comment on column public.entitlements.upgraded_from_slot_expires_at is
   'Istek vezanog slota PRIJE nadogradnje; NULL = pravo pri nadogradnji nije bilo vezano uz rad.';
 comment on column public.entitlements.upgrade_reverted_at is
   'Kad je puni povrat uplate nadogradnje vratio pravo na zapamceni Repair (revert_entitlement_upgrade).';
+comment on column public.entitlements.refunded_cents is
+  'Djelomicno vraceno od izvorne uplate (Stripe amount_refunded, kumulativno). > 0 = nadogradnja nije dopustena.';
 
 -- ---------------------------------------------------------------------------------------------
 -- 4. Novi proizvodi (odjeljci 3, 5, 6, 25)
@@ -385,6 +392,18 @@ comment on column public.bonus_outbox.status is
 --    Slot se zakljucava (for update), pa purge koji krene istodobno ceka i nakon pretvorbe vise ne
 --    pogadja produljen slot. Vraca `slot_anonymized`; webhook uplatu salje na rucni pregled.
 --    Nevezano pravo (slots_used = 0) se smije pretvoriti.
+--  * BEZ DJELOMICNOG POVRATA (Codex pregled PR #217, M1): odbitak je puni placeni iznos Repaira, pa
+--    djelomicno vracena izvorna uplata (refunded_cents > 0 ili oznaka `partial_refund_noted` njezina
+--    PaymentIntenta) ili djelomicno vracena uplata same nadogradnje vraca `partially_refunded`
+--    (webhook uplatu salje na rucni pregled). Provjera je POD ZAKLJUCAVANJEM, u istoj transakciji
+--    kao pretvorba, pa je citanje oznake u Edgeu (readSourcePartiallyRefunded) samo rani izlaz:
+--      - povrat izvorne uplate: note_entitlement_partial_refund zakljucava ISTI redak (po order_id,
+--        koji se ne mijenja); tko drugi dodje, vidi upis prvoga;
+--      - povrat uplate nadogradnje: redak prije pretvorbe ne nosi njezin PaymentIntent, pa obje
+--        funkcije PRVO uzimaju isti savjetodavni kljuc `lekta:refund:<PaymentIntent>`.
+--    Webhook oznaku povrata upise (i potvrdi) PRIJE poziva note_entitlement_partial_refund, a ova
+--    funkcija je cita tek nakon zakljucavanja, pa povrat koji ona ne vidi naidje na vec pretvoren
+--    redak i salje ga na rucni pregled (odjeljak 10).
 -- Snapshot prava (offer_code, capabilities) se cita iz kataloga U ISTOJ transakciji.
 create or replace function public.apply_entitlement_upgrade(
   p_entitlement_id uuid,
@@ -409,12 +428,27 @@ begin
     raise exception 'upgrade_order_missing';
   end if;
 
+  -- Isti kljuc kao note_entitlement_partial_refund za PaymentIntent nadogradnje; uvijek PRIJE
+  -- zakljucavanja retka (isti redoslijed u obje funkcije, bez zastoja).
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('lekta:refund:' || p_upgrade_order_id, 0));
+
   select * into v_ent from public.entitlements where id = p_entitlement_id for update;
   if not found or v_ent.user_id is distinct from p_user_id then
     return 'unavailable';
   end if;
   if v_ent.upgrade_order_id = p_upgrade_order_id then
     return 'duplicate';
+  end if;
+  -- Djelomican povrat izvorne uplate ili uplate nadogradnje (M1, vidi komentar iznad funkcije).
+  if v_ent.refunded_cents > 0
+     or exists (
+       select 1
+         from public.webhook_events w
+        where w.provider = 'stripe'
+          and w.outcome_detail = 'partial_refund_noted'
+          and w.order_id in (v_ent.order_id, p_upgrade_order_id)
+     ) then
+    return 'partially_refunded';
   end if;
   if v_ent.upgrade_order_id is not null
      or v_ent.status <> 'active'
@@ -558,3 +592,82 @@ revoke all on function public.revert_entitlement_upgrade(text) from public, anon
 
 comment on function public.revert_entitlement_upgrade(text) is
   'Puni povrat uplate nadogradnje vraca pravo na zapamceni Repair (MONETIZACIJA_V1.md odjeljak 14). Samo webhook-mor.';
+
+-- ---------------------------------------------------------------------------------------------
+-- 10. Djelomican povrat i nadogradnja (Codex pregled PR #217, M1)
+-- ---------------------------------------------------------------------------------------------
+-- Poziva je SAMO webhook-mor za DJELOMICAN povrat (`charge.refunded` ispod punog iznosa), i to
+-- tek NAKON sto je oznaku `partial_refund_noted` upisao u inbox. p_refunded_cents je kumulativni
+-- Stripe `amount_refunded` (NULL ako ga dogadjaj ne nosi). Pravo po PaymentIntentu:
+--  * IZVORNA uplata (order_id): refunded_cents raste na vraceni iznos (greatest, pa ponovljena ili
+--    zakasnjela dostava nizeg iznosa ne smanjuje zapis). Nenadogradjeno pravo zatim vise nije
+--    kandidat za nadogradnju (apply_entitlement_upgrade `partially_refunded`), a pristup ostaje
+--    (djelomican povrat ne oduzima placenu uslugu, PAY-09).
+--  * uplata NADOGRADNJE (upgrade_order_id): iznos se ne pise (to nije izvorna uplata), redak se
+--    samo zakljucava i procjenjuje.
+-- Ishodi:
+--  * `noted`: pravo nije (ili vise nije) nadogradjeno, nista ne ceka operatera;
+--  * `upgraded_needs_review`: pravo je VEC pretvoreno u Final Pass (upgrade_order_id postavljen,
+--    upgrade_reverted_at prazan, status active). Pretvorba je racunala odbitak od punog iznosa, pa
+--    Final Pass sada stoji uz manji neto iznos. Pravo se NE dira automatski: vracanje na Repair
+--    oduzelo bi Final Pass koji je nadogradnja platila, a automatska naplata razlike ne postoji.
+--    Webhook ishod biljezi kao `needs_manual_review` i operater bira (docs/GO_LIVE_NAPLATA.md,
+--    odjeljak 5.2): povrat uplate nadogradnje (revert_entitlement_upgrade vraca Repair) ili svjesno
+--    zadrzavanje Final Passa;
+--  * `not_found`: nema Lektina prava za taj PaymentIntent (npr. uplata jos nije knjizena). Oznaka u
+--    inboxu ostaje, pa je apply_entitlement_upgrade kasnije ipak vidi.
+-- Zakljucavanje: savjetodavni kljuc `lekta:refund:<PaymentIntent>` pa redak, isti redoslijed kao u
+-- apply_entitlement_upgrade (odjeljak 8).
+create or replace function public.note_entitlement_partial_refund(
+  p_order_id text,
+  p_refunded_cents integer
+) returns text
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_ent public.entitlements;
+  v_ishod text := 'not_found';
+begin
+  if coalesce(p_order_id, '') = '' then
+    raise exception 'order_missing';
+  end if;
+  if p_refunded_cents is not null and p_refunded_cents < 0 then
+    raise exception 'refunded_cents_invalid';
+  end if;
+
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('lekta:refund:' || p_order_id, 0));
+
+  for v_ent in
+    select *
+      from public.entitlements e
+     where e.provider = 'stripe'
+       and (e.order_id = p_order_id or e.upgrade_order_id = p_order_id)
+     order by e.id
+       for update
+  loop
+    if v_ent.order_id = p_order_id then
+      update public.entitlements
+         set refunded_cents = greatest(refunded_cents, coalesce(p_refunded_cents, 0))
+       where id = v_ent.id
+         and refunded_cents < coalesce(p_refunded_cents, 0);
+    end if;
+    if v_ent.upgrade_order_id is not null
+       and v_ent.upgrade_reverted_at is null
+       and v_ent.status = 'active' then
+      v_ishod := 'upgraded_needs_review';
+    elsif v_ishod = 'not_found' then
+      v_ishod := 'noted';
+    end if;
+  end loop;
+
+  return v_ishod;
+end;
+$$;
+
+revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;
+grant execute on function public.note_entitlement_partial_refund(text, integer) to service_role;
+
+comment on function public.note_entitlement_partial_refund(text, integer) is
+  'Djelomican povrat: vodi vraceni iznos izvorne uplate i javlja vec nadogradjeno pravo (Codex PR #217, M1). Samo webhook-mor.';

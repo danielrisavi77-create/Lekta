@@ -132,6 +132,7 @@ import {
   V1_MIGRATION,
   catalogProblems,
   idempotencyProblems,
+  partialRefundSqlProblems,
   readMigration,
   runV1,
   snapshotProblems,
@@ -7637,6 +7638,57 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     const run = await runV1(mutated);
     try {
       expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ugasenog prava'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: djelomican povrat baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await partialRefundSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba bez provjere djelomicnog povrata (stanje f466d454) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if false\n     and exists (');
+    const run = await runV1(mutated);
+    try {
+      const p = await partialRefundSqlProblems(run.db);
+      expect(p.some((x) => x.startsWith('povrat prije pretvorbe: apply_entitlement_upgrade vraca upgraded'))).toBe(true);
+      expect(p.some((x) => x.includes('povrat uplate nadogradnje prije pretvorbe'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba koja cita samo oznaku izvorne uplate (ne refunded_cents) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if exists (');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('samo refunded_cents'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat nakon pretvorbe koji ne javlja nadogradjeno pravo obara gard', async () => {
+    const mutated = mutirajRe(/      v_ishod := 'upgraded_needs_review';/, "      v_ishod := 'noted';");
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('Final Pass tiho ostaje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat koji ne vodi iznos u bazi obara gard', async () => {
+    const mutated = mutirajRe(/set refunded_cents = greatest\(refunded_cents, coalesce\(p_refunded_cents, 0\)\)/, 'set refunded_cents = refunded_cents');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('iznos se ne vodi u bazi'))).toBe(true);
     } finally {
       await run.db.close();
     }

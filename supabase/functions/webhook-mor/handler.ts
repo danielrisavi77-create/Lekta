@@ -695,6 +695,42 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
     if (!isFullRefund(ev)) {
+      // DJELOMICAN POVRAT I NADOGRADNJA (Codex pregled PR #217, M1). Pretvorba Repair -> Final Pass
+      // odbija puni placeni iznos Repaira, pa djelomicno vracena uplata ne smije ni pustiti kasniju
+      // pretvorbu ni tiho ostaviti vec pretvoreni Final Pass uz manji neto iznos. Isti dogovor pisi
+      // pa citaj kao puni povrat: PRVO se trajno upise oznaka `partial_refund_noted` (inbox), pa tek
+      // onda note_entitlement_partial_refund (0207, odjeljak 10) pod zakljucavanjem vodi vraceni
+      // iznos i javlja je li pravo vec pretvoreno. apply_entitlement_upgrade oznaku i iznos cita pod
+      // istim zakljucavanjem, pa barem jedna strana vidi drugu. Bez upisane oznake ili uz pad
+      // funkcije je 500 (Stripe ponovi); pristup se ni tada ne oduzima (PAY-09).
+      if (!(await settle(null, 'partial_refund_noted'))) {
+        console.error('webhook-mor refund_marker_failed', { orderId: ev.orderId, partial: true });
+        return json({ error: 'refund_marker_failed' }, 500);
+      }
+      const { data: djelomicno, error: djelomicnoErr } = await admin.rpc('note_entitlement_partial_refund', {
+        p_order_id: ev.orderId,
+        p_refunded_cents: ev.refundedCents,
+      });
+      if (djelomicnoErr) {
+        console.error('webhook-mor partial_refund_note_failed', { orderId: ev.orderId, error: dbErrorMessage(djelomicnoErr) });
+        await settle('failed', 'partial_refund_noted', `partial_refund_note: ${dbErrorMessage(djelomicnoErr)}`);
+        return json({ error: 'refund_failed' }, 500);
+      }
+      const ishodDjelomicnog = String(djelomicno ?? '');
+      if (ishodDjelomicnog !== 'noted' && ishodDjelomicnog !== 'not_found') {
+        // `upgraded_needs_review`: pravo je vec Final Pass placen uz odbitak punog iznosa. Pravo se
+        // ne dira automatski; operater bira (docs/GO_LIVE_NAPLATA.md, 5.2). Nepoznat ishod ide istim
+        // putem (fail-closed). `outcome_detail` ostaje oznaka, pa je checkout i webhook i dalje citaju.
+        const biljeska = `partial_refund_after_upgrade: uplata=${ev.orderId} vraceno=${ev.refundedCents ?? 'nepoznato'} naplaceno=${ev.totalCents ?? 'nepoznato'} ishod=${ishodDjelomicnog}`;
+        console.error('webhook-mor partial_refund_after_upgrade', {
+          orderId: ev.orderId,
+          totalCents: ev.totalCents,
+          refundedCents: ev.refundedCents,
+          ishod: ishodDjelomicnog,
+        });
+        await settle('needs_manual_review', 'partial_refund_noted', biljeska);
+        return json({ ok: true, action: 'partial_refund_noted', review: 'partial_refund_after_upgrade' }, 200);
+      }
       console.error('webhook-mor partial_refund_kept', {
         orderId: ev.orderId,
         totalCents: ev.totalCents,

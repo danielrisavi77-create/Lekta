@@ -531,3 +531,93 @@ export async function upgradeRevertSqlProblems(db: PGlite): Promise<string[]> {
   if ((await revert(db, 'pi_nepostojeci')) !== 'not_found') problems.push('povrat: nepoznata uplata nadogradnje ne vraca not_found');
   return problems;
 }
+
+/** Oznaka djelomicnog povrata u inboxu, kako je webhook-mor upise PRIJE note_entitlement_partial_refund. */
+async function partialMarker(db: PGlite, order: string): Promise<void> {
+  await db.query(`insert into public.webhook_events (provider, event_name, order_id, raw_payload, signature_valid, outcome, outcome_detail)
+                  values ('stripe', 'charge.refunded', $1, '{}'::jsonb, true, 'processed', 'partial_refund_noted')`, [order]);
+}
+
+async function notePartial(db: PGlite, order: string, cents: number | null): Promise<string> {
+  const r = await one(db, 'select public.note_entitlement_partial_refund($1, $2) as ishod', [order, cents]);
+  return String(r?.ishod);
+}
+
+/**
+ * DJELOMICAN POVRAT I NADOGRADNJA (Codex pregled PR #217, M1). Pretvorba odbija puni placeni iznos
+ * Repaira, pa djelomicno vracena uplata ne smije proci pretvorbu, a povrat koji stigne NAKON
+ * pretvorbe ne smije tiho ostaviti Final Pass uz manji neto iznos. Oba redoslijeda se mjere nad
+ * stvarnim funkcijama: povrat prije pretvorbe (iznos zapisan u bazi, pretvorba odbijena) i povrat
+ * nakon pretvorbe (iznos zapisan, ishod `upgraded_needs_review` za rucni pregled). Negativne
+ * kontrole: nepovezan povrat ne blokira cistu nadogradnju, a ponovljena dostava ne mijenja zapis.
+ */
+export async function partialRefundSqlProblems(db: PGlite): Promise<string[]> {
+  const problems: string[] = [];
+  const osnovno = (opis: string): UpgradeCase => ({ opis, productId: 'slot_diplomski', workType: 'diplomski', slotsUsed: 1, slotDays: 5, targetId: 'pass_diplomski', ocekivano: 'upgraded' });
+  const vraceno = async (id: string) => Number((await one(db, 'select refunded_cents from public.entitlements where id = $1', [id]))?.refunded_cents);
+  const redak = async (id: string) => JSON.stringify(await one(db, 'select * from public.entitlements where id = $1', [id]));
+
+  // 1. POVRAT PRIJE PRETVORBE: oznaka pa funkcija (redoslijed webhooka), iznos se vodi u bazi.
+  const id1 = await seedRepair(db, osnovno('prije'), 700);
+  await partialMarker(db, 'pi_repair_700');
+  const n1 = await notePartial(db, 'pi_repair_700', 500);
+  if (n1 !== 'noted') problems.push(`povrat prije pretvorbe: note_entitlement_partial_refund vraca ${n1} umjesto noted`);
+  if ((await vraceno(id1)) !== 500) problems.push(`povrat prije pretvorbe: refunded_cents je ${await vraceno(id1)} umjesto 500 (iznos se ne vodi u bazi)`);
+  const prije1 = await redak(id1);
+  const a1 = await apply(db, id1, USER_A, 'pi_up_700', 'pass_diplomski');
+  if (a1 !== 'partially_refunded') problems.push(`povrat prije pretvorbe: apply_entitlement_upgrade vraca ${a1} umjesto partially_refunded`);
+  if ((await redak(id1)) !== prije1) problems.push('povrat prije pretvorbe: odbijena pretvorba ipak mijenja pravo');
+  // Ponovljena i zakasnjela dostava (nizi kumulativni iznos) ne smanjuje zapis.
+  await notePartial(db, 'pi_repair_700', 500);
+  await notePartial(db, 'pi_repair_700', 200);
+  if ((await vraceno(id1)) !== 500) problems.push('povrat prije pretvorbe: ponovljena ili zakasnjela dostava mijenja refunded_cents');
+
+  // 1b. Zapis u retku sam (bez oznake u inboxu) isto odbija: provjera je pod zakljucavanjem retka.
+  const id1b = await seedRepair(db, osnovno('samo iznos'), 701);
+  await notePartial(db, 'pi_repair_701', 300);
+  const a1b = await apply(db, id1b, USER_A, 'pi_up_701', 'pass_diplomski');
+  if (a1b !== 'partially_refunded') problems.push(`povrat prije pretvorbe (samo refunded_cents): apply vraca ${a1b} umjesto partially_refunded`);
+
+  // 1c. Povrat stigao prije knjizenja Repaira (not_found): oznaka u inboxu i dalje odbija pretvorbu.
+  if ((await notePartial(db, 'pi_repair_702', 400)) !== 'not_found') problems.push('povrat bez prava ne vraca not_found');
+  await partialMarker(db, 'pi_repair_702');
+  const id1c = await seedRepair(db, osnovno('oznaka prije prava'), 702);
+  const a1c = await apply(db, id1c, USER_A, 'pi_up_702', 'pass_diplomski');
+  if (a1c !== 'partially_refunded') problems.push(`povrat prije knjizenja prava: apply vraca ${a1c} umjesto partially_refunded`);
+
+  // 1d. Djelomicno vracena uplata NADOGRADNJE prije pretvorbe (redak jos ne nosi njezin PaymentIntent).
+  const id1d = await seedRepair(db, osnovno('povrat nadogradnje prije'), 703);
+  await partialMarker(db, 'pi_up_703');
+  if ((await notePartial(db, 'pi_up_703', 300)) !== 'not_found') problems.push('povrat nadogradnje prije pretvorbe ne vraca not_found');
+  const a1d = await apply(db, id1d, USER_A, 'pi_up_703', 'pass_diplomski');
+  if (a1d !== 'partially_refunded') problems.push(`povrat uplate nadogradnje prije pretvorbe: apply vraca ${a1d} umjesto partially_refunded`);
+
+  // 2. POVRAT NAKON PRETVORBE: Repair 9,99 + nadogradnja 10,00, pa povrat 5,00 izvorne uplate.
+  const id2 = await seedRepair(db, osnovno('nakon'), 710);
+  if ((await apply(db, id2, USER_A, 'pi_up_710', 'pass_diplomski')) !== 'upgraded') {
+    problems.push('povrat nakon pretvorbe: generator ne proizvodi nadogradjeno pravo');
+  } else {
+    await partialMarker(db, 'pi_repair_710');
+    const n2 = await notePartial(db, 'pi_repair_710', 500);
+    if (n2 !== 'upgraded_needs_review') problems.push(`povrat nakon pretvorbe: note_entitlement_partial_refund vraca ${n2} umjesto upgraded_needs_review (Final Pass tiho ostaje uz manji neto iznos)`);
+    if ((await vraceno(id2)) !== 500) problems.push('povrat nakon pretvorbe: refunded_cents se ne vodi u bazi');
+    const e2 = await one(db, 'select offer_code, status from public.entitlements where id = $1', [id2]);
+    if (e2?.offer_code !== 'final_pass_v1' || e2?.status !== 'active') problems.push(`povrat nakon pretvorbe: pravo se mijenja automatski umjesto rucnog pregleda (${JSON.stringify(e2)})`);
+    // Povrat dijela UPLATE NADOGRADNJE nakon pretvorbe: isti ishod, iznos izvorne uplate se ne dira.
+    if ((await notePartial(db, 'pi_up_710', 300)) !== 'upgraded_needs_review') problems.push('povrat dijela uplate nadogradnje nakon pretvorbe nije upgraded_needs_review');
+    if ((await vraceno(id2)) !== 500) problems.push('povrat uplate nadogradnje pise u refunded_cents izvorne uplate');
+    // Nakon punog povrata nadogradnje (vracen Repair) isti povrat vise ne trazi pregled.
+    await revert(db, 'pi_up_710');
+    const n2r = await notePartial(db, 'pi_repair_710', 500);
+    if (n2r !== 'noted') problems.push(`povrat nakon vracene nadogradnje vraca ${n2r} umjesto noted`);
+  }
+
+  // 3. NEGATIVNA KONTROLA: nepovezan djelomicni povrat ne blokira cistu nadogradnju.
+  const id3 = await seedRepair(db, osnovno('kontrola'), 720);
+  await partialMarker(db, 'pi_tudji');
+  await notePartial(db, 'pi_tudji', 100);
+  const a3 = await apply(db, id3, USER_A, 'pi_up_720', 'pass_diplomski');
+  if (a3 !== 'upgraded') problems.push(`kontrola: nepovezan povrat blokira cistu nadogradnju (${a3})`);
+  if ((await vraceno(id3)) !== 0) problems.push('kontrola: nepovezan povrat pise refunded_cents');
+  return problems;
+}
