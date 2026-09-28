@@ -70,6 +70,27 @@ Točno oblik `LayaDecisionResultV2` (`schemas/laya/finding-v2.schema.json`), bez
 - Runtime ne vraća prag ni politiku. Ako ih vrati, odgovor ima dodatno polje i presuda je
   `invalid_result`. Prag i manifest dolaze isključivo iz `scripts/laya/registry.json`.
 
+## Pitanje modelu i budžet tokena
+
+Runtime postavlja jedno pitanje tipa `choice`: upute i četiri opcije oblika `oznaka: opis`. Model
+vidi kratke hrvatske oznake (`nepotpun`, `potpun`, `krivo izvucen`, `neodlucivo`), a runtime
+upstreamove vjerojatnosti preslikava natrag u Lektine verdikte **po imenu oznake**, nikad po
+položaju. Redoslijed opcija prati `labelOrder` iz zahtjeva.
+
+Upstream `build_sequence` (`laya/common.py`) cijelo pitanje slaže u `head_max_len` tokena (zadano
+192), svaku opciju reže na 48 tokena, a kad opcijama ostane manje od 16 tokena, dodatno ih skraćuje.
+Upute zatim dobivaju samo ostatak, najmanje 8 tokena. Prvo pitanje (dvojezično, `a43dd62`) po tom
+računu nije stalo, pa je model odgovarao na odrezano pitanje. D1 na #203 dao je točnost 0,044 i
+nestabilnost redoslijeda 0,79.
+
+Zato runtime pri startu broji tokene pitanja **tokenizerom učitanog modela** (`agent.tok`), istim
+računom kao upstream. Start odbija ako vrijedi išta od ovoga:
+- ijedna opcija ima više od 48 tokena;
+- opcijama ostaje manje od 16 tokena;
+- upute ne stanu u ostatak budžeta.
+
+Brojke se ispisuju pri startu kao `budzetPitanja`.
+
 ## Što runner radi s odgovorom
 
 `adjudicate(odgovor, case, manifest iz registra, politika iz registra)`. Ishod je uvijek

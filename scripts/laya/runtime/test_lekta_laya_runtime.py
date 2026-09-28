@@ -21,18 +21,28 @@ MANIFEST = {"backend": "laya-python", "modelId": "convaiinnovations:laya:multili
             "runtimeVersion": "0.3.21", "precision": "fp32"}
 
 
+def whitespace_tok(text, add_special_tokens=False):
+    """Zamjenski tokenizer: jedna rijec je jedan token (pravi mmBERT daje vise tokena po rijeci)."""
+    return {"input_ids": text.split()}
+
+
 class FakeAgent:
-    def __init__(self, probabilities=None, extra=None):
+    """Isti oblik kao upstream: vjerojatnosti su po oznaci koju je model vidio u `criteria`."""
+
+    def __init__(self, probabilities=None, extra=None, tok=whitespace_tok, cfg=None):
         self.calls = []
+        # Zadaje se po Lektinom verdiktu; `predict` ih vraca po oznaci iz pitanja.
         self.probabilities = probabilities or {"finding_supported": 0.5, "possible_false_positive": 0.2,
                                                "extraction_uncertain": 0.2, "insufficient_evidence": 0.1}
         self.extra = extra or {}
+        self.tok = tok
+        self.cfg = cfg or {}
 
     def predict(self, state, questions):
         self.calls.append((state, questions))
-        top = max(self.probabilities, key=self.probabilities.get)
-        return {"answers": {"nalaz": {"choice": top, "confidence": self.probabilities[top],
-                                      "probabilities": dict(self.probabilities), **self.extra}}}
+        shown = {rt.OPTIONS[v][0]: p for v, p in self.probabilities.items()}
+        top = max(shown, key=shown.get)
+        return {"answers": {"nalaz": {"choice": top, "confidence": shown[top], "probabilities": shown, **self.extra}}}
 
 
 def request(**over):
@@ -60,7 +70,22 @@ class InferTest(unittest.TestCase):
         state, questions = agent.calls[0]
         self.assertEqual(set(state), {"zapis", "jezik"})
         self.assertNotIn(DIGEST, json.dumps(state))
-        self.assertEqual(list(questions["nalaz"]["criteria"]), order)
+        self.assertEqual(list(questions["nalaz"]["criteria"]), [rt.OPTIONS[v][0] for v in order])
+
+    def test_odgovor_se_preslikava_po_oznaci_ne_po_polozaju(self):
+        # Model najvise vjeruje opciji "potpun"; u obrnutom redoslijedu ona je na drugom mjestu s kraja.
+        agent = FakeAgent({"finding_supported": 0.1, "possible_false_positive": 0.6, "extraction_uncertain": 0.2, "insufficient_evidence": 0.1})
+        for order in [list(rt.VERDICTS), list(reversed(rt.VERDICTS))]:
+            out = rt.LektaLayaRuntime(agent, MANIFEST).infer(request(labelOrder=order))
+            self.assertEqual(out["verdict"], "possible_false_positive")
+            self.assertEqual(out["probabilities"]["possible_false_positive"], 0.6)
+
+    def test_odgovor_po_lektinim_imenima_umjesto_prikazanih_oznaka_je_kvar(self):
+        class OldShape(FakeAgent):
+            def predict(self, state, questions):
+                return {"answers": {"nalaz": {"probabilities": dict(self.probabilities)}}}
+        with self.assertRaises(ValueError):
+            rt.LektaLayaRuntime(OldShape(), MANIFEST).infer(request())
 
     def test_normalizacija_i_answer_confidence(self):
         agent = FakeAgent({"finding_supported": 2, "possible_false_positive": 1, "extraction_uncertain": 1, "insufficient_evidence": 0},
@@ -156,6 +181,54 @@ class PrepareTest(unittest.TestCase):
             args = rt.parse_args(["--model-revision", rev, "--calibration-revision", "c"])
             with self.assertRaises(rt.StartError):
                 rt.prepare(args, lambda *a, **k: RevisionAgent(rev), "t", locate=lambda a: self.dir)
+
+    def test_pitanje_stane_u_budzet_i_budzet_se_ispisuje(self):
+        runtime = rt.prepare(self.args(), lambda *a, **k: RevisionAgent(REV), "t", locate=lambda a: self.dir)
+        budget = runtime.question_budget
+        self.assertEqual(budget["headMaxLen"], 192)
+        self.assertGreaterEqual(budget["free"], 0)
+        self.assertEqual(set(budget["options"]), set(rt.VERDICTS))
+
+    def test_odbija_start_kad_bi_upstream_rezao_pitanje(self):
+        def agent(tok=whitespace_tok, cfg=None):
+            a = RevisionAgent(REV)
+            a.tok, a.cfg = tok, cfg or {}
+            return a
+        # Premali budzet: upute bi se skratile. Tokenizer po znaku: opcije bi presle 48 tokena.
+        cases = [agent(cfg={"head_max_len": 40}), agent(tok=lambda t, add_special_tokens=False: {"input_ids": list(t)})]
+        for a in cases:
+            with self.assertRaises(rt.StartError):
+                rt.prepare(self.args(), lambda *x, _a=a, **k: _a, "t", locate=lambda x: self.dir)
+        no_tok = agent()
+        no_tok.tok = None
+        with self.assertRaises(rt.StartError):
+            rt.prepare(self.args(), lambda *x, **k: no_tok, "t", locate=lambda x: self.dir)
+
+    def test_svaki_uvjet_budzeta_zasebno(self):
+        chars = lambda t, add_special_tokens=False: {"input_ids": list(t)}
+        triple = lambda t, add_special_tokens=False: {"input_ids": t.split() * 3}
+        b3 = rt.question_budget(triple, 192)
+        options_total = sum(b3["options"].values())
+        self.assertGreater(b3["head"], rt.OPTION_BUDGET_FLOOR)  # inace slucaj ispod ne ispituje ono sto tvrdi
+        only = {
+            # samo opcija dulja od 48 tokena (budzet je golem, upute stanu)
+            "opcija_preduga": (chars, 100_000),
+            # samo upute ne stanu: opcijama ostaje tocno donja granica, upute su dulje od nje
+            "upute_rezane": (triple, options_total + rt.OPTION_BUDGET_FLOOR),
+            # samo opcije pojedu budzet ispod donje granice
+            "opcije_bez_mjesta": (whitespace_tok, sum(rt.question_budget(whitespace_tok, 0)["options"].values()) + rt.OPTION_BUDGET_FLOOR - 1),
+        }
+        for name, (tok, hml) in only.items():
+            a = RevisionAgent(REV)
+            a.tok, a.cfg = tok, {"head_max_len": hml}
+            with self.assertRaises(rt.StartError, msg=name):
+                rt.prepare(self.args(), lambda *x, _a=a, **k: _a, "t", locate=lambda x: self.dir)
+
+    def test_budzet_racuna_kao_upstream(self):
+        b = rt.question_budget(whitespace_tok, 192)
+        self.assertEqual(b["head"], len(("choice question: " + rt.INSTRUCTIONS).split()))
+        label, desc = rt.OPTIONS["finding_supported"]
+        self.assertEqual(b["options"]["finding_supported"], 1 + len((" " + label + ": " + desc).split()))
 
     def test_odbija_kad_je_ucitan_drugi_commit(self):
         for loaded in [None, "f" * 40]:

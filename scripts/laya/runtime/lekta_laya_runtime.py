@@ -42,17 +42,21 @@ COMMIT = re.compile(r"^[0-9a-f]{40}$")
 CHECKPOINT_PATTERNS = ("rl_agent_config.json", "model.safetensors", "tokenizer/*", "encoder/*")
 
 QUESTION = "nalaz"
-INSTRUCTIONS = (
-    "Lekta je deterministickom provjerom oznacila ovaj zapis iz popisa literature kao moguce nepotpun "
-    "(nedostaje autor ili godina, ili je zapis prekratak). Procijeni je li taj nalaz stvaran. "
-    "Lekta flagged this bibliography entry as possibly incomplete; judge whether the finding is real."
-)
-CRITERIA = {
-    "finding_supported": "Zapis stvarno nije potpun: nedostaje autor, godina ili drugi obvezni element. The entry is really incomplete.",
-    "possible_false_positive": "Zapis je potpun za svoju vrstu izvora (npr. propis, presuda, institucija kao autor, izvor bez godine s oznakom b.g.), pa je nalaz vjerojatno lazan. The entry is complete for its source type.",
-    "extraction_uncertain": "Tekst ne izgleda kao jedan cijeli zapis (spojen s drugim zapisom, prekinut, naslov popisa). The text is not one whole entry.",
-    "insufficient_evidence": "Iz samog teksta se ne moze odluciti. The text alone is not enough to decide.",
+# Upstream cijelo pitanje (upute i sve opcije) slaze u `head_max_len` tokena (zadano 192), svaku
+# opciju reze na 48, a kad opcije pojedu budzet, upute reze na 8 do 16 tokena (common.py,
+# `build_sequence`). Prva, dvojezicna verzija nije stala: model nije vidio sto se pita (D1 na #203:
+# tocnost 0,044, nestabilnost redoslijeda 0,79). Zato su upute i opcije kratke, a `prepare` odbija
+# start ako pitanje ne stane (`assert_question_fits`).
+INSTRUCTIONS = "Je li ovaj zapis iz popisa literature stvarno nepotpun?"
+# Model vidi `oznaka: opis`; Lektin verdikt je samo kljuc za preslikavanje odgovora natrag.
+OPTIONS = {
+    "finding_supported": ("nepotpun", "nedostaje autor, godina ili naslov"),
+    "possible_false_positive": ("potpun", "potpun za svoju vrstu izvora, npr. zakon, presuda, institucija kao autor ili b. g."),
+    "extraction_uncertain": ("krivo izvucen", "nije jedan cijeli zapis: spojen s drugim, prekinut ili naslov popisa"),
+    "insufficient_evidence": ("neodlucivo", "iz samog teksta se ne moze odluciti"),
 }
+OPTION_TOKEN_CAP = 48  # upstream `build_sequence`: truncation max_length=48 po opciji
+OPTION_BUDGET_FLOOR = 16  # upstream: ispod ovoga opcije se dodatno skracuju
 
 
 class RequestError(Exception):
@@ -96,6 +100,7 @@ class LektaLayaRuntime:
     def __init__(self, agent: Any, manifest: dict[str, str]):
         self.agent = agent
         self.manifest = dict(manifest)
+        self.question_budget: dict[str, Any] | None = None
 
     def infer(self, request: Any) -> dict[str, Any]:
         expected = {"schemaVersion", "taskId", "caseId", "inputDigest", "modelInput", "labelOrder"}
@@ -121,9 +126,11 @@ class LektaLayaRuntime:
         if isinstance(rule, dict) and isinstance(rule.get("excerpt"), str):
             state["pravilo"] = rule["excerpt"]
         questions = {QUESTION: {"type": "choice", "instructions": INSTRUCTIONS,
-                                "criteria": {label: CRITERIA[label] for label in order}}}
+                                "criteria": {OPTIONS[label][0]: OPTIONS[label][1] for label in order}}}
         answer = self.agent.predict(state, questions)["answers"][QUESTION]
-        probabilities = normalized(answer["probabilities"])
+        raw = answer["probabilities"]
+        # Upstream vraca vjerojatnosti po oznaci koju je model vidio; natrag u Lektin verdikt po imenu.
+        probabilities = normalized({label: raw.get(OPTIONS[label][0]) for label in VERDICTS})
         verdict = max(VERDICTS, key=lambda label: probabilities[label])
         # Upstream preporucuje odluke nad kalibriranom pouzdanoscu; bez nje koristi se vjerojatnost presude.
         confidence = answer.get("answer_confidence", answer.get("confidence", probabilities[verdict]))
@@ -227,6 +234,29 @@ class StartError(Exception):
     """Runtime se ne smije pokrenuti; poruka ide operateru."""
 
 
+def question_budget(tok: Any, head_max_len: int) -> dict[str, Any]:
+    """Tokeni pitanja istim racunom kao upstream `build_sequence` (common.py)."""
+    def count(text: str) -> int:
+        return len(tok(text, add_special_tokens=False)["input_ids"])
+    head = count(f"choice question: {INSTRUCTIONS}")
+    # Svaka opcija je [MASK] + " oznaka: opis"; najgori slucaj ne ovisi o redoslijedu.
+    options = {label: 1 + count(f" {OPTIONS[label][0]}: {OPTIONS[label][1]}") for label in VERDICTS}
+    return {"headMaxLen": head_max_len, "head": head, "options": options, "free": head_max_len - sum(options.values()) - head}
+
+
+def assert_question_fits(agent: Any) -> dict[str, Any]:
+    """Odbija start ako bi upstream skratio upute ili ijednu opciju: model bi odgovarao na drugo pitanje."""
+    tok = getattr(agent, "tok", None)
+    if tok is None:
+        raise StartError("Agent nema tokenizer (agent.tok); budzet pitanja se ne moze provjeriti.")
+    budget = question_budget(tok, int((getattr(agent, "cfg", None) or {}).get("head_max_len", 192)))
+    options_total = sum(budget["options"].values())
+    too_long = [label for label, n in budget["options"].items() if n > 1 + OPTION_TOKEN_CAP]
+    if too_long or budget["headMaxLen"] - options_total < OPTION_BUDGET_FLOOR or budget["free"] < 0:
+        raise StartError(f"Pitanje ne stane u head_max_len bez rezanja: {json.dumps(budget)}")
+    return budget
+
+
 def prepare(args: argparse.Namespace, load: Callable[..., Any], runtime_version: str,
             locate: Callable[[argparse.Namespace], str] = locate_checkpoint) -> LektaLayaRuntime:
     if args.host not in LOOPBACK:
@@ -238,7 +268,10 @@ def prepare(args: argparse.Namespace, load: Callable[..., Any], runtime_version:
     loaded = getattr(agent, "revision", None)
     if loaded != args.model_revision:
         raise StartError(f"Ucitan je commit {loaded!r}, a trazen {args.model_revision}.")
-    return LektaLayaRuntime(agent, build_manifest(args, runtime_version, locate(args)))
+    budget = assert_question_fits(agent)
+    runtime = LektaLayaRuntime(agent, build_manifest(args, runtime_version, locate(args)))
+    runtime.question_budget = budget
+    return runtime
 
 
 def main(argv: list[str]) -> int:
@@ -250,7 +283,8 @@ def main(argv: list[str]) -> int:
     except StartError as error:
         print(error, file=sys.stderr)
         return 2
-    print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest}, indent=2), flush=True)
+    print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest,
+                      "budzetPitanja": runtime.question_budget}, indent=2), flush=True)
     HTTPServer((args.host, args.port), make_handler(runtime)).serve_forever()
     return 0
 
