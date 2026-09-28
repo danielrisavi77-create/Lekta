@@ -9,8 +9,14 @@ const entry = (over: Record<string, unknown> = {}) => ({
 });
 
 describe('Laya registar pinanih manifesta i pragova (V2.1)', () => {
-  it('commitani registar se ucitava i jos nema nijedan model', () => {
-    expect(loadRegistry(JSON.parse(JSON.stringify(committed))).entries).toEqual([]);
+  it('commitani registar se ucitava; prvi model je pinan na commit i jos nema prag', () => {
+    const r = loadRegistry(JSON.parse(JSON.stringify(committed)));
+    expect(r.entries.map((e) => e.entryId)).toEqual(['laya-multilingual-fp32-55cf4c4']);
+    const pinned = pinnedModel(r, 'laya-multilingual-fp32-55cf4c4');
+    expect(pinned?.manifest.modelRevision).toMatch(/^[0-9a-f]{40}$/);
+    // Prag ulazi tek s kalibracijskim dokazom (EVALUATION_PROTOCOL.md); tada se ova tvrdnja mijenja.
+    expect(pinned?.policy).toBeNull();
+    expect(r.entries[0].calibrationEvidence).toBeNull();
   });
 
   it('valjan unos daje pinani manifest, politiku i modelDigest', () => {
