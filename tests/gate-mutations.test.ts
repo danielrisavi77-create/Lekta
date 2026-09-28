@@ -188,6 +188,10 @@ import {
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { judgeCpuDiscipline, packageScriptReader, HEAVY_BINARIES } from '../scripts/hooks/cpu-discipline.mjs';
+import { decideStop, MAX_BLOCKS } from '../scripts/hooks/implementer-stop.mjs';
+import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
+import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 import { leanPromptProblems } from './helpers/lean-prompts';
 import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
 import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
@@ -8491,6 +8495,55 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
       return { ...h, analysis: h.kind };
     };
     expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
+  });
+});
+
+describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
+  const settings = JSON.parse(readFileSync(resolve(process.cwd(), '.claude/settings.json'), 'utf8'));
+  const readScript = packageScriptReader(process.cwd());
+  /** Tvrdnja A1 garda: izravan vitest i tsc se odbijaju, isti posao pod lockom prolazi. */
+  const a1Grize = (heavyBinaries: readonly string[]): boolean =>
+    !judgeCpuDiscipline('npx vitest run tests/a.test.ts', { readScript, heavyBinaries }).allow &&
+    !judgeCpuDiscipline('npx tsc --noEmit', { readScript, heavyBinaries }).allow &&
+    judgeCpuDiscipline('node scripts/with-gate-lock.mjs t -- npx vitest run', { readScript, heavyBinaries }).allow;
+  const checklist = '- [ ] testovi\n';
+  const env = { LEKTA_ROLE: 'implementer', LEKTA_CHECKLIST: 'c.md' };
+  /** Tvrdnja A3 garda: blokira dok ima otvorenih stavki, ali najvise MAX_BLOCKS puta. */
+  const a3Grize = (maxBlocks: number): boolean =>
+    decideStop({ env, blocksSoFar: 0, readFile: () => checklist, maxBlocks }).block &&
+    !decideStop({ env, blocksSoFar: MAX_BLOCKS, readFile: () => checklist, maxBlocks }).block;
+
+  it('baseline: registracija, A1, A2 i A3 su cisti', () => {
+    expect(missingHookRegistrations(settings)).toEqual([]);
+    expect(a1Grize(HEAVY_BINARIES)).toBe(true);
+    expect(sessionRulesProblems(formatSessionRules())).toEqual([]);
+    expect(a3Grize(MAX_BLOCKS)).toBe(true);
+  });
+
+  it('mutant: cpu-discipline maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
+      (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('cpu-discipline')));
+    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: node scripts/hooks/cpu-discipline.mjs']);
+  });
+
+  it('mutant: Stop hook maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    delete mutant.hooks.Stop;
+    expect(missingHookRegistrations(mutant)).toEqual(['Stop: node scripts/hooks/implementer-stop.mjs']);
+  });
+
+  it('mutant: vitest ispao s popisa teskih alata obara tvrdnju A1', () => {
+    expect(a1Grize(HEAVY_BINARIES.filter((b) => b !== 'vitest'))).toBe(false);
+  });
+
+  it('mutant: pravila bez retka o relayed porukama se hvataju', () => {
+    const mutant = formatSessionRules().filter((l) => !l.includes('relayed'));
+    expect(sessionRulesProblems(mutant)).toEqual(['nedostaje pravilo o relayed porukama']);
+  });
+
+  it('mutant: Stop hook bez gornje granice blokiranja obara tvrdnju A3', () => {
+    expect(a3Grize(Number.POSITIVE_INFINITY)).toBe(false);
   });
 });
 
