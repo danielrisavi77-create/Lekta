@@ -1,7 +1,7 @@
 import type { RuleEntry, ThesisProfile, SourceEntry, VerificationLedgerEntry } from '../profiles/profile-schema';
 import { stableJson } from './ai-evidence-audit';
 
-export type QuoteAnchorCode = 'anchored' | 'already-literal' | 'ambiguous' | 'not-found' | 'source-unavailable' | 'quote-missing' | 'status-ineligible';
+type QuoteAnchorCode = 'anchored' | 'already-literal' | 'ambiguous' | 'not-found' | 'source-unavailable' | 'quote-missing' | 'status-ineligible';
 export interface QuoteAnchorPlan {
   profile: ThesisProfile;
   ledger: VerificationLedgerEntry[];

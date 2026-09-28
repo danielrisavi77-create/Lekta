@@ -10,7 +10,7 @@ function evidenceKey(profileId: string, ruleId: string): string {
 }
 
 /** Return only rule IDs whose evidence package was deterministically revalidated. */
-export function selectAiAuditedRuleEntries(
+function selectAiAuditedRuleEntries(
   profile: ThesisProfile,
   auditResultsByRule: Readonly<Record<string, AiEvidenceAuditResult>>,
 ): RuleEntry[] {

@@ -202,6 +202,17 @@ export interface ScopedRegistryProfile {
   scope: 'faculty' | 'legal';
 }
 
+function groupClaimsByProfile(rows: readonly Pick<LedgerRow, 'profileId' | 'claim'>[]): Map<string, LedgerRow['claim'][]> {
+  const claimsByProfile = new Map<string, LedgerRow['claim'][]>();
+  for (const row of rows) {
+    if (row.profileId == null) continue;
+    const claims = claimsByProfile.get(row.profileId) ?? [];
+    claims.push(row.claim);
+    claimsByProfile.set(row.profileId, claims);
+  }
+  return claimsByProfile;
+}
+
 /** Fakultetski prag i pravni profili prikazuju se zasebno, bez miješanja nazivnika. */
 export function assessFacultyMinimumBRatchet(
   registryProfiles: readonly ScopedRegistryProfile[],
@@ -219,13 +230,7 @@ export function assessFacultyMinimumBRatchet(
     .sort();
   const facultyIds = new Set(facultyCounts.keys());
   const legalIds = new Set(legalCounts.keys());
-  const claimsByProfile = new Map<string, LedgerRow['claim'][]>();
-  for (const row of rows) {
-    if (row.profileId == null) continue;
-    const claims = claimsByProfile.get(row.profileId) ?? [];
-    claims.push(row.claim);
-    claimsByProfile.set(row.profileId, claims);
-  }
+  const claimsByProfile = groupClaimsByProfile(rows);
 
   const missingFacultyIds = [...facultyIds].filter((id) => !claimsByProfile.has(id)).sort();
   const unregisteredFacultyIds = [...claimsByProfile.keys()]
@@ -275,13 +280,7 @@ export function assessFacultyAllARatchet(
   const facultyIds = new Set(
     registryProfiles.filter((profile) => profile.scope === 'faculty').map((profile) => profile.id),
   );
-  const claimsByProfile = new Map<string, LedgerRow['claim'][]>();
-  for (const row of rows) {
-    if (row.profileId == null) continue;
-    const claims = claimsByProfile.get(row.profileId) ?? [];
-    claims.push(row.claim);
-    claimsByProfile.set(row.profileId, claims);
-  }
+  const claimsByProfile = groupClaimsByProfile(rows);
   const facultyBelowA = [...facultyIds].filter((id) => {
     const claims = claimsByProfile.get(id) ?? [];
     return claims.length === 0 || claims.some((claim) => claim !== 'A');

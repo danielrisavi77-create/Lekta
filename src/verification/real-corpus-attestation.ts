@@ -215,6 +215,22 @@ export function attestationProblems(
   return p;
 }
 
+/** Oba oblika para dijele istu provjeru potpisa, otiska i cistog mjerenja. */
+function provenPairs(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash: string | null | undefined,
+  keys: (entry: CorpusAttestationEntry) => readonly string[],
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
+  const out = new Set<string>();
+  for (const e of a!.entries) {
+    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
+      for (const key of keys(e)) out.add(key);
+    }
+  }
+  return out;
+}
+
 /**
  * Parovi `unitId::workType` kojima ovjera daje dokaz na stvarnom radu.
  *
@@ -225,14 +241,7 @@ export function provenUnitWorkTypes(
   a: CorpusAttestation | null | undefined,
   currentRepairSourceHash?: string | null,
 ): Set<string> {
-  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
-  const out = new Set<string>();
-  for (const e of a!.entries) {
-    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
-      out.add(`${e.unitId}::${e.workType}`);
-    }
-  }
-  return out;
+  return provenPairs(a, currentRepairSourceHash, (e) => [`${e.unitId}::${e.workType}`]);
 }
 
 /**
@@ -247,12 +256,5 @@ export function attestedProfileWorkTypes(
   a: CorpusAttestation | null | undefined,
   currentRepairSourceHash?: string | null,
 ): Set<string> {
-  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
-  const out = new Set<string>();
-  for (const e of a!.entries) {
-    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
-      for (const p of e.profileIds ?? []) out.add(`${p}::${e.workType}`);
-    }
-  }
-  return out;
+  return provenPairs(a, currentRepairSourceHash, (e) => (e.profileIds ?? []).map((p) => `${p}::${e.workType}`));
 }

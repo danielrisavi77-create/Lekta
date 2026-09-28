@@ -1,11 +1,9 @@
 import { existsSync, readdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { RuleEntry, SourceEntry, ThesisProfile, VerificationLedgerEntry } from '../src/profiles/profile-schema';
-import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
+import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS, loadRepositoryAiEvidenceContext, type RuleEntry, type SourceEntry, type ThesisProfile, type VerificationLedgerEntry } from './lib/ai-evidence-cli';
 import { applyAiEvidenceProfile } from '../src/verification/apply-ai-evidence-profile';
 import { prepareAiEvidenceProfilePersistence, type AiEvidenceDraftDocument } from '../src/verification/ai-evidence-profile-storage';
-import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
 import { unreconciledAiConfirmations } from '../src/verification/reconcile-ai-ledger';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');

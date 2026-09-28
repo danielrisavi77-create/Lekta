@@ -56,14 +56,14 @@ export interface WorklistTotals {
   notScored: number;
 }
 
-export type RuleWorklistStatus =
+type RuleWorklistStatus =
   | 'not-scored'
   | 'human-verified'
   | 'ai-evidence-verified'
   | 'needs-ai-evidence'
   | 'needs-recheck';
 
-export interface RuleWorklistRow {
+interface RuleWorklistRow {
   profileId: string;
   ruleId: string;
   sourceId: string | null;

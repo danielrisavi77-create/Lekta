@@ -1,7 +1,7 @@
 import type { RuleEntry, SourceEntry } from '../profiles/profile-schema.ts';
 import { DETECTOR_CHECK_BY_RULE } from './detector-check-map.ts';
 
-export type AiEvidenceAuditReasonCode =
+type AiEvidenceAuditReasonCode =
   | 'evidence-missing'
   | 'evidence-structure-incomplete'
   | 'schema-version-unsupported'
@@ -50,7 +50,7 @@ export type AiEvidenceAuditReasonCode =
   | 'manifest-rule-value-mismatch'
   | 'test-failed';
 
-export interface AiEvidenceAuditReason {
+interface AiEvidenceAuditReason {
   code: AiEvidenceAuditReasonCode;
   message: string;
 }
