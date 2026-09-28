@@ -38,6 +38,32 @@ When writing the code, be careful of structuring your CSS selector specificities
 
 Try to do a lot of this planning and iteration in your thinking, and only show ideas to the user when you have higher confidence it'll delight them.
 
+## Zabranjeni obrasci (Lekta)
+
+Ovaj popis zamjenjuje opcu uputu "izbjegni genericki izgled" tocnim obrascima. Vrijedi za svaku novu
+povrsinu i prototip u ovom repozitoriju. Identitet "Korektorski stol" (`design/README.md`) je
+nadredjen: kad README neki obrazac izricito propisuje, vrijedi samo iznimka navedena uz stavku, ni
+sira ni slobodnija od nje.
+
+1. **Krem ili off-white pozadina stranice.** Iznimka: "papir" iz tokena (`design/tokens.json`,
+   `primitive.color.*.paper`) kao ploha na kojoj zivi sadrzaj. Nikad kao pozadina stranice ili stola.
+2. **Kurzivni naglasci u naslovima** (jedna rijec u kurzivu radi efekta). Iznimka: kurziv serifa
+   samo u ulogama iz README-a (tekstualna veza, korektorska biljeska).
+3. **Numerirane oznake sekcija "01 / 02 / 03"** kao ukras. Iznimka: stvarni slijed koraka kojem
+   redoslijed nosi informaciju (npr. koraci toka "01 Nalazi").
+4. **Monospace oznake u sucelju** izvan koda. Iznimka: Geist Mono samo u ulogama iz README-a
+   (gumbi, navigacija, eyebrow, kodovi pravila, brojevi, meta redovi). Nova uloga za mono trazi
+   odluku vlasnika, ne odluku implementatora.
+5. **Pill gumbi.** Gumb je pecat s radijusom 2px; `999px` samo za znacke, korake i cipove.
+6. **Gradijentne hero pozadine.**
+7. **Kartice s lijevom obojenom crticom** (`border-left` akcent). Presuda ide u boju eyebrow teksta
+   ili tocku (README, tvrdo pravilo boje 3).
+8. **Emoji u sucelju.** Tipografski znakovi presude koji vec postoje (`src/citations/verify-badges.ts`)
+   nisu ovim uklonjeni; njihova zamjena je zaseban zadatak.
+
+Nakon prvog rezultata provjeri koje je od ovih obrazaca rezultat ipak upotrijebio i koje nove
+genericke obrasce je uveo. Svaki novi takav obrazac dopisi na ovaj popis u istom PR-u.
+
 ## Restraint and self-critique
 
 Spend your boldness in one place. Let the signature element be the one memorable thing, keep everything around it quiet and disciplined, and cut any decoration that does not serve the brief. Not taking a risk can be a risk itself! Build to a quality floor without announcing it: responsive down to mobile, visible keyboard focus, reduced motion respected. Critique your own work as you build, taking screenshots if your environment supports it – a picture is worth 1000 tokens. Consider Chanel's advice: before leaving the house, take a look in the mirror and remove one accessory. Human creators have memory and always try to do something new, so if you have a space to quickly jot down notes about what you've tried, it can help you in future passes.

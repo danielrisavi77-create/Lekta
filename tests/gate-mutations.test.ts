@@ -108,12 +108,15 @@ import {
 } from '../src/report/webhook';
 import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
+import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
+import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
@@ -1134,6 +1137,38 @@ function pdfKorpusSelftestProlazi(izvor: string): boolean {
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
+  {
+    id: 'agents/model-probe-prima-api-kljuc',
+    imitates: 'doctor ili fixture pokrenu Claude CLI s API kljucem u okolini, pa verifikacija modela tiho naplacuje po pozivu umjesto pretplate',
+    caught: () => { try { probeModel('claude-opus-5-5', { env: { ANTHROPIC_API_KEY: 'x' }, spawn: () => { throw new Error('poziv'); } }); return false; } catch (e) { return /API credentials/.test((e as Error).message); } },
+    cleanBefore: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-opus-5-5': { outputTokens: 1 } } }) }) }).ok,
+  },
+  {
+    id: 'agents/model-probe-broji-pomocni-model',
+    imitates: 'doctor proglasi model dostupnim jer je CLI pozvao samo pomocni model (modelMatches prihvaca bilo koji pogodak u modelUsage)',
+    caught: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-haiku-4-5-20251001': { outputTokens: 3 }, 'claude-opus-5-5': { outputTokens: 0 } } }) }) }).reason === 'model_not_called',
+    cleanBefore: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-opus-5-5': { outputTokens: 2 } } }) }) }).ok,
+  },
+  {
+    id: 'agents/fixture-vjeruje-izmijenjenom-testu',
+    imitates: 'implementator u fixtureu prepise test tako da prolazi, a ocjenjivac mjeri njegovu verziju umjesto izvorne',
+    caught: () => {
+      const d = mkdtempSync(join(tmpdir(), 'lekta-gate-fixture-'));
+      writeFileSync(join(d, 'rimski.mjs'), FIXTURE_FILES['rimski.mjs']);
+      writeFileSync(join(d, 'rimski.test.mjs'), "import { test } from 'node:test'; for (const n of 'abcde') test(n, () => {});\n");
+      const g = gradeTests(d);
+      rmSync(d, { recursive: true, force: true });
+      return !g.ok && g.fail === 5;
+    },
+    cleanBefore: () => {
+      const d = mkdtempSync(join(tmpdir(), 'lekta-gate-fixture-'));
+      for (const [n, c] of Object.entries(FIXTURE_FILES)) writeFileSync(join(d, n), c);
+      const g = gradeTests(d);
+      rmSync(d, { recursive: true, force: true });
+      return g.pass === 0 && g.fail === 5;
+    },
+  },
   {
     id: 'upisnik/b15b-negacija',
     imitates: 'Uklanjanje provjere negacije prihvaca izjavu da se upute ne odnose na sve radove',
@@ -7724,10 +7759,11 @@ describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
 
     // MUTACIJA: implement uloga za M/nezasticeno prebacena na neverificiran model.
     const mutiran = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
-    mutiran.routing.M.false.roles.implement.model = 'claude-opus-5-5';
+    mutiran.models['claude-neverificiran-test'] = { status: 'unverified' };
+    mutiran.routing.M.false.roles.implement.model = 'claude-neverificiran-test';
     const problems = findUnverifiedModelUsages(mutiran);
     expect(problems.length).toBeGreaterThan(0);
-    expect(problems.some((problem) => problem.includes('claude-opus-5-5'))).toBe(true);
+    expect(problems.some((problem) => problem.includes('claude-neverificiran-test'))).toBe(true);
     expect(problems.some((problem) => problem.startsWith('M/false/implement'))).toBe(true);
   });
 
@@ -8395,14 +8431,15 @@ describe('mutacije: routing korak 2 (select-route)', () => {
   const izvedi = (code: string): SelectRoute => new Function(`${code}\nreturn selectRoute;`)() as SelectRoute;
   const configSUnverified = () => {
     const cfg = JSON.parse(readFileSync(resolve(process.cwd(), 'config/agent-routing.json'), 'utf8'));
-    cfg.routing.S.false.roles.implement.model = 'claude-opus-5-5';
+    cfg.models['claude-neverificiran-test'] = { input: 1, output: 1, status: 'unverified' };
+    cfg.routing.S.false.roles.implement.model = 'claude-neverificiran-test';
     return cfg;
   };
   /** Tvrdnja garda: neverificiran model iz configa nikad ne izlazi iz selectRoute. */
   const odbijaUnverified = (fn: SelectRoute): boolean => {
     try {
       const r = fn({ config: configSUnverified(), size: 'S', files: [], phase: 'implement' });
-      return r.model !== 'claude-opus-5-5';
+      return r.model !== 'claude-neverificiran-test';
     } catch {
       return true;
     }
@@ -8412,7 +8449,7 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     expect(odbijaUnverified(izvedi(blok))).toBe(true);
   });
 
-  it('mutant koji preskoci provjeru statusa vraca claude-opus-5-5 i gard ga hvata', () => {
+  it('mutant koji preskoci provjeru statusa vraca neverificiran model i gard ga hvata', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
@@ -8644,6 +8681,33 @@ describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', ()
       },
     ];
     expect(findJobsRunningOnEdited(sIf)).toEqual([]);
+  });
+});
+
+describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/agents/usage-daily.mjs'), 'utf8').replace(/\r/g, '');
+  const blok = (pocetak: string) => {
+    const i = src.indexOf(pocetak);
+    return src.slice(i, src.indexOf('\n}\n', i) + 3);
+  };
+  const numBlok = blok('function num(');
+  const tokensBlok = blok('export function claudeTokens(');
+  type Tokens = (u: Record<string, number>) => { input: number; cacheRead: number };
+  const izvedi = (fn: string): Tokens => new Function(`${numBlok}\n${fn.replace('export ', '')}\nreturn claudeTokens;`)() as Tokens;
+  // Tvrdnja: ulaz je samo input_tokens; citanje kesa ide u zaseban stupac i ne dize tezinu.
+  const cisto = (t: Tokens) => {
+    const r = t({ input_tokens: 3, output_tokens: 4, cache_read_input_tokens: 500, cache_creation_input_tokens: 7 });
+    return r.input === 3 && r.cacheRead === 500;
+  };
+
+  it('baseline: stvarni claudeTokens odvaja citanje kesa od ulaza', () => {
+    expect(cisto(izvedi(tokensBlok))).toBe(true);
+  });
+
+  it('mutant koji zbraja cache_read u ulaz se hvata', () => {
+    const mutant = tokensBlok.replace('input: num(usage?.input_tokens),', 'input: num(usage?.input_tokens) + num(usage?.cache_read_input_tokens),');
+    expect(mutant).not.toBe(tokensBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
   });
 });
 
@@ -9063,5 +9127,34 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
   it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
     const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
+  });
+});
+
+describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
+  // Gard je brojac rada u skeneru (deterministicki, Codex R2 na #230) nad svih 11 napada, n i 2n.
+  // Mutanti su zamjene u STVARNOM izvoru skenera: forward finder koji ne pamti poziciju, i matcher
+  // stila koji zadnji `</w:style>` trazi iznova za svaku pojavu. Svaki mutant hvataju upravo napadi
+  // koji ciljaju taj pokazivac; ostali napadi ostaju cisti, pa tvrdnja nije "nesto je palo".
+  it('BASELINE: stvarni skener je linearan na svih 11 napada', () => {
+    expect(linearnostProblemi(extractFingerprintInputFromDocx, 2000)).toEqual([]);
+  });
+
+  it('mutant: forward finder bez pamcenja pozicije se hvata', () => {
+    const mutant = mutiraniSkener('    if (cached >= from) return cached;\n', '');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:name bez > u stilu',
+      'document: <w:pStyle bez > u odlomku',
+      'document: <w:t bez > u odlomku',
+      'styles: vise styleId u tagu, jedan > na kraju',
+    ]);
+  });
+
+  it('mutant: matcher stila bez pamcenja zadnjeg </w:style> se hvata', () => {
+    const mutant = mutiraniSkener('        if (lastClose === null) {', '        if (true) {');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:style styleId bez zatvaranja',
+      'styles: vise styleId u tagu, jedan > na kraju',
+      'styles: > u navodnicima bez zatvaranja',
+    ]);
   });
 });

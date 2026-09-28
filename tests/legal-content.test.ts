@@ -68,6 +68,34 @@ describe('legal-content', () => {
     expect(html).toContain('Voditelj obrade');
   });
 
+  it('T89: privacy objavljuje Cloudflare Turnstile (tko, sto, cime ne, pravna osnova, poveznica)', () => {
+    const html = docs.privacy.html;
+    const odlomak = html.slice(html.indexOf('<h4>1d. Zaštita od zlouporabe (captcha)</h4>'), html.indexOf('<h4>2. Ručna usluga</h4>'));
+    expect(odlomak.length).toBeGreaterThan(100);
+    expect(odlomak).toContain('Cloudflare, Inc.');
+    // Svaka tvrdnja ima izvor (provjera 28. 9. 2026.): Turnstile Privacy Addendum (18. 6. 2025.),
+    // Cloudflare Privacy Policy odj. 7 i 11, Cloudflare DPA 6.4 (v6.4).
+    expect(odlomak).toContain('tehničke signale kao što su IP adresa, TLS otisak, User-Agent zaglavlje te site key i domena Lekte');
+    expect(odlomak).toContain('ne dobiva korisnikove dokumente ni rezultate analize');
+    expect(odlomak).toContain('Za samu provjeru Cloudflare djeluje kao izvršitelj obrade u ime Lekte');
+    expect(odlomak).toContain('prava u vezi s tom obradom ostvaruju se kod Lekte');
+    expect(odlomak).toContain('kao samostalni voditelj, na temelju vlastitog legitimnog interesa');
+    expect(odlomak).toContain('dpo@cloudflare.com');
+    expect(odlomak).toContain('Prijenos u SAD temelji se na certifikatu Cloudflare, Inc. u EU-U.S. Data Privacy Frameworku; ako certifikat prestane vrijediti, Cloudflare se oslanja na standardne ugovorne klauzule');
+    expect(odlomak).toContain('ne navodi fiksan rok čuvanja, nego ih čuva koliko to zahtijeva svrha obrade; Lekta ih ne prima ni ne pohranjuje');
+    expect(odlomak).toContain('legitimni interes (čl. 6. st. 1. t. f)');
+    expect(odlomak).toContain('href="https://www.cloudflare.com/turnstile-privacy-policy/"');
+    expect(odlomak).toContain('href="https://www.cloudflare.com/privacypolicy/"');
+    expect(odlomak).toContain('Od dana uključivanja');
+    // Tvrdnje bez izvora ne smiju se vratiti.
+    for (const bezIzvora of ['kolačić', 'unosima u obrasce', 'Ugovoru o obradi podataka', 'npr. vrstu preglednika']) {
+      expect(odlomak).not.toContain(bezIzvora);
+    }
+    // Izvrsitelj za samu provjeru mora biti i u popisu izvrsitelja (odjeljak 5).
+    const izvrsitelji = html.slice(html.indexOf('<h4>5. Izvršitelji obrade</h4>'), html.indexOf('<h4>6. Rok čuvanja</h4>'));
+    expect(izvrsitelji).toContain('<strong>Cloudflare, Inc.</strong> (Turnstile, zaštita od zlouporabe pri prijavi; obrada i u Sjedinjenim Američkim Državama)');
+  });
+
   it('WS-6: privacy i processing objavljuju server-side popravak s pohranom-do-brisanja i pravom brisanja', () => {
     for (const kind of ['privacy', 'processing'] as const) {
       const html = docs[kind].html;
