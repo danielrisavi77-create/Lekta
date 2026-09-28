@@ -236,6 +236,16 @@ function sourceHost(url: string): string | null {
   catch { return null; }
 }
 
+function comparableProfileSourceUrl(value: string): string | null {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+    return url.hostname.toLowerCase().replace(/^www\./u, '')
+      + (url.port ? ':' + url.port : '')
+      + url.pathname.replace(/\/$/u, '') + url.search + url.hash;
+  } catch { return null; }
+}
+
 const UNIVERSITY_ROOTS = new Set(['unizg.hr', 'uniri.hr', 'unist.hr', 'unios.hr', 'unipu.hr', 'unidu.hr', 'unizd.hr']);
 
 // Službena domena Arhitektonskog fakulteta koristi dulji naziv sastavnice od kataloškog id-a.
@@ -279,7 +289,17 @@ function wordRoot(word: string): string {
   return ending == null ? word : word.slice(0, -ending.length);
 }
 
-function evidenceNamesProgram(name: string, evidence: ProgramProfileDecisionEvidence, cycle: StudyCycle | null): boolean {
+function wholeWorkScopeStatement(scopeQuote: string): boolean {
+  const scopeMatch = /\b(upute|uputa|pravila|pravilnik|odredbe)\b([^.]{0,80})\b(odnose|primjenjuju|vrijede|primjenjuje)\b([^.]{0,30})\b(na|za) (sve|svim|svih) ((kategorij|vrst|oblik)\w* )?(studentsk|pisan|akademsk|ocjensk)\w* (rad|radove|radova|radovima)\b([^.]{0,60})/u.exec(scopeQuote);
+  if (scopeMatch != null
+    && !/\b(ne|nisu|nije)\b/u.test(scopeMatch[2] + scopeMatch[4])
+    && !/\b(osim|izuzev)\b/u.test(scopeMatch[11])
+    && !scopeMatch[11].startsWith(', bez')
+    && !/\bna (kolegij|predmet)/u.test(scopeMatch[11])) return true;
+  return false;
+}
+
+function evidenceNamesProgram(name: string, evidence: ProgramProfileDecisionEvidence, cycle: StudyCycle | null, profile: ProfileCandidateInput): boolean {
   const title = normalizedProgramTitle(name).replace(/\s*\((?:jednopredmetni|dvopredmetni)\)/gu, '').trim();
   const text = normalized(evidence.quote + ' ' + evidence.sourceLocator)
     .replace(/fakultet\p{L}*\s+za\s+\p{L}+(?:\s+\p{L}+)?/gu, '');
@@ -306,6 +326,12 @@ function evidenceNamesProgram(name: string, evidence: ProgramProfileDecisionEvid
   for (const match of text.matchAll(/\b(?:na\s+)?svim?\s+((?:prijediplomsk|diplomsk|specijalistick|doktorsk)\w*)?\s*studij(?:ima|i)\b/gu)) {
     const level = match[1] == null ? null : levels[Object.keys(levels).find((root) => match[1].startsWith(root)) ?? ''];
     if (level != null && level === cycle) return true;
+  }
+  // Izricita izjava o svim vrstama radova vrijedi samo iz dokumenta vezanog profila.
+  const scopeQuote = normalized(evidence.quote).replace(/\s+/gu, ' ');
+  if (wholeWorkScopeStatement(scopeQuote)) {
+    const evidenceUrl = comparableProfileSourceUrl(evidence.sourceUrl);
+    if (evidenceUrl != null && profile.sources?.some((source) => comparableProfileSourceUrl(source.url) === evidenceUrl)) return true;
   }
   return false;
 }
@@ -429,7 +455,7 @@ export function buildUpisnikProfileCandidates(
     if (!/^https:\/\//u.test(sourceUrl.trim()) || !sourceLocator.trim() || !quote.trim()) throw new Error('integrated graduate coverage ' + pair + ' has incomplete evidence');
     if (!sourceRegistry.some((source) => source.id === coverage.sourceId && source.url === sourceUrl)) throw new Error('integrated graduate coverage ' + pair + ' has source registry mismatch');
     if (!sourceBelongsToUnit(sourceUrl, profile.unitId, profiles, sourceRegistry)) throw new Error('integrated graduate coverage ' + pair + ' has source domain mismatch');
-    if (!evidenceNamesProgram(row.naziv, coverage.evidence, studyCycleForStudyType(row.vrsta ?? ''))) throw new Error('integrated graduate coverage ' + pair + ' lacks program name');
+    if (!evidenceNamesProgram(row.naziv, coverage.evidence, studyCycleForStudyType(row.vrsta ?? ''), profile)) throw new Error('integrated graduate coverage ' + pair + ' lacks program name');
     if (!profileSupportsStudyType(profile, studyKindForStudyType(row.vrsta ?? ''), 'graduate', quote)) throw new Error('integrated graduate coverage ' + pair + ' has study type mismatch');
   }
   const explicitByCode = new Map<string, ProgramProfileDecision[]>();
@@ -471,7 +497,7 @@ export function buildUpisnikProfileCandidates(
     if (!sourceBelongsToUnit(sourceUrl, profile.unitId, profiles, sourceRegistry)) {
       throw new Error(`program profile decision ${explicit.programCode}/${explicit.profileId} has source domain mismatch`);
     }
-    if (!evidenceNamesProgram(row.naziv, explicit.evidence, studyCycleForStudyType(row.vrsta ?? ''))) {
+    if (!evidenceNamesProgram(row.naziv, explicit.evidence, studyCycleForStudyType(row.vrsta ?? ''), profile)) {
       throw new Error(`program profile decision ${explicit.programCode}/${explicit.profileId} lacks program name`);
     }
     const forCode = explicitByCode.get(explicit.programCode) ?? [];
