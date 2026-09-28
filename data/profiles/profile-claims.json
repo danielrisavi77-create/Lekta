@@ -536,5 +536,12 @@
     "zsem-zavrsni-en": "B",
     "zvu-specijalisticki": "B",
     "zvu-zavrsni": "A"
-  }
+  },
+  "pdfLadder": {
+    "A-pdf": "provjereno i popravljano prema sluzbenim uputama, dokazano na javnom radu pretvorenom iz PDF-a, ne na izvornom Word dokumentu"
+  },
+  "pdfCounts": {
+    "A-pdf": 0
+  },
+  "byPdfProfile": {}
 }

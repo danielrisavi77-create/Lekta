@@ -139,6 +139,8 @@ export const PROJECTIONS = [
       'data/declarations/declarations.json',
       // Od 2026-09-05 ledger cita i ovjeru dokaza na stvarnim radovima (generate-completion-ledger.mts).
       'data/verification/real-corpus-attestation.json',
+      // Od 2026-09-28 i zasebnu ovjeru nad radovima pretvorenim iz PDF-a (razina A-pdf); neobavezna.
+      'data/verification/pdf-corpus-attestation.json',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],

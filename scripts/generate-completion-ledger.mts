@@ -20,7 +20,7 @@ import {
 } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { computeWorklist } from '../src/verification/worklist';
-import { buildCompletionLedger, type LedgerInputs } from '../src/verification/completion-ledger';
+import { buildCompletionLedger, pdfSeparationProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -56,7 +56,23 @@ const corpusAttestation = existsSync(ovjeraPut)
   ? (JSON.parse(readFileSync(ovjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['corpusAttestation'])
   : null;
 
-const ledger = buildCompletionLedger({ ...inputs, corpusAttestation });
+// Ovjera nad javnim radovima pretvorenim iz PDF-a (odluka vlasnika 2026-09-28). Neobavezna kao i prava:
+// bez datoteke nijedan redak nema `A-pdf`. Daje SAMO zasebnu razinu `A-pdf`, nikad `claim`; ovjeru bez
+// `sourceKind: 'public-pdf-converted'` ili bez potpisa `provenPdfUnitWorkTypes` sam odbija.
+const pdfOvjeraPut = join(root, 'data', 'verification', 'pdf-corpus-attestation.json');
+const pdfCorpusAttestation = existsSync(pdfOvjeraPut)
+  ? (JSON.parse(readFileSync(pdfOvjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['pdfCorpusAttestation'])
+  : null;
+
+const ledger = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation });
+
+// Codex #225, nalaz 3: gard odvojenosti A-pdf radi nad STVARNIM ulazima generatora, ne samo u testu. Ledger
+// bez PDF ovjere mora biti isti u svemu osim PDF polja; inace se artefakt ne pise.
+const problemiPdf = pdfSeparationProblems(buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation: null }), ledger);
+if (problemiPdf.length) {
+  console.error(`[completion-ledger] FAIL: PDF ovjera dira ljestvicu:\n  ${problemiPdf.join('\n  ')}`);
+  process.exit(1);
+}
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(
@@ -82,6 +98,7 @@ console.log(`  naslovnica: ${fmt(s.byTitlePage)}`);
 console.log(`  citat     : ${fmt(s.byCitation)}`);
 console.log(`  izjava    : ${fmt(s.byDeclaration)}`);
 console.log(`tvrdnja : ${fmt(s.byClaim)}`);
+console.log(`A-pdf   : ${s.byPdfClaim['A-pdf']}  (zasebno, ne ulazi u tvrdnju)`);
 console.log('');
 if (s.nationalClaimBlockers.length) {
   console.log('NACIONALNA TVRDNJA: NO-GO');
