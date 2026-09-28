@@ -38,11 +38,11 @@
  */
 
 /** Ponuda koja se nadogradjuje (Repair, jedan slot). */
-export const UPGRADE_SOURCE_OFFER = 'repair_v1';
+const UPGRADE_SOURCE_OFFER = 'repair_v1';
 /** Ponuda na koju se nadogradjuje (Final Pass). Semester Pass nije cilj nadogradnje. */
-export const UPGRADE_TARGET_OFFER = 'final_pass_v1';
+const UPGRADE_TARGET_OFFER = 'final_pass_v1';
 /** Pruzatelj cija se uplata priznaje kao vec placeno. */
-export const UPGRADE_PAID_PROVIDER = 'stripe';
+const UPGRADE_PAID_PROVIDER = 'stripe';
 
 export interface UpgradeTarget {
   id: string;
@@ -99,7 +99,7 @@ export const UPGRADE_REFUSALS = Object.freeze([
   'upgrade_source_partially_refunded',
   'upgrade_amount_invalid',
 ] as const);
-export type UpgradeRefusal = (typeof UPGRADE_REFUSALS)[number];
+type UpgradeRefusal = (typeof UPGRADE_REFUSALS)[number];
 
 export type UpgradeQuote =
   | { ok: true; amountCents: number; targetCents: number; creditCents: number }
@@ -198,7 +198,7 @@ export function fingerprintIntact(fingerprint: unknown): boolean {
 }
 
 /** Upit supabase-js graditelja, onoliko koliko ga citanja nadogradnje trebaju. */
-export interface UpgradeReadQuery extends PromiseLike<{ data: unknown; error: unknown }> {
+interface UpgradeReadQuery extends PromiseLike<{ data: unknown; error: unknown }> {
   eq(column: string, value: string): UpgradeReadQuery;
   limit(count: number): UpgradeReadQuery;
 }

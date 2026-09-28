@@ -125,7 +125,7 @@ export function catalogFromMigrations(dir = join(ROOT, 'supabase', 'migrations')
 }
 
 /** Katalog iz zive baze (service role). */
-export async function catalogFromDb(env = process.env, fetchImpl = fetch) {
+async function catalogFromDb(env = process.env, fetchImpl = fetch) {
   const url = String(env.SUPABASE_URL ?? '').replace(/\/+$/, '');
   const key = String(env.SUPABASE_SERVICE_ROLE_KEY ?? '');
   if (!url || !key) throw new Error('--from=db trazi SUPABASE_URL i SUPABASE_SERVICE_ROLE_KEY');
@@ -258,7 +258,7 @@ async function stripe(fetchImpl, secret, method, path, body, idempotencyKey) {
 }
 
 /** Trenutno stanje Stripea za zeljene i arhivirane SKU-ove (samo citanje). */
-export async function readStripeState(desired, secret, fetchImpl = fetch, retired = []) {
+async function readStripeState(desired, secret, fetchImpl = fetch, retired = []) {
   const state = new Map();
   for (const productId of [...desired.map((d) => d.productId), ...retired]) {
     const p = await stripe(fetchImpl, secret, 'GET', `/products/${encodeURIComponent(stripeProductId(productId))}`);
@@ -273,12 +273,12 @@ export async function readStripeState(desired, secret, fetchImpl = fetch, retire
 }
 
 /** Idempotency-Key koraka: izveden iz plana, pa retry istog koraka ne stvara drugu Price. */
-export function stepIdempotencyKey(step) {
+function stepIdempotencyKey(step) {
   return `lekta:stripe-sync:${step.action}:${step.productId}:${step.unitAmount ?? ''}:${step.previousPriceId ?? ''}`;
 }
 
 /** Izvrsi plan. Svaki POST nosi Idempotency-Key izveden iz koraka, pa retry ne udvostrucuje. */
-export async function applyStripePlan(plan, secret, fetchImpl = fetch) {
+async function applyStripePlan(plan, secret, fetchImpl = fetch) {
   const done = [];
   for (const step of plan) {
     if (step.action.startsWith('noop')) continue;
