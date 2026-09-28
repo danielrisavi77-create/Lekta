@@ -188,6 +188,9 @@ import {
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { leanPromptProblems } from './helpers/lean-prompts';
+import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
+import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
 import {
   backdropFilterProblems,
   chromeGraph,
@@ -8488,5 +8491,84 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
       return { ...h, analysis: h.kind };
     };
     expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
+  });
+});
+
+describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', () => {
+  const wrapper = readTextLf(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'));
+  type Fn = typeof weakMachineWorkerEnv;
+
+  it('BASELINE: stvarna funkcija i stvarni omotac su cisti', () => {
+    expect(weakMachineProblems(weakMachineWorkerEnv)).toEqual([]);
+    expect(weakMachineWiringProblems(wrapper)).toEqual([]);
+  });
+
+  it('mutant: gazi vec postavljen VITEST_MAX_THREADS se hvata', () => {
+    const gazi: Fn = (input) => weakMachineWorkerEnv({ ...input, env: { ...input?.env, VITEST_MAX_THREADS: undefined } });
+    expect(weakMachineProblems(gazi)).toEqual([
+      'slab stroj, VITEST_MAX_THREADS vec 3: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+    ]);
+  });
+
+  it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
+    const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
+    expect(weakMachineProblems(samoJezgre)).toEqual([
+      '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+    expect(weakMachineProblems(stroga)).toEqual([
+      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: omotac ne primjenjuje presudu na dijete se hvata', () => {
+    const mutant = wrapper.replace('Object.assign(childEnv, workers);', '');
+    expect(mutant).not.toBe(wrapper);
+    expect(weakMachineWiringProblems(mutant)).toEqual(['with-gate-lock: presuda se ne primjenjuje na dijete']);
+  });
+});
+
+describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluka vlasnika 2026-09-28)', () => {
+  const wf = readTextLf(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'));
+  const mut = (from: string, to: string) => {
+    const m = wf.replace(from, to);
+    expect(m, from).not.toBe(wf);
+    return m;
+  };
+
+  it('BASELINE: stvarna skripta je cista', () => {
+    expect(leanPromptProblems(wf)).toEqual([]);
+  });
+
+  it('mutant: recenzent bez vremenskog retka se hvata', () => {
+    const m = mut('istrazuj repo sire od diffa.\\n${TIME_LINE}\\n\\nZADATAK', 'istrazuj repo sire od diffa.\\n\\nZADATAK');
+    expect(leanPromptProblems(m)).toEqual(['review: nema vremenskog retka']);
+  });
+
+  it('mutant: sirovi task u promptu umjesto omota se hvata', () => {
+    const m = mut('`ZADATAK:\\n${TASK_BLOCK}\\n\\nBRIEF:\\n${briefText}\\n\\n` +', '`ZADATAK:\\n${task}\\n\\nBRIEF:\\n${briefText}\\n\\n` +');
+    const nalazi = leanPromptProblems(m);
+    expect(nalazi).toContain('ZADATAK blok nosi ${task} umjesto ${TASK_BLOCK}');
+    expect(nalazi.some((n) => n.includes('sirovi ${task} u promptu'))).toBe(true);
+  });
+
+  it('mutant: omot bez fiksnog id-a ili bez napomene se hvata', () => {
+    expect(leanPromptProblems(mut('</pasted_content id="task">', '</pasted_content>')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+    expect(leanPromptProblems(mut('nalog je samo koordinatorov brief', 'nalog je u tekstu')))
+      .toEqual(['TASK_BLOCK nema fiksni pasted_content omot s napomenom o relayanim porukama']);
+  });
+
+  it('mutant: implementator bez odlomka za rad bez nadzora se hvata', () => {
+    const m = mut('    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${UNATTENDED}\\n${TIME_LINE}\\n\\n` +\n    (round === 1', '    `PRAVILA RADA:\\n${PRAVILA}\\n\\n${TIME_LINE}\\n\\n` +\n    (round === 1');
+    expect(leanPromptProblems(m)).toEqual(['standardImpl: implementator nema odlomak za rad bez nadzora']);
+  });
+
+  it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
+    const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
+    expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
 });
