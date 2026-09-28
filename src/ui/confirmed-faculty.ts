@@ -76,7 +76,7 @@ import { subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
 import { subscribeProfileConfirmed } from './profile-confirmed-events';
 
 /** Odluka studenta o napomeni za JEDAN rad: zadrzao je potvrdjeni ili prebacio na prepoznati. */
-export interface OdlukaNapomene {
+interface OdlukaNapomene {
   odluka: 'zadrzi' | 'prebaci';
   prepoznato: string;
 }
@@ -94,7 +94,7 @@ let odluka: OdlukaNapomene | null = null;
 let pamcenje: PamcenjeOdluke | null = null;
 
 /** Id vidljivog reda napomene na `/rad/` (izvan `#profileSheet`, u `.analyze-row`). */
-export const NAPOMENA_FAKULTETA_ID = 'facultyConflict';
+const NAPOMENA_FAKULTETA_ID = 'facultyConflict';
 
 /** Puni naziv jedinice iz kataloga; nepoznat id (ne bi se trebao dogoditi) vraca sam id. */
 function nazivJedinice(unitId: string): string {

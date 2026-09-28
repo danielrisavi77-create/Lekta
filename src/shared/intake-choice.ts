@@ -187,7 +187,7 @@ export function potvrdaZaSesiju(sesija: string): PotvrdaUlaza | null {
 }
 
 /** Odluka o napomeni o drugom prepoznatom fakultetu (`src/ui/confirmed-faculty.ts`). */
-export interface OdlukaNapomeneSesije {
+interface OdlukaNapomeneSesije {
   odluka: 'zadrzi' | 'prebaci';
   prepoznato: string;
 }

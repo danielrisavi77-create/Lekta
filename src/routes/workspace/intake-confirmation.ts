@@ -97,7 +97,7 @@ function potvrdaZaOvuSesiju(deps: IntakeConfirmationDeps): PotvrdaUlaza | null {
 }
 
 /** Odluka o napomeni za sesiju `sesija`, kroz sigurne omotace u `intake-choice.ts`. */
-export function pamcenjeOdlukeSesije(sesija: string): PamcenjeOdluke {
+function pamcenjeOdlukeSesije(sesija: string): PamcenjeOdluke {
   return {
     procitaj: () => odlukaNapomeneZaSesiju(sesija),
     zapisi: (odluka) => { zapisiOdlukuNapomene(sesija, odluka); },
