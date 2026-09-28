@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { TIME_SENTENCE, evalTimeLine, leanPromptProblems, leanPromptSections } from './helpers/lean-prompts';
 
-const workflow = readFileSync(resolve('.claude/workflows/lekta-lean.js'), 'utf8');
+// Normalizira CR (CLAUDE.md): Windows checkout daje CRLF, pa bi CRLF test ispod dobio \r\r\n.
+const workflow = readFileSync(resolve('.claude/workflows/lekta-lean.js'), 'utf8').replace(/\r\n/g, '\n');
 
 describe('lean workflow: vremenski redak, omot zadatka i rad bez nadzora (odluka vlasnika 2026-09-28)', () => {
   it('BASELINE: stvarna skripta je cista', () => {
