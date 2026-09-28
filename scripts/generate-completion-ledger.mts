@@ -56,7 +56,15 @@ const corpusAttestation = existsSync(ovjeraPut)
   ? (JSON.parse(readFileSync(ovjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['corpusAttestation'])
   : null;
 
-const ledger = buildCompletionLedger({ ...inputs, corpusAttestation });
+// Ovjera nad javnim radovima pretvorenim iz PDF-a (odluka vlasnika 2026-09-28). Neobavezna kao i prava:
+// bez datoteke nijedan redak nema `A-pdf`. Daje SAMO zasebnu razinu `A-pdf`, nikad `claim`; ovjeru bez
+// `sourceKind: 'public-pdf-converted'` ili bez potpisa `provenPdfUnitWorkTypes` sam odbija.
+const pdfOvjeraPut = join(root, 'data', 'verification', 'pdf-corpus-attestation.json');
+const pdfCorpusAttestation = existsSync(pdfOvjeraPut)
+  ? (JSON.parse(readFileSync(pdfOvjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['pdfCorpusAttestation'])
+  : null;
+
+const ledger = buildCompletionLedger({ ...inputs, corpusAttestation, pdfCorpusAttestation });
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(
@@ -82,6 +90,7 @@ console.log(`  naslovnica: ${fmt(s.byTitlePage)}`);
 console.log(`  citat     : ${fmt(s.byCitation)}`);
 console.log(`  izjava    : ${fmt(s.byDeclaration)}`);
 console.log(`tvrdnja : ${fmt(s.byClaim)}`);
+console.log(`A-pdf   : ${s.byPdfClaim['A-pdf']}  (zasebno, ne ulazi u tvrdnju)`);
 console.log('');
 if (s.nationalClaimBlockers.length) {
   console.log('NACIONALNA TVRDNJA: NO-GO');
