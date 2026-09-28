@@ -29,8 +29,10 @@ import {
   parseWmicCsv,
   readLock,
   releaseLock,
+  weakMachineWorkerEnv,
   writeLock,
 } from '../scripts/gate-preflight.mjs';
+import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
 import { ALL_UX_PROJECTS, CHROMIUM_ENGINE_PROJECTS, selectUxProjects } from '../playwright.config';
 
 const NOW = Date.parse('2026-09-26T12:00:00Z');
@@ -509,5 +511,15 @@ describe('playwright.config.ts: lokalno samo Chromium motor', () => {
         expect(body, name).toMatch(/--env LEKTA_UX_ALL_BROWSERS=1/);
       }
     }
+  });
+});
+
+describe('slab stroj: VITEST_MAX_THREADS=1 za dijete gatea (pravilo vlasnika 2026-09-28)', () => {
+  it('ubrizgane jezgre i RAM: jak stroj ne dira, slab postavlja 1, postavljen se ne dira', () => {
+    expect(weakMachineProblems(weakMachineWorkerEnv)).toEqual([]);
+  });
+
+  it('omotac primjenjuje presudu na env djeteta prije pokretanja i ispisuje jedan redak', () => {
+    expect(weakMachineWiringProblems(readFileSync(resolve('scripts/with-gate-lock.mjs'), 'utf8'))).toEqual([]);
   });
 });
