@@ -140,7 +140,15 @@ function bajtova(rel: string): number {
 //   jednokratni `loadStripeModal()` uklonjen, `??=` uvoz stoji na jedinom mjestu poziva           -51
 //   neto                                                                                           -9
 // Tip je placen uklanjanjem funkcije koja je postojala za jedan poziv, ne dizanjem brojke.
-const BUDZET_APP = 357411;
+// Z32 "DA, SAMA" I NALAZI CODEX PREGLEDA (2026-09-28): 357411 -> 357398, dakle -13 B, izmjereno
+// (bajtovi bez CR). Racunica:
+//   osnova grane (b10e0b22)                                                                 357361
+//   Z32 popravak: brava iz app.ts u src/ui/confirmed-faculty.ts (applyFacultyIds)   -117 -> 357244
+//   nalazi Codex pregleda: uvoz potvrdjenFakultet i skrijNapomenu, setFile gasi napomenu
+//   (skrijNapomenu umjesto skrivanja znacke), C4 preskace detekciju samo bez brave, "Prebaci"
+//   ponovi detekciju umjesto slanja change obrascu                                  +154 -> 357398
+// Logika (brava, odluka uz sesiju, tekst napomene) zivi u confirmed-faculty.ts i intake-choice.ts.
+const BUDZET_APP = 357398;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
