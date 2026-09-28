@@ -33,7 +33,8 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readdirSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -106,6 +107,7 @@ import {
 } from '../src/report/webhook';
 import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
+import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
@@ -1048,6 +1050,38 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
+  {
+    id: 'agents/model-probe-prima-api-kljuc',
+    imitates: 'doctor ili fixture pokrenu Claude CLI s API kljucem u okolini, pa verifikacija modela tiho naplacuje po pozivu umjesto pretplate',
+    caught: () => { try { probeModel('claude-opus-5-5', { env: { ANTHROPIC_API_KEY: 'x' }, spawn: () => { throw new Error('poziv'); } }); return false; } catch (e) { return /API credentials/.test((e as Error).message); } },
+    cleanBefore: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-opus-5-5': { outputTokens: 1 } } }) }) }).ok,
+  },
+  {
+    id: 'agents/model-probe-broji-pomocni-model',
+    imitates: 'doctor proglasi model dostupnim jer je CLI pozvao samo pomocni model (modelMatches prihvaca bilo koji pogodak u modelUsage)',
+    caught: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-haiku-4-5-20251001': { outputTokens: 3 }, 'claude-opus-5-5': { outputTokens: 0 } } }) }) }).reason === 'model_not_called',
+    cleanBefore: () => probeModel('claude-opus-5-5', { env: {}, spawn: () => ({ status: 0, stderr: '', stdout: JSON.stringify({ subtype: 'success', is_error: false, result: 'OK', modelUsage: { 'claude-opus-5-5': { outputTokens: 2 } } }) }) }).ok,
+  },
+  {
+    id: 'agents/fixture-vjeruje-izmijenjenom-testu',
+    imitates: 'implementator u fixtureu prepise test tako da prolazi, a ocjenjivac mjeri njegovu verziju umjesto izvorne',
+    caught: () => {
+      const d = mkdtempSync(join(tmpdir(), 'lekta-gate-fixture-'));
+      writeFileSync(join(d, 'rimski.mjs'), FIXTURE_FILES['rimski.mjs']);
+      writeFileSync(join(d, 'rimski.test.mjs'), "import { test } from 'node:test'; for (const n of 'abcde') test(n, () => {});\n");
+      const g = gradeTests(d);
+      rmSync(d, { recursive: true, force: true });
+      return !g.ok && g.fail === 5;
+    },
+    cleanBefore: () => {
+      const d = mkdtempSync(join(tmpdir(), 'lekta-gate-fixture-'));
+      for (const [n, c] of Object.entries(FIXTURE_FILES)) writeFileSync(join(d, n), c);
+      const g = gradeTests(d);
+      rmSync(d, { recursive: true, force: true });
+      return g.pass === 0 && g.fail === 5;
+    },
+  },
   {
     id: 'upisnik/b15b-negacija',
     imitates: 'Uklanjanje provjere negacije prihvaca izjavu da se upute ne odnose na sve radove',
@@ -7563,10 +7597,11 @@ describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
 
     // MUTACIJA: implement uloga za M/nezasticeno prebacena na neverificiran model.
     const mutiran = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
-    mutiran.routing.M.false.roles.implement.model = 'claude-opus-5-5';
+    mutiran.models['claude-neverificiran-test'] = { status: 'unverified' };
+    mutiran.routing.M.false.roles.implement.model = 'claude-neverificiran-test';
     const problems = findUnverifiedModelUsages(mutiran);
     expect(problems.length).toBeGreaterThan(0);
-    expect(problems.some((problem) => problem.includes('claude-opus-5-5'))).toBe(true);
+    expect(problems.some((problem) => problem.includes('claude-neverificiran-test'))).toBe(true);
     expect(problems.some((problem) => problem.startsWith('M/false/implement'))).toBe(true);
   });
 
@@ -8234,14 +8269,15 @@ describe('mutacije: routing korak 2 (select-route)', () => {
   const izvedi = (code: string): SelectRoute => new Function(`${code}\nreturn selectRoute;`)() as SelectRoute;
   const configSUnverified = () => {
     const cfg = JSON.parse(readFileSync(resolve(process.cwd(), 'config/agent-routing.json'), 'utf8'));
-    cfg.routing.S.false.roles.implement.model = 'claude-opus-5-5';
+    cfg.models['claude-neverificiran-test'] = { input: 1, output: 1, status: 'unverified' };
+    cfg.routing.S.false.roles.implement.model = 'claude-neverificiran-test';
     return cfg;
   };
   /** Tvrdnja garda: neverificiran model iz configa nikad ne izlazi iz selectRoute. */
   const odbijaUnverified = (fn: SelectRoute): boolean => {
     try {
       const r = fn({ config: configSUnverified(), size: 'S', files: [], phase: 'implement' });
-      return r.model !== 'claude-opus-5-5';
+      return r.model !== 'claude-neverificiran-test';
     } catch {
       return true;
     }
@@ -8251,7 +8287,7 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     expect(odbijaUnverified(izvedi(blok))).toBe(true);
   });
 
-  it('mutant koji preskoci provjeru statusa vraca claude-opus-5-5 i gard ga hvata', () => {
+  it('mutant koji preskoci provjeru statusa vraca neverificiran model i gard ga hvata', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);

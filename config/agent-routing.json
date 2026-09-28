@@ -17,9 +17,10 @@
     "claude-opus-5-5": {
       "input": 4,
       "output": 20,
-      "status": "unverified",
+      "status": "verified",
+      "verifiedAt": "2026-09-28",
       "defaultEffort": "medium",
-      "note": "ulazi tek nakon doctor + fixture"
+      "note": "doctor --model i model-fixture prosli 28. 9. (docs/agents/reports/OPUS55_VERIFIKACIJA.md); dodjela ulogama je zaseban PR"
     },
     "claude-opus-5": {
       "input": 5,
