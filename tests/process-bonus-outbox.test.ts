@@ -200,24 +200,30 @@ describe('process-bonus-outbox: ishod dodjele nagrade (M2)', () => {
  * modula testira se laznim klijentom koji odgovara REDOM (bez table/op grananja): tocno onim redom
  * kojim tryGrantReferrerReward stvarno zove bazu.
  */
-function sequentialAdmin(odgovori: Array<{ data?: unknown; error?: unknown; count?: number }>) {
+function sequentialAdmin(
+  odgovori: Array<{ data?: unknown; error?: unknown; count?: number }>,
+  authResult: { data: { user: { is_anonymous: boolean } | null }; error: unknown } = { data: { user: { is_anonymous: false } }, error: null },
+) {
   const pozivi: string[] = [];
+  const poziviDetalji: Array<{ tablica: string; operacije: Array<{ metoda: string; argumenti: unknown[] }> }> = [];
   let i = 0;
   const lanac = (tablica: string) => {
     const builder: Record<string, unknown> = {};
-    for (const m of ['select', 'insert', 'update', 'eq', 'not', 'gte', 'maybeSingle', 'single']) {
-      builder[m] = () => builder;
+    const operacije: Array<{ metoda: string; argumenti: unknown[] }> = [];
+    for (const m of ['select', 'insert', 'update', 'eq', 'not', 'gte', 'is', 'maybeSingle', 'single']) {
+      builder[m] = (...argumenti: unknown[]) => { operacije.push({ metoda: m, argumenti }); return builder; };
     }
     // oxlint-disable-next-line unicorn/no-thenable
     builder.then = (ok: (v: unknown) => unknown, fail?: (e: unknown) => unknown) => {
       const r = odgovori[i] ?? { data: null, error: null };
       i += 1;
       pozivi.push(tablica);
+      poziviDetalji.push({ tablica, operacije });
       return Promise.resolve({ data: null, error: null, count: null, ...r }).then(ok, fail);
     };
     return builder;
   };
-  return { from: (tablica: string) => lanac(tablica), pozivi };
+  return { from: (tablica: string) => lanac(tablica), auth: { admin: { getUserById: async () => authResult } }, pozivi, poziviDetalji };
 }
 
 const SIGNUP = { id: 'signup-1', referrer_user_id: 'ref-1', referred_ip_hash: null };
@@ -225,13 +231,33 @@ const PRIJE_INSERTA = [
   { data: SIGNUP, error: null }, // referral_signups select (friend_rewarded)
   { data: [], error: null }, // report_generations (fraud provjera)
   { data: null, error: null, count: 0 }, // referral_signups count (mjesecni strop)
+  { data: { id: SIGNUP.id }, error: null }, // atomicno preuzimanje signupa za ovaj order
 ];
+const DUPLICATE_REWARD = { message: 'duplicate key value violates unique constraint "entitlements_provider_order_id_key"', code: '23505' };
 
 describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara idempotentno (M2)', () => {
+  it('anonimni kupac ne dodjeljuje preporucitelju placeno pravo', async () => {
+    const admin = sequentialAdmin([], { data: { user: { is_anonymous: true } }, error: null });
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ineligible_buyer' });
+    expect(admin.pozivi).toEqual([]);
+  });
+
+  it('pad provjere identiteta kupca ostavlja obvezu za retry', async () => {
+    const admin = sequentialAdmin([], { data: { user: null }, error: { message: 'auth down' } });
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'error' });
+    expect(admin.pozivi).toEqual([]);
+  });
+
+  it('odbijanje anonimnog kupca trajno zatvara obvezu bez nagrade', () => {
+    expect(referrerRewardSettlement({ granted: false, reason: 'ineligible_buyer' }))
+      .toEqual({ settled: true, reason: 'ineligible_buyer' });
+  });
   it('23505 na insert: postojece pravo se procita i referral_signups dovrsi (granted, idempotentno)', async () => {
     const admin = sequentialAdmin([
       ...PRIJE_INSERTA,
-      { data: null, error: { message: 'duplicate key', code: '23505' } }, // entitlements insert
+      { data: null, error: DUPLICATE_REWARD }, // entitlements insert
       { data: { id: 'ent-postojeci' }, error: null }, // entitlements select po order_id
       { data: null, error: null }, // referral_signups update (dovrsavanje)
     ]);
@@ -239,25 +265,105 @@ describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara ide
     expect(ishod).toEqual({ granted: true });
   });
 
-  it('23505, ali dovrsavanje azuriranja padne: trajni razlog already_granted (zatvara se kao done)', async () => {
+  it('23505, ali dovrsavanje azuriranja padne: ponovni pokusaj', async () => {
     const admin = sequentialAdmin([
       ...PRIJE_INSERTA,
-      { data: null, error: { message: 'duplicate key', code: '23505' } },
+      { data: null, error: DUPLICATE_REWARD },
       { data: { id: 'ent-postojeci' }, error: null },
       { data: null, error: { message: 'db down' } }, // update padne
     ]);
     const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
-    expect(ishod).toEqual({ granted: false, reason: 'already_granted' });
+    expect(ishod).toEqual({ granted: false, reason: 'error' });
   });
 
-  it('23505, ali postojece pravo se ne moze naci: already_granted (ne grant_failed u beskonacnost)', async () => {
+  it('23505, ali postojece pravo se ne moze naci: ponovni pokusaj', async () => {
     const admin = sequentialAdmin([
       ...PRIJE_INSERTA,
-      { data: null, error: { message: 'duplicate key', code: '23505' } },
+      { data: null, error: DUPLICATE_REWARD },
       { data: null, error: null }, // lookup ne nadje nista
     ]);
     const ishod = await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1');
-    expect(ishod).toEqual({ granted: false, reason: 'already_granted' });
+    expect(ishod).toEqual({ granted: false, reason: 'grant_failed' });
+  });
+
+  it.each([1, 2])('pad citanja prije inserta (%i) ne dodjeljuje nagradu', async (failedRead) => {
+    const replies = [...PRIJE_INSERTA];
+    replies[failedRead] = { data: null, error: { message: 'db down' } };
+    const admin = sequentialAdmin(replies);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'error' });
+    expect(admin.pozivi).not.toContain('entitlements');
+  });
+
+  it('23505 iz drugog ogranicenja bez nagradnog prava ostaje pending', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: null, error: { message: 'duplicate referral code', code: '23505' } },
+      { data: null, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'grant_failed' });
+  });
+
+  it('drugi order ne smije preuzeti signup koji je vec rezervirao prvi', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, converted_order_id: 'pi_first' }, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_second'))
+      .toEqual({ granted: false, reason: 'no_pending_referral' });
+    expect(admin.pozivi).toEqual(['referral_signups']);
+  });
+
+  it('izgubljena utrka pri preuzimanju signupa ne upisuje entitlement', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA.slice(0, 3),
+      { data: null, error: null }, // drugi order je preuzeo redak
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_second'))
+      .toEqual({ granted: false, reason: 'no_pending_referral' });
+    expect(admin.pozivi).not.toContain('entitlements');
+    const preuzimanje = admin.poziviDetalji.at(-1)!;
+    expect(preuzimanje.tablica).toBe('referral_signups');
+    expect(preuzimanje.operacije).toContainEqual({ metoda: 'eq', argumenti: ['status', 'friend_rewarded'] });
+    expect(preuzimanje.operacije).toContainEqual({ metoda: 'is', argumenti: ['converted_order_id', null] });
+  });
+
+  it('isti order moze dovrsiti nagradu nakon prekida poslije rezervacije', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, converted_order_id: 'pi_1' }, error: null },
+      ...PRIJE_INSERTA.slice(1, 3),
+      { data: { id: 'ent-svjez' }, error: null },
+      { data: null, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: true });
+    expect(admin.pozivi.filter((p) => p === 'referral_signups')).toHaveLength(3);
+  });
+
+  it('isti rezervirani order moze dovrsiti insert i kad drugi signup u meduvremenu popuni mjesecni strop', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, converted_order_id: 'pi_1' }, error: null },
+      { data: [], error: null },
+      { data: null, error: null, count: 10 },
+      { data: { id: 'ent-svjez' }, error: null },
+      { data: null, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: true });
+  });
+
+  it('mjesecni strop ne prepisuje rezervaciju drugog ordera u utrci', async () => {
+    const admin = sequentialAdmin([
+      { data: SIGNUP, error: null },
+      { data: [], error: null },
+      { data: null, error: null, count: 10 },
+      { data: null, error: null }, // CAS update vise ne nalazi slobodan signup
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_second'))
+      .toEqual({ granted: false, reason: 'no_pending_referral' });
+    expect(admin.pozivi).not.toContain('entitlements');
+    expect(admin.poziviDetalji.at(-1)?.operacije)
+      .toContainEqual({ metoda: 'is', argumenti: ['converted_order_id', null] });
   });
 
   it('negativna kontrola: svjez insert uspije, ali azuriranje referral_signups padne -> error (ne tihi granted:true)', async () => {
@@ -280,7 +386,7 @@ describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara ide
     expect(ishod).toEqual({ granted: true });
   });
 
-  it('already_granted je trajna odluka: referrerRewardSettlement je zatvara (done), ne ponavlja', () => {
-    expect(referrerRewardSettlement({ granted: false, reason: 'already_granted' })).toEqual({ settled: true, reason: 'already_granted' });
+  it('already_granted bez potvrdenog signupa nije trajna odluka', () => {
+    expect(referrerRewardSettlement({ granted: false, reason: 'already_granted' })).toEqual({ settled: false, reason: 'already_granted' });
   });
 });
