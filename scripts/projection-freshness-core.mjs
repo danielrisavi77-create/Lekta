@@ -51,6 +51,12 @@ export const PROJECTIONS = [
       'data/profiles/verified-profiles-index.json',
       'data/catalog/zagreb-catalog.json',
       'data/coverage/corpus-stats.json',
+      // Z15 (2026-09-27): rulesVersion i sourcesCheckedAt u SiteStats citaju ova dva artefakta
+      // (rulesVersionFromDisk i uvoz SCORED_COVERAGE u src/coverage/site-stats.ts), pa i njih
+      // pomak zaostaje bez ove dvije linije: "Stanje stola" bi nosilo pecenu vrijednost koja
+      // vise ne odgovara stvarnom stanju izvora.
+      'data/generated/profile-rules-server.json',
+      'data/coverage/scored-coverage.json',
       'src/coverage/site-stats.ts',
       'scripts/gen-site-stats.mts',
     ],
@@ -133,6 +139,8 @@ export const PROJECTIONS = [
       'data/declarations/declarations.json',
       // Od 2026-09-05 ledger cita i ovjeru dokaza na stvarnim radovima (generate-completion-ledger.mts).
       'data/verification/real-corpus-attestation.json',
+      // Od 2026-09-28 i zasebnu ovjeru nad radovima pretvorenim iz PDF-a (razina A-pdf); neobavezna.
+      'data/verification/pdf-corpus-attestation.json',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],
