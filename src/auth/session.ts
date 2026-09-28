@@ -54,6 +54,41 @@ function authHeaders(cfg: AuthConfig): Record<string, string> {
   };
 }
 
+/**
+ * Izvor captcha tokena (T89). Zadano je Cloudflare Turnstile iz `./captcha`, ucitan lijeno tek na
+ * prvom Auth pozivu. Bez `VITE_TURNSTILE_SITE_KEY` vraca `undefined` bez ikakvog DOM-a i mreze,
+ * pa tok radi kao prije. To je fail-open SAMO dok captcha nije ukljucen na Supabase Authu; kad je
+ * ukljucen, GoTrue odbija poziv bez tokena (redoslijed: docs/deploy/AUTH_CAPTCHA.md).
+ */
+export type CaptchaSource = () => Promise<string | undefined>;
+
+const turnstileCaptcha: CaptchaSource = async () => (await import('./captcha')).getCaptchaToken();
+
+async function captchaTokenFrom(source: CaptchaSource): Promise<string | undefined> {
+  try {
+    return (await source()) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Tijelo Auth poziva s captcha tokenom u obliku koji GoTrue ocekuje
+ * (`gotrue_meta_security.captcha_token`). Bez tokena tijelo ostaje nepromijenjeno.
+ * Svaki poziv koji GoTrue stiti captchom (signup, otp, token?grant_type=password, recover) MORA
+ * proci kroz ovu funkciju; gard je `tests/helpers/auth-captcha.ts`.
+ */
+export function withCaptcha(body: Record<string, unknown>, captchaToken: string | undefined): string {
+  return JSON.stringify(captchaToken ? { ...body, gotrue_meta_security: { captcha_token: captchaToken } } : body);
+}
+
+/** Uspjesan GoTrue token odgovor u sesiju; nevaljan oblik je neuspjeh, ne prazna sesija. */
+async function sessionFromResponse(res: Response, now: number): Promise<SessionResult> {
+  const session = parseTokenResponse(await res.json().catch(() => ({})), now);
+  if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
+  return { ok: true, session };
+}
+
 /** GoTrue token odgovor (snake_case) -> tipizirana Session. `now` za deterministicki istek. */
 export function parseTokenResponse(raw: unknown, now: number): Session | null {
   const data = (raw ?? {}) as Record<string, unknown>;
@@ -91,15 +126,17 @@ export async function requestEmailOtp(
   email: string,
   fetchImpl: typeof fetch = fetch,
   redirectTo?: string,
+  captcha: CaptchaSource = turnstileCaptcha,
 ): Promise<OtpResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   const clean = email.trim();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) return { ok: false, message: 'neispravan e-mail' };
+  const captchaToken = await captchaTokenFrom(captcha);
   try {
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/otp`, {
       method: 'POST',
       headers: authHeaders(cfg),
-      body: JSON.stringify({ email: clean, create_user: true, ...(redirectTo ? { redirect_to: redirectTo } : {}) }),
+      body: withCaptcha({ email: clean, create_user: true, ...(redirectTo ? { redirect_to: redirectTo } : {}) }, captchaToken),
     });
     if (res.ok) return { ok: true };
     if (res.status === 429) return { ok: false, message: 'previše pokušaja, pričekaj minutu' };
@@ -156,22 +193,22 @@ export async function signInAnonymously(
   cfg: AuthConfig,
   fetchImpl: typeof fetch = fetch,
   now: number = Date.now(),
+  captcha: CaptchaSource = turnstileCaptcha,
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  const captchaToken = await captchaTokenFrom(captcha);
   try {
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/signup`, {
       method: 'POST',
       headers: authHeaders(cfg),
-      body: '{}',
+      body: withCaptcha({}, captchaToken),
     });
     if (!res.ok) {
       // 422 = anonimne prijave nisu ukljucene na projektu (external_anonymous_users_enabled).
       if (res.status === 422) return { ok: false, message: 'anonimna prijava nije uključena' };
       return { ok: false, message: `anonimna prijava nije uspjela (${res.status})` };
     }
-    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
-    if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
-    return { ok: true, session };
+    return sessionFromResponse(res, now);
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
   }
@@ -189,23 +226,23 @@ export async function signInWithPassword(
   password: string,
   fetchImpl: typeof fetch = fetch,
   now: number = Date.now(),
+  captcha: CaptchaSource = turnstileCaptcha,
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   const clean = email.trim();
   if (!clean || !password) return { ok: false, message: 'unesi e-mail i lozinku' };
+  const captchaToken = await captchaTokenFrom(captcha);
   try {
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/token?grant_type=password`, {
       method: 'POST',
       headers: authHeaders(cfg),
-      body: JSON.stringify({ email: clean, password }),
+      body: withCaptcha({ email: clean, password }, captchaToken),
     });
     if (!res.ok) {
       if (res.status === 400 || res.status === 401) return { ok: false, message: 'e-mail ili lozinka nisu točni' };
       return { ok: false, message: `prijava nije uspjela (${res.status})` };
     }
-    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
-    if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
-    return { ok: true, session };
+    return sessionFromResponse(res, now);
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
   }
