@@ -188,6 +188,8 @@ import {
 } from './helpers/opportunity-wiring';
 import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
+import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
 import {
   backdropFilterProblems,
   chromeGraph,
@@ -8402,5 +8404,42 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
       return { ...h, analysis: h.kind };
     };
     expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
+  });
+});
+
+describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', () => {
+  const wrapper = readTextLf(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'));
+  type Fn = typeof weakMachineWorkerEnv;
+
+  it('BASELINE: stvarna funkcija i stvarni omotac su cisti', () => {
+    expect(weakMachineProblems(weakMachineWorkerEnv)).toEqual([]);
+    expect(weakMachineWiringProblems(wrapper)).toEqual([]);
+  });
+
+  it('mutant: gazi vec postavljen VITEST_MAX_THREADS se hvata', () => {
+    const gazi: Fn = (input) => weakMachineWorkerEnv({ ...input, env: { ...input?.env, VITEST_MAX_THREADS: undefined } });
+    expect(weakMachineProblems(gazi)).toEqual([
+      'slab stroj, VITEST_MAX_THREADS vec 3: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+    ]);
+  });
+
+  it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
+    const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
+    expect(weakMachineProblems(samoJezgre)).toEqual([
+      '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+    expect(weakMachineProblems(stroga)).toEqual([
+      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: omotac ne primjenjuje presudu na dijete se hvata', () => {
+    const mutant = wrapper.replace('Object.assign(childEnv, workers);', '');
+    expect(mutant).not.toBe(wrapper);
+    expect(weakMachineWiringProblems(mutant)).toEqual(['with-gate-lock: presuda se ne primjenjuje na dijete']);
   });
 });
