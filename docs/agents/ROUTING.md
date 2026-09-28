@@ -67,6 +67,9 @@ Redoslijed po ulozi (nizi prema visem): `brief`/`scout`/`gate` su `low`, `review
 `medium`, `implement` je `high`, a `implement` u zasticenom podrucju je `xhigh`
 (`implementProtected`).
 
+Spustanje efforta na medium vrijedi tek kad implementator bude na verificiranom Opusu 5.5; do tada
+high/xhigh ostaju.
+
 ## Pravilo drugog providera
 
 Recenzent nikad nije isti provider kao implementator (`review.provider !== implement.provider`
