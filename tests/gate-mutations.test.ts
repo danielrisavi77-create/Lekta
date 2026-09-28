@@ -566,6 +566,17 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
+
+function upisnikScopeFixture(sourceUrl: string, quote: string) {
+  const profileUrl = 'https://pmf.unizg.hr/upute';
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+    [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: profileUrl }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote } }],
+  );
+}
+
 function upisnikRitehRootFixture(sourceUrl: string) {
   return buildUpisnikProfileCandidates(
     [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
@@ -850,7 +861,82 @@ function z15bTintaProblemi(ts: string): string[] {
   return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
+type UpisnikScopePredicate = (quote: string) => boolean;
+type UpisnikSourceNormalizer = (url: string) => string | null;
+
+function upisnikScopeFromSource(source: string): UpisnikScopePredicate | null {
+  return funkcijaIzIzvora<UpisnikScopePredicate>(
+    source.replace('function wholeWorkScopeStatement(', 'export function wholeWorkScopeStatement('),
+    'wholeWorkScopeStatement',
+  );
+}
+
+function upisnikSourceNormalizerFromSource(source: string): UpisnikSourceNormalizer | null {
+  return funkcijaIzIzvora<UpisnikSourceNormalizer>(
+    source.replace('function comparableProfileSourceUrl(', 'export function comparableProfileSourceUrl('),
+    'comparableProfileSourceUrl',
+  );
+}
+
+const upisnikCandidateSource = (): string => readTextLf(resolve(process.cwd(), 'src/programs/upisnik-profile-candidates.ts'));
+
 const MUTATIONS: Mutation[] = [
+  {
+    id: 'upisnik/b15b-negacija',
+    imitates: 'Uklanjanje provjere negacije prihvaca izjavu da se upute ne odnose na sve radove',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('ove upute ne odnose se na sve studentske radove') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(ne|nisu|nije)\\b/u.test(scopeMatch[2] + scopeMatch[4])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('ove upute ne odnose se na sve studentske radove') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-iznimka',
+    imitates: 'Uklanjanje provjere iznimke prihvaca sve studentske radove osim diplomskih',
+    cleanBefore: () => upisnikScopeFromSource(upisnikCandidateSource())?.('upute se odnose na sve studentske radove osim diplomskih') === false,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('    && !/\\b(osim|izuzev)\\b/u.test(scopeMatch[11])\n', '');
+      return mutant !== source && upisnikScopeFromSource(mutant)?.('upute se odnose na sve studentske radove osim diplomskih') === true;
+    },
+  },
+  {
+    id: 'upisnik/b15b-http-https',
+    imitates: 'Uklanjanje normalizacije sheme ponovno razdvaja HTTP profil EFST od HTTPS dokaza',
+    cleanBefore: () => {
+      const normalize = upisnikSourceNormalizerFromSource(upisnikCandidateSource());
+      return normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf') != null
+        && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        === normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace("return url.hostname.toLowerCase()", "return url.protocol + url.hostname.toLowerCase()");
+      const normalize = upisnikSourceNormalizerFromSource(mutant);
+      return mutant !== source && normalize?.('http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf')
+        !== normalize?.('https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf');
+    },
+  },
+
+  {
+    id: 'upisnik/b15-izvor-profila',
+    imitates: 'Izjava o svim radovima s druge stranice iste domene prolazi bez vezanog izvora profila',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/druge-upute', 'Upute se odnose na sve kategorije studentskih radova'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b15-samo-radovi',
+    imitates: 'Slaba izjava za sve studente prolazi kao izjava o svim vrstama radova',
+    cleanBefore: () => upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute se odnose na sve kategorije studentskih radova').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikScopeFixture('https://pmf.unizg.hr/upute', 'Upute vrijede za sve studente'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
   {
     id: 'upisnik/b13-korijen-rijeci',
     imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
