@@ -113,7 +113,7 @@ import {
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
-import { adversarialInputs, legacyExtractFingerprintInputFromDocx } from './helpers/fingerprint-legacy';
+import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
@@ -8906,20 +8906,30 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
 });
 
 describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
-  // Gard je vremenski prag nad ulazom koji je za regex kvadratan. Mutant je doslovna stara regex
-  // izvedba: na ~44 KB `<w:style ` bez `>` treba stotine ms (7,2 s na 176 KB), linearna ispod 100.
-  const [napad] = adversarialInputs(5000);
-  const trajanje = (fn: (d: string, s: string) => unknown) => {
-    const t0 = performance.now();
-    fn(napad.documentXml, napad.stylesXml);
-    return performance.now() - t0;
-  };
-
-  it('BASELINE: linearni skener prolazi ispod 100 ms', () => {
-    expect(trajanje(extractFingerprintInputFromDocx)).toBeLessThan(100);
+  // Gard je brojac rada u skeneru (deterministicki, Codex R2 na #230) nad svih 11 napada, n i 2n.
+  // Mutanti su zamjene u STVARNOM izvoru skenera: forward finder koji ne pamti poziciju, i matcher
+  // stila koji zadnji `</w:style>` trazi iznova za svaku pojavu. Svaki mutant hvataju upravo napadi
+  // koji ciljaju taj pokazivac; ostali napadi ostaju cisti, pa tvrdnja nije "nesto je palo".
+  it('BASELINE: stvarni skener je linearan na svih 11 napada', () => {
+    expect(linearnostProblemi(extractFingerprintInputFromDocx, 2000)).toEqual([]);
   });
 
-  it('mutant: stara regex izvedba probija prag', () => {
-    expect(trajanje(legacyExtractFingerprintInputFromDocx)).toBeGreaterThan(100);
+  it('mutant: forward finder bez pamcenja pozicije se hvata', () => {
+    const mutant = mutiraniSkener('    if (cached >= from) return cached;\n', '');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:name bez > u stilu',
+      'document: <w:pStyle bez > u odlomku',
+      'document: <w:t bez > u odlomku',
+      'styles: vise styleId u tagu bez >',
+    ]);
+  });
+
+  it('mutant: matcher stila bez pamcenja zadnjeg </w:style> se hvata', () => {
+    const mutant = mutiraniSkener('        if (lastClose === null) {', '        if (true) {');
+    expect(linearnostProblemi(mutant, 2000)).toEqual([
+      'styles: <w:style styleId bez zatvaranja',
+      'styles: vise styleId u tagu bez >',
+      'styles: > u navodnicima bez zatvaranja',
+    ]);
   });
 });
