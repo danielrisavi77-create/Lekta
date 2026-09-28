@@ -1,0 +1,28 @@
+{
+  "source": {
+    "id": "efzg-upute-specijalisticki-2021",
+    "url": "https://www.efzg.unizg.hr/userdocsimages/PDS/Upute_za_izradu_pisanih_radova_na_SS%20studiju.pdf",
+    "fetchedAt": "2026-07-03",
+    "snapshotHash": "41b9dc41a63ecedd982c152060d699862cac08d1b1a0349737ab5580454d5055",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\efzg-upute-specijalisticki-2021.txt"
+  },
+  "rules": [
+    {
+      "profileId": "efzg-specijalisticki",
+      "ruleId": "efzg-specijalisticki--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "str. 13 (poglavlje \"3. PRAVILA I UPUTE ZA PISANJE RADOVA\")",
+      "quote": "Radovi se pišu na papiru formata A4 (210 mm x 297 mm), vrsta fonta Calibri ili Times New Roman, veličina fonta 12, margine 2,5 cm sa svih strana, poravnanje na obje strane i prored 1,5.",
+      "valueShape": "string",
+      "contexts": [
+        "je mentora za postavljanje pitanja i rješavanje nejasnoća/problema na koje naiđe tijekom izrade rada. 2.3. Pregled seminarskog rada i upis ocjene u indeks Nakon što je student završio pisanje seminarskog rada, isti predaje mentoru na pregled. U dogovoru s mentorom rad se predaje u fizičkom (isprintana verzija) ili elektroničkom (npr. e- mailom, USB-om i sl.) obliku. Nakon što mentor pročita rad, daje povratne informacije studentu na konzultacijama ili putem e-maila temeljem kojih student popravlja rad. Taj se postupak ponavlja dokle god mentor ne odobri konačnu verziju rada. Tada, prema uputama mentora, student na konzultacije mentora donosi konačnu verziju spiralno uvezanog seminarskog rada (u dogovoru s mentorom umjesto spiralno uvezane konačne verzije rada, student istu može predati kao elektroničku verziju putem e-maila, na USB-u i sl.), popunjenu prijavnicu za seminarski rad (kupuje se u Skriptarnici Ekonomskog fakulteta - Zagreb) i indeks. Mentor upisuje ocjenu u indeks i prijavnicu koju potom dostavlja u Referadu. 11 3. PRAVILA I UPUTE ZA PISANJE RADOVA Radovi se pišu u trećem licu jednine. Tekst treba biti pravopisno i gramatički ispravan, jasan i bez tiskarskih pogrešaka. Radovi se pišu na papiru formata A4 (210 mm x 297 mm), vrsta fonta Calibri ili Times New Roman, veličina fonta 12, margine 2,5 cm sa svih strana, poravnanje na obje strane i prored 1,5. Stranice radova trebaju biti numerirane. Stranice prije uvoda se numeriraju rimskim brojevima počevši s brojem jedan. Prva stranica uvoda se numerira s arapskim brojem jedan i tako u kontinuitetu do posljednje stranice rada. Svako poglavlje rada treba započeti na novoj stranici, a potpoglavlja se pišu u kontinuitetu bez prekida stranica. Tekst svake stranice treba biti logično raščlanjen u odlomke. Odlomci se odvajaju praznim redom. Početak odlomka se ne uvlači. U radovima se uvijek treba označiti kada se preuzima tuđi tekst, spoznaje i/ili podaci. Upućivanje na tuđe radove u tekstu treba biti uređeno prema formatu „autor (godina)“ primjenom APA ili Harvardskog stila citiranja. Upute o stilu citiranja mogu se pronaći na internetskim stranicama Knjižnice. Važne informacije moguće je pronaći na sljedećim internetskim stranicama:  Informacije o sveučilišnim specijalističkim studijima (https://www.efzg.unizg.hr/studiji-29719/sveučilišni-specijalisticki-studiji/22359)  Akti Ekonomskog fakulteta – Zagreb značajni za studente (http://www.efzg.unizg.hr/default.aspx?id=12978)  Knjižnično dokumentacijski centar (http://www.efzg.unizg.hr/za-studente- 29717/knjiznicno-dokumentacijski-centa"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

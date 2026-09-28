@@ -1,0 +1,54 @@
+{
+  "source": {
+    "id": "agr-upute-doktorski-2026",
+    "url": "https://www.agr.unizg.hr/upload/nastava/dr_08_upute_za_oblikovanje_doktorskog_rada_20260512.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "7d88702516094d932f4eac67a91bf49d8119c214cc6aa56f03954b4e9bcd0f4c",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\agr-upute-doktorski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak",
+      "valueShape": "number",
+      "contexts": [
+        "SVEUČILIŠTE U ZAGREBU DR.08 Upute za oblikovanje doktorskoga rada Upute za oblikovanje doktorskoga rada Doktorski se rad može pisati na hrvatskom, engleskom ili drugom jeziku koji je predviđen elaboratom doktorskog studija. - Tekst doktorskoga rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. - Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm). o preporuča se nazive poglavlja pisati velikim podebljanim (bold) slovima, a nazive potpoglavlja kurzivom. - Tekst treba biti logično razdijeljen u odjeljke. - Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se piše u donjem desnom kutu. - Predani rad treba biti uvezan. Postavke stranice - Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times New Roman) - Veličina pisma: 12 tipografskih točaka - Prored: 1,5 redak 1 - Lijeva i desna margina: 2,5 cm - Gornja i donja margina: 2,5 cm - Naslovnica ima drugačije margine! - Izgled korica – Hrbat: ime autora godina obrane doktorski rad Ilustracije (tablice i slike) - Sve tablice i slike (grafikoni, fotografije, crteži, sheme, dijagrami, histogrami, karte...) trebaju imati odgovarajući naslov i biti numerirane. - Brojevi i naslovi tablica nalaze se uvijek iznad tablica. - Brojevi i naslovi slika nalaze se uvijek ispod slika. - Ako ilustracija nije izvoran doprinos autora obavezno je navođenje izvora (ako je ilustracija već objavljena), odnosno autora (ako ilustracija još nije objavljena) od kojeg je preuzeta. Izvor se navodi neposredno ispod ilustracije. - Ako je ilustracija reprodukcija umjetničkog djela, navodi se autor (ako je poznat), naslov te ostali nužni podaci relevantni za pojedine umjetničke vrste. - Opće pravilo je da se u svim pisanim radovima uvijek jasno mora odvojiti tuđi tekst, tuđe spoznaje i tuđi podaci od autorova teksta, njegovih zaključaka, spoznaja, ideja, podataka i sl. Od drugih se autora mogu preuzeti manji dijelovi teksta, ali se to uvijek mora označiti na jasan i uobičajen način. Detaljne upute o pisanju radova, citiranju"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Opce upute",
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada",
+      "valueShape": "boolean",
+      "contexts": [
+        "SVEUČILIŠTE U ZAGREBU DR.08 Upute za oblikovanje doktorskoga rada Upute za oblikovanje doktorskoga rada Doktorski se rad može pisati na hrvatskom, engleskom ili drugom jeziku koji je predviđen elaboratom doktorskog studija. - Tekst doktorskoga rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. - Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm). o preporuča se nazive poglavlja pisati velikim podebljanim (bold) slovima, a nazive potpoglavlja kurzivom. - Tekst treba biti logično razdijeljen u odjeljke. - Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se piše u donjem desnom kutu. - Predani rad treba biti uvezan. Postavke stranice - Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times New Roman) - Veličina pisma: 12 tipografskih točaka - Prored: 1,5 redak 1 - Lijeva i desna margina: 2,5 cm - Gornja i donja margina: 2,5 cm - Naslovnica ima drugačije margine! - Izgled korica – Hrbat: ime autora godina obrane doktorski rad Ilustracije (tablice i slike) - Sve tablice i slike (grafikoni, fotografije, crteži, sheme, dijagrami, histogrami, karte...) trebaju imati odgovarajući naslov i biti numerirane. - Brojevi i naslovi tablica nalaze se uvijek iznad tablica. - Brojevi i naslovi slika nalaze se uvijek ispod slika. - Ako ilustracija nije izvoran doprinos autora obavezno je navođenje izvora (ako je ilustracija već objavljena), odnosno autora (ako ilustracija još nije objavljena) od kojeg je preuzeta. Izvor se navodi neposredno ispod ilustracije. - Ako je ilustracija reprodukcija umjetničkog djela, navodi se autor (ako je poznat), naslov te ostali nužni podaci relevantni za pojedine umjetničke vrste. - Opće pravilo je da se u svim pisanim radovima uvijek jasno mora odvojiti tuđi tekst, tuđe spoznaje i tuđi p"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak Opce upute",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm)",
+      "valueShape": "string",
+      "contexts": [
+        "SVEUČILIŠTE U ZAGREBU DR.08 Upute za oblikovanje doktorskoga rada Upute za oblikovanje doktorskoga rada Doktorski se rad može pisati na hrvatskom, engleskom ili drugom jeziku koji je predviđen elaboratom doktorskog studija. - Tekst doktorskoga rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. - Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm). o preporuča se nazive poglavlja pisati velikim podebljanim (bold) slovima, a nazive potpoglavlja kurzivom. - Tekst treba biti logično razdijeljen u odjeljke. - Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se piše u donjem desnom kutu. - Predani rad treba biti uvezan. Postavke stranice - Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times New Roman) - Veličina pisma: 12 tipografskih točaka - Prored: 1,5 redak 1 - Lijeva i desna margina: 2,5 cm - Gornja i donja margina: 2,5 cm - Naslovnica ima drugačije margine! - Izgled korica – Hrbat: ime autora godina obrane doktorski rad Ilustracije (tablice i slike) - Sve tablice i slike (grafikoni, fotografije, crteži, sheme, dijagrami, histogrami, karte...) trebaju imati odgovarajući naslov i biti numerirane. - Brojevi i naslovi tablica nalaze se uvijek iznad tablica. - Brojevi i naslovi slika nalaze se uvijek ispod slika. - Ako ilustracija nije izvoran doprinos autora obavezno je navođenje izvora (ako je ilustracija već objavljena), odnosno autora (ako ilustracija još nije objavljena) od kojeg je preuzeta. Izvor se navodi neposredno ispod ilustracije. - Ako je ilustracija repro"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

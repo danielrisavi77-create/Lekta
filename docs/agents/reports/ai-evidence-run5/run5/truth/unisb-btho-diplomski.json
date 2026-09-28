@@ -1,0 +1,36 @@
+{
+  "unisb-btho-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "recommendation",
+    "scope": "body"
+  },
+  "unisb-btho-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "unisb-btho-diplomski--line-spacing": {
+    "value": 1,
+    "modality": "recommendation",
+    "scope": "body"
+  },
+  "unisb-btho-diplomski--margins": {
+    "value": {
+      "top": 2,
+      "right": 2,
+      "bottom": 2,
+      "left": 2.5
+    },
+    "modality": "recommendation",
+    "scope": "whole"
+  },
+  "unisb-btho-diplomski--paper-size": {
+    "value": true,
+    "modality": null,
+    "scope": null
+  }
+}

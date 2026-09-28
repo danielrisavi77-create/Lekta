@@ -1,0 +1,26 @@
+﻿{
+  "sourceId": "unizd-klasicna-filologija-upute-2021",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "ruleId": "unizd-klasicna-filologija-diplomski--footnote-size",
+      "value": [10],
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "– Veličina pisma (fonta):\n                    • naslovi u radu: 14 tipografskih točka\n                    • podnaslovi u radu: 12 tipografskih točaka\n                    • tijelo teksta: 12 tipografskih točaka\n                    • broj stranica: 12 tipografskih točaka\n                    • izdvojeni citati zajedno s prijevodom: 10 tipografskih točaka\n                    • podnožne bilješke (fusnote): 10 tipografskih točaka\n                    • naslovi tablica, grafikona i sl.: 10 tipografskih točaka",
+      "note": "Izvor navodi 10 tipografskih točaka za fusnote u natuknici, pa vrijednost je [10], modalitet je directive, a opseg je footnote."
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "ruleId": "unizd-klasicna-filologija-zavrsni--footnote-size",
+      "value": [10],
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "– Veličina pisma (fonta):\n                    • naslovi u radu: 14 tipografskih točka\n                    • podnaslovi u radu: 12 tipografskih točaka\n                    • tijelo teksta: 12 tipografskih točaka\n                    • broj stranica: 12 tipografskih točaka\n                    • izdvojeni citati zajedno s prijevodom: 10 tipografskih točaka\n                    • podnožne bilješke (fusnote): 10 tipografskih točaka\n                    • naslovi tablica, grafikona i sl.: 10 tipografskih točaka",
+      "note": "Izvor navodi 10 tipografskih točaka za fusnote u natuknici, pa vrijednost je [10], modalitet je directive, a opseg je footnote."
+    }
+  ]
+}

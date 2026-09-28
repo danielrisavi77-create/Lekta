@@ -1,0 +1,160 @@
+{
+    "sourceId":  "vuka-poslovni-upute",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "vuka-poslovni-diplomski",
+                      "ruleId":  "vuka-poslovni-diplomski--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je: odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+                      "note":  "Tekstu je zadana veličina 12; izraz „potrebno je” daje direktivu, a riječ „teksta” određuje opseg tijela rada."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-diplomski",
+                      "ruleId":  "vuka-poslovni-diplomski--heading-rules",
+                      "value":  {
+                                    "levels":  {
+                                                   "1":  {
+                                                             "bold":  true,
+                                                             "size":  16,
+                                                             "uppercase":  true
+                                                         },
+                                                   "2":  {
+                                                             "bold":  true,
+                                                             "size":  14,
+                                                             "uppercase":  false
+                                                         },
+                                                   "3":  {
+                                                             "bold":  true,
+                                                             "size":  12,
+                                                             "uppercase":  false
+                                                         }
+                                               }
+                                },
+                      "modality":  "directive",
+                      "scope":  "heading",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima.",
+                      "note":  "Odlomak zadaje razine naslova, podebljanje, veličine i velika ili mala slova; „potrebno je” daje direktivu, a opseg je naslovi."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-diplomski",
+                      "ruleId":  "vuka-poslovni-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+                      "note":  "Rečenica navodi prored 1,5 u direktivnom indikativu; prored se odnosi na tijelo rada."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-opci-akademski-rad",
+                      "ruleId":  "vuka-poslovni-opci-akademski-rad--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je: odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+                      "note":  "Tekstu je zadana veličina 12; izraz „potrebno je” daje direktivu, a riječ „teksta” određuje opseg tijela rada."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-opci-akademski-rad",
+                      "ruleId":  "vuka-poslovni-opci-akademski-rad--heading-rules",
+                      "value":  {
+                                    "levels":  {
+                                                   "1":  {
+                                                             "bold":  true,
+                                                             "size":  16,
+                                                             "uppercase":  true
+                                                         },
+                                                   "2":  {
+                                                             "bold":  true,
+                                                             "size":  14,
+                                                             "uppercase":  false
+                                                         },
+                                                   "3":  {
+                                                             "bold":  true,
+                                                             "size":  12,
+                                                             "uppercase":  false
+                                                         }
+                                               }
+                                },
+                      "modality":  "directive",
+                      "scope":  "heading",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima.",
+                      "note":  "Odlomak zadaje razine naslova, podebljanje, veličine i velika ili mala slova; „potrebno je” daje direktivu, a opseg je naslovi."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-opci-akademski-rad",
+                      "ruleId":  "vuka-poslovni-opci-akademski-rad--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+                      "note":  "Rečenica navodi prored 1,5 u direktivnom indikativu; prored se odnosi na tijelo rada."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-zavrsni",
+                      "ruleId":  "vuka-poslovni-zavrsni--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je: odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+                      "note":  "Tekstu je zadana veličina 12; izraz „potrebno je” daje direktivu, a riječ „teksta” određuje opseg tijela rada."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-zavrsni",
+                      "ruleId":  "vuka-poslovni-zavrsni--heading-rules",
+                      "value":  {
+                                    "levels":  {
+                                                   "1":  {
+                                                             "bold":  true,
+                                                             "size":  16,
+                                                             "uppercase":  true
+                                                         },
+                                                   "2":  {
+                                                             "bold":  true,
+                                                             "size":  14,
+                                                             "uppercase":  false
+                                                         },
+                                                   "3":  {
+                                                             "bold":  true,
+                                                             "size":  12,
+                                                             "uppercase":  false
+                                                         }
+                                               }
+                                },
+                      "modality":  "directive",
+                      "scope":  "heading",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima.",
+                      "note":  "Odlomak zadaje razine naslova, podebljanje, veličine i velika ili mala slova; „potrebno je” daje direktivu, a opseg je naslovi."
+                  },
+                  {
+                      "profileId":  "vuka-poslovni-zavrsni",
+                      "ruleId":  "vuka-poslovni-zavrsni--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+                      "note":  "Rečenica navodi prored 1,5 u direktivnom indikativu; prored se odnosi na tijelo rada."
+                  }
+              ]
+}

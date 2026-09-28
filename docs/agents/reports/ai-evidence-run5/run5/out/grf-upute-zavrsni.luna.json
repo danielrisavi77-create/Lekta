@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "grf-upute-zavrsni",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Pismo: Times New Roman",
+      "note": "Vrijednost je doslovno navedeno pismo, goli iskaz daje direktivni modalitet, a pravilo se odnosi na tekst rada."
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "U prijelomu teksta osnovno pismo je Times New Roman 12 pt, a izgled stranice je takav da se naslovi poglavlja pišu polumasno i verzal, a podnaslovi kurent.",
+      "note": "Osnovno pismo iznosi 12 pt, rečenica je direktivni iskaz, a osnovno pismo odnosi se na tijelo teksta."
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored: 1,5 redak",
+      "note": "Izvor navodi prored 1,5, stavka je gola direktiva, a prored pripada tijelu teksta."
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--margins",
+      "value": { "bottom": 2, "left": 3.5, "right": 2.5, "top": 2 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm",
+      "note": "Vezna margina iznosi 3,5 cm, vanjski rub 2,5 cm, a glava i noge odgovaraju gornjoj i donjoj vrijednosti od 2 cm; stavka je direktiva za cijeli rad."
+    }
+  ]
+}

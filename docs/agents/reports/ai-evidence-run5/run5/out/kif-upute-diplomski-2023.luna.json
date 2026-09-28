@@ -1,0 +1,77 @@
+{
+    "sourceId":  "kif-upute-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "kif-diplomski",
+                      "ruleId":  "kif-diplomski--citation-style",
+                      "value":  "apa",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Na Kineziološkom fakultetu koristi se American Psychological Association APA stil citiranja.",
+                      "note":  "Izvor izričito navodi APA stil, što odgovara dopuštenoj vrijednosti apa; goli navod daje direktivu za citiranje u radu."
+                  },
+                  {
+                      "profileId":  "kif-diplomski",
+                      "ruleId":  "kif-diplomski--reference-count",
+                      "value":  20,
+                      "modality":  "directive",
+                      "scope":  "bibliography",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "minimalno 20 referenci",
+                      "note":  "Izraz minimalno određuje broj od 20 referenci kao minimum popisa literature."
+                  },
+                  {
+                      "profileId":  "kif-diplomski",
+                      "ruleId":  "kif-diplomski--word-count",
+                      "value":  {
+                                    "min":  4000
+                                },
+                      "modality":  "prohibition",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Opseg ne smije biti manji od 4000 riječi, odnosno 15 kartica teksta (jedna kartica = 1800 znakova)",
+                      "note":  "Za znanstveno-istraživački diplomski rad izvor zabranjuje opseg manji od 4000 riječi."
+                  },
+                  {
+                      "profileId":  "kif-specijalisticki",
+                      "ruleId":  "kif-specijalisticki--margins",
+                      "value":  {
+                                    "bottom":  2.5,
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Margine 2,5 cm sa svake strane",
+                      "note":  "Izvor propisuje 2,5 cm na sve četiri strane, a oblikovanje je opće za rad."
+                  },
+                  {
+                      "profileId":  "kif-specijalisticki",
+                      "ruleId":  "kif-specijalisticki--page-numbers",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Uvod je prva stranica na kojoj se mora naći napisana numeracija",
+                      "note":  "Rečenica nalaže numeraciju najkasnije od uvoda, pa je numeriranje stranica obvezno u radu."
+                  },
+                  {
+                      "profileId":  "kif-specijalisticki",
+                      "ruleId":  "kif-specijalisticki--reference-count",
+                      "value":  20,
+                      "modality":  "directive",
+                      "scope":  "bibliography",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "minimalno 20 referenci",
+                      "note":  "Izvor postavlja minimum od 20 referenci u popisu korištene literature."
+                  }
+              ]
+}

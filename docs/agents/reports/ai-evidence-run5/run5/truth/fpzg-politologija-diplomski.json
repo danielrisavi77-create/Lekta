@@ -1,0 +1,53 @@
+{
+  "fpzg-politologija-diplomski--bibliography-rules": {
+    "value": {
+      "sort": "alphabetical",
+      "authorYearSuffixes": true
+    },
+    "modality": "directive",
+    "scope": "bibliography"
+  },
+  "fpzg-politologija-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-politologija-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-politologija-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-politologija-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-politologija-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "fpzg-politologija-diplomski--section-surgery-rules": {
+    "value": {
+      "frontMatter": {
+        "numbering": "roman",
+        "removePageNumberFromTitlePage": true
+      },
+      "mainMatter": {
+        "numbering": "decimal",
+        "startAt": 1
+      }
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "pmf-geog-upute-diplomski-2026",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--citation-style",
+      "value": "harvard",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Literatura se citira prema harvardskom sustavu.",
+      "note": "Izvor izričito propisuje harvardski sustav citiranja, a os citatnog stila odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.",
+      "note": "Rečenica određuje margine od 2,5 cm sa svih strana, a margine se odnose na cijeli dokument."
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba oblikovati kao dokument formata A4.",
+      "note": "Izvor navodi format A4, a format papira odnosi se na cijeli dokument."
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--required-sections",
+      "value": ["Uvod", "Pregled dosadašnjih istraživanja i literature", "Teorijski pristup", "Metode istraživanja", "Rezultati", "Rasprava", "Zaključak", "Literatura i izvori"],
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi poglavlja. Uvod: sažeto definirati objekt, prostorni i vremenski obuhvat teme istraživanja. U zasebnom odlomku jasno iskazati polazne hipoteze i cilj istraživanja. Prva stranica Uvoda nosi arapski broj 1. Pregled dosadašnjih istraživanja i literature: aktualan pregled znanja (znanstvenih i stručnih radova) o užem području rada. Teorijski pristup: pristup istraživanju s teorijskog aspekta na temelju pročitane literature, logično strukturiran po poglavljima relevantnim za rad. Metode istraživanja: metode prikupljanja i analize podataka; izvori podataka. Rezultati: Iznose se rezultati vlastitog rada, praćeni objašnjenima te tabličnim i grafičkim prilozima. Ovaj se dio može podijeliti u više logičkih cjelina (poglavlja). Usporedba s rezultatima drugih autora (iz literature) piše se u Raspravi. Rasprava: Kritička usporedba rezultata vlastitog rada i spoznaja iz literature. Zaključak: Sažeta sinteza najvažnijih spoznaja u radu. Zaključak sadržava najvažnija rješenja postavljenog problema te osvrt na ispunjenost ciljeva i hipoteza definiranih u Uvodu. Zaključak nije sažetak rada i nije isto što i Izvadak koji se piše u Temeljnoj dokumentacijskoj kartici. Literatura i izvori: Piše se na kraju rada, ali ne numerira se kao poglavlje.",
+      "note": "Izvor označuje popisane dijelove kao obvezne i zatim ih navodi, pa je vrijednost njihov skup, obveza izričita, a struktura vrijedi za cijeli rad."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "accepted": [
+    "pravo-socijalni-rad-zavrsni--line-spacing"
+  ],
+  "refuted": [
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+      "reason": "Cijeli dokument je naslovljen 'UPUTE ZA IZRADU ZAVRŠNOG RADA' za Sveučilišni prijediplomski studij Socijalni rad i tekst spominje da studenti prije toga izraduju i seminarske radove kao odvojenu obavezu. Profil 'pravo-socijalni-opci-akademski-rad' je siri/opci profil koji nije ogranicen na zavrsni rad, pa primjena ove zavrsni-rad-specificne odredbe o proredu na taj siri profil je opseg koji izvor ne pokriva."
+    }
+  ]
+}

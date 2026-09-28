@@ -1,0 +1,1990 @@
+[
+    {
+        "sourceId":  "adu-montaza-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  5,
+                     "matchedRuleIds":  [
+                                            "adu-montaza-diplomski--font",
+                                            "adu-montaza-diplomski--font-size",
+                                            "adu-montaza-diplomski--line-spacing",
+                                            "adu-montaza-diplomski--margins",
+                                            "adu-montaza-diplomski--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "adu-montaza-diplomski/adu-montaza-diplomski--paper-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "adu-montaza-diplomski--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "adu-montaza-diplomski/adu-montaza-diplomski--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "adu-montaza-diplomski--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "28,017",
+        "solTokens":  "13,305"
+    },
+    {
+        "sourceId":  "agr-upute-doktorski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "agr-doktorski--line-spacing",
+                                            "agr-doktorski--page-numbers",
+                                            "agr-doktorski--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "18,688",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "algebra-pravilnik-radovi-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "algebra-diplomski--word-count",
+                                            "algebra-diplomski-odnosi-s-javnoscu--word-count",
+                                            "algebra-specijalisticki--word-count",
+                                            "algebra-zavrsni--word-count"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "21,264",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "alu-pravilnik-diplomski-2014",
+        "luna":  {
+                     "ok":  false,
+                     "error":  "izlaz-ne-postoji"
+                 },
+        "sol":  null,
+        "lunaTokens":  "21,000",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "alu-vodic-doktorski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "alu-doktorski/alu-doktorski--page-count"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "11,068",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "arca-pravilnik-zavrsni-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "arca-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "arca-zavrsni/arca-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "arca-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "arca-zavrsni/arca-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "arca-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "9,687",
+        "solTokens":  "17,536"
+    },
+    {
+        "sourceId":  "biolos-pravilnik-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "biolos-diplomski/biolos-diplomski--page-numbers"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "6,453",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "biolos-pravilnik-zavrsni-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "biolos-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "8,868",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "effectus-pravilnik-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  19,
+                     "matchedRuleIds":  [
+                                            "effectus-diplomski--justify",
+                                            "effectus-diplomski--line-spacing",
+                                            "effectus-diplomski--page-count",
+                                            "effectus-diplomski--font-size",
+                                            "effectus-diplomski--margins",
+                                            "effectus-diplomski--paper-size",
+                                            "effectus-seminarski--font-size",
+                                            "effectus-seminarski--justify",
+                                            "effectus-seminarski--line-spacing",
+                                            "effectus-seminarski--margins",
+                                            "effectus-seminarski--page-count",
+                                            "effectus-seminarski--paper-size",
+                                            "effectus-seminarski--reference-count",
+                                            "effectus-zavrsni--justify",
+                                            "effectus-zavrsni--line-spacing",
+                                            "effectus-zavrsni--page-count",
+                                            "effectus-zavrsni--font-size",
+                                            "effectus-zavrsni--margins",
+                                            "effectus-zavrsni--paper-size"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "effectus-diplomski/effectus-diplomski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "effectus-seminarski/effectus-seminarski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "effectus-zavrsni/effectus-zavrsni--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+                                          "effectus-diplomski/effectus-diplomski--citation-style",
+                                          "effectus-seminarski/effectus-seminarski--citation-style",
+                                          "effectus-zavrsni/effectus-zavrsni--citation-style"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "effectus-diplomski--font",
+                                              "effectus-seminarski--font",
+                                              "effectus-zavrsni--font",
+                                              "effectus-diplomski--citation-style",
+                                              "effectus-seminarski--citation-style",
+                                              "effectus-zavrsni--citation-style"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  3,
+                    "matchedRuleIds":  [
+                                           "effectus-diplomski--font",
+                                           "effectus-seminarski--font",
+                                           "effectus-zavrsni--font"
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "effectus-diplomski/effectus-diplomski--citation-style",
+                                         "effectus-seminarski/effectus-seminarski--citation-style",
+                                         "effectus-zavrsni/effectus-zavrsni--citation-style"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "effectus-diplomski--citation-style",
+                                             "effectus-seminarski--citation-style",
+                                             "effectus-zavrsni--citation-style"
+                                         ]
+                },
+        "lunaTokens":  "34,779",
+        "solTokens":  "38,758"
+    },
+    {
+        "sourceId":  "efos-upute-studentski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "efos-opci-akademski-rad--font",
+                                            "efos-opci-akademski-rad--font-size",
+                                            "efos-opci-akademski-rad--line-spacing",
+                                            "efos-opci-akademski-rad--margins"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "efos-opci-akademski-rad/efos-opci-akademski-rad--paper-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "efos-opci-akademski-rad--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "efos-opci-akademski-rad/efos-opci-akademski-rad--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "efos-opci-akademski-rad--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "24,846",
+        "solTokens":  "24,488"
+    },
+    {
+        "sourceId":  "efst-upute-studentski-radovi-2013",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  5,
+                     "matchedRuleIds":  [
+                                            "efst-opci-akademski-rad--font",
+                                            "efst-opci-akademski-rad--font-size",
+                                            "efst-opci-akademski-rad--justify",
+                                            "efst-opci-akademski-rad--line-spacing",
+                                            "efst-opci-akademski-rad--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "15,214",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "efzg-postupak-zavrsni",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "efzg-zavrsni--justify",
+                                            "efzg-zavrsni--line-spacing",
+                                            "efzg-zavrsni--margins",
+                                            "efzg-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "19,794",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "efzg-upute-specijalisticki-2021",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "efzg-specijalisticki--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,035",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "erf-upute-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "erf-diplomski--font",
+                                            "erf-diplomski--font-size",
+                                            "erf-diplomski--line-spacing",
+                                            "erf-diplomski--toc"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "erf-diplomski/erf-diplomski--required-sections"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "erf-diplomski--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+                                     "erf-diplomski/erf-diplomski--required-sections"
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+
+                                         ]
+                },
+        "lunaTokens":  "15,673",
+        "solTokens":  "23,357"
+    },
+    {
+        "sourceId":  "fbf-upute-spec-2014",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "fbf-specijalisticki--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "fbf-specijalisticki/fbf-specijalisticki--citation-style",
+                                            "diffs":  [
+                                                          "scope"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+                                          "fbf-specijalisticki/fbf-specijalisticki--required-sections"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "fbf-specijalisticki--citation-style",
+                                              "fbf-specijalisticki--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "fbf-specijalisticki/fbf-specijalisticki--citation-style",
+                                           "diffs":  [
+                                                         "scope"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+                                         "fbf-specijalisticki/fbf-specijalisticki--required-sections"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "fbf-specijalisticki--citation-style",
+                                             "fbf-specijalisticki--required-sections"
+                                         ]
+                },
+        "lunaTokens":  "11,987",
+        "solTokens":  "23,345"
+    },
+    {
+        "sourceId":  "ffri-psihologija-brosura-2022",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "ffri-psihologija-diplomski--line-spacing"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "ffri-psihologija-diplomski/ffri-psihologija-diplomski--font-size"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "17,011",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-etnologija-diplomski-2019",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "ffzg-etnologija-graduate--font",
+                                            "ffzg-etnologija-graduate--justify",
+                                            "ffzg-etnologija-graduate--line-spacing",
+                                            "ffzg-etnologija-graduate--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "ffzg-etnologija-graduate/ffzg-etnologija-graduate--page-numbers"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "21,833",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-filoz-diplomski-2019",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "ffzg-filozofija-diplomski--toc",
+                                            "ffzg-filozofija-diplomski--justify",
+                                            "ffzg-filozofija-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--page-number-title-suppression",
+                                            "diffs":  [
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--required-sections",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+                                          "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--citation-style"
+                                      ],
+                     "conflict":  [
+                                      "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--font-size",
+                                      "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--line-spacing",
+                                      "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--page-numbers"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "ffzg-filozofija-diplomski--font",
+                                              "ffzg-filozofija-diplomski--page-number-title-suppression",
+                                              "ffzg-filozofija-diplomski--required-sections",
+                                              "ffzg-filozofija-diplomski--citation-style"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  1,
+                    "matchedRuleIds":  [
+                                           "ffzg-filozofija-diplomski--font"
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--page-number-title-suppression",
+                                           "diffs":  [
+                                                         "scope"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--required-sections",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--citation-style",
+                                           "diffs":  [
+                                                         "value",
+                                                         "scope"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "ffzg-filozofija-diplomski--page-number-title-suppression",
+                                             "ffzg-filozofija-diplomski--required-sections",
+                                             "ffzg-filozofija-diplomski--citation-style"
+                                         ]
+                },
+        "lunaTokens":  "38,426",
+        "solTokens":  "34,327"
+    },
+    {
+        "sourceId":  "ffzg-kroatistika-diplomski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "ffzg-kroatistika-graduate--justify"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "18,261",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-lingvistika-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "ffzg-lingvistika-diplomski--justify",
+                                            "ffzg-lingvistika-diplomski--line-spacing",
+                                            "ffzg-lingvistika-diplomski--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "9,745",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-pedagogija-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "ffzg-pedagogija-graduate--justify",
+                                            "ffzg-pedagogija-graduate--line-spacing",
+                                            "ffzg-pedagogija-graduate--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "ffzg-pedagogija-graduate/ffzg-pedagogija-graduate--page-numbers"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,284",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-povum-diplomski-2016",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "ffzg-povijest-umjetnosti-diplomski--justify",
+                                            "ffzg-povijest-umjetnosti-diplomski--margins",
+                                            "ffzg-povijest-umjetnosti-diplomski--page-numbers",
+                                            "ffzg-povijest-umjetnosti-diplomski--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "ffzg-povijest-umjetnosti-diplomski/ffzg-povijest-umjetnosti-diplomski--line-spacing"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "13,457",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-psihologija-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "ffzg-psihologija-diplomski--line-spacing",
+                                            "ffzg-psihologija-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "31,073",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ffzg-socio-diplomski-2014",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "ffzg-sociologija-diplomski--justify",
+                                            "ffzg-sociologija-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "ffzg-sociologija-diplomski/ffzg-sociologija-diplomski--line-spacing"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "27,779",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "fhs-upute-diplomski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "fhs-diplomski--justify"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "fhs-diplomski/fhs-diplomski--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "fhs-diplomski/fhs-diplomski--margins"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "fhs-diplomski--font"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "fhs-diplomski/fhs-diplomski--font",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "fhs-diplomski--font"
+                                         ]
+                },
+        "lunaTokens":  "11,450",
+        "solTokens":  "21,414"
+    },
+    {
+        "sourceId":  "fhs-upute-zavrsni-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "fhs-zavrsni--justify"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "fhs-zavrsni/fhs-zavrsni--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "fhs-zavrsni/fhs-zavrsni--margins"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "fhs-zavrsni--font"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  1,
+                    "matchedRuleIds":  [
+                                           "fhs-zavrsni--font"
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+
+                                         ]
+                },
+        "lunaTokens":  "20,281",
+        "solTokens":  "20,284"
+    },
+    {
+        "sourceId":  "fpzg-odluka-zavrsni-opseg-2025",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "fpzg-politologija-zavrsni--word-count"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "fpzg-novinarstvo-zavrsni-tekst/fpzg-novinarstvo-zavrsni-tekst--word-count"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "9,899",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "fpzg-upute-akademski-radovi",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  27,
+                     "matchedRuleIds":  [
+                                            "fpzg-mes-master-thesis--justify",
+                                            "fpzg-mes-master-thesis--line-spacing",
+                                            "fpzg-mes-master-thesis--page-numbers",
+                                            "fpzg-nacionalna-sigurnost-diplomski--justify",
+                                            "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+                                            "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+                                            "fpzg-novinarstvo-diplomski--justify",
+                                            "fpzg-novinarstvo-diplomski--line-spacing",
+                                            "fpzg-novinarstvo-diplomski--page-numbers",
+                                            "fpzg-novinarstvo-zavrsni-tekst--justify",
+                                            "fpzg-opci-akademski-rad--justify",
+                                            "fpzg-politologija-diplomski--justify",
+                                            "fpzg-politologija-diplomski--line-spacing",
+                                            "fpzg-politologija-diplomski--page-numbers",
+                                            "fpzg-politologija-zavrsni--justify",
+                                            "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+                                            "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+                                            "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+                                            "fpzg-specijalisticki-prilagodba-eu--justify",
+                                            "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+                                            "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+                                            "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+                                            "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+                                            "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+                                            "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+                                            "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+                                            "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+                                            "diffs":  [
+                                                          "value",
+                                                          "scope"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "fpzg-mes-master-thesis--bibliography-rules",
+                                              "fpzg-mes-master-thesis--font",
+                                              "fpzg-mes-master-thesis--font-size",
+                                              "fpzg-mes-master-thesis--section-surgery-rules",
+                                              "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+                                              "fpzg-nacionalna-sigurnost-diplomski--font",
+                                              "fpzg-nacionalna-sigurnost-diplomski--font-size",
+                                              "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+                                              "fpzg-novinarstvo-diplomski--bibliography-rules",
+                                              "fpzg-novinarstvo-diplomski--font",
+                                              "fpzg-novinarstvo-diplomski--font-size",
+                                              "fpzg-novinarstvo-diplomski--section-surgery-rules",
+                                              "fpzg-politologija-diplomski--bibliography-rules",
+                                              "fpzg-politologija-diplomski--font",
+                                              "fpzg-politologija-diplomski--font-size",
+                                              "fpzg-politologija-diplomski--section-surgery-rules",
+                                              "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+                                              "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+                                              "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+                                              "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+                                              "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+                                              "fpzg-specijalisticki-prilagodba-eu--font",
+                                              "fpzg-specijalisticki-prilagodba-eu--font-size",
+                                              "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+                                              "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+                                              "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+                                              "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+                                              "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+                                              "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+                                              "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+                                              "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+                                              "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  16,
+                    "matchedRuleIds":  [
+                                           "fpzg-mes-master-thesis--font",
+                                           "fpzg-mes-master-thesis--font-size",
+                                           "fpzg-nacionalna-sigurnost-diplomski--font",
+                                           "fpzg-nacionalna-sigurnost-diplomski--font-size",
+                                           "fpzg-novinarstvo-diplomski--font",
+                                           "fpzg-novinarstvo-diplomski--font-size",
+                                           "fpzg-politologija-diplomski--font",
+                                           "fpzg-politologija-diplomski--font-size",
+                                           "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+                                           "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+                                           "fpzg-specijalisticki-prilagodba-eu--font",
+                                           "fpzg-specijalisticki-prilagodba-eu--font-size",
+                                           "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+                                           "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+                                           "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+                                           "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size"
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-mes-master-thesis/fpzg-mes-master-thesis--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-nacionalna-sigurnost-diplomski/fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-novinarstvo-diplomski/fpzg-novinarstvo-diplomski--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-politologija-diplomski/fpzg-politologija-diplomski--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-odnosi-s-javnoscu/fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-prilagodba-eu/fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-sigurnosna-politika-rh/fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "fpzg-specijalisticki-vanjska-politika-diplomacija/fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "fpzg-mes-master-thesis--bibliography-rules",
+                                             "fpzg-mes-master-thesis--section-surgery-rules",
+                                             "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+                                             "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+                                             "fpzg-novinarstvo-diplomski--bibliography-rules",
+                                             "fpzg-novinarstvo-diplomski--section-surgery-rules",
+                                             "fpzg-politologija-diplomski--bibliography-rules",
+                                             "fpzg-politologija-diplomski--section-surgery-rules",
+                                             "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+                                             "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+                                             "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+                                             "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+                                             "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+                                             "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+                                             "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+                                             "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules"
+                                         ]
+                },
+        "lunaTokens":  "28,192",
+        "solTokens":  "29,597"
+    },
+    {
+        "sourceId":  "ftrr-pravilnik-zavrsni-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "ftrr-diplomski--font",
+                                            "ftrr-diplomski--font-size",
+                                            "ftrr-diplomski--line-spacing",
+                                            "ftrr-diplomski--margins",
+                                            "ftrr-zavrsni--font",
+                                            "ftrr-zavrsni--font-size",
+                                            "ftrr-zavrsni--line-spacing",
+                                            "ftrr-zavrsni--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "ftrr-diplomski/ftrr-diplomski--paper-size",
+                                          "ftrr-zavrsni/ftrr-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "ftrr-diplomski--paper-size",
+                                              "ftrr-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "ftrr-diplomski/ftrr-diplomski--paper-size",
+                                         "ftrr-zavrsni/ftrr-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "ftrr-diplomski--paper-size",
+                                             "ftrr-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "22,698",
+        "solTokens":  "22,090"
+    },
+    {
+        "sourceId":  "geof-naputak-ocjenski-2000",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "geof-diplomski/geof-diplomski--citation-style",
+                                          "geof-doktorski/geof-doktorski--citation-style"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "geof-diplomski--citation-style",
+                                              "geof-doktorski--citation-style"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "geof-diplomski/geof-diplomski--citation-style",
+                                         "geof-doktorski/geof-doktorski--citation-style"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "geof-diplomski--citation-style",
+                                             "geof-doktorski--citation-style"
+                                         ]
+                },
+        "lunaTokens":  "8,466",
+        "solTokens":  "24,043"
+    },
+    {
+        "sourceId":  "grad-predlozak-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "grad-diplomski--font-size",
+                                            "grad-zavrsni--font-size",
+                                            "grad-diplomski--line-spacing",
+                                            "grad-zavrsni--line-spacing",
+                                            "grad-diplomski--page-numbers",
+                                            "grad-zavrsni--page-numbers",
+                                            "grad-diplomski--toc",
+                                            "grad-zavrsni--toc"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "grad-diplomski/grad-diplomski--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "grad-zavrsni/grad-zavrsni--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "grad-diplomski--font",
+                                              "grad-zavrsni--font"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  2,
+                    "matchedRuleIds":  [
+                                           "grad-diplomski--font",
+                                           "grad-zavrsni--font"
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+
+                                         ]
+                },
+        "lunaTokens":  "33,857",
+        "solTokens":  "22,967"
+    },
+    {
+        "sourceId":  "grf-upute-zavrsni",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "grf-zavrsni--font",
+                                            "grf-zavrsni--font-size",
+                                            "grf-zavrsni--line-spacing",
+                                            "grf-zavrsni--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "10,692",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "hks-opce-upute-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "hks-diplomski--footnote-justify",
+                                            "hks-diplomski--footnote-size",
+                                            "hks-diplomski--footnote-spacing",
+                                            "hks-diplomski--font",
+                                            "hks-diplomski--font-size",
+                                            "hks-diplomski--justify",
+                                            "hks-diplomski--line-spacing",
+                                            "hks-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "16,112",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "iv-pravilnik-2025",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "iv-diplomski--font",
+                                            "iv-diplomski--line-spacing",
+                                            "iv-diplomski--margins",
+                                            "iv-diplomski--page-numbers",
+                                            "iv-zavrsni--font",
+                                            "iv-zavrsni--line-spacing",
+                                            "iv-zavrsni--margins",
+                                            "iv-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "iv-diplomski/iv-diplomski--font-size",
+                                      "iv-zavrsni/iv-zavrsni--font-size"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "31,950",
+        "solTokens":  null
+    }
+]

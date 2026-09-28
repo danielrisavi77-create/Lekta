@@ -1,0 +1,24 @@
+{
+  "source": {
+    "id": "biolos-pravilnik-diplomski-2023",
+    "url": "https://www.biologija.unios.hr/wp-content/uploads/2023/10/pravilnik-o-dipl-radu-i-dipl-ispitima102023.pdf",
+    "fetchedAt": "2026-07-27",
+    "snapshotHash": "859abb3cf02a8be7bc97f096ffec5cc2be71690eb72b361c00044e8ca42e02a1",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\biolos-pravilnik-diplomski-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "biolos-diplomski",
+      "ruleId": "biolos-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica (donji desni kut, od Uvoda)",
+      "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", odjeljak 6. Sadrzaj rada (str. 7 PDF-a)",
+      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju\r\n       se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem\r\n       desnom kutu.",
+      "valueShape": "boolean",
+      "contexts": [
+        "lomskog rada: sažetak treba biti jasno i precizno napisan te sadržavati osnovne informacije o ciljevima rada, korištenim metodama, glavnim rezultatima i zaključcima rada. Sažetak se piše u jednom odlomku i ne smije biti duži od 200 riječi. Ključne riječi: odabrati do 5 ključnih riječi vezanih za problematiku koja se obrađuje u diplomskom radu. Ključne riječi ne bi trebale biti ponavljane iz naslova rada. 5 3. Basic documentation card na engleskom jeziku treba biti izrađena prema Prilogu 3. Sadrži iste podatke kao i Temeljna dokumentacijska kartica, ali na engleskom jeziku. Tekst Basic documentation card treba pisati malim tiskanim slovima veličine l O pt 4. Izjava o izvornosti treba biti izrađena prema Prilogu 4. 5. Zahvala U ovom dijelu student može izraziti zahvalnost pojedincima ili institucijama za stručnu, financijsku i drugu pomoć te navesti ukoliko je rad izrađen u sklopu nekog projekta. Naslov \"Zahvala\" obično se ne stavlja. Stranica na kojoj se navodi zahvala ne treba biti numerirana. 6. Sadržaj rada U Sadržaju se navode naslovi i brojevi početnih stranica svakog poglavlja i potpoglavlja u diplomskom radu. Potpoglavlja trebaju imati decimalnu numeraciju (npr. 1.1.; 1.2.). Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu. Stranica na kojoj se navodi sadržaj ne treba biti numerirana. Svaki od navedenih dijelova diplomskog rada ( 1. do 6.) treba biti na zasebnoj stranici. o Osnovni dio rada ima sljedeća poglavlja: l. Uvod Uvod iznosi osnovne ideje i pretpostavke rada, teorijske osnove i literatumi pregled stanja znanosti u relevantnom području kao i jasno istaknut cilj rada. Cilj diplomskog rada piše se kao posebno potpoglavlje na zasebnoj stranici. Naslove poglavlja treba pisati velikim tiskanim slovima veličine 14 pt, podebljano i uz lijevo poravnanje. Naslove potpoglavlja (l. l., 1.2.) treba pisati podebljano, slovima veličine 12 pt. 2. Materijali i metode Poglavlje Materijali i metode sadrži opis područja, način prikupljanja uzoraka, opise uzoraka, pripreme uzoraka, postupke i opise eksperimentalnih, računalnih i drugih metoda koje su korištene u radu. 3. Rezultati Rezultate istraživanja potrebno je prikazati jasno, logičkim slijedom i dokwnentirati ih tablicama i slikama (fotografije, sheme, grafikoni i slično). Nije potrebno iste rezultate prikazivati i tablicom i slikom. Tekst u tablicama, grafikonima i slikama može biti pisan slovima veličina l O pt ili manjim. Tablice, grafikoni i slike se c"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+﻿{
+  "sourceId": "unizd-tko-upute-diplomski",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "note": "Izvor izričito navodi Times New Roman za rad, a glagol treba daje direktivni modalitet i opseg tijela rada."
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "note": "Rečenica određuje veličinu slova rada na 12 pt, uz direktivni modalitet i opseg tijela rada."
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "note": "Rečenica propisuje prored 1,5 za rad, a prored se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Izvor određuje 2,5 cm sa svake strane rada, a margine se odnose na cijeli dokument."
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "note": "Izvor nalaže numeriranje stranica uz izuzeće naslovnice, pa se pravilo odnosi na cijeli rad."
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Format rada je AC (210 x 297 mm).",
+      "note": "Dimenzije 210 × 297 mm odgovaraju dopuštenoj vrijednosti A4, a format rada obuhvaća cijeli dokument."
+    }
+  ]
+}

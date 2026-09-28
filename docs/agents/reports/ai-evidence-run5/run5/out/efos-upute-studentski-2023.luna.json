@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "efos-upute-studentski-2023",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "note": "Izvor izričito navodi Times New Roman; ‘treba’ daje direktivni modalitet, a font se odnosi na tekst rada."
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "note": "Izvor propisuje veličinu od 12 točaka; ‘treba’ daje direktivni modalitet, a veličina slova odnosi se na tekst rada."
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "note": "Izvor navodi prored 1,5; ‘treba’ daje direktivni modalitet, a prored se odnosi na tekst rada."
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--margins",
+      "value": {"bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5},
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+      "note": "Izvor određuje sve četiri rubnice na 25 mm, odnosno 2,5 cm; ‘trebaju’ je direktivno, a rubnice su opće postavke rada."
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+      "note": "Izvor izričito navodi format A4; rečenica ga iznosi kao opću direktivnu postavku stranice rada."
+    }
+  ]
+}

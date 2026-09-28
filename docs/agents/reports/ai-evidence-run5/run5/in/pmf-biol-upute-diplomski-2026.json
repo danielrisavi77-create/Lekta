@@ -1,0 +1,59 @@
+{
+  "source": {
+    "id": "pmf-biol-upute-diplomski-2026",
+    "url": "https://www.pmf.unizg.hr/_download/repository/Upute%20za%20prijavu%20i%20izradu%20diplomskog%20rada%5B2%5D.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pmf-biol-upute-diplomski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "valueShape": "number",
+      "contexts": [
+        "i, ili s hrvatskog ili nekog stranog jezika na engleski). Samo uz vrlo opravdan razlog dozvoljeno je nečiji dio teksta navesti doslovno od riječi do riječi, ali ga tada treba staviti pod navodnike i navesti referencu. Autentičnosti radova danas se jednostavno utvrđuje različitim programskim paketima (npr. https://www.srce.unizg.hr/spa). Prilikom predaje rada student potpisuje Izjavu o izvornosti rada. Svaki oblik plagiranja podliježe sankcijama i smatra se teškim stegovnim djelom (usp. Pravilnik o stegovnoj odgovornosti studenata PMF-a Sveučilišta u Zagrebu, čl. 4, st. e). Plagiranje podliježe i kaznenoj odgovornosti (Zakon o znanstvenoj djelatnosti i visokom obrazovanju, čl. 37., st. 2, točke 2. i 3.). Nastavnik koji je mentor ili komentor s BO treba na zamolbi za diplomski ispit potpisati da je pomoću računalnog programa Turnitin provjerio da diplomski rad ne sadrži plagirani tekst. Studentima je također omogućena provjera radova u Turnitinu. Upute o korištenju Turnitina za studente nalaze se na mrežnim stranicama Središnje biološke knjižnice i na početnoj stranici Repozitorija PMF-a: • https://www.pmf.unizg.hr/biol/sredisnja_bioloska_knjiznica • https://repozitorij.pmf.unizg.hr Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane. Veličina slova u tekstu treba biti 11 ili 12 pt. Veličina slova naslova i podnaslova može biti veća, a veličina 7 slova na koricama i naslovnoj stranici propisana je u prilogu ovih uputa. Stranice trebaju biti numerirane u donjem desnom kutu. Diplomski rad treba sadržavati najmanje 30 i najviše 80 numeriranih stranica. Diplomski rad mora sadržavati sljedeće dijelove: 1) NASLOV RADA - treba biti isti kao i naslov prihvaćen od strane Povjerenstva. Potrebno je provjeriti završnu verziju naslova u zapisniku arhiviranom na mrežnim stranicama, jer do promjene naslova može doći i po očitovanju članova BO o zapisniku. 2) NASLOVNA STRANA - uvijek sadrži naziv sveučilišta, fakulteta i odsjeka, ime i prezime studenta, naslov rada, vrstu ocjenskog rada (Diplomski rad) te mjesto i godinu izrade diplomskog rada. Ilustrirani format naslovne strane moguće je naći na mrežnim stranicama BO. Ako je rad pisan na engleskom jeziku, tekst na prvoj naslovnoj strani se piše na engleskom jeziku, a iza nje slijedi naslovna strana na hrvatskom jeziku. Ako je rad pisan na hrvatskom jeziku nije potrebna naslovna strana na engleskom jeziku. 3) PRVA (NENUMERIRANA) STRANICA - sadrži podatke o tome gdje je i pod č"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "i, ili s hrvatskog ili nekog stranog jezika na engleski). Samo uz vrlo opravdan razlog dozvoljeno je nečiji dio teksta navesti doslovno od riječi do riječi, ali ga tada treba staviti pod navodnike i navesti referencu. Autentičnosti radova danas se jednostavno utvrđuje različitim programskim paketima (npr. https://www.srce.unizg.hr/spa). Prilikom predaje rada student potpisuje Izjavu o izvornosti rada. Svaki oblik plagiranja podliježe sankcijama i smatra se teškim stegovnim djelom (usp. Pravilnik o stegovnoj odgovornosti studenata PMF-a Sveučilišta u Zagrebu, čl. 4, st. e). Plagiranje podliježe i kaznenoj odgovornosti (Zakon o znanstvenoj djelatnosti i visokom obrazovanju, čl. 37., st. 2, točke 2. i 3.). Nastavnik koji je mentor ili komentor s BO treba na zamolbi za diplomski ispit potpisati da je pomoću računalnog programa Turnitin provjerio da diplomski rad ne sadrži plagirani tekst. Studentima je također omogućena provjera radova u Turnitinu. Upute o korištenju Turnitina za studente nalaze se na mrežnim stranicama Središnje biološke knjižnice i na početnoj stranici Repozitorija PMF-a: • https://www.pmf.unizg.hr/biol/sredisnja_bioloska_knjiznica • https://repozitorij.pmf.unizg.hr Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane. Veličina slova u tekstu treba biti 11 ili 12 pt. Veličina slova naslova i podnaslova može biti veća, a veličina 7 slova na koricama i naslovnoj stranici propisana je u prilogu ovih uputa. Stranice trebaju biti numerirane u donjem desnom kutu. Diplomski rad treba sadržavati najmanje 30 i najviše 80 numeriranih stranica. Diplomski rad mora sadržavati sljedeće dijelove: 1) NASLOV RADA - treba biti isti kao i naslov prihvaćen od strane Povjerenstva. Potrebno je provjeriti završnu verziju naslova u zapisniku arhiviranom na mrežnim stranicama, jer do promjene naslova može doći i po očitovanju članova BO o zapisniku. 2) NASLOVNA STRANA - uvijek sadrži naziv sveučilišta, fakulteta i odsjeka, ime i prezime studenta, naslov rada, vrstu ocjenskog rada (Diplomski rad) te mjesto i godinu izrade diplomskog rada. Ilustrirani format naslovne strane moguće je naći na mrežnim stranicama BO. Ako je rad pisan na engleskom jeziku, tekst na prvoj naslovnoj strani se piše na engleskom jeziku, a iza nje slijedi naslovna strana na hrvatskom jeziku. Ako je rad pisan na hrvatskom jeziku nije potrebna naslovna strana na engleskom jeziku. 3) PRVA (NENUMERIRANA) STRANICA - sadrži podatke o tome gdje je i pod č"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "valueShape": "string",
+      "contexts": [
+        "i, ili s hrvatskog ili nekog stranog jezika na engleski). Samo uz vrlo opravdan razlog dozvoljeno je nečiji dio teksta navesti doslovno od riječi do riječi, ali ga tada treba staviti pod navodnike i navesti referencu. Autentičnosti radova danas se jednostavno utvrđuje različitim programskim paketima (npr. https://www.srce.unizg.hr/spa). Prilikom predaje rada student potpisuje Izjavu o izvornosti rada. Svaki oblik plagiranja podliježe sankcijama i smatra se teškim stegovnim djelom (usp. Pravilnik o stegovnoj odgovornosti studenata PMF-a Sveučilišta u Zagrebu, čl. 4, st. e). Plagiranje podliježe i kaznenoj odgovornosti (Zakon o znanstvenoj djelatnosti i visokom obrazovanju, čl. 37., st. 2, točke 2. i 3.). Nastavnik koji je mentor ili komentor s BO treba na zamolbi za diplomski ispit potpisati da je pomoću računalnog programa Turnitin provjerio da diplomski rad ne sadrži plagirani tekst. Studentima je također omogućena provjera radova u Turnitinu. Upute o korištenju Turnitina za studente nalaze se na mrežnim stranicama Središnje biološke knjižnice i na početnoj stranici Repozitorija PMF-a: • https://www.pmf.unizg.hr/biol/sredisnja_bioloska_knjiznica • https://repozitorij.pmf.unizg.hr Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane. Veličina slova u tekstu treba biti 11 ili 12 pt. Veličina slova naslova i podnaslova može biti veća, a veličina 7 slova na koricama i naslovnoj stranici propisana je u prilogu ovih uputa. Stranice trebaju biti numerirane u donjem desnom kutu. Diplomski rad treba sadržavati najmanje 30 i najviše 80 numeriranih stranica. Diplomski rad mora sadržavati sljedeće dijelove: 1) NASLOV RADA - treba biti isti kao i naslov prihvaćen od strane Povjerenstva. Potrebno je provjeriti završnu verziju naslova u zapisniku arhiviranom na mrežnim stranicama, jer do promjene naslova može doći i po očitovanju članova BO o zapisniku. 2) NASLOVNA STRANA - uvijek sadrži naziv sveučilišta, fakulteta i odsjeka, ime i prezime studenta, naslov rada, vrstu ocjenskog rada (Diplomski rad) te mjesto i godinu izrade diplomskog rada. Ilustrirani format naslovne strane moguće je naći na mrežnim stranicama BO. Ako je rad pisan na engleskom jeziku, tekst na prvoj naslovnoj strani se piše na engleskom jeziku, a iza nje slijedi naslovna strana na hrvatskom jeziku. Ako je rad pisan na hrvatskom jeziku nije potrebna naslovna strana na engleskom jeziku. 3) PRVA (NENUMERIRANA) STRANICA - sadrži podatke o tome gdje je i pod č"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

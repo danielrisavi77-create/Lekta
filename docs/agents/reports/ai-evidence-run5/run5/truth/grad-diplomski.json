@@ -1,0 +1,29 @@
+{
+  "grad-diplomski--font": {
+    "value": [
+      "Titillium"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "grad-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grad-diplomski--line-spacing": {
+    "value": 1.15,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grad-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "grad-diplomski--toc": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

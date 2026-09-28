@@ -1,0 +1,29 @@
+{
+    "sourceId":  "pmf-geog-upute-diplomski-2026",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "pmf-geografija-diplomski",
+                      "ruleId":  "pmf-geografija-diplomski--required-sections",
+                      "value":  [
+                                    "Uvod",
+                                    "Pregled dosadašnjih istraživanja i literature",
+                                    "Teorijski pristup",
+                                    "Metode istraživanja",
+                                    "Rezultati",
+                                    "Rasprava",
+                                    "Zaključak",
+                                    "Literatura i izvori"
+                                ],
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "• Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi poglavlja. • Uvod: sažeto definirati objekt, prostorni i vremenski obuhvat teme istraživanja. U zasebnom odlomku jasno iskazati polazne hipoteze i cilj istraživanja. Prva stranica Uvoda nosi arapski broj 1. • Pregled dosadašnjih istraživanja i literature: aktualan pregled znanja (znanstvenih i stručnih radova) o užem području rada. • Teorijski pristup: pristup istraživanju s teorijskog aspekta na temelju pročitane literature, logično strukturiran po poglavljima relevantnim za rad. • Metode istraživanja: metode prikupljanja i analize podataka; izvori podataka. • Rezultati: Iznose se rezultati vlastitog rada, praćeni objašnjenima te tabličnim i grafičkim prilozima. Ovaj se dio može podijeliti u više logičkih cjelina (poglavlja). Usporedba s rezultatima drugih autora (iz literature) piše se u Raspravi. • Rasprava: Kritička usporedba rezultata vlastitog rada i spoznaja iz literature. • Zaključak: Sažeta sinteza najvažnijih spoznaja u radu. Zaključak sadrži najvažnija rješenja postavljenog problema te osvrt na ispunjenost ciljeva i hipoteza definiranih u Uvodu. Zaključak nije sažetak rada i nije isto što i Izvadak koji se piše u Temeljnoj dokumentacijskoj kartici. • Literatura i izvori: Piše se na kraju rada, ali ne numerira se kao poglavlje.",
+                      "note":  "Izvor izričito naziva osam navedenih dijelova obveznima za strukturu cijelog diplomskog rada."
+                  }
+              ]
+}

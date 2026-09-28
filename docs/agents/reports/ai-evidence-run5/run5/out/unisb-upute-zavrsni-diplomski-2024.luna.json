@@ -1,0 +1,442 @@
+{
+  "sourceId": "unisb-upute-zavrsni-diplomski-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli unknown"
+  },
+  "rules": [
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Times New Roman is explicitly presented as a recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "12 pt is presented alongside the recommendation for the written work."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--line-spacing",
+      "value": 1.0,
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(preporuka: jednostruki prored kao što je pisan i ovaj tekst).",
+      "note": "The source explicitly labels single spacing as a recommendation."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--margins",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source gives minimum free-margin widths and a separate binding edge, but not an unambiguous value for all four sides."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "The source does not specify one unambiguous paper size for the whole work."
+    }
+  ]
+}

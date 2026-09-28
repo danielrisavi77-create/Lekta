@@ -1,0 +1,19 @@
+{
+  "kbf-zavrsni--citation-style": {
+    "value": "chicago-notes",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "kbf-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "kbf-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

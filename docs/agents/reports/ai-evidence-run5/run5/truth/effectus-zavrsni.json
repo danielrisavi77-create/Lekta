@@ -1,0 +1,52 @@
+{
+  "effectus-zavrsni--citation-style": {
+    "value": "chicago-notes",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "effectus-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "effectus-zavrsni--line-spacing": {
+    "value": 1.15,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "effectus-zavrsni--page-count": {
+    "value": {
+      "min": 35,
+      "max": 50
+    },
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "effectus-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "effectus-zavrsni--font-size": {
+    "value": 12,
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "effectus-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "effectus-zavrsni--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

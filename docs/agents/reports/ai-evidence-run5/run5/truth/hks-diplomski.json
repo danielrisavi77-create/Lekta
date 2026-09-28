@@ -1,0 +1,51 @@
+{
+  "hks-diplomski--footnote-justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "footnote"
+  },
+  "hks-diplomski--footnote-size": {
+    "value": [
+      10
+    ],
+    "modality": "directive",
+    "scope": "footnote"
+  },
+  "hks-diplomski--footnote-spacing": {
+    "value": 1,
+    "modality": "directive",
+    "scope": "footnote"
+  },
+  "hks-diplomski--font": {
+    "value": [
+      "Book Antiqua"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "hks-diplomski--font-size": {
+    "value": 11,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "hks-diplomski--justify": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "hks-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "hks-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

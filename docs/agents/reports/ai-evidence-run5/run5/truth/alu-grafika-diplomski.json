@@ -1,0 +1,10 @@
+{
+  "alu-grafika-diplomski--page-count": {
+    "value": {
+      "min": 15,
+      "max": 25
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

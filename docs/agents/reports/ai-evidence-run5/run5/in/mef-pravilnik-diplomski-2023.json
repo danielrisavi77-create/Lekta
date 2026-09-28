@@ -1,0 +1,28 @@
+{
+  "source": {
+    "id": "mef-pravilnik-diplomski-2023",
+    "url": "https://mef.unizg.hr/app/uploads/2023/07/Pravilnik-o-izradi-diplomskog-rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\mef-pravilnik-diplomski-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "mef-diplomski",
+      "ruleId": "mef-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik neuvezanog primjerka rada",
+      "quote": "tiskan na papiru formata A4, pisan fontom Times New Roman ili Arial",
+      "valueShape": "string",
+      "contexts": [
+        "ex development. Cereb Cortex doi:10.1093/cercor/bhq219 (Cerebral Cortex Advance Access published November 8, 2010) Kanold PO, Luhman HJ (2010) The subplate and early cortical circuits. Annu Rev Neurosci 33:23-48. Mischel PS, Nguyen LP, Vinters HV (1995) Cerebral cortical dysplasia associated with pediatric epilepsy. Review of neuropathologic features and proposal for a grading system. J Neuropathol Exp Neurol 54:137-153. Ramón y Cajal S (1899a) Apuntes para el estudio estructural de la corteza visual del cerebro humano. Rev Ibero-Americana Cienc Méd 1:146-157. Ramón y Cajal S (1899b) Estudios sobre la corteza cerebral humana I: corteza visual. Rev Trimestral Micrográf (Madrid) 4:1-63. Sidman RL, Rakic P (1982) Development of the human central nervous system. U: Haymaker W, Adams RD (Ur.) Histology and Histopathology of the Nervous System. Springfield: Thomas, str. 3-145. Slifka MK, Whitton JL (2000) Clinical implications of dysregulated cytokine production. J Mol Med doi:10.1007/s001090000086 OBLIK NEUVEZANOG PRIMJERKA RADA (ZA OCJENU) TE KONAČNOG (UVEZANOG) RADA: Č etiri primjerka gotovog neuvezanog rada te verzija rada u elektronič kom obliku dostavlja se Povjerenstvu na ocjenu, tiskan na papiru formata A4, pisan fontom Times New Roman ili Arial (velič ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored), s ispisom na samo jednoj stranici svakog lista (dakle, u istom obliku u kojem bi se poslao rad na recenziju u č asopis, da recenzenti imaju prostora za bilješke i ispravke). Nakon što je rad pozitivno ocijenjen i unesene su sve potrebne ispravke, pristupa se konač nom prijelomu teksta i uvezu. Pritom je dopušteno i poželjno da se rad oblikuje i tiska kao tipič ni č lanak u znanstvenom ili struč nom č asopisu (formata A4 – dakle, dva stupca širine 8 cm i između njih razmak od 1 cm, a slike i tablice širine jednog stupca ili cijele stranice – dakle, 8 cm ili 17 cm; margine su najmanje 2,5 cm gore, dolje, lijevo i 28 desno; tisak obostrano; broj stranice u donjem desnom kutu na desnoj stranici, a u donjem lijevom kutu na lijevoj stranici). UVEZ I KORICE RADA: Konač na verzija rada se uvezuje u tvrde korice tamnoplave boje, na kojima se otiskuju slova bijele boje. Na naslovnici se uz tekst otiskuje i znak Fakulteta, kojeg dobivate u Uredu za diplomske radove u elektronič kom obliku. U pisanju teksta naslovnice koristi se ne-serifni font ARIAL, kako slijedi: Arial bold, 14 toč aka, velika slova (v"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

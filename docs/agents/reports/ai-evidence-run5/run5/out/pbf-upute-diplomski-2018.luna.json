@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "pbf-upute-diplomski-2018",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen.",
+      "note": "Izraz 'Times New Roman' daje naziv pisma, rečenica ga određuje direktivno, a opseg je glavni tekst rada."
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen.",
+      "note": "Broj 12 uz naziv pisma određuje veličinu slova, uz direktivu za glavni tekst rada."
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen.",
+      "note": "Izvor navodi prored 1,5 u rečenici s direktivom za pisanje glavnog teksta."
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen.",
+      "note": "Papir je izričito formata A4, a format papira odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--required-sections",
+      "value": ["UVOD", "TEORIJSKI DIO", "EKSPERIMENTALNI DIO", "REZULTATI I RASPRAVA", "ZAKLJUČCI", "LITERATURA", "PRILOZI"],
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove: 1. UVOD 2. TEORIJSKI DIO 2.1. Podpoglavlje 2.1.1. Podpoglavlje 3. EKSPERIMENTALNI DIO 3.1. Podpoglavlje 3.1.1. Podpoglavlje 4. REZULTATI I RASPRAVA 4.1. sa ili bez Podpoglavlja (ovisno o samom radu) 5. ZAKLJUČCI 6. LITERATURA 7. PRILOZI (nisu nužni) 7.1. Podpoglavlje 7.1.1. Podpoglavlje",
+      "note": "Obvezni poglavlja navedena su kao dijelovi diplomskog rada; prilozi su navedeni kao neobvezni."
+    }
+  ]
+}

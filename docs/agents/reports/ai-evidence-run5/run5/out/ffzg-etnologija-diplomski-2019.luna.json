@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "ffzg-etnologija-diplomski-2019",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "tekst rada treba biti u fontu Times New Roman",
+      "note": "Izvor navodi Times New Roman, rečenica koristi 'treba' pa je modalitet directive, a font se odnosi na tekst rada."
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "1,5 linija, obostrano poravnatim tekstualnim blokom",
+      "note": "Tekstni blok treba biti obostrano poravnat, a ovaj goli opis nosi modalitet directive i odnosi se na tijelo rada."
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija",
+      "note": "Izvor propisuje prored 1,5 linija, rečenica uključuje 'treba' pa je modalitet directive, a prored se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "margine 2,5 cm",
+      "note": "Izvor navodi margine od 2,5 cm bez izdvajanja stranice, pa se ista vrijednost primjenjuje na sve margine i opseg je whole."
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "conflict",
+      "evidenceQuote": "paginiranim stranicama (naslovna stranica se ne paginira)",
+      "note": "Izvor traži paginirane stranice, ali izričito izuzima naslovnu stranicu, što je iznimka unutar pravila o numeraciji."
+    }
+  ]
+}

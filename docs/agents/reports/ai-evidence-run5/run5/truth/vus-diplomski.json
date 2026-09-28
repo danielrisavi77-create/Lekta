@@ -1,0 +1,26 @@
+{
+  "vus-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

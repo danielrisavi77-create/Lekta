@@ -1,0 +1,75 @@
+{
+  "source": {
+    "id": "algebra-pravilnik-radovi-2026",
+    "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf",
+    "fetchedAt": "2026-07-17",
+    "snapshotHash": "e9ca604d0591b5401e655b59a9bd7b625b460d6b677dcfd7af5e342d3232846e",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\algebra-pravilnik-radovi-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "algebra-diplomski",
+      "ruleId": "algebra-diplomski--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rada",
+      "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+      "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "romjenu mentora odobrava predsjednik Povjerenstva, a novu predloženu temu odobrava Povjerenstvo. (6) Studenti koji studiraju na izvanrednom studiju, kao i studenti koji su stipendisti ili korisnici kredita, mogu izabrati temu rada u skladu s potrebama tvrtke, stipenditora, odnosno kreditora. (1) Predsjednik Povjerenstva ima obvezu početkom svakog ljetnog semestra odrediti točan raspored rokova u svezi sa završnim, odnosno diplomskim radovima te isti objaviti pod nastavnim materijalima kolegija u sklopu kojih se izrađuje završni, diplomski odnosno specijalistički rad. 6. IZRADA ZAVRŠNOG, DIPLOMSKOG ODNOSNO SPECIJALISTIČKOG RADA (1) Student je obvezan kod izrade rada držati se odobrene teme od strane Povjerenstva prihvaćajući i uvažajući sve komentare i prijedloge koje je dobio od Povjerenstva. (2) Mentor je odgovoran pratiti da se rad izrađuje u skladu s odobrenom temom. (3) Opseg i složenost teme završnog, diplomskog odnosno specijalističkog rada moraju odgovarati razini studija i moraju biti takvi da ju student može obraditi u roku koji odgovara upisanim ECTS bodovima (1 ECTS bod = 25-30 radnih sati). (4) Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi. (5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi. (1) Ako student izrađuje rad u vanjskoj tvrtki tijekom svoje stručne prakse, određuje mu se uz mentora i stručni koordinator rada, koji je zadužen pratiti i pomagati njegov rad i biti u stalnom kontaktu i koordinaciji s mentorom, sukladno Pravilniku o stručnoj praksi. (2) Specifikacija zadataka stručnog koordinatora rada, te prava i obveze studenta za vrijeme stručne prakse, bit će definirani posebnim ugovorom između Sveučilišta Algebra Bernays i pojedinog radilišta u koje se upućuje studenta na praktični rad, sukladno Pravilniku o stručnoj praksi. (1) Završni rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (2) Diplomski rad piše se standardnim egleskim jezikom, latiničnim pismom. 5 (3) Specijalistički rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (4) Kompletni primjer tekstualnog oblika završnog, diplomskog odnosno specijalističkograda sa svim veličinama i oblicima fontova u završnom, diplomskom odnosno specijalističkom radu nalaze se na elektroničkom predlošku (Prilog 1), koji je dostupan studentima unutar sustava digitalne referade. Obveza je studenta da završni, diplomski odnosno specijalistički rad izradi točno kako je"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "ruleId": "algebra-diplomski-odnosi-s-javnoscu--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rada",
+      "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+      "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "romjenu mentora odobrava predsjednik Povjerenstva, a novu predloženu temu odobrava Povjerenstvo. (6) Studenti koji studiraju na izvanrednom studiju, kao i studenti koji su stipendisti ili korisnici kredita, mogu izabrati temu rada u skladu s potrebama tvrtke, stipenditora, odnosno kreditora. (1) Predsjednik Povjerenstva ima obvezu početkom svakog ljetnog semestra odrediti točan raspored rokova u svezi sa završnim, odnosno diplomskim radovima te isti objaviti pod nastavnim materijalima kolegija u sklopu kojih se izrađuje završni, diplomski odnosno specijalistički rad. 6. IZRADA ZAVRŠNOG, DIPLOMSKOG ODNOSNO SPECIJALISTIČKOG RADA (1) Student je obvezan kod izrade rada držati se odobrene teme od strane Povjerenstva prihvaćajući i uvažajući sve komentare i prijedloge koje je dobio od Povjerenstva. (2) Mentor je odgovoran pratiti da se rad izrađuje u skladu s odobrenom temom. (3) Opseg i složenost teme završnog, diplomskog odnosno specijalističkog rada moraju odgovarati razini studija i moraju biti takvi da ju student može obraditi u roku koji odgovara upisanim ECTS bodovima (1 ECTS bod = 25-30 radnih sati). (4) Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi. (5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi. (1) Ako student izrađuje rad u vanjskoj tvrtki tijekom svoje stručne prakse, određuje mu se uz mentora i stručni koordinator rada, koji je zadužen pratiti i pomagati njegov rad i biti u stalnom kontaktu i koordinaciji s mentorom, sukladno Pravilniku o stručnoj praksi. (2) Specifikacija zadataka stručnog koordinatora rada, te prava i obveze studenta za vrijeme stručne prakse, bit će definirani posebnim ugovorom između Sveučilišta Algebra Bernays i pojedinog radilišta u koje se upućuje studenta na praktični rad, sukladno Pravilniku o stručnoj praksi. (1) Završni rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (2) Diplomski rad piše se standardnim egleskim jezikom, latiničnim pismom. 5 (3) Specijalistički rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (4) Kompletni primjer tekstualnog oblika završnog, diplomskog odnosno specijalističkograda sa svim veličinama i oblicima fontova u završnom, diplomskom odnosno specijalističkom radu nalaze se na elektroničkom predlošku (Prilog 1), koji je dostupan studentima unutar sustava digitalne referade. Obveza je studenta da završni, diplomski odnosno specijalistički rad izradi točno kako je"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "ruleId": "algebra-specijalisticki--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rada",
+      "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+      "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "romjenu mentora odobrava predsjednik Povjerenstva, a novu predloženu temu odobrava Povjerenstvo. (6) Studenti koji studiraju na izvanrednom studiju, kao i studenti koji su stipendisti ili korisnici kredita, mogu izabrati temu rada u skladu s potrebama tvrtke, stipenditora, odnosno kreditora. (1) Predsjednik Povjerenstva ima obvezu početkom svakog ljetnog semestra odrediti točan raspored rokova u svezi sa završnim, odnosno diplomskim radovima te isti objaviti pod nastavnim materijalima kolegija u sklopu kojih se izrađuje završni, diplomski odnosno specijalistički rad. 6. IZRADA ZAVRŠNOG, DIPLOMSKOG ODNOSNO SPECIJALISTIČKOG RADA (1) Student je obvezan kod izrade rada držati se odobrene teme od strane Povjerenstva prihvaćajući i uvažajući sve komentare i prijedloge koje je dobio od Povjerenstva. (2) Mentor je odgovoran pratiti da se rad izrađuje u skladu s odobrenom temom. (3) Opseg i složenost teme završnog, diplomskog odnosno specijalističkog rada moraju odgovarati razini studija i moraju biti takvi da ju student može obraditi u roku koji odgovara upisanim ECTS bodovima (1 ECTS bod = 25-30 radnih sati). (4) Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi. (5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi. (1) Ako student izrađuje rad u vanjskoj tvrtki tijekom svoje stručne prakse, određuje mu se uz mentora i stručni koordinator rada, koji je zadužen pratiti i pomagati njegov rad i biti u stalnom kontaktu i koordinaciji s mentorom, sukladno Pravilniku o stručnoj praksi. (2) Specifikacija zadataka stručnog koordinatora rada, te prava i obveze studenta za vrijeme stručne prakse, bit će definirani posebnim ugovorom između Sveučilišta Algebra Bernays i pojedinog radilišta u koje se upućuje studenta na praktični rad, sukladno Pravilniku o stručnoj praksi. (1) Završni rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (2) Diplomski rad piše se standardnim egleskim jezikom, latiničnim pismom. 5 (3) Specijalistički rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (4) Kompletni primjer tekstualnog oblika završnog, diplomskog odnosno specijalističkograda sa svim veličinama i oblicima fontova u završnom, diplomskom odnosno specijalističkom radu nalaze se na elektroničkom predlošku (Prilog 1), koji je dostupan studentima unutar sustava digitalne referade. Obveza je studenta da završni, diplomski odnosno specijalistički rad izradi točno kako je"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "ruleId": "algebra-zavrsni--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rada",
+      "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+      "quote": "Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "entor treba dati pismenu suglasnost da prihvaća mentorstvo za tu temu. (5) Promjenu mentora odobrava predsjednik Povjerenstva, a novu predloženu temu odobrava Povjerenstvo. (6) Studenti koji studiraju na izvanrednom studiju, kao i studenti koji su stipendisti ili korisnici kredita, mogu izabrati temu rada u skladu s potrebama tvrtke, stipenditora, odnosno kreditora. (1) Predsjednik Povjerenstva ima obvezu početkom svakog ljetnog semestra odrediti točan raspored rokova u svezi sa završnim, odnosno diplomskim radovima te isti objaviti pod nastavnim materijalima kolegija u sklopu kojih se izrađuje završni, diplomski odnosno specijalistički rad. 6. IZRADA ZAVRŠNOG, DIPLOMSKOG ODNOSNO SPECIJALISTIČKOG RADA (1) Student je obvezan kod izrade rada držati se odobrene teme od strane Povjerenstva prihvaćajući i uvažajući sve komentare i prijedloge koje je dobio od Povjerenstva. (2) Mentor je odgovoran pratiti da se rad izrađuje u skladu s odobrenom temom. (3) Opseg i složenost teme završnog, diplomskog odnosno specijalističkog rada moraju odgovarati razini studija i moraju biti takvi da ju student može obraditi u roku koji odgovara upisanim ECTS bodovima (1 ECTS bod = 25-30 radnih sati). (4) Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi. (5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi. (1) Ako student izrađuje rad u vanjskoj tvrtki tijekom svoje stručne prakse, određuje mu se uz mentora i stručni koordinator rada, koji je zadužen pratiti i pomagati njegov rad i biti u stalnom kontaktu i koordinaciji s mentorom, sukladno Pravilniku o stručnoj praksi. (2) Specifikacija zadataka stručnog koordinatora rada, te prava i obveze studenta za vrijeme stručne prakse, bit će definirani posebnim ugovorom između Sveučilišta Algebra Bernays i pojedinog radilišta u koje se upućuje studenta na praktični rad, sukladno Pravilniku o stručnoj praksi. (1) Završni rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (2) Diplomski rad piše se standardnim egleskim jezikom, latiničnim pismom. 5 (3) Specijalistički rad piše se standardnim hrvatskim ili engleskim jezikom, latiničnim pismom. (4) Kompletni primjer tekstualnog oblika završnog, diplomskog odnosno specijalističkograda sa svim veličinama i oblicima fontova u završnom, diplomskom odnosno specijalističkom radu nalaze se na elektroničkom predlošku (Prilog 1), koji je dostupan studentima unutar sustava digitaln"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

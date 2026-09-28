@@ -1,0 +1,12 @@
+{
+  "vef-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vef-diplomski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

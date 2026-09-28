@@ -1,0 +1,65 @@
+{
+  "pravo-specijalisticki-pravni-opci--citation-style": {
+    "value": "pravo-fusnote",
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "pravo-specijalisticki-pravni-opci--footnote-font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "footnote"
+  },
+  "pravo-specijalisticki-pravni-opci--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pravo-specijalisticki-pravni-opci--required-sections": {
+    "value": [
+      {
+        "key": "intro",
+        "label": "uvod",
+        "terms": [
+          "uvod",
+          "uvodni dio",
+          "introduction"
+        ]
+      },
+      {
+        "key": "body",
+        "label": "sredisnji dio",
+        "terms": [
+          "sredisnji dio",
+          "razrada",
+          "poglavlje",
+          "glava",
+          "chapter"
+        ]
+      },
+      {
+        "key": "conclusion",
+        "label": "zakljucak",
+        "terms": [
+          "zakljucak",
+          "zakljucni dio",
+          "conclusion"
+        ]
+      },
+      {
+        "key": "refs",
+        "label": "popis koristenih izvora i literature",
+        "terms": [
+          "izvori i literatura",
+          "popis literature",
+          "literatura",
+          "bibliografija",
+          "references"
+        ]
+      }
+    ],
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

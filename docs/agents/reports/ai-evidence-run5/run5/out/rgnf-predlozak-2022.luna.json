@@ -1,0 +1,144 @@
+﻿{
+    "sourceId":  "rgnf-predlozak-2022",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "value":  "harvard",
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+                      "ruleId":  "rgnf-diplomski--citation-style",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Izvor izričito navodi harvardski sustav, a glagol treba označava direktivu za rad u cjelini.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-diplomski--font",
+                      "verdict":  "extracted",
+                      "scope":  "body",
+                      "note":  "Izvor za tekst rada navodi Times New Roman, a izraz koristi se označava direktivu za glavni tekst.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  12,
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-diplomski--font-size",
+                      "verdict":  "conflict",
+                      "scope":  "body",
+                      "note":  "Za tekst rada izvor navodi 12 pt, ali sažetak izričito propisuje 10 pt kao iznimku za diplomski rad.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  1.5,
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-diplomski--line-spacing",
+                      "verdict":  "extracted",
+                      "scope":  "body",
+                      "note":  "Izvor izričito navodi prored 1,5 za tekst rada, pa je opseg glavni tekst.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  {
+                                    "left":  3,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+                      "ruleId":  "rgnf-diplomski--margins",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Izvor propisuje lijevu marginu 3 cm i ostale 2,5 cm kroz cijeli rad riječju moraju.",
+                      "modality":  "obligation"
+                  },
+                  {
+                      "value":  true,
+                      "profileId":  "rgnf-diplomski",
+                      "evidenceQuote":  "Obvezni dijelovi u strukturi rada su redom: Naslovnica ili prva stranica, istovjetna koricama (1. stranica ovog predloška) Rješenje Povjerenstva o dodjeli teme rada (ubacuje se u rad nakon potpisivanja i ovjeravanja u Studentskoj referadi) Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku) Sadržaj koji uključuje:",
+                      "ruleId":  "rgnf-diplomski--toc",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Sadržaj je naveden među obveznim dijelovima strukture rada, pa je njegova prisutnost obvezna u radu.",
+                      "modality":  "obligation"
+                  },
+                  {
+                      "value":  "harvard",
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+                      "ruleId":  "rgnf-zavrsni--citation-style",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Izvor izričito navodi harvardski sustav, a glagol treba označava direktivu za rad u cjelini.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-zavrsni--font",
+                      "verdict":  "extracted",
+                      "scope":  "body",
+                      "note":  "Izvor za tekst rada navodi Times New Roman, a izraz koristi se označava direktivu za glavni tekst.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  12,
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-zavrsni--font-size",
+                      "verdict":  "conflict",
+                      "scope":  "body",
+                      "note":  "Za tekst rada izvor navodi 12 pt, ali sažetak izričito propisuje 10 pt kao iznimku za završni rad.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  1.5,
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+                      "ruleId":  "rgnf-zavrsni--line-spacing",
+                      "verdict":  "extracted",
+                      "scope":  "body",
+                      "note":  "Izvor izričito navodi prored 1,5 za tekst rada, pa je opseg glavni tekst.",
+                      "modality":  "directive"
+                  },
+                  {
+                      "value":  {
+                                    "left":  3,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+                      "ruleId":  "rgnf-zavrsni--margins",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Izvor propisuje lijevu marginu 3 cm i ostale 2,5 cm kroz cijeli rad riječju moraju.",
+                      "modality":  "obligation"
+                  },
+                  {
+                      "value":  true,
+                      "profileId":  "rgnf-zavrsni",
+                      "evidenceQuote":  "Obvezni dijelovi u strukturi rada su redom: Naslovnica ili prva stranica, istovjetna koricama (1. stranica ovog predloška) Rješenje Povjerenstva o dodjeli teme rada (ubacuje se u rad nakon potpisivanja i ovjeravanja u Studentskoj referadi) Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku) Sadržaj koji uključuje:",
+                      "ruleId":  "rgnf-zavrsni--toc",
+                      "verdict":  "extracted",
+                      "scope":  "whole",
+                      "note":  "Sadržaj je naveden među obveznim dijelovima strukture rada, pa je njegova prisutnost obvezna u radu.",
+                      "modality":  "obligation"
+                  }
+              ]
+}

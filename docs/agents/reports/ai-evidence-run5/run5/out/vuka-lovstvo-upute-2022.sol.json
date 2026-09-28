@@ -1,0 +1,32 @@
+{
+  "sourceId": "vuka-lovstvo-upute-2022",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "prohibition",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano).",
+      "note": "Za slova rada navodi se 12 točaka, izraz ne može određuje zabranu, a posebno spomenutih 14 točaka odnosi se na naslove."
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.",
+      "note": "Izvor propisuje A4 za rad u cjelini, ali tekstna dopuštena vrijednost A4 ne može se upisati u zadani boolean oblik."
+    }
+  ]
+}

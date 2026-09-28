@@ -1,0 +1,15 @@
+{
+  "unizd-psihologija-zavrsni--citation-style": {
+    "value": "apa7",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "unizd-psihologija-zavrsni--page-count": {
+    "value": {
+      "min": 20,
+      "max": 30
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

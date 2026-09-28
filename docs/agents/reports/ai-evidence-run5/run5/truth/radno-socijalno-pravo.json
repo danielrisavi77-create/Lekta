@@ -1,0 +1,29 @@
+{
+  "radno-socijalno-pravo--heading-rules": {
+    "value": {
+      "numberRequired": true,
+      "trailingDot": true,
+      "romanLevelOneAllowed": false,
+      "maxLevel": 3,
+      "levels": {
+        "1": {
+          "uppercase": true
+        },
+        "2": {},
+        "3": {}
+      }
+    },
+    "modality": "directive",
+    "scope": "heading"
+  },
+  "radno-socijalno-pravo--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "radno-socijalno-pravo--toc": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

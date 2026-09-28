@@ -1,0 +1,15 @@
+{
+  "fpzg-novinarstvo-zavrsni-tekst--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-novinarstvo-zavrsni-tekst--word-count": {
+    "value": {
+      "min": 5000,
+      "max": 6000
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

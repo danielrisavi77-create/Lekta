@@ -1,0 +1,9 @@
+{
+  "unidu-elektro-diplomski--page-count": {
+    "value": {
+      "min": 50
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

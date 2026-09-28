@@ -1,0 +1,63 @@
+{
+  "source": {
+    "id": "geof-naputak-ocjenski-2000",
+    "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\geof-naputak-ocjenski-2000.txt"
+  },
+  "rules": [
+    {
+      "profileId": "geof-diplomski",
+      "ruleId": "geof-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (autor-godina)",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+      "valueShape": "string",
+      "contexts": [
+        "revelik, jer bi inače tekst bio teško čitljiv. Svaka tablica i graf neka budu što samostalnije jedinke, čitljive i izvan svojeg konteksta. Za razliku od uobičajene prakse u znanstvenim časopisima, u ocjenskoj se radnji smiju isti podaci prikazati u tablicnom i u grafičkom obliku, s time da bi tablični prikaz trebalo uvrstiti kada je god moguće. Ako bi tablice odviše opterećivale tekst, treba ih staviti u Prilog. * Rasprava (diskusija): sadrži izvođenje zaključaka iz vlastitih rezultata, u svezi sa spoznajama objavljenim u literaturi. U načelu, najprije valja kritički usporediti vlastite rezultate s rezultatima drugih autora za isti problem. * Zaključak: sažeta rekapitulacija najvažnijih spoznaja dosegnutih u Raspravi, kada je rasprava kratka i pregledna, zasebno poglavlje nije nužno nego se uključuje u Raspravu kao poseban odlomak. Zaključak nipošto nije isto što i sažetak. * Literatura: služi za dokumentiranje važnijih tvrdnji i podataka. Smiju se navesti samo oni naslovi koje je autor(ica) sam procitao i prethodno naveo u tekstu. Iznimno, ako je važno navesti bibliografski podatak za rad nedostupan autoru(ici), tada obvezatno treba navesti i izvor iz kojeg je referenca preuzeta. Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988). Citiranu literaturu treba poredati po abecednom redu prezimena autora. Knjige se citiraju navodenjem slijedećih podataka: prezime autora (ako iz ima više odvajaju se zarezom), inicijali imena, godina u zagradi, naslov knjige, izdavač, mjesto izdanja, npr.: Lovric, P. (1988): Opća kartografija, Sveučilišna naklada Liber, Zagreb. Redoslijed pri citiranju časopisa je slijedeći: prezime autora, inicijali imena, godina u zagradi, naslov članka, broj sveska, početna i završna stranica, npr.: Čolić, K. (1996): Geodezija u Hrvatskoj 1991-1994, Geodetski list 1, 17-28. ° Prilog (primarni mjerni podaci, manje važni izvedeni podaci, dulji matematički dokazi i izvodi, algoritmi, računarski programi i sl.). Vrijedno je truda sastaviti prilog, jer se tako znatno olakšava pisanje znanstvenih publikacija na osnovi podataka iz ocjenske radnje. U prilog ocjenske radnje mogu se također uvrstiti i podaci mjerenja i računanja, digitalne podloge ili banke podataka, kao i programski paketi koje je autor(ica) u okviru rada obradio ili sastavio koji su pohranjeni na nekom drugom tipu medija (diskete, DC, magnetske vrpce i sl.). U slučaju da takvi zapisi čine integralni dio oc"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "geof-doktorski",
+      "ruleId": "geof-doktorski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (autor-godina)",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+      "valueShape": "string",
+      "contexts": [
+        "revelik, jer bi inače tekst bio teško čitljiv. Svaka tablica i graf neka budu što samostalnije jedinke, čitljive i izvan svojeg konteksta. Za razliku od uobičajene prakse u znanstvenim časopisima, u ocjenskoj se radnji smiju isti podaci prikazati u tablicnom i u grafičkom obliku, s time da bi tablični prikaz trebalo uvrstiti kada je god moguće. Ako bi tablice odviše opterećivale tekst, treba ih staviti u Prilog. * Rasprava (diskusija): sadrži izvođenje zaključaka iz vlastitih rezultata, u svezi sa spoznajama objavljenim u literaturi. U načelu, najprije valja kritički usporediti vlastite rezultate s rezultatima drugih autora za isti problem. * Zaključak: sažeta rekapitulacija najvažnijih spoznaja dosegnutih u Raspravi, kada je rasprava kratka i pregledna, zasebno poglavlje nije nužno nego se uključuje u Raspravu kao poseban odlomak. Zaključak nipošto nije isto što i sažetak. * Literatura: služi za dokumentiranje važnijih tvrdnji i podataka. Smiju se navesti samo oni naslovi koje je autor(ica) sam procitao i prethodno naveo u tekstu. Iznimno, ako je važno navesti bibliografski podatak za rad nedostupan autoru(ici), tada obvezatno treba navesti i izvor iz kojeg je referenca preuzeta. Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988). Citiranu literaturu treba poredati po abecednom redu prezimena autora. Knjige se citiraju navodenjem slijedećih podataka: prezime autora (ako iz ima više odvajaju se zarezom), inicijali imena, godina u zagradi, naslov knjige, izdavač, mjesto izdanja, npr.: Lovric, P. (1988): Opća kartografija, Sveučilišna naklada Liber, Zagreb. Redoslijed pri citiranju časopisa je slijedeći: prezime autora, inicijali imena, godina u zagradi, naslov članka, broj sveska, početna i završna stranica, npr.: Čolić, K. (1996): Geodezija u Hrvatskoj 1991-1994, Geodetski list 1, 17-28. ° Prilog (primarni mjerni podaci, manje važni izvedeni podaci, dulji matematički dokazi i izvodi, algoritmi, računarski programi i sl.). Vrijedno je truda sastaviti prilog, jer se tako znatno olakšava pisanje znanstvenih publikacija na osnovi podataka iz ocjenske radnje. U prilog ocjenske radnje mogu se također uvrstiti i podaci mjerenja i računanja, digitalne podloge ili banke podataka, kao i programski paketi koje je autor(ica) u okviru rada obradio ili sastavio koji su pohranjeni na nekom drugom tipu medija (diskete, DC, magnetske vrpce i sl.). U slučaju da takvi zapisi čine integralni dio oc"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "mef-doktorski--page-number-start-at-intro": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "mef-doktorski--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "mef-doktorski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "mef-doktorski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

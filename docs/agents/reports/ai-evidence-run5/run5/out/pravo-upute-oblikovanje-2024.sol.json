@@ -1,0 +1,130 @@
+{
+  "sourceId": "pravo-upute-oblikovanje-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--footnote-font",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "ruleId": "pravo-integrirani-diplomski--citation-style",
+      "value": "pravo-fusnote",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\nbiti numerirane.",
+      "note": "Uputa za diplomske i zavrsne radove navodi izvore u fusnotama indikativom 'navode se', a stil citiranja odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+      "value": "pravo-fusnote",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\nbiti numerirane.",
+      "note": "Uputa za diplomske i zavrsne radove navodi izvore u fusnotama indikativom 'navode se', a stil citiranja odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+      "value": "pravo-fusnote",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\nbiti numerirane.",
+      "note": "Uputa za diplomske i zavrsne radove navodi izvore u fusnotama indikativom 'navode se', a stil citiranja odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "ruleId": "pravo-porezni-prijediplomski--citation-style",
+      "value": "pravo-fusnote",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\nbiti numerirane.",
+      "note": "Uputa za diplomske i zavrsne radove navodi izvore u fusnotama indikativom 'navode se', a stil citiranja odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--footnote-font",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+      "value": null,
+      "modality": null,
+      "scope": null,
+      "verdict": "insufficient",
+      "evidenceQuote": "Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za\noblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.",
+      "note": "Izvor preporucuje upute za diplomske i zavrsne radove, pa ne utvrduje vrijednost, modalitet ni opseg za ovaj siri ili drugi profil."
+    }
+  ]
+}

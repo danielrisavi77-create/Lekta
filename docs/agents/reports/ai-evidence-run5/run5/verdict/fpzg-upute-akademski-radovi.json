@@ -1,0 +1,58 @@
+{
+  "accepted": [
+    "fpzg-mes-master-thesis--justify",
+    "fpzg-mes-master-thesis--line-spacing",
+    "fpzg-mes-master-thesis--page-numbers",
+    "fpzg-mes-master-thesis--font",
+    "fpzg-mes-master-thesis--font-size",
+    "fpzg-nacionalna-sigurnost-diplomski--justify",
+    "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+    "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+    "fpzg-nacionalna-sigurnost-diplomski--font",
+    "fpzg-nacionalna-sigurnost-diplomski--font-size",
+    "fpzg-novinarstvo-diplomski--justify",
+    "fpzg-novinarstvo-diplomski--line-spacing",
+    "fpzg-novinarstvo-diplomski--page-numbers",
+    "fpzg-novinarstvo-diplomski--font",
+    "fpzg-novinarstvo-diplomski--font-size",
+    "fpzg-politologija-diplomski--justify",
+    "fpzg-politologija-diplomski--line-spacing",
+    "fpzg-politologija-diplomski--page-numbers",
+    "fpzg-politologija-diplomski--font",
+    "fpzg-politologija-diplomski--font-size",
+    "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+    "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+    "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+    "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+    "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+    "fpzg-specijalisticki-prilagodba-eu--justify",
+    "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+    "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+    "fpzg-specijalisticki-prilagodba-eu--font",
+    "fpzg-specijalisticki-prilagodba-eu--font-size",
+    "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+    "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+    "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+    "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+    "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+    "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+    "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+    "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+    "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+    "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size"
+  ],
+  "refuted": [
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+      "reason": "Izvor (str. 4-5, tipologija akademskih radova) izricito navodi da FPZG preddiplomski studij 'ne uključuje pisanje zavrsnog rada' i da su jedine priznate vrste diplomski, zavrsni specijalisticki, seminarski, esej, podnesak/osvrt i doktorski rad. Citirana odredba o poravnanju vrijedi samo za 'Diplomski i zavrsni specijalisticki rad'; profil 'novinarstvo-zavrsni-tekst' ne odgovara nijednoj od tih priznatih vrsta, pa se izvor odnosi na drugu vrstu rada nego profil."
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--justify",
+      "reason": "Format-odredba (str. 14) vrijedi izricito za 'Diplomski i zavrsni specijalisticki rad'. Ostale vrste akademske proze na FPZG (podnesak/osvrt, seminarski rad, esej) opisane su ranije u istom izvoru bez ikakve vlastite odredbe o poravnanju, pa se ne moze pretpostaviti da vrijedi za generican 'opci akademski rad'. Nesigurno kojoj vrsti profil odgovara, pravilo se obara."
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--justify",
+      "reason": "Izvor izricito kaze da FPZG preddiplomski studij 'ne uključuje pisanje zavrsnog rada', a jedina 'zavrsna' vrsta koju izvor poznaje je 'zavrsni specijalisticki rad' (poslijediplomski, ne studija politologije). Profil 'politologija-zavrsni' ne odgovara priznatoj vrsti rada iz izvora, pa se citat o poravnanju ne moze pripisati toj vrsti bez pretpostavke."
+    }
+  ]
+}

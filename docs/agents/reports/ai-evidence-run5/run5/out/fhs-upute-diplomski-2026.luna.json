@@ -1,0 +1,36 @@
+﻿{
+  "sourceId": "fhs-upute-diplomski-2026",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
+      "note": "Times New Roman je izričito naveden za tekst, uz iznimku naslovnih stranica, a natuknica daje direktivni modalitet i opseg tijela rada."
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst je obostrano poravnat",
+      "note": "Izvor izričito kaže da je tekst obostrano poravnat, u obliku direktivne tehničke upute za tijelo rada."
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "conflict",
+      "evidenceQuote": "Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm Naslovnica ima drugačije margine!",
+      "note": "Upute daju 2,5 cm na sve četiri strane, ali posebno navode da naslovnica ima drugačije margine bez određivanja njihovih vrijednosti."
+    }
+  ]
+}

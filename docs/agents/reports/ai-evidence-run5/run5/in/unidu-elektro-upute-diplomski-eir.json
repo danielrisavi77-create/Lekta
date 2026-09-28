@@ -1,0 +1,26 @@
+{
+  "source": {
+    "id": "unidu-elektro-upute-diplomski-eir",
+    "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2307",
+    "fetchedAt": "2026-07-30",
+    "snapshotHash": "91854cfd56fbb7c5e27ef1f8ce828c7682b4317eaaeadba2012d71b01ec2f70c",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unidu-elektro-upute-diplomski-eir.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "ruleId": "unidu-elektro-diplomski--page-count",
+      "checkId": "page-count",
+      "label": "Najmanji opseg (50 stranica)",
+      "sourcePage": "Tocka o opsegu rada",
+      "quote": "Opsega je od najmanje\r\n      50 stranica i formata sukladno uobičajenim standardima publikacija.",
+      "valueShape": {
+        "min": "number"
+      },
+      "contexts": [
+        "plomskoga rada 11. Krajnji rok predaje diplomskog rada je prvi radni dan na Sveučilištu u Dubrovniku, tri mjeseca nakon preuzimanja diplomskoga zadatka. 12. O tijeku izradbe diplomskoga rada student redovito izvještava mentora/komentora ili suradnika kojega je odredio mentor. 13. Diplomski je rad samostalna stručna obradba određenog problema teorijske, metodološke, teorijsko-metodološke ili stručne prirode, čime student treba dokazati sposobnost inženjerskog rada u rješavanju složenih zadaća. 14. Pri izradbi diplomskog rada student treba voditi računa o njegovim formalnim i sadržajnim odlikama. Formalnu stranu rada čine: stil, jezik, pravopis, klasifikacija sadržaja, pozivanje na upotrijebljena vrela, označivanje tablica i grafičkih prikaza i slično. Rabljena literatura u tekstu i popisu navodi se prema propisu Nacionalne i sveučilišne knjižnice ili međunarodnog standarda određene struke. Sadržajna kakvoća diplomskog rada prosuđuje se prema dosljednosti u pridržavanju zadane teme naznačene u naslovu rada, prema izboru i načinu primjene metoda analize i sinteze, izvođenju i argumentiranosti zaključaka, prijedloga i slično. Diplomski rad je rad u pisanom obliku na hrvatskomu jeziku. Opsega je od najmanje 50 stranica i formata sukladno uobičajenim standardima publikacija. Rad treba sadržavati sažetak na jednomu stranom jeziku (najčešće engleskomu). 15. Diplomski rad mora biti opremljen u skladu s naputcima za oblikovanje i opremu diplomskoga rada, a prema uputi za izradu naslovnice (R06-01). Prijava obrane diplomskoga rada 16. Diplomski rad i prijavu za njegovu obranu pristupnik predaje Službi studentskih poslova. Diplomski rad koji je odobrio mentor, student predaje u tri uvezana primjerka i jedan uručuje mentoru u elektroničkom obliku (CD). Prijava za obranu diplomskog rada podnosi se na obrascu (F06-03). 2 U iznimnim okolnostima, studentu se može rok predaje diplomskog rada promijeniti uz suglasnost Stručnog vijeća Odjela. Student koji do isteka roka nije predao diplomski rad, mora ponovno prijaviti novu temu diplomskoga rada. 17. Nakon prijema diplomskoga rada, Služba studentskih poslova o tome će izvijestiti pročelnika Odjela i on zatim imenuje povjerenstvo za ocjenu i obranu diplomskoga rada. Obrana diplomskoga rada 18. Obrani diplomskoga rada može pristupiti student: - koji je u propisanom roku predao svoj diplomski rad, - kojemu je diplomski rad pozitivno ocijenilo imenovano povjerenstvo, - koji je riješio sve studentske obveze (knjižnica i"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

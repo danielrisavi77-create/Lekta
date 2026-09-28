@@ -1,0 +1,16 @@
+﻿{
+  "sourceId": "unizd-turizam-upute",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "unizd-turizam-diplomski",
+      "ruleId": "unizd-turizam-diplomski--page-count",
+      "value": { "min": 70 },
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad mora imati najmanje 70 stranica.",
+      "note": "Izvor propisuje najmanje 70 stranica uz riječ ‘mora’, a opseg se odnosi na cijeli rad."
+    }
+  ]
+}

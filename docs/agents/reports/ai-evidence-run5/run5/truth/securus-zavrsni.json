@@ -1,0 +1,36 @@
+{
+  "securus-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "securus-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "securus-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2,
+      "bottom": 2.5,
+      "left": 3
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "securus-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "securus-zavrsni--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

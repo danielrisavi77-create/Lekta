@@ -1,0 +1,53 @@
+{
+  "source": {
+    "id": "unizd-psihologija-upute",
+    "url": "https://www.unizd.hr/Portals/12/Studenti%20PDF/Upute%20za%20izradu%20zavr%C5%A1nog%20rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "e5303b61dcbb0307882e1e33981b096cd6c843b8b9b713eaba6d614d6c16d53a",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unizd-psihologija-upute.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "ruleId": "unizd-psihologija-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (APA)",
+      "sourcePage": "Upute, citiranje",
+      "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
+      "valueShape": "string",
+      "contexts": [
+        "ranicama Odjela za psihologiju. 2. Izgled završnog rada  Završni rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.).  Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm.  Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.  Završni rad treba imati najmanje 20 i najviše 30 stranica.  Završni rad treba slijediti glavne principe pisanja znanstvenog izvještaja. Treba sadržavati sljedeće cjeline: sažetak i ključne riječi na hrvatskom i engleskom jeziku, uvod (koji slijedi princip lijevka te na kraju kojeg se navodi polazište u istraživanje), 1 cilj, probleme i hipoteze, opisanu metodologiju istraživanja, rezultate, raspravu, zaključak i literaturu, i to navedenim redoslijedom. Ukoliko postoje prilozi, oni se navode nakon popisa literature i označeni su rednim brojevima.  Isticanje nekih informacija treba činiti italic stilom (kosa slova), a ne bold ili podcrtano.  Naslovna stranica i stranica na kojoj se nalazi sadržaj nisu numerirane. Ostale su stranice označene rednim brojem koji se nalazi u sredini na dnu stranice.  Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association). 3. Osnovne cjeline završnog rada Naslovna stranica Na prvoj stranici završnoga rada treba navesti naziv sveučilišta, odjela i studija, ime i prezime studenta, naslov završnoga rada, naziv vrste rada ispod naslova (završni rad), zatim titulu te ime i prezime mentora te mjesto i godinu nastanka rada. Preporučuje se da podatci na prvoj stranici budu napisani fontom Times New Roman, slovima veličine 14pt, a da naslov završnoga rada bude napisan slovima veličine 16pt (pogledati primjer dolje). Naslovna stranica nije numerirana. 2 Primjer naslovne stranice Sveučilište u Zadru Odjel za psihologiju Preddiplomski studij psihologije Ime i prezime Naslov završnog rada Završni rad Mentor (titula, ime i prezime mentora) Zadar, godina Druga stranica Nakon naslovne stranice navodi se sadržaj i ta stranica nije numerirana. Treća i četvrta stranica Nakon sadržaja, treća stranica sadržava naslov rada na hrvatskom jeziku, sažetak na hrvatskom jeziku (prored 1), te 3-5 ključnih riječi na hrvatskom jeziku. Četvrta stranica sadržava naslov rada na engleskom jeziku, sažetak na engleskom jeziku (prored 1), te 3-5 ključnih riječi na engleskom jeziku. U sažetku treba u 250 - 300 riječi opisati kratak uvod,"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "ruleId": "unizd-psihologija-zavrsni--page-count",
+      "checkId": "page-count",
+      "label": "Opseg (20-30 str.)",
+      "sourcePage": "Upute, opseg",
+      "quote": "Završni rad treba imati najmanje 20 i najviše 30 stranica.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "rana pred Povjerenstvom organizira se nakon što student prikupi programom predviđenih 180 ECTS bodova;  student sam odabire temu i mentora završnog rada i samostalno je obrađuje pod vodstvom mentora;  Mentor se može izabrati sukladno članku 7. Pravilnika o izradi završnog rada, a koji kaže: - “Mentor u izradi završnog rada član je Odjela za psihologiju. - Mentor u izradi završnog rada osoba je u znanstveno‐nastavnom, nastavnom ili suradničkom zvanju s doktoratom znanosti. - Mentor u izradi završnog rada, iznimno, može biti nastavnik bez doktorata znanosti, ako je prije toga bio barem dvije godine sudjelovao u izvedbi nastave na visokim učilištima.” Za detaljnije odredbe izrade završnog rada, pogledati Pravilnik o završnom radu donesen 13. veljače 2012. godine, koji je objavljen na službenim web stranicama Odjela za psihologiju. 2. Izgled završnog rada  Završni rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.).  Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm.  Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.  Završni rad treba imati najmanje 20 i najviše 30 stranica.  Završni rad treba slijediti glavne principe pisanja znanstvenog izvještaja. Treba sadržavati sljedeće cjeline: sažetak i ključne riječi na hrvatskom i engleskom jeziku, uvod (koji slijedi princip lijevka te na kraju kojeg se navodi polazište u istraživanje), 1 cilj, probleme i hipoteze, opisanu metodologiju istraživanja, rezultate, raspravu, zaključak i literaturu, i to navedenim redoslijedom. Ukoliko postoje prilozi, oni se navode nakon popisa literature i označeni su rednim brojevima.  Isticanje nekih informacija treba činiti italic stilom (kosa slova), a ne bold ili podcrtano.  Naslovna stranica i stranica na kojoj se nalazi sadržaj nisu numerirane. Ostale su stranice označene rednim brojem koji se nalazi u sredini na dnu stranice.  Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association). 3. Osnovne cjeline završnog rada Naslovna stranica Na prvoj stranici završnoga rada treba navesti naziv sveučilišta, odjela i studija, ime i prezime studenta, naslov završnoga rada, naziv vrste rada ispod naslova (završni rad), zatim titulu te ime i prezime mentora te mjesto i godinu nastanka rada. Preporuču"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

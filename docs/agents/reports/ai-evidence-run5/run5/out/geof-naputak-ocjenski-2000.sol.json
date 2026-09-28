@@ -1,0 +1,30 @@
+{
+    "sourceId":  "geof-naputak-ocjenski-2000",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "geof-diplomski",
+                      "ruleId":  "geof-diplomski--citation-style",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988).",
+                      "note":  "Izvor propisuje navođenje autora i godine bez jednoznačnog naziva dopuštenog stila; rečenica je indikativna, a stil citiranja odnosi se na cijeli rad."
+                  },
+                  {
+                      "profileId":  "geof-doktorski",
+                      "ruleId":  "geof-doktorski--citation-style",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988).",
+                      "note":  "Izvor propisuje navođenje autora i godine bez jednoznačnog naziva dopuštenog stila; rečenica je indikativna, a stil citiranja odnosi se na cijeli rad."
+                  }
+              ]
+}

@@ -1,0 +1,43 @@
+{
+  "pravo-socijalni-rad-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravo-socijalni-rad-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravo-socijalni-rad-diplomski--footnote-size": {
+    "value": [
+      10
+    ],
+    "modality": "directive",
+    "scope": "footnote"
+  },
+  "pravo-socijalni-rad-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravo-socijalni-rad-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pravo-socijalni-rad-diplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pravo-socijalni-rad-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

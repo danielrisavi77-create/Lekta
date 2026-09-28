@@ -1,0 +1,57 @@
+{
+  "effectus-seminarski--citation-style": {
+    "value": "chicago-notes",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "effectus-seminarski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "effectus-seminarski--font-size": {
+    "value": 12,
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "effectus-seminarski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "effectus-seminarski--line-spacing": {
+    "value": 1.15,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "effectus-seminarski--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "effectus-seminarski--page-count": {
+    "value": {
+      "min": 10,
+      "max": 20
+    },
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "effectus-seminarski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "effectus-seminarski--reference-count": {
+    "value": 5,
+    "modality": "directive",
+    "scope": "bibliography"
+  }
+}

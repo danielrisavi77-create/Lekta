@@ -1,0 +1,34 @@
+{
+  "ffzg-etnologija-graduate--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-etnologija-graduate--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-etnologija-graduate--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-etnologija-graduate--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ffzg-etnologija-graduate--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

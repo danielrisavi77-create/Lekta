@@ -1,0 +1,24 @@
+{
+  "fhs-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "fhs-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fhs-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "sourceId": "unisb-upute-zavrsni-diplomski-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "ruleId": "unisb-btho-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "ruleId": "unisb-btho-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "ruleId": "unisb-odhz-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "ruleId": "unisb-odhz-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "ruleId": "unisb-sfsb-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "ruleId": "unisb-sfsb-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "ruleId": "unisb-teho-diplomski--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "recommendation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Na stranici ne bi trebalo biti više od 30 redaka teksta uz veličinu slova 12 pt (preporuka: pismo Times New Roman uz veličinu slova 12 pt).",
+      "note": "Za tekst rada navodi se 12 pt u preporuci, pa je opseg glavni tekst, a modalitet preporuka."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--margins",
+      "value": null,
+      "modality": "recommendation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
+      "note": "Za margine se preporučuju najmanje 2 cm i 2,5 cm na uveznom rubu, ali nije navedeno koja je to strana pa potpuna vrijednost nije jednoznačna."
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "ruleId": "unisb-teho-zavrsni--paper-size",
+      "value": null,
+      "modality": null,
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Slike, sheme i dijagrame formata A4 ili nešto većeg od A4, a koji se jednostavno daju složiti na A4, treba uvezati između stranica što bliže tekstu koji se na njih poziva.",
+      "note": "A4 se spominje samo za slike, sheme i dijagrame, bez odredbe o formatu stranica rada ili modalitetu te odredbe."
+    }
+  ]
+}

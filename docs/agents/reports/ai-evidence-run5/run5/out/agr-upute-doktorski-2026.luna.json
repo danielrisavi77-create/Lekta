@@ -1,0 +1,36 @@
+﻿{
+  "sourceId": "agr-upute-doktorski-2026",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored: 1,5 redak",
+      "note": "Izvor navodi prored 1,5 redak kao izravnu postavku teksta, pa je modalitet directive, a opseg body."
+    },
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se piše u donjem desnom kutu.",
+      "note": "Izvor traži numeriranje stranica riječju trebaju, koja je directive, a obuhvat od Uvoda do kraja rada daje opseg whole."
+    },
+    {
+      "profileId": "agr-doktorski",
+      "ruleId": "agr-doktorski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm).",
+      "note": "Izvor izričito propisuje format A4, a riječ treba daje modalitet directive i rad kao cjelina opseg whole."
+    }
+  ]
+}

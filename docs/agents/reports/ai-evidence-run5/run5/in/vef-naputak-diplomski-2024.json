@@ -1,0 +1,41 @@
+{
+  "source": {
+    "id": "vef-naputak-diplomski-2024",
+    "url": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\vef-naputak-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "vef-diplomski",
+      "ruleId": "vef-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "Predsjednik tročlanog povjerenstva ispunjava propisani zapisnik te ga odmah nakon završetka diplomskog ispita potpisuju svi članovi povjerenstva. Potpisani zapisnik i popis pitanja postavljenih kandidatu dostavljaju se u Referadu za integrirani studij. • Student bez studentskih prava uz dokumentaciju prilaže i priznanicu o uplati troškova za obranu diplomskog rada. • U slučaju da student ne obrani diplomski rad, ponovni pristup obrani, uz prijavu istoga, moguć je najranije 30 dana od prethodnog pristupanja obrani. • Središnja knjižnica na svojoj mrežnoj podstranici održava elektroničku bazu diplomskih radova, u skladu s postojećim propisima o javnom pristupu te zaštiti autorskih prava Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada 5 objavljenih radova. Diplomski radovi objavljuju se u cijelosti ili dijelu, u svrhu informiranja javnosti. Prilikom predaje gotovog diplomskog rada student i mentor potpisuju Izjavu (obrazac OB-K-26) o javnom pristupu diplomskom radu koji se u roku od 30 dana od dana obrane objavljuje na nacionalnom repozitoriju odnosno repozitoriju Fakulteta. • Diplomski rad treba biti pisan na računalu i tiskan u standardnoj veličini (A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Diplomski rad u pravilu treba imati minimalno 25 stranica. Sve stranice teksta (počevši od Uvoda) trebaju biti numerirane u donjem desnom kutu. Tekst treba biti pisan hrvatskim ili engleskim jezikom, prema svim gramatičkim i pravopisnim pravilima, te ga je poželjno lektorirati. 4. • Latinski, engleski i drugi strani nazivi pišu se kurzivom. TEHNIČKE UPUTE • Kratica za engleski je engl. kurziv, npr. FDA od engl. Food and Drug Administration. ZA IZRADU • Prva se stranica (naslovnica) ne označava brojem, druga i ostale stranice do Uvoda označavaju DIPLOMSKOG se rimskim brojevima, a ostale arapskim brojevima. RADA • Uvlaka odlomka (engl. paragraph indent) o Svaki odlomak započinje uvlakom o Nazivi odjeljaka i pododjeljaka diplomskog rada se ne uvlače o Uvlaka prvog odlomka treba biti 1,25 cm o Kada je to moguće, treba izbjeći prelamanje odlomaka na više stranica. • Uvez diplomskog rada ne treba imati tvrde korice. • Primjer naslovne stranice: SVEUČILIŠTE U ZAGREBU VETERINARSKI FAKULTET (Times New Roman, 14pt, centrirano) SVEUČILIŠNI INTEGRIRANI PRIJEDIPLOMSKI I DIPLOMSKI STUDIJ VETERINARSKA MEDICINA (Times New Roman, "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "vef-diplomski",
+      "ruleId": "vef-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5",
+      "valueShape": "string",
+      "contexts": [
+        "Predsjednik tročlanog povjerenstva ispunjava propisani zapisnik te ga odmah nakon završetka diplomskog ispita potpisuju svi članovi povjerenstva. Potpisani zapisnik i popis pitanja postavljenih kandidatu dostavljaju se u Referadu za integrirani studij. • Student bez studentskih prava uz dokumentaciju prilaže i priznanicu o uplati troškova za obranu diplomskog rada. • U slučaju da student ne obrani diplomski rad, ponovni pristup obrani, uz prijavu istoga, moguć je najranije 30 dana od prethodnog pristupanja obrani. • Središnja knjižnica na svojoj mrežnoj podstranici održava elektroničku bazu diplomskih radova, u skladu s postojećim propisima o javnom pristupu te zaštiti autorskih prava Veterinarski fakultet: Naputak za prijavu, pisanje i oblikovanje diplomskog rada 5 objavljenih radova. Diplomski radovi objavljuju se u cijelosti ili dijelu, u svrhu informiranja javnosti. Prilikom predaje gotovog diplomskog rada student i mentor potpisuju Izjavu (obrazac OB-K-26) o javnom pristupu diplomskom radu koji se u roku od 30 dana od dana obrane objavljuje na nacionalnom repozitoriju odnosno repozitoriju Fakulteta. • Diplomski rad treba biti pisan na računalu i tiskan u standardnoj veličini (A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Diplomski rad u pravilu treba imati minimalno 25 stranica. Sve stranice teksta (počevši od Uvoda) trebaju biti numerirane u donjem desnom kutu. Tekst treba biti pisan hrvatskim ili engleskim jezikom, prema svim gramatičkim i pravopisnim pravilima, te ga je poželjno lektorirati. 4. • Latinski, engleski i drugi strani nazivi pišu se kurzivom. TEHNIČKE UPUTE • Kratica za engleski je engl. kurziv, npr. FDA od engl. Food and Drug Administration. ZA IZRADU • Prva se stranica (naslovnica) ne označava brojem, druga i ostale stranice do Uvoda označavaju DIPLOMSKOG se rimskim brojevima, a ostale arapskim brojevima. RADA • Uvlaka odlomka (engl. paragraph indent) o Svaki odlomak započinje uvlakom o Nazivi odjeljaka i pododjeljaka diplomskog rada se ne uvlače o Uvlaka prvog odlomka treba biti 1,25 cm o Kada je to moguće, treba izbjeći prelamanje odlomaka na više stranica. • Uvez diplomskog rada ne treba imati tvrde korice. • Primjer naslovne stranice: SVEUČILIŠTE U ZAGREBU VETERINARSKI FAKULTET (Times New Roman, 14pt, centrirano) SVEUČILIŠNI INTEGRIRANI PRIJEDIPLOMSKI I DIPLOMSKI STUDIJ VETERINARSKA MEDICINA (Times New Roman, "
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

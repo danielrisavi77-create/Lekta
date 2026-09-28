@@ -1,0 +1,157 @@
+{
+  "source": {
+    "id": "oss-upute-drustveni",
+    "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf",
+    "fetchedAt": "2026-07-16",
+    "snapshotHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\oss-upute-drustveni.txt"
+  },
+  "rules": [
+    {
+      "profileId": "oss-diplomski",
+      "ruleId": "oss-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "ija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne numeriraju. Prva stranica završnog rada istovjetna je naslovnoj stranici, format "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-diplomski",
+      "ruleId": "oss-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "ija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne numeriraju. Prva stranica završnog rada istovjetna je naslovnoj stranici, format "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-diplomski",
+      "ruleId": "oss-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "valueShape": "number",
+      "contexts": [
+        ".5. Citiranje publikacija međunarodnih organizacija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-diplomski",
+      "ruleId": "oss-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "PDF str. 9 (tiskana str. 7)",
+      "quote": "Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice",
+      "valueShape": "boolean",
+      "contexts": [
+        ",9 12 9,7 11 10,3 Domaće privatno vlasništvo 10 4,7 10 4,4 8 4,0 Domaće državno vlasništvo 2 5,2 2 5,3 3 6,3 Strano vlasništvo 16 90,1 16 90,3 15 89,7 Ukupno 28 100,0 28 100,0 26 100,0 Izvor: Hrvatska narodna banka (2017) Bilten o bankama, br. 30, str. 5, http://www.hnb.hr/documents/20182/2020824/hbilten-o-bankama-30.pdf/42efdf39-5ba2- 4111-9efd-1a9b80ff78e8 [23.11.2017.] TNR, vel. 10 6 Primjer prikazivanja grafikona u završnom radu: TNR, vel. 12 pt Grafikon 1. Struktura operativnog prihoda banaka 120 100 80 70 72,1 72,3 70,6 71 73,4 67,6 60 40 20 20,5 20,5 20,1 18,7 19,1 21,4 21,1 9,4 9,2 8,6 8,9 7,7 5,6 12,3 0 2010. 2011. 2012. 2013. 2014. 2015. 2016. neto ostali nekamatni prihod neto prihod od provizija i naknada TNR, vel. neto kamatni prihod 10 pt Izvor: Hrvatska narodna banka (2017) Bilten o bankama, br. 30, str. 16, http://www.hnb.hr/documents/20182/2020824/hbilten-o-bankama-30.pdf/42efdf39-5ba2-4111-9efd- 1a9b80ff78e8 [29.11.2017.] U Prilozima student prilaže anketne upitnike, različite dokumente, obrasce i slično, koje je koristio u izradi završnog rada. U završnom radu stranice se numeriraju od Sažetka pa sve do kraja rada, a poglavlja se numeriraju od Uvoda do Zaključka. Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice na način da se u programu za obradu teksta Word na alatnoj traci izabere naredba \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right. 7 Ako se pri izradi rada koriste formule, one se izrađuju na način da se u programu za obradu teksta Word na alatnoj traci izabere naredba \"Insert\", nakon toga „Equation“, „Insert New Equation“. Font osnovnih varijabli u formulama je Times New Roman, veličine 12, dok drugi elementi formula (potencije, korijeni, indeksi i sl.) mogu imati i manju veličinu slova. Formule se pišu poravnato ulijevo iz numeriranje rednog broja formule u zagradama pri čemu se ispod formule može dati i legenda kojom se objašnjavaju korištene oznake. Font kod legendi je Times New Roman, veličine 12. Primjer prikazivanja formula u završnom radu: TNR, veličina 12 𝐶 𝑁𝑃𝑉 = ∑ (1+𝑟) 𝑖 𝑖 (1) NPV – neto sadašnja vrijednost Ci – novčani tok u razdoblju i i - broj razdoblja r – diskontna stopa TNR, veličina 12 8 3. NAČIN CITIRANJA U ZAVRŠNOM RADU U završnom radu se od drugog autora mogu preuzeti definicije pojmova, znanstvene činjenice, ideje, podaci, stavovi, informacije, ilustracije i sl., ali se uvijek treba na vrlo jasan način navesti čiji "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-diplomski",
+      "ruleId": "oss-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "osnovnog teksta rada na papiru A4 formata",
+      "valueShape": "boolean",
+      "contexts": [
+        "............... 11 3.4. Citiranje znanstvenih i stručnih članaka u časopisima .............................................. 11 3.5. Citiranje publikacija međunarodnih organizacija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice zavr"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "ruleId": "oss-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "ija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne numeriraju. Prva stranica završnog rada istovjetna je naslovnoj stranici, format "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "ruleId": "oss-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "ija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne numeriraju. Prva stranica završnog rada istovjetna je naslovnoj stranici, format "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "ruleId": "oss-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "valueShape": "number",
+      "contexts": [
+        ".5. Citiranje publikacija međunarodnih organizacija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "ruleId": "oss-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "PDF str. 9 (tiskana str. 7)",
+      "quote": "Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice",
+      "valueShape": "boolean",
+      "contexts": [
+        ",9 12 9,7 11 10,3 Domaće privatno vlasništvo 10 4,7 10 4,4 8 4,0 Domaće državno vlasništvo 2 5,2 2 5,3 3 6,3 Strano vlasništvo 16 90,1 16 90,3 15 89,7 Ukupno 28 100,0 28 100,0 26 100,0 Izvor: Hrvatska narodna banka (2017) Bilten o bankama, br. 30, str. 5, http://www.hnb.hr/documents/20182/2020824/hbilten-o-bankama-30.pdf/42efdf39-5ba2- 4111-9efd-1a9b80ff78e8 [23.11.2017.] TNR, vel. 10 6 Primjer prikazivanja grafikona u završnom radu: TNR, vel. 12 pt Grafikon 1. Struktura operativnog prihoda banaka 120 100 80 70 72,1 72,3 70,6 71 73,4 67,6 60 40 20 20,5 20,5 20,1 18,7 19,1 21,4 21,1 9,4 9,2 8,6 8,9 7,7 5,6 12,3 0 2010. 2011. 2012. 2013. 2014. 2015. 2016. neto ostali nekamatni prihod neto prihod od provizija i naknada TNR, vel. neto kamatni prihod 10 pt Izvor: Hrvatska narodna banka (2017) Bilten o bankama, br. 30, str. 16, http://www.hnb.hr/documents/20182/2020824/hbilten-o-bankama-30.pdf/42efdf39-5ba2-4111-9efd- 1a9b80ff78e8 [29.11.2017.] U Prilozima student prilaže anketne upitnike, različite dokumente, obrasce i slično, koje je koristio u izradi završnog rada. U završnom radu stranice se numeriraju od Sažetka pa sve do kraja rada, a poglavlja se numeriraju od Uvoda do Zaključka. Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice na način da se u programu za obradu teksta Word na alatnoj traci izabere naredba \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right. 7 Ako se pri izradi rada koriste formule, one se izrađuju na način da se u programu za obradu teksta Word na alatnoj traci izabere naredba \"Insert\", nakon toga „Equation“, „Insert New Equation“. Font osnovnih varijabli u formulama je Times New Roman, veličine 12, dok drugi elementi formula (potencije, korijeni, indeksi i sl.) mogu imati i manju veličinu slova. Formule se pišu poravnato ulijevo iz numeriranje rednog broja formule u zagradama pri čemu se ispod formule može dati i legenda kojom se objašnjavaju korištene oznake. Font kod legendi je Times New Roman, veličine 12. Primjer prikazivanja formula u završnom radu: TNR, veličina 12 𝐶 𝑁𝑃𝑉 = ∑ (1+𝑟) 𝑖 𝑖 (1) NPV – neto sadašnja vrijednost Ci – novčani tok u razdoblju i i - broj razdoblja r – diskontna stopa TNR, veličina 12 8 3. NAČIN CITIRANJA U ZAVRŠNOM RADU U završnom radu se od drugog autora mogu preuzeti definicije pojmova, znanstvene činjenice, ideje, podaci, stavovi, informacije, ilustracije i sl., ali se uvijek treba na vrlo jasan način navesti čiji "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "ruleId": "oss-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "osnovnog teksta rada na papiru A4 formata",
+      "valueShape": "boolean",
+      "contexts": [
+        "............... 11 3.4. Citiranje znanstvenih i stručnih članaka u časopisima .............................................. 11 3.5. Citiranje publikacija međunarodnih organizacija i dr. .............................................. 12 3.6. Citiranje zakonskih propisa ....................................................................................... 12 3.7. Dodatne napomene kod citiranja literature ................................................................ 12 i 1. UVOD Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada. Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira kasnije u ovim Uputama. Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta. Tekst rada uvijek se piše u neutralnom obliku (npr. \"objasnit će se\"/definirat će se“, a ne \"objasnit ću\"/“definirat ću“) vodeći računa o pravopisnim standardima. 1 2. IZGLED ZAVRŠNOG RADA Završni rad sadrži sljedeće dijelove:  naslovna stranica,  prva stranica,  sadržaj,  naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),  uvod,  izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),  zaključak,  literatura,  popis tablica,  popis slika,  popis grafikona i  prilozi. Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve stranice zavr"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

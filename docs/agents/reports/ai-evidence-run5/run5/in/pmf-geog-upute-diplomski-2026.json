@@ -1,0 +1,87 @@
+{
+  "source": {
+    "id": "pmf-geog-upute-diplomski-2026",
+    "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski%20rad%20-%20upute%202026%5B1%5D.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pmf-geog-upute-diplomski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (harvardski)",
+      "sourcePage": "odjeljak Citiranje",
+      "quote": "Literatura se citira prema harvardskom sustavu.",
+      "valueShape": "string",
+      "contexts": [
+        "lu se ne prikazuje i pomoću tablice i pomoću slike. • Treba izbjegavati preuzimanje (kopiranje, skeniranje) gotovih grafičkih i tabličnih prikaza drugih autora. • Naslovi slika ili tablica moraju davati odgovore na pitanja „što, gdje i kada“ (što = objekt koji je prikazan, gdje = prostorni obuhvat/okvir, kada = vremenski period ili trenutak). Ispred naslova tablica/slika pišu se redni brojevi u skraćenom obliku (npr. Sl. 1. Naslov slike; Tab. 1. Naslov tablice). Naslovi tablica pišu se iznad tablica, a naslovi slika ispod slika. • Ispod slika i tablica piše se izvor u skraćenom obliku (vidjeti tablicu kod citiranja). Izvor se odnosi na podatke na temelju kojih je izrađena slika ili tablica. Ne piše se da je sliku ili tablicu izradio autor (student), nego se pretpostavlja da je autorsko djelo jer se nalazi u diplomskom radu studenta. U slučajevima preuzimanja gotovih tablica ili grafičkih priloga potrebno je navesti da je prilog preuzet i navesti izvor. • Pri pozivanju na određenu tablicu ili sliku u tekstu u zagradi se piše skraćena oznaka malim početnim slovom (npr. tab. 1 ili sl. 1). Sve slike i tablice trebaju biti najavljene u tekstu, u pravilu prije samog priloga. Citiranje • Literatura se citira prema harvardskom sustavu. • Korištena literatura citira se unutar teksta tako da se navede prezime autora i godina objavljivanja (odvojena zarezom) na kraju rečenice ili dijela rečenice koji predstavlja prepričani sadržaj iz literature, npr. „(Chang, 2019)“. • U slučaju preuzimanja doslovnog citata iz literature, preuzeti dio označava se navodnim znakovima te se uz referencu navodi i stranica rada (odvojena zarezom) iz koje je citat preuzet, npr. „(Chang, 2019, 97)“. • Ako citirana referenca ima dva autora, navode se oba prezimena autora i godina, npr. „(Garay i Cànoves, 2011)” • Ako citirana referenca ima tri i više autora, u tekstu se navode prezime prvog autora i kratica „i dr.”, npr. „(Graham i dr., 2000)“. U popisu literature navode se svi autori rada. • Ako se citira više članaka jednog autora ili iste grupe autora, prezime se navodi samo jednom, a godine objave radova navode se kronološki i odvajaju znakom točka-zarez, npr. „(Andriotis, 2002; 2006)“. • Ako se citira više radova jednog autora ili iste grupe autora iz iste godine izdanja, uz godinu 4 se navode i slova po abecednom redu, npr. „(Harvey, 2016a; 2016b)“. • Kada se navodi više radova u kontinuitetu, upotrebljava se znak točka-zarez. Radovi"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "D., 2003: Focus: Targetitis ails Novinski (Chittenden i Chittenden i NHS, Times Online, 1 June, članak (na dr., 2003) dr. (2003) http://www.timesonline.co.uk/tol/news/uk/scotland/article1138006.ece internetu) (17. 03. 2005.) 6 Referenca u (Longman, Longman Longman, 2013: Longman Dictionary of Contemporary English (New tiskanom 2003) (2003) Edition), Pearson Education Limited, Harlow. rječniku Referenca u (Longman, Longman Longman, 2018: Longman Dictionary of Contemporary English rječniku na 2013) (2013) Online, https://www.ldoceonline.com/ (13. 12. 2018.) internetu Opseg i forma rada • Optimalni opseg diplomskog rada je oko 50 stranica. Jedna stranica u radu treba odgovarati standardnoj veličini „kartice“, tj. sadržavati oko 1800 znakova. • Rad se piše fontom Times New Roman, veličina 12 točaka, s proredom od 1,5 redaka. Veličina pozivnih bilješki je 10 točaka. Kod slika, tablica, dijagrama i drugih priloga može se koristiti drugačiji font i veličina slova. • Naslovi poglavlja pišu se podebljanim velikim tiskanim slovima (bold), veličine 12 točaka (npr. METODE RADA). Naslovi potpoglavlja pišu se malim podebljanim slovima, veličine 12 točaka (npr. Prostorni obuhvat istraživanja). • Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm. • Rad se predaje u digitalnom obliku. Verzije rada za mentora i povjerenstvo predaje se u formatu MS Word. Konačna verzija rada prije obrane i nakon obrane predaje se u formatu PDF pod nazivom Ime Prezime – Diplomski rad i godina. OCJENA I OBRANA DIPLOMSKOG RADA a) Ocjena diplomskog rada • Student redovito izvještava mentora o tijeku izrade diplomskog rada. • Student šalje mentoru dovršeni diplomski rad, pripremljen prema ovim Uputama i dodatnim uputama mentora, najkasnije 20 radnih dana (prema akademskom kalendaru) prije sjednice Vijeća Geografskog odsjeka na kojoj se imenuje Povjerenstvo za ocjenu rada (u daljnjem tekstu: Povjerenstvo). • Kada mentor smatra da je rad spreman za obranu, a najviše nakon dva revizijska pregleda, mentor dostavlja pomoćniku pročelnika za nastavu prijedlog članova povjerenstva za ocjenu i obranu rada, najkasnije jedan radni dan prije sjednice Povjerenstva za nastavu. Mentor time potvrđuje svoju suglasnost da je rad spreman za ocjenu. • Vijeće Odsjeka na prijedlog Povjerenstva za nastavu imenuje Povjerenstvo za ocjenu rada. • Najkasnije tri radna dana nakon sjednice Vijeća Odsjeka, a u dogovoru s mentorom, student šalje primjerak rada imenovanim članov"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.",
+      "valueShape": "string",
+      "contexts": [
+        "D., 2003: Focus: Targetitis ails Novinski (Chittenden i Chittenden i NHS, Times Online, 1 June, članak (na dr., 2003) dr. (2003) http://www.timesonline.co.uk/tol/news/uk/scotland/article1138006.ece internetu) (17. 03. 2005.) 6 Referenca u (Longman, Longman Longman, 2013: Longman Dictionary of Contemporary English (New tiskanom 2003) (2003) Edition), Pearson Education Limited, Harlow. rječniku Referenca u (Longman, Longman Longman, 2018: Longman Dictionary of Contemporary English rječniku na 2013) (2013) Online, https://www.ldoceonline.com/ (13. 12. 2018.) internetu Opseg i forma rada • Optimalni opseg diplomskog rada je oko 50 stranica. Jedna stranica u radu treba odgovarati standardnoj veličini „kartice“, tj. sadržavati oko 1800 znakova. • Rad se piše fontom Times New Roman, veličina 12 točaka, s proredom od 1,5 redaka. Veličina pozivnih bilješki je 10 točaka. Kod slika, tablica, dijagrama i drugih priloga može se koristiti drugačiji font i veličina slova. • Naslovi poglavlja pišu se podebljanim velikim tiskanim slovima (bold), veličine 12 točaka (npr. METODE RADA). Naslovi potpoglavlja pišu se malim podebljanim slovima, veličine 12 točaka (npr. Prostorni obuhvat istraživanja). • Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm. • Rad se predaje u digitalnom obliku. Verzije rada za mentora i povjerenstvo predaje se u formatu MS Word. Konačna verzija rada prije obrane i nakon obrane predaje se u formatu PDF pod nazivom Ime Prezime – Diplomski rad i godina. OCJENA I OBRANA DIPLOMSKOG RADA a) Ocjena diplomskog rada • Student redovito izvještava mentora o tijeku izrade diplomskog rada. • Student šalje mentoru dovršeni diplomski rad, pripremljen prema ovim Uputama i dodatnim uputama mentora, najkasnije 20 radnih dana (prema akademskom kalendaru) prije sjednice Vijeća Geografskog odsjeka na kojoj se imenuje Povjerenstvo za ocjenu rada (u daljnjem tekstu: Povjerenstvo). • Kada mentor smatra da je rad spreman za obranu, a najviše nakon dva revizijska pregleda, mentor dostavlja pomoćniku pročelnika za nastavu prijedlog članova povjerenstva za ocjenu i obranu rada, najkasnije jedan radni dan prije sjednice Povjerenstva za nastavu. Mentor time potvrđuje svoju suglasnost da je rad spreman za ocjenu. • Vijeće Odsjeka na prijedlog Povjerenstva za nastavu imenuje Povjerenstvo za ocjenu rada. • Najkasnije tri radna dana nakon sjednice Vijeća Odsjeka, a u dogovoru s mentorom, student šalje primjerak rada imenovanim članov"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "ruleId": "pmf-geografija-diplomski--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezni dijelovi strukture diplomskog rada",
+      "sourcePage": "odjeljak Struktura i oblikovanje teksta, b) Struktura rada",
+      "quote": "Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "piše cijeli rad. Korišteni font je Times New Roman. • Prva stranica u dokumentu predstavlja korice. Iza korica je predviđena jedna prazna stranica. • Iza prazne stranice dolazi naslovnica s osnovnim podacima o radu. Prilikom predaje konačne verzije diplomskog rada s naslovne stranice briše se formulacija \"predan na ocjenu…\". • Iza naslovnice stoji iskaz Ovaj je diplomski rad izrađen u sklopu...). • Temeljna dokumentacijska kartica: Piše se na hrvatskom jeziku isključivo na jednoj kartici. Pod Tema prihvaćena navodi se datum sjednice Vijeća Geografskog odsjeka na kojoj je prihvaćena tema rada. Pod Datum obrane piše se dogovoreni datum obrane diplomskog rada. 2 • Basic documentation card: Temeljna dokumentacijska kartica na engleskom jeziku. Sadržaj treba biti istovjetan temeljnoj dokumentacijskoj kartici na hrvatskom i piše se isključivo na jednoj kartici. • Sadržaj: Preporučuje se decimalno označavanje poglavlja i potpoglavlja. • Predgovor: Može sadržavati zahvale i sličan sadržaj. Nije obvezan dio, a može se i drugačije nasloviti. • Početne stranice do uključivo Sadržaja (ili Predgovora) ne numeriraju se. Numeracija započinje od Uvoda koji nosi arapski broj 1. b) Struktura rada • Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi poglavlja. • Uvod: sažeto definirati objekt, prostorni i vremenski obuhvat teme istraživanja. U zasebnom odlomku jasno iskazati polazne hipoteze i cilj istraživanja. Prva stranica Uvoda nosi arapski broj 1. • Pregled dosadašnjih istraživanja i literature: aktualan pregled znanja (znanstvenih i stručnih radova) o užem području rada. • Teorijski pristup: pristup istraživanju s teorijskog aspekta na temelju pročitane literature, logično strukturiran po poglavljima relevantnim za rad. • Metode istraživanja: metode prikupljanja i analize podataka; izvori podataka. • Rezultati: Iznose se rezultati vlastitog rada, praćeni objašnjenima te tabličnim i grafičkim prilozima. Ovaj se dio može podijeliti u više logičkih cjelina (poglavlja). Usporedba s rezultatima drugih autora (iz literature) piše se u Raspravi. • Rasprava: Kritička usporedba rezultata vlastitog rada i spoznaja iz literature. • Zaključak: Sažeta sinteza najvažnijih spoznaja u radu. Zaključak sadrži najvažnija rješenja postavljenog problema te osvrt na ispunjenost ciljeva i hipoteza definiranih u Uvodu. Zaključak nije sažetak rada i nije isto što i Izvadak koji se piše u Temeljnoj dokumentacijskoj kartici. • Literatura i izvori"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

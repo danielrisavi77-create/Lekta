@@ -1,0 +1,24 @@
+{
+  "source": {
+    "id": "ffzg-kroatistika-diplomski-2026",
+    "url": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/153-opce-upute-za-sastavljanje-diplomskoga-rada",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "bff2cedf29ff0ca3d65d3ddab8bf5e48ae193495a25c1094e1c0a681017e20de",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-kroatistika-diplomski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "ruleId": "ffzg-kroatistika-graduate--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Desni je rub teksta poravnat.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ique et analogique de la langue française. Version numérique. Le Robert – Bureau van Dijk. Nemec, Krešimir. 2018. Što je nama danas Krleža: Uz 150. obljetnicu rođenja Miroslava Krleže. Vijenac , Zagreb, XXVI, 639–640 (13. 9. 2018), http://www.matica.hr/vijenac/639%20-%20640/sto-je-nama-danas-krleza-28188/ [pregled 30. 9. 2018]. Pranjić, Krunoslav. 2018. Izabrani stilistički spisi . Prir. Đurđica Garvanović-Porobija. Stilistika, http://stilistika.org/krunoslav-pranjic-izabrani-stilisticki-spisi [pregled 30. 9. 2018]. Žanić, Ivo. 2017. Nekim protagonistima jezične politike živi govornici kao da su smetnja. [Razgovor s Matijom Štahanom.] Arteist, 13. 6. 2017, https://arteist.hr/ivo-zanic-o-jeziku-se-i-dalje-razmislja-mehanicki-u-kategorijama-ispravno-pogresno/ [pregled 30. 9. 2018]. Tiskani radovi iz internetskih baza časopisâ ili općenito oni skinuti s interneta citiraju se kao tiskani. Dakle kao izvor se ne navodi npr. Hrčak , koji je samo internetska baza tiskanih časopisa. Pravi internetski časopisi i portali nemaju tiskanih izdanja. 6. Oblikovanje teksta Osnovni tekst: Times New Roman , 12 p, sve margine 2,5 cm, prored 1,5. Bilješke (fusnote): Times New Roman , 10 p, prored 1,5. Desni je rub teksta poravnat. Stranice se numeriraju arapskim brojkama počevši od Uvoda . Bilješke je (fusnote) preporučljivo stavljati na vidljivo mjesto, tj. na kraj smislene cjeline, primjerice rečenice, svakako desno od interpunkcijskoga znaka. Dijelovi teksta (primjeri ili termini) ističu se nakošenim pismom (kurzivom); ako su primjeri ili citati duži (rečenica ili tekst), izdvajaju se u novi red i pišu uvučeno, običnim pismom manje veličine. 7. Predaja i obrana rada Rad se predaje uvezan u tri primjerka. Brani se usmeno pred tročlanim povjerenstvom koje čine mentor i dva člana u znanstveno-nastavnom, nastavnom ili suradničkom zvanju. O obrani se sastavlja zapisnik koji potpisuju svi članovi povjerenstva. Obrana je javna i sastoji se od: diplomandova izlaganja temeljnih postavki i zaključaka rada (10–15 minuta), razgovora diplomanda s članovima povjerenstva o radu i pitanjima koja on nameće (tema, metodologija, metajezik i sl.). Završnom se ocjenom vrednuju i pisani tekst i njegova usmena prezentacija i obrana. Sastavili: Krešimir Bagić i Ivan Marković Prilog: Uzorak naslovnice (PDF) Novosti 11. 6. 2026. Kako govori prava dama? 1. 6. 2026. Natječaj za mobilnost studenata (Erasmus+) 1. 6. 2026. Nagrade \"Vl"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

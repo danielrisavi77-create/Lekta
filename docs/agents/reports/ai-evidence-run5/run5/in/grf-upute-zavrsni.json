@@ -1,0 +1,70 @@
+{
+  "source": {
+    "id": "grf-upute-zavrsni",
+    "url": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\grf-upute-zavrsni.txt"
+  },
+  "rules": [
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--font",
+      "checkId": "font",
+      "label": "Pismo (font)",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Pismo: Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "UPUTE ZA IZRADU ZAVRŠNOG RADA 1. OBLIKOVANJE ZAVRŠNOG RADA Završni rad se izrađuje na kraju preddiplomskog studija i obično obrađuje definiranu stručnu temu kojom se dokazuje sposobnost kandidata za stručni rad, snalaženje u rje- šavanju određenih problema i vještina elaboriranja te oblikovanja pisanih radova. Format završnog rada: A-4 (21 x 29,7 cm), tvrdi uvez Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm Pismo: Times New Roman Prored: 1,5 redak Korice završnog rada (2. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - završni rad (28 pt, polumasno, verzal) - upisuje se ime i prezime studenta (14 pt, kurent) - isključivanje u sredinu Prva unutarnja stranica završnog rada (3. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - naziv smjera (14 pt, kurent) - završni rad (28 pt, polumasno, verzal) - naslov teme završnog rada (18 pt, polumasno, verzal) - upisuje se ime i prezime mentora (lijevo) te ime i prezime studenta (desno), (14 pt), kurent - upisuje se mjesto i godina (14 pt), kurent - isključivanje u sredinu SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB ZAVRŠNI RAD Upisati ime i prezime studenta SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB Smjer: upisati naziv smjera ZAVRŠNI RAD UPISATI NASLOV ZAVRŠNOG RADA Mentor: Student: Titula, ime i prezime Ime i prezime Zagreb, upisati godinu. 2. SASTAVLJANJE ZAVRŠNOG RADA Iza prve unutarnje stranice ulaže se Rješenje o odobrenju teme završnog rada i ime- novanju mentora. Sažetak završnog rada stavlja se iza Rješenja o odobrenju teme završnog rada, a prije sadržaja završno"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (prijelom teksta)",
+      "quote": "U prijelomu teksta osnovno pismo je Times New Roman 12 pt",
+      "valueShape": "number",
+      "contexts": [
+        "s predavanja, upute proizvođača, pro- spekti, pravilnici i propisi. Citati i bilješke. Pri izradi završnog rada dopušteno je korištenje literature, a time i citiranja drugih. U pravilu se na jednom mjestu smije citirati najviše 15 redaka tuđeg teksta, pod uvjetom da se citat stavi pod navodnike i da se navede izvor na kraju poglavlja u kojem je naveden citat. U završnom radu može se svojim riječima prepričati i nekoliko stranica tuđeg teksta uz navođenje izvora. Citat ima svrhu jedino ako od- govara kontekstu, ako se želi potkrijepiti mišljenje autoritetom ili ako se želi protiv nečijeg mišljenja polemizirati. Kada se navodi izvor tada se na kraju citata ili pre- pričanog izvatka stavlja oznaka za bilješku koja se citira u literaturi. Numeriranje stranica ide od prve stranice uvoda do zadnje u tekućem nizu. Prva stranica uvoda je paginirana ali se ne prikazuje. Paginacija se piše arapskim brojkama. Formule i jednadžbe koje se koriste uklapaju se u tekst završnog rada. 7. Prilozi u obliku ilustracija ili tablica mogu stajati uz sam tekst, a mogu biti (uz napomenu) i na kraju teksta. Ako su prilozi većeg formata, moraju se preklopiti i uklopiti u sam rad (nacrti) ili u poseban džep. U prijelomu teksta osnovno pismo je Times New Roman 12 pt, a izgled stranice je takav da se naslovi poglavlja pišu polumasno i verzal, a podnaslovi kurent. Dijelove teksta koje je potrebno posebno istaknuti pišu se u kurzivu. Isključivanje na puni format s uključenim rastavljanjem riječi u duhu Hrvatskog jezika. Cijeli rad piše se jednostrano. Obrazac GF- Zahtjev ZR SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET Student __________________________________ JMBAG __________________________ ZAHTJEV ZA ODOBRENJE TEME ZAVRŠNOG RADA Molim Fakultetsko vijeće Grafičkog fakulteta Sveučilišta u Zagrebu da mi odobri izradu završnog rada iz kolegija __________________________________________________________________ pod naslovom____________________________________________________________________ Kratko obrazloženje teme: Naslov završnog rada dogovoren je s mentorom _______________________________________________________________________________ (ime i prezime mentora) Mentor predlaže Povjerenstvo za ocjenu i obranu završnog rada 1. __________________________________________________________ predsjednik 2. __________________________________________________________ član 3. __________________________________________________________ mentor 4. _____________________"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Prored: 1,5 redak",
+      "valueShape": "number",
+      "contexts": [
+        "UPUTE ZA IZRADU ZAVRŠNOG RADA 1. OBLIKOVANJE ZAVRŠNOG RADA Završni rad se izrađuje na kraju preddiplomskog studija i obično obrađuje definiranu stručnu temu kojom se dokazuje sposobnost kandidata za stručni rad, snalaženje u rje- šavanju određenih problema i vještina elaboriranja te oblikovanja pisanih radova. Format završnog rada: A-4 (21 x 29,7 cm), tvrdi uvez Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm Pismo: Times New Roman Prored: 1,5 redak Korice završnog rada (2. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - završni rad (28 pt, polumasno, verzal) - upisuje se ime i prezime studenta (14 pt, kurent) - isključivanje u sredinu Prva unutarnja stranica završnog rada (3. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - naziv smjera (14 pt, kurent) - završni rad (28 pt, polumasno, verzal) - naslov teme završnog rada (18 pt, polumasno, verzal) - upisuje se ime i prezime mentora (lijevo) te ime i prezime studenta (desno), (14 pt), kurent - upisuje se mjesto i godina (14 pt), kurent - isključivanje u sredinu SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB ZAVRŠNI RAD Upisati ime i prezime studenta SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB Smjer: upisati naziv smjera ZAVRŠNI RAD UPISATI NASLOV ZAVRŠNOG RADA Mentor: Student: Titula, ime i prezime Ime i prezime Zagreb, upisati godinu. 2. SASTAVLJANJE ZAVRŠNOG RADA Iza prve unutarnje stranice ulaže se Rješenje o odobrenju teme završnog rada i ime- novanju mentora. Sažetak završnog rada stavlja se iza Rješenja o odobrenju teme završnog rada, a prije sadržaja završnog rada. Sažetak mo"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "ruleId": "grf-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "UPUTE ZA IZRADU ZAVRŠNOG RADA 1. OBLIKOVANJE ZAVRŠNOG RADA Završni rad se izrađuje na kraju preddiplomskog studija i obično obrađuje definiranu stručnu temu kojom se dokazuje sposobnost kandidata za stručni rad, snalaženje u rje- šavanju određenih problema i vještina elaboriranja te oblikovanja pisanih radova. Format završnog rada: A-4 (21 x 29,7 cm), tvrdi uvez Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm Pismo: Times New Roman Prored: 1,5 redak Korice završnog rada (2. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - završni rad (28 pt, polumasno, verzal) - upisuje se ime i prezime studenta (14 pt, kurent) - isključivanje u sredinu Prva unutarnja stranica završnog rada (3. stranica u dokumentu Završni rad špranca): - puni naziv Fakulteta (16 pt, polumasno, verzal) - naziv smjera (14 pt, kurent) - završni rad (28 pt, polumasno, verzal) - naslov teme završnog rada (18 pt, polumasno, verzal) - upisuje se ime i prezime mentora (lijevo) te ime i prezime studenta (desno), (14 pt), kurent - upisuje se mjesto i godina (14 pt), kurent - isključivanje u sredinu SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB ZAVRŠNI RAD Upisati ime i prezime studenta SVEUČILIŠTE U ZAGREBU GRAFIČKI FAKULTET ZAGREB Smjer: upisati naziv smjera ZAVRŠNI RAD UPISATI NASLOV ZAVRŠNOG RADA Mentor: Student: Titula, ime i prezime Ime i prezime Zagreb, upisati godinu. 2. SASTAVLJANJE ZAVRŠNOG RADA Iza prve unutarnje stranice ulaže se Rješenje o odobrenju teme završnog rada i ime- novanju mentora. Sažetak završnog rada stavlja se iza Rješenja o odobrenju teme završnog rada, a"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

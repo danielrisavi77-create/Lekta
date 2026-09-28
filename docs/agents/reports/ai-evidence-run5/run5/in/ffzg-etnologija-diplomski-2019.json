@@ -1,0 +1,83 @@
+{
+  "source": {
+    "id": "ffzg-etnologija-diplomski-2019",
+    "url": "https://etno.ffzg.unizg.hr/wp-content/uploads/2019/08/UPUTE-DIPLOMSKI-RAD-EKA.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-etnologija-diplomski-2019.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "tekst rada treba biti u fontu Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "lju uje usmeno izlaganje studenta o radu te odgovaranje na pitanja o radu koja postavljaju lanovi povjerenstva. Nakon što kandidat odgovori na postavljena pitanja, povjerenstvo može dopustiti i drugim nazo nim osobama da postave dodatna pitanja. Obrana diplomskog rada završava odlukom povjerenstva o ishodu obrane. U roku od tjedan dana nakon obrane student donosi jedan isprintani primjerak rada (spiralni uvez) koji se pohranjuje u Arhivu Odsjeka, a rad u elektroni kom obliku šalje e-mailom predmetnoj knjižni arki te tajnici Odsjeka. Student je dužan priložiti i potpisanu Izjavu o pohrani ocjenskog rada u digitalni arhiv Knjižnice Filozofskog fakulteta: (http://knjiznica.ffzg.unizg.hr/uploads/G2/1r/G21r9ync38chLAbMAM88lA/izjava-dig- arhiv.pdf). OPSEG RADA Predvi eno je da diplomski rad na diplomskom studiju etnologije i kulturne antropologije obuhva a od 25 do 40 kartica teksta, ne uklju uju i naslovnu stranicu, popis poglavlja, popis literature, priloge i sažetke. Integrirani ili interdisciplinarni diplomski rad može obuhva ati od 50 do 70 kartica teksta.1 GRAFI KO OBLIKOVANJE TEKSTA Rad mora biti napisan u programu Word te u formatu Word Document (.doc ili .docx); margine 2,5 cm; tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira). Za dodatna objašnjenja dijelova teksta treba koristiti bilješke na dnu iste stranice (footnotes), ozna ene arapskim brojevima i pisane u veli ini pisma od 10 to aka. 1 Jedna kartica teksta iznosi 1800 znakova (s razmacima) ili prosje no 30 redova sa 60 znakova u retku, odnosno oko 300 rije i. 2 UPUTE ZA PISANJE DIPLOMSKOG RADA Elementi diplomskog rada 1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaklju ak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 rije i) i klju ne rije i (3 – 5) na hrvatskom i engleskom jeziku. Naslovnica Naslovna stranica mora sadržavati sljede e podatke: Sveu ilište u Zagrebu, Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju, \"Diplomski rad\", naslov diplomskog rada, ime i prezime studenta/studentice, ime i prezime mentora/mentorice s pripadaju om titulom, mjesto te mjesec i godina predaje diplomskog rada. Stranica s Izjavom o autorstvu Izjavljujem pod punom moralnom odgovornoš u da sam diplomski rad XY izradio/la potpuno samostalno"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "obostrano poravnatim tekstualnim blokom",
+      "valueShape": "boolean",
+      "contexts": [
+        " lanovi povjerenstva. Nakon što kandidat odgovori na postavljena pitanja, povjerenstvo može dopustiti i drugim nazo nim osobama da postave dodatna pitanja. Obrana diplomskog rada završava odlukom povjerenstva o ishodu obrane. U roku od tjedan dana nakon obrane student donosi jedan isprintani primjerak rada (spiralni uvez) koji se pohranjuje u Arhivu Odsjeka, a rad u elektroni kom obliku šalje e-mailom predmetnoj knjižni arki te tajnici Odsjeka. Student je dužan priložiti i potpisanu Izjavu o pohrani ocjenskog rada u digitalni arhiv Knjižnice Filozofskog fakulteta: (http://knjiznica.ffzg.unizg.hr/uploads/G2/1r/G21r9ync38chLAbMAM88lA/izjava-dig- arhiv.pdf). OPSEG RADA Predvi eno je da diplomski rad na diplomskom studiju etnologije i kulturne antropologije obuhva a od 25 do 40 kartica teksta, ne uklju uju i naslovnu stranicu, popis poglavlja, popis literature, priloge i sažetke. Integrirani ili interdisciplinarni diplomski rad može obuhva ati od 50 do 70 kartica teksta.1 GRAFI KO OBLIKOVANJE TEKSTA Rad mora biti napisan u programu Word te u formatu Word Document (.doc ili .docx); margine 2,5 cm; tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira). Za dodatna objašnjenja dijelova teksta treba koristiti bilješke na dnu iste stranice (footnotes), ozna ene arapskim brojevima i pisane u veli ini pisma od 10 to aka. 1 Jedna kartica teksta iznosi 1800 znakova (s razmacima) ili prosje no 30 redova sa 60 znakova u retku, odnosno oko 300 rije i. 2 UPUTE ZA PISANJE DIPLOMSKOG RADA Elementi diplomskog rada 1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaklju ak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 rije i) i klju ne rije i (3 – 5) na hrvatskom i engleskom jeziku. Naslovnica Naslovna stranica mora sadržavati sljede e podatke: Sveu ilište u Zagrebu, Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju, \"Diplomski rad\", naslov diplomskog rada, ime i prezime studenta/studentice, ime i prezime mentora/mentorice s pripadaju om titulom, mjesto te mjesec i godina predaje diplomskog rada. Stranica s Izjavom o autorstvu Izjavljujem pod punom moralnom odgovornoš u da sam diplomski rad XY izradio/la potpuno samostalno uz stru no vodstvo mentora/ice XY. Svi podaci navedeni u radu su istiniti i prikupl"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "1,5 linija",
+      "valueShape": "number",
+      "contexts": [
+        " postavljaju lanovi povjerenstva. Nakon što kandidat odgovori na postavljena pitanja, povjerenstvo može dopustiti i drugim nazo nim osobama da postave dodatna pitanja. Obrana diplomskog rada završava odlukom povjerenstva o ishodu obrane. U roku od tjedan dana nakon obrane student donosi jedan isprintani primjerak rada (spiralni uvez) koji se pohranjuje u Arhivu Odsjeka, a rad u elektroni kom obliku šalje e-mailom predmetnoj knjižni arki te tajnici Odsjeka. Student je dužan priložiti i potpisanu Izjavu o pohrani ocjenskog rada u digitalni arhiv Knjižnice Filozofskog fakulteta: (http://knjiznica.ffzg.unizg.hr/uploads/G2/1r/G21r9ync38chLAbMAM88lA/izjava-dig- arhiv.pdf). OPSEG RADA Predvi eno je da diplomski rad na diplomskom studiju etnologije i kulturne antropologije obuhva a od 25 do 40 kartica teksta, ne uklju uju i naslovnu stranicu, popis poglavlja, popis literature, priloge i sažetke. Integrirani ili interdisciplinarni diplomski rad može obuhva ati od 50 do 70 kartica teksta.1 GRAFI KO OBLIKOVANJE TEKSTA Rad mora biti napisan u programu Word te u formatu Word Document (.doc ili .docx); margine 2,5 cm; tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira). Za dodatna objašnjenja dijelova teksta treba koristiti bilješke na dnu iste stranice (footnotes), ozna ene arapskim brojevima i pisane u veli ini pisma od 10 to aka. 1 Jedna kartica teksta iznosi 1800 znakova (s razmacima) ili prosje no 30 redova sa 60 znakova u retku, odnosno oko 300 rije i. 2 UPUTE ZA PISANJE DIPLOMSKOG RADA Elementi diplomskog rada 1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaklju ak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 rije i) i klju ne rije i (3 – 5) na hrvatskom i engleskom jeziku. Naslovnica Naslovna stranica mora sadržavati sljede e podatke: Sveu ilište u Zagrebu, Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju, \"Diplomski rad\", naslov diplomskog rada, ime i prezime studenta/studentice, ime i prezime mentora/mentorice s pripadaju om titulom, mjesto te mjesec i godina predaje diplomskog rada. Stranica s Izjavom o autorstvu Izjavljujem pod punom moralnom odgovornoš u da sam diplomski rad XY izradio/la potpuno samostalno uz stru no vodstvo mentora/ice XY. Svi pod"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "margine 2,5 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "je javna. Ona uklju uje usmeno izlaganje studenta o radu te odgovaranje na pitanja o radu koja postavljaju lanovi povjerenstva. Nakon što kandidat odgovori na postavljena pitanja, povjerenstvo može dopustiti i drugim nazo nim osobama da postave dodatna pitanja. Obrana diplomskog rada završava odlukom povjerenstva o ishodu obrane. U roku od tjedan dana nakon obrane student donosi jedan isprintani primjerak rada (spiralni uvez) koji se pohranjuje u Arhivu Odsjeka, a rad u elektroni kom obliku šalje e-mailom predmetnoj knjižni arki te tajnici Odsjeka. Student je dužan priložiti i potpisanu Izjavu o pohrani ocjenskog rada u digitalni arhiv Knjižnice Filozofskog fakulteta: (http://knjiznica.ffzg.unizg.hr/uploads/G2/1r/G21r9ync38chLAbMAM88lA/izjava-dig- arhiv.pdf). OPSEG RADA Predvi eno je da diplomski rad na diplomskom studiju etnologije i kulturne antropologije obuhva a od 25 do 40 kartica teksta, ne uklju uju i naslovnu stranicu, popis poglavlja, popis literature, priloge i sažetke. Integrirani ili interdisciplinarni diplomski rad može obuhva ati od 50 do 70 kartica teksta.1 GRAFI KO OBLIKOVANJE TEKSTA Rad mora biti napisan u programu Word te u formatu Word Document (.doc ili .docx); margine 2,5 cm; tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira). Za dodatna objašnjenja dijelova teksta treba koristiti bilješke na dnu iste stranice (footnotes), ozna ene arapskim brojevima i pisane u veli ini pisma od 10 to aka. 1 Jedna kartica teksta iznosi 1800 znakova (s razmacima) ili prosje no 30 redova sa 60 znakova u retku, odnosno oko 300 rije i. 2 UPUTE ZA PISANJE DIPLOMSKOG RADA Elementi diplomskog rada 1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaklju ak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 rije i) i klju ne rije i (3 – 5) na hrvatskom i engleskom jeziku. Naslovnica Naslovna stranica mora sadržavati sljede e podatke: Sveu ilište u Zagrebu, Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju, \"Diplomski rad\", naslov diplomskog rada, ime i prezime studenta/studentice, ime i prezime mentora/mentorice s pripadaju om titulom, mjesto te mjesec i godina predaje diplomskog rada. Stranica s Izjavom o autorstvu Izjavljujem pod punom moralnom odgovornoš u da sam"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "paginiranim stranicama",
+      "valueShape": "boolean",
+      "contexts": [
+        "govori na postavljena pitanja, povjerenstvo može dopustiti i drugim nazo nim osobama da postave dodatna pitanja. Obrana diplomskog rada završava odlukom povjerenstva o ishodu obrane. U roku od tjedan dana nakon obrane student donosi jedan isprintani primjerak rada (spiralni uvez) koji se pohranjuje u Arhivu Odsjeka, a rad u elektroni kom obliku šalje e-mailom predmetnoj knjižni arki te tajnici Odsjeka. Student je dužan priložiti i potpisanu Izjavu o pohrani ocjenskog rada u digitalni arhiv Knjižnice Filozofskog fakulteta: (http://knjiznica.ffzg.unizg.hr/uploads/G2/1r/G21r9ync38chLAbMAM88lA/izjava-dig- arhiv.pdf). OPSEG RADA Predvi eno je da diplomski rad na diplomskom studiju etnologije i kulturne antropologije obuhva a od 25 do 40 kartica teksta, ne uklju uju i naslovnu stranicu, popis poglavlja, popis literature, priloge i sažetke. Integrirani ili interdisciplinarni diplomski rad može obuhva ati od 50 do 70 kartica teksta.1 GRAFI KO OBLIKOVANJE TEKSTA Rad mora biti napisan u programu Word te u formatu Word Document (.doc ili .docx); margine 2,5 cm; tekst rada treba biti u fontu Times New Roman, veli ine 12 to aka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira). Za dodatna objašnjenja dijelova teksta treba koristiti bilješke na dnu iste stranice (footnotes), ozna ene arapskim brojevima i pisane u veli ini pisma od 10 to aka. 1 Jedna kartica teksta iznosi 1800 znakova (s razmacima) ili prosje no 30 redova sa 60 znakova u retku, odnosno oko 300 rije i. 2 UPUTE ZA PISANJE DIPLOMSKOG RADA Elementi diplomskog rada 1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaklju ak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 rije i) i klju ne rije i (3 – 5) na hrvatskom i engleskom jeziku. Naslovnica Naslovna stranica mora sadržavati sljede e podatke: Sveu ilište u Zagrebu, Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju, \"Diplomski rad\", naslov diplomskog rada, ime i prezime studenta/studentice, ime i prezime mentora/mentorice s pripadaju om titulom, mjesto te mjesec i godina predaje diplomskog rada. Stranica s Izjavom o autorstvu Izjavljujem pod punom moralnom odgovornoš u da sam diplomski rad XY izradio/la potpuno samostalno uz stru no vodstvo mentora/ice XY. Svi podaci navedeni u radu su istiniti i prikupljeni u skladu s eti kim st"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

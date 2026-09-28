@@ -1,0 +1,19 @@
+{
+  "accepted": [
+    "erf-diplomski--toc"
+  ],
+  "refuted": [
+    {
+      "ruleId": "erf-diplomski--font",
+      "reason": "Redak 'Font: 12 pt, Times New Roman, prored 1.5' stoji isključivo u odjeljku B) Pregledni rad (nakon 'Preporučen broj stranica: 40-50' za taj podtip), a ne postoji odgovarajuca odredba za odjeljak A) Istrazivacki rad niti opca odredba za diplomski rad u cjelini. Primjena kao opceg pravila za sve diplomske radove nadilazi vrstu rada koju izvor pokriva."
+    },
+    {
+      "ruleId": "erf-diplomski--font-size",
+      "reason": "Ista vrijednost (12 pt) navedena je samo u odjeljku B) Pregledni rad; nema potvrde da vrijedi i za A) Istrazivacki rad ili za diplomski rad opcenito."
+    },
+    {
+      "ruleId": "erf-diplomski--line-spacing",
+      "reason": "Prored 1,5 naveden je samo u odjeljku B) Pregledni rad; nema odgovarajuce odredbe za A) Istrazivacki rad niti opce odredbe za cijeli diplomski rad."
+    }
+  ]
+}

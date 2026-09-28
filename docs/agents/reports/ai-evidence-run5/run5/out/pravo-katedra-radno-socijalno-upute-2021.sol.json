@@ -1,0 +1,20 @@
+{
+  "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "radno-socijalno-pravo",
+      "ruleId": "radno-socijalno-pravo--heading-rules",
+      "value": null,
+      "modality": "directive",
+      "scope": "heading",
+      "verdict": "insufficient",
+      "evidenceQuote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) označavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima. Tako bi npr. ispravno označavanje bilo:",
+      "note": "Uputa se odnosi na naslove cjelina i daje izravnu naredbu za arapsko označavanje, ali primjer ne propisuje jednoznačno najveću razinu ni obvezan oblik svih polja tražene vrijednosti."
+    }
+  ]
+}

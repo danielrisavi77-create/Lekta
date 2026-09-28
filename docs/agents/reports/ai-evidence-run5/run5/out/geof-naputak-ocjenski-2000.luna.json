@@ -1,0 +1,30 @@
+﻿{
+    "sourceId":  "geof-naputak-ocjenski-2000",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "geof-diplomski",
+                      "ruleId":  "geof-diplomski--citation-style",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988).",
+                      "note":  "Izvor daje autor-godina način citiranja, ali ne određuje jednoznačno nijedan od dopuštenih identifikatora stila."
+                  },
+                  {
+                      "profileId":  "geof-doktorski",
+                      "ruleId":  "geof-doktorski--citation-style",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine izdanja, npr.: (Lovrić 1988).",
+                      "note":  "Izvor daje autor-godina način citiranja, ali ne određuje jednoznačno nijedan od dopuštenih identifikatora stila."
+                  }
+              ]
+}

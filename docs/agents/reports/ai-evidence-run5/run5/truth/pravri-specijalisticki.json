@@ -1,0 +1,34 @@
+{
+  "pravri-specijalisticki--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravri-specijalisticki--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravri-specijalisticki--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pravri-specijalisticki--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pravri-specijalisticki--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

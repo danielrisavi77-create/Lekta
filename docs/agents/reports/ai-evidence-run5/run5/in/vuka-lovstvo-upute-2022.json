@@ -1,0 +1,43 @@
+{
+  "source": {
+    "id": "vuka-lovstvo-upute-2022",
+    "url": "https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx",
+    "fetchedAt": "2026-07-28",
+    "snapshotHash": "4d73f33fdd210a54a5bcb6ca0a729250c2d979c0ae2cec220c4c52ab6ac8e618",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\vuka-lovstvo-upute-2022.txt"
+  },
+  "rules": [
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "quote": "rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano).",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        " tvrdo uvezati i 3 primjerka predati u Studentsku referadu. 5. Obrana se zakazuje od dana predaje rada najkasnije za 30 dana, a ne prije 7 dana.2.1. Struktura završnog radaZavršni rad mora biti strukturiran po poglavljima. Preporuča se uobičajena struktura rada ukoliko su provedena vlastita istraživanja - sažetak, popis priloga, uvod, materijali i metode, rezultati, rasprava, zaključci, literatura, odnosno ukoliko je riječ o teorijskom radu - sažetak, popis priloga, uvod, teorijski dio, rasprava i zaključci, literatura. Struktura rada može iz opravdanih razloga odstupati od uobičajene, ali uz odobrenje mentora. Sažetak mora biti napisan na hrvatskom i engleskom jeziku. Prije sažetka treba napisati naslov rada na hrvatskom I engleskom jeziku.Način pisanja završnog radaKod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima:- završni rad se piše standardnim hrvatskim književnim jezikom, latiničnim pismom.- dozvoljena je upotreba isključivo SI sustava mjernih jedinica. Vrijednosti izražene u drugim jedinicama mogu biti navedene samo dodatno u zagradi, ako je to povoljnije za razumijevanje, npr. \"... iznosi 50 s-1 (3000 okr./min)...\".- rad mora biti otisnut pomoću računala - rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano). Znakovi moraju biti crne boje.- za tiskanje rada preporuča se font “Arial CE” ili “Times New Roman CE”.- rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.- stranice teksta moraju biti orijentirane uspravno (\"portret\"). Iznimno, ako je potrebno na nekim stranicama može tekst biti orijentiran vodoravno (\"pejsaž\"), i to tako da lijevi rub položenog teksta odgovara donjem rubu uspravnog teksta.- tekst se na uspravnu stranicu smješta unutar nevidljivog okvira (margina) koji je od lijevog ruba papira odmaknut za 2,5-3 cm, a od gornjeg, donjeg i desnog ruba za 2-2,5 cm.Redoslijed stranica rada:- korica rada - plastificirani tvrdi karton - zelene boje - prva stranica nakon korica je prazna - druga stranica je naslovna (kao korice) s tim da je ispod naslova udesno napisano ime i prezime mentora s titulom - treća stranica je Predgovor (Izjava i zahvala kandidata) – nije nužno - na četvrtoj stranici je naslov rada, sažetak i ključne riječi na hrvatskom i engleskom jeziku (Abstract),- na petoj stranici je Sadržaj po poglavljima s brojevima stranica na kojima se poglavlja nalaze,- na šestoj stranici se nalazi popis priloga,- na sedmoj stranici počinje tekst r"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "quote": "rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ura rada ukoliko su provedena vlastita istraživanja - sažetak, popis priloga, uvod, materijali i metode, rezultati, rasprava, zaključci, literatura, odnosno ukoliko je riječ o teorijskom radu - sažetak, popis priloga, uvod, teorijski dio, rasprava i zaključci, literatura. Struktura rada može iz opravdanih razloga odstupati od uobičajene, ali uz odobrenje mentora. Sažetak mora biti napisan na hrvatskom i engleskom jeziku. Prije sažetka treba napisati naslov rada na hrvatskom I engleskom jeziku.Način pisanja završnog radaKod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima:- završni rad se piše standardnim hrvatskim književnim jezikom, latiničnim pismom.- dozvoljena je upotreba isključivo SI sustava mjernih jedinica. Vrijednosti izražene u drugim jedinicama mogu biti navedene samo dodatno u zagradi, ako je to povoljnije za razumijevanje, npr. \"... iznosi 50 s-1 (3000 okr./min)...\".- rad mora biti otisnut pomoću računala - rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano). Znakovi moraju biti crne boje.- za tiskanje rada preporuča se font “Arial CE” ili “Times New Roman CE”.- rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.- stranice teksta moraju biti orijentirane uspravno (\"portret\"). Iznimno, ako je potrebno na nekim stranicama može tekst biti orijentiran vodoravno (\"pejsaž\"), i to tako da lijevi rub položenog teksta odgovara donjem rubu uspravnog teksta.- tekst se na uspravnu stranicu smješta unutar nevidljivog okvira (margina) koji je od lijevog ruba papira odmaknut za 2,5-3 cm, a od gornjeg, donjeg i desnog ruba za 2-2,5 cm.Redoslijed stranica rada:- korica rada - plastificirani tvrdi karton - zelene boje - prva stranica nakon korica je prazna - druga stranica je naslovna (kao korice) s tim da je ispod naslova udesno napisano ime i prezime mentora s titulom - treća stranica je Predgovor (Izjava i zahvala kandidata) – nije nužno - na četvrtoj stranici je naslov rada, sažetak i ključne riječi na hrvatskom i engleskom jeziku (Abstract),- na petoj stranici je Sadržaj po poglavljima s brojevima stranica na kojima se poglavlja nalaze,- na šestoj stranici se nalazi popis priloga,- na sedmoj stranici počinje tekst rada (poglavlje Uvod itd.)- stranice se obrojavaju rednim brojevima od 1 (jedan) na dalje. Prve stranice se ne obrojavaju (ako da, koriste se rimski brojevi), a obrojavanje počinje od Uvoda ("
+      ],
+      "priorStatus": "needs-ai-evidence",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

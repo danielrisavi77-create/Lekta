@@ -1,0 +1,22 @@
+{
+    "sourceId":  "fhs-upute-zavrsni-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "fhs-zavrsni",
+                      "ruleId":  "fhs-zavrsni--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
+                      "note":  "Izvor navodi Times New Roman uz obaveznu potporu hrvatskih znakova te izuzima naslovne stranice, pa se pravilo odnosi na tekst rada."
+                  }
+              ]
+}

@@ -1,0 +1,27 @@
+{
+  "unidu-marikultura-diplomski--font": {
+    "value": [
+      "Times New Roman",
+      "Arial"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "unidu-marikultura-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "unidu-marikultura-diplomski--justify": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "unidu-marikultura-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

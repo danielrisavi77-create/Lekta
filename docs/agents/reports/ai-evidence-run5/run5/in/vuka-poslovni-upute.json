@@ -1,0 +1,188 @@
+{
+  "source": {
+    "id": "vuka-poslovni-upute",
+    "url": "https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf",
+    "fetchedAt": "2026-07-27",
+    "snapshotHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\vuka-poslovni-upute.txt"
+  },
+  "rules": [
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        " sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  M"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "label": "Oblikovanje naslova po razinama",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a\r\n       naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold,\r\n       a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "valueShape": {
+        "levels": {
+          "1": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "2": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "3": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          }
+        }
+      },
+      "contexts": [
+        "mljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  Matični broj (broj indeksa) autora,  Mjesto, mjesec i godinu predaje rada. Primjer 21 prikazuje naslovnu stranicu završnog rada stručnog studija, a primjer 22 naslovnu stranicu završnog rada specijalističkog studija. 3.5.2. Vanjska ili omotna stranica završnog rada Završni rad, osim n"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s\r\nproredom 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        " f = funkcija  ∞ = beskonačno  Δ = prirast  $ = dolar Ponekad autori već u tekstualnom dijelu objašnjavaju simbole redom kako se pojavljuju. U tom slučaju nije potrebno sastavljati popis simbola, a ukoliko autor nije objasnio simbole u tekstu obavezno mora sastaviti popis simbola na kraju ili početku djela. 3.5. Tehnička obrada završnih radova Prilikom izrade radova priznanja također je potrebno voditi računa kako o sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        " sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  M"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--heading-rules",
+      "checkId": "heading-rules",
+      "label": "Oblikovanje naslova po razinama",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a\r\n       naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold,\r\n       a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "valueShape": {
+        "levels": {
+          "1": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "2": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "3": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          }
+        }
+      },
+      "contexts": [
+        "mljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  Matični broj (broj indeksa) autora,  Mjesto, mjesec i godinu predaje rada. Primjer 21 prikazuje naslovnu stranicu završnog rada stručnog studija, a primjer 22 naslovnu stranicu završnog rada specijalističkog studija. 3.5.2. Vanjska ili omotna stranica završnog rada Završni rad, osim n"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s\r\nproredom 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        " f = funkcija  ∞ = beskonačno  Δ = prirast  $ = dolar Ponekad autori već u tekstualnom dijelu objašnjavaju simbole redom kako se pojavljuju. U tom slučaju nije potrebno sastavljati popis simbola, a ukoliko autor nije objasnio simbole u tekstu obavezno mora sastaviti popis simbola na kraju ili početku djela. 3.5. Tehnička obrada završnih radova Prilikom izrade radova priznanja također je potrebno voditi računa kako o sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        " sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  M"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "label": "Oblikovanje naslova po razinama",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a\r\n       naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold,\r\n       a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "valueShape": {
+        "levels": {
+          "1": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "2": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          },
+          "3": {
+            "bold": "boolean",
+            "size": "number",
+            "uppercase": "boolean"
+          }
+        }
+      },
+      "contexts": [
+        "mljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je stranica prva stranica rada i nikada se ne označava rednim brojem. Mora sadržavati sljedeće elemente:  Ime i prezime autora,  Naslov rada,  Naznaku „ZAVRŠNI RAD“ odnosno „SEMINARSKI RAD“ ovisno o kojoj vrsti rada se radi,  Naziv veleučilišta, naziv odjela i studija,  Naziv kolegija iz kojeg je završni rad izrađen,  Titulu, ime i prezime mentora,  Matični broj (broj indeksa) autora,  Mjesto, mjesec i godinu predaje rada. Primjer 21 prikazuje naslovnu stranicu završnog rada stručnog studija, a primjer 22 naslovnu stranicu završnog rada specijalističkog studija. 3.5.2. Vanjska ili omotna stranica završnog rada Završni rad, osim n"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s\r\nproredom 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        " f = funkcija  ∞ = beskonačno  Δ = prirast  $ = dolar Ponekad autori već u tekstualnom dijelu objašnjavaju simbole redom kako se pojavljuju. U tom slučaju nije potrebno sastavljati popis simbola, a ukoliko autor nije objasnio simbole u tekstu obavezno mora sastaviti popis simbola na kraju ili početku djela. 3.5. Tehnička obrada završnih radova Prilikom izrade radova priznanja također je potrebno voditi računa kako o sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost izlaganja i obrade određene teme. Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana završnog/diplomskog rada. Završni radovi moraju pokazati dobro poznavanje struke te sposobnost pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti. Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5. Preporučljivi opseg završnog rada stručnog studija jest 40 do 50 stranica, a specijalističkog diplomskog studija 60 do 80 stranica iako on ovisi o samoj temi, ciljevima koji se žele postići i području iz kojeg se piše završni rad pa opseg može biti i veći, ali nikako manji. Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)  za bilješke (“fusnote“ ) odabrati veličinu slova 10,  za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.  koristiti standardne margine – margine dolje, gore, lijevo i desno po 2,54 cm,  pisati u odlomcima koristeći europski ili američki način formiranja odlomaka ili njihovu kombinaciju. Svako pisano djelo treba imati određenu strukturu, odnosno mora imati minimum osnovnih elemenata. 3.5.1. Naslovna stranica završnog/seminarskog rada Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada, stoga ona treba sadržavati osnovne podatke i"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "sourceId": "vuka-poslovni-upute",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "note": "U odjeljku 3.5 potrebno je odabrati 12 pt za tekst, pa je modalitet directive, a opseg body."
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--heading-rules",
+      "value": {
+        "levels": {
+          "1": {
+            "bold": true,
+            "size": 16,
+            "uppercase": true
+          },
+          "2": {
+            "bold": true,
+            "size": 14,
+            "uppercase": false
+          },
+          "3": {
+            "bold": true,
+            "size": 12,
+            "uppercase": false
+          }
+        }
+      },
+      "modality": "directive",
+      "scope": "heading",
+      "verdict": "conflict",
+      "evidenceQuote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.",
+      "note": "U odjeljku 3.5 najprije su zadane razine naslova 16/14/12 pt, a odmah zatim dopusteno je i standardno oblikovanje Word dokumenata."
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+      "note": "U odjeljku 3.5 zavrsni radovi pisu se s proredom 1,5, sto je directive za body."
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "note": "U odjeljku 3.5 potrebno je odabrati 12 pt za tekst, pa je modalitet directive, a opseg body."
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--heading-rules",
+      "value": {
+        "levels": {
+          "1": {
+            "bold": true,
+            "size": 16,
+            "uppercase": true
+          },
+          "2": {
+            "bold": true,
+            "size": 14,
+            "uppercase": false
+          },
+          "3": {
+            "bold": true,
+            "size": 12,
+            "uppercase": false
+          }
+        }
+      },
+      "modality": "directive",
+      "scope": "heading",
+      "verdict": "conflict",
+      "evidenceQuote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.",
+      "note": "U odjeljku 3.5 najprije su zadane razine naslova 16/14/12 pt, a odmah zatim dopusteno je i standardno oblikovanje Word dokumenata."
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+      "note": "U odjeljku 3.5 zavrsni radovi pisu se s proredom 1,5, sto je directive za body."
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Kako bi rad bio pregledan i sustavno oblikovan, potrebno je:  odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
+      "note": "U odjeljku 3.5 potrebno je odabrati 12 pt za tekst, pa je modalitet directive, a opseg body."
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "value": {
+        "levels": {
+          "1": {
+            "bold": true,
+            "size": 16,
+            "uppercase": true
+          },
+          "2": {
+            "bold": true,
+            "size": 14,
+            "uppercase": false
+          },
+          "3": {
+            "bold": true,
+            "size": 12,
+            "uppercase": false
+          }
+        }
+      },
+      "modality": "directive",
+      "scope": "heading",
+      "verdict": "conflict",
+      "evidenceQuote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima. Moguće je koristiti i standardno formatiranje „Word“ dokumenata.",
+      "note": "U odjeljku 3.5 najprije su zadane razine naslova 16/14/12 pt, a odmah zatim dopusteno je i standardno oblikovanje Word dokumenata."
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
+      "note": "U odjeljku 3.5 zavrsni radovi pisu se s proredom 1,5, sto je directive za body."
+    }
+  ]
+}

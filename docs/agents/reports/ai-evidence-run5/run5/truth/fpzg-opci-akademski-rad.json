@@ -1,0 +1,7 @@
+{
+  "fpzg-opci-akademski-rad--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

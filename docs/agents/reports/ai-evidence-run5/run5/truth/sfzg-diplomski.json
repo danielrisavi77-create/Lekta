@@ -1,0 +1,34 @@
+{
+  "sfzg-diplomski--citation-style": {
+    "value": "vancouver",
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "sfzg-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "sfzg-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "sfzg-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "sfzg-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

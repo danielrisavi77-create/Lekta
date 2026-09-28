@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "unidu-marikultura-upute-diplomski",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli version unavailable" },
+  "rules": [
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--font",
+      "value": ["Times New Roman", "Arial"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad je potrebno pisati raÄunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veliÄinom znakova 12, koristeÄ‡i font Times New Roman ili Arial.",
+      "note": "Izvor izričito navodi oba dopuštena fonta, a rečenica ima direktivno „potrebno je” i odnosi se na tekst rada."
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad je potrebno pisati raÄunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veliÄinom znakova 12, koristeÄ‡i font Times New Roman ili Arial.",
+      "note": "Izvor navodi veličinu znakova 12, a „potrebno je” daje direktivni modalitet za tekst rada."
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--justify",
+      "value": true,
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst mora biti obostrano poravnan.",
+      "note": "„Obostrano poravnan” znači obostrano poravnanje, a „mora” označuje obvezu za tekst rada."
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad je potrebno pisati raÄunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veliÄinom znakova 12, koristeÄ‡i font Times New Roman ili Arial.",
+      "note": "Izvor navodi prored 1,5 u rečenici s direktivnim „potrebno je”, za tekst diplomskog rada."
+    }
+  ]
+}

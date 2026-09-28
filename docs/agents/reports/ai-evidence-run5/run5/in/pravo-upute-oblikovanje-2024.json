@@ -1,0 +1,429 @@
+{
+  "source": {
+    "id": "pravo-upute-oblikovanje-2024",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2024/05/Upute-za-oblikovanje-i-uredenje-teksta-i-navodenje-izvora_diplomski_zavrsni_rad.pdf",
+    "fetchedAt": "2026-06-30",
+    "snapshotHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pravo-upute-oblikovanje-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--footnote-font",
+      "checkId": "footnote-font",
+      "label": "Font fusnota",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+      "quote": "Bilješke (fusnote)\r\n   -   font: Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "vima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate)"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezni dijelovi rada",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio.\r\nNa kraju rada treba biti popis korištenih izvora i literature (bibliografija).",
+      "valueShape": [
+        {
+          "key": "string",
+          "label": "string",
+          "terms": [
+            "string"
+          ]
+        }
+      ],
+      "contexts": [
+        "aja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "ruleId": "pravo-integrirani-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "ruleId": "pravo-integrirani-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "ruleId": "pravo-integrirani-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2. Sadrzaj",
+      "quote": "Nakon naslovne stranice treba biti stranica sa sadržajem.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ĐENJE TEKSTA I NAVOĐENJE IZVORA U I DIPLOMSKIM I ZAVRŠNIM RADOVIMA NA PRAVNOM FAKULTETU SVEUČILIŠTA U ZAGREBU (Preuzeto: Curry - Sumner, Ian [et al.], Istraživačke vještine, s engleskoga preveo i prilagodio Luka Burazin, Zagreb: Sveučilište u Zagrebu Pravni fakultet, 2023.) Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za oblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima. 1. NASLOVNA STRANICA Na naslovnoj stranici trebaju biti navedeni: 1. naslov rada (u sredini) 2. autor rada (u sredini iznad naslova i uz jedan red razmaka) 3. naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda) 4. naznaka mentora (u sredini ispod naslova i jednog reda razmaka; titule se pišu malim početnim slovom ispred imena ako je riječ o osobama koje imaju doktorat znanosti i razmacima nakon točaka) 5. naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.). Primjer naslovne stranice: REPUBLIKA HRVATSKA SVEUČILIŠTE U ZAGREBU PRAVNI FAKULTET Student: Ime i prezime DIPLOMSKI RAD Naslov rada Kolegij: NAZIV KOLEGIJA Mentor: titula te ime i prezime mentora Zagreb, 2023. 2. SADRŽAJ Nakon naslovne stranice treba biti stranica sa sadržajem. Sadržaj je potrebno automatski generirati u programu (MS Word) u kojem se piše rad – izbornik Reference, Tablica sadržaja – dodati određeni oblik sadržaja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. O"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "ruleId": "pravo-javna-uprava-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "ruleId": "pravo-javna-uprava-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2. Sadrzaj",
+      "quote": "Nakon naslovne stranice treba biti stranica sa sadržajem.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ĐENJE TEKSTA I NAVOĐENJE IZVORA U I DIPLOMSKIM I ZAVRŠNIM RADOVIMA NA PRAVNOM FAKULTETU SVEUČILIŠTA U ZAGREBU (Preuzeto: Curry - Sumner, Ian [et al.], Istraživačke vještine, s engleskoga preveo i prilagodio Luka Burazin, Zagreb: Sveučilište u Zagrebu Pravni fakultet, 2023.) Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za oblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima. 1. NASLOVNA STRANICA Na naslovnoj stranici trebaju biti navedeni: 1. naslov rada (u sredini) 2. autor rada (u sredini iznad naslova i uz jedan red razmaka) 3. naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda) 4. naznaka mentora (u sredini ispod naslova i jednog reda razmaka; titule se pišu malim početnim slovom ispred imena ako je riječ o osobama koje imaju doktorat znanosti i razmacima nakon točaka) 5. naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.). Primjer naslovne stranice: REPUBLIKA HRVATSKA SVEUČILIŠTE U ZAGREBU PRAVNI FAKULTET Student: Ime i prezime DIPLOMSKI RAD Naslov rada Kolegij: NAZIV KOLEGIJA Mentor: titula te ime i prezime mentora Zagreb, 2023. 2. SADRŽAJ Nakon naslovne stranice treba biti stranica sa sadržajem. Sadržaj je potrebno automatski generirati u programu (MS Word) u kojem se piše rad – izbornik Reference, Tablica sadržaja – dodati određeni oblik sadržaja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. O"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "ruleId": "pravo-javna-uprava-prijediplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "ruleId": "pravo-javna-uprava-prijediplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2. Sadrzaj",
+      "quote": "Nakon naslovne stranice treba biti stranica sa sadržajem.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ĐENJE TEKSTA I NAVOĐENJE IZVORA U I DIPLOMSKIM I ZAVRŠNIM RADOVIMA NA PRAVNOM FAKULTETU SVEUČILIŠTA U ZAGREBU (Preuzeto: Curry - Sumner, Ian [et al.], Istraživačke vještine, s engleskoga preveo i prilagodio Luka Burazin, Zagreb: Sveučilište u Zagrebu Pravni fakultet, 2023.) Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za oblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima. 1. NASLOVNA STRANICA Na naslovnoj stranici trebaju biti navedeni: 1. naslov rada (u sredini) 2. autor rada (u sredini iznad naslova i uz jedan red razmaka) 3. naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda) 4. naznaka mentora (u sredini ispod naslova i jednog reda razmaka; titule se pišu malim početnim slovom ispred imena ako je riječ o osobama koje imaju doktorat znanosti i razmacima nakon točaka) 5. naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.). Primjer naslovne stranice: REPUBLIKA HRVATSKA SVEUČILIŠTE U ZAGREBU PRAVNI FAKULTET Student: Ime i prezime DIPLOMSKI RAD Naslov rada Kolegij: NAZIV KOLEGIJA Mentor: titula te ime i prezime mentora Zagreb, 2023. 2. SADRŽAJ Nakon naslovne stranice treba biti stranica sa sadržajem. Sadržaj je potrebno automatski generirati u programu (MS Word) u kojem se piše rad – izbornik Reference, Tablica sadržaja – dodati određeni oblik sadržaja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. O"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezni dijelovi rada",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio.\r\nNa kraju rada treba biti popis korištenih izvora i literature (bibliografija).",
+      "valueShape": [
+        {
+          "key": "string",
+          "label": "string",
+          "terms": [
+            "string"
+          ]
+        }
+      ],
+      "contexts": [
+        "aja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "ruleId": "pravo-porezni-prijediplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "ruleId": "pravo-porezni-prijediplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "ruleId": "pravo-porezni-prijediplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2. Sadrzaj",
+      "quote": "Nakon naslovne stranice treba biti stranica sa sadržajem.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ĐENJE TEKSTA I NAVOĐENJE IZVORA U I DIPLOMSKIM I ZAVRŠNIM RADOVIMA NA PRAVNOM FAKULTETU SVEUČILIŠTA U ZAGREBU (Preuzeto: Curry - Sumner, Ian [et al.], Istraživačke vještine, s engleskoga preveo i prilagodio Luka Burazin, Zagreb: Sveučilište u Zagrebu Pravni fakultet, 2023.) Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za oblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima. 1. NASLOVNA STRANICA Na naslovnoj stranici trebaju biti navedeni: 1. naslov rada (u sredini) 2. autor rada (u sredini iznad naslova i uz jedan red razmaka) 3. naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda) 4. naznaka mentora (u sredini ispod naslova i jednog reda razmaka; titule se pišu malim početnim slovom ispred imena ako je riječ o osobama koje imaju doktorat znanosti i razmacima nakon točaka) 5. naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.). Primjer naslovne stranice: REPUBLIKA HRVATSKA SVEUČILIŠTE U ZAGREBU PRAVNI FAKULTET Student: Ime i prezime DIPLOMSKI RAD Naslov rada Kolegij: NAZIV KOLEGIJA Mentor: titula te ime i prezime mentora Zagreb, 2023. 2. SADRŽAJ Nakon naslovne stranice treba biti stranica sa sadržajem. Sadržaj je potrebno automatski generirati u programu (MS Word) u kojem se piše rad – izbornik Reference, Tablica sadržaja – dodati određeni oblik sadržaja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. O"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "quote": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju\r\nbiti numerirane.",
+      "valueShape": "string",
+      "contexts": [
+        "slovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu [knjige] Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ), izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.). Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55. Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65. Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet. Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi). U popisu literature ne navode se stranice, nego se piše samo ovako: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998. Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveuč"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--footnote-font",
+      "checkId": "footnote-font",
+      "label": "Font fusnota",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+      "quote": "Bilješke (fusnote)\r\n   -   font: Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "vima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate)"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        ", 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u kurzivu. Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez kurziva. Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.). 5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA (FUSNOTAMA) I U POPISU LITERATURE Bibliografski podatci o korištenim izvorima navode se "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezni dijelovi rada",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "quote": "Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio.\r\nNa kraju rada treba biti popis korištenih izvora i literature (bibliografija).",
+      "valueShape": [
+        {
+          "key": "string",
+          "label": "string",
+          "terms": [
+            "string"
+          ]
+        }
+      ],
+      "contexts": [
+        "aja. Za automatsko ubacivanje tablice sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati naslove odgovarajuće razine). Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao i glavni tekst (Times New Roman, 12). U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća poglavlja. 3. NASLOVI Svaki naslov mora biti numeriran u skladu sa svojom razinom. o naslov 1. razine – 1.: font 12, TISKANA SLOVA o naslov 2. razine – 1.1.: font 12, podebljano (bold) o naslov 3. razine – 1.1.1.: font 12, podebljano i kurzivirano (bold i italik) Naslovi se poravnavaju slijeva (left aligned). Ako postoji podjela na velike cjeline, posebno u diplomskim radovima, moguće je na prvoj razini rabiti rimske brojeve (I., II., III..), a na razinama ispod arapske brojeve (1., 1.1., 1.1.1.). Primjer: SADRŽAJ 1. UVOD 2. RAZVOJ OVRHE U RIMSKOM PRAVU 2.1. Općenito o razvoju oblika pravne zaštite – od samopomoći do isključive državne pravne pomoći 2.2. Osobna ovrha u rimskom pravu 2.3. Imovinska ovrha 2.3.1. Općenito 2.3.2. Missio in possessionem 2.3.3. Venditio bonorum 4. OBLIKOVANJE I UREĐENJE TEKSTA Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio. Na kraju rada treba biti popis korištenih izvora i literature (bibliografija). Glavni tekst - font: Times New Roman - veličina fonta: 12 - prored: 1,5 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Bilješke (fusnote) - font: Times New Roman - veličina fonta: 10 - prored: 1 (razmak 0 i prije i poslije) - poravnanje s obiju strana (justified) Svaka bilješka mora započeti velikim početnim slovom i završiti točkom. Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice navode se abecednim redom prema prezimenu (prvog) autora. Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice. Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju – engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je riječ o dužim radovima. Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili podcrtanim tekstom. Latinske riječi i tekstovi na latinskom pišu se u"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

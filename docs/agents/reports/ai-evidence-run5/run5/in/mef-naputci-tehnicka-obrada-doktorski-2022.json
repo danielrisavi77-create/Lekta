@@ -1,0 +1,67 @@
+{
+  "source": {
+    "id": "mef-naputci-tehnicka-obrada-doktorski-2022",
+    "url": "https://mef.unizg.hr/app/uploads/2022/06/NAPUTCI-ZA-TEHNICKU-OBRADU-DOKTORSKOG-RADA-3-6-2022-korekcije.docx",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\mef-naputci-tehnicka-obrada-doktorski-2022.txt"
+  },
+  "rules": [
+    {
+      "profileId": "mef-doktorski",
+      "ruleId": "mef-doktorski--page-number-start-at-intro",
+      "checkId": "page-number-start-at-intro",
+      "label": "Numeriranje pocinje od Uvoda",
+      "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
+      "quote": "Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)",
+      "valueShape": "boolean",
+      "contexts": [
+        "NAPUTCI ZA TEHNIČKU OBRADU DOKTORSKOG RADACilj ove informacije je usklađivanje postupaka oko tehničke opreme doktorskog rada. 1) Format radova je A 4 (21x29,7 cm)2) Uvez broširan u platno, skaj prema naputku - izrada korica i naslovnica Na koricama se ispisuje:- Naziv Sveučilišta (Sveučilište u Zagrebu)- Naziv fakulteta (Medicinski fakultet)- Ime i prezime autora- Naslov rada- Doktorski rad- Grb Fakulteta- Mjesto- Godina3) Na prvoj stranici drugog lista ispisuje se tekst kao na koricama bez grba4) Na sljedeći list ispisuju se sljedeći podaci:- Naziv institucije (zavoda, instituta i sl.) gdje je rad izrađen- Voditelj rada (ime i prezime)- Ovdje se fakultativno upisuje namjena, posveta ili zahvala5) Rad mora sadržavati:- Sadržaj prema poglavljima- Popis oznaka i kratica, te poglavlja:1. Uvod i svrha rada2. Hipoteza3. Ciljevi rada4. Materijali i metode (ispitanici – uzorak)5. Rezultati6. Rasprava7. Zaključak8. Kratki sadržaj na hrvatskom jeziku9. Kratki sadržaj i naslov doktorskog rada na engleskom jeziku ime i prezime te godina obrane doktorskog rada do (200 riječi) 10. Popis literature (prema naputcima Liječničkog vjesnika) 11. Kratka biografija (do 200 riječi)6) Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod slike, a naslov tablice piše se iznad tablice)8) Doktorski rad mora biti pisan u skladu s pravopisom hrvatskog jezika i poželjno ga je lektorirati9) Kod predaje primjeraka uvezanih doktorskih radova treba predati jedan primjerak doktorskog rada na kompaktnom disku"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "mef-doktorski",
+      "ruleId": "mef-doktorski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
+      "quote": "Stranice obavezno označiti brojevima",
+      "valueShape": "boolean",
+      "contexts": [
+        "NAPUTCI ZA TEHNIČKU OBRADU DOKTORSKOG RADACilj ove informacije je usklađivanje postupaka oko tehničke opreme doktorskog rada. 1) Format radova je A 4 (21x29,7 cm)2) Uvez broširan u platno, skaj prema naputku - izrada korica i naslovnica Na koricama se ispisuje:- Naziv Sveučilišta (Sveučilište u Zagrebu)- Naziv fakulteta (Medicinski fakultet)- Ime i prezime autora- Naslov rada- Doktorski rad- Grb Fakulteta- Mjesto- Godina3) Na prvoj stranici drugog lista ispisuje se tekst kao na koricama bez grba4) Na sljedeći list ispisuju se sljedeći podaci:- Naziv institucije (zavoda, instituta i sl.) gdje je rad izrađen- Voditelj rada (ime i prezime)- Ovdje se fakultativno upisuje namjena, posveta ili zahvala5) Rad mora sadržavati:- Sadržaj prema poglavljima- Popis oznaka i kratica, te poglavlja:1. Uvod i svrha rada2. Hipoteza3. Ciljevi rada4. Materijali i metode (ispitanici – uzorak)5. Rezultati6. Rasprava7. Zaključak8. Kratki sadržaj na hrvatskom jeziku9. Kratki sadržaj i naslov doktorskog rada na engleskom jeziku ime i prezime te godina obrane doktorskog rada do (200 riječi) 10. Popis literature (prema naputcima Liječničkog vjesnika) 11. Kratka biografija (do 200 riječi)6) Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod slike, a naslov tablice piše se iznad tablice)8) Doktorski rad mora biti pisan u skladu s pravopisom hrvatskog jezika i poželjno ga je lektorirati9) Kod predaje primjeraka uvezanih doktorskih radova treba predati jedan primjerak doktorskog rada na kompaktnom disku"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "mef-doktorski",
+      "ruleId": "mef-doktorski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "tocka 1) Format radova",
+      "quote": "Format radova je A 4 (21x29,7 cm)",
+      "valueShape": "string",
+      "contexts": [
+        "NAPUTCI ZA TEHNIČKU OBRADU DOKTORSKOG RADACilj ove informacije je usklađivanje postupaka oko tehničke opreme doktorskog rada. 1) Format radova je A 4 (21x29,7 cm)2) Uvez broširan u platno, skaj prema naputku - izrada korica i naslovnica Na koricama se ispisuje:- Naziv Sveučilišta (Sveučilište u Zagrebu)- Naziv fakulteta (Medicinski fakultet)- Ime i prezime autora- Naslov rada- Doktorski rad- Grb Fakulteta- Mjesto- Godina3) Na prvoj stranici drugog lista ispisuje se tekst kao na koricama bez grba4) Na sljedeći list ispisuju se sljedeći podaci:- Naziv institucije (zavoda, instituta i sl.) gdje je rad izrađen- Voditelj rada (ime i prezime)- Ovdje se fakultativno upisuje namjena, posveta ili zahvala5) Rad mora sadržavati:- Sadržaj prema poglavljima- Popis oznaka i kratica, te poglavlja:1. Uvod i svrha rada2. Hipoteza3. Ciljevi rada4. Materijali i metode (ispitanici – uzorak)5. Rezultati6. Rasprava7. Zaključak8. Kratki sadržaj na hrvatskom jeziku9. Kratki sadržaj i naslov doktorskog rada na engleskom jeziku ime i prezime te godina obrane doktorskog rada do (200 riječi) 10. Popis literature (prema naputcima Liječničkog vjesnika) 11. Kratka biografija (do 200 riječi)6) Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod slike, a naslov tablice piše se izna"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "mef-doktorski",
+      "ruleId": "mef-doktorski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "tocka 5) Rad mora sadrzavati, stavka Sadrzaj prema poglavljima",
+      "quote": "Sadržaj prema poglavljima",
+      "valueShape": "boolean",
+      "contexts": [
+        "NAPUTCI ZA TEHNIČKU OBRADU DOKTORSKOG RADACilj ove informacije je usklađivanje postupaka oko tehničke opreme doktorskog rada. 1) Format radova je A 4 (21x29,7 cm)2) Uvez broširan u platno, skaj prema naputku - izrada korica i naslovnica Na koricama se ispisuje:- Naziv Sveučilišta (Sveučilište u Zagrebu)- Naziv fakulteta (Medicinski fakultet)- Ime i prezime autora- Naslov rada- Doktorski rad- Grb Fakulteta- Mjesto- Godina3) Na prvoj stranici drugog lista ispisuje se tekst kao na koricama bez grba4) Na sljedeći list ispisuju se sljedeći podaci:- Naziv institucije (zavoda, instituta i sl.) gdje je rad izrađen- Voditelj rada (ime i prezime)- Ovdje se fakultativno upisuje namjena, posveta ili zahvala5) Rad mora sadržavati:- Sadržaj prema poglavljima- Popis oznaka i kratica, te poglavlja:1. Uvod i svrha rada2. Hipoteza3. Ciljevi rada4. Materijali i metode (ispitanici – uzorak)5. Rezultati6. Rasprava7. Zaključak8. Kratki sadržaj na hrvatskom jeziku9. Kratki sadržaj i naslov doktorskog rada na engleskom jeziku ime i prezime te godina obrane doktorskog rada do (200 riječi) 10. Popis literature (prema naputcima Liječničkog vjesnika) 11. Kratka biografija (do 200 riječi)6) Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod slike, a naslov tablice piše se iznad tablice)8) Doktorski rad mora biti pisan u skladu s pravopisom hrvatskog jezika i poželjno ga je lektorirati9) Kod predaje primjeraka uvezanih doktorskih radova treba predati jedan primjerak doktorskog rada na kompaktnom disku"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

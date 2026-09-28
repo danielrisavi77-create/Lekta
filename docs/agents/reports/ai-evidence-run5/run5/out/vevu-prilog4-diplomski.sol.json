@@ -1,0 +1,22 @@
+{
+    "sourceId":  "vevu-prilog4-diplomski",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "vevu-diplomski",
+                      "ruleId":  "vevu-diplomski--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt.",
+                      "note":  "Za običan tekst izvor navodi 12 pt u direktivnoj natuknici, pa se vrijednost odnosi na tijelo rada."
+                  }
+              ]
+}

@@ -1,0 +1,62 @@
+{
+  "source": {
+    "id": "pravo-katedra-radno-socijalno-upute-2021",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Diplomski-seminari_upute_za_izradu_i_citiranje_2014_sire_20210729.pdf",
+    "fetchedAt": "2026-06-30",
+    "snapshotHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pravo-katedra-radno-socijalno-upute-2021.txt"
+  },
+  "rules": [
+    {
+      "profileId": "radno-socijalno-pravo",
+      "ruleId": "radno-socijalno-pravo--heading-rules",
+      "checkId": "heading-rules",
+      "label": "Oblikovanje naslova po razinama",
+      "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
+      "quote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) označavajte samo\r\narapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim\r\nbrojevima.",
+      "valueShape": {
+        "levels": {
+          "1": {
+            "uppercase": "boolean"
+          },
+          "2": {},
+          "3": {}
+        },
+        "maxLevel": "number",
+        "numberRequired": "boolean",
+        "romanLevelOneAllowed": "boolean",
+        "trailingDot": "boolean"
+      },
+      "contexts": [
+        "icanje pojedinih dijelova teksta treba koristiti masni tisak. Kurziv treba koristiti samo za označavanje stranih riječi (latinske, njemačke, engleske itd.). 4. Pojmovno kazalo Ukoliko planirate izradu pojmovnog kazala, molimo vas da u tekstu označite pojmove za koje želite da se nađu u indeksu. To možete učiniti uz pomoć funkcija u Microsoft Word-u: References, Mark Entry, a za kreiranje indeksa funkcije: References i Insert Index.2 S obzirom da će cjeloviti indeks knjige biti kreiran na tri razine molimo vas da pojam prve razine unesete pod rubrikom „glavni unos“ (Entry), a pojam druge razine pod rubrikom „podunos“ (Subentry). Za treću razinu potrebno je da nakon teksta druge razine – „podunosa“ (Subentry) upišite dvotočku (:), a zatim dopišete željeni tekst unosa s treće razine. 1 Za više vidi: http://office.microsoft.com/en-ca/word-help/add-page-numbers- HA102809692.aspx?CTT=5&origin=HA104056071. 2Radi lakšeg snalaženja oko postupka označavanja pojmova za pojmovno kazalo, molimo vas da eventualno konzultirate upute dostupne na ovoj Internet stranici: http://office.microsoft.com/hr-hr/word-help/stvaranje-i- azuriranje-indeksa-HP001226499.aspx . 3 5. Označavanje cjelina i sadržaj Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) označavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima. Tako bi npr. ispravno označavanje bilo: UGOVOR O RADU 1. UVOD 2. POJAM UGOVORA O RADU .............................................................................1 2.1. Trenutak sklapanja (perfekcije) ugovora o radu ............................2 2.2. Oblik ugovora o radu .............................................................................4 2.3. Prava osobe koja traži zaposlenje glede sklapanja ugovora o radu ...6 3. UGOVORNE STRANE ...............................................................................................6 3.1. Radnik .....................................................................................................6 3.2. Poslodavac .........................................................................................7 3.2.1. Pojam poslodavca ..............................................................7 3.2.2. Agencija za privremeno zapošljavanje kao poslodavac ...8 Molimo da sadržaj generirate pomoću Wordovog alata References - Table of Contents.3 6. Kratice Molimo vas da u radu koristite kratice koje se uobičajeno koriste (popis u nastavku) ili druge kratice koje u svojim odlukama koristi Vrhovni sud RH. Ako koristite kratice koje nisu naved"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "radno-socijalno-pravo",
+      "ruleId": "radno-socijalno-pravo--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "str. 3, odjeljak 2",
+      "quote": "Stranice trebaju biti označene arapskim brojevima (dolje desno), pri čemu se prva\r\nbrojčana oznaka stavlja na prvu stranicu uvoda.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ad, a posebice završni i diplomski radovi moraju imati izjavu o autorstvu odnosno izvornosti rada, koja može glasiti kako slijedi: Ja, (ime i prezime studenta), ovime potvrđujem da sam osobno napisao/la rad pod nazivom: _________________________________________________________. Svi dijelovi rada, nalazi ili ideje koje su u radu citirane, parafrazirane ili se temelje na 2 drugim izvorima (bilo da su u pitanju knjige, znanstveni, stručni ili popularni članci, mrežni izvori, propisi, sudske odluke ili statistički podaci) su u radu jasno označeni kao takvi te adekvatno navedeni u popisu literature. U izradi rada nisam koristio/-la drugim izvorima do onih navedenih u radu. Mjesto i datum: ____________________ Potpis studenta s navođenjem punog imena i prezimena: _________________________________ 2. Tip i veličina slova Molimo da prilikom izrade rada koristite tip slova Times New Roman, veličinu 12, prored 1,5. Preporuča se koristiti program Word u standardnom obliku. Za tekst u bilješkama (fusnotama) potrebno je koristiti veličinu slova 10, bez proreda i razmaka nakon svake bilješke. Nadalje, s obzirom da su bilješke (fusnote) rečenice, trebaju početi velikom slovom, a završiti točkom. Stranice trebaju biti označene arapskim brojevima (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda. Stranice označavajte uz pomoć Wordovog alata Insert – Page Number.1 Tekst je potrebno pisati s obostranim poravnanjem. Unutar pojedinih cjelina (glava, odjeljka i pododjeljka) molimo da tekst organizirate u smislene odlomke. Odlomke trebate pisati sa uvlakama. 3. Isticanje pojedinih dijelova teksta Za isticanje pojedinih dijelova teksta treba koristiti masni tisak. Kurziv treba koristiti samo za označavanje stranih riječi (latinske, njemačke, engleske itd.). 4. Pojmovno kazalo Ukoliko planirate izradu pojmovnog kazala, molimo vas da u tekstu označite pojmove za koje želite da se nađu u indeksu. To možete učiniti uz pomoć funkcija u Microsoft Word-u: References, Mark Entry, a za kreiranje indeksa funkcije: References i Insert Index.2 S obzirom da će cjeloviti indeks knjige biti kreiran na tri razine molimo vas da pojam prve razine unesete pod rubrikom „glavni unos“ (Entry), a pojam druge razine pod rubrikom „podunos“ (Subentry). Za treću razinu potrebno je da nakon teksta druge razine – „podunosa“ (Subentry) upišite dvotočku (:), a zatim dopišete željeni tekst unosa s treće razine. 1 Za više vidi: http://office.microsoft.com/en-ca/word-help/add-page-numbers- HA102809692.aspx?CTT=5&"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "radno-socijalno-pravo",
+      "ruleId": "radno-socijalno-pravo--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "str. 2, odjeljak 1 (Opce napomene)",
+      "quote": "Svi radovi moraju imati sadržaj, uvod, razradu teme po smislenim cjelinama i\r\nzaključak.",
+      "valueShape": "boolean",
+      "contexts": [
+        "...................... 9 7.1.8. Novinski napisi ........................................................................................................................................ 10 7. 1.9. Sudske odluke ........................................................................................................................................ 10 7.1.10. Citiranje s Interneta i članaka u elektronskom obliku .......................................................................... 11 7.2. Sukcesivni navodi .................................................................................................................................... 11 7.3. Više navoda unutar iste bilješke .............................................................................................................. 12 7.4. Posebne napomene ................................................................................................................................. 12 8. POPIS LITERATURE ............................................................................................................12 9. PROVJERA AUTENTIČNOSTI RADA PUTEM PLAGSCAN PROGRAMA ....................................14 1 1. Opće napomene Svi radovi moraju imati sadržaj, uvod, razradu teme po smislenim cjelinama i zaključak. Pri izradi rada (posebice diplomskog odnosno završnog) student je također dužan slijediti upute mentora. U obradi pojedine teme potrebno je koristiti domaće i strane pravne izvore, sudsku praksu te stručnu i znanstvenu literaturu. Oni su preduvjet daljnjeg samostalnog rada u obradi i kritičkoj analizi teme. U prikupljanju literature uputno je koristiti on-line katalog knjižnice Pravnog fakulteta Sveučilišta u Zagrebu (https://www.pravo.unizg.hr/knjiznica/online_katalog) , kao i pristupe domaćim i stranim bazama podataka dostupnim putem https://www.pravo.unizg.hr/knjiznica. Studente dodatno ohrabrujemo da koriste i kataloge drugih knjižnica, kao i da pretražuju on-line sudsku praksu (npr. Ustavnog suda RH, Vrhovnog suda RH, Suda EU, Europskog suda za zaštitu ljudskih prava). Neke korisne linkove možete naći i na stranici naše Katedre: http://www.pravo.unizg.hr/RSP/korisni_linkovi. Seminarski rad se izrađuje radi šireg i dubljeg upoznavanja studenta s dijelom materije nastavnog predmeta i radi stjecanja iskustva u pisanju radova. Seminarski rad predstavlja samostalnu stručnu obradu izabrane teme. Izradom rada student pokazuje sposobnost samostalnog služenja pravnim izvorima te aktua"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

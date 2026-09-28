@@ -1,0 +1,20 @@
+{
+    "sourceId":  "kif-upute-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "kif-diplomski",
+                      "ruleId":  "kif-diplomski--citation-style",
+                      "value":  "apa",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Na Kineziološkom fakultetu koristi se American Psychological Association APA stil ci- tiranja.",
+                      "note":  "Rečenica propisuje APA stil za citiranje na fakultetu bez modalne riječi ili ograničenja na pojedini dio rada."
+                  }
+              ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": {
+    "id": "unidu-marikultura-upute-diplomski",
+    "url": "https://www.unidu.hr/index.php?p=download&id=2123",
+    "fetchedAt": "2026-07-28",
+    "snapshotHash": "b8e5ee56c2504e975326d0de450cef712618b0fe6da6fbe8afdfc43e5ea1a0b5",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unidu-marikultura-upute-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)",
+      "quote": "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po\r\nstranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili\r\nArial. Tekst mora biti obostrano poravnan.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Sveučilište u Dubrovniku Odjel za akvakulturu Upute za pisanje diplomskog rada na diplomskom studiju Marikultura 1. Opće upute o načinu pisanja rada Diplomski rad na kraju diplomskog studija predstavlja samostalnu stručnu obradu određenog problema, obuhvaća teoretski te eksperimentalni ili terenski istraživački rad. Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili Arial. Tekst mora biti obostrano poravnan. Tablice i slike se označavaju brojevima kako slijede. Opis slike je ispod prikaza slike, a opis tablice je iznad prikaza tablice (prilog 4.). Ukoliko su tablice i slike preuzete od drugih autora, potrebno je prilikom opisa navesti izvor. Stranice se numeriraju arapskim brojevima na vrhu stranice, u sredini, tako da je 1. stranica Uvod. Pisati valja sažeto, ali jasno i logički potpuno. Dužnu pozornost treba posvetiti jezičnoj pravilnosti teksta. Ako je student nevješt jasnu i pravilnu pisanju, dužnost je mentora uputiti ga na jezičnu lekturu rada., prije predaje rada na ocjenu. Diplomski rad se na obranu donosi u mekom uvezu u tri (3) primjerka, a nakon obrane jedan rad se uvezuje u tvrdi uvez i dostavlja tajnistvu Odjela, kao i rad u PDF-u. 2. Kompozicija rada Diplomski rad mora sadržavati slijedeće dijelove: naslovnu stranicu, iskaz o izvedbi rada, Sadržaj, Sažetak, Uvod, Materijal i metode, Rezultate, Raspravu, Zaključak i citiranu Literaturu. Svako poglavlje potrebno je započeti na novoj stranici. Naslovi poglavlja piše se podebljanim velikim tiskanim slovima na lijevoj strani 1. Uvod, 2. Materijal i metode, 3. Rezultati, 4. Rasprava, 5. Zaključak i 6. Literatura. Naslovna stra"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)",
+      "quote": "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po\r\nstranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili\r\nArial. Tekst mora biti obostrano poravnan.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "Sveučilište u Dubrovniku Odjel za akvakulturu Upute za pisanje diplomskog rada na diplomskom studiju Marikultura 1. Opće upute o načinu pisanja rada Diplomski rad na kraju diplomskog studija predstavlja samostalnu stručnu obradu određenog problema, obuhvaća teoretski te eksperimentalni ili terenski istraživački rad. Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili Arial. Tekst mora biti obostrano poravnan. Tablice i slike se označavaju brojevima kako slijede. Opis slike je ispod prikaza slike, a opis tablice je iznad prikaza tablice (prilog 4.). Ukoliko su tablice i slike preuzete od drugih autora, potrebno je prilikom opisa navesti izvor. Stranice se numeriraju arapskim brojevima na vrhu stranice, u sredini, tako da je 1. stranica Uvod. Pisati valja sažeto, ali jasno i logički potpuno. Dužnu pozornost treba posvetiti jezičnoj pravilnosti teksta. Ako je student nevješt jasnu i pravilnu pisanju, dužnost je mentora uputiti ga na jezičnu lekturu rada., prije predaje rada na ocjenu. Diplomski rad se na obranu donosi u mekom uvezu u tri (3) primjerka, a nakon obrane jedan rad se uvezuje u tvrdi uvez i dostavlja tajnistvu Odjela, kao i rad u PDF-u. 2. Kompozicija rada Diplomski rad mora sadržavati slijedeće dijelove: naslovnu stranicu, iskaz o izvedbi rada, Sadržaj, Sažetak, Uvod, Materijal i metode, Rezultate, Raspravu, Zaključak i citiranu Literaturu. Svako poglavlje potrebno je započeti na novoj stranici. Naslovi poglavlja piše se podebljanim velikim tiskanim slovima na lijevoj strani 1. Uvod, 2. Materijal i metode, 3. Rezultati, 4. Rasprava, 5. Zaključak i 6. Literatura. Naslovna stra"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "sourcePage": "Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)",
+      "quote": "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po\r\nstranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili\r\nArial. Tekst mora biti obostrano poravnan.",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Dubrovniku Odjel za akvakulturu Upute za pisanje diplomskog rada na diplomskom studiju Marikultura 1. Opće upute o načinu pisanja rada Diplomski rad na kraju diplomskog studija predstavlja samostalnu stručnu obradu određenog problema, obuhvaća teoretski te eksperimentalni ili terenski istraživački rad. Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili Arial. Tekst mora biti obostrano poravnan. Tablice i slike se označavaju brojevima kako slijede. Opis slike je ispod prikaza slike, a opis tablice je iznad prikaza tablice (prilog 4.). Ukoliko su tablice i slike preuzete od drugih autora, potrebno je prilikom opisa navesti izvor. Stranice se numeriraju arapskim brojevima na vrhu stranice, u sredini, tako da je 1. stranica Uvod. Pisati valja sažeto, ali jasno i logički potpuno. Dužnu pozornost treba posvetiti jezičnoj pravilnosti teksta. Ako je student nevješt jasnu i pravilnu pisanju, dužnost je mentora uputiti ga na jezičnu lekturu rada., prije predaje rada na ocjenu. Diplomski rad se na obranu donosi u mekom uvezu u tri (3) primjerka, a nakon obrane jedan rad se uvezuje u tvrdi uvez i dostavlja tajnistvu Odjela, kao i rad u PDF-u. 2. Kompozicija rada Diplomski rad mora sadržavati slijedeće dijelove: naslovnu stranicu, iskaz o izvedbi rada, Sadržaj, Sažetak, Uvod, Materijal i metode, Rezultate, Raspravu, Zaključak i citiranu Literaturu. Svako poglavlje potrebno je započeti na novoj stranici. Naslovi poglavlja piše se podebljanim velikim tiskanim slovima na lijevoj strani 1. Uvod, 2. Materijal i metode, 3. Rezultati, 4. Rasprava, 5. Zaključak i 6. Literatura. Naslovna stra"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": "unidu-marikultura-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)",
+      "quote": "Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po\r\nstranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili\r\nArial. Tekst mora biti obostrano poravnan.",
+      "valueShape": "number",
+      "contexts": [
+        "Sveučilište u Dubrovniku Odjel za akvakulturu Upute za pisanje diplomskog rada na diplomskom studiju Marikultura 1. Opće upute o načinu pisanja rada Diplomski rad na kraju diplomskog studija predstavlja samostalnu stručnu obradu određenog problema, obuhvaća teoretski te eksperimentalni ili terenski istraživački rad. Diplomski rad je potrebno pisati računalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, veličinom znakova 12, koristeći font Times New Roman ili Arial. Tekst mora biti obostrano poravnan. Tablice i slike se označavaju brojevima kako slijede. Opis slike je ispod prikaza slike, a opis tablice je iznad prikaza tablice (prilog 4.). Ukoliko su tablice i slike preuzete od drugih autora, potrebno je prilikom opisa navesti izvor. Stranice se numeriraju arapskim brojevima na vrhu stranice, u sredini, tako da je 1. stranica Uvod. Pisati valja sažeto, ali jasno i logički potpuno. Dužnu pozornost treba posvetiti jezičnoj pravilnosti teksta. Ako je student nevješt jasnu i pravilnu pisanju, dužnost je mentora uputiti ga na jezičnu lekturu rada., prije predaje rada na ocjenu. Diplomski rad se na obranu donosi u mekom uvezu u tri (3) primjerka, a nakon obrane jedan rad se uvezuje u tvrdi uvez i dostavlja tajnistvu Odjela, kao i rad u PDF-u. 2. Kompozicija rada Diplomski rad mora sadržavati slijedeće dijelove: naslovnu stranicu, iskaz o izvedbi rada, Sadržaj, Sažetak, Uvod, Materijal i metode, Rezultate, Raspravu, Zaključak i citiranu Literaturu. Svako poglavlje potrebno je započeti na novoj stranici. Naslovi poglavlja piše se podebljanim velikim tiskanim slovima na lijevoj strani 1. Uvod, 2. Materijal i metode, 3. Rezultati, 4. Rasprava, 5. Zaključak i 6. Literatura. Naslovna stra"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

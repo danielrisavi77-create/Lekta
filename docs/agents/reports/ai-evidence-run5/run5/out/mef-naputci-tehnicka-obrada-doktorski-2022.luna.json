@@ -1,0 +1,50 @@
+﻿{
+    "sourceId":  "mef-naputci-tehnicka-obrada-doktorski-2022",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "mef-doktorski",
+                      "ruleId":  "mef-doktorski--page-number-start-at-intro",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)",
+                      "note":  "Obavezno označavanje čini numeriranje obveznim, a izvor izričito određuje Uvod kao prvu numeriranu stranicu rada."
+                  },
+                  {
+                      "profileId":  "mef-doktorski",
+                      "ruleId":  "mef-doktorski--page-numbers",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice obavezno označiti brojevima",
+                      "note":  "Izvor nalaže obvezno označavanje stranica brojevima za cijeli rad."
+                  },
+                  {
+                      "profileId":  "mef-doktorski",
+                      "ruleId":  "mef-doktorski--paper-size",
+                      "value":  "A4",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Format radova je A 4 (21x29,7 cm)",
+                      "note":  "Format je naveden kao A 4, što odgovara dopuštenoj vrijednosti A4, a odnosi se na cijeli rad."
+                  },
+                  {
+                      "profileId":  "mef-doktorski",
+                      "ruleId":  "mef-doktorski--toc",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad mora sadržavati:- Sadržaj prema poglavljima",
+                      "note":  "Sadržaj prema poglavljima naveden je kao obvezna sastavnica rada."
+                  }
+              ]
+}

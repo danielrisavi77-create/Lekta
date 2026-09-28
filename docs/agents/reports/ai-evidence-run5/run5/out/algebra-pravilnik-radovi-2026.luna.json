@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "algebra-pravilnik-radovi-2026",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "algebra-diplomski",
+      "ruleId": "algebra-diplomski--word-count",
+      "value": { "max": 25000, "min": 20000 },
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "(5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "note": "Raspon je 20.000–25.000 riječi od uvoda do zaključka; izraz ‘mora’ označuje obvezu, a opseg rada odgovara cijelom radu."
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "ruleId": "algebra-diplomski-odnosi-s-javnoscu--word-count",
+      "value": { "max": 25000, "min": 20000 },
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "(5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "note": "Raspon je 20.000–25.000 riječi od uvoda do zaključka; izraz ‘mora’ označuje obvezu, a opseg rada odgovara cijelom radu."
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "ruleId": "algebra-specijalisticki--word-count",
+      "value": { "max": 25000, "min": 20000 },
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "(5) Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "note": "Raspon je 20.000–25.000 riječi od uvoda do zaključka; izraz ‘mora’ označuje obvezu, a opseg rada odgovara cijelom radu."
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "ruleId": "algebra-zavrsni--word-count",
+      "value": { "max": 15000, "min": 12000 },
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "(4) Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi.",
+      "note": "Raspon je 12.000–15.000 riječi od uvoda do zaključka; izraz ‘mora’ označuje obvezu, a opseg rada odgovara cijelom radu."
+    }
+  ]
+}

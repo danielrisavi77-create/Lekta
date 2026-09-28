@@ -1,0 +1,30 @@
+{
+  "sourceId": "fbf-upute-spec-2014",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--citation-style",
+      "value": "vancouver",
+      "modality": "directive",
+      "scope": "bibliography",
+      "verdict": "extracted",
+      "evidenceQuote": "Literatura se navodi Vancouverskim stilom, a u popisu slijede redosljedom pojavljivanja u tekstu (najviše do 30 literaturnih navoda, što novijeg datuma objave).",
+      "note": "Izvor izričito navodi Vancouverski stil za literaturu, a izraz 'se navodi' daje direktivu za bibliografiju."
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--required-sections",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Obvezatni dijelovi rada koji slijede su: a) Eksperimentalni specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode (ili: Ispitanici i metode) 4. Rezultati 5. Rasprava 6. Zaključak (ili: Zaključci) i 7. Referencije (ili Literatura) 8. Životopis b) Teorijski specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode - Sustavni pregled saznanja o temi (podijeljen u odgovarajuća poglavlja) 4. Rasprava 5. Zaključak (ili: Zaključci) i 6. Referencije (ili Literatura) 7. Životopis",
+      "note": "Izvor direktivno propisuje različite cjeline za eksperimentalni i teorijski rad, pa jedinstven niz za cijeli rad nije jednoznačan."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+﻿{
+    "sourceId":  "biolos-pravilnik-zavrsni-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "biolos-zavrsni",
+                      "ruleId":  "biolos-zavrsni--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Numeriranje stranica zapoÄinje na prvoj stranici Uvoda zavrÅ¡nog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
+                      "note":  "Izvor izričito propisuje numeriranje stranica, rečenica je u indikativu pa je modalitet directive, a numeriranje se odnosi na cijeli rad."
+                  }
+              ]
+}

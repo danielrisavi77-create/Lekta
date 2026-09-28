@@ -1,0 +1,69 @@
+﻿{
+  "sourceId": "securus-pravilnik-zavrsni-2023",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad se piše u fontu Times New Roman 12.",
+      "note": "Izvor navodi Times New Roman u rečenici s golim indikativom, a vrsta slova odnosi se na tijelo rada."
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad se piše u fontu Times New Roman 12.",
+      "note": "Broj 12 određuje veličinu fonta u rečenici s golim indikativom, a veličina slova odnosi se na tijelo rada."
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--margins",
+      "value": {
+        "bottom": 2.5,
+        "left": 3,
+        "right": 2,
+        "top": 2.5
+      },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt).",
+      "note": "Rečenica navodi margine izravno u golom indikativu, a margine se odnose na cijeli dokument."
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Sažetak je prva stranica rada s kojom započinje numeriranje stranica (za numeraciju primijeniti arapske brojeve u donjem desnom uglu stranice).",
+      "note": "Odlomak izričito propisuje numeriranje arapskim brojevima, a numeriranje stranica odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--paper-size",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12.",
+      "note": "Izvor navodi A4 u direktivnoj rečenici za cijeli rad, ali traženi boolean oblik vrijednosti ne može se jednoznačno izvesti."
+    }
+  ]
+}

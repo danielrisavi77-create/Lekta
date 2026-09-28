@@ -1,0 +1,17 @@
+{
+  "pravo-porezni-prijediplomski--citation-style": {
+    "value": "pravo-fusnote",
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "pravo-porezni-prijediplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pravo-porezni-prijediplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

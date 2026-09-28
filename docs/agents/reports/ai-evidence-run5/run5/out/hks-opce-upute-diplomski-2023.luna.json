@@ -1,0 +1,86 @@
+﻿{
+  "sourceId": "hks-opce-upute-diplomski-2023",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "note": "Izvor za bilješke izričito navodi obostrano poravnanje indikativnom formulacijom, pa je vrijednost true, modalitet directive, a opseg footnote."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-size",
+      "value": [10],
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "note": "Rečenica za bilješke navodi veličinu slova 10 kao indikativnu uputu, a os se odnosi na fusnote."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-spacing",
+      "value": 1,
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "note": "Izvor propisuje jednostruki prored za bilješke, što je vrijednost 1 u zadanom obliku, indikativnom uputom za fusnote."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--font",
+      "value": ["Book Antiqua"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11",
+      "note": "Uputa za pisanje diplomskog rada izričito navodi font Book Antiqua u indikativnom obliku, a font se odnosi na glavni tekst."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--font-size",
+      "value": 11,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11",
+      "note": "Izvor navodi veličinu slova 11 za pismo diplomskog rada, kao indikativnu uputu za glavni tekst."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--justify",
+      "value": true,
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "tekst mora biti obostrano poravnan (Paragraph, Justify)",
+      "note": "Rečenica izričito kaže da tekst mora biti obostrano poravnan, pa je vrijednost true, modalitet obligation, a opseg body."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "prored: 1,5",
+      "note": "Natuknica navodi prored 1,5 za diplomski rad, što je direktivna vrijednost za glavni tekst."
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm",
+      "note": "Natuknica određuje sve četiri margine na 2,5 cm za diplomski rad, što daje vrijednost u zadanom obliku i opseg whole."
+    }
+  ]
+}

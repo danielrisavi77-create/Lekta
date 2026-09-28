@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "efzg-postupak-zavrsni",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "efzg-zavrsni",
+      "ruleId": "efzg-zavrsni--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Koristiti font Times New Roman ili Arial, veličina slova 12. Tekst obostrano poravnati.",
+      "note": "Izvor nalaže obostrano poravnanje teksta, pa je vrijednost true, modalitet direktiva, a opseg tijelo rada."
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "ruleId": "efzg-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored između redaka postaviti na 1,5.",
+      "note": "Izvor izričito određuje prored od 1,5, a ne koristi modalnu riječ pa je modalitet direktiva i opseg tijelo rada."
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "ruleId": "efzg-zavrsni--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Sve margine stranica postaviti na 2,5 cm.",
+      "note": "Sve četiri margine određene su na 2,5 cm, izravnom uputom za stranice rada u cjelini."
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "ruleId": "efzg-zavrsni--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Numerirati stranice rada. Naslovna stranica se ne numerira.",
+      "note": "Stranice rada treba numerirati uz izričitu iznimku naslovnice, pa je pravilo uključeno za rad u cjelini."
+    }
+  ]
+}

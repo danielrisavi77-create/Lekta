@@ -1,0 +1,20 @@
+{
+    "sourceId":  "efos-upute-studentski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "efos-opci-akademski-rad",
+                      "ruleId":  "efos-opci-akademski-rad--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "veličina je stranice A4 (210x297 mm)",
+                      "note":  "Izvor navodi A4 za cijeli rad u indikativu, ali vrijednost ne može istodobno biti zadanog oblika boolean i jedna od dopuštenih tekstualnih vrijednosti A3 ili A4."
+                  }
+              ]
+}

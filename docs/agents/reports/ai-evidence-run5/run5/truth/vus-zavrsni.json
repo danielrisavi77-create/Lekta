@@ -1,0 +1,26 @@
+{
+  "vus-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vus-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

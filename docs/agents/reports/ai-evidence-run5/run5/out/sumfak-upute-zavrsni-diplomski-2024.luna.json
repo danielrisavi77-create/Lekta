@@ -1,0 +1,50 @@
+﻿{
+  "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli unknown"
+  },
+  "rules": [
+    {
+      "profileId": "sumfak-diplomski",
+      "ruleId": "sumfak-diplomski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "note": "Vrijednost je true jer izvor propisuje numeriranje stranica, rečenica je u indikativu, a pravilo numeriranja stranica vrijedi za cijeli rad."
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "ruleId": "sumfak-diplomski--toc",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Dijelovi rada su sljedeći: Naslov rada (hrvatski i engleski) treba obuhvatiti glavnu ideju/temu te biti kratak (do 100 znakova s razmacima), jasan, logičan i jednoznačan. Potrebno je izbjegavati kratice, tuđice i posuđenice ako postoje hrvatske istoznačnice. Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic). Student može dodati stranicu s osobnom zahvalom za pomoć pri izradi rada. Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "note": "Sadržaj je naveden među dijelovima rada pa je njegova vrijednost true, definicijska rečenica je u indikativu, a pravilo sadržaja odnosi se na cijeli rad."
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "ruleId": "sumfak-zavrsni--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "note": "Vrijednost je true jer izvor propisuje numeriranje stranica, rečenica je u indikativu, a pravilo numeriranja stranica vrijedi za cijeli rad."
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "ruleId": "sumfak-zavrsni--toc",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Dijelovi rada su sljedeći: Naslov rada (hrvatski i engleski) treba obuhvatiti glavnu ideju/temu te biti kratak (do 100 znakova s razmacima), jasan, logičan i jednoznačan. Potrebno je izbjegavati kratice, tuđice i posuđenice ako postoje hrvatske istoznačnice. Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic). Student može dodati stranicu s osobnom zahvalom za pomoć pri izradi rada. Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "note": "Sadržaj je naveden među dijelovima rada pa je njegova vrijednost true, definicijska rečenica je u indikativu, a pravilo sadržaja odnosi se na cijeli rad."
+    }
+  ]
+}

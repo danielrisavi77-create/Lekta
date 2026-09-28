@@ -1,0 +1,132 @@
+{
+  "sourceId": "ttf-upute-zavrsni-diplomski",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "ttf-diplomski",
+      "ruleId": "ttf-diplomski--font",
+      "value": [
+        "Arial"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial",
+      "note": "Uputa navodi Arial uz obaveznu potporu hrvatskih znakova, a font se odnosi na tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "ruleId": "ttf-dizajn-diplomski--font",
+      "value": [
+        "Arial"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial",
+      "note": "Uputa navodi Arial uz obaveznu potporu hrvatskih znakova, a font se odnosi na tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "ruleId": "ttf-dizajn-diplomski--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Veličina slova (Font size): 12 tipografskih točaka",
+      "note": "Natuknica navodi velicinu slova 12 pt za tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "ruleId": "ttf-dizajn-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored (Line spacing): 1,5 redak",
+      "note": "Natuknica navodi prored 1,5 za tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "ruleId": "ttf-dizajn-diplomski--margins",
+      "value": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5,
+        "top": 2.5
+      },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Lijeva i desna margina: 2,5 cm\nGornja i donja margina: 2,5 cm",
+      "note": "Natuknice navode sve cetiri margine od 2,5 cm za stranice rada."
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "ruleId": "ttf-dizajn-zavrsni--font",
+      "value": [
+        "Arial"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial",
+      "note": "Uputa navodi Arial uz obaveznu potporu hrvatskih znakova, a font se odnosi na tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "ruleId": "ttf-dizajn-zavrsni--font-size",
+      "value": [
+        12
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Veličina slova (Font size): 12 tipografskih točaka",
+      "note": "Natuknica navodi velicinu slova 12 pt za tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "ruleId": "ttf-dizajn-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored (Line spacing): 1,5 redak",
+      "note": "Natuknica navodi prored 1,5 za tekst rada."
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "ruleId": "ttf-dizajn-zavrsni--margins",
+      "value": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5,
+        "top": 2.5
+      },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Lijeva i desna margina: 2,5 cm\nGornja i donja margina: 2,5 cm",
+      "note": "Natuknice navode sve cetiri margine od 2,5 cm za stranice rada."
+    },
+    {
+      "profileId": "ttf-zavrsni",
+      "ruleId": "ttf-zavrsni--font",
+      "value": [
+        "Arial"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial",
+      "note": "Uputa navodi Arial uz obaveznu potporu hrvatskih znakova, a font se odnosi na tekst rada."
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "source": {
+    "id": "securus-pravilnik-zavrsni-2023",
+    "url": "https://www.vs-securus.hr/wp-content/uploads/2023/05/Pravilnik-o-zavr%C5%A1nom-radu-Securus-2023.pdf",
+    "fetchedAt": "2026-07-17",
+    "snapshotHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\securus-pravilnik-zavrsni-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        " (1) Za temu rada koja je prihvaćena, mentor je dužan u roku petnaest dana od dana primitka obavijesti Veleučilišta (i razgovora sa studentom) napisati zadatak rada (prema obrascu u Prilogu 4.). (2) Potpisani Zadatak završnog rada mentor dostavlja Studentskoj referadi u pisanom obliku. (3) Student može jednom promijeniti temu rada, najkasnije u roku od 30 dana od dana izdavanja prve teme. (4) Student treba predati izrađeni rad najkasnije 180 dana od dana uručenja Zadatka. (5) Student koji nije u roku predao izrađeni završni rad ponovno upisuje predmet Završni rad i upućuje se na ponovnu dodjelu nove teme rada. (6) Izuzetno, student može, u opravdanim slučajevima, zatražiti produljenje izrade rada, ali prije isteka roka za predaju rada. Produljenje izrade rada ne može biti veće od 30 dana. 4. IZRADA ZAVRŠNOG RADA Članak 11. (1) Završni rad piše se i brani na hrvatskom ili engleskom jeziku. (2) Rad treba biti pisan u trećem licu pasivno stilom strukovnog područja studija. (3) Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12. Naslovi glavnih poglavlja obavezno započinju na novoj stranici, dok se naslovi potpoglavlja pišu nastavno na prethodna potpoglavlja. (4) Opseg razrade rada, na prijedlog studenta, utvrđuje mentor, odnosno komentor, a ne može biti manji od 25 autorskih kartica (45.000 znakova) čistog teksta za Završni rad, a preporuča se da ne bude veći od 70 autorskih kartica (126.000 znakova) ne računajući priloge. (5) Rad se sastoji od obveznih i neobveznih dijelova. (6) Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada (7) Neobvezni i uvjetovani dijelovi rada su: 1) Abecedni popis korištenih kratica i akronima (ukoliko su korištene u radu) 2) Popis slika (nije obvezno) 3) Popis tablica (nije obvezno) 4) Prilozi (ako postoje) (8) Na kraju rada stavlja se potvrda mentora o završetku rada (Prilog 7.) te "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        " (1) Za temu rada koja je prihvaćena, mentor je dužan u roku petnaest dana od dana primitka obavijesti Veleučilišta (i razgovora sa studentom) napisati zadatak rada (prema obrascu u Prilogu 4.). (2) Potpisani Zadatak završnog rada mentor dostavlja Studentskoj referadi u pisanom obliku. (3) Student može jednom promijeniti temu rada, najkasnije u roku od 30 dana od dana izdavanja prve teme. (4) Student treba predati izrađeni rad najkasnije 180 dana od dana uručenja Zadatka. (5) Student koji nije u roku predao izrađeni završni rad ponovno upisuje predmet Završni rad i upućuje se na ponovnu dodjelu nove teme rada. (6) Izuzetno, student može, u opravdanim slučajevima, zatražiti produljenje izrade rada, ali prije isteka roka za predaju rada. Produljenje izrade rada ne može biti veće od 30 dana. 4. IZRADA ZAVRŠNOG RADA Članak 11. (1) Završni rad piše se i brani na hrvatskom ili engleskom jeziku. (2) Rad treba biti pisan u trećem licu pasivno stilom strukovnog područja studija. (3) Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12. Naslovi glavnih poglavlja obavezno započinju na novoj stranici, dok se naslovi potpoglavlja pišu nastavno na prethodna potpoglavlja. (4) Opseg razrade rada, na prijedlog studenta, utvrđuje mentor, odnosno komentor, a ne može biti manji od 25 autorskih kartica (45.000 znakova) čistog teksta za Završni rad, a preporuča se da ne bude veći od 70 autorskih kartica (126.000 znakova) ne računajući priloge. (5) Rad se sastoji od obveznih i neobveznih dijelova. (6) Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada (7) Neobvezni i uvjetovani dijelovi rada su: 1) Abecedni popis korištenih kratica i akronima (ukoliko su korištene u radu) 2) Popis slika (nije obvezno) 3) Popis tablica (nije obvezno) 4) Prilozi (ako postoje) (8) Na kraju rada stavlja se potvrda mentora o završetku rada (Prilog 7.) te "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt).",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        " odobrenih zadataka, pročelnik studija objavljuje putem informacijskog sustava Veleučilišta. (7) Vijeće Veleučilišta rješava molbe te prigovore i žalbe studenata na rad Povjerenstva za završne radove. Članak 10. (1) Za temu rada koja je prihvaćena, mentor je dužan u roku petnaest dana od dana primitka obavijesti Veleučilišta (i razgovora sa studentom) napisati zadatak rada (prema obrascu u Prilogu 4.). (2) Potpisani Zadatak završnog rada mentor dostavlja Studentskoj referadi u pisanom obliku. (3) Student može jednom promijeniti temu rada, najkasnije u roku od 30 dana od dana izdavanja prve teme. (4) Student treba predati izrađeni rad najkasnije 180 dana od dana uručenja Zadatka. (5) Student koji nije u roku predao izrađeni završni rad ponovno upisuje predmet Završni rad i upućuje se na ponovnu dodjelu nove teme rada. (6) Izuzetno, student može, u opravdanim slučajevima, zatražiti produljenje izrade rada, ali prije isteka roka za predaju rada. Produljenje izrade rada ne može biti veće od 30 dana. 4. IZRADA ZAVRŠNOG RADA Članak 11. (1) Završni rad piše se i brani na hrvatskom ili engleskom jeziku. (2) Rad treba biti pisan u trećem licu pasivno stilom strukovnog područja studija. (3) Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12. Naslovi glavnih poglavlja obavezno započinju na novoj stranici, dok se naslovi potpoglavlja pišu nastavno na prethodna potpoglavlja. (4) Opseg razrade rada, na prijedlog studenta, utvrđuje mentor, odnosno komentor, a ne može biti manji od 25 autorskih kartica (45.000 znakova) čistog teksta za Završni rad, a preporuča se da ne bude veći od 70 autorskih kartica (126.000 znakova) ne računajući priloge. (5) Rad se sastoji od obveznih i neobveznih dijelova. (6) Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada (7) Neobvezni i uvjetovani dijelovi rada su: 1) Abecedni popis korištenih kratica i akronima (ukoliko su korištene u radu) 2) Popis slika (nije obvezno) 3) Popis tablica (nije obvezno) 4) Prilozi (ako postoje) (8) Na kraju rada stavlja se potvrda "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "Članak 15. stavak 4.",
+      "quote": "Sažetak je prva stranica rada s kojom započinje numeriranje stranica (za numeraciju primijeniti arapske brojeve u donjem desnom uglu stranice).",
+      "valueShape": "boolean",
+      "contexts": [
+        "rak rada obvezno se ukoričuje u tvrde korice i, u pravilu, uvezuje u plavo platno. (2) Na koricama se obvezno, pozlaćenim slovima, ispisuje (Prilog 5.): − Veleučilište − Ime i prezime studenta − Naslov rada − Završni rad − Pula, godina. Članak 13. (1) Na drugoj ili unutarnjoj naslovnoj stranici (Prilog 6.) ispisuju se sljedeći podaci: − Veleučilište − Naziv studija − Naslov rada − Mentor, komentor (ako postoji) i Ime i prezime studenta − Pula, godina. Članak 14. (1) Sadržaj rada je obvezatan. (2) Sadržaj predstavlja brojčano-tekstualni pregled poglavlja i potpoglavlja. (3) Sadržaj treba biti napisan tako da su glavna poglavlja napisana velikim slovima i označena jednoznamenkastim brojem (npr. 1., 2.), a potpoglavlja malim slovima i označena s dva broja (npr. 1.1., 1.2.), a potpoglavlja nižeg ranga također malim slovima i s tri broja (1.1.1., 2.1.1.). Sadržaj treba biti strukturiran najviše do treće razine. Članak 15. (1) Sažetak je jezgrovit prikaz završnog rada koji sadrži sve bitne informacije. (2) Iza sažetka piše se popis minimalno pet ključnih riječi odvojenih zarezom. (3) Abstract i key words predstavljaju lektorirani prijevod sažetka i ključnih riječi na engleski jezik. (4) Sažetak je prva stranica rada s kojom započinje numeriranje stranica (za numeraciju primijeniti arapske brojeve u donjem desnom uglu stranice). Članak 16. (1) Uvod rada je obvezatan. (2) Uvod je početni i pristupni dio rada. Uvod treba čitatelja uvesti u područje tematike rada, upoznati ga s problemom i predmetom rada, svrhom i ciljevima te metodama, strukturom i sadržajem rada. (3) Prva stranica Uvoda je ujedno i prva stranica rada s kojom započinje mjerenje veličine rada. Članak 17. (1) Student u tekstu rada obvezno i na uobičajen način citira korištenu literaturu. (2) Navodi u APA (American Psychological Association) stilu koriste se kod svakog izravnog citiranja, navođenja činjeničnog iskaza koji nije općenito poznat, s tim da je autor takvog iskaza neka određena osoba te kod parafraziranja. (3) Za svaki iznesen dio tuđeg teksta, kao i za interpretaciju nečijeg rada, mora se navesti izvor. Izravno prenošenje tekstova iz tuđih radova ili izvora, ne smije biti više od 5% rada. (4) Pozivne bilješke (fusnote) koriste se za dodatna objašnjenja tekstualnih cjelina, ali ne i kao sredstvo navođenja izvora. Članak 18. (1) Student u radu koristi grafičke ilustracije, sheme i prikaze. (2) Numeriranje slika i tablica izvodi se numeracijom od broja 1 pa do „n-tog broja“, posebno za slike, a posebno za tablice. Naslovi slika i tabl"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12.",
+      "valueShape": "boolean",
+      "contexts": [
+        " odobrenih zadataka, pročelnik studija objavljuje putem informacijskog sustava Veleučilišta. (7) Vijeće Veleučilišta rješava molbe te prigovore i žalbe studenata na rad Povjerenstva za završne radove. Članak 10. (1) Za temu rada koja je prihvaćena, mentor je dužan u roku petnaest dana od dana primitka obavijesti Veleučilišta (i razgovora sa studentom) napisati zadatak rada (prema obrascu u Prilogu 4.). (2) Potpisani Zadatak završnog rada mentor dostavlja Studentskoj referadi u pisanom obliku. (3) Student može jednom promijeniti temu rada, najkasnije u roku od 30 dana od dana izdavanja prve teme. (4) Student treba predati izrađeni rad najkasnije 180 dana od dana uručenja Zadatka. (5) Student koji nije u roku predao izrađeni završni rad ponovno upisuje predmet Završni rad i upućuje se na ponovnu dodjelu nove teme rada. (6) Izuzetno, student može, u opravdanim slučajevima, zatražiti produljenje izrade rada, ali prije isteka roka za predaju rada. Produljenje izrade rada ne može biti veće od 30 dana. 4. IZRADA ZAVRŠNOG RADA Članak 11. (1) Završni rad piše se i brani na hrvatskom ili engleskom jeziku. (2) Rad treba biti pisan u trećem licu pasivno stilom strukovnog područja studija. (3) Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12. Naslovi glavnih poglavlja obavezno započinju na novoj stranici, dok se naslovi potpoglavlja pišu nastavno na prethodna potpoglavlja. (4) Opseg razrade rada, na prijedlog studenta, utvrđuje mentor, odnosno komentor, a ne može biti manji od 25 autorskih kartica (45.000 znakova) čistog teksta za Završni rad, a preporuča se da ne bude veći od 70 autorskih kartica (126.000 znakova) ne računajući priloge. (5) Rad se sastoji od obveznih i neobveznih dijelova. (6) Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada (7) Neobvezni i uvjetovani dijelovi rada su: 1) Abecedni popis korištenih kratica i akronima (ukoliko su korištene u radu) 2) Popis slika (nije obvezno) 3) Popis tablica (nije obvezno) 4) Prilozi (ako postoje) (8) Na kraju rada stavlja se potvrda mentora o završetku rada (Prilog 7.) te "
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

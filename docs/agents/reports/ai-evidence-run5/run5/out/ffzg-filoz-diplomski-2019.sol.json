@@ -1,0 +1,50 @@
+{
+  "sourceId": "ffzg-filoz-diplomski-2019",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12;",
+      "note": "Natuknica propisuje Times New Roman za tekst bez vlastite modalne riječi, pa vrijede direktiva i opseg tijela rada."
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--page-number-title-suppression",
+      "value": true,
+      "modality": "directive",
+      "scope": "title-page",
+      "verdict": "extracted",
+      "evidenceQuote": "naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+      "note": "Natuknica izravno nalaže izostavljanje broja na naslovnici te stranicama sadržaja i sažetaka, bez modalne riječi iz jačih kategorija."
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--required-sections",
+      "value": ["naslovna stranica", "sadržaj", "sažeci i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku", "uvod", "razrada teme", "zaključak", "popis literature"],
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature.",
+      "note": "Izraz mora sadržavati obvezuje na navedene cjeline cijeloga diplomskog rada."
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--citation-style",
+      "value": "custom",
+      "modality": "directive",
+      "scope": "footnote",
+      "verdict": "extracted",
+      "evidenceQuote": "Izvori za citirane, sažete ili parafrazirane misli nekog drugog autora navode se u fusnotama na dnu pojedine stranice, Ti navodi sadržavaju propisno oblikovan bibliografski opis citirane bibliografske jedinice.",
+      "note": "Izvor propisuje vlastiti oblik bilježaka bez naziva standardnog stila, glagol navode se daje direktivu, a rečenica izričito smješta navode u fusnote."
+    }
+  ]
+}

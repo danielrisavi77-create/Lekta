@@ -1,0 +1,29 @@
+{
+  "grf-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grf-zavrsni--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grf-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grf-zavrsni--margins": {
+    "value": {
+      "top": 2,
+      "right": 2.5,
+      "bottom": 2,
+      "left": 3.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "source": {
+    "id": "pravo-katedra-trgovacko-upute",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/UPUTE-za-izradu-diplomskih-i-seminarskih-radova-copy.pdf",
+    "fetchedAt": "2026-06-30",
+    "snapshotHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pravo-katedra-trgovacko-upute.txt"
+  },
+  "rules": [
+    {
+      "profileId": "trgovacko-pravo",
+      "ruleId": "trgovacko-pravo--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "str. 2, odjeljak FONT, PRORED I DRUGE FORMALNOSTI",
+      "quote": "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira).",
+      "valueShape": "boolean",
+      "contexts": [
+        "mativnog okvira, prilikom korištenja izvora važno je voditi računa i o tome jesu li neki izvori zastarjeli (npr. znanstveni i stručni članci). Prilikom pisanja Rada iz područja prava društava svakako se preporuča korištenje posljednjeg izdanja knjiga akademika Barbića, „Pravo društava“. OPSEG RADA: Seminarski rad mora sadržavati između 15 i 25 kartica teksta (1 autorska kartica = 1800 znakova uključujući prazna mjesta), a diplomski rad između 20 i 40 kartica teksta (bez naslovne stranice, popisa izvora i drugih priloga). S mentorom je moguće dogovoriti drugačiji opseg Rada. NASLOVNA STRANICA: Naslovna stranica mora sadržavati naziv obrazovne ustanove (Pravni fakultet Sveučilišta u Zagrebu), naznaku Katedre, naznaku kolegija u sklopu kojeg se piše Rad (npr. trgovačko pravo ili pravo društava), ime autora, naziv teme Rada, naznaku vrste Rada (diplomski ili seminarski rad), ime mentora te vrijeme i mjesto izrade rada. FONT, PRORED I DRUGE FORMALNOSTI: Rad se piše upotrebom fonta „Times New Roman“ veličine 12 s proredom 1,5 između redova teksta. Veličina fonta u bilješkama iznosi 10 s proredom 1,15 između redova teksta. Tekst mora biti poravnat s lijevom i desnom marginom (justified). Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira). 2 Katedra za trgovačko pravo i pravo društava Pravni fakultet Sveučilišta u Zagrebu Upute za izradu diplomskog i seminarskog rada Prije obrane, diplomski rad je potrebno isprintati u standardnom A4 formatu te spiralno uvesti u četiri primjerka. U izostanku drugačijeg dogovora, seminarski rad se predaje u jednom primjerku mentoru (voditelju seminara). PRAVILA CITIRANJA: Citiranje izvora u bilješkama potrebno je učiniti sukladno uobičajenim pravilima citiranja, primjerice, upotrebom pravila citiranja u Zborniku Pravnog fakulteta u Zagrebu: http://zbornik.pravo.hr/zbornik/upute (upute se nalaze pri dnu stranice) Preporuča se parafraziranje sadržaja korištenih izvora, a samo iznimno njegovo izravno prenošenje u tekst Rada, uz odgovarajuće naznačavanje citata (npr. kada je nužno iznošenje cjelokupnog izričaja zakonske odredbe). Svako korištenje izvora u tekstu Rada nužno je odgovarajuće naznačiti u bilješci jer će u suprotnom Rad biti negativno ocjenjen. PREGLED I KONTROLA RADA: Student će u dogovoru s mentorom dogovoriti način predaje rada na pregled i kontrolu (npr. u tiskanom obliku ili putem e-maila u digitalnom word format obliku). Student i mentor će se također dogovoriti o način"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    }
+  ]
+}

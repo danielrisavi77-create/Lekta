@@ -1,0 +1,50 @@
+{
+  "source": {
+    "id": "ffzg-lingvistika-diplomski-2024",
+    "url": "https://www.ffzg.unizg.hr/oling/wp-content/uploads/2024/04/Smjernice-za-izradu-diplomskoga-rada-Lingvistika-1.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "9c6e95ab738afce19518872a512c3a45565e3f64657ab41e5cd90c98fc51cd87",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-lingvistika-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "ruleId": "ffzg-lingvistika-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "poravnato s obje strane.",
+      "valueShape": "boolean",
+      "contexts": [
+        " Prije predaje cjelovite inačice rada očekuje se da s mentorom obave konzultacije vezane uz izradu diplomskog rada. Studenti povjerenstvu za obranu rada dostavljaju diplomski rad najmanje tjedan dana prije termina obrane rada. Obrana diplomskog rada javna je i uključuje usmeno izlaganje teme diplomskog rada te odgovaranje na pitanja članova povjerenstva. Povjerenstvo može omogućiti i ostalim prisutnim sudionicima postavljanje pitanja i komentara. Smjernice za oblikovanje rada i citiranje Preporučeni je minimalni opseg rada 40 kartica teksta, zajedno s naslovnom stranicom, sažetkom na hrvatskom i stranom jeziku, ključnim riječima, prilozima i popisom literature (1 kartica = 1800 znakova s prazninama). Opseg rada može varirati ovisno o odabranoj temi, prema dogovoru s mentorom. Preporučeno oblikovanje teksta slijedi smjernice časopisa Suvremena lingvistika prilagođene diplomskom radu. U dogovoru s mentorom student može koristiti i druge smjernice za citiranje dosljedne nekom stilu citiranja. Smjernice časopisa Suvremena lingvistika Oblikovanje teksta 1. Rad treba predati kao dokument programa Microsoft Word (.doc, .docx ili .rtf); prored 1,5; font Times New Roman; veličina fonta 12; poravnato s obje strane. 2. Margine treba postaviti na 25 mm sa sve četiri strane; početak svakog odlomka uvući za 5 mm, bez razmaka između odlomaka. 3. Ako rad sadržava posebne znakove ili simbole, treba ga predati i u PDF formatu. 4. Sve stranice trebaju biti numerirane pri dnu stranice desno. 5. Rad mora biti adekvatno strukturiran, poglavlja i potpoglavlja moraju biti jasno naznačena, odvojena i hijerarhijski uređena. Naslovi poglavlja i potpoglavlja trebaju biti lijevo poravnati i organizirani na sljedeći način: 1. Naslov prve razine (bold, veličina fonta 12) 1.1. Naslov druge razine (bold, veličina fonta 12) 1.1.1. Naslov treće razine (veličina fonta 12) Brojevi ne mogu započinjati od 0. 6. Primjeri iz jezične građe koja se navodi i analizira u radu moraju biti u kurzivu, morfološki glosirani te prevedeni na jezik rada. Primjere valja brojčano označiti arapskim brojevima u zagradama te ih treba odvojiti od glavnog teksta po jednim praznim retkom ispred i iza primjera, npr. (2) Lena poslužu-je gost-ima čaj-Ø. Lena serve-3sg.PRES guest-DAT.pl tea-ACC.sg ‘Lena is serving tea to the guests.’ Primjere se može grupirati upotrebom malih slova, a u tekstu se treba pozivati na primjere kao (2), (2a), (2a, b)"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "ruleId": "ffzg-lingvistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "prored 1,5;",
+      "valueShape": "number",
+      "contexts": [
+        "a one akademske godine u kojoj planiraju obranu rada. Prije predaje cjelovite inačice rada očekuje se da s mentorom obave konzultacije vezane uz izradu diplomskog rada. Studenti povjerenstvu za obranu rada dostavljaju diplomski rad najmanje tjedan dana prije termina obrane rada. Obrana diplomskog rada javna je i uključuje usmeno izlaganje teme diplomskog rada te odgovaranje na pitanja članova povjerenstva. Povjerenstvo može omogućiti i ostalim prisutnim sudionicima postavljanje pitanja i komentara. Smjernice za oblikovanje rada i citiranje Preporučeni je minimalni opseg rada 40 kartica teksta, zajedno s naslovnom stranicom, sažetkom na hrvatskom i stranom jeziku, ključnim riječima, prilozima i popisom literature (1 kartica = 1800 znakova s prazninama). Opseg rada može varirati ovisno o odabranoj temi, prema dogovoru s mentorom. Preporučeno oblikovanje teksta slijedi smjernice časopisa Suvremena lingvistika prilagođene diplomskom radu. U dogovoru s mentorom student može koristiti i druge smjernice za citiranje dosljedne nekom stilu citiranja. Smjernice časopisa Suvremena lingvistika Oblikovanje teksta 1. Rad treba predati kao dokument programa Microsoft Word (.doc, .docx ili .rtf); prored 1,5; font Times New Roman; veličina fonta 12; poravnato s obje strane. 2. Margine treba postaviti na 25 mm sa sve četiri strane; početak svakog odlomka uvući za 5 mm, bez razmaka između odlomaka. 3. Ako rad sadržava posebne znakove ili simbole, treba ga predati i u PDF formatu. 4. Sve stranice trebaju biti numerirane pri dnu stranice desno. 5. Rad mora biti adekvatno strukturiran, poglavlja i potpoglavlja moraju biti jasno naznačena, odvojena i hijerarhijski uređena. Naslovi poglavlja i potpoglavlja trebaju biti lijevo poravnati i organizirani na sljedeći način: 1. Naslov prve razine (bold, veličina fonta 12) 1.1. Naslov druge razine (bold, veličina fonta 12) 1.1.1. Naslov treće razine (veličina fonta 12) Brojevi ne mogu započinjati od 0. 6. Primjeri iz jezične građe koja se navodi i analizira u radu moraju biti u kurzivu, morfološki glosirani te prevedeni na jezik rada. Primjere valja brojčano označiti arapskim brojevima u zagradama te ih treba odvojiti od glavnog teksta po jednim praznim retkom ispred i iza primjera, npr. (2) Lena poslužu-je gost-ima čaj-Ø. Lena serve-3sg.PRES guest-DAT.pl tea-ACC.sg ‘Lena is serving tea to the guests.’ Primjere se može grupirati upotrebom malih slov"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "ruleId": "ffzg-lingvistika-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 4",
+      "quote": "Sve stranice trebaju biti numerirane pri dnu stranice desno.",
+      "valueShape": "boolean",
+      "contexts": [
+        "plomskog rada javna je i uključuje usmeno izlaganje teme diplomskog rada te odgovaranje na pitanja članova povjerenstva. Povjerenstvo može omogućiti i ostalim prisutnim sudionicima postavljanje pitanja i komentara. Smjernice za oblikovanje rada i citiranje Preporučeni je minimalni opseg rada 40 kartica teksta, zajedno s naslovnom stranicom, sažetkom na hrvatskom i stranom jeziku, ključnim riječima, prilozima i popisom literature (1 kartica = 1800 znakova s prazninama). Opseg rada može varirati ovisno o odabranoj temi, prema dogovoru s mentorom. Preporučeno oblikovanje teksta slijedi smjernice časopisa Suvremena lingvistika prilagođene diplomskom radu. U dogovoru s mentorom student može koristiti i druge smjernice za citiranje dosljedne nekom stilu citiranja. Smjernice časopisa Suvremena lingvistika Oblikovanje teksta 1. Rad treba predati kao dokument programa Microsoft Word (.doc, .docx ili .rtf); prored 1,5; font Times New Roman; veličina fonta 12; poravnato s obje strane. 2. Margine treba postaviti na 25 mm sa sve četiri strane; početak svakog odlomka uvući za 5 mm, bez razmaka između odlomaka. 3. Ako rad sadržava posebne znakove ili simbole, treba ga predati i u PDF formatu. 4. Sve stranice trebaju biti numerirane pri dnu stranice desno. 5. Rad mora biti adekvatno strukturiran, poglavlja i potpoglavlja moraju biti jasno naznačena, odvojena i hijerarhijski uređena. Naslovi poglavlja i potpoglavlja trebaju biti lijevo poravnati i organizirani na sljedeći način: 1. Naslov prve razine (bold, veličina fonta 12) 1.1. Naslov druge razine (bold, veličina fonta 12) 1.1.1. Naslov treće razine (veličina fonta 12) Brojevi ne mogu započinjati od 0. 6. Primjeri iz jezične građe koja se navodi i analizira u radu moraju biti u kurzivu, morfološki glosirani te prevedeni na jezik rada. Primjere valja brojčano označiti arapskim brojevima u zagradama te ih treba odvojiti od glavnog teksta po jednim praznim retkom ispred i iza primjera, npr. (2) Lena poslužu-je gost-ima čaj-Ø. Lena serve-3sg.PRES guest-DAT.pl tea-ACC.sg ‘Lena is serving tea to the guests.’ Primjere se može grupirati upotrebom malih slova, a u tekstu se treba pozivati na primjere kao (2), (2a), (2a, b) ili (2 a-c). 7. Kratki citati (manje od 60 riječi) mogu biti uključeni u tekst rada i stavljeni u dvostruke navodnike. Dulji citati trebaju biti u obliku izdvojenog odlomka, pod jednostrukim navodnicima, veličina fonta 11, uvučeni 10 mm s lijeve i desne strane te odvojen"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

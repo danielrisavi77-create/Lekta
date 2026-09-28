@@ -1,0 +1,16 @@
+﻿{
+  "sourceId": "biolos-pravilnik-diplomski-2023",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "biolos-diplomski",
+      "ruleId": "biolos-diplomski--page-numbers",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "conflict",
+      "evidenceQuote": "Stranica na kojoj se navodi zahvala ne treba biti numerirana. 6. SadrÅ¾aj rada ... Numeriranje stranica zapoÄinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu. Stranica na kojoj se navodi sadrÅ¾aj ne treba biti numerirana.",
+      "note": "Izvor nalaže numeriranje stranica s tekstom, slikama i tablicama od Uvoda, ali izuzima stranicu zahvale i stranicu sadržaja, pa boolean vrijednost nije jednoznačna."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source": {
+    "id": "alu-pravilnik-diplomski-2014",
+    "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\alu-pravilnik-diplomski-2014.txt"
+  },
+  "rules": [
+    {
+      "profileId": "alu-grafika-diplomski",
+      "ruleId": "alu-grafika-diplomski--page-count",
+      "checkId": "page-count",
+      "label": "Opseg pisanog obrazlozenja (15-25 kartica)",
+      "sourcePage": "Clanak 49 (Graficki odsjek)",
+      "quote": "Pisano obrazloženje sastoji se od\r\nnajmanje 15 a najviše 25 kartica teksta uz slikovni materijal koji uključuje i reprodukcije rada.\r\nPisano obrazloženje treba biti ispisano u maksimalnoj veličini formata A4 i tvrdo uvezano.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "7. Evidencija i pohrana diplomskih radova Članak 46. Diplomski rad čije su ostvarenje omogućili sponzori Akademije vlasništvo je Akademije. Članak 47. Diplomski rad izveden u manjoj kiparskoj formi (multipl. i sl.) pohranjuje se u fundusu ALU kao signirani pramaster (izvornik) izrađen u trajnom materijalu (poliester, cink, aluminij, bronca), a po odabiru komisije. 8 Članak 48. Svi likovni diplomski radovi na Kiparskom odsjeku pohranjuju se u obliku digitalnog zapisa (digitalna fotografija) na CD mediju u fundusu ALU. Pisana obrazloženja diplomskog rada na Kiparskom odsjeku pohranjuju se u obliku tvrdog uveza u položenom formatu A4 uz CD ili DVD sa cjelokupnom dokumentacijom (prošireni izbor) u fundusu ALU. GRAFIČKI ODSJEK 1. Diplomski rad Članak 49. Diplomski rad na Grafičkom odsjeku je samostalno izvedeni rad: a) u bilo kojoj od grafičkih tehnika b) u bilo kojem crtačkom ili monotipnom postupku, njihovoj kombinaciji ili montaži c) u kombinaciji grafičkih tehnika s drugim medijima umjetničkog likovnog izraza ili izraza suvremene umjetničke prakse d) u svim autonomnim oblikovnim disciplinama Primijenjene grafike Sastavni dio diplomskog rada je i pisano obrazloženje diplomskog rada. Pisano obrazloženje sastoji se od najmanje 15 a najviše 25 kartica teksta uz slikovni materijal koji uključuje i reprodukcije rada. Pisano obrazloženje treba biti ispisano u maksimalnoj veličini formata A4 i tvrdo uvezano. Uz pisano obrazloženje prilaže se i CD ili DVD sa cjelokupnom dokumentacijom. 2. Mentor i komentori Članak 50. Mentor pri izradi diplomskog rada je mentor glavnog umjetničkog predmeta diplomskog studija. 3. Ispitno povjerenstvo Članak 51. Odsjek predlaže Vijeću po tri člana Povjerenstava za diplomski ispit za studente svakog pojedinog mentora, te po jednog zamjenika po povjerenstvu. 4. Odabir, prijava i odobravanje teme diplomskog rada Članak 52. Prijava teme diplomskog rada dostavlja se Povjerenstvu za diplomski ispit najkasnije do kraja prvog semestra studija. Prijava teme diplomskog rada sadrži: 1. opće podatke o pristupniku 2. naziv diplomskog rada 3. ime mentora, te komentora 4. opis i obrazloženje teme diplomskog rada: a) Sažetak (maksimalno 500 znakova s praznim mjestima) b) Hipoteze, cilj i plan umj. istraživanja (maksimalno 2000 znakova s praznim mjestima) c) Opis tehnike, materijala i postupaka izvedbe, način i mjesto prezentacije (maksimalno 1000 znakova s praznim mjestima) 5. predviđeni oblik prezentacije 5. Izrada diplomskog rada i pristup obrani Članak 53. Diplomski rad izvodi se tijekom nastave jednog ili oba semestra diplomskog studija. 9 Članak 54. Nakon realizaci"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

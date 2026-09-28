@@ -1,0 +1,15 @@
+{
+  "accepted": [
+    "grad-diplomski--font-size",
+    "grad-zavrsni--font-size",
+    "grad-diplomski--line-spacing",
+    "grad-zavrsni--line-spacing",
+    "grad-diplomski--page-numbers",
+    "grad-zavrsni--page-numbers",
+    "grad-diplomski--toc",
+    "grad-zavrsni--toc",
+    "grad-diplomski--font",
+    "grad-zavrsni--font"
+  ],
+  "refuted": []
+}

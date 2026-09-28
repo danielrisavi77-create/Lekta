@@ -1,0 +1,2242 @@
+[
+    {
+        "sourceId":  "kbf-upute-zavrsni-diplomski-2017",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "kbf-diplomski--font",
+                                            "kbf-diplomski--justify",
+                                            "kbf-zavrsni--font",
+                                            "kbf-zavrsni--justify"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "kbf-diplomski/kbf-diplomski--citation-style",
+                                      "kbf-zavrsni/kbf-zavrsni--citation-style"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "27,514",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "kif-upute-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  5,
+                     "matchedRuleIds":  [
+                                            "kif-diplomski--reference-count",
+                                            "kif-diplomski--word-count",
+                                            "kif-specijalisticki--margins",
+                                            "kif-specijalisticki--page-numbers",
+                                            "kif-specijalisticki--reference-count"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "kif-diplomski/kif-diplomski--citation-style",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "kif-diplomski--citation-style"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "kif-diplomski/kif-diplomski--citation-style",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "kif-diplomski--citation-style"
+                                         ]
+                },
+        "lunaTokens":  "39,266",
+        "solTokens":  "21,978"
+    },
+    {
+        "sourceId":  "kif-upute-oblikovanje-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "kif-diplomski--toc",
+                                            "kif-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "kif-diplomski/kif-diplomski--font",
+                                      "kif-diplomski/kif-diplomski--line-spacing"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "25,789",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "mef-naputci-tehnicka-obrada-doktorski-2022",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "mef-doktorski--page-number-start-at-intro",
+                                            "mef-doktorski--page-numbers",
+                                            "mef-doktorski--paper-size"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "mef-doktorski/mef-doktorski--toc",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "mef-doktorski--toc"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "mef-doktorski/mef-doktorski--toc",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "mef-doktorski--toc"
+                                         ]
+                },
+        "lunaTokens":  "12,776",
+        "solTokens":  "19,145"
+    },
+    {
+        "sourceId":  "mef-pravilnik-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "mef-diplomski--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "19,551",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "oss-upute-drustveni",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "oss-diplomski--font",
+                                            "oss-diplomski--font-size",
+                                            "oss-diplomski--line-spacing",
+                                            "oss-diplomski--page-numbers",
+                                            "oss-zavrsni--font",
+                                            "oss-zavrsni--font-size",
+                                            "oss-zavrsni--line-spacing",
+                                            "oss-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "oss-diplomski/oss-diplomski--paper-size",
+                                          "oss-zavrsni/oss-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "oss-diplomski--paper-size",
+                                              "oss-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "oss-diplomski/oss-diplomski--paper-size",
+                                         "oss-zavrsni/oss-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "oss-diplomski--paper-size",
+                                             "oss-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "19,495",
+        "solTokens":  "43,157"
+    },
+    {
+        "sourceId":  "pbf-upute-diplomski-2018",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "pbf-diplomski--font",
+                                            "pbf-diplomski--font-size",
+                                            "pbf-diplomski--line-spacing",
+                                            "pbf-diplomski--paper-size"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "pbf-diplomski/pbf-diplomski--required-sections",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "pbf-diplomski--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "pbf-diplomski/pbf-diplomski--required-sections",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "pbf-diplomski--required-sections"
+                                         ]
+                },
+        "lunaTokens":  "25,113",
+        "solTokens":  "23,506"
+    },
+    {
+        "sourceId":  "pmf-biol-upute-diplomski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "pmf-biologija-graduate--line-spacing",
+                                            "pmf-biologija-graduate--margins",
+                                            "pmf-biologija-graduate--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "18,109",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "pmf-geog-upute-diplomski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  3,
+                     "matchedRuleIds":  [
+                                            "pmf-geografija-diplomski--citation-style",
+                                            "pmf-geografija-diplomski--margins",
+                                            "pmf-geografija-diplomski--paper-size"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "pmf-geografija-diplomski/pmf-geografija-diplomski--required-sections",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "pmf-geografija-diplomski--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "pmf-geografija-diplomski/pmf-geografija-diplomski--required-sections",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "pmf-geografija-diplomski--required-sections"
+                                         ]
+                },
+        "lunaTokens":  "22,139",
+        "solTokens":  "55,201"
+    },
+    {
+        "sourceId":  "pmf-geol-upute-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "pmf-geologija-graduate--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "25,328",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "pravo-katedra-radno-socijalno-upute-2021",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "radno-socijalno-pravo--page-numbers",
+                                            "radno-socijalno-pravo--toc"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "radno-socijalno-pravo/radno-socijalno-pravo--heading-rules"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "radno-socijalno-pravo--heading-rules"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "radno-socijalno-pravo/radno-socijalno-pravo--heading-rules"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "radno-socijalno-pravo--heading-rules"
+                                         ]
+                },
+        "lunaTokens":  "33,287",
+        "solTokens":  "21,218"
+    },
+    {
+        "sourceId":  "pravo-katedra-trgovacko-upute",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "trgovacko-pravo--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,409",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "pravo-scsr-upute-diplomski-2021",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  10,
+                     "matchedRuleIds":  [
+                                            "pravo-socijalna-politika-diplomski--font",
+                                            "pravo-socijalna-politika-diplomski--footnote-size",
+                                            "pravo-socijalna-politika-diplomski--justify",
+                                            "pravo-socijalna-politika-diplomski--page-numbers",
+                                            "pravo-socijalna-politika-diplomski--toc",
+                                            "pravo-socijalni-rad-diplomski--font",
+                                            "pravo-socijalni-rad-diplomski--footnote-size",
+                                            "pravo-socijalni-rad-diplomski--justify",
+                                            "pravo-socijalni-rad-diplomski--page-numbers",
+                                            "pravo-socijalni-rad-diplomski--toc"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "pravo-socijalna-politika-diplomski/pravo-socijalna-politika-diplomski--font-size",
+                                      "pravo-socijalna-politika-diplomski/pravo-socijalna-politika-diplomski--line-spacing",
+                                      "pravo-socijalni-rad-diplomski/pravo-socijalni-rad-diplomski--font-size",
+                                      "pravo-socijalni-rad-diplomski/pravo-socijalni-rad-diplomski--line-spacing"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "20,340",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "pravo-scsr-upute-zavrsni-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "pravo-socijalni-opci-akademski-rad--line-spacing",
+                                            "pravo-socijalni-rad-zavrsni--line-spacing"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "21,547",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "pravo-upute-oblikovanje-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  11,
+                     "matchedRuleIds":  [
+                                            "pravo-doktorski-pravne-znanosti--page-numbers",
+                                            "pravo-integrirani-diplomski--page-numbers",
+                                            "pravo-integrirani-diplomski--toc",
+                                            "pravo-javna-uprava-diplomski--page-numbers",
+                                            "pravo-javna-uprava-diplomski--toc",
+                                            "pravo-javna-uprava-prijediplomski--page-numbers",
+                                            "pravo-javna-uprava-prijediplomski--toc",
+                                            "pravo-opci-pravni-akademski-rad--page-numbers",
+                                            "pravo-porezni-prijediplomski--page-numbers",
+                                            "pravo-porezni-prijediplomski--toc",
+                                            "pravo-specijalisticki-pravni-opci--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--footnote-font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--required-sections",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-integrirani-diplomski/pravo-integrirani-diplomski--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-javna-uprava-diplomski/pravo-javna-uprava-diplomski--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-javna-uprava-prijediplomski/pravo-javna-uprava-prijediplomski--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-opci-pravni-akademski-rad/pravo-opci-pravni-akademski-rad--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-opci-pravni-akademski-rad/pravo-opci-pravni-akademski-rad--required-sections",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-porezni-prijediplomski/pravo-porezni-prijediplomski--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--citation-style",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--footnote-font",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--required-sections",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "pravo-doktorski-pravne-znanosti--citation-style",
+                                              "pravo-doktorski-pravne-znanosti--footnote-font",
+                                              "pravo-doktorski-pravne-znanosti--required-sections",
+                                              "pravo-integrirani-diplomski--citation-style",
+                                              "pravo-javna-uprava-diplomski--citation-style",
+                                              "pravo-javna-uprava-prijediplomski--citation-style",
+                                              "pravo-opci-pravni-akademski-rad--citation-style",
+                                              "pravo-opci-pravni-akademski-rad--required-sections",
+                                              "pravo-porezni-prijediplomski--citation-style",
+                                              "pravo-specijalisticki-pravni-opci--citation-style",
+                                              "pravo-specijalisticki-pravni-opci--footnote-font",
+                                              "pravo-specijalisticki-pravni-opci--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "pravo-integrirani-diplomski/pravo-integrirani-diplomski--citation-style",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "pravo-javna-uprava-diplomski/pravo-javna-uprava-diplomski--citation-style",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "pravo-javna-uprava-prijediplomski/pravo-javna-uprava-prijediplomski--citation-style",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "pravo-porezni-prijediplomski/pravo-porezni-prijediplomski--citation-style",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+                                         "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--citation-style",
+                                         "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--footnote-font",
+                                         "pravo-doktorski-pravne-znanosti/pravo-doktorski-pravne-znanosti--required-sections",
+                                         "pravo-opci-pravni-akademski-rad/pravo-opci-pravni-akademski-rad--citation-style",
+                                         "pravo-opci-pravni-akademski-rad/pravo-opci-pravni-akademski-rad--required-sections",
+                                         "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--citation-style",
+                                         "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--footnote-font",
+                                         "pravo-specijalisticki-pravni-opci/pravo-specijalisticki-pravni-opci--required-sections"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "pravo-integrirani-diplomski--citation-style",
+                                             "pravo-javna-uprava-diplomski--citation-style",
+                                             "pravo-javna-uprava-prijediplomski--citation-style",
+                                             "pravo-porezni-prijediplomski--citation-style",
+                                             "pravo-doktorski-pravne-znanosti--citation-style",
+                                             "pravo-doktorski-pravne-znanosti--footnote-font",
+                                             "pravo-doktorski-pravne-znanosti--required-sections",
+                                             "pravo-opci-pravni-akademski-rad--citation-style",
+                                             "pravo-opci-pravni-akademski-rad--required-sections",
+                                             "pravo-specijalisticki-pravni-opci--citation-style",
+                                             "pravo-specijalisticki-pravni-opci--footnote-font",
+                                             "pravo-specijalisticki-pravni-opci--required-sections"
+                                         ]
+                },
+        "lunaTokens":  "41,839",
+        "solTokens":  "49,046"
+    },
+    {
+        "sourceId":  "pravri-upute-radovi-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "pravri-specijalisticki--font",
+                                            "pravri-specijalisticki--line-spacing",
+                                            "pravri-specijalisticki--margins",
+                                            "pravri-specijalisticki--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "pravri-specijalisticki/pravri-specijalisticki--font-size"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,632",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "rgnf-predlozak-2022",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "rgnf-diplomski--citation-style",
+                                            "rgnf-diplomski--font",
+                                            "rgnf-diplomski--line-spacing",
+                                            "rgnf-diplomski--margins",
+                                            "rgnf-zavrsni--citation-style",
+                                            "rgnf-zavrsni--font",
+                                            "rgnf-zavrsni--line-spacing",
+                                            "rgnf-zavrsni--margins"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "rgnf-diplomski/rgnf-diplomski--toc",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "rgnf-zavrsni/rgnf-zavrsni--toc",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+                                      "rgnf-diplomski/rgnf-diplomski--font-size",
+                                      "rgnf-zavrsni/rgnf-zavrsni--font-size"
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "rgnf-diplomski--toc",
+                                              "rgnf-zavrsni--toc"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "rgnf-diplomski/rgnf-diplomski--toc",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "rgnf-zavrsni/rgnf-zavrsni--toc",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "rgnf-diplomski--toc",
+                                             "rgnf-zavrsni--toc"
+                                         ]
+                },
+        "lunaTokens":  "32,975",
+        "solTokens":  "26,874"
+    },
+    {
+        "sourceId":  "securus-pravilnik-zavrsni-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "securus-zavrsni--font",
+                                            "securus-zavrsni--font-size",
+                                            "securus-zavrsni--margins",
+                                            "securus-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "securus-zavrsni/securus-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "securus-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "securus-zavrsni/securus-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "securus-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "21,803",
+        "solTokens":  "24,695"
+    },
+    {
+        "sourceId":  "sfzg-naputak-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  5,
+                     "matchedRuleIds":  [
+                                            "sfzg-diplomski--citation-style",
+                                            "sfzg-diplomski--font",
+                                            "sfzg-diplomski--justify",
+                                            "sfzg-diplomski--line-spacing",
+                                            "sfzg-diplomski--margins"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "14,798",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "sumfak-upute-zavrsni-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "sumfak-diplomski--page-numbers",
+                                            "sumfak-diplomski--toc",
+                                            "sumfak-zavrsni--page-numbers",
+                                            "sumfak-zavrsni--toc"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "16,586",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "ttf-upute-zavrsni-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  10,
+                     "matchedRuleIds":  [
+                                            "ttf-diplomski--font-size",
+                                            "ttf-diplomski--justify",
+                                            "ttf-diplomski--line-spacing",
+                                            "ttf-diplomski--margins",
+                                            "ttf-diplomski--page-numbers",
+                                            "ttf-zavrsni--font-size",
+                                            "ttf-zavrsni--justify",
+                                            "ttf-zavrsni--line-spacing",
+                                            "ttf-zavrsni--margins",
+                                            "ttf-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "ttf-diplomski/ttf-diplomski--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--font-size",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--line-spacing",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--margins",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--line-spacing",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--margins",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "ttf-zavrsni/ttf-zavrsni--font",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "ttf-diplomski--font",
+                                              "ttf-dizajn-diplomski--font",
+                                              "ttf-dizajn-diplomski--font-size",
+                                              "ttf-dizajn-diplomski--line-spacing",
+                                              "ttf-dizajn-diplomski--margins",
+                                              "ttf-dizajn-zavrsni--font",
+                                              "ttf-dizajn-zavrsni--font-size",
+                                              "ttf-dizajn-zavrsni--line-spacing",
+                                              "ttf-dizajn-zavrsni--margins",
+                                              "ttf-zavrsni--font"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  4,
+                    "matchedRuleIds":  [
+                                           "ttf-diplomski--font",
+                                           "ttf-dizajn-diplomski--font",
+                                           "ttf-dizajn-zavrsni--font",
+                                           "ttf-zavrsni--font"
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--line-spacing",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ttf-dizajn-diplomski/ttf-dizajn-diplomski--margins",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--line-spacing",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--margins",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "ttf-dizajn-diplomski--font-size",
+                                             "ttf-dizajn-diplomski--line-spacing",
+                                             "ttf-dizajn-diplomski--margins",
+                                             "ttf-dizajn-zavrsni--font-size",
+                                             "ttf-dizajn-zavrsni--line-spacing",
+                                             "ttf-dizajn-zavrsni--margins"
+                                         ]
+                },
+        "lunaTokens":  "33,780",
+        "solTokens":  "30,925"
+    },
+    {
+        "sourceId":  "ufzg-upute-zavrsni-diplomski-2026",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "ufzg-zavrsni--justify",
+                                            "ufzg-zavrsni--line-spacing",
+                                            "ufzg-zavrsni--margins",
+                                            "ufzg-zavrsni--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "ufzg-zavrsni/ufzg-zavrsni--required-sections",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "ufzg-zavrsni--required-sections"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+                                     "ufzg-zavrsni/ufzg-zavrsni--required-sections"
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+
+                                         ]
+                },
+        "lunaTokens":  "19,077",
+        "solTokens":  "18,843"
+    },
+    {
+        "sourceId":  "unidu-elektro-upute-diplomski-eir",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "unidu-elektro-diplomski--page-count"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "7,548",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "unidu-marikultura-upute-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  4,
+                     "matchedRuleIds":  [
+                                            "unidu-marikultura-diplomski--font",
+                                            "unidu-marikultura-diplomski--font-size",
+                                            "unidu-marikultura-diplomski--justify",
+                                            "unidu-marikultura-diplomski--line-spacing"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "10,769",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "unisb-upute-zavrsni-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  16,
+                     "matchedRuleIds":  [
+                                            "unisb-btho-diplomski--font",
+                                            "unisb-btho-diplomski--line-spacing",
+                                            "unisb-btho-zavrsni--font",
+                                            "unisb-btho-zavrsni--line-spacing",
+                                            "unisb-odhz-diplomski--font",
+                                            "unisb-odhz-diplomski--line-spacing",
+                                            "unisb-odhz-zavrsni--font",
+                                            "unisb-odhz-zavrsni--line-spacing",
+                                            "unisb-sfsb-diplomski--font",
+                                            "unisb-sfsb-diplomski--line-spacing",
+                                            "unisb-sfsb-zavrsni--font",
+                                            "unisb-sfsb-zavrsni--line-spacing",
+                                            "unisb-teho-diplomski--font",
+                                            "unisb-teho-diplomski--line-spacing",
+                                            "unisb-teho-zavrsni--font",
+                                            "unisb-teho-zavrsni--line-spacing"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "unisb-btho-diplomski/unisb-btho-diplomski--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-btho-zavrsni/unisb-btho-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-odhz-diplomski/unisb-odhz-diplomski--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-odhz-zavrsni/unisb-odhz-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-sfsb-diplomski/unisb-sfsb-diplomski--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-teho-diplomski/unisb-teho-diplomski--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "unisb-teho-zavrsni/unisb-teho-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+                                          "unisb-btho-diplomski/unisb-btho-diplomski--margins",
+                                          "unisb-btho-diplomski/unisb-btho-diplomski--paper-size",
+                                          "unisb-btho-zavrsni/unisb-btho-zavrsni--margins",
+                                          "unisb-btho-zavrsni/unisb-btho-zavrsni--paper-size",
+                                          "unisb-odhz-diplomski/unisb-odhz-diplomski--margins",
+                                          "unisb-odhz-diplomski/unisb-odhz-diplomski--paper-size",
+                                          "unisb-odhz-zavrsni/unisb-odhz-zavrsni--margins",
+                                          "unisb-odhz-zavrsni/unisb-odhz-zavrsni--paper-size",
+                                          "unisb-sfsb-diplomski/unisb-sfsb-diplomski--margins",
+                                          "unisb-sfsb-diplomski/unisb-sfsb-diplomski--paper-size",
+                                          "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--margins",
+                                          "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--paper-size",
+                                          "unisb-teho-diplomski/unisb-teho-diplomski--margins",
+                                          "unisb-teho-diplomski/unisb-teho-diplomski--paper-size",
+                                          "unisb-teho-zavrsni/unisb-teho-zavrsni--margins",
+                                          "unisb-teho-zavrsni/unisb-teho-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "unisb-btho-diplomski--font-size",
+                                              "unisb-btho-zavrsni--font-size",
+                                              "unisb-odhz-diplomski--font-size",
+                                              "unisb-odhz-zavrsni--font-size",
+                                              "unisb-sfsb-diplomski--font-size",
+                                              "unisb-sfsb-zavrsni--font-size",
+                                              "unisb-teho-diplomski--font-size",
+                                              "unisb-teho-zavrsni--font-size",
+                                              "unisb-btho-diplomski--margins",
+                                              "unisb-btho-diplomski--paper-size",
+                                              "unisb-btho-zavrsni--margins",
+                                              "unisb-btho-zavrsni--paper-size",
+                                              "unisb-odhz-diplomski--margins",
+                                              "unisb-odhz-diplomski--paper-size",
+                                              "unisb-odhz-zavrsni--margins",
+                                              "unisb-odhz-zavrsni--paper-size",
+                                              "unisb-sfsb-diplomski--margins",
+                                              "unisb-sfsb-diplomski--paper-size",
+                                              "unisb-sfsb-zavrsni--margins",
+                                              "unisb-sfsb-zavrsni--paper-size",
+                                              "unisb-teho-diplomski--margins",
+                                              "unisb-teho-diplomski--paper-size",
+                                              "unisb-teho-zavrsni--margins",
+                                              "unisb-teho-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "unisb-btho-diplomski/unisb-btho-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-btho-zavrsni/unisb-btho-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-odhz-diplomski/unisb-odhz-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-odhz-zavrsni/unisb-odhz-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-sfsb-diplomski/unisb-sfsb-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-teho-diplomski/unisb-teho-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "unisb-teho-zavrsni/unisb-teho-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+                                         "unisb-btho-diplomski/unisb-btho-diplomski--margins",
+                                         "unisb-btho-diplomski/unisb-btho-diplomski--paper-size",
+                                         "unisb-btho-zavrsni/unisb-btho-zavrsni--margins",
+                                         "unisb-btho-zavrsni/unisb-btho-zavrsni--paper-size",
+                                         "unisb-odhz-diplomski/unisb-odhz-diplomski--margins",
+                                         "unisb-odhz-diplomski/unisb-odhz-diplomski--paper-size",
+                                         "unisb-odhz-zavrsni/unisb-odhz-zavrsni--margins",
+                                         "unisb-odhz-zavrsni/unisb-odhz-zavrsni--paper-size",
+                                         "unisb-sfsb-diplomski/unisb-sfsb-diplomski--margins",
+                                         "unisb-sfsb-diplomski/unisb-sfsb-diplomski--paper-size",
+                                         "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--margins",
+                                         "unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--paper-size",
+                                         "unisb-teho-diplomski/unisb-teho-diplomski--margins",
+                                         "unisb-teho-diplomski/unisb-teho-diplomski--paper-size",
+                                         "unisb-teho-zavrsni/unisb-teho-zavrsni--margins",
+                                         "unisb-teho-zavrsni/unisb-teho-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "unisb-btho-diplomski--font-size",
+                                             "unisb-btho-zavrsni--font-size",
+                                             "unisb-odhz-diplomski--font-size",
+                                             "unisb-odhz-zavrsni--font-size",
+                                             "unisb-sfsb-diplomski--font-size",
+                                             "unisb-sfsb-zavrsni--font-size",
+                                             "unisb-teho-diplomski--font-size",
+                                             "unisb-teho-zavrsni--font-size",
+                                             "unisb-btho-diplomski--margins",
+                                             "unisb-btho-diplomski--paper-size",
+                                             "unisb-btho-zavrsni--margins",
+                                             "unisb-btho-zavrsni--paper-size",
+                                             "unisb-odhz-diplomski--margins",
+                                             "unisb-odhz-diplomski--paper-size",
+                                             "unisb-odhz-zavrsni--margins",
+                                             "unisb-odhz-zavrsni--paper-size",
+                                             "unisb-sfsb-diplomski--margins",
+                                             "unisb-sfsb-diplomski--paper-size",
+                                             "unisb-sfsb-zavrsni--margins",
+                                             "unisb-sfsb-zavrsni--paper-size",
+                                             "unisb-teho-diplomski--margins",
+                                             "unisb-teho-diplomski--paper-size",
+                                             "unisb-teho-zavrsni--margins",
+                                             "unisb-teho-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "33,399",
+        "solTokens":  "42,335"
+    },
+    {
+        "sourceId":  "unizd-klasicna-filologija-upute-2021",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "unizd-klasicna-filologija-diplomski--footnote-size",
+                                            "unizd-klasicna-filologija-zavrsni--footnote-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,714",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "unizd-psihologija-upute",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "unizd-psihologija-zavrsni--page-count"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "unizd-psihologija-zavrsni/unizd-psihologija-zavrsni--citation-style",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "unizd-psihologija-zavrsni--citation-style"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "unizd-psihologija-zavrsni/unizd-psihologija-zavrsni--citation-style",
+                                           "diffs":  [
+                                                         "value"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "unizd-psihologija-zavrsni--citation-style"
+                                         ]
+                },
+        "lunaTokens":  "11,334",
+        "solTokens":  "12,547"
+    },
+    {
+        "sourceId":  "unizd-tko-upute-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  5,
+                     "matchedRuleIds":  [
+                                            "unizd-tko-diplomski--font",
+                                            "unizd-tko-diplomski--font-size",
+                                            "unizd-tko-diplomski--line-spacing",
+                                            "unizd-tko-diplomski--margins",
+                                            "unizd-tko-diplomski--page-numbers"
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "unizd-tko-diplomski/unizd-tko-diplomski--paper-size",
+                                            "diffs":  [
+                                                          "value"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "unizd-tko-diplomski--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+                                         "unizd-tko-diplomski/unizd-tko-diplomski--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "unizd-tko-diplomski--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "16,157",
+        "solTokens":  "13,540"
+    },
+    {
+        "sourceId":  "unizd-turizam-upute",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  1,
+                     "matchedRuleIds":  [
+                                            "unizd-turizam-diplomski--page-count"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "5,523",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "vef-naputak-diplomski-2024",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  2,
+                     "matchedRuleIds":  [
+                                            "vef-diplomski--line-spacing",
+                                            "vef-diplomski--paper-size"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "16,316",
+        "solTokens":  null
+    },
+    {
+        "sourceId":  "vevu-prilog4-diplomski",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+                                          "vevu-diplomski/vevu-diplomski--font-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "vevu-diplomski--font-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  1,
+                    "matchedRuleIds":  [
+                                           "vevu-diplomski--font-size"
+                                       ],
+                    "mismatched":  [
+
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+
+                                         ]
+                },
+        "lunaTokens":  "8,388",
+        "solTokens":  "15,327"
+    },
+    {
+        "sourceId":  "vuka-lovstvo-upute-2022",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "vuka-lovstvo-zavrsni/vuka-lovstvo-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "value",
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+                                          "vuka-lovstvo-zavrsni/vuka-lovstvo-zavrsni--paper-size"
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "vuka-lovstvo-zavrsni--font-size",
+                                              "vuka-lovstvo-zavrsni--paper-size"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "vuka-lovstvo-zavrsni/vuka-lovstvo-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+                                         "vuka-lovstvo-zavrsni/vuka-lovstvo-zavrsni--paper-size"
+                                     ],
+                    "conflict":  [
+
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "vuka-lovstvo-zavrsni--font-size",
+                                             "vuka-lovstvo-zavrsni--paper-size"
+                                         ]
+                },
+        "lunaTokens":  "19,969",
+        "solTokens":  "32,166"
+    },
+    {
+        "sourceId":  "vuka-poslovni-upute",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  0,
+                     "matchedRuleIds":  [
+
+                                        ],
+                     "mismatched":  [
+                                        {
+                                            "key":  "vuka-poslovni-diplomski/vuka-poslovni-diplomski--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-diplomski/vuka-poslovni-diplomski--heading-rules",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-diplomski/vuka-poslovni-diplomski--line-spacing",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--heading-rules",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--line-spacing",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--font-size",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--heading-rules",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        },
+                                        {
+                                            "key":  "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--line-spacing",
+                                            "diffs":  [
+                                                          "modality"
+                                                      ]
+                                        }
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+                                              "vuka-poslovni-diplomski--font-size",
+                                              "vuka-poslovni-diplomski--heading-rules",
+                                              "vuka-poslovni-diplomski--line-spacing",
+                                              "vuka-poslovni-opci-akademski-rad--font-size",
+                                              "vuka-poslovni-opci-akademski-rad--heading-rules",
+                                              "vuka-poslovni-opci-akademski-rad--line-spacing",
+                                              "vuka-poslovni-zavrsni--font-size",
+                                              "vuka-poslovni-zavrsni--heading-rules",
+                                              "vuka-poslovni-zavrsni--line-spacing"
+                                          ]
+                 },
+        "sol":  {
+                    "ok":  true,
+                    "model":  "gpt-6-sol",
+                    "matched":  0,
+                    "matchedRuleIds":  [
+
+                                       ],
+                    "mismatched":  [
+                                       {
+                                           "key":  "vuka-poslovni-diplomski/vuka-poslovni-diplomski--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "vuka-poslovni-diplomski/vuka-poslovni-diplomski--line-spacing",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--line-spacing",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--font-size",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       },
+                                       {
+                                           "key":  "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--line-spacing",
+                                           "diffs":  [
+                                                         "modality"
+                                                     ]
+                                       }
+                                   ],
+                    "insufficient":  [
+
+                                     ],
+                    "conflict":  [
+                                     "vuka-poslovni-diplomski/vuka-poslovni-diplomski--heading-rules",
+                                     "vuka-poslovni-opci-akademski-rad/vuka-poslovni-opci-akademski-rad--heading-rules",
+                                     "vuka-poslovni-zavrsni/vuka-poslovni-zavrsni--heading-rules"
+                                 ],
+                    "missing":  [
+
+                                ],
+                    "unknown":  [
+
+                                ],
+                    "retryableRuleIds":  [
+                                             "vuka-poslovni-diplomski--font-size",
+                                             "vuka-poslovni-diplomski--line-spacing",
+                                             "vuka-poslovni-opci-akademski-rad--font-size",
+                                             "vuka-poslovni-opci-akademski-rad--line-spacing",
+                                             "vuka-poslovni-zavrsni--font-size",
+                                             "vuka-poslovni-zavrsni--line-spacing"
+                                         ]
+                },
+        "lunaTokens":  "29,612",
+        "solTokens":  "38,702"
+    },
+    {
+        "sourceId":  "vus-pravilnik-zavrsni-diplomski-2023",
+        "luna":  {
+                     "ok":  true,
+                     "model":  "gpt-6-luna",
+                     "matched":  8,
+                     "matchedRuleIds":  [
+                                            "vus-diplomski--font",
+                                            "vus-diplomski--font-size",
+                                            "vus-diplomski--justify",
+                                            "vus-diplomski--line-spacing",
+                                            "vus-zavrsni--font",
+                                            "vus-zavrsni--font-size",
+                                            "vus-zavrsni--justify",
+                                            "vus-zavrsni--line-spacing"
+                                        ],
+                     "mismatched":  [
+
+                                    ],
+                     "insufficient":  [
+
+                                      ],
+                     "conflict":  [
+
+                                  ],
+                     "missing":  [
+
+                                 ],
+                     "unknown":  [
+
+                                 ],
+                     "retryableRuleIds":  [
+
+                                          ]
+                 },
+        "sol":  null,
+        "lunaTokens":  "24,361",
+        "solTokens":  null
+    }
+]

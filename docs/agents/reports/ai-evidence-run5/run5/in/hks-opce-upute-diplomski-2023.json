@@ -1,0 +1,124 @@
+{
+  "source": {
+    "id": "hks-opce-upute-diplomski-2023",
+    "url": "https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "c3a0193ffb9b03ce3d04e79ff0a6f7827e50121326d3050b90a51783b3858f88",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\hks-opce-upute-diplomski-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-justify",
+      "checkId": "footnote-justify",
+      "label": "Poravnanje bilješaka",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored\r\n      jednostruk s obostranim poravnanjem",
+      "valueShape": "boolean",
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Korice (boja: plava – Pantone 280 C ili CMYK 100/72/0/18.); slova i logo na 1. korici (boja: srebrna) 2. Hrbat 3. Prazna stranica 4. Naslovna stranica 5. Prazna stranica 6. Izjava o akademskoj čestitosti 7. Temeljna dokumentacijska kartica 8. Basic dokumentation card 9. Sažetak (do 1800 znakova)/Abstract (do 1800 znakova) 10. Zahvala (izborno) 11. Glavnina teksta (obvezni dijelovi strukture) 12. Popis priloga (ukoliko diplomski rad sadrži priloge) 13. Popis literature (KORICE) SVEUČILIŠNI ODJEL ZA ___________ (centrirano, Book Antiqua, veličina 14) Ime i prezime studenta (centrirano, Book Antiqua, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, Book Antiqua, veličina 16) Diplomski rad (centr"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-size",
+      "checkId": "footnote-size",
+      "label": "Veličina slova u bilješkama",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored\r\n      jednostruk s obostranim poravnanjem",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Korice (boja: plava – Pantone 280 C ili CMYK 100/72/0/18.); slova i logo na 1. korici (boja: srebrna) 2. Hrbat 3. Prazna stranica 4. Naslovna stranica 5. Prazna stranica 6. Izjava o akademskoj čestitosti 7. Temeljna dokumentacijska kartica 8. Basic dokumentation card 9. Sažetak (do 1800 znakova)/Abstract (do 1800 znakova) 10. Zahvala (izborno) 11. Glavnina teksta (obvezni dijelovi strukture) 12. Popis priloga (ukoliko diplomski rad sadrži priloge) 13. Popis literature (KORICE) SVEUČILIŠNI ODJEL ZA ___________ (centrirano, Book Antiqua, veličina 14) Ime i prezime studenta (centrirano, Book Antiqua, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, Book Antiqua, veličina 16) Diplomski rad (centr"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--footnote-spacing",
+      "checkId": "footnote-spacing",
+      "label": "Prored u bilješkama",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored\r\n      jednostruk s obostranim poravnanjem",
+      "valueShape": "number",
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Korice (boja: plava – Pantone 280 C ili CMYK 100/72/0/18.); slova i logo na 1. korici (boja: srebrna) 2. Hrbat 3. Prazna stranica 4. Naslovna stranica 5. Prazna stranica 6. Izjava o akademskoj čestitosti 7. Temeljna dokumentacijska kartica 8. Basic dokumentation card 9. Sažetak (do 1800 znakova)/Abstract (do 1800 znakova) 10. Zahvala (izborno) 11. Glavnina teksta (obvezni dijelovi strukture) 12. Popis priloga (ukoliko diplomski rad sadrži priloge) 13. Popis literature (KORICE) SVEUČILIŠNI ODJEL ZA ___________ (centrirano, Book Antiqua, veličina 14) Ime i prezime studenta (centrirano, Book Antiqua, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, Book Antiqua, veličina 16) Diplomski rad (centr"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "pismo (font): Book Antiqua, veličina slova 11",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "pismo (font): Book Antiqua, veličina slova 11",
+      "valueShape": "number",
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "tekst mora biti obostrano poravnan (Paragraph, Justify)",
+      "valueShape": "boolean",
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Korice (boja: plava – Pantone 280 C ili CMYK 100/72/0/18.); slova i logo na 1. korici (boja: srebrna) 2. Hrbat 3. Prazna stranica 4. Naslovna stranica 5. Prazna stranica 6. Izjava o akademskoj čestitosti 7. Temeljna dokumentacijska kartica 8. Basic dokumentation card 9. Sažetak (do 1800 "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "prored: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Korice (boja: pla"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "hks-diplomski",
+      "ruleId": "hks-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "Opće upute za izradu diplomskog rada Zagreb, prosinac 2023. Na temelju članka 31. Statuta Hrvatskog katoličkog sveučilišta, članka 3. Pravilnika o diplomskom radu i Odluke KLASA: 080-08/20-01/01, URBROJ: 498-03-01-02/2-21-15, prorektor za nastavu, prof. dr. sc. Roko Mišetić donosi OPĆE UPUTE ZA IZRADU DIPLOMSKOG RADA I. Diplomski rad piše se: - na računalu u formatu A4 - pismo (font): Book Antiqua, veličina slova 11 - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm prored: 1,5 - stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua - naslovna stranica, stranice sa sadržajem, sažecima i predgovor se ne numeriraju, prva stranica: Uvod numerira se arapskim brojem 1 - tekst mora biti obostrano poravnan (Paragraph, Justify) - početak svakoga pasusa se uvlači 1,25 cm (Paragraph, Identation, Special: First line, By: 1,25 cm) - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima započinju poglavlja (desno) pišu se podebljanim slovima (Bold) - za dijelove teksta koji se žele istaknuti koristi se kurziv (italic) - bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem - ilustrativni prilozi (grafikoni, karte, dijagrami, crteži, preslici dokumenata, fotografije i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom) a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice) - ako prilog nije autorski mora sadržavati zapis o izvoru podataka II. Formalni izgled diplomskog rada: 1. Koric"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

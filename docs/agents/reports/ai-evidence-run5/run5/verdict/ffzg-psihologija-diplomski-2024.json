@@ -1,0 +1,11 @@
+{
+  "accepted": [
+    "ffzg-psihologija-diplomski--margins"
+  ],
+  "refuted": [
+    {
+      "ruleId": "ffzg-psihologija-diplomski--line-spacing",
+      "reason": "Isti snimak drugdje izricito propisuje 'prored 1' za sazetak/Abstract stranicu ('Sazetak na hrvatskom jeziku ... (prored 1)', 'Abstract, prored 1'), dok pravilo navodi samo opcu vrijednost 1,5 bez te iznimke; vrijednost/opseg nisu potpuno vjerni izvoru."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "vuka-poslovni-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "vuka-poslovni-zavrsni--heading-rules": {
+    "value": {
+      "levels": {
+        "1": {
+          "size": 16,
+          "bold": true,
+          "uppercase": true
+        },
+        "2": {
+          "size": 14,
+          "bold": true,
+          "uppercase": false
+        },
+        "3": {
+          "size": 12,
+          "bold": true,
+          "uppercase": false
+        }
+      }
+    },
+    "modality": "obligation",
+    "scope": "heading"
+  },
+  "vuka-poslovni-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "obligation",
+    "scope": "body"
+  }
+}

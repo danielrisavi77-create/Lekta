@@ -1,0 +1,36 @@
+{
+  "ftrr-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ftrr-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ftrr-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ftrr-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ftrr-zavrsni--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "sourceId": "arca-pravilnik-zavrsni-2023",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "arca-zavrsni",
+      "ruleId": "arca-zavrsni--paper-size",
+      "value": null,
+      "modality": "directive",
+      "scope": "title-page",
+      "verdict": "insufficient",
+      "evidenceQuote": "Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4.",
+      "note": "Izvor navodi A4 bez modalne riječi za prvu, naslovnu stranicu, ali zadani boolean oblik nije spojiv s dopuštenim vrijednostima A3/A4."
+    }
+  ]
+}

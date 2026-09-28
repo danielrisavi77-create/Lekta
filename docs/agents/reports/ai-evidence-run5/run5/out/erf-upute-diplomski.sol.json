@@ -1,0 +1,20 @@
+﻿{
+    "sourceId":  "erf-upute-diplomski",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "erf-diplomski",
+                      "ruleId":  "erf-diplomski--required-sections",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "Istraživački rad1 treba sadržavati sljedeća poglavlja: Sažetak2 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi Preporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi",
+                      "note":  "Istraživački rad traži poglavlja Problem i Metode istraživanja te Rezultati istraživanja i rasprava, a pregledni rad Problemska pitanja i Pregled dosadašnjih spoznaja, pa nema jedinstvenog popisa za cijeli diplomski rad; formulacija treba sadržavati određuje directive."
+                  }
+              ]
+}

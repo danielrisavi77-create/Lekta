@@ -1,0 +1,63 @@
+{
+  "source": {
+    "id": "sumfak-upute-zavrsni-diplomski-2024",
+    "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\sumfak-upute-zavrsni-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "sumfak-diplomski",
+      "ruleId": "sumfak-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "valueShape": "boolean",
+      "contexts": [
+        "grada, navodnici na početku i kraju navoda, pišu se zajedno s riječju ili brojem iza kojega slijede (između tih znakova i riječi ne stavlja se razmak)crtica (–) i spojnica (-) različiti su pravopisni znakovi. Crtica je nešto duža od spojnice i piše se s razmacima s obiju njezinih strana (primjer: 3 – 5 ključnih riječi), ali se u bilježenju stranica u bibliografskim jedinicama crtica piše bez bjelina (str. 123–146). Spojnica je nešto kraća i piše se bez razmaka (primjer: Ličko-senjska županija). Njihovo je značenje, dakako, različito.oznake fizikalnih veličina pišu se u kurzivukratice mjernih jedinica pišu se iza numeričke vrijednosti s jednim praznim mjestom, tj. s razmakom (bjelinom), prema ovim pravilima:između broja i znaka mjerne jedinice dolazi jedan razmak, npr.: 3 kg, 2 m, 220 V, 60 W, 5 oCbrojčane vrijednosti i znakovi mjernih jedinica pišu se samo uspravnim pismomrazmak se u mjernoj jedinici ne piše u složenim mjernim jedinicama: 50 m/s, 2 kg/m2 i između broja i oznake za kutni stupanj, minutu i sekundu: 180° 20' 50\"u decimalnim se brojevima piše zarez, a ne točka: temperatura je 36,6 °Cpoglavlja se numeriraju u sadržaju i tekstu, a numeracija počinje od uvodnoga poglavljastranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kutsvaka tablica, graf, slika mora biti numerirana, mora imati naslov i mora biti smještena na sredinu stranicenaslov tablice piše se iznad tablicenaslov slike ili grafa piše se ispod slike ili grafaako je tablica, slika ili graf preuzet iz drugoga izvora, potrebno je navesti izvor ispod njih u veličini slova 10 pt. (knjiga, mrežna stranica) Prezentacija završnoga i diplomskoga radaZavršni radStudent može prijaviti obranu završnoga rada i pristupiti obrani nakon što položi sve propisane ispite i ispuni ostale obveze propisane studijskim programom. Završni se rad brani u formi ispita pred izabranim mentorom. Tijekom obrane student izlaže sadržaj završnoga rada te nakon izlaganja odgovara na pitanja mentora koja su u svezi s temom završnoga rada. Na obrani završnoga rada vodi se Zapisnik o obrani završnoga rada (OB FŠDT PDS 02). Nakon uspješne obrane završnoga rada Studentska referada preuzima od mentora Zapisnik o obrani završnoga rada te priprema sve podatke vezane uz izdavanje diplome i dopunske isprave o studiju.Diplomski radNa obrani diplomskoga rada treba uz vizualnu prezentaciju usmeno izložiti sadržaj diplomskoga rada u trajanju od 15 do 20 minuta. Važno je ne prekoračiti vrijem"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "ruleId": "sumfak-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "valueShape": "boolean",
+      "contexts": [
+        "kodeks.pdf). Kako bi se izbjegao svaki, pa i nenamjerni oblik plagiranja, kao posljedica neznanja, važno je držati se pravila citiranja (vidi 5. Pravila citiranja i izrada popisa literature). Prilikom predaje izrađenoga diplomskoga rada pristupnik potpisuje Izjavu o akademskoj čestitosti kojom potvrđuje poštovanje etičkih pravila te izvornost predanoga rada. Mentor je prilikom pregleda rada dužan također provesti postupak provjere autentičnosti u odgovarajućem računalnom programu i ispuniti Izvješće o provedenoj provjeri izvornosti studentskoga rada – OB FŠDT 09 03. Izvornost diplomskoga rada provjerava se softverom za provjeru autentičnosti radova Turnitin. Prijava na sučelje omogućena je putem AAI korisničkih podataka za studente i za mentore.Struktura i sadržaj završnoga i diplomskoga radaDijelovi rada su sljedeći:Naslov rada (hrvatski i engleski) treba obuhvatiti glavnu ideju/temu te biti kratak (do 100 znakova s razmacima), jasan, logičan i jednoznačan. Potrebno je izbjegavati kratice, tuđice i posuđenice ako postoje hrvatske istoznačnice. Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic).Student može dodati stranicu s osobnom zahvalom za pomoć pri izradi rada.Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.U sažetku (hrvatski i engleski) potrebno je ukratko prikazati cijeli rad – opisati problem, izraziti najvažnije ideje i ciljeve, materijal i metode rada te rezultate i zaključke, bez citata, tablica i grafova. Opseg je sažetka do 1000 znakova s razmacima. Na kraju sažetka potrebno je navesti 3 – 5 ključnih riječi. Sažetak treba napisati i na engleskom jeziku.U uvodu se na jasan i jezgrovit način opisuju tema rada i problemi koji će biti obrađivani. U uvodu treba opisati namjeru rada i uvesti u problem. Uvod se može organizirati u potpoglavljima prema ključnim aspektima teme.U ciljevima istraživanja potrebno je navesti (nabrojiti) što se točno želi utvrditi. Pronalaženje recentne literature izuzetno je važno za istraživački rad. U pregledu literature opisuju se dosadašnja istraživanja s područja teme rada drugih autora čiji se radovi navode kao izvor (vidi 5. Pravila citiranja i izrada popisa literature). Cilj istraživanja i pregled literature mogu biti potpoglavlja uvoda.–Poglavlje materijal i metode istraživanja osiguravaju ponovljivost istraživanja te se u njima podrobno navodi na čemu se (materijal) i kako (metode) istraživalo. Postupak provedbe istraživanja opisuje se kronološk"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "ruleId": "sumfak-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "valueShape": "boolean",
+      "contexts": [
+        "grada, navodnici na početku i kraju navoda, pišu se zajedno s riječju ili brojem iza kojega slijede (između tih znakova i riječi ne stavlja se razmak)crtica (–) i spojnica (-) različiti su pravopisni znakovi. Crtica je nešto duža od spojnice i piše se s razmacima s obiju njezinih strana (primjer: 3 – 5 ključnih riječi), ali se u bilježenju stranica u bibliografskim jedinicama crtica piše bez bjelina (str. 123–146). Spojnica je nešto kraća i piše se bez razmaka (primjer: Ličko-senjska županija). Njihovo je značenje, dakako, različito.oznake fizikalnih veličina pišu se u kurzivukratice mjernih jedinica pišu se iza numeričke vrijednosti s jednim praznim mjestom, tj. s razmakom (bjelinom), prema ovim pravilima:između broja i znaka mjerne jedinice dolazi jedan razmak, npr.: 3 kg, 2 m, 220 V, 60 W, 5 oCbrojčane vrijednosti i znakovi mjernih jedinica pišu se samo uspravnim pismomrazmak se u mjernoj jedinici ne piše u složenim mjernim jedinicama: 50 m/s, 2 kg/m2 i između broja i oznake za kutni stupanj, minutu i sekundu: 180° 20' 50\"u decimalnim se brojevima piše zarez, a ne točka: temperatura je 36,6 °Cpoglavlja se numeriraju u sadržaju i tekstu, a numeracija počinje od uvodnoga poglavljastranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kutsvaka tablica, graf, slika mora biti numerirana, mora imati naslov i mora biti smještena na sredinu stranicenaslov tablice piše se iznad tablicenaslov slike ili grafa piše se ispod slike ili grafaako je tablica, slika ili graf preuzet iz drugoga izvora, potrebno je navesti izvor ispod njih u veličini slova 10 pt. (knjiga, mrežna stranica) Prezentacija završnoga i diplomskoga radaZavršni radStudent može prijaviti obranu završnoga rada i pristupiti obrani nakon što položi sve propisane ispite i ispuni ostale obveze propisane studijskim programom. Završni se rad brani u formi ispita pred izabranim mentorom. Tijekom obrane student izlaže sadržaj završnoga rada te nakon izlaganja odgovara na pitanja mentora koja su u svezi s temom završnoga rada. Na obrani završnoga rada vodi se Zapisnik o obrani završnoga rada (OB FŠDT PDS 02). Nakon uspješne obrane završnoga rada Studentska referada preuzima od mentora Zapisnik o obrani završnoga rada te priprema sve podatke vezane uz izdavanje diplome i dopunske isprave o studiju.Diplomski radNa obrani diplomskoga rada treba uz vizualnu prezentaciju usmeno izložiti sadržaj diplomskoga rada u trajanju od 15 do 20 minuta. Važno je ne prekoračiti vrijem"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "ruleId": "sumfak-zavrsni--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "valueShape": "boolean",
+      "contexts": [
+        "kodeks.pdf). Kako bi se izbjegao svaki, pa i nenamjerni oblik plagiranja, kao posljedica neznanja, važno je držati se pravila citiranja (vidi 5. Pravila citiranja i izrada popisa literature). Prilikom predaje izrađenoga diplomskoga rada pristupnik potpisuje Izjavu o akademskoj čestitosti kojom potvrđuje poštovanje etičkih pravila te izvornost predanoga rada. Mentor je prilikom pregleda rada dužan također provesti postupak provjere autentičnosti u odgovarajućem računalnom programu i ispuniti Izvješće o provedenoj provjeri izvornosti studentskoga rada – OB FŠDT 09 03. Izvornost diplomskoga rada provjerava se softverom za provjeru autentičnosti radova Turnitin. Prijava na sučelje omogućena je putem AAI korisničkih podataka za studente i za mentore.Struktura i sadržaj završnoga i diplomskoga radaDijelovi rada su sljedeći:Naslov rada (hrvatski i engleski) treba obuhvatiti glavnu ideju/temu te biti kratak (do 100 znakova s razmacima), jasan, logičan i jednoznačan. Potrebno je izbjegavati kratice, tuđice i posuđenice ako postoje hrvatske istoznačnice. Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic).Student može dodati stranicu s osobnom zahvalom za pomoć pri izradi rada.Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.U sažetku (hrvatski i engleski) potrebno je ukratko prikazati cijeli rad – opisati problem, izraziti najvažnije ideje i ciljeve, materijal i metode rada te rezultate i zaključke, bez citata, tablica i grafova. Opseg je sažetka do 1000 znakova s razmacima. Na kraju sažetka potrebno je navesti 3 – 5 ključnih riječi. Sažetak treba napisati i na engleskom jeziku.U uvodu se na jasan i jezgrovit način opisuju tema rada i problemi koji će biti obrađivani. U uvodu treba opisati namjeru rada i uvesti u problem. Uvod se može organizirati u potpoglavljima prema ključnim aspektima teme.U ciljevima istraživanja potrebno je navesti (nabrojiti) što se točno želi utvrditi. Pronalaženje recentne literature izuzetno je važno za istraživački rad. U pregledu literature opisuju se dosadašnja istraživanja s područja teme rada drugih autora čiji se radovi navode kao izvor (vidi 5. Pravila citiranja i izrada popisa literature). Cilj istraživanja i pregled literature mogu biti potpoglavlja uvoda.–Poglavlje materijal i metode istraživanja osiguravaju ponovljivost istraživanja te se u njima podrobno navodi na čemu se (materijal) i kako (metode) istraživalo. Postupak provedbe istraživanja opisuje se kronološk"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

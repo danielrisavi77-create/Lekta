@@ -1,0 +1,114 @@
+{
+  "sourceId": "grad-predlozak-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli unknown"
+  },
+  "rules": [
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--font",
+      "value": [
+        "Titillium"
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova â€“ Titillium",
+      "note": "Izvor navodi Titillium, a font se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--font",
+      "value": [
+        "Titillium"
+      ],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova â€“ Titillium",
+      "note": "Izvor navodi Titillium, a font se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Rečenica određuje veličinu 12 pt za tekst rada, a opseg je tijelo rada."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Rečenica određuje veličinu 12 pt za tekst rada, a opseg je tijelo rada."
+    },
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--line-spacing",
+      "value": 1.15,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Rečenica određuje prored 1,15 za tekst rada, a opseg je tijelo rada."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--line-spacing",
+      "value": 1.15,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Rečenica određuje prored 1,15 za tekst rada, a opseg je tijelo rada."
+    },
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Broj stranice treba pozicionirati desno na dnu stranice prema predloÅ¡ku, font Titillium 9.",
+      "note": "Izvor propisuje pozicioniranje broja stranice, pa je numeriranje prisutno u cijelom radu."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Broj stranice treba pozicionirati desno na dnu stranice prema predloÅ¡ku, font Titillium 9.",
+      "note": "Izvor propisuje pozicioniranje broja stranice, pa je numeriranje prisutno u cijelom radu."
+    },
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--toc",
+      "value": true,
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad mora sadrÅ¾avati:Naslovnicu.Lijeva i desna margina: 3,0 cmGornja i donja margina: 3,0 cmIza nje slijedi naslovnica na engleskom jeziku.Naslovne stranice s informacijama o mentoru/komentorimaObrazac 3 (s potpisom mentora)Obrazac 5 (s potpisom studenta)Obrazac 6 (s potpisom studenta)Zahvale (neobavezno).SaÅ¾etak na hrvatskom i engleskom jezikuSaÅ¾etak mora sadrÅ¾avati maksimalno 200 rijeÄi, sadrÅ¾avati kljuÄne rijeÄi i omoguÄ‡iti Äitatelju razumijevanje cilja rada, metode, rezultate te zakljuÄke.KljuÄne rijeÄi na hrvatskom i engleskom jezikuSadrÅ¾aj",
+      "note": "Popis obveznih sastavnica izričito uključuje Sadržaj, pa je njegova vrijednost prisutna u cijelom radu."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--toc",
+      "value": true,
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad mora sadrÅ¾avati:Naslovnicu.Lijeva i desna margina: 3,0 cmGornja i donja margina: 3,0 cmIza nje slijedi naslovnica na engleskom jeziku.Naslovne stranice s informacijama o mentoru/komentorimaObrazac 3 (s potpisom mentora)Obrazac 5 (s potpisom studenta)Obrazac 6 (s potpisom studenta)Zahvale (neobavezno).SaÅ¾etak na hrvatskom i engleskom jezikuSaÅ¾etak mora sadrÅ¾avati maksimalno 200 rijeÄi, sadrÅ¾avati kljuÄne rijeÄi i omoguÄ‡iti Äitatelju razumijevanje cilja rada, metode, rezultate te zakljuÄke.KljuÄne rijeÄi na hrvatskom i engleskom jezikuSadrÅ¾aj",
+      "note": "Popis obveznih sastavnica izričito uključuje Sadržaj, pa je njegova vrijednost prisutna u cijelom radu."
+    }
+  ]
+}

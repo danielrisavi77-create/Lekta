@@ -1,0 +1,9 @@
+{
+  "vevu-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  }
+}

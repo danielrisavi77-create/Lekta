@@ -1,0 +1,25 @@
+{
+  "fbf-specijalisticki--citation-style": {
+    "value": "vancouver",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "fbf-specijalisticki--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "fbf-specijalisticki--required-sections": {
+    "value": [
+      "uvod",
+      "cilj istrazivanja",
+      "materijal i metode",
+      "rasprava",
+      "zakljucak",
+      "literatura",
+      "zivotopis"
+    ],
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

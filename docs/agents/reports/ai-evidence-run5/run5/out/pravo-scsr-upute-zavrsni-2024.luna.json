@@ -1,0 +1,26 @@
+{
+  "sourceId": "pravo-scsr-upute-zavrsni-2024",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Upute za oblikovanje teksta\n1. Osnovne upute\nPrilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:\n■ margine trebaju biti slijedeće: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje;\n■ oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman);\n■ prored treba biti: 1,5;",
+      "note": "Vrijednost 1,5 izričito je navedena uz prored, glagol treba daje direktivu, a pravilo se odnosi na glavni tekst."
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Upute za oblikovanje teksta\n1. Osnovne upute\nPrilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:\n■ margine trebaju biti slijedeće: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje;\n■ oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman);\n■ prored treba biti: 1,5;",
+      "note": "Vrijednost 1,5 izričito je navedena uz prored, glagol treba daje direktivu, a pravilo se odnosi na glavni tekst."
+    }
+  ]
+}

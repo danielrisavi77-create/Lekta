@@ -1,0 +1,82 @@
+{
+  "source": {
+    "id": "erf-upute-diplomski",
+    "url": "https://www.erf.unizg.hr/_download/repository/erfunizg_upute_za_pisanje_diplomskog_rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\erf-upute-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "eporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi Preporučen broj korištene literature: 30-40 referenci 3 vidi upute za pisanje sažetka Preporučen broj stranica: 40-50 Font: 12 pt, Times New Roman, prored 1.5 Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili časopisa Kriminologija i socijalna integracija. Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane Na drugoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime mentora 6. ime i prezime studenta 7. mjesto, mjesec i godina obrane Prilozi 1. Obrazac za prijavu teme i teza diplomskog rada 2. Primjer izgleda prve i druge stranice diplomskog rada 3. Upute za pisanje sažetka diplomskog rada 4. Prijava za polaganje diplomskog ispita"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "valueShape": "number",
+      "contexts": [
+        "eporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi Preporučen broj korištene literature: 30-40 referenci 3 vidi upute za pisanje sažetka Preporučen broj stranica: 40-50 Font: 12 pt, Times New Roman, prored 1.5 Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili časopisa Kriminologija i socijalna integracija. Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane Na drugoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime mentora 6. ime i prezime studenta 7. mjesto, mjesec i godina obrane Prilozi 1. Obrazac za prijavu teme i teza diplomskog rada 2. Primjer izgleda prve i druge stranice diplomskog rada 3. Upute za pisanje sažetka diplomskog rada 4. Prijava za polaganje diplomskog ispita"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "valueShape": "number",
+      "contexts": [
+        "eporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi Preporučen broj korištene literature: 30-40 referenci 3 vidi upute za pisanje sažetka Preporučen broj stranica: 40-50 Font: 12 pt, Times New Roman, prored 1.5 Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili časopisa Kriminologija i socijalna integracija. Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane Na drugoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime mentora 6. ime i prezime studenta 7. mjesto, mjesec i godina obrane Prilozi 1. Obrazac za prijavu teme i teza diplomskog rada 2. Primjer izgleda prve i druge stranice diplomskog rada 3. Upute za pisanje sažetka diplomskog rada 4. Prijava za polaganje diplomskog ispita"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezne cjeline diplomskog rada",
+      "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad",
+      "quote": "treba sadržavati sljedeća poglavlja",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Diplomski rad može biti: A) Istraživački rad Istraživački rad1 treba sadržavati sljedeća poglavlja: Sažetak2 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi Preporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B)",
+        "a hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi Preporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi Preporučen broj korištene literature: 30-40 referenci 3 vidi upute za pisanje sažetka Preporučen broj stranica: 40-50 Font: 12 pt, Times New Roman, prored 1.5 Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili časopisa Kriminologija i socijalna integracija. Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane Na drugoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime mentora 6. ime i prezime studenta 7. mjesto, mjesec i godina obrane Prilozi 1. Obrazac za prijavu teme i teza diplomskog rada 2. Primjer izgleda prve i druge stranice diplomskog rada 3. Upute za pisanje sažetka diplomskog rada 4. Prijava za polaganje diplomskog ispita"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad (poglavlje Sadrzaj)",
+      "quote": "treba sadržavati sljedeća poglavlja",
+      "valueShape": "boolean",
+      "contexts": [
+        "Diplomski rad može biti: A) Istraživački rad Istraživački rad1 treba sadržavati sljedeća poglavlja: Sažetak2 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi Preporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B)",
+        "a hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi Preporučen broj korištene literature: 20-30 referenci 1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije. Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s etičkim načelima. (vidi Upute za traženje mišljenja EP). Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a). 2 Vidi upute za pisanje sažetka. B) Pregledni rad Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi Preporučen broj korištene literature: 30-40 referenci 3 vidi upute za pisanje sažetka Preporučen broj stranica: 40-50 Font: 12 pt, Times New Roman, prored 1.5 Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili časopisa Kriminologija i socijalna integracija. Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane Na drugoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. „Diplomski rad“ 4. naslov rada 5. ime i prezime mentora 6. ime i prezime studenta 7. mjesto, mjesec i godina obrane Prilozi 1. Obrazac za prijavu teme i teza diplomskog rada 2. Primjer izgleda prve i druge stranice diplomskog rada 3. Upute za pisanje sažetka diplomskog rada 4. Prijava za polaganje diplomskog ispita"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

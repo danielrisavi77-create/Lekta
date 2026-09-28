@@ -1,0 +1,47 @@
+{
+    "sourceId":  "fhs-upute-zavrsni-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "fhs-zavrsni",
+                      "ruleId":  "fhs-zavrsni--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
+                      "note":  "Vrijednost je Times New Roman, rečenica daje tehničku uputu bez modalne riječi iz zadanih kategorija, a opseg osi fonta je tijelo rada."
+                  },
+                  {
+                      "profileId":  "fhs-zavrsni",
+                      "ruleId":  "fhs-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je obostrano poravnat",
+                      "note":  "Tvrdnja izričito traži obostrano poravnanje, a opseg osi poravnanja je tijelo rada."
+                  },
+                  {
+                      "profileId":  "fhs-zavrsni",
+                      "ruleId":  "fhs-zavrsni--margins",
+                      "value":  {
+                                    "bottom":  2.5,
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm Naslovnica ima drugačije margine!",
+                      "note":  "Upute navode 2,5 cm za sve četiri margine, ali zasebno kažu da naslovnica ima drugačije margine, bez navođenja tih vrijednosti."
+                  }
+              ]
+}

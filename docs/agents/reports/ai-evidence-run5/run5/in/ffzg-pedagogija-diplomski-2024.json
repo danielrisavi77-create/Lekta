@@ -1,0 +1,68 @@
+{
+  "source": {
+    "id": "ffzg-pedagogija-diplomski-2024",
+    "url": "https://pedagogija.ffzg.unizg.hr/wp-content/uploads/2024/03/Upute-za-oblikovanje-diplomskoga-rada-Odsjeka-za-pedagogiju_2024.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-pedagogija-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za pedagogiju Zagreb, 5. ožujka 2024. godine Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju Diplomski rad piše se u formi znanstvenoga rada. Opseg rada ograničen je na minimalno 40 i maksimalno 80 stranica, pri čemu prve četiri stranice, tj. naslovnica, sadržaj, stranica sa sažecima i Izjava o akademskoj čestitosti1 , kao i popis literature i prilozi na kraju rada, ne ulaze u taj opseg. Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje; - font: Times New Roman veličine 12 točaka za naslove i tekst, a 10 točaka za fusnote; - prored: 1,5; - stranice numerirane (na dnu, centrirano); - glavni naslovi podebljanim, a podnaslovi kosim slovima; - dijelove teksta koje se želi istaknuti pisati kosim slovima. Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti1, također bez oznake broja stranice. Sažetak rada treba biti opsega između 200 i 300 riječi i sadržavati cilj istraživanja, metodologiju i najvažnije dobivene rezultate. Ispod sažetka treba navesti ključne riječi (njih 3 do 5). Navođenje literature i oblikovanje tabličnoga i grafičkoga prikazivanja potrebno je uskladiti s posljednjom verzijom APA stila. 1 U Prilozima ovih Uputa navedeni su primjeri izgleda korica diplomskoga rada, naslovne i sljedeće dvije stranice diplomskoga rada te Izjave o akademskoj čestitosti. Prilozi Izgled korica diplomskoga rada SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA PEDAGOGIJU (c"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "prored: 1,5;",
+      "valueShape": "number",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za pedagogiju Zagreb, 5. ožujka 2024. godine Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju Diplomski rad piše se u formi znanstvenoga rada. Opseg rada ograničen je na minimalno 40 i maksimalno 80 stranica, pri čemu prve četiri stranice, tj. naslovnica, sadržaj, stranica sa sažecima i Izjava o akademskoj čestitosti1 , kao i popis literature i prilozi na kraju rada, ne ulaze u taj opseg. Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje; - font: Times New Roman veličine 12 točaka za naslove i tekst, a 10 točaka za fusnote; - prored: 1,5; - stranice numerirane (na dnu, centrirano); - glavni naslovi podebljanim, a podnaslovi kosim slovima; - dijelove teksta koje se želi istaknuti pisati kosim slovima. Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti1, također bez oznake broja stranice. Sažetak rada treba biti opsega između 200 i 300 riječi i sadržavati cilj istraživanja, metodologiju i najvažnije dobivene rezultate. Ispod sažetka treba navesti ključne riječi (njih 3 do 5). Navođenje literature i oblikovanje tabličnoga i grafičkoga prikazivanja potrebno je uskladiti s posljednjom verzijom APA stila. 1 U Prilozima ovih Uputa navedeni su primjeri izgleda korica diplomskoga rada, naslovne i sljedeće dvije stranice diplomskoga rada te Izjave o akademskoj čestitosti. Prilozi Izgled korica diplomskoga rada SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA PEDAGOGIJU (centrirano, velikim tiskanim slovima, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, v"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za pedagogiju Zagreb, 5. ožujka 2024. godine Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju Diplomski rad piše se u formi znanstvenoga rada. Opseg rada ograničen je na minimalno 40 i maksimalno 80 stranica, pri čemu prve četiri stranice, tj. naslovnica, sadržaj, stranica sa sažecima i Izjava o akademskoj čestitosti1 , kao i popis literature i prilozi na kraju rada, ne ulaze u taj opseg. Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje; - font: Times New Roman veličine 12 točaka za naslove i tekst, a 10 točaka za fusnote; - prored: 1,5; - stranice numerirane (na dnu, centrirano); - glavni naslovi podebljanim, a podnaslovi kosim slovima; - dijelove teksta koje se želi istaknuti pisati kosim slovima. Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti1, također bez oznake broja stranice. Sažetak rada treba biti opsega između 200 i 300 riječi i sadržavati cilj istraživanja, metodologiju i najvažnije dobivene rezultate. Ispod sažetka treba navesti ključne riječi (njih 3 do 5). Navođenje literature i oblikovanje tabličnoga i grafičkoga prikazivanja potrebno je uskladiti s posljednjom verzijom APA stila. 1 U Prilozima ovih Uputa navedeni su primjeri izgleda korica diplomskoga rada, naslovne i sljedeće dvije stranice diplomskoga rada te Izjave o akademskoj čestitosti. Prilozi Izgled korica diplomskoga rada SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA PEDAGOGIJU (c"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "stranice numerirane (na dnu, centrirano);",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za pedagogiju Zagreb, 5. ožujka 2024. godine Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju Diplomski rad piše se u formi znanstvenoga rada. Opseg rada ograničen je na minimalno 40 i maksimalno 80 stranica, pri čemu prve četiri stranice, tj. naslovnica, sadržaj, stranica sa sažecima i Izjava o akademskoj čestitosti1 , kao i popis literature i prilozi na kraju rada, ne ulaze u taj opseg. Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje; - font: Times New Roman veličine 12 točaka za naslove i tekst, a 10 točaka za fusnote; - prored: 1,5; - stranice numerirane (na dnu, centrirano); - glavni naslovi podebljanim, a podnaslovi kosim slovima; - dijelove teksta koje se želi istaknuti pisati kosim slovima. Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti1, također bez oznake broja stranice. Sažetak rada treba biti opsega između 200 i 300 riječi i sadržavati cilj istraživanja, metodologiju i najvažnije dobivene rezultate. Ispod sažetka treba navesti ključne riječi (njih 3 do 5). Navođenje literature i oblikovanje tabličnoga i grafičkoga prikazivanja potrebno je uskladiti s posljednjom verzijom APA stila. 1 U Prilozima ovih Uputa navedeni su primjeri izgleda korica diplomskoga rada, naslovne i sljedeće dvije stranice diplomskoga rada te Izjave o akademskoj čestitosti. Prilozi Izgled korica diplomskoga rada SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA PEDAGOGIJU (centrirano, velikim tiskanim slovima, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, veličina 16, bold) Diplomski rad (centrirano,"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

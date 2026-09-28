@@ -1,0 +1,17 @@
+{
+  "ffzg-psihologija-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-psihologija-diplomski--margins": {
+    "value": {
+      "top": 2.54,
+      "bottom": 2.54,
+      "left": 2.54,
+      "right": 2.54
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "source": {
+    "id": "efos-upute-studentski-2023",
+    "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\efos-upute-studentski-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "mjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje radaOpće upute za oblikovanje teksta u studentskim radovima su sljedeće:studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mmrad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranjastranice rada (osim naslovne stranice) potrebno je brojčano označiti (numerirati) tako da se stra"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "mjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje radaOpće upute za oblikovanje teksta u studentskim radovima su sljedeće:studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mmrad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranjastranice rada (osim naslovne stranice) potrebno je brojčano označiti (numerirati) tako da se stra"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "mjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje radaOpće upute za oblikovanje teksta u studentskim radovima su sljedeće:studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mmrad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranjastranice rada (osim naslovne stranice) potrebno je brojčano označiti (numerirati) tako da se stra"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        " od strukturnih dijelova rada u akademskom pisanju (Uvod, Metodologija, Rezultati, Rasprava, Zaključak i drugi dijelovi) postoje smjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje radaOpće upute za oblikovanje teksta u studentskim radovima su sljedeće:studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mmrad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranjastranice rada (osim naslo"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "ruleId": "efos-opci-akademski-rad--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+      "valueShape": "boolean",
+      "contexts": [
+        " od strukturnih dijelova rada u akademskom pisanju (Uvod, Metodologija, Rezultati, Rasprava, Zaključak i drugi dijelovi) postoje smjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje radaOpće upute za oblikovanje teksta u studentskim radovima su sljedeće:studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mmrad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranjastranice rada (osim naslo"
+      ],
+      "priorStatus": "needs-ai-evidence",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

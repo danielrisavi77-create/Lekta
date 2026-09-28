@@ -1,0 +1,16 @@
+﻿{
+  "sourceId": "pmf-geolog-upute-diplomski-2024",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "pmf-geologija-graduate",
+      "ruleId": "pmf-geologija-graduate--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Sve stranice do Uvoda, osim korica, numeriraju se rimskim brojevima, no na prvu stranicu i stranicu sa zahvalama (ako je imate) ne pišete broj stranice, pa Temeljna dokumentacijska kartica ima numeraciju II odnosno III, a slijedi ih sadržaj. Ukoliko vaš rad na kraju ima Table i Priloge oni su također numerirani rimskim brojevima, s time da se njihova numeracija nastavlja na onu sa zadnje stranice sadržaja.",
+      "note": "Tvrdnja i dodatna napomena potvrđuju rimske brojeve za navedene stranice, uz izostanak otisnutog broja na prvoj stranici i zahvalama; rečenica koristi goli indikativ, a numeriranje stranica odnosi se na cijeli rad."
+    }
+  ]
+}

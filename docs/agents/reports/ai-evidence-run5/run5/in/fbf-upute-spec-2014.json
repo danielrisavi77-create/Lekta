@@ -1,0 +1,65 @@
+{
+  "source": {
+    "id": "fbf-upute-spec-2014",
+    "url": "https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\fbf-upute-spec-2014.txt"
+  },
+  "rules": [
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (Vancouver)",
+      "sourcePage": "odjeljak 6. Referencije/literatura",
+      "quote": "Literatura se navodi Vancouverskim stilom",
+      "valueShape": "string",
+      "contexts": [
+        "ju temeljnih bioetičkih principa (osobni integritet – autonomnost, pravednost, dobročinstvo i neškodljivost), kao i onih iz njih izvedenih (npr. privatnost, povjerenje i sl.), a u skladu s Nürnberškim kodeksom, najnovijom revizijom Helsinške deklaracije, te ostalim mjerodavnim dokumentima. b) Na eksperimentalnim životinjama U prijavi je potrebno napisati da li će istraživanje biti u skladu s važećim zakonskim propisima te bioetičkim standardima o provođenju pokusa na eksperimentalnim životinjama, odnosno izbjegavanjem nepotrebnih pokusa i patnje eksperimentalnih životinja. 4.3. Statistička obrada podataka Kratko opisati kako će se prikupljati podaci, kojih će biti osobina i mjernih ljestvica, kojim statističkim postupcima će biti analizirani i zašto. Statističke postupke treba opisati i citirati izvornim radovima te navesti očekivanu uporabu računalnih programa za obradu podataka. 5. Očekivani doprinos Jasno i kratko napisati što se očekuje kao izvorni doprinos ovog ispitivanja, odnosno stručno-znanstvenu opravdanost ispitivanja. 6. Referencije/literatura Popis literature čine precizno navedene literaturne reference, temeljem kojih je osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom, a u popisu slijede redosljedom pojavljivanja u tekstu (najviše do 30 literaturnih navoda, što novijeg datuma objave). Ako izvor koji se navodi ima do šest autora, onda se navode svi autori, a ako ima sedam i više autora, onda se navode prva tri autora i popis zaključuje s \"i sur.\" Primjeri navođenja najčešće rabljenih literaturnih izvora: ----------------------------------------------------------------------------------------------------------------- Članak u časopisu: Marusteri M, Bacarea V.Comparing groups for statistical differences:How to chose the right statistical test. Biochem Med 2010;20:15-32. Poglavlje u uredničkoj knjizi: O Donnell VB. Eicosanoid-Based Signaling. U: Jacob K, Winyard PG, ur. Redox Signaling and Regulation in Biology and Medicine. Wiley-VCH Verlag GmbH and Co KgaA, 2009;229-44. Knjiga: Baynes JW, Dominiczak MH. Medical Biochemistry. Mosby Elsevier; 2005, str. 5-17. Knjiga (urednici): Walker R, Whittlesea C. ur. Clinical Pharmacy and Therapeutics. Curchill Livingstone Elsevier; 2012, str. 880-893. Poglavlje u uredničkoj knjizi: Abdul-Wahab A, Desai N, Eczema and psoriasis. U: Walker R, Whittlesea C. ur. Clinical Pharmacy and Therapeutics. Curchill Livings"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "obvezatnom potporom svih hrvatskih znakova). Sve stranice moraju biti numerirane, tj.",
+      "valueShape": "boolean",
+      "contexts": [
+        "stranica: World Health Organisation (WHO): The global burden of disease 2008. Causes of death 2008-summary tables. Available at: http//apps.who.int/ghodata/?vid=10012. Accessed August 25, 2011. ----------------------------------------------------------------------------------------------------------------- IV. Potvrdnica o lektoriranom naslovu Naslov teme ispisan na lektorovoj potvrdnici mora biti odgovarajući/sukladan onom, navedenom u molbi pristupnika. V. Mišljenje i suglasnost mentora Predloženi mentor rada svojim potpisom iznosi slaganje ili neslaganje s voditeljstvom ispitivanja, kao i s naslovom te obrazloženjem teme. VI. Životopis Životopis treba napisati strukturirano, a ne kao slobodan literarni tekst. Uobičajeni dijelovi životopisa su: opći podaci, adresa, zaposlenje, školovanje, akademski naslovi, znanstveni stupnjevi, nagrade, članstva, stručne aktivnosti i publikacije. B. OBLIKOVANJE ZAVRŠNOG SPECIJALISTIČKOG RADA Specijalistički rad treba biti napisan na hrvatskom jeziku, tiskan na papiru standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu (28-32 retka po stranici; pismo veličine 10 do 12 tipografskih točaka čitljive vrste s obvezatnom potporom svih hrvatskih znakova). Sve stranice moraju biti numerirane, tj. označene brojevima. 1. Uvez i oblikovanje ovitka Specijalistički rad se uvezuje, nakon obrane rada. Na prednjoj stranici ovitka treba u gornjem dijelu, pri vrhu, pisati: SVEUČILIŠTE U ZAGREBU FARMACEUTSKO-BIOKEMIJSKI FAKULTET U sredini stranice treba pisati: Ime i prezime NASLOV RADA Specijalistički rad Pri dnu stranice treba pisati: Mjesto, godina Prazni su i unutrašnja strana ovitka i prva stranica koja se na ovitak naslanja. Na hrptu uvezanog rada treba pisati: ime i prezime, godina, «Specijalistički rad». 2. Obvezatni listovi rada Na sljedećem, drugom listu ponavlja se sadržaj ovitka rada (v. gore). Treći list rada sadrži sljedeće podatke: PSS studij: (Naziv Poslijediplomskog specijalističkog studija) Mentor(i) rada: (Ime i prezime mentora, s titulom) Specijalistički rad obranjen je dana ____________ u/na ________________ ___________________________________, pred povjerenstvom u sastavu: 1. _____________________________ 2. _____________________________ 3. _____________________________ 4. _____________________________ 5. _____________________________ Rad ima ______ listova. Četvrti list sadrži Predgovor, unutar kojeg se navode podaci važni za provedbu istraživanja, primjerice, "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezni dijelovi rada",
+      "sourcePage": "odjeljak B.4. Sadrzaj specijalistickog rada",
+      "quote": "Obvezatni dijelovi rada koji slijede su:",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "_____________________ 4. _____________________________ 5. _____________________________ Rad ima ______ listova. Četvrti list sadrži Predgovor, unutar kojeg se navode podaci važni za provedbu istraživanja, primjerice, naziv ustanove (ustanova) u kojoj (kojima) je istraživanje provedeno, naziv i oznaku odgovarajućeg projekta. Predgovor može sadržavati i moto istraživanja, te zahvale osobama koje su na neki način pomogle u ostvarenju rada. 3. Sažetak Strukturirani Sažetak rada na hrvatskom jeziku (jedna do dvije stranice teksta, uobičajeno 200-250 riječi), i strukturirani Summary, sažetak rada na engleskom jeziku uključuju sljedeće cjeline:. Cilj istraživanja (Objectives), Materijal/Ispitanici i metode (Material/Patients and Methods), Rezultati (Results), i Zaključak (Conclusion). 4. Sadržaj specijalističkog rada Sadržaj specijalističkog rada navodi poglavlja i brojeve stranica na kojima poglavlja započinju. Početne stranice numeriraju se rimskim brojevima u sredini na dnu stranice. Prva stranica Uvoda i pregleda područja istraživanja prva je stranica numerirana arapskim brojevima, koji slijede do kraja rada (bez obzira na sadržaj stranica i jednako u sredini donjeg dijela stranice). Obvezatni dijelovi rada koji slijede su: a) Eksperimentalni specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode (ili: Ispitanici i metode) 4. Rezultati 5. Rasprava 6. Zaključak (ili: Zaključci) i 7. Referencije (ili Literatura) 8. Životopis b) Teorijski specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode - Sustavni pregled saznanja o temi (podijeljen u odgovarajuća poglavlja) 4. Rasprava 5. Zaključak (ili: Zaključci) i 6. Referencije (ili Literatura) 7. Životopis Svako navedeno poglavlje rada treba započeti na novoj stranici. Iza literature se prema potrebi stavljaju stranice s abecednim Popisom skraćenica koje su upotrebljavane u radu. U radu se navode samo objavljeni podaci, a izvori podataka koji nisu objavljeni navode se u tekstu (u zagradi). 5. Prilozi Prilozi uz tekst rada su tablice i slike. Grafikoni, sheme, dijagrami, prikazi i sl. moraju uvrstiti u jednu od dviju spomenutih skupina. Svi prilozi moraju imati naslov. Numeriraju se arapskim brojevima slijedom kojim se pojavljuju za sva poglavlja rada zajedno. Smještaju se odmah uz tekst u kojem se opisuju, a samo iznimno kao privitak rada, uvezuju se na samom kr"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

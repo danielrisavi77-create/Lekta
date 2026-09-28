@@ -1,0 +1,66 @@
+﻿{
+  "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--citation-style",
+      "value": null,
+      "modality": "obligation",
+      "scope": "bibliography",
+      "verdict": "conflict",
+      "evidenceQuote": "3. Upute za navođenje literature Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra (http://hrcak. srce.hr/bogoslovska-smotra). U završnim/diplomskim radovima iz područja povijesti potrebno je dosljedno se pridržavati uputa znanstvenog časopisa Croatica christiana periodica (http://hrcak. srce.hr/ccp).",
+      "note": "Opće pravilo upućuje na Bogoslovsku smotru, a za radove iz povijesti na Croatica christiana periodica, dok nijedna vrijednost iz dopuštenog popisa nije jednoznačno određena."
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).",
+      "note": "Izvor navodi Times New Roman za cijeli tekst, a glagol treba daje direktivni modalitet i opseg je tijelo rada."
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst je potrebno pisati s obostranim poravnanjem.",
+      "note": "Rečenica nalaže obostrano poravnanje teksta, a pravilo se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--citation-style",
+      "value": null,
+      "modality": "obligation",
+      "scope": "bibliography",
+      "verdict": "conflict",
+      "evidenceQuote": "3. Upute za navođenje literature Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra (http://hrcak. srce.hr/bogoslovska-smotra). U završnim/diplomskim radovima iz područja povijesti potrebno je dosljedno se pridržavati uputa znanstvenog časopisa Croatica christiana periodica (http://hrcak. srce.hr/ccp).",
+      "note": "Opće pravilo upućuje na Bogoslovsku smotru, a za radove iz povijesti na Croatica christiana periodica, dok nijedna vrijednost iz dopuštenog popisa nije jednoznačno određena."
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).",
+      "note": "Izvor navodi Times New Roman za cijeli tekst, a glagol treba daje direktivni modalitet i opseg je tijelo rada."
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst je potrebno pisati s obostranim poravnanjem.",
+      "note": "Rečenica nalaže obostrano poravnanje teksta, a pravilo se odnosi na tijelo rada."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fpzg-politologija-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-politologija-zavrsni--word-count": {
+    "value": {
+      "min": 5000,
+      "max": 6000
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

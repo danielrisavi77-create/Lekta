@@ -1,0 +1,21 @@
+{
+  "accepted": [],
+  "refuted": [
+    {
+      "ruleId": "pravri-specijalisticki--font",
+      "reason": "Uvodni dio izvora ('Uvodne napomene') izricito kaze da su upute namijenjene 'izradi svih vrsta studentskih radova (seminarski rad, zavrsni rad i diplomski rad)'. Poslijediplomski specijalisticki (i doktorski) polaznici dobivaju odvojen tretman: samo primjere korica/naslovnica (Prilog 7-10) i posebne upute za sadrzaj (Prilog 12 'upute za poslijediplomante i polaznike specijalistickih i doktorskih studija'), a ne opci tehnicki normativ iz poglavlja II/2.1 s kojeg je citat uzet. Nije jasno da se normativ stranice (font/prored/margine/format) primjenjuje na specijalisticki profil."
+    },
+    {
+      "ruleId": "pravri-specijalisticki--line-spacing",
+      "reason": "Isti razlog kao za font: normativ stranice (2.1) dolazi iz poglavlja opcih tehnickih uputa koje izvor ogranicava na seminarski/zavrsni/diplomski rad, dok poslijediplomski specijalisticki polaznici imaju zaseban tretman (Prilog 7-10 i 12)."
+    },
+    {
+      "ruleId": "pravri-specijalisticki--margins",
+      "reason": "Isti razlog kao za font: normativ stranice (2.1) dolazi iz poglavlja opcih tehnickih uputa koje izvor ogranicava na seminarski/zavrsni/diplomski rad, dok poslijediplomski specijalisticki polaznici imaju zaseban tretman (Prilog 7-10 i 12)."
+    },
+    {
+      "ruleId": "pravri-specijalisticki--paper-size",
+      "reason": "Isti razlog kao za font: normativ stranice (2.1) dolazi iz poglavlja opcih tehnickih uputa koje izvor ogranicava na seminarski/zavrsni/diplomski rad, dok poslijediplomski specijalisticki polaznici imaju zaseban tretman (Prilog 7-10 i 12)."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "iv-zavrsni--font": {
+    "value": [
+      "Arial"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "iv-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "iv-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "iv-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "iv-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

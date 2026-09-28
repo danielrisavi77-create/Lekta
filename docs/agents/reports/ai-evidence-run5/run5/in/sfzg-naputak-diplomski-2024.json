@@ -1,0 +1,96 @@
+{
+  "source": {
+    "id": "sfzg-naputak-diplomski-2024",
+    "url": "https://www.sfzg.unizg.hr/_download/repository/Naputak%20za%20oblikovanje%20diplomskog%202024.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\sfzg-naputak-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "sfzg-diplomski",
+      "ruleId": "sfzg-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (ICMJE / Vancouver)",
+      "sourcePage": "odjeljak Citiranje i literatura",
+      "quote": "Obvezna je primjena pravila citiranja",
+      "valueShape": "string",
+      "contexts": [
+        "ca sadržava popis kratica korištenih u radu prema abecednom redu i njihovo objašnjenje na jeziku na kojem je rad pisan te puni naziv kratice na izvornom jeziku. VII. Tijelo rada (Slika 8 i 9) Citiranje i literatura U svim pisanim radovima uvijek se mora jasno odvojiti tuđi tekst i tuđi podaci od autorovog teksta i podataka. Od drugih autora se mogu preuzeti samo manji dijelovi teksta odnosno podataka i to se uvijek mora označiti na jasan način citiranjem. Oznaka podrijetla citiranih dijelova stavlja se kao brojka u zagradu na kraju rečenice prije točke, Slika 9. Brojka u zagradi odgovara brojci u popisu korištene literature. Preuzimanje tuđeg ili vlastitog prethodno objavljenog teksta i podataka, a bez pravilnog citiranja smatra se plagiranjem odnosno autoplagiranjem. To su neetični postupci koji mogu biti na odgovarajući način sankcionirani. Navode se svi radovi koji su u diplomskom radu citirani, kao i oni na koje se autor poziva. Jednako tako, u popisu ne smiju biti radovi koji nisu citirani, niti oni na koje se u radu ne upućuje. Popis korištene literature numerira se slijedom navođenja u tekstu. Naslovi časopisa pišu se kraticom u obliku koji se upotrebljava u Index Medicusu. Obvezna je primjena pravila citiranja prema International Committee of Medical Journal Editors – ICMJE (ranije Vancouverski stil). Pravila citiranja su dostupna na mrežnoj stranici: http://www.icmje.org/, a primjeri na: https://www.nlm.nih.gov/bsd/uniform_requirements.html. 9 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Životopis Životopis treba biti napisan u trećem licu jednine, a opsegom ne smije prijeći 200 riječi. Tekst životopisa mora biti u obliku eseja, a ne natuknica. Nakon životopisa navodi se popis radova koje je autor objavio. Predaja rada na ocjenu Ocjena rada odvijati će se elektroničkim putem e-mail adrese referada@sfzg.hr 1. Diplomski rad u PDF formatu. Cijeli diplomski rad, uključujući uvodne stranice mora biti jedan PDF dokument 2. Potpisana Izjava mentora u postupku predaje diplomskog rada na ocjenu da je rad izrađen prema Naputku (scan) 3. Potpisano i popunjeno Izvješće o provedenoj provjeri izvornosti studentskog rada (scan) 4. Potpisani obrazac Izjava lektora hrvatskog jezika (scan) 5. Potpisani obrazac Izjava lektora engleskog jezika (scan) 6. Suglasnost Etičkog povjerenstva za znanstveni rad/prikaz slučaja 10"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "ruleId": "sfzg-diplomski--font",
+      "checkId": "font",
+      "label": "Tip pisma",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "........................................................................................................................ 10 3 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Vrsta diplomskog rada Diplomski rad može biti: stručni rad, znanstveni rad, pregledni rad ili prikaz slučaja. Suglasnost Etičkog odbora Stomatološkog fakulteta potrebna je za znanstveni rad i prikaz slučaja. Jezik i lektoriranje Diplomski rad piše se na hrvatskom jeziku. Tekst diplomskog rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. Diplomski rad mora lektorirati profesor hrvatskog jezika, a sažetak rada na engleskom jeziku mora lektorirati profesor engleskog jezika. Podaci o hrvatskom, odnosno engleskom lektoru (titula, ime i prezime) navode se na uvodnim stranicama rada na odgovarajućem mjestu kako je kasnije navedeno u ovom naputku. Tekst svake stranice treba biti logično razdijeljen u odjeljke. Postavke stranice i pisma Diplomski rad može imati najmanje 25, a najviše 50 stranica. Nazive poglavlja treba pisati velikim podebljanim slovima (bold), a nazive potpoglavlja malim podebljanim slovima (bold).  Tip pisma (Font): Times New Roman  Veličina pisma (Font size): 12  Prored (Line spacing): 1,5 redak (1,5 lines)  Poravnanje (Alignment): obostrano (Justified)  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – right): 2,5 cm  Gornji rub (Margin – top): 2.5 cm (do teksta, zaglavlje unutar 2,5 cm)  Donji rub (Margin – bottom): 2,5 cm Numeriranje stranica U radu se broje (numeriraju) sve stranice počevši od Uvoda do kraja rada. Broj stranice piše se u donjem desnom kutu stranice. Zaglavlje (header) i podnožje (footer) Svaka stranica rada počevši od Uvoda do kraja rada treba imati zaglavlje (header). U zaglavlje se upisuje tekst „Ime i prezime autora, diplomski rad“. Tekst zaglavlja treba poravnati u lijevu stranu (align left) i ravnom crtom ga vizualno odvojiti od ostalog teksta rada, Slika 9. Podnožje (footer) se ne koristi. U podnožje se stavlja samo broj stranice. 4 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Skraćenice Pri prvom navođenju neke skraćenice u tekstu rada treba prvo napisati potpuni naziv pojma, a potom skraćenicu koja se navodi u zagradi. U daljnjem tekstu može se koristiti samo skraćenica. U naslovu rada ne mogu se koristiti"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "ruleId": "sfzg-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Poravnanje (Alignment):       obostrano (Justified)",
+      "valueShape": "boolean",
+      "contexts": [
+        "...................... 10 3 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Vrsta diplomskog rada Diplomski rad može biti: stručni rad, znanstveni rad, pregledni rad ili prikaz slučaja. Suglasnost Etičkog odbora Stomatološkog fakulteta potrebna je za znanstveni rad i prikaz slučaja. Jezik i lektoriranje Diplomski rad piše se na hrvatskom jeziku. Tekst diplomskog rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. Diplomski rad mora lektorirati profesor hrvatskog jezika, a sažetak rada na engleskom jeziku mora lektorirati profesor engleskog jezika. Podaci o hrvatskom, odnosno engleskom lektoru (titula, ime i prezime) navode se na uvodnim stranicama rada na odgovarajućem mjestu kako je kasnije navedeno u ovom naputku. Tekst svake stranice treba biti logično razdijeljen u odjeljke. Postavke stranice i pisma Diplomski rad može imati najmanje 25, a najviše 50 stranica. Nazive poglavlja treba pisati velikim podebljanim slovima (bold), a nazive potpoglavlja malim podebljanim slovima (bold).  Tip pisma (Font): Times New Roman  Veličina pisma (Font size): 12  Prored (Line spacing): 1,5 redak (1,5 lines)  Poravnanje (Alignment): obostrano (Justified)  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – right): 2,5 cm  Gornji rub (Margin – top): 2.5 cm (do teksta, zaglavlje unutar 2,5 cm)  Donji rub (Margin – bottom): 2,5 cm Numeriranje stranica U radu se broje (numeriraju) sve stranice počevši od Uvoda do kraja rada. Broj stranice piše se u donjem desnom kutu stranice. Zaglavlje (header) i podnožje (footer) Svaka stranica rada počevši od Uvoda do kraja rada treba imati zaglavlje (header). U zaglavlje se upisuje tekst „Ime i prezime autora, diplomski rad“. Tekst zaglavlja treba poravnati u lijevu stranu (align left) i ravnom crtom ga vizualno odvojiti od ostalog teksta rada, Slika 9. Podnožje (footer) se ne koristi. U podnožje se stavlja samo broj stranice. 4 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Skraćenice Pri prvom navođenju neke skraćenice u tekstu rada treba prvo napisati potpuni naziv pojma, a potom skraćenicu koja se navodi u zagradi. U daljnjem tekstu može se koristiti samo skraćenica. U naslovu rada ne mogu se koristiti skraćenice, osim ako je njihovo značenje opće poznato. Popis skraćenica korištenih u tekstu rada navodi se na uvodnim stranicam"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "ruleId": "sfzg-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Prored (Line spacing):        1,5 redak (1,5 lines)",
+      "valueShape": "number",
+      "contexts": [
+        "..................................................................... 10 3 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Vrsta diplomskog rada Diplomski rad može biti: stručni rad, znanstveni rad, pregledni rad ili prikaz slučaja. Suglasnost Etičkog odbora Stomatološkog fakulteta potrebna je za znanstveni rad i prikaz slučaja. Jezik i lektoriranje Diplomski rad piše se na hrvatskom jeziku. Tekst diplomskog rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. Diplomski rad mora lektorirati profesor hrvatskog jezika, a sažetak rada na engleskom jeziku mora lektorirati profesor engleskog jezika. Podaci o hrvatskom, odnosno engleskom lektoru (titula, ime i prezime) navode se na uvodnim stranicama rada na odgovarajućem mjestu kako je kasnije navedeno u ovom naputku. Tekst svake stranice treba biti logično razdijeljen u odjeljke. Postavke stranice i pisma Diplomski rad može imati najmanje 25, a najviše 50 stranica. Nazive poglavlja treba pisati velikim podebljanim slovima (bold), a nazive potpoglavlja malim podebljanim slovima (bold).  Tip pisma (Font): Times New Roman  Veličina pisma (Font size): 12  Prored (Line spacing): 1,5 redak (1,5 lines)  Poravnanje (Alignment): obostrano (Justified)  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – right): 2,5 cm  Gornji rub (Margin – top): 2.5 cm (do teksta, zaglavlje unutar 2,5 cm)  Donji rub (Margin – bottom): 2,5 cm Numeriranje stranica U radu se broje (numeriraju) sve stranice počevši od Uvoda do kraja rada. Broj stranice piše se u donjem desnom kutu stranice. Zaglavlje (header) i podnožje (footer) Svaka stranica rada počevši od Uvoda do kraja rada treba imati zaglavlje (header). U zaglavlje se upisuje tekst „Ime i prezime autora, diplomski rad“. Tekst zaglavlja treba poravnati u lijevu stranu (align left) i ravnom crtom ga vizualno odvojiti od ostalog teksta rada, Slika 9. Podnožje (footer) se ne koristi. U podnožje se stavlja samo broj stranice. 4 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Skraćenice Pri prvom navođenju neke skraćenice u tekstu rada treba prvo napisati potpuni naziv pojma, a potom skraćenicu koja se navodi u zagradi. U daljnjem tekstu može se koristiti samo skraćenica. U naslovu rada ne mogu se koristiti skraćenice, osim ako je njihovo značenje opće poznato. Popis skraćenica korište"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "ruleId": "sfzg-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "2.5 cm (do teksta, zaglavlje unutar 2,5 cm)",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "g rada Diplomski rad može biti: stručni rad, znanstveni rad, pregledni rad ili prikaz slučaja. Suglasnost Etičkog odbora Stomatološkog fakulteta potrebna je za znanstveni rad i prikaz slučaja. Jezik i lektoriranje Diplomski rad piše se na hrvatskom jeziku. Tekst diplomskog rada treba biti gramatički i pravopisno ispravan i bez tiskarskih pogrešaka. Diplomski rad mora lektorirati profesor hrvatskog jezika, a sažetak rada na engleskom jeziku mora lektorirati profesor engleskog jezika. Podaci o hrvatskom, odnosno engleskom lektoru (titula, ime i prezime) navode se na uvodnim stranicama rada na odgovarajućem mjestu kako je kasnije navedeno u ovom naputku. Tekst svake stranice treba biti logično razdijeljen u odjeljke. Postavke stranice i pisma Diplomski rad može imati najmanje 25, a najviše 50 stranica. Nazive poglavlja treba pisati velikim podebljanim slovima (bold), a nazive potpoglavlja malim podebljanim slovima (bold).  Tip pisma (Font): Times New Roman  Veličina pisma (Font size): 12  Prored (Line spacing): 1,5 redak (1,5 lines)  Poravnanje (Alignment): obostrano (Justified)  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – right): 2,5 cm  Gornji rub (Margin – top): 2.5 cm (do teksta, zaglavlje unutar 2,5 cm)  Donji rub (Margin – bottom): 2,5 cm Numeriranje stranica U radu se broje (numeriraju) sve stranice počevši od Uvoda do kraja rada. Broj stranice piše se u donjem desnom kutu stranice. Zaglavlje (header) i podnožje (footer) Svaka stranica rada počevši od Uvoda do kraja rada treba imati zaglavlje (header). U zaglavlje se upisuje tekst „Ime i prezime autora, diplomski rad“. Tekst zaglavlja treba poravnati u lijevu stranu (align left) i ravnom crtom ga vizualno odvojiti od ostalog teksta rada, Slika 9. Podnožje (footer) se ne koristi. U podnožje se stavlja samo broj stranice. 4 Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu Skraćenice Pri prvom navođenju neke skraćenice u tekstu rada treba prvo napisati potpuni naziv pojma, a potom skraćenicu koja se navodi u zagradi. U daljnjem tekstu može se koristiti samo skraćenica. U naslovu rada ne mogu se koristiti skraćenice, osim ako je njihovo značenje opće poznato. Popis skraćenica korištenih u tekstu rada navodi se na uvodnim stranicama rada na odgovarajućem mjestu kako je kasnije navedeno u ovom naputku, Slika 7. Ilustracije Rad može sadržavati samo dvije vrste ilustracija i to:"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "source": {
+    "id": "alu-vodic-doktorski-2026",
+    "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/programi/vodic_kroz_doktorski_studij_likovne_umjetnosti_08052026.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "7633072e3d6f875a0e35f6ee0a95be3388aeb92eefd952e3cd56f2103e3274d9",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\alu-vodic-doktorski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "alu-doktorski",
+      "ruleId": "alu-doktorski--page-count",
+      "checkId": "page-count",
+      "label": "Opseg disertacije (kartice, minimum)",
+      "sourcePage": "5. Doktorski rad (model A, teorijski rad manjeg opsega)",
+      "quote": "teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica",
+      "valueShape": {
+        "min": "number"
+      },
+      "contexts": [
+        "jelovanje u sveučilišnoj nastavi; 10 ECTS-a (u slučaju da je doktorand/ica zaposlenik/ica sveučilišta odnosi se na održavanje nastave minimalno 15 sati na drugom sveučilištu; u slučaju da doktorand/ica nije zaposlenik/ica niti jednog sveučilišta odnosi se na održavanje nastave minimalno 15 sati na bilo kojem sveučilištu uključujući Sveučilište u Zagrebu Akademiju likovnih umjetnosti na kojem se doktorski studij izvodi) 5. DOKTORSKI RAD U dogovoru s mentorom/mentoricom doktorand/doktorandica ima pravo odabrati jedan od dva modela doktorskog rada: A) doktorski rad baziran na praksi i B) doktorski rad baziran na praksi i teoriji. U oba slučaja doktorski rad je sinteza doktorskog umjetničkog istraživanja od dva dijela: praktičnog rad (umjetničko ostvarenje) i teorijskog rada (disertacija) u pisanom obliku. Međutim, razlika u modelima je u opsegu teorijskog rada. A). Doktorski rad temeljen na praksi odabire se ako doktorand/doktorandica odabere samo mentora/mentoricu u umjetničko-nastavnom zvanju, a sastoji se od: – praktičnog rada (umjetničkog ostvarenja) koji je cjelovita likovna zamisao ostvarena adekvatnim umjetničkim sredstvima i postupcima, a javno se prezentira primjereno temi – teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica teksta (1 kartica od 1800 slovnih mjesta) temeljenog na izvještajima umjetničkog istraživanja, koji se predaju na kraju svake godine studija. U teorijskom radu manjeg opsega doktorand/doktorandica opisuje metode, saznanja, spoznaje i zaključke ostvarene tijekom umjetničkog istraživanja na kojemu se temelji praktični rad. B). Doktorski rad temeljen na praksi i teoriji odabire se ako je I. mentor/mentorica u umjetničko-nastavnom zvanju, a II. mentor/mentorica u znanstveno-nastavnom zvanju, a sastoji se od – praktičnog rada (umjetničkog ostvarenja) koji je cjelovita likovna zamisao ostvarena adekvatnim umjetničkim sredstvima i postupcima, a javno se prezentira primjereno temi – teorijskog rada (disertacije) većeg opsega u pisanom obliku od minimalno 90 kartica teksta (1 kartica od 1800 slovnih mjesta) temeljenog na umjetničkom istraživanju u poveznici s interdisciplinarnom literaturom iz područja teme koja se istražuje. U teorijskom radu većeg opsega doktorand/doktorandica koristi umjetničke i znanstvene metode istraživanja te opisuje saznanja, spoznaje, ciljeve i zaključke istraživanja. 6. OBVEZE STUDIJSKOG SAVJETNIKA/SAVJETNICE, MENTORA/MENTORICE I DOKTORANDA/DOKTORANDICE Studijski"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "source": {
+    "id": "kbf-upute-zavrsni-diplomski-2017",
+    "url": "https://www.kbf.unizg.hr/wp-content/uploads/2017/06/Upute-za-pisanje-zavr%C5%A1noga-i-diplomskoga-rada-KONA%C4%8CNA-VERZIJA.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\kbf-upute-zavrsni-diplomski-2017.txt"
+  },
+  "rules": [
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (biljeske na dnu stranice)",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta, 3. Upute za navoenje literature",
+      "quote": "Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra",
+      "valueShape": "string",
+      "contexts": [
+        "čno  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen, a između odlomka nema praznog reda, ili tako da početak odlomka nije uvučen, a između odlomaka je razmak (6 pt). 2. Upute za oblikovanje tablica i slika Tablice i slike (grafovi, sheme i sl.) trebaju biti označene dvobrojčano i imati naslov. Prva brojka označava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju (npr. prva tablica u trećem poglavlju označava se „Tablica 3.1.;). Tablice i slike potrebno je označiti po kategorijama, što znači da se slike označavaju posebno a tablice posebno. Tablice i slike nalaze se u onom dijelu teksta u koji i sadržajno pripadaju te se u te se u tekstu potrebno pozvati na njih na način da se navede njihov broj, (npr. Tablica 3.1.). Ako je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti točan izvor (npr. Izvor:…). 3. Upute za navođenje literature Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra (http://hrcak. srce.hr/bogoslovska-smotra). U završnim/diplomskim radovima iz područja povijesti potrebno je dosljedno se pridržavati uputa znanstvenog časopisa Croatica christiana periodica (http://hrcak. srce.hr/ccp). U nastavku se donose upute za reference Bogoslovske smotre. 8 1. Pri prvome navođenju nekoga djela, bilješka, bez obzira je li objavljena na hrvatskom ili nekom od stranih jezika, treba ovako izgledati: Knjige i zbornici radova: Osoba kao autor:  Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.  Theodor SCHNITZLER, O značenju sakramenata, Zagreb, 1998. Više osoba kao autori:  Angelo SCOLA – Gilfredo MARENGO – Javier P. LÓPEZ, Čovjek kao osoba. Teološka antropologija, Zagreb, 2003. Osoba kao autor djela koje je uredila druga osoba:  Vjekoslav BAJSIĆ, Granična pitanja religije i znanosti, Stjepan Kušar (ur.), Zagreb, Poglavlja u knjizi:  Marina MILADINOV, Uvod, u: Anselmo CANTERBURYJSKI, Quod vere sit Deus, I, Zagreb, 1997., 25. Urednik kao autor:  Nediljko A. ANČIĆ (ur.), Na granicama Riječi, Zbornik u čast dr. Drage Šimundže, Split, 2005. Urednici kao autori:  Marin ŠKARICA – Ante MATELJAN (ur.), U križu je spas, Zbornik u čast mons. Ante Jurića, Split, 199"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+      "quote": "Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "išu se na sljedeći način: Dr. sc.; Doc. dr. sc.; Izv. prof. dr. sc.; Prof. dr. sc. Ako rad vode mentor i komentor potrebno je napisati oba imena, komentora ispod mentora (vidi Prilog 4). Izjava o autorstvu rada Student je obvezan potpisati Izjavu o autorstvu rada (vidi Prilog 5). Kratice (ako ih ima) Sažetak i ključne riječi Sljedeća stranica sadržava naslov (centrirano), Sažetak, ključne riječi na hrvatskom jeziku. Naslov rada na engleskom jeziku (centrirano), Sažetak, ključne riječi na drugom jeziku. Sadržaj Slijedi Sadržaj rada. Stranica na kojoj je Sadržaj ne numerira se, kao ni prethodne stranice. Sadržaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojčanom oznakom te s brojem stranice na kojoj započinju. Uvod Numeracija stranica započinje na stranici Uvoda. Razrada teme po poglavljima Zaključak Literatura (Izvori i literatura) Prilozi 7 4.5. Tehničke upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:  Margine trebaju biti sljedeće: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje.  Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).  Veličina slova u glavnome tekst je 12, prored 1,5.  Veličina slova u bilješkama je 10, prored 1.  Bilješke se označavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake stranice.  Stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu Uvoda.  Numeriraju se sve stranice (osim Sadržaja i stranica koje mu prethode), tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljeni u tekst.  Tekst je potrebno pisati s obostranim poravnanjem.  Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti napisani na sljedeći način:  Uvod i Zaključak: podebljano, bez numeracije  Glavni naslovi: 1. podebljano  Podnaslovi: 1.1. kurziv, ne podebljano  Podnaslovi unutar podnaslova: 1.1.1. obično  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "ruleId": "kbf-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+      "quote": "Tekst je potrebno pisati s obostranim poravnanjem.",
+      "valueShape": "boolean",
+      "contexts": [
+        " ni prethodne stranice. Sadržaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojčanom oznakom te s brojem stranice na kojoj započinju. Uvod Numeracija stranica započinje na stranici Uvoda. Razrada teme po poglavljima Zaključak Literatura (Izvori i literatura) Prilozi 7 4.5. Tehničke upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:  Margine trebaju biti sljedeće: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje.  Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).  Veličina slova u glavnome tekst je 12, prored 1,5.  Veličina slova u bilješkama je 10, prored 1.  Bilješke se označavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake stranice.  Stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu Uvoda.  Numeriraju se sve stranice (osim Sadržaja i stranica koje mu prethode), tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljeni u tekst.  Tekst je potrebno pisati s obostranim poravnanjem.  Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti napisani na sljedeći način:  Uvod i Zaključak: podebljano, bez numeracije  Glavni naslovi: 1. podebljano  Podnaslovi: 1.1. kurziv, ne podebljano  Podnaslovi unutar podnaslova: 1.1.1. obično  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen, a između odlomka nema praznog reda, ili tako da početak odlomka nije uvučen, a između odlomaka je razmak (6 pt). 2. Upute za oblikovanje tablica i slika Tablice i slike (grafovi, sheme i sl.) trebaju biti označene dvobrojčano i imati naslov. Prva brojka označava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju (npr. prva tablica u trećem poglavlju označava se „Tablica 3.1.;). Tablice i slike potrebno je označiti po kategorijama, što znači da se slike označavaju posebno a tablice posebno. Tablice i slike nalaze se u onom dijelu teksta u "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (biljeske na dnu stranice)",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta, 3. Upute za navoenje literature",
+      "quote": "Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra",
+      "valueShape": "string",
+      "contexts": [
+        "čno  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen, a između odlomka nema praznog reda, ili tako da početak odlomka nije uvučen, a između odlomaka je razmak (6 pt). 2. Upute za oblikovanje tablica i slika Tablice i slike (grafovi, sheme i sl.) trebaju biti označene dvobrojčano i imati naslov. Prva brojka označava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju (npr. prva tablica u trećem poglavlju označava se „Tablica 3.1.;). Tablice i slike potrebno je označiti po kategorijama, što znači da se slike označavaju posebno a tablice posebno. Tablice i slike nalaze se u onom dijelu teksta u koji i sadržajno pripadaju te se u te se u tekstu potrebno pozvati na njih na način da se navede njihov broj, (npr. Tablica 3.1.). Ako je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti točan izvor (npr. Izvor:…). 3. Upute za navođenje literature Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju literature prema uputama znanstvenoga časopisa Bogoslovska smotra (http://hrcak. srce.hr/bogoslovska-smotra). U završnim/diplomskim radovima iz područja povijesti potrebno je dosljedno se pridržavati uputa znanstvenog časopisa Croatica christiana periodica (http://hrcak. srce.hr/ccp). U nastavku se donose upute za reference Bogoslovske smotre. 8 1. Pri prvome navođenju nekoga djela, bilješka, bez obzira je li objavljena na hrvatskom ili nekom od stranih jezika, treba ovako izgledati: Knjige i zbornici radova: Osoba kao autor:  Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.  Theodor SCHNITZLER, O značenju sakramenata, Zagreb, 1998. Više osoba kao autori:  Angelo SCOLA – Gilfredo MARENGO – Javier P. LÓPEZ, Čovjek kao osoba. Teološka antropologija, Zagreb, 2003. Osoba kao autor djela koje je uredila druga osoba:  Vjekoslav BAJSIĆ, Granična pitanja religije i znanosti, Stjepan Kušar (ur.), Zagreb, Poglavlja u knjizi:  Marina MILADINOV, Uvod, u: Anselmo CANTERBURYJSKI, Quod vere sit Deus, I, Zagreb, 1997., 25. Urednik kao autor:  Nediljko A. ANČIĆ (ur.), Na granicama Riječi, Zbornik u čast dr. Drage Šimundže, Split, 2005. Urednici kao autori:  Marin ŠKARICA – Ante MATELJAN (ur.), U križu je spas, Zbornik u čast mons. Ante Jurića, Split, 199"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+      "quote": "Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "išu se na sljedeći način: Dr. sc.; Doc. dr. sc.; Izv. prof. dr. sc.; Prof. dr. sc. Ako rad vode mentor i komentor potrebno je napisati oba imena, komentora ispod mentora (vidi Prilog 4). Izjava o autorstvu rada Student je obvezan potpisati Izjavu o autorstvu rada (vidi Prilog 5). Kratice (ako ih ima) Sažetak i ključne riječi Sljedeća stranica sadržava naslov (centrirano), Sažetak, ključne riječi na hrvatskom jeziku. Naslov rada na engleskom jeziku (centrirano), Sažetak, ključne riječi na drugom jeziku. Sadržaj Slijedi Sadržaj rada. Stranica na kojoj je Sadržaj ne numerira se, kao ni prethodne stranice. Sadržaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojčanom oznakom te s brojem stranice na kojoj započinju. Uvod Numeracija stranica započinje na stranici Uvoda. Razrada teme po poglavljima Zaključak Literatura (Izvori i literatura) Prilozi 7 4.5. Tehničke upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:  Margine trebaju biti sljedeće: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje.  Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).  Veličina slova u glavnome tekst je 12, prored 1,5.  Veličina slova u bilješkama je 10, prored 1.  Bilješke se označavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake stranice.  Stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu Uvoda.  Numeriraju se sve stranice (osim Sadržaja i stranica koje mu prethode), tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljeni u tekst.  Tekst je potrebno pisati s obostranim poravnanjem.  Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti napisani na sljedeći način:  Uvod i Zaključak: podebljano, bez numeracije  Glavni naslovi: 1. podebljano  Podnaslovi: 1.1. kurziv, ne podebljano  Podnaslovi unutar podnaslova: 1.1.1. obično  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "ruleId": "kbf-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+      "quote": "Tekst je potrebno pisati s obostranim poravnanjem.",
+      "valueShape": "boolean",
+      "contexts": [
+        " ni prethodne stranice. Sadržaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojčanom oznakom te s brojem stranice na kojoj započinju. Uvod Numeracija stranica započinje na stranici Uvoda. Razrada teme po poglavljima Zaključak Literatura (Izvori i literatura) Prilozi 7 4.5. Tehničke upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:  Margine trebaju biti sljedeće: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje.  Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).  Veličina slova u glavnome tekst je 12, prored 1,5.  Veličina slova u bilješkama je 10, prored 1.  Bilješke se označavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake stranice.  Stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu Uvoda.  Numeriraju se sve stranice (osim Sadržaja i stranica koje mu prethode), tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljeni u tekst.  Tekst je potrebno pisati s obostranim poravnanjem.  Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti napisani na sljedeći način:  Uvod i Zaključak: podebljano, bez numeracije  Glavni naslovi: 1. podebljano  Podnaslovi: 1.1. kurziv, ne podebljano  Podnaslovi unutar podnaslova: 1.1.1. obično  Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).  Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.  Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: ili tako da je početak odlomka uvučen, a između odlomka nema praznog reda, ili tako da početak odlomka nije uvučen, a između odlomaka je razmak (6 pt). 2. Upute za oblikovanje tablica i slika Tablice i slike (grafovi, sheme i sl.) trebaju biti označene dvobrojčano i imati naslov. Prva brojka označava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju (npr. prva tablica u trećem poglavlju označava se „Tablica 3.1.;). Tablice i slike potrebno je označiti po kategorijama, što znači da se slike označavaju posebno a tablice posebno. Tablice i slike nalaze se u onom dijelu teksta u "
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

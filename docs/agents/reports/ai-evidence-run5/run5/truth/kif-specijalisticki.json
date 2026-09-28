@@ -1,0 +1,22 @@
+{
+  "kif-specijalisticki--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "kif-specijalisticki--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "kif-specijalisticki--reference-count": {
+    "value": 20,
+    "modality": "directive",
+    "scope": "bibliography"
+  }
+}

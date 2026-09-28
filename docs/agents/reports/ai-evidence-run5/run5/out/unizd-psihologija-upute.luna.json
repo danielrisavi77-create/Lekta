@@ -1,0 +1,33 @@
+{
+    "sourceId":  "unizd-psihologija-upute",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "unizd-psihologija-zavrsni",
+                      "ruleId":  "unizd-psihologija-zavrsni--citation-style",
+                      "value":  "apa",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
+                      "note":  "Izvor izričito navodi APA standarde, koristi direktivno „treba” te uređuje tekst rada u cjelini."
+                  },
+                  {
+                      "profileId":  "unizd-psihologija-zavrsni",
+                      "ruleId":  "unizd-psihologija-zavrsni--page-count",
+                      "value":  {
+                                    "max":  30,
+                                    "min":  20
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "   Završni rad treba imati najmanje 20 i najviše 30 stranica.",
+                      "note":  "Odlomak određuje raspon od 20 do 30 stranica uz direktivno „treba”, a opseg stranica vrijedi za cijeli rad."
+                  }
+              ]
+}

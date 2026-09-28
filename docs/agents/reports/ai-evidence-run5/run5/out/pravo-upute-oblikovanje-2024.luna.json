@@ -1,0 +1,336 @@
+{
+    "sourceId":  "pravo-upute-oblikovanje-2024",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "pravo-doktorski-pravne-znanosti",
+                      "ruleId":  "pravo-doktorski-pravne-znanosti--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-doktorski-pravne-znanosti",
+                      "ruleId":  "pravo-doktorski-pravne-znanosti--footnote-font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "footnote",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "BiljeÅ¡ke (fusnote)\r\n   -   font: Times New Roman",
+                      "note":  "Natuknica izričito navodi font Times New Roman za fusnote, pa je modalitet direktiva i opseg fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-doktorski-pravne-znanosti",
+                      "ruleId":  "pravo-doktorski-pravne-znanosti--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-doktorski-pravne-znanosti",
+                      "ruleId":  "pravo-doktorski-pravne-znanosti--required-sections",
+                      "value":  [
+                                    {
+                                        "label":  "Uvodni dio",
+                                        "key":  "introduction",
+                                        "terms":  [
+                                                      "uvodni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Središnji dio",
+                                        "key":  "body",
+                                        "terms":  [
+                                                      "središnji dio",
+                                                      "poglavlja",
+                                                      "potpoglavlja"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Zaključni dio",
+                                        "key":  "conclusion",
+                                        "terms":  [
+                                                      "zaključni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Popis izvora i literature",
+                                        "key":  "bibliography",
+                                        "terms":  [
+                                                      "popis korištenih izvora i literature",
+                                                      "bibliografija"
+                                                  ]
+                                    }
+                                ],
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad mora imati uvodni dio, srediÅ¡nji dio (s viÅ¡e poglavlja i/ili potpoglavlja) te zakljuÄni dio.\r\nNa kraju rada treba biti popis koriÅ¡tenih izvora i literature (bibliografija).",
+                      "note":  "Izvor navodi uvodni, središnji i zaključni dio te popis izvora i literature kao dijelove rada."
+                  },
+                  {
+                      "profileId":  "pravo-integrirani-diplomski",
+                      "ruleId":  "pravo-integrirani-diplomski--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-integrirani-diplomski",
+                      "ruleId":  "pravo-integrirani-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-integrirani-diplomski",
+                      "ruleId":  "pravo-integrirani-diplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Nakon naslovne stranice treba biti stranica sa sadrÅ¾ajem.",
+                      "note":  "Rečenica traži stranicu sa sadržajem nakon naslovne stranice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-diplomski",
+                      "ruleId":  "pravo-javna-uprava-diplomski--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-diplomski",
+                      "ruleId":  "pravo-javna-uprava-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-diplomski",
+                      "ruleId":  "pravo-javna-uprava-diplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Nakon naslovne stranice treba biti stranica sa sadrÅ¾ajem.",
+                      "note":  "Rečenica traži stranicu sa sadržajem nakon naslovne stranice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-prijediplomski",
+                      "ruleId":  "pravo-javna-uprava-prijediplomski--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-prijediplomski",
+                      "ruleId":  "pravo-javna-uprava-prijediplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-javna-uprava-prijediplomski",
+                      "ruleId":  "pravo-javna-uprava-prijediplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Nakon naslovne stranice treba biti stranica sa sadrÅ¾ajem.",
+                      "note":  "Rečenica traži stranicu sa sadržajem nakon naslovne stranice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-opci-pravni-akademski-rad",
+                      "ruleId":  "pravo-opci-pravni-akademski-rad--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-opci-pravni-akademski-rad",
+                      "ruleId":  "pravo-opci-pravni-akademski-rad--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-opci-pravni-akademski-rad",
+                      "ruleId":  "pravo-opci-pravni-akademski-rad--required-sections",
+                      "value":  [
+                                    {
+                                        "label":  "Uvodni dio",
+                                        "key":  "introduction",
+                                        "terms":  [
+                                                      "uvodni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Središnji dio",
+                                        "key":  "body",
+                                        "terms":  [
+                                                      "središnji dio",
+                                                      "poglavlja",
+                                                      "potpoglavlja"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Zaključni dio",
+                                        "key":  "conclusion",
+                                        "terms":  [
+                                                      "zaključni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Popis izvora i literature",
+                                        "key":  "bibliography",
+                                        "terms":  [
+                                                      "popis korištenih izvora i literature",
+                                                      "bibliografija"
+                                                  ]
+                                    }
+                                ],
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad mora imati uvodni dio, srediÅ¡nji dio (s viÅ¡e poglavlja i/ili potpoglavlja) te zakljuÄni dio.\r\nNa kraju rada treba biti popis koriÅ¡tenih izvora i literature (bibliografija).",
+                      "note":  "Izvor navodi uvodni, središnji i zaključni dio te popis izvora i literature kao dijelove rada."
+                  },
+                  {
+                      "profileId":  "pravo-porezni-prijediplomski",
+                      "ruleId":  "pravo-porezni-prijediplomski--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-porezni-prijediplomski",
+                      "ruleId":  "pravo-porezni-prijediplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-porezni-prijediplomski",
+                      "ruleId":  "pravo-porezni-prijediplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Nakon naslovne stranice treba biti stranica sa sadrÅ¾ajem.",
+                      "note":  "Rečenica traži stranicu sa sadržajem nakon naslovne stranice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-specijalisticki-pravni-opci",
+                      "ruleId":  "pravo-specijalisticki-pravni-opci--citation-style",
+                      "value":  "pravo-fusnote",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Bibliografski podatci o koriÅ¡tenim izvorima navode se u biljeÅ¡kama (fusnotama) koje moraju\r\nbiti numerirane.",
+                      "note":  "Izvor izričito propisuje navođenje bibliografskih podataka u numeriranim fusnotama, što odgovara stilu pravo-fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-specijalisticki-pravni-opci",
+                      "ruleId":  "pravo-specijalisticki-pravni-opci--footnote-font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "footnote",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "BiljeÅ¡ke (fusnote)\r\n   -   font: Times New Roman",
+                      "note":  "Natuknica izričito navodi font Times New Roman za fusnote, pa je modalitet direktiva i opseg fusnote."
+                  },
+                  {
+                      "profileId":  "pravo-specijalisticki-pravni-opci",
+                      "ruleId":  "pravo-specijalisticki-pravni-opci--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti\r\nautomatski umetnut broj stranice.",
+                      "note":  "Rečenica traži numeriranje stranica rada, uz iznimku naslovnice, pa je vrijednost da i opseg cijeli rad."
+                  },
+                  {
+                      "profileId":  "pravo-specijalisticki-pravni-opci",
+                      "ruleId":  "pravo-specijalisticki-pravni-opci--required-sections",
+                      "value":  [
+                                    {
+                                        "label":  "Uvodni dio",
+                                        "key":  "introduction",
+                                        "terms":  [
+                                                      "uvodni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Središnji dio",
+                                        "key":  "body",
+                                        "terms":  [
+                                                      "središnji dio",
+                                                      "poglavlja",
+                                                      "potpoglavlja"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Zaključni dio",
+                                        "key":  "conclusion",
+                                        "terms":  [
+                                                      "zaključni dio"
+                                                  ]
+                                    },
+                                    {
+                                        "label":  "Popis izvora i literature",
+                                        "key":  "bibliography",
+                                        "terms":  [
+                                                      "popis korištenih izvora i literature",
+                                                      "bibliografija"
+                                                  ]
+                                    }
+                                ],
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad mora imati uvodni dio, srediÅ¡nji dio (s viÅ¡e poglavlja i/ili potpoglavlja) te zakljuÄni dio.\r\nNa kraju rada treba biti popis koriÅ¡tenih izvora i literature (bibliografija).",
+                      "note":  "Izvor navodi uvodni, središnji i zaključni dio te popis izvora i literature kao dijelove rada."
+                  }
+              ]
+}

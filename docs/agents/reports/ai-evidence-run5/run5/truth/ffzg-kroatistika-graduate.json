@@ -1,0 +1,7 @@
+{
+  "ffzg-kroatistika-graduate--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

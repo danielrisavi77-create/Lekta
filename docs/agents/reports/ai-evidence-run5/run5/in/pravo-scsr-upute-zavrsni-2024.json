@@ -1,0 +1,37 @@
+{
+  "source": {
+    "id": "pravo-scsr-upute-zavrsni-2024",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2025/01/Upute-za-izradu-zavrsnog-rada-2024-25.pdf",
+    "fetchedAt": "2026-07-16",
+    "snapshotHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pravo-scsr-upute-zavrsni-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "quote": "prored treba biti: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "umeriraju se sve stranice, tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljene u tekst. 6 Treći list Naslov rada na hrvatskom jeziku (centrirano) Sažetak: na hrvatskom jeziku do 200 riječi (prored 1, Italic) Ključne riječi: 3-5 na hrvatskom jeziku Naslov rada na engleskom jeziku (centrirano) Sažetak (Abstract): na engleskom jeziku (prored 1, Italic) Ključne riječi (Key words): 3-5 na engleskom jeziku Četvrti list Izjava o izvornosti Ja, ____________________ (ime i prezime studenta/ice) pod punom moralnom, materijalnom i kaznenom odgovornošću, izjavljujem da sam isključivi autor/ica završnog rada te da u radu nisu na nedozvoljeni način (bez pravilnog citiranja) korišteni dijelovi tuđih radova te da se prilikom izrade rada nisam koristio/-la drugim izvorima do onih navedenih u radu. Ime i prezime: Datum: 7 Upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku: ■ margine trebaju biti slijedeće: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje; ■ oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman); ■ prored treba biti: 1,5; ■ stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda; ■ tekst je potrebno pisati s obostranim poravnanjem; ■ glavni tekst treba biti podijeljen u poglavlja, potpoglavlja,…, pri čemu se glavni naslovi trebaju biti označeni masnim slovima (eng. bold), a podnaslovi kosim slovima (eng. italic) s brojčanim označavanjem arapskim brojkama, pri čemu je prije naslova, a iza zadnjeg broja potrebno staviti točku, npr. 1. …1.2. …1.2.1… (najviše 5 u nizu); ■ tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: početak odlomka je uvučen, a između odlomaka nema praznog reda ili početak odlomka nije uvučen, a između odlomaka je jedan red razmaka); ■ sve dijelove teksta koji se žele istaknuti treba označiti masnim slovima (eng. bold); ■ u hrvatskom tekstu se ne bi smjele koristiti engleske ili neke druge strane riječi - izuzetak su slučajevi kada za navedeni pojam nema hrvatske riječi, pa se tada može napisati prepoznatljiv strani naziv kosim slovima (eng. italic); ■ decimalno mjesto odvaja se isključivo zarezom (npr. 567,89), a tisućice se uvijek odvajaju jednim razmakom (npr. 1 989 ili 12 345 567"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "quote": "prored treba biti: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "umeriraju se sve stranice, tj. kako stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama, ukoliko već nisu uklopljene u tekst. 6 Treći list Naslov rada na hrvatskom jeziku (centrirano) Sažetak: na hrvatskom jeziku do 200 riječi (prored 1, Italic) Ključne riječi: 3-5 na hrvatskom jeziku Naslov rada na engleskom jeziku (centrirano) Sažetak (Abstract): na engleskom jeziku (prored 1, Italic) Ključne riječi (Key words): 3-5 na engleskom jeziku Četvrti list Izjava o izvornosti Ja, ____________________ (ime i prezime studenta/ice) pod punom moralnom, materijalnom i kaznenom odgovornošću, izjavljujem da sam isključivi autor/ica završnog rada te da u radu nisu na nedozvoljeni način (bez pravilnog citiranja) korišteni dijelovi tuđih radova te da se prilikom izrade rada nisam koristio/-la drugim izvorima do onih navedenih u radu. Ime i prezime: Datum: 7 Upute za oblikovanje teksta 1. Osnovne upute Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku: ■ margine trebaju biti slijedeće: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje; ■ oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman); ■ prored treba biti: 1,5; ■ stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda; ■ tekst je potrebno pisati s obostranim poravnanjem; ■ glavni tekst treba biti podijeljen u poglavlja, potpoglavlja,…, pri čemu se glavni naslovi trebaju biti označeni masnim slovima (eng. bold), a podnaslovi kosim slovima (eng. italic) s brojčanim označavanjem arapskim brojkama, pri čemu je prije naslova, a iza zadnjeg broja potrebno staviti točku, npr. 1. …1.2. …1.2.1… (najviše 5 u nizu); ■ tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina: početak odlomka je uvučen, a između odlomaka nema praznog reda ili početak odlomka nije uvučen, a između odlomaka je jedan red razmaka); ■ sve dijelove teksta koji se žele istaknuti treba označiti masnim slovima (eng. bold); ■ u hrvatskom tekstu se ne bi smjele koristiti engleske ili neke druge strane riječi - izuzetak su slučajevi kada za navedeni pojam nema hrvatske riječi, pa se tada može napisati prepoznatljiv strani naziv kosim slovima (eng. italic); ■ decimalno mjesto odvaja se isključivo zarezom (npr. 567,89), a tisućice se uvijek odvajaju jednim razmakom (npr. 1 989 ili 12 345 567"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

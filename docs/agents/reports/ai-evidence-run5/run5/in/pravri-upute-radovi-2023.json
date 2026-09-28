@@ -1,0 +1,87 @@
+{
+  "source": {
+    "id": "pravri-upute-radovi-2023",
+    "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "1943a0cbb283419c152c8d42da42080384c73297d2f69ea643ce1251d74b1e08",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pravri-upute-radovi-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "oje se piše broj zaključnog poglavlja. Prilozi su dijelovi rada koji se prilažu osnovnom tekstu rada. Mogu biti različiti dokumenti i detaljna objašnjenja, odnosno materijali koji su ili manje važni za rad ili previše detaljni, pa ih stoga nije prikladno iznositi u samom tekstu rada jer ga nepotrebno opterećuje. U priloge se obično stavljaju instrumenti istraživanja korišteni u rad, tablice s detaljnim statističkim podatcima, službeni dokumenti ili njihovi dijelovi (pravilnici, zakonski akti, obrasci) i sl. 4 Tkalac Verčič, A., Sinčić, D., Pološki Vokić, N., op. cit., str. 200-208. 5 Smještaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju se arapskim brojevima od 1 do n. Svaki prilog započinje na novoj stranici. Na stranici na kojoj započinje svaki od priloga velikim se podebljanim slovima lijevo gore piše riječ PRILOG i njegov broj (npr. PRILOG 1.). U tekstu je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi (npr. vidi Prilog 1.). II. Tehničke upute za pisanja rada Tehničko je oblikovanje rada važno kako bi oni bili pregledniji, sustavniji i razumljiviji. 6 2.1. Normativ stranice Kartica teksta Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada. Stranica teksta podrazumijeva, tzv. karticu teksta. Kartica teksta su stranice na kojima broj redaka ne prelazi 32 retka po stranici, odnosno stranice od 1800 do 2000 znakova. Karticu teksta stoga ne treba poistovjećivati sa stranicom teksta. 5 2.2. Brojčano označavanje elemenata rada U znanstvenim i stručnim radovima redni se brojevi dodjeljuju stranicama rada, poglavljima i potpoglavljima, popisu korištenih izvora, slikama i tablicama te prilozima. 6 Brojčano označavanje stranica rada: predgovor i stranice sadržaja označavaju se rimskim, a tekst arapskim brojevima. Najčešće se brojevi stranica pišu dolje desno. Brojčano označavanje dijelova teksta: Decimalni sustav brojeva najpregledniji je način označavanja dijelova rada. Poglavlja se označavaju brojevima od 1 do n, a potpoglavlja se označavaju s dva broja od kojih se prvi podudara s brojem poglavlja kojem potpoglavlje pripada, a drugi označava broj potpoglavlja u poglavlju. 5 Loc. cit., str. 182. 6 Loc. cit. 7 Brojčano označavanje dijelova slika/tablica: Slikama/tablicama dodjeljuju se redni broje"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "valueShape": "number",
+      "contexts": [
+        "oje se piše broj zaključnog poglavlja. Prilozi su dijelovi rada koji se prilažu osnovnom tekstu rada. Mogu biti različiti dokumenti i detaljna objašnjenja, odnosno materijali koji su ili manje važni za rad ili previše detaljni, pa ih stoga nije prikladno iznositi u samom tekstu rada jer ga nepotrebno opterećuje. U priloge se obično stavljaju instrumenti istraživanja korišteni u rad, tablice s detaljnim statističkim podatcima, službeni dokumenti ili njihovi dijelovi (pravilnici, zakonski akti, obrasci) i sl. 4 Tkalac Verčič, A., Sinčić, D., Pološki Vokić, N., op. cit., str. 200-208. 5 Smještaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju se arapskim brojevima od 1 do n. Svaki prilog započinje na novoj stranici. Na stranici na kojoj započinje svaki od priloga velikim se podebljanim slovima lijevo gore piše riječ PRILOG i njegov broj (npr. PRILOG 1.). U tekstu je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi (npr. vidi Prilog 1.). II. Tehničke upute za pisanja rada Tehničko je oblikovanje rada važno kako bi oni bili pregledniji, sustavniji i razumljiviji. 6 2.1. Normativ stranice Kartica teksta Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada. Stranica teksta podrazumijeva, tzv. karticu teksta. Kartica teksta su stranice na kojima broj redaka ne prelazi 32 retka po stranici, odnosno stranice od 1800 do 2000 znakova. Karticu teksta stoga ne treba poistovjećivati sa stranicom teksta. 5 2.2. Brojčano označavanje elemenata rada U znanstvenim i stručnim radovima redni se brojevi dodjeljuju stranicama rada, poglavljima i potpoglavljima, popisu korištenih izvora, slikama i tablicama te prilozima. 6 Brojčano označavanje stranica rada: predgovor i stranice sadržaja označavaju se rimskim, a tekst arapskim brojevima. Najčešće se brojevi stranica pišu dolje desno. Brojčano označavanje dijelova teksta: Decimalni sustav brojeva najpregledniji je način označavanja dijelova rada. Poglavlja se označavaju brojevima od 1 do n, a potpoglavlja se označavaju s dva broja od kojih se prvi podudara s brojem poglavlja kojem potpoglavlje pripada, a drugi označava broj potpoglavlja u poglavlju. 5 Loc. cit., str. 182. 6 Loc. cit. 7 Brojčano označavanje dijelova slika/tablica: Slikama/tablicama dodjeljuju se redni broje"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "valueShape": "number",
+      "contexts": [
+        "oje se piše broj zaključnog poglavlja. Prilozi su dijelovi rada koji se prilažu osnovnom tekstu rada. Mogu biti različiti dokumenti i detaljna objašnjenja, odnosno materijali koji su ili manje važni za rad ili previše detaljni, pa ih stoga nije prikladno iznositi u samom tekstu rada jer ga nepotrebno opterećuje. U priloge se obično stavljaju instrumenti istraživanja korišteni u rad, tablice s detaljnim statističkim podatcima, službeni dokumenti ili njihovi dijelovi (pravilnici, zakonski akti, obrasci) i sl. 4 Tkalac Verčič, A., Sinčić, D., Pološki Vokić, N., op. cit., str. 200-208. 5 Smještaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju se arapskim brojevima od 1 do n. Svaki prilog započinje na novoj stranici. Na stranici na kojoj započinje svaki od priloga velikim se podebljanim slovima lijevo gore piše riječ PRILOG i njegov broj (npr. PRILOG 1.). U tekstu je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi (npr. vidi Prilog 1.). II. Tehničke upute za pisanja rada Tehničko je oblikovanje rada važno kako bi oni bili pregledniji, sustavniji i razumljiviji. 6 2.1. Normativ stranice Kartica teksta Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada. Stranica teksta podrazumijeva, tzv. karticu teksta. Kartica teksta su stranice na kojima broj redaka ne prelazi 32 retka po stranici, odnosno stranice od 1800 do 2000 znakova. Karticu teksta stoga ne treba poistovjećivati sa stranicom teksta. 5 2.2. Brojčano označavanje elemenata rada U znanstvenim i stručnim radovima redni se brojevi dodjeljuju stranicama rada, poglavljima i potpoglavljima, popisu korištenih izvora, slikama i tablicama te prilozima. 6 Brojčano označavanje stranica rada: predgovor i stranice sadržaja označavaju se rimskim, a tekst arapskim brojevima. Najčešće se brojevi stranica pišu dolje desno. Brojčano označavanje dijelova teksta: Decimalni sustav brojeva najpregledniji je način označavanja dijelova rada. Poglavlja se označavaju brojevima od 1 do n, a potpoglavlja se označavaju s dva broja od kojih se prvi podudara s brojem poglavlja kojem potpoglavlje pripada, a drugi označava broj potpoglavlja u poglavlju. 5 Loc. cit., str. 182. 6 Loc. cit. 7 Brojčano označavanje dijelova slika/tablica: Slikama/tablicama dodjeljuju se redni broje"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "oje se piše broj zaključnog poglavlja. Prilozi su dijelovi rada koji se prilažu osnovnom tekstu rada. Mogu biti različiti dokumenti i detaljna objašnjenja, odnosno materijali koji su ili manje važni za rad ili previše detaljni, pa ih stoga nije prikladno iznositi u samom tekstu rada jer ga nepotrebno opterećuje. U priloge se obično stavljaju instrumenti istraživanja korišteni u rad, tablice s detaljnim statističkim podatcima, službeni dokumenti ili njihovi dijelovi (pravilnici, zakonski akti, obrasci) i sl. 4 Tkalac Verčič, A., Sinčić, D., Pološki Vokić, N., op. cit., str. 200-208. 5 Smještaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju se arapskim brojevima od 1 do n. Svaki prilog započinje na novoj stranici. Na stranici na kojoj započinje svaki od priloga velikim se podebljanim slovima lijevo gore piše riječ PRILOG i njegov broj (npr. PRILOG 1.). U tekstu je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi (npr. vidi Prilog 1.). II. Tehničke upute za pisanja rada Tehničko je oblikovanje rada važno kako bi oni bili pregledniji, sustavniji i razumljiviji. 6 2.1. Normativ stranice Kartica teksta Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada. Stranica teksta podrazumijeva, tzv. karticu teksta. Kartica teksta su stranice na kojima broj redaka ne prelazi 32 retka po stranici, odnosno stranice od 1800 do 2000 znakova. Karticu teksta stoga ne treba poistovjećivati sa stranicom teksta. 5 2.2. Brojčano označavanje elemenata rada U znanstvenim i stručnim radovima redni se brojevi dodjeljuju stranicama rada, poglavljima i potpoglavljima, popisu korištenih izvora, slikama i tablicama te prilozima. 6 Brojčano označavanje stranica rada: predgovor i stranice sadržaja označavaju se rimskim, a tekst arapskim brojevima. Najčešće se brojevi stranica pišu dolje desno. Brojčano označavanje dijelova teksta: Decimalni sustav brojeva najpregledniji je način označavanja dijelova rada. Poglavlja se označavaju brojevima od 1 do n, a potpoglavlja se označavaju s dva broja od kojih se prvi podudara s brojem poglavlja kojem potpoglavlje pripada, a drugi označava broj potpoglavlja u poglavlju. 5 Loc. cit., str. 182. 6 Loc. cit. 7 Brojčano označavanje dijelova slika/tablica: Slikama/tablicama dodjeljuju se redni broje"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "valueShape": "string",
+      "contexts": [
+        "oje se piše broj zaključnog poglavlja. Prilozi su dijelovi rada koji se prilažu osnovnom tekstu rada. Mogu biti različiti dokumenti i detaljna objašnjenja, odnosno materijali koji su ili manje važni za rad ili previše detaljni, pa ih stoga nije prikladno iznositi u samom tekstu rada jer ga nepotrebno opterećuje. U priloge se obično stavljaju instrumenti istraživanja korišteni u rad, tablice s detaljnim statističkim podatcima, službeni dokumenti ili njihovi dijelovi (pravilnici, zakonski akti, obrasci) i sl. 4 Tkalac Verčič, A., Sinčić, D., Pološki Vokić, N., op. cit., str. 200-208. 5 Smještaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju se arapskim brojevima od 1 do n. Svaki prilog započinje na novoj stranici. Na stranici na kojoj započinje svaki od priloga velikim se podebljanim slovima lijevo gore piše riječ PRILOG i njegov broj (npr. PRILOG 1.). U tekstu je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi (npr. vidi Prilog 1.). II. Tehničke upute za pisanja rada Tehničko je oblikovanje rada važno kako bi oni bili pregledniji, sustavniji i razumljiviji. 6 2.1. Normativ stranice Kartica teksta Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada. Stranica teksta podrazumijeva, tzv. karticu teksta. Kartica teksta su stranice na kojima broj redaka ne prelazi 32 retka po stranici, odnosno stranice od 1800 do 2000 znakova. Karticu teksta stoga ne treba poistovjećivati sa stranicom teksta. 5 2.2. Brojčano označavanje elemenata rada U znanstvenim i stručnim radovima redni se brojevi dodjeljuju stranicama rada, poglavljima i potpoglavljima, popisu korištenih izvora, slikama i tablicama te prilozima. 6 Brojčano označavanje stranica rada: predgovor i stranice sadržaja označavaju se rimskim, a tekst arapskim brojevima. Najčešće se brojevi stranica pišu dolje desno. Brojčano označavanje dijelova teksta: Decimalni sustav brojeva najpregledniji je način označavanja dijelova rada. Poglavlja se označavaju brojevima od 1 do n, a potpoglavlja se označavaju s dva broja od kojih se prvi podudara s brojem poglavlja kojem potpoglavlje pripada, a drugi označava broj potpoglavlja u poglavlju. 5 Loc. cit., str. 182. 6 Loc. cit. 7 Brojčano označavanje dijelova slika/tablica: Slikama/tablicama dodjeljuju se redni broje"
+      ],
+      "priorStatus": "needs-ai-evidence",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

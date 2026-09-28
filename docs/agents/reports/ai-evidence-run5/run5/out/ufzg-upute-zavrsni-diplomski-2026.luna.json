@@ -1,0 +1,139 @@
+﻿{
+    "sourceId":  "ufzg-upute-zavrsni-diplomski-2026",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "    • Tekst: obostrano poravnano",
+                      "note":  "Izvor navodi obostrano poravnanje teksta kao izravnu uputu, što znači true za poravnanje i odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "    • Razmak među redovima: 1,5",
+                      "note":  "Izvor izričito propisuje prored 1,5 u tijelu rada izravnom navodnicom."
+                  },
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--margins",
+                      "value":  {
+                                    "bottom":  2.5,
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "    • Margine: 2,5 cm",
+                      "note":  "Jedinstvena uputa navodi margine 2,5 cm bez razlikovanja stranica, pa ista vrijednost vrijedi za sve rubove rada."
+                  },
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "    • Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1",
+                      "note":  "Izvor izravno navodi numeriranje na dnu po sredini i početak brojenja na uvodu, što znači da su brojevi stranica uključeni."
+                  },
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--required-sections",
+                      "value":  [
+                                    {
+                                        "key":  "omotna-stranica",
+                                        "label":  "omotna stranica (prilog 1.)",
+                                        "terms":  [
+                                                      "omotna stranica"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "naslovna-stranica",
+                                        "label":  "naslovna stranica (prilog 2.)",
+                                        "terms":  [
+                                                      "naslovna stranica"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "sazetak-s-kljucnim-rijecima",
+                                        "label":  "sažetak s ključnim riječima",
+                                        "terms":  [
+                                                      "sažetak",
+                                                      "ključne riječi"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "sadrzaj",
+                                        "label":  "sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica)",
+                                        "terms":  [
+                                                      "sadržaj",
+                                                      "poglavlja",
+                                                      "potpoglavlja"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "uvod",
+                                        "label":  "uvod",
+                                        "terms":  [
+                                                      "uvod"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "razrada-teme",
+                                        "label":  "razrada teme",
+                                        "terms":  [
+                                                      "razrada teme"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "zakljucak",
+                                        "label":  "zaključak",
+                                        "terms":  [
+                                                      "zaključak"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "literatura",
+                                        "label":  "literatura",
+                                        "terms":  [
+                                                      "literatura"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "prilozi",
+                                        "label":  "prilozi",
+                                        "terms":  [
+                                                      "prilozi"
+                                                  ]
+                                    },
+                                    {
+                                        "key":  "izjava-o-izvornosti-rada",
+                                        "label":  "izjava o izvornosti rada (prilog 3.)",
+                                        "terms":  [
+                                                      "izjava o izvornosti rada"
+                                                  ]
+                                    }
+                                ],
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stručni rad treba sadržavati sljedeće dijelove: - omotna stranica (prilog 1.) - naslovna stranica (prilog 2.) - sažetak s ključnim riječima - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica) - uvod - razrada teme - zaključak - literatura - prilozi - izjava o izvornosti rada (prilog 3.)",
+                      "note":  "Uputa izričito daje ove cjeline za stručni rad; “treba sadržavati” klasificira se kao directive, a pravilo o obveznim cjelinama odnosi se na rad u cjelini."
+                  }
+              ]
+}

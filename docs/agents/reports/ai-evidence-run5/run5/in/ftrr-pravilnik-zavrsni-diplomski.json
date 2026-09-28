@@ -1,0 +1,167 @@
+{
+  "source": {
+    "id": "ftrr-pravilnik-zavrsni-diplomski",
+    "url": "https://ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf",
+    "fetchedAt": "2026-07-27",
+    "snapshotHash": "022952e068eb6cfc45cfad4300a99c64f2f11200a8623e6656894d5300d46bdf",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ftrr-pravilnik-zavrsni-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": "ftrr-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": "ftrr-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": "ftrr-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": "number",
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": "ftrr-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": "ftrr-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "sourcePage": "Clanak 12., stavak 1",
+      "quote": "Završni/diplomski rad se piše na računalu na papiru formata A4.",
+      "valueShape": "boolean",
+      "contexts": [
+        " rad prijavljuje − naziv teme na hrvatskom i engleskom jeziku − predmet i cilj završnog/diplomskog rada − okvirni sadržaj završnog/diplomskog rada − prijedlog članova Povjerenstva. III. Odobravanje teme završnog/diplomskog rada Članak 10. (1) Odbor razmatra i odobrava predložene teme završnih/diplomskih radova i druge zamolbe studenata vezane uz završne/diplomske radove. (2) U razdoblju od 16. srpnja do 25. kolovoza te od 22. prosinca do 7. siječnja Odbor ne razmatra teme završnih/diplomskih radova. (3) Odbor može predloženu temu potvrditi, zatražiti njezine izmjene i dopune te može odbiti predloženu temu. (4) Odbor može potvrditi ili izmijeniti Povjerenstvo, te predloženog komentora. Članak 11. (1) Zapisnik Odbora dostavlja se mentorima i Uredu za studente i studije. Po zaprimanju obavijesti, mentor je dužan obavijestiti imenovano Povjerenstvo i studenta o ishodu prijave teme. (2) Student treba prijaviti obranu završnog/diplomskog rada najkasnije 3 mjeseca od datuma odobrenja teme završnog/diplomskog rada. (3) Student koji nije u propisanom roku prijavio obranu završnog/diplomskog rada treba pristupiti postupku prijave nove teme. IV. Izrada završnog/diplomskog rada Članak 12. (1) Završni/diplomski rad se piše na računalu na papiru formata A4. (2) Završni/diplomski rad sastoji se od: − vanjske stranice (korica) (Prilog 3) − naslovne stranice (Prilog 4.) − sažetka (od 100 do 300 riječi) i ključnih riječi (od 3 do 5 ključnih riječi) na hrvatskom i engleskom ili njemačkom jeziku − sadržaja − uvoda − razrade teme (obrazloženje teme, navođenje korištenih materijala i metoda, prikaz i analiza rezultata) za radove iz područja Društvenih znanosti − materijala i metoda istraživanja (za radove iz područja Biotehničkih znanosti) − rezultata (za radove iz područja Biotehničkih znanosti) − rasprave (za radove iz područja Biotehničkih znanosti) − zaključak − literature − popisa tablica, slika, shema, grafikona i formula (ukoliko su korištene u radu) te kratica i simbola − priloga (ako postoje, npr. anketni upitnik, zakoni, …) − zadnje stranice u radu, Izjava o autorstvu rada (Prilog 5). (3) Rad bez priloga bi trebao sadržavati, na prijediplomskim studijima najmanje 20 stranica i ne više od 40, a na diplomskim studijima najmanje 40 stranica i ne više od 50, od Uvoda do Zaključka. Članak 13. (1) Na vanjskoj stranici se ispisuje (Prilog 3): − SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU, FAKULTET TURIZMA I RURALNOG RAZVOJA U POŽEGI −"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": "ftrr-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": "ftrr-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": "ftrr-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": "number",
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": "ftrr-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Clanak 29., stavak 2",
+      "quote": "Za pisanje rada je potrebno:\r\n     − odabrati veličinu slova Times New Roman 12 pt i prored 1.5,\r\n     − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "m redom prema harvardskom načinu citiranja (Prilog 12). (2) U popisu korištene literature navode se samo izvori koji su korišteni u radu. Članak 27. (1) Ukoliko u radu postoji potreba za navođenjem većeg dijela teksta, zakona ili drugih materijala koji nisu djelo autora završnog/diplomskog rada, oni se izdvajaju kao prilog. (2) Prilog može biti pomoćni materijal koji je autor izradio za potrebe pisanja rada, no prema stavu mentora on ne predstavlja suštinski dio rada (ankete, analize, proračune i sl.). (3) Prilozi ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obvezno se u tekstu mora pozivati na njih. (4) Prilozi moraju imati izvor. (5) Numeriranje priloga započinje brojem 1 pa sve do n. Članak 28. (1) Zaključak je završni dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi završnog/diplomskog rada. (2) Dijelovi zaključka se formuliraju kronološki prema strukturi završnog/diplomskog rada. (3) U zaključku se ne navode tuđi citati. Članak 29. (1) Završni/diplomski rad treba biti pisan u trećem licu stilom strukovnog područja studija. (2) Za pisanje rada je potrebno: − odabrati veličinu slova Times New Roman 12 pt i prored 1.5, − koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm), − pisati u odlomcima s uvučenim prvim redom novog odlomka, − svako glavno poglavlje započeti na novoj stranici, − naslov poglavlja 1. razine piše se veličinom slova 14 (velikim štampanim slovima), a sve daljnje razine veličinom slova 12 pt (pisana slova). (3) Rad mora biti napisan na hrvatskom jeziku i latiničnom pismu, a prije predaje student je dužan pažljivo pročitati rad i ispraviti pravopisne i gramatičke pogreške. (4) Ako je rad napisan na stranom jeziku, student je dužan sažetak napisati na hrvatskom jeziku. Članak 30. (1) Mentor je dužan poslati/dostaviti u elektroničkom obliku radnu verziju rada Povjerenstvu. (2) Mentor i članovi Povjerenstva po primitku rada u elektroničkom obliku pregledavaju rad. Članovi Povjerenstva daju mentoru suglasnost za postupak prijave obrane ili upućuju upute za određene ispravke i dorade rada. (3) Student je dužan postupiti prema uputama i primjedbama mentora i ostalih članova Povjerenstva. (4) Nakon pozitivnog mišljenja o radu od strane mentora i ostalih članova Povjerenstva, student uvezuje rad u spiralni uvez i predaje ga u Ured za studente i studije prilikom prijave obrane. V. Prijava obrane završnog/diplomskog rada ili polaganja završno"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": "ftrr-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "sourcePage": "Clanak 12., stavak 1",
+      "quote": "Završni/diplomski rad se piše na računalu na papiru formata A4.",
+      "valueShape": "boolean",
+      "contexts": [
+        " rad prijavljuje − naziv teme na hrvatskom i engleskom jeziku − predmet i cilj završnog/diplomskog rada − okvirni sadržaj završnog/diplomskog rada − prijedlog članova Povjerenstva. III. Odobravanje teme završnog/diplomskog rada Članak 10. (1) Odbor razmatra i odobrava predložene teme završnih/diplomskih radova i druge zamolbe studenata vezane uz završne/diplomske radove. (2) U razdoblju od 16. srpnja do 25. kolovoza te od 22. prosinca do 7. siječnja Odbor ne razmatra teme završnih/diplomskih radova. (3) Odbor može predloženu temu potvrditi, zatražiti njezine izmjene i dopune te može odbiti predloženu temu. (4) Odbor može potvrditi ili izmijeniti Povjerenstvo, te predloženog komentora. Članak 11. (1) Zapisnik Odbora dostavlja se mentorima i Uredu za studente i studije. Po zaprimanju obavijesti, mentor je dužan obavijestiti imenovano Povjerenstvo i studenta o ishodu prijave teme. (2) Student treba prijaviti obranu završnog/diplomskog rada najkasnije 3 mjeseca od datuma odobrenja teme završnog/diplomskog rada. (3) Student koji nije u propisanom roku prijavio obranu završnog/diplomskog rada treba pristupiti postupku prijave nove teme. IV. Izrada završnog/diplomskog rada Članak 12. (1) Završni/diplomski rad se piše na računalu na papiru formata A4. (2) Završni/diplomski rad sastoji se od: − vanjske stranice (korica) (Prilog 3) − naslovne stranice (Prilog 4.) − sažetka (od 100 do 300 riječi) i ključnih riječi (od 3 do 5 ključnih riječi) na hrvatskom i engleskom ili njemačkom jeziku − sadržaja − uvoda − razrade teme (obrazloženje teme, navođenje korištenih materijala i metoda, prikaz i analiza rezultata) za radove iz područja Društvenih znanosti − materijala i metoda istraživanja (za radove iz područja Biotehničkih znanosti) − rezultata (za radove iz područja Biotehničkih znanosti) − rasprave (za radove iz područja Biotehničkih znanosti) − zaključak − literature − popisa tablica, slika, shema, grafikona i formula (ukoliko su korištene u radu) te kratica i simbola − priloga (ako postoje, npr. anketni upitnik, zakoni, …) − zadnje stranice u radu, Izjava o autorstvu rada (Prilog 5). (3) Rad bez priloga bi trebao sadržavati, na prijediplomskim studijima najmanje 20 stranica i ne više od 40, a na diplomskim studijima najmanje 40 stranica i ne više od 50, od Uvoda do Zaključka. Članak 13. (1) Na vanjskoj stranici se ispisuje (Prilog 3): − SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU, FAKULTET TURIZMA I RURALNOG RAZVOJA U POŽEGI −"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "efzg-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "efzg-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "efzg-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "efzg-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

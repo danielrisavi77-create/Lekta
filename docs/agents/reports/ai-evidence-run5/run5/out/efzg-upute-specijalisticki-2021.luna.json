@@ -1,0 +1,20 @@
+﻿{
+  "sourceId": "efzg-upute-specijalisticki-2021",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "unknown"
+  },
+  "rules": [
+    {
+      "profileId": "efzg-specijalisticki",
+      "ruleId": "efzg-specijalisticki--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Radovi se pišu na papiru formata A4 (210 mm x 297 mm), vrsta fonta Calibri ili Times New Roman, veličina fonta 12, margine 2,5 cm sa svih strana, poravnanje na obje strane i prored 1,5.",
+      "note": "Izvor izričito navodi format A4 u opisnom indikativu, pa je modalitet directive, a format papira vrijedi za cijeli rad."
+    }
+  ]
+}

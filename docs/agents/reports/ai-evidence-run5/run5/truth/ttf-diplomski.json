@@ -1,0 +1,39 @@
+{
+  "ttf-diplomski--font": {
+    "value": [
+      "Arial"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "ttf-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ttf-diplomski--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

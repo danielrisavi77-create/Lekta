@@ -1,0 +1,26 @@
+{
+  "accepted": [
+    "pravo-integrirani-diplomski--page-numbers",
+    "pravo-integrirani-diplomski--toc",
+    "pravo-javna-uprava-diplomski--page-numbers",
+    "pravo-javna-uprava-diplomski--toc",
+    "pravo-javna-uprava-prijediplomski--page-numbers",
+    "pravo-javna-uprava-prijediplomski--toc",
+    "pravo-porezni-prijediplomski--page-numbers",
+    "pravo-porezni-prijediplomski--toc"
+  ],
+  "refuted": [
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+      "reason": "Izvor sam navodi svoj opseg: 'ove upute se preporucuju koristiti za oblikovanje i uredenje teksta i navodenje izvora u diplomskim i zavrsnim radovima.' Doktorski rad (poslijediplomski doktorski studij) nije diplomski ni zavrsni rad, pa izvor ne pokriva ovaj profil; drugi model (sol) je za isti profil iz istog izvora vec ocijenio ostala pravila kao 'insufficient' iz istog razloga."
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+      "reason": "Izvor je uputa ogranicena na 'diplomske i zavrsne radove' pojedinih programa; 'opci pravni akademski rad' je sirok/rezervni profil koji nije nuzno ogranicen samo na te dvije vrste rada. Drugi model (sol) je za isti profil iz istog izvora ostala pravila (citation-style, required-sections) ocijenio kao 'insufficient' zbog neusklaĐenog opsega, pa je i ovo pravilo sumnjivo."
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+      "reason": "Izvor izricito ogranicava svoju primjenu na 'diplomske i zavrsne radove'; specijalisticki (poslijediplomski) studij nije obuhvacen tom formulacijom. Drugi model (sol) je za isti profil iz istog izvora ostala pravila vec ocijenio kao 'insufficient' zbog opsega, sto potvrduje da izvor ne pokriva ovaj profil."
+    }
+  ]
+}

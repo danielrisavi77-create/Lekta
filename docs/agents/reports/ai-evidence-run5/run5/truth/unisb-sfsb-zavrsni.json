@@ -1,0 +1,36 @@
+{
+  "unisb-sfsb-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "recommendation",
+    "scope": "body"
+  },
+  "unisb-sfsb-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "unisb-sfsb-zavrsni--line-spacing": {
+    "value": 1,
+    "modality": "recommendation",
+    "scope": "body"
+  },
+  "unisb-sfsb-zavrsni--margins": {
+    "value": {
+      "top": 2,
+      "right": 2,
+      "bottom": 2,
+      "left": 2.5
+    },
+    "modality": "recommendation",
+    "scope": "whole"
+  },
+  "unisb-sfsb-zavrsni--paper-size": {
+    "value": true,
+    "modality": null,
+    "scope": null
+  }
+}

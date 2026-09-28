@@ -1,0 +1,30 @@
+{
+    "sourceId":  "ftrr-pravilnik-zavrsni-diplomski",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ftrr-diplomski",
+                      "ruleId":  "ftrr-diplomski--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Završni/diplomski rad se piše na računalu na papiru formata A4.",
+                      "note":  "Izvor određuje A4 za cijeli rad u indikativu, ali zadani boolean valueShape nije spojiv s allowedValues A3/A4."
+                  },
+                  {
+                      "profileId":  "ftrr-zavrsni",
+                      "ruleId":  "ftrr-zavrsni--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Završni/diplomski rad se piše na računalu na papiru formata A4.",
+                      "note":  "Izvor određuje A4 za cijeli rad u indikativu, ali zadani boolean valueShape nije spojiv s allowedValues A3/A4."
+                  }
+              ]
+}

@@ -1,0 +1,37 @@
+{
+  "vuka-poslovni-opci-akademski-rad--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "vuka-poslovni-opci-akademski-rad--heading-rules": {
+    "value": {
+      "levels": {
+        "1": {
+          "size": 16,
+          "bold": true,
+          "uppercase": true
+        },
+        "2": {
+          "size": 14,
+          "bold": true,
+          "uppercase": false
+        },
+        "3": {
+          "size": 12,
+          "bold": true,
+          "uppercase": false
+        }
+      }
+    },
+    "modality": "obligation",
+    "scope": "heading"
+  },
+  "vuka-poslovni-opci-akademski-rad--line-spacing": {
+    "value": 1.5,
+    "modality": "obligation",
+    "scope": "body"
+  }
+}

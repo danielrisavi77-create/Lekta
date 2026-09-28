@@ -1,0 +1,67 @@
+{
+    "sourceId":  "sfzg-naputak-diplomski-2024",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "sfzg-diplomski",
+                      "ruleId":  "sfzg-diplomski--citation-style",
+                      "value":  "vancouver",
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Obvezna je primjena pravila citiranja prema International Committee of Medical Journal Editors â€“ ICMJE (ranije Vancouverski stil).",
+                      "note":  "ICMJE (ranije Vancouverski stil) mapira na vancouver, â€žObveznaâ€ daje obvezu, a stil citiranja obuhvaÄ‡a cijeli rad."
+                  },
+                  {
+                      "profileId":  "sfzg-diplomski",
+                      "ruleId":  "sfzg-diplomski--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tip pisma (Font):                         Times New Roman",
+                      "note":  "Izvor izriÄito navodi Times New Roman, natuknica je direktiva, a tip pisma odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "sfzg-diplomski",
+                      "ruleId":  "sfzg-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Poravnanje (Alignment):                   obostrano (Justified)",
+                      "note":  "Obostrano poravnanje znaÄi true, natuknica je direktiva, a poravnanje se odnosi na tijelo rada."
+                  },
+                  {
+                      "profileId":  "sfzg-diplomski",
+                      "ruleId":  "sfzg-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Prored (Line spacing):                    1,5 redak (1,5 lines)",
+                      "note":  "Navedeni prored iznosi 1,5, natuknica je direktiva, a prored se odnosi na tijelo rada."
+                  },
+                  {
+                      "profileId":  "sfzg-diplomski",
+                      "ruleId":  "sfzg-diplomski--margins",
+                      "value":  {
+                                    "bottom":  2.5,
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Lijevi rub (Margin – left):               2,5 cm\nDesni rub (Margin – right):               2,5 cm\nGornji rub (Margin – top):                2.5 cm (do teksta, zaglavlje unutar 2,5 cm)\nDonji rub (Margin – bottom):              2,5 cm",
+                      "note":  "Sve Äetiri margine navedene su kao 2,5 cm, natuknice su direktive, a margine se odnose na cijeli dokument."
+                  }
+              ]
+}

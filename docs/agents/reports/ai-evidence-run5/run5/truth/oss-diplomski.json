@@ -1,0 +1,31 @@
+{
+  "oss-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-diplomski--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-diplomski--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "oss-diplomski--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

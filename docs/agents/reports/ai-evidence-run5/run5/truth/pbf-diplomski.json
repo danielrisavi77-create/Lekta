@@ -1,0 +1,39 @@
+{
+  "pbf-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pbf-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pbf-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pbf-diplomski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pbf-diplomski--required-sections": {
+    "value": [
+      "naslovnica",
+      "temeljna dokumentacijska kartica (sazetak)",
+      "sadrzaj",
+      "uvod",
+      "teorijski dio",
+      "eksperimentalni dio",
+      "rezultati i rasprava",
+      "zakljucci",
+      "literatura"
+    ],
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

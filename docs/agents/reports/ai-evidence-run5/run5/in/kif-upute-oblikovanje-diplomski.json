@@ -1,0 +1,71 @@
+{
+  "source": {
+    "id": "kif-upute-oblikovanje-diplomski",
+    "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_diplomski_rad%5B1%5D.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\kif-upute-oblikovanje-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, struktura diplomskog rada",
+      "quote": "Nakon ove stranice, slijedi sadržaj diplomskog rada",
+      "valueShape": "boolean",
+      "contexts": [
+        "prezime – mala slova 18, podebljano, sredina NASLOV RADA – velika slova, 20, podebljano, sredina diplomski rad – mala slova, 16, sredina Mentor: Titula, ime i prezime – mala slova, 16, podebljano, desno poravnavanje Zagreb, mjesec, godina – mala slova, 16, sredina 2 Poleđina naslovne stranice treba izgledati ovako: Ovim potpisima se potvrđuje da je ovo završena verzija diplomskog rada koja je obranjena pred Povjerenstvom, s unesenim korekcijama koje je Povjerenstvo zahtijevalo na obrani te da je ova tiskana verzija istovjetna elektroničkoj verziji predanoj u Knjižnici. Mentor: upisati titulu, ime i prezime Student: upisati ime i prezime Sve mala slova, 12, desno poravnavanje 3 Nakon naslovne stranice, slijedi stranica na kojoj se nalaze naslovi, sažeci (250 – 300 riječi) i ključne riječi, na hrvatskom i engleskom jeziku. Ključne riječi ne smiju ponavljati riječi iz naslova. Stranica je oblikovana ovako: NASLOV RADA NA HRVATSKOM JEZIKU – velika slova, 12, sredina Sažetak (masno, mala slova, 12) tekst sažetka – mala slova, 12, poravnano obostrano Ključne riječi (masno, mala slova, 12): riječi – mala slova, 12, poravnano obostrano TITLE – velika slova, 12, sredina Abstract Key words: Nakon ove stranice, slijedi sadržaj diplomskog rada EKSPERIMENTALNI diplomski rad treba sadržavati sljedeća poglavlja: Sadržaj 1. Uvod (teorijska pozadina, dosadašnje spoznaje, problem istraživanja) 2. Ciljevi i hipoteze 3. Metode istraživanja (uzorak ispitanika, opis protokola, mjernih instrumenata i varijabli, metode obrade podataka) 4. Rezultati 5. Rasprava 6. Zaključak 7. Literatura (minimalno 20 referenci) 8. Prilozi 4 TEORIJSKI RAD diplomski rad treba sadržavati sljedeća poglavlja: Sadržaj 1. Uvod (teorijska pozadina, dosadašnje spoznaje, problem) 2. Razrada teme po poglavljima i potpoglavljima 3. Zaključak 4. Literatura (minimalno 20 referenci) 5. Prilozi Na sljedećoj stranici nakon sadržaja počinje tekst rada, UVODOM. Ovo je stranica koja je numerirana. Kako se stranice broje od naslovne stranice (1. stranice knjižnoga bloka, ne od korica), ali se NE označavaju, ne pišu se (naslovna str., sažeci, sadržaj), UVOD počinje najranije na 4. stranici. Vidi ovdje. KAKO NAVODITI IZVORE? Izvor je svaki oblik građe, bez obzira na medij, dakle, tiskani ili elektronički, kojim se služite u izradi diplomskog rada (tekst, grafički prikaz, fotografija, enciklopedija). Svi izvori nisu jednako pouzdani. U akademskoj zajednici, znanstveni rad"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "Times New Roman",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Prilog 1. UPUTE ZA OBLIKOVANJE DIPLOMSKOG RADA Općenito – oblikovanje  Jezik – standardni književni hrvatski jezik  Font – Times New Roman  Veličina fonta – 12  Margine – margina 2,5 cm sa svake strane  Prored – 1,5 redak  Razmak – prije i poslije – 0 pt  Poravnano obostrano  Tekst se otiskuje samo na jednu stranicu STRUKTURA DIPLOMSKOG RADA Oblikovanje naslovne stranice i korica Korice diplomskog rada trebaju biti identične kao i naslovna stranica koja treba izgledati ovako: 1 SVEUČILIŠTE U ZAGREBU KINEZIOLOŠKI FAKULTET – velika slova, 14 podebljano, lijevo poravnavanje (studij za stjecanje akademskog naziva: magistar kineziologije) – mala slova, 14, lijevo poravnavanje Ime i prezime – mala slova 18, podebljano, sredina NASLOV RADA – velika slova, 20, podebljano, sredina diplomski rad – mala slova, 16, sredina Mentor: Titula, ime i prezime – mala slova, 16, podebljano, desno poravnavanje Zagreb, mjesec, godina – mala slova, 16, sredina 2 Poleđina naslovne stranice treba izgledati ovako: Ovim potpisima se potvrđuje da je ovo završena verzija diplomskog rada koja je obranjena pred Povjerenstvom, s unesenim korekcijama koje je Povjerenstvo zahtijevalo na obrani te da je ova tiskana verzija istovjetna elektroničkoj verziji predanoj u Knjižnici. Mentor: upisati titulu, ime i prezime Student: upisati ime i prezime S",
+        " i sur., Ramirez, Soo i Ramirez, Soo i četiri autora (2006) 2006) Walsh (2006) Walsh, 2006) Walker, Allen, (Walker, Allen, Jedan rad s Walker i sur. (Walker i sur., Bradley, Ramirez Bradley, Ramirez i pet autora (2008) 2008) i Soo (2008) Soo, 2008) Jedan rad s Wasserstein i sur. Wasserstein i sur. (Wasserstein i (Wasserstein i šest ili više (2005) (2005) sur., 2005) sur., 2005) autora KAKO NAVODITI MATERIJALE KOJI NISU TEKSTUALNI (TABLICE I SLIKE) TABLICE (eng. tables) se sastoje od numeričkih vrijednosti ili tekstualnih podataka koji su složeni po nekom redu u redove i stupce. Takve prikaze označite arapskim brojevima, onim redoslijedom kojim se pojavljuju u tekstu. Nemojte koristiti sufikse uz brojeve, npr. Tablica 5a i Tablica 5b. U tekstu rada, kada se osvrćete na neku tablicu, izdvojite samo ono što želite naglasiti; nema potrebe objašnjavati svaku jedinicu u tablici. Također, svakako izbjegavajte pisati ''…u tablici na sljedećoj stranici'' ili ''u tablici ispod'', jasno navedite o kojoj je tablici riječ. Npr. Kao što je prikazano u Tablici 8, odgovori ispitanika upućuju da se tjelesna neaktivnost često povezuje s… 13 Tablicu imenujte jasnim, ali dovoljno sadržajnim naslovom, Times New Roman, 12 pt, 1,5 proredom, kurziv. Tekst u tablici je Ariel, 10, jednostruki prored, primjer: Table 1. Descriptive characteristics of the participants (mean±SD) Men (n=8) Women (n=11) Age (years) 22.0±1.9 23.2±1.2 Height (cm) 177.9±3.8 169.4±6.8 Body mass (kg) 78.9±10.6 65.5±9.5 VO2max (ml min-1) 2752±562 2447±576 VO2max (ml kg-1 min-1) 35.2±7.0* 37.5±7.4 VO2 @ VT (ml/min-1) 1310±276 1106±268 Legenda: Podaci su djelomično preuzeti i prilagođeni iz ''Effects of additional basketball and volleyball program on motor abilities of fifth grade elementary school students'', D. Milanović, 2013, Journal of Applied Psychology, 22(2), str. 356. *p≤05 vs baseline Tablice mogu imati legendu koje se nalaze ispod same tablice, Ariel, 9, jednostruki prored. Legende mogu biti opće i one sadrže objašnjenja koja se odnose na cijelu tablicu, npr. objašnjenje kratica, simbola i sl., a tu se navode i drugi izvori iz kojih su podaci u tablici preuzeti. Specijalne legende odnose se na određenu ćeliju, stupac ili redak, a označene su malim slovima u eksponentu (eng. superscript) Probability notes ukazuju na zvjezdice i ostale simbole te upućuju na objašnjenja vezana uz statistiku. SLIKE U diplomskom radu slike"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "1,5 redak",
+      "valueShape": "number",
+      "contexts": [
+        "Prilog 1. UPUTE ZA OBLIKOVANJE DIPLOMSKOG RADA Općenito – oblikovanje  Jezik – standardni književni hrvatski jezik  Font – Times New Roman  Veličina fonta – 12  Margine – margina 2,5 cm sa svake strane  Prored – 1,5 redak  Razmak – prije i poslije – 0 pt  Poravnano obostrano  Tekst se otiskuje samo na jednu stranicu STRUKTURA DIPLOMSKOG RADA Oblikovanje naslovne stranice i korica Korice diplomskog rada trebaju biti identične kao i naslovna stranica koja treba izgledati ovako: 1 SVEUČILIŠTE U ZAGREBU KINEZIOLOŠKI FAKULTET – velika slova, 14 podebljano, lijevo poravnavanje (studij za stjecanje akademskog naziva: magistar kineziologije) – mala slova, 14, lijevo poravnavanje Ime i prezime – mala slova 18, podebljano, sredina NASLOV RADA – velika slova, 20, podebljano, sredina diplomski rad – mala slova, 16, sredina Mentor: Titula, ime i prezime – mala slova, 16, podebljano, desno poravnavanje Zagreb, mjesec, godina – mala slova, 16, sredina 2 Poleđina naslovne stranice treba izgledati ovako: Ovim potpisima se potvrđuje da je ovo završena verzija diplomskog rada koja je obranjena pred Povjerenstvom, s unesenim korekcijama koje je Povjerenstvo zahtijevalo na obrani te da je ova tiskana verzija istovjetna elektroničkoj verziji predanoj u Knjižnici. Mentor: upisati titulu, ime i prezime Student: upisati ime i prezime Sve mala slova, 12, desno poravnavanje 3 Nakon naslovne stranice, slijedi stranica na k"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "margina 2,5 cm sa svake strane",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "Prilog 1. UPUTE ZA OBLIKOVANJE DIPLOMSKOG RADA Općenito – oblikovanje  Jezik – standardni književni hrvatski jezik  Font – Times New Roman  Veličina fonta – 12  Margine – margina 2,5 cm sa svake strane  Prored – 1,5 redak  Razmak – prije i poslije – 0 pt  Poravnano obostrano  Tekst se otiskuje samo na jednu stranicu STRUKTURA DIPLOMSKOG RADA Oblikovanje naslovne stranice i korica Korice diplomskog rada trebaju biti identične kao i naslovna stranica koja treba izgledati ovako: 1 SVEUČILIŠTE U ZAGREBU KINEZIOLOŠKI FAKULTET – velika slova, 14 podebljano, lijevo poravnavanje (studij za stjecanje akademskog naziva: magistar kineziologije) – mala slova, 14, lijevo poravnavanje Ime i prezime – mala slova 18, podebljano, sredina NASLOV RADA – velika slova, 20, podebljano, sredina diplomski rad – mala slova, 16, sredina Mentor: Titula, ime i prezime – mala slova, 16, podebljano, desno poravnavanje Zagreb, mjesec, godina – mala slova, 16, sredina 2 Poleđina naslovne stranice treba izgledati ovako: Ovim potpisima se potvrđuje da je ovo završena verzija diplomskog rada koja je obranjena pred Povjerenstvom, s unesenim korekcijama koje je Povjerenstvo zahtijevalo na obrani te da je ova tiskana verzija istovjetna elektroničkoj verziji predanoj u Knjižnici. Mentor: upisati titulu, ime i prezime Student: upisati ime i prezime Sve mala slova, 12, desno poravnavanje 3 Nakon naslovne stranice, "
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

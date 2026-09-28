@@ -1,0 +1,26 @@
+{
+  "sourceId": "vef-naputak-diplomski-2024",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "vef-diplomski",
+      "ruleId": "vef-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "(A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5.",
+      "note": "Izvor navodi prored 1,5 uz direktivni izraz 'treba'; prored se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "vef-diplomski",
+      "ruleId": "vef-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "(A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5.",
+      "note": "Izvor navodi standardnu velicinu A4 uz izraz 'treba'; format papira odnosi se na cijeli rad."
+    }
+  ]
+}

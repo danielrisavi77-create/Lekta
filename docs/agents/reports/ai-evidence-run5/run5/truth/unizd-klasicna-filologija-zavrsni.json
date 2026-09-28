@@ -1,0 +1,9 @@
+{
+  "unizd-klasicna-filologija-zavrsni--footnote-size": {
+    "value": [
+      10
+    ],
+    "modality": "directive",
+    "scope": "footnote"
+  }
+}

@@ -1,0 +1,284 @@
+﻿{
+    "sourceId":  "effectus-pravilnik-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--citation-style",
+                      "value":  null,
+                      "modality":  null,
+                      "scope":  null,
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+                      "note":  "Izvor propisuje brojčane fusnote, ali nijedna ponuđena stilska oznaka nije jednoznačno potkrijepljena."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Poravnanje s obje strane izričito je zadano za tekst rada, bez modalne riječi koja bi mijenjala direktivni indikativ."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--line-spacing",
+                      "value":  1.15,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Odlomak navodi prored 1,15 za tekst rada uz direktivni izraz treba."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--page-count",
+                      "value":  {
+                                    "min":  50,
+                                    "max":  80
+                                },
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+                      "note":  "Za diplomski rad propisan je raspon 50–80 stranica."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže korištenje Times New Roman kao službenog fonta."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže veličinu slova 12 pt."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor određuje margine od 2,5 cm sa svake strane."
+                  },
+                  {
+                      "profileId":  "effectus-diplomski",
+                      "ruleId":  "effectus-diplomski--paper-size",
+                      "value":  "A4",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor navodi format papira A4."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--citation-style",
+                      "value":  null,
+                      "modality":  null,
+                      "scope":  null,
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+                      "note":  "Izvor propisuje brojčane fusnote, ali nijedna ponuđena stilska oznaka nije jednoznačno potkrijepljena."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže korištenje Times New Roman kao službenog fonta."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--font-size",
+                      "value":  12,
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže veličinu slova 12 pt."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Poravnanje s obje strane izričito je zadano za tekst rada, bez modalne riječi koja bi mijenjala direktivni indikativ."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--line-spacing",
+                      "value":  1.15,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Odlomak navodi prored 1,15 za tekst rada uz direktivni izraz treba."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor određuje margine od 2,5 cm sa svake strane."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--page-count",
+                      "value":  {
+                                    "min":  10,
+                                    "max":  20
+                                },
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Opseg seminarskog rada mora iznositi 10-20 stranica.",
+                      "note":  "Za seminarski rad propisan je raspon 10–20 stranica."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--paper-size",
+                      "value":  "A4",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor navodi format papira A4."
+                  },
+                  {
+                      "profileId":  "effectus-seminarski",
+                      "ruleId":  "effectus-seminarski--reference-count",
+                      "value":  5,
+                      "modality":  "directive",
+                      "scope":  "bibliography",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige.",
+                      "note":  "Za seminarski rad izvor propisuje najmanje pet izvora; vrijednost bilježi taj minimum."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--citation-style",
+                      "value":  null,
+                      "modality":  null,
+                      "scope":  null,
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+                      "note":  "Izvor propisuje brojčane fusnote, ali nijedna ponuđena stilska oznaka nije jednoznačno potkrijepljena."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Poravnanje s obje strane izričito je zadano za tekst rada, bez modalne riječi koja bi mijenjala direktivni indikativ."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--line-spacing",
+                      "value":  1.15,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+                      "note":  "Odlomak navodi prored 1,15 za tekst rada uz direktivni izraz treba."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--page-count",
+                      "value":  {
+                                    "min":  35,
+                                    "max":  50
+                                },
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+                      "note":  "Za završni rad propisan je raspon 35–50 stranica."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--font",
+                      "value":  "Times New Roman",
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže korištenje Times New Roman kao službenog fonta."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--font-size",
+                      "value":  12,
+                      "modality":  "obligation",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+                      "note":  "Izvor izričito nalaže veličinu slova 12 pt."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor određuje margine od 2,5 cm sa svake strane."
+                  },
+                  {
+                      "profileId":  "effectus-zavrsni",
+                      "ruleId":  "effectus-zavrsni--paper-size",
+                      "value":  "A4",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+                      "note":  "Izvor navodi format papira A4."
+                  }
+              ]
+}

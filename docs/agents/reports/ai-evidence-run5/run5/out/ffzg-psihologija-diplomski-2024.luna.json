@@ -1,0 +1,35 @@
+{
+    "sourceId":  "ffzg-psihologija-diplomski-2024",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ffzg-psihologija-diplomski",
+                      "ruleId":  "ffzg-psihologija-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "prored: 1,5",
+                      "note":  "Prored je naveden kao 1,5 u popisu formatiranja teksta, pa je vrijednost 1.5, modalitet direktiva, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "ffzg-psihologija-diplomski",
+                      "ruleId":  "ffzg-psihologija-diplomski--margins",
+                      "value":  {
+                                    "bottom":  2.54,
+                                    "left":  2.54,
+                                    "right":  2.54,
+                                    "top":  2.54
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "margine: sve 2,54 cm (lijevo, desno, gore, dolje)",
+                      "note":  "Izvor propisuje sve cetiri margine kao 2,54 cm, pa je vrijednost 2.54 cm za svaku stranu, modalitet direktiva, a opseg cijeli rad."
+                  }
+              ]
+}

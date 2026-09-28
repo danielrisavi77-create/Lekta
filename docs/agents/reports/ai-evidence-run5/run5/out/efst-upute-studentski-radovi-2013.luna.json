@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "efst-upute-studentski-radovi-2013",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Izvor izričito navodi Times New Roman kao font za oblikovanje teksta; indikativ 'koristi se' daje direktivu, a font se odnosi na osnovni tekst rada."
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Izvor navodi veličinu 12 za osnovno oblikovanje teksta; indikativ 'koristi se' daje direktivu, a opseg je tijelo rada."
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Poravnanje uz lijevi i desni rub znači obostrano poravnanje; 'treba' je direktiva, a rečenica govori o tekstu rada."
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Prored je izričito naveden kao 1,5; indikativ 'koristi se' daje direktivu za tijelo rada."
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Izvor navodi 2,5 cm za sva četiri ruba; 'trebaju' je direktiva, a margine vrijede za cijelu stranicu rada."
+    }
+  ]
+}

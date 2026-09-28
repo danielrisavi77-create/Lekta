@@ -1,0 +1,913 @@
+[
+    {
+        "profileId":  "adu-montaza-diplomski",
+        "counts":  {
+                       "anchored":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "alu-grafika-diplomski",
+        "counts":  {
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "alu-kiparstvo-diplomski",
+        "counts":  {
+                       "not-found":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "alu-konzerviranje-diplomski",
+        "counts":  {
+                       "not-found":  8
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "alu-slikarstvo-diplomski",
+        "counts":  {
+                       "not-found":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "aspira-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "aspira-diplomski-en",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "aspira-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "aspira-zavrsni-en",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "bak-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "bak-zavrsni",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "biolos-diplomski",
+        "counts":  {
+                       "not-found":  5,
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "biolos-zavrsni",
+        "counts":  {
+                       "not-found":  5,
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "dizajn-diplomski",
+        "counts":  {
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "effectus-diplomski",
+        "counts":  {
+                       "already-literal":  4,
+                       "anchored":  4,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "effectus-seminarski",
+        "counts":  {
+                       "already-literal":  6,
+                       "anchored":  3,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "effectus-zavrsni",
+        "counts":  {
+                       "already-literal":  4,
+                       "anchored":  4,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fdmz-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffos-germanistika-diplomski",
+        "counts":  {
+                       "not-found":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffos-germanistika-zavrsni",
+        "counts":  {
+                       "not-found":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffos-psihologija-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffos-psihologija-zavrsni",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffri-germanistika-diplomski",
+        "counts":  {
+                       "not-found":  7,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffri-germanistika-zavrsni",
+        "counts":  {
+                       "not-found":  7,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffri-kulturalni-diplomski",
+        "counts":  {
+                       "not-found":  7,
+                       "status-ineligible":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffri-povum-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffri-psihologija-diplomski",
+        "counts":  {
+                       "not-found":  3,
+                       "anchored":  1,
+                       "already-literal":  1,
+                       "status-ineligible":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffst-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffst-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ffzg-filozofija-diplomski",
+        "counts":  {
+                       "anchored":  5,
+                       "already-literal":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fizos-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-mes-master-thesis",
+        "counts":  {
+                       "not-found":  6,
+                       "anchored":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-novinarstvo-diplomski",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-novinarstvo-zavrsni-tekst",
+        "counts":  {
+                       "not-found":  12,
+                       "anchored":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-opci-akademski-rad",
+        "counts":  {
+                       "not-found":  9,
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-politologija-diplomski",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-politologija-zavrsni",
+        "counts":  {
+                       "not-found":  12,
+                       "anchored":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+        "counts":  {
+                       "anchored":  7,
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzpu-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "fpzpu-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ftrr-diplomski",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ftrr-zavrsni",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "gradri-diplomski",
+        "counts":  {
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "gradri-zavrsni",
+        "counts":  {
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "hks-diplomski",
+        "counts":  {
+                       "not-found":  1,
+                       "already-literal":  5,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "kbfdj-diplomski",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "kif-diplomski",
+        "counts":  {
+                       "already-literal":  4,
+                       "not-found":  3,
+                       "anchored":  3,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "kif-specijalisticki",
+        "counts":  {
+                       "not-found":  6,
+                       "anchored":  2,
+                       "already-literal":  1,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "mev-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "mev-zavrsni-drustveni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-doktorski-pravne-znanosti",
+        "counts":  {
+                       "not-found":  6,
+                       "status-ineligible":  2,
+                       "anchored":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-integrirani-diplomski",
+        "counts":  {
+                       "not-found":  9,
+                       "status-ineligible":  3,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-javna-uprava-diplomski",
+        "counts":  {
+                       "not-found":  9,
+                       "status-ineligible":  2,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-javna-uprava-prijediplomski",
+        "counts":  {
+                       "not-found":  9,
+                       "status-ineligible":  2,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-opci-pravni-akademski-rad",
+        "counts":  {
+                       "not-found":  7,
+                       "status-ineligible":  2,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-porezni-prijediplomski",
+        "counts":  {
+                       "not-found":  9,
+                       "status-ineligible":  2,
+                       "anchored":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-socijalna-politika-diplomski",
+        "counts":  {
+                       "anchored":  5,
+                       "already-literal":  2,
+                       "not-found":  4,
+                       "status-ineligible":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-socijalni-rad-diplomski",
+        "counts":  {
+                       "anchored":  5,
+                       "already-literal":  2,
+                       "not-found":  4,
+                       "status-ineligible":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravo-specijalisticki-pravni-opci",
+        "counts":  {
+                       "not-found":  6,
+                       "status-ineligible":  2,
+                       "anchored":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "pravri-opci-akademski-rad",
+        "counts":  {
+                       "not-found":  5,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "radno-socijalno-pravo",
+        "counts":  {
+                       "anchored":  3,
+                       "not-found":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "sois-ft-vojno-inzenjerstvo-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "sois-ft-vojno-inzenjerstvo-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "sois-ft-vojno-pomorstvo-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "sois-ft-vojno-vodjenje-diplomski",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "sois-ft-vojno-vodjenje-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ttf-dizajn-diplomski",
+        "counts":  {
+                       "anchored":  4,
+                       "not-found":  3,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "ttf-dizajn-zavrsni",
+        "counts":  {
+                       "anchored":  4,
+                       "not-found":  3,
+                       "status-ineligible":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unidu-elektro-diplomski",
+        "counts":  {
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unidu-komunikologija-zavrsni",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unidu-marikultura-diplomski",
+        "counts":  {
+                       "anchored":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unidu-umjetnost-zavrsni",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-btho-diplomski",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-btho-zavrsni",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-odhz-diplomski",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-odhz-zavrsni",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-sfsb-diplomski",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-sfsb-zavrsni",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-teho-diplomski",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unisb-teho-zavrsni",
+        "counts":  {
+                       "anchored":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-arheologija-diplomski",
+        "counts":  {
+                       "not-found":  3,
+                       "status-ineligible":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-arheologija-zavrsni",
+        "counts":  {
+                       "not-found":  3,
+                       "status-ineligible":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-ekologija-diplomski",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-ekologija-zavrsni",
+        "counts":  {
+                       "not-found":  5,
+                       "status-ineligible":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-geografija-diplomski",
+        "counts":  {
+                       "not-found":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-germanistika-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-germanistika-zavrsni",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-hispanistika-diplomski",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-informacijske-diplomski",
+        "counts":  {
+                       "not-found":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-informacijske-zavrsni",
+        "counts":  {
+                       "not-found":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-klasicna-filologija-diplomski",
+        "counts":  {
+                       "not-found":  5,
+                       "already-literal":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-klasicna-filologija-zavrsni",
+        "counts":  {
+                       "not-found":  5,
+                       "already-literal":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-pomorski-diplomski",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-pomorski-zavrsni",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-povijest-diplomski",
+        "counts":  {
+                       "not-found":  4,
+                       "status-ineligible":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-povijest-umj-diplomski",
+        "counts":  {
+                       "not-found":  6,
+                       "status-ineligible":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-povijest-zavrsni",
+        "counts":  {
+                       "not-found":  4,
+                       "status-ineligible":  2
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-psihologija-diplomski",
+        "counts":  {
+                       "not-found":  5
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-sociologija-diplomski",
+        "counts":  {
+                       "not-found":  8
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-ucitelji-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-zdravstvo-diplomski",
+        "counts":  {
+                       "not-found":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "unizd-zdravstvo-zavrsni",
+        "counts":  {
+                       "not-found":  3,
+                       "status-ineligible":  3
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vevu-diplomski",
+        "counts":  {
+                       "not-found":  5,
+                       "anchored":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vguk-diplomski",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vguk-zavrsni",
+        "counts":  {
+                       "not-found":  6
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vss-diplomski",
+        "counts":  {
+                       "not-found":  8
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vss-zavrsni",
+        "counts":  {
+                       "not-found":  8
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vub-zavrsni-tehnicki",
+        "counts":  {
+                       "not-found":  7
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vuka-poslovni-diplomski",
+        "counts":  {
+                       "already-literal":  1,
+                       "anchored":  2,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vuka-poslovni-opci-akademski-rad",
+        "counts":  {
+                       "already-literal":  1,
+                       "anchored":  2,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vuka-poslovni-zavrsni",
+        "counts":  {
+                       "already-literal":  1,
+                       "anchored":  2,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vuka-sigurnost-diplomski",
+        "counts":  {
+                       "status-ineligible":  3,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vuka-sigurnost-zavrsni",
+        "counts":  {
+                       "status-ineligible":  3,
+                       "not-found":  1
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vus-diplomski",
+        "counts":  {
+                       "anchored":  4
+                   },
+        "error":  ""
+    },
+    {
+        "profileId":  "vus-zavrsni",
+        "counts":  {
+                       "anchored":  4
+                   },
+        "error":  ""
+    }
+]

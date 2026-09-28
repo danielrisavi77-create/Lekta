@@ -1,0 +1,53 @@
+{
+  "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules": {
+    "value": {
+      "sort": "alphabetical",
+      "authorYearSuffixes": true
+    },
+    "modality": "directive",
+    "scope": "bibliography"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules": {
+    "value": {
+      "frontMatter": {
+        "numbering": "roman",
+        "removePageNumberFromTitlePage": true
+      },
+      "mainMatter": {
+        "numbering": "decimal",
+        "startAt": 1
+      }
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "arca-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "arca-zavrsni--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

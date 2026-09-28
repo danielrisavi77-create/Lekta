@@ -1,0 +1,66 @@
+﻿{
+  "sourceId": "adu-montaza-diplomski",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.",
+      "note": "Izvor navodi Times New Roman u rečenici s direktivom ‘treba pisati’, a zahtjev se odnosi na tekst rada."
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.",
+      "note": "Vrijednost 12 točaka pripada slovima za pisanje rada, a ‘treba pisati’ daje direktivni modalitet."
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad treba pisati slovima Times New Roman, veličine 12 točaka s proredom 1,5.",
+      "note": "Izvor izričito navodi prored 1,5 u direktivnoj rečenici o pisanju rada."
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 4, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti širok 40 mm.",
+      "note": "Tri ruba iznose 25 mm (2,5 cm), a lijevi 40 mm (4 cm); ‘trebaju’ je direktiva, a margine se odnose na cijeli rad."
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--page-numbers",
+      "value": true,
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Sve stranice moraju biti numerirane.",
+      "note": "‘Moraju’ izriče obvezu numeriranja svih stranica rada."
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "ruleId": "adu-montaza-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Veličine je stranice A4 (210x297 mm).",
+      "note": "Izvor jednoznačno navodi A4 kao veličinu stranice rada."
+    }
+  ]
+}

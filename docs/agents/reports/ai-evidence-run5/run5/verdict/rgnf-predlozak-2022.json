@@ -1,0 +1,13 @@
+{
+  "accepted": [
+    "rgnf-diplomski--citation-style",
+    "rgnf-diplomski--font",
+    "rgnf-diplomski--line-spacing",
+    "rgnf-diplomski--margins",
+    "rgnf-zavrsni--citation-style",
+    "rgnf-zavrsni--font",
+    "rgnf-zavrsni--line-spacing",
+    "rgnf-zavrsni--margins"
+  ],
+  "refuted": []
+}

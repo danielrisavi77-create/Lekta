@@ -1,0 +1,20 @@
+{
+    "sourceId":  "ufzg-upute-zavrsni-diplomski-2026",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ufzg-zavrsni",
+                      "ruleId":  "ufzg-zavrsni--required-sections",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "1.1. Struktura stručnog rada Stručni rad treba sadržavati sljedeće dijelove: - omotna stranica (prilog 1.) - naslovna stranica (prilog 2.) - sažetak s ključnim riječima - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica) - uvod - razrada teme - zaključak - literatura - prilozi - izjava o izvornosti rada (prilog 3.) Sažetak treba sadržavati kratko obrazloženje teorijskog polazišta, cilj rada i zaključak. Sažetak treba imati između 250 i 300 riječi, a ispod sažetka navodi se tri do pet ključnih riječi. Ako je rad pisan na hrvatskom jeziku, sažetak se piše na hrvatskom i engleskom jeziku. Ako je rad pisan na stranom jeziku, sažetak i ključne riječi moraju biti na jeziku rada, kao i na hrvatskom i engleskom jeziku. U tom slučaju, sažetak na hrvatskom i engleskom treba sadržavati i naslov rada na oba jezika. Uvod sažeto opisuje teorijsku podlogu rada te prikazuje dosadašnja istraživanja i spoznaje vezane uz temu. Također, uvod objašnjava razloge za pisanje rada i jasno definira njegov cilj. Na kraju uvoda izlaže se struktura rada kroz kratki pregled poglavlja koja slijede. Razrada teme sadrži poglavlja i potpoglavlja koja sustavno analiziraju teorijske postavke i/ili empirijske spoznaje iz relevantne literature, u skladu s postavljenim ciljevima rada. Zaključak sumira najznačajnije dobivene spoznaje te objašnjava njihov znanstveni i/ili stručni doprinos. Naglasak je na povezivanju rezultata rada s njegovim ciljevima te mogućnostima primjene stečenih saznanja u praksi. Literatura treba sadržavati minimalno 20 izvora. Sustavni pregled spoznaja iz literature se treba temeljiti na izvornim znanstvenim ili stručnim radovima, dok se izvori poput sveučilišnih udžbenika ili drugih preglednih radova mogu koristiti u manjoj mjeri i to u pravilu s ciljem uvoda u temu rada. 1.2. Struktura empirijskog rada Empirijski rad treba sadržavati sljedeće dijelove: - omotna stranica (prilog 1.) - naslovna stranica (prilog 2.) - sažetak s ključnim riječima - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica) - uvod - cilj i problemi istraživanja/istraživačka pitanja - metoda - rezultati - rasprava - zaključak - literatura - prilozi - izjava o izvornosti rada (prilog 3.)",
+                      "note":  "Odjeljak 1.1 traži dijelove stručnog rada, a odjeljak 1.2 drukčije dijelove empirijskog rada koji može biti završni rad; oba popisa riječju treba usmjeravaju strukturu cijelog rada, pa nema jedne vrijednosti."
+                  }
+              ]
+}

@@ -1,0 +1,30 @@
+﻿{
+    "sourceId":  "arca-pravilnik-zavrsni-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli version unavailable"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "arca-zavrsni",
+                      "ruleId":  "arca-zavrsni--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice završnog rada se numeriraju, a tablice i slike numeriraju i opisuju.",
+                      "note":  "Numeriranje stranica izričito je navedeno u indikativu, pa je vrijednost true, modalitet directive, a opseg whole."
+                  },
+                  {
+                      "profileId":  "arca-zavrsni",
+                      "ruleId":  "arca-zavrsni--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4.",
+                      "note":  "Izvor navodi A4 indikativom, ali valueShape boolean nije uskladiv s vrijednošću A4 i allowedValues."
+                  }
+              ]
+}

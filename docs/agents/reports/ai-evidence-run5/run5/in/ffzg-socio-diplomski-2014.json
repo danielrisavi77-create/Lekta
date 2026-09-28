@@ -1,0 +1,55 @@
+{
+  "source": {
+    "id": "ffzg-socio-diplomski-2014",
+    "url": "https://www.ffzg.unizg.hr/socio/wp-content/uploads/2014/02/Upute-za-diplomski.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-socio-diplomski-2014.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "tekst poravnati po obje margine (\"justified\")",
+      "valueShape": "boolean",
+      "contexts": [
+        "a interpretacija i kontekstualizacija. Na kraju rasprave nužno je navesti i ukratko prodiskutirati ograničenja provedenog istraživanja. Zaključak U Zaključku se sažeto iznose nove spoznaje kojima je rad rezultirao. Valja komentirati u kojoj su mjeri ostvareni ciljevi rada, navesti glavne poteškoće vezane za realizaciju tih ciljeva i iznijeti sugestije koje se tiču daljnje razrade problema i eventualnih daljnjih istraživanja problematike kojom se rad bavio. Literatura Sadrži popis svih izvora (\"referenci\") navedenih u radu. Radovi na koje se ne referira u radu ne navode se. Prilozi Prema potrebi. radu se mogu priložiti iscrpniji ispisi rezultata, transkripti intervjua te drugi relevantni materijali. Sažetak Sažetak se piše na hrvatskom i engleskom jeziku. Sažetak sadrži kratak pregled diplomskog rada s osvrtom na najvažnije rezultate. Uz sažetak se navode i ključne riječi (3– 5 pojmova). GRAFIČKO FORMATIRANJE RADA • za tijelo teksta koristiti pismo (\"font\") Times New Roman veličine 12 točaka • za naslove koristiti masno pismo (\"bold\") • margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm • prored: 1,5 • za numeraciju stranica koristiti arapske brojeve smještene u donji desni kut • tekst poravnati po obje margine (\"justified\") • početak svakog novog paragrafa treba biti uvučen (1,27 cm) • za sve dijelove teksta koji se žele istaknuti koristi kurziv (\"italic\") a ne masno ili podcrtano pismo • za dodatna objašnjenja koristiti bilješke na dnu stranice ('footnotes'), a ne bilješke na kraju teksta ('endnotes'). Veličina pisma za bilješke: 10 točaka. CITIRANJE, PARAFRAZIRANJE I SAŽIMANJE Prilikom pisanja diplomskog rada iznimno je važno posvetiti dužnu pozornost korektnosti u navoñenju tuñih misli, ideja, zaključaka ili rezultata istraživanja, neovisno o tome u kojem se obliku oni preuzimaju odnosno koriste (doslovno navoñenje, sažimanje, parafraziranje). Odsjek za sociologiju iskazuje nultu tolerantnost na sve oblike plagiranja. 5 POPIS LITERATURE Popis literature (referenci) nalazi se na kraju diplomskog rada. Piše se abecednim redom bez rednih brojeva. Ako se spominje više djela istog autora, prvo se navode ona novijeg datuma. Ako se koristi više djela istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede, kako bi se djela razlikovala prilikom navoñenja u tekstu. Prored teksta u popisu literature je 1 (ne 1,5 kao u ostalom tekstu). U slučaju da je navedena referenca duža od jednog reda"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "prored: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "vanja. Raspravu je dobro započeti sažetim pregledom glavnih nalaza, nakon čega slijedi njihova interpretacija i kontekstualizacija. Na kraju rasprave nužno je navesti i ukratko prodiskutirati ograničenja provedenog istraživanja. Zaključak U Zaključku se sažeto iznose nove spoznaje kojima je rad rezultirao. Valja komentirati u kojoj su mjeri ostvareni ciljevi rada, navesti glavne poteškoće vezane za realizaciju tih ciljeva i iznijeti sugestije koje se tiču daljnje razrade problema i eventualnih daljnjih istraživanja problematike kojom se rad bavio. Literatura Sadrži popis svih izvora (\"referenci\") navedenih u radu. Radovi na koje se ne referira u radu ne navode se. Prilozi Prema potrebi. radu se mogu priložiti iscrpniji ispisi rezultata, transkripti intervjua te drugi relevantni materijali. Sažetak Sažetak se piše na hrvatskom i engleskom jeziku. Sažetak sadrži kratak pregled diplomskog rada s osvrtom na najvažnije rezultate. Uz sažetak se navode i ključne riječi (3– 5 pojmova). GRAFIČKO FORMATIRANJE RADA • za tijelo teksta koristiti pismo (\"font\") Times New Roman veličine 12 točaka • za naslove koristiti masno pismo (\"bold\") • margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm • prored: 1,5 • za numeraciju stranica koristiti arapske brojeve smještene u donji desni kut • tekst poravnati po obje margine (\"justified\") • početak svakog novog paragrafa treba biti uvučen (1,27 cm) • za sve dijelove teksta koji se žele istaknuti koristi kurziv (\"italic\") a ne masno ili podcrtano pismo • za dodatna objašnjenja koristiti bilješke na dnu stranice ('footnotes'), a ne bilješke na kraju teksta ('endnotes'). Veličina pisma za bilješke: 10 točaka. CITIRANJE, PARAFRAZIRANJE I SAŽIMANJE Prilikom pisanja diplomskog rada iznimno je važno posvetiti dužnu pozornost korektnosti u navoñenju tuñih misli, ideja, zaključaka ili rezultata istraživanja, neovisno o tome u kojem se obliku oni preuzimaju odnosno koriste (doslovno navoñenje, sažimanje, parafraziranje). Odsjek za sociologiju iskazuje nultu tolerantnost na sve oblike plagiranja. 5 POPIS LITERATURE Popis literature (referenci) nalazi se na kraju diplomskog rada. Piše se abecednim redom bez rednih brojeva. Ako se spominje više djela istog autora, prvo se navode ona novijeg datuma. Ako se koristi više djela istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede, kako bi se djela razlikovala prilikom navoñenja u tekst"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "aciji i njihovoj usporedbi s rezultatima drugih istraživanja. Raspravu je dobro započeti sažetim pregledom glavnih nalaza, nakon čega slijedi njihova interpretacija i kontekstualizacija. Na kraju rasprave nužno je navesti i ukratko prodiskutirati ograničenja provedenog istraživanja. Zaključak U Zaključku se sažeto iznose nove spoznaje kojima je rad rezultirao. Valja komentirati u kojoj su mjeri ostvareni ciljevi rada, navesti glavne poteškoće vezane za realizaciju tih ciljeva i iznijeti sugestije koje se tiču daljnje razrade problema i eventualnih daljnjih istraživanja problematike kojom se rad bavio. Literatura Sadrži popis svih izvora (\"referenci\") navedenih u radu. Radovi na koje se ne referira u radu ne navode se. Prilozi Prema potrebi. radu se mogu priložiti iscrpniji ispisi rezultata, transkripti intervjua te drugi relevantni materijali. Sažetak Sažetak se piše na hrvatskom i engleskom jeziku. Sažetak sadrži kratak pregled diplomskog rada s osvrtom na najvažnije rezultate. Uz sažetak se navode i ključne riječi (3– 5 pojmova). GRAFIČKO FORMATIRANJE RADA • za tijelo teksta koristiti pismo (\"font\") Times New Roman veličine 12 točaka • za naslove koristiti masno pismo (\"bold\") • margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm • prored: 1,5 • za numeraciju stranica koristiti arapske brojeve smještene u donji desni kut • tekst poravnati po obje margine (\"justified\") • početak svakog novog paragrafa treba biti uvučen (1,27 cm) • za sve dijelove teksta koji se žele istaknuti koristi kurziv (\"italic\") a ne masno ili podcrtano pismo • za dodatna objašnjenja koristiti bilješke na dnu stranice ('footnotes'), a ne bilješke na kraju teksta ('endnotes'). Veličina pisma za bilješke: 10 točaka. CITIRANJE, PARAFRAZIRANJE I SAŽIMANJE Prilikom pisanja diplomskog rada iznimno je važno posvetiti dužnu pozornost korektnosti u navoñenju tuñih misli, ideja, zaključaka ili rezultata istraživanja, neovisno o tome u kojem se obliku oni preuzimaju odnosno koriste (doslovno navoñenje, sažimanje, parafraziranje). Odsjek za sociologiju iskazuje nultu tolerantnost na sve oblike plagiranja. 5 POPIS LITERATURE Popis literature (referenci) nalazi se na kraju diplomskog rada. Piše se abecednim redom bez rednih brojeva. Ako se spominje više djela istog autora, prvo se navode ona novijeg datuma. Ako se koristi više djela istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede, kako bi se djela razlikovala prilikom nav"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

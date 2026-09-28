@@ -1,0 +1,17 @@
+{
+  "accepted": ["ffzg-filozofija-diplomski--font"],
+  "refuted": [
+    {
+      "ruleId": "ffzg-filozofija-diplomski--toc",
+      "reason": "Autoritativna ekstrakcija (sol.json, postoji za ovaj izvor) ne sadrzi ovo pravilo; nema izvucene tvrdnje o vrijednosti/modalitetu/opsegu koju bi bilo moguce provjeriti protiv izvora, pa se ne moze potvrditi vjernost."
+    },
+    {
+      "ruleId": "ffzg-filozofija-diplomski--justify",
+      "reason": "Autoritativna ekstrakcija (sol.json) ne sadrzi ovo pravilo; nema izvucene tvrdnje o vrijednosti/modalitetu/opsegu koju bi bilo moguce provjeriti protiv izvora."
+    },
+    {
+      "ruleId": "ffzg-filozofija-diplomski--margins",
+      "reason": "Autoritativna ekstrakcija (sol.json) ne sadrzi ovo pravilo; nema izvucene tvrdnje o vrijednosti/modalitetu/opsegu koju bi bilo moguce provjeriti protiv izvora."
+    }
+  ]
+}

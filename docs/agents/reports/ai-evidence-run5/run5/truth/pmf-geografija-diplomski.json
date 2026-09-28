@@ -1,0 +1,36 @@
+{
+  "pmf-geografija-diplomski--citation-style": {
+    "value": "harvard",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pmf-geografija-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pmf-geografija-diplomski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pmf-geografija-diplomski--required-sections": {
+    "value": [
+      "uvod",
+      "pregled dosadasnjih istrazivanja i literature",
+      "teorijski pristup",
+      "metode istrazivanja",
+      "rezultati",
+      "rasprava",
+      "zakljucak",
+      "literatura i izvori"
+    ],
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

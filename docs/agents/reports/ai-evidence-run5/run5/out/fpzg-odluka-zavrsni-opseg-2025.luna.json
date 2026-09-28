@@ -1,0 +1,26 @@
+﻿{
+  "sourceId": "fpzg-odluka-zavrsni-opseg-2025",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--word-count",
+      "value": { "max": 6000, "min": 5000 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "conflict",
+      "evidenceQuote": "Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 riječi. Završni rad na preddiplomskom studiju novinarstva može imatĺ i oblik i audiovizualnog rada na kojem je potrebno raditi oko 150 studentskih radnih sati.",
+      "note": "Raspon je 5000–6000 riječi uz direktivni goli indikativ i opseg rada u cjelini, ali izvor navodi i audiovizualni oblik rada na preddiplomskom novinarstvu s oko 150 radnih sati kao iznimku za tu vrstu rada."
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "ruleId": "fpzg-politologija-zavrsni--word-count",
+      "value": { "max": 6000, "min": 5000 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 riječi.",
+      "note": "Izvor zadaje raspon od 5000 do 6000 riječi u golom indikativu, a os odnosi se na završni rad u cjelini; navedena audiovizualna mogućnost posebno se odnosi na novinarstvo."
+    }
+  ]
+}

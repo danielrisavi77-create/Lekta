@@ -1,0 +1,12 @@
+{
+  "sumfak-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "sumfak-diplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

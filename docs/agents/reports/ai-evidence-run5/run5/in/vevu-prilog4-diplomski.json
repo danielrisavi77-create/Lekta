@@ -1,0 +1,26 @@
+{
+  "source": {
+    "id": "vevu-prilog4-diplomski",
+    "url": "https://www.vevu.hr (Veleuciliste \"Lavoslav Ruzicka\" u Vukovaru)",
+    "fetchedAt": "2026-07-28",
+    "snapshotHash": "8bc9008e9fcc705c1cbcb74a3608acbc4d3b36eab00d6a070819d0aa5f35d026",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\vevu-prilog4-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "vevu-diplomski",
+      "ruleId": "vevu-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Prilog 4, odjeljak \"OBRADA TEKSTA\"",
+      "quote": "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvučen.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "problemima istraživanja, te procijeniti teorijske i praktične posljedice rezultata.ZAKLJUČAKSustavno, koncizno i jezgrovito izlaganje svih relevantnih spoznaja, informacija i stavova koji su izneseni u središnjem dijelu rada. Zaključak rezimira cjelokupni rad. U zaključku se ne iznose nove spoznaje, nego formuliraju već izrečene u prethodnom dijelu rada. Duljina zaključka je uobičajeno 1-2 strane, do maksimalno 10% veličine završnog rada.POPIS LITERATUREPopisuje se sva korištena literatura po pravilima koja slijede u dijelu „citiranje literature“.POPIS TABLICA, SLIKA, GRAFIKONA I SLIČNOPopis je potreban ako u radu ima više od 20 tablica, slika i/ili grafikona.PRILOZIOvaj dio nije obavezan. U prilog se stavljaju tabele i slike veličine A4 formata ili veće, ili dokumenti i materijali korišteni pri izradi završnog rada (anketni upitnici, obrasci, sheme i slični dokumenti). Svaki prilog mora biti numeriran kako bi se u tekstu rada moglo jednoznačno upućivati na pojedini prilog.ŽIVOTOPISPodaci o autoru završnog/diplomskog rada. Piše se u obliku skraćenog europass obrasca.GRAFIČKI IZGLED RADAKoristiti predloške iz ovih uputa (str.1. i 2.) koji su izrađeni u valjanom formatu.OBRADA TEKSTAFormat rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvučen. Između naslova i teksta treba biti 1 red prazan.NUMERACIJESve strane u radu počevši od Uvoda moraju biti numerirane. Broj strane stavlja se u donjem desnom kutu stranice, a numeracija počinje od 1 za stranu na kojoj je Uvod. Poglavlja se numeriraju arapskim brojevima, numeracija počinje od 1. za Uvod, a završava posljednjim rednim brojem za Zaključak. Sažetak (koji je ispred Uvoda) nema broj, kao ni Popis literature, Životopis i ako postoje u radu Prilozi i Popis tablica, slika i grafikona!Numeracija potpoglavlja izvodi se sa dva broja razdvojena točkom, od kojih je prvi broj poglavlja, a drugi redni broj potpoglavlja u poglavlju, tako da će npr. drugo potpoglavlje u trećem poglavlju imati broj 3.2. Između naslova poglavlja i potpoglavlja mora biti bar jedna rečenica teksta, ne redati naslov za naslovom! Ako je neko poglavlje podijeljeno na potpoglavlja, mora ih biti barem dva, jer podjela u kojoj ima samo jedno potpoglavlje nema smisla.Svako novo poglavlje počinje na novoj strani, a potpoglavlja se naslanjaju na prethodni tekst (pri čemu između teksta i naslova treba biti 1 red prazan). Sve slike, grafikoni i tabele u radu moraju biti numerirane i imati naslov (koji govori o tome"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

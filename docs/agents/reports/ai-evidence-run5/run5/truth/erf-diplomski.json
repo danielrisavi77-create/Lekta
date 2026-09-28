@@ -1,0 +1,36 @@
+{
+  "erf-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "erf-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "erf-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "erf-diplomski--required-sections": {
+    "value": [
+      "sazetak",
+      "sadrzaj",
+      "uvod",
+      "zakljucak",
+      "literatura",
+      "prilozi"
+    ],
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "erf-diplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

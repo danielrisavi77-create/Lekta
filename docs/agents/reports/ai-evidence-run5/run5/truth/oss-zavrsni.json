@@ -1,0 +1,31 @@
+{
+  "oss-zavrsni--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "oss-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "oss-zavrsni--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

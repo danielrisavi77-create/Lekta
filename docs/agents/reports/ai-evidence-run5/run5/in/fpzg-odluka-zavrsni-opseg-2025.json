@@ -1,0 +1,43 @@
+{
+  "source": {
+    "id": "fpzg-odluka-zavrsni-opseg-2025",
+    "url": "https://www.fpzg.unizg.hr/_download/repository/4.%20Odluka_rokovi%20prijave%20i%20obrane%20zavr%C5%A1nih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\fpzg-odluka-zavrsni-opseg-2025.txt"
+  },
+  "rules": [
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rijeci",
+      "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
+      "quote": "Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000\r\n do 6000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "anju na preddiplomskim i diplomskim studijima Fakulteta političkĺhznanosti, Fakultetsko vijeće na sjednici održanoj 23. listopad a 2025. donijelo je oDLUKU o RoKoVlMA oBRANA ZAVRšN!H RADoVA NA sVEUčlllšNlMPRtJEDlPtoMsKlM sTUDtJ!MA PoLlToLoGlJA I NOVTNARSTVO U AK. GOD|Nt 202s 12026. t. obrane završnih radova održavaju se tijekom ispitnih rokova odreďenih Akademskim kalendarom za akademsku godinu 2025./20Ż6. Datum obrane može biti bilo koji radni dan u razdoblju ispitnih rokova. o Za studente koji su prenijelizavršni rad s akademske godine2024'/2025. obrane završnih radova se održavaju tijekom oba dijela integriranog ispitnog roka te ljetnog i jesenskog ispitnog roka, kao i posebnog dijela jesenskog roka za obrane završnih radova sukladno akademskom kalendaru. o Za studente koji su upisali završni rad u akademskoj godini 2025./2026. obrane se održavaju tijekom drugog dijela integriranog ispitnog roka, ljetnog i jesenskog ispitnog roka, kao i posebnog dĺjela jesenskog roka za obrane završnih radova sukladno akademskom kalendaru. Obrane moraju biti prijavljene najmanje tri radna dana prije datuma obrane dogovorenog s mentoricom ili mentorom i obrađeneu Uredu za studente i studije. t!. Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 riječi. Završni rad na preddiplomskom studiju novinarstva može imatĺ i oblik i audiovizualnog rada na kojem je potrebno raditi oko 150 studentskih radnih sati. Sr'eučilište tl Zagrebrr, F_akultet po]itičkih zn.rnosti, LepuŠiĆeva 6, nt _ roooo Zagreb Tel.: +385 (o) l 464z oclo, a* mail: dekanat@ípzg.hĺ, wwwĺ pzg.hr orľ: z8ĺlu54857s'lĺB: 0327026Ż, toĺN (Žiro račun): rłrł'l.4z36ooĺrorlovl7644 brg $r'euč'i l išlĺ:u Zagl'c,bu IŁlĺultct pĺ.:1 i LiČlĺih zl\"}än{)sľl ilt. Studenti obrane završnih radova prijavljuju u zasebnoj aplikacĺji na fakultetskom intranetu. Nakon izvršene prijave, o kojoj će mentor dobiti automatski generiranu obavĺjest na e-mail, mentor upĺsuje datum obrane završnog rada' (koji je prethodno dogovoren sa studentom) i odobrava obranu. Nakon uspješne obrane, ocjena iz završnog rada upisuje se isključivo u aplikaciju, a ocjena se automatski prenosi u ISVU i evidentira u jednom od rokova otvorenih za završne radove. Prijava obrane završnog rada prijavljuje se isključivo u aplikaciji, nikako u |SVU sustavu. Nakon što nastavnici upišu datum obrane, odnosno odobre obranu završnog rada, prijavu obrađujeUredu za studente i studije, gdje se provjerava je li student izvršio sve prethod"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "ruleId": "fpzg-politologija-zavrsni--word-count",
+      "checkId": "word-count",
+      "label": "Opseg rijeci",
+      "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
+      "quote": "Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000\r\n do 6000 riječi.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "anju na preddiplomskim i diplomskim studijima Fakulteta političkĺhznanosti, Fakultetsko vijeće na sjednici održanoj 23. listopad a 2025. donijelo je oDLUKU o RoKoVlMA oBRANA ZAVRšN!H RADoVA NA sVEUčlllšNlMPRtJEDlPtoMsKlM sTUDtJ!MA PoLlToLoGlJA I NOVTNARSTVO U AK. GOD|Nt 202s 12026. t. obrane završnih radova održavaju se tijekom ispitnih rokova odreďenih Akademskim kalendarom za akademsku godinu 2025./20Ż6. Datum obrane može biti bilo koji radni dan u razdoblju ispitnih rokova. o Za studente koji su prenijelizavršni rad s akademske godine2024'/2025. obrane završnih radova se održavaju tijekom oba dijela integriranog ispitnog roka te ljetnog i jesenskog ispitnog roka, kao i posebnog dijela jesenskog roka za obrane završnih radova sukladno akademskom kalendaru. o Za studente koji su upisali završni rad u akademskoj godini 2025./2026. obrane se održavaju tijekom drugog dijela integriranog ispitnog roka, ljetnog i jesenskog ispitnog roka, kao i posebnog dĺjela jesenskog roka za obrane završnih radova sukladno akademskom kalendaru. Obrane moraju biti prijavljene najmanje tri radna dana prije datuma obrane dogovorenog s mentoricom ili mentorom i obrađeneu Uredu za studente i studije. t!. Završni rad uključuje 5 ECTS bodova, što se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 riječi. Završni rad na preddiplomskom studiju novinarstva može imatĺ i oblik i audiovizualnog rada na kojem je potrebno raditi oko 150 studentskih radnih sati. Sr'eučilište tl Zagrebrr, F_akultet po]itičkih zn.rnosti, LepuŠiĆeva 6, nt _ roooo Zagreb Tel.: +385 (o) l 464z oclo, a* mail: dekanat@ípzg.hĺ, wwwĺ pzg.hr orľ: z8ĺlu54857s'lĺB: 0327026Ż, toĺN (Žiro račun): rłrł'l.4z36ooĺrorlovl7644 brg $r'euč'i l išlĺ:u Zagl'c,bu IŁlĺultct pĺ.:1 i LiČlĺih zl\"}än{)sľl ilt. Studenti obrane završnih radova prijavljuju u zasebnoj aplikacĺji na fakultetskom intranetu. Nakon izvršene prijave, o kojoj će mentor dobiti automatski generiranu obavĺjest na e-mail, mentor upĺsuje datum obrane završnog rada' (koji je prethodno dogovoren sa studentom) i odobrava obranu. Nakon uspješne obrane, ocjena iz završnog rada upisuje se isključivo u aplikaciju, a ocjena se automatski prenosi u ISVU i evidentira u jednom od rokova otvorenih za završne radove. Prijava obrane završnog rada prijavljuje se isključivo u aplikaciji, nikako u |SVU sustavu. Nakon što nastavnici upišu datum obrane, odnosno odobre obranu završnog rada, prijavu obrađujeUredu za studente i studije, gdje se provjerava je li student izvršio sve prethod"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

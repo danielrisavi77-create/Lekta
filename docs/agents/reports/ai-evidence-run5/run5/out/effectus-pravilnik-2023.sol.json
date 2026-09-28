@@ -1,0 +1,76 @@
+{
+  "sourceId": "effectus-pravilnik-2023",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--citation-style",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+      "note": "Izvor određuje brojčane fusnote za citate u radu, ali ne određuje jednoznačno jedan od dopuštenih identifikatora citatnog stila."
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Izvor izričito zahtijeva Times New Roman, a pravilo o fontu primjenjuje se na tekst rada."
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--citation-style",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+      "note": "Izvor određuje brojčane fusnote za citate u radu, ali ne određuje jednoznačno jedan od dopuštenih identifikatora citatnog stila."
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Izvor izričito zahtijeva Times New Roman, a pravilo o fontu primjenjuje se na tekst rada."
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--citation-style",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+      "note": "Izvor određuje brojčane fusnote za citate u radu, ali ne određuje jednoznačno jedan od dopuštenih identifikatora citatnog stila."
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--font",
+      "value": [
+        "Times New Roman"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Izvor izričito zahtijeva Times New Roman, a pravilo o fontu primjenjuje se na tekst rada."
+    }
+  ]
+}

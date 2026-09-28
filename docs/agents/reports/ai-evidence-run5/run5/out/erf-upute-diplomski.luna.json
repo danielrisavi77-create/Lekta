@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "erf-upute-diplomski",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Izričito je naveden font Times New Roman, redak je gola uputa, a pravilo fonta odnosi se na tijelo rada."
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Redak izričito navodi veličinu 12 pt, formuliran je kao gola uputa, a veličina fonta odnosi se na tijelo rada."
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Redak izričito navodi prored 1.5, formuliran je kao gola uputa, a prored se odnosi na tijelo rada."
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--required-sections",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Istraživački rad1 treba sadržavati sljedeća poglavlja: Sažetak2 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje) 2. Problem istraživanja (ciljevi, problem, hipoteze) 3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog instrumentarija, način provođenja istraživanja, metode obrade podataka) 4. Rezultati istraživanja i rasprava 5. Zaključak 6. Literatura Prilozi; Pregledni rad treba sadržavati sljedeća poglavlja: Sažetak3 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod 2. Problemska pitanja (pitanja na koja se želi odgovoriti) 3. Pregled dosadašnjih spoznaja (iz područja teme rada) 4. Zaključak 5. Literatura Prilozi",
+      "note": "Izvor propisuje različite cjeline za istraživački i pregledni rad, a paket ne određuje vrstu rada za koju treba izdvojiti popis."
+    },
+    {
+      "profileId": "erf-diplomski",
+      "ruleId": "erf-diplomski--toc",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Istraživački rad1 treba sadržavati sljedeća poglavlja: Sažetak2 i ključne riječi na hrvatskom jeziku Sažetak i ključne riječi na engleskom jeziku Sadržaj 1. Uvod (teorijska podloga, dosadašnje spoznaje)",
+      "note": "Sadržaj je izričito naveden među cjelinama rada, što potvrđuje njegovu prisutnost, a struktura se odnosi na cijeli rad."
+    }
+  ]
+}

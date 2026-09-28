@@ -1,0 +1,41 @@
+{
+  "source": {
+    "id": "unizd-klasicna-filologija-upute-2021",
+    "url": "https://klfil.unizd.hr/Portals/7/doc/Upute%20za%20oblikovanje%20seminarskih%2003-2021.pdf",
+    "fetchedAt": "2026-07-28",
+    "snapshotHash": "5a30c66a903be73d630f0fa4acc8e62c25bf17136b31a163c7c1e9462356caac",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unizd-klasicna-filologija-upute-2021.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "ruleId": "unizd-klasicna-filologija-diplomski--footnote-size",
+      "checkId": "footnote-size",
+      "label": "Velicina fusnota",
+      "sourcePage": "str. 2-3 \"Postavke stranice\"",
+      "quote": "podnožne bilješke (fusnote): 10 tipografskih točaka",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "rezultata istraživanja, ocjena književne vrijednosti analiziranoga djela/odlomka, osvrt na stil, pregled motiva i načina njihove obrade, osobno mišljenje o problematici koje se književno djelo dotiče i sl.). Opsežniji citati i parafraze tuđih misli ne smiju se uklapati u ovaj dio rada, tj. u zaključku nema mjesta bilješkama. Preporučeni je opseg Zaključka do petine ukupnoga opsega rada. Opseg rada ‒ Seminar treba sadržavati najmanje 5 kartica, završni rad 10 kartica, a diplomski 30 kartica teksta rada (broji se od Uvoda do Zaključka). Kartica teksta definirana je kao 1800 znakova, tj. 60 znakova (uključujući bjeline i interpunkcije) u retku x 30 redaka. ‒ Ako je za neku svrhu potrebna i ispisana verzija, rad treba biti ispisan na papiru formata A4 (210 x 297). Postavke stranice – Margine: • lijeva i desna: 2,5 cm • gornja i donja: 2,5 cm • Naslovnica ima drugačije margine kao i veličinu pisma.4 – Tip pisma (font): Times New Roman – Veličina pisma (fonta): • naslovi u radu: 14 tipografskih točka • podnaslovi u radu: 12 tipografskih točaka • tijelo teksta: 12 tipografskih točaka • broj stranica: 12 tipografskih točaka • izdvojeni citati zajedno s prijevodom: 10 tipografskih točaka • podnožne bilješke (fusnote): 10 tipografskih točaka • naslovi tablica, grafikona i sl.: 10 tipografskih točaka 4 Vidi bilj. 1. 2 – Prored: • u tijelu teksta: 1,5 lines • u izdvojenim citatima: jednostruk (Single) • u podnožnim bilješkama: jednostruk (Single) – Tekst je obostrano poravnat. – Numeracija stranica u donjemu desnom kutu. • Naslovne stranice te stranice na kojima se nalaze Izjava o akademskoj čestitosti, sažetak i tablica sadržaja ne numeriraju se. • Numeracija stranica počinje od Uvoda. – Naslovi i podnaslovi u radu kao i u Sadržaju • Numeriraju se samo naslovi i podnaslovi koji se odnose na sam tekst rada. • Preporučuje se naslove poglavlja pisati velikim običnim slovima, a naslove potpoglavlja malim podebljanim slovima. Ako postoje naslovi unutar potpoglavlja, preporuča se da se oni pišu malim slovima u kurzivu. To bi izgledalo primjerice ovako: 1. UVOD 2. NASLOV TIJELA RADA 2.1. Podnaslov 2.2. Podnaslov 2.2.1. Podnaslov 2.2.2. Podnaslov itd. 3. NASLOV TIJELA RADA 3.1. Podnaslov 3.1.1. Podnaslov 3.1.2. Podnaslov itd. 3.2. Podnaslov itd. 4. ZAKLJUČAK LITERATURA • Novo poglavlje ili potpoglavlje u radu nije potrebno odvajati na posebnu stranicu. – Odlomci: • u tekstu rada prvi redak odlomaka uvući na 1,25 cm (u izbornik"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "ruleId": "unizd-klasicna-filologija-zavrsni--footnote-size",
+      "checkId": "footnote-size",
+      "label": "Velicina fusnota",
+      "sourcePage": "str. 2-3 \"Postavke stranice\"",
+      "quote": "podnožne bilješke (fusnote): 10 tipografskih točaka",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "rezultata istraživanja, ocjena književne vrijednosti analiziranoga djela/odlomka, osvrt na stil, pregled motiva i načina njihove obrade, osobno mišljenje o problematici koje se književno djelo dotiče i sl.). Opsežniji citati i parafraze tuđih misli ne smiju se uklapati u ovaj dio rada, tj. u zaključku nema mjesta bilješkama. Preporučeni je opseg Zaključka do petine ukupnoga opsega rada. Opseg rada ‒ Seminar treba sadržavati najmanje 5 kartica, završni rad 10 kartica, a diplomski 30 kartica teksta rada (broji se od Uvoda do Zaključka). Kartica teksta definirana je kao 1800 znakova, tj. 60 znakova (uključujući bjeline i interpunkcije) u retku x 30 redaka. ‒ Ako je za neku svrhu potrebna i ispisana verzija, rad treba biti ispisan na papiru formata A4 (210 x 297). Postavke stranice – Margine: • lijeva i desna: 2,5 cm • gornja i donja: 2,5 cm • Naslovnica ima drugačije margine kao i veličinu pisma.4 – Tip pisma (font): Times New Roman – Veličina pisma (fonta): • naslovi u radu: 14 tipografskih točka • podnaslovi u radu: 12 tipografskih točaka • tijelo teksta: 12 tipografskih točaka • broj stranica: 12 tipografskih točaka • izdvojeni citati zajedno s prijevodom: 10 tipografskih točaka • podnožne bilješke (fusnote): 10 tipografskih točaka • naslovi tablica, grafikona i sl.: 10 tipografskih točaka 4 Vidi bilj. 1. 2 – Prored: • u tijelu teksta: 1,5 lines • u izdvojenim citatima: jednostruk (Single) • u podnožnim bilješkama: jednostruk (Single) – Tekst je obostrano poravnat. – Numeracija stranica u donjemu desnom kutu. • Naslovne stranice te stranice na kojima se nalaze Izjava o akademskoj čestitosti, sažetak i tablica sadržaja ne numeriraju se. • Numeracija stranica počinje od Uvoda. – Naslovi i podnaslovi u radu kao i u Sadržaju • Numeriraju se samo naslovi i podnaslovi koji se odnose na sam tekst rada. • Preporučuje se naslove poglavlja pisati velikim običnim slovima, a naslove potpoglavlja malim podebljanim slovima. Ako postoje naslovi unutar potpoglavlja, preporuča se da se oni pišu malim slovima u kurzivu. To bi izgledalo primjerice ovako: 1. UVOD 2. NASLOV TIJELA RADA 2.1. Podnaslov 2.2. Podnaslov 2.2.1. Podnaslov 2.2.2. Podnaslov itd. 3. NASLOV TIJELA RADA 3.1. Podnaslov 3.1.1. Podnaslov 3.1.2. Podnaslov itd. 3.2. Podnaslov itd. 4. ZAKLJUČAK LITERATURA • Novo poglavlje ili potpoglavlje u radu nije potrebno odvajati na posebnu stranicu. – Odlomci: • u tekstu rada prvi redak odlomaka uvući na 1,25 cm (u izbornik"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    }
+  ]
+}

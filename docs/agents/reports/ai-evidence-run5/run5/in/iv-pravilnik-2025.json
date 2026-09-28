@@ -1,0 +1,159 @@
+{
+  "source": {
+    "id": "iv-pravilnik-2025",
+    "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf",
+    "fetchedAt": "2026-07-17",
+    "snapshotHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\iv-pravilnik-2025.txt"
+  },
+  "rules": [
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "IK O IZRADI ZAVRŠNIH I DIPLOMSKIH RADOVA Ovim Pravilnikom uređuju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Saž"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "IK O IZRADI ZAVRŠNIH I DIPLOMSKIH RADOVA Ovim Pravilnikom uređuju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Saž"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Prored: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "uju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Margine: 2,5 cm sa svih strana.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        " način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i prilozi ne numeriraju se, ali se u"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "valueShape": "boolean",
+      "contexts": [
+        "edaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i prilozi ne numeriraju se, ali se uvrštavaju u sadržaj. 6. SADRŽAJ PO POGLAVLJIMA Uvod U uvodu se definira tema rada, njezina važnost, ciljevi rada, istraživačka"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "IK O IZRADI ZAVRŠNIH I DIPLOMSKIH RADOVA Ovim Pravilnikom uređuju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Saž"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "IK O IZRADI ZAVRŠNIH I DIPLOMSKIH RADOVA Ovim Pravilnikom uređuju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Saž"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Prored: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "uju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Margine: 2,5 cm sa svih strana.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        " način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i prilozi ne numeriraju se, ali se u"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "valueShape": "boolean",
+      "contexts": [
+        "edaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu. Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih, diplomskih i specijalističkih završnih radova na Veleučilištu. 1. OPĆE ODREDBE Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te jasnoće i sustavnosti u pisanom izlaganju. Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje svih korištenih izvora. 2. OPSEG RADA • Završni rad: optimalno između 30 i 40 stranica teksta. • Diplomski rad: optimalno između 40 i 60 stranica teksta. U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi. Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka. 3. TEHNIČKI ZAHTJEVI • Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic) • Prored: 1,5 • Margine: 2,5 cm sa svih strana. • Poravnanje teksta: obostrano (justify). • Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira. Naslovi: • Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub. • Podnaslovi: 12 pt. 2 4. TABLICE, SLIKE I GRAFIKONI • Svaka tablica, slika, grafikon ili crtež mora biti numeriran i imati naslov, tablice iznad centrirano, a slike ispod centrirano (font 10 pt). • Ako je tablica, grafikon ili slika preuzeta iz drugih izvora, potrebno je navesti izvor ispod prikaza (font 10 pt). • Ako je prikaz vlastit, navesti izvor: Autor. • Isti podatci u pravilu se ne prikazuju istodobno tablično i grafički. 5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA NASLOVNA STRANICA DRUGA IZJAVA O AKADEMSKOJ ČESTITOSTI IZJAVA O KORIŠTENJU AUTRORSKOG DJELA SADRŽAJ UVOD TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO) METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova) REZULTATI I RASPRAVA (mogu biti objedinjeni) ZAKLJUČAK POPIS LITERATURE POPIS TABLICA I SLIKA (ako je primjenjivo) PRILOZI (ako postoje) SAŽETAK (hrvatski jezik) SUMMARY (engleski jezik) Sažeci, popisi i prilozi ne numeriraju se, ali se uvrštavaju u sadržaj. 6. SADRŽAJ PO POGLAVLJIMA Uvod U uvodu se definira tema rada, njezina važnost, ciljevi rada, istraživačka"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+﻿{
+  "sourceId": "fbf-upute-spec-2014",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--citation-style",
+      "value": "vancouver",
+      "modality": "directive",
+      "scope": "bibliography",
+      "verdict": "extracted",
+      "evidenceQuote": "Popis literature čine precizno navedene literaturne reference, temeljem kojih je osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom, a u popisu slijede redosljedom pojavljivanja u tekstu (najviše do 30 literaturnih navoda, što novijeg datuma objave).",
+      "note": "Izvor izričito propisuje Vancouverski stil za literaturu, pa vrijednost odgovara dopuštenom identifikatoru, goli indikativ daje direktivu, a imenovani dio rada je bibliografija."
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--page-numbers",
+      "value": true,
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Sve stranice moraju biti numerirane, tj. označene brojevima.",
+      "note": "Rečenica zahtijeva numeriranje svih stranica, što daje true, modalitet obveze i opseg cijelog rada."
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--required-sections",
+      "value": null,
+      "modality": "obligation",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "Obvezatni dijelovi rada koji slijede su: a) Eksperimentalni specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode (ili: Ispitanici i metode) 4. Rezultati 5. Rasprava 6. Zaključak (ili: Zaključci) i 7. Referencije (ili Literatura) 8. Životopis b) Teorijski specijalistički rad: 1. Uvod i pregled područja istraživanja 2. Cilj istraživanja 3. Materijal i metode - Sustavni pregled saznanja o temi (podijeljen u odgovarajuća poglavlja) 4. Rasprava 5. Zaključak (ili: Zaključci) i 6. Referencije (ili Literatura) 7. Životopis",
+      "note": "Izvor daje različite popise za eksperimentalni i teorijski rad, a paket ne određuje vrstu rada, pa se jedna vrijednost niza ne može odabrati jednoznačno."
+    }
+  ]
+}

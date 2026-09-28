@@ -1,0 +1,27 @@
+{
+  "accepted": [
+    "effectus-diplomski--justify",
+    "effectus-diplomski--line-spacing",
+    "effectus-diplomski--page-count",
+    "effectus-diplomski--font-size",
+    "effectus-diplomski--margins",
+    "effectus-diplomski--paper-size",
+    "effectus-seminarski--font-size",
+    "effectus-seminarski--justify",
+    "effectus-seminarski--line-spacing",
+    "effectus-seminarski--margins",
+    "effectus-seminarski--page-count",
+    "effectus-seminarski--paper-size",
+    "effectus-seminarski--reference-count",
+    "effectus-zavrsni--justify",
+    "effectus-zavrsni--line-spacing",
+    "effectus-zavrsni--page-count",
+    "effectus-zavrsni--font-size",
+    "effectus-zavrsni--margins",
+    "effectus-zavrsni--paper-size",
+    "effectus-diplomski--font",
+    "effectus-seminarski--font",
+    "effectus-zavrsni--font"
+  ],
+  "refuted": []
+}

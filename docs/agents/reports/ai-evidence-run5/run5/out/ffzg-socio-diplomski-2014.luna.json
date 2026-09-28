@@ -1,0 +1,45 @@
+﻿{
+  "sourceId": "ffzg-socio-diplomski-2014",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "•    tekst poravnati po obje margine (\"justified\")",
+      "note": "Za tijelo teksta traži se obostrano poravnanje, izrečeno izravnom uputom."
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "•    prored: 1,5\nProred teksta u popisu literature je 1 (ne 1,5 kao u ostalom tekstu).",
+      "note": "Opća uputa propisuje prored 1,5 za tijelo teksta, ali popis literature izričito izuzima i propisuje prored 1."
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "ruleId": "ffzg-sociologija-diplomski--margins",
+      "value": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 3.5,
+        "top": 2.5
+      },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "•    margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm",
+      "note": "Uputa navodi desnu marginu 3,5 cm, a lijevu, gornju i donju 2,5 cm za rad."
+    }
+  ]
+}

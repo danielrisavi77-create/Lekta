@@ -1,0 +1,39 @@
+{
+  "source": {
+    "id": "ffri-psihologija-brosura-2022",
+    "url": "https://ffri.uniri.hr/wp-content/uploads/Brosura-diplomski_rad-PSIH-2022.pdf",
+    "fetchedAt": "2026-07-28",
+    "snapshotHash": "e65363cbefec01e79e410e053d952e8856b4c739559f0e7954a5037c1e2c204d",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffri-psihologija-brosura-2022.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "ruleId": "ffri-psihologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "str. 9 (temeljem Clanka 11 Pravilnika)",
+      "quote": "Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10\r\n    pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "otpoglavlja. 6.3.5. Literatura korištena u radu stavlja se na kraju i popisuje u skladu sa standardom navođenja literature u znanstvenim radovima (vidi APA priručnik i časopis Psihologijske teme). Na isti način pišu se i bilješke ispod teksta. Bilješke obavezno moraju imati naznačenu stranicu na koju se autor u tekstu poziva. 6.3.6. Prilozi u obliku ilustracija i tabela mogu stajati uz sam tekst, a mogu se stavljati (s upozorenjem) na kraj teksta. Odsjek za psihologiju Sveučilišna avenija 4 51000 Rijeka Hrvatska 10 Sveučilište u Rijeci Odsjek za psihologiju Filozofski fakultet Diplomski studij psihologije tel. +385 (0)51 265-600, +385 (0)51 265-602 tel. +385 (0)51 265-752 fax. +385 (0)51 216-099 fax. +385 (0)51 216-099 e-adresa - dekanat@ffri.uniri.hr e-adresa: anamarija.ivanusic@ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr 6.4. Numeriranje stranica ide od prve stranice UVODA do zadnje stranice teksta diplomskog rada. Brojevi stranica pišu se arapskim brojkama, u desnom podnožju stranice. Prilozi dobivaju svoju numeraciju. Formule koje idu u sadržaj rada uklapaju se u tekst. 6.5. Razmak se u tipkanju provodi proredom 1,5. 6.6. Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10 pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm. Odsjek za psihologiju Sveučilišna avenija 4 51000 Rijeka Hrvatska 11 Sveučilište u Rijeci Odsjek za psihologiju Filozofski fakultet Diplomski studij psihologije tel. +385 (0)51 265-600, +385 (0)51 265-602 tel. +385 (0)51 265-752 fax. +385 (0)51 216-099 fax. +385 (0)51 216-099 e-adresa - dekanat@ffri.uniri.hr e-adresa: anamarija.ivanusic@ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr 7. Kada prijaviti obranu diplomskog rada? Nakon što je mentor pregledao rukopis rada i složio se s tekstom, student predaje rukopis na pregled članovima Povjerenstva. Nastavnici-članovi Povjerenstva dužni su pregledati rukopis u roku od dva tjedna. Ukoliko imaju određenih primjedbi na tekst, student je dužan izvršiti preradu i dopunu u skladu s njima, a preporučuje se da se to ne čini bez znanja mentora. Tek kada su i mentor i članovi Povjerenstva odobrili tekst diplomskog rada, student može prijaviti obranu diplomskog rada. Student je dužan prije konačne predaje mentoru dostaviti rad u elektroničkom obliku (word ili pdf format). Mentor vrši provjeru rada kroz informatički sustav za provjeru izvornosti, Turnitin. Po završetku procjene izvornosti dipl"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "ruleId": "ffri-psihologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "str. 9 (temeljem Clanka 11 Pravilnika)",
+      "quote": "Razmak se u tipkanju provodi proredom 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        "oručuje se decimalno označavanje poglavlja ili potpoglavlja. 6.3.5. Literatura korištena u radu stavlja se na kraju i popisuje u skladu sa standardom navođenja literature u znanstvenim radovima (vidi APA priručnik i časopis Psihologijske teme). Na isti način pišu se i bilješke ispod teksta. Bilješke obavezno moraju imati naznačenu stranicu na koju se autor u tekstu poziva. 6.3.6. Prilozi u obliku ilustracija i tabela mogu stajati uz sam tekst, a mogu se stavljati (s upozorenjem) na kraj teksta. Odsjek za psihologiju Sveučilišna avenija 4 51000 Rijeka Hrvatska 10 Sveučilište u Rijeci Odsjek za psihologiju Filozofski fakultet Diplomski studij psihologije tel. +385 (0)51 265-600, +385 (0)51 265-602 tel. +385 (0)51 265-752 fax. +385 (0)51 216-099 fax. +385 (0)51 216-099 e-adresa - dekanat@ffri.uniri.hr e-adresa: anamarija.ivanusic@ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr 6.4. Numeriranje stranica ide od prve stranice UVODA do zadnje stranice teksta diplomskog rada. Brojevi stranica pišu se arapskim brojkama, u desnom podnožju stranice. Prilozi dobivaju svoju numeraciju. Formule koje idu u sadržaj rada uklapaju se u tekst. 6.5. Razmak se u tipkanju provodi proredom 1,5. 6.6. Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10 pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm. Odsjek za psihologiju Sveučilišna avenija 4 51000 Rijeka Hrvatska 11 Sveučilište u Rijeci Odsjek za psihologiju Filozofski fakultet Diplomski studij psihologije tel. +385 (0)51 265-600, +385 (0)51 265-602 tel. +385 (0)51 265-752 fax. +385 (0)51 216-099 fax. +385 (0)51 216-099 e-adresa - dekanat@ffri.uniri.hr e-adresa: anamarija.ivanusic@ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr mrežne stranice - http://www.ffri.uniri.hr 7. Kada prijaviti obranu diplomskog rada? Nakon što je mentor pregledao rukopis rada i složio se s tekstom, student predaje rukopis na pregled članovima Povjerenstva. Nastavnici-članovi Povjerenstva dužni su pregledati rukopis u roku od dva tjedna. Ukoliko imaju određenih primjedbi na tekst, student je dužan izvršiti preradu i dopunu u skladu s njima, a preporučuje se da se to ne čini bez znanja mentora. Tek kada su i mentor i članovi Povjerenstva odobrili tekst diplomskog rada, student može prijaviti obranu diplomskog rada. Student je dužan prije konačne predaje mentoru dostaviti rad u ele"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "ffzg-povum-diplomski-2016",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst se poravnava po oba ruba (Justified)",
+      "note": "Obostrano poravnanje izričito je navedeno kao indikativna uputa za tekst rada, pa je vrijednost true, modalitet directive, a opseg body."
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified).",
+      "note": "Za tekst rada naveden je prored 1,5, dok za bilješke na dnu stranice izričito vrijedi prored 1, pa izvor propisuje različite vrijednosti za tu os."
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno).",
+      "note": "Odlomak izričito određuje gornju, donju i lijevu marginu na 2,5 cm te desnu na 2 cm kao uputu za rad u cjelini."
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu.",
+      "note": "Izvor izravno nalaže numeriranje stranica teksta, što daje vrijednost true i opseg whole."
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje.",
+      "note": "Rečenica izričito navodi format papira A4 za rad, pa je modalitet directive, a opseg whole."
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "source": {
+    "id": "effectus-pravilnik-2023",
+    "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\effectus-pravilnik-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Nacin citiranja (brojcane fusnote)",
+      "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word\r\ndokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert\r\nFootnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju\r\nbrojčanim redoslijedom.",
+      "valueShape": "string",
+      "contexts": [
+        "(za hrvatske presude), ime stranaka, ako je uvriježeno (npr. obavezno kod presuda Suda EU i ESLJP, ne kod presuda hrvatskih sudova), posebni podaci (posebni brojevi i podaci o objavi presuda, ako je takav podatak dostupan) ESLJP, 65731/01 i 65900/01, Stec i dr. / UK, ESLJP, 12.04. 2006., ECHR 2006-VI. Sud EU, C-53/81 od 23.3.1982., Levin / Staatssecretaris van Justitie, ECLI:EU:C:1982:105. VSRH, Rev-1545/01 od 22.11.2001 (6) Odrednica u enciklopedijskim djelima i leksikonima: odrednica, naziv enciklopedije/leksikona, mjesto, izdavač, datum izdanja Ius naturale, u: Pravni leksikon, Zagreb: Leksikografski zavod Miroslav Krleža, 2007 (6) Internet izvori: Autor, naslov rada, godina, točan link, datum pristupa web stranici. Ukoliko bilo koji od elemenata autor, naslov rada ili godina nije naznačen na web stranici, tada se navodi točan link i datum pristupa stranici. Marcelić, S. (2010) Plagijat u hrvatskoj akademskoj zajednici: (ne)uspješna borba i moguća rješenja, http://www.iro.hr/hr/javne-politike-visokog- obrazovanja/kolumna/plagijat-u-hrvatskoj-akademskoj- zajednici/, pristup: 01.02.2012. Knowledge Management, http://www.nwlink.com/~donclark/knowledge/km.html, pristup: 01.02.2012. Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom. U citiranju je obavezno potrebno navesti broj stranice na kojoj se nalazi citat, dok se u popisu literature navodi samo djelo, bez brojeva stranica. 5.8.2. Izvori slika, shema i tablica Student u radu može koristiti slike, formule i tablice. One ne predstavljaju samo dodatak tekstu već predstavljaju važan dio rada i obvezno se u tekstu mora pozivati na njih navodeći njihov broj. Izvori slika, shema i tablica prikazuju se na sljedeći način: Iznad slike/sheme/tablice navodi se broj slike/sheme/tablice i njezin naslov. Izvor iz kojeg je preuzeta navodi se ispod slike/sheme/tablice. Ukoliko je slika vlastiti rad autora, izvor se ne navodi. Dodatna objašnjenja mogu se dati u tekstu uz povezivanje s rednim brojem slike ili tablice. Način naslovljavanja i navođenja izvora prikazan je u primjerima 9 i 10 u prilozima ovih Uputa. Slike, sheme i tablice numeriraju se arapskim brojevima, a numeriranje počinje brojem 1 (npr. tablica 1, tablica 2, tablica 3, tablica X,…). Formule se obilježavaju brojevima u okrugloj zagradi, a u tekstu se treba pozvati na redni broj formule. Popis slika, tablica i formula dodaje se na kraju završnog rada, iza zaključka. 5.8.3. Kratice Student u radu može korist"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "boolean",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "number",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--page-count",
+      "checkId": "page-count",
+      "label": "Opseg (50-80 str.)",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 5)",
+      "quote": "Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne\r\nuračunava se naslovna stranica, sadržaj i popis literature).",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, žargon i slično. Studenti se upućuju da prije pisanja rada pročitaju nekoliko stručnih i znanstvenih radova, kako bi mogli svoj stil pisanja prilagoditi akademskom i stručnom stilu. 4.1. Jezik rada Rad se piše na hrvatskom književnom jeziku, latiničnim pismom. U iznimnim slučajevima, na temelju obrazloženog i opravdanog zahtjeva studenta i uz suglasnost mentora, završni rad može se pisati i usmeno b"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": "number",
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "ruleId": "effectus-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": "string",
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--citation-style",
+      "checkId": "citation-style",
+      "label": "Nacin citiranja (brojcane fusnote)",
+      "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word\r\ndokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert\r\nFootnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju\r\nbrojčanim redoslijedom.",
+      "valueShape": "string",
+      "contexts": [
+        "(za hrvatske presude), ime stranaka, ako je uvriježeno (npr. obavezno kod presuda Suda EU i ESLJP, ne kod presuda hrvatskih sudova), posebni podaci (posebni brojevi i podaci o objavi presuda, ako je takav podatak dostupan) ESLJP, 65731/01 i 65900/01, Stec i dr. / UK, ESLJP, 12.04. 2006., ECHR 2006-VI. Sud EU, C-53/81 od 23.3.1982., Levin / Staatssecretaris van Justitie, ECLI:EU:C:1982:105. VSRH, Rev-1545/01 od 22.11.2001 (6) Odrednica u enciklopedijskim djelima i leksikonima: odrednica, naziv enciklopedije/leksikona, mjesto, izdavač, datum izdanja Ius naturale, u: Pravni leksikon, Zagreb: Leksikografski zavod Miroslav Krleža, 2007 (6) Internet izvori: Autor, naslov rada, godina, točan link, datum pristupa web stranici. Ukoliko bilo koji od elemenata autor, naslov rada ili godina nije naznačen na web stranici, tada se navodi točan link i datum pristupa stranici. Marcelić, S. (2010) Plagijat u hrvatskoj akademskoj zajednici: (ne)uspješna borba i moguća rješenja, http://www.iro.hr/hr/javne-politike-visokog- obrazovanja/kolumna/plagijat-u-hrvatskoj-akademskoj- zajednici/, pristup: 01.02.2012. Knowledge Management, http://www.nwlink.com/~donclark/knowledge/km.html, pristup: 01.02.2012. Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom. U citiranju je obavezno potrebno navesti broj stranice na kojoj se nalazi citat, dok se u popisu literature navodi samo djelo, bez brojeva stranica. 5.8.2. Izvori slika, shema i tablica Student u radu može koristiti slike, formule i tablice. One ne predstavljaju samo dodatak tekstu već predstavljaju važan dio rada i obvezno se u tekstu mora pozivati na njih navodeći njihov broj. Izvori slika, shema i tablica prikazuju se na sljedeći način: Iznad slike/sheme/tablice navodi se broj slike/sheme/tablice i njezin naslov. Izvor iz kojeg je preuzeta navodi se ispod slike/sheme/tablice. Ukoliko je slika vlastiti rad autora, izvor se ne navodi. Dodatna objašnjenja mogu se dati u tekstu uz povezivanje s rednim brojem slike ili tablice. Način naslovljavanja i navođenja izvora prikazan je u primjerima 9 i 10 u prilozima ovih Uputa. Slike, sheme i tablice numeriraju se arapskim brojevima, a numeriranje počinje brojem 1 (npr. tablica 1, tablica 2, tablica 3, tablica X,…). Formule se obilježavaju brojevima u okrugloj zagradi, a u tekstu se treba pozvati na redni broj formule. Popis slika, tablica i formula dodaje se na kraju završnog rada, iza zaključka. 5.8.3. Kratice Student u radu može korist"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": "number",
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "boolean",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "number",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--page-count",
+      "checkId": "page-count",
+      "label": "Opseg (10-20 str.)",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 4)",
+      "quote": "Opseg seminarskog rada mora iznositi 10-20 stranica.",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, žargon i slično. Studenti se upućuju da prije pisanja rada pročitaju nekoliko stručnih i znanstvenih"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": "string",
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "needs-ai-evidence",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "ruleId": "effectus-seminarski--reference-count",
+      "checkId": "reference-count",
+      "label": "Najmanji broj izvora (5, od toga najmanje 2 knjige)",
+      "sourcePage": "Upute (Prilog 1), tč. 2.2 (str. 4)",
+      "quote": "Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige.",
+      "valueShape": "number",
+      "contexts": [
+        ". Nastavnik će u tom slučaju potvrditi prijedlog teme, ukoliko je ista u skladu s nastavnim sadržajem i temom koju nastavni predmet obrađuje, ili će zajedno sa studentom kroz konzultacije dogovoriti i uskladiti temu kako bi ona odgovarala nastavnom sadržaju i temi koju predmet obrađuje. Postupak odabira teme završnog i diplomskog rada kao i postupak obrane je formaliziran, precizno određen posebnim pravilnikom i sastoji se od više koraka. 2.1. Rokovi predaje seminarskog, završnog i diplomskog rada Rok predaje seminarskog rada nastavnik može odrediti unaprijed ili može sa studentom dogovoriti rok predaje seminarskog rada individualno za svaki rad. Rokovi vezani uz izradu i predaju završnog odnosno diplomskog rada definirani su posebnim pravilnikom i usklađuju se s mentorom. 2.2. Početak pisanja seminarskog, završnog i diplomskog rada Početak pisanja rada započinje prikupljanjem relevantne literature (knjige, zbornici, članci, Internet izvori i sl.). Prikupljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "label": "Nacin citiranja (brojcane fusnote)",
+      "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word\r\ndokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert\r\nFootnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju\r\nbrojčanim redoslijedom.",
+      "valueShape": "string",
+      "contexts": [
+        "(za hrvatske presude), ime stranaka, ako je uvriježeno (npr. obavezno kod presuda Suda EU i ESLJP, ne kod presuda hrvatskih sudova), posebni podaci (posebni brojevi i podaci o objavi presuda, ako je takav podatak dostupan) ESLJP, 65731/01 i 65900/01, Stec i dr. / UK, ESLJP, 12.04. 2006., ECHR 2006-VI. Sud EU, C-53/81 od 23.3.1982., Levin / Staatssecretaris van Justitie, ECLI:EU:C:1982:105. VSRH, Rev-1545/01 od 22.11.2001 (6) Odrednica u enciklopedijskim djelima i leksikonima: odrednica, naziv enciklopedije/leksikona, mjesto, izdavač, datum izdanja Ius naturale, u: Pravni leksikon, Zagreb: Leksikografski zavod Miroslav Krleža, 2007 (6) Internet izvori: Autor, naslov rada, godina, točan link, datum pristupa web stranici. Ukoliko bilo koji od elemenata autor, naslov rada ili godina nije naznačen na web stranici, tada se navodi točan link i datum pristupa stranici. Marcelić, S. (2010) Plagijat u hrvatskoj akademskoj zajednici: (ne)uspješna borba i moguća rješenja, http://www.iro.hr/hr/javne-politike-visokog- obrazovanja/kolumna/plagijat-u-hrvatskoj-akademskoj- zajednici/, pristup: 01.02.2012. Knowledge Management, http://www.nwlink.com/~donclark/knowledge/km.html, pristup: 01.02.2012. Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom. U citiranju je obavezno potrebno navesti broj stranice na kojoj se nalazi citat, dok se u popisu literature navodi samo djelo, bez brojeva stranica. 5.8.2. Izvori slika, shema i tablica Student u radu može koristiti slike, formule i tablice. One ne predstavljaju samo dodatak tekstu već predstavljaju važan dio rada i obvezno se u tekstu mora pozivati na njih navodeći njihov broj. Izvori slika, shema i tablica prikazuju se na sljedeći način: Iznad slike/sheme/tablice navodi se broj slike/sheme/tablice i njezin naslov. Izvor iz kojeg je preuzeta navodi se ispod slike/sheme/tablice. Ukoliko je slika vlastiti rad autora, izvor se ne navodi. Dodatna objašnjenja mogu se dati u tekstu uz povezivanje s rednim brojem slike ili tablice. Način naslovljavanja i navođenja izvora prikazan je u primjerima 9 i 10 u prilozima ovih Uputa. Slike, sheme i tablice numeriraju se arapskim brojevima, a numeriranje počinje brojem 1 (npr. tablica 1, tablica 2, tablica 3, tablica X,…). Formule se obilježavaju brojevima u okrugloj zagradi, a u tekstu se treba pozvati na redni broj formule. Popis slika, tablica i formula dodaje se na kraju završnog rada, iza zaključka. 5.8.3. Kratice Student u radu može korist"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "boolean",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba\r\nbiti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "valueShape": "number",
+      "contexts": [
+        "i svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, ž"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--page-count",
+      "checkId": "page-count",
+      "label": "Opseg (35-50 str.)",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 4-5)",
+      "quote": "Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava\r\nse         naslovna         stranica,          sadržaj         i          popis         literature).",
+      "valueShape": {
+        "max": "number",
+        "min": "number"
+      },
+      "contexts": [
+        "četi s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od pisanja literarnih radova i popularnih članaka te se stoga i stil pisanja treba prilagoditi. U pisanju je potrebno izbjegavati prazne fraze, nepotrebne metafore, hiperbole, žargon i slično. Studenti se upućuju da prije pisanja rada pročitaju nekoliko stručnih i znanstvenih radova, kako bi mogli svoj stil pisanja prilagoditi akademskom i stručnom stilu. 4.1. Jezik rada Rad se piše na hrvatskom književnom jeziku, latiničn"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "valueShape": "number",
+      "contexts": [
+        "a najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači da se radi o jednoj riječi. 4. Stil pisanja Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što je: „Prema mišljenju autora…“). Pisanje rada razlikuje se od "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "ruleId": "effectus-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "valueShape": "string",
+      "contexts": [
+        "upljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih izvora odabere informacije koje smatra važnima za navedenu temu. Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige. Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski jezik. Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada. Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog problema ili situacije i slično. 3. Tehnički detalji Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini stranice. Razmak između glava i poglavlja iznosi jedan redak, a između naslova glave ili poglavlja nema razmaka. Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt. Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje odlomka prikazano je na slici 1. Opseg seminarskog rada mora iznositi 10-20 stranica. Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature). Slika 1: Formatiranje odlomka Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znak"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "kif-diplomski--citation-style": {
+    "value": "apa7",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "kif-diplomski--reference-count": {
+    "value": 20,
+    "modality": "directive",
+    "scope": "bibliography"
+  },
+  "kif-diplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "kif-diplomski--word-count": {
+    "value": {
+      "min": 4000
+    },
+    "modality": "prohibition",
+    "scope": "whole"
+  },
+  "kif-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "kif-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "kif-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

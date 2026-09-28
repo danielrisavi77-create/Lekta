@@ -1,0 +1,22 @@
+{
+  "pmf-biologija-graduate--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "pmf-biologija-graduate--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "pmf-biologija-graduate--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

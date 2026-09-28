@@ -1,0 +1,10 @@
+{
+  "algebra-diplomski-odnosi-s-javnoscu--word-count": {
+    "value": {
+      "min": 20000,
+      "max": 25000
+    },
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

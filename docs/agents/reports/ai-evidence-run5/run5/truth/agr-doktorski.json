@@ -1,0 +1,17 @@
+{
+  "agr-doktorski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "agr-doktorski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "agr-doktorski--paper-size": {
+    "value": "A4",
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

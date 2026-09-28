@@ -1,0 +1,696 @@
+﻿{
+    "sourceId":  "fpzg-upute-akademski-radovi",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-mes-master-thesis",
+                      "ruleId":  "fpzg-mes-master-thesis--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+                      "ruleId":  "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-diplomski",
+                      "ruleId":  "fpzg-novinarstvo-diplomski--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-novinarstvo-zavrsni-tekst",
+                      "ruleId":  "fpzg-novinarstvo-zavrsni-tekst--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-opci-akademski-rad",
+                      "ruleId":  "fpzg-opci-akademski-rad--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-diplomski",
+                      "ruleId":  "fpzg-politologija-diplomski--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-politologija-zavrsni",
+                      "ruleId":  "fpzg-politologija-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+                      "ruleId":  "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+                      "ruleId":  "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+                      "ruleId":  "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+                      "value":  {
+                                    "authorYearSuffixes":  true,
+                                    "sort":  "alphabetical-by-author-then-chronological"
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Popis\r\nliterature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronološkim\r\nredom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu\r\nizdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+                      "note":  "Izvori se redaju abecedno prema prezimenu pa kronološki za istog autora, a radovi istog autora iste godine razlikuju se slovima; riječ je o direktivi za bibliografiju."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi Times New Roman za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor propisuje veličinu slova 12 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor traži obostrano poravnanje (Justify), pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski i završni specijalistički rad trebaju biti napisani fontom/ pismom Times New\r\nRoman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+                      "note":  "Izvor navodi prored 1,5 za rad, pa je opseg tijelo i modalitet direktiva."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor kaže da se stranice rada numeriraju uz izričitu iznimku naslovnica, pa je numeriranje obvezno kao direktiva u opsegu cijelog rada."
+                  },
+                  {
+                      "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+                      "ruleId":  "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+                      "value":  {
+                                    "frontMatter":  {
+                                                        "numbering":  "roman",
+                                                        "removePageNumberFromTitlePage":  true
+                                                    },
+                                    "mainMatter":  {
+                                                       "numbering":  "arabic",
+                                                       "startAt":  1
+                                                   }
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice rada se\r\nnumeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni\r\ntekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+                      "note":  "Izvor izričito određuje rimske brojke za prethodne dijelove, arapske za osnovni tekst od 1 na uvodu te izuzima naslovnice, pa je riječ o direktivi u opsegu cijelog rada."
+                  }
+              ]
+}

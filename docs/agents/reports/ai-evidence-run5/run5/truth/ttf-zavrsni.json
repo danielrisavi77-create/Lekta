@@ -1,0 +1,39 @@
+{
+  "ttf-zavrsni--font": {
+    "value": [
+      "Arial"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "ttf-zavrsni--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-zavrsni--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ttf-zavrsni--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ttf-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

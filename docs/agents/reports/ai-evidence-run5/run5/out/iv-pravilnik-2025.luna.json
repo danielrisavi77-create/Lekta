@@ -1,0 +1,106 @@
+﻿{
+  "sourceId": "iv-pravilnik-2025",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--font",
+      "value": ["Arial"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Arial je naveden za tekst, a gola natuknica daje direktivu za tijelo rada."
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Opća natuknica navodi 12 pt, ali za glavne naslove izričito navodi 14 pt, a za prikaze 10 pt, pa os ima iznimke."
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored: 1,5",
+      "note": "Natuknica propisuje prored 1,5 za tekst tijela rada."
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--margins",
+      "value": {"bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5},
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine: 2,5 cm sa svih strana.",
+      "note": "Natuknica određuje 2,5 cm na svim stranama stranice, za cijeli rad."
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "note": "Natuknica traži numeriranje stranica arapskim brojevima, uz izuzeće naslovnice, pa se odnosi na rad u cjelini."
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--font",
+      "value": ["Arial"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Arial je naveden za tekst, a gola natuknica daje direktivu za tijelo rada."
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--font-size",
+      "value": [12],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Opća natuknica navodi 12 pt, ali za glavne naslove izričito navodi 14 pt, a za prikaze 10 pt, pa os ima iznimke."
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored: 1,5",
+      "note": "Natuknica propisuje prored 1,5 za tekst tijela rada."
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--margins",
+      "value": {"bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5},
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine: 2,5 cm sa svih strana.",
+      "note": "Natuknica određuje 2,5 cm na svim stranama stranice, za cijeli rad."
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "note": "Natuknica traži numeriranje stranica arapskim brojevima, uz izuzeće naslovnice, pa se odnosi na rad u cjelini."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+    "sourceId":  "alu-vodic-doktorski-2026",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "alu-doktorski",
+                      "ruleId":  "alu-doktorski--page-count",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "A). Doktorski rad temeljen na praksi odabire se ako doktorand/doktorandica odabere samo mentora/mentoricu u umjetničko-nastavnom zvanju, a sastoji se od: – teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica teksta (1 kartica od 1800 slovnih mjesta) temeljenog na izvještajima umjetničkog istraživanja, koji se predaju na kraju svake godine studija. B). Doktorski rad temeljen na praksi i teoriji odabire se ako je I. mentor/mentorica u umjetničko-nastavnom zvanju, a II. mentor/mentorica u znanstveno-nastavnom zvanju, a sastoji se od – teorijskog rada (disertacije) većeg opsega u pisanom obliku od minimalno 90 kartica teksta (1 kartica od 1800 slovnih mjesta) temeljenog na umjetničkom istraživanju u poveznici s interdisciplinarnom literaturom iz područja teme koja se istražuje.",
+                      "note":  "Izvor za model A propisuje najmanje 30 kartica, a za model B najmanje 90 kartica, pa vrijednost ovisi o vrsti rada; oba su iskaza izravna pravila o opsegu disertacije."
+                  }
+              ]
+}

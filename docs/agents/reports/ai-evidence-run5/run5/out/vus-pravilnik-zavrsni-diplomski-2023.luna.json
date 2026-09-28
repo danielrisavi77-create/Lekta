@@ -1,0 +1,98 @@
+{
+    "sourceId":  "vus-pravilnik-zavrsni-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli (version unavailable)"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "vus-diplomski",
+                      "ruleId":  "vus-diplomski--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi Times New Roman u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-diplomski",
+                      "ruleId":  "vus-diplomski--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi 12 pt u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-diplomski",
+                      "ruleId":  "vus-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi obostrano u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-diplomski",
+                      "ruleId":  "vus-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi 1,5 u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-zavrsni",
+                      "ruleId":  "vus-zavrsni--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi Times New Roman u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-zavrsni",
+                      "ruleId":  "vus-zavrsni--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi 12 pt u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-zavrsni",
+                      "ruleId":  "vus-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi obostrano u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  },
+                  {
+                      "profileId":  "vus-zavrsni",
+                      "ruleId":  "vus-zavrsni--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (moguÄ‡nost proreda prije i poslije 0), odnosno:",
+                      "note":  "Izvor navodi 1,5 u radu kao opće pravilo, pa je modalitet directive, a opseg body."
+                  }
+              ]
+}

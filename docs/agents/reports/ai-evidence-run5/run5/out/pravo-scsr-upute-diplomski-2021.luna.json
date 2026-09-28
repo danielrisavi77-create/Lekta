@@ -1,0 +1,162 @@
+{
+    "sourceId":  "pravo-scsr-upute-diplomski-2021",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman)",
+                      "note":  "Izvor izričito navodi vrijednost za glavni tekst, pa je modalitet direktiva, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman)",
+                      "note":  "Glavni tekst ima veličinu 12, dok izvor za korice navodi 14 i za naslov rada 16, pa postoji izričita iznimka."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--footnote-size",
+                      "value":  [
+                                    10
+                                ],
+                      "modality":  "directive",
+                      "scope":  "footnote",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "bilješke (fusnote) se ispisuju na dnu svake stranice - označavaju se od rednog broja 1 i nadalje, veličina slova je 10.",
+                      "note":  "Izvor navodi veličinu slova 10 za bilješke (fusnote), pa je opseg fusnota."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "tekst je potrebno pisati s obostranim poravnanjem.",
+                      "note":  "Izvor izričito navodi vrijednost za glavni tekst, pa je modalitet direktiva, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda.",
+                      "note":  "Izvor traži rednu oznaku stranica od prve stranice uvoda, što obuhvaća rad kao cjelinu."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Na drugoj stranici se nalazi sadržaj rada i ona se ne numerira.",
+                      "note":  "Izvor propisuje da se sadržaj nalazi na drugoj stranici, što je zahtjev za rad kao cjelinu."
+                  },
+                  {
+                      "profileId":  "pravo-socijalna-politika-diplomski",
+                      "ruleId":  "pravo-socijalna-politika-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "prored treba biti: 1,5; Treća stranica sadržava naslov, sažetak, ključne riječi na hrvatskom i engleskom jeziku, i ona ne sadrži oznaku broja stranice. Sažetak treba biti opsega do 200 riječi. Sažetak pruža osnovne informacije o tome što je u radu obrađeno",
+                      "note":  "Glavni tekst ima prored 1,5, dok je za sažetak izričito naveden prored 1, pa postoji iznimka."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--font",
+                      "value":  [
+                                    "Times New Roman"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman)",
+                      "note":  "Izvor izričito navodi vrijednost za glavni tekst, pa je modalitet direktiva, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--font-size",
+                      "value":  [
+                                    12
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "oblik i veličina slova treba biti jednaka u cijelom tekstu (veličina: 12, oblik: Times New Roman)",
+                      "note":  "Glavni tekst ima veličinu 12, dok izvor za korice navodi 14 i za naslov rada 16, pa postoji izričita iznimka."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--footnote-size",
+                      "value":  [
+                                    10
+                                ],
+                      "modality":  "directive",
+                      "scope":  "footnote",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "bilješke (fusnote) se ispisuju na dnu svake stranice - označavaju se od rednog broja 1 i nadalje, veličina slova je 10.",
+                      "note":  "Izvor navodi veličinu slova 10 za bilješke (fusnote), pa je opseg fusnota."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "tekst je potrebno pisati s obostranim poravnanjem.",
+                      "note":  "Izvor izričito navodi vrijednost za glavni tekst, pa je modalitet direktiva, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda.",
+                      "note":  "Izvor traži rednu oznaku stranica od prve stranice uvoda, što obuhvaća rad kao cjelinu."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--toc",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Na drugoj stranici se nalazi sadržaj rada i ona se ne numerira.",
+                      "note":  "Izvor propisuje da se sadržaj nalazi na drugoj stranici, što je zahtjev za rad kao cjelinu."
+                  },
+                  {
+                      "profileId":  "pravo-socijalni-rad-diplomski",
+                      "ruleId":  "pravo-socijalni-rad-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "prored treba biti: 1,5; Treća stranica sadržava naslov, sažetak, ključne riječi na hrvatskom i engleskom jeziku, i ona ne sadrži oznaku broja stranice. Sažetak treba biti opsega do 200 riječi. Sažetak pruža osnovne informacije o tome što je u radu obrađeno",
+                      "note":  "Glavni tekst ima prored 1,5, dok je za sažetak izričito naveden prored 1, pa postoji iznimka."
+                  }
+              ]
+}

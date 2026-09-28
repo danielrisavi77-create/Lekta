@@ -1,0 +1,40 @@
+﻿{
+    "sourceId":  "pravo-katedra-radno-socijalno-upute-2021",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "radno-socijalno-pravo",
+                      "ruleId":  "radno-socijalno-pravo--heading-rules",
+                      "value":  null,
+                      "modality":  "prohibition",
+                      "scope":  "heading",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) označavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima. Tako bi npr. ispravno označavanje bilo:",
+                      "note":  "Izvor nalaže arapsko decimalno označavanje i zabranjuje slova i rimske brojeve, ali maksimalnu razinu, velika slova i završnu točku prikazuje samo kroz primjer pa cijeli traženi oblik vrijednosti nije jednoznačan."
+                  },
+                  {
+                      "profileId":  "radno-socijalno-pravo",
+                      "ruleId":  "radno-socijalno-pravo--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice trebaju biti označene arapskim brojevima (dolje desno), pri čemu se prva brojčana oznaka stavlja na prvu stranicu uvoda.",
+                      "note":  "Stranice trebaju imati arapske brojeve, što daje vrijednost true; izraz „trebaju” ovdje je direktiva, a pravilo se odnosi na stranice rada."
+                  },
+                  {
+                      "profileId":  "radno-socijalno-pravo",
+                      "ruleId":  "radno-socijalno-pravo--toc",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Svi radovi moraju imati sadržaj, uvod, razradu teme po smislenim cjelinama i zaključak.",
+                      "note":  "Izvor izričito zahtijeva sadržaj za sve radove izrazom „moraju”, pa je vrijednost true, modalitet obligation i opseg whole."
+                  }
+              ]
+}

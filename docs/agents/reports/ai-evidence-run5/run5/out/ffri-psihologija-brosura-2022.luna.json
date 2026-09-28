@@ -1,0 +1,26 @@
+﻿{
+  "sourceId": "ffri-psihologija-brosura-2022",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "ruleId": "ffri-psihologija-diplomski--font-size",
+      "value": [12],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "6.6. Oblikovanje teksta u cijelom diplomskom radu mora biti veličine 12 pt (fusnote 10 pt) te u vrsti Times New Roman, obostrano poravnano, s marginama od 2,5 cm.",
+      "note": "Izvor propisuje 12 pt za tekst rada, ali izričito izuzima fusnote s 10 pt, pa je vrijednost za tijelo rada 12 uz iznimku za fusnote."
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "ruleId": "ffri-psihologija-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "6.5. Razmak se u tipkanju provodi proredom 1,5.",
+      "note": "Izvor navodi prored 1,5 u tipkanju, što je direktivni iskaz za tekst rada."
+    }
+  ]
+}

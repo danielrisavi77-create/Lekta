@@ -1,0 +1,578 @@
+[
+    {
+        "profileId":  "adu-montaza-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: adu-montaza-diplomski/adu-montaza-diplomski--paper-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "agr-doktorski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: agr-doktorski/agr-doktorski--font-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "algebra-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx1,source-input-missingx6"
+    },
+    {
+        "profileId":  "algebra-diplomski-odnosi-s-javnoscu",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx1,source-input-missingx6"
+    },
+    {
+        "profileId":  "algebra-specijalisticki",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx1,source-input-missingx6"
+    },
+    {
+        "profileId":  "algebra-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx1,source-input-missingx6"
+    },
+    {
+        "profileId":  "arca-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: extract-insufficientx1,manifest-missingx1,source-input-mismatchx2"
+    },
+    {
+        "profileId":  "biolos-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx5,manifest-missingx1"
+    },
+    {
+        "profileId":  "effectus-diplomski",
+        "built":  6,
+        "applied":  false,
+        "reason":  "proba: effectus-diplomski/effectus-diplomski--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "effectus-seminarski",
+        "built":  6,
+        "applied":  false,
+        "reason":  "proba: effectus-seminarski/effectus-seminarski--page-count: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "effectus-zavrsni",
+        "built":  6,
+        "applied":  false,
+        "reason":  "proba: effectus-zavrsni/effectus-zavrsni--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "efos-opci-akademski-rad",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: efos-opci-akademski-rad/efos-opci-akademski-rad--paper-size: manifest-time-mismatch: Vrijeme izvođenja ne odgovara izvršnom manifestu."
+    },
+    {
+        "profileId":  "efst-opci-akademski-rad",
+        "built":  5,
+        "applied":  false,
+        "reason":  "proba prolazi"
+    },
+    {
+        "profileId":  "efzg-specijalisticki",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: efzg-specijalisticki/efzg-specijalisticki--margins: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "efzg-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: efzg-zavrsni/efzg-zavrsni--margins: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "erf-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: refutedx3,manifest-missingx1,extract-conflictx1,source-input-mismatchx2"
+    },
+    {
+        "profileId":  "fbf-specijalisticki",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx5,manifest-missingx1,blind-mismatchx1,extract-insufficientx1"
+    },
+    {
+        "profileId":  "ffri-psihologija-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ffri-psihologija-diplomski/ffri-psihologija-diplomski--font: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "ffzg-etnologija-graduate",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: Syntax Error: Unknown character collection \u0027PDFXC30-Identity\u0027"
+    },
+    {
+        "profileId":  "ffzg-filozofija-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ffzg-filozofija-diplomski/ffzg-filozofija-diplomski--required-sections: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-kroatistika-graduate",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ffzg-kroatistika-graduate/ffzg-kroatistika-graduate--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-lingvistika-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: ffzg-lingvistika-diplomski/ffzg-lingvistika-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-pedagogija-graduate",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: ffzg-pedagogija-graduate/ffzg-pedagogija-graduate--margins: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-povijest-umjetnosti-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: ffzg-povijest-umjetnosti-diplomski/ffzg-povijest-umjetnosti-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-psihologija-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ffzg-psihologija-diplomski/ffzg-psihologija-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ffzg-sociologija-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: ffzg-sociologija-diplomski/ffzg-sociologija-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "fhs-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: fhs-diplomski/fhs-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "fhs-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: fhs-zavrsni/fhs-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "fpzg-mes-master-thesis",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-mes-master-thesis: postoje 5 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-nacionalna-sigurnost-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-nacionalna-sigurnost-diplomski: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-novinarstvo-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-novinarstvo-diplomski: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-politologija-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-politologija-diplomski: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-politologija-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-missingx1,source-input-mismatchx11,manifest-missingx1,refutedx1"
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-specijalisticki-odnosi-s-javnoscu: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-prilagodba-eu",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-specijalisticki-prilagodba-eu: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-specijalisticki-sigurnosna-politika-rh: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "fpzg-specijalisticki-vanjska-politika-diplomacija",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: fpzg-specijalisticki-vanjska-politika-diplomacija: postoje 6 AI-confirmed ledger događaji bez odgovarajućeg dokaznog pravila; prvo ih razriješi append-only korekcijom."
+    },
+    {
+        "profileId":  "ftrr-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: ftrr-diplomski/ftrr-diplomski--paper-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "ftrr-zavrsni",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: ftrr-zavrsni/ftrr-zavrsni--paper-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "grad-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: grad-diplomski/grad-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "grad-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: grad-zavrsni/grad-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "grf-zavrsni",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: grf-zavrsni/grf-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "hks-diplomski",
+        "built":  5,
+        "applied":  false,
+        "reason":  "proba: hks-diplomski/hks-diplomski--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "iv-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: iv-diplomski/iv-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "iv-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: iv-zavrsni/iv-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "kbf-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: kbf-diplomski/kbf-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "kbf-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: kbf-zavrsni/kbf-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "kif-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: kif-diplomski/kif-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "kif-specijalisticki",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: kif-specijalisticki/kif-specijalisticki--font: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "mef-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: mef-diplomski/mef-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "mef-doktorski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: mef-doktorski/mef-doktorski--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "oss-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: oss-diplomski/oss-diplomski--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "oss-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: oss-zavrsni/oss-zavrsni--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "pbf-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: pbf-diplomski/pbf-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "pmf-biologija-graduate",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: pmf-biologija-graduate/pmf-biologija-graduate--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "pmf-geografija-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: pmf-geografija-diplomski/pmf-geografija-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "pmf-geologija-graduate",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx6,manifest-missingx1"
+    },
+    {
+        "profileId":  "pravo-integrirani-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx10,source-missingx2,blind-mismatchx1,manifest-missingx2"
+    },
+    {
+        "profileId":  "pravo-javna-uprava-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx10,source-missingx1,blind-mismatchx1,manifest-missingx2"
+    },
+    {
+        "profileId":  "pravo-javna-uprava-prijediplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx10,source-missingx1,blind-mismatchx1,manifest-missingx2"
+    },
+    {
+        "profileId":  "pravo-porezni-prijediplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx10,source-missingx1,blind-mismatchx1,manifest-missingx2"
+    },
+    {
+        "profileId":  "pravo-socijalna-politika-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: pravo-socijalna-politika-diplomski/pravo-socijalna-politika-diplomski--margins: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "pravo-socijalni-rad-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: pravo-socijalni-rad-diplomski/pravo-socijalni-rad-diplomski--margins: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "pravo-socijalni-rad-zavrsni",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: pravo-socijalni-rad-zavrsni: nema valjanih pravila za primjenu; ništa nije zapisano."
+    },
+    {
+        "profileId":  "radno-socijalno-pravo",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx2,source-input-mismatchx3,extract-insufficientx1"
+    },
+    {
+        "profileId":  "rgnf-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: rgnf-diplomski/rgnf-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "rgnf-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: rgnf-zavrsni/rgnf-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "securus-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: securus-zavrsni/securus-zavrsni--paper-size: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "sfzg-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: sfzg-diplomski/sfzg-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "sumfak-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx9,manifest-missingx2"
+    },
+    {
+        "profileId":  "sumfak-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx7,manifest-missingx2"
+    },
+    {
+        "profileId":  "trgovacko-pravo",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx5,manifest-missingx1"
+    },
+    {
+        "profileId":  "ttf-diplomski",
+        "built":  5,
+        "applied":  false,
+        "reason":  "proba: ttf-diplomski/ttf-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ttf-dizajn-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ttf-dizajn-diplomski/ttf-dizajn-diplomski--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "ttf-dizajn-zavrsni",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: ttf-dizajn-zavrsni/ttf-dizajn-zavrsni--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "ttf-zavrsni",
+        "built":  5,
+        "applied":  false,
+        "reason":  "proba: ttf-zavrsni/ttf-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "ufzg-zavrsni",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: ufzg-zavrsni/ufzg-zavrsni--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "unidu-elektro-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: manifest-missingx1"
+    },
+    {
+        "profileId":  "unidu-marikultura-diplomski",
+        "built":  3,
+        "applied":  false,
+        "reason":  "proba: unidu-marikultura-diplomski/unidu-marikultura-diplomski--font: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-btho-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-btho-diplomski/unisb-btho-diplomski--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-btho-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-btho-zavrsni/unisb-btho-zavrsni--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-odhz-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-odhz-diplomski/unisb-odhz-diplomski--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-odhz-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-odhz-zavrsni/unisb-odhz-zavrsni--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-sfsb-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-sfsb-diplomski/unisb-sfsb-diplomski--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-sfsb-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-sfsb-zavrsni/unisb-sfsb-zavrsni--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-teho-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-teho-diplomski/unisb-teho-diplomski--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unisb-teho-zavrsni",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: unisb-teho-zavrsni/unisb-teho-zavrsni--font-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "unizd-klasicna-filologija-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx5,manifest-missingx1"
+    },
+    {
+        "profileId":  "unizd-klasicna-filologija-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx5,manifest-missingx1"
+    },
+    {
+        "profileId":  "unizd-psihologija-zavrsni",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx8,manifest-missingx1,blind-mismatchx1"
+    },
+    {
+        "profileId":  "unizd-tko-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba: unizd-tko-diplomski/unizd-tko-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "unizd-turizam-diplomski",
+        "built":  0,
+        "applied":  false,
+        "reason":  "sastavljanje: source-input-mismatchx8,manifest-missingx1"
+    },
+    {
+        "profileId":  "vef-diplomski",
+        "built":  2,
+        "applied":  false,
+        "reason":  "proba: vef-diplomski/vef-diplomski--font: rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit."
+    },
+    {
+        "profileId":  "vevu-diplomski",
+        "built":  1,
+        "applied":  false,
+        "reason":  "proba: vevu-diplomski/vevu-diplomski--paper-size: evidence-missing: Nedostaje strukturirani AI dokazni paket."
+    },
+    {
+        "profileId":  "vus-diplomski",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba prolazi"
+    },
+    {
+        "profileId":  "vus-zavrsni",
+        "built":  4,
+        "applied":  false,
+        "reason":  "proba prolazi"
+    }
+]

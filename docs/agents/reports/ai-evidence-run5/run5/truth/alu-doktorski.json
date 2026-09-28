@@ -1,0 +1,9 @@
+{
+  "alu-doktorski--page-count": {
+    "value": {
+      "min": 30
+    },
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

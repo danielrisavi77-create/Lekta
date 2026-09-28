@@ -1,0 +1,67 @@
+{
+  "ffzg-filozofija-diplomski--citation-style": {
+    "value": "chicago-notes",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ffzg-filozofija-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-filozofija-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-filozofija-diplomski--page-number-title-suppression": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ffzg-filozofija-diplomski--required-sections": {
+    "value": [
+      "naslovna stranica",
+      "sadrzaj",
+      "sazetak i kljucne rijeci",
+      "uvod",
+      "razrada teme",
+      "zakljucak",
+      "popis literature"
+    ],
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "ffzg-filozofija-diplomski--toc": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "ffzg-filozofija-diplomski--justify": {
+    "value": true,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-filozofija-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "ffzg-filozofija-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "bottom": 2.5,
+      "left": 2.5,
+      "right": 2.5
+    },
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "ffzg-filozofija-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

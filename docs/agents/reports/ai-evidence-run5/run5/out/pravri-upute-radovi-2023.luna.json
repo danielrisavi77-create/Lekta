@@ -1,0 +1,56 @@
+﻿{
+  "sourceId": "pravri-upute-radovi-2023",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli version unavailable" },
+  "rules": [
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Vrsta slova: Times New Roman",
+      "note": "Odlomak navodi Times New Roman kao vrstu slova u normativu stranice, pa je zapis direktiva za glavni tekst."
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--font-size",
+      "value": 12,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Veličina slova: 12 (tipografskih točaka). Napomena: Veličina slova jednaka je u svim dijelovima rada, i obuhvaća i veličinu slova naslova i podnaslova, osim naslovnica rada.\n\nBilješke na dnu stranice (fusnote) pišu se veličinom slova od 10 točaka bez proreda, a vrsta slova je Times New Roman.",
+      "note": "Normativ stranice propisuje 12 točaka, ali odlomak o fusnotama propisuje 10 točaka; vrijednost 12 odnosi se na glavni tekst."
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Prored teksta: 1,5 redak",
+      "note": "Normativ stranice navodi prored teksta od 1,5 retka kao direktivu za glavni tekst."
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno)",
+      "note": "Izvor određuje 2,5 cm za sve četiri strane papira kao direktivu koja vrijedi za rad u cjelini."
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "ruleId": "pravri-specijalisticki--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Format papira: A4 (21,0 cm × 29,7 cm)",
+      "note": "Normativ stranice izričito navodi format A4 kao direktivu za rad u cjelini."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source": {
+    "id": "biolos-pravilnik-zavrsni-2023",
+    "url": "https://www.biologija.unios.hr/wp-content/uploads/2023/09/pravilnik-o-zavrsnom-radu-08092023.pdf",
+    "fetchedAt": "2026-07-27",
+    "snapshotHash": "eeb93c1ed214c9f2c7c5e4eeedb7918ec501a503777ebe21327b886a93664fd8",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\biolos-pravilnik-zavrsni-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "biolos-zavrsni",
+      "ruleId": "biolos-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica (donji desni kut, od Uvoda)",
+      "sourcePage": "Prilog \"Upute za izradu zavrsnog rada\", odjeljak 6. Sadrzaj rada (str. 6 PDF-a)",
+      "quote": "Numeriranje\r\nstranica započinje na prvoj stranici Uvoda završnog rada, a numeriraju se sve stranice s tekstom,\r\nslikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
+      "valueShape": "boolean",
+      "contexts": [
+        "jska kartica na hrvatskom jeziku treba biti izrađena prema Prilogu 2. Tekst Temeljne dokumentacijske kartice treba pisati malim tiskanim slovima veličine l O pt Kratak sažetak završnog rada treba biti jasno i precizno napisan i treba sadržavati osnovne informacije o ciljevima i zaključcima rada. Ukoliko je završni rad izrađen na temelju rezultata istraživanja sažetak treba sadržavati ukratko navedene osnovne metode rada te sažeto iznijete glavne rezultate i zaključke rada. Sažetak se piše u jednom odlomku i ne smije biti duži od 150 riječi. Ključne riječi: odabrati do 5 ključnih riječi vezanih za problematiku koja se obrađuje u završnom radu. Ključne riječi ne bi trebale biti ponavljane iz naslova rada. 3. Basic documentation card treba biti izrađena prema Prilogu 3. Treba sadržavati iste podatke kao i temeljna dokumentacijska kartica, ali na engleskom jeziku. Tekst Basic documentation card treba pisati malim tiskanim slovima veličine l O pt 4. Izjava o izvornosti treba biti izrađena prema Prilogu 4. 5. Sadržaj U Sadržaju se navode naslovi i brojevi početnih stranica svakog poglavlja i potpoglavlja u završnom radu. Potpoglavlja trebaju imati decimalnu numeraciju (npr. 1. 1.; 1.2). Numeriranje stranica započinje na prvoj stranici Uvoda završnog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu. Stranica na kojoj se navodi sadržaj ne treba biti numerirana. 6. Uvod U uvodnom dijelu treba ukratko opisati i objasniti temu završnog rada s osvrtom na objavljene rezultate dosadašnjih istraživanja te jasno defmirati i istaknuti cilj istraživanja. Ukoliko su u završnom radu korištene kratice, na posebnoj stranici treba navesti njihov popis i objašnjenje. Stranica s korištenim kraticama treba biti prije uvoda. 7. Tematski dio (naslov ove cjeline prilagoditi temi završnog rada) Završni rad izrađen na temelju obrade literatumih podataka sadrži tematski dio u kojem se detaljno analizira tema rada. Tematski dio završnog rada izrađenog na temelju rezultata istraživanja podijeljen je na sljedeće cjeline: l. Materijali i metode 2. Rezultati 3. Rasprava. 5 Materijali i metode je poglavlje u kojem treba točno opisati način istraživanja, eksperiment, uređaje i aparate koji su korišteni te navesti statističke metode ili računalne programe koji su primijenjeni. Rezultate istraživanja potrebno je prikazati jasno, logičnim slijedom i dokumentirati ih tablicama i slikama (fotografije, sheme, grafikoni i sl.). Tekst u tablicama, grafikonima i slikama može biti pisan slovima veličina l O pt ili ma"
+      ],
+      "priorStatus": "needs-recheck"
+    }
+  ]
+}

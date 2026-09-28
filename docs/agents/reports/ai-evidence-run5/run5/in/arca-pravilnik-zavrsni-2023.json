@@ -1,0 +1,41 @@
+{
+  "source": {
+    "id": "arca-pravilnik-zavrsni-2023",
+    "url": "https://api.velarca.hr/dokument/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/",
+    "fetchedAt": "2026-07-17",
+    "snapshotHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\arca-pravilnik-zavrsni-2023.txt"
+  },
+  "rules": [
+    {
+      "profileId": "arca-zavrsni",
+      "ruleId": "arca-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "Prilog 3 (Napomene za daljnje stranice), str. 11 PDF-a",
+      "quote": "Stranice završnog rada se numeriraju, a tablice i slike numeriraju i opisuju.",
+      "valueShape": "boolean",
+      "contexts": [
+        "Center) KANDIDAT: Ime i prezime TEMA ZAVRŠNOG RADA:___________________ MENTOR: _______________________ (Times New Roman 12 Pt Bold, 2,5 cm uvučen tekst) Mjesto, mjesec i godina (Times New Roman 14 Pt Bold-Center) NAPOMENE ZA DALJNJE STRANICE: • treća stranica – sadržaj završnog rada s nazivima poglavlja, podpoglavlja, naslove i podnaslove s rednim brojem stranice na kojoj se nalaze 10 • Sažetak – u sažetku se navodi naziv završnog rada, kratki navodi o glavnim činjenicama, sadržaju i zadatku rada te postignuti rezultati i/ili zaključci. Opseg sažetka je do pola stranice. Sažetak se piše na hrvatskom i engleskom jeziku (Summary). • Uvod • Bit • Zaključak • Literatura – popis korištene literature navodi se kako slijedi: 1. Prezime autora, inicijal imena: Naslov knjige, izdavač, mjesto i godina izdavanja 2. Prezime autora, inicijal imena: Naslov rada, naziv skupa, časopisa ili zbornika radova, mjesto i godina o objavljivanja 3. Prezime autora, inicijal imena: Naslov rada, web. stranica objavljivanja Svi citati (doslovno prepisani dijelovi drugog autora ili izjave) označavaju se navodnicima i određuju brojčano uz objašnjenje u fusnoti (bilješkama ispod teksta o autoru navoda i djelu). Stranice završnog rada se numeriraju, a tablice i slike numeriraju i opisuju. Ako završni rad sadrži crteže, listinge programa, eksperimentalno snimljene dijagrame i dr. većeg formata od A4 trebaju se priložiti iza popisa literature, pri čemu trebaju biti numerirani. 11 Prilog 4. Klasa: Urbroj: Split, Na temelju članka 16. Pravilnika o izradi i obrani završnog rada dekan Veleučilišta Arca dana ………………………………….godine donosi ODLUKU I. Imenuje se Povjerenstvo za obranu završnog rada studenta ____________________________________________________________ u sastavu: • predsjednik Povjerenstva _________________________ • član Povjerenstva _________________________ • član Povjerenstva _________________________. II. Obrana završnog rada iz točke 1. održat će se ______________ u __ sati u______________. Dekan: Prof. dr. sc. Đorđe Nadrljanski 12 Prilog 5. ZAPISNIK O OBRANI ZAVRŠNOG RADA Prezime i ime studenta: _____________________________________________ Matični broj: _________________ Tema završnog rada: __________________________________________________________ Mentor: ________________________________ Datum obrane: _______________________ Ocjena rada: ________________________ Ocjena obrane: ____________________ Ocjena završnog ispita: _________________ Članovi Ispitno"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "arca-zavrsni",
+      "ruleId": "arca-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "Prilog 3 (naslovnica), str. 9 PDF-a",
+      "quote": "Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4.",
+      "valueShape": "boolean",
+      "contexts": [
+        "_____________________ Potpis studenta: ______________________ ODOBRENO ___________________ (datum) Potpis mentora:_______________ Potpis dekana:______________________ 7 Prilog 2. Ime i prezime _________________________________ Matični broj ____________________ Adresa ________________________________ E-mail________________ Telefon ________ PRIJAVA ZA PRISTUP OBRANI ZAVRŠNOG RADA Prezime i ime studenta: ______________________________________________ Tema završnog rada: ___________________________________________________________________________ Mentor završnog rada: _________________________________________________ Datum prijave: ________________ Suglasan sam za objavu završnog rada na mrežnim stranicama Veleučilišta. Potpis kandidata: ___________________________ Potpis mentora: __________________ Uvidom u dokumentaciju utvrđeno je da je student položio sve propisane ispite. Datum: __________________ Voditelj Referade:______________________ 8 Prilog 3. VELEUČILIŠTE ARCA (Times New Roman 14 Pt Bold-Center) IME I PREZIME (Times New Roman 18 pt Bold-Center) ZAVRŠNI RAD (Times New Roman 14 Pt Bold-Center) NASLOV TEME (po izboru) Mjesto, mjesec i godina (Times New Roman 14 Pt Bold-Center) Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4. druga stranica 9 VELEUČILIŠTE ARCA (Times New Roman 14 Pt Bold-Center) PREDMET: ________________________________ (Times New Roman 14 pt Bold, 2,5 cm uvučen tekst) ZAVRŠNI RAD (Times New Roman 16 Pt Bold-Center) KANDIDAT: Ime i prezime TEMA ZAVRŠNOG RADA:___________________ MENTOR: _______________________ (Times New Roman 12 Pt Bold, 2,5 cm uvučen tekst) Mjesto, mjesec i godina (Times New Roman 14 Pt Bold-Center) NAPOMENE ZA DALJNJE STRANICE: • treća stranica – sadržaj završnog rada s nazivima poglavlja, podpoglavlja, naslove i podnaslove s rednim brojem stranice na kojoj se nalaze 10 • Sažetak – u sažetku se navodi naziv završnog rada, kratki navodi o glavnim činjenicama, sadržaju i zadatku rada te postignuti rezultati i/ili zaključci. Opseg sažetka je do pola stranice. Sažetak se piše na hrvatskom i engleskom jeziku (Summary). • Uvod • Bit • Zaključak • Literatura – popis korištene literature navodi se kako slijedi: 1. Prezime autora, inicijal imena: Naslov knjige, izdavač, mjesto i godina izdavanja 2. Prezime autora, inicijal imena: Naslov rada, naziv skupa, časopisa ili zbornika radova, mjesto i godina o objavljivanja 3. Prezime autora, inicijal imena: Naslov rada, web. stranic"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

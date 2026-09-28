@@ -1,0 +1,57 @@
+{
+  "source": {
+    "id": "fhs-upute-diplomski-2026",
+    "url": "https://www.fhs.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\fhs-upute-diplomski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--font",
+      "checkId": "font",
+      "label": "Font (pismo)",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "itorij. Termini edukacija bit će pravovremeno objavljeni na mrežnim stranicama Knjižnice. Neovisno o najavljenim terminima, studenti se u svakom trenutku mogu obratiti knjižničarima za individualne konzultacije i pojašnjenja vezana za postupak samoarhiviranja. e) Nakon obrane Prilikom predaje zapisnika o obrani diplomskog rada u Službi za nastavu i studente student treba ispuniti: • Anketni upitnik za studente koji su završili diplomski studij (SuZg). Pri tom na Anketnom upitniku obvezno treba označiti brojčanu oznaku (kod) studija: Sveučilišni diplomski studij filozofije, 0277 Sveučilišni diplomski studij komunikologije, 0278 Sveučilišni diplomski studij hrvatskoga latiniteta, 0283 Sveučilišni diplomski studij kroatologije, 0279 Sveučilišni diplomski studij povijesti, 0280 Sveučilišni diplomski studij psihologije, 0281 Sveučilišni diplomski studij sociologije, 0282 Sveučilišni integrirani studij demografije i hrvatskoga iseljeništva, 0439 5 OPĆE TEHNIČKE UPUTE Po svom opsegu diplomski rad treba imati od 50 do 60 kartica teksta (jedna kartica je 1800 znakova s razmacima), bez naslovne stranice, sadržaja, sažetka i priloga. Pri tome treba poštivati sljedeće tehničke karakteristike: Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica) Veličina pisma: 12 tipografskih točaka Prored: 1,5 redak (sažetak ima jednostruki prored) Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm Numeriranje stranica (počinje od sadržaja): centrirano, dolje Tekst je obostrano poravnat Naslovnica ima drugačije margine! Bold podebljanjem označavati glavne naslove, a podnaslove italikom (kao i sve riječi na stranom jeziku). Rad mora sadržavati: Naslovnicu na jeziku kojim je rad pisan Sažetak na jeziku na kojem je rad napisan i na engleskom jeziku Ključne riječi Sadržaj Tekst rada (diplomski rad treba sadržavati sve sastavnice svojstvene znanstvenom radu iz područja psihologije: Uvod, Ciljevi i problemi, Metoda, Rezultati, Rasprava) Zaključak Popis literature Prilozi (neobavezno) U pisanju (posebice kod opisa metode, provedenih analiza i zaključaka) koristite aktiv i prvo lice množine (istražili smo, dobili smo, otkrili smo... ). „...Ne preporučuje se prvo lice jednine... jer se time gubi dojam znanstvene objektivnosti i nepristranosti...“ (Milas, 2009; str.76). Uvažite jezična i pravopisna pravila hrvatskoga jezika (primjerice ljestvica- podljestvica umjesto skala-subskala, višedimenzionalno umjesto multidimenzionalno, tjelesn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Tekst je obostrano poravnat",
+      "valueShape": "boolean",
+      "contexts": [
+        "lomskog rada u Službi za nastavu i studente student treba ispuniti: • Anketni upitnik za studente koji su završili diplomski studij (SuZg). Pri tom na Anketnom upitniku obvezno treba označiti brojčanu oznaku (kod) studija: Sveučilišni diplomski studij filozofije, 0277 Sveučilišni diplomski studij komunikologije, 0278 Sveučilišni diplomski studij hrvatskoga latiniteta, 0283 Sveučilišni diplomski studij kroatologije, 0279 Sveučilišni diplomski studij povijesti, 0280 Sveučilišni diplomski studij psihologije, 0281 Sveučilišni diplomski studij sociologije, 0282 Sveučilišni integrirani studij demografije i hrvatskoga iseljeništva, 0439 5 OPĆE TEHNIČKE UPUTE Po svom opsegu diplomski rad treba imati od 50 do 60 kartica teksta (jedna kartica je 1800 znakova s razmacima), bez naslovne stranice, sadržaja, sažetka i priloga. Pri tome treba poštivati sljedeće tehničke karakteristike: Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica) Veličina pisma: 12 tipografskih točaka Prored: 1,5 redak (sažetak ima jednostruki prored) Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm Numeriranje stranica (počinje od sadržaja): centrirano, dolje Tekst je obostrano poravnat Naslovnica ima drugačije margine! Bold podebljanjem označavati glavne naslove, a podnaslove italikom (kao i sve riječi na stranom jeziku). Rad mora sadržavati: Naslovnicu na jeziku kojim je rad pisan Sažetak na jeziku na kojem je rad napisan i na engleskom jeziku Ključne riječi Sadržaj Tekst rada (diplomski rad treba sadržavati sve sastavnice svojstvene znanstvenom radu iz područja psihologije: Uvod, Ciljevi i problemi, Metoda, Rezultati, Rasprava) Zaključak Popis literature Prilozi (neobavezno) U pisanju (posebice kod opisa metode, provedenih analiza i zaključaka) koristite aktiv i prvo lice množine (istražili smo, dobili smo, otkrili smo... ). „...Ne preporučuje se prvo lice jednine... jer se time gubi dojam znanstvene objektivnosti i nepristranosti...“ (Milas, 2009; str.76). Uvažite jezična i pravopisna pravila hrvatskoga jezika (primjerice ljestvica- podljestvica umjesto skala-subskala, višedimenzionalno umjesto multidimenzionalno, tjelesni 6 umjesto fizički simptomi, obrada umjesto procesiranje, psihičko zdravlje umjesto mentalno zdravlje). Obratite pažnju na navođenje pojmova koji su psihologiji i srodnim profesijama poprimale različite oblike u skladu sa suvremenim poimanje"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "ruleId": "fhs-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "ualne konzultacije i pojašnjenja vezana za postupak samoarhiviranja. e) Nakon obrane Prilikom predaje zapisnika o obrani diplomskog rada u Službi za nastavu i studente student treba ispuniti: • Anketni upitnik za studente koji su završili diplomski studij (SuZg). Pri tom na Anketnom upitniku obvezno treba označiti brojčanu oznaku (kod) studija: Sveučilišni diplomski studij filozofije, 0277 Sveučilišni diplomski studij komunikologije, 0278 Sveučilišni diplomski studij hrvatskoga latiniteta, 0283 Sveučilišni diplomski studij kroatologije, 0279 Sveučilišni diplomski studij povijesti, 0280 Sveučilišni diplomski studij psihologije, 0281 Sveučilišni diplomski studij sociologije, 0282 Sveučilišni integrirani studij demografije i hrvatskoga iseljeništva, 0439 5 OPĆE TEHNIČKE UPUTE Po svom opsegu diplomski rad treba imati od 50 do 60 kartica teksta (jedna kartica je 1800 znakova s razmacima), bez naslovne stranice, sadržaja, sažetka i priloga. Pri tome treba poštivati sljedeće tehničke karakteristike: Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica) Veličina pisma: 12 tipografskih točaka Prored: 1,5 redak (sažetak ima jednostruki prored) Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm Numeriranje stranica (počinje od sadržaja): centrirano, dolje Tekst je obostrano poravnat Naslovnica ima drugačije margine! Bold podebljanjem označavati glavne naslove, a podnaslove italikom (kao i sve riječi na stranom jeziku). Rad mora sadržavati: Naslovnicu na jeziku kojim je rad pisan Sažetak na jeziku na kojem je rad napisan i na engleskom jeziku Ključne riječi Sadržaj Tekst rada (diplomski rad treba sadržavati sve sastavnice svojstvene znanstvenom radu iz područja psihologije: Uvod, Ciljevi i problemi, Metoda, Rezultati, Rasprava) Zaključak Popis literature Prilozi (neobavezno) U pisanju (posebice kod opisa metode, provedenih analiza i zaključaka) koristite aktiv i prvo lice množine (istražili smo, dobili smo, otkrili smo... ). „...Ne preporučuje se prvo lice jednine... jer se time gubi dojam znanstvene objektivnosti i nepristranosti...“ (Milas, 2009; str.76). Uvažite jezična i pravopisna pravila hrvatskoga jezika (primjerice ljestvica- podljestvica umjesto skala-subskala, višedimenzionalno umjesto multidimenzionalno, tjelesni 6 umjesto fizički simptomi, obrada umjesto procesiranje, psihičko zdravlje umjesto mentalno zdravlje). Obratite pažnju na navođenje pojmova koji su ps"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

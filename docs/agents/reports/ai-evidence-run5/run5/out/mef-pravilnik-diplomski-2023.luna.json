@@ -1,0 +1,20 @@
+{
+    "sourceId":  "mef-pravilnik-diplomski-2023",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "mef-diplomski",
+                      "ruleId":  "mef-diplomski--paper-size",
+                      "value":  "A4",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "ÄŒetiri primjerka gotovog neuvezanog rada te verzija rada u elektroniÄkom obliku dostavlja se Povjerenstvu na ocjenu, tiskan na papiru formata A4, pisan fontom Times New Roman ili Arial (veliÄina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored), s ispisom na samo jednoj stranici svakog lista",
+                      "note":  "Izvor izričito navodi format A4 u indikativnoj odredbi o radu, pa je vrijednost A4, modalitet directive, a opseg whole."
+                  }
+              ]
+}

@@ -1,0 +1,20 @@
+﻿{
+    "sourceId":  "pravo-katedra-trgovacko-upute",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "trgovacko-pravo",
+                      "ruleId":  "trgovacko-pravo--page-numbers",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira).",
+                      "note":  "Izvor propisuje numeriranje stranica, uz izuzeće naslovne stranice; izraz „moraju” označava obvezu, a numeriranje stranica odnosi se na cijeli rad."
+                  }
+              ]
+}

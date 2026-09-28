@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "kif-upute-oblikovanje-diplomski",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unspecified" },
+  "rules": [
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--toc",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Nakon ove stranice, slijedi sadržaj diplomskog rada",
+      "note": "Odlomak izričito navodi sadržaj nakon prethodne stranice, što određuje da je sadržaj uključen, kao direktivu za cijeli rad."
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--font",
+      "value": ["Times New Roman"],
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Font – Times New Roman",
+      "note": "Opće oblikovanje navodi Times New Roman za tekst rada, ali kasnije izričito navodi da je tekst u tablici Ariel, pa postoji iznimka za tablice."
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "conflict",
+      "evidenceQuote": "Prored – 1,5 redak",
+      "note": "Opće oblikovanje propisuje prored 1,5, ali za tekst u tablici izričito navodi jednostruki prored, pa postoji iznimka za tablice."
+    },
+    {
+      "profileId": "kif-diplomski",
+      "ruleId": "kif-diplomski--margins",
+      "value": { "bottom": 2.5, "left": 2.5, "right": 2.5, "top": 2.5 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Margine – margina 2,5 cm sa svake strane",
+      "note": "Izvor propisuje marginu od 2,5 cm sa svake strane, što daje jednaku vrijednost za sve rubove cijelog rada."
+    }
+  ]
+}

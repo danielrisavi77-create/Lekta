@@ -1,0 +1,207 @@
+{
+  "source": {
+    "id": "rgnf-predlozak-2022",
+    "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\rgnf-predlozak-2022.txt"
+  },
+  "rules": [
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (harvardski, autor-godina)",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+      "valueShape": "string",
+      "contexts": [
+        "anje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispod. (21)gdje su: Δp- diferencijalni tlak (Pa),f- koeficijent otpora,L- duljina (m),ρ- gustoća (kg/m3),O- opseg (m),A- površina (m2),v- brzina (m/s).Automatsko generiranje sadržaja i popisaPopis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski. Pri automatskom umetanju sadržaja i popisa MS Word formira tzv. polja (eng. field) koje se sastoji od naziva poglavlja/slike/tablica i broja stranice na kojoj se poglavlje/slika/tablica nalazi. Pri izmjenama unutar dokumenta ova se polja mogu automatski ažurirati, bez potrebe za ručnom izmjenom (slika 3-1.). Da bi automatsko ažuriranje funkcioniralo, potrebno je koristiti stilove oblikovanja poglavlja, te nazive (engl. caption) slika i tablica.Slika 31. Ažuriranje polja SadržajliteraturAKorištenje radova/izvora drugih autora (knjige, članci, norme, prezentacije, internet izvori...) navodi se u tekstu rada i u popisu literature. Citati u tekstu služe kao poveznice s popisom literature, dok se u popisu nalaze detaljne informacije o korištenom izvoru.Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja. U nastavku su navedeni primjeri a detaljnije informacije mogu se pronaći nahttps://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j.Citiranje u tekstuAko citat ima prirodni slijed u rečenici navodi se autor, te godina u zagradi, npr.:jedan autor:Jones (1998) navodi da studenti imaju poteškoća koristeći… ,dva autora:Jones i Collymore (1994) istražuju utjecaj… ,više autora:Park i dr. (2003) ili Park et al. (2003) u svome radu raspravljaju….Ako citat nema prirodni slijed u rečenici navode se autor i godina u zagradi, npr.:jedan autor:Studenti imaju poteškoća koristeći APA stil (Jones, 1998)…,dva autora: (Dalglish i Rush, 1983),više autora: (Dalglish i dr., 1983 ili Dalglish et al., 1983).Doslovno citiranje nekog rada postavlja se unutar navodih znakova i kosog je fonta, a iza navoda slijedi broj stranice s koje je navod preuzet, npr.:\"Students often had difficulty using APA style, especially when it was their first time\" (Jones, 1998, p. 199).ili prirodnim slijedom:According to Jones (1998), \"Students often had difficulty using APA style, especially when it was their first time\" (p. 199),Organizacija kao autor. Često se dokumenti izrađuju pod okriljem organizacija, tako da s"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "d u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja iznad tablice (tablica 2-1.). Svaku tablicu potrebno je prethodno navesti ili komentirati u tekstu. Tablica 21. Tablica množenja12345678910112345678910224681012141618203369121518212427304481216202428323640551015202530354045506612182430364248546077142128354249566370881624324048566472809918273645546372819010102030405060708090100Umetanje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispo"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "ruleId": "rgnf-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Popis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja iznad tablice (tablica 2-1.). Svaku tablicu potrebno je prethodno navesti ili komentirati u tekstu. Tablica 21. Tablica množenja12345678910112345678910224681012141618203369121518212427304481216202428323640551015202530354045506612182430364248546077142128354249566370881624324048566472809918273645546372819010102030405060708090100Umetanje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispod. (21)gdje su: Δp- diferencijalni tlak (Pa),f- koeficijent otpora,L- duljina (m),ρ- gustoća (kg/m3),O- opseg (m),A- površina (m2),v- brzina (m/s).Automatsko generiranje sadržaja i popisaPopis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski. Pri automatskom umetanju sadržaja i popisa MS Word formira tzv. polja (eng. field) koje se sastoji od naziva poglavlja/slike/tablica i broja stranice na kojoj se poglavlje/slika/tablica nalazi. Pri izmjenama unutar dokumenta ova se polja mogu automatski ažurirati, bez potrebe za ručnom izmjenom (slika 3-1.). Da bi automatsko ažuriranje funkcioniralo, potrebno je koristiti stilove oblikovanja poglavlja, te nazive (engl. caption) slika i tablica.Slika 31. Ažuriranje polja SadržajliteraturAKorištenje radova/izvora drugih autora (knjige, članci, norme, prezentacije, internet izvori...) navodi se u tekstu rada i u popisu literature. Citati u tekstu služe kao poveznice s popisom literature, dok se u popisu nalaze detaljne informacije o korištenom izvoru.Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja. U nastavku su navedeni primjeri a detaljnije informacije mogu se pronaći nahttps://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j.Citiranje u tekstuAko citat ima prirodni slijed u rečenici navodi se autor, te godina u zagradi, npr.:jedan autor:Jones (1998) navodi da studenti imaju poteškoća koristeći… ,dva autora:Jones i Collymore (1994) istražuju"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (harvardski, autor-godina)",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+      "valueShape": "string",
+      "contexts": [
+        "anje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispod. (21)gdje su: Δp- diferencijalni tlak (Pa),f- koeficijent otpora,L- duljina (m),ρ- gustoća (kg/m3),O- opseg (m),A- površina (m2),v- brzina (m/s).Automatsko generiranje sadržaja i popisaPopis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski. Pri automatskom umetanju sadržaja i popisa MS Word formira tzv. polja (eng. field) koje se sastoji od naziva poglavlja/slike/tablica i broja stranice na kojoj se poglavlje/slika/tablica nalazi. Pri izmjenama unutar dokumenta ova se polja mogu automatski ažurirati, bez potrebe za ručnom izmjenom (slika 3-1.). Da bi automatsko ažuriranje funkcioniralo, potrebno je koristiti stilove oblikovanja poglavlja, te nazive (engl. caption) slika i tablica.Slika 31. Ažuriranje polja SadržajliteraturAKorištenje radova/izvora drugih autora (knjige, članci, norme, prezentacije, internet izvori...) navodi se u tekstu rada i u popisu literature. Citati u tekstu služe kao poveznice s popisom literature, dok se u popisu nalaze detaljne informacije o korištenom izvoru.Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja. U nastavku su navedeni primjeri a detaljnije informacije mogu se pronaći nahttps://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j.Citiranje u tekstuAko citat ima prirodni slijed u rečenici navodi se autor, te godina u zagradi, npr.:jedan autor:Jones (1998) navodi da studenti imaju poteškoća koristeći… ,dva autora:Jones i Collymore (1994) istražuju utjecaj… ,više autora:Park i dr. (2003) ili Park et al. (2003) u svome radu raspravljaju….Ako citat nema prirodni slijed u rečenici navode se autor i godina u zagradi, npr.:jedan autor:Studenti imaju poteškoća koristeći APA stil (Jones, 1998)…,dva autora: (Dalglish i Rush, 1983),više autora: (Dalglish i dr., 1983 ili Dalglish et al., 1983).Doslovno citiranje nekog rada postavlja se unutar navodih znakova i kosog je fonta, a iza navoda slijedi broj stranice s koje je navod preuzet, npr.:\"Students often had difficulty using APA style, especially when it was their first time\" (Jones, 1998, p. 199).ili prirodnim slijedom:According to Jones (1998), \"Students often had difficulty using APA style, especially when it was their first time\" (p. 199),Organizacija kao autor. Često se dokumenti izrađuju pod okriljem organizacija, tako da s"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        ")Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)Sadržaj koji uključuje: (4. stranca ovog predloška)popis poglavlja s numeracijom stranicapopis tablica u tekstu s numeracijom stranicapopis slika u tekstu s numeracijom stranicapopis priloga (grafičkih, tabličnih, tekstualnih...)popis korištenih oznaka i odgovarajućih SI jedinicaNakon toga rad u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja izn"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "d u pravilu mora sadržavati iduće cjeline:Uvod (definiranje zadatka završnog rada, svrha završnog rada, postupak izrade, očekivani rezultati)Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)Teorijske osnove radaOpis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanjaAnaliza rezultataDiskusija i zaključakOvo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).LiteraturaTekst rada i postavke stranicaZa pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).Isto tako postoje predefinirani stilovi za iduće:Popis (poput ovoga u nastavku)Naziv poglavlja (1.)Naziv prve razine podpoglavlja (1.1.)Naziv druge razine podpoglavlja (1.1.1.)Naziv treće razine podpoglavlja (1.1.1.1.) Slika 21. Odabir stilova za oblikovanjeMargine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). Umetanje slika u tekstSlike moraju biti numerirane brojčanom oznakom ispod slike, za kojom slijedi naziv (slika 2-2.). Prva brojka označava redni broj poglavlja u kojem se slika nalazi dok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja iznad tablice (tablica 2-1.). Svaku tablicu potrebno je prethodno navesti ili komentirati u tekstu. Tablica 21. Tablica množenja12345678910112345678910224681012141618203369121518212427304481216202428323640551015202530354045506612182430364248546077142128354249566370881624324048566472809918273645546372819010102030405060708090100Umetanje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispo"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "ruleId": "rgnf-zavrsni--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Popis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski.",
+      "valueShape": "boolean",
+      "contexts": [
+        "ok druga brojka označava redni broj slike unutar poglavlja. Poravnavanje oznake je lijevo. Svaku sliku potrebno je prethodno navesti ili komentirati u tekstu. Slika 22. Rudnik bakraSlike, grafovi i tablice moraju biti jasni i pregledni a prateći tekst pisan na hrvatskom jeziku. Primjerice, dolje prikazanu sliku potrebno je preurediti u nekom programu za obradu slika.Slika 23. Slika je pregledna, međutim nije naveden izvor i na engleskom je jeziku. Umetanje tablica u tekstZa razliku od slika, kod numeriranja tablica oznaka se postavlja iznad tablice (tablica 2-1.). Svaku tablicu potrebno je prethodno navesti ili komentirati u tekstu. Tablica 21. Tablica množenja12345678910112345678910224681012141618203369121518212427304481216202428323640551015202530354045506612182430364248546077142128354249566370881624324048566472809918273645546372819010102030405060708090100Umetanje jednadžbiJednadžbe se pišu u Equation editor-u, dostupnom u alatnoj traci MS Word-a. Primjer formule i označavanja istih nalazi se ispod. (21)gdje su: Δp- diferencijalni tlak (Pa),f- koeficijent otpora,L- duljina (m),ρ- gustoća (kg/m3),O- opseg (m),A- površina (m2),v- brzina (m/s).Automatsko generiranje sadržaja i popisaPopis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski. Pri automatskom umetanju sadržaja i popisa MS Word formira tzv. polja (eng. field) koje se sastoji od naziva poglavlja/slike/tablica i broja stranice na kojoj se poglavlje/slika/tablica nalazi. Pri izmjenama unutar dokumenta ova se polja mogu automatski ažurirati, bez potrebe za ručnom izmjenom (slika 3-1.). Da bi automatsko ažuriranje funkcioniralo, potrebno je koristiti stilove oblikovanja poglavlja, te nazive (engl. caption) slika i tablica.Slika 31. Ažuriranje polja SadržajliteraturAKorištenje radova/izvora drugih autora (knjige, članci, norme, prezentacije, internet izvori...) navodi se u tekstu rada i u popisu literature. Citati u tekstu služe kao poveznice s popisom literature, dok se u popisu nalaze detaljne informacije o korištenom izvoru.Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja. U nastavku su navedeni primjeri a detaljnije informacije mogu se pronaći nahttps://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j.Citiranje u tekstuAko citat ima prirodni slijed u rečenici navodi se autor, te godina u zagradi, npr.:jedan autor:Jones (1998) navodi da studenti imaju poteškoća koristeći… ,dva autora:Jones i Collymore (1994) istražuju"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

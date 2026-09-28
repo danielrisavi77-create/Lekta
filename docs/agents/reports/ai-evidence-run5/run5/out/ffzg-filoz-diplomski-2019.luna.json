@@ -1,0 +1,115 @@
+﻿{
+    "sourceId":  "ffzg-filoz-diplomski-2019",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli unknown"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--citation-style",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Izvori za citirane, sažete ili parafrazirane misli nekog drugog autora navode se u fusnotama na dnu pojedine stranice, Ti navodi sadržavaju propisno oblikovan bibliografski opis citirane bibliografske jedinice.",
+                      "note":  "Izvor propisuje bibliografske podatke u fusnotama, ali ne određuje jednoznačno nijednu od ponuđenih vrijednosti stila citiranja."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--font",
+                      "value":  "Times New Roman",
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12;",
+                      "note":  "Stavka propisuje Times New Roman za tekst, pa je modalitet direktivan, a opseg tijelo rada."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "- pismo (font): Times New Roman, veličina 12;\n- fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk.",
+                      "note":  "Opći tekst ima veličinu 12, dok fusnote izričito imaju veličinu 10, pa izvor daje dvije vrijednosti za istu os."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--page-number-title-suppression",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "title-page",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "- naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+                      "note":  "Uputa izričito nalaže izostavljanje numeracije naslovnice i stranica sa sadržajem i sažecima."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--required-sections",
+                      "value":  "naslovna stranica; sadržaj; sažeci i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku; uvod; razrada teme; zaključak; popis literature",
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature.",
+                      "note":  "Izvor navodi obvezne sastavnice rada nakon izraza ‘mora sadržavati’, što označuje obvezu za cijeli rad."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--toc",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature.",
+                      "note":  "Sadržaj je izričito naveden među obveznim sastavnicama diplomskog rada."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "- tekst pisati s obostranim poravnanjem;",
+                      "note":  "Uputa izravno nalaže obostrano poravnanje teksta, što se odnosi na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "- prored: 1,5;\n- fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk.\n\nSažetak (na hrvatskom, do 250 riječi, obostrano poravnanje, jednostruki prored)",
+                      "note":  "Opći tekst ima prored 1,5, ali fusnote i sažeci izričito imaju jednostruki prored."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--margins",
+                      "value":  {
+                                    "bottom":  2.5,
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "- margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm;",
+                      "note":  "Uputa određuje sve četiri margine na 2,5 cm, a pravilo o marginama odnosi se na cijeli rad."
+                  },
+                  {
+                      "profileId":  "ffzg-filozofija-diplomski",
+                      "ruleId":  "ffzg-filozofija-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "conflict",
+                      "evidenceQuote":  "- stranice numerirati arapskim brojkama u donjem desnom kutu;\n- naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+                      "note":  "Opća uputa traži numeriranje arapskim brojkama, ali izričito izuzima naslovnicu te stranice sa sadržajem i sažecima."
+                  }
+              ]
+}

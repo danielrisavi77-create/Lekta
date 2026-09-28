@@ -1,0 +1,12 @@
+{
+  "sumfak-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "sumfak-zavrsni--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

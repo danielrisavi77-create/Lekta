@@ -1,0 +1,7 @@
+{
+  "biolos-diplomski--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

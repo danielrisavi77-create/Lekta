@@ -1,0 +1,85 @@
+{
+  "source": {
+    "id": "ffzg-povum-diplomski-2016",
+    "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-povum-diplomski-2016.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Tekst se poravnava po oba ruba (Justified)",
+      "valueShape": "boolean",
+      "contexts": [
+        " popisu arhivskih izvora navode se arhivske ustanove te korišteni fondovi, npr. Državni arhiv u Zagrebu, Fond 251. Zagrebački zbor (1909.–1945.). U abecednom popisu literature prema prezimenu autora navode se samo oni naslovi koji su korišteni tijekom pisanja rada i koji su spomenuti u samome radu, bilo u tekstu ili bilješkama. Popis literature dijeli se prema sljedećim kategorijama: Knjige, Poglavlja u knjigama, Članci, Internetski izvori. POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu. Numeracija reprodukcija mora odgovarati onoj navedenoj u tekstu rada. Uz popis reprodukcija potrebno je navesti i izvor reprodukcija (publikacija, mrežna stranica, institucija ili fotograf). Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku). 7.2. Opseg i grafičko oblikovanje Diplomski rad treba sadržavati oko 50 kartica teksta bez naslovne stranice, sadržaja, ilustracija, priloga, popisa literature i izvora. Jedna kartica iznosi 1800 znakova uključujući razmake. Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. 7 Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified). Diplomski rad mora bit napisan gramatički i pravopisno ispravno, bez grešaka u tipkopisu (Tippfehlera). Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje. Riječi koje se koriste u prenesenom značenju, tuđice, naslovi knjiga, časopisa, umjetničkih djela i izložaba pišu se kurzivom. Za oznake vremenskog trajanja ili navođenje stranica koristi se crta (npr. 1920.–1925., str. 121–130), a u polusloženicama, sklonidbi kratica ili navođenju desetljeća spojnica (npr. kulturno-povijesni, 50-godišnjica, EU-a, 1970-ih). Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane). U tekstu se mora jasno ukazivati na reprodukciju koja služi kao njegovo pojašnjenje, prema modelu da se unutar teks"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "proredom 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "menu autora. U popisu arhivskih izvora navode se arhivske ustanove te korišteni fondovi, npr. Državni arhiv u Zagrebu, Fond 251. Zagrebački zbor (1909.–1945.). U abecednom popisu literature prema prezimenu autora navode se samo oni naslovi koji su korišteni tijekom pisanja rada i koji su spomenuti u samome radu, bilo u tekstu ili bilješkama. Popis literature dijeli se prema sljedećim kategorijama: Knjige, Poglavlja u knjigama, Članci, Internetski izvori. POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu. Numeracija reprodukcija mora odgovarati onoj navedenoj u tekstu rada. Uz popis reprodukcija potrebno je navesti i izvor reprodukcija (publikacija, mrežna stranica, institucija ili fotograf). Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku). 7.2. Opseg i grafičko oblikovanje Diplomski rad treba sadržavati oko 50 kartica teksta bez naslovne stranice, sadržaja, ilustracija, priloga, popisa literature i izvora. Jedna kartica iznosi 1800 znakova uključujući razmake. Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. 7 Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified). Diplomski rad mora bit napisan gramatički i pravopisno ispravno, bez grešaka u tipkopisu (Tippfehlera). Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje. Riječi koje se koriste u prenesenom značenju, tuđice, naslovi knjiga, časopisa, umjetničkih djela i izložaba pišu se kurzivom. Za oznake vremenskog trajanja ili navođenje stranica koristi se crta (npr. 1920.–1925., str. 121–130), a u polusloženicama, sklonidbi kratica ili navođenju desetljeća spojnica (npr. kulturno-povijesni, 50-godišnjica, EU-a, 1970-ih). Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane). U tekstu se mora jasno ukazivati na reprodukciju koja služi kao njegovo"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (2,5 cm gore, dolje, lijevo; 2 cm desno)",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "ima margine 2,5 cm (gore, dolje,",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "stanove te korišteni fondovi, npr. Državni arhiv u Zagrebu, Fond 251. Zagrebački zbor (1909.–1945.). U abecednom popisu literature prema prezimenu autora navode se samo oni naslovi koji su korišteni tijekom pisanja rada i koji su spomenuti u samome radu, bilo u tekstu ili bilješkama. Popis literature dijeli se prema sljedećim kategorijama: Knjige, Poglavlja u knjigama, Članci, Internetski izvori. POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu. Numeracija reprodukcija mora odgovarati onoj navedenoj u tekstu rada. Uz popis reprodukcija potrebno je navesti i izvor reprodukcija (publikacija, mrežna stranica, institucija ili fotograf). Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku). 7.2. Opseg i grafičko oblikovanje Diplomski rad treba sadržavati oko 50 kartica teksta bez naslovne stranice, sadržaja, ilustracija, priloga, popisa literature i izvora. Jedna kartica iznosi 1800 znakova uključujući razmake. Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. 7 Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified). Diplomski rad mora bit napisan gramatički i pravopisno ispravno, bez grešaka u tipkopisu (Tippfehlera). Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje. Riječi koje se koriste u prenesenom značenju, tuđice, naslovi knjiga, časopisa, umjetničkih djela i izložaba pišu se kurzivom. Za oznake vremenskog trajanja ili navođenje stranica koristi se crta (npr. 1920.–1925., str. 121–130), a u polusloženicama, sklonidbi kratica ili navođenju desetljeća spojnica (npr. kulturno-povijesni, 50-godišnjica, EU-a, 1970-ih). Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane). U tekstu se mora jasno ukazivati na reprodukciju koja služi kao njegovo pojašnjenje, prema modelu da se unutar teksta umeće obla zagrada s naznakom re"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu",
+      "valueShape": "boolean",
+      "contexts": [
+        "u, Fond 251. Zagrebački zbor (1909.–1945.). U abecednom popisu literature prema prezimenu autora navode se samo oni naslovi koji su korišteni tijekom pisanja rada i koji su spomenuti u samome radu, bilo u tekstu ili bilješkama. Popis literature dijeli se prema sljedećim kategorijama: Knjige, Poglavlja u knjigama, Članci, Internetski izvori. POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu. Numeracija reprodukcija mora odgovarati onoj navedenoj u tekstu rada. Uz popis reprodukcija potrebno je navesti i izvor reprodukcija (publikacija, mrežna stranica, institucija ili fotograf). Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku). 7.2. Opseg i grafičko oblikovanje Diplomski rad treba sadržavati oko 50 kartica teksta bez naslovne stranice, sadržaja, ilustracija, priloga, popisa literature i izvora. Jedna kartica iznosi 1800 znakova uključujući razmake. Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. 7 Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified). Diplomski rad mora bit napisan gramatički i pravopisno ispravno, bez grešaka u tipkopisu (Tippfehlera). Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje. Riječi koje se koriste u prenesenom značenju, tuđice, naslovi knjiga, časopisa, umjetničkih djela i izložaba pišu se kurzivom. Za oznake vremenskog trajanja ili navođenje stranica koristi se crta (npr. 1920.–1925., str. 121–130), a u polusloženicama, sklonidbi kratica ili navođenju desetljeća spojnica (npr. kulturno-povijesni, 50-godišnjica, EU-a, 1970-ih). Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane). U tekstu se mora jasno ukazivati na reprodukciju koja služi kao njegovo pojašnjenje, prema modelu da se unutar teksta umeće obla zagrada s naznakom rednog broja reprodukcije (sl. 1). Primjer legende ispod reprodukcije umjetničkoga djela: 12. G"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje",
+      "valueShape": "string",
+      "contexts": [
+        "OGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu. Numeracija reprodukcija mora odgovarati onoj navedenoj u tekstu rada. Uz popis reprodukcija potrebno je navesti i izvor reprodukcija (publikacija, mrežna stranica, institucija ili fotograf). Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku). 7.2. Opseg i grafičko oblikovanje Diplomski rad treba sadržavati oko 50 kartica teksta bez naslovne stranice, sadržaja, ilustracija, priloga, popisa literature i izvora. Jedna kartica iznosi 1800 znakova uključujući razmake. Tekst se piše u programu MS Word, fontu Times New Roman veličine slova 12 i s proredom 1,5. Tekst se poravnava po oba ruba (Justified) i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno). Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu. 7 Tekst u bilješkama na dnu stranice (footnotes) numerira se arapskim brojkama, a oblikuje se u fontu Times New Roman veličine slova 10, s proredom 1 i poravnanjem po oba ruba (Justified). Diplomski rad mora bit napisan gramatički i pravopisno ispravno, bez grešaka u tipkopisu (Tippfehlera). Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje. Riječi koje se koriste u prenesenom značenju, tuđice, naslovi knjiga, časopisa, umjetničkih djela i izložaba pišu se kurzivom. Za oznake vremenskog trajanja ili navođenje stranica koristi se crta (npr. 1920.–1925., str. 121–130), a u polusloženicama, sklonidbi kratica ili navođenju desetljeća spojnica (npr. kulturno-povijesni, 50-godišnjica, EU-a, 1970-ih). Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane). U tekstu se mora jasno ukazivati na reprodukciju koja služi kao njegovo pojašnjenje, prema modelu da se unutar teksta umeće obla zagrada s naznakom rednog broja reprodukcije (sl. 1). Primjer legende ispod reprodukcije umjetničkoga djela: 12. Giacomo Balla, Iridescentna interpretacija br. 7, 1912., ulje na platnu, 76,7 × 77 cm, Galleria Civica d'Arte Moderna e Contemporanea, Torino. Ostale upute vezane za oblikovanje teksta i uporabu stručnoga nazivlja specifičnog za temu studentu daje mentor tijekom izrade diplomskoga rada. 7.3. Navođenje i citiranje literature U pisanju diplomskog rada izni"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

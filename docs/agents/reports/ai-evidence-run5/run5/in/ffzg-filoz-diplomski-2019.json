@@ -1,0 +1,163 @@
+{
+  "source": {
+    "id": "ffzg-filoz-diplomski-2019",
+    "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-filoz-diplomski-2019.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--citation-style",
+      "checkId": "citation-style",
+      "label": "Stil citiranja (fusnote)",
+      "sourcePage": "odjeljak Upute o navoenju literature i citiranju",
+      "quote": "Izvori za citirane, sažete ili parafrazirane misli nekog drugog autora navode se u fusnotama na",
+      "valueShape": "string",
+      "contexts": [
+        "........................................................ xx 2.1. Naslov potpoglavlja ......................................................................................................... xx . . . Zaključak ................................................................................................................................ xx Popis literature ........................................................................................................................ xx (Ne numerirati stranicu.) 3. STRANICA Naslov rada na hrvatskom jeziku (centrirano, podebljano) Sažetak (na hrvatskom, do 250 riječi, obostrano poravnanje, jednostruki prored) Ključne riječi: (na hrvatskom, 5–10 riječi, obostrano poravnanje) Naslov rada na engleskom, njemačkom ili francuskom jeziku (centrirano, podebljano) Abstract / Zusammenfassung / Résumé (na engleskom, njemačkom ili francuskom, istovjetan sažetku na hrvatskom, obostrano poravnanje, jednostruki prored) Key words / Schlüsselwörter / Mots-clés: (na engleskom, njemačkom ili francuskom, istovjetno ključnim riječima na hrvatskom, obostrano poravnanje) (Sve unutar jedne stranice. Ne numerirati stranicu.) Upute o navođenju literature i citiranju Izvori za citirane, sažete ili parafrazirane misli nekog drugog autora navode se u fusnotama na dnu pojedine stranice, Ti navodi sadržavaju propisno oblikovan bibliografski opis citirane bibliografske jedinice. Ako oznaka reference u tekstu dolazi pokraj interpunkcijskoga znaka, označava se iza znaka. Prilikom citiranja, izvorni se tekst stavlja u navodnike, a iza navodnika se stavlja oznaka fusnote („ “xx). Ako se navodi posredno prema nekoj drugoj publikaciji, potrebno je u fusnoti navesti bibliografske podatke obje publikacije uz uputu: prema, a u popisu literature navesti također publikaciju iz koje se preuzima. Osim za pozivanje na izvore, fusnote mogu služiti također za dodatna objašnjenja i komentare. Bibliografski podaci u fusnotama za prvo pojavljivanje jedinice navode se na sljedeći način: Knjige: xx Ime Prezime [autora], Naslov knjige, Izdavač, Mjesto izdavanja, godina izdavanja, str. xxx [broj stranice] Radovi/poglavlja iz zbornika/knjige: xx Ime Prezime [autora], „Naslov rada/poglavlja iz zbornika/knjige“, u: Ime Prezime [urednika/autora] (ur.), Naslov zbornika/knjige, Izdavač, Mjesto izdavanja, godina izdavanja, str. xxx–xxx [raspon stranica rada/poglavlja], ovdje str. xxx [broj stranice]. Radovi iz časopisa: xx Ime Prezime [autora], „Naslov rada“, Naslov časop"
+      ],
+      "priorStatus": "needs-recheck",
+      "allowedValues": [
+        "apa",
+        "apa7",
+        "chicago",
+        "chicago-author",
+        "chicago-notes",
+        "custom",
+        "fpzg",
+        "harvard",
+        "pravo-fusnote",
+        "pravo-social-author",
+        "vancouver"
+      ]
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "pismo (font): Times New Roman, veličina 12",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "pismo (font): Times New Roman, veličina 12",
+      "valueShape": "number",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i "
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--page-number-title-suppression",
+      "checkId": "page-number-title-suppression",
+      "label": "Naslovnica i sazeci bez broja stranice",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedeci nacin",
+      "quote": "naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i nastavnih titula: dr. sc.; doc. dr. sc.; izv. prof. dr. sc., prof. dr. sc.; akademik) (U slučaju postojanja komentora, valja ga navesti na jednak način neposredno ispod mentora.) Zagreb, mjesec i godina "
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezne cjeline diplomskog rada",
+      "sourcePage": "uvodni popis: Diplomski rad mora sadrzavati",
+      "quote": "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati:",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, ve"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--toc",
+      "checkId": "toc",
+      "label": "Sadrzaj",
+      "sourcePage": "uvodni popis: Diplomski rad mora sadrzavati",
+      "quote": "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati:",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, ve"
+      ],
+      "priorStatus": "needs-recheck"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "tekst pisati s obostranim poravnanjem;",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i nastavnih titula: dr. sc.; doc. dr. sc.; izv. prof. dr. sc., prof. dr. sc.; akademik) (U slučaju postojanja komentora, valja ga navesti na jednak način neposredno ispod mentora.) Zagreb, mjesec i godina obrane diplomskoga rada (centrirano, veli"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "prored: 1,5;",
+      "valueShape": "number",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i nastavnih titula: dr. sc.; doc. dr. sc.; izv. prof. dr. sc., prof. dr. "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm;",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i nastavnih titula: dr. sc.; doc. dr. sc.; izv. prof. dr. "
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "ruleId": "ffzg-filozofija-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu;",
+      "valueShape": "boolean",
+      "contexts": [
+        "Sveučilište u Zagrebu Filozofski fakultet Odsjek za filozofiju Upute za oblikovanje diplomskoga rada na studiju filozofije Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadržavati: - naslovnu stranicu, - sadržaj, - sažetke i ključne riječi na hrvatskom te na engleskom, njemačkom ili francuskom jeziku, - uvod, razradu teme, zaključak, - popis literature. Tekst treba oblikovati na sljedeći način: - pismo (font): Times New Roman, veličina 12; - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm; - prored: 1,5; - stranice numerirati arapskim brojkama u donjem desnom kutu; - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem; - početak svakoga novog odlomka uvući; - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), veličina 12, te numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja); - poglavlje treba započeti na zasebnoj stranici, a potpoglavlja se nižu kontinuirano s jednim praznim redom iznad naslova potpoglavlja; - za sve dijelove teksta koji se žele istaknuti koristiti kurziv (italic), a ne podebljano niti podcrtano pismo; - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) veličine 10, prored jednostruk. Prve tri stranice rada treba oblikovati na sljedeći način: 1. NASLOVNA STRANICA SVEUČILIŠTE U ZAGREBU FILOZOFSKI FAKULTET ODSJEK ZA FILOZOFIJU (centrirano, veličina 14) Ime i prezime studenta (centrirano, veličina 14) NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) Diplomski rad (centrirano, veličina 14) Mentor: titula Ime i Prezime (lijevo poravnanje, veličina 14) (primjeri znanstvenih i nastavnih titula: dr. sc.; doc. dr. sc.; izv. prof. dr. sc., prof. dr. sc.; akademik) (U slučaju postojanja komentora, valja ga naves"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

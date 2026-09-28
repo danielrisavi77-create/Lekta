@@ -1,0 +1,26 @@
+{
+  "source": {
+    "id": "unizd-turizam-upute",
+    "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unizd-turizam-upute.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unizd-turizam-diplomski",
+      "ruleId": "unizd-turizam-diplomski--page-count",
+      "checkId": "page-count",
+      "label": "Opseg (najmanje 70 str.)",
+      "sourcePage": "Upute, opseg",
+      "quote": "Diplomski rad mora imati najmanje 70 stranica.",
+      "valueShape": {
+        "min": "number"
+      },
+      "contexts": [
+        "ivanjem različitih izvora na Internetu, student/ica uz vodstvo mentora postavlja radne hipoteze temeljem kojeg provodi samostalno istraživanje vezano za problem diplomskog rada. 2.1. IZGLED DIPLOMSKOG RADA \u0001 Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). \u0001 Format rada je A4 (210 x 297 mm). \u0001 Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. \u0001 Tekst treba pisati s obostranim poravnanjem („justify“). \u0001 Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. \u0001 Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. \u0001 Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, trebaju biti 2,5 cm sa svake strane. \u0001 Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. \u0001 Diplomski rad mora imati najmanje 70 stranica. \u0001 Diplomski rad mora biti lektoriran. 13 Upute za izradu završnoga i diplomskog rada \u0001 Rad se predaje u 4 spiralno uvezana primjerka u tajništvo Odjela nakon mentorovog odobrenja zajedno sa zahtjevom za obranu rada. \u0001 Nakon što je Stručno vijeće Odjela odobrilo izvještaj o diplomskom radu student/ica je prije obrane dužan predati tajništvu Odjela pet „tvrdo“ ukoričena primjerka rada. \u0001 Krajnji rok za prijavu teme diplomskog rada je do početka ljetnog semestra završne godine. \u0001 Izradom i obranom diplomskog rada student/ica stječe 25 ECTS bodova. 2.1.1. Izgled vanjske (omotne) i naslovne stranice diplomskog rada Diplomski se rad sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: \u0001 Ime Sveučilišta \u0001 Naziv Odjela \u0001 Naziv diplomskog studija (Novinarstvo i odnosi s javnostima / Poduzetništvo u kulturi i turizmu / Kulturna baština i turizam) \u0001 Ime i prezime studenta \u0001 Naslov rada \u0001 Naznaka „Diplomski rad“ \u0001 Mjesto, godina. Izgled i razmještaj podataka na vanjskoj (omotnoj) stranici diplomskog rada vidjeti u Primjeru 6. 14 Upute za izradu završnoga i diplomskog rada Primjer 6. Vanjska (omotna) stranica diplomskog rad"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

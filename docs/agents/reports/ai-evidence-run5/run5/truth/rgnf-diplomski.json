@@ -1,0 +1,39 @@
+{
+  "rgnf-diplomski--citation-style": {
+    "value": "harvard",
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "rgnf-diplomski--font": {
+    "value": [
+      "Times New Roman"
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "rgnf-diplomski--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "rgnf-diplomski--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "rgnf-diplomski--margins": {
+    "value": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 3
+    },
+    "modality": "obligation",
+    "scope": "whole"
+  },
+  "rgnf-diplomski--toc": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

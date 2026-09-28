@@ -1,0 +1,45 @@
+﻿{
+  "sourceId": "pmf-biol-upute-diplomski-2026",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli version unavailable"
+  },
+  "rules": [
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Rečenica navodi prored 1,5 kao izravnu uputu, a prored pripada tekstu tijela rada."
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--margins",
+      "value": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5,
+        "top": 2.5
+      },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Izvor propisuje margine od 2,5 cm sa svake strane, što daje jednaku vrijednost za sve rubove cijelog rada."
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "ruleId": "pmf-biologija-graduate--paper-size",
+      "value": "A4",
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Izvor navodi format A4 za tiskanje diplomskih radova kao izravnu uputu za cijeli rad."
+    }
+  ]
+}

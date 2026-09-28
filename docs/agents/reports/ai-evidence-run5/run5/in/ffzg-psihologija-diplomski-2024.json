@@ -1,0 +1,42 @@
+{
+  "source": {
+    "id": "ffzg-psihologija-diplomski-2024",
+    "url": "https://psihologija.ffzg.unizg.hr/wp-content/uploads/2024/10/Diplomski-rad_upute_2024.docx",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ffzg-psihologija-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "ruleId": "ffzg-psihologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "prored: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "obnost da što samostalnije, uz vođenje mentora, provede empirijsko istraživanje iz područja psihologije te primjereno tumači i raspravi dobivene rezultate i njihove implikacije. Glavni dio diplomskog rada uobičajeno sadrži sljedeća poglavlja: sažetak, ključne riječi, uvod, cilj, problem, metoda (sudionici, instrumenti, postupak), rezultati, rasprava, zaključak, literatura i eventualno prilozi. Diplomskom se radu ne prilažu komercijalni psihologijski instrumenti niti oni koji nemaju pismeno odobrenje autora za objavu. Rad se piše na hrvatskom standardnom jeziku i prema ovim uputama kojih se potrebno strogo pridržavati.STROGO SE PRIDRŽAVATI !Opseg rada je minimalno 20 i maksimalno 30 stranica teksta. Prve četiri stranice tj. naslovna stranica, izjava o izvornosti rada, sadržaj, te stranica sa sažecima se ne računaju u taj opseg. Stranice s popisom referenci, tj. poglavlje literatura ne računaju se u maksimalni opseg od 30 stranica. Isto tako, ako postoje prilozi na kraju rada, oni se ne računaju u maksimalni opseg od 30 stranica. Formatiranje stranice teksta i nekih njegovih karakteristika je sljedeća:margine: sve 2,54 cm (lijevo, desno, gore, dolje)font: veličina 12, Times New Romanprored: 1,5potrebno je uvući prvi red svakog novog odlomkane stavlja se dodatni razmak između odlomakastranice moraju biti označene rednim brojem, na dnu po sredini stranice počevši od Uvoda (Uvod mora biti na prvoj stranici)tekst se piše lijevo poravnatosve dijelove teksta koji se žele istaknuti valja pisati italikom (kurzivom; ne bold niti podcrtano)glavne naslove treba pisati sukladno APA standardima (vidi ispod)Izgled prve, naslovne stranice je propisan (vidi ispod) i na njoj nema oznake broja stranice.Druga stranica je Izjava o izvornosti rada (vidi ispod), također bez broja stranice.Treća stranica je Sadržaj, također bez broja stranice.Četvrta stranica sadrži Naslov rada, Sažetak te Ključne riječi na hrvatskom i engleskom jeziku, bez oznake broja stranice. Sažetak treba biti opsega između 200 i 300 riječi. Sažetak treba sadržavati cilj istraživanja, opis metodologije i najvažnije dobivene rezultate.Treba navesti 3-5 ključnih riječi. Forma teksta uobičajena je za pisanje znanstvenog rada, a sadrži sljedeće osnovne elemente: Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zaključak, Literatura. Prema potrebi mogu se dodati prilozi koje treba označiti (npr. Prilog A, Prilog B) i jasno na"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "ruleId": "ffzg-psihologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "margine: sve 2,54 cm (lijevo, desno, gore, dolje)",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "omski rad završni je rad studija psihologije kojim studentica/student pokazuje sposobnost da što samostalnije, uz vođenje mentora, provede empirijsko istraživanje iz područja psihologije te primjereno tumači i raspravi dobivene rezultate i njihove implikacije. Glavni dio diplomskog rada uobičajeno sadrži sljedeća poglavlja: sažetak, ključne riječi, uvod, cilj, problem, metoda (sudionici, instrumenti, postupak), rezultati, rasprava, zaključak, literatura i eventualno prilozi. Diplomskom se radu ne prilažu komercijalni psihologijski instrumenti niti oni koji nemaju pismeno odobrenje autora za objavu. Rad se piše na hrvatskom standardnom jeziku i prema ovim uputama kojih se potrebno strogo pridržavati.STROGO SE PRIDRŽAVATI !Opseg rada je minimalno 20 i maksimalno 30 stranica teksta. Prve četiri stranice tj. naslovna stranica, izjava o izvornosti rada, sadržaj, te stranica sa sažecima se ne računaju u taj opseg. Stranice s popisom referenci, tj. poglavlje literatura ne računaju se u maksimalni opseg od 30 stranica. Isto tako, ako postoje prilozi na kraju rada, oni se ne računaju u maksimalni opseg od 30 stranica. Formatiranje stranice teksta i nekih njegovih karakteristika je sljedeća:margine: sve 2,54 cm (lijevo, desno, gore, dolje)font: veličina 12, Times New Romanprored: 1,5potrebno je uvući prvi red svakog novog odlomkane stavlja se dodatni razmak između odlomakastranice moraju biti označene rednim brojem, na dnu po sredini stranice počevši od Uvoda (Uvod mora biti na prvoj stranici)tekst se piše lijevo poravnatosve dijelove teksta koji se žele istaknuti valja pisati italikom (kurzivom; ne bold niti podcrtano)glavne naslove treba pisati sukladno APA standardima (vidi ispod)Izgled prve, naslovne stranice je propisan (vidi ispod) i na njoj nema oznake broja stranice.Druga stranica je Izjava o izvornosti rada (vidi ispod), također bez broja stranice.Treća stranica je Sadržaj, također bez broja stranice.Četvrta stranica sadrži Naslov rada, Sažetak te Ključne riječi na hrvatskom i engleskom jeziku, bez oznake broja stranice. Sažetak treba biti opsega između 200 i 300 riječi. Sažetak treba sadržavati cilj istraživanja, opis metodologije i najvažnije dobivene rezultate.Treba navesti 3-5 ključnih riječi. Forma teksta uobičajena je za pisanje znanstvenog rada, a sadrži sljedeće osnovne elemente: Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zaključak, Literatura. Prema potrebi mogu se dodati prilozi koje treba "
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

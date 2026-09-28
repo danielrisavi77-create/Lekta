@@ -1,0 +1,89 @@
+{
+  "source": {
+    "id": "ufzg-upute-zavrsni-diplomski-2026",
+    "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\ufzg-upute-zavrsni-diplomski-2026.txt"
+  },
+  "rules": [
+    {
+      "profileId": "ufzg-zavrsni",
+      "ruleId": "ufzg-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+      "quote": "Tekst: obostrano poravnano",
+      "valueShape": "boolean",
+      "contexts": [
+        "ti istraživanja trebaju biti prikazani na pregledan način koji je strukturiran prema pojedinim problemima istraživanja. U raspravi se objašnjavaju dobiveni rezultati istraživanja te se povezuju s teorijskim spoznajama i rezultatima prošlih istraživanja. Ako to odgovara strukturi pojedinog rada, rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slučaju izlaganje pojedinih dijelova rezultata odmah prate pripadajuća obrazloženja. U zaključku se navode najznačajnije dobivene spoznaje te se objašnjava njihov znanstveni i/ili stručni doprinos. Literatura treba sadržavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se treba temeljiti na znanstvenim ili stručnim radovima (knjigama i člancima), dok se izvori poput sveučilišnih udžbenika mogu koristiti u manjoj mjeri. 2. Opseg i oblikovanje završnog odnosno diplomskog rada Završni rad treba imati između 20 i 40 stranica, a diplomski rad između 25 i 50 stranica, ne računajući priloge. Završni i diplomski rad piše se računalnim programom prikladnim za pisanje i obradu teksta. • Veličina stranice: A4 (210 x 297 mm) • Margine: 2,5 cm • Font slova: Times New Roman, veličine 12 točaka • Razmak među redovima: 1,5 • Tekst: obostrano poravnano • Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1 • Ulomak/odjeljak: uvučen • Naslovi/Podnaslovi: glavni naslovi podebljani (Bold), podnaslovi u kurzivu (Italic) • lspis rada: obostran Uz zadovoljavajući vanjski izgled i primjerenu sadržajnu strukturu, rad mora biti napisan na standardnom hrvatskom jeziku (osim ako je rad pisan na stranom jeziku) i bez pravopisnih i gramatičkih grešaka. Preporučljivo je pisati jasne i kratke rečenice uz obavezno korištenje znanstvenog rječnika. Ako se želi upotrijebiti neki izraz/fraza iz svakodnevnog govora, slenga i sl. potrebno je taj izraz/frazu staviti u kurziv. Student je odgovoran za provjeru točnosti i ispravljanje pogrešaka (ako ih ima) prije konačne predaje rada. Navođenje literature te oblikovanje tablica i grafičkih prikaza (npr. slika, ilustracija) treba biti usklađeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafičkih prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, moguće je i korištenje drugih stilova citiranja, ali samo ako je tema rada vezana uz znanstveno polje u kojem je uvriježen drugi stil citiranja. U tom slučaju, na kraju popisa literatur"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "ruleId": "ufzg-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+      "quote": "Razmak među redovima: 1,5",
+      "valueShape": "number",
+      "contexts": [
+        "ovedbi istraživanja. Rezultati istraživanja trebaju biti prikazani na pregledan način koji je strukturiran prema pojedinim problemima istraživanja. U raspravi se objašnjavaju dobiveni rezultati istraživanja te se povezuju s teorijskim spoznajama i rezultatima prošlih istraživanja. Ako to odgovara strukturi pojedinog rada, rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slučaju izlaganje pojedinih dijelova rezultata odmah prate pripadajuća obrazloženja. U zaključku se navode najznačajnije dobivene spoznaje te se objašnjava njihov znanstveni i/ili stručni doprinos. Literatura treba sadržavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se treba temeljiti na znanstvenim ili stručnim radovima (knjigama i člancima), dok se izvori poput sveučilišnih udžbenika mogu koristiti u manjoj mjeri. 2. Opseg i oblikovanje završnog odnosno diplomskog rada Završni rad treba imati između 20 i 40 stranica, a diplomski rad između 25 i 50 stranica, ne računajući priloge. Završni i diplomski rad piše se računalnim programom prikladnim za pisanje i obradu teksta. • Veličina stranice: A4 (210 x 297 mm) • Margine: 2,5 cm • Font slova: Times New Roman, veličine 12 točaka • Razmak među redovima: 1,5 • Tekst: obostrano poravnano • Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1 • Ulomak/odjeljak: uvučen • Naslovi/Podnaslovi: glavni naslovi podebljani (Bold), podnaslovi u kurzivu (Italic) • lspis rada: obostran Uz zadovoljavajući vanjski izgled i primjerenu sadržajnu strukturu, rad mora biti napisan na standardnom hrvatskom jeziku (osim ako je rad pisan na stranom jeziku) i bez pravopisnih i gramatičkih grešaka. Preporučljivo je pisati jasne i kratke rečenice uz obavezno korištenje znanstvenog rječnika. Ako se želi upotrijebiti neki izraz/fraza iz svakodnevnog govora, slenga i sl. potrebno je taj izraz/frazu staviti u kurziv. Student je odgovoran za provjeru točnosti i ispravljanje pogrešaka (ako ih ima) prije konačne predaje rada. Navođenje literature te oblikovanje tablica i grafičkih prikaza (npr. slika, ilustracija) treba biti usklađeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafičkih prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, moguće je i korištenje drugih stilova citiranja, ali samo ako je tema rada vezana uz znanstveno polje u kojem je uvriježen drugi stil citiranja. U tom sluča"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "ruleId": "ufzg-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+      "quote": "Margine: 2,5 cm",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        " Potrebno je naznačiti na koji način su poštivana etička načela u provedbi istraživanja. Rezultati istraživanja trebaju biti prikazani na pregledan način koji je strukturiran prema pojedinim problemima istraživanja. U raspravi se objašnjavaju dobiveni rezultati istraživanja te se povezuju s teorijskim spoznajama i rezultatima prošlih istraživanja. Ako to odgovara strukturi pojedinog rada, rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slučaju izlaganje pojedinih dijelova rezultata odmah prate pripadajuća obrazloženja. U zaključku se navode najznačajnije dobivene spoznaje te se objašnjava njihov znanstveni i/ili stručni doprinos. Literatura treba sadržavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se treba temeljiti na znanstvenim ili stručnim radovima (knjigama i člancima), dok se izvori poput sveučilišnih udžbenika mogu koristiti u manjoj mjeri. 2. Opseg i oblikovanje završnog odnosno diplomskog rada Završni rad treba imati između 20 i 40 stranica, a diplomski rad između 25 i 50 stranica, ne računajući priloge. Završni i diplomski rad piše se računalnim programom prikladnim za pisanje i obradu teksta. • Veličina stranice: A4 (210 x 297 mm) • Margine: 2,5 cm • Font slova: Times New Roman, veličine 12 točaka • Razmak među redovima: 1,5 • Tekst: obostrano poravnano • Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1 • Ulomak/odjeljak: uvučen • Naslovi/Podnaslovi: glavni naslovi podebljani (Bold), podnaslovi u kurzivu (Italic) • lspis rada: obostran Uz zadovoljavajući vanjski izgled i primjerenu sadržajnu strukturu, rad mora biti napisan na standardnom hrvatskom jeziku (osim ako je rad pisan na stranom jeziku) i bez pravopisnih i gramatičkih grešaka. Preporučljivo je pisati jasne i kratke rečenice uz obavezno korištenje znanstvenog rječnika. Ako se želi upotrijebiti neki izraz/fraza iz svakodnevnog govora, slenga i sl. potrebno je taj izraz/frazu staviti u kurziv. Student je odgovoran za provjeru točnosti i ispravljanje pogrešaka (ako ih ima) prije konačne predaje rada. Navođenje literature te oblikovanje tablica i grafičkih prikaza (npr. slika, ilustracija) treba biti usklađeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafičkih prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, moguće je i korištenje drugih stilova citiranja, ali samo ako je tema rada vez"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "ruleId": "ufzg-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+      "quote": "Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1",
+      "valueShape": "boolean",
+      "contexts": [
+        "prikazani na pregledan način koji je strukturiran prema pojedinim problemima istraživanja. U raspravi se objašnjavaju dobiveni rezultati istraživanja te se povezuju s teorijskim spoznajama i rezultatima prošlih istraživanja. Ako to odgovara strukturi pojedinog rada, rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slučaju izlaganje pojedinih dijelova rezultata odmah prate pripadajuća obrazloženja. U zaključku se navode najznačajnije dobivene spoznaje te se objašnjava njihov znanstveni i/ili stručni doprinos. Literatura treba sadržavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se treba temeljiti na znanstvenim ili stručnim radovima (knjigama i člancima), dok se izvori poput sveučilišnih udžbenika mogu koristiti u manjoj mjeri. 2. Opseg i oblikovanje završnog odnosno diplomskog rada Završni rad treba imati između 20 i 40 stranica, a diplomski rad između 25 i 50 stranica, ne računajući priloge. Završni i diplomski rad piše se računalnim programom prikladnim za pisanje i obradu teksta. • Veličina stranice: A4 (210 x 297 mm) • Margine: 2,5 cm • Font slova: Times New Roman, veličine 12 točaka • Razmak među redovima: 1,5 • Tekst: obostrano poravnano • Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1 • Ulomak/odjeljak: uvučen • Naslovi/Podnaslovi: glavni naslovi podebljani (Bold), podnaslovi u kurzivu (Italic) • lspis rada: obostran Uz zadovoljavajući vanjski izgled i primjerenu sadržajnu strukturu, rad mora biti napisan na standardnom hrvatskom jeziku (osim ako je rad pisan na stranom jeziku) i bez pravopisnih i gramatičkih grešaka. Preporučljivo je pisati jasne i kratke rečenice uz obavezno korištenje znanstvenog rječnika. Ako se želi upotrijebiti neki izraz/fraza iz svakodnevnog govora, slenga i sl. potrebno je taj izraz/frazu staviti u kurziv. Student je odgovoran za provjeru točnosti i ispravljanje pogrešaka (ako ih ima) prije konačne predaje rada. Navođenje literature te oblikovanje tablica i grafičkih prikaza (npr. slika, ilustracija) treba biti usklađeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafičkih prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, moguće je i korištenje drugih stilova citiranja, ali samo ako je tema rada vezana uz znanstveno polje u kojem je uvriježen drugi stil citiranja. U tom slučaju, na kraju popisa literature dodaje se napomena u kojoj se navodi koji je stil citiranja korišten. 3. Postupak iz"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "ruleId": "ufzg-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezne cjeline rada",
+      "sourcePage": "odjeljak 1.1. Struktura strucnog rada",
+      "quote": "Stručni rad treba sadržavati sljedeće dijelove",
+      "valueShape": [
+        {
+          "key": "string",
+          "label": "string",
+          "terms": [
+            "string"
+          ]
+        }
+      ],
+      "contexts": [
+        "Upute za izradu završnog odnosno diplomskog rada 1. Struktura završnog/diplomskog rada Završni rad je u pravilu stručni rad, ali može biti i znanstveni empirijski odnosno znanstveno istraživački rad. Diplomski rad je znanstveni rad. U stručnom radu iznose se poznati i objavljeni rezultati znanstvenih istraživanja, s naglaskom na njihovu primjenu u praksi ili širenje znanja u određenom stručnom području. Takav rad ne mora sadržavati izvorna autorova istraživanja, već pruža korisne priloge koji doprinose razumijevanju i unapređenju struke. U empirijskom radu iznose se rezultati vlastitog istraživanja koje se može provesti kvantitativnom i/ili kvalitativnom metodologijom kako bi se odgovorilo na postavljene probleme istraživanja odnosno istraživačka pitanja definirana u skladu s postavljenim ciljem rada. 1.1. Struktura stručnog rada Stručni rad treba sadržavati sljedeće dijelove: - omotna stranica (prilog 1.) - naslovna stranica (prilog 2.) - sažetak s ključnim riječima - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica) - uvod - razrada teme - zaključak - literatura - prilozi - izjava o izvornosti rada (prilog 3.) Sažetak treba sadržavati kratko obrazloženje teorijskog polazišta, cilj rada i zaključak. Sažetak treba imati između 250 i 300 riječi, a ispod sažetka navodi se tri do pet ključnih riječi. Ako je rad pisan na hrvatskom jeziku, sažetak se piše na hrvatskom i engleskom jeziku. Ako je rad pisan na stranom jeziku, sažetak i ključne riječi moraju biti na jeziku rada, kao i na hrvatskom i engleskom jeziku. U tom slučaju, sažetak na hrvatskom i engleskom treba sadržavati i naslov rada na oba jezika. Uvod sažeto opisuje teorijsku podlogu rada te prikazuje dosadašnja istraživanja i spoznaje vezane uz temu. Također, uvod objašnjava razloge za pisanje rada i jasno definira njegov cilj. Na kraju uvoda izlaže se struktura rada kroz kratki pregled poglavlja koja slijede. Razrada teme sadrži poglavlja i potpoglavlja koja sustavno analiziraju teorijske postavke i/ili empirijske spoznaje iz relevantne literature, u skladu s "
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

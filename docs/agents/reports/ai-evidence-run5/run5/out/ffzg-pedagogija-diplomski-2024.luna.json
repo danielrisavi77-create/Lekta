@@ -1,0 +1,46 @@
+﻿{
+  "sourceId": "ffzg-pedagogija-diplomski-2024",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli 0.156.1" },
+  "rules": [
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "note": "Natuknica izričito navodi obostrano poravnanje kao uputu za tekst diplomskoga rada, pa je vrijednost true, modalitet directive i opseg body."
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--line-spacing",
+      "value": 1.5,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst diplomskoga rada valja oblikovati na sljedeći način: - prored: 1,5;",
+      "note": "Natuknica navodi prored 1,5 kao uputu za tekst diplomskoga rada, pa je modalitet directive i opseg body."
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--margins",
+      "value": { "bottom": 3, "left": 3, "right": 3, "top": 3 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Tekst diplomskoga rada valja oblikovati na sljedeći način: - margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "note": "Izvor za lijevu, desnu, gornju i donju marginu navodi 3 cm, kao izravnu uputu za cijeli rad."
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "ruleId": "ffzg-pedagogija-graduate--page-numbers",
+      "value": true,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "conflict",
+      "evidenceQuote": "Tekst diplomskoga rada valja oblikovati na sljedeći način: - stranice numerirane (na dnu, centrirano); Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti1, također bez oznake broja stranice.",
+      "note": "Opća natuknica traži numeriranje stranica, ali odmah zatim izvor izuzima naslovnicu i sljedeće tri stranice; zato postoji izričita iznimka za numeraciju."
+    }
+  ]
+}

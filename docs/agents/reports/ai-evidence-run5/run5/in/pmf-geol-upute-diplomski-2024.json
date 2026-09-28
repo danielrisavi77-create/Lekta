@@ -1,0 +1,24 @@
+{
+  "source": {
+    "id": "pmf-geol-upute-diplomski-2024",
+    "url": "https://www.pmf.unizg.hr/_download/repository/PMF-GO2021_Upute_i_predlozak-Diplomski_rad.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pmf-geol-upute-diplomski-2024.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pmf-geologija-graduate",
+      "ruleId": "pmf-geologija-graduate--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeracija stranica",
+      "sourcePage": "odjeljak Sadrzaj (Pocetne stranice)",
+      "quote": "Sve stranice do Uvoda, osim korica, numeriraju se rimskim brojevima",
+      "valueShape": "boolean",
+      "contexts": [
+        "MF, Zagreb Maja Majić, Ph.D. research associate, IRB, Zagreb Reviewers: prijevodi: docent – Assistant professor izvanredni profesor – Associate Professor redoviti profesor – Full Professor redoviti profesor u trajnom zvanju – Full Professor with tenure viši predavač – senior lecturer poslijedoktorand – postdoctoral researcher znanstveni suradnik – research associate viši znanstveni suradnik – senior research associate znanstveni savjetnik – scientific adviser Date of the final exam: February 10, 2020 III Ime Prezime, Diplomski rad Sadržaj Sadržaj Po završetku rada treba (automatski) stvoriti sadržaj. Preporučuje se decimalno označavanje poglavlja i odlomaka npr. 3. Materijali i metode rada 3.1. Uzorci 3.2. Laboratorijski rad 3.2.1. Metode kemijske analize 3.2.1.1. Analiza glavnih elemenata 3.2.1.2. Kalcimetrija 3.2.2. Rendgenska difrakcijska analiza 4. Rezultati Iza sadržaja možete na zasebne stranice dodati Popis korištenih oznaka, kratica i simbola (osobito onih koji nisu međunarodno standardizirani), Popis slika i Popis tablica u tekstu Prva stranica ovog dokumenta predstavlja tekst koji se tiska na korice. Druga stranica ustvari predstavlja prvu stranicu vašeg diplomskog rada. Sve stranice do Uvoda, osim korica, numeriraju se rimskim brojevima, no na prvu stranicu i stranicu sa zahvalama (ako je imate) ne pišete broj stranice, pa Temeljna dokumentacijska kartica ima numeraciju II odnosno III, a slijedi ih sadržaj. Ukoliko vaš rad na kraju ima Table i Priloge oni su također numerirani rimskim brojevima, s time da se njihova numeracija nastavlja na onu sa zadnje stranice sadržaja. Stoga u Temeljnoj dokumentacijskoj kartici u retku „Rad sadrži:“ može pisati npr. 80 + XV stranica. IV Ime Prezime, Diplomski rad Uvod 1. Uvod Pri pisanju teksta koristite font Times New Roman, veličine 12 te prored 1,5. Prvi odlomak svakog poglavlja se ne uvlači, dok ostali imaju uvlaku. Prva stranica Uvoda numerira se arapskim bojem 1. Kompozicija diplomskog rada (navedena poglavlja i njihov naziv) preporučena u ovom dokumentu prikladna je za većinu geoloških radova, ali se zbog specifičnosti pojedinih radova može od nje odstupiti. Rad ne mora nužno sadržavati sve nabrojene dijelove/poglavlja. Npr. iako je poželjno da se rezultati prvo prikažu, a tek onda diskutiraju, raznolikost prikazane građe ili njezin logički ustroj može iziskivati da se pojedini rezultati odmah i prodiskutiraju pa će trebati spojiti poglavlja Rezultati i Rasprava, no tad"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

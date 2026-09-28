@@ -1,0 +1,16 @@
+﻿{
+  "sourceId": "unidu-elektro-upute-diplomski-eir",
+  "model": { "provider": "OpenAI", "model": "gpt-6-luna", "version": "codex-cli unknown" },
+  "rules": [
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "ruleId": "unidu-elektro-diplomski--page-count",
+      "value": { "min": 50 },
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "extracted",
+      "evidenceQuote": "Diplomski rad je rad u pisanom obliku na hrvatskomu jeziku. Opsega je od najmanje 50 stranica i formata sukladno uobičajenim standardima publikacija.",
+      "note": "Izvor određuje najmanje 50 stranica, rečenica je u indikativu bez modalne riječi, a opseg se odnosi na cijeli rad."
+    }
+  ]
+}

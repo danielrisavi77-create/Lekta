@@ -1,0 +1,7 @@
+{
+  "biolos-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

@@ -1,0 +1,20 @@
+﻿{
+    "sourceId":  "unizd-psihologija-upute",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "unizd-psihologija-zavrsni",
+                      "ruleId":  "unizd-psihologija-zavrsni--citation-style",
+                      "value":  "apa",
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
+                      "note":  "Izvor izričito navodi APA standarde za formalno uređenje teksta; riječ treba označuje directive, a pravilo se odnosi na cijeli rad."
+                  }
+              ]
+}

@@ -1,0 +1,27 @@
+{
+    "sourceId":  "pbf-upute-diplomski-2018",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "pbf-diplomski",
+                      "ruleId":  "pbf-diplomski--required-sections",
+                      "value":  [
+                                    "UVOD",
+                                    "TEORIJSKI DIO",
+                                    "EKSPERIMENTALNI DIO",
+                                    "REZULTATI I RASPRAVA",
+                                    "ZAKLJUČCI",
+                                    "LITERATURA"
+                                ],
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove: 1. UVOD 2. TEORIJSKI DIO 2.1. Podpoglavlje 2.1.1. Podpoglavlje 3. EKSPERIMENTALNI DIO 3.1. Podpoglavlje 3.1.1. Podpoglavlje 4. REZULTATI I RASPRAVA 4.1. sa ili bez Podpoglavlja (ovisno o samom radu) 5. ZAKLJUČCI 6. LITERATURA 7. PRILOZI (nisu nužni) 7.1. Podpoglavlje 7.1.1. Podpoglavlje",
+                      "note":  "Izraz mora sadržavati propisuje šest glavnih cjelina za cijeli diplomski rad, dok su prilozi izričito neobvezni."
+                  }
+              ]
+}

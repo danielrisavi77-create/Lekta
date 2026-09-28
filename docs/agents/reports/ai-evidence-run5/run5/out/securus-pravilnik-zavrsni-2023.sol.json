@@ -1,0 +1,20 @@
+{
+  "sourceId": "securus-pravilnik-zavrsni-2023",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--paper-size",
+      "value": null,
+      "modality": "directive",
+      "scope": "whole",
+      "verdict": "insufficient",
+      "evidenceQuote": "(3) Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt).",
+      "note": "Izvor navodi A4 za cijeli završni rad u indikativu, ali zadani boolean oblik ne dopušta vrijednost A4 koja je među allowedValues."
+    }
+  ]
+}

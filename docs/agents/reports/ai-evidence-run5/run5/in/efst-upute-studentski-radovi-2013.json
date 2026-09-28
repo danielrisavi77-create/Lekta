@@ -1,0 +1,85 @@
+{
+  "source": {
+    "id": "efst-upute-studentski-radovi-2013",
+    "url": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\efst-upute-studentski-radovi-2013.txt"
+  },
+  "rules": [
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "azuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 6 \\n\\f\\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 4. OBLIKOVANJE TEKSTA Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u neutralnom obliku (npr. \"istražit će se\", a ne \"istražit ću/ćemo\") vodeći računa o pravopisnim standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati naredbu \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right, uz neoznačenu opciju \"Show number on first page\" (ako je naslovnica sastavni dio dokumenta). U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan opseg rada ovisi o vrsti rada: • Završni rad ima opseg između 30 i 40 stranica, • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraživački rad I. ima opseg između 20 i 30 stranica, • Istraživački rad II. ima opseg između 5 i 10 stranica, • Diplomski rad ima opseg između 50 i 80 stranica. Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izv"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "azuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 6 \\n\\f\\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 4. OBLIKOVANJE TEKSTA Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u neutralnom obliku (npr. \"istražit će se\", a ne \"istražit ću/ćemo\") vodeći računa o pravopisnim standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati naredbu \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right, uz neoznačenu opciju \"Show number on first page\" (ako je naslovnica sastavni dio dokumenta). U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan opseg rada ovisi o vrsti rada: • Završni rad ima opseg između 30 i 40 stranica, • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraživački rad I. ima opseg između 20 i 30 stranica, • Istraživački rad II. ima opseg između 5 i 10 stranica, • Diplomski rad ima opseg između 50 i 80 stranica. Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izv"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "valueShape": "boolean",
+      "contexts": [
+        "azuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 6 \\n\\f\\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 4. OBLIKOVANJE TEKSTA Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u neutralnom obliku (npr. \"istražit će se\", a ne \"istražit ću/ćemo\") vodeći računa o pravopisnim standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati naredbu \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right, uz neoznačenu opciju \"Show number on first page\" (ako je naslovnica sastavni dio dokumenta). U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan opseg rada ovisi o vrsti rada: • Završni rad ima opseg između 30 i 40 stranica, • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraživački rad I. ima opseg između 20 i 30 stranica, • Istraživački rad II. ima opseg između 5 i 10 stranica, • Diplomski rad ima opseg između 50 i 80 stranica. Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izv"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "valueShape": "number",
+      "contexts": [
+        "azuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 6 \\n\\f\\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 4. OBLIKOVANJE TEKSTA Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u neutralnom obliku (npr. \"istražit će se\", a ne \"istražit ću/ćemo\") vodeći računa o pravopisnim standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati naredbu \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right, uz neoznačenu opciju \"Show number on first page\" (ako je naslovnica sastavni dio dokumenta). U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan opseg rada ovisi o vrsti rada: • Završni rad ima opseg između 30 i 40 stranica, • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraživački rad I. ima opseg između 20 i 30 stranica, • Istraživački rad II. ima opseg između 5 i 10 stranica, • Diplomski rad ima opseg između 50 i 80 stranica. Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izv"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "azuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 6 \\n\\f\\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 4. OBLIKOVANJE TEKSTA Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u neutralnom obliku (npr. \"istražit će se\", a ne \"istražit ću/ćemo\") vodeći računa o pravopisnim standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati naredbu \"Insert\", nakon toga \"Page numbers\", \"Position\" Bottom of the page, \"Alignment\" Right, uz neoznačenu opciju \"Show number on first page\" (ako je naslovnica sastavni dio dokumenta). U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan opseg rada ovisi o vrsti rada: • Završni rad ima opseg između 30 i 40 stranica, • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraživački rad I. ima opseg između 20 i 30 stranica, • Istraživački rad II. ima opseg između 5 i 10 stranica, • Diplomski rad ima opseg između 50 i 80 stranica. Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izv"
+      ],
+      "priorStatus": "needs-ai-evidence"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+    "sourceId":  "oss-upute-drustveni",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-sol",
+                  "version":  "codex-cli 0.156.1"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "oss-diplomski",
+                      "ruleId":  "oss-diplomski--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana.",
+                      "note":  "Izvor u indikativu navodi A4 za osnovni tekst rada, ali boolean oblik ne može sadržavati nijednu dopuštenu vrijednost A3 ili A4."
+                  },
+                  {
+                      "profileId":  "oss-zavrsni",
+                      "ruleId":  "oss-zavrsni--paper-size",
+                      "value":  null,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "insufficient",
+                      "evidenceQuote":  "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i margina od 2,5 cm sa svih strana.",
+                      "note":  "Izvor u indikativu navodi A4 za osnovni tekst rada, ali boolean oblik ne može sadržavati nijednu dopuštenu vrijednost A3 ili A4."
+                  }
+              ]
+}

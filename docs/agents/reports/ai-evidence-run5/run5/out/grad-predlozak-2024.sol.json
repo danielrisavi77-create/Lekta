@@ -1,0 +1,34 @@
+{
+  "sourceId": "grad-predlozak-2024",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-sol",
+    "version": "codex-cli 0.156.1"
+  },
+  "rules": [
+    {
+      "profileId": "grad-diplomski",
+      "ruleId": "grad-diplomski--font",
+      "value": [
+        "Titillium"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Titillium",
+      "note": "Izvor navodi Titillium uz obaveznu potporu hrvatskih znakova, a uputa za pisanje teksta potvrdjuje primjenu na tekst rada."
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "ruleId": "grad-zavrsni--font",
+      "value": [
+        "Titillium"
+      ],
+      "modality": "obligation",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Titillium",
+      "note": "Izvor navodi Titillium uz obaveznu potporu hrvatskih znakova, a uputa za pisanje teksta potvrdjuje primjenu na tekst rada."
+    }
+  ]
+}

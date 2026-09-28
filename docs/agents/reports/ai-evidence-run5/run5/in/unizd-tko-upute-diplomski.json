@@ -1,0 +1,102 @@
+{
+  "source": {
+    "id": "unizd-tko-upute-diplomski",
+    "url": "https://tko.unizd.hr/Portals/65/Upute%20za%20izradu%20diplomskog%20rada_1.pdf",
+    "fetchedAt": "2026-07-17",
+    "snapshotHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\unizd-tko-upute-diplomski.txt"
+  },
+  "rules": [
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: § Naziv Sveučilišta § Naziv Odjela § Naziv diplomsk"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "valueShape": [
+        "number"
+      ],
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: § Naziv Sveučilišta § Naziv Odjela § Naziv diplomsk"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+      "valueShape": "number",
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: § Naziv Sveučilišta § Naziv Odjela § Naziv diplomsk"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "valueShape": {
+        "bottom": "number",
+        "left": "number",
+        "right": "number",
+        "top": "number"
+      },
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: § Naziv Sveučilišta § Naziv Odjela § Naziv diplomskog studija § Ime i prezime studenta § Naslov rada § Naznaka „Diplomski rad“ § Mjesto, godina. Izgled i razmještaj podataka na vanjskoj (omotnoj) stranici rada vidjeti u Primjeru 1. SVEUČILIŠTE U ZADRU TEOLOŠKO-KATEHETSKI ODJEL Diplomski sveučilišni studij (Times New Roman, 14 pt, centrirano) Ime i prezime (Times New Roman, 16 pt, bold, centrirano) NASLOV RADA (Times New Roman, 16 pt, bold, centrirano) Diplomski rad (Times New Roman, 16 pt, bol"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "label": "Numeriranje stranica",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "valueShape": "boolean",
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nalaze se sljedeći podaci: § Naziv Sveučilišta § Naziv Odjela § Naziv diplomskog studija § Ime i prezime studenta § Naslov rada § Naznaka „Diplomski rad“ § Mjesto, godina. Izgled i razmještaj podataka na vanjskoj (omotnoj) stranici rada vidjeti u Primjeru 1. SVEUČILIŠTE U ZADRU TEOLOŠKO-KATEHETSKI ODJEL Diplomski sveučilišni studij (Times New Roman, 14 pt, centrirano) Ime i prezime ("
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+      "quote": "Format rada je AC (210 x 297 mm).",
+      "valueShape": "boolean",
+      "contexts": [
+        "1.1. UPUTE ZA IZRADU DIPLOMSKOG RADA Diplomski rad se izrađuje na kraju diplomskog studija. U njemu student, pod vodstvom mentora, samostalno obrađuje temu koju odobrava Stručno vijeće Odjela. Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te samostalnim znanstvenim istraživanjem. 1.2. IZGLED DIPLOMSKOG RADA § Diplomski rad treba biti napisan jednim od programa za obradu teksta na računalu (preporuča se MS Word). § Format rada je AC (210 x 297 mm). § Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. § Rad treba pisati s obostranim poravnanjem („justify“). § Naslovi veličine 14 pt i podnaslovi veličine 13 pt rada pišu se velikim slovima, podebljano („bold“), poravnati uz lijevi rub teksta. § Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira. § Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane. § Svaka tablica, grafikon, slika ili crtež mora biti numeriran i mora imati naslov i tumač kratica i znakova, ako je potrebno. Ukoliko je tablica, grafikon, slika ili crtež preuzet iz drugih izvora, potrebno je navesti izvor ispod istih. Veličina fonta za pisanje izvora tablica, grafikona, slika i crteža ispod istih je 10 pt. § Optimalan opseg rada je između 30 i 50 stranica teksta. § Diplomski rad mora biti lektoriran. § U rad mora biti umetnuta Izjava o autentičnosti rada i akademskoj čestitosti. 1.2.1. Izgled vanjske (omotne) stranice diplomskog rada Diplomski rad se sastoji od vanjske ili omotne stranice i naslovne stranice. Na vanjskoj (omotnoj ) stranici rada nala"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    }
+  ]
+}

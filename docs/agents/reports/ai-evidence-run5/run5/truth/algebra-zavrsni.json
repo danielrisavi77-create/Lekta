@@ -1,0 +1,10 @@
+{
+  "algebra-zavrsni--word-count": {
+    "value": {
+      "min": 12000,
+      "max": 15000
+    },
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

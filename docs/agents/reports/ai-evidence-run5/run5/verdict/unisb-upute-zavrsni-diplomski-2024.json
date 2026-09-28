@@ -1,0 +1,21 @@
+{
+  "accepted": [
+    "unisb-btho-diplomski--font",
+    "unisb-btho-diplomski--line-spacing",
+    "unisb-btho-zavrsni--font",
+    "unisb-btho-zavrsni--line-spacing",
+    "unisb-odhz-diplomski--font",
+    "unisb-odhz-diplomski--line-spacing",
+    "unisb-odhz-zavrsni--font",
+    "unisb-odhz-zavrsni--line-spacing",
+    "unisb-sfsb-diplomski--font",
+    "unisb-sfsb-diplomski--line-spacing",
+    "unisb-sfsb-zavrsni--font",
+    "unisb-sfsb-zavrsni--line-spacing",
+    "unisb-teho-diplomski--font",
+    "unisb-teho-diplomski--line-spacing",
+    "unisb-teho-zavrsni--font",
+    "unisb-teho-zavrsni--line-spacing"
+  ],
+  "refuted": []
+}

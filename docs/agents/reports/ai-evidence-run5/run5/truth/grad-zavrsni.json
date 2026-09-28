@@ -1,0 +1,29 @@
+{
+  "grad-zavrsni--font": {
+    "value": [
+      "Titillium"
+    ],
+    "modality": "obligation",
+    "scope": "body"
+  },
+  "grad-zavrsni--font-size": {
+    "value": 12,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grad-zavrsni--line-spacing": {
+    "value": 1.15,
+    "modality": "directive",
+    "scope": "body"
+  },
+  "grad-zavrsni--page-numbers": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  },
+  "grad-zavrsni--toc": {
+    "value": true,
+    "modality": "obligation",
+    "scope": "whole"
+  }
+}

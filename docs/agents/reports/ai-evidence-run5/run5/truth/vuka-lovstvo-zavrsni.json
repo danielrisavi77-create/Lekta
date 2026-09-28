@@ -1,0 +1,14 @@
+{
+  "vuka-lovstvo-zavrsni--font-size": {
+    "value": [
+      12
+    ],
+    "modality": "directive",
+    "scope": "body"
+  },
+  "vuka-lovstvo-zavrsni--paper-size": {
+    "value": true,
+    "modality": "directive",
+    "scope": "whole"
+  }
+}

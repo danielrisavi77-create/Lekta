@@ -1,0 +1,84 @@
+{
+  "source": {
+    "id": "pbf-upute-diplomski-2018",
+    "url": "http://www.pbf.unizg.hr/content/download/793/9738/file/Upute%20za%20izradu%20diplomskog%20rada.pdf",
+    "fetchedAt": "2026-07-02",
+    "snapshotHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+    "snapshotTextPath": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\c--Users-PC-Desktop-Lekta\\375154d1-6d34-4ad6-b063-6e1ca6ac3fd1\\scratchpad\\ai-evidence\\run5\\snap\\pbf-upute-diplomski-2018.txt"
+  },
+  "rules": [
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--font",
+      "checkId": "font",
+      "label": "Font (pismo)",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "ikazati u obliku tablice, pa se ti podaci često unose u koordinatni sustav i prikazuju u obliku grafičkog prikaza. Vodoravna koordinata (apscisa) obično služi za bilježenje vrijednosti mjerenja nezavisnih varijabli. Na okomitu koordinatu (ordinatu) bilježi se zavisna varijabla, odnosno frekvencija zavisne varijable. Histogram je grafički prikaz u obliku stupaca u kojem visina odgovara frekvenciji pojedinog razreda. Poligon frekvencija je naziv za izlomljenu krivulju koja odgovara histogramu. Grafičko prikazivanje rezultata može biti korisno za mnogobrojne kvantitativne podatke. Svaki slikovni prikaz mora imati svoju oznaku i naziv (npr. Slika 5. Utjecaj temperature na viskoznost.... ). Naziv slikovnog prikaza se piše ispod slike. Za statističku obradu eksperimentalno dobivenih podataka, mogu se koristiti programski sustavi za statističku obradu podataka. 5. PISANJE DIPLOMSKOG RADA 5.1. Jezik i obrada teksta Diplomski rad piše se na hrvatskom jeziku. Diplomski rad može biti napisan na engleskom jeziku ako je veći dio eksperimentalnog dijela diplomskog rada izrađen u inozemstvu. Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen. Pisati valja sažeto, ali jasno i logički. Pozornost treba posvetiti pravopisu i terminologiji. Na primjer: Ispred interpunkcijskih znakova (točka, dvotočka, zarez, točka-zarez, upitnik, uskličnik...) ne dolazi razmak, dok nakon njih dolazi. Ispred otvorene zagrade dolazi razmak, iza zatvorene zagrade dolazi razmak. Iza otvorene i ispred zatvorene zagrade razmaka nema. Program u kojem se piše tekstualni dio rada mora imati instaliranu automatsku provjeru pravopisa za hrvatski i engleski jezik da bi se odmah uočile greške pri pisanju. Ako je student nevješt u jasnu i pravilnu pisanju, dužnost je mentora uputiti ga da rukopis svog rada lektorira prije predaje rada na ocjenjivanje. 5.2. Uvodne stranice Diplomski rad mora sadržavati uvodne stranice napisane i navedene redom:  na koricama treba upisati na vrhu Sveučilište u Zagrebu (Times New Roman 16) i naziv fakulteta (Times New Roman 16), u sredini Diplomski rad (Times New Roman 28), a na dnu korica s lijeve strane Zagreb, mjesec i godina obrane, a s desne strane ime i prezime studenta i matični broj studenta (Times New Roman 12);  prva stranica u diplomskom radu identična je koricama;  naslov diplomskog rada napisan i"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "valueShape": "number",
+      "contexts": [
+        "ikazati u obliku tablice, pa se ti podaci često unose u koordinatni sustav i prikazuju u obliku grafičkog prikaza. Vodoravna koordinata (apscisa) obično služi za bilježenje vrijednosti mjerenja nezavisnih varijabli. Na okomitu koordinatu (ordinatu) bilježi se zavisna varijabla, odnosno frekvencija zavisne varijable. Histogram je grafički prikaz u obliku stupaca u kojem visina odgovara frekvenciji pojedinog razreda. Poligon frekvencija je naziv za izlomljenu krivulju koja odgovara histogramu. Grafičko prikazivanje rezultata može biti korisno za mnogobrojne kvantitativne podatke. Svaki slikovni prikaz mora imati svoju oznaku i naziv (npr. Slika 5. Utjecaj temperature na viskoznost.... ). Naziv slikovnog prikaza se piše ispod slike. Za statističku obradu eksperimentalno dobivenih podataka, mogu se koristiti programski sustavi za statističku obradu podataka. 5. PISANJE DIPLOMSKOG RADA 5.1. Jezik i obrada teksta Diplomski rad piše se na hrvatskom jeziku. Diplomski rad može biti napisan na engleskom jeziku ako je veći dio eksperimentalnog dijela diplomskog rada izrađen u inozemstvu. Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen. Pisati valja sažeto, ali jasno i logički. Pozornost treba posvetiti pravopisu i terminologiji. Na primjer: Ispred interpunkcijskih znakova (točka, dvotočka, zarez, točka-zarez, upitnik, uskličnik...) ne dolazi razmak, dok nakon njih dolazi. Ispred otvorene zagrade dolazi razmak, iza zatvorene zagrade dolazi razmak. Iza otvorene i ispred zatvorene zagrade razmaka nema. Program u kojem se piše tekstualni dio rada mora imati instaliranu automatsku provjeru pravopisa za hrvatski i engleski jezik da bi se odmah uočile greške pri pisanju. Ako je student nevješt u jasnu i pravilnu pisanju, dužnost je mentora uputiti ga da rukopis svog rada lektorira prije predaje rada na ocjenjivanje. 5.2. Uvodne stranice Diplomski rad mora sadržavati uvodne stranice napisane i navedene redom:  na koricama treba upisati na vrhu Sveučilište u Zagrebu (Times New Roman 16) i naziv fakulteta (Times New Roman 16), u sredini Diplomski rad (Times New Roman 28), a na dnu korica s lijeve strane Zagreb, mjesec i godina obrane, a s desne strane ime i prezime studenta i matični broj studenta (Times New Roman 12);  prva stranica u diplomskom radu identična je koricama;  naslov diplomskog rada napisan i"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "valueShape": "number",
+      "contexts": [
+        "ikazati u obliku tablice, pa se ti podaci često unose u koordinatni sustav i prikazuju u obliku grafičkog prikaza. Vodoravna koordinata (apscisa) obično služi za bilježenje vrijednosti mjerenja nezavisnih varijabli. Na okomitu koordinatu (ordinatu) bilježi se zavisna varijabla, odnosno frekvencija zavisne varijable. Histogram je grafički prikaz u obliku stupaca u kojem visina odgovara frekvenciji pojedinog razreda. Poligon frekvencija je naziv za izlomljenu krivulju koja odgovara histogramu. Grafičko prikazivanje rezultata može biti korisno za mnogobrojne kvantitativne podatke. Svaki slikovni prikaz mora imati svoju oznaku i naziv (npr. Slika 5. Utjecaj temperature na viskoznost.... ). Naziv slikovnog prikaza se piše ispod slike. Za statističku obradu eksperimentalno dobivenih podataka, mogu se koristiti programski sustavi za statističku obradu podataka. 5. PISANJE DIPLOMSKOG RADA 5.1. Jezik i obrada teksta Diplomski rad piše se na hrvatskom jeziku. Diplomski rad može biti napisan na engleskom jeziku ako je veći dio eksperimentalnog dijela diplomskog rada izrađen u inozemstvu. Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen. Pisati valja sažeto, ali jasno i logički. Pozornost treba posvetiti pravopisu i terminologiji. Na primjer: Ispred interpunkcijskih znakova (točka, dvotočka, zarez, točka-zarez, upitnik, uskličnik...) ne dolazi razmak, dok nakon njih dolazi. Ispred otvorene zagrade dolazi razmak, iza zatvorene zagrade dolazi razmak. Iza otvorene i ispred zatvorene zagrade razmaka nema. Program u kojem se piše tekstualni dio rada mora imati instaliranu automatsku provjeru pravopisa za hrvatski i engleski jezik da bi se odmah uočile greške pri pisanju. Ako je student nevješt u jasnu i pravilnu pisanju, dužnost je mentora uputiti ga da rukopis svog rada lektorira prije predaje rada na ocjenjivanje. 5.2. Uvodne stranice Diplomski rad mora sadržavati uvodne stranice napisane i navedene redom:  na koricama treba upisati na vrhu Sveučilište u Zagrebu (Times New Roman 16) i naziv fakulteta (Times New Roman 16), u sredini Diplomski rad (Times New Roman 28), a na dnu korica s lijeve strane Zagreb, mjesec i godina obrane, a s desne strane ime i prezime studenta i matični broj studenta (Times New Roman 12);  prva stranica u diplomskom radu identična je koricama;  naslov diplomskog rada napisan i"
+      ],
+      "priorStatus": "human-verified"
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "valueShape": "string",
+      "contexts": [
+        "ikazati u obliku tablice, pa se ti podaci često unose u koordinatni sustav i prikazuju u obliku grafičkog prikaza. Vodoravna koordinata (apscisa) obično služi za bilježenje vrijednosti mjerenja nezavisnih varijabli. Na okomitu koordinatu (ordinatu) bilježi se zavisna varijabla, odnosno frekvencija zavisne varijable. Histogram je grafički prikaz u obliku stupaca u kojem visina odgovara frekvenciji pojedinog razreda. Poligon frekvencija je naziv za izlomljenu krivulju koja odgovara histogramu. Grafičko prikazivanje rezultata može biti korisno za mnogobrojne kvantitativne podatke. Svaki slikovni prikaz mora imati svoju oznaku i naziv (npr. Slika 5. Utjecaj temperature na viskoznost.... ). Naziv slikovnog prikaza se piše ispod slike. Za statističku obradu eksperimentalno dobivenih podataka, mogu se koristiti programski sustavi za statističku obradu podataka. 5. PISANJE DIPLOMSKOG RADA 5.1. Jezik i obrada teksta Diplomski rad piše se na hrvatskom jeziku. Diplomski rad može biti napisan na engleskom jeziku ako je veći dio eksperimentalnog dijela diplomskog rada izrađen u inozemstvu. Diplomski rad ima najmanje 40 stranica, a ne više od 80 stranica teksta bez Priloga te treba biti napisan razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano i ukoričen. Pisati valja sažeto, ali jasno i logički. Pozornost treba posvetiti pravopisu i terminologiji. Na primjer: Ispred interpunkcijskih znakova (točka, dvotočka, zarez, točka-zarez, upitnik, uskličnik...) ne dolazi razmak, dok nakon njih dolazi. Ispred otvorene zagrade dolazi razmak, iza zatvorene zagrade dolazi razmak. Iza otvorene i ispred zatvorene zagrade razmaka nema. Program u kojem se piše tekstualni dio rada mora imati instaliranu automatsku provjeru pravopisa za hrvatski i engleski jezik da bi se odmah uočile greške pri pisanju. Ako je student nevješt u jasnu i pravilnu pisanju, dužnost je mentora uputiti ga da rukopis svog rada lektorira prije predaje rada na ocjenjivanje. 5.2. Uvodne stranice Diplomski rad mora sadržavati uvodne stranice napisane i navedene redom:  na koricama treba upisati na vrhu Sveučilište u Zagrebu (Times New Roman 16) i naziv fakulteta (Times New Roman 16), u sredini Diplomski rad (Times New Roman 28), a na dnu korica s lijeve strane Zagreb, mjesec i godina obrane, a s desne strane ime i prezime studenta i matični broj studenta (Times New Roman 12);  prva stranica u diplomskom radu identična je koricama;  naslov diplomskog rada napisan i"
+      ],
+      "priorStatus": "human-verified",
+      "allowedValues": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "ruleId": "pbf-diplomski--required-sections",
+      "checkId": "required-sections",
+      "label": "Obvezne cjeline diplomskog rada",
+      "sourcePage": "odjeljak 5.4. Glavni dijelovi diplomskog rada",
+      "quote": "Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove",
+      "valueShape": [
+        "string"
+      ],
+      "contexts": [
+        "velikim debelo otisnutim slovima i označavaju se rednim brojevima, a podpoglavlja malim slovima i brojevima druge(treće) razine. Ogledni primjeri uvodnih stranica diplomskog rada nalaze se u Prilogu I. ovih Uputa. 5.3. Numeracija stranica i označavanje poglavlja Numeracija diplomskog rada započinje tekstom u poglavlju Uvod, a završava zadnjom stranicom poglavlja Literatura. Pregled stranica koje se ne numeriraju: naslovna stranica identična koricama, naslov diplomskog rada, gdje je rad izrađen i imena mentora i asistenta koji su pomogli pri izradi, zahvala (nije nužna), Temeljna dokumentacijska kartica na hrvatskom i engleskom jeziku, sadržaj, prilozi. Unutar samog rada, navođenje naslova glavnih poglavlja i podpoglavlja mora biti ujednačeno: - glavno poglavlje, npr. 1. (Times New Roman 16, Bold, velikim slovima) - podpoglavlje prve dubine, npr. 2.1. (Times New Roman 12, Bold, velikim slovima) - podpoglavlje druge dubine, npr. 2.1.1. (Times New Roman 12) - podpoglavlje treće dubine, npr. 2.1.1.1. (Times New Roman 12, Italic). Preporuča se navođenje podpoglavlja završiti s podpoglavljem treće dubine budući da je najveći broj stranica rada do 80. 5.4. Glavni dijelovi diplomskog rada Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove: 1. UVOD 2. TEORIJSKI DIO 2.1. Podpoglavlje 2.1.1. Podpoglavlje 3. EKSPERIMENTALNI DIO 3.1. Podpoglavlje 3.1.1. Podpoglavlje 4. REZULTATI I RASPRAVA 4.1. sa ili bez Podpoglavlja (ovisno o samom radu) 5. ZAKLJUČCI 6. LITERATURA 7. PRILOZI (nisu nužni) 7.1. Podpoglavlje 7.1.1. Podpoglavlje Uvod je izuzetno bitan dio diplomskog rada koji služi za uvođenje čitatelja u problematiku istraživanja koje je tema diplomskog rada. Ovaj dio daje ton i kontekst čitavom diplomskom radu jer mora sažeto prikazati razloge i svrhu istraživanja, postaviti pitanja na koja će istraživanje dati odgovor i metodologiju kojom će se odgovoriti na postavljena pitanja. Uvod treba koncizno i jednostavno objasniti važnost istraživanja i smjestiti ga u širi kontekst pa treba izbjegavati suvišna objašnjenja. Uvod treba sadržavati kratki opis dosadašnjih spoznaja u području odabranog istraživanja, precizno definirati pitanja na koja će istraživanje dati odgovor te navesti metode istraživanja kojima se namjerava dobiti rezultate čijom će se obradom odgovoriti na postavljena pitanja. U Uvodu se nikako ne navode dobiveni rezultati. Uvod se piše u pasivnom obliku, npr. „Istražit će se..“; Odgovorit će se..“, a ne „Ist"
+      ],
+      "priorStatus": "human-verified"
+    }
+  ]
+}

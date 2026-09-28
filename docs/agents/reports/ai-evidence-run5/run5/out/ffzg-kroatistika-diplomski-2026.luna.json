@@ -1,0 +1,20 @@
+﻿{
+  "sourceId": "ffzg-kroatistika-diplomski-2026",
+  "model": {
+    "provider": "OpenAI",
+    "model": "gpt-6-luna",
+    "version": "codex-cli unknown"
+  },
+  "rules": [
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "ruleId": "ffzg-kroatistika-graduate--justify",
+      "value": true,
+      "modality": "directive",
+      "scope": "body",
+      "verdict": "extracted",
+      "evidenceQuote": "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5. Bilješke (fusnote): Times New Roman, 10 p, prored 1,5. Desni je rub teksta poravnat.",
+      "note": "Izvor izravno navodi poravnat desni rub, što potvrđuje obostrano poravnanje kao direktivnu uputu za osnovni tekst."
+    }
+  ]
+}

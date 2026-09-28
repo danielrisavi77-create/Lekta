@@ -1,0 +1,7 @@
+{
+  "pravo-socijalni-rad-zavrsni--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}

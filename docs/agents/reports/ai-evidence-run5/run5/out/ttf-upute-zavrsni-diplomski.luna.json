@@ -1,0 +1,238 @@
+﻿{
+    "sourceId":  "ttf-upute-zavrsni-diplomski",
+    "model":  {
+                  "provider":  "OpenAI",
+                  "model":  "gpt-6-luna",
+                  "version":  "codex-cli (verzija nije navedena)"
+              },
+    "rules":  [
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--font",
+                      "value":  [
+                                    "Arial"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi Arial kao tip pisma, a pravilo za font odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi veličinu od 12 tipografskih točaka, a pravilo za veličinu slova odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Poravnanje (Alignment): Obostrano (Justified)",
+                      "note":  "Obostrano (Justified) označava obostrano poravnanje teksta u tijelu rada."
+                  },
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi prored od 1,5 retka, a pravilo za prored odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor određuje sve četiri margine na 2,5 cm za cijelu stranicu."
+                  },
+                  {
+                      "profileId":  "ttf-diplomski",
+                      "ruleId":  "ttf-diplomski--page-numbers",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice moraju biti numerirane.",
+                      "note":  "Izvor obvezuje numeriranje stranica, a pravilo numeracije odnosi se na cijeli rad."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-diplomski",
+                      "ruleId":  "ttf-dizajn-diplomski--font",
+                      "value":  [
+                                    "Arial"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi Arial kao tip pisma, a pravilo za font odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-diplomski",
+                      "ruleId":  "ttf-dizajn-diplomski--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi veličinu od 12 tipografskih točaka, a pravilo za veličinu slova odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-diplomski",
+                      "ruleId":  "ttf-dizajn-diplomski--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi prored od 1,5 retka, a pravilo za prored odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-diplomski",
+                      "ruleId":  "ttf-dizajn-diplomski--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor određuje sve četiri margine na 2,5 cm za cijelu stranicu."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-zavrsni",
+                      "ruleId":  "ttf-dizajn-zavrsni--font",
+                      "value":  [
+                                    "Arial"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi Arial kao tip pisma, a pravilo za font odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-zavrsni",
+                      "ruleId":  "ttf-dizajn-zavrsni--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi veličinu od 12 tipografskih točaka, a pravilo za veličinu slova odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-zavrsni",
+                      "ruleId":  "ttf-dizajn-zavrsni--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice:\r\nTip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial\r\nVeličina slova (Font size): 12 tipografskih točaka\r\nPoravnanje (Alignment): Obostrano (Justified)\r\nProred (Line spacing): 1,5 redak\r\nLijeva i desna margina: 2,5 cm\r\nGornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi prored od 1,5 retka, a pravilo za prored odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-dizajn-zavrsni",
+                      "ruleId":  "ttf-dizajn-zavrsni--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor određuje sve četiri margine na 2,5 cm za cijelu stranicu."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--font",
+                      "value":  [
+                                    "Arial"
+                                ],
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi Arial kao tip pisma, a pravilo za font odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--font-size",
+                      "value":  12,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi veličinu od 12 tipografskih točaka, a pravilo za veličinu slova odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--justify",
+                      "value":  true,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Poravnanje (Alignment): Obostrano (Justified)",
+                      "note":  "Obostrano (Justified) označava obostrano poravnanje teksta u tijelu rada."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--line-spacing",
+                      "value":  1.5,
+                      "modality":  "directive",
+                      "scope":  "body",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor navodi prored od 1,5 retka, a pravilo za prored odnosi se na tijelo rada."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--margins",
+                      "value":  {
+                                    "left":  2.5,
+                                    "right":  2.5,
+                                    "bottom":  2.5,
+                                    "top":  2.5
+                                },
+                      "modality":  "directive",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
+                      "note":  "Izvor određuje sve četiri margine na 2,5 cm za cijelu stranicu."
+                  },
+                  {
+                      "profileId":  "ttf-zavrsni",
+                      "ruleId":  "ttf-zavrsni--page-numbers",
+                      "value":  true,
+                      "modality":  "obligation",
+                      "scope":  "whole",
+                      "verdict":  "extracted",
+                      "evidenceQuote":  "Stranice moraju biti numerirane.",
+                      "note":  "Izvor obvezuje numeriranje stranica, a pravilo numeracije odnosi se na cijeli rad."
+                  }
+              ]
+}

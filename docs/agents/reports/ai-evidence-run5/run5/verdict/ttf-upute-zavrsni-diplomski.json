@@ -1,0 +1,19 @@
+{
+  "accepted": [
+    "ttf-diplomski--font-size",
+    "ttf-diplomski--justify",
+    "ttf-diplomski--line-spacing",
+    "ttf-diplomski--margins",
+    "ttf-diplomski--page-numbers",
+    "ttf-zavrsni--font-size",
+    "ttf-zavrsni--justify",
+    "ttf-zavrsni--line-spacing",
+    "ttf-zavrsni--margins",
+    "ttf-zavrsni--page-numbers",
+    "ttf-diplomski--font",
+    "ttf-dizajn-diplomski--font",
+    "ttf-dizajn-zavrsni--font",
+    "ttf-zavrsni--font"
+  ],
+  "refuted": []
+}

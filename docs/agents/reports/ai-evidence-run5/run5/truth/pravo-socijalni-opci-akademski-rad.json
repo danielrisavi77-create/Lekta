@@ -1,0 +1,7 @@
+{
+  "pravo-socijalni-opci-akademski-rad--line-spacing": {
+    "value": 1.5,
+    "modality": "directive",
+    "scope": "body"
+  }
+}
