@@ -6321,6 +6321,34 @@ const MUTATIONS: Mutation[] = [
         && izvan.rmCalls.length === 1 && izvan.rmCalls[0] === dir;
     },
   },
+  // --- register-clean-task.ps1 stavka G: ime Scheduled Taska bez ':' i drugih nedopustenih znakova ---
+  {
+    id: 'register-clean-task/ime-taska-nedopusteni-znak',
+    imitates: "izmjereno 2026-09-28: ':' u imenu Scheduled Taska ('Lekta clean:tmp') obara "
+      + "Register-ScheduledTask s 'The parameter is incorrect' (HRESULT 0x80070057); -DryRun to ne otkriva",
+    cleanBefore: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace("$TaskName = 'Lekta clean-tmp'", "$TaskName = 'Lekta clean:tmp'"),
+    ).length > 0,
+  },
+  // --- register-clean-task.ps1 stavka G: -TaskName kao PARAMETAR odbija nedopustene znakove ---
+  {
+    id: 'register-clean-task/taskname-parametar-nedopusteni-znak',
+    imitates: "prosirenje gard a474690e na -TaskName PARAMETAR: provjera nad $TaskName.Contains($znak) "
+      + 'ispise poruku ali ne izadje s exit 1, pa Register-ScheduledTask ipak dobije ime s nedopustenim '
+      + "znakom i padne tek u OS-u s 'The parameter is incorrect'",
+    cleanBefore: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace(
+        /(\$TaskName\.Contains\(\$znak\)\)\s*\{\r?\n(?:.*\r?\n)*?)\s*exit 1\r?\n/,
+        '$1',
+      ),
+    ).length > 0,
+  },
   {
     id: 'register-clean-task/execute-provjera-uklonjena',
     imitates: 'Test-LektaCleanTaskOwned bez provjere leaf Execute (Codex nalaz, M1): tudji Scheduled Task s '
@@ -6651,6 +6679,51 @@ const CT_VIEW_ROOT = resolve('/lekta-pogled');
 function ctViewFs(dir: string) {
   const base = ctLeftoverFs(dir, 90 * CT_HOUR, CT_VIEW_ROOT);
   return { ...base, realpath: (p: string) => (p.startsWith(CT_VIEW_ROOT) ? CT_CLAUDE_ROOT + p.slice(CT_VIEW_ROOT.length) : p) };
+}
+
+/**
+ * Stavka G: ime Scheduled Taska (`$TaskName` u scripts/register-clean-task.ps1) ne smije sadrzavati
+ * nijedan znak nedopusten u imenu Windows Scheduled Taska, isti skup kao za nazive datoteka.
+ * `npm run clean:tmp` je zaseban npm skript naziv i nije obuhvacen ovim gardom.
+ */
+const REGISTER_CLEAN_TASK_SCRIPT = resolve(process.cwd(), 'scripts/register-clean-task.ps1');
+const REGISTER_CLEAN_TASK_FORBIDDEN_CHARS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+
+function registerCleanTaskNameProblems(src: string): string[] {
+  const m = src.match(/\$TaskName\s*=\s*'([^']*)'/);
+  if (!m) return ['nema $TaskName u izvoru'];
+  const ime = m[1];
+  return REGISTER_CLEAN_TASK_FORBIDDEN_CHARS
+    .filter((znak) => ime.includes(znak))
+    .map((znak) => `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`);
+}
+
+/**
+ * Stavka G, tocka 2: gard nedopustenih znakova prosiren i na -TaskName kao PARAMETAR (ne samo na
+ * zadano ime u izvoru), provjeren PRIJE bilo kojeg poziva Register-ScheduledTask ili grane
+ * -Unregister. Test: tests/register-clean-task.test.ts.
+ */
+function registerCleanTaskParamNameProblems(src: string): string[] {
+  const c = src.replace(/\r/g, '');
+  const problems: string[] = [];
+  if (!/\[string\]\$TaskName\s*=\s*'Lekta clean-tmp'/.test(c)) {
+    problems.push('nema parametra -TaskName s defaultom Lekta clean-tmp');
+  }
+  const provjeraIdx = c.search(/\$TaskName\.Contains\(\$znak\)/);
+  if (provjeraIdx < 0) {
+    problems.push('nema provjere $TaskName.Contains($znak) nad zabranjenim znakovima');
+  } else if (!/exit 1/.test(c.slice(provjeraIdx, provjeraIdx + 400))) {
+    problems.push('provjera -TaskName ne zavrsava s exit 1 (upozorenje bez odbijanja)');
+  }
+  const prviUnregister = c.indexOf('if ($Unregister)');
+  const prviRegister = c.indexOf('Register-ScheduledTask -TaskName');
+  if (provjeraIdx < 0 || prviUnregister < 0 || provjeraIdx > prviUnregister) {
+    problems.push('provjera -TaskName ne prethodi grani -Unregister');
+  }
+  if (provjeraIdx < 0 || prviRegister < 0 || provjeraIdx > prviRegister) {
+    problems.push('provjera -TaskName ne prethodi Register-ScheduledTask');
+  }
+  return problems;
 }
 
 /** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */

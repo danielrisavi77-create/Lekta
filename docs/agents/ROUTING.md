@@ -278,6 +278,21 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
   jedino tako prolaze kroz lock. Ciljani vitest ide kroz omotac:
   `node scripts/with-gate-lock.mjs ciljano -- npx vitest run <datoteke>`. U Claude Code sesijama
   to provodi PreToolUse hook (odjeljak "Hookovi"); za Codex i Grok je i dalje pravilo.
+- **Scheduled Task za ciscenje `%TEMP%` (stavka G).** `scripts/register-clean-task.ps1` registrira
+  Windows Scheduled Task `Lekta clean-tmp` koji dnevno i pri prijavi pokrece
+  `scripts/clean-vitest-tmp.mjs` (isto sto `npm run clean:tmp`). Task na laptopu se registrira nad
+  ZASEBNIM worktreeom `C:\Users\PC\Lekta-clean-task` (detached `origin/master`), ne nad dijeljenim
+  radnim stablom (`C:\Users\PC\Desktop\Lekta`) ni nad bilo kojim `Lekta-wt-*`; ta mapa nema
+  `node_modules`, jer skripta koristi samo Node ugradjene module (`node:fs`, `node:path`,
+  `node:os`). Osvjezavanje na najnoviji `master`:
+  `git -C C:\Users\PC\Lekta-clean-task fetch && git -C C:\Users\PC\Lekta-clean-task checkout --detach origin/master`.
+  Dokaz da task stvarno radi (bez cekanja na dnevni okidac):
+  `Start-ScheduledTask -TaskName 'Lekta clean-tmp'`, pa nakon nekoliko sekundi
+  `Get-ScheduledTaskInfo -TaskName 'Lekta clean-tmp'` i provjeri `LastRunTime`/`LastTaskResult` (0 =
+  uspjeh). Skripta prima opcionalni `-TaskName` (zadano `Lekta clean-tmp`); i zadano ime i
+  `-TaskName` prolaze isti gard nedopustenih znakova za ime Windows Scheduled Taska
+  (`\ / : * ? " < > |`), provjeren PRIJE bilo kojeg poziva `Register-ScheduledTask` ili
+  `Get-/Unregister-ScheduledTask` (test: `tests/register-clean-task.test.ts`).
 
 ## Hookovi
 
