@@ -8901,4 +8901,14 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
     const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
+
+  it('mutant: TIME_LINE bez upute o proteklom vremenu se hvata (E1)', () => {
+    const m = mut('Na pocetku svakog koraka izracunaj proteklo vrijeme', 'Pazi na vrijeme');
+    expect(leanPromptProblems(m)).toEqual(['TIME_LINE nema uputu o proteklom vremenu ("Na pocetku svakog koraka izracunaj proteklo vrijeme")']);
+  });
+
+  it('mutant: uputa o proteklom vremenu bez uvjeta poznatog pocetka se hvata (E1)', () => {
+    const m = mut('(startExpr\n', '(true\n');
+    expect(leanPromptProblems(m)).toEqual(['uputa o proteklom vremenu nije uvjetovana poznatim pocetkom']);
+  });
 });
