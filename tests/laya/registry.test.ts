@@ -5,7 +5,7 @@ import { modelDigest } from '../../scripts/laya/contracts-v2.ts';
 import { LAYA_FIXTURE_MODEL, makePolicy, makeRuntime } from '../helpers/laya-v2-fixtures.ts';
 
 const entry = (over: Record<string, unknown> = {}) => ({
-  key: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'docs/laya/fixture-kalibracija.md', ...over,
+  entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'docs/laya/fixture-kalibracija.md', ...over,
 });
 
 describe('Laya registar pinanih manifesta i pragova (V2.1)', () => {
@@ -34,7 +34,7 @@ describe('Laya registar pinanih manifesta i pragova (V2.1)', () => {
     ['politika bez dokaza mjerenja', entry({ calibrationEvidence: null })],
     ['dokaz bez politike', entry({ policy: null })],
     ['dodatno polje u unosu', { ...entry(), weights: 'x' }],
-    ['neispravan kljuc', entry({ key: 'A' })],
+    ['neispravan kljuc', entry({ entryId: 'A' })],
     ['neispravan manifest', entry({ manifest: { ...makeRuntime(), precision: 'fp64' } })],
   ])('odbija: %s', (_name, bad) => {
     expect(() => loadRegistry({ schemaVersion: 1, entries: [bad] })).toThrow();
@@ -42,7 +42,7 @@ describe('Laya registar pinanih manifesta i pragova (V2.1)', () => {
 
   it('odbija dupli kljuc i dupli modelDigest', () => {
     expect(() => loadRegistry({ schemaVersion: 1, entries: [entry(), entry()] })).toThrow();
-    expect(() => loadRegistry({ schemaVersion: 1, entries: [entry(), entry({ key: 'drugi-kljuc' })] })).toThrow();
+    expect(() => loadRegistry({ schemaVersion: 1, entries: [entry(), entry({ entryId: 'drugi-kljuc' })] })).toThrow();
   });
 
   it('odbija nepoznatu verziju i dodatna polja korijena', () => {

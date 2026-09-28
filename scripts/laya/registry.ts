@@ -15,8 +15,11 @@ import type { LayaCalibrationPolicy, LayaRuntime } from './contracts-v2.ts';
 const REGISTRY_SCHEMA_VERSION = 1 as const;
 
 export interface LayaRegistryEntry {
-  /** Stabilan kljuc koji pozivatelj zadaje (npr. "laya-base-fp32-2026-10"). */
-  key: string;
+  /**
+   * Stabilan identifikator unosa koji pozivatelj zadaje (npr. "laya-base-fp32-2026-10"). Polje se
+   * namjerno ne zove `key`: gitleaks `generic-api-key` bi svaki takav redak u registry.json citao kao tajnu.
+   */
+  entryId: string;
   manifest: LayaRuntime;
   /** null dok prag nije izmjeren na zamrznutom kalibracijskom skupu. */
   policy: LayaCalibrationPolicy | null;
@@ -26,7 +29,7 @@ export interface LayaRegistryEntry {
 export interface LayaRegistry { schemaVersion: typeof REGISTRY_SCHEMA_VERSION; entries: LayaRegistryEntry[] }
 export interface PinnedModel { manifest: LayaRuntime; policy: LayaCalibrationPolicy | null; modelDigest: string }
 
-const KEY = /^[a-z0-9][a-z0-9._-]{2,79}$/;
+const ENTRY_ID = /^[a-z0-9][a-z0-9._-]{2,79}$/;
 const REVISION = /^[A-Za-z0-9._:-]{1,80}$/;
 
 function plainObject(value: unknown, keys: readonly string[]): Record<string, unknown> {
@@ -56,11 +59,11 @@ export function loadRegistry(value: unknown): LayaRegistry {
   const root = plainObject(value, ['schemaVersion', 'entries']);
   if (root.schemaVersion !== REGISTRY_SCHEMA_VERSION || !Array.isArray(root.entries)) throw new DecisionContractError('INVALID_REGISTRY');
   const entries: LayaRegistryEntry[] = [];
-  const keys = new Set<string>();
+  const ids = new Set<string>();
   const digests = new Set<string>();
   for (const raw of root.entries as unknown[]) {
-    const e = plainObject(raw, ['key', 'manifest', 'policy', 'calibrationEvidence']);
-    if (typeof e.key !== 'string' || !KEY.test(e.key) || keys.has(e.key)) throw new DecisionContractError('INVALID_REGISTRY');
+    const e = plainObject(raw, ['entryId', 'manifest', 'policy', 'calibrationEvidence']);
+    if (typeof e.entryId !== 'string' || !ENTRY_ID.test(e.entryId) || ids.has(e.entryId)) throw new DecisionContractError('INVALID_REGISTRY');
     const manifest = validateRuntime(e.manifest);
     if (!REVISION.test(manifest.calibrationRevision)) throw new DecisionContractError('INVALID_REGISTRY');
     const digest = modelDigest(manifest);
@@ -68,14 +71,14 @@ export function loadRegistry(value: unknown): LayaRegistry {
     const policy = e.policy === null ? null : validatePolicy(e.policy, digest, manifest);
     const evidence = e.calibrationEvidence;
     if (policy ? typeof evidence !== 'string' || !evidence.trim() : evidence !== null) throw new DecisionContractError('INVALID_REGISTRY');
-    keys.add(e.key); digests.add(digest);
-    entries.push({ key: e.key, manifest, policy, calibrationEvidence: evidence as string | null });
+    ids.add(e.entryId); digests.add(digest);
+    entries.push({ entryId: e.entryId, manifest, policy, calibrationEvidence: evidence as string | null });
   }
   return { schemaVersion: REGISTRY_SCHEMA_VERSION, entries };
 }
 
 /** Pinani model za kljuc koji zadaje pozivatelj. Nepoznat kljuc je null (runner tada nema Layu). */
-export function pinnedModel(registry: LayaRegistry, key: string): PinnedModel | null {
-  const entry = registry.entries.find((e) => e.key === key);
+export function pinnedModel(registry: LayaRegistry, entryId: string): PinnedModel | null {
+  const entry = registry.entries.find((e) => e.entryId === entryId);
   return entry ? { manifest: entry.manifest, policy: entry.policy, modelDigest: modelDigest(entry.manifest) } : null;
 }

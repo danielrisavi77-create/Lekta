@@ -83,14 +83,20 @@ compute capability 8+ koristi bf16; na CPU-u je fp32.
 U `scripts/laya/registry.json` dodaj unos bez praga i commitaj ga kroz PR:
 
 ```json
-{ "key": "laya-multilingual-fp32-2026-10",
+{ "entryId": "laya-multilingual-fp32-2026-10",
   "manifest": { "backend": "laya-python", "modelId": "<id>", "modelRevision": "<revizija>",
-                "weightsSha256": "<mala slova>", "tokenizerSha256": "<mala slova>",
+                "weightsSha256": "<mala slova>", "vocabularySha256": "<mala slova>",
                 "calibrationRevision": "cal-2026-10-1", "runtimeVersion": "<verzija>", "precision": "fp32" },
   "policy": null, "calibrationEvidence": null }
 ```
 
 Težine nikad ne idu u Git, samo njihovi hashovi.
+
+Polja se zovu `entryId` i `vocabularySha256`, a ne `key` i `tokenizerSha256`. Gitleaksovo
+pravilo `generic-api-key` redak s riječju "key" ili "token" i 64 heksadecimalna znaka čita kao
+tajnu. Kako gitleaks skenira sve refove, jedan takav redak srušio bi CI na svim PR-ovima (vidi
+#203 i #205, 28. 9.). Imena bez tih riječi rješavaju to za svaki budući model, bez iznimke u
+allowlisti.
 
 ## 4. Evaluacija
 

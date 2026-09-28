@@ -17,7 +17,7 @@ import lekta_laya_runtime as rt  # noqa: E402
 
 DIGEST = "a" * 64
 MANIFEST = {"backend": "laya-python", "modelId": "convaiinnovations:laya:multilingual", "modelRevision": "rev1",
-            "weightsSha256": "b" * 64, "tokenizerSha256": "c" * 64, "calibrationRevision": "cal-1",
+            "weightsSha256": "b" * 64, "vocabularySha256": "c" * 64, "calibrationRevision": "cal-1",
             "runtimeVersion": "0.3.21", "precision": "fp32"}
 
 
@@ -214,7 +214,7 @@ class ManifestTest(unittest.TestCase):
             return RevisionAgent(REV)
         args = rt.parse_args(["--model-revision", REV, "--calibration-revision", "cal-1"])
         runtime = rt.prepare(args, load, "0.3.21", locate=lambda a: self.dir)
-        self.assertEqual(runtime.manifest["tokenizerSha256"], self.digests()[1])
+        self.assertEqual(runtime.manifest["vocabularySha256"], self.digests()[1])
 
 
 if __name__ == "__main__":

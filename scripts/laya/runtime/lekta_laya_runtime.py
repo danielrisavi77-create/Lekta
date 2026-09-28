@@ -174,7 +174,7 @@ def tree_sha256(root: str, rel_paths: list[str]) -> str:
 
 
 def checkpoint_digests(checkpoint_dir: str) -> tuple[str, str]:
-    """(weightsSha256, tokenizerSha256) za mapu checkpointa.
+    """(weightsSha256, vocabularySha256) za mapu checkpointa.
 
     Tezine pokrivaju `model.safetensors`, `rl_agent_config.json` i cijeli `encoder/`, jer model
     bez istog enkodera i konfiguracije nije isti model. Tokenizer pokriva cijeli `tokenizer/`.
@@ -206,7 +206,7 @@ def build_manifest(args: argparse.Namespace, runtime_version: str, checkpoint_di
     model_id = check_id(f"{args.model.replace('/', ':')}:{args.subfolder}" if args.subfolder else args.model.replace("/", ":"), "modelId")
     weights, tokenizer = checkpoint_digests(checkpoint_dir)
     return {"backend": "laya-python", "modelId": model_id, "modelRevision": check_id(args.model_revision, "modelRevision"),
-            "weightsSha256": weights, "tokenizerSha256": tokenizer,
+            "weightsSha256": weights, "vocabularySha256": tokenizer,
             "calibrationRevision": check_id(args.calibration_revision, "calibrationRevision"),
             "runtimeVersion": check_id(runtime_version, "runtimeVersion"), "precision": args.precision}
 
@@ -250,7 +250,7 @@ def main(argv: list[str]) -> int:
     except StartError as error:
         print(error, file=sys.stderr)
         return 2
-    print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest}, indent=2))
+    print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest}, indent=2), flush=True)
     HTTPServer((args.host, args.port), make_handler(runtime)).serve_forever()
     return 0
 

@@ -41,7 +41,7 @@ describe('laya:eval nad lokalnim runtimeom', () => {
   afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())));
 
   const write = (name: string, value: unknown) => { const p = join(dir, name); writeFileSync(p, JSON.stringify(value)); return p; };
-  const registry = () => write('registry.json', { schemaVersion: 1, entries: [{ key: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'fixture' }] });
+  const registry = () => write('registry.json', { schemaVersion: 1, entries: [{ entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'fixture' }] });
   const gold = (split: 'calibration' | 'test') => write(`gold-${split}.json`, { schemaVersion: 1, datasetId: 'd0-fixture', split,
     items: [{ case: cases[0], gold: 'finding_supported' }, { case: cases[1], gold: 'possible_false_positive' }, { case: cases[2], gold: 'finding_supported' }] });
 

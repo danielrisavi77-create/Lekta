@@ -6435,10 +6435,10 @@ const MUTATIONS: Mutation[] = [
     id: 'laya/registar-prima-tudji-prag',
     imitates: 'registar prihvati prag izmjeren za drugi model ili reviziju, pa runner presudjuje pragom koji ne pripada pinanom modelu (Codex A1 na #149)',
     caught: () => {
-      const entry = { key: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: { ...makePolicy(), modelDigest: 'f'.repeat(64) }, calibrationEvidence: 'x' };
+      const entry = { entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: { ...makePolicy(), modelDigest: 'f'.repeat(64) }, calibrationEvidence: 'x' };
       try { loadRegistry({ schemaVersion: 1, entries: [entry] }); return false; } catch { return true; }
     },
-    cleanBefore: () => loadRegistry({ schemaVersion: 1, entries: [{ key: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'x' }] }).entries.length === 1,
+    cleanBefore: () => loadRegistry({ schemaVersion: 1, entries: [{ entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'x' }] }).entries.length === 1,
   },
   {
     id: 'laya/udaljeni-runtime',

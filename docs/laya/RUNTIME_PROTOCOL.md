@@ -48,19 +48,19 @@ Točno oblik `LayaDecisionResultV2` (`schemas/laya/finding-v2.schema.json`), bez
                      "extraction_uncertain": 0.12, "insufficient_evidence": 0.08 },
   "answerConfidence": 0.71,
   "runtime": { "backend": "laya-python", "modelId": "<id>", "modelRevision": "<revizija>",
-               "weightsSha256": "<sha256 stabla tezina>", "tokenizerSha256": "<sha256 stabla tokenizera>",
+               "weightsSha256": "<sha256 stabla tezina>", "vocabularySha256": "<sha256 stabla tokenizera>",
                "calibrationRevision": "<revizija>", "runtimeVersion": "<verzija>", "precision": "fp32" }
 }
 ```
 
 - `probabilities` imaju sve četiri oznake. Zbroj je 1 uz toleranciju 0,0005, a `verdict` je
   jedinstveni argmax.
-- `weightsSha256` i `tokenizerSha256` runtime računa iz stvarnih datoteka koje je učitao, ne
+- `weightsSha256` i `vocabularySha256` runtime računa iz stvarnih datoteka koje je učitao, ne
   prepisuje ih iz konfiguracije. Checkpoint čine `model.safetensors`, `rl_agent_config.json`,
   `encoder/*` i `tokenizer/*` (upstream `agent.py:352`). Svaki hash je SHA-256 niza sortiranih
   redaka `relativna/putanja NUL sha256(datoteke) LF`:
   - `weightsSha256` pokriva `model.safetensors`, `rl_agent_config.json` i sve pod `encoder/`;
-  - `tokenizerSha256` pokriva sve pod `tokenizer/`;
+  - `vocabularySha256` pokriva sve pod `tokenizer/`;
   - skrivene datoteke (upstreamov privremeni `.tokenizer_config.*.tmp`) ne ulaze.
 - Hash se računa **nakon** `laya.load`, jer upstream pri učitavanju smije prepisati
   `tokenizer/tokenizer_config.json` (`_fix_tokenizer_config`). Manifest tako opisuje točno ono što

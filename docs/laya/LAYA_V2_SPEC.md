@@ -169,7 +169,7 @@ interface LayaDecisionResultV2 {
   probabilities: Record<verdict, number>;
   answerConfidence: number;
   runtime: { backend: 'laya-python' | 'laya-onnx'; modelId; modelRevision; weightsSha256;
-    tokenizerSha256; calibrationRevision; runtimeVersion; precision };
+    vocabularySha256; calibrationRevision; runtimeVersion; precision };
 }
 ```
 
@@ -198,7 +198,7 @@ verziju runtimea, preciznost i kalibracijsku reviziju. Cache kljuc je `inputDige
 | dodatno ili nedostajuce polje | `invalid_result` |
 | odgovor nije vezan uz `caseId` i `inputDigest` | `input_not_bound` |
 | hash tezina ne odgovara | `weights_mismatch` |
-| hash tokenizera ne odgovara | `tokenizer_mismatch` |
+| hash tokenizera ne odgovara | `vocabulary_mismatch` |
 | drugi backend, verzija, preciznost ili kalibracija | `runtime_mismatch` |
 | zbroj nije 1, verdict nije jedinstveni argmax, vrijednost izvan [0,1] | `invalid_distribution` |
 | nema kalibracijske politike | `calibration_missing` |

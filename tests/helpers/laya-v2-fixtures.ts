@@ -31,7 +31,7 @@ export function makeCase(): LayaDecisionCaseV2 {
 
 export function makeRuntime(): LayaRuntime {
   return { backend: 'laya-python', modelId: 'laya-fixture', modelRevision: 'c'.repeat(40), weightsSha256: 'd'.repeat(64),
-    tokenizerSha256: 'e'.repeat(64), calibrationRevision: 'cal-fixture-1', runtimeVersion: '0.0.0-fixture', precision: 'fp32' };
+    vocabularySha256: 'e'.repeat(64), calibrationRevision: 'cal-fixture-1', runtimeVersion: '0.0.0-fixture', precision: 'fp32' };
 }
 
 export function makeResult(): LayaDecisionResultV2 {

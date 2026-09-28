@@ -6,7 +6,7 @@ import { LAYA_FIXTURE_MODEL, makePolicy, makeResult, makeRuntime, makeSnapshot }
 
 const MODEL = LAYA_FIXTURE_MODEL;
 const registry = (policy: unknown = makePolicy(), evidence: string | null = 'docs/laya/fixture-kalibracija.md') =>
-  loadRegistry({ schemaVersion: 1, entries: [{ key: MODEL, manifest: makeRuntime(), policy, calibrationEvidence: evidence }] });
+  loadRegistry({ schemaVersion: 1, entries: [{ entryId: MODEL, manifest: makeRuntime(), policy, calibrationEvidence: evidence }] });
 
 function client(answer: (r: LayaInferenceRequest) => unknown): LayaRuntimeClient & { calls: LayaInferenceRequest[] } {
   const calls: LayaInferenceRequest[] = [];
