@@ -190,14 +190,9 @@ function caveatHtml(model: VisualResultModel): string {
 }
 
 /**
- * Dva sitna cipa: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u zaglavlju
- * koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo na cemu ta
- * pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
- *
- * STOJI UZ PRSTEN (popravak drugog kruga), ne izmedju eyebrowa i H1: prva izvedba Z8 je marks
- * umetnula u tok teksta liste presude, pa je korisnik na dva cipa nailazio prije nego sto uopce
- * procita presudu. `verdictRingHtml` ovaj HTML ugraduje u `cockpit-ring-wrap`, kao metapodatak o
- * mjeracu, ne kao recenicu u prici.
+ * T64: jedan redak "Nije provjereno u cijelosti". Imenuje vrste slozenih Word struktura i
+ * PROVJERE koje nisu obuhvatile sve dijelove (Codex M3 na #165), oboje iz fiksnih mapiranja u
+ * modelu; slobodni reason iz skipped zapisa i tekst rada ovdje nikad ne dolaze.
  */
 function inspectionLimitHtml(model: VisualResultModel): string {
   const inspection = model.inspectionCoverage;
@@ -208,15 +203,24 @@ function inspectionLimitHtml(model: VisualResultModel): string {
   }
   const parts: string[] = [];
   if (inspection.labels.length) parts.push(inspection.labels.map(escapeHtml).join(', '));
-  if (inspection.analyzerSkips > 0) {
-    const preskok = pluralHr(inspection.analyzerSkips, ['strukturirani preskok', 'strukturirana preskoka', 'strukturiranih preskoka']);
-    parts.push(`${inspection.analyzerSkips} ${preskok} u automatiziranim provjerama`);
+  if (inspection.analyzerLabels.length) {
+    parts.push('provjere koje nisu obuhvatile sve dijelove: ' + inspection.analyzerLabels.map(escapeHtml).join(', '));
   }
-  const detail = parts.length ? parts.join(' · ') : 'postoje složene Word strukture s ograničenom automatskom provjerom';
+  const detail = parts.length ? parts.join('; ') : 'postoje složene Word strukture s ograničenom automatskom provjerom';
   return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
     + '<strong>Nije provjereno u cijelosti:</strong> ' + detail + '.</p>';
 }
 
+/**
+ * Dva sitna cipa: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u zaglavlju
+ * koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo na cemu ta
+ * pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
+ *
+ * STOJI UZ PRSTEN (popravak drugog kruga), ne izmedju eyebrowa i H1: prva izvedba Z8 je marks
+ * umetnula u tok teksta liste presude, pa je korisnik na dva cipa nailazio prije nego sto uopce
+ * procita presudu. `verdictRingHtml` ovaj HTML ugraduje u `cockpit-ring-wrap`, kao metapodatak o
+ * mjeracu, ne kao recenicu u prici.
+ */
 function marksHtml(model: VisualResultModel): string {
   const potvrden = model.header.profileConfirmed;
   const natpis = potvrden ? 'Profil potvrđen' : 'Profil nije potvrđen';

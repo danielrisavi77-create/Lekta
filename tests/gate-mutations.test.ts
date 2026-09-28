@@ -8698,3 +8698,48 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
   });
 });
+
+describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
+  // Uvoz je lijen da ovaj blok ne mijenja redoslijed ucitavanja ostatka datoteke.
+  const load = async () => ({
+    cov: await import('../src/analysis/inspection-coverage'),
+    guard: await import('./helpers/inspection-coverage-guard'),
+  });
+
+  it('baseline: stvarni census je cist pod gardom', async () => {
+    const { cov, guard } = await load();
+    expect(await guard.inspectionCensusProblems(cov.inspectionCoverageFromPackage)).toEqual([]);
+  });
+
+  it('(a) census bez zaglavlja i podnozja (stanje na 265598f7) obara gard', async () => {
+    const { cov, guard } = await load();
+    const samoTijeloIBiljeske = (names: Iterable<string>) =>
+      [...names].filter((name) => /^word\/(?:document|footnotes|endnotes)\.xml$/.test(name)).sort();
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: samoTijeloIBiljeske });
+    const problems = await guard.inspectionCensusProblems(mutant);
+    expect(problems).toContain('tekstni okvir samo u zaglavlju nije prijavljen kao ogranicenje');
+    expect(problems).toContain('strukturirana kontrola samo u podnozju nije prijavljena kao ogranicenje');
+  });
+
+  it('(b) census koji izostavi jednu strukturu (txbx) obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezOkvira = cov.INSPECTION_STRUCTURES.filter((s) => s.kind !== 'text-box');
+    expect(bezOkvira.length).toBe(cov.INSPECTION_STRUCTURES.length - 1);
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { structures: bezOkvira });
+    expect(await guard.inspectionCensusProblems(mutant)).toContain('vrsta text-box nije prepoznata u census-u');
+  });
+
+  it('(c) lazni no-known-limits kad census baci izuzetak obara gard', async () => {
+    const { cov, guard } = await load();
+    const mutant: typeof cov.inspectionCoverageFromPackage = async (zip, details) => {
+      try {
+        return cov.buildInspectionCoverage(await cov.readInspectionParts(zip), details);
+      } catch {
+        return cov.buildInspectionCoverage([], details);
+      }
+    };
+    expect(await guard.inspectionCensusProblems(mutant)).toContain('kvar citanja dijela dao je no-known-limits, ne unknown');
+  });
+});

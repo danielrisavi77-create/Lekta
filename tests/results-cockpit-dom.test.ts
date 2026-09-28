@@ -964,7 +964,10 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
     expect(row?.textContent).toContain('Nije provjereno u cijelosti');
     expect(row?.textContent).toContain('tekstualni okviri');
     expect(row?.textContent).toContain('ugniježđene tablice');
-    expect(row?.textContent).toContain('2 strukturirana preskoka');
+    // M3: redak imenuje provjeru iz fiksnog mapiranja, ne svodi preskoke na jedan zbroj.
+    expect(row?.textContent).toContain('provjere koje nisu obuhvatile sve dijelove: dosljednost');
+    expect(row?.textContent).not.toContain('strukturirana preskoka');
+    expect(row?.textContent).not.toMatch(/[\u2013\u2014]/);
 
     const completeMount = document.createElement('section');
     const complete = buildVisualResultModel(result({
@@ -981,6 +984,34 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
     }));
     renderResultsCockpit(completeMount, complete, { repairAvailable: false });
     expect(completeMount.querySelector('[data-cockpit-inspection-limit]')).toBeNull();
+  });
+
+  it('M3: redak imenuje sve pogodjene provjere i ne prenosi slobodni reason ni nepoznat analizator', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({
+      details: {
+        ruleAuthority: 'official-source',
+        inspectionCoverage: {
+          version: 1,
+          status: 'partial',
+          items: [],
+          analyzerSkips: [
+            { analyzer: 'typography', count: 1 },
+            { analyzer: 'link-doi', count: 3 },
+            { analyzer: 'required-sections', count: 1 },
+            { analyzer: 'legal-footnotes', count: 1 },
+            { analyzer: '<img src=x onerror=alert(1)>', count: 1, reason: 'Tajni reason iz rada' },
+          ],
+          summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 7 },
+        } as any,
+      },
+    }));
+    renderResultsCockpit(mount, model, { repairAvailable: false });
+    const row = mount.querySelector('[data-cockpit-inspection-limit]');
+    expect(row?.textContent).toContain('tipografija, poveznice i DOI, obvezni dijelovi, pravne fusnote');
+    expect(row?.textContent).not.toContain('Tajni');
+    expect(row?.querySelector('img')).toBeNull();
+    expect(row?.textContent).not.toMatch(/[\u2013\u2014]/);
   });
 
   it('unknown inspection coverage priznaje da opseg nije bilo moguce utvrditi', () => {

@@ -269,7 +269,49 @@ describe('VisualResultModel', () => {
       limitedOccurrences: 3,
       analyzerSkips: 3,
       labels: ['strukturirane kontrole', 'praćene izmjene'],
+      analyzerLabels: ['tipografija'],
     });
+  });
+
+  it('M3: imenuje provjere s preskocima iz fiksnog mapiranja, nikad iz slobodnog teksta', () => {
+    const model = buildVisualResultModel({
+      ...baseResult,
+      details: {
+        ...baseResult.details,
+        inspectionCoverage: {
+          version: 1,
+          status: 'partial',
+          items: [
+            { kind: 'unbalanced-field', count: 1 },
+            // Nepoznat ili prototipni kljuc iz nepouzdanog ulaza ne smije postati oznaka.
+            { kind: 'toString', count: 1 },
+            { kind: 'Tajni tekst rada', count: 1 },
+          ],
+          analyzerSkips: [
+            { analyzer: 'typography', count: 1 },
+            { analyzer: 'consistency', count: 2 },
+            { analyzer: 'link-doi', count: 1 },
+            { analyzer: 'required-sections', count: 1 },
+            { analyzer: 'legal-footnotes', count: 1 },
+            { analyzer: 'constructor', count: 1 },
+            { analyzer: 'Tajni tekst rada', count: 4, reason: 'Tajni reason' },
+            { analyzer: 'typography', count: 0 },
+          ],
+          summary: { limitedKinds: 1, limitedOccurrences: 1, analyzerSkips: 6 },
+        } as any,
+      },
+    });
+    expect(model.inspectionCoverage?.labels).toEqual(['nezatvorena Word polja']);
+    expect(model.inspectionCoverage?.analyzerLabels).toEqual([
+      'tipografija',
+      'dosljednost',
+      'poveznice i DOI',
+      'obvezni dijelovi',
+      'pravne fusnote',
+    ]);
+    const json = JSON.stringify(model.inspectionCoverage);
+    expect(json).not.toContain('Tajni');
+    expect(json).not.toMatch(/[\u2013\u2014]/);
   });
 
   it('complete inspection coverage ostaje eksplicitno complete bez izmisljene granice', () => {
@@ -291,6 +333,7 @@ describe('VisualResultModel', () => {
       limitedOccurrences: 0,
       analyzerSkips: 0,
       labels: [],
+      analyzerLabels: [],
     });
   });
 

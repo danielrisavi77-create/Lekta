@@ -11,7 +11,7 @@ import {
 } from '../finding-view-model';
 import { resultReadiness, type ReadinessAuthority, type ResultReadiness } from '../result-readiness';
 import { profileClaimFor, type ProfileClaim } from '../profile-claim';
-import type { InspectionCoverage, InspectionStructureKind } from '../../analysis/inspection-coverage';
+import type { InspectionAnalyzer, InspectionCoverage, InspectionStructureKind } from '../../analysis/inspection-coverage';
 
 export type VisualAuthorityKind = 'verified' | 'limited' | 'generic';
 
@@ -108,6 +108,8 @@ export interface VisualInspectionCoverageModel {
   limitedOccurrences: number;
   analyzerSkips: number;
   labels: string[];
+  /** Kratki nazivi provjera s preskocima, iz fiksnog mapiranja (nikad slobodni tekst). */
+  analyzerLabels: string[];
 }
 
 export interface VisualResultInput extends FindingResultInput {
@@ -169,18 +171,52 @@ const INSPECTION_LABELS: Record<InspectionStructureKind, string> = {
   'tracked-change': 'praćene izmjene',
   'embedded-object': 'ugrađeni objekti',
   'nested-table': 'ugniježđene tablice',
+  'unbalanced-field': 'nezatvorena Word polja',
 };
+
+/**
+ * Kratki nazivi provjera koje su neke dijelove preskocile (Codex M3 na #165). FIKSNO mapiranje
+ * imena analizatora; slobodni `reason` iz skipped zapisa i tekst rada nikad ne dolaze u UI.
+ */
+const INSPECTION_ANALYZER_LABELS: Record<InspectionAnalyzer, string> = {
+  typography: 'tipografija',
+  consistency: 'dosljednost',
+  'link-doi': 'poveznice i DOI',
+  'required-sections': 'obvezni dijelovi',
+  'legal-footnotes': 'pravne fusnote',
+};
+
+const INSPECTION_STATUSES: readonly InspectionCoverage['status'][] = ['no-known-limits', 'partial', 'unknown'];
+
+/** Oznaka samo za VLASTITI kljuc mape: `toString` ili `constructor` iz nepouzdanog ulaza ne prolaze. */
+function fixedLabel<K extends string>(map: Record<K, string>, key: unknown): string | null {
+  return typeof key === 'string' && Object.prototype.hasOwnProperty.call(map, key) ? map[key as K] : null;
+}
+
+function positiveCount(value: unknown): boolean {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0;
+}
+
+function fixedLabels<K extends string>(map: Record<K, string>, keys: unknown[]): string[] {
+  const out: string[] = [];
+  for (const key of keys) {
+    const label = fixedLabel(map, key);
+    if (label && !out.includes(label)) out.push(label);
+  }
+  return out;
+}
 
 function inspectionCoverageModel(value: InspectionCoverage | undefined): VisualInspectionCoverageModel | null {
   if (!value || value.version !== 1) return null;
   const items = Array.isArray(value.items) ? value.items : [];
+  const skips = Array.isArray(value.analyzerSkips) ? value.analyzerSkips : [];
   return {
-    status: value.status,
+    // Nepoznat status se ne smije prikazati kao potpuna provjera.
+    status: INSPECTION_STATUSES.includes(value.status) ? value.status : 'unknown',
     limitedOccurrences: Number.isFinite(value.summary?.limitedOccurrences) ? Math.max(0, Math.floor(value.summary.limitedOccurrences)) : 0,
     analyzerSkips: Number.isFinite(value.summary?.analyzerSkips) ? Math.max(0, Math.floor(value.summary.analyzerSkips)) : 0,
-    labels: items
-      .filter((item) => item && item.count > 0 && item.kind in INSPECTION_LABELS)
-      .map((item) => INSPECTION_LABELS[item.kind]),
+    labels: fixedLabels(INSPECTION_LABELS, items.filter((item) => item && positiveCount(item.count)).map((item) => item.kind)),
+    analyzerLabels: fixedLabels(INSPECTION_ANALYZER_LABELS, skips.filter((skip) => skip && positiveCount(skip.count)).map((skip) => skip.analyzer)),
   };
 }
 
