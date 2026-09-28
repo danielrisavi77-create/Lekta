@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
  * UX SPECOVI ULAZA `/`. Zaseban od `free-tools-audit`, i to nije uredovanje nego posljedica garda.
@@ -217,17 +217,262 @@ test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz do
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   // Znacka istinito imenuje prepoznati fakultet i nudi oba gumba (Z32: napomenaDrugiFakultet).
   // `#detectBadge` zivi unutar `#profileSheet` (list za promjenu profila), koji ovaj tok ne
-  // otvara, pa se provjerava sadrzaj (bez zahtjeva na vidljivost), a ne `toBeVisible`.
+  // otvara, pa se ondje provjerava sadrzaj; VIDLJIVOST mjeri napomena izvan lista (test ispod).
   const znacka = page.locator('#detectBadge');
-  await expect(znacka).toContainText(
-    'Dokument izgleda kao rad koji pripada fakultetu Fakultet političkih znanosti. Na ulazu je potvrđen Fakultet elektrotehnike i računarstva.',
-    { timeout: 30_000 },
-  );
-  await expect(znacka.locator('button')).toHaveText([
-    'Prebaci na Fakultet političkih znanosti',
-    'Zadrži Fakultet elektrotehnike i računarstva',
-  ]);
+  await expect(znacka).toContainText(NAPOMENA_FPZG_FER, { timeout: 30_000 });
+  await expect(znacka.locator('button')).toHaveText(GUMBI_FPZG_FER);
   await expect(page.locator('#unitSelect')).toHaveValue('fer');
+});
+
+/**
+ * NAPOMENA SE POKAZUJE SAMA (odluka vlasnika 2026-09-27, "Da, sama"). Isti tok kao iznad (FER
+ * potvrdjen na `/`, dokument FPZG-a), ali se mjeri VIDLJIVOST bez otvaranja lista profila:
+ * napomena stoji u `#facultyConflict` uz karticu profila, s oba gumba. Prvi prolaz: "Zadrži"
+ * zatvara napomenu, a FER ostaje. Drugi prolaz (nova sesija): "Prebaci" mijenja profil na FPZG.
+ */
+const NAPOMENA_FPZG_FER = 'Dokument izgleda kao rad koji pripada fakultetu Fakultet političkih znanosti. Na ulazu je potvrđen Fakultet elektrotehnike i računarstva.';
+const GUMBI_FPZG_FER = ['Prebaci na Fakultet političkih znanosti', 'Zadrži Fakultet elektrotehnike i računarstva'];
+
+async function doRadaSPotvrdjenimFer(page: Page): Promise<void> {
+  await page.goto('/?unit=fer');
+  await page.locator('[data-intake-potvrdi]').click();
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+}
+
+test('Z32: napomena o drugom prepoznatom fakultetu vidljiva je sama; "Zadrži" je zatvara, "Prebaci" mijenja profil', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await expect(napomena).toHaveAttribute('role', 'status');
+  await expect(napomena.locator('.fc-tekst')).toHaveText(NAPOMENA_FPZG_FER);
+  await expect(napomena.locator('button')).toHaveText(GUMBI_FPZG_FER);
+  await expect(napomena.locator('button').first()).toBeVisible();
+  await expect(napomena.locator('button').last()).toBeVisible();
+  // Bez otvaranja lista profila, i bez otimanja fokusa.
+  await expect(page.locator('#profileSheet')).toBeHidden();
+  expect(await napomena.evaluate((el) => el.contains(document.activeElement)), 'fokus se ne otima').toBe(false);
+
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[1] }).click();
+  await expect(napomena).toBeHidden();
+  await expect(napomena.locator('button')).toHaveCount(0);
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet elektrotehnike i računarstva');
+
+  await doRadaSPotvrdjenimFer(page);
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] }).click();
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti');
+});
+
+/**
+ * FOKUS PRI ZATVARANJU NAPOMENE (nalaz pregleda, WCAG 2.4.3). Gumb koji zatvara napomenu nestaje
+ * s njom; bez povrata fokus pada na `<body>` i sljedeci Tab krece s vrha stranice. Mjeri se
+ * TIPKOVNICOM: Tab do "Zadrži", Enter, pa fokus mora stajati na "Analiziraj dokument", a sljedeci
+ * Tab ici dalje od njega. Drugi prolaz isto mjeri za znacku u listu profila (`#detectBadge`):
+ * fokus ostaje u listu, na izborniku fakulteta.
+ */
+test('Z32: tipkovnicom "Zadrži" zatvara napomenu, a fokus se vraca na smislen element', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  const zadrzi = napomena.getByRole('button', { name: GUMBI_FPZG_FER[1] });
+  let stigao = false;
+  for (let i = 0; i < 150 && !stigao; i += 1) {
+    await page.keyboard.press('Tab');
+    stigao = await zadrzi.evaluate((el) => el === document.activeElement);
+  }
+  expect(stigao, 'Tab stize do "Zadrži"').toBe(true);
+  await page.keyboard.press('Enter');
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  const nakon = await page.evaluate(() => ({
+    body: document.activeElement === document.body,
+    id: document.activeElement?.id ?? '',
+  }));
+  expect(nakon.body, 'fokus nije pao na body').toBe(false);
+  expect(nakon.id, 'fokus je na "Analiziraj dokument"').toBe('analyzeBtn');
+  await page.keyboard.press('Tab');
+  const sljedeci = await page.evaluate(() => {
+    const aktivan = document.activeElement;
+    const analiziraj = document.getElementById('analyzeBtn')!;
+    return {
+      body: aktivan === document.body,
+      iza: !!aktivan && aktivan !== analiziraj
+        && Boolean(analiziraj.compareDocumentPosition(aktivan) & Node.DOCUMENT_POSITION_FOLLOWING),
+    };
+  });
+  expect(sljedeci.body, 'sljedeci Tab ne pada na body').toBe(false);
+  expect(sljedeci.iza, 'sljedeci Tab ide dalje od "Analiziraj dokument", ne s vrha').toBe(true);
+
+  // Znacka u listu profila: list se otvara s kartice ("Promijeni"), gumb se aktivira Enterom.
+  await doRadaSPotvrdjenimFer(page);
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await page.locator('#analyzeProfile [data-change-profile]').click();
+  await expect(page.locator('#profileSheet')).toBeVisible();
+  const zadrziUListu = page.locator('#detectBadge').getByRole('button', { name: GUMBI_FPZG_FER[1] });
+  await zadrziUListu.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#detectBadge')).toBeHidden();
+  const uListu = await page.evaluate(() => ({
+    id: document.activeElement?.id ?? '',
+    uListu: Boolean(document.activeElement?.closest('#profileSheet')),
+  }));
+  expect(uListu.id, 'fokus je na izborniku fakulteta').toBe('unitSelect');
+  expect(uListu.uListu, 'fokus ostaje u listu profila').toBe(true);
+});
+
+/** Tab dok fokus ne stane na `gumb` (najvise 150 koraka); vraca je li stigao. */
+async function tabDo(page: Page, gumb: Locator): Promise<boolean> {
+  for (let i = 0; i < 150; i += 1) {
+    await page.keyboard.press('Tab');
+    if (await gumb.evaluate((el) => el === document.activeElement)) return true;
+  }
+  return false;
+}
+
+/** Profil u obrascu i tekst kartice, za usporedbu dvaju tokova nad istim radom. */
+const profilObrasca = (page: Page) => page.evaluate(() => ({
+  unit: (document.getElementById('unitSelect') as HTMLSelectElement).value,
+  program: (document.getElementById('programSelect') as HTMLSelectElement).value,
+  workType: (document.getElementById('workType') as HTMLSelectElement).value,
+  kartica: document.getElementById('analyzeProfile')?.textContent ?? '',
+}));
+
+test('Z32: tipkovnicom "Prebaci" mijenja fakultet, a fokus se vraca na "Analiziraj dokument"', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  expect(await tabDo(page, napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] })), 'Tab stize do "Prebaci"').toBe(true);
+  await page.keyboard.press('Enter');
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  const nakon = await page.evaluate(() => ({
+    body: document.activeElement === document.body,
+    id: document.activeElement?.id ?? '',
+  }));
+  expect(nakon.body, 'fokus nije pao na body').toBe(false);
+  expect(nakon.id, 'fokus je na "Analiziraj dokument"').toBe('analyzeBtn');
+});
+
+/**
+ * NALAZ PREGLEDA (Codex, blocker): potvrdjen CIJELI profil (zapamcene postavke FER · Računarstvo
+ * potvrdjene na `/`) preskakao je detekciju prije nego je napomena mogla nastati, pa student koji
+ * je potvrdio FER i ubacio rad FPZG-a napomenu nije vidio. Testovi su pokrivali samo `?unit=fer`.
+ */
+test('Z32: potvrdjen cijeli profil (postavke FER · Računarstvo) uz rad FPZG-a pokazuje napomenu', async ({ page }) => {
+  await sPostavkama(page);
+  await page.goto('/');
+  await expect(page.locator('[data-intake-fakultet]')).toHaveText('FER · Računarstvo · Dipl.');
+  await page.locator('[data-intake-potvrdi]').click();
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/#session=/);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await expect(napomena.locator('.fc-tekst')).toHaveText(NAPOMENA_FPZG_FER);
+  // Potvrdjeni profil stoji dok student ne odluci.
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  await expect(page.locator('#programSelect')).toHaveValue('Računarstvo');
+  // "Prebaci" i ovdje prebacuje (potvrdjen profil sesije vise ne blokira detekciju).
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] }).click();
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg', { timeout: 30_000 });
+  // Ponovno otvaranje: sesija sada ima vlastiti profil (C4 obnavlja FER), a odluka "Prebaci" se
+  // ponovi, pa rad ostaje na FPZG-u, bez napomene.
+  await page.reload();
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  await expect(napomena).toBeHidden();
+});
+
+/**
+ * NALAZ PREGLEDA (Codex, major): "Prebaci" je slao `change` obrascu, a `app.ts` na svaki `change`
+ * izbornika profila oznaci cijeli profil potvrdjenim, pa je analiza mogla krenuti pod prvim
+ * studijem FPZG-a bez ikakve potvrde studija. Sada "Prebaci" primijeni ono sto je detekcija
+ * prepoznala, istim putem kao da fakulteta na ulazu nije ni bilo. ORAKL je taj drugi tok: isti rad
+ * bez potvrde FER-a mora dati isti obrazac i istu karticu kao potvrda FER-a pa "Prebaci".
+ */
+test('Z32: "Prebaci" daje profil koji je detekcija prepoznala, ne prvi studij fakulteta', async ({ page }) => {
+  await page.goto('/?unit=fer');
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+  await expect(page.locator('#detectBadge')).toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti', { timeout: 30_000 });
+  const detektirano = await profilObrasca(page);
+
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] }).click();
+  await expect(page.locator('#detectBadge'), 'primijenjena je detekcija, ne promjena obrasca').toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti');
+  expect(await profilObrasca(page)).toEqual(detektirano);
+});
+
+/**
+ * NALAZ PREGLEDA (Codex, major): "Zadrži" se pamtio samo u memoriji modula, pa je ponovno
+ * otvaranje iste sesije (`/rad/#session=...`) napomenu vratilo. Odluka sada zivi uz sesiju, istim
+ * mehanizmom kao rok i potvrda (`src/shared/intake-choice.ts`). Tisina se mjeri uz KONTROLU
+ * vremena: pri prvom otvaranju mjeri se koliko nakon kartice profila napomena stigne, a poslije
+ * ponovnog ucitavanja ceka se trostruko toliko (najmanje 3 s) prije tvrdnje da je nema.
+ */
+test('Z32: odluka o napomeni pamti se uz sesiju: ponovno otvaranje je ne vraca', async ({ page }) => {
+  const kartica = page.locator('#analyzeProfile .ap-ustanova');
+  const napomena = page.getByTestId('faculty-conflict');
+  await doRadaSPotvrdjenimFer(page);
+  await expect(kartica).toHaveText('Fakultet elektrotehnike i računarstva', { timeout: 30_000 });
+  const t0 = Date.now();
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  const kasnjenje = Date.now() - t0;
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[1] }).click();
+  await expect(napomena).toBeHidden();
+  await page.reload();
+  await expect(kartica).toHaveText('Fakultet elektrotehnike i računarstva', { timeout: 30_000 });
+  await page.waitForTimeout(Math.max(3_000, 3 * kasnjenje));
+  await expect(napomena, '"Zadrži" vrijedi i nakon ponovnog otvaranja sesije').toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+
+  // "Prebaci" isto: ponovno otvaranje zadrzava prebaceni fakultet, bez napomene.
+  await doRadaSPotvrdjenimFer(page);
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] }).click();
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg', { timeout: 30_000 });
+  await page.reload();
+  await expect(kartica).toHaveText('Fakultet političkih znanosti', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  await expect(napomena).toBeHidden();
+});
+
+/**
+ * NALAZ PREGLEDA (Codex, minor): zamjena dokumenta skrivala je samo znacku u listu, a vidljivi red
+ * napomene o STAROM radu ostajao je popunjen (i klikljiv) dok se novi ne slegne; odbijen novi rad
+ * ga je ostavljao zauvijek, jer brava pada tek na prihvacen drugi dokument. Mjeri se sinkrono, u
+ * istom zadatku u kojem `change` stigne na `#fileInput`.
+ */
+test('Z32: zamjena dokumenta odmah gasi napomenu o starom radu', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  const zamijeni = (bajtovi: number[], ime: string) => page.evaluate(({ b, n }) => {
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    const dt = new DataTransfer();
+    dt.items.add(new File([new Uint8Array(b)], n, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
+    input.files = dt.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    return document.getElementById('facultyConflict')!.childElementCount;
+  }, { b: bajtovi, n: ime });
+  // Odbijen novi rad (nije ZIP): napomena ne smije ostati uz rad kojeg vise nema.
+  expect(await zamijeni([...Buffer.from('ovo nije docx '.repeat(400))], 'kvar.docx'), 'odmah po odabiru').toBe(0);
+  // Odbijanje se ceka po tekstu, ne po vidljivosti: `setFile(null)` vraca carobnjak na prvi korak,
+  // pa poruka na sirokom prikazu moze biti u stupcu koji se tada ne crta.
+  await expect(page.locator('#dropError')).toContainText('nije pravi .docx', { timeout: 30_000 });
+  await expect(napomena).toBeHidden();
+  expect(await napomena.evaluate((el) => el.childElementCount)).toBe(0);
 });
 
 test('Z32: povlacenje podize list, a napustanje ekrana ga spusta', async ({ page }) => {
