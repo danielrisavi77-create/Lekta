@@ -335,7 +335,7 @@ export function parseArgs(argv) {
  */
 export function applyGuard(opts, env) {
   if (!opts.apply) return null;
-  if (!opts.fromExplicit) {
+  if (opts.from !== 'db') {
     throw new Error('--apply trazi --from=db: zrcali se zivi katalog, ne sjeme cijena iz migracija');
   }
   const secret = String(env.STRIPE_SECRET_KEY ?? '');

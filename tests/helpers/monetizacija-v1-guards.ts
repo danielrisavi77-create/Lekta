@@ -548,6 +548,9 @@ export function stripeSyncSafetyProblems(parse: StripeSyncParse, guard: StripeSy
   if (!throwsWith(() => guard(parse(['--apply']), { STRIPE_SECRET_KEY: test }), /--from=db/)) {
     problems.push('stripe-sync: --apply bez eksplicitnog --from zrcali sjeme cijena iz migracija');
   }
+  if (!throwsWith(() => guard(parse(['--apply', '--from=migrations']), { STRIPE_SECRET_KEY: test }), /--from=db/)) {
+    problems.push('stripe-sync: --apply --from=migrations zrcali sjeme cijena iz migracija umjesto zivog kataloga');
+  }
   try {
     if (guard(parse(['--apply', '--from=db', '--live']), { STRIPE_SECRET_KEY: live }) !== live) {
       problems.push('stripe-sync: ispravan --apply --from=db --live ne vraca kljuc');

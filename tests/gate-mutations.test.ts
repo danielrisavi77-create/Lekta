@@ -105,7 +105,7 @@ import {
   STRIPE_HANDLED_EVENTS,
   buildEntitlementInsert,
 } from '../src/report/webhook';
-import { quoteUpgrade, readBoundSlotIntact } from '../src/report/upgrade';
+import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src/report/upgrade';
 import {
   accessRowsProblems,
   bonusOutboxWorkerProblems,
@@ -6009,12 +6009,127 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/stripe-sync-apply-sjeme-migracija',
-    imitates: 'krug 4 (6d): --apply bez --from zrcali sjeme cijena iz migracija u Stripe umjesto zivog kataloga',
+    imitates: 'krug 4 (6d) / M2: gard se vraca na staru provjeru (fromExplicit umjesto from === "db"), pa --apply --from=migrations opet zrcali sjeme cijena iz migracija u Stripe umjesto zivog kataloga',
     caught: () => {
-      const mutant: typeof stripeSyncApplyGuard = (opts, env) => stripeSyncApplyGuard({ ...opts, fromExplicit: true }, env);
-      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez eksplicitnog --from'));
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        if (secret.startsWith('sk_live_') && !opts.live) throw new Error('--live');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('--from=migrations zrcali'));
     },
     cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/webhook-inline-nagrada-bez-ponovnog-citanja-povrata',
+    imitates: 'krug 4 nalaz pregleda (6a): handler inline izdaje nagradu preporucitelju bez ponovnog citanja oznake povrata (upisane izmedju prvog citanja i ove tocke), pa puni povrat u tom prozoru ostavlja nagradu izdanu',
+    caught: () => {
+      const izvor = "  const { data: povratPrijeNagrade, error: povratPrijeNagradeErr } = await admin\n"
+        + "    .from('webhook_events')\n"
+        + "    .select('id')\n"
+        + "    .eq('provider', PROVIDER)\n"
+        + "    .eq('order_id', ev.orderId)\n"
+        + "    .in('outcome_detail', REFUND_MARKERS)\n"
+        + "    .limit(1);\n"
+        + "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {\n"
+        + "    console.error('webhook-mor referrer_reward_deferred', {\n"
+        + "      orderId: ev.orderId,\n"
+        + "      reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',\n"
+        + "    });\n"
+        + "  } else {\n"
+        + "    await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);\n"
+        + "    await markBonusDone(admin, ev.orderId, 'referrer_reward');\n"
+        + "  }";
+      const bezPonovnogCitanja = "  await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);\n"
+        + "  await markBonusDone(admin, ev.orderId, 'referrer_reward');";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezPonovnogCitanja);
+      return mutated !== src && !mutated.includes('povratPrijeNagrade');
+    },
+    cleanBefore: () => webhookMorSource().includes(
+      "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {",
+    ),
+  },
+  {
+    id: 'naplata/webhook-markbonusdone-bez-uvjeta-pending',
+    imitates: 'krug 4 nalaz pregleda (6a): markBonusDone oznacava obvezu izvrsenom i kad ju je puni povrat u medjuvremenu vec otkazao (cancelled), pa se otkaz izgubi',
+    caught: () => {
+      const izvor = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');\n"
+        + "  } catch (e) {";
+      const bezUvjeta = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind);\n"
+        + "  } catch (e) {";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezUvjeta);
+      const fnStart = mutated.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !/\.eq\('status', 'pending'\)/.test(fn);
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return /\.eq\('status', 'pending'\)/.test(fn);
+    },
+  },
+  {
+    id: 'naplata/webhook-nadogradnja-bez-ponovnog-citanja-partial-refund',
+    imitates: 'krug 4 nalaz pregleda (6b): bookUpgradePayment ne cita partial_refund_noted izvorne uplate ponovno prije pretvorbe, pa djelomican povrat zabiljezen izmedju checkouta i uplate nadogradnje prolazi s odbitkom punog iznosa',
+    caught: () => {
+      const izvor = "    if (source) {\n"
+        + "      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');\n"
+        + "      if (!partial.ok) {\n"
+        + "        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: partial.error });\n"
+        + "        await settle('failed', `upgrade_refund_lookup: ${partial.error}`);\n"
+        + "        return json({ error: 'internal' }, 500);\n"
+        + "      }\n"
+        + "      source.partiallyRefunded = partial.partial;\n"
+        + "    }\n\n";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, '');
+      const fnStart = mutated.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !fn.includes('readSourcePartiallyRefunded(');
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return fn.includes('readSourcePartiallyRefunded(');
+    },
+  },
+  {
+    id: 'naplata/upgrade-idempotency-key-bez-iznosa',
+    imitates: 'krug 4 nalaz pregleda (6e): kljuc idempotencije za nadogradnju ne nosi iznos, pa nova ciljna cijena (npr. promjena kataloga izmedju dva klika) vraca STARI PaymentIntent po starom iznosu umjesto novog',
+    caught: () => {
+      const stariKljuc = (userId: string, sourceEntitlementId: string, targetProductId: string, _amountCents: number): string =>
+        `lekta:pi:upgrade:${userId}:${sourceEntitlementId}:${targetProductId}`;
+      const a = stariKljuc('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = stariKljuc('u1', 'ent1', 'pass_diplomski', 2999);
+      return a === b;
+    },
+    cleanBefore: () => {
+      const a = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 2999);
+      return a !== b;
+    },
   },
   {
     id: 'naplata/stripe-sync-zastita-poslije-mreze',

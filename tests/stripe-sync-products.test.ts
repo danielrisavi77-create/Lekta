@@ -78,6 +78,20 @@ function fakeStripe() {
   return { f, products, prices, posts };
 }
 
+const DB_URL = 'https://db.test.example';
+const DB_ENV = { SUPABASE_URL: DB_URL, SUPABASE_SERVICE_ROLE_KEY: 'service-role-test' };
+
+/** Omata lazan Stripe fetch tako da `--from=db` prvo dobije katalog iz migracija preko PostgREST-a. */
+function fakeDb(stripeFetch: typeof fetch, rows: unknown[] = catalogFromMigrations()) {
+  return (async (url: string, init?: RequestInit) => {
+    const u = new URL(String(url));
+    if (u.origin === DB_URL && u.pathname === '/rest/v1/products') {
+      return new Response(JSON.stringify(rows), { status: 200 });
+    }
+    return stripeFetch(url, init as RequestInit);
+  }) as unknown as typeof fetch;
+}
+
 function metadataOf(body: URLSearchParams): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [k, v] of body) {
@@ -152,6 +166,11 @@ describe('stripe-sync-products: dry-run je zadan i ne dira mrezu', () => {
     expect(parseArgs(['--apply']).fromExplicit).toBe(false);
     expect(parseArgs(['--apply', '--from=db']).fromExplicit).toBe(true);
   });
+
+  it('M2: --apply --from=migrations se odbija (samo --from=db zrcali zivi katalog), prije ikakvog poziva', async () => {
+    await expect(main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, zabranjenFetch, quiet)).rejects.toThrow(/--from=db/);
+    expect(parseArgs(['--apply', '--from=migrations']).fromExplicit).toBe(true);
+  });
 });
 
 describe('stripe-sync-products: neaktivan SKU se arhivira (krug 4)', () => {
@@ -178,14 +197,14 @@ describe('stripe-sync-products: neaktivan SKU se arhivira (krug 4)', () => {
     const s = fakeStripe();
     s.products.set('lekta_slot_zavrsni_do_obrane', { id: 'lekta_slot_zavrsni_do_obrane', name: 'Lekta slot_zavrsni_do_obrane', active: true, metadata: {} });
     s.prices.push({ id: 'price_obrana', product: 'lekta_slot_zavrsni_do_obrane', unit_amount: 999, currency: 'eur', lookup_key: 'slot_zavrsni_do_obrane', active: true });
-    const prvi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const prvi = await main(['--apply', '--from=db'], { STRIPE_SECRET_KEY: TEST_KEY, ...DB_ENV }, fakeDb(s.f), quiet);
     expect(prvi.plan.map((st: { action: string; productId: string }) => `${st.action}:${st.productId}`))
       .toEqual(expect.arrayContaining(['archive_product:slot_zavrsni_do_obrane', 'archive_price:slot_zavrsni_do_obrane', 'noop_archived:slot_diplomski_do_obrane']));
     expect(s.products.get('lekta_slot_zavrsni_do_obrane')?.active).toBe(false);
     const cijena = s.prices.find((p) => p.id === 'price_obrana');
     expect(cijena).toMatchObject({ active: false, lookup_key: null });
     const postova = s.posts.length;
-    const drugi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const drugi = await main(['--apply', '--from=db'], { STRIPE_SECRET_KEY: TEST_KEY, ...DB_ENV }, fakeDb(s.f), quiet);
     expect(drugi.applied).toBe(0);
     expect(s.posts.length).toBe(postova);
   });
@@ -194,13 +213,13 @@ describe('stripe-sync-products: neaktivan SKU se arhivira (krug 4)', () => {
 describe('stripe-sync-products: idempotencija (dva prolaza, drugi je no-op)', () => {
   it('prvi --apply stvori Product i Price po SKU-u; drugi ne salje nijedan POST', async () => {
     const s = fakeStripe();
-    const prvi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const prvi = await main(['--apply', '--from=db'], { STRIPE_SECRET_KEY: TEST_KEY, ...DB_ENV }, fakeDb(s.f), quiet);
     const broj = desiredStripeCatalog(catalogFromMigrations()).length;
     expect(prvi.applied).toBe(broj * 2);
     expect(s.products.size).toBe(broj);
     const postsPrvi = s.posts.length;
 
-    const drugi = await main(['--apply', '--from=migrations'], { STRIPE_SECRET_KEY: TEST_KEY }, s.f, quiet);
+    const drugi = await main(['--apply', '--from=db'], { STRIPE_SECRET_KEY: TEST_KEY, ...DB_ENV }, fakeDb(s.f), quiet);
     expect(drugi.applied).toBe(0);
     expect(drugi.plan.every((st: { action: string }) => st.action.startsWith('noop'))).toBe(true);
     expect(s.posts.length).toBe(postsPrvi);
