@@ -36,24 +36,37 @@
 -- ---------------------------------------------------------------------------------------------
 -- 1. work_type CHECK: specijalisticki
 -- ---------------------------------------------------------------------------------------------
--- Imena ogranicenja iz 0001, 0002, 0011/0054, 0026 i 0102 nisu deklarirana (stupcani CHECK), pa se
--- ne pretpostavlja zadani naziv nego se STVARNO ime cita iz pg_constraint. Nakon toga se dodaje
--- imenovano ogranicenje; drugi prolaz ga opet nadje (sadrzi work_type i doktorski) i zamijeni istim.
+-- Ogranicenja iz 0001, 0002, 0011/0054, 0026 i 0102 su stupcani CHECK bez deklariranog imena, pa
+-- Postgres daje zadano ime `<tablica>_work_type_check` (izmjereno nad stvarnim migracijama u PGliteu,
+-- tests/monetizacija-v1-sql.test.ts). BRISE SE SAMO TOCNO TO (Codex pregled PR #217, M3): nalazi se
+-- svaki CHECK koji referencira stupac work_type (pg_constraint.conkey, ne podniz teksta), a brise se
+-- samo ako mu je ime zadano, referencira JEDINO work_type i dopusta tocno stari skup vrijednosti (ili
+-- novi, pri drugom prolazu). Sve drugo je RAISE EXCEPTION: nepoznato ogranicenje se ne brise naslijepo,
+-- migracija pada glasno i trazi covjeka. Nakon toga se dodaje imenovano ogranicenje.
 do $$
 declare
   r record;
+  v_vrijednosti text[];
 begin
   for r in
-    select t.relname as tabela, c.conname as ime
+    select t.relname as tabela, c.conname as ime, c.conkey as stupci, pg_catalog.pg_get_constraintdef(c.oid) as def
       from pg_catalog.pg_constraint c
       join pg_catalog.pg_class t on t.oid = c.conrelid
       join pg_catalog.pg_namespace n on n.oid = t.relnamespace
+      join pg_catalog.pg_attribute a on a.attrelid = t.oid and a.attname = 'work_type'
      where n.nspname = 'public'
        and c.contype = 'c'
        and t.relname in ('entitlements', 'products', 'faculty_requests', 'repair_jobs', 'corpus_contributions')
-       and pg_catalog.pg_get_constraintdef(c.oid) like '%work_type%'
-       and pg_catalog.pg_get_constraintdef(c.oid) like '%doktorski%'
+       and a.attnum = any (c.conkey)
   loop
+    select array_agg(distinct m[1] order by m[1]) into v_vrijednosti
+      from regexp_matches(r.def, '''([^'']*)''', 'g') as m;
+    if r.ime <> r.tabela || '_work_type_check'
+       or cardinality(r.stupci) <> 1
+       or (v_vrijednosti is distinct from array['diplomski', 'doktorski', 'seminarski', 'zavrsni']
+           and v_vrijednosti is distinct from array['diplomski', 'doktorski', 'seminarski', 'specijalisticki', 'zavrsni']) then
+      raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;
+    end if;
     execute format('alter table public.%I drop constraint %I', r.tabela, r.ime);
   end loop;
 end $$;
@@ -340,21 +353,32 @@ select id, 'packaging', 'active=true', 'active=false',
 -- Puni povrat otkazuje obvezu koja jos ceka (webhook-mor closeRefundConsequences), a radnik
 -- (process-bonus-outbox) prije i poslije izvrsenja cita oznaku povrata. `cancelled` je zavrsno
 -- stanje: claim_due_bonus_outbox (0100) uzima samo `pending`.
+-- Isto pravilo kao work_type (M3): CHECK nad stupcem status smije biti samo zadani
+-- `bonus_outbox_status_check` iz 0100 (ili ovaj, pri drugom prolazu); sve drugo je RAISE EXCEPTION.
 do $$
 declare
   r record;
+  v_vrijednosti text[];
 begin
   for r in
-    select c.conname as ime
+    select c.conname as ime, c.conkey as stupci, pg_catalog.pg_get_constraintdef(c.oid) as def
       from pg_catalog.pg_constraint c
       join pg_catalog.pg_class t on t.oid = c.conrelid
       join pg_catalog.pg_namespace n on n.oid = t.relnamespace
+      join pg_catalog.pg_attribute a on a.attrelid = t.oid and a.attname = 'status'
      where n.nspname = 'public'
        and t.relname = 'bonus_outbox'
        and c.contype = 'c'
-       and pg_catalog.pg_get_constraintdef(c.oid) like '%status%'
-       and pg_catalog.pg_get_constraintdef(c.oid) like '%pending%'
+       and a.attnum = any (c.conkey)
   loop
+    select array_agg(distinct m[1] order by m[1]) into v_vrijednosti
+      from regexp_matches(r.def, '''([^'']*)''', 'g') as m;
+    if r.ime <> 'bonus_outbox_status_check'
+       or cardinality(r.stupci) <> 1
+       or (v_vrijednosti is distinct from array['done', 'failed', 'pending']
+           and v_vrijednosti is distinct from array['cancelled', 'done', 'failed', 'pending']) then
+      raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;
+    end if;
     execute format('alter table public.bonus_outbox drop constraint %I', r.ime);
   end loop;
 end $$;

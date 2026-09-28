@@ -11,6 +11,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   catalogProblems,
+  constraintDropProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
   privilegeProblems,
@@ -72,5 +73,11 @@ describe('0207: privilegije (Codex PR #217, M4)', () => {
       await sZadanima.db.close();
       await bez.db.close();
     }
+  }, ROK);
+});
+
+describe('0207: brisanje CHECK ogranicenja (Codex PR #217, M3)', () => {
+  it('brisu se samo zadana ogranicenja s ocekivanim vrijednostima; nepoznato obara migraciju i ostaje', async () => {
+    expect(await constraintDropProblems()).toEqual([]);
   }, ROK);
 });

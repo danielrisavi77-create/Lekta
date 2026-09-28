@@ -121,7 +121,8 @@ describe('0207: specijalisticki u svakom Lektinom work_type CHECK-u', () => {
   const tables = ['entitlements', 'products', 'faculty_requests', 'repair_jobs', 'corpus_contributions'];
 
   it.each(tables)('%s: ogranicenje se prvo trazi po stvarnom imenu, pa dodaje s pet vrsta', (table) => {
-    const dropLoop = /t\.relname in \(([^)]*)\)\s*and pg_catalog\.pg_get_constraintdef\(c\.oid\) like '%work_type%'/.exec(SQL);
+    // Codex PR #217 (M3): ogranicenje se nalazi po stupcu (conkey), ne po podnizu definicije.
+    const dropLoop = /t\.relname in \(([^)]*)\)\s*and a\.attnum = any \(c\.conkey\)/.exec(SQL);
     expect(dropLoop?.[1]).toContain(`'${table}'`);
     const add = new RegExp(`alter table public\\.${table} add constraint ${table}_work_type_check\\s*check \\(([^;]*)\\);`).exec(SQL);
     expect(add, `${table}: nema add constraint`).not.toBeNull();

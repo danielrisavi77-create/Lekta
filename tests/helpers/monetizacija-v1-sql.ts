@@ -705,3 +705,51 @@ export async function privilegeProblems(withDefaults: PGlite, plain: PGlite): Pr
   }
   return problems;
 }
+
+/**
+ * BRISANJE CHECK OGRANICENJA (Codex pregled PR #217, M3). 0207 smije obrisati SAMO zadana ogranicenja
+ * `<tablica>_work_type_check` i `bonus_outbox_status_check` s ocekivanim skupom vrijednosti. Svako
+ * drugo ogranicenje koje dira ta dva stupca mora oboriti migraciju (RAISE EXCEPTION) i ostati na
+ * mjestu, umjesto da se tiho obrise kao prije (podniz `work_type` i `doktorski` u definiciji).
+ * Generator: svaki slucaj dodaje stvarno ogranicenje u bazu prije 0207 i provjerava da postoji.
+ */
+export async function constraintDropProblems(v1Sql: string = readMigration(V1_MIGRATION)): Promise<string[]> {
+  const problems: string[] = [];
+  const slucajevi = [
+    { opis: 'visestupcani CHECK s work_type i doktorski', tabela: 'entitlements', ime: 'entitlements_doktorski_slotovi', check: "work_type <> 'doktorski' or slots_total <= 3" },
+    { opis: 'jednostupcani CHECK na work_type pod drugim imenom', tabela: 'products', ime: 'products_bez_magistarskog', check: "work_type <> 'magistarski'" },
+    { opis: 'zadano ime s neocekivanim skupom vrijednosti', tabela: 'repair_jobs', ime: null, check: null },
+    { opis: 'visestupcani CHECK na bonus_outbox.status', tabela: 'bonus_outbox', ime: 'bonus_outbox_pending_pokusaji', check: "status <> 'pending' or attempts >= 0" },
+  ] as const;
+  for (const c of slucajevi) {
+    const db = await baseDatabase();
+    try {
+      let ime: string;
+      if (c.ime === null) {
+        // Zadano ime, ali skup vrijednosti koji 0207 ne poznaje (npr. rucna izmjena u produkciji).
+        ime = 'repair_jobs_work_type_check';
+        await db.exec(`alter table public.repair_jobs drop constraint ${ime};
+                       alter table public.repair_jobs add constraint ${ime} check (work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski', 'magistarski'))`);
+      } else {
+        ime = c.ime;
+        await db.exec(`alter table public.${c.tabela} add constraint ${ime} check (${c.check})`);
+      }
+      const ima = async () => (await rows(db, 'select 1 from pg_constraint where conname = $1', [ime])).length === 1;
+      if (!(await ima())) {
+        problems.push(`${c.opis}: generator ne proizvodi ogranicenje ${ime}`);
+        continue;
+      }
+      let palo = false;
+      try {
+        await db.exec(v1Sql);
+      } catch (e) {
+        palo = e instanceof Error && e.message.includes('ne brise se naslijepo');
+      }
+      if (!palo) problems.push(`${c.opis}: 0207 ne pada glasno (RAISE EXCEPTION) na ${ime}`);
+      if (!(await ima())) problems.push(`${c.opis}: 0207 tiho brise ${ime}`);
+    } finally {
+      await db.close();
+    }
+  }
+  return problems;
+}

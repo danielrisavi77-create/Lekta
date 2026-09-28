@@ -133,6 +133,7 @@ import { isReportWorkType } from '../src/report/pricing';
 import {
   V1_MIGRATION,
   catalogProblems,
+  constraintDropProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
   privilegeProblems,
@@ -7752,6 +7753,22 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
   it('Codex PR #217 M4: offer_codes bez grant service_role obara gard u bazi bez zadanih', async () => {
     const mutated = mutiraj('grant select, insert, update, delete on table public.offer_codes to service_role;', '');
     expect((await privilegijeNad(mutated)).some((x) => x.startsWith('service_role nema SELECT na offer_codes (bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: brisanje CHECK-ova baseline cisto', async () => {
+    expect(await constraintDropProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: work_type CHECK se brise bez provjere imena i definicije (stanje f466d454) i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;", 'null;');
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('tiho brise entitlements_doktorski_slotovi'))).toBe(true);
+    expect(p.some((x) => x.includes('ne pada glasno (RAISE EXCEPTION) na repair_jobs_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: bonus_outbox status CHECK se brise bez provjere i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;", 'null;');
+    expect((await constraintDropProblems(mutated)).some((x) => x.includes('tiho brise bonus_outbox_pending_pokusaji'))).toBe(true);
   }, ROK_SQL);
 
   it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
