@@ -1,9 +1,8 @@
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { buildLocalRepairDeploymentPlan } from '../scripts/local-repair-release-gate';
 import {
@@ -11,8 +10,12 @@ import {
   buildRunnerDeploymentEnvironment,
   stageVerifiedRunnerArtifact,
 } from '../scripts/run-local-repair-release';
+import { removeTrackedTempDirs, trackedTempDir } from './helpers/temp-dirs';
 
 describe('objava potpisanog WordReplica runnera kroz Lekta release', () => {
+  // Stavka G: svaka mkdtemp mapa ovog testa se brise, i nakon pada tvrdnje.
+  afterEach(removeTrackedTempDirs);
+
   it('za build iz manifesta generira samo kanonski HTTPS URL i prikovani hash', () => {
     expect(buildRunnerDeploymentEnvironment({
       publicUrl: 'https://lektahr.netlify.app/downloads/LektaRepair.exe',
@@ -32,7 +35,7 @@ describe('objava potpisanog WordReplica runnera kroz Lekta release', () => {
   });
 
   it('kopira samo verificirani artefakt u dist i ponovno potvrduje hash', () => {
-    const root = mkdtempSync(join(tmpdir(), 'lekta-runner-publish-'));
+    const root = trackedTempDir('lekta-runner-publish-');
     const artifact = join(root, 'LektaRepair.exe');
     const bytes = Buffer.from('MZ-signed-fixture');
     writeFileSync(artifact, bytes);

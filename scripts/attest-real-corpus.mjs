@@ -10,14 +10,17 @@
 // postoji ali ljestvica je ne priznaje. Time se ne moze dogoditi da razina dokaza poraste zato sto
 // je netko pokrenuo skriptu.
 import { execFileSync } from 'node:child_process';
-import crypto from 'node:crypto';
+import { FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { repairSourceHashAtCommit } from './lib/repair-source-hash.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ULAZ = path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
-const IZLAZ = path.join(ROOT, 'data', 'verification', 'real-corpus-attestation.json');
+// Putanje se mogu preusmjeriti SAMO za test kroz stvarnu skriptu (T83-06): tests/real-corpus-dedupe.test.ts
+// je pokrece nad privremenim datotekama, da ne dira gitignorirano mjerenje ni commitanu ovjeru.
+const ULAZ = process.env.LEKTA_ATTEST_INPUT || path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
+const IZLAZ = process.env.LEKTA_ATTEST_OUTPUT || path.join(ROOT, 'data', 'verification', 'real-corpus-attestation.json');
 
 const args = process.argv.slice(2);
 const potpis = (() => {
@@ -60,13 +63,29 @@ if (rezultati.length === 0) {
   console.error('[ovjera] FAIL: mjerenje nema nijedan rezultat; prazan skup nije ovjera.');
   process.exit(1);
 }
+// T83: mjerenje s dvostrukim documentId (napuhani brojevi po skupini), s padom isporuke ili s
+// ostecenim paketom ne ovjerava se (scripts/lib/corpus-attestation-core.mjs, attestationRefusals).
+const odbijeno = attestationRefusals(rezultati);
+if (odbijeno.length) {
+  for (const razlog of odbijeno) console.error(`[ovjera] FAIL: ${razlog}.`);
+  process.exit(1);
+}
 
 // Otisak SKUPA, ne sadrzaja: imena dokumenata i njihov broj. Mijenja se kad se korpus mijenja, pa
-// ovjera prestaje odgovarati stanju i to se vidi.
-const otisak = crypto.createHash('sha256')
-  .update(rezultati.map((r) => r.documentId).sort().join('\n'))
-  .digest('hex')
-  .slice(0, 32);
+// ovjera prestaje odgovarati stanju i to se vidi. Verzija 2 (T83): nad jedinstvenim id-ovima i s
+// oznakom verzije, vidi scripts/lib/corpus-attestation-core.mjs.
+const otisak = corpusFingerprintV2(rezultati.map((r) => r.documentId));
+// Koliko je kopija harness izbacio prije mjerenja; povijest ostaje citljiva uz ovjere prije T83.
+const izbaceno = Number.isInteger(mjerenje.scope?.duplicateDocumentCount) ? mjerenje.scope.duplicateDocumentCount : 0;
+// T75: otisak koda popravka NAD KOJIM JE MJERENO, iz git objekata commita mjerenja (T74 modul). Ovjera se
+// pise u commitu nakon mjerenja, pa otisak s diska (HEAD) ne bi opisivao mjereni kod. Bez otiska nema ovjere.
+let otisakKoda;
+try {
+  otisakKoda = repairSourceHashAtCommit(mjerenje.generatedFromCommit, ROOT).hash;
+} catch (e) {
+  console.error(`[ovjera] FAIL: otisak koda popravka za commit mjerenja ${mjerenje.generatedFromCommit} nije izracunljiv: ${e.message}`);
+  process.exit(1);
+}
 
 // Registar daje jedinicu i vrste rada za svaki profil; sidecar dokumenta nosi samo `profileId`.
 const registar = new Map(
@@ -80,11 +99,15 @@ const poSkupini = new Map();
 let bezJedinice = 0;
 let izdvojeno = 0;
 let neovisnoPotvrdjeno = 0;
+// T83-07: koliko je JEDINSTVENIH dokumenata uslo u bar jednu skupinu. Zbroj `documentCount` po skupinama
+// nije jednak tom broju (dokument profila s vise vrsta rada ulazi u svaku), pa se broj pise izricito.
+let uracunato = 0;
 for (const r of rezultati) {
   if (r.expectationProvenance === 'independent') neovisnoPotvrdjeno += 1;
   if (r.holdout === true && !holdoutConfirmed) { izdvojeno += 1; continue; }
   const p = registar.get(r.profileId);
   if (!p || !p.unitId) { bezJedinice += 1; continue; }
+  uracunato += 1;
   const vrste = p.workTypes.length ? p.workTypes : ['unknown'];
   for (const wt of vrste) {
     const kljuc = `${p.unitId}::${wt}`;
@@ -110,11 +133,13 @@ if (mjerenje.generatedFromCommit !== commit) {
 }
 
 const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8')) : null;
-const ovjera = {
+const sadrzaj = {
   schemaVersion: 1,
+  fingerprintVersion: FINGERPRINT_VERSION,
   corpusFingerprint: otisak,
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,
+  repairSourceHash: otisakKoda,
   oracles: ['scripts/repair-real-corpus.mts (harness + detectPassRegressions)'],
   // T06: okolina i protokol mjerenja, da se zakljucak moze vezati uz verziju alata i uz nacin nastanka ocekivanja.
   environment: { wordVersion },
@@ -123,14 +148,26 @@ const ovjera = {
     holdoutDocumentCount: rezultati.filter((r) => r.holdout === true).length,
     independentlyConfirmedCount: neovisnoPotvrdjeno,
     derivedExpectationCount: rezultati.length - neovisnoPotvrdjeno,
+    // T83: ovjera je provjerila da nijedan dokument nije brojan dvaput (gore se inace prekida).
+    duplicateDocumentCount: 0,
+    uniqueDocumentCount: rezultati.length,
+    rawDocumentCount: rezultati.length + izbaceno,
+    countedDocumentCount: uracunato,
   },
-  // Potpis se NE nasljedjuje kad se korpus promijeni: tada je rijec o drugom mjerenju.
-  signedBy: potpis ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedBy : null),
-  signedAt: potpis ? new Date().toISOString() : (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedAt : null),
-  signatureNote: biljeska ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signatureNote ?? null : null),
   entries: [...poSkupini.values()]
     .map((e) => ({ ...e, profileIds: [...e.profileIds].sort(), regressedChecks: [...e.regressedChecks].sort() }))
     .sort((a, b) => (a.unitId + a.workType).localeCompare(b.unitId + b.workType)),
+};
+// Potpis pokriva kanonski otisak SADRZAJA ovjere; novi potpis ga zapisuje, a postojeci se prenosi samo
+// kad je sadrzaj bajt po bajt isti (isto mjerenje, isti opseg holdouta, iste brojke), vidi T83-05.
+const otisakSadrzaja = attestationContentDigest(sadrzaj);
+const naslijedjen = potpis ? null : inheritedSignature(postojeca, sadrzaj);
+const ovjera = {
+  ...sadrzaj,
+  signedBy: potpis ?? naslijedjen?.signedBy ?? null,
+  signedAt: potpis ? new Date().toISOString() : naslijedjen?.signedAt ?? null,
+  signatureNote: biljeska ?? naslijedjen?.signatureNote ?? null,
+  signedContentDigest: potpis ? otisakSadrzaja : naslijedjen?.signedContentDigest ?? null,
 };
 
 fs.mkdirSync(path.dirname(IZLAZ), { recursive: true });

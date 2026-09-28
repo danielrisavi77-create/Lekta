@@ -1,9 +1,8 @@
 import { createHash, generateKeyPairSync } from 'node:crypto';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   EXPECTED_SUPABASE_PROJECT_REF,
@@ -11,6 +10,7 @@ import {
   verifyRemoteRepairDocxBaseline,
   verifyLocalRepairRelease,
 } from '../scripts/local-repair-release-gate';
+import { removeTrackedTempDirs, trackedTempDir } from './helpers/temp-dirs';
 
 const EXPECTED_PUBLISHER_THUMBPRINT = 'AA'.repeat(20);
 const EXPECTED_CONTRACT_KEY_ID = 'lekta-prod-2026-01';
@@ -101,8 +101,11 @@ function validReleaseInput(paths: ReturnType<typeof fixture>) {
 }
 
 describe('Lekta local-repair release gate', () => {
+  // Stavka G: svaka mkdtemp mapa ovog testa se brise, i nakon pada tvrdnje.
+  afterEach(removeTrackedTempDirs);
+
   it('prihvaca samo uskladjen potpisani WordReplica artefakt i sve potrebne migracije', () => {
-    const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-valid-'));
+    const root = trackedTempDir('lekta-release-gate-valid-');
     const paths = fixture(root);
 
     expect(verifyLocalRepairRelease(validReleaseInput(paths))).toMatchObject({
@@ -116,12 +119,12 @@ describe('Lekta local-repair release gate', () => {
   });
 
   it('odbija manifest v1 i v2 manifest bez javnog fingerprinta', () => {
-    const root = mkdtempSync(join(tmpdir(), 'lekta-release-manifest-v2-'));
+    const root = trackedTempDir('lekta-release-manifest-v2-');
     expect(() => verifyLocalRepairRelease(validReleaseInput(fixture(root, {
       schemaVersion: 1,
     })))).toThrow(/schemaVersion/i);
 
-    const missing = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-manifest-fingerprint-')), {
+    const missing = fixture(trackedTempDir('lekta-release-manifest-fingerprint-'), {
       contractPublicKeySha256: undefined as never,
     });
     expect(() => verifyLocalRepairRelease(validReleaseInput(missing))).toThrow(/javni.*otisak|fingerprint/i);
@@ -129,14 +132,14 @@ describe('Lekta local-repair release gate', () => {
 
   it('odbija manifest fingerprint koji ne odgovara privatnom kljucu i neovisnom otisku', () => {
     const other = createContractKeyFixture();
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-wrong-manifest-key-')), {
+    const paths = fixture(trackedTempDir('lekta-release-wrong-manifest-key-'), {
       contractPublicKeySha256: other.publicKeySha256,
     });
     expect(() => verifyLocalRepairRelease(validReleaseInput(paths))).toThrow(/privatni.*javni.*kljuc|otisak/i);
   });
 
   it('odbija fingerprint manifesta pisan velikim slovima', () => {
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-uppercase-manifest-key-')), {
+    const paths = fixture(trackedTempDir('lekta-release-uppercase-manifest-key-'), {
       contractPublicKeySha256: CONTRACT_KEY.publicKeySha256.toUpperCase(),
     });
     expect(() => verifyLocalRepairRelease(validReleaseInput(paths))).toThrow(/javni.*otisak|fingerprint/i);
@@ -144,7 +147,7 @@ describe('Lekta local-repair release gate', () => {
 
   it('odbija privatni kljuc koji ne odgovara manifestu i neovisnom otisku', () => {
     const other = createContractKeyFixture();
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-wrong-private-')));
+    const paths = fixture(trackedTempDir('lekta-release-wrong-private-'));
     expect(() => verifyLocalRepairRelease({
       ...validReleaseInput(paths),
       contractPrivateKeyPkcs8Base64Url: other.privateKeyPkcs8Base64Url,
@@ -152,7 +155,7 @@ describe('Lekta local-repair release gate', () => {
   });
 
   it.each(['abc=', 'not base64url!', ''])('odbija nekanonski PKCS8 ulaz %j', (value) => {
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-bad-pkcs8-')));
+    const paths = fixture(trackedTempDir('lekta-release-bad-pkcs8-'));
     expect(() => verifyLocalRepairRelease({
       ...validReleaseInput(paths),
       contractPrivateKeyPkcs8Base64Url: value,
@@ -161,7 +164,7 @@ describe('Lekta local-repair release gate', () => {
 
   it('odbija valjani PKCS8 kljuc koji nije P-256', () => {
     const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-rsa-private-')));
+    const paths = fixture(trackedTempDir('lekta-release-rsa-private-'));
     expect(() => verifyLocalRepairRelease({
       ...validReleaseInput(paths),
       contractPrivateKeyPkcs8Base64Url: privateKey
@@ -171,14 +174,14 @@ describe('Lekta local-repair release gate', () => {
   });
 
   it('vraca samo javni identitet, nikad privatni kljuc', () => {
-    const paths = fixture(mkdtempSync(join(tmpdir(), 'lekta-release-public-output-')));
+    const paths = fixture(trackedTempDir('lekta-release-public-output-'));
     const verified = verifyLocalRepairRelease(validReleaseInput(paths));
     expect(verified.contractPublicKeySha256).toBe(CONTRACT_KEY.publicKeySha256);
     expect(JSON.stringify(verified)).not.toContain(CONTRACT_KEY.privateKeyPkcs8Base64Url);
   });
 
   it('odbija drugi valjani Authenticode potpisnik i samouskladjeni krivotvoreni manifest', () => {
-    const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-forged-signer-'));
+    const root = trackedTempDir('lekta-release-gate-forged-signer-');
     const forgedThumbprint = 'BB'.repeat(20);
     const paths = fixture(root, { signingCertificateThumbprint: forgedThumbprint });
 
@@ -189,7 +192,7 @@ describe('Lekta local-repair release gate', () => {
   });
 
   it('odbija stari trusted-signed artefakt sa samouskladjenim manifestom koji tvrdi pregledani source commit', () => {
-    const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-old-artifact-'));
+    const root = trackedTempDir('lekta-release-gate-old-artifact-');
     const paths = fixture(root, {}, Buffer.from('old-trusted-signed-runner'));
 
     expect(() => verifyLocalRepairRelease(validReleaseInput(paths))).toThrow(/pregledanom artefaktu/i);
@@ -206,7 +209,7 @@ describe('Lekta local-repair release gate', () => {
     ['MissingReviewedCommit', { input: { reviewedSourceCommit: '' } }],
     ['MissingReviewedArtifactHash', { input: { reviewedArtifactSha256: '' } }],
   ])('trust/source gate fail-closed odbija %s', (_label, mutation) => {
-    const root = mkdtempSync(join(tmpdir(), `lekta-release-gate-${_label}-`));
+    const root = trackedTempDir(`lekta-release-gate-${_label}-`);
     const paths = fixture(root, 'manifest' in mutation ? mutation.manifest : {});
 
     expect(() => verifyLocalRepairRelease({
@@ -222,7 +225,7 @@ describe('Lekta local-repair release gate', () => {
     ['WrongSigner', { authenticode: { status: 'Valid', signerThumbprint: 'DEADBEEF' } }],
     ['MissingMigration', { removeMigration: true }],
   ])('fail-closed odbija %s', (_label, mutation) => {
-    const root = mkdtempSync(join(tmpdir(), `lekta-release-gate-${_label}-`));
+    const root = trackedTempDir(`lekta-release-gate-${_label}-`);
     const paths = fixture(root);
     if ('rewriteArtifact' in mutation) writeFileSync(paths.artifactPath, 'changed');
     if ('removeMigration' in mutation) {

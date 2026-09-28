@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 
 /**
  * Gard nad ovjerom dokaza na stvarnim radovima. Granularnost je JEDINICA x VRSTA RADA (odluka
@@ -13,12 +14,21 @@ import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from
  * ljudskog potpisa, ili unatoc nadjenoj regresiji.
  */
 
-const OSNOVA: CorpusAttestation = {
+/** Potpis v2 pokriva kanonski sadrzaj (T83, NOVO-01); svaka izmjena fixture mora se ponovno potpisati. */
+const potpisi = (a: CorpusAttestation): CorpusAttestation => ({ ...a, signedContentDigest: attestationContentDigestSync(a) });
+
+const OSNOVA: CorpusAttestation = potpisi({
   schemaVersion: 1,
+  fingerprintVersion: 2,
   corpusFingerprint: 'abc123',
   measuredAt: '2026-09-03T00:00:00.000Z',
   measuredFromCommit: 'a'.repeat(40),
+  repairSourceHash: 'e'.repeat(64),
   oracles: ['harness'],
+  protocol: {
+    holdoutExcluded: true, holdoutDocumentCount: 0, independentlyConfirmedCount: 0, derivedExpectationCount: 6,
+    duplicateDocumentCount: 0, uniqueDocumentCount: 6, rawDocumentCount: 6, countedDocumentCount: 6,
+  },
   signedBy: 'Netko',
   signedAt: '2026-09-03T00:00:00.000Z',
   entries: [
@@ -26,7 +36,7 @@ const OSNOVA: CorpusAttestation = {
     { unitId: 'u-regresija', workType: 'graduate', profileIds: ['p-regresija'], documentCount: 3, cleanCount: 2, regressedChecks: ['structure.heading.hierarchy'] },
     { unitId: 'u-prazan', workType: 'graduate', profileIds: ['p-prazan'], documentCount: 0, cleanCount: 0, regressedChecks: [] },
   ],
-};
+});
 
 describe('ovjera: sto se priznaje kao dokaz', () => {
   it('potpisana ovjera dokazuje samo profile bez regresije i s barem jednim cistim radom', () => {
@@ -107,13 +117,24 @@ describe('ovjera u repozitoriju', () => {
    * Gard bez dokaza da grize se ne racuna. Podmece se tocno ono zbog cega ovjera postoji:
    * potpisana tvrdnja koja bi dokazala profil unatoc nadjenoj regresiji.
    */
+  it('T75: v1 ovjera vise nije dokaz, a v2 bez otiska koda popravka nije dokaz', () => {
+    const { fingerprintVersion: _v, ...bezVerzije } = OSNOVA;
+    const v1 = potpisi({ ...bezVerzije } as CorpusAttestation);
+    expect(attestationProblems(v1)).toContain('ovjera v1 (otisak s ponavljanjima) vise nije dokaz');
+    expect(provenUnitWorkTypes(v1).size).toBe(0);
+    const bezOtiska = potpisi({ ...OSNOVA, repairSourceHash: null });
+    expect(attestationProblems(bezOtiska)).toContain('nema otiska koda popravka nad kojim je mjereno');
+    expect(provenUnitWorkTypes(bezOtiska).size).toBe(0);
+    expect(attestationProblems(OSNOVA)).toEqual([]);
+  });
+
   it('gard stvarno grize', () => {
     const cisto = provenUnitWorkTypes(OSNOVA);
     expect(cisto.size, 'baseline je izmjeren, ne pretpostavljen').toBe(1);
-    const mutiran: CorpusAttestation = {
+    const mutiran: CorpusAttestation = potpisi({
       ...OSNOVA,
       entries: OSNOVA.entries.map((e) => (e.unitId === 'u-regresija' ? { ...e, regressedChecks: [] } : e)),
-    };
+    });
     expect(provenUnitWorkTypes(mutiran).size, 'uklonjena regresija mora promijeniti ishod').toBe(2);
   });
 });

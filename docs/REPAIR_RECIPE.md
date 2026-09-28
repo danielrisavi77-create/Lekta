@@ -16,7 +16,7 @@ svoju, pecenu vrijednost iz ovog istog recepta (`data/generated/repair-params-by
 vidi `src/repair/param-authority.ts`) i klijentovu ignorira. Klijentov `params` vrijedi jos
 samo tamo gdje fakultetskog pravila nema (univerzalna higijena), i to se biljezi u odgovoru
 (`paramSources`). Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:
-jedna masina, `407` skupova vrijednosti.
+jedna masina, `423` skupova vrijednosti.
 
 Vrijednosti dolaze iz onoga sto zivi engine stvarno cita (`rules` profila; ciljane
 vrijednosti racuna `paramsForCheck` u `src/ui/repair-items.ts`), a provenijencija
@@ -25,10 +25,10 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 
 ## Opseg
 
-- profila: **407**
-- s popravkom po UPUTI FAKULTETA: **373**
-- samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **34**
-- ukupno stavki recepta: **2737**
+- profila: **423**
+- s popravkom po UPUTI FAKULTETA: **374**
+- samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **49**
+- ukupno stavki recepta: **2770**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -3363,6 +3363,16 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Sadrzaj kao zivo TOC polje | `toc-field-fixer` | Word sam azurira sadrzaj<br><sub>Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
+#### Prirodoslovno-matematički fakultet (Geološki odsjek), prijediplomski Seminar III
+
+`pmf-geologija-zavrsni` · status: partial · vrste rada: -
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
+| Numeriranje stranica od Uvoda | `page-numbering-fixer / section-insert-fixer` | prednji listovi rimski, glavni tekst arapski od 1, broj right<br><sub>Uvod je prepoznat. Kad prijelom sekcije vec pada tocno na Uvod, postavlja se numeriranje nad postojecim sekcijama; kad prijeloma nema (jednosekcijski rad), umece se prijelom, uz izricitu potvrdu mjesta.</sub> |  |  |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
 #### Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad
 
 `pmf-matematika-graduate` · status: partial · vrste rada: graduate
@@ -5585,15 +5595,29 @@ nametali vrijednost koju fakultet nije propisao.
 - `adu-opci-diplomski` (Akademija dramske umjetnosti, Opći profil ADU, diplomski rad)
 - `adu-produkcija-diplomski` (Akademija dramske umjetnosti, Odsjek produkcije, diplomski rad)
 - `adu-snimanje-diplomski` (Akademija dramske umjetnosti, Odsjek snimanja, diplomski rad)
+- `agromed-zavrsni` (Agromediteranski fakultet, završni rad)
 - `alu-doktorski` (Akademija likovnih umjetnosti, doktorski rad / disertacija)
 - `alu-grafika-diplomski` (Akademija likovnih umjetnosti, Grafički odsjek, diplomski rad)
 - `alu-nastavnicki-diplomski` (Akademija likovnih umjetnosti, Nastavnički odsjek, diplomski rad)
 - `alu-novi-mediji-diplomski` (Akademija likovnih umjetnosti, Odsjek za animirani film i nove medije, diplomski rad)
 - `dizajn-diplomski` (Studij dizajna (Arhitektonski fakultet), diplomski rad)
+- `efri-specijalisticki` (EFRI · sveučilišni specijalistički rad)
+- `ffzg-svedski-zavrsni` (FFZG, švedski jezik i kultura, prijediplomski završni rad)
 - `fpzg-novinarstvo-zavrsni-av` (FPZG · prijediplomsko Novinarstvo · završni rad · audiovizualni)
 - `geof-opci-akademski-rad` (GEOF · opći akademski rad (seminar/projekt))
+- `geoteh-diplomski` (Geotehnički fakultet, diplomski rad)
+- `geoteh-doktorski` (Geotehnički fakultet, doktorski rad)
+- `geoteh-zavrsni` (Geotehnički fakultet, završni rad)
+- `hig-zavrsni` (Hotelijerstvo i gastronomija, završni rad)
+- `medri-doktorski` (MEDRI · Doktorska škola · doktorski rad)
+- `medri-sanitarno-diplomski` (MEDRI, Sanitarno inženjerstvo, diplomski rad)
+- `mefst-doktorski` (MEFST, doktorski rad)
+- `mefst-tribe-doktorski` (MEFST, TRIBE, doktorska disertacija)
+- `mvi-diplomski` (TFMVI, diplomski rad)
+- `mvi-prijediplomski` (TFMVI, prijediplomski bakalaurski rad)
 - `par-diplomski` (Veleučilište PAR, diplomski rad)
 - `par-zavrsni` (Veleučilište PAR, završni rad)
+- `pmf-biologija-zavrsni` (Prirodoslovno-matematički fakultet (Biološki odsjek), prijediplomski završni rad)
 - `pravst-diplomski` (Pravni Split, diplomski rad)
 - `pravst-zavrsni` (Pravni Split, završni rad)
 - `umas-diplomski` (Umjetnicka akademija u Splitu, diplomski rad)
@@ -5610,6 +5634,7 @@ nametali vrijednost koju fakultet nije propisao.
 - `unizd-lingvistika-zavrsni` (Zadar - Lingvistika, završni rad)
 - `unizd-rusistika-diplomski` (Zadar - Rusistika, diplomski rad)
 - `unizd-sociologija-zavrsni` (Zadar - Sociologija, završni rad)
+- `vef-specijalisticki` (VEF, završni specijalistički rad)
 - `vuka-strojarski-diplomski` (Veleučilište Karlovac - Strojarski odjel, diplomski rad)
 - `vuka-strojarski-zavrsni` (Veleučilište Karlovac - Strojarski odjel, završni rad)
 

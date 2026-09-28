@@ -219,9 +219,19 @@ export interface OpportunityRow {
 }
 
 export interface OpportunityGapBreakdown {
+  profileId?: string;
+  workType?: string;
   category?: string;
   kind: string;
   count: number;
+}
+
+interface OpportunityScopeMismatch {
+  surface: 'structure' | 'repair_noop_items' | 'repair_attempts';
+  profileId: string;
+  workType: string;
+  summary: number;
+  breakdown: number;
 }
 
 export interface OpportunityBucket {
@@ -240,11 +250,20 @@ export interface OpportunityBucket {
   repairRuns: number;
   repairGapRuns: number;
   repairUnresolvedChecks: number;
+  /** Neovisni brojac uspjesnih repair rezultata (`repair_result_ok`, emitira ga pozivatelj) od V3 epohe. */
+  repairAttemptEvents: number;
+  /** Jedan summary event po uspješnom repair pokušaju (lokalni ili serverski). */
+  repairNoOpSummaryEvents: number;
+  /** Zbroj count iz repair_noop_summary; neovisni parity izvor. */
+  repairNoOpSummaryItems: number;
+  /** Zbroj detaljnih repair_noop_reason count vrijednosti. */
   repairNoOpItems: number;
   paywallEvents: number;
   checkoutEvents: number;
   purchaseEvents: number;
   opportunities: OpportunityRow[];
+  /** Parity po (profileId, workType); prazno kad se svaki obuhvat slaze. */
+  scopeParityMismatches: OpportunityScopeMismatch[];
   structureGaps: OpportunityGapBreakdown[];
   repairNoOpReasons: OpportunityGapBreakdown[];
 }

@@ -89,3 +89,35 @@ export function findSameProviderWithoutFallback(config: RoutingConfig): string[]
   }
   return problems;
 }
+
+export interface BotSpec {
+  provider: string;
+  agent?: string;
+  phases: string[];
+  runnerPhase: string;
+  sandbox: string;
+  allowedPaths?: string[];
+  forbiddenPaths?: string[];
+}
+
+/**
+ * Grok botovi: vraca botove koji bi smjeli implementirati nad nekom `protectedPaths` stazom po
+ * VLASTITOM configu (allowedPaths/forbiddenPaths), bez obrane koju runner dodaje. Za svaku zasticenu
+ * stazu provjerava tipicnu datoteku (`<staza>/x.ts` i `<staza>/NOTES.md`): mora biti povreda.
+ */
+export function findBotsImplementingProtected(
+  bots: Record<string, BotSpec>,
+  protectedPaths: string[],
+  violations: (bot: BotSpec, files: string[], protectedPaths?: string[]) => string[],
+): string[] {
+  const problems: string[] = [];
+  for (const [name, bot] of Object.entries(bots)) {
+    if (bot.runnerPhase !== 'implement' && !bot.phases.includes('implement')) continue;
+    for (const p of protectedPaths) {
+      for (const probe of [`${p}/x.ts`, `${p}/NOTES.md`]) {
+        if (violations(bot, [probe], []).length === 0) problems.push(`${name} smije implementirati ${probe}`);
+      }
+    }
+  }
+  return problems;
+}

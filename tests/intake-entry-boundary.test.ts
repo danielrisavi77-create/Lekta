@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, staticRuntimeImports } from './helpers/module-graph';
 import { intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
+import { zabranjenUGrafuUlaza } from './helpers/entry-graph-boundary';
 
 /**
  * GRANICA CISTOG ULAZA `/` (rez naslovnice, 2026-09-05).
@@ -25,6 +26,9 @@ const INTAKE_CSS = resolve(ROOT, 'src/routes/intake/intake.css');
 
 const source = (path: string): string => readFileSync(path, 'utf8');
 
+// Predikat `zabranjenUGrafuUlaza` zivi u `helpers/entry-graph-boundary.ts`, jer ga kao izvorni
+// tekst ucitava i mutacijski test u `tests/gate-mutations.test.ts`.
+
 // Obilazak grafa zivi u `helpers/module-graph.ts`, jer ga dijeli i `entry-fonts`. Ondje stoji i
 // biljeska o greedy `from` skupini koja je do 2026-09-05 gutala bare uvoze (5 nadjenih umjesto 19).
 
@@ -35,7 +39,9 @@ describe('cisti ulaz /', () => {
     expect(statSync(ROOT_HTML).size).toBeLessThan(30_000);
     expect(html).toMatch(/src=["']\/src\/routes\/intake\/main\.ts["']/);
     expect(html).not.toContain('/src/main.ts');
-    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeFileSize', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'paperCover']) {
+    // Z32: `intakeFileSize` je otisao s karticom dokumenta (drugo lice papira); ime datoteke sada
+    // stoji u zaglavlju lista, a kontroler velicinu upisuje samo ako polje postoji.
+    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'paperCover']) {
       expect(html, `ulaz treba #${id}`).toContain(`id="${id}"`);
     }
     expect(html).toContain('href="/moji-radovi/"');
@@ -89,20 +95,26 @@ describe('cisti ulaz /', () => {
     }
   });
 
-  it('papir mijenja stanje NA sebi: kartica dokumenta postoji uz poziv', () => {
+  it('papir mijenja stanje NA sebi, na ISTOM licu (Z32: bez promjene ekrana)', () => {
     // Do reza je status stajao kao poruka ISPOD papira, pa je dokument izgledao kao da je
-    // "negdje drugdje". Kartica je isti list s drugim sadrzajem, pa se vidi da predmet putuje.
+    // "negdje drugdje". Z7 je to rijesio drugim licem papira (kartica dokumenta); Z32 ide korak
+    // dalje i trazi "bez promjene ekrana": list ostaje, a stanje nose ime datoteke u zaglavlju,
+    // pecat i linija skeniranja. Ova tvrdnja je zato PROMIJENJENA, ne oslabljena: i dalje mjeri
+    // da se stanje vidi NA predmetu, samo na novom mjestu.
     const html = source(ROOT_HTML);
     expect(html).toContain('class="intake-poziv"');
-    expect(html).toContain('class="intake-karta"');
-    for (const korak of ['format', 'lokalno']) {
-      expect(html, `kartici nedostaje potvrda koraka ${korak}`).toContain(`data-korak="${korak}"`);
-    }
+    expect(html, 'drugo lice papira se vratilo; Z32 stanje nosi na istom listu').not.toContain('class="intake-karta"');
     const css = source(INTAKE_CSS);
-    // Prebacivanje ide preko `display`, ne `opacity`: skriveni poziv ne smije ostati u redoslijedu
-    // citaca ekrana ni hvatati fokus.
-    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-poziv\{display:none\}/);
-    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-karta\{display:grid\}/);
+    // Poziv se vise NE skriva: isti list ostaje u svakom stanju.
+    expect(css).not.toMatch(/data-intake-state="ready"\][^{]*\.intake-poziv\{display:none\}/);
+    // Dok ulaz cita, zaglavlje pokazuje ime datoteke umjesto "Nepregledano", a ispod podnaslova je
+    // linija skeniranja. Prebacivanje ide preko `display`, ne `opacity`: skriveno ne ostaje citacu.
+    for (const stanje of ['checking', 'saving', 'ready']) {
+      const uStanju = (ostatak: string): RegExp => new RegExp(String.raw`data-intake-state="${stanje}"\][^{]*` + ostatak);
+      expect(css).toMatch(uStanju(String.raw`\.intake-zaglavlje-ime[^{]*\{display:inline-block\}`));
+      expect(css).toMatch(uStanju(String.raw`\[data-intake-nepregledano\][^{]*\{display:none\}`));
+      expect(css).toMatch(uStanju(String.raw`\.intake-sken[^{]*\{display:block\}`));
+    }
   });
 
   it('nav i podnozje NE vode u mrtva sidra: odrediste svakog `#` sidra postoji na stranici', () => {
@@ -152,21 +164,48 @@ describe('cisti ulaz /', () => {
 
   it('pocetni staticki graf NEMA analizator, profile ni repair motor', () => {
     const graph = [...collectStaticGraph(INTAKE_MAIN)].map((path) => path.replace(/\\/g, '/'));
-    const forbidden = graph.filter((path) => (
-      path.includes('/src/analysis/')
-      || path.includes('/src/profiles/')
-      || path.includes('/src/ui/app.ts')
-      || path.includes('/src/routes/workspace/')
-      || path.includes('/src/audits/')
-      || path.includes('/src/citations/')
-      || (path.includes('/src/repair/') && !path.endsWith('/src/repair/docx-budget.ts'))
-      || /(?:preflight|preview|history|landing)/i.test(path)
-    ));
+    const forbidden = graph.filter((path) => zabranjenUGrafuUlaza(path, ROOT));
     expect(forbidden).toEqual([]);
     expect(graph.some((path) => path.endsWith('/src/repair/docx-budget.ts'))).toBe(true);
     // Sto SMIJE: dijeljena ljuska (tema, navigacija) i prazan stol pod lampom.
     expect(graph.some((path) => path.endsWith('/src/shared/ui-boot.ts'))).toBe(true);
     expect(graph.some((path) => path.endsWith('/src/ui/hero-depth.ts'))).toBe(true);
+  });
+
+  it('predikat grafa ne gleda ime checkouta, ali i dalje hvata zabranjen modul', () => {
+    // Baseline i mutacija za relativno mjerenje iznad: dopusteni modul u checkoutu cije ime nosi
+    // zabranjenu rijec mora proci, a stvaran zabranjen modul u istom checkoutu mora pasti.
+    for (const root of ['C:\\wt\\wf-gate-preflight-lock', '/tmp/landing-preview-history']) {
+      const r = root.replace(/\\/g, '/');
+      expect(zabranjenUGrafuUlaza(`${r}/src/shared/ui-boot.ts`, root), `lazni pogodak za ${root}`).toBe(false);
+      expect(zabranjenUGrafuUlaza(`${r}/src/repair/docx-budget.ts`, root)).toBe(false);
+      for (const modul of ['src/ui/preview-modal.ts', 'src/preflight/index.ts', 'src/ui/history.ts', 'src/landing/hero.ts', 'src/analysis/run.ts', 'src/repair/engine.ts', 'src/ui/app.ts']) {
+        expect(zabranjenUGrafuUlaza(`${r}/${modul}`, root), `${modul} mora biti zabranjen u ${root}`).toBe(true);
+      }
+    }
+    // Staza izvan korijena se mjeri apsolutno, dakle strozim starim uvjetom.
+    expect(zabranjenUGrafuUlaza('D:/drugo/preview/x.ts', 'C:/wt/lekta')).toBe(true);
+  });
+
+  it('slovo diska u drugoj velicini slova ne baca mjerenje natrag na apsolutnu stazu (win32)', () => {
+    // Platforma se predaje izricito jer je normalizacija slova diska win32 ponasanje: gard ne smije
+    // ovisiti o tome izvrsava li se test na Windows razvojnom stroju ili na Linux CI runneru.
+    // `resolve()` u testu i stvaran checkout mogu vratiti isto slovo diska razlicite velicine.
+    // Bez normalizacije na malo slovo prefiks se ne bi poklopio, staza bi ostala apsolutna, i
+    // dopusteni modul (koji sadrzi ime checkouta `wf-gate-preflight-lock`) bio bi lazno zabranjen.
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/shared/ui-boot.ts', root, { platform: 'win32' })).toBe(false);
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root, { platform: 'win32' })).toBe(true);
+  });
+
+  it('na linuxu (bez slova diska) velicina slova ostaje neizmijenjena i prefiks i dalje mora tocno pogoditi', () => {
+    // Linux nema slovo diska, pa normalizacija nije potrebna: isti niz znakova u korijenu i stazi
+    // i dalje mora tocno poklopiti prefiks, a dopusteni modul ostaje dopusten.
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    expect(zabranjenUGrafuUlaza(`${root}/src/shared/ui-boot.ts`, root, { platform: 'linux' })).toBe(false);
+    // Kad se slovo diska razlikuje, na linuxu se NE normalizira: staza vise ne pogadja prefiks i
+    // pada natrag na strozi apsolutni uvjet, koji stvaran zabranjen modul i dalje mora uhvatiti.
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root, { platform: 'linux' })).toBe(true);
   });
 
   it('intake gate ostaje dinamicki iza korisnicke akcije', () => {

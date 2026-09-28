@@ -2,6 +2,26 @@
   "profileId": "unidu-marikultura-diplomski",
   "entries": [
     {
+      "ruleId": "unidu-marikultura-diplomski--lines-per-page",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
+      "checkId": "lines-per-page",
+      "value": {
+        "min": null,
+        "max": 33
+      },
+      "category": "format",
+      "label": "Redaka po stranici (kapacitet)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unidu-marikultura-upute-diplomski",
+      "sourcePage": "Upute, str. 1 (uz Pravilnik Cl.4(1) file=2121)",
+      "quote": "Diplomski rad je potrebno pisati racunalom na hrvatskom jeziku, do 33 retka po stranici, proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan.",
+      "status": "draft",
+      "scored": false
+    },
+    {
       "ruleId": "unidu-marikultura-diplomski--font",
       "modality": "directive",
       "scope": "body",

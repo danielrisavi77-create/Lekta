@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "profileCount": 407,
+  "profileCount": 423,
   "byOutcome": {
-    "no-rules": 35,
-    "pass": 372
+    "no-rules": 49,
+    "pass": 374
   },
   "rows": [
     {
@@ -433,6 +433,39 @@
         "margins"
       ],
       "resolved": 7,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "agromed-zavrsni",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2104,6 +2137,39 @@
         "paper-size"
       ],
       "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5310,6 +5376,39 @@
       "textPreserved": true
     },
     {
+      "profileId": "ffzg-svedski-zavrsni",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
       "profileId": "fgag-diplomski",
       "outcome": "pass",
       "violated": [
@@ -7678,6 +7777,105 @@
       "textPreserved": true
     },
     {
+      "profileId": "geoteh-diplomski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
       "profileId": "grad-diplomski",
       "outcome": "pass",
       "violated": [
@@ -8155,6 +8353,39 @@
         "paper-size"
       ],
       "resolved": 7,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -9637,6 +9868,39 @@
       "textPreserved": true
     },
     {
+      "profileId": "medri-doktorski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
       "profileId": "medri-farmacija-diplomski",
       "outcome": "pass",
       "violated": [
@@ -9719,6 +9983,39 @@
         "paper-size"
       ],
       "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -9958,6 +10255,72 @@
         "paper-size"
       ],
       "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -10343,6 +10706,72 @@
         "paper-size"
       ],
       "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -10957,6 +11386,49 @@
       "textPreserved": true
     },
     {
+      "profileId": "pmf-biologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "font-size",
+        "line-spacing",
+        "heading-style",
+        "margins"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
       "profileId": "pmf-fizika-graduate",
       "outcome": "pass",
       "violated": [
@@ -11134,6 +11606,49 @@
       ],
       "profileAxesViolated": [
         "font",
+        "line-spacing"
+      ],
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
         "line-spacing"
       ],
       "resolved": 4,
@@ -17106,6 +17621,39 @@
         "paper-size"
       ],
       "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "outcome": "no-rules",
+      "violated": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style"
+      ],
+      "requested": 6,
+      "axesResolved": [
+        "heading-style"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [],
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },

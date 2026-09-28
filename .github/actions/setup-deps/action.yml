@@ -9,6 +9,10 @@
 # setup-nodea, a `package.json` zakljucava npm 11.11.0 (razlicite npm verzije razlicito
 # tumace opcionalne peer zapise u lockfileu). Taj korak MORA ici izmedju setup-nodea i
 # `npm ci`, pa je dio ovog akcije, ne odvojen korak u pozivajucem jobu.
+#
+# Shell: na Windowsu `powershell` (self-hosted word-proof runner nema WSL; WindowsApps
+# `bash.exe` je stub koji pada s WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED). Na Linux/macOS
+# ostaje `bash` (GitHub-hosted jobovi).
 name: 'Setup deps (kesiran node_modules)'
 description: 'actions/setup-node + kes node_modules po lockfile hashu; npm ci samo na promasaj'
 
@@ -20,6 +24,13 @@ inputs:
     description: 'Ako je postavljeno, prisilno instalira ovu tocnu npm verziju prije npm ci'
     required: false
     default: ''
+  npm-cache:
+    description: >-
+      'true' (zadano) = actions/setup-node kesira npm cache mapu; 'false' = ne kesira. Self-hosted
+      word-proof runner gasi: tamo je npm cache cijeli korisnikov %LOCALAPPDATA%\npm-cache (3,6 GB,
+      restore oko 23 min u runu 36348083630), a node_modules kes vec preskace npm ci.
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -28,10 +39,16 @@ runs:
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: ${{ inputs.node-version }}
+        package-manager-cache: ${{ inputs.npm-cache }}
 
     - name: npm iz packageManager polja
-      if: inputs.npm-version != ''
+      if: inputs.npm-version != '' && runner.os != 'Windows'
       shell: bash
+      run: npm install --global npm@${{ inputs.npm-version }}
+
+    - name: npm iz packageManager polja (Windows)
+      if: inputs.npm-version != '' && runner.os == 'Windows'
+      shell: powershell
       run: npm install --global npm@${{ inputs.npm-version }}
 
     - name: 'Kes node_modules (kljuc: OS + Node + package-lock.json hash)'
@@ -48,6 +65,11 @@ runs:
           node-modules-${{ runner.os }}-
 
     - name: Instaliraj ovisnosti (npm ci, samo na promasaj kesa)
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      if: steps.cache-node-modules.outputs.cache-hit != 'true' && runner.os != 'Windows'
       shell: bash
+      run: npm ci
+
+    - name: Instaliraj ovisnosti (npm ci, Windows)
+      if: steps.cache-node-modules.outputs.cache-hit != 'true' && runner.os == 'Windows'
+      shell: powershell
       run: npm ci

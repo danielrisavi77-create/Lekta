@@ -1,5 +1,5 @@
 import type { OpportunityStats, OpportunityRow } from './admin-types';
-import { opportunityMeasurementHealth, rankOpportunityRows } from './opportunity-ranking';
+import { opportunityMeasurementHealth, rankOpportunityRows, strongestMeasuredOpportunity } from './opportunity-ranking';
 import {
   el, heroCard, statTile, dataTable, computeDelta, seriesColors,
   fmtCount, fmtPct, type Column,
@@ -35,36 +35,55 @@ function opportunityLabel(row: OpportunityRow): string {
   return LABELS[row.id] ?? row.id;
 }
 
+function scopeLabel(row: { profileId?: string; workType?: string }): string {
+  return `${row.profileId || 'unknown'} · ${row.workType || 'unknown'}`;
+}
+
 export function renderOpportunitiesSection(container: HTMLElement, stats: OpportunityStats): void {
   container.replaceChildren();
   const s = seriesColors();
   const bento = el('div', 'bento');
 
   const ranked = rankOpportunityRows(stats.current.opportunities);
-  const strongest = ranked[0];
+  const strongest = strongestMeasuredOpportunity(ranked);
   const health = opportunityMeasurementHealth(stats.current);
+  const delta = (n: number) => `${n >= 0 ? '+' : ''}${n}`;
 
+  // Rang signala ovisi o zdravlju ANALITIKE; zdrava repair telemetrija bez ijedne analize ne daje
+  // "najjaci signal". Prazan nazivnik je prazno stanje, nikad 0 % (Codex V3-03 na #163).
   bento.appendChild(heroCard({
-    label: health.kind === 'healthy'
-      ? 'Najjači izmjereni signal'
+    label: !strongest
+      ? 'Nema izmjerenog signala'
       : health.kind === 'partial'
         ? 'Privremeni signal · mjerenje nepotpuno'
-        : 'Nema potvrđenog signala',
+        : 'Najjači izmjereni signal',
     value: strongest?.ratePct ?? 0,
-    render: (n) => fmtPct(n, 1),
+    render: (n) => strongest ? fmtPct(n, 1) : '—',
     sub: strongest
       ? `${opportunityLabel(strongest)} · ${fmtCount(strongest.affected)}/${fmtCount(strongest.denominator)} opažanja`
-      : 'Nema dovoljno podataka u odabranom razdoblju.',
+      : 'Nijedna prilika nema nazivnik u odabranom razdoblju.',
   }));
 
   const healthCard = el('div', 'card c12 rise');
   healthCard.appendChild(el('div', 'card-title', 'Zdravlje mjerenja'));
-  const healthText = health.kind === 'healthy'
-    ? `Exact parity: analysis_completed ${fmtCount(stats.current.analysisCompletedEvents)} = opportunity_summary ${fmtCount(stats.current.opportunityEvents)}; structure summary ${fmtCount(stats.current.structureGapItems)} = breakdown ${fmtCount(stats.current.structureBreakdownItems)}.`
-    : health.kind === 'no-data'
-      ? 'Nema baznih analiza u odabranom razdoblju; report nema što potvrditi.'
-      : `Mjerenje je nepotpuno: analysis parity Δ ${health.analysisDelta >= 0 ? '+' : ''}${health.analysisDelta}; structure parity Δ ${health.structureDelta >= 0 ? '+' : ''}${health.structureDelta}. Rangiranje koristi nepotpun uzorak dok se parity ne vrati na nulu.`;
-  healthCard.appendChild(el('p', 'hint', healthText));
+  const analysisText = health.analysis === 'healthy'
+    ? `Analiza: exact parity, analysis_completed ${fmtCount(stats.current.analysisCompletedEvents)} = opportunity_summary ${fmtCount(stats.current.opportunityEvents)}; structure summary ${fmtCount(stats.current.structureGapItems)} = breakdown ${fmtCount(stats.current.structureBreakdownItems)}, i po profilu i vrsti rada.`
+    : health.analysis === 'no-data'
+      ? 'Analiza: nema baznih analiza u odabranom razdoblju.'
+      : `Analiza: mjerenje je nepotpuno, analysis parity Δ ${delta(health.analysisDelta)}; structure parity Δ ${delta(health.structureDelta)}.`;
+  const repairText = health.repair === 'healthy'
+    ? `Repair: exact parity, repair_result_ok ${fmtCount(stats.current.repairAttemptEvents)} = repair_noop_summary ${fmtCount(stats.current.repairNoOpSummaryEvents)}; no-op summary ${fmtCount(stats.current.repairNoOpSummaryItems)} = breakdown ${fmtCount(stats.current.repairNoOpItems)}, i po profilu i vrsti rada.`
+    : health.repair === 'no-data'
+      ? 'Repair: nema V3 repair telemetrije u odabranom razdoblju.'
+      : `Repair: mjerenje je nepotpuno, summary prema rezultatima Δ ${delta(health.repairAttemptDelta)}; no-op parity Δ ${delta(health.repairNoOpDelta)}.`;
+  healthCard.appendChild(el('p', 'hint', analysisText));
+  healthCard.appendChild(el('p', 'hint', repairText));
+  if (health.scopeMismatches > 0) {
+    const scopes = stats.current.scopeParityMismatches
+      .map((m) => `${m.surface}: ${scopeLabel(m)} ${fmtCount(m.summary)}≠${fmtCount(m.breakdown)}`)
+      .join('; ');
+    healthCard.appendChild(el('p', 'hint', `Parity po obuhvatu ne odgovara (${fmtCount(health.scopeMismatches)}): ${scopes}. Tablice ispod mogu pripisati preskok krivom profilu dok se to ne vrati na nulu.`));
+  }
   bento.appendChild(healthCard);
 
   bento.appendChild(statTile({
@@ -108,6 +127,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   }));
 
   const structureColumns: Array<Column<(typeof stats.current.structureGaps)[number]>> = [
+    { header: 'Profil · vrsta', render: (r) => scopeLabel(r) },
     { header: 'Podsustav', render: (r) => r.category ?? '—' },
     { header: 'Razlog', render: (r) => r.kind },
     { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
@@ -122,6 +142,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   bento.appendChild(structureTable);
 
   const noOpColumns: Array<Column<(typeof stats.current.repairNoOpReasons)[number]>> = [
+    { header: 'Profil · vrsta', render: (r) => scopeLabel(r) },
     { header: 'Razlog fixera', render: (r) => NOOP_META[r.kind]?.label ?? r.kind },
     { header: 'Razred', render: (r) => NOOP_META[r.kind]?.class ?? 'unknown' },
     { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },

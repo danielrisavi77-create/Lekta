@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "source": "lekta data/profiles/verified-profiles.json",
   "counts": {
-   "units": 131,
-   "profiles": 407
+   "units": 135,
+   "profiles": 423
   },
   "statusLabels": {
    "verified": "Pravila potvrđena",
@@ -38,6 +38,14 @@
     "agr-diplomski",
     "agr-doktorski",
     "agr-zavrsni"
+   ]
+  },
+  {
+   "id": "agromed",
+   "name": "Agromediteranski fakultet",
+   "inst": "Sveučilište u Splitu",
+   "profiles": [
+    "agromed-zavrsni"
    ]
   },
   {
@@ -168,6 +176,7 @@
    "inst": "Sveučilište u Rijeci",
    "profiles": [
     "efri-diplomski",
+    "efri-specijalisticki",
     "efri-zavrsni"
    ]
   },
@@ -359,7 +368,8 @@
     "ffzg-pedagogija-graduate",
     "ffzg-povijest-umjetnosti-diplomski",
     "ffzg-psihologija-diplomski",
-    "ffzg-sociologija-diplomski"
+    "ffzg-sociologija-diplomski",
+    "ffzg-svedski-zavrsni"
    ]
   },
   {
@@ -538,6 +548,16 @@
    ]
   },
   {
+   "id": "geoteh",
+   "name": "Geotehnički fakultet",
+   "inst": "Sveučilište u Zagrebu",
+   "profiles": [
+    "geoteh-diplomski",
+    "geoteh-doktorski",
+    "geoteh-zavrsni"
+   ]
+  },
+  {
    "id": "grad",
    "name": "Građevinski fakultet",
    "inst": "Sveučilište u Zagrebu",
@@ -573,6 +593,14 @@
     "grf-diplomski",
     "grf-doktorski",
     "grf-zavrsni"
+   ]
+  },
+  {
+   "id": "hig",
+   "name": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+   "inst": "Sveučilište u Splitu",
+   "profiles": [
+    "hig-zavrsni"
    ]
   },
   {
@@ -724,8 +752,10 @@
    "name": "Medicinski fakultet u Rijeci",
    "inst": "Sveučilište u Rijeci",
    "profiles": [
+    "medri-doktorski",
     "medri-farmacija-diplomski",
-    "medri-medicina-diplomski"
+    "medri-medicina-diplomski",
+    "medri-sanitarno-diplomski"
    ]
   },
   {
@@ -751,7 +781,9 @@
    "name": "Medicinski fakultet u Splitu",
    "inst": "Sveučilište u Splitu",
    "profiles": [
-    "mefst-diplomski"
+    "mefst-diplomski",
+    "mefst-doktorski",
+    "mefst-tribe-doktorski"
    ]
   },
   {
@@ -788,6 +820,15 @@
    "profiles": [
     "muza-diplomski",
     "muza-doktorski"
+   ]
+  },
+  {
+   "id": "mvi",
+   "name": "Teološki fakultet Matija Vlačić Ilirik",
+   "inst": "Sveučilište u Zagrebu",
+   "profiles": [
+    "mvi-diplomski",
+    "mvi-prijediplomski"
    ]
   },
   {
@@ -859,10 +900,12 @@
    "inst": "Sveučilište u Zagrebu",
    "profiles": [
     "pmf-biologija-graduate",
+    "pmf-biologija-zavrsni",
     "pmf-fizika-graduate",
     "pmf-geofizika-graduate",
     "pmf-geografija-diplomski",
     "pmf-geologija-graduate",
+    "pmf-geologija-zavrsni",
     "pmf-matematika-graduate"
    ]
   },
@@ -1175,7 +1218,8 @@
    "inst": "Sveučilište u Zagrebu",
    "profiles": [
     "vef-diplomski",
-    "vef-doktorski"
+    "vef-doktorski",
+    "vef-specijalisticki"
    ]
   },
   {
@@ -1578,6 +1622,21 @@
     {
      "t": "Upute za izradu zavrsnog rada (AGR, 2017)",
      "u": "https://www.agr.unizg.hr/upload/nastava/bs_zavrsni_rad_uputa_20170612.pdf"
+    }
+   ]
+  },
+  {
+   "id": "agromed-zavrsni",
+   "unitId": "agromed",
+   "label": "Agromediteranski fakultet, završni rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "sources": [
+    {
+     "t": "Završni rad, Mediteranska poljoprivreda 2025./2026.",
+     "u": "https://mp.unist.hr/zavrsni-rad/120"
     }
    ]
   },
@@ -2462,6 +2521,21 @@
     {
      "t": "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)",
      "u": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_diplomskom_radu_na_sveucili%C5%A1nom_diplomskom_i_integriranom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf"
+    }
+   ]
+  },
+  {
+   "id": "efri-specijalisticki",
+   "unitId": "efri",
+   "label": "EFRI · sveučilišni specijalistički rad",
+   "status": "partial",
+   "workTypes": [
+    "specialist"
+   ],
+   "sources": [
+    {
+     "t": "Pravilnik o specijalističkom radu na Sveučilišnim specijalističkim studijima EFRI (22. 7. 2024.)",
+     "u": "https://arhiva.efri.uniri.hr/upload/SSS/SSS_EFRI-Pravilnik_rad_22_07_2024.pdf"
     }
    ]
   },
@@ -4219,6 +4293,26 @@
    ]
   },
   {
+   "id": "ffzg-svedski-zavrsni",
+   "unitId": "ffzg",
+   "label": "FFZG, švedski jezik i kultura, prijediplomski završni rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "facts": [
+    "Godišnje upute 2025./26. opisuju završni rad kao pregledni akademski rad i traže da se piše na švedskom jeziku.",
+    "Opseg: očekivano 20.000 do 27.000 znakova bez popisa literature; dopušteni minimum 18.000 i maksimum 30.000 znakova. Nema odgovarajuće aktivne provjere broja znakova.",
+    "Nakon popisa literature prilažu se sažeci na hrvatskom i engleskom, oko 1.000 znakova svaki; sažeci se ne ubrajaju u opseg.",
+    "Oblikovanje se u načelu veže uz opća pravila pisanja seminarskih radova; stil citiranja treba odgovarati znanstvenom području i preporučuje se savjetovanje s mentorom."
+   ],
+   "sources": [
+    {},
+    {},
+    {}
+   ]
+  },
+  {
    "id": "fgag-diplomski",
    "unitId": "fgag",
    "label": "FGAG, diplomski rad",
@@ -5933,6 +6027,59 @@
    ]
   },
   {
+   "id": "geoteh-diplomski",
+   "unitId": "geoteh",
+   "label": "Geotehnički fakultet, diplomski rad",
+   "status": "partial",
+   "workTypes": [
+    "graduate"
+   ],
+   "sources": [
+    {
+     "t": "O diplomskom studiju Inženjerstvo okoliša",
+     "u": "https://www.gfv.unizg.hr/static/diplomski-studij-o-studiju"
+    },
+    {
+     "t": "Upute za pisanje diplomskog rada na diplomskom studiju Geotehničkog fakulteta (2026)",
+     "u": "https://www.gfv.unizg.hr/upload/document/24/Upute%20za%20pisanje%20diplomskog%20rada_2026.pdf"
+    }
+   ]
+  },
+  {
+   "id": "geoteh-doktorski",
+   "unitId": "geoteh",
+   "label": "Geotehnički fakultet, doktorski rad",
+   "status": "partial",
+   "workTypes": [
+    "doctoral"
+   ],
+   "sources": [
+    {
+     "t": "Doktorski studij Inženjerstvo okoliša",
+     "u": "https://www.gfv.unizg.hr/static/doktorski-studij"
+    },
+    {
+     "t": "Upute za pisanje doktorskoga rada po skandinavskom modelu (2025)",
+     "u": "https://www.gfv.unizg.hr/upload/document/30/Skandinavski_model_-_upute_za_pisanje_25.3.2025.pdf"
+    }
+   ]
+  },
+  {
+   "id": "geoteh-zavrsni",
+   "unitId": "geoteh",
+   "label": "Geotehnički fakultet, završni rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "sources": [
+    {
+     "t": "Upute za pisanje završnog rada na prijediplomskom studiju Geotehničkog fakulteta (2026)",
+     "u": "https://www.gfv.unizg.hr/upload/document/23/Upute%20za%20pisanje%20zavr%C5%A1nog%20rada_2026.pdf"
+    }
+   ]
+  },
+  {
    "id": "grad-diplomski",
    "unitId": "grad",
    "label": "Građevinski fakultet, diplomski rad",
@@ -6173,6 +6320,21 @@
     {
      "t": "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)",
      "u": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf"
+    }
+   ]
+  },
+  {
+   "id": "hig-zavrsni",
+   "unitId": "hig",
+   "label": "Hotelijerstvo i gastronomija, završni rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "sources": [
+    {
+     "t": "Prijediplomski sveučilišni studij Hotelijerstvo i gastronomija",
+     "u": "https://hig.unist.hr/prijediplomski-studij/41"
     }
    ]
   },
@@ -6967,6 +7129,18 @@
    ]
   },
   {
+   "id": "medri-doktorski",
+   "unitId": "medri",
+   "label": "MEDRI · Doktorska škola · doktorski rad",
+   "status": "partial",
+   "workTypes": [
+    "doctoral"
+   ],
+   "sources": [
+    {}
+   ]
+  },
+  {
    "id": "medri-farmacija-diplomski",
    "unitId": "medri",
    "label": "MEDRI Farmacija, diplomski rad",
@@ -7006,6 +7180,19 @@
      "t": "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)",
      "u": "https://medri.uniri.hr/wp-content/uploads/2026/01/NAPUTAK_ZA_PRIJAVU_OBLIKOVANJE_I_OPREMU_DIPLOMSKOG_RADA_I_POLAGANJE_DIPLOMSKOG_ISPITA_2025_2026.pdf"
     }
+   ]
+  },
+  {
+   "id": "medri-sanitarno-diplomski",
+   "unitId": "medri",
+   "label": "MEDRI, Sanitarno inženjerstvo, diplomski rad",
+   "status": "partial",
+   "workTypes": [
+    "graduate"
+   ],
+   "sources": [
+    {},
+    {}
    ]
   },
   {
@@ -7130,6 +7317,36 @@
     {
      "t": "Uputa za oblikovanje diplomskoga rada (MEFST, 2021)",
      "u": "https://neuron.mefst.hr/docs/katedre/diplomski_ispit/Uputa%20za%20oblikovanje%20diplomskoga%20rada.pdf"
+    }
+   ]
+  },
+  {
+   "id": "mefst-doktorski",
+   "unitId": "mefst",
+   "label": "MEFST, doktorski rad",
+   "status": "partial",
+   "workTypes": [
+    "doctoral"
+   ],
+   "sources": [
+    {
+     "t": "Naputak za izradu doktorskog rada (MEFST, Doktorska škola)",
+     "u": "https://neuron.mefst.hr/docs/graduate_school/novosti/Naputak_za_izradu_doktorskog_rada.pdf?vel=74197"
+    }
+   ]
+  },
+  {
+   "id": "mefst-tribe-doktorski",
+   "unitId": "mefst",
+   "label": "MEFST, TRIBE, doktorska disertacija",
+   "status": "partial",
+   "workTypes": [
+    "doctoral"
+   ],
+   "sources": [
+    {
+     "t": "Naputak za tehničku obradu doktorske disertacije (TRIBE, MEFST)",
+     "u": "https://neuron.mefst.hr/docs/graduate_school/tribe/Nastavni%20materijali/Naputak-za-tehnicku-obradu-doktorske-disertacije.pdf?vel=87282"
     }
    ]
   },
@@ -7337,6 +7554,36 @@
     {
      "t": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
      "u": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+    }
+   ]
+  },
+  {
+   "id": "mvi-diplomski",
+   "unitId": "mvi",
+   "label": "TFMVI, diplomski rad",
+   "status": "partial",
+   "workTypes": [
+    "graduate"
+   ],
+   "sources": [
+    {
+     "t": "Diplomski sveučilišni studij Protestantska teologija",
+     "u": "https://mvi.unizg.hr/studiji/diplomski-sveucilisni-studij-protestantska-teologija/"
+    }
+   ]
+  },
+  {
+   "id": "mvi-prijediplomski",
+   "unitId": "mvi",
+   "label": "TFMVI, prijediplomski bakalaurski rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "sources": [
+    {
+     "t": "Prijediplomski sveučilišni studij Protestantska teologija",
+     "u": "https://mvi.unizg.hr/studiji/prijediplomski-sveucilisni-studij-protestantska-teologija/"
     }
    ]
   },
@@ -7670,6 +7917,20 @@
    ]
   },
   {
+   "id": "pmf-biologija-zavrsni",
+   "unitId": "pmf",
+   "label": "Prirodoslovno-matematički fakultet (Biološki odsjek), prijediplomski završni rad",
+   "status": "partial",
+   "workTypes": [
+    "final"
+   ],
+   "size": 11,
+   "spacing": 1.5,
+   "sources": [
+    {}
+   ]
+  },
+  {
    "id": "pmf-fizika-graduate",
    "unitId": "pmf",
    "label": "Prirodoslovno-matematicki fakultet (Fizicki odsjek), diplomski rad",
@@ -7799,6 +8060,18 @@
      "t": "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu (PMF, Geoloski odsjek, 2021)",
      "u": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_zavrsnom_i_diplomskom_radu_GO.pdf"
     }
+   ]
+  },
+  {
+   "id": "pmf-geologija-zavrsni",
+   "unitId": "pmf",
+   "label": "Prirodoslovno-matematički fakultet (Geološki odsjek), prijediplomski Seminar III",
+   "status": "partial",
+   "font": "Times New Roman",
+   "size": 12,
+   "spacing": 1.5,
+   "sources": [
+    {}
    ]
   },
   {
@@ -11024,6 +11297,25 @@
     {
      "t": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
      "u": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+    }
+   ]
+  },
+  {
+   "id": "vef-specijalisticki",
+   "unitId": "vef",
+   "label": "VEF, završni specijalistički rad",
+   "status": "partial",
+   "workTypes": [
+    "specialist"
+   ],
+   "sources": [
+    {
+     "t": "Natječaj za upis na sveučilišni specijalistički studij u ak. god. 2026./2027.",
+     "u": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+     "t": "Oblikovanje završnog specijalističkog rada",
+     "u": "https://www.vef.unizg.hr/wp-content/uploads/2018/07/oblikovanje_zavrsnog_specijalistickog_rada.pdf"
     }
    ]
   },
