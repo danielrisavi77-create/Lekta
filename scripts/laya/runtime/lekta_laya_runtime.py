@@ -55,6 +55,16 @@ OPTIONS = {
     "extraction_uncertain": ("krivo izvucen", "nije jedan cijeli zapis: spojen s drugim, prekinut ili naslov popisa"),
     "insufficient_evidence": ("neodlucivo", "iz samog teksta se ne moze odluciti"),
 }
+# Varijanta `da-ne` (pokus koordinatora prije zatvaranja T79): binarno pitanje tipa `noul`.
+# Upstream vraca `noul` = P(true); "true" znaci da je zapis potpun, dakle da je Lektin nalaz lazan.
+# Binarno pitanje ne moze izraziti `extraction_uncertain` ni `insufficient_evidence` (vjerojatnost 0).
+DA_NE_INSTRUCTIONS = "Je li ovaj zapis iz popisa literature potpun?"
+DA_NE_CRITERIA = {
+    "true": "potpun je za svoju vrstu izvora, npr. zakon, presuda, institucija kao autor ili b. g.",
+    "false": "nedostaje autor, godina ili naslov",
+}
+NOUL_LABELS = ("false", "true")  # upstream `_DEFAULT_NOUL_LABELS`, redoslijed [false, true]
+PITANJA = ("izbor", "da-ne")
 OPTION_TOKEN_CAP = 48  # upstream `build_sequence`: truncation max_length=48 po opciji
 OPTION_BUDGET_FLOOR = 16  # upstream: ispod ovoga opcije se dodatno skracuju
 
@@ -97,9 +107,12 @@ def normalized(probabilities: dict[str, Any]) -> dict[str, float]:
 class LektaLayaRuntime:
     """Jedan zahtjev prema protokolu -> jedan poziv agent.predict -> LayaDecisionResultV2."""
 
-    def __init__(self, agent: Any, manifest: dict[str, str]):
+    def __init__(self, agent: Any, manifest: dict[str, str], pitanje: str = "izbor"):
+        if pitanje not in PITANJA:
+            raise ValueError("nepoznata varijanta pitanja")
         self.agent = agent
         self.manifest = dict(manifest)
+        self.pitanje = pitanje
         self.question_budget: dict[str, Any] | None = None
 
     def infer(self, request: Any) -> dict[str, Any]:
@@ -125,12 +138,22 @@ class LektaLayaRuntime:
         rule = model_input["ruleEvidence"]
         if isinstance(rule, dict) and isinstance(rule.get("excerpt"), str):
             state["pravilo"] = rule["excerpt"]
-        questions = {QUESTION: {"type": "choice", "instructions": INSTRUCTIONS,
-                                "criteria": {OPTIONS[label][0]: OPTIONS[label][1] for label in order}}}
-        answer = self.agent.predict(state, questions)["answers"][QUESTION]
-        raw = answer["probabilities"]
-        # Upstream vraca vjerojatnosti po oznaci koju je model vidio; natrag u Lektin verdikt po imenu.
-        probabilities = normalized({label: raw.get(OPTIONS[label][0]) for label in VERDICTS})
+        if self.pitanje == "da-ne":
+            # labelOrder nema ucinka: upstream noul uvijek nudi [false, true].
+            questions = {QUESTION: {"type": "noul", "instructions": DA_NE_INSTRUCTIONS, "criteria": dict(DA_NE_CRITERIA)}}
+            answer = self.agent.predict(state, questions)["answers"][QUESTION]
+            complete = answer.get("noul")
+            if not isinstance(complete, (int, float)) or isinstance(complete, bool) or not 0 <= complete <= 1:
+                raise ValueError("upstream nije vratio noul vjerojatnost")
+            probabilities = normalized({"finding_supported": 1 - complete, "possible_false_positive": complete,
+                                        "extraction_uncertain": 0, "insufficient_evidence": 0})
+        else:
+            questions = {QUESTION: {"type": "choice", "instructions": INSTRUCTIONS,
+                                    "criteria": {OPTIONS[label][0]: OPTIONS[label][1] for label in order}}}
+            answer = self.agent.predict(state, questions)["answers"][QUESTION]
+            raw = answer["probabilities"]
+            # Upstream vraca vjerojatnosti po oznaci koju je model vidio; natrag u Lektin verdikt po imenu.
+            probabilities = normalized({label: raw.get(OPTIONS[label][0]) for label in VERDICTS})
         verdict = max(VERDICTS, key=lambda label: probabilities[label])
         # Upstream preporucuje odluke nad kalibriranom pouzdanoscu; bez nje koristi se vjerojatnost presude.
         confidence = answer.get("answer_confidence", answer.get("confidence", probabilities[verdict]))
@@ -225,6 +248,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--model-revision", required=True, help="40-znamenkasti commit Hugging Face repozitorija modela")
     parser.add_argument("--calibration-revision", required=True)
     parser.add_argument("--precision", default="fp32", choices=["fp32", "fp16", "bf16", "int8", "int4"])
+    parser.add_argument("--pitanje", default="izbor", choices=PITANJA,
+                        help="izbor: cetiri oznake; da-ne: binarno 'je li zapis potpun' (noul)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     return parser.parse_args(argv)
@@ -234,22 +259,27 @@ class StartError(Exception):
     """Runtime se ne smije pokrenuti; poruka ide operateru."""
 
 
-def question_budget(tok: Any, head_max_len: int) -> dict[str, Any]:
+def question_budget(tok: Any, head_max_len: int, pitanje: str = "izbor") -> dict[str, Any]:
     """Tokeni pitanja istim racunom kao upstream `build_sequence` (common.py)."""
     def count(text: str) -> int:
         return len(tok(text, add_special_tokens=False)["input_ids"])
-    head = count(f"choice question: {INSTRUCTIONS}")
     # Svaka opcija je [MASK] + " oznaka: opis"; najgori slucaj ne ovisi o redoslijedu.
-    options = {label: 1 + count(f" {OPTIONS[label][0]}: {OPTIONS[label][1]}") for label in VERDICTS}
-    return {"headMaxLen": head_max_len, "head": head, "options": options, "free": head_max_len - sum(options.values()) - head}
+    if pitanje == "da-ne":
+        head = count(f"noul question: {DA_NE_INSTRUCTIONS}")
+        options = {label: 1 + count(f" {label}: {DA_NE_CRITERIA[label]}") for label in NOUL_LABELS}
+    else:
+        head = count(f"choice question: {INSTRUCTIONS}")
+        options = {label: 1 + count(f" {OPTIONS[label][0]}: {OPTIONS[label][1]}") for label in VERDICTS}
+    return {"pitanje": pitanje, "headMaxLen": head_max_len, "head": head, "options": options,
+            "free": head_max_len - sum(options.values()) - head}
 
 
-def assert_question_fits(agent: Any) -> dict[str, Any]:
+def assert_question_fits(agent: Any, pitanje: str = "izbor") -> dict[str, Any]:
     """Odbija start ako bi upstream skratio upute ili ijednu opciju: model bi odgovarao na drugo pitanje."""
     tok = getattr(agent, "tok", None)
     if tok is None:
         raise StartError("Agent nema tokenizer (agent.tok); budzet pitanja se ne moze provjeriti.")
-    budget = question_budget(tok, int((getattr(agent, "cfg", None) or {}).get("head_max_len", 192)))
+    budget = question_budget(tok, int((getattr(agent, "cfg", None) or {}).get("head_max_len", 192)), pitanje)
     options_total = sum(budget["options"].values())
     too_long = [label for label, n in budget["options"].items() if n > 1 + OPTION_TOKEN_CAP]
     if too_long or budget["headMaxLen"] - options_total < OPTION_BUDGET_FLOOR or budget["free"] < 0:
@@ -268,8 +298,11 @@ def prepare(args: argparse.Namespace, load: Callable[..., Any], runtime_version:
     loaded = getattr(agent, "revision", None)
     if loaded != args.model_revision:
         raise StartError(f"Ucitan je commit {loaded!r}, a trazen {args.model_revision}.")
-    budget = assert_question_fits(agent)
-    runtime = LektaLayaRuntime(agent, build_manifest(args, runtime_version, locate(args)))
+    budget = assert_question_fits(agent, args.pitanje)
+    # Drugo pitanje je drugo ponasanje modela: varijanta ulazi u runtimeVersion, dakle i u modelDigest,
+    # pa se prag izmjeren za jednu varijantu ne moze primijeniti na drugu.
+    manifest = build_manifest(args, f"{runtime_version}+{args.pitanje}", locate(args))
+    runtime = LektaLayaRuntime(agent, manifest, args.pitanje)
     runtime.question_budget = budget
     return runtime
 

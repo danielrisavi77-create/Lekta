@@ -106,6 +106,53 @@ class InferTest(unittest.TestCase):
             rt.LektaLayaRuntime(FakeAgent({"finding_supported": 1.0}), MANIFEST).infer(request())
 
 
+class NoulAgent(FakeAgent):
+    """Upstream oblik za `noul`: jedna vjerojatnost P(true), ovdje "zapis je potpun"."""
+
+    def __init__(self, complete=0.8, **kw):
+        super().__init__(**kw)
+        self.complete = complete
+
+    def predict(self, state, questions):
+        self.calls.append((state, questions))
+        return {"answers": {"nalaz": {"type": "noul", "noul": self.complete, "confidence": 0.6, "answer_confidence": 0.61}}}
+
+
+class DaNeTest(unittest.TestCase):
+    def test_pitanje_je_noul_s_kratkim_uputama(self):
+        agent = NoulAgent()
+        rt.LektaLayaRuntime(agent, MANIFEST, "da-ne").infer(request())
+        q = agent.calls[0][1]["nalaz"]
+        self.assertEqual(q["type"], "noul")
+        self.assertEqual(q["instructions"], rt.DA_NE_INSTRUCTIONS)
+        self.assertEqual(set(q["criteria"]), {"true", "false"})
+
+    def test_potpun_zapis_znaci_lazan_nalaz(self):
+        out = rt.LektaLayaRuntime(NoulAgent(0.8), MANIFEST, "da-ne").infer(request())
+        self.assertEqual(out["verdict"], "possible_false_positive")
+        self.assertEqual(out["probabilities"], {"finding_supported": 0.2, "possible_false_positive": 0.8,
+                                                "extraction_uncertain": 0.0, "insufficient_evidence": 0.0})
+        self.assertEqual(out["answerConfidence"], 0.61)
+        out = rt.LektaLayaRuntime(NoulAgent(0.1), MANIFEST, "da-ne").infer(request())
+        self.assertEqual(out["verdict"], "finding_supported")
+
+    def test_labelorder_nema_ucinka(self):
+        a = rt.LektaLayaRuntime(NoulAgent(0.3), MANIFEST, "da-ne").infer(request())
+        b = rt.LektaLayaRuntime(NoulAgent(0.3), MANIFEST, "da-ne").infer(request(labelOrder=list(reversed(rt.VERDICTS))))
+        self.assertEqual(a["probabilities"], b["probabilities"])
+
+    def test_bez_noul_vjerojatnosti_je_kvar(self):
+        for bad in [None, 1.5, -0.1, True, "0.5"]:
+            with self.assertRaises(ValueError):
+                rt.LektaLayaRuntime(NoulAgent(bad), MANIFEST, "da-ne").infer(request())
+
+    def test_nepoznata_varijanta_se_odbija(self):
+        with self.assertRaises(ValueError):
+            rt.LektaLayaRuntime(NoulAgent(), MANIFEST, "slobodno")
+        with self.assertRaises(SystemExit):
+            rt.parse_args(["--model-revision", REV, "--calibration-revision", "c", "--pitanje", "slobodno"])
+
+
 class ServerTest(unittest.TestCase):
     def test_http_200_400_404_i_bez_logiranja(self):
         server = HTTPServer(("127.0.0.1", 0), rt.make_handler(rt.LektaLayaRuntime(FakeAgent(), MANIFEST)))
@@ -223,6 +270,18 @@ class PrepareTest(unittest.TestCase):
             a.tok, a.cfg = tok, {"head_max_len": hml}
             with self.assertRaises(rt.StartError, msg=name):
                 rt.prepare(self.args(), lambda *x, _a=a, **k: _a, "t", locate=lambda x: self.dir)
+
+    def test_varijanta_ulazi_u_runtime_version_i_budzet(self):
+        izbor = rt.prepare(self.args(), lambda *a, **k: RevisionAgent(REV), "0.3.21", locate=lambda a: self.dir)
+        dane = rt.prepare(self.args("--pitanje", "da-ne"), lambda *a, **k: RevisionAgent(REV), "0.3.21", locate=lambda a: self.dir)
+        self.assertEqual(izbor.manifest["runtimeVersion"], "0.3.21+izbor")
+        self.assertEqual(dane.manifest["runtimeVersion"], "0.3.21+da-ne")
+        self.assertEqual(dane.pitanje, "da-ne")
+        self.assertEqual(set(dane.question_budget["options"]), {"false", "true"})
+        a = RevisionAgent(REV)
+        a.cfg = {"head_max_len": 20}
+        with self.assertRaises(rt.StartError):
+            rt.prepare(self.args("--pitanje", "da-ne"), lambda *x, **k: a, "t", locate=lambda x: self.dir)
 
     def test_budzet_racuna_kao_upstream(self):
         b = rt.question_budget(whitespace_tok, 192)
