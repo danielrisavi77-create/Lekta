@@ -16,6 +16,7 @@ import {
 import type { UnitMatchDecision } from '../src/programs/unit-match-decisions';
 import type { MatchProposal } from '../src/programs/unit-match';
 import { withProvenance } from './lib/provenance.mjs';
+import { verifyUpisnikEvidenceSnapshots, type SnapshotRatchet } from '../src/programs/upisnik-evidence-snapshots';
 import {
   buildUpisnikProfileCandidates,
   validateUpisnikProfileCoverageHolds,
@@ -96,6 +97,21 @@ const profileDecisionFile = JSON.parse(
   readFileSync(join(root, 'data', 'programs', 'upisnik-profile-decisions.json'), 'utf8'),
 ) as { schemaVersion: 1; decisions: ProgramProfileDecision[]; exclusions: ProgramProfileExclusionDecision[]; blockers: ProgramProfileBlockerDecision[]; holds: ProgramProfileHoldDecision[]; integratedGraduateCoverage?: IntegratedGraduateCoverageDecision[] };
 const sourceRegistry = JSON.parse(readFileSync(join(root, 'data', 'sources', 'source-registry.json'), 'utf8')) as Array<{ url: string; snapshotPath?: string }>;
+const snapshotRatchet = JSON.parse(
+  readFileSync(join(root, 'data', 'programs', 'upisnik-evidence-snapshot-ratchet.json'), 'utf8'),
+) as SnapshotRatchet;
+const snapshotBaseline = JSON.parse(readFileSync(join(root, 'tests', 'fixtures', 'upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as SnapshotRatchet;
+const snapshotProblems = await verifyUpisnikEvidenceSnapshots(
+  profileDecisionFile,
+  sourceRegistry,
+  (path) => {
+    try { return new Uint8Array(readFileSync(join(root, path))); }
+    catch { return null; }
+  },
+  snapshotRatchet,
+  snapshotBaseline,
+);
+if (snapshotProblems.length) throw new Error(`neispravni citati Upisnika:\n${snapshotProblems.join('\n')}`);
 const profileCandidates = buildUpisnikProfileCandidates(
   upisnik.rows,
   result.decisions,

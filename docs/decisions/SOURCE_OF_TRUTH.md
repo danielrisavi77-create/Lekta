@@ -34,3 +34,31 @@ roditeljsku dimenziju u oba smjera.
 `data/classification.json` odreduje smije li putanja u javni bundle. Posljednje
 pravilo koje pogodi vrijedi. Nepoznata putanja mora srusiti build, ne dobiti
 pretpostavljenu klasifikaciju.
+
+## Obvezujuci dokazi Upisnika
+
+Obvezujuca odluka mora imati doslovan citat iz registrirane snimke izvora, uz
+provjeren sha256 snimke. HTML se cita samo iz vidljivog teksta po odlomcima, PDF kroz unpdf,
+DOCX kroz readZip i XML parser, a DOC/DOT kroz word-extractor. Vanjski CSS i klase
+se ne racunaju: element skriven samo klasom iz stylesheeta smatra se vidljivim. Nepodrzana vrsta
+snimke i citat koji nije podniz jednog odlomka su problem. `unpdf` 1.8.1
+deklarira Node >=22, ali su stvarni podaci izmjereni i na Node 20 u CI matrici.
+
+Gard citata stiti od gresaka agenata: izmisljenog citata, citata iz krivog dokumenta,
+spajanja preko odlomaka te ocito skrivenog ili obrisanog teksta. Ne stiti od namjerno
+konstruiranog sadrzaja koji vara parser. Poznata ogranicenja su CSS escapei i komentari
+u inline `style`, klase i vanjski CSS, `opacity:0`, DOCX teme i uvjetno oblikovanje.
+
+Skenirani PDF zahtijeva lokalno proizveden pratitelj `.snapshot-ocr.txt` s
+prvim retkom `# snapshotHash: <sha256 snimke>`. Lokalni preduvjeti su tesseract
+5.4, hrv/eng tessdata i PyMuPDF; `scripts/ocr-snapshot.mjs` poziva
+`scripts/ocr_pdf.py`. OCR se ne pokrece u CI-ju. Stari `-ocr.txt` i
+`.ocr.txt` nisu vezani uz snimku i ne racunaju se kao dokaz. Hash prati
+zaglavlje, ali ne stiti tijelo OCR pratitelja od rucne izmjene.
+
+Neregistrirani URL-ovi ostaju u
+`data/programs/upisnik-evidence-snapshot-ratchet.json`; strop je 380 zapisa
+i smije se samo smanjivati. Novi obvezujuci dokazi bez snimke i zastarjeli
+ratchet zapisi zaustavljaju provjeru. Svaki ratchet zapis mora biti u zamrznutoj
+osnovici `tests/fixtures/upisnik-snapshot-ratchet-baseline.json`; osnovica se
+ne prosiruje i smije se samo smanjivati zajedno s ratchetom.
