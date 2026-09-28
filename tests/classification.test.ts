@@ -87,6 +87,7 @@ describe('klasifikacijski manifest', () => {
     // privatni sloj nikad u bundle
     expect(verdict('data/profiles/fpzg/drafts/fpzg-drafts.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('data/verification/ledger.json')).toBe('PROPRIETARY-DATA/forbidden');
+    expect(verdict('data/verification/ai-evidence-worklist.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('data/sources/source-registry.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('data/profiles/verified-profiles.json')).toBe('PROPRIETARY-DATA/derived');
     expect(verdict('data/generated/repair-params-by-profile.json')).toBe('SECURITY-SENSITIVE/forbidden');

@@ -1,5 +1,5 @@
 /**
- * CLI: zapisi verifikacijski worklist za ljudski pass (data/verification/dossiers/**).
+ * CLI: zapisi privatni worklist dokaznog AI-audita (JSON plus profilni dosjei).
  *
  *   npx vite-node scripts/verification-worklist.mts
  *   npm run worklist
@@ -10,7 +10,7 @@
  * ranija .mjs inacica je zato imala vlastitu kopiju merge semantike i nije se mogla uvesti u
  * vitest, pa je commitani izlaz tiho zastario.
  *
- * Skripta NISTA ne proglasava verificiranim; samo priprema dosje da covjek ne kopa po PDF-u.
+ * Skripta ne potvrduje pravila. Valjan status AI-audita mora doci iz deterministickog validatora.
  */
 import { mkdirSync, writeFileSync, readdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +23,7 @@ import {
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { computeWorklist } from '../src/verification/worklist';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
+import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -33,7 +34,10 @@ const profiles = [
 const registered = new Set(profiles.map((p) => p.id));
 const orphans = DRAFT_PROFILE_IDS.filter((id) => !registered.has(id));
 
-const report = computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[], orphans);
+const evidenceContext = await loadRepositoryAiEvidenceContext(root, profiles, SOURCE_REGISTRY as SourceEntry[]);
+const report = computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[], orphans, {
+  aiEvidenceResults: evidenceContext.resultsByRule,
+});
 
 const dossierDir = join(root, 'data', 'verification', 'dossiers');
 mkdirSync(dossierDir, { recursive: true });
@@ -48,13 +52,13 @@ for (const [rel, content] of Object.entries(report.files)) {
 const stale = readdirSync(dossierDir).filter((f) => f.endsWith('.md') && !written.has(f));
 for (const f of stale) rmSync(join(dossierDir, f));
 
-console.log('=== Verifikacijski worklist ===');
+console.log('=== Worklist dokaznog AI-audita ===');
 console.log(
   `profila sa scored: ${report.totals.profilesWithScored}, scored ukupno: ${report.totals.scoredTotal}`,
 );
-console.log(
-  `ljudski potvrdjeno: ${report.totals.human}, za audit (bulk): ${report.totals.bulk}, needs-recheck: ${report.totals.recheck}`,
-);
+console.log(`pravila: ${report.totals.ruleCount}; AI-evidence valjano: ${report.totals.aiEvidenceVerified}; ceka dokaz: ${report.totals.needsAiEvidence}; legacy ljudski: ${report.totals.humanVerified}; nebodovana: ${report.totals.notScored}`);
+console.log(`AI paketa lokalno revalidirano: ${Object.keys(evidenceContext.resultsByRule).length}; nevaljano: ${Object.values(evidenceContext.resultsByRule).filter((result) => !result.valid).length}`);
 console.log(`dosjea zapisano: ${report.totals.dossiersWritten}${stale.length ? `, uklonjeno: ${stale.length}` : ''}`);
+console.log('JSON: data/verification/ai-evidence-worklist.json');
 if (orphans.length) console.log(`UPOZORENJE: draft bez profila u registru: ${orphans.join(', ')}`);
 console.log('master: data/verification/dossiers/INDEX.md');

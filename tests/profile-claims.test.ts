@@ -45,6 +45,10 @@ function expectedByProfile(): Record<string, ClaimLevel> {
 }
 
 describe('profile-claims.json: drift prema ledgeru', () => {
+  it('objavljuje masterove A profile iz svjezeg ledgera', () => {
+    expect(art.counts.A).toBe(32);
+    expect(rows.filter((row) => row.claim === 'A')).toHaveLength(38);
+  });
   it('pecena mapa je identicna izracunu iz ledgera', () => {
     // Hint u obliku `inace: npm run ...` je ono sto detektor registra projekcija cita
     // (tests/projection-registry-coverage.test.ts); bez njega je ova projekcija bila nevidljiva.

@@ -1,31 +1,167 @@
-# Verifikacijski worklist (ljudski pass)
+# Worklist dokaznog AI-audita
 
-Audit masovno odobrenih (owner-bulk-approval) scored pravila. Otvori dosje profila, provjeri svako pravilo protiv izvora na lokatoru, pa u konzoli/rucno postavi verifiedBy=svoje ime.
+Svako profilno pravilo ima jedan dokazni status. Nema ljudskog reda odobravanja; legacy batch oznake nisu dokaz.
 
-Profila sa scored: 369. Scored ukupno: 2218.
-Vec ljudski potvrdjeno: 2180. Za audit (bulk): 38. Needs-recheck: 19. Dosjea zapisano: 21.
+Pravila ukupno: 2683; AI dokaz prihvaćen: 0; čekaju dokaz: 894; legacy ljudski dokaz: 1382; nebodovana/advisory: 388.
 
-| Profil | Za audit (bulk) | Ljudski OK | Scored | Recheck | Dosje |
-|---|---:|---:|---:|---:|---|
-| effectus-seminarski | 10 | 0 | 10 | 0 | [effectus-seminarski.md](effectus-seminarski.md) |
-| kif-specijalisticki | 9 | 0 | 9 | 0 | [kif-specijalisticki.md](kif-specijalisticki.md) |
-| efos-doktorski | 5 | 0 | 5 | 0 | [efos-doktorski.md](efos-doktorski.md) |
-| efos-specijalisticki | 5 | 0 | 5 | 0 | [efos-specijalisticki.md](efos-specijalisticki.md) |
-| pravri-specijalisticki | 5 | 0 | 5 | 0 | [pravri-specijalisticki.md](pravri-specijalisticki.md) |
-| kif-diplomski | 2 | 8 | 10 | 0 | [kif-diplomski.md](kif-diplomski.md) |
-| effectus-diplomski | 1 | 8 | 9 | 0 | [effectus-diplomski.md](effectus-diplomski.md) |
-| effectus-zavrsni | 1 | 8 | 9 | 0 | [effectus-zavrsni.md](effectus-zavrsni.md) |
-| ffst-diplomski | 0 | 6 | 6 | 1 | [ffst-diplomski.md](ffst-diplomski.md) |
-| ffst-zavrsni | 0 | 6 | 6 | 1 | [ffst-zavrsni.md](ffst-zavrsni.md) |
-| medri-sanitarno-diplomski | 0 | 0 | 0 | 7 | [medri-sanitarno-diplomski.md](medri-sanitarno-diplomski.md) |
-| unisb-btho-diplomski | 0 | 4 | 4 | 1 | [unisb-btho-diplomski.md](unisb-btho-diplomski.md) |
-| unisb-btho-zavrsni | 0 | 4 | 4 | 1 | [unisb-btho-zavrsni.md](unisb-btho-zavrsni.md) |
-| unisb-odhz-diplomski | 0 | 4 | 4 | 1 | [unisb-odhz-diplomski.md](unisb-odhz-diplomski.md) |
-| unisb-odhz-zavrsni | 0 | 4 | 4 | 1 | [unisb-odhz-zavrsni.md](unisb-odhz-zavrsni.md) |
-| unisb-sfsb-diplomski | 0 | 4 | 4 | 1 | [unisb-sfsb-diplomski.md](unisb-sfsb-diplomski.md) |
-| unisb-sfsb-zavrsni | 0 | 4 | 4 | 1 | [unisb-sfsb-zavrsni.md](unisb-sfsb-zavrsni.md) |
-| unisb-teho-diplomski | 0 | 4 | 4 | 1 | [unisb-teho-diplomski.md](unisb-teho-diplomski.md) |
-| unisb-teho-zavrsni | 0 | 4 | 4 | 1 | [unisb-teho-zavrsni.md](unisb-teho-zavrsni.md) |
-| vuka-strojarski-diplomski | 0 | 0 | 0 | 1 | [vuka-strojarski-diplomski.md](vuka-strojarski-diplomski.md) |
-| vuka-strojarski-zavrsni | 0 | 0 | 0 | 1 | [vuka-strojarski-zavrsni.md](vuka-strojarski-zavrsni.md) |
-
+| Profil | Pravila koja traže dokaz | Dosje |
+|---|---:|---|
+| adu-montaza-diplomski | 6 | [adu-montaza-diplomski.md](adu-montaza-diplomski.md) |
+| adu-produkcija-diplomski | 1 | [adu-produkcija-diplomski.md](adu-produkcija-diplomski.md) |
+| alu-grafika-diplomski | 1 | [alu-grafika-diplomski.md](alu-grafika-diplomski.md) |
+| alu-kiparstvo-diplomski | 3 | [alu-kiparstvo-diplomski.md](alu-kiparstvo-diplomski.md) |
+| alu-konzerviranje-diplomski | 8 | [alu-konzerviranje-diplomski.md](alu-konzerviranje-diplomski.md) |
+| alu-slikarstvo-diplomski | 2 | [alu-slikarstvo-diplomski.md](alu-slikarstvo-diplomski.md) |
+| aspira-diplomski | 7 | [aspira-diplomski.md](aspira-diplomski.md) |
+| aspira-diplomski-en | 7 | [aspira-diplomski-en.md](aspira-diplomski-en.md) |
+| aspira-zavrsni | 7 | [aspira-zavrsni.md](aspira-zavrsni.md) |
+| aspira-zavrsni-en | 7 | [aspira-zavrsni-en.md](aspira-zavrsni-en.md) |
+| bak-diplomski | 6 | [bak-diplomski.md](bak-diplomski.md) |
+| bak-zavrsni | 6 | [bak-zavrsni.md](bak-zavrsni.md) |
+| biolos-diplomski | 6 | [biolos-diplomski.md](biolos-diplomski.md) |
+| biolos-zavrsni | 6 | [biolos-zavrsni.md](biolos-zavrsni.md) |
+| dizajn-diplomski | 1 | [dizajn-diplomski.md](dizajn-diplomski.md) |
+| effectus-diplomski | 1 | [effectus-diplomski.md](effectus-diplomski.md) |
+| effectus-seminarski | 10 | [effectus-seminarski.md](effectus-seminarski.md) |
+| effectus-zavrsni | 1 | [effectus-zavrsni.md](effectus-zavrsni.md) |
+| efos-doktorski | 5 | [efos-doktorski.md](efos-doktorski.md) |
+| efos-opci-akademski-rad | 5 | [efos-opci-akademski-rad.md](efos-opci-akademski-rad.md) |
+| efos-specijalisticki | 5 | [efos-specijalisticki.md](efos-specijalisticki.md) |
+| efri-specijalisticki | 8 | [efri-specijalisticki.md](efri-specijalisticki.md) |
+| efst-opci-akademski-rad | 5 | [efst-opci-akademski-rad.md](efst-opci-akademski-rad.md) |
+| fbf-specijalisticki | 1 | [fbf-specijalisticki.md](fbf-specijalisticki.md) |
+| fdmz-diplomski | 6 | [fdmz-diplomski.md](fdmz-diplomski.md) |
+| fesb-diplomski | 2 | [fesb-diplomski.md](fesb-diplomski.md) |
+| fesb-zavrsni | 2 | [fesb-zavrsni.md](fesb-zavrsni.md) |
+| ffos-germanistika-diplomski | 4 | [ffos-germanistika-diplomski.md](ffos-germanistika-diplomski.md) |
+| ffos-germanistika-zavrsni | 4 | [ffos-germanistika-zavrsni.md](ffos-germanistika-zavrsni.md) |
+| ffos-psihologija-diplomski | 6 | [ffos-psihologija-diplomski.md](ffos-psihologija-diplomski.md) |
+| ffos-psihologija-zavrsni | 5 | [ffos-psihologija-zavrsni.md](ffos-psihologija-zavrsni.md) |
+| ffri-diplomski | 1 | [ffri-diplomski.md](ffri-diplomski.md) |
+| ffri-germanistika-diplomski | 7 | [ffri-germanistika-diplomski.md](ffri-germanistika-diplomski.md) |
+| ffri-germanistika-zavrsni | 7 | [ffri-germanistika-zavrsni.md](ffri-germanistika-zavrsni.md) |
+| ffri-kroatistika-zavrsni | 8 | [ffri-kroatistika-zavrsni.md](ffri-kroatistika-zavrsni.md) |
+| ffri-kulturalni-diplomski | 7 | [ffri-kulturalni-diplomski.md](ffri-kulturalni-diplomski.md) |
+| ffri-povum-diplomski | 7 | [ffri-povum-diplomski.md](ffri-povum-diplomski.md) |
+| ffri-povum-zavrsni | 7 | [ffri-povum-zavrsni.md](ffri-povum-zavrsni.md) |
+| ffri-psihologija-diplomski | 5 | [ffri-psihologija-diplomski.md](ffri-psihologija-diplomski.md) |
+| ffri-zavrsni | 1 | [ffri-zavrsni.md](ffri-zavrsni.md) |
+| ffst-diplomski | 7 | [ffst-diplomski.md](ffst-diplomski.md) |
+| ffst-zavrsni | 7 | [ffst-zavrsni.md](ffst-zavrsni.md) |
+| ffzg-filozofija-diplomski | 1 | [ffzg-filozofija-diplomski.md](ffzg-filozofija-diplomski.md) |
+| ffzg-svedski-zavrsni | 5 | [ffzg-svedski-zavrsni.md](ffzg-svedski-zavrsni.md) |
+| fizos-diplomski | 6 | [fizos-diplomski.md](fizos-diplomski.md) |
+| fpzg-doktorski-politologija | 7 | [fpzg-doktorski-politologija.md](fpzg-doktorski-politologija.md) |
+| fpzg-mes-master-thesis | 13 | [fpzg-mes-master-thesis.md](fpzg-mes-master-thesis.md) |
+| fpzg-nacionalna-sigurnost-diplomski | 14 | [fpzg-nacionalna-sigurnost-diplomski.md](fpzg-nacionalna-sigurnost-diplomski.md) |
+| fpzg-novinarstvo-diplomski | 14 | [fpzg-novinarstvo-diplomski.md](fpzg-novinarstvo-diplomski.md) |
+| fpzg-novinarstvo-zavrsni-av | 1 | [fpzg-novinarstvo-zavrsni-av.md](fpzg-novinarstvo-zavrsni-av.md) |
+| fpzg-novinarstvo-zavrsni-tekst | 14 | [fpzg-novinarstvo-zavrsni-tekst.md](fpzg-novinarstvo-zavrsni-tekst.md) |
+| fpzg-opci-akademski-rad | 10 | [fpzg-opci-akademski-rad.md](fpzg-opci-akademski-rad.md) |
+| fpzg-politologija-diplomski | 14 | [fpzg-politologija-diplomski.md](fpzg-politologija-diplomski.md) |
+| fpzg-politologija-zavrsni | 14 | [fpzg-politologija-zavrsni.md](fpzg-politologija-zavrsni.md) |
+| fpzg-specijalisticki-odnosi-s-javnoscu | 14 | [fpzg-specijalisticki-odnosi-s-javnoscu.md](fpzg-specijalisticki-odnosi-s-javnoscu.md) |
+| fpzg-specijalisticki-prilagodba-eu | 14 | [fpzg-specijalisticki-prilagodba-eu.md](fpzg-specijalisticki-prilagodba-eu.md) |
+| fpzg-specijalisticki-sigurnosna-politika-rh | 14 | [fpzg-specijalisticki-sigurnosna-politika-rh.md](fpzg-specijalisticki-sigurnosna-politika-rh.md) |
+| fpzg-specijalisticki-vanjska-politika-diplomacija | 14 | [fpzg-specijalisticki-vanjska-politika-diplomacija.md](fpzg-specijalisticki-vanjska-politika-diplomacija.md) |
+| fpzpu-diplomski | 7 | [fpzpu-diplomski.md](fpzpu-diplomski.md) |
+| fpzpu-zavrsni | 7 | [fpzpu-zavrsni.md](fpzpu-zavrsni.md) |
+| ftrr-diplomski | 5 | [ftrr-diplomski.md](ftrr-diplomski.md) |
+| ftrr-zavrsni | 5 | [ftrr-zavrsni.md](ftrr-zavrsni.md) |
+| gradri-diplomski | 1 | [gradri-diplomski.md](gradri-diplomski.md) |
+| gradri-zavrsni | 1 | [gradri-zavrsni.md](gradri-zavrsni.md) |
+| hks-diplomski | 3 | [hks-diplomski.md](hks-diplomski.md) |
+| kbfdj-diplomski | 5 | [kbfdj-diplomski.md](kbfdj-diplomski.md) |
+| kif-diplomski | 2 | [kif-diplomski.md](kif-diplomski.md) |
+| kif-specijalisticki | 9 | [kif-specijalisticki.md](kif-specijalisticki.md) |
+| mathos-diplomski | 3 | [mathos-diplomski.md](mathos-diplomski.md) |
+| mathos-zavrsni | 3 | [mathos-zavrsni.md](mathos-zavrsni.md) |
+| medri-doktorski | 6 | [medri-doktorski.md](medri-doktorski.md) |
+| medri-sanitarno-diplomski | 7 | [medri-sanitarno-diplomski.md](medri-sanitarno-diplomski.md) |
+| mef-doktorski | 1 | [mef-doktorski.md](mef-doktorski.md) |
+| mefst-doktorski | 5 | [mefst-doktorski.md](mefst-doktorski.md) |
+| mefst-tribe-doktorski | 2 | [mefst-tribe-doktorski.md](mefst-tribe-doktorski.md) |
+| mev-diplomski | 7 | [mev-diplomski.md](mev-diplomski.md) |
+| mev-zavrsni-drustveni | 7 | [mev-zavrsni-drustveni.md](mev-zavrsni-drustveni.md) |
+| par-diplomski | 1 | [par-diplomski.md](par-diplomski.md) |
+| par-zavrsni | 1 | [par-zavrsni.md](par-zavrsni.md) |
+| pmf-biologija-zavrsni | 7 | [pmf-biologija-zavrsni.md](pmf-biologija-zavrsni.md) |
+| pmf-geologija-zavrsni | 5 | [pmf-geologija-zavrsni.md](pmf-geologija-zavrsni.md) |
+| pravo-doktorski-pravne-znanosti | 10 | [pravo-doktorski-pravne-znanosti.md](pravo-doktorski-pravne-znanosti.md) |
+| pravo-integrirani-diplomski | 13 | [pravo-integrirani-diplomski.md](pravo-integrirani-diplomski.md) |
+| pravo-javna-uprava-diplomski | 13 | [pravo-javna-uprava-diplomski.md](pravo-javna-uprava-diplomski.md) |
+| pravo-javna-uprava-prijediplomski | 13 | [pravo-javna-uprava-prijediplomski.md](pravo-javna-uprava-prijediplomski.md) |
+| pravo-opci-pravni-akademski-rad | 10 | [pravo-opci-pravni-akademski-rad.md](pravo-opci-pravni-akademski-rad.md) |
+| pravo-porezni-prijediplomski | 13 | [pravo-porezni-prijediplomski.md](pravo-porezni-prijediplomski.md) |
+| pravo-socijalna-politika-diplomski | 3 | [pravo-socijalna-politika-diplomski.md](pravo-socijalna-politika-diplomski.md) |
+| pravo-socijalni-rad-diplomski | 3 | [pravo-socijalni-rad-diplomski.md](pravo-socijalni-rad-diplomski.md) |
+| pravo-specijalisticki-pravni-opci | 10 | [pravo-specijalisticki-pravni-opci.md](pravo-specijalisticki-pravni-opci.md) |
+| pravri-opci-akademski-rad | 5 | [pravri-opci-akademski-rad.md](pravri-opci-akademski-rad.md) |
+| pravri-specijalisticki | 5 | [pravri-specijalisticki.md](pravri-specijalisticki.md) |
+| radno-socijalno-pravo | 5 | [radno-socijalno-pravo.md](radno-socijalno-pravo.md) |
+| sociologija | 6 | [sociologija.md](sociologija.md) |
+| sois-ft-vojno-inzenjerstvo-diplomski | 7 | [sois-ft-vojno-inzenjerstvo-diplomski.md](sois-ft-vojno-inzenjerstvo-diplomski.md) |
+| sois-ft-vojno-inzenjerstvo-zavrsni | 7 | [sois-ft-vojno-inzenjerstvo-zavrsni.md](sois-ft-vojno-inzenjerstvo-zavrsni.md) |
+| sois-ft-vojno-pomorstvo-diplomski | 7 | [sois-ft-vojno-pomorstvo-diplomski.md](sois-ft-vojno-pomorstvo-diplomski.md) |
+| sois-ft-vojno-vodjenje-diplomski | 7 | [sois-ft-vojno-vodjenje-diplomski.md](sois-ft-vojno-vodjenje-diplomski.md) |
+| sois-ft-vojno-vodjenje-zavrsni | 7 | [sois-ft-vojno-vodjenje-zavrsni.md](sois-ft-vojno-vodjenje-zavrsni.md) |
+| trgovacko-pravo | 6 | [trgovacko-pravo.md](trgovacko-pravo.md) |
+| ttf-dizajn-diplomski | 7 | [ttf-dizajn-diplomski.md](ttf-dizajn-diplomski.md) |
+| ttf-dizajn-zavrsni | 7 | [ttf-dizajn-zavrsni.md](ttf-dizajn-zavrsni.md) |
+| uaos-diplomski | 5 | [uaos-diplomski.md](uaos-diplomski.md) |
+| uaos-zavrsni | 5 | [uaos-zavrsni.md](uaos-zavrsni.md) |
+| unidu-elektro-diplomski | 1 | [unidu-elektro-diplomski.md](unidu-elektro-diplomski.md) |
+| unidu-komunikologija-zavrsni | 7 | [unidu-komunikologija-zavrsni.md](unidu-komunikologija-zavrsni.md) |
+| unidu-marikultura-diplomski | 5 | [unidu-marikultura-diplomski.md](unidu-marikultura-diplomski.md) |
+| unidu-umjetnost-zavrsni | 6 | [unidu-umjetnost-zavrsni.md](unidu-umjetnost-zavrsni.md) |
+| unisb-btho-diplomski | 5 | [unisb-btho-diplomski.md](unisb-btho-diplomski.md) |
+| unisb-btho-zavrsni | 5 | [unisb-btho-zavrsni.md](unisb-btho-zavrsni.md) |
+| unisb-odhz-diplomski | 5 | [unisb-odhz-diplomski.md](unisb-odhz-diplomski.md) |
+| unisb-odhz-zavrsni | 5 | [unisb-odhz-zavrsni.md](unisb-odhz-zavrsni.md) |
+| unisb-sfsb-diplomski | 5 | [unisb-sfsb-diplomski.md](unisb-sfsb-diplomski.md) |
+| unisb-sfsb-zavrsni | 5 | [unisb-sfsb-zavrsni.md](unisb-sfsb-zavrsni.md) |
+| unisb-teho-diplomski | 5 | [unisb-teho-diplomski.md](unisb-teho-diplomski.md) |
+| unisb-teho-zavrsni | 5 | [unisb-teho-zavrsni.md](unisb-teho-zavrsni.md) |
+| unizd-arheologija-diplomski | 3 | [unizd-arheologija-diplomski.md](unizd-arheologija-diplomski.md) |
+| unizd-arheologija-zavrsni | 3 | [unizd-arheologija-zavrsni.md](unizd-arheologija-zavrsni.md) |
+| unizd-ekologija-diplomski | 5 | [unizd-ekologija-diplomski.md](unizd-ekologija-diplomski.md) |
+| unizd-ekologija-zavrsni | 5 | [unizd-ekologija-zavrsni.md](unizd-ekologija-zavrsni.md) |
+| unizd-etnologija-diplomski | 6 | [unizd-etnologija-diplomski.md](unizd-etnologija-diplomski.md) |
+| unizd-geografija-diplomski | 4 | [unizd-geografija-diplomski.md](unizd-geografija-diplomski.md) |
+| unizd-germanistika-diplomski | 6 | [unizd-germanistika-diplomski.md](unizd-germanistika-diplomski.md) |
+| unizd-germanistika-zavrsni | 6 | [unizd-germanistika-zavrsni.md](unizd-germanistika-zavrsni.md) |
+| unizd-hispanistika-diplomski | 5 | [unizd-hispanistika-diplomski.md](unizd-hispanistika-diplomski.md) |
+| unizd-informacijske-diplomski | 4 | [unizd-informacijske-diplomski.md](unizd-informacijske-diplomski.md) |
+| unizd-informacijske-zavrsni | 4 | [unizd-informacijske-zavrsni.md](unizd-informacijske-zavrsni.md) |
+| unizd-klasicna-filologija-diplomski | 6 | [unizd-klasicna-filologija-diplomski.md](unizd-klasicna-filologija-diplomski.md) |
+| unizd-klasicna-filologija-zavrsni | 6 | [unizd-klasicna-filologija-zavrsni.md](unizd-klasicna-filologija-zavrsni.md) |
+| unizd-pomorski-diplomski | 5 | [unizd-pomorski-diplomski.md](unizd-pomorski-diplomski.md) |
+| unizd-pomorski-zavrsni | 5 | [unizd-pomorski-zavrsni.md](unizd-pomorski-zavrsni.md) |
+| unizd-povijest-diplomski | 4 | [unizd-povijest-diplomski.md](unizd-povijest-diplomski.md) |
+| unizd-povijest-umj-diplomski | 6 | [unizd-povijest-umj-diplomski.md](unizd-povijest-umj-diplomski.md) |
+| unizd-povijest-zavrsni | 4 | [unizd-povijest-zavrsni.md](unizd-povijest-zavrsni.md) |
+| unizd-psihologija-diplomski | 5 | [unizd-psihologija-diplomski.md](unizd-psihologija-diplomski.md) |
+| unizd-sociologija-diplomski | 8 | [unizd-sociologija-diplomski.md](unizd-sociologija-diplomski.md) |
+| unizd-ucitelji-diplomski | 6 | [unizd-ucitelji-diplomski.md](unizd-ucitelji-diplomski.md) |
+| unizd-zdravstvo-diplomski | 3 | [unizd-zdravstvo-diplomski.md](unizd-zdravstvo-diplomski.md) |
+| unizd-zdravstvo-zavrsni | 3 | [unizd-zdravstvo-zavrsni.md](unizd-zdravstvo-zavrsni.md) |
+| vef-specijalisticki | 8 | [vef-specijalisticki.md](vef-specijalisticki.md) |
+| veleknin-diplomski | 6 | [veleknin-diplomski.md](veleknin-diplomski.md) |
+| vevu-diplomski | 6 | [vevu-diplomski.md](vevu-diplomski.md) |
+| vguk-diplomski | 6 | [vguk-diplomski.md](vguk-diplomski.md) |
+| vguk-zavrsni | 6 | [vguk-zavrsni.md](vguk-zavrsni.md) |
+| vss-diplomski | 8 | [vss-diplomski.md](vss-diplomski.md) |
+| vss-zavrsni | 8 | [vss-zavrsni.md](vss-zavrsni.md) |
+| vub-zavrsni-sestrinstvo | 8 | [vub-zavrsni-sestrinstvo.md](vub-zavrsni-sestrinstvo.md) |
+| vub-zavrsni-tehnicki | 7 | [vub-zavrsni-tehnicki.md](vub-zavrsni-tehnicki.md) |
+| vuka-lovstvo-zavrsni | 2 | [vuka-lovstvo-zavrsni.md](vuka-lovstvo-zavrsni.md) |
+| vuka-poslovni-diplomski | 4 | [vuka-poslovni-diplomski.md](vuka-poslovni-diplomski.md) |
+| vuka-poslovni-opci-akademski-rad | 4 | [vuka-poslovni-opci-akademski-rad.md](vuka-poslovni-opci-akademski-rad.md) |
+| vuka-poslovni-zavrsni | 4 | [vuka-poslovni-zavrsni.md](vuka-poslovni-zavrsni.md) |
+| vuka-prehrambena-zavrsni | 2 | [vuka-prehrambena-zavrsni.md](vuka-prehrambena-zavrsni.md) |
+| vuka-sigurnost-diplomski | 1 | [vuka-sigurnost-diplomski.md](vuka-sigurnost-diplomski.md) |
+| vuka-sigurnost-zavrsni | 1 | [vuka-sigurnost-zavrsni.md](vuka-sigurnost-zavrsni.md) |
+| vuka-strojarski-diplomski | 1 | [vuka-strojarski-diplomski.md](vuka-strojarski-diplomski.md) |
+| vuka-strojarski-zavrsni | 1 | [vuka-strojarski-zavrsni.md](vuka-strojarski-zavrsni.md) |
+| vus-diplomski | 4 | [vus-diplomski.md](vus-diplomski.md) |
+| vus-zavrsni | 4 | [vus-zavrsni.md](vus-zavrsni.md) |

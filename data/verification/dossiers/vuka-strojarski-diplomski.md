@@ -1,10 +1,17 @@
-# Verifikacijski dosje: vuka-strojarski-diplomski
+# AI-evidence worklist: vuka-strojarski-diplomski
 
-Covjek potvrdjuje, AI ne proglasava verified. Otvori PDF snapshot na lokatoru (sourcePage), provjeri VRIJEDNOST protiv DOSLOVNOG citata, pa postavi verifiedBy=svoje ime (i po zelji reviewedBy).
+Nema ljudskog reda odobravanja. Pravilo izlazi iz worklista tek uz valjan deterministicki dokazni paket.
 
-Scored ukupno: 0. Vec ljudski potvrdjeno: 0. Za audit (bulk): 0. Needs-recheck: 1.
+Pravila za rad: 1.
 
-## Needs-recheck (1)
-
-- `margins` - Margine: izvor vuka-strojarski-upute-2025, citat "Lijeva margina 3.0 cm Gornja margina 3.0 cm ... Donja margina 3.0 cm Desna margina 3.0 cm"
-
+## Margine
+- Pravilo: `vuka-strojarski-diplomski--margins`
+- Status: `needs-recheck`
+- Razlozi: `source-or-evidence-recheck`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: vuka-strojarski-upute-2025
+- Autoritet: general
+- Lokator: predlozak korica, oznake 'Lijeva/Gornja/Donja/Desna margina'
+- Snapshot: `data/sources/vuka/vuka-strojarski-upute-2025.pdf`
+- Vrijednost: `{"top":3,"right":3,"bottom":3,"left":3}`
+- Citat: "Lijeva margina 3.0 cm Gornja margina 3.0 cm ... Donja margina 3.0 cm Desna margina 3.0 cm"

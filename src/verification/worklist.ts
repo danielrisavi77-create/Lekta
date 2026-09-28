@@ -1,15 +1,13 @@
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../profiles/profile-schema';
 import { computePublishedRules } from './published-rules';
+import type { AiEvidenceAuditResult } from './ai-evidence-audit';
 
 /**
- * Verifikacijski worklist za LJUDSKI pass preko cijelog porta (P0-1 u
+ * Verifikacijski worklist za dokazni AI-audit preko cijelog registra (P0-1 u
  * docs/PLAN_POTPUNA_POKRIVENOST.md).
  *
- * Sto radi: za svaki profil odvaja bodovana pravila koja je covjek POJEDINACNO potvrdio od
- * onih odobrenih MASOVNO (`verifiedBy === 'owner-bulk-approval'`), pa za druge pise dosje s
- * vrijednoscu, izvorom, lokatorom, doslovnim citatom i putanjom snapshota. Covjek otvori PDF
- * na lokatoru, provjeri vrijednost protiv citata i postavi verifiedBy na svoje ime. Ovdje se
- * NISTA ne proglasava verificiranim.
+ * Svako pravilo dobiva tocno jedan status i radnju. Stari batch unosi nisu dokaz; prihvaceni
+ * AI dokaz mora proci deterministicki validator. Ljudski audit nije skriveni blocker.
  *
  * Zasto je ovo TS modul, a ne vise skripta: commitani izlaz je bio USTAJAO (tvrdio je 2150
  * bodovanih i 26 pravila za audit, a ziva regeneracija daje 2208 i 38 kroz 8 profila). Ranija
@@ -20,7 +18,7 @@ import { computePublishedRules } from './published-rules';
  *
  * Semantika brojeva je namjerno drugacija od coverage matrice i to je tocno:
  *   - coverage `scored` broji SAMO strojno provjerljiva pravila (nazivnik omjera),
- *   - ovdje `scored` broji SVA bodovana pravila, jer ih covjek sva mora proci.
+ *   - ovdje `scored` broji SVA bodovana pravila, jer svako treba valjan dokazni status.
  * Razlika (danas 73: citation-style, required-sections, reference-count) nije nepomirena, nego
  * dvije populacije; vidi `scoredNonMachineCheckable` u coverage-report.ts.
  */
@@ -30,14 +28,18 @@ export const BULK_APPROVAL = 'owner-bulk-approval';
 
 export interface WorklistRow {
   profileId: string;
-  /** Bodovana pravila odobrena masovno (cekaju ljudski audit). */
+  /** Bodovana pravila iz legacy masovnog odobrenja. */
   bulk: number;
-  /** Bodovana pravila koja je covjek pojedinacno potvrdio. */
+  /** Bodovana pravila iz legacy pojedinacne potvrde. */
   human: number;
   /** Sva bodovana pravila (bulk + human + eventualno bez verifiedBy). */
   scored: number;
   /** Pravila oborena u ponovnu provjeru (ne boduju se dok se ne isprave). */
   recheck: number;
+  /** Pravila koja worklist još ne smatra dokazno riješenima. */
+  pendingEvidence: number;
+  /** Novi AI paket smije povisiti tvrdnju tek kad su sva njegova pravila revalidirana. */
+  hasAiAuditedRules: boolean;
 }
 
 export interface WorklistTotals {
@@ -47,11 +49,43 @@ export interface WorklistTotals {
   bulk: number;
   recheck: number;
   dossiersWritten: number;
+  ruleCount: number;
+  aiEvidenceVerified: number;
+  needsAiEvidence: number;
+  humanVerified: number;
+  notScored: number;
+}
+
+export type RuleWorklistStatus =
+  | 'not-scored'
+  | 'human-verified'
+  | 'ai-evidence-verified'
+  | 'needs-ai-evidence'
+  | 'needs-recheck';
+
+export interface RuleWorklistRow {
+  profileId: string;
+  ruleId: string;
+  sourceId: string | null;
+  status: RuleWorklistStatus;
+  reasonCodes: string[];
+  action: 'none' | 'run-ai-evidence-audit';
+}
+
+export interface WorklistOptions {
+  /** Rezultati iz validatora, vezani uz profil i pravilo nakon razrješenja snapshota/manifesta. */
+  aiEvidenceResults?: Readonly<Record<string, AiEvidenceAuditResult>>;
+}
+
+export function ruleEvidenceKey(profileId: string, ruleId: string): string {
+  return JSON.stringify([profileId, ruleId]);
 }
 
 export interface WorklistReport {
   /** Svi profili sa staging pravilima, sortirani po profileId. */
   rows: WorklistRow[];
+  /** Svako registrirano pravilo dobiva točno jedan dokazni status i sljedeću radnju. */
+  ruleItems: RuleWorklistRow[];
   totals: WorklistTotals;
   /**
    * profileId-jevi koji imaju draft datoteku ali NISU u registru profila. Danas prazno; da
@@ -71,81 +105,61 @@ function snapshotPathFor(entry: RuleEntry, sourceById: Map<string, SourceEntry>)
 
 function renderDossier(
   profileId: string,
-  scored: RuleEntry[],
-  bulk: RuleEntry[],
-  human: RuleEntry[],
-  recheck: RuleEntry[],
+  items: RuleWorklistRow[],
+  entriesByRuleId: Map<string, RuleEntry>,
   sourceById: Map<string, SourceEntry>,
 ): string {
   const out: string[] = [];
-  out.push(`# Verifikacijski dosje: ${profileId}`);
+  out.push(`# AI-evidence worklist: ${profileId}`);
   out.push('');
-  out.push(
-    'Covjek potvrdjuje, AI ne proglasava verified. Otvori PDF snapshot na lokatoru (sourcePage), provjeri VRIJEDNOST protiv DOSLOVNOG citata, pa postavi verifiedBy=svoje ime (i po zelji reviewedBy).',
-  );
+  out.push('Nema ljudskog reda odobravanja. Pravilo izlazi iz worklista tek uz valjan deterministicki dokazni paket.');
   out.push('');
-  out.push(
-    `Scored ukupno: ${scored.length}. Vec ljudski potvrdjeno: ${human.length}. Za audit (bulk): ${bulk.length}. Needs-recheck: ${recheck.length}.`,
-  );
+  out.push(`Pravila za rad: ${items.length}.`);
   out.push('');
-
-  if (bulk.length) {
-    out.push(`## Za audit - masovno odobreno (${bulk.length})`);
-    out.push('');
-    for (const e of bulk) {
-      out.push(`### ${e.checkId} - ${e.label ?? e.ruleId}`);
-      out.push(`- Vrijednost: \`${JSON.stringify(e.value)}\``);
-      out.push(`- Autoritet: ${e.authority}`);
-      out.push(`- Izvor: ${e.sourceId} - ${e.sourcePage}`);
-      out.push(`- Snapshot: \`${snapshotPathFor(e, sourceById)}\``);
-      out.push(`- Citat: "${e.quote}"`);
-      out.push('');
-    }
-  }
-
-  if (recheck.length) {
-    out.push(`## Needs-recheck (${recheck.length})`);
-    out.push('');
-    for (const e of recheck) {
-      out.push(
-        `- \`${e.checkId}\` - ${e.label ?? e.ruleId}: izvor ${e.sourceId ?? '(nema)'}${e.quote ? `, citat "${e.quote}"` : ', bez citata - treba ponovno citanje izvora'}`,
-      );
+  for (const item of items) {
+    const entry = entriesByRuleId.get(item.ruleId);
+    out.push(`## ${entry?.label ?? item.ruleId}`);
+    out.push(`- Pravilo: \`${item.ruleId}\``);
+    out.push(`- Status: \`${item.status}\``);
+    out.push(`- Razlozi: ${item.reasonCodes.length ? item.reasonCodes.map((code) => `\`${code}\``).join(', ') : '(nema)'}`);
+    out.push(`- Radnja: \`${item.action}\``);
+    out.push(`- Izvor: ${item.sourceId ?? '(nema)'}`);
+    if (entry) {
+      out.push(`- Autoritet: ${entry.authority ?? '(nije postavljen)'}`);
+      out.push(`- Lokator: ${entry.sourcePage ?? '(nema)'}`);
+      out.push(`- Snapshot: \`${snapshotPathFor(entry, sourceById)}\``);
+      out.push(`- Vrijednost: \`${JSON.stringify(entry.value)}\``);
+      out.push(`- Citat: ${entry.quote ? `"${entry.quote}"` : '(nema)'}`);
     }
     out.push('');
   }
-
-  return out.join('\n') + '\n';
+  return out.join('\n');
 }
 
-function renderIndex(rows: WorklistRow[], totals: WorklistTotals, orphans: string[]): string {
+function renderIndex(items: RuleWorklistRow[], totals: WorklistTotals, orphans: string[]): string {
   const idx: string[] = [];
-  idx.push('# Verifikacijski worklist (ljudski pass)');
+  idx.push('# Worklist dokaznog AI-audita');
   idx.push('');
-  idx.push(
-    'Audit masovno odobrenih (owner-bulk-approval) scored pravila. Otvori dosje profila, provjeri svako pravilo protiv izvora na lokatoru, pa u konzoli/rucno postavi verifiedBy=svoje ime.',
-  );
+  idx.push('Svako profilno pravilo ima jedan dokazni status. Nema ljudskog reda odobravanja; legacy batch oznake nisu dokaz.');
   idx.push('');
-  idx.push(`Profila sa scored: ${totals.profilesWithScored}. Scored ukupno: ${totals.scoredTotal}.`);
-  idx.push(
-    `Vec ljudski potvrdjeno: ${totals.human}. Za audit (bulk): ${totals.bulk}. Needs-recheck: ${totals.recheck}. Dosjea zapisano: ${totals.dossiersWritten}.`,
-  );
+  idx.push(`Pravila ukupno: ${totals.ruleCount}; AI dokaz prihvaćen: ${totals.aiEvidenceVerified}; čekaju dokaz: ${totals.needsAiEvidence}; legacy ljudski dokaz: ${totals.humanVerified}; nebodovana/advisory: ${totals.notScored}.`);
   idx.push('');
   if (orphans.length) {
     // Tripwire: draft bez profila u registru znaci da se pravila vode mimo svakog izvjestaja.
     idx.push(`> Draft bez profila u registru (${orphans.length}): ${orphans.join(', ')}`);
     idx.push('');
   }
-  idx.push('| Profil | Za audit (bulk) | Ljudski OK | Scored | Recheck | Dosje |');
-  idx.push('|---|---:|---:|---:|---:|---|');
-  for (const r of rows
-    .filter((r) => r.bulk || r.recheck)
-    .sort((a, b) => b.bulk - a.bulk || (a.profileId < b.profileId ? -1 : 1))) {
-    idx.push(
-      `| ${r.profileId} | ${r.bulk} | ${r.human} | ${r.scored} | ${r.recheck} | [${r.profileId}.md](${r.profileId}.md) |`,
-    );
+  const byProfile = new Map<string, number>();
+  for (const item of items) {
+    if (item.action !== 'none') byProfile.set(item.profileId, (byProfile.get(item.profileId) ?? 0) + 1);
+  }
+  idx.push('| Profil | Pravila koja traže dokaz | Dosje |');
+  idx.push('|---|---:|---|');
+  for (const [profileId, count] of [...byProfile].sort(([a], [b]) => a.localeCompare(b))) {
+    idx.push(`| ${profileId} | ${count} | [${profileId}.md](${profileId}.md) |`);
   }
   idx.push('');
-  return idx.join('\n') + '\n';
+  return idx.join('\n');
 }
 
 /**
@@ -158,6 +172,7 @@ export function computeWorklist(
   profiles: ThesisProfile[],
   sources: SourceEntry[],
   orphanDraftProfileIds: string[] = [],
+  options: WorklistOptions = {},
 ): WorklistReport {
   const sourceById = new Map(sources.map((s) => [s.id, s]));
   const withEntries = profiles
@@ -165,6 +180,7 @@ export function computeWorklist(
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   const rows: WorklistRow[] = [];
+  const ruleItems: RuleWorklistRow[] = [];
   const files: Record<string, string> = {};
 
   for (const profile of withEntries) {
@@ -172,35 +188,96 @@ export function computeWorklist(
     const bulk = scored.filter((e) => e.verifiedBy === BULK_APPROVAL);
     const human = scored.filter((e) => e.verifiedBy && e.verifiedBy !== BULK_APPROVAL);
     const recheck = (profile.ruleEntries ?? []).filter((e) => e.status === 'needs-recheck');
+    let pendingEvidence = 0;
+    for (const entry of profile.ruleEntries ?? []) {
+      const key = ruleEvidenceKey(profile.id, entry.ruleId);
+      const audit = options.aiEvidenceResults?.[key];
+      let item: RuleWorklistRow;
+      if (entry.status === 'advisory' || entry.status === 'retired') {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'not-scored', reasonCodes: [], action: 'none' };
+      } else if (entry.status === 'needs-recheck') {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-recheck', reasonCodes: ['source-or-evidence-recheck'], action: 'run-ai-evidence-audit' };
+      } else if (entry.confirmedVia === 'ai-evidence-audit') {
+        const provenanceRecheck = entry.aiEvidence?.schemaVersion === 1
+          && entry.aiEvidence.model?.provider === 'OpenAI'
+          && entry.aiEvidence.model.model === 'GPT-5'
+          && entry.aiEvidence.model.version === 'runtime-version-not-exposed';
+        if (provenanceRecheck) {
+          item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null,
+            status: 'needs-ai-evidence', reasonCodes: ['provider-provenance-recheck'], action: 'run-ai-evidence-audit' };
+        } else if (entry.status === 'verified' && entry.aiEvidence && audit?.valid) {
+          item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'ai-evidence-verified', reasonCodes: [], action: 'none' };
+        } else {
+          const reasonCodes = audit && !audit.valid
+            ? audit.reasons.map((reason) => reason.code)
+            : ['ai-evidence-not-revalidated'];
+          item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-ai-evidence', reasonCodes, action: 'run-ai-evidence-audit' };
+        }
+      } else if (entry.confirmedVia === 'ai-1pass-batch' || entry.confirmedVia === 'ai-3pass-batch') {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-ai-evidence', reasonCodes: ['legacy-ai-batch-untrusted'], action: 'run-ai-evidence-audit' };
+      } else if (entry.verifiedBy === BULK_APPROVAL) {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-ai-evidence', reasonCodes: ['legacy-bulk-untrusted'], action: 'run-ai-evidence-audit' };
+      } else if (entry.status === 'verified' && entry.confirmedVia === 'human') {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-ai-evidence', reasonCodes: ['human-verification-not-ai-audited'], action: 'run-ai-evidence-audit' };
+      } else if (entry.status === 'verified' && isRuleEligibleForWorklist(entry, scored)) {
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'human-verified', reasonCodes: [], action: 'none' };
+      } else {
+        const reasonCodes = entry.sourceId == null ? ['source-missing'] : ['unverified-rule'];
+        item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-ai-evidence', reasonCodes, action: 'run-ai-evidence-audit' };
+      }
+      ruleItems.push(item);
+      if (item.action !== 'none') pendingEvidence += 1;
+    }
     rows.push({
       profileId: profile.id,
       bulk: bulk.length,
       human: human.length,
       scored: scored.length,
       recheck: recheck.length,
+      pendingEvidence,
+      hasAiAuditedRules: (profile.ruleEntries ?? []).some((entry) => entry.confirmedVia === 'ai-evidence-audit'),
     });
-    if (!bulk.length && !recheck.length) continue;
-    files[`${DOSSIER_DIR}/${profile.id}.md`] = renderDossier(
-      profile.id,
-      scored,
-      bulk,
-      human,
-      recheck,
-      sourceById,
-    );
   }
 
   const orphans = [...orphanDraftProfileIds].sort();
+  ruleItems.sort((a, b) => a.profileId.localeCompare(b.profileId) || a.ruleId.localeCompare(b.ruleId));
+
+  for (const profile of withEntries) {
+    const items = ruleItems.filter((item) => item.profileId === profile.id && item.action !== 'none');
+    if (!items.length) continue;
+    const entriesByRuleId = new Map((profile.ruleEntries ?? []).map((entry) => [entry.ruleId, entry]));
+    files[`${DOSSIER_DIR}/${profile.id}.md`] = renderDossier(profile.id, items, entriesByRuleId, sourceById);
+  }
+
   const totals: WorklistTotals = {
     profilesWithScored: rows.filter((r) => r.scored).length,
     scoredTotal: rows.reduce((n, r) => n + r.scored, 0),
     human: rows.reduce((n, r) => n + r.human, 0),
     bulk: rows.reduce((n, r) => n + r.bulk, 0),
     recheck: rows.reduce((n, r) => n + r.recheck, 0),
-    dossiersWritten: Object.keys(files).length,
+    dossiersWritten: Object.keys(files).filter((path) => path.endsWith('.md') && !path.endsWith('/INDEX.md')).length,
+    ruleCount: ruleItems.length,
+    aiEvidenceVerified: ruleItems.filter((item) => item.status === 'ai-evidence-verified').length,
+    needsAiEvidence: ruleItems.filter((item) => item.status === 'needs-ai-evidence').length,
+    humanVerified: ruleItems.filter((item) => item.status === 'human-verified').length,
+    notScored: ruleItems.filter((item) => item.status === 'not-scored').length,
   };
 
-  files[`${DOSSIER_DIR}/INDEX.md`] = renderIndex(rows, totals, orphans);
+  const statusCounts = ruleItems.reduce<Record<string, number>>((counts, item) => {
+    counts[item.status] = (counts[item.status] ?? 0) + 1;
+    return counts;
+  }, {});
+  files['data/verification/ai-evidence-worklist.json'] = `${JSON.stringify({
+    schemaVersion: 1,
+    ruleCount: ruleItems.length,
+    statusCounts,
+    rules: ruleItems,
+  }, null, 2)}\n`;
+  files[`${DOSSIER_DIR}/INDEX.md`] = renderIndex(ruleItems, totals, orphans);
 
-  return { rows, totals, orphanDraftProfileIds: orphans, files };
+  return { rows, ruleItems, totals, orphanDraftProfileIds: orphans, files };
+}
+
+function isRuleEligibleForWorklist(entry: RuleEntry, scored: RuleEntry[]): boolean {
+  return scored.some((candidate) => candidate.ruleId === entry.ruleId);
 }

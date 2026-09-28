@@ -10,11 +10,13 @@
  * 32 profila od 418.
  */
 import { describe, it, expect } from 'vitest';
-import { profileClaimFor, claimSentence, claimBadgeHtml } from '../src/ui/profile-claim';
+import { profileClaimFor, projectProfileClaim, claimSentence, claimBadgeHtml } from '../src/ui/profile-claim';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import artifact from '../data/profiles/profile-claims.json';
 import status from '../data/profiles/profile-status.json';
 import registry from '../data/profiles/verified-profiles.json';
+import completionLedger from '../docs/generated/completion-ledger.json';
+import corpusAttestation from '../data/verification/real-corpus-attestation.json';
 
 const art = artifact as unknown as {
   ladder: Record<string, string>;
@@ -23,21 +25,40 @@ const art = artifact as unknown as {
   inheritedA: string[];
 };
 const statusEntries = Object.entries(status as Record<string, { label: string; note?: string }>);
+const completionRows = (completionLedger as unknown as {
+  rows: Array<{
+    profileId: string | null;
+    unitId: string | null;
+    workType: string | null;
+    proof: string;
+    proofSource: string | null;
+  }>;
+}).rows;
+const attestationEntries = (corpusAttestation as unknown as {
+  entries: Array<{
+    unitId: string;
+    workType: string;
+    profileIds: string[];
+    documentCount: number;
+    cleanCount: number;
+    regressedChecks: string[];
+  }>;
+}).entries;
 
 /**
- * Vanjski audit 2026-09-08, nalaz 4: od 31 profila razine A samo je 12 izravno u ovjeri, 19
- * nasljedjuje dokaz po paru jedinica x vrsta rada, a sucelje ih je pokrivalo istom recenicom.
- * Skupovi se IZVODE iz artefakta, ne hardkodiraju, uz tvrdnju da nijedan nije prazan; inace bi
- * test prolazio vakuumski nad praznim popisom.
+ * Masterova svjeza ovjera daje A profilima izravni ili naslijedjeni dokaz.
+ * Produkcijski popis mora odgovarati ledgeru, a zasebni fixture cuva granicne slucajeve.
  */
 describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
   const aIds = Object.keys(art.byProfile).filter((id) => art.byProfile[id] === 'A');
   const inherited = new Set(art.inheritedA);
   const direct = aIds.filter((id) => !inherited.has(id));
 
-  it('oba skupa postoje (inace tvrdnje nize ne mjere nista)', () => {
+  it('A profili zadrzavaju izravni i naslijedjeni dokaz masterove ovjere', () => {
+    expect(aIds).toHaveLength(32);
     expect(direct.length).toBeGreaterThan(0);
     expect(art.inheritedA.length).toBeGreaterThan(0);
+    expect(direct.length + art.inheritedA.length).toBe(aIds.length);
     expect(art.inheritedA.every((id) => art.byProfile[id] === 'A')).toBe(true);
   });
 
@@ -61,6 +82,30 @@ describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
     }
   });
 
+  it('fixture pokriva izravni i naslijedjeni A bez oslanjanja na trenutno stanje populacije', () => {
+    const fixture = {
+      ladder: { A: 'dokazano na stvarnom radu' },
+      byProfile: { direct: 'A', inherited: 'A' } as const,
+      proofNotes: { 'unit-work-type': 'Dokaz je naslijedjen za istu ustanovu i vrstu rada.' },
+      inheritedA: ['inherited'],
+      inheritedFrom: { inherited: ['direct', 'inherited'] },
+    };
+    const directClaim = projectProfileClaim('direct', fixture)!;
+    const inheritedClaim = projectProfileClaim('inherited', fixture)!;
+
+    expect(directClaim.proof).toBe('direct');
+    expect(directClaim.evidenceBasis).toBe('direct');
+    expect(directClaim.testedProfileIds).toEqual(['direct']);
+    expect(claimSentence(directClaim)).not.toContain(fixture.proofNotes['unit-work-type']);
+
+    expect(inheritedClaim.proof).toBe('inherited');
+    expect(inheritedClaim.evidenceBasis).toBe('inherited');
+    expect(inheritedClaim.testedProfileIds).toEqual(['direct']);
+    expect(inheritedClaim.testedProfileIds).not.toContain('inherited');
+    expect(inheritedClaim.note).toBe(fixture.proofNotes['unit-work-type']);
+    expect(claimSentence(inheritedClaim)).toContain(fixture.proofNotes['unit-work-type']);
+  });
+
   it('T05: osnova dokaza je jedna os za sve razine, a testedProfileIds nikad ne sadrzi naslijedjeni profil', () => {
     const inheritedFrom = (art as unknown as { inheritedFrom: Record<string, string[]> }).inheritedFrom;
     expect(Object.keys(inheritedFrom).sort()).toEqual(art.inheritedA);
@@ -69,7 +114,39 @@ describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
       expect(claim.evidenceBasis, id).toBe('inherited');
       expect(claim.testedProfileIds.length, id).toBeGreaterThan(0);
       expect(claim.testedProfileIds, id).not.toContain(id);
-      for (const tested of claim.testedProfileIds) expect(profileClaimFor(tested)?.evidenceBasis, tested).toBe('direct');
+      const inheritedRows = completionRows.filter(
+        (row) => row.profileId === id && row.claim === 'A' && row.proof === 'real-docx-pass' && row.proofSource === 'unit-work-type',
+      );
+      expect(inheritedRows.length, id).toBeGreaterThan(0);
+
+      const directlyAttestedSources = new Set<string>();
+      for (const row of inheritedRows) {
+        const entries = attestationEntries.filter(
+          (entry) =>
+            entry.unitId === row.unitId &&
+            entry.workType === row.workType &&
+            entry.documentCount > 0 &&
+            entry.cleanCount === entry.documentCount &&
+            entry.regressedChecks.length === 0,
+        );
+        expect(entries.length, `${id}/${row.workType}: svjeza ovjera bez regresija`).toBeGreaterThan(0);
+        for (const entry of entries) {
+          for (const sourceId of entry.profileIds) {
+            const directlyMeasured = completionRows.some(
+              (sourceRow) =>
+                sourceRow.profileId === sourceId &&
+                sourceRow.unitId === row.unitId &&
+                sourceRow.workType === row.workType &&
+                sourceRow.proof === 'real-docx-pass' &&
+                sourceRow.proofSource === 'profile',
+            );
+            if (directlyMeasured) directlyAttestedSources.add(sourceId);
+          }
+        }
+      }
+      // Ukupna ocjena izvornog profila moze biti niza zbog njegovih pravila; bitno je da DOCX
+      // dokaz postoji izravno za istu ustanovu i vrstu rada, sto potvrduju ovjera i ledger.
+      for (const tested of claim.testedProfileIds) expect(directlyAttestedSources.has(tested), `${id} -> ${tested}`).toBe(true);
     }
     for (const id of direct) {
       const claim = profileClaimFor(id)!;
@@ -84,7 +161,9 @@ describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
     }
     expect([...(basis.get('B') ?? [])]).toEqual(['synthetic']);
     for (const letter of ['C', 'D', 'E']) if (basis.has(letter)) expect([...basis.get(letter)!]).toEqual(['not-demonstrated']);
-    expect([...(basis.get('A') ?? [])].sort()).toEqual(['direct', 'inherited']);
+    expect([...(basis.get('A') ?? [])].sort()).toEqual(
+      [...new Set([...direct.map(() => 'direct'), ...art.inheritedA.map(() => 'inherited')])].sort(),
+    );
   });
 
   it('razine ispod A nemaju izvor dokaza', () => {
@@ -190,15 +269,18 @@ describe('T05: ista projekcija na kartici i u rezultatu, recenica po osnovi doka
       expect(s, letter).toMatch(/nije dokazan/);
       expect(s, letter).not.toMatch(/generiran/);
     }
-    const a = profileClaimFor(idFor('A')!)!;
+    const a = projectProfileClaim('fixture-a', {
+      ladder: { A: art.ladder.A },
+      byProfile: { 'fixture-a': 'A' },
+    })!;
     expect(claimSentence(a)).not.toMatch(/generiran|nije dokazan/);
     // Recenica ljestvice ostaje doslovna i prva; dodatak o osnovi je iza nje.
     expect(claimSentence(a).startsWith(`Razina dokaza A: ${a.label}.`)).toBe(true);
   });
 
-  it('SENTINEL: ljestvica ima barem A, B i jednu od C/D/E, inace tvrdnje gore ne mjere nista', () => {
-    expect(idFor('A')).toBeTruthy();
-    expect(idFor('B')).toBeTruthy();
-    expect(idFor('C') || idFor('D') || idFor('E')).toBeTruthy();
+  it('SENTINEL: objavljena ljestvica definira A-E neovisno o trenutno dokazanim profilima', () => {
+    expect(art.ladder.A).toBeTruthy();
+    expect(art.ladder.B).toBeTruthy();
+    expect(art.ladder.C || art.ladder.D || art.ladder.E).toBeTruthy();
   });
 });

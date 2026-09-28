@@ -1,6 +1,7 @@
 import type { ThesisProfile } from './profile-schema';
 import { FIXER_IDS } from '../repair/apply-fixers';
 import { ACADEMIC_YEAR_RE } from './academic-year';
+import { schema2ProviderProblems } from '../verification/ai-evidence-audit';
 
 export interface ProfileValidationError {
   profileId: string;
@@ -26,9 +27,40 @@ export function validateProfiles(profiles: ThesisProfile[]): ProfileValidationEr
     seen.add(profile.id);
 
     // Repair Engine (REPAIR_ENGINE.md sekcija 3): autoFixable:true je dopusteno SAMO na
-    // ljudski verificiranom pravilu (status 'verified') i uz postavljen fixerId. Time
-    // nijedno neverificirano ili nemapirano pravilo ne moze pisati u korisnikov docx.
+    // pravilu u statusu 'verified' i uz postavljen fixerId. AI-verificiran status dodatno
+    // mora nositi strukturirani dokaz; njegov sadrzaj neovisno provjerava AI-evidence validator.
     for (const entry of profile.ruleEntries ?? []) {
+      if (entry.confirmedVia === 'ai-evidence-audit') {
+        if (entry.status !== 'verified') {
+          errors.push({
+            profileId: profile.id,
+            message: `Pravilo ${entry.ruleId}: confirmedVia ai-evidence-audit zahtijeva status:"verified".`,
+          });
+        }
+        if (!entry.aiEvidence) {
+          errors.push({
+            profileId: profile.id,
+            message: `Pravilo ${entry.ruleId}: confirmedVia ai-evidence-audit bez strukturiranog aiEvidence paketa.`,
+          });
+        } else if (
+          (entry.aiEvidence.schemaVersion !== 1 && entry.aiEvidence.schemaVersion !== 2)
+          || entry.aiEvidence.profileId !== profile.id
+          || entry.aiEvidence.ruleId !== entry.ruleId
+          || entry.aiEvidence.sourceId !== entry.sourceId
+          || !/^[a-f0-9]{64}$/.test(entry.aiEvidence.snapshotHash)
+          || (entry.aiEvidence.schemaVersion === 2 && schema2ProviderProblems(entry.aiEvidence).length > 0)
+        ) {
+          errors.push({
+            profileId: profile.id,
+            message: `Pravilo ${entry.ruleId}: aiEvidence ima nevaljan schema version, identitet ili snapshot hash.`,
+          });
+        }
+      } else if (entry.aiEvidence != null) {
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: aiEvidence zahtijeva confirmedVia:"ai-evidence-audit".`,
+        });
+      }
       // academicYear (opcionalni override): format "2025./2026." i uzastopne godine,
       // inace bi se u UI-ju prikazala besmislena godina verifikacije.
       if (entry.academicYear != null) {

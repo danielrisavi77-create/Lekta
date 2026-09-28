@@ -11,28 +11,13 @@ import { expect } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
 import { detectPassRegressions } from '../../src/analysis/repair-regression';
-import { readZip } from '../../src/repair/zip-codec';
 import { assertPackageIntact } from './docx-package-assert';
 import type { RepairableItem } from '../../src/ui/repair-panel';
+import { documentText } from '../../src/verification/docx-visible-text.ts';
+
+export { documentText };
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-export async function documentText(bytes: Uint8Array): Promise<string> {
-  const entries = await readZip(bytes);
-  const document = entries.find((entry) => entry.name === 'word/document.xml');
-  if (!document) throw new Error('DOCX nema word/document.xml');
-  const xml = new TextDecoder().decode(document.data);
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
-    .map((match) =>
-      match[1]
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&apos;/g, "'"),
-    )
-    .join('');
-}
 
 /**
  * Sama usporedba vise ne zivi ovdje: detectPassRegressions (src/analysis/repair-regression.ts) je

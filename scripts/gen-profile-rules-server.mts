@@ -15,7 +15,11 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildProfileRulesArtifact, type SourceIndex } from '../src/profiles/profile-rules-contract';
 import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
+import { VERIFIED_PROFILES_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
+import { filterRepairEntriesToAiAuditedRules, publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
+import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
 import { draftFilePaths } from './draft-files';
+import type { SourceEntry, ThesisProfile } from '../src/profiles/profile-schema';
 
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const sha256Hex = (input: string) => createHash('sha256').update(input, 'utf8').digest('hex');
@@ -32,7 +36,7 @@ const repairMap = JSON.parse(
 // Iz registra izlaze SAMO title i url; `snapshotHash` je kanarinac i ostaje ovdje.
 const registry = JSON.parse(
   readFileSync(resolve(ROOT, 'data', 'sources', 'source-registry.json'), 'utf8'),
-) as Array<{ id?: unknown; title?: unknown; url?: unknown }>;
+) as SourceEntry[];
 const sourceIndex: SourceIndex = {};
 for (const row of registry) {
   if (typeof row?.id !== 'string' || typeof row.title !== 'string' || typeof row.url !== 'string') continue;
@@ -45,7 +49,22 @@ const draftFiles = draftFilePaths(ROOT)
   .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
 const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
 
-const artifact = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex, evidenceIndex);
+const aiEvidenceContext = await loadRepositoryAiEvidenceContext(
+  ROOT,
+  VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+  registry,
+);
+const publishableProfiles = publishAiAuditedRules(
+  verified,
+  VERIFIED_PROFILES_WITH_DRAFTS,
+  aiEvidenceContext.resultsByRule,
+);
+const aiAuditedRepairMap = filterRepairEntriesToAiAuditedRules(
+  repairMap,
+  VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+  aiEvidenceContext.resultsByRule,
+);
+const artifact = buildProfileRulesArtifact(publishableProfiles, aiAuditedRepairMap, sha256Hex, sourceIndex, evidenceIndex);
 
 const outPath = resolve(ROOT, 'data', 'generated', 'profile-rules-server.json');
 writeFileSync(outPath, `${JSON.stringify(artifact)}\n`, 'utf8');

@@ -20,7 +20,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
@@ -33,7 +33,8 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -113,14 +114,22 @@ import {
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
-import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { textContractPreserved } from '../scripts/closed-loop-text-contract';
+import { documentText } from '../src/verification/docx-visible-text.ts';
+import { buildDocx } from './helpers/docx-builder';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
-import { proofSourceProblems } from '../src/verification/completion-ledger';
+import {
+  assessFacultyMinimumBRatchet,
+  assessFacultyAllARatchet,
+  assessGlobalARatchet,
+  proofSourceProblems,
+} from '../src/verification/completion-ledger';
 import { buildUpisnikProfileCandidates as buildRawUpisnikProfileCandidates, validateUpisnikProfileCoverageHolds } from '../src/programs/upisnik-profile-candidates';
 import sourceRegistry from '../data/sources/source-registry.json';
 import { validateDecisions } from '../src/programs/unit-match-decisions';
@@ -141,12 +150,24 @@ import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
-import { measuredCodeProblem, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { measuredCodeProblem, signedContentProblem, attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
 import { seededProducts } from './helpers/product-seeds';
+import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { applyAiEvidenceProfile } from '../src/verification/apply-ai-evidence-profile';
+import { approveFromAi } from '../src/verification/verification-actions';
+import { planAiLedgerReconciliation, unreconciledAiConfirmations } from '../src/verification/reconcile-ai-ledger';
+import { createDetectorExecutionManifest } from '../scripts/closed-loop-execution-manifest';
+import { validateProfiles } from '../src/profiles/profile-validator';
+import { anchorRuleQuotes, validateQuoteAnchorPlan } from '../src/verification/anchor-rule-quotes';
+import { publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
+import { textSnapshotMatchesSource } from '../scripts/ai-evidence-context-loader';
+import { hashRepairSourceTree } from '../scripts/lib/repair-source-hash.mjs';
+import { hashAnalysisSourceTree } from '../scripts/lib/analysis-source-hash.mjs';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 import {
   REQUIRED_CONTEXT_FILES,
   REQUIRED_SCOPED_GUIDES,
@@ -2636,6 +2657,13 @@ const MUTATIONS: Mutation[] = [
       };
       return compareAuditToRatchet(audit, auditRatchet).verdict === 'equal';
     },
+  },
+  /** Broj iz nase grane ostaje zasebno prikovan uz masterovu novu provjeru identiteta paketa. */
+  {
+    id: 'supply-chain/porast-broja-nalaza-nevidljiv',
+    imitates: 'audit koji porast broja high/critical nalaza samo ispise, bez pada ratcheta',
+    caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
+    cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
   },
   /**
    * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
@@ -6341,6 +6369,28 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
+  {
+    id: 'ai-detektor/ispravan-dokument-stalno-prijavljuje',
+    imitates: 'detektor uvijek prijavljuje krsenje pa ne razlikuje ispravan kontrolni DOCX od namjerno krseceg',
+    cleanBefore: () => createDetectorExecutionManifest({
+      profileId: 'p', ruleId: 'p--toc', ruleCheckId: 'toc', checkId: 'toc.present', ruleValue: true,
+      analysisSourceHash: 'a'.repeat(64), testId: 'detector:p', command: 'detector:p',
+      ranAt: '2026-09-27T10:00:00.000Z',
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'toc.present', earned: 0, max: 5 },
+      correctCheck: { id: 'toc.present', earned: 5, max: 5 },
+    }).outcome === 'pass',
+    caught: () => createDetectorExecutionManifest({
+      profileId: 'p', ruleId: 'p--toc', ruleCheckId: 'toc', checkId: 'toc.present', ruleValue: true,
+      analysisSourceHash: 'a'.repeat(64), testId: 'detector:p', command: 'detector:p',
+      ranAt: '2026-09-27T10:00:00.000Z',
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'toc.present', earned: 0, max: 5 },
+      correctCheck: { id: 'toc.present', earned: 0, max: 5 },
+    }).outcome === 'fail',
+  },
 
 ];
 
@@ -6670,6 +6720,357 @@ describe('agent workflow guards', () => {
     queue.tasks[1].status = 'in_review';
     expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
     expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
+  });
+});
+
+describe('AI evidence audit: baseline i poznate mutacije', () => {
+  it('nemutirani dokazni paket prolazi (baseline)', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    expect(auditAiEvidence(fixture)).toEqual({ valid: true, reasons: [] });
+  });
+
+  it('hvata izmijenjenu ciljnu vrijednost', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, claim: { ...fixture.evidence.claim, value: ['Arial'] } },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('value-mismatch');
+  });
+
+  it('hvata citat koji dolazi iz drugog ili nepovezanog izvora', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, quote: 'The font may be Arial.' },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('quote-not-found');
+  });
+
+  it('hvata drift SHA-256 hasha snapshota', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      source: { ...fixture.source, snapshotHash: '0'.repeat(64) },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('snapshot-hash-mismatch');
+  });
+
+  it('hvata samoprijavljeni prolaz bez razrijesenog manifesta', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({ ...fixture, manifest: null });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('manifest-missing');
+  });
+
+  it('hvata manifest ciji ID ne veže stvarne profilne i hash podatke', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const forgedId = `${fixture.manifest.manifestId}:forged`;
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, execution: { ...fixture.evidence.execution, manifestId: forgedId } },
+      manifest: { ...fixture.manifest, manifestId: forgedId },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('manifest-id-mismatch');
+  });
+
+  it('hvata neuspjeli ili zastarjeli manifest i promjenu vrijednosti pravila', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    expect(auditAiEvidence(fixture)).toEqual({ valid: true, reasons: [] });
+    for (const [input, code] of [
+      [{ ...fixture, manifest: { ...fixture.manifest, outcome: 'fail' as const } }, 'test-failed'],
+      [{ ...fixture, currentRepairSourceHash: '0'.repeat(64) }, 'manifest-stale-repair'],
+      [{ ...fixture, ruleValueSha256: '0'.repeat(64) }, 'manifest-rule-value-mismatch'],
+    ] as const) {
+      const result = auditAiEvidence(input);
+      expect(result.valid).toBe(false);
+      if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain(code);
+    }
+  });
+});
+
+describe('partial AI primjena i detektor: baseline i mutacije', () => {
+  it('novi dokaz prolazi uz legacy pravilo bez dokaza, ali nevaljan kandidat zaustavlja cijeli profil', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const context = {
+      now: '2026-09-27', sourcesById: { [fixture.source.id]: fixture.source },
+      snapshotBytesBySourceId: { [fixture.source.id]: fixture.snapshotBytes },
+      snapshotTextsBySourceId: { [fixture.source.id]: fixture.snapshotText },
+      snapshotHashesBySourceId: { [fixture.source.id]: fixture.snapshotSha256 },
+      currentRepairSourceHash: fixture.currentRepairSourceHash,
+      ruleValueHashesByRule: { [JSON.stringify([fixture.profileId, fixture.rule.ruleId])]: fixture.ruleValueSha256 },
+      manifestsById: { [fixture.manifest.manifestId]: fixture.manifest },
+    };
+    const candidate = { ...fixture.rule, aiEvidence: fixture.evidence };
+    const legacy = { ...candidate, ruleId: 'legacy', scored: true, aiEvidence: undefined };
+    const baseline = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [candidate, legacy] } as ThesisProfile, context);
+    expect(baseline.ok).toBe(true);
+    if (baseline.ok) expect(baseline.ledger).toHaveLength(1);
+    const invalid = { ...candidate, ruleId: 'invalid', scored: false };
+    expect(applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [candidate, invalid] } as ThesisProfile, context).ok).toBe(false);
+  });
+
+  it('human-audit se može ponovno auditirati, retired i advisory ne', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const input = { now: '2026-09-27', snapshotBytes: fixture.snapshotBytes,
+      snapshotSha256: fixture.snapshotSha256, snapshotText: fixture.snapshotText,
+      currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+      manifest: fixture.manifest };
+    expect(approveFromAi(fixture.profileId, { ...fixture.rule, status: 'verified', confirmedVia: 'human-audit' },
+      fixture.source, input, fixture.evidence).ok).toBe(true);
+    for (const status of ['retired', 'advisory'] as const) {
+      const mutated = approveFromAi(fixture.profileId, { ...fixture.rule, status }, fixture.source, input, fixture.evidence);
+      expect(mutated.ok).toBe(false);
+      expect(mutated.errors?.join(' ')).toContain('rule-not-pending');
+    }
+  });
+
+  it('korekcija neutralizira točno izvorni događaj, kriva referenca ostaje siroče', () => {
+    const old = { id: 'old', profileId: 'p', ruleId: 'r', action: 'ai-confirmed' as const,
+      actor: 'ai', timestamp: '2026-09-20', sourceId: null, sourcePage: null, quote: null };
+    const correction = planAiLedgerReconciliation('p', [], [old], '2026-09-27');
+    expect(correction).toHaveLength(1);
+    expect(unreconciledAiConfirmations('p', [], [old, ...correction])).toEqual([]);
+    expect(unreconciledAiConfirmations('p', [], [old, { ...correction[0], revokesLedgerId: 'other' }])).toEqual([old]);
+    expect(unreconciledAiConfirmations('p', [], [old, { ...correction[0], profileId: 'other-profile' }])).toEqual([old]);
+  });
+
+  it('detektor hvata propušteno kršenje i zastarjeli analizni kod', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const base = {
+      profileId: fixture.profileId, ruleId: fixture.rule.ruleId, ruleCheckId: 'font',
+      checkId: 'format.font.dominant', ruleValue: fixture.rule.value,
+      analysisSourceHash: 'a'.repeat(64), testId: 'detector:test', command: 'detector:test',
+      ranAt: fixture.evidence.execution.ranAt,
+      violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+      correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+      violatingCheck: { id: 'format.font.dominant', earned: 0, max: 5 },
+      correctCheck: { id: 'format.font.dominant', earned: 5, max: 5 },
+    };
+    const manifest = createDetectorExecutionManifest(base);
+    expect(manifest.outcome).toBe('pass');
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: { ...base.violatingCheck, earned: 5 } }).outcome).toBe('fail');
+    const evidence = { ...fixture.evidence, execution: { manifestId: manifest.manifestId,
+      testId: manifest.testId, command: manifest.command, inputHash: manifest.inputHash,
+      outputHash: manifest.outputHash, ranAt: manifest.ranAt } };
+    expect(auditAiEvidence({ ...fixture, evidence, manifest, currentAnalysisSourceHash: base.analysisSourceHash })).toEqual({ valid: true, reasons: [] });
+    const wrongKind = auditAiEvidence({ ...fixture, evidence, manifest,
+      rule: { ...fixture.rule, autoFixable: true, fixerId: 'font-fixer' },
+      currentAnalysisSourceHash: base.analysisSourceHash });
+    expect(wrongKind.valid).toBe(false);
+    if (!wrongKind.valid) expect(wrongKind.reasons.map((reason) => reason.code)).toContain('manifest-kind-mismatch');
+    const wrongCheck = auditAiEvidence({ ...fixture, evidence,
+      manifest: { ...manifest, checkId: 'toc.present' }, currentAnalysisSourceHash: base.analysisSourceHash });
+    expect(wrongCheck.valid).toBe(false);
+    if (!wrongCheck.valid) expect(wrongCheck.reasons.map((reason) => reason.code)).toContain('manifest-check-mismatch');
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: undefined }))
+      .toMatchObject({ outcome: 'fail', failureReason: 'nema detektora' });
+    expect(createDetectorExecutionManifest({ ...base, violatingCheck: { ...base.violatingCheck, max: 0 } }))
+      .toMatchObject({ outcome: 'fail', failureReason: 'nema detektora' });
+    const stale = auditAiEvidence({ ...fixture, evidence, manifest, currentAnalysisSourceHash: 'b'.repeat(64) });
+    expect(stale.valid).toBe(false);
+    if (!stale.valid) expect(stale.reasons.map((reason) => reason.code)).toContain('manifest-stale-analysis');
+  });
+
+  it('analizni hash hvata promjenu DOCX parsera, ali ignorira CRLF', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-analysis-hash-'));
+    const folders = ['analysis', 'scoring', 'profiles', 'docx', 'citations', 'utils', 'report'];
+    try {
+      for (const folder of folders) {
+        const directory = join(root, 'src', folder);
+        mkdirSync(directory, { recursive: true });
+        writeFileSync(join(directory, 'module.ts'), 'export const value = 1;\n');
+      }
+      const parser = join(root, 'src', 'docx', 'module.ts');
+      const baseline = hashAnalysisSourceTree(root);
+      const fixture = createAiEvidenceAuditFixture();
+      const detector = createDetectorExecutionManifest({
+        profileId: fixture.profileId, ruleId: fixture.rule.ruleId, ruleCheckId: 'font',
+        checkId: 'format.font.dominant', ruleValue: fixture.rule.value,
+        analysisSourceHash: baseline, testId: 'detector:hash-test', command: 'detector:hash-test',
+        ranAt: fixture.evidence.execution.ranAt,
+        violatingInputBytes: Buffer.from('bad'), violatingOutputBytes: Buffer.from('bad'),
+        correctInputBytes: Buffer.from('good'), correctOutputBytes: Buffer.from('good'),
+        violatingCheck: { id: 'format.font.dominant', earned: 0, max: 5 },
+        correctCheck: { id: 'format.font.dominant', earned: 5, max: 5 },
+      });
+      const evidence = { ...fixture.evidence, execution: { ...fixture.evidence.execution,
+        manifestId: detector.manifestId, testId: detector.testId, command: detector.command,
+        inputHash: detector.inputHash, outputHash: detector.outputHash } };
+      expect(auditAiEvidence({ ...fixture, evidence, manifest: detector,
+        currentAnalysisSourceHash: baseline })).toEqual({ valid: true, reasons: [] });
+      writeFileSync(parser, 'export const value = 1;\r\n');
+      expect(hashAnalysisSourceTree(root)).toBe(baseline);
+      writeFileSync(parser, 'export const value = 2;\n');
+      const changed = hashAnalysisSourceTree(root);
+      expect(changed).not.toBe(baseline);
+      const stale = auditAiEvidence({ ...fixture, evidence, manifest: detector, currentAnalysisSourceHash: changed });
+      expect(stale.valid).toBe(false);
+      if (!stale.valid) expect(stale.reasons.map((reason) => reason.code)).toContain('manifest-stale-analysis');
+      const auditDir = join(root, 'src', 'audits');
+      mkdirSync(auditDir, { recursive: true });
+      const imported = join(auditDir, 'check.tsx');
+      writeFileSync(join(root, 'src', 'analysis', 'module.ts'), "import { check } from '../audits/check.js';\nexport const value = check;\n");
+      writeFileSync(imported, 'export const check = 1;\n');
+      const importedBaseline = hashAnalysisSourceTree(root);
+      writeFileSync(imported, 'export const check = 2;\n');
+      expect(hashAnalysisSourceTree(root)).not.toBe(importedBaseline);
+    } finally {
+      if (root.startsWith(join(tmpdir(), 'lekta-analysis-hash-'))) rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('objava i hashiranje: baseline i mutacije', () => {
+  it('zadrzava legacy pravilo pri AI objavi, brisanje u kompajleru rusi gard', async () => {
+    const baseline = { id: 'p', rules: { requireA4: true, headingRules: { levels: { '1': { size: 12 } } } } };
+    const evidence = {
+      ...baseline,
+      ruleEntries: [{
+        ruleId: 'p--heading-rules', checkId: 'heading-rules',
+        value: { levels: { '1': { size: 14 } } },
+        authority: 'general', sourceId: 'official-source', sourcePage: '7',
+        quote: 'Heading is 14 pt.', status: 'verified', scored: true,
+        modality: 'obligation', scope: 'heading', confirmedVia: 'ai-evidence-audit',
+      }],
+    } as unknown as ThesisProfile;
+    const results = { '["p","p--heading-rules"]': { valid: true as const, reasons: [] } };
+    const guard = (candidate: { rules?: Record<string, unknown> }) => {
+      expect(candidate.rules).toEqual({
+        requireA4: true,
+        headingRules: { levels: { '1': { size: 14 } } },
+      });
+    };
+    guard(publishAiAuditedRules([baseline], [evidence], results)[0]);
+    vi.resetModules();
+    vi.doMock('../src/profiles/rule-compiler', async (importOriginal) => {
+      const original = await importOriginal<typeof import('../src/profiles/rule-compiler')>();
+      return { ...original, compileEffectiveRules: (profile: ThesisProfile) =>
+        original.compileEffectiveRules({ ...profile, rules: {} }) };
+    });
+    try {
+      const { publishAiAuditedRules: mutatedPublisher } = await import('../src/profiles/publish-ai-rules');
+      const mutated = mutatedPublisher([baseline], [evidence], results)[0];
+      expect(mutated.rules).not.toHaveProperty('requireA4');
+      expect(() => guard(mutated)).toThrow();
+    } finally {
+      vi.doUnmock('../src/profiles/rule-compiler');
+      vi.resetModules();
+    }
+  });
+
+  it('ovjera odbija popravak mjeren starim repairSourceHashom', () => {
+    const unsigned: CorpusAttestation = {
+      schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'corpus', repairSourceHash: 'a'.repeat(64),
+      measuredAt: '2026-09-25T12:00:00.000Z', measuredFromCommit: 'b'.repeat(40),
+      oracles: ['harness'], signedBy: 'owner', signedAt: '2026-09-25T12:00:00.000Z',
+      protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, independentlyConfirmedCount: 1,
+        derivedExpectationCount: 0, duplicateDocumentCount: 0, uniqueDocumentCount: 1,
+        rawDocumentCount: 1, countedDocumentCount: 1 },
+      entries: [{ unitId: 'unit', workType: 'graduate', profileIds: ['p'],
+        documentCount: 1, cleanCount: 1, regressedChecks: [] }],
+    };
+    const attestation = { ...unsigned, signedContentDigest: attestationContentDigestSync(unsigned) };
+    expect(attestationProblems(attestation, attestation.repairSourceHash)).toEqual([]);
+    expect(provenUnitWorkTypes(attestation, attestation.repairSourceHash).size).toBe(1);
+    expect(attestationProblems(attestation, 'c'.repeat(64)))
+      .toContain('kod popravka promijenjen nakon mjerenja');
+    expect(provenUnitWorkTypes(attestation, 'c'.repeat(64)).size).toBe(0);
+  });
+
+  it('prihvaca vezani tekstualni izvadak, odbija krivi hash i krivi PDF', () => {
+    const source = { snapshotHash: 'a'.repeat(64), textSnapshotOf: 'a'.repeat(64),
+      textSnapshotHash: 'b'.repeat(64) } as SourceEntry;
+    expect(textSnapshotMatchesSource(source, 'b'.repeat(64))).toBe(true);
+    expect(textSnapshotMatchesSource(source, 'c'.repeat(64))).toBe(false);
+    expect(textSnapshotMatchesSource({ ...source, textSnapshotOf: 'c'.repeat(64) }, 'b'.repeat(64))).toBe(false);
+  });
+
+  it('normalizira CRLF u kodu popravka, ali stvarnu promjenu teksta otkriva', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-hash-mutation-'));
+    const repairRoot = join(root, 'src', 'repair');
+    const file = join(repairRoot, 'fixer.ts');
+    try {
+      mkdirSync(repairRoot, { recursive: true });
+      writeFileSync(file, 'const x = 1;\n');
+      const baseline = hashRepairSourceTree(repairRoot);
+      writeFileSync(file, 'const x = 1;\r\n');
+      expect(hashRepairSourceTree(repairRoot)).toBe(baseline);
+      writeFileSync(file, 'const x = 2;\r\n');
+      expect(hashRepairSourceTree(repairRoot)).not.toBe(baseline);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('globalni A ciljnik: baseline i mutacija registra', () => {
+  it('potvrđuje čisti puni A skup i hvata profil izostavljen iz ledgera', () => {
+    const registry = ['profil-a', 'profil-b'];
+    const clean = [
+      { profileId: 'profil-a', claim: 'A' as const },
+      { profileId: 'profil-b', claim: 'A' as const },
+    ];
+    expect(assessGlobalARatchet(registry, clean).allProfilesA).toBe(true);
+
+    const omitted = assessGlobalARatchet(registry, clean.slice(0, 1));
+    expect(omitted.allProfilesA).toBe(false);
+    expect(omitted.missingProfileIds).toEqual(['profil-b']);
+  });
+});
+
+describe('fakultetski minimum B: baseline i mutacije', () => {
+  it('čist skup prolazi, a profil ispod B ili izostavljen iz ledgera ruši cilj', () => {
+    const registry = [
+      { id: 'fakultet-a', scope: 'faculty' as const },
+      { id: 'fakultet-b', scope: 'faculty' as const },
+      { id: 'pravni-a', scope: 'legal' as const },
+    ];
+    const clean = [
+      { profileId: 'fakultet-a', claim: 'A' as const },
+      { profileId: 'fakultet-b', claim: 'B' as const },
+      { profileId: 'pravni-a', claim: 'E' as const },
+    ];
+    expect(assessFacultyMinimumBRatchet(registry, clean).meetsFacultyMinimumB).toBe(true);
+
+    const belowB = assessFacultyMinimumBRatchet(registry, [
+      ...clean,
+      { profileId: 'fakultet-b', claim: 'C' as const },
+    ]);
+    expect(belowB.meetsFacultyMinimumB).toBe(false);
+    expect(belowB.facultyBelowB).toEqual(['fakultet-b']);
+    expect(belowB.legalProfilesBelowA).toEqual(['pravni-a']);
+
+    const omitted = assessFacultyMinimumBRatchet(registry, clean.slice(0, 1));
+    expect(omitted.meetsFacultyMinimumB).toBe(false);
+    expect(omitted.missingFacultyIds).toEqual(['fakultet-b']);
+  });
+});
+
+describe('fakultetski all-A cilj: baseline i mutacija razine', () => {
+  it('čisti A skup prolazi, ali mutacija jednog profila na B ruši cilj', () => {
+    const registry = [
+      { id: 'fakultet-a', scope: 'faculty' as const },
+      { id: 'fakultet-b', scope: 'faculty' as const },
+      { id: 'pravni-a', scope: 'legal' as const },
+    ];
+    const clean = [
+      { profileId: 'fakultet-a', claim: 'A' as const },
+      { profileId: 'fakultet-b', claim: 'A' as const },
+      { profileId: 'pravni-a', claim: 'E' as const },
+    ];
+    expect(assessFacultyAllARatchet(registry, clean).meetsFacultyAllA).toBe(true);
+
+    const mutated = assessFacultyAllARatchet(registry, [
+      ...clean,
+      { profileId: 'fakultet-b', claim: 'B' as const },
+    ]);
+    expect(mutated.meetsFacultyAllA).toBe(false);
+    expect(mutated.facultyBelowA).toEqual(['fakultet-b']);
   });
 });
 
@@ -7686,6 +8087,104 @@ runs:
   });
 });
 
+describe('mutacija closed-loop ugovora teksta', () => {
+  it('nemutirani autorski tekst prolazi, dodani tekst bez dopustenog fixera pada', async () => {
+    const bytes = buildDocx({ paragraphs: [{ text: 'Autorski tekst.' }] });
+    const original = await documentText(bytes);
+    expect(await textContractPreserved(bytes, original, original, [])).toBe(true);
+    expect(await textContractPreserved(bytes, original, `${original} Novi sadrzaj.`, [])).toBe(false);
+  });
+
+  it('nova shema prolazi s dva providera, isti provider u extract i refute pada', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const baseline = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    expect(auditAiEvidence({ ...fixture, evidence: baseline })).toEqual({ valid: true, reasons: [] });
+    const mutated = { ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+      ? { ...pass, model: { ...pass.model, provider: 'OpenAI' } } : pass) };
+    const result = auditAiEvidence({ ...fixture, evidence: mutated });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain('passes-same-provider');
+    const wrongSummaryModel = auditAiEvidence({ ...fixture,
+      evidence: { ...baseline, model: { ...baseline.model, provider: 'fictional-provider' } },
+    });
+    expect(wrongSummaryModel.valid).toBe(false);
+    if (!wrongSummaryModel.valid) expect(wrongSummaryModel.reasons.map((reason) => reason.code)).toContain('passes-model-mismatch');
+    const unknownProvider = auditAiEvidence({ ...fixture,
+      evidence: { ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+        ? { ...pass, model: { ...pass.model, provider: 'fictional-provider' } } : pass) },
+    });
+    expect(unknownProvider.valid).toBe(false);
+    if (!unknownProvider.valid) expect(unknownProvider.reasons.map((reason) => reason.code)).toContain('provider-unknown');
+  });
+
+  it('profilni validator prihvaca valjanu shemu 2, a odbija mutirane providere, identitet i hash', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const baseline = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    const errorsFor = (aiEvidence: typeof baseline) => validateProfiles([{
+      id: fixture.profileId,
+      ruleEntries: [{ ...fixture.rule, status: 'verified', confirmedVia: 'ai-evidence-audit', aiEvidence }],
+    } as ThesisProfile]);
+    expect(errorsFor(baseline)).toEqual([]);
+    expect(errorsFor({ ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+      ? { ...pass, model: { ...pass.model, provider: 'OpenAI' } } : pass) })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, model: { ...baseline.model, provider: 'fictional-provider' } })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, profileId: 'wrong-profile' })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, snapshotHash: 'invalid' })).not.toEqual([]);
+  });
+});
+
+describe('sidrenje citata: baseline i mutacije', () => {
+  const makePlan = () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const source = fixture.source;
+    const before = { id: fixture.profileId, ruleEntries: [{ ...fixture.rule,
+      quote: 'Velicine je stranice A4', status: 'verified' as const, scored: true,
+    }] } as ThesisProfile;
+    const sources = { [source.id]: source };
+    const snapshots = { [source.id]: { text: 'Veličine je stranice A4.', sha256: source.snapshotHash! } };
+    const plan = anchorRuleQuotes(before, sources, snapshots, '2026-09-27T10:00:00.000Z');
+    return { before, sources, snapshots, plan };
+  };
+
+  it('doslovni citat i append-only ledger prolaze bez mutacije', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    expect(plan.ledger).toHaveLength(1);
+    expect(validateQuoteAnchorPlan(before, plan, sources, snapshots)).toEqual([]);
+  });
+
+  it('sidrenje bez ledger zapisa pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    expect(validateQuoteAnchorPlan(before, { ...plan, ledger: [] }, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: anchor-ledger-missing-or-mismatched`);
+  });
+
+  it('promjena vrijednosti pri sidrenju pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    const mutated = { ...plan, profile: { ...plan.profile,
+      ruleEntries: [{ ...plan.profile.ruleEntries![0], value: 'A3' }],
+    } };
+    expect(validateQuoteAnchorPlan(before, mutated, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: protected-claim-changed`);
+  });
+
+  it('spustanje ljudski potvrdjenog statusa pri sidrenju pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    const mutated = { ...plan, profile: { ...plan.profile,
+      ruleEntries: [{ ...plan.profile.ruleEntries![0], status: 'needs-recheck' as const, scored: false }],
+    } };
+    expect(validateQuoteAnchorPlan(before, mutated, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: human-status-changed`);
+  });
+});
+
 describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {
   it('job koji zove "npm ci" izravno, bez composite akcije, obara gard', () => {
     // BASELINE: stvaran repo nema nijedan job koji zove "npm ci" mimo `setup-deps` (dokazano
@@ -8095,7 +8594,7 @@ describe('mutacije: read-only faze lean workflowa idu kroz lean-citac (run wf_c8
   });
 
   it('mutant: uklonjen tools (agent bi naslijedio sve alate) se hvata', () => {
-    const mutant = agentMd.replace(/^tools:.*\n/m, '');
+    const mutant = agentMd.replace(/^tools:.*(?:\r?\n|$)/m, '');
     expect(mutant).not.toBe(agentMd);
     expect(samoCitanje(mutant)).toBe(false);
   });

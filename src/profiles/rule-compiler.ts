@@ -130,7 +130,7 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       // Uz to je zrcalo isti propis vec zapisalo kao `[10,11,12]`, pa je usporedba tvrdnje i
       // bodovane vrijednosti prijavljivala raskorak ondje gdje se strane savrseno slazu, i
       // demotirala velicinu pisma na profilu bez ijednog stvarnog neslaganja.
-      eff.size = expandNumericRange(value) ?? (value as never);
+      eff.size = expandNumericRange(value) ?? (typeof value === 'number' ? [value] : (value as never));
       return true;
     case 'line-spacing': eff.spacing = value; return true;
     case 'lines-per-page': eff.linesPerPage = value; return true;

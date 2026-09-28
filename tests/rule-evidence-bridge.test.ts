@@ -21,6 +21,21 @@ import type { Check, Issue } from '../src/scoring/checks';
  */
 
 const ROOT = resolve(__dirname, '..');
+const BRIDGED_CHECK_IDS = new Set(Object.values(RULE_BRIDGE_BY_REGISTRY_ID).flat());
+const servedBridgeEvidenceProblems = (() => {
+  const artifact = JSON.parse(
+    readFileSync(resolve(ROOT, 'data', 'generated', 'profile-rules-server.json'), 'utf8'),
+  ) as { profiles?: Record<string, { evidenceEntries?: Array<Record<string, unknown>>; repairEntries?: Array<Record<string, unknown>> }> };
+  const out: string[] = [];
+  for (const [profileId, profile] of Object.entries(artifact.profiles || {})) {
+    for (const entry of [...(profile?.evidenceEntries || []), ...(profile?.repairEntries || [])]) {
+      if (typeof entry.checkId !== 'string' || !BRIDGED_CHECK_IDS.has(entry.checkId)) continue;
+      const quote = typeof entry.quote === 'string' ? entry.quote.trim() : '';
+      if (!quote) out.push(`${profileId}/${entry.checkId}`);
+    }
+  }
+  return out;
+})();
 
 const servedQuotedCheckIds = (() => {
   const artifact = JSON.parse(
@@ -69,19 +84,15 @@ describe('most nalaz -> autorsko pravilo', () => {
   });
 
   it('svako autorsko pravilo u mostu POSTOJI u serviranim podacima, i to s citatom', () => {
-    // Suprotan smjer mrtvog unosa: pravilo koje se vise ne servira ili je ostalo bez citata.
+    // Oba smjera mosta mjere stvarno servirane repair unose s citatom.
     const referenced = [...new Set(Object.values(RULE_BRIDGE_BY_REGISTRY_ID).flat())];
-    const missing = referenced.filter((id) => !servedQuotedCheckIds.has(id));
-    expect(missing).toEqual([]);
+    expect(referenced.filter((id) => !servedQuotedCheckIds.has(id))).toEqual([]);
+    expect(servedBridgeEvidenceProblems).toEqual([]);
   });
 
   it('most pokriva svaki servirani tip pravila s citatom, osim izricito izuzetog', () => {
-    // Bez ovoga bi nov tip pravila s citatom tiho ostao bez dokaza u sucelju.
-    const bridged = new Set(Object.values(RULE_BRIDGE_BY_REGISTRY_ID).flat());
-    const uncovered = [...servedQuotedCheckIds].filter((id) => !bridged.has(id)).sort();
-    // `table-figure-rescue-rules` uredjuje poravnanje, a motor poravnanje ne mjeri nijednom
-    // provjerom. Ostaje nepokriven dok ta provjera ne postoji; zakvacen na naslove tablica
-    // nosio bi navod ciji enkodiran propis govori o necem drugom.
+    // Pravilo o poravnanju ostaje izuzeto dok motor ne mjeri tu os.
+    const uncovered = [...servedQuotedCheckIds].filter((id) => !BRIDGED_CHECK_IDS.has(id)).sort();
     expect(uncovered).toEqual(['table-figure-rescue-rules']);
   });
 

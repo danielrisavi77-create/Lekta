@@ -226,23 +226,22 @@ export const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => 
  * `checkId`-jevi su izvuceni iz koda (`grep "checkId === "`), ne prepisani po sjecanju: prvi
  * pokusaj je koristio `legal-footnote-rules`, imena koje u kodu ne postoji, i dao lazno tocnu nulu.
  */
-export const ASSISTED_RULE_GATE: Record<string, string> = {
+export const ASSISTED_RULE_GATE: Record<string, string | readonly string[]> = {
   'bibliography-repair-fixer': 'bibliography-rules',
   'citation-bibliography-sync-fixer': 'citation-sync-rules',
   'section-surgery-fixer': 'section-surgery-rules',
   'legal-footnote-repair-fixer': 'legal-footnote-repair-rules',
-  // `requiredSectionsRepairableItem` isto radi tvrdi `if (!ruleEntry) return []`. Taj unos ima 21
-  // profil od 407, pa ostalima stavka nikad nije ni ponudjena; provjereno na uzorku od pet profila
-  // iz nepokrivenog skupa, gdje se u punom lancu ne pojavi nijednom.
-  'required-section-fixer': 'required-section-rules',
+  // `requiredSectionsRepairableItem` traži izvorno potkrijepljeno pravilo; postojeći nacrti koriste
+  // oba checkId-ja za taj sadržaj, pa oba moraju proći istu provjeru provenijencije.
+  'required-section-fixer': ['required-section-rules', 'required-sections'],
 };
 
 /** Isti uvjet koji graditelji u `src/ui/repair-items.ts` primjenjuju na `profile.ruleEntries`. */
-function hasAssistedRule(profileId: string, checkId: string): boolean {
+function hasAssistedRule(profileId: string, checkIds: readonly string[]): boolean {
   const entries = (draftRuleEntriesFor(profileId) ?? []) as Array<Record<string, unknown>>;
   return entries.some(
     (entry) =>
-      entry?.checkId === checkId &&
+      checkIds.includes(String(entry?.checkId ?? '')) &&
       (entry?.status === 'verified' || entry?.status === 'advisory') &&
       Boolean(entry?.sourceId) &&
       Boolean(entry?.sourcePage) &&
@@ -472,7 +471,8 @@ function uncoveredReason(
   // Asistirano pravilo bez kojeg graditelj radi tvrdi `return []`: bez njega se fixer ne nudi
   // ni kao preporuka, pa se za taj profil nema sto dokazivati.
   const ruleCheckId = ASSISTED_RULE_GATE[fixerId];
-  if (ruleCheckId && profileId && !hasAssistedRule(profileId, ruleCheckId)) return 'profil-ne-propisuje-os';
+  const ruleCheckIds = typeof ruleCheckId === 'string' ? [ruleCheckId] : ruleCheckId;
+  if (ruleCheckIds && profileId && !hasAssistedRule(profileId, ruleCheckIds)) return 'profil-ne-propisuje-os';
   // Os koju generator NIJE prekrsio za ovaj profil nije "bez dokaza" nego neprimjenjiva: generator
   // krsi samo ono sto profil propisuje. Bez ove grane je 325 celija `toc-field-fixera` (407 minus
   // 83 profila s `requireToc`) nosilo krivu dijagnozu.
@@ -492,7 +492,7 @@ function uncoveredReason(
    * Razlika nije kozmeticka: "univerzalna higijena bez dokaza" zvuci kao rub, a `nema-dokaza` je
    * rupa u pokrivenosti bas ondje gdje fakultet nesto propisuje.
    */
-  const kapijaProsla = Boolean((gate && profile) || (ruleCheckId && profileId));
+  const kapijaProsla = Boolean((gate && profile) || (ruleCheckIds && profileId));
   if (ruleCount === 0) {
     if (isGated) return 'profil-ne-propisuje-os';
     return kapijaProsla ? 'nema-dokaza' : 'univerzalna-higijena-bez-dokaza';

@@ -21,6 +21,7 @@
  */
 
 import { attestationContentDigestSync } from './attestation-content-digest';
+import { repairSourceFreshness } from '../../scripts/lib/repair-source-hash.mjs';
 
 /**
  * Jedna mjerena skupina, bez ijednog podatka o dokumentima.
@@ -126,7 +127,10 @@ export function measuredCodeProblem(
   return isHash(String(a.repairSourceHash ?? '')) ? null : 'nema otiska koda popravka nad kojim je mjereno';
 }
 
-export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
+export function attestationProblems(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash?: string | null,
+): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
   if (a.schemaVersion !== 1) p.push('nepoznata verzija sheme');
@@ -134,6 +138,14 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   if (!a.signedAt) p.push('nema datuma potpisa');
   if (!Array.isArray(a.oracles) || a.oracles.length === 0) p.push('nema navedenih alata mjerenja');
   if (!a.corpusFingerprint) p.push('nema otiska korpusa');
+  if (currentRepairSourceHash !== undefined) {
+    const freshness = repairSourceFreshness(a.repairSourceHash, currentRepairSourceHash);
+    if (repairSourceFreshness(currentRepairSourceHash, currentRepairSourceHash).status === 'missing') {
+      p.push('nema otiska aktualnog koda popravka');
+    } else if (freshness.status === 'stale') {
+      p.push('kod popravka promijenjen nakon mjerenja');
+    }
+  }
   if (!a.measuredFromCommit) p.push('nema commita nad kojim je mjereno');
   // Vrijeme mjerenja je ono sto potpis pokriva; bez njega gard "potpis stariji od mjerenja" nema sto
   // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
@@ -209,8 +221,11 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
  * Par ulazi SAMO ako je barem jedan rad zavrsio cisto I nijedna provjera nije regresirala. Mjerenje
  * koje je naslo regresiju nije dokaz da popravak radi; ono je dokaz da ne radi.
  */
-export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
+export function provenUnitWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash?: string | null,
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
   const out = new Set<string>();
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
@@ -228,8 +243,11 @@ export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Se
  * 2026-09-08, nalaz 4: sucelje je 12 izmjerenih i 19 izvedenih profila pokrivalo istom recenicom).
  * Isti uvjet cistoce kao za par: unos s regresijom nista ne dokazuje.
  */
-export function attestedProfileWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
+export function attestedProfileWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash?: string | null,
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
   const out = new Set<string>();
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
