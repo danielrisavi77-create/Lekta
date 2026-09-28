@@ -34,6 +34,7 @@ import {
   zakljucajFakultet, zakljucajObnovljeniFakultet,
 } from '../src/ui/confirmed-faculty';
 import { emitAnalyzerDocumentSettled } from '../src/ui/analyzer-document-events';
+import { emitProfileConfirmed } from '../src/ui/profile-confirmed-events';
 import type { SelectionIds } from '../src/ui/profile-selection-ids';
 import {
   cijeliProfilProblemi, detekcijaFakultetaProblemi, ispustanjeProblemi, ozicenjeUlazaProblemi, pecatRokaProblemi,
@@ -762,6 +763,94 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(primijeniPotvrduUlaza({ ...baza, sessionId: 's-2' })).toBe('locked');
     expect(detekcijaSmije('fpzg', naPrebaci)).toBe(false);
     expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+  });
+
+  /**
+   * REGRESIJA (pregled eaf21950): "Prebaci" na FPZG zapise odluku uz sesiju; student se predomisli
+   * i u listu profila RUCNO potvrdi FER (`potvrdiProfil` u `app.ts`, `emitProfileConfirmed`). Bez
+   * ovog popravka bi ponovno otvaranje iste sesije ponovilo stari "Prebaci" i tiho pregazilo rucno
+   * potvrdjeni FER. Test SVJESNO ne prolazi kroz `app.ts`: `emitProfileConfirmed` je jedina spona
+   * koju `confirmed-faculty.ts` sluša, kao i za dokument (`subscribeAnalyzerDocumentSettled`).
+   */
+  it('rucna potvrda drugog profila ponistava staru "Prebaci" odluku: ne ponavlja se pri ponovnom otvaranju', () => {
+    ocistiPohranu();
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    zapisiPotvrdu({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    const baza = {
+      sessionId: 's-1', sessionHasProfile: true,
+      readForm: () => { throw new Error('C4 je vec obnovio profil'); },
+      apply: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      applyFaculty: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      confirm: () => { throw new Error('bez nove snimke'); },
+      zakljucajObnovljeno: (pamcenje: Parameters<typeof zakljucajObnovljeniFakultet>[0]) => { zakljucajObnovljeniFakultet(pamcenje); },
+    };
+    // Prvo otvaranje: brava na potvrdjeni FER, dokument pokazuje fpzg, student klikne "Prebaci".
+    expect(primijeniPotvrduUlaza(baza)).toBe('locked');
+    expect(potvrdjenFakultet()).toBe('fer');
+    const naPrebaci1 = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci1), 'prvi sukob: znacka/red se crta, jos nema odluke').toBe(false);
+    expect(naPrebaci1).not.toHaveBeenCalled();
+    gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(naPrebaci1, 'klik na "Prebaci" primjenjuje prepoznati kontekst').toHaveBeenCalledTimes(1);
+    expect(potvrdjenFakultet(), 'Prebaci je preselio bravu na fpzg').toBe('fpzg');
+    expect(odlukaNapomeneZaSesiju('s-1')).toEqual({ odluka: 'prebaci', prepoznato: 'fpzg' });
+    // Student se predomisli: u listu profila RUCNO potvrdi FER (drugi profil od prepoznatog fpzg).
+    emitProfileConfirmed({
+      profileDefinitionId: 'fer-racunarstvo-diplomski',
+      selectionIds: {
+        institution: 'unizg', unit: 'fer', program: 'Računarstvo', workType: 'graduate',
+        variant: 'default', department: 'general', methodology: 'auto', citation: 'apa7',
+      },
+      confirmedAt: 2,
+    });
+    // Stara odluka je pretvorena u "zadrzi" za isti prepoznati fakultet, ne obrisana.
+    expect(odlukaNapomeneZaSesiju('s-1')).toEqual({ odluka: 'zadrzi', prepoznato: 'fpzg' });
+    // PONOVNO OTVARANJE (nova brava, memorija modula prazna): C4 obnovi FER, obrazac ga pokazuje.
+    zakljucajFakultet(undefined, undefined);
+    unit.value = 'fer';
+    expect(primijeniPotvrduUlaza(baza)).toBe('locked');
+    expect(potvrdjenFakultet(), 'brava na obnovljeni FER').toBe('fer');
+    const naPrebaci2 = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci2), 'stara odluka se NE ponavlja').toBe(false);
+    expect(naPrebaci2, 'nema tihog prebacivanja na fpzg').not.toHaveBeenCalled();
+    expect(potvrdjenFakultet(), 'rucno potvrdjeni FER ostaje').toBe('fer');
+    expect(vidljiviRed().childElementCount, 'bez napomene: "zadrzi" je tih kao i prije').toBe(0);
+  });
+
+  it('KONTROLA: bez rucne potvrde poslije "Prebaci", odluka ostaje netaknuta i "Prebaci" vrijedi i nakon ponovnog otvaranja', () => {
+    ocistiPohranu();
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    zapisiPotvrdu({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija: null, at: 1 });
+    veziPotvrduZaSesiju('s-1');
+    const baza = {
+      sessionId: 's-1', sessionHasProfile: true,
+      readForm: () => { throw new Error('C4 je vec obnovio profil'); },
+      apply: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      applyFaculty: () => { throw new Error('potvrda se ne primjenjuje ponovo'); },
+      confirm: () => { throw new Error('bez nove snimke'); },
+      zakljucajObnovljeno: (pamcenje: Parameters<typeof zakljucajObnovljeniFakultet>[0]) => { zakljucajObnovljeniFakultet(pamcenje); },
+    };
+    expect(primijeniPotvrduUlaza(baza)).toBe('locked');
+    const naPrebaci1 = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci1)).toBe(false);
+    gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(naPrebaci1).toHaveBeenCalledTimes(1);
+    // BEZ rucne potvrde ("Potvrdi profil" nikad kliknut poslije "Prebaci"): odluka ostaje netaknuta.
+    expect(odlukaNapomeneZaSesiju('s-1')).toEqual({ odluka: 'prebaci', prepoznato: 'fpzg' });
+    // Ponovno otvaranje: bez rucne potvrde C4 obnovi opet FER (Prebaci nije pisao vlastiti profil),
+    // pa "Prebaci" se ponovi kao i prije ovog popravka (kontrola postojeceg ponasanja).
+    zakljucajFakultet(undefined, undefined);
+    expect(unit.value, 'Prebaci nije pisao C4 profil: obrazac se obnavlja na FER').toBe('fer');
+    expect(primijeniPotvrduUlaza(baza)).toBe('locked');
+    const naPrebaci2 = vi.fn();
+    expect(detekcijaSmije('fpzg', naPrebaci2), '"Prebaci" iz prvog otvaranja se ponovi').toBe(false);
+    expect(naPrebaci2).toHaveBeenCalledTimes(1);
+    expect(vidljiviRed().childElementCount, 'bez napomene: tihi replay').toBe(0);
   });
 
   it('skrijNapomenu (zove je setFile u app.ts) prazni vidljivi red i skriva znacku odmah', () => {

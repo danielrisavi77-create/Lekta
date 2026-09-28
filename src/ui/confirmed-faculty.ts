@@ -58,9 +58,22 @@
  * `profile-confirmed-events.ts`): drugi dokument u istoj kartici je drugi rad, pa brava pada.
  * "Prebaci" pracenje dokumenta NE resetira (nalaz pregleda Codex, major): prebaceni fakultet
  * vrijedi za isti rad, a drugi rad ga otpusta kao i potvrdjeni.
+ *
+ * RUCNA POTVRDA DRUGOG PROFILA PONISTAVA STARU "PREBACI" ODLUKU (Z32 popravak, regresija otkrivena
+ * u pregledu eaf21950, odluka vlasnika 2026-09-27 "korisnik moze odabrati sam" i C4). Student koji
+ * je kliknuo "Prebaci" (odluka zapisana uz sesiju), pa se predomislio i u listu profila RUCNO
+ * potvrdio drugi profil (`potvrdiProfil` u `app.ts`, `emitProfileConfirmed`), pri ponovnom
+ * otvaranju iste sesije (`zakljucajObnovljeniFakultet`) ne smije dobiti staru odluku vracenu: ona
+ * bi se ponovila i tiho pregazila upravo rucno potvrdjeni profil. Odluka se zato PRETVARA u
+ * "zadrzi" za isti prepoznati fakultet (ne brise): brisanje bi pri ponovnom otvaranju ostavilo
+ * sljedecu detekciju bez odluke, pa bi napomena iskrsla iznova umjesto da rucna potvrda
+ * jednostavno vrijedi. Rucna potvrda TOCNO onog fakulteta na koji je "Prebaci" vec prebacio ne
+ * dira odluku, jer je vec dosljedna. Bez rucne potvrde odluka ostaje netaknuta i "Prebaci" se pri
+ * ponovnom otvaranju ponovi kao i prije ovog popravka.
  */
 import { findUnit } from '../catalog/catalog-loader';
 import { subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
+import { subscribeProfileConfirmed } from './profile-confirmed-events';
 
 /** Odluka studenta o napomeni za JEDAN rad: zadrzao je potvrdjeni ili prebacio na prepoznati. */
 export interface OdlukaNapomene {
@@ -317,4 +330,17 @@ subscribeAnalyzerDocumentSettled((e) => {
   }
   if (!datoteka) datoteka = e.file;
   else if (e.file !== datoteka) { jedinica = null; zaboraviIzbor(); }
+});
+
+/**
+ * Rucna potvrda profila (vidi zaglavlje) poništava odluku "Prebaci" koja ciljala DRUGI fakultet od
+ * upravo potvrdjenog: pretvara je u "Zadrži" za taj isti prepoznati fakultet, pa se pri ponovnom
+ * otvaranju ne ponovi. Bez aktivne odluke za ovu sesiju (`odluka` ili `pamcenje` prazni), ili kad
+ * je rucno potvrdjen TOCNO fakultet na koji je "Prebaci" vec prebacio, nista se ne dira.
+ */
+subscribeProfileConfirmed((event) => {
+  if (!odluka || !pamcenje) return;
+  const potvrdjenoRucno = event.selectionIds.unit;
+  if (!potvrdjenoRucno || potvrdjenoRucno === odluka.prepoznato) return;
+  zapamti({ odluka: 'zadrzi', prepoznato: odluka.prepoznato });
 });
