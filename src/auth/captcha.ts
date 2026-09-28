@@ -22,6 +22,12 @@ export const TURNSTILE_SCRIPT_URL = 'https://challenges.cloudflare.com/turnstile
 /** Koliko se najdulje ceka token; izazov s interakcijom trazi klik korisnika. */
 const TOKEN_TIMEOUT_MS = 120_000;
 
+/**
+ * Koliko se najdulje ceka ucitavanje api.js (Codex T89-01). Zahtjev koji nikad ne zavrsi (ni load
+ * ni error) inace bi zadrzao Auth poziv zauvijek, jer rok tokena krece tek nakon ucitavanja.
+ */
+const SCRIPT_TIMEOUT_MS = 20_000;
+
 interface TurnstileRenderOptions {
   sitekey: string;
   appearance: 'interaction-only';
@@ -43,6 +49,7 @@ export interface CaptchaDeps {
   /** Vraca Turnstile API nakon ucitavanja skripte; testovi ga podmecu. */
   loadApi?: (doc: Document) => Promise<TurnstileApi | undefined>;
   timeoutMs?: number;
+  scriptTimeoutMs?: number;
 }
 
 export function turnstileSiteKey(): string {
@@ -71,6 +78,35 @@ function loadTurnstileApi(doc: Document): Promise<TurnstileApi | undefined> {
   return apiPromise;
 }
 
+function withinTimeout<T>(promise: Promise<T | undefined>, ms: number): Promise<T | undefined> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(undefined), ms);
+    promise.then(
+      (value) => { clearTimeout(timer); resolve(value); },
+      () => { clearTimeout(timer); resolve(undefined); },
+    );
+  });
+}
+
+/** Poruka kad Auth odbije poziv zbog captche (Codex T89-02). */
+export const CAPTCHA_REJECTED_MESSAGE =
+  'Provjera da nisi robot nije prošla. Osvježi stranicu i pokušaj ponovno; ako koristiš blokator sadržaja, dopusti challenges.cloudflare.com.';
+
+/**
+ * Vidljiva obavijest za tok koji nema vlastiti obrazac (anonimna prijava iza popravka): bez nje bi
+ * razlog nestao, a korisnik bi vidio samo e-mail prijavu. Jedna obavijest, `role="alert"`.
+ */
+export function showCaptchaRejectedNotice(doc: Document | undefined = typeof document === 'undefined' ? undefined : document): void {
+  if (!doc?.body || doc.querySelector('[data-lekta-captcha-odbijen]')) return;
+  const note = doc.createElement('div');
+  note.setAttribute('data-lekta-captcha-odbijen', '');
+  note.setAttribute('role', 'alert');
+  note.textContent = CAPTCHA_REJECTED_MESSAGE;
+  note.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2147483000;max-width:min(92vw,480px);padding:12px 16px;border-radius:8px;background:#1f2937;color:#fff;font:14px/1.4 system-ui,sans-serif';
+  doc.body.appendChild(note);
+  setTimeout(() => note.remove(), 12_000);
+}
+
 /**
  * Jednokratni Turnstile token za jedan Auth poziv, ili `undefined` (bez kljuca, kvar, istek).
  * Widget je `interaction-only`: vidi se samo kad Cloudflare trazi klik, inace korisnik nista ne
@@ -81,8 +117,12 @@ export async function getCaptchaToken(deps: CaptchaDeps = {}): Promise<string | 
   if (!siteKey) return undefined;
   const doc = deps.doc ?? (typeof document === 'undefined' ? undefined : document);
   if (!doc?.body) return undefined;
-  const api = await (deps.loadApi ?? loadTurnstileApi)(doc);
-  if (!api) return undefined;
+  const api = await withinTimeout((deps.loadApi ?? loadTurnstileApi)(doc), deps.scriptTimeoutMs ?? SCRIPT_TIMEOUT_MS);
+  if (!api) {
+    // Visece ili palo ucitavanje ne smije ostati u predmemoriji: sljedeci pokusaj krece ispocetka.
+    if (!deps.loadApi) apiPromise = null;
+    return undefined;
+  }
 
   const container = doc.createElement('div');
   container.setAttribute('data-lekta-captcha', '');

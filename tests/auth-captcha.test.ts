@@ -2,8 +2,9 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { requestEmailOtp, signInAnonymously, signInWithPassword, withCaptcha } from '../src/auth/session';
-import { getCaptchaToken, TURNSTILE_SCRIPT_URL, type TurnstileApi } from '../src/auth/captcha';
+import { CAPTCHA_REJECTED_MESSAGE, getCaptchaToken, TURNSTILE_SCRIPT_URL, type TurnstileApi } from '../src/auth/captcha';
 import { captchaWiringProblems, type SourceFile } from './helpers/auth-captcha';
+import { buildInfo } from '../scripts/write-build-info.mjs';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon' };
 const TOKEN_BODY = { access_token: 'at', refresh_token: 'rt', expires_in: 3600, user: { id: 'u1', is_anonymous: true } };
@@ -60,6 +61,30 @@ describe('T89: captcha token u svim Auth pozivima', () => {
     expect(captcha).not.toHaveBeenCalled();
   });
 
+  it.each(FLOWS)('%s: 400 captcha_failed daje uputu za ponovni pokusaj (Codex T89-02)', async (_name, run) => {
+    const impl = (async () => new Response(
+      JSON.stringify({ code: 400, error_code: 'captcha_failed', msg: 'captcha protection: request disallowed (no captcha response)' }),
+      { status: 400 },
+    )) as unknown as typeof fetch;
+    const out = await run(impl, noToken);
+    expect(out).toEqual({ ok: false, message: CAPTCHA_REJECTED_MESSAGE });
+  });
+
+  it('anonimna prijava odbijena zbog captche pokazuje obavijest, jer nema vlastiti obrazac', async () => {
+    document.body.innerHTML = '';
+    const impl = (async () => new Response(JSON.stringify({ error_code: 'captcha_failed' }), { status: 400 })) as unknown as typeof fetch;
+    await signInAnonymously(CFG, impl, 0, noToken);
+    const note = document.querySelector('[data-lekta-captcha-odbijen]');
+    expect(note?.getAttribute('role')).toBe('alert');
+    expect(note?.textContent).toBe(CAPTCHA_REJECTED_MESSAGE);
+    document.body.innerHTML = '';
+  });
+
+  it('obican 400 na prijavi lozinkom i dalje znaci krive podatke', async () => {
+    const impl = (async () => new Response(JSON.stringify({ error_code: 'invalid_credentials' }), { status: 400 })) as unknown as typeof fetch;
+    expect(await signInWithPassword(CFG, 'a@b.hr', 'lozinka123', impl, 0, noToken)).toEqual({ ok: false, message: 'e-mail ili lozinka nisu točni' });
+  });
+
   it('withCaptcha: oblik koji GoTrue ocekuje', () => {
     expect(JSON.parse(withCaptcha({ a: 1 }, 't'))).toEqual({ a: 1, gotrue_meta_security: { captcha_token: 't' } });
     expect(withCaptcha({}, undefined)).toBe('{}');
@@ -110,6 +135,9 @@ describe('T89: Turnstile widget', () => {
     const silent: TurnstileApi = { render: () => 'w3', remove: () => {} };
     expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: async () => silent, timeoutMs: 5 })).toBeUndefined();
     expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: async () => undefined })).toBeUndefined();
+    // Codex T89-01: skripta koja se nikad ne ucita (ni load ni error) ne smije zadrzati Auth poziv.
+    const never = () => new Promise<TurnstileApi | undefined>(() => {});
+    expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: never, scriptTimeoutMs: 5 })).toBeUndefined();
     expect(document.querySelector('[data-lekta-captcha]')).toBeNull();
   });
 });
@@ -124,8 +152,36 @@ function sources(dir: string): SourceFile[] {
   return out;
 }
 
-describe('T89: gard ozicenja captche nad stvarnim src/', () => {
+describe('T89: gard ozicenja captche nad stvarnim src/ i supabase/functions', () => {
+  const real = () => [...sources(resolve(process.cwd(), 'src')), ...sources(resolve(process.cwd(), 'supabase', 'functions'))];
+
   it('svaki zasticeni Auth poziv ide kroz withCaptcha s tokenom', () => {
-    expect(captchaWiringProblems(sources(resolve(process.cwd(), 'src')))).toEqual([]);
+    expect(captchaWiringProblems(real())).toEqual([]);
+  });
+
+  it('negativna kontrola (Codex T89-04): supabase-js Auth poziv uz postojece pozive je nalaz', () => {
+    const sdk = { path: 'src/novo.ts', text: 'await supabase.auth.signInAnonymously();\nawait sb.auth.resetPasswordForEmail(email);\n' };
+    const problems = captchaWiringProblems([...real(), sdk]);
+    expect(problems).toEqual([
+      'src/novo.ts: supabase-js signInAnonymously() mimo withCaptcha; ozici captchaToken i prosiri gard',
+      'src/novo.ts: supabase-js resetPasswordForEmail() mimo withCaptcha; ozici captchaToken i prosiri gard',
+    ]);
+  });
+
+  it('auth.admin.* (service role) nije nalaz', () => {
+    expect(captchaWiringProblems([...real(), { path: 'x.ts', text: 'await admin.auth.admin.getUserById(id);' }])).toEqual([]);
+  });
+});
+
+describe('T89: build-info javlja ima li build captcha kljuc (bez samog kljuca)', () => {
+  const sha = 'a'.repeat(40);
+  const at = new Date('2026-09-28T00:00:00Z');
+
+  it('s kljucem true, bez ili s razmacima false; kljuc se nikad ne upisuje', () => {
+    const s = buildInfo(sha, at, { VITE_TURNSTILE_SITE_KEY: '0x4AAAAtajnovit' });
+    expect(s.captchaSiteKey).toBe(true);
+    expect(JSON.stringify(s)).not.toContain('0x4AAAAtajnovit');
+    expect(buildInfo(sha, at, {}).captchaSiteKey).toBe(false);
+    expect(buildInfo(sha, at, { VITE_TURNSTILE_SITE_KEY: '  ' }).captchaSiteKey).toBe(false);
   });
 });

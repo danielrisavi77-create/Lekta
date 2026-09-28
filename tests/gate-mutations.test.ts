@@ -4412,6 +4412,21 @@ const MUTATIONS: Mutation[] = [
       captchaWiringProblems([{ path: 'src/auth/session.ts', text: readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts')) }]).length === 0,
   },
   {
+    id: 'auth/supabase-js-prijava-mimo-captche',
+    imitates:
+      'Codex T89-04: novi tok kroz supabase-js (npr. reset lozinke ili anonimna prijava) bez captchaToken; ' +
+      'fetch dio garda ga ne vidi, pa bi uz tri postojeca poziva prosao.',
+    caught: () => {
+      const text = readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts'));
+      return captchaWiringProblems([
+        { path: 'src/auth/session.ts', text },
+        { path: 'src/auth/reset.ts', text: 'await supabase.auth.resetPasswordForEmail(email);\n' },
+      ]).some((p) => p.includes('supabase-js resetPasswordForEmail() mimo withCaptcha'));
+    },
+    cleanBefore: () =>
+      captchaWiringProblems([{ path: 'src/auth/session.ts', text: readTextLf(resolve(process.cwd(), 'src', 'auth', 'session.ts')) }]).length === 0,
+  },
+  {
     id: 'csp/turnstile-izbacen-iz-script-src',
     imitates:
       'Bez challenges.cloudflare.com u script-src preglednik blokira Turnstile api.js; klijent tada ' +

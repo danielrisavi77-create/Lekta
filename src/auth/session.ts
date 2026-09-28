@@ -82,6 +82,21 @@ export function withCaptcha(body: Record<string, unknown>, captchaToken: string 
   return JSON.stringify(captchaToken ? { ...body, gotrue_meta_security: { captcha_token: captchaToken } } : body);
 }
 
+/**
+ * GoTrue odbija poziv zbog captche s 400 i `error_code: captcha_failed` (Codex T89-02). Bez ove
+ * provjere prijava lozinkom bi rekla "e-mail ili lozinka nisu točni", a anonimna bi izgubila razlog.
+ */
+async function captchaRejected(res: Response): Promise<boolean> {
+  if (res.status !== 400) return false;
+  // Tijelo se cita jednom: nakon ove provjere nijedna grana greske ga vise ne cita.
+  const data = (await Promise.resolve().then(() => res.json()).catch(() => ({}))) as Record<string, unknown>;
+  return data.error_code === 'captcha_failed' || /captcha/i.test(String(data.msg ?? data.error_description ?? ''));
+}
+
+async function captchaRejectedMessage(): Promise<string> {
+  return (await import('./captcha')).CAPTCHA_REJECTED_MESSAGE;
+}
+
 /** Uspjesan GoTrue token odgovor u sesiju; nevaljan oblik je neuspjeh, ne prazna sesija. */
 async function sessionFromResponse(res: Response, now: number): Promise<SessionResult> {
   const session = parseTokenResponse(await res.json().catch(() => ({})), now);
@@ -139,6 +154,7 @@ export async function requestEmailOtp(
       body: withCaptcha({ email: clean, create_user: true, ...(redirectTo ? { redirect_to: redirectTo } : {}) }, captchaToken),
     });
     if (res.ok) return { ok: true };
+    if (await captchaRejected(res)) return { ok: false, message: await captchaRejectedMessage() };
     if (res.status === 429) return { ok: false, message: 'previše pokušaja, pričekaj minutu' };
     return { ok: false, message: `slanje koda nije uspjelo (${res.status})` };
   } catch (e) {
@@ -204,6 +220,12 @@ export async function signInAnonymously(
       body: withCaptcha({}, captchaToken),
     });
     if (!res.ok) {
+      if (await captchaRejected(res)) {
+        // Anonimna prijava nema obrazac, pa se razlog pokazuje obavijesti, ne samo porukom.
+        const captcha = await import('./captcha');
+        captcha.showCaptchaRejectedNotice();
+        return { ok: false, message: captcha.CAPTCHA_REJECTED_MESSAGE };
+      }
       // 422 = anonimne prijave nisu ukljucene na projektu (external_anonymous_users_enabled).
       if (res.status === 422) return { ok: false, message: 'anonimna prijava nije uključena' };
       return { ok: false, message: `anonimna prijava nije uspjela (${res.status})` };
@@ -239,6 +261,7 @@ export async function signInWithPassword(
       body: withCaptcha({ email: clean, password }, captchaToken),
     });
     if (!res.ok) {
+      if (await captchaRejected(res)) return { ok: false, message: await captchaRejectedMessage() };
       if (res.status === 400 || res.status === 401) return { ok: false, message: 'e-mail ili lozinka nisu točni' };
       return { ok: false, message: `prijava nije uspjela (${res.status})` };
     }
