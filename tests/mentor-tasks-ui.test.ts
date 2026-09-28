@@ -95,6 +95,35 @@ describe('montaza: obradjeno naspram provjereno', () => {
     expect(f.textContent).toContain('Povezana formalna provjera prolazi');
   });
 
+  // Mobilni audit 2026-09-28: na uskom ekranu blok je sklopljen u jedan redak, da prvi ekran nakon provjere pokaze
+  // rezultat. Sazetak u retku nosi broj komentara i otvorenih; siri ekran ostaje otvoren kao prije.
+  it('uzak ekran: blok je sklopljen, redak nosi broj komentara i otvorenih', async () => {
+    await mountMentorTasks(mount, bytes, CHECKS, { uzak: true });
+    const d = mount.querySelector<HTMLDetailsElement>('details.mt')!;
+    expect(d, 'blok je <details>').not.toBeNull();
+    expect(d.open).toBe(false);
+    const redak = d.querySelector('summary')!.textContent!;
+    expect(redak).toContain('Komentari mentora u dokumentu (4)');
+    expect(redak).toContain('otvoreno 2');
+  });
+
+  it('sirok ekran: blok je otvoren kao i prije', async () => {
+    await mountMentorTasks(mount, bytes, CHECKS, { uzak: false });
+    expect(mount.querySelector<HTMLDetailsElement>('details.mt')!.open).toBe(true);
+  });
+
+  it('korisnik otvori blok na mobitelu, oznaci komentar obradjenim: blok ostaje otvoren', async () => {
+    await mountMentorTasks(mount, bytes, CHECKS, { uzak: true });
+    const d = mount.querySelector<HTMLDetailsElement>('details.mt')!;
+    d.open = true;
+    d.dispatchEvent(new Event('toggle'));
+    mount.querySelectorAll<HTMLElement>('[data-mentor-task]')[1].querySelector<HTMLButtonElement>('[data-mentor-address]')!.click();
+    const poslije = mount.querySelector<HTMLDetailsElement>('details.mt')!;
+    expect(poslije, 'render je zamijenio blok').not.toBe(d);
+    expect(poslije.open).toBe(true);
+    expect(poslije.querySelector('summary')!.textContent).toContain('otvoreno 1');
+  });
+
   it('bez komentara mount ostaje skriven', async () => {
     const bez = new Uint8Array(readFileSync(join(__dirname, 'fixtures', 'docx', 'lo-fpzg-zavrsni-neuskladjen.docx')));
     expect(await mountMentorTasks(mount, bez, CHECKS)).toBe(false);

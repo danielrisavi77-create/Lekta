@@ -748,6 +748,10 @@ body.is-scrolling .section *{box-shadow:none!important}
 .privacy-pill svg{width:12px;height:12px}
 /* obrazac: veliki papir s trakom */
 .analyzer-wrap{border:0;border-radius:0;box-shadow:var(--paper-sh);transform:rotate(.3deg);position:relative;overflow:visible}
+/* Na mobitelu list stoji ravno. Nagib od .3deg na listu visokom tisucama piksela (rezultat s otvorenim
+   nalazima) pomice gornji rub za pola visine puta sin kuta, pa je list na 390 px izasao ~18 px preko
+   desnog ruba i bio odrezan (mobilni audit 2026-09-28, "Pregledaj nalaze"). */
+@media(max-width:720px){.analyzer-wrap{transform:none}}
 .analyzer-wrap::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-1.5deg);width:150px;height:30px;background:color-mix(in srgb,var(--paper) 55%,transparent);border:1px solid color-mix(in srgb,var(--paper-ink) 8%,transparent);backdrop-filter:blur(2px);z-index:3}
 .wizard-rail{display:flex;align-items:center;gap:14px;padding:14px 30px;border-bottom:1.5px solid var(--paper-ink);margin:0;background:none;flex-wrap:wrap}
 .rail-form-title{font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
