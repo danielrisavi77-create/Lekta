@@ -13,6 +13,7 @@ import {
   catalogProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
+  privilegeProblems,
   runV1,
   snapshotProblems,
   upgradeRevertSqlProblems,
@@ -58,5 +59,18 @@ describe('0207 u stvarnom Postgresu', () => {
   it('Codex PR #217 M1: djelomican povrat se vodi u bazi; povrat prije pretvorbe je odbija, povrat nakon nje trazi rucni pregled', async () => {
     run = await runV1();
     expect(await partialRefundSqlProblems(run.db)).toEqual([]);
+  }, ROK);
+});
+
+describe('0207: privilegije (Codex PR #217, M4)', () => {
+  it('anon i authenticated nemaju nista na offer_codes ni EXECUTE na RPC-ima; service_role ima izricite grantove', async () => {
+    const sZadanima = await runV1(undefined, { supabaseDefaults: true });
+    const bez = await runV1();
+    try {
+      expect(await privilegeProblems(sZadanima.db, bez.db)).toEqual([]);
+    } finally {
+      await sZadanima.db.close();
+      await bez.db.close();
+    }
   }, ROK);
 });

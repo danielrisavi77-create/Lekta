@@ -135,6 +135,7 @@ import {
   catalogProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
+  privilegeProblems,
   readMigration,
   runV1,
   snapshotProblems,
@@ -7713,6 +7714,44 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     } finally {
       await run.db.close();
     }
+  }, ROK_SQL);
+
+  /** M4: privilegije se mjere u bazi sa zadanim privilegijama Supabasea i u bazi bez njih. */
+  async function privilegijeNad(sql: string): Promise<string[]> {
+    const sZadanima = await runV1(sql, { supabaseDefaults: true });
+    const bez = await runV1(sql);
+    try {
+      return await privilegeProblems(sZadanima.db, bez.db);
+    } finally {
+      await sZadanima.db.close();
+      await bez.db.close();
+    }
+  }
+
+  it('Codex PR #217 M4: privilegije baseline ciste', async () => {
+    expect(await privilegijeNad(readMigration(V1_MIGRATION))).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez revoke (stanje f466d454) daje anon zadane privilegije i obara gard', async () => {
+    const mutated = mutiraj('revoke all on table public.offer_codes from public, anon, authenticated;', '');
+    const p = await privilegijeNad(mutated);
+    expect(p.some((x) => x.startsWith('anon ima INSERT na offer_codes'))).toBe(true);
+    expect(p.some((x) => x.startsWith('authenticated ima TRUNCATE na offer_codes'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez izricitog grant execute service_role (stanje f466d454) obara gard u bazi bez zadanih', async () => {
+    const mutated = mutirajRe(/grant execute on function public\.apply_entitlement_upgrade\([^)]*\)\r?\n  to service_role;/, '');
+    expect((await privilegijeNad(mutated)).some((x) => x.includes('service_role nema EXECUTE na public.apply_entitlement_upgrade') && x.includes('bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez revoke za anon obara gard', async () => {
+    const mutated = mutiraj('revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('anon ima EXECUTE na public.note_entitlement_partial_refund'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez grant service_role obara gard u bazi bez zadanih', async () => {
+    const mutated = mutiraj('grant select, insert, update, delete on table public.offer_codes to service_role;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('service_role nema SELECT na offer_codes (bez zadanih'))).toBe(true);
   }, ROK_SQL);
 
   it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {

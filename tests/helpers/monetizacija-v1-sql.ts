@@ -70,10 +70,28 @@ const SUPABASE_ENV = `
   create function cron.unschedule(a text) returns boolean language sql as $$ select true $$;
 `;
 
-/** Baza sa svim BASE_MIGRATIONS; 0207 se primjenjuje zasebno (applyV1), da se moze mjeriti prije i poslije. */
-export async function baseDatabase(): Promise<PGlite> {
+/**
+ * ZADANE PRIVILEGIJE SUPABASEA (Codex pregled PR #217, M4). Supabase za objekte koje u shemi public
+ * stvori vlasnik migracija daje anon, authenticated i service_role SVE privilegije na tablicama,
+ * funkcijama i sekvencama (`alter default privileges ... grant all ... to anon, authenticated,
+ * service_role`) i USAGE na shemi. Bez te simulacije mjerenje privilegija vidi samo tekst migracije,
+ * a ne ono sto bi anon stvarno imao u produkciji. NIJE provjereno nad zivim projektom.
+ */
+const SUPABASE_DEFAULT_PRIVILEGES = `
+  grant usage on schema public to anon, authenticated, service_role;
+  alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
+  alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
+  alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+`;
+
+/**
+ * Baza sa svim BASE_MIGRATIONS; 0207 se primjenjuje zasebno (applyV1), da se moze mjeriti prije i
+ * poslije. `supabaseDefaults`: prije migracija postavi zadane privilegije Supabasea (M4).
+ */
+export async function baseDatabase(opts: { supabaseDefaults?: boolean } = {}): Promise<PGlite> {
   const db = new PGlite();
   await db.exec(SUPABASE_ENV);
+  if (opts.supabaseDefaults) await db.exec(SUPABASE_DEFAULT_PRIVILEGES);
   for (const name of BASE_MIGRATIONS) {
     let sql = readMigration(name);
     if (name === '0011_faculty_requests.sql' || name === '0016_retention_slots_faculty.sql') {
@@ -145,8 +163,8 @@ export interface V1Run {
 }
 
 /** Baza, jedno pravo kupljeno prije 0207, pa 0207 (po zelji s izmijenjenim tekstom za mutaciju). */
-export async function runV1(v1Sql: string = readMigration(V1_MIGRATION)): Promise<V1Run> {
-  const db = await baseDatabase();
+export async function runV1(v1Sql: string = readMigration(V1_MIGRATION), opts: { supabaseDefaults?: boolean } = {}): Promise<V1Run> {
+  const db = await baseDatabase(opts);
   await db.query('insert into auth.users (id) values ($1), ($2)', [USER_A, USER_B]);
   const staro = await one(db, `insert into public.entitlements (user_id, work_type, slots_total, order_id, provider, purchase_expires_at, product_id)
                                values ($1, 'doktorski', 1, 'pi_staro', 'stripe', now() + interval '60 days', 'slot_doktorski') returning id`, [USER_A]);
@@ -619,5 +637,71 @@ export async function partialRefundSqlProblems(db: PGlite): Promise<string[]> {
   const a3 = await apply(db, id3, USER_A, 'pi_up_720', 'pass_diplomski');
   if (a3 !== 'upgraded') problems.push(`kontrola: nepovezan povrat blokira cistu nadogradnju (${a3})`);
   if ((await vraceno(id3)) !== 0) problems.push('kontrola: nepovezan povrat pise refunded_cents');
+  return problems;
+}
+
+const V1_RPC_SIGNATURES = [
+  'public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)',
+  'public.revert_entitlement_upgrade(text)',
+  'public.note_entitlement_partial_refund(text, integer)',
+] as const;
+
+const TABLE_PRIVILEGES = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'] as const;
+
+/** Pokusaj naredbe pod zadanom ulogom; vraca null za uspjeh ili poruku greske. */
+async function asRole(db: PGlite, role: string, sql: string): Promise<string | null> {
+  await db.exec(`set role ${role}`);
+  try {
+    await db.query(sql);
+    return null;
+  } catch (e) {
+    return e instanceof Error ? e.message : String(e);
+  } finally {
+    await db.exec('reset role');
+  }
+}
+
+/**
+ * PRIVILEGIJE 0207 (Codex pregled PR #217, M4). Mjeri se u DVIJE baze, jer svaka hvata drugi kvar:
+ *  - `withDefaults` (zadane privilegije Supabasea, kao produkcija): anon i authenticated NE smiju
+ *    imati nijednu privilegiju na offer_codes ni EXECUTE na RPC-ima 0207, i to se provjerava i
+ *    stvarnim pokusajem pod ulogom (select, insert, poziv funkcije);
+ *  - `plain` (samo tekst migracija, bez zadanih): service_role mora imati SELECT/INSERT/UPDATE/DELETE
+ *    na offer_codes i EXECUTE na RPC-ima iz IZRICITIH grantova, ne iz implicitnih zadanih.
+ * U obje baze service_role stvarno cita offer_codes i poziva note_entitlement_partial_refund.
+ */
+export async function privilegeProblems(withDefaults: PGlite, plain: PGlite): Promise<string[]> {
+  const problems: string[] = [];
+  for (const role of ['anon', 'authenticated']) {
+    for (const priv of TABLE_PRIVILEGES) {
+      const r = await one(withDefaults, 'select has_table_privilege($1, $2, $3) as ima', [role, 'public.offer_codes', priv]);
+      if (r?.ima !== false) problems.push(`${role} ima ${priv} na offer_codes (zadane privilegije Supabasea nisu oduzete)`);
+    }
+    for (const sig of V1_RPC_SIGNATURES) {
+      const r = await one(withDefaults, 'select has_function_privilege($1, $2, $3) as ima', [role, sig, 'EXECUTE']);
+      if (r?.ima !== false) problems.push(`${role} ima EXECUTE na ${sig}`);
+    }
+    if ((await asRole(withDefaults, role, 'select code from public.offer_codes')) === null) problems.push(`${role} stvarno cita offer_codes`);
+    if ((await asRole(withDefaults, role, "insert into public.offer_codes (code, capabilities) values ('x_uloga', array['repair'])")) === null) {
+      problems.push(`${role} stvarno pise u offer_codes`);
+    }
+    if ((await asRole(withDefaults, role, "select public.note_entitlement_partial_refund('pi_uloga', 1)")) === null) {
+      problems.push(`${role} stvarno poziva note_entitlement_partial_refund`);
+    }
+  }
+  for (const [ime, db] of [['sa zadanim privilegijama', withDefaults], ['bez zadanih privilegija', plain]] as const) {
+    for (const priv of ['SELECT', 'INSERT', 'UPDATE', 'DELETE']) {
+      const r = await one(db, 'select has_table_privilege($1, $2, $3) as ima', ['service_role', 'public.offer_codes', priv]);
+      if (r?.ima !== true) problems.push(`service_role nema ${priv} na offer_codes (${ime})`);
+    }
+    for (const sig of V1_RPC_SIGNATURES) {
+      const r = await one(db, 'select has_function_privilege($1, $2, $3) as ima', ['service_role', sig, 'EXECUTE']);
+      if (r?.ima !== true) problems.push(`service_role nema EXECUTE na ${sig} (${ime})`);
+    }
+    const citanje = await asRole(db, 'service_role', 'select code from public.offer_codes');
+    if (citanje !== null) problems.push(`service_role ne cita offer_codes (${ime}): ${citanje}`);
+    const poziv = await asRole(db, 'service_role', "select public.note_entitlement_partial_refund('pi_uloga', 1)");
+    if (poziv !== null) problems.push(`service_role ne poziva note_entitlement_partial_refund (${ime}): ${poziv}`);
+  }
   return problems;
 }

@@ -96,10 +96,16 @@ on conflict (code) do nothing;
 comment on table public.offer_codes is
   'Verzionirani skupovi prava (MONETIZACIJA_V1.md odjeljak 13). Postojeci kod se ne mijenja; nova ponuda je novi kod.';
 
--- Opis ponude nije tajna (paywall ga smije citati); pisanje samo service role (bez policyja).
+-- PRIVILEGIJE IZRICITO (Codex pregled PR #217, M4). Klijent (anon, authenticated) offer_codes ne
+-- cita: paywall cita samo products, a prava ponude cita webhook-mor service roleom (ugradnja
+-- products -> offer_codes). Supabase zadane privilegije bi anon i authenticated inace dale SELECT,
+-- INSERT, UPDATE, DELETE i TRUNCATE, pa ih ovdje oduzimamo; service_role dobiva samo DML koji Edge
+-- i odrzavanje kataloga trebaju. RLS ostaje ukljucen bez ijednog policyja (default deny), kao
+-- druga crta. Gard: tests/monetizacija-v1-sql.test.ts (privilegeProblems) i gate-mutations.
 alter table public.offer_codes enable row level security;
 drop policy if exists offer_codes_select_all on public.offer_codes;
-create policy offer_codes_select_all on public.offer_codes for select using (true);
+revoke all on table public.offer_codes from public, anon, authenticated;
+grant select, insert, update, delete on table public.offer_codes to service_role;
 
 alter table public.products add column if not exists offer_code text references public.offer_codes(code);
 
@@ -523,6 +529,8 @@ $$;
 
 revoke all on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)
   from public, anon, authenticated;
+grant execute on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)
+  to service_role;
 
 comment on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz) is
   'Atomska pretvorba Repair prava u Final Pass za isti entitlement (MONETIZACIJA_V1.md odjeljak 14). Samo webhook-mor.';
@@ -597,6 +605,7 @@ end;
 $$;
 
 revoke all on function public.revert_entitlement_upgrade(text) from public, anon, authenticated;
+grant execute on function public.revert_entitlement_upgrade(text) to service_role;
 
 comment on function public.revert_entitlement_upgrade(text) is
   'Puni povrat uplate nadogradnje vraca pravo na zapamceni Repair (MONETIZACIJA_V1.md odjeljak 14). Samo webhook-mor.';
