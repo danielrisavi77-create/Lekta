@@ -33,7 +33,9 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -1045,6 +1047,25 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
   return src.slice(0, i) + src.slice(j);
 }
 
+
+/**
+ * Gard lokalnog PDF korpusa (scripts/pdf-corpus/harvest_pdf_corpus.py): javni radovi smiju samo IZVAN
+ * repozitorija. Python skripta nema TS ulaz, pa se mutira kopija izvora u privremenom stablu istog oblika
+ * (`scripts/pdf-corpus/`), a signal je njezin `--selftest` koji tvrdi da izlaz unutar repoa pada.
+ */
+const PDF_KORPUS_IZVOR = readFileSync(join(__dirname, '..', 'scripts', 'pdf-corpus', 'harvest_pdf_corpus.py'), 'utf8');
+function pdfKorpusSelftestProlazi(izvor: string): boolean {
+  const dir = mkdtempSync(join(tmpdir(), 'lekta-pdf-korpus-'));
+  try {
+    mkdirSync(join(dir, 'scripts', 'pdf-corpus'), { recursive: true });
+    const put = join(dir, 'scripts', 'pdf-corpus', 'harvest_pdf_corpus.py');
+    writeFileSync(put, izvor);
+    return spawnSync('python3', [put, '--selftest'], { encoding: 'utf8' }).status === 0;
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 const MUTATIONS: Mutation[] = [
   {
     id: 'upisnik/b15b-negacija',
@@ -1812,6 +1833,17 @@ const MUTATIONS: Mutation[] = [
       const r = pdfRazdvajanje();
       return r.bBez === 1 && r.aPdf === 1 && r.problemi.length === 0;
     },
+  },
+
+  /** Javni PDF radovi (A-pdf korpus) smiju samo lokalno, izvan repozitorija (odluka vlasnika 2026-09-28). */
+  {
+    id: 'pdf-korpus/izlaz-unutar-repozitorija',
+    imitates:
+      'skripta PDF korpusa nije provjeravala izlaznu mapu, pa bi javni studentski radovi (PDF i pretvoreni DOCX) ' +
+      'zavrsili u radnom stablu repozitorija i jednim commitom u Gitu',
+    caught: () => !pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR.replace('if out == repo or repo in out.parents:', 'if False:')),
+    cleanBefore: () =>
+      PDF_KORPUS_IZVOR.includes('if out == repo or repo in out.parents:') && pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
