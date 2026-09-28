@@ -8104,7 +8104,9 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
     expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
     expect(g.ispustanjeProblemi(procitaj('src/routes/intake/intake-controller.ts'), procitaj('src/routes/intake/intake-live.ts'))).toEqual([]);
-    expect(g.detekcijaFakultetaProblemi(procitaj('src/ui/app.ts'))).toEqual([]);
+    expect(g.detekcijaFakultetaProblemi(
+      procitaj('src/ui/app.ts'), procitaj('src/ui/confirmed-faculty.ts'), procitaj('src/routes/workspace/main.ts'),
+    )).toEqual([]);
   });
 
   it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
@@ -8183,18 +8185,50 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
   it('(h) detekcija na /rad/ koja gazi fakultet potvrdjen na ulazu obara gard', async () => {
     const { detekcijaFakultetaProblemi } = await import('./helpers/intake-live-guards');
     const app = procitaj('src/ui/app.ts');
+    const fak = procitaj('src/ui/confirmed-faculty.ts');
+    const main = procitaj('src/routes/workspace/main.ts');
+    expect(detekcijaFakultetaProblemi(app, fak, main), 'cist baseline').toEqual([]);
     // Kvar: detekcija ne pita bravu.
-    const bez = app.replace('||!detekcijaSmije(ctx.unitId))return;', ')return;');
+    const bez = app.replace('||!detekcijaSmije(ctx.unitId,', '||!(ctx.unitId,');
     expect(bez).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(bez)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
+    expect(detekcijaFakultetaProblemi(bez, fak, main)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
     // Kvar: primjena fakulteta ne postavlja bravu.
-    const bezBrave = app.replace('return zakljucajFakultet(ids.unit,$(\'#unitSelect\')?.value)', 'return true');
-    expect(bezBrave).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(bezBrave)).toContain('primjena fakulteta ne postavlja bravu');
+    const bezBrave = fak.replace('  return zakljucajFakultet(ids.unit, jedinicaUObrascu(doc), novoPamcenje);', '  return true;');
+    expect(bezBrave).not.toBe(fak);
+    expect(detekcijaFakultetaProblemi(app, bezBrave, main)).toContain('primjena fakulteta ne postavlja bravu');
+    // Kvar: obrazac se ne postavi prije brave, pa brava cita stari izbornik (iz postavki).
+    const rano = fak.replace('  postaviObrazac(ids);\n  return zakljucajFakultet', '  return zakljucajFakultet');
+    expect(rano).not.toBe(fak);
+    expect(detekcijaFakultetaProblemi(app, rano, main)).toContain('brava se postavlja prije nego obrazac prihvati fakultet');
     // Kvar: fakultet bez studija ostavi `_profileConfirmed` iz postavki, pa nepotvrdjen studij prolazi kao potvrdjen.
-    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false;', 'applySelectionIds(ids);');
+    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false}', 'applySelectionIds(ids)}');
     expect(potvrden).not.toBe(app);
-    expect(detekcijaFakultetaProblemi(potvrden)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+    expect(detekcijaFakultetaProblemi(potvrden, fak, main)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+    // Kvar: /rad/ potvrdu bez studija vodi ravno na obrazac, pa brava nikad ne nastane.
+    const ravno = main.replace('applyFaculty: (ids, pamcenje) => primijeniFakultetUlaza(ids, applyFacultyIds, pamcenje),', 'applyFaculty: (ids) => { applyFacultyIds(ids); return true; },');
+    expect(ravno).not.toBe(main);
+    expect(detekcijaFakultetaProblemi(app, fak, ravno)).toContain('/rad/ primjenjuje fakultet s ulaza bez brave');
+    // Nalaz pregleda Codex (blocker): cijeli profil s ulaza ide ravno na C4, bez brave, pa rad
+    // drugog fakulteta nikad ne dobije napomenu.
+    const profilRavno = main.replace('apply: (ids, pamcenje) => primijeniProfilUlaza(ids, applyConfirmedProfileSelection, pamcenje),', 'apply: applyConfirmedProfileSelection,');
+    expect(profilRavno).not.toBe(main);
+    expect(detekcijaFakultetaProblemi(app, fak, profilRavno)).toContain('/rad/ primjenjuje cijeli profil s ulaza bez brave');
+    // Kvar: ponovno otvaranje sesije s vlastitim profilom (C4) bez brave, pa "Prebaci" tiho nestane.
+    const obnovaBez = main.replace('      zakljucajObnovljeno: (pamcenje) => { zakljucajObnovljeniFakultet(pamcenje); },\n', '');
+    expect(obnovaBez).not.toBe(main);
+    expect(detekcijaFakultetaProblemi(app, fak, obnovaBez)).toContain('/rad/ obnavlja profil sesije s ulaza bez brave');
+    // Isti nalaz, druga polovica: C4 opet preskace detekciju i kad je fakultet zakljucan.
+    const c4Rano = app.replace('if(_sessionProfileApplied&&!potvrdjenFakultet())return;', 'if(_sessionProfileApplied)return;');
+    expect(c4Rano).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(c4Rano, fak, main)).toContain('potvrdjen profil sesije preskace provjeru potvrdjenog fakulteta');
+    // Kvar: detekcija koja smije (isti fakultet) primijeni se preko potvrdjenog profila sesije (C4).
+    const c4Gazi = app.replace('||_sessionProfileApplied)return;', ')return;');
+    expect(c4Gazi).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(c4Gazi, fak, main)).toContain('detekcija gazi potvrdjen profil sesije (C4)');
+    // Nalaz pregleda Codex (minor): zamjena dokumenta skriva samo znacku, a vidljivi red ostaje.
+    const staraNapomena = app.replace('clearErr();skrijNapomenu();', "clearErr();$('#detectBadge')?.classList.add('hidden');");
+    expect(staraNapomena).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(staraNapomena, fak, main)).toContain('zamjena dokumenta ostavlja napomenu o starom radu');
   });
 
   it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {
