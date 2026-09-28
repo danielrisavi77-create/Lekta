@@ -9,12 +9,12 @@ const WordExtractor = createRequire(import.meta.url)('word-extractor') as new ()
 // unpdf 1.8.1 deklarira Node >=22; tekst stvarnih snimki izmjeren je i na Node 20.
 const decode = (b: Uint8Array) => new TextDecoder().decode(b);
 export const UPISNIK_SNAPSHOT_RATCHET_CEILING = 380;
-export interface EvidenceRow { programCode: string; evidence: { sourceUrl: string; sourceLocator: string; quote: string } }
+interface EvidenceRow { programCode: string; evidence: { sourceUrl: string; sourceLocator: string; quote: string } }
 export interface UpisnikEvidenceFile { decisions: EvidenceRow[]; exclusions: EvidenceRow[]; integratedGraduateCoverage?: EvidenceRow[] }
 export interface SnapshotSource { url: string; snapshotPath?: string; snapshotHash?: string }
 export interface SnapshotRatchet { schemaVersion: number; entries: Array<{ programCode: string; kind: 'decision' | 'exclusion'; sourceUrl: string }> }
-export const ratchetKey = (e: { programCode: string; kind: string; sourceUrl: string }) => JSON.stringify([e.programCode, e.kind, e.sourceUrl]);
-export function normalizeSnapshotQuote(s: string): string {
+const ratchetKey = (e: { programCode: string; kind: string; sourceUrl: string }) => JSON.stringify([e.programCode, e.kind, e.sourceUrl]);
+function normalizeSnapshotQuote(s: string): string {
   return s.normalize('NFC').replace(/\u00ad/gu, '').replace(/(?<=\p{L})-\r?\n(?=\p{L})/gu, '')
     .replace(/[\u2018\u2019\u201a\u201b\u02bc]/gu, "'").replace(/[\u201c\u201d\u201e\u201f]/gu, '"')
     .replace(/\s+/gu, ' ').trim().toLocaleLowerCase('hr');
@@ -180,7 +180,7 @@ function docxText(xml: string, stylesXml?: string): string {
   visit(document);
   return result;
 }
-export async function pdfSnapshotText(bytes: Uint8Array): Promise<string> {
+async function pdfSnapshotText(bytes: Uint8Array): Promise<string> {
   const pdf = await getDocumentProxy(new Uint8Array(bytes));
   return (await extractText(pdf, { mergePages: true })).text;
 }
