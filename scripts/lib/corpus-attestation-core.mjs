@@ -88,3 +88,55 @@ export function attestationRefusals(results) {
   return out;
 }
 // <<< GARD:attestationRefusals
+
+// >>> GARD:sourceKindRefusals (mutacijski test cita ovaj blok kao izvor)
+const VRSTE_IZVORA_REZULTATA = new Set(['source-docx', 'public-pdf-converted']);
+/**
+ * Razlozi zbog kojih mjerenje NE SMIJE u ovjeru zadane vrste (`--source-kind`); prazno znaci da smije.
+ *
+ * Vrsta svakog rezultata dolazi iz sidecara (corpus-ingest --source-kind, repair-real-corpus je prenosi).
+ * PDF ovjera (razina A-pdf) trazi da SVAKI rezultat nosi `public-pdf-converted`: rezultat bez vrste je
+ * commitana fixture, izvorni DOCX ili PDF koji je zaobisao ingest, i nijedan od njih nije dokaz A-pdf.
+ * Ovjera izvornog DOCX-a odbija svaki rezultat pretvoren iz PDF-a, jer bi inace podigao pravi A
+ * (odluka vlasnika 2026-09-28). Nepoznata vrsta se odbija u oba smjera: zatvoren skup, kao u citacu ovjere.
+ */
+export function sourceKindRefusals(results, kind) {
+  const out = [];
+  const vrsta = (r) => (r.sourceKind === undefined ? null : r.sourceKind);
+  if (!VRSTE_IZVORA_REZULTATA.has(kind)) return [`nepoznata vrsta ovjere ${String(kind)}`];
+  const nepoznate = results.filter((r) => vrsta(r) !== null && !VRSTE_IZVORA_REZULTATA.has(vrsta(r))).length;
+  if (nepoznate) out.push(`${nepoznate} rezultata nosi nepoznat sourceKind`);
+  if (kind === 'public-pdf-converted') {
+    const bezPdf = results.filter((r) => vrsta(r) !== 'public-pdf-converted').length;
+    if (bezPdf) {
+      out.push(
+        `${bezPdf} rezultata nema sourceKind public-pdf-converted iz sidecara; PDF ovjera mjeri samo izlaz ` +
+          'corpus-ingest --source-kind public-pdf-converted (repair-real-corpus --only-root)',
+      );
+    }
+  } else {
+    const pdf = results.filter((r) => vrsta(r) === 'public-pdf-converted').length;
+    if (pdf) out.push(`${pdf} rezultata nosi sourceKind public-pdf-converted; rad pretvoren iz PDF-a ne smije u ovjeru izvornog DOCX-a`);
+  }
+  return out;
+}
+// <<< GARD:sourceKindRefusals
+
+// >>> GARD:ingestSourceKindProblem (mutacijski test cita ovaj blok kao izvor)
+/**
+ * Problem vrste izvora za scripts/corpus-ingest.mts, ili null. `--source-kind` je obavezan i iz zatvorenog
+ * skupa; izvor koji nosi oznaku `.lekta-corpus-kind` (pise je scripts/pdf-corpus/harvest_pdf_corpus.py) mora se
+ * s njom slagati, a `public-pdf-converted` bez oznake se odbija, jer
+ * rucno sastavljena mapa ne postaje PDF korpus (Codex #229, nalaz 02).
+ */
+export function ingestSourceKindProblem(kind, marker) {
+  if (!kind || !['source-docx', 'public-pdf-converted'].includes(kind)) {
+    return `obavezno --source-kind source-docx|public-pdf-converted (dobiveno: ${String(kind)})`;
+  }
+  if (marker !== null && marker !== kind) return `izvor se oznakom .lekta-corpus-kind izjasnjava kao "${marker}", a zadano je --source-kind ${kind}`;
+  if (kind === 'public-pdf-converted' && marker !== kind) {
+    return '--source-kind public-pdf-converted trazi izvor s oznakom .lekta-corpus-kind (staging mapa iz harvest_pdf_corpus.py)';
+  }
+  return null;
+}
+// <<< GARD:ingestSourceKindProblem

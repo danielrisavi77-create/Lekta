@@ -314,6 +314,15 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(procitaj(dir).sourceKind).toBe('source-docx');
       expect(attestationProblems(procitaj(dir))).toEqual([]);
 
+      // Codex #229, nalaz 02: PDF ovjera prima samo rezultate s PDF sidecarom (sourceKind iz corpus-ingest).
+      const bezPdfSidecara = pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted');
+      expect(bezPdfSidecara.status).toBe(1);
+      expect(bezPdfSidecara.stderr).toMatch(/2 rezultata nema sourceKind public-pdf-converted/);
+      writeFileSync(
+        join(dir, 'mjerenje.json'),
+        JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z', { sourceKind: 'public-pdf-converted' })),
+      );
+      expect(pokreni(dir, ['--sign', 'Vlasnik'], 'source-docx').status).toBe(1);
       expect(pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted').status).toBe(0);
       const pdf = procitaj(dir);
       expect(pdf.sourceKind).toBe('public-pdf-converted');

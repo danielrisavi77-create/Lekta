@@ -142,7 +142,7 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
-import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { attestationContentDigest, attestationRefusals, ingestSourceKindProblem, inheritedSignature, sourceKindRefusals } from '../scripts/lib/corpus-attestation-core.mjs';
 import {
   measuredCodeProblem,
   provenPdfUnitWorkTypes,
@@ -478,6 +478,54 @@ function gardIzIzvora(staro: string, novo: string): (results: Array<Record<strin
   const blok = src.slice(a, b).replace('export function', 'function');
   if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
   return new Function(`${blok.replace(staro, novo)}\nreturn attestationRefusals;`)() as (results: Array<Record<string, unknown>>) => string[];
+}
+
+type VrstaFn = (results: Array<Record<string, unknown>>, kind: string) => string[];
+type IngestVrstaFn = (kind: string | null, marker: string | null) => string | null;
+
+/** Mutant imenovanog GARD bloka iz STVARNOG izvora scripts/lib/corpus-attestation-core.mjs (zamjena jednog izraza). */
+function gardBlokIzIzvora<T>(ime: string, staro: string, novo: string): T {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lib/corpus-attestation-core.mjs'), 'utf8').replace(/\r/g, '');
+  const a = src.indexOf(`// >>> GARD:${ime}`);
+  const b = src.indexOf(`// <<< GARD:${ime}`);
+  if (a < 0 || b < a) throw new Error(`blok GARD:${ime} nije pronadjen`);
+  const blok = src.slice(a, b).replace(/export (function|const)/g, '$1');
+  if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
+  return new Function(`${blok.replace(staro, novo)}\nreturn ${ime};`)() as T;
+}
+const gardVrsteIzIzvora = (staro: string, novo: string) => gardBlokIzIzvora<VrstaFn>('sourceKindRefusals', staro, novo);
+
+/**
+ * Tvrdnja garda vrste izvora u ingestu (Codex #229 nalaz 02): `--source-kind` je obavezan, izvor s oznakom se
+ * mora slagati sa zastavicom, a PDF vrsta bez oznake staging mape se odbija.
+ */
+function ingestVrstaSeProvjerava(problem: IngestVrstaFn): boolean {
+  const pdf = 'public-pdf-converted';
+  return (
+    problem(null, null) !== null &&
+    problem('pdf', null) !== null &&
+    problem('source-docx', null) === null &&
+    problem(pdf, pdf) === null &&
+    problem('source-docx', pdf) !== null &&
+    problem(pdf, null) !== null
+  );
+}
+
+/**
+ * Tvrdnja garda vrste izvora u ovjeri (A-pdf, Codex #229 nalaz 02): PDF ovjera prima samo rezultate s PDF
+ * sidecarom, a ovjera izvornog DOCX-a ne prima nijedan rezultat pretvoren iz PDF-a.
+ */
+function vrstaIzvoraSeProvjerava(refuse: VrstaFn): boolean {
+  const r = (documentId: string, sourceKind?: string | null) => ({ documentId, ...(sourceKind === undefined ? {} : { sourceKind }) });
+  const pdf = 'public-pdf-converted';
+  return (
+    refuse([r('a', pdf), r('b', pdf)], pdf).length === 0 &&
+    refuse([r('a', pdf), r('b')], pdf).length > 0 &&
+    refuse([r('a', pdf), r('b', null)], pdf).length > 0 &&
+    refuse([r('a', pdf), r('b', 'source-docx')], pdf).length > 0 &&
+    refuse([r('a'), r('b', 'source-docx')], 'source-docx').length === 0 &&
+    refuse([r('a'), r('b', pdf)], 'source-docx').length > 0
+  );
 }
 
 type PotpisFn = (
@@ -1844,6 +1892,59 @@ const MUTATIONS: Mutation[] = [
     caught: () => !pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR.replace('if out == repo or repo in out.parents:', 'if False:')),
     cleanBefore: () =>
       PDF_KORPUS_IZVOR.includes('if out == repo or repo in out.parents:') && pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR),
+  },
+  /** Codex #229 nalaz 03: poveznica UNUTAR izlaznog korijena prolazi provjeru razrijesene putanje. */
+  {
+    id: 'pdf-korpus/poveznica-unutar-izlaza',
+    imitates:
+      'upis je provjeravao samo razrijesenu putanju, pa je poveznica unutar izlazne mape (records -> druga mapa) ' +
+      'preusmjeravala zapise bez ikakve greske',
+    caught: () =>
+      !pdfKorpusSelftestProlazi(
+        PDF_KORPUS_IZVOR.replace(/\r/g, '').replace('        if is_link(cur):\n            raise PathError', '        if False:\n            raise PathError'),
+      ),
+    cleanBefore: () =>
+      PDF_KORPUS_IZVOR.replace(/\r/g, '').includes('        if is_link(cur):\n            raise PathError') && pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR),
+  },
+
+  /**
+   * A-pdf tok ide preko ingesta (Codex #229 nalaz 02): svaki rezultat nosi `sourceKind` iz sidecara, a ovjera
+   * odbija mjerenje u kojem se vrste mijesaju.
+   */
+  {
+    id: 'korpus/ovjera-pdf-vrste-prihvaca-rezultat-bez-pdf-sidecara',
+    imitates:
+      'ovjera PDF vrste prihvaca rezultat bez PDF sidecara: mjerenje koje je uz izlaz ingesta pokupilo commitane ' +
+      'fixture ili izvorne DOCX radove dalo bi razinu A-pdf paru koji nije mjeren ni na jednom pretvorenom PDF-u',
+    caught: () => !vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) !== 'public-pdf-converted'", 'false')),
+    cleanBefore: () =>
+      vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) !== 'public-pdf-converted'", "vrsta(r) !== 'public-pdf-converted'")) &&
+      vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+  {
+    id: 'korpus/ovjera-docx-vrste-prihvaca-pdf-rezultat',
+    imitates:
+      'ovjera izvornog DOCX-a nije gledala sourceKind rezultata, pa bi rad pretvoren iz PDF-a, izmjeren zajedno s ' +
+      'lokalnim korpusom, podigao pravi A (odluka vlasnika 2026-09-28)',
+    caught: () => !vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) === 'public-pdf-converted'", 'false')),
+    cleanBefore: () => vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+
+  {
+    id: 'ingest/pdf-vrsta-bez-oznake-staging-mape',
+    imitates:
+      'corpus-ingest je prihvacao --source-kind public-pdf-converted nad bilo kojom mapom, pa bi rucno sastavljen ' +
+      'skup izvornih DOCX radova dobio PDF sidecar i usao u ovjeru razine A-pdf',
+    caught: () => !ingestVrstaSeProvjerava(gardBlokIzIzvora<IngestVrstaFn>('ingestSourceKindProblem', "kind === 'public-pdf-converted' && marker !== kind", 'false')),
+    cleanBefore: () => ingestVrstaSeProvjerava(ingestSourceKindProblem),
+  },
+  {
+    id: 'ingest/docx-vrsta-nad-pdf-staging-mapom',
+    imitates:
+      'corpus-ingest nije citao oznaku izvora, pa bi staging mapa pretvorenih PDF-ova ingestirana s --source-kind ' +
+      'source-docx dala sidecar izvornog DOCX-a i podigla pravi A',
+    caught: () => !ingestVrstaSeProvjerava(gardBlokIzIzvora<IngestVrstaFn>('ingestSourceKindProblem', 'marker !== null && marker !== kind', 'false')),
+    cleanBefore: () => ingestVrstaSeProvjerava(ingestSourceKindProblem),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
