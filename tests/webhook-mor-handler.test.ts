@@ -121,6 +121,7 @@ async function run(req: Request, resolve = baseResolver(), extra: { allowTestMod
     now: () => NOW_MS,
     grantReferrerReward: (async (_a: unknown, _u: string, _w: string, orderId: string) => {
       granted.push(orderId);
+      return { granted: true };
     }) as never,
   });
   const res = await handler(req);
@@ -1614,6 +1615,7 @@ describe('webhook-mor handler: povrat stigne dok uplata izdaje bonuse', () => {
       now: () => NOW_MS,
       grantReferrerReward: (async () => {
         await grant();
+        return { granted: true };
       }) as never,
     });
     const res = await handler(req);
@@ -2407,5 +2409,53 @@ describe('webhook-mor handler: F21, bonus_outbox i dijagnostika povrata', () => 
     const w = outboxWorld(true);
     const { calls } = await run(signedRequest(refunded(999)), w.resolve);
     for (const s of settled(calls)) expect(s).not.toHaveProperty('outcome_note');
+  });
+});
+
+/**
+ * Codex pregled PR #217, M2: inline nagrada preporucitelju cita ishod. Prolazan pad ne oznacava
+ * obvezu `done` (ostaje `pending` za radnika), trajna odluka je zatvara `done` uz razlog.
+ */
+describe('webhook-mor handler: ishod nagrade preporucitelju (M2)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  async function uplataSNagradom(rezultat: unknown) {
+    const db = fakeAdmin(baseResolver());
+    const handler = createWebhookHandler({
+      admin: () => db.admin,
+      webhookSecret: SECRET,
+      allowTestMode: false,
+      now: () => NOW_MS,
+      grantReferrerReward: (async () => rezultat) as never,
+    });
+    const res = await handler(signedRequest(succeeded()));
+    const nagradaDone = db.calls.filter((c) => c.table === 'bonus_outbox' && writeOp(c) === 'update' && eqs(c).kind === 'referrer_reward');
+    return { res, calls: db.calls, nagradaDone };
+  }
+
+  it.each(['grant_failed', 'error'])('%s: obveza referrer_reward NE prelazi u done (radnik je ponovi)', async (reason) => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { res, nagradaDone } = await uplataSNagradom({ granted: false, reason });
+    expect(res.status).toBe(200);
+    expect(nagradaDone).toHaveLength(0);
+    expect(err.mock.calls.find((c) => c[0] === 'webhook-mor referrer_reward_retry')?.[1]).toEqual({ orderId: 'pi_1', reason });
+  });
+
+  it('trajna odluka (ip_match_fraud): done uz razlog, samo dok obveza ceka', async () => {
+    const { res, nagradaDone } = await uplataSNagradom({ granted: false, reason: 'ip_match_fraud' });
+    expect(res.status).toBe(200);
+    expect(nagradaDone).toHaveLength(1);
+    expect(argOf(nagradaDone[0], 'update')).toMatchObject({ status: 'done', last_error: null, done_reason: 'ip_match_fraud' });
+    expect(eqs(nagradaDone[0])).toEqual({ order_id: 'pi_1', kind: 'referrer_reward', status: 'pending' });
+  });
+
+  it('negativna kontrola: dodijeljena nagrada je done bez razloga', async () => {
+    const { nagradaDone } = await uplataSNagradom({ granted: true });
+    expect(nagradaDone).toHaveLength(1);
+    const upd = argOf(nagradaDone[0], 'update') as Record<string, unknown>;
+    expect(upd.status).toBe('done');
+    expect('done_reason' in upd).toBe(false);
   });
 });

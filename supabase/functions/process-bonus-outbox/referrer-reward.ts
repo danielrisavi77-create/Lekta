@@ -13,7 +13,12 @@
 //     nastala, pa je nije mogao povuci; zato je povlaci ovaj korak (pullReferralSignupReward).
 //
 // Pad citanja BACA: obveza ostaje `pending` i radnik je ponovi, a nagrada se ne dodjeljuje naslijepo.
-import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
+//
+// ISHOD DODJELE SE CITA (Codex pregled PR #217, M2). Prolazan pad (`grant_failed`, `error`, nepoznat
+// oblik) BACA, pa obveza ostaje `pending` i radnik je ponovi. Trajna odluka (preporuke nema ili je
+// vec nagradjena, prijevara po IP-u, mjesecni strop) zatvara obvezu kao `done` uz `done_reason`
+// (referrerRewardSettlement u _shared/grant-referrer-reward.ts), pa se vise ne ponavlja.
+import { referrerRewardSettlement, tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 import { pullReferralSignupReward, REFUND_MARKERS } from '../webhook-mor/handler.ts';
 
 /** Odgovor PostgREST upita, onoliko koliko ga ovaj modul cita. */
@@ -45,7 +50,7 @@ export interface ReferrerRewardRow {
   payload: Record<string, unknown>;
 }
 
-export type ReferrerRewardOutcome = 'granted' | 'cancelled_refunded' | 'revoked_refunded';
+export type ReferrerRewardOutcome = 'granted' | 'declined' | 'cancelled_refunded' | 'revoked_refunded';
 
 /** Nagrada; samo testovi je zamjenjuju. Potpis kao tryGrantReferrerReward. */
 export type GrantReferrerReward = (
@@ -113,8 +118,9 @@ export async function orderFullyRefunded(admin: ReferrerRewardDb, orderId: strin
 
 /**
  * Izvrsi obvezu `referrer_reward` uz provjeru povrata prije i poslije dodjele. Vraca ishod; zavrsni
- * status retka (`done` ili `cancelled`) postavlja pozivatelj za `granted`, a ovaj modul sam za oba
- * ishoda povrata, i to samo dok je redak jos `pending` (webhook ga je mozda vec otkazao).
+ * status retka (`done`) postavlja pozivatelj za `granted`, a ovaj modul sam za trajnu odluku bez
+ * dodjele (`declined`, `done` uz `done_reason`) i za oba ishoda povrata (`cancelled`), i to samo dok
+ * je redak jos `pending` (webhook ga je mozda vec otkazao). Prolazan pad dodjele BACA (M2).
  */
 export async function runReferrerRewardObligation(
   admin: ReferrerRewardDb,
@@ -129,7 +135,9 @@ export async function runReferrerRewardObligation(
     return 'cancelled_refunded';
   }
 
-  await grant(admin as never, row.user_id, workType, row.order_id);
+  const rezultat = await grant(admin as never, row.user_id, workType, row.order_id);
+  const zatvaranje = referrerRewardSettlement(rezultat);
+  if (!zatvaranje.settled) throw new Error(`referrer_reward_retry: ${zatvaranje.reason}`);
 
   if (await orderFullyRefunded(admin, row.order_id)) {
     // Povrat je stigao izmedju provjere i dodjele: nagrada koju je upravo izdala ova obveza se
@@ -138,7 +146,21 @@ export async function runReferrerRewardObligation(
     await cancelObligation(admin, row.id);
     return 'revoked_refunded';
   }
+  if (zatvaranje.reason !== 'granted') {
+    await declineObligation(admin, row.id, zatvaranje.reason);
+    return 'declined';
+  }
   return 'granted';
+}
+
+/** Trajna odluka bez dodjele: `done` uz razlog, samo dok redak jos ceka. */
+async function declineObligation(admin: ReferrerRewardDb, id: string, reason: string): Promise<void> {
+  const { error } = await admin
+    .from('bonus_outbox')
+    .update({ status: 'done', done_at: new Date().toISOString(), last_error: null, done_reason: reason })
+    .eq('id', id)
+    .eq('status', 'pending');
+  if (error) throw new Error(`bonus_outbox_decline: ${message(error)}`);
 }
 
 async function cancelObligation(admin: ReferrerRewardDb, id: string): Promise<void> {

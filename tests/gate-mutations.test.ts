@@ -109,6 +109,7 @@ import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src
 import {
   accessRowsProblems,
   bonusOutboxWorkerProblems,
+  referrerRewardRetryProblems,
   boundSlotReadProblems,
   entitlementAccessProblems,
   entitlementConsumerProblems,
@@ -121,6 +122,7 @@ import {
   upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
+import { runReferrerRewardObligation } from '../supabase/functions/process-bonus-outbox/referrer-reward';
 import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
 import type { SlotRow } from '../src/report/slot-logic';
 import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
@@ -6040,12 +6042,10 @@ const MUTATIONS: Mutation[] = [
         + "      orderId: ev.orderId,\n"
         + "      reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',\n"
         + "    });\n"
-        + "  } else {\n"
-        + "    await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);\n"
-        + "    await markBonusDone(admin, ev.orderId, 'referrer_reward');\n"
-        + "  }";
-      const bezPonovnogCitanja = "  await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);\n"
-        + "  await markBonusDone(admin, ev.orderId, 'referrer_reward');";
+        + "  } else {\n";
+      // Codex PR #217 (M2): blok nagrade cita ishod dodjele; mutacija uklanja samo ponovno citanje
+      // oznake povrata ispred njega, a blok ostaje.
+      const bezPonovnogCitanja = "  {\n";
       const src = webhookMorSource();
       if (!src.includes(izvor)) return false;
       const mutated = src.replace(izvor, bezPonovnogCitanja);
@@ -7434,6 +7434,27 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
  */
 describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
   const ROK_SQL = 180_000;
+
+  it('Codex PR #217 M2: nagrada preporucitelju, baseline cist; zanemaren ishod dodjele (stanje f466d454) obara gard', async () => {
+    expect(await referrerRewardRetryProblems(runReferrerRewardObligation)).toEqual([]);
+    const zanemaruje: typeof runReferrerRewardObligation = (admin, row, grant) =>
+      runReferrerRewardObligation(admin, row, async (a, u, w, o) => {
+        await grant?.(a, u, w, o);
+        return { granted: true };
+      });
+    const p = await referrerRewardRetryProblems(zanemaruje);
+    expect(p.some((x) => x.startsWith('grant_failed:'))).toBe(true);
+    expect(p.some((x) => x.startsWith('error:'))).toBe(true);
+  });
+
+  it('Codex PR #217 M2: trajna odluka koja se tretira kao prolazan pad (ponavlja se) obara gard', async () => {
+    const ponavlja: typeof runReferrerRewardObligation = (admin, row, grant) =>
+      runReferrerRewardObligation(admin, row, async (a, u, w, o) => {
+        const r = await grant?.(a, u, w, o);
+        return (r as { reason?: string } | undefined)?.reason === 'ip_match_fraud' ? { granted: false, reason: 'grant_failed' } : r;
+      });
+    expect((await referrerRewardRetryProblems(ponavlja)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
+  });
 
   it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
     expect(await accessRowsProblems(readAccessRows)).toEqual([]);

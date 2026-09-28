@@ -21,6 +21,26 @@ const MAX_REWARDED_PER_MONTH = 10;
 const REWARD_WINDOW_DAYS = 90;
 const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString();
 
+/**
+ * TRAJNE ODLUKE (Codex pregled PR #217, M2): ishod koji se ponovnim pokusajem ne mijenja, pa obveza
+ * `referrer_reward` u bonus_outboxu smije zavrsiti kao `done` s tim razlogom. `no_pending_referral`
+ * pokriva i kupca bez preporuke i vec nagradjenu preporuku (status vise nije friend_rewarded).
+ */
+const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ip_match_fraud', 'monthly_cap_reached']);
+
+/**
+ * Smije li se obveza nagrade zatvoriti. `grant_failed`, `error` i svaki nepoznat oblik rezultata NISU
+ * zatvaranje: obveza ostaje `pending` i radnik (process-bonus-outbox) je ponovi. Prije je rezultat
+ * zanemaren, pa je prolazan pad upisa nagrade zavrsavao kao `done` i nagrada se nikad nije ponovila.
+ */
+export function referrerRewardSettlement(result: unknown): { settled: boolean; reason: string } {
+  if (typeof result !== 'object' || result === null) return { settled: false, reason: 'nepoznat_ishod' };
+  const r = result as { granted?: unknown; reason?: unknown };
+  if (r.granted === true) return { settled: true, reason: 'granted' };
+  const reason = typeof r.reason === 'string' && r.reason !== '' ? r.reason : 'nepoznat_ishod';
+  return { settled: r.granted === false && TRAJNI_RAZLOZI.has(reason), reason };
+}
+
 export async function tryGrantReferrerReward(
   supabase: SupabaseClient,
   buyerUserId: string,
@@ -28,13 +48,15 @@ export async function tryGrantReferrerReward(
   buyerOrderId: string,
 ): Promise<{ granted: boolean; reason?: string }> {
   try {
-    const { data: signup } = await supabase
+    const { data: signup, error: signupError } = await supabase
       .from('referral_signups')
       .select('*')
       .eq('referred_user_id', buyerUserId)
       .eq('status', 'friend_rewarded')
       .maybeSingle();
 
+    // Pad citanja nije "nema preporuke" (trajno), nego prolazna greska: obveza se ponavlja (M2).
+    if (signupError) return { granted: false, reason: 'error' };
     if (!signup) return { granted: false, reason: 'no_pending_referral' };
 
     // Fraud: ista mreza je vjerojatno stvorila oba racuna. Usporedi referred_ip_hash (iz signupa)

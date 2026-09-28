@@ -77,6 +77,12 @@ Deno.serve(async (req: Request) => {
           // Supabase klijent je nadskup ReferrerRewardDb; strukturna usporedba cijelog tipa klijenta
           // je za tsc preduboka (TS2589), pa se suzava na granici.
           const ishod = await runReferrerRewardObligation(admin as unknown as ReferrerRewardDb, row);
+          // Trajna odluka bez dodjele (Codex PR #217, M2): modul je redak vec zatvorio kao `done`
+          // uz razlog. Prolazan pad dodjele modul BACA, pa redak ostaje `pending` (catch nize).
+          if (ishod === 'declined') {
+            done++;
+            continue;
+          }
           if (ishod !== 'granted') {
             cancelled++;
             console.warn('[process-bonus-outbox] obveza otkazana povratom', { id: row.id, ishod });

@@ -21,7 +21,8 @@
 --     samo kad se razlikuje, pa drugi prolaz ne dopisuje pricing_changelog.
 --  6. Deaktivacija slot_zavrsni_do_obrane i slot_diplomski_do_obrane (active=false, NE brisanje).
 --  7. `bonus_outbox.status` dobiva `cancelled`: puni povrat otkazuje obvezu koja jos ceka (F21), a
---     `webhook_events.outcome_note` nosi korak i gresku sporednog pada povrata (F21).
+--     `webhook_events.outcome_note` nosi korak i gresku sporednog pada povrata (F21);
+--     `bonus_outbox.done_reason` nosi razlog trajne odluke bez izvrsenja (Codex PR #217, M2).
 --  8. apply_entitlement_upgrade: atomska pretvorba Repair prava u Final Pass za ISTI entitlement.
 --     Pretvorba pamti stanje Repair prava prije nje (upgraded_from_*).
 --  9. revert_entitlement_upgrade: puni povrat SAMO uplate nadogradnje vraca pravo na zapamceni
@@ -363,6 +364,13 @@ comment on column public.webhook_events.outcome_note is
 
 comment on column public.bonus_outbox.status is
   'pending = ceka ili se ponavlja; done = izvrseno; failed = odustalo nakon max pokusaja; cancelled = otkazano punim povratom izvorne uplate (F21).';
+
+-- Trajna odluka bez izvrsenja (Codex pregled PR #217, M2): nagrada preporucitelju se ne dodjeljuje
+-- jer preporuke nema ili je vec nagradjena, zbog prijevare po IP-u ili mjesecnog stropa. Obveza je
+-- tada `done` uz razlog, a prolazan pad dodjele ostaje `pending` (radnik ga ponovi).
+alter table public.bonus_outbox add column if not exists done_reason text;
+comment on column public.bonus_outbox.done_reason is
+  'Razlog trajne odluke bez izvrsenja uz status done (npr. ip_match_fraud); NULL = obveza je izvrsena.';
 
 -- ---------------------------------------------------------------------------------------------
 -- 8. Nadogradnja Repair -> Final Pass (odjeljak 14)

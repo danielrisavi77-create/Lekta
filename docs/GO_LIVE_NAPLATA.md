@@ -541,6 +541,14 @@ prozoru povrata se povlači. Pad sporednog koraka povrata (ručna narudžba, pas
 dalje ostavlja oznaku `refund_consequences_failed`, a korak i greška su sada i u stupcu
 `webhook_events.outcome_note` (migracija 0207), ne samo u logu.
 
+**Ishod nagrade preporučitelju** (Codex pregled PR #217, M2). Webhook i radnik čitaju ishod
+dodjele: prolazan pad (`grant_failed`, `error`) ostavlja obvezu `referrer_reward` u stanju
+`pending` (ERROR redak `webhook-mor referrer_reward_retry`), pa je radnik ponavlja do
+`BONUS_OUTBOX_MAX_ATTEMPTS`, a zatim `failed` čeka čovjeka. Trajna odluka bez dodjele (preporuke
+nema ili je već nagrađena, prijevara po IP-u, mjesečni strop) zatvara obvezu kao `done` uz
+`bonus_outbox.done_reason` (`no_pending_referral`, `ip_match_fraud`, `monthly_cap_reached`);
+`done_reason` NULL znači da je nagrada izdana.
+
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
 Dvije opcije, iste vrijednosti:

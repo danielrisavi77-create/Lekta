@@ -13,6 +13,8 @@ import { unambiguousMismatch } from '../../src/report/work-type-estimate';
 import type { checkoutMismatch } from '../../src/report/checkout';
 import type { entitlementRowFromDb, readAccessRows } from '../../src/report/entitlement-access';
 import { decideReportAccess } from '../../src/report/slot-logic';
+import type { ReferrerRewardDb, runReferrerRewardObligation } from '../../supabase/functions/process-bonus-outbox/referrer-reward';
+import { argOf, fakeAdmin, writeOp, type FakeCall } from './fake-supabase';
 
 type BuildFn = typeof buildEntitlementInsert;
 type QuoteFn = typeof quoteUpgrade;
@@ -609,6 +611,45 @@ export function upgradeRefundTraceProblems(webhookSrc: string): string[] {
   const obicno = w.indexOf("await settle('processed', 'refunded');");
   if (pregled < 0 || obicno < 0 || pregled > obicno || !w.slice(Math.max(0, pregled - 200), pregled).includes('if (rucniPregled !== null) {')) {
     problems.push('povrat koji dira nadogradnju zavrsava kao obican processed/refunded, bez trajnog traga u inboxu');
+  }
+  return problems;
+}
+
+/**
+ * Codex pregled PR #217, M2: obveza `referrer_reward` cita ishod dodjele. Prolazan pad (`grant_failed`,
+ * `error`) mora ostaviti obvezu za ponovni pokusaj (modul baca, radnik redak ostavlja `pending`), a
+ * trajna odluka (prijevara po IP-u) zatvara obvezu kao `done` s razlogom i ne ponavlja se. Mjeri se
+ * izvrsen modul nad laznom bazom bez povrata.
+ */
+export async function referrerRewardRetryProblems(run: typeof runReferrerRewardObligation): Promise<string[]> {
+  const problems: string[] = [];
+  const row = { id: 'ob-1', user_id: 'buyer-1', order_id: 'pi_1', payload: { workType: 'diplomski' } };
+  const svijet = () => fakeAdmin((c) => (writeOp(c) === 'select' ? { data: [] } : undefined));
+  const outboxPisanja = (calls: FakeCall[]) => calls.filter((c) => c.table === 'bonus_outbox' && writeOp(c) !== 'select');
+
+  for (const reason of ['grant_failed', 'error']) {
+    const db = svijet();
+    let ishod = 'bacilo';
+    try {
+      ishod = await run(db.admin as unknown as ReferrerRewardDb, row, async () => ({ granted: false, reason }));
+    } catch {
+      // ocekivano: obveza ostaje pending za ponovni pokusaj
+    }
+    if (ishod !== 'bacilo' || outboxPisanja(db.calls).length > 0) {
+      problems.push(`${reason}: obveza zavrsi kao ${ishod} umjesto ponovnog pokusaja (nagrada se vise ne pokusava)`);
+    }
+  }
+
+  const db = svijet();
+  let trajno = 'bacilo';
+  try {
+    trajno = await run(db.admin as unknown as ReferrerRewardDb, row, async () => ({ granted: false, reason: 'ip_match_fraud' }));
+  } catch {
+    // trajna odluka ne smije bacati
+  }
+  const zatvoreno = outboxPisanja(db.calls).find((c) => (argOf(c, 'update') as Record<string, unknown> | undefined)?.status === 'done');
+  if (trajno !== 'declined' || !zatvoreno || (argOf(zatvoreno, 'update') as Record<string, unknown>).done_reason !== 'ip_match_fraud') {
+    problems.push(`trajna odluka ip_match_fraud se ponavlja ili se zatvara bez razloga (${trajno})`);
   }
   return problems;
 }

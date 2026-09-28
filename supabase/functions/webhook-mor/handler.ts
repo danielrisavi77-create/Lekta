@@ -33,7 +33,7 @@ import {
   semesterStart,
   REFERRAL_WELCOME_DISCOUNT,
 } from '../../../src/report/referral.ts';
-import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
+import { referrerRewardSettlement, tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 import {
   mapUpgradeSourceRow,
   quoteUpgrade,
@@ -485,6 +485,18 @@ async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Prom
   try {
     await admin.from('bonus_outbox')
       .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })
+      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');
+  } catch (e) {
+    console.error('webhook-mor bonus_outbox_mark_failed', { orderId, kind, error: String(e) });
+  }
+}
+
+/** Trajna odluka bez izvrsenja (Codex PR #217, M2): `done` uz razlog, isto samo dok redak ceka.
+ *  Tiho na gresci kao markBonusDone: redak tada ostaje `pending` i radnik donese istu odluku. */
+async function markBonusDeclined(admin: any, orderId: string, kind: BonusKind, reason: string): Promise<void> {
+  try {
+    await admin.from('bonus_outbox')
+      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null, done_reason: reason })
       .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');
   } catch (e) {
     console.error('webhook-mor bonus_outbox_mark_failed', { orderId, kind, error: String(e) });
@@ -1299,8 +1311,17 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',
     });
   } else {
-    await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);
-    await markBonusDone(admin, ev.orderId, 'referrer_reward');
+    // Ishod se CITA (Codex pregled PR #217, M2): prolazan pad (`grant_failed`, `error`) ostavlja
+    // obvezu `pending` pa je radnik ponovi; trajna odluka je zatvara s razlogom.
+    const nagrada = await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);
+    const zatvaranje = referrerRewardSettlement(nagrada);
+    if (!zatvaranje.settled) {
+      console.error('webhook-mor referrer_reward_retry', { orderId: ev.orderId, reason: zatvaranje.reason });
+    } else if (zatvaranje.reason === 'granted') {
+      await markBonusDone(admin, ev.orderId, 'referrer_reward');
+    } else {
+      await markBonusDeclined(admin, ev.orderId, 'referrer_reward', zatvaranje.reason);
+    }
   }
 
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)

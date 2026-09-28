@@ -11,6 +11,7 @@ import { describe, it, expect } from 'vitest';
 
 import { runReferrerRewardObligation, orderFullyRefunded, type ReferrerRewardDb } from '../supabase/functions/process-bonus-outbox/referrer-reward';
 import { fakeAdmin, argOf, eqs, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
+import { referrerRewardRetryProblems } from './helpers/monetizacija-v1-guards';
 
 const ROW = { id: 'ob-1', user_id: 'buyer-1', order_id: 'pi_1', payload: { userId: 'buyer-1', workType: 'diplomski' } };
 const REFUND_DETAILS = ['refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded'];
@@ -38,6 +39,7 @@ function scenario(opts: { refundAfterMarkerReads?: number | null; entitlementRef
   const granted: string[] = [];
   const grant = async (_a: never, _u: string, _w: string, orderId: string) => {
     granted.push(orderId);
+    return { granted: true };
   };
   return { db, granted, grant };
 }
@@ -129,7 +131,7 @@ describe('process-bonus-outbox: povrat nadogradnje nije povrat izvorne uplate', 
     const db = world(['pi_up'], [nadogradjen]);
     expect(await orderFullyRefunded(db.admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(false);
     const granted: string[] = [];
-    const ishod = await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async (_a, _u, _w, o) => { granted.push(o); });
+    const ishod = await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async (_a, _u, _w, o) => { granted.push(o); return { granted: true }; });
     expect(ishod).toBe('granted');
     expect(granted).toEqual(['pi_1']);
   });
@@ -144,5 +146,48 @@ describe('process-bonus-outbox: povrat nadogradnje nije povrat izvorne uplate', 
 
   it('nenadogradjen redak refunded: vraceno (kao i dosad)', async () => {
     expect(await orderFullyRefunded(world([], [{ id: 'ent-1', upgrade_order_id: null }]).admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(true);
+  });
+});
+
+/**
+ * Codex pregled PR #217, M2: ishod dodjele se cita. Prolazan pad (`grant_failed`, `error`) BACA, pa
+ * radnik redak ostavlja `pending` i ponovi ga; trajna odluka zatvara obvezu kao `done` s razlogom i
+ * vise se ne ponavlja. Isti gard (referrerRewardRetryProblems) mutira tests/gate-mutations.test.ts.
+ */
+describe('process-bonus-outbox: ishod dodjele nagrade (M2)', () => {
+  it('gard referrerRewardRetryProblems je cist nad pravim modulom', async () => {
+    expect(await referrerRewardRetryProblems(runReferrerRewardObligation)).toEqual([]);
+  });
+
+  it.each(['grant_failed', 'error'])('%s: obveza ostaje pending (modul baca), bez zapisa u bonus_outbox', async (reason) => {
+    const { db } = scenario();
+    await expect(
+      runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async () => ({ granted: false, reason })),
+    ).rejects.toThrow(`referrer_reward_retry: ${reason}`);
+    expect(outboxWrites(db.calls)).toHaveLength(0);
+  });
+
+  it('nepoznat oblik rezultata (npr. undefined) nije zatvaranje nego ponovni pokusaj', async () => {
+    const { db } = scenario();
+    await expect(
+      runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async () => undefined),
+    ).rejects.toThrow('referrer_reward_retry: nepoznat_ishod');
+  });
+
+  it.each(['ip_match_fraud', 'monthly_cap_reached', 'no_pending_referral'])('trajna odluka %s: done s razlogom, samo dok redak ceka', async (reason) => {
+    const { db } = scenario();
+    const ishod = await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async () => ({ granted: false, reason }));
+    expect(ishod).toBe('declined');
+    const w = outboxWrites(db.calls);
+    expect(w).toHaveLength(1);
+    expect(argOf(w[0], 'update')).toMatchObject({ status: 'done', last_error: null, done_reason: reason });
+    expect(eqs(w[0])).toEqual({ id: 'ob-1', status: 'pending' });
+  });
+
+  it('negativna kontrola: nagrada dodijeljena (granted) ne pise done_reason; redak zatvara radnik', async () => {
+    const { db, granted, grant } = scenario();
+    expect(await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, grant)).toBe('granted');
+    expect(granted).toEqual(['pi_1']);
+    expect(outboxWrites(db.calls)).toHaveLength(0);
   });
 });
