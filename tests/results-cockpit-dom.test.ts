@@ -63,6 +63,22 @@ function result(overrides: Record<string, unknown> = {}) {
 }
 
 describe('Results Cockpit V1', () => {
+  it('keeps one workspace H1 when analysis results are rendered', () => {
+    const page = document.createElement('div');
+    page.innerHTML = readFileSync(join(cssRoot, 'rad/index.html'), 'utf8');
+    expect(page.querySelectorAll('h1')).toHaveLength(1);
+    const mount = page.querySelector<HTMLElement>('#resultCockpit')!;
+    renderResultsCockpit(mount, buildVisualResultModel(result()), { repairAvailable: true });
+    expect(page.querySelectorAll('h1')).toHaveLength(1);
+    expect(mount.querySelector('#cockpitVerdictTitle')?.tagName).toBe('H2');
+  });
+
+  it('places the upload section one heading level below the workspace title', () => {
+    const page = document.createElement('div');
+    page.innerHTML = readFileSync(join(cssRoot, 'rad/index.html'), 'utf8');
+    expect(page.querySelector('#wordUploadTitle')?.tagName).toBe('H2');
+  });
+
   it('renders one clear status, one technical score and at most three priority findings', () => {
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result());

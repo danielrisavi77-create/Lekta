@@ -315,8 +315,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '" aria-labelledby="cockpitVerdictTitle">',
     '<div class="cockpit-sheet__lead" data-cockpit-sheet-lead>',
     eyebrowHtml(model),
-    '<h1 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
-    status.tone, '">', escapeHtml(status.label), '</h1>',
+    '<h2 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
+    status.tone, '">', escapeHtml(status.label), '</h2>',
     // SAZETAK JE POSTOJECI MODUL. Ocjena se iz njega ISKLJUCUJE, jer je u listu presude crta
     // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),

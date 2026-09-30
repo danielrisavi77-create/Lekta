@@ -143,7 +143,7 @@
   line-height: 1.5;
 }
 
-/* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je H1 u display
+/* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je naslov rezultata ispod H1 stranice, u display
    serifu, jer je to prva recenica koju korisnik cita i jedina koja odgovara na "smijem li
    predati". Ton NE nosi lijevi rub (design/README.md, pravilo 3) nego prsten i pecat. */
 .cockpit-verdict-title {

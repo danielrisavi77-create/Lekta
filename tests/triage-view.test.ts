@@ -69,8 +69,9 @@ describe('triagePanelHtml', () => {
 
   it('manual nalaz iz citata vodi na alate + rucnu uslugu (lijevak, uputa prvo)', () => {
     const html = triagePanelHtml(MODEL, { unlocked: false, filter: 'manual' });
-    expect(html).toContain('href="citat.html"');
-    expect(html).toContain('href="literatura.html"');
+    // The workspace lives at /rad/, so tool links must resolve from the site root.
+    expect(html).toContain('href="/citat.html"');
+    expect(html).toContain('href="/literatura.html"');
     expect(html).toContain('data-triage-order');
   });
 
