@@ -65,7 +65,7 @@ describe('FindingViewModel', () => {
       selection: { program: 'Politologija' },
     };
     const finding = buildFindingViewModels(naslovnicaResult)[0];
-    expect(finding.tool).toEqual({ href: 'naslovnica.html?fakultet=fpzg&razina=diplomski&smjer=Politologija', label: 'Složi naslovnicu' });
+    expect(finding.tool).toEqual({ href: '/naslovnica.html?fakultet=fpzg&razina=diplomski&smjer=Politologija', label: 'Složi naslovnicu' });
     const html = findingCardHtml(finding, false);
     expect(html).toContain('class="action-tool"');
     expect(html).toContain('target="_blank" rel="noopener"');
