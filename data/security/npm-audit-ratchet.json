@@ -1,54 +1,13 @@
 {
   "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI. Osvjezi: `npm run audit:ratchet` ispisuje izmjereno, pa upisi ovdje uz razlog u changeNote. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
-  "measuredAt": "2026-09-21",
-  "fullGraphHighCritical": 7,
-  "fullGraphHighCriticalPackages": [
-    "@netlify/dev",
-    "@netlify/images",
-    "ipx",
-    "netlify-cli",
-    "sharp",
-    "vite",
-    "vitest"
-  ],
-  "changeNote": "Prvi T41 korak: ratchet sada usporeduje i broj i identitet high/critical paketa, odbija nevaljan npm audit JSON (error / bez vulnerabilities), te zahtijeva iznimke s vlasnikom, mitigacijom i rokom. Strop ostaje 7 (izmjereno 2026-09-21 na origin/master 9cbd132b). Broader nadogradnje (vitest/vite, toolchain) ostaju za kasniji PR.",
-  "exceptions": [
-    {
-      "id": "netlify-cli-image-pipeline",
-      "packages": [
-        "@netlify/dev",
-        "@netlify/images",
-        "ipx",
-        "netlify-cli",
-        "sharp"
-      ],
-      "owner": "Daniel Risavi",
-      "mitigation": "Lanac je devDependency i ne ulazi u browser bundle ni Edge funkcije. Ne pokretati netlify dev nad nepouzdanim slikama. Zadrzati produkcijski npm audit --omit=dev kao tvrdi gate i nadograditi kad @netlify/images/ipx dopuste sharp >=0.35.4.",
-      "expiresOn": "2026-10-09",
-      "nextReviewOn": "2026-09-28",
-      "advisories": [
-        "GHSA-f88m-g3jw-g9cj",
-        "GHSA-rgj7-g3m4-5g8c"
-      ]
-    },
-    {
-      "id": "vitest-vite-dev-toolchain",
-      "packages": [
-        "vite",
-        "vitest"
-      ],
-      "owner": "Daniel Risavi",
-      "mitigation": "Vitest/Vite su samo test/build alati; ne ulaze u produkcijski bundle. Produkcijski audit --omit=dev ostaje tvrdi gate. Planirani zasebni PR: nadogradnja vitest (i uskladjeni vite) nakon sto prolaze check i orphan-scan.",
-      "expiresOn": "2026-10-09",
-      "nextReviewOn": "2026-09-28",
-      "advisories": [
-        "GHSA-5xrq-8626-4rwp"
-      ]
-    }
-  ],
+  "measuredAt": "2026-09-30",
+  "fullGraphHighCritical": 0,
+  "fullGraphHighCriticalPackages": [],
+  "changeNote": "PR #236: Vitest 4.1.11, eksplicitni vite-node 3.2.4 i Netlify CLI 27.10.2; ipx koristi zakrpani sharp ^0.35.5. npm audit fix osvjezava brace-expansion, fast-uri i Vite pod vite-node. Izmjereno 0 ranjivosti u punom grafu; obje iznimke uklonjene, strop spusten sa 7 na 0. Rokovi nisu produzeni.",
+  "exceptions": [],
   "priorMeasurement": {
-    "measuredAt": "2026-09-09",
+    "measuredAt": "2026-09-21",
     "fullGraphHighCritical": 7,
-    "note": "Nakon nadogradnje netlify-cli 26.2 na 27.5.2 (broj bez registra identiteta)."
+    "note": "Prije uklanjanja iznimki netlify-cli-image-pipeline i vitest-vite-dev-toolchain."
   }
 }

@@ -6,6 +6,10 @@ async function setTheme(page: Page, theme: string): Promise<void> {
   // WebKit can expose the new custom property before inherited colors are painted.
   // Yield to rendering before polling; keep the same color assertions and deadline.
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  // WebKit CI can retain stale computed colors until it paints (the failure
+  // screenshot already shows the new color). Paint the full page before reading
+  // inherited colors, including headings outside the current viewport.
+  await page.screenshot({ fullPage: true });
   // Wait for the inherited ink, not for a guessed delay or a passing axe result.
   await expect.poll(() => page.evaluate(() => {
     const ink = getComputedStyle(document.documentElement).getPropertyValue('--desk-ink').trim();
@@ -111,6 +115,7 @@ test('popunjeni mobilni alati: nema serious/critical axe nalaza', async ({ page 
         const heading = page.locator('h2.sec-h').first();
         await heading.evaluate(el => { (el as HTMLElement).style.color = '#26221b'; });
         await heading.scrollIntoViewIfNeeded();
+        await page.screenshot({ fullPage: true });
         await expect(heading).toHaveCSS('color', 'rgb(38, 34, 27)');
         try {
           const bad = await new AxeBuilder({ page }).analyze();
