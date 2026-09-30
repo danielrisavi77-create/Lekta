@@ -30,6 +30,48 @@ import { expectInsideFold } from './fold';
 const FIXTURE = path.resolve('tests/fixtures/docx/word-veliki-neuredan.docx');
 const DUGO_IME = 'Diplomski rad - konacna verzija - nakon mentora - ispravljeno - za predaju - v7 FINAL.docx';
 
+test('audit: mobilna analiza pa desktop prikaz bez reload i dosljedni koraci', async ({ page }, info) => {
+  test.setTimeout(180_000);
+  const repairRequests: string[] = [];
+  page.on('request', request => { if (/\/functions\/v1\/repair-docx/.test(request.url())) repairRequests.push(request.url()); });
+  await page.setViewportSize({ width: 375, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/rad/');
+  await page.locator('#analyticsDecline').click({ timeout: 3000 }).catch(() => {});
+  await cekajApp(page);
+  await page.locator('#fileInput').setInputFiles(path.resolve('tests/fixtures/docx/synthetic-fpzg-zavrsni-verzija-2.docx'));
+  await cekajKorak(page, '2');
+  await expect(page.locator('#analyzeBtn')).toBeVisible();
+  await expect(page.locator('[data-confirm-profile]')).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('profile-mobile.png') });
+  await page.locator('#analyzeBtn').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
+  await expect(page.locator('[data-site-chrome]')).toHaveAttribute('data-site-chrome-stage', 'findings');
+  await page.screenshot({ path: info.outputPath('results-mobile.png') });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(page.locator('[data-desk-doc] .lekta-fac-page').first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator('[data-desk-doc] .lekta-facsimile')).toHaveCount(1);
+  const count = await page.locator('[data-desk-doc] .lekta-fac-page').count();
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate((t) => document.documentElement.dataset.theme = t, theme);
+    await page.screenshot({ path: info.outputPath(`resized-document-${theme}.png`) });
+  }
+  await page.setViewportSize({ width: 375, height: 844 });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(page.locator('[data-desk-doc] .lekta-fac-page')).toHaveCount(count);
+  await page.getByTestId('repair-entry').click();
+  await expect(page.locator('#repairView')).toBeVisible();
+  await expect(page.locator('[data-site-chrome]')).toHaveAttribute('data-site-chrome-stage', 'plan');
+  expect(repairRequests).toEqual([]);
+  await expect(page.locator('#repairPanelMount [data-repair-consent]')).not.toBeChecked();
+  await page.screenshot({ path: info.outputPath('repair-entry.png') });
+  await page.locator('#repairBackToResults').click();
+  await expect(page.locator('[data-site-chrome]')).toHaveAttribute('data-site-chrome-stage', 'findings');
+  await expect(page.getByTestId('repair-entry')).toBeFocused();
+  await page.screenshot({ path: info.outputPath('repair-return-focus.png') });
+});
+
 const SIRINE: ReadonlyArray<{ w: number; h: number; ime: string }> = [
   { w: 390, h: 844, ime: 'telefon' },
   { w: 768, h: 1024, ime: 'tablet' },
@@ -87,11 +129,7 @@ async function postaja(page: Page, w: number, gdje: string): Promise<void> {
 
 /** Potvrda profila ILI izravni nalaz: za ovaj fixture se ne pretpostavlja koji od ta dva put ide. */
 async function pokreniAnalizu(page: Page): Promise<void> {
-  const gumb = page.locator('#analyzeBtn');
-  await expect(gumb).toBeEnabled({ timeout: 60_000 });
-  await gumb.click();
-  await expect(page.locator('[data-confirm-profile]:visible, #resultView:visible').first()).toBeVisible({ timeout: 120_000 });
-  if ((await page.locator('#resultView:not(.hidden)').count()) === 0) await potvrdiProfil(page);
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 }
 

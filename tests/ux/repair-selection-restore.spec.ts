@@ -34,7 +34,6 @@ async function prviDolazak(page: Page) {
   await page.locator('#fileInput').setInputFiles(fixture);
   await cekajKorak(page, '2');
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
-  await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 }
@@ -48,11 +47,7 @@ async function analizaNakonObnove(page: Page) {
   await cekajApp(page);
   await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 30_000 });
   await cekajKorak(page, '2');
-  const gumb = page.locator('#analyzeBtn');
-  await expect(gumb).toBeEnabled({ timeout: 60_000 }).catch(() => {});
-  await gumb.click({ timeout: 10_000 }).catch(() => {});
-  await expect(page.locator('[data-confirm-profile]:visible, #resultView:visible').first()).toBeVisible({ timeout: 120_000 });
-  if ((await page.locator('#resultView:not(.hidden)').count()) === 0) await potvrdiProfil(page);
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 }
 
