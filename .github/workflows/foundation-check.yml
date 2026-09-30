@@ -26,6 +26,8 @@ jobs:
         uses: ./.github/actions/setup-deps
         with:
           node-version: 22
+          # Match packageManager and the build-gate matrix when reading optional peers.
+          npm-version: 11.11.0
       # Od 2026-09-01 je `check:edge` DIO `npm run check`, a taj korak trazi Deno i NAMJERNO pada
       # umjesto da se tiho preskoci. `check.yml` je Deno dobio odmah; ovaj posao nije, i to se nije
       # vidjelo jer se okida SAMO na pull requestu prema masteru, nikad na pushu na master. Master
