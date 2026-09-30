@@ -137,13 +137,13 @@ function renderTemplateNotes(sel: TemplateSelection) {
 // na istu vrijednost i dalje mijenja text node pa SR zna ponoviti najavu). Isti obrazac kao
 // scheduleSrSummary u kartice-page.ts; vizualni pregled naslovnice ostaje trenutan.
 let _hintTimer: any = 0;
-function scheduleHint(missing: string[]) {
+function scheduleHint(missing: string[], state: string, ready: boolean) {
   const hint = $('#tp-hint');
   if (!hint) return;
   clearTimeout(_hintTimer);
   _hintTimer = setTimeout(() => {
-    const cls = missing.length ? 'out-hint warn' : 'out-hint ok';
-    const text = missing.length ? `Preporučeno dodati: ${missing.join(', ')}.` : 'Sva preporučena polja su ispunjena.';
+    const cls = ready ? 'out-hint ok' : 'out-hint warn';
+    const text = `${state}. ` + (missing.length ? `Preporučeno dodati: ${missing.join(', ')}.` : 'Sva preporučena polja su ispunjena.');
     if (hint.className !== cls) hint.className = cls;
     if (hint.textContent !== text) hint.textContent = text;
   }, 600);
@@ -188,14 +188,18 @@ async function render(): Promise<void> {
 
   renderBadge(sel);
   renderTemplateNotes(sel);
-  scheduleHint(model.missing);
+  const ready = !!input.author?.trim() && !!input.title?.trim() && model.missing.length === 0;
+  const state = ready ? 'Naslovnica je popunjena' : input.author?.trim() || input.title?.trim() ? 'Nacrt naslovnice' : 'Prikaz predloška';
+  sheet?.setAttribute('aria-label', state);
+  sheet?.setAttribute('role', 'region');
+  scheduleHint(model.missing, state, ready);
 
   const hasContent = model.lines.length > 0;
   const copy = $('#tp-copy'), print = $('#tp-print'), docx = $('#tp-docx');
-  if (copy) copy.disabled = !hasContent;
+  if (copy) { copy.disabled = !hasContent; copy.textContent = ready ? 'Kopiraj tekst' : 'Kopiraj nacrt'; }
   if (print) print.disabled = !hasContent;
-  if (docx) docx.disabled = !hasContent;
-  $('#tp-success-cta')?.classList.toggle('is-visible', hasContent);
+  if (docx) { docx.disabled = !hasContent; docx.textContent = ready ? 'Preuzmi .docx' : 'Preuzmi nacrt .docx'; }
+  $('#tp-success-cta')?.classList.toggle('is-visible', ready);
   const ctaUnitId = $('#tp-unit')?.value || '';
   $('#tp-success-cta-link')?.setAttribute('href', ctaUnitId ? `/?unit=${encodeURIComponent(ctaUnitId)}` : '/');
   // Poveznica ima smisla samo kad kaskada nosi konkretan fakultet (syncUrl vec upisao ?fakultet=

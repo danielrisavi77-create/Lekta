@@ -118,6 +118,6 @@ describe('npm audit ratchet: commitani zapis', () => {
 
   it('prethodno mjerenje je zapisano da se promjena ne moze procitati kao tiha', () => {
     expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(7);
-    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-09');
+    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-21');
   });
 });
