@@ -23,7 +23,9 @@
 //   protected?: boolean,        pozivatelj izricito potvrduje da zadatak dira zasticenu stazu
 //   timeBudgetSeconds?: number, vremenski proracun runa u sekundama; ulazi u redak o vremenu u promptu
 //                               implementatora i recenzenta (skripta ne smije citati sat, pa ga predaje pozivatelj)
-//   startedAt?: string,         kada je proracun poceo (npr. ISO vrijeme); samo uz timeBudgetSeconds
+//   startedAt?: number|string,  kada je proracun poceo: epoch sekunde ili ISO UTC (2026-09-28T01:00:00Z); samo
+//                               uz timeBudgetSeconds. Tada implementator i recenzent racunaju proteklo vrijeme
+//                               (`date -u +%s` minus pocetak) na pocetku svakog koraka
 // }
 //
 // Izlaz: { mode, branch, worktreePath, commits, gate, review, report } - report zavrsava STATUS retkom:
@@ -57,10 +59,21 @@ const TASK_BLOCK =
 const timeBudgetSeconds = (args && Number.isFinite(args.timeBudgetSeconds) && args.timeBudgetSeconds > 0)
   ? Math.floor(args.timeBudgetSeconds)
   : null
-const startedAt = (timeBudgetSeconds && args && typeof args.startedAt === 'string' && args.startedAt) ? args.startedAt : null
+// startedAt: epoch sekunde (broj ili niz znamenki) ili ISO UTC bez milisekundi. Ide u naredbu u promptu, pa
+// se prima samo strogi oblik; sve ostalo se ignorira umjesto da se prepise u prompt.
+const startRaw = timeBudgetSeconds && args ? args.startedAt : undefined
+const startEpoch = (typeof startRaw === 'number' && /^\d{9,11}$/.test(String(startRaw))) ? startRaw
+  : (typeof startRaw === 'string' && /^\d{9,11}$/.test(startRaw)) ? Number(startRaw) : null
+const startIso = (typeof startRaw === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(startRaw)) ? startRaw : null
+const startedAt = startEpoch !== null ? String(startEpoch) : startIso
+const startExpr = startEpoch !== null ? String(startEpoch) : startIso ? `$(date -u -d ${startIso} +%s)` : null
 const TIME_LINE =
   'Vrijeme je vazno: ne trosi vrijeme koje se moze izbjeci; sto ranije tocan rezultat, to bolje.' +
-  (timeBudgetSeconds ? ` Proracun ${timeBudgetSeconds} s${startedAt ? ` od ${startedAt}` : ''}.` : '')
+  (timeBudgetSeconds ? ` Proracun ${timeBudgetSeconds} s${startedAt ? ` od ${startedAt}` : ''}.` : '') +
+  (startExpr
+    ? ` Na pocetku svakog koraka izracunaj proteklo vrijeme (\`date -u +%s\` minus ${startExpr}) i drzi se ` +
+      `proracuna; u izvjestaj napisi "proteklo Ns / proracun ${timeBudgetSeconds}s".`
+    : '')
 
 // Implementator radi bez nadzora: nitko ne ceka njegov medjusazetak da bi rekao "nastavi".
 const UNATTENDED =
