@@ -141,12 +141,15 @@ describe('consent banner (self-boot na import)', () => {
 });
 
 describe('bindAnalyzerCtaTracking (delegirano na document)', () => {
-  it('klik na poveznicu prema #analyzer salje tool_to_analyzer_click kad je privola dana', async () => {
+  it.each([
+    '<a href="index.html?utm_source=alat_kartice#analyzer">Provjeri rad</a>',
+    '<a data-analyzer-cta href="index.html?utm_source=alat_kartice#top">Provjeri rad</a>',
+  ])('klik na oznaceni ulaz salje tool_to_analyzer_click kad je privola dana: %s', async (link) => {
     localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
     const fetchMock = vi.fn().mockResolvedValue({});
     vi.stubGlobal('fetch', fetchMock);
     await loadFresh();
-    document.body.insertAdjacentHTML('beforeend', '<a href="index.html?utm_source=alat_kartice#analyzer">Provjeri rad</a>');
+    document.body.insertAdjacentHTML('beforeend', link);
 
     (document.querySelector('a') as HTMLElement).click();
 

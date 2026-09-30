@@ -835,7 +835,7 @@ function boot(){
   renderBanner();
   trackFacultyEvent('faculty_page_view');
   document.addEventListener('click',function(e){
-    var a=e.target&&e.target.closest&&e.target.closest('a[href*="#analyzer"]');
+    var a=e.target&&e.target.closest&&e.target.closest('a[href*="#analyzer"], a[data-analyzer-cta]');
     if(a){trackFacultyEvent('faculty_to_analyzer_click');return;}
     var t=e.target&&e.target.closest&&e.target.closest('a[data-fk-tool]');
     if(t)trackFacultyEvent('faculty_tool_click:'+t.getAttribute('data-fk-tool'));
@@ -984,13 +984,13 @@ function buildMasterIndexPage(catalog, existence) {
       // Nepokrivene jedinice (ukljucivo cijele institucije s nula pokrivenih jedinica, npr.
       // Sveuciliste VERN'): PRVI PUT postoje na hubu, u tonu profile-status.json's
       // research/generic unosa ("jos prikupljamo"), ne kao poruka o neuspjehu. Link na
-      // /?unit=<id>#analyzer je POSTOJECI ulaz gdje renderWaitlistBar() vec preuzima kad
+      // /?unit=<id>#top je POSTOJECI ulaz gdje renderWaitlistBar() vec preuzima kad
       // student stigne do rezultata za tu jedinicu - nema nove forme na statickoj stranici.
       const uncoveredHtml = uncovered.length
         ? `<p class="coverage-pending-label">Još prikupljamo posebna pravila za:</p><ul class="check-list coverage-pending">${uncovered
             .map((u) => {
               const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
-              return `<li data-search="${searchKey}"><a href="/?unit=${encodeURIComponent(u.id)}#analyzer">${escapeHtml(u.name)}</a>: opća tehnička provjera već radi, posebna pravila još čekamo</li>`;
+              return `<li data-search="${searchKey}"><a data-analyzer-cta href="/?unit=${encodeURIComponent(u.id)}#top">${escapeHtml(u.name)}</a>: opća tehnička provjera već radi, posebna pravila još čekamo</li>`;
             })
             .join('')}</ul>`
         : '';
