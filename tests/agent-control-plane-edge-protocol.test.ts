@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildLeaseClaim } from '../scripts/agents/control-plane-client.mjs';
 import {
@@ -10,6 +12,8 @@ import {
   timingSafeTokenHashMatch,
   validateEnvelope,
 } from '../ops/agent-control-plane/function/protocol.ts';
+
+const edgeSource = readFileSync(resolve('ops/agent-control-plane/function/index.ts'), 'utf8');
 
 describe('agent control-plane edge protocol', () => {
   it('prihvaca samo protocolVersion 1 i poznate operacije', () => {
@@ -79,6 +83,13 @@ describe('agent control-plane edge protocol', () => {
     expect(await timingSafeTokenHashMatch('abd', hash)).toBe(false);
     expect(await timingSafeTokenHashMatch(null, hash)).toBe(false);
     expect(await timingSafeTokenHashMatch('abc', 'nije-hash')).toBe(false);
+  });
+
+  it('ne koristi Supabase admin kljuc kao control-plane credential', () => {
+    expect(edgeSource).toContain("agent_control.control_settings");
+    expect(edgeSource).toContain("admin_token_sha256");
+    expect(edgeSource).not.toContain('SUPABASE_SECRET_KEYS');
+    expect(edgeSource).not.toContain('SUPABASE_SERVICE_ROLE_KEY');
   });
 
   it('mapira konflikt i malformed backend odgovor na odgovarajuci HTTP status', () => {
