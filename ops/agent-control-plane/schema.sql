@@ -53,6 +53,10 @@ create unique index if not exists agent_leases_one_active_session_idx
   on agent_control.agent_leases (session_name)
   where state = 'active';
 
+create unique index if not exists agent_leases_one_active_capability_idx
+  on agent_control.agent_leases (capability_hash)
+  where state = 'active';
+
 create table if not exists agent_control.agent_path_leases (
   lease_id uuid not null references agent_control.agent_leases(lease_id) on delete cascade,
   pattern text not null,
@@ -856,7 +860,7 @@ $$;
 create or replace function agent_control.validate_lease(payload jsonb)
 returns jsonb
 language plpgsql
-volatile
+stable
 security invoker
 set search_path = ''
 as $$
@@ -883,8 +887,6 @@ begin
      or v_capability_hash !~ '^[0-9a-f]{64}$' then
     return jsonb_build_object('ok', false, 'code', 'invalid_validation', 'message', 'Lease validation payload nije valjan.');
   end if;
-
-  perform pg_catalog.pg_advisory_xact_lock(1279341101);
 
   select *
     into v_lease
