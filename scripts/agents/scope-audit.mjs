@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { activeTasksMissingWriteScope, findWriteScopeConflicts, validateWorkScope } from './task-scope.mjs';
 
-export function auditTaskScopes(queue) {
+function auditTaskScopes(queue) {
   const invalid = [];
   for (const task of queue?.tasks ?? []) {
     try {
