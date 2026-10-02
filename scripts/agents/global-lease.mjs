@@ -8,6 +8,12 @@ export function globalLeaseEnforced(env = process.env) {
   return env.LEKTA_GLOBAL_LEASE_ENFORCED === '1';
 }
 
+export function implementerHasControlPlaneAdminToken(env = process.env) {
+  return globalLeaseEnforced(env)
+    && env.LEKTA_ROLE === 'implementer'
+    && Boolean(String(env.LEKTA_CONTROL_PLANE_ADMIN_TOKEN || '').trim());
+}
+
 export function scrubControlPlaneAdminToken(env = process.env) {
   const {
     LEKTA_CONTROL_PLANE_ADMIN_TOKEN: _adminToken,
