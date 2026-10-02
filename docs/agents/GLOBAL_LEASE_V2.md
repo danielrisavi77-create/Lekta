@@ -124,12 +124,23 @@ Primjer:
 `scopeHash` se racuna nakon sortiranja normaliziranih read/write/forbidden nizova. Backend mora
 ponovno validirati payload; hash nije autorizacija nego drift dokaz.
 
+### Idempotencija i nepoznat ishod
+
+Ako je za isti `sessionName + taskId` vec aktivan neistekli lease s jednakim `baseSha` i
+`scopeHash`, ponovljeni `claim` mora vratiti taj isti lease ID, ne stvoriti drugi i ne prijaviti
+samokonflikt. Ako ista sesija za isti task trazi drugaciji scope, koristi se iskljucivo `expand`.
+
+Ako HTTP poziv pukne nakon slanja i nije poznato je li server mutaciju izvrsio, orkestrator ne
+radi slijepi drugi claim. Kad se control plane vrati, prvo cita `snapshot`; tek ako nema aktivnog
+odgovarajuceg leasea salje novi claim. `renew`, `expand` i `release` moraju biti idempotentni po
+lease ID-u. Ovaj uvjet je dio 2B konkurencijskog testa.
+
 ## Operacije protokola v1
 
 - `health`: kompatibilnost i dostupnost backenda
 - `register`: registracija imenovane sesije, stroja i uloge
 - `heartbeat`: osvjezavanje `last_seen_at` sesije
-- `claim`: atomarni novi lease ili `lease_conflict`
+- `claim`: atomarni novi lease, idempotentni povrat postojeceg istog aktivnog leasea ili `lease_conflict`
 - `renew`: produljenje postojeceg leasea
 - `expand`: atomarna zamjena scopea istog leasea nakon SCOPE EXPANSION odluke
 - `release`: eksplicitno zatvaranje leasea
