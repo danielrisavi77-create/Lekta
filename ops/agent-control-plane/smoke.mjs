@@ -89,6 +89,15 @@ async function main() {
     role: 'implementer',
     environmentKind: 'smoke',
   });
+  await requestControlPlane('heartbeat', { sessionName: SESSION_A });
+
+  await expectCode('session identity promjena', 'session_identity_conflict', () =>
+    requestControlPlane('register', {
+      sessionName: SESSION_A,
+      machine: 'laptop',
+      role: 'implementer',
+      environmentKind: 'smoke',
+    }));
 
   await cleanupSmokeLeases();
   await assertConcurrentConflict();
@@ -110,6 +119,9 @@ async function main() {
       throw new Error('ponovljeni identicni claim nije vratio isti lease ID');
     }
 
+    const renewed = await requestControlPlane('renew', { leaseId: leaseA.leaseId, ttlSeconds: 900 });
+    if (renewed.leaseId !== leaseA.leaseId) throw new Error('renew je promijenio lease ID');
+
     await expectCode('isti task na drugoj sesiji', 'task_busy', () =>
       claim(TASK_A, SESSION_B, ['.agent-control-plane-smoke-task-busy/**'], 'smoke/b-task-busy'));
 
@@ -117,15 +129,57 @@ async function main() {
       claim(TASK_B, SESSION_A, ['.agent-control-plane-smoke-session-busy/**'], 'smoke/a-session-busy'));
 
     await requestControlPlane('release', { leaseId: leaseA.leaseId, reason: 'smoke_phase_1_done' });
+    const releaseRetry = await requestControlPlane('release', { leaseId: leaseA.leaseId, reason: 'smoke_phase_1_done' });
+    if (releaseRetry.idempotent !== true) throw new Error('ponovljeni release nije idempotentan');
     leaseA = null;
 
+    leaseA = await claim(
+      TASK_A,
+      SESSION_A,
+      ['.agent-control-plane-smoke-expand-a/**'],
+      'smoke/expand-a',
+    );
     leaseB = await claim(
       TASK_B,
       SESSION_B,
-      ['.agent-control-plane-smoke-after-release/file.ts'],
-      'smoke/b-after-release',
+      ['.agent-control-plane-smoke-expand-b/**'],
+      'smoke/expand-b',
     );
 
+    const conflictingExpand = buildLeaseClaim({
+      task: task(TASK_A, [
+        '.agent-control-plane-smoke-expand-a/**',
+        '.agent-control-plane-smoke-expand-b/file.ts',
+      ]),
+      sessionName: SESSION_A,
+      baseSha: BASE_SHA,
+      branch: 'smoke/expand-a-conflict',
+      environmentKind: 'smoke',
+    });
+    await expectCode('expand u tudji scope', 'lease_conflict', () =>
+      requestControlPlane('expand', { leaseId: leaseA.leaseId, ...conflictingExpand }));
+
+    const safeExpand = buildLeaseClaim({
+      task: task(TASK_A, [
+        '.agent-control-plane-smoke-expand-a/**',
+        '.agent-control-plane-smoke-expand-c/**',
+      ]),
+      sessionName: SESSION_A,
+      baseSha: BASE_SHA,
+      branch: 'smoke/expand-a-safe',
+      environmentKind: 'smoke',
+    });
+    const expanded = await requestControlPlane('expand', { leaseId: leaseA.leaseId, ...safeExpand });
+    if (expanded.leaseId !== leaseA.leaseId || expanded.idempotent !== false) {
+      throw new Error('sigurni expand nije azurirao postojeci lease');
+    }
+    const expandRetry = await requestControlPlane('expand', { leaseId: leaseA.leaseId, ...safeExpand });
+    if (expandRetry.leaseId !== leaseA.leaseId || expandRetry.idempotent !== true) {
+      throw new Error('ponovljeni identicni expand nije idempotentan');
+    }
+
+    await requestControlPlane('release', { leaseId: leaseA.leaseId, reason: 'smoke_expand_complete' });
+    leaseA = null;
     await requestControlPlane('release', { leaseId: leaseB.leaseId, reason: 'smoke_complete' });
     leaseB = null;
 
