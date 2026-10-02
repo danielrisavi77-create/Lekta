@@ -60,6 +60,7 @@ async function main(argv = process.argv.slice(2)) {
     process.stdout.write([
       'agents:lease health',
       'agents:lease register --session lekta-01 --machine laptop|desktop|claude_cloud --role coordinator|implementer|reviewer|integration|explorer|flex [--environment-kind KIND]',
+      'agents:lease heartbeat --session lekta-01',
       'agents:lease claim T01 --session lekta-01 --base-sha <40-sha> [--ttl-seconds 900] [--branch NAME] [--environment-kind KIND]',
       'agents:lease renew --lease-id UUID [--ttl-seconds 900]',
       'agents:lease expand T01 --lease-id UUID --session lekta-01 --base-sha <40-sha> [--ttl-seconds 900] [--branch NAME] [--environment-kind KIND]',
@@ -91,6 +92,11 @@ async function main(argv = process.argv.slice(2)) {
       machine,
       role,
       environmentKind: options.get('--environment-kind') ?? null,
+    });
+  } else if (command === 'heartbeat') {
+    const options = parseOptions(argv, { '--session': 'value' });
+    response = await requestControlPlane('heartbeat', {
+      sessionName: required(options, '--session'),
     });
   } else if (command === 'claim' || command === 'expand') {
     const taskId = argv.shift();
