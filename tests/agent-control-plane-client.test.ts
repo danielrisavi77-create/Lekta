@@ -23,6 +23,10 @@ describe('agent control-plane config', () => {
       LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
       LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
     })).toThrow(/credentials/);
+    expect(() => controlPlaneConfigFromEnv({
+      LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
+      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
+    })).toThrow(/credentials/);
 
     expect(controlPlaneConfigFromEnv({
       LEKTA_CONTROL_PLANE_URL: 'http://127.0.0.1:54321/functions/v1/lease',
@@ -93,6 +97,10 @@ describe('global lease claim contract', () => {
     expect(() => buildLeaseClaim({ ...base, sessionName: 'lekta 03' })).toThrow(/sessionName/);
     expect(() => buildLeaseClaim({ ...base, baseSha: 'abc' })).toThrow(/40/);
     expect(() => buildLeaseClaim({ ...base, ttlSeconds: 30 })).toThrow(/120 do 3600/);
+    expect(() => buildLeaseClaim({
+      ...base,
+      task: { ...base.task, status: 'blocked' },
+    })).toThrow(/claimable statusu/);
     expect(() => buildLeaseClaim({
       ...base,
       task: { ...base.task, status: 'blocked' },
