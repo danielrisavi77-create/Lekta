@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   buildGlobalLeaseValidation,
   globalLeaseEnforced,
+  implementerHasControlPlaneAdminToken,
   scrubControlPlaneAdminToken,
   validateGlobalLease,
 } from '../scripts/agents/global-lease.mjs';
@@ -31,6 +32,23 @@ describe('global lease worker boundary', () => {
   it('enforcement je opt-in', () => {
     expect(globalLeaseEnforced({})).toBe(false);
     expect(globalLeaseEnforced({ LEKTA_GLOBAL_LEASE_ENFORCED: '1' })).toBe(true);
+  });
+
+  it('prepoznaje admin token kao privilege leak samo u enforced implementeru', () => {
+    expect(implementerHasControlPlaneAdminToken(ENV)).toBe(false);
+    expect(implementerHasControlPlaneAdminToken({
+      ...ENV,
+      LEKTA_ROLE: 'implementer',
+    })).toBe(true);
+    expect(implementerHasControlPlaneAdminToken({
+      ...ENV,
+      LEKTA_ROLE: 'coordinator',
+    })).toBe(false);
+    expect(implementerHasControlPlaneAdminToken({
+      ...ENV,
+      LEKTA_ROLE: 'implementer',
+      LEKTA_GLOBAL_LEASE_ENFORCED: '0',
+    })).toBe(false);
   });
 
   it('admin token se nikad ne prosljedjuje workeru', () => {
