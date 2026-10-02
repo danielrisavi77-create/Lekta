@@ -186,3 +186,34 @@ describe('judgeCommand - opce i fail-open ponasanje', () => {
     expect(r.allow).toBe(false);
   });
 });
+
+
+describe('judgeCommand - enforced worker secret boundary', () => {
+  const leakedEnv = {
+    LEKTA_GLOBAL_LEASE_ENFORCED: '1',
+    LEKTA_ROLE: 'implementer',
+    LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'admin-secret',
+  };
+
+  it('blokira i inace bezopasan Bash kad implementer naslijedi admin token', () => {
+    const r = judgeCommand('Bash', 'git status', leakedEnv);
+    expect(r.allow).toBe(false);
+    expect(r.reason).toContain('LEKTA_CONTROL_PLANE_ADMIN_TOKEN');
+  });
+
+  it('ne blokira coordinatora koji legitimno drzi admin token', () => {
+    const r = judgeCommand('Bash', 'git status', {
+      ...leakedEnv,
+      LEKTA_ROLE: 'coordinator',
+    });
+    expect(r.allow).toBe(true);
+  });
+
+  it('ne mijenja legacy tok kad global enforcement nije ukljucen', () => {
+    const r = judgeCommand('Bash', 'git status', {
+      LEKTA_ROLE: 'implementer',
+      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'admin-secret',
+    });
+    expect(r.allow).toBe(true);
+  });
+});
