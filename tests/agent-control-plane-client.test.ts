@@ -35,6 +35,11 @@ describe('agent control-plane config', () => {
       baseUrl: 'http://127.0.0.1:54321/functions/v1/lease',
       adminToken: 'secret',
     });
+
+    expect(() => controlPlaneConfigFromEnv({
+      LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
+      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
+    })).toThrow(/credentials/);
   });
 });
 
