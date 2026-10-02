@@ -53,14 +53,6 @@ function taskById(queue, id) {
   return task;
 }
 
-function optionalMetadata(options) {
-  const metadata = {};
-  if (options.has('--environment-kind')) metadata.environmentKind = options.get('--environment-kind');
-  if (options.has('--machine')) metadata.machine = options.get('--machine');
-  if (options.has('--role')) metadata.role = options.get('--role');
-  return metadata;
-}
-
 async function main(argv = process.argv.slice(2)) {
   const root = resolve(process.cwd());
   const command = argv.shift();
