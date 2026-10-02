@@ -197,6 +197,22 @@ describe('global lease PreToolUse odluka', () => {
     })).resolves.toEqual({ allow: true, reason: '' });
   });
 
+  it('blokira write prije mreze ako enforced worker nosi admin token', async () => {
+    let calls = 0;
+    const result = await judgeGlobalLeaseWrite({
+      env: { ...enforcedEnv, LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'admin-secret' },
+      payload,
+      queue,
+      validate: async () => {
+        calls += 1;
+        return { enforced: true };
+      },
+    });
+    expect(result.allow).toBe(false);
+    expect(result.reason).toContain('LEKTA_CONTROL_PLANE_ADMIN_TOKEN');
+    expect(calls).toBe(0);
+  });
+
   it('fail-closed blokira write kad lease validation padne', async () => {
     const result = await judgeGlobalLeaseWrite({
       env: enforcedEnv,
