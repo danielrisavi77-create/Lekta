@@ -144,7 +144,7 @@ odgovarajuceg leasea salje novi claim. `release` mora biti idempotentan, a ident
 - `expand`: atomarna zamjena scopea istog leasea nakon SCOPE EXPANSION odluke
 - `release`: eksplicitno zatvaranje leasea
 - `snapshot`: read-only pregled aktivnih sesija i leaseova
-- `validate`: worker-only provjera jednog aktivnog leasea; prihvaca samo lease capability i nema mutacijsku ovlast
+- `validate`: worker-only, read-only provjera jednog aktivnog leasea; prihvaca samo lease capability, nema mutacijsku ovlast i ne uzima globalni write advisory lock
 
 Preporuceni pocetni TTL write leasea je 15 minuta, uz renew otprilike svakih 5 minuta dok
 implementator aktivno radi. TTL nije dokaz napretka; to je samo granica nakon koje napusteni lease
@@ -221,7 +221,9 @@ Kad se ukljuci, implementer okolina mora imati:
 - `LEKTA_SESSION_NAME`
 
 Runner automatski zakljucava `LEKTA_GLOBAL_LEASE_BASE_SHA` na pocetni HEAD i uklanja
-`LEKTA_CONTROL_PLANE_ADMIN_TOKEN` prije pokretanja workera. Preflight i postflight validation su
+`LEKTA_CONTROL_PLANE_ADMIN_TOKEN` prije pokretanja workera. Ako je implementer pokrenut rucno
+i ipak naslijedi admin token, enforced Edit/Write hook i Bash/PowerShell tool-guard blokiraju
+mutacijske alate dok se admin token ne ukloni iz njegove okoline. Preflight i postflight validation su
 blokirajuci; Claude `Edit|Write` hook dodatno radi fail-closed validation prije svakog dopustenog
 write alata. Bash/generator promjene i dalje se hvataju diff-level scope provjerom, a postflight
 validation odbija rezultat ako lease vise nije aktivan.
