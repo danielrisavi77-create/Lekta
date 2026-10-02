@@ -23,10 +23,6 @@ describe('agent control-plane config', () => {
       LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
       LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
     })).toThrow(/credentials/);
-    expect(() => controlPlaneConfigFromEnv({
-      LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
-      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
-    })).toThrow(/credentials/);
 
     expect(controlPlaneConfigFromEnv({
       LEKTA_CONTROL_PLANE_URL: 'http://127.0.0.1:54321/functions/v1/lease',
@@ -36,10 +32,6 @@ describe('agent control-plane config', () => {
       adminToken: 'secret',
     });
 
-    expect(() => controlPlaneConfigFromEnv({
-      LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
-      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
-    })).toThrow(/credentials/);
   });
 });
 
@@ -105,11 +97,11 @@ describe('global lease claim contract', () => {
     expect(() => buildLeaseClaim({
       ...base,
       task: { ...base.task, status: 'blocked' },
-    })).toThrow(/claimable statusu/);
+    })).toThrow(/nije claimable/);
     expect(() => buildLeaseClaim({
       ...base,
-      task: { ...base.task, status: 'blocked' },
-    })).toThrow(/nije u claimable statusu/);
+      task: { ...base.task, status: 'in_review' },
+    })).toThrow(/nije claimable/);
   });
 });
 
