@@ -1,13 +1,36 @@
 {
-  "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI. Osvjezi: `npm run audit:ratchet` ispisuje izmjereno, pa upisi ovdje uz razlog u changeNote. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
-  "measuredAt": "2026-09-30",
-  "fullGraphHighCritical": 0,
-  "fullGraphHighCriticalPackages": [],
-  "changeNote": "PR #236: Vitest 4.1.11, eksplicitni vite-node 3.2.4 i Netlify CLI 27.10.2; ipx koristi zakrpani sharp ^0.35.5. npm audit fix osvjezava brace-expansion, fast-uri i Vite pod vite-node. Izmjereno 0 ranjivosti u punom grafu; obje iznimke uklonjene, strop spusten sa 7 na 0. Rokovi nisu produzeni.",
-  "exceptions": [],
+  "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI osim kad NOVI VANJSKI advisory pogodi nepromijenjeni alatni graf bez dostupnog patcha. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
+  "measuredAt": "2026-10-02",
+  "fullGraphHighCritical": 6,
+  "fullGraphHighCriticalPackages": [
+    "@netlify/dev",
+    "@netlify/images",
+    "ipx",
+    "listhen",
+    "netlify-cli",
+    "node-forge"
+  ],
+  "changeNote": "2026-10-02: novi GHSA-86w9-cpqp-85rv/CVE-2026-85393 pogodio je nepromijenjeni Netlify CLI dev-lanac netlify-cli -> @netlify/images -> ipx -> listhen -> node-forge. Isti package-lock cache key 646dced83ea0188d187d0458af58f85ebe0b3fe14d9a0d08ba83b8e04f7f57ac imao je 0 high/critical 2026-09-30, a 2026-10-02 npm audit prijavljuje 6 high identiteta zbog novog advisoryja. netlify-cli 27.10.2 i node-forge 1.4.0 su aktualni npm latest; upstream fix za node-forge je jos otvoren u digitalbazaar/forge#1152 i cilja 1.4.1. Produkcijski graf ostaje 0. Dodana je vremenski ogranicena iznimka do 2026-10-09, bez npm audit fix --force i bez downgradea Netlify CLI-ja.",
+  "exceptions": [
+    {
+      "id": "netlify-node-forge-cve-2026-85393",
+      "packages": [
+        "@netlify/dev",
+        "@netlify/images",
+        "ipx",
+        "listhen",
+        "netlify-cli",
+        "node-forge"
+      ],
+      "owner": "Daniel Risavi",
+      "mitigation": "Samo dev/tooling lanac; `npm audit --omit=dev --audit-level=high` mora ostati 0. Kanonski Lekta release koristi `netlify status`, `netlify build` i `netlify deploy`, ne `netlify dev --https`, gdje listhen koristi node-forge za self-signed cert podrsku. Ne pokretati Netlify lokalni HTTPS dev server do zakrpe. Pratiti digitalbazaar/forge#1152 i odmah ukloniti iznimku nakon objave node-forge 1.4.1 ili Netlify izdanja koje uklanja lanac.",
+      "nextReviewOn": "2026-10-05",
+      "expiresOn": "2026-10-09"
+    }
+  ],
   "priorMeasurement": {
-    "measuredAt": "2026-09-21",
-    "fullGraphHighCritical": 7,
-    "note": "Prije uklanjanja iznimki netlify-cli-image-pipeline i vitest-vite-dev-toolchain."
+    "measuredAt": "2026-09-30",
+    "fullGraphHighCritical": 0,
+    "note": "PR #236: pun graf izmjeren na 0; iznimke uklonjene i strop spusten na 0 prije pojave novog vanjskog advisoryja."
   }
 }
