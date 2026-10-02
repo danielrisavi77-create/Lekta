@@ -76,8 +76,9 @@ describe('agent control-plane SQL contract', () => {
     const snapshotBlock = sql.slice(snapshotStart, snapshotEnd);
 
     expect(validateBlock).toContain('v_capability_hash');
-    expect(validateBlock).toContain('language plpgsql\nvolatile\nsecurity invoker');
-    expect(validateBlock).toContain('pg_advisory_xact_lock(1279341101)');
+    expect(validateBlock).toContain('language plpgsql\nstable\nsecurity invoker');
+    expect(validateBlock).not.toContain('pg_advisory_xact_lock(1279341101)');
+    expect(sql).toContain('agent_leases_one_active_capability_idx');
     expect(snapshotBlock).not.toContain("'capabilityHash'");
     expect(snapshotBlock).not.toContain('capability_hash');
   });
