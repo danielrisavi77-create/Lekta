@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { scopePathMatches, validateWorkScope } from '../agents/task-scope.mjs';
 
-export function findRepoRoot(start, exists = existsSync) {
+function findRepoRoot(start, exists = existsSync) {
   let current = resolve(start || process.cwd());
   while (true) {
     if (exists(join(current, 'docs', 'agents', 'tasks.json'))) return current;
