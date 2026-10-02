@@ -23,10 +23,6 @@ describe('agent control-plane config', () => {
       LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
       LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
     })).toThrow(/credentials/);
-    expect(() => controlPlaneConfigFromEnv({
-      LEKTA_CONTROL_PLANE_URL: 'https://user:pass@control.example/lease',
-      LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'secret',
-    })).toThrow(/credentials/);
 
     expect(controlPlaneConfigFromEnv({
       LEKTA_CONTROL_PLANE_URL: 'http://127.0.0.1:54321/functions/v1/lease',
@@ -35,6 +31,7 @@ describe('agent control-plane config', () => {
       baseUrl: 'http://127.0.0.1:54321/functions/v1/lease',
       adminToken: 'secret',
     });
+
   });
 });
 
@@ -89,6 +86,13 @@ describe('global lease claim contract', () => {
     expect(second.scopeHash).toBe(first.scopeHash);
   });
 
+  it('prihvaca rezervirani cetveroznamenkasti smoke task ID', () => {
+    expect(buildLeaseClaim({
+      ...base,
+      task: { ...base.task, id: 'T9000' },
+    }).taskId).toBe('T9000');
+  });
+
   it('odbija claim bez write scopea ili s nevaljanim identitetom/TTL-om', () => {
     expect(() => buildLeaseClaim({
       ...base,
@@ -100,11 +104,11 @@ describe('global lease claim contract', () => {
     expect(() => buildLeaseClaim({
       ...base,
       task: { ...base.task, status: 'blocked' },
-    })).toThrow(/claimable statusu/);
+    })).toThrow(/nije claimable/);
     expect(() => buildLeaseClaim({
       ...base,
-      task: { ...base.task, status: 'blocked' },
-    })).toThrow(/nije u claimable statusu/);
+      task: { ...base.task, status: 'in_review' },
+    })).toThrow(/nije claimable/);
   });
 });
 
