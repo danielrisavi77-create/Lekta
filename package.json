@@ -138,6 +138,7 @@
     "branch-ci": "node scripts/master-ci-status.mjs --current",
     "agents": "node scripts/agents/cli.mjs",
     "agents:scope-audit": "node scripts/agents/scope-audit.mjs",
+    "agents:lease": "node scripts/agents/control-plane-cli.mjs",
     "agents:usage-report": "node scripts/agents/usage-report.mjs",
     "agents:usage-daily": "node scripts/agents/usage-daily.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
