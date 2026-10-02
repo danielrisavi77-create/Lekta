@@ -194,8 +194,7 @@
       "ops/agent-control-plane/function/index.ts"
     ],
     "ignoreDependencies": [
-      "@supabase/functions-js",
-      "jsr:@supabase/functions-js",
+      "@jsr/supabase__functions-js",
       "postgres"
     ]
   }
