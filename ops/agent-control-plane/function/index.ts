@@ -4,7 +4,7 @@ import {
   PROTOCOL_VERSION,
   payloadScopeHashValid,
   statusForControlResult,
-  timingSafeTokenEqual,
+  timingSafeTokenHashMatch,
   validateEnvelope,
 } from './protocol.ts';
 
@@ -30,16 +30,16 @@ function json(body: unknown, status: number): Response {
   });
 }
 
-function expectedControlToken(): string {
-  const explicit = Deno.env.get('LEKTA_CONTROL_PLANE_ADMIN_TOKEN')?.trim();
-  if (explicit) return explicit;
-
-  try {
-    const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
-    return typeof keys?.default === 'string' ? keys.default.trim() : '';
-  } catch {
-    return '';
-  }
+async function expectedControlTokenHash(): Promise<string> {
+  if (!sql) return '';
+  const rows = await sql`
+    select setting_value
+      from agent_control.control_settings
+     where setting_key = 'admin_token_sha256'
+     limit 1
+  `;
+  const value = rows[0]?.setting_value;
+  return typeof value === 'string' && /^[0-9a-f]{64}$/i.test(value) ? value.toLowerCase() : '';
 }
 
 Deno.serve(async (request: Request) => {
@@ -47,21 +47,29 @@ Deno.serve(async (request: Request) => {
     return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'method_not_allowed' }, 405);
   }
 
-  const expectedToken = expectedControlToken();
-  if (!expectedToken) {
+  if (!sql) {
+    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'database_not_configured' }, 503);
+  }
+
+  let expectedTokenHash = '';
+  try {
+    expectedTokenHash = await expectedControlTokenHash();
+  } catch (error) {
+    console.error('agent-control-plane auth lookup failed', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'database_unavailable' }, 503);
+  }
+  if (!expectedTokenHash) {
     return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'server_not_configured' }, 503);
   }
 
-  const authorized = await timingSafeTokenEqual(
+  const authorized = await timingSafeTokenHashMatch(
     request.headers.get('x-lekta-control-token'),
-    expectedToken,
+    expectedTokenHash,
   );
   if (!authorized) {
     return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'unauthorized' }, 401);
-  }
-
-  if (!sql) {
-    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'database_not_configured' }, 503);
   }
 
   const advertisedLength = Number(request.headers.get('content-length') ?? '0');
