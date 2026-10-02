@@ -132,8 +132,7 @@ samokonflikt. Ako ista sesija za isti task trazi drugaciji scope, koristi se isk
 
 Ako HTTP poziv pukne nakon slanja i nije poznato je li server mutaciju izvrsio, orkestrator ne
 radi slijepi drugi claim. Kad se control plane vrati, prvo cita `snapshot`; tek ako nema aktivnog
-odgovarajuceg leasea salje novi claim. `renew`, `expand` i `release` moraju biti idempotentni po
-lease ID-u. Ovaj uvjet je dio 2B konkurencijskog testa.
+odgovarajuceg leasea salje novi claim. `release` mora biti idempotentan, a identicni `expand` mora vratiti postojeci lease bez nove mutacije.\n`renew` je safe-to-retry: ponovljeni poziv moze pomaknuti istek na `now + TTL`, ali ne stvara novi\nlease i ostaje ogranicen maksimalnim TTL-om. Stroga operation-idempotency za renew moze se dodati u\nbuducu verziju protokola ako mjerenje pokaze da je potrebna.
 
 ## Operacije protokola v1
 
