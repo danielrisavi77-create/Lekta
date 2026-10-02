@@ -195,6 +195,7 @@
     ],
     "ignoreDependencies": [
       "@supabase/functions-js",
+      "jsr:@supabase/functions-js",
       "postgres"
     ]
   }
