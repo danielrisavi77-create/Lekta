@@ -23,7 +23,7 @@ export function canonicalScopePattern(raw) {
   return isTree ? body.replace(/\/$/, '') + '/**' : body.replace(/\/$/, '');
 }
 
-export function canonicalRepoPath(raw) {
+function canonicalRepoPath(raw) {
   const value = canonicalScopePattern(raw);
   if (value.endsWith('/**')) throw new Error('repo path ne smije biti obrazac: ' + raw);
   return value;
