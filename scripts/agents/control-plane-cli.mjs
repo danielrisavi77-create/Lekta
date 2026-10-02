@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { buildLeaseClaim, requestControlPlane, validateSessionName } from './control-plane-client.mjs';
+import { buildLeaseClaim, buildLeaseValidation, leaseCapabilityHash, requestControlPlane, requestLeaseValidation, validateSessionName, workScopeHash } from './control-plane-client.mjs';
 
 const MACHINES = new Set(['laptop', 'desktop', 'claude_cloud']);
 const ROLES = new Set(['coordinator', 'implementer', 'reviewer', 'integration', 'explorer', 'flex']);
@@ -61,7 +61,8 @@ async function main(argv = process.argv.slice(2)) {
       'agents:lease health',
       'agents:lease register --session lekta-01 --machine laptop|desktop|claude_cloud --role coordinator|implementer|reviewer|integration|explorer|flex [--environment-kind KIND]',
       'agents:lease heartbeat --session lekta-01',
-      'agents:lease claim T01 --session lekta-01 --base-sha <40-sha> [--ttl-seconds 900] [--branch NAME] [--environment-kind KIND]',
+      'agents:lease claim T01 --session lekta-01 --base-sha <40-sha> [--ttl-seconds 900] [--branch NAME] [--environment-kind KIND]  # env: LEKTA_GLOBAL_LEASE_TOKEN',
+      'agents:lease validate T01 --lease-id UUID --session lekta-01 --base-sha <40-sha>  # env: LEKTA_GLOBAL_LEASE_TOKEN',
       'agents:lease renew --lease-id UUID [--ttl-seconds 900]',
       'agents:lease expand T01 --lease-id UUID --session lekta-01 --base-sha <40-sha> [--ttl-seconds 900] [--branch NAME] [--environment-kind KIND]',
       'agents:lease release --lease-id UUID [--reason TEXT]',
@@ -126,8 +127,30 @@ async function main(argv = process.argv.slice(2)) {
       });
     } else {
       if (options.has('--lease-id')) fail('claim ne prima --lease-id');
-      response = await requestControlPlane('claim', claim);
+      const leaseToken = String(process.env.LEKTA_GLOBAL_LEASE_TOKEN || '').trim();
+      if (!leaseToken) fail('claim zahtijeva LEKTA_GLOBAL_LEASE_TOKEN u okolini');
+      response = await requestControlPlane('claim', {
+        ...claim,
+        capabilityHash: leaseCapabilityHash(leaseToken),
+      });
     }
+  } else if (command === 'validate') {
+    const taskId = argv.shift();
+    if (!taskId || taskId.startsWith('--')) fail('validate zahtijeva Txx');
+    const options = parseOptions(argv, {
+      '--lease-id': 'value',
+      '--session': 'value',
+      '--base-sha': 'value',
+    });
+    const queue = readQueue(root);
+    const task = taskById(queue, taskId);
+    response = await requestLeaseValidation(buildLeaseValidation({
+      leaseId: required(options, '--lease-id'),
+      taskId,
+      sessionName: required(options, '--session'),
+      baseSha: required(options, '--base-sha'),
+      scopeHash: workScopeHash(task.workScope, task.id),
+    }), { env: process.env });
   } else if (command === 'renew') {
     const options = parseOptions(argv, {
       '--lease-id': 'value',

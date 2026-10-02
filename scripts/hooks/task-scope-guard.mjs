@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { globalLeaseEnforced, validateGlobalLease } from '../agents/global-lease.mjs';
 import { scopePathMatches, validateWorkScope } from '../agents/task-scope.mjs';
 
 function findRepoRoot(start, exists = existsSync) {
@@ -54,6 +55,35 @@ export function judgeTaskWrite({ env = {}, payload = {}, queue, repoRoot, cwd })
   };
 }
 
+
+export async function judgeGlobalLeaseWrite({
+  env = {},
+  payload = {},
+  queue,
+  validate = validateGlobalLease,
+}) {
+  if (!globalLeaseEnforced(env)) return { allow: true, reason: '' };
+  if (env.LEKTA_ROLE !== 'implementer') return { allow: true, reason: '' };
+  if (!['Edit', 'Write'].includes(String(payload.tool_name || ''))) return { allow: true, reason: '' };
+
+  const taskId = String(env.LEKTA_TASK_ID || '').trim();
+  if (!taskId) {
+    return { allow: false, reason: 'Global lease enforcement zahtijeva LEKTA_TASK_ID.' };
+  }
+  const task = (queue?.tasks ?? []).find((item) => item.id === taskId);
+  if (!task) return { allow: false, reason: taskId + ' ne postoji za global lease validation.' };
+
+  try {
+    await validate({ env, task });
+    return { allow: true, reason: '' };
+  } catch (error) {
+    return {
+      allow: false,
+      reason: 'global lease validation nije prosla: ' + (error instanceof Error ? error.message : String(error)),
+    };
+  }
+}
+
 async function readStdin() {
   let raw = '';
   process.stdin.setEncoding('utf8');
@@ -92,7 +122,19 @@ async function main() {
     process.stderr.write('task-scope-guard: ' + verdict.reason + '\n');
     process.exit(2);
   }
+
+  const globalVerdict = await judgeGlobalLeaseWrite({
+    env: process.env,
+    payload,
+    queue,
+  });
+  if (!globalVerdict.allow) {
+    process.stderr.write('task-scope-guard: ' + globalVerdict.reason + '\n');
+    process.exit(2);
+  }
+
   if (verdict.reason) process.stderr.write('task-scope-guard: ' + verdict.reason + '\n');
+  if (globalVerdict.reason) process.stderr.write('task-scope-guard: ' + globalVerdict.reason + '\n');
   process.exit(0);
 }
 

@@ -17,7 +17,7 @@ describe('agent control-plane SQL contract', () => {
     const opens = (sql.match(/\nas \$\$\n/g) ?? []).length;
     const closes = (sql.match(/\n\$\$;/g) ?? []).length;
 
-    expect(functionCount).toBe(15);
+    expect(functionCount).toBe(16);
     expect(opens).toBe(functionCount);
     expect(closes).toBe(functionCount);
     expect(sql).not.toMatch(/\nas \$\n/);
@@ -51,6 +51,7 @@ describe('agent control-plane SQL contract', () => {
       'renew_lease',
       'expand_lease',
       'release_lease',
+      'validate_lease',
       'snapshot_state',
       'dispatch',
     ]) {
@@ -61,7 +62,24 @@ describe('agent control-plane SQL contract', () => {
     expect(sql).toContain("'session_busy'");
     expect(sql).toContain("'lease_requires_expand'");
     expect(sql).toContain("'session_identity_conflict'");
+    expect(sql).toContain("'lease_capability_mismatch'");
+    expect(sql).toContain("'lease_validation_mismatch'");
+    expect(sql).toContain('capability_hash text not null');
     expect(sql).toContain("'metadata', l.metadata");
+  });
+
+  it('capability hash ostaje privatan i validate koristi isti koordinacijski lock', () => {
+    const validateStart = sql.indexOf('function agent_control.validate_lease');
+    const snapshotStart = sql.indexOf('function agent_control.snapshot_state');
+    const validateBlock = sql.slice(validateStart, snapshotStart);
+    const snapshotEnd = sql.indexOf('function agent_control.dispatch');
+    const snapshotBlock = sql.slice(snapshotStart, snapshotEnd);
+
+    expect(validateBlock).toContain('v_capability_hash');
+    expect(validateBlock).toContain('language plpgsql\nvolatile\nsecurity invoker');
+    expect(validateBlock).toContain('pg_advisory_xact_lock(1279341101)');
+    expect(snapshotBlock).not.toContain("'capabilityHash'");
+    expect(snapshotBlock).not.toContain('capability_hash');
   });
 
   it('path overlap ne koristi LIKE nad korisnickom putanjom', () => {

@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-import { buildLeaseClaim, requestControlPlane } from '../../scripts/agents/control-plane-client.mjs';
+import { buildLeaseClaim, buildLeaseValidation, leaseCapabilityHash, requestControlPlane, requestLeaseValidation } from '../../scripts/agents/control-plane-client.mjs';
 
 const BASE_SHA = '0'.repeat(40);
 const TASK_A = 'T9000';
 const TASK_B = 'T9001';
 const SESSION_A = 'lease-smoke-a';
 const SESSION_B = 'lease-smoke-b';
+const TOKEN_A = 'smoke-a-' + 'a'.repeat(48);
+const TOKEN_B = 'smoke-b-' + 'b'.repeat(48);
 
 function task(id, write) {
   return {
@@ -38,14 +40,28 @@ async function cleanupSmokeLeases() {
   }
 }
 
-function claim(taskId, sessionName, write, branch) {
-  return requestControlPlane('claim', buildLeaseClaim({
+function tokenForSession(sessionName) {
+  if (sessionName === SESSION_A) return TOKEN_A;
+  if (sessionName === SESSION_B) return TOKEN_B;
+  throw new Error('Nepoznat smoke session za capability');
+}
+
+function buildSmokeClaim(taskId, sessionName, write, branch) {
+  const payload = buildLeaseClaim({
     task: task(taskId, write),
     sessionName,
     baseSha: BASE_SHA,
     branch,
     environmentKind: 'smoke',
-  }));
+  });
+  return {
+    ...payload,
+    capabilityHash: leaseCapabilityHash(tokenForSession(sessionName)),
+  };
+}
+
+function claim(taskId, sessionName, write, branch) {
+  return requestControlPlane('claim', buildSmokeClaim(taskId, sessionName, write, branch));
 }
 
 async function assertConcurrentConflict() {
@@ -105,19 +121,38 @@ async function main() {
   let leaseA = null;
   let leaseB = null;
   try {
-    const claimA = buildLeaseClaim({
-      task: task(TASK_A, ['.agent-control-plane-smoke-idempotent/**']),
-      sessionName: SESSION_A,
-      baseSha: BASE_SHA,
-      branch: 'smoke/a',
-      environmentKind: 'smoke',
-    });
+    const claimA = buildSmokeClaim(
+      TASK_A,
+      SESSION_A,
+      ['.agent-control-plane-smoke-idempotent/**'],
+      'smoke/a',
+    );
     leaseA = await requestControlPlane('claim', claimA);
 
     const retryA = await requestControlPlane('claim', claimA);
     if (retryA.leaseId !== leaseA.leaseId || retryA.idempotent !== true) {
       throw new Error('ponovljeni identicni claim nije vratio isti lease ID');
     }
+
+    const validationPayload = buildLeaseValidation({
+      leaseId: leaseA.leaseId,
+      taskId: TASK_A,
+      sessionName: SESSION_A,
+      baseSha: BASE_SHA,
+      scopeHash: claimA.scopeHash,
+    });
+    const validated = await requestLeaseValidation(validationPayload, {
+      env: process.env,
+      leaseToken: TOKEN_A,
+    });
+    if (validated.leaseId !== leaseA.leaseId) {
+      throw new Error('worker validate nije vratio aktivni lease');
+    }
+    await expectCode('pogresan worker capability', 'lease_validation_mismatch', () =>
+      requestLeaseValidation(validationPayload, {
+        env: process.env,
+        leaseToken: TOKEN_B,
+      }));
 
     const renewed = await requestControlPlane('renew', { leaseId: leaseA.leaseId, ttlSeconds: 900 });
     if (renewed.leaseId !== leaseA.leaseId) throw new Error('renew je promijenio lease ID');

@@ -2,7 +2,9 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import postgres from 'postgres';
 import {
   PROTOCOL_VERSION,
+  type ControlOperation,
   payloadScopeHashValid,
+  sha256Hex,
   statusForControlResult,
   timingSafeTokenHashMatch,
   validateEnvelope,
@@ -42,9 +44,90 @@ async function expectedControlTokenHash(): Promise<string> {
   return typeof value === 'string' && /^[0-9a-f]{64}$/i.test(value) ? value.toLowerCase() : '';
 }
 
+type ValidEnvelope = {
+  ok: true;
+  operation: ControlOperation;
+  payload: Record<string, unknown>;
+};
+
+type ParsedEnvelope =
+  | { ok: true; envelope: ValidEnvelope }
+  | { ok: false; response: Response };
+
+async function readEnvelope(request: Request): Promise<ParsedEnvelope> {
+  const advertisedLength = Number(request.headers.get('content-length') ?? '0');
+  if (Number.isFinite(advertisedLength) && advertisedLength > MAX_BODY_BYTES) {
+    return { ok: false, response: json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'payload_too_large' }, 413) };
+  }
+
+  const raw = await request.text();
+  if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
+    return { ok: false, response: json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'payload_too_large' }, 413) };
+  }
+
+  let body: unknown;
+  try {
+    body = JSON.parse(raw);
+  } catch {
+    return { ok: false, response: json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'invalid_json' }, 400) };
+  }
+
+  const envelope = validateEnvelope(body);
+  if (!envelope.ok) {
+    return { ok: false, response: json({ protocolVersion: PROTOCOL_VERSION, ...envelope }, 400) };
+  }
+  return { ok: true, envelope };
+}
+
+async function validateWorkerLease(
+  payload: Record<string, unknown>,
+  request: Request,
+): Promise<Response> {
+  if (!sql) {
+    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'database_not_configured' }, 503);
+  }
+
+  const leaseToken = request.headers.get('x-lekta-lease-token')?.trim() ?? '';
+  if (leaseToken.length < 32 || leaseToken.length > 256 || /\s/.test(leaseToken)) {
+    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'unauthorized' }, 401);
+  }
+
+  try {
+    const capabilityHash = await sha256Hex(leaseToken);
+    const rows = await sql`
+      select agent_control.validate_lease(
+        ${JSON.stringify({ ...payload, capabilityHash })}::jsonb
+      ) as result
+    `;
+    const rawResult = rows[0]?.result;
+    const result = rawResult && typeof rawResult === 'object'
+      ? { protocolVersion: PROTOCOL_VERSION, ...rawResult }
+      : rawResult;
+    return json(result, statusForControlResult(result));
+  } catch (error) {
+    console.error('agent-control-plane validate failed', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return json({
+      protocolVersion: PROTOCOL_VERSION,
+      ok: false,
+      code: 'internal_error',
+      message: 'Control plane nije mogao provjeriti lease.',
+    }, 500);
+  }
+}
+
 Deno.serve(async (request: Request) => {
   if (request.method !== 'POST') {
     return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'method_not_allowed' }, 405);
+  }
+
+  const parsed = await readEnvelope(request);
+  if (!parsed.ok) return parsed.response;
+  const envelope = parsed.envelope;
+
+  if (envelope.operation === 'validate') {
+    return validateWorkerLease(envelope.payload, request);
   }
 
   if (!sql) {
@@ -70,28 +153,6 @@ Deno.serve(async (request: Request) => {
   );
   if (!authorized) {
     return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'unauthorized' }, 401);
-  }
-
-  const advertisedLength = Number(request.headers.get('content-length') ?? '0');
-  if (Number.isFinite(advertisedLength) && advertisedLength > MAX_BODY_BYTES) {
-    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'payload_too_large' }, 413);
-  }
-
-  const raw = await request.text();
-  if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
-    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'payload_too_large' }, 413);
-  }
-
-  let body: unknown;
-  try {
-    body = JSON.parse(raw);
-  } catch {
-    return json({ protocolVersion: PROTOCOL_VERSION, ok: false, code: 'invalid_json' }, 400);
-  }
-
-  const envelope = validateEnvelope(body);
-  if (!envelope.ok) {
-    return json({ protocolVersion: PROTOCOL_VERSION, ...envelope }, 400);
   }
 
   if ((envelope.operation === 'claim' || envelope.operation === 'expand')

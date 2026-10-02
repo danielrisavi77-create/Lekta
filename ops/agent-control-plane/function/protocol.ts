@@ -9,6 +9,7 @@ const CONTROL_OPERATIONS = [
   'expand',
   'release',
   'snapshot',
+  'validate',
 ] as const;
 
 export type ControlOperation = typeof CONTROL_OPERATIONS[number];
@@ -88,7 +89,10 @@ export function statusForControlResult(result: unknown): number {
     case 'lease_requires_expand':
     case 'lease_expired':
     case 'session_identity_conflict':
+    case 'lease_capability_mismatch':
       return 409;
+    case 'lease_validation_mismatch':
+      return 403;
     case 'lease_not_found':
       return 404;
     case 'invalid_envelope':
@@ -98,6 +102,7 @@ export function statusForControlResult(result: unknown): number {
     case 'invalid_expand':
     case 'invalid_renew':
     case 'invalid_release':
+    case 'invalid_validation':
     case 'invalid_ttl':
     case 'unknown_operation':
     case 'session_not_registered':

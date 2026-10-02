@@ -28,6 +28,7 @@ create table if not exists agent_control.agent_leases (
   session_name text not null references agent_control.agent_sessions(session_name) on update cascade on delete restrict,
   base_sha text not null check (base_sha ~ '^[0-9a-f]{40}$'),
   scope_hash text not null check (scope_hash ~ '^[0-9a-f]{64}$'),
+  capability_hash text not null check (capability_hash ~ '^[0-9a-f]{64}$'),
   scope jsonb not null check (jsonb_typeof(scope) = 'object'),
   metadata jsonb not null default '{}'::jsonb check (jsonb_typeof(metadata) = 'object'),
   state text not null default 'active' check (state in ('active', 'released', 'expired')),
@@ -358,6 +359,7 @@ declare
   v_session_name text := payload ->> 'sessionName';
   v_base_sha text := lower(payload ->> 'baseSha');
   v_scope_hash text := lower(payload ->> 'scopeHash');
+  v_capability_hash text := lower(payload ->> 'capabilityHash');
   v_scope jsonb := payload -> 'scope';
   v_metadata jsonb := coalesce(payload -> 'metadata', '{}'::jsonb);
   v_ttl_seconds integer;
@@ -381,6 +383,7 @@ begin
      or not agent_control.valid_session_name(v_session_name)
      or v_base_sha !~ '^[0-9a-f]{40}$'
      or v_scope_hash !~ '^[0-9a-f]{64}$'
+     or v_capability_hash !~ '^[0-9a-f]{64}$'
      or v_ttl_seconds < 120
      or v_ttl_seconds > 3600
      or not agent_control.canonical_scope_valid(v_scope)
@@ -409,6 +412,14 @@ begin
     if v_existing.base_sha = v_base_sha
        and v_existing.scope_hash = v_scope_hash
        and v_existing.scope = v_scope then
+      if v_existing.capability_hash <> v_capability_hash then
+        return jsonb_build_object(
+          'ok', false,
+          'code', 'lease_capability_mismatch',
+          'message', 'Aktivni lease postoji, ali capability ne odgovara izvornom claimu.',
+          'leaseId', v_existing.lease_id
+        );
+      end if;
       return jsonb_build_object(
         'ok', true,
         'leaseId', v_existing.lease_id,
@@ -509,12 +520,13 @@ begin
     end if;
   end loop;
 
-  insert into agent_control.agent_leases(task_id, session_name, base_sha, scope_hash, scope, metadata, expires_at)
+  insert into agent_control.agent_leases(task_id, session_name, base_sha, scope_hash, capability_hash, scope, metadata, expires_at)
   values (
     v_task_id,
     v_session_name,
     v_base_sha,
     v_scope_hash,
+    v_capability_hash,
     v_scope,
     v_metadata,
     v_at_time + make_interval(secs => v_ttl_seconds)
@@ -837,6 +849,76 @@ begin
     'leaseId', v_requested_id,
     'idempotent', false,
     'state', v_lease.state
+  );
+end;
+$$;
+
+create or replace function agent_control.validate_lease(payload jsonb)
+returns jsonb
+language plpgsql
+volatile
+security invoker
+set search_path = ''
+as $$
+declare
+  v_requested_id uuid;
+  v_task_id text := payload ->> 'taskId';
+  v_session_name text := payload ->> 'sessionName';
+  v_base_sha text := lower(payload ->> 'baseSha');
+  v_scope_hash text := lower(payload ->> 'scopeHash');
+  v_capability_hash text := lower(payload ->> 'capabilityHash');
+  v_at_time timestamptz := clock_timestamp();
+  v_lease agent_control.agent_leases%rowtype;
+begin
+  begin
+    v_requested_id := (payload ->> 'leaseId')::uuid;
+  exception when others then
+    return jsonb_build_object('ok', false, 'code', 'invalid_validation', 'message', 'Lease validation payload nije valjan.');
+  end;
+
+  if v_task_id !~ '^T[0-9]{2,4}$'
+     or not agent_control.valid_session_name(v_session_name)
+     or v_base_sha !~ '^[0-9a-f]{40}$'
+     or v_scope_hash !~ '^[0-9a-f]{64}$'
+     or v_capability_hash !~ '^[0-9a-f]{64}$' then
+    return jsonb_build_object('ok', false, 'code', 'invalid_validation', 'message', 'Lease validation payload nije valjan.');
+  end if;
+
+  perform pg_catalog.pg_advisory_xact_lock(1279341101);
+
+  select *
+    into v_lease
+    from agent_control.agent_leases l
+   where l.lease_id = v_requested_id;
+
+  if not found then
+    return jsonb_build_object('ok', false, 'code', 'lease_not_found', 'message', 'Lease ne postoji.');
+  end if;
+
+  if v_lease.state <> 'active' or v_lease.expires_at <= v_at_time then
+    return jsonb_build_object('ok', false, 'code', 'lease_expired', 'message', 'Lease vise nije aktivan.');
+  end if;
+
+  if v_lease.task_id <> v_task_id
+     or v_lease.session_name <> v_session_name
+     or v_lease.base_sha <> v_base_sha
+     or v_lease.scope_hash <> v_scope_hash
+     or v_lease.capability_hash <> v_capability_hash then
+    return jsonb_build_object(
+      'ok', false,
+      'code', 'lease_validation_mismatch',
+      'message', 'Lease capability ili identitet ne odgovara aktivnom leaseu.'
+    );
+  end if;
+
+  return jsonb_build_object(
+    'ok', true,
+    'leaseId', v_lease.lease_id,
+    'taskId', v_lease.task_id,
+    'sessionName', v_lease.session_name,
+    'baseSha', v_lease.base_sha,
+    'scopeHash', v_lease.scope_hash,
+    'expiresAt', v_lease.expires_at
   );
 end;
 $$;

@@ -24,6 +24,12 @@ describe('agent control-plane edge protocol', () => {
     })).toMatchObject({ ok: true, operation: 'claim' });
 
     expect(validateEnvelope({
+      protocolVersion: PROTOCOL_VERSION,
+      operation: 'validate',
+      payload: {},
+    })).toMatchObject({ ok: true, operation: 'validate' });
+
+    expect(validateEnvelope({
       protocolVersion: 2,
       operation: 'claim',
       payload: {},
@@ -88,6 +94,8 @@ describe('agent control-plane edge protocol', () => {
   it('ne koristi Supabase admin kljuc kao control-plane credential', () => {
     expect(edgeSource).toContain("agent_control.control_settings");
     expect(edgeSource).toContain("admin_token_sha256");
+    expect(edgeSource).toContain("x-lekta-lease-token");
+    expect(edgeSource).toContain("agent_control.validate_lease");
     expect(edgeSource).not.toContain('SUPABASE_SECRET_KEYS');
     expect(edgeSource).not.toContain('SUPABASE_SERVICE_ROLE_KEY');
   });
@@ -97,6 +105,8 @@ describe('agent control-plane edge protocol', () => {
     expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_conflict' })).toBe(409);
     expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_not_found' })).toBe(404);
     expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'session_identity_conflict' })).toBe(409);
+    expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_capability_mismatch' })).toBe(409);
+    expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_validation_mismatch' })).toBe(403);
     expect(statusForControlResult({ ok: true })).toBe(502);
   });
 });
