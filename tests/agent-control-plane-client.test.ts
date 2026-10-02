@@ -101,7 +101,7 @@ describe('control-plane HTTP boundary', () => {
     let seen: { url?: unknown; init?: RequestInit } = {};
     const fakeFetch = async (url: unknown, init?: RequestInit) => {
       seen = { url, init };
-      return new Response(JSON.stringify({ ok: true, leaseId: 'lease-1' }), {
+      return new Response(JSON.stringify({ protocolVersion: 1, ok: true, leaseId: 'lease-1' }), {
         status: 200,
         headers: { 'content-type': 'application/json' },
       });
@@ -112,7 +112,7 @@ describe('control-plane HTTP boundary', () => {
       fetchImpl: fakeFetch as typeof fetch,
     });
 
-    expect(result).toEqual({ ok: true, leaseId: 'lease-1' });
+    expect(result).toEqual({ protocolVersion: 1, ok: true, leaseId: 'lease-1' });
     expect(seen.url).toBe(config.baseUrl);
     expect(seen.init?.method).toBe('POST');
     expect(seen.init?.headers).toMatchObject({
@@ -128,6 +128,7 @@ describe('control-plane HTTP boundary', () => {
 
   it('fail-closed odbija backend gresku i redaktira token', async () => {
     const fakeFetch = async () => new Response(JSON.stringify({
+      protocolVersion: 1,
       ok: false,
       code: 'lease_conflict',
       message: `token ${config.adminToken} ne smije izaci`,
@@ -144,7 +145,7 @@ describe('control-plane HTTP boundary', () => {
     expect(message).not.toContain(config.adminToken);
   });
 
-  it('odbija nevaljan JSON i odgovor bez ok=true', async () => {
+  it('odbija nevaljan JSON, krivu verziju i odgovor bez ok=true', async () => {
     await expect(requestControlPlane('health', {}, {
       config,
       fetchImpl: (async () => new Response('nije-json', { status: 200 })) as typeof fetch,
@@ -152,7 +153,12 @@ describe('control-plane HTTP boundary', () => {
 
     await expect(requestControlPlane('health', {}, {
       config,
-      fetchImpl: (async () => new Response(JSON.stringify({ status: 'ok' }), { status: 200 })) as typeof fetch,
+      fetchImpl: (async () => new Response(JSON.stringify({ protocolVersion: 2, ok: true }), { status: 200 })) as typeof fetch,
+    })).rejects.toThrow(/protocol nije kompatibilan/);
+
+    await expect(requestControlPlane('health', {}, {
+      config,
+      fetchImpl: (async () => new Response(JSON.stringify({ protocolVersion: 1, status: 'ok' }), { status: 200 })) as typeof fetch,
     })).rejects.toThrow(/ok=true/);
   });
 });
