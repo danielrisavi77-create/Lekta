@@ -38,7 +38,7 @@ Ovaj PR isporucuje samo:
 
 ### 2B - zaseban control-plane backend
 
-Backend se stvara kao zaseban Supabase projekt, nikad u Lektinoj produkcijskoj ni staging bazi.
+Backend source zivi pod `ops/agent-control-plane/`; sama prisutnost sourcea ne znaci da je globalni lock aktivan. Target mora biti izolirani Supabase projekt ili development branch bez produkcijskih podataka i s eksplicitno potvrdenim troskom. Lektina produkcijska i staging baza ne koriste se kao control-plane spremiste.
 Sadrzi samo razvojnu koordinacijsku telemetriju, bez studentskih dokumenata, korisnickih podataka,
 payment podataka ili produkcijskih tajni.
 
@@ -132,7 +132,7 @@ samokonflikt. Ako ista sesija za isti task trazi drugaciji scope, koristi se isk
 
 Ako HTTP poziv pukne nakon slanja i nije poznato je li server mutaciju izvrsio, orkestrator ne
 radi slijepi drugi claim. Kad se control plane vrati, prvo cita `snapshot`; tek ako nema aktivnog
-odgovarajuceg leasea salje novi claim. `release` mora biti idempotentan, a identicni `expand` mora vratiti postojeci lease bez nove mutacije.\n`renew` je safe-to-retry: ponovljeni poziv moze pomaknuti istek na `now + TTL`, ali ne stvara novi\nlease i ostaje ogranicen maksimalnim TTL-om. Stroga operation-idempotency za renew moze se dodati u\nbuducu verziju protokola ako mjerenje pokaze da je potrebna.
+odgovarajuceg leasea salje novi claim. `release` mora biti idempotentan, a identicni `expand` mora vratiti postojeci lease bez nove mutacije. `renew` je safe-to-retry: ponovljeni poziv moze pomaknuti istek na `now + TTL`, ali ne stvara novi lease i ostaje ogranicen maksimalnim TTL-om. Stroga operation-idempotency za renew moze se dodati u buducu verziju protokola ako mjerenje pokaze da je potrebna.
 
 ## Operacije protokola v1
 
