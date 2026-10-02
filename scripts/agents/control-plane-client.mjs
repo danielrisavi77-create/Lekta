@@ -98,7 +98,7 @@ export async function requestControlPlane(operation, payload = {}, options = {})
         'content-type': 'application/json',
         'x-lekta-control-token': config.adminToken,
       },
-      body: JSON.stringify({ operation, payload }),
+      body: JSON.stringify({ protocolVersion: 1, operation, payload }),
       signal: controller.signal,
     });
   } catch (error) {
