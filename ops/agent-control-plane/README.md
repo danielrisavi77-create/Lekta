@@ -22,13 +22,16 @@ podatke. `agent_control` schema nije izlozena Data API-ju. SQL eksplicitno uklan
 Postgres preko server-side `SUPABASE_DB_URL`.
 
 Edge Function se deploya s `verify_jwt=false` **iskljucivo zato sto implementira vlastitu
-server-to-server autentikaciju** preko `x-lekta-control-token`. Token je:
+server-to-server autentikaciju** preko `x-lekta-control-token`.
 
-1. preferirano custom secret `LEKTA_CONTROL_PLANE_ADMIN_TOKEN`, ili
-2. kao bootstrap fallback default Supabase secret key iz `SUPABASE_SECRET_KEYS`.
+Control token je zaseban nasumicni secret koji postoji u plaintextu samo na Fable orkestratoru.
+U bazi se cuva iskljucivo njegov SHA-256 hash pod
+`agent_control.control_settings.admin_token_sha256`. Edge Function hasha primljeni header i
+radi timing-safe usporedbu s tim hashom. Ne koristi Supabase secret/service-role kljuc kao
+control-plane credential.
 
-Ni jedan od njih ne ide worker sesijama. Pocetno ih koristi samo Fable orkestrator. CLI na
-orkestratoru isti token cita kroz lokalni env `LEKTA_CONTROL_PLANE_ADMIN_TOKEN`.
+Worker sesijama se token ne daje. CLI na orkestratoru ga cita samo iz lokalnog
+`LEKTA_CONTROL_PLANE_ADMIN_TOKEN` enva.
 
 ## Atomski claim
 
@@ -57,18 +60,23 @@ toga retry moze produziti lease za nekoliko sekundi/minuta, ali nikad iznad konf
 
 ## Deploy redoslijed
 
-Backend se ne deploya dok dedicated projekt nije eksplicitno odabran i trosak potvrden.
+Backend se ne deploya dok izolirani Supabase target nije eksplicitno odabran i svaki njegov
+trosak potvrden. Preferira se zaseban projekt. Ako plan ogranicava broj aktivnih projekata,
+dopusten je zaseban development branch bez produkcijskih podataka, uz zasebnu potvrdu hourly
+troska. Produkcijski `Lekta` projekt i `Lekta staging` ne koriste se kao control-plane baza.
 
-1. Stvori zaseban Supabase projekt, npr. `Lekta Agent Control Plane`, u europskoj regiji.
-2. Primijeni `schema.sql` samo na taj projekt.
-3. Pokreni Supabase security i performance advisore.
-4. Deployaj Edge Function `lekta-control-plane` iz `function/` s `verify_jwt=false`.
-5. Postavi/rotiraj server-side control token.
+1. Stvori/odaberi izolirani projekt ili development branch u europskoj regiji.
+2. Primijeni `schema.sql` samo na taj izolirani target.
+3. Generiraj najmanje 32 bajta nasumicnog control tokena lokalno na orkestratoru, izracunaj
+   SHA-256 i upisi samo hash:
+   `insert into agent_control.control_settings(setting_key, setting_value) values ('admin_token_sha256', '<sha256>') on conflict (setting_key) do update set setting_value = excluded.setting_value, updated_at = clock_timestamp();`
+4. Pokreni Supabase security i performance advisore.
+5. Deployaj Edge Function `lekta-control-plane` iz `function/` s `verify_jwt=false`.
 6. Na orkestratoru postavi:
    - `LEKTA_CONTROL_PLANE_URL=https://<ref>.supabase.co/functions/v1/lekta-control-plane`
    - `LEKTA_CONTROL_PLANE_ADMIN_TOKEN=<secret>`
 7. Pokreni `npm run agents:lease -- health`.
-8. Pokreni `npm run agents:lease-smoke`.
+8. Pokreni `npm run agents:lease-smoke`; smoke ukljucuje stvarno paralelna dva preklapajuca claima.
 9. Tek nakon zelenog smokea Phase 2C smije vezati hook/runner uz udaljeni lease.
 
 ## Smoke rezervacije
