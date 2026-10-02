@@ -93,7 +93,7 @@ Zato je v1 obrana od nekontroliranog sirenja scopea i detektor konflikata, a ne 
 
 ## Sljedeca faza: globalni lease
 
-V2 treba centralni control plane izvan produkcijskih podataka Lekte s najmanje:
+Phase 2A ugovor je u `docs/agents/GLOBAL_LEASE_V2.md`. V2 treba centralni control plane izvan produkcijskih podataka Lekte s najmanje:
 
 - session id i heartbeat
 - task id, owner i base SHA
