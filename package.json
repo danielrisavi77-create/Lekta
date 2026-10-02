@@ -186,5 +186,12 @@
     "lucide": "^1.48.0",
     "motion": "^12.42.2",
     "open-props": "^1.7.23"
+  },
+  "knip": {
+    "entry": [
+      "{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "ops/agent-control-plane/function/index.ts"
+    ]
   }
 }
