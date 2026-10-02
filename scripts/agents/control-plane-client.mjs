@@ -13,7 +13,7 @@ function normalizedBaseUrl(raw) {
   } catch {
     throw new Error('LEKTA_CONTROL_PLANE_URL nije valjan URL');
   }
-  const local = ['localhost', '127.0.0.1', '::1'].includes(url.hostname);
+  const local = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(url.hostname);
   if (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) {
     throw new Error('Control-plane URL mora koristiti HTTPS (HTTP je dopusten samo za localhost)');
   }
@@ -118,7 +118,8 @@ export async function requestControlPlane(operation, payload = {}, options = {})
   if (!response.ok || body?.ok === false) {
     const code = typeof body?.code === 'string' ? body.code : `http_${response.status}`;
     const message = typeof body?.message === 'string' ? body.message : 'zahtjev odbijen';
-    throw new Error(`Control-plane ${code}: ${message}`);
+    const safeMessage = config.adminToken ? message.split(config.adminToken).join('[REDACTED]') : message;
+    throw new Error(`Control-plane ${code}: ${safeMessage}`);
   }
   if (!body || typeof body !== 'object' || body.ok !== true) {
     throw new Error('Control-plane odgovor nema ok=true');
