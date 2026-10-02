@@ -120,6 +120,7 @@ describe('control-plane HTTP boundary', () => {
       'x-lekta-control-token': config.adminToken,
     });
     expect(JSON.parse(String(seen.init?.body))).toEqual({
+      protocolVersion: 1,
       operation: 'claim',
       payload: { taskId: 'T01' },
     });
