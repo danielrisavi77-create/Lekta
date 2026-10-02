@@ -3,7 +3,7 @@ import { validateWorkScope } from './task-scope.mjs';
 
 const DEFAULT_TIMEOUT_MS = 8_000;
 const SESSION_RE = /^[A-Za-z0-9][A-Za-z0-9._:@-]{0,63}$/;
-const TASK_RE = /^T\d{2}$/;
+const TASK_RE = /^T\d{2,4}$/;
 const SHA_RE = /^[0-9a-f]{40}$/i;
 
 function normalizedBaseUrl(raw) {
@@ -12,9 +12,6 @@ function normalizedBaseUrl(raw) {
     url = new URL(String(raw || '').trim());
   } catch {
     throw new Error('LEKTA_CONTROL_PLANE_URL nije valjan URL');
-  }
-  if (url.username || url.password) {
-    throw new Error('Control-plane URL ne smije sadrzavati credentials');
   }
   if (url.username || url.password) {
     throw new Error('Control-plane URL ne smije sadrzavati credentials');
@@ -63,13 +60,10 @@ export function buildLeaseClaim({
   environmentKind = null,
 }) {
   if (!task || typeof task !== 'object' || !TASK_RE.test(String(task.id || ''))) {
-    throw new Error('Claim zahtijeva valjan Txx zadatak');
+    throw new Error('Claim zahtijeva valjan Txx-Txxxx zadatak');
   }
   if (!['ready', 'in_progress'].includes(String(task.status || ''))) {
-    throw new Error(`${task.id} nije u claimable statusu ready/in_progress`);
-  }
-  if (!['ready', 'in_progress'].includes(task.status)) {
-    throw new Error(`${task.id} nije claimable: status ${String(task.status ?? 'nedostaje')}`);
+    throw new Error(`${task.id} nije claimable: status ${String(task.status ?? 'nedostaje')}; ocekuje se ready ili in_progress`);
   }
   const normalizedSession = validateSessionName(sessionName);
   if (!SHA_RE.test(String(baseSha || ''))) {
