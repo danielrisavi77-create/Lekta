@@ -16,9 +16,6 @@ function normalizedBaseUrl(raw) {
   if (url.username || url.password) {
     throw new Error('Control-plane URL ne smije sadrzavati credentials');
   }
-  if (url.username || url.password) {
-    throw new Error('Control-plane URL ne smije sadrzavati credentials');
-  }
   const local = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(url.hostname);
   if (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) {
     throw new Error('Control-plane URL mora koristiti HTTPS (HTTP je dopusten samo za localhost)');
@@ -66,10 +63,7 @@ export function buildLeaseClaim({
     throw new Error('Claim zahtijeva valjan Txx zadatak');
   }
   if (!['ready', 'in_progress'].includes(String(task.status || ''))) {
-    throw new Error(`${task.id} nije u claimable statusu ready/in_progress`);
-  }
-  if (!['ready', 'in_progress'].includes(task.status)) {
-    throw new Error(`${task.id} nije claimable: status ${String(task.status ?? 'nedostaje')}`);
+    throw new Error(`${task.id} nije claimable: status ${String(task.status ?? 'nedostaje')}; ocekuje se ready ili in_progress`);
   }
   const normalizedSession = validateSessionName(sessionName);
   if (!SHA_RE.test(String(baseSha || ''))) {
