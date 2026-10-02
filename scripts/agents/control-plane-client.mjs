@@ -21,6 +21,12 @@ function normalizedBaseUrl(raw) {
   return url.toString();
 }
 
+export function validateSessionName(raw) {
+  const value = String(raw || '').trim();
+  if (!SESSION_RE.test(value)) throw new Error('sessionName nije valjan');
+  return value;
+}
+
 export function controlPlaneConfigFromEnv(env = process.env) {
   const baseUrl = String(env.LEKTA_CONTROL_PLANE_URL || '').trim();
   const adminToken = String(env.LEKTA_CONTROL_PLANE_ADMIN_TOKEN || '').trim();
@@ -53,9 +59,7 @@ export function buildLeaseClaim({
   if (!task || typeof task !== 'object' || !TASK_RE.test(String(task.id || ''))) {
     throw new Error('Claim zahtijeva valjan Txx zadatak');
   }
-  if (!SESSION_RE.test(String(sessionName || ''))) {
-    throw new Error('sessionName nije valjan');
-  }
+  const normalizedSession = validateSessionName(sessionName);
   if (!SHA_RE.test(String(baseSha || ''))) {
     throw new Error('baseSha mora biti puni 40-znamenkasti Git SHA');
   }
@@ -71,7 +75,7 @@ export function buildLeaseClaim({
   if (environmentKind) metadata.environmentKind = String(environmentKind);
   return {
     taskId: task.id,
-    sessionName: String(sessionName),
+    sessionName: normalizedSession,
     baseSha: String(baseSha).toLowerCase(),
     scope,
     scopeHash: hashScope(scope),
