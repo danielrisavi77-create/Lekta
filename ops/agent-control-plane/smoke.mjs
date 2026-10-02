@@ -38,6 +38,43 @@ async function cleanupSmokeLeases() {
   }
 }
 
+function claim(taskId, sessionName, write, branch) {
+  return requestControlPlane('claim', buildLeaseClaim({
+    task: task(taskId, write),
+    sessionName,
+    baseSha: BASE_SHA,
+    branch,
+    environmentKind: 'smoke',
+  }));
+}
+
+async function assertConcurrentConflict() {
+  const results = await Promise.allSettled([
+    claim(TASK_A, SESSION_A, ['.agent-control-plane-smoke/**'], 'smoke/concurrent-a'),
+    claim(TASK_B, SESSION_B, ['.agent-control-plane-smoke/file.ts'], 'smoke/concurrent-b'),
+  ]);
+
+  const fulfilled = results.filter((result) => result.status === 'fulfilled');
+  const rejected = results.filter((result) => result.status === 'rejected');
+  if (fulfilled.length !== 1 || rejected.length !== 1) {
+    throw new Error(`concurrent claim: ocekivao 1 success + 1 conflict, dobio ${fulfilled.length} success + ${rejected.length} reject`);
+  }
+
+  const rejection = rejected[0].reason instanceof Error
+    ? rejected[0].reason.message
+    : String(rejected[0].reason);
+  if (!rejection.includes('lease_conflict')) {
+    throw new Error(`concurrent claim: ocekivao lease_conflict, dobio ${rejection}`);
+  }
+
+  const winner = fulfilled[0].value;
+  if (!winner?.leaseId) throw new Error('concurrent claim: pobjednik nema leaseId');
+  await requestControlPlane('release', {
+    leaseId: winner.leaseId,
+    reason: 'smoke_concurrency_complete',
+  });
+}
+
 async function main() {
   await requestControlPlane('health', {});
   await requestControlPlane('register', {
@@ -54,15 +91,17 @@ async function main() {
   });
 
   await cleanupSmokeLeases();
+  await assertConcurrentConflict();
 
   let leaseA = null;
   let leaseB = null;
   try {
     const claimA = buildLeaseClaim({
-      task: task(TASK_A, ['.agent-control-plane-smoke/**']),
+      task: task(TASK_A, ['.agent-control-plane-smoke-idempotent/**']),
       sessionName: SESSION_A,
       baseSha: BASE_SHA,
       branch: 'smoke/a',
+      environmentKind: 'smoke',
     });
     leaseA = await requestControlPlane('claim', claimA);
 
@@ -72,38 +111,20 @@ async function main() {
     }
 
     await expectCode('isti task na drugoj sesiji', 'task_busy', () =>
-      requestControlPlane('claim', buildLeaseClaim({
-        task: task(TASK_A, ['.agent-control-plane-smoke-disjoint/**']),
-        sessionName: SESSION_B,
-        baseSha: BASE_SHA,
-        branch: 'smoke/b-task-busy',
-      })));
+      claim(TASK_A, SESSION_B, ['.agent-control-plane-smoke-task-busy/**'], 'smoke/b-task-busy'));
 
     await expectCode('isti session na drugom tasku', 'session_busy', () =>
-      requestControlPlane('claim', buildLeaseClaim({
-        task: task(TASK_B, ['.agent-control-plane-smoke-disjoint/**']),
-        sessionName: SESSION_A,
-        baseSha: BASE_SHA,
-        branch: 'smoke/a-session-busy',
-      })));
-
-    await expectCode('preklapajuci write scope', 'lease_conflict', () =>
-      requestControlPlane('claim', buildLeaseClaim({
-        task: task(TASK_B, ['.agent-control-plane-smoke/file.ts']),
-        sessionName: SESSION_B,
-        baseSha: BASE_SHA,
-        branch: 'smoke/b-conflict',
-      })));
+      claim(TASK_B, SESSION_A, ['.agent-control-plane-smoke-session-busy/**'], 'smoke/a-session-busy'));
 
     await requestControlPlane('release', { leaseId: leaseA.leaseId, reason: 'smoke_phase_1_done' });
     leaseA = null;
 
-    leaseB = await requestControlPlane('claim', buildLeaseClaim({
-      task: task(TASK_B, ['.agent-control-plane-smoke/file.ts']),
-      sessionName: SESSION_B,
-      baseSha: BASE_SHA,
-      branch: 'smoke/b-after-release',
-    }));
+    leaseB = await claim(
+      TASK_B,
+      SESSION_B,
+      ['.agent-control-plane-smoke-after-release/file.ts'],
+      'smoke/b-after-release',
+    );
 
     await requestControlPlane('release', { leaseId: leaseB.leaseId, reason: 'smoke_complete' });
     leaseB = null;
@@ -121,6 +142,7 @@ async function main() {
     if (leaseB?.leaseId) {
       await requestControlPlane('release', { leaseId: leaseB.leaseId, reason: 'smoke_finally' }).catch(() => {});
     }
+    await cleanupSmokeLeases().catch(() => {});
   }
 }
 
