@@ -86,6 +86,13 @@ describe('global lease claim contract', () => {
     expect(second.scopeHash).toBe(first.scopeHash);
   });
 
+  it('prihvaca rezervirani cetveroznamenkasti smoke task ID', () => {
+    expect(buildLeaseClaim({
+      ...base,
+      task: { ...base.task, id: 'T9000' },
+    }).taskId).toBe('T9000');
+  });
+
   it('odbija claim bez write scopea ili s nevaljanim identitetom/TTL-om', () => {
     expect(() => buildLeaseClaim({
       ...base,
