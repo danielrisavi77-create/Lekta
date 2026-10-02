@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
-import { globalLeaseEnforced, validateGlobalLease } from '../agents/global-lease.mjs';
+import { globalLeaseEnforced, implementerHasControlPlaneAdminToken, validateGlobalLease } from '../agents/global-lease.mjs';
 import { scopePathMatches, validateWorkScope } from '../agents/task-scope.mjs';
 
 function findRepoRoot(start, exists = existsSync) {
@@ -64,6 +64,9 @@ export async function judgeGlobalLeaseWrite({
 }) {
   if (!globalLeaseEnforced(env)) return { allow: true, reason: '' };
   if (env.LEKTA_ROLE !== 'implementer') return { allow: true, reason: '' };
+  if (implementerHasControlPlaneAdminToken(env)) {
+    return { allow: false, reason: 'Enforced implementer ne smije imati LEKTA_CONTROL_PLANE_ADMIN_TOKEN.' };
+  }
   if (!['Edit', 'Write'].includes(String(payload.tool_name || ''))) return { allow: true, reason: '' };
 
   const taskId = String(env.LEKTA_TASK_ID || '').trim();
