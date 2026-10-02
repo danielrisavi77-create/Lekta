@@ -1,6 +1,6 @@
 export const PROTOCOL_VERSION = 1 as const;
 
-export const CONTROL_OPERATIONS = [
+const CONTROL_OPERATIONS = [
   'health',
   'register',
   'heartbeat',
