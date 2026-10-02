@@ -192,6 +192,10 @@
       "{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
       "src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
       "ops/agent-control-plane/function/index.ts"
+    ],
+    "ignoreDependencies": [
+      "@supabase/functions-js",
+      "postgres"
     ]
   }
 }
