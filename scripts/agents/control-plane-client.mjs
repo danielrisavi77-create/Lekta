@@ -119,6 +119,9 @@ export async function requestControlPlane(operation, payload = {}, options = {})
   } catch {
     throw new Error(`Control-plane je vratio nevaljan JSON (HTTP ${response.status})`);
   }
+  if (body?.protocolVersion !== 1) {
+    throw new Error(`Control-plane protocol nije kompatibilan: ${String(body?.protocolVersion ?? 'nedostaje')}`);
+  }
   if (!response.ok || body?.ok === false) {
     const code = typeof body?.code === 'string' ? body.code : `http_${response.status}`;
     const message = typeof body?.message === 'string' ? body.message : 'zahtjev odbijen';
