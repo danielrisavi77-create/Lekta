@@ -69,10 +69,10 @@ export async function payloadScopeHashValid(payload: JsonRecord): Promise<boolea
   return (await sha256Hex(canonical)) === payload.scopeHash.toLowerCase();
 }
 
-export async function timingSafeTokenEqual(provided: string | null, expected: string): Promise<boolean> {
-  if (!provided || !expected) return false;
-  const [left, right] = await Promise.all([sha256Hex(provided), sha256Hex(expected)]);
-  if (left.length !== right.length) return false;
+export async function timingSafeTokenHashMatch(provided: string | null, expectedSha256: string): Promise<boolean> {
+  if (!provided || !/^[0-9a-f]{64}$/i.test(expectedSha256)) return false;
+  const left = await sha256Hex(provided);
+  const right = expectedSha256.toLowerCase();
   let diff = 0;
   for (let i = 0; i < left.length; i += 1) diff |= left.charCodeAt(i) ^ right.charCodeAt(i);
   return diff === 0;
@@ -87,6 +87,7 @@ export function statusForControlResult(result: unknown): number {
     case 'task_busy':
     case 'lease_requires_expand':
     case 'lease_expired':
+    case 'session_identity_conflict':
       return 409;
     case 'lease_not_found':
       return 404;
