@@ -13,6 +13,9 @@ function normalizedBaseUrl(raw) {
   } catch {
     throw new Error('LEKTA_CONTROL_PLANE_URL nije valjan URL');
   }
+  if (url.username || url.password) {
+    throw new Error('Control-plane URL ne smije sadrzavati credentials');
+  }
   const local = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(url.hostname);
   if (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) {
     throw new Error('Control-plane URL mora koristiti HTTPS (HTTP je dopusten samo za localhost)');
@@ -58,6 +61,9 @@ export function buildLeaseClaim({
 }) {
   if (!task || typeof task !== 'object' || !TASK_RE.test(String(task.id || ''))) {
     throw new Error('Claim zahtijeva valjan Txx zadatak');
+  }
+  if (!['ready', 'in_progress'].includes(task.status)) {
+    throw new Error(`${task.id} nije claimable: status ${String(task.status ?? 'nedostaje')}`);
   }
   const normalizedSession = validateSessionName(sessionName);
   if (!SHA_RE.test(String(baseSha || ''))) {
