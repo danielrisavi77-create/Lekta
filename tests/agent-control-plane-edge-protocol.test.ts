@@ -7,7 +7,7 @@ import {
   payloadScopeHashValid,
   sha256Hex,
   statusForControlResult,
-  timingSafeTokenEqual,
+  timingSafeTokenHashMatch,
   validateEnvelope,
 } from '../ops/agent-control-plane/function/protocol.ts';
 
@@ -73,16 +73,19 @@ describe('agent control-plane edge protocol', () => {
     expect(await payloadScopeHashValid(tampered)).toBe(false);
   });
 
-  it('token usporedba ne prihvaca null ili razlicitu vrijednost', async () => {
-    expect(await timingSafeTokenEqual('abc', 'abc')).toBe(true);
-    expect(await timingSafeTokenEqual('abc', 'abd')).toBe(false);
-    expect(await timingSafeTokenEqual(null, 'abc')).toBe(false);
+  it('token usporedba radi prema pohranjenom SHA-256 hashu', async () => {
+    const hash = await sha256Hex('abc');
+    expect(await timingSafeTokenHashMatch('abc', hash)).toBe(true);
+    expect(await timingSafeTokenHashMatch('abd', hash)).toBe(false);
+    expect(await timingSafeTokenHashMatch(null, hash)).toBe(false);
+    expect(await timingSafeTokenHashMatch('abc', 'nije-hash')).toBe(false);
   });
 
   it('mapira konflikt i malformed backend odgovor na odgovarajuci HTTP status', () => {
     expect(statusForControlResult({ protocolVersion: 1, ok: true })).toBe(200);
     expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_conflict' })).toBe(409);
     expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'lease_not_found' })).toBe(404);
+    expect(statusForControlResult({ protocolVersion: 1, ok: false, code: 'session_identity_conflict' })).toBe(409);
     expect(statusForControlResult({ ok: true })).toBe(502);
   });
 });
