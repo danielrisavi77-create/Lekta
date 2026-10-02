@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { buildLeaseClaim, requestControlPlane } from './control-plane-client.mjs';
+import { buildLeaseClaim, requestControlPlane, validateSessionName } from './control-plane-client.mjs';
 
 const MACHINES = new Set(['laptop', 'desktop', 'claude_cloud']);
 const ROLES = new Set(['coordinator', 'implementer', 'reviewer', 'integration', 'explorer', 'flex']);
@@ -82,7 +82,7 @@ async function main(argv = process.argv.slice(2)) {
       '--role': 'value',
       '--environment-kind': 'value',
     });
-    const sessionName = required(options, '--session');
+    const sessionName = validateSessionName(required(options, '--session'));
     const machine = required(options, '--machine');
     const role = required(options, '--role');
     if (!MACHINES.has(machine)) fail(`Nepoznat --machine: ${machine}`);
@@ -96,7 +96,7 @@ async function main(argv = process.argv.slice(2)) {
   } else if (command === 'heartbeat') {
     const options = parseOptions(argv, { '--session': 'value' });
     response = await requestControlPlane('heartbeat', {
-      sessionName: required(options, '--session'),
+      sessionName: validateSessionName(required(options, '--session')),
     });
   } else if (command === 'claim' || command === 'expand') {
     const taskId = argv.shift();
@@ -149,7 +149,7 @@ async function main(argv = process.argv.slice(2)) {
   } else if (command === 'snapshot') {
     const options = parseOptions(argv, { '--session': 'value' });
     response = await requestControlPlane('snapshot', {
-      sessionName: options.get('--session') ?? null,
+      sessionName: options.has('--session') ? validateSessionName(options.get('--session')) : null,
     });
   } else {
     fail(`Nepoznata agents:lease naredba: ${command}`);
