@@ -104,7 +104,7 @@ describe('global lease claim contract', () => {
     expect(() => buildLeaseClaim({
       ...base,
       task: { ...base.task, status: 'blocked' },
-    })).toThrow(/nije claimable/);
+    })).toThrow(/nije u claimable statusu/);
   });
 });
 
