@@ -15,7 +15,9 @@
  *    bez ijednog `ruleEntry`: prolazi vakuumski.
  *
  * PRAVILA OVOG TESTA:
- *  1. Mutira se SAMO u memoriji. Nijedna datoteka na disku se ne dira.
+ *  1. Mutira se SAMO u memoriji. Nijedna datoteka repozitorija se ne dira. Jedina iznimka su
+ *     privremene datoteke izvan repozitorija (`mkdtemp` pod `tmpdir()`, obrisane u `finally`) kad gard
+ *     po ugovoru cita stablo s diska, npr. `crlf/citanje-bez-normalizacije` (T92).
  *  2. Svaka mutacija ima i BASELINE tvrdnju: nemutiran ulaz mora biti cist. Bez toga mutacija koja
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
@@ -33,7 +35,7 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -53,6 +55,7 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -7446,8 +7449,52 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
+  /**
+   * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;
+   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka.
+   *
+   * Svjesna iznimka od pravila 1 iz zaglavlja: prva mutacija PISE jednu sinteticku test datoteku, ali
+   * u privremenu mapu izvan repozitorija (`mkdtemp` pod `tmpdir()`), koju gard skenira preko parametra
+   * `root` isto kao pravo stablo, i brise je u `finally`. Datoteke repozitorija se ne diraju. Druga
+   * mutacija ne mijenja izvor garda na disku: ubrizgava detektor `readNormalized` koji uvijek kaze
+   * "nije normalizirano" i trazi da presuda nad pravim stablom tada ne bude prazna.
+   */
+  {
+    id: 'crlf/citanje-bez-normalizacije',
+    imitates:
+      'test koji readFileSync(..., utf8) cita datoteku iz repozitorija i trazi `\\nas \\$\\$\\n` bez normalizacije CR-a; ' +
+      'Linux CI zelen, Windows checkout (CRLF) crven (#243, popravak #245)',
+    caught: () => crlfSintetickoStablo(false).length === 1,
+    cleanBefore: () => crlfSintetickoStablo(true).length === 0,
+  },
+  {
+    id: 'crlf/gard-bez-provjere-normalizacije',
+    imitates:
+      'gard kojem netko ukloni provjeru normalizacije (c): svako citanje koje ispravno normalizira CR postane ' +
+      'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
+    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
+    cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
 
 ];
+
+/**
+ * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
+ * (cita schema.sql i trazi `\nas \$\$\n`), sa ili bez normalizacije CR-a.
+ */
+function crlfSintetickoStablo(normalizira: boolean): string[] {
+  const root = mkdtempSync(join(tmpdir(), 'lekta-t92-'));
+  try {
+    mkdirSync(join(root, 'tests'));
+    const citanje = normalizira
+      ? "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8').replace(/\\r\\n/g, '\\n');"
+      : "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8');";
+    writeFileSync(join(root, 'tests', 'sinteticki.test.ts'), `${citanje}\nexpect((sql.match(/\\nas \\$\\$\\n/g) ?? []).length).toBe(1);\n`);
+    return crlfReadProblems(collectScannedSources(root));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
 type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
