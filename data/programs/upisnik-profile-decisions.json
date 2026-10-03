@@ -650,6 +650,33 @@
       }
     },
     {
+      "programCode": "261",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "262",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "263",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "275",
       "profileId": "pravo-socijalni-rad-zavrsni",
       "evidence": {
@@ -785,6 +812,15 @@
       }
     },
     {
+      "programCode": "375",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Opis diplomskog studija, odjeljak Elektrotehnika i informacijska tehnologija; odlomak o završetku studija",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+      }
+    },
+    {
       "programCode": "383",
       "profileId": "grf-diplomski",
       "evidence": {
@@ -809,6 +845,24 @@
         "sourceUrl": "https://www.fkit.unizg.hr/diplomski/ekoinzenjerstvo",
         "sourceLocator": "službena stranica FKIT-a, diplomski program Ekoinženjerstvo",
         "quote": "Diplomski studijski program Ekoinženjerstvo"
+      }
+    },
+    {
+      "programCode": "392",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Opis diplomskog studija, odjeljak Računarstvo; odlomak o završetku studija",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+      }
+    },
+    {
+      "programCode": "393",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Opis diplomskog studija, odjeljak Informacijska i komunikacijska tehnologija; odlomak o završetku studija",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
       }
     },
     {
@@ -1277,6 +1331,24 @@
         "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/diplomski",
         "sourceLocator": "diplomski studijski programi",
         "quote": "Primijenjena ekonomija"
+      }
+    },
+    {
+      "programCode": "591",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "592",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -1829,6 +1901,24 @@
       }
     },
     {
+      "programCode": "938",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "939",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "943",
       "profileId": "efzg-zavrsni",
       "evidence": {
@@ -2135,6 +2225,15 @@
       }
     },
     {
+      "programCode": "1770",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "1775",
       "profileId": "unin-drustveni-diplomski",
       "evidence": {
@@ -2186,6 +2285,15 @@
         "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
         "sourceLocator": "Studij socijalnog rada, sveučilišni diplomski studij",
         "quote": "Socijalna politika"
+      }
+    },
+    {
+      "programCode": "1807",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {

@@ -3908,5 +3908,18 @@
     "validityClass": "volatile",
     "lastChecked": "2026-09-25",
     "note": "Službena godišnja uputa za prijediplomski završni rad u 2025./26. Na str. 1 propisuje rad na švedskom i sažetke HR/EN, navodi opseg u znakovima; oblikovanje upućuje načelno na opća pravila seminara i citiranje prepušta području/mentoru. Ne prenositi automatski kao upute za 2026./27."
+  },
+  {
+    "id": "upisnik-fer-b8648013",
+    "kind": "program-page",
+    "title": "Diplomski studiji - Fakultet elektrotehnike i računarstva",
+    "url": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+    "publisher": "fer",
+    "fetchedAt": "2026-10-03",
+    "snapshotPath": "data/sources/fer/upisnik-b8648013.html",
+    "snapshotHash": "63407dcdeaece99f37c56b65d500280a86a52d6e2d2adcff0c0ac1ded77146e3",
+    "validityClass": "volatile",
+    "lastChecked": "2026-10-03",
+    "note": "Snimka identitetskog dokaza Upisnika (workflow lekta-upisnik-identitet). Point-in-time; citat provjerava gard citata u snimci."
   }
 ]

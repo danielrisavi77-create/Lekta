@@ -6,17 +6,17 @@
     "unmappedPrograms": 0,
     "exactCandidatePrograms": 161,
     "noExactCandidatePrograms": 1151,
-    "candidatePrograms": 386,
-    "noCandidatePrograms": 926,
-    "evidenceBackedCandidatePrograms": 364,
+    "candidatePrograms": 398,
+    "noCandidatePrograms": 914,
+    "evidenceBackedCandidatePrograms": 376,
     "notApplicablePrograms": 28,
     "evidenceConflictPrograms": 2,
     "coverageByStatus": {
-      "verified": 364,
+      "verified": 376,
       "component-unresolved": 0,
       "profile-missing-for-component-level": 329,
       "exact-name-candidate-needs-evidence": 22,
-      "identity-evidence-needed": 567,
+      "identity-evidence-needed": 555,
       "not-applicable": 28,
       "evidence-conflict": 2
     }
@@ -4418,23 +4418,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-zavrsni",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 261 kandidat efst-zavrsni odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 261 i potvrđuje primjenu uputa profila efst-zavrsni te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "262",
@@ -4442,23 +4444,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-zavrsni",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 262 kandidat efst-zavrsni odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 262 i potvrđuje primjenu uputa profila efst-zavrsni te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "263",
@@ -4466,23 +4470,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-zavrsni",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 263 kandidat efst-zavrsni odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 263 i potvrđuje primjenu uputa profila efst-zavrsni te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "264",
@@ -5828,23 +5834,25 @@
       "componentIds": [
         "fer"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "fer-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "fer-diplomski",
+          "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+          "sourceLocator": "Opis diplomskog studija, odjeljak Elektrotehnika i informacijska tehnologija; odlomak o završetku studija",
+          "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "fer-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 375 kandidat fer-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 375 i potvrđuje primjenu uputa profila fer-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "376",
@@ -6136,23 +6144,25 @@
       "componentIds": [
         "fer"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "fer-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "fer-diplomski",
+          "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+          "sourceLocator": "Opis diplomskog studija, odjeljak Računarstvo; odlomak o završetku studija",
+          "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "fer-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 392 kandidat fer-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 392 i potvrđuje primjenu uputa profila fer-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "393",
@@ -6160,23 +6170,25 @@
       "componentIds": [
         "fer"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "fer-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "fer-diplomski",
+          "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+          "sourceLocator": "Opis diplomskog studija, odjeljak Informacijska i komunikacijska tehnologija; odlomak o završetku studija",
+          "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "fer-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 393 kandidat fer-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 393 i potvrđuje primjenu uputa profila fer-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "394",
@@ -9723,23 +9735,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-diplomski",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 591 kandidat efst-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 591 i potvrđuje primjenu uputa profila efst-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "592",
@@ -9747,23 +9761,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-diplomski",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 592 kandidat efst-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 592 i potvrđuje primjenu uputa profila efst-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "594",
@@ -14996,23 +15012,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-zavrsni",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 938 kandidat efst-zavrsni odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 938 i potvrđuje primjenu uputa profila efst-zavrsni te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "939",
@@ -15020,23 +15038,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-zavrsni",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 939 kandidat efst-zavrsni odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 939 i potvrđuje primjenu uputa profila efst-zavrsni te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "943",
@@ -18910,23 +18930,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-diplomski",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 1770 kandidat efst-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 1770 i potvrđuje primjenu uputa profila efst-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "1774",
@@ -19375,23 +19397,25 @@
       "componentIds": [
         "efst"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "efst-diplomski"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "efst-diplomski",
+          "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+          "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+          "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "efst-diplomski"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Za Upisnik šifru 1807 kandidat efst-diplomski odgovara razini, ali nedostaje dokaz da se njegove upute primjenjuju na ovaj program.",
-        "missingEvidence": [
-          "Službeni aktualni izvor koji imenuje program 1807 i potvrđuje primjenu uputa profila efst-diplomski te obveznu vrstu rada."
-        ],
-        "sources": []
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "1812",
@@ -36166,7 +36190,7 @@
       }
     }
   ],
-  "generatedAt": "2026-10-03T10:59:52.512Z",
-  "generatedFromCommit": "3e234a3758907a8fb3a70af6a8df2ec7c21b5028",
+  "generatedAt": "2026-10-03T16:56:39.319Z",
+  "generatedFromCommit": "6839551aa5616b7cbd68940274f22e92c1bb0ff0",
   "generator": "npm run match-upisnik-program-components"
 }
