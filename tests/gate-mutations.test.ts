@@ -6799,8 +6799,13 @@ const MUTATIONS: Mutation[] = [
   },
   /**
    * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;
-   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka. Sinteticka test datoteka ide u
-   * privremeno stablo koje gard skenira preko parametra `root`, isto kao i pravo stablo.
+   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka.
+   *
+   * Svjesna iznimka od pravila 1 iz zaglavlja: prva mutacija PISE jednu sinteticku test datoteku, ali
+   * u privremenu mapu izvan repozitorija (`mkdtemp` pod `tmpdir()`), koju gard skenira preko parametra
+   * `root` isto kao pravo stablo, i brise je u `finally`. Datoteke repozitorija se ne diraju. Druga
+   * mutacija ne mijenja izvor garda na disku: ubrizgava detektor `readNormalized` koji uvijek kaze
+   * "nije normalizirano" i trazi da presuda nad pravim stablom tada ne bude prazna.
    */
   {
     id: 'crlf/citanje-bez-normalizacije',
@@ -6813,9 +6818,9 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'crlf/gard-bez-provjere-normalizacije',
     imitates:
-      'gard kojem netko ukloni provjeru normalizacije (c): svaka datoteka koja ispravno normalizira CR postane ' +
+      'gard kojem netko ukloni provjeru normalizacije (c): svako citanje koje ispravno normalizira CR postane ' +
       'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
-    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, normalizesCr: () => false })).length > 0,
+    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
     cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
   },
 
