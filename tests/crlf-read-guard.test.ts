@@ -100,7 +100,12 @@ describe('T92 gard: citanje teksta iz repozitorija normalizira CR', () => {
       expect(nalazi(CITANJE.replace(';', `${norm};`) + TRAZENJE), norm).toEqual([]);
       expect(nalazi(CITANJE + `const lf = sql${norm};\n` + TRAZENJE.replace('sql', 'lf')), `alias ${norm}`).toEqual([]);
     }
-    expect(nalazi(CITANJE + 'const t = normalizeLf(sql);\n' + TRAZENJE)).toEqual([]);
+    expect(nalazi(CITANJE + 'const t = normalizeLf(sql);\n' + TRAZENJE.replace('sql', 't'))).toEqual([]);
+    expect(nalazi(CITANJE + "sql.replace(/\\r\\n/g, '\\n').split('\\n');\n")).toEqual([]);
+    // R1a na #252: normalizirana KOPIJA ne oslobadja trazenje nad izvornim imenom, ni prije ni poslije.
+    expect(nalazi(CITANJE + TRAZENJE + "const lf = sql.replace(/\\r/g, '');\n")).toEqual(['tests/x.test.ts']);
+    expect(nalazi(CITANJE + "const lf = sql.replace(/\\r/g, '');\n" + TRAZENJE)).toEqual(['tests/x.test.ts']);
+    expect(nalazi(CITANJE + "sql.replace(/\\r\\n/g, '\\n');\n" + TRAZENJE)).toEqual(['tests/x.test.ts']);
     // R1 na #252: oznaka u komentaru ili stringu ne oslobadja.
     expect(nalazi(CITANJE + '/* readTextLf( .replace(/\\r\\n/g */\n' + TRAZENJE)).toEqual(['tests/x.test.ts']);
     expect(nalazi(CITANJE + "const opis = 'sql.replace(/\\\\r\\\\n/g';\n" + TRAZENJE)).toEqual(['tests/x.test.ts']);
@@ -121,6 +126,34 @@ describe('T92 gard: citanje teksta iz repozitorija normalizira CR', () => {
       "it('a', () => { const text = readFileSync(resolve('a.ps1'), 'utf8'); expect(problemi(text)).toEqual([]); });\n" +
       "it('b', () => { const text = readFileSync(resolve('a.ps1'), 'utf8').replace(/\\r/g, ''); /x\\ny/.exec(text); });\n",
     )).toEqual([]);
+  });
+
+  it('normalizacija istog imena u drugom bloku ne oslobadja prvi blok', () => {
+    expect(nalazi(
+      "it('a', () => { const s = readFileSync(resolve('a.sql'), 'utf8'); expect(s).toContain('x\\ny'); });\n" +
+      "it('b', () => { const s = readFileSync(resolve('a.sql'), 'utf8').replace(/\\r\\n/g, '\\n'); expect(s).toContain('x\\ny'); });\n",
+    )).toEqual(['tests/x.test.ts']);
+  });
+
+  it('R1e na #252: citanje unutar `${...}` template literala ostaje citanje', () => {
+    expect(nalazi("const s = `${readFileSync(resolve('a.sql'), 'utf8')}`;\n" + "expect(s).toContain('a\\nb');\n")).toEqual(['tests/x.test.ts']);
+    expect(blankStrings("const s = `x ${readFileSync(p, 'utf8')} y`;")).toContain("readFileSync(p, 'utf8')");
+    expect(blankStrings('const s = `readFileSync(p, x)`;')).not.toContain('readFileSync');
+  });
+
+  it('poznate granice (R1b, R1c, R1d na #252) su zabiljezene, ne skrivene', () => {
+    // Poznata granica R1b: destrukturiranje ne stvara vezanje, pa trazenje nad `s` ostaje nepovezano.
+    expect(nalazi("const { s } = { s: readFileSync(resolve('a.sql'), 'utf8') };\nexpect(s).toContain('a\\nb');\n")).toEqual([]);
+    // Poznata granica R1c: dodjela u beforeAll vrijedi do kraja tog bloka; trazenje u `it` se ne poveze.
+    expect(nalazi(
+      "let s: string;\nbeforeAll(() => { s = readFileSync(resolve('a.sql'), 'utf8'); });\n" +
+      "it('x', () => { expect(s).toContain('a\\nb'); });\n",
+    )).toEqual([]);
+    // Poznata granica R1d: helper koji cita i test koji trazi su razlicite datoteke; nijedna sama nije nalaz.
+    expect(crlfReadProblems([
+      { path: 'tests/helpers/h.ts', source: "export const readTextLf = (p: string) => readFileSync(p, 'utf8');\n" },
+      { path: 'tests/x.test.ts', source: "const s = readTextLf('a.sql');\nexpect(s).toContain('a\\nb');\n" },
+    ])).toEqual([]);
   });
 
   it('komentari i stringovi se prazne bez pomaka polozaja', () => {

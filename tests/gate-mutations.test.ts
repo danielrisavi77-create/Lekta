@@ -15,7 +15,9 @@
  *    bez ijednog `ruleEntry`: prolazi vakuumski.
  *
  * PRAVILA OVOG TESTA:
- *  1. Mutira se SAMO u memoriji. Nijedna datoteka na disku se ne dira.
+ *  1. Mutira se SAMO u memoriji. Nijedna datoteka repozitorija se ne dira. Jedina iznimka su
+ *     privremene datoteke izvan repozitorija (`mkdtemp` pod `tmpdir()`, obrisane u `finally`) kad gard
+ *     po ugovoru cita stablo s diska, npr. `crlf/citanje-bez-normalizacije` (T92).
  *  2. Svaka mutacija ima i BASELINE tvrdnju: nemutiran ulaz mora biti cist. Bez toga mutacija koja
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.

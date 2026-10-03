@@ -5,6 +5,7 @@
  * nad schema.sql), popravljena u #245.
  *
  * Gard radi nad izvorom bez komentara (`stripComments`), pa oznaka u komentaru nista ne oslobadja.
+ * Za (a) i (c) prazni se i tekst stringova; izrazi `${...}` u template literalima ostaju kod.
  *
  * (a) citanje teksta: poziv `readFile(...)` ili `readFileSync(...)` cije argumente (do kraja naredbe)
  *     prati kodiranje `utf8`/`utf-8`. Binarno citanje (Buffer) se ne broji: bajtovi se usporeduju
@@ -17,19 +18,28 @@
  *     je svaki `\n` bez `\r?` osjetljiv, jer svakom retku ostavi `\r`. U string literalu predanom metodi
  *     `includes`, `indexOf`, `lastIndexOf`, `startsWith`, `endsWith`, `toContain` ili `toMatch`: `\n`
  *     koji nije na pocetku niza (`indexOf('\nfunction')` pogodi i `\r\n`); u `split`: svaki `\n`.
- * (c) normalizacija vezana uz ISTO citanje: oznaka u istoj naredbi kao citanje, ili nad imenom na koje
- *     je citanje dodijeljeno (`const x = readFileSync(...)` pa `x.replace(/\r\n/g, ...)`), ili nad
- *     pozivom funkcije omotaca koja citanje vraca (`read(p).split('\r\n').join('\n')`). Oznake su
- *     `.replace(/\r\n?/g`, `.replace(/\r\n/g`, `.replace(/\r/g`, `.replaceAll('\r\n'`,
- *     `.replaceAll('\r', '')`, `.split('\r\n').join(`, `.split(/\r?\n/)` i omotac `normalizeLf(x)`.
- *     `readTextLf(...)` nije citanje u smislu (a), jer sam normalizira.
+ * (c) normalizacija vezana uz vrijednost koja se pretrazuje: oznaka u istoj naredbi kao citanje
+ *     (`readFileSync(...).replace(/\r\n/g, '\n')`), u desnoj strani dodjele iz koje nastaje
+ *     pretrazivana kopija (`const lf = x.replace(...)` pa trazenje nad `lf`), ili u lancu izmedju
+ *     imena i trazenja (`x.replace(/\r\n/g, '\n').split('\n')`). Kasniji `x.replace(...)` ne mijenja
+ *     `x` i ne oslobadja trazenje nad `x` (R1a na #252). Oznake su `.replace(/\r\n?/g`,
+ *     `.replace(/\r\n/g`, `.replace(/\r/g`, `.replaceAll('\r\n'`, `.replaceAll('\r', '')`,
+ *     `.split('\r\n').join(`, `.split(/\r?\n/)` i omotac `normalizeLf(`. `readTextLf(...)` nije
+ *     citanje u smislu (a), jer sam normalizira.
  *
- * Nalaz je datoteka s barem jednim citanjem (a) bez (c) i s barem jednim trazenjem (b). Svjesne granice:
- * (b) je i dalje na razini datoteke i ne prati tok podataka, pa moze biti nad sadrzajem koji nije
- * procitan s diska; niz spremljen u lokalnu konstantu pa predan `includes(needle)` se ne vidi (R3 na
- * #252); `$` uz zastavicu `m` se ne trazi; skeniraju se `*.test.ts` i `tests/helpers/**`, ne
- * Playwright `*.spec.ts` (R7 na #252). Lazni nalazi idu u allowlistu s nepraznim obrazlozenjem, a
- * svaki novi nalaz pada.
+ * Nalaz je datoteka s barem jednim citanjem (a) bez (c) nad kojim se trazi (b): u istoj naredbi, ili
+ * nad imenom na koje je citanje vezano (dodjela, strelica, funkcija koja citanje vraca) i njegovim
+ * nenormaliziranim aliasima, unutar dosega bloka.
+ *
+ * Svjesne granice, svaka zabiljezena testom u `tests/crlf-read-guard.test.ts` ("poznata granica"):
+ * - destrukturiranje (`const { s } = { s: readFileSync(...) }`) ne stvara vezanje (R1b na #252);
+ * - dodjela u `beforeAll` vrijedi samo do kraja tog bloka, pa se trazenje u `it` ne poveze (R1c);
+ * - granica izmedju datoteka: helper koji cita, a test koji trazi, ne vide jedan drugog (R1d);
+ *   ugovor `readTextLf` stiti njegov vlastiti test;
+ * - niz spremljen u lokalnu konstantu pa predan `includes(needle)` se ne vidi (R3);
+ * - `$` uz zastavicu `m` se ne trazi; skeniraju se `*.test.ts` i `tests/helpers/**`, ne Playwright
+ *   `*.spec.ts` (R7).
+ * Lazni nalazi idu u allowlistu s nepraznim obrazlozenjem, a svaki novi nalaz pada.
  *
  * Detektori su regex literali, ne nizovi slozeni u RegExp, iz istog razloga kao i ostale straze u
  * `tests/helpers/`: escape kroz slaganje zna nestati i gard tada ne grize nista.
@@ -52,7 +62,7 @@ export interface TextRead {
 /** Poziv citanja s kodiranjem utf8 do kraja naredbe; grupa 1 su argumenti. */
 const CITANJE_TEKSTA = /\breadFile(?:Sync)?\s*\(([^;]*?['"]utf-?8['"])/g;
 /** Privremena mapa kao identifikator ili komponenta putanje, ne podniz (`templates` nije `temp`). */
-const PRIVREMENA_PUTANJA = /(?<![\w])(?:tmp|temp)(?:dir|root|path)?(?![\w])|\btmpdir\s*\(|\bmkdtemp/i;
+const PRIVREMENA_PUTANJA = /(?<![\w])(?:tmp|temp)(?:dir|root|path)?(?![\w])|\btmpdir\s*\(|\bmkdtemp(?:Sync)?\b/i;
 /** Citanje omotano u `JSON.parse(`. */
 const JSON_OMOTAC = /JSON\.parse\(\s*$/;
 
@@ -100,8 +110,6 @@ const NORMALIZACIJA_METODOM: readonly RegExp[] = [
   /\.split\(\s*(['"`])\\r\\n\1\s*\)\s*\.join\(/g,
   /\.split\(\s*\/\\r\?\\n\//g,
 ];
-/** Omotac koji normalizira svoj argument; grupa 1 je ime ili poziv u argumentu. */
-const NORMALIZACIJA_OMOTACEM = /\bnormalizeLf\s*\(\s*(\w+)/g;
 /**
  * Korijen prijamnika metode: ime, opcionalno s pozivom `ime(...)`, pa lanac `.metoda(...)` do kraja
  * (`SRC.slice(0, i).split` daje `SRC`). Zagrade do tri razine.
@@ -110,7 +118,7 @@ const PRIJAMNIK =
   /(\w+)\s*(?:\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*)?(?:\??\.\s*\w+\s*(?:\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*)?(?:\[[^\]]*\]\s*)?)*$/;
 /** Citanje dodijeljeno imenu: `const x = `, `const read = (p): string => `, `x = `. */
 const DODJELA =
-  /(?:\b(?:const|let|var)\s+(\w+)\s*(?::[^=;]+)?=|(?<![=!<>])\b(\w+)\s*=)\s*(?:(?:async\s*)?\([^()]*\)\s*(?::\s*[\w<>[\]|]+\s*)?=>\s*)?(?:await\s+)?$/;
+  /(?:\b(?:const|let|var)\s+(\w+)\s*(?::[^=;]+)?=|(?<![=!<>])\b(\w+)\s*=)\s*(?:(?:async\s*)?\([^()]*\)\s*(?::\s*[\w<>[\]|]+\s*)?=>\s*)?(?:`\$\{\s*)?(?:await\s+)?$/;
 /** Citanje vraceno iz funkcije: `return readFileSync(...)`. */
 const POVRAT = /\breturn\s+(?:await\s+)?$/;
 /** Deklaracija funkcije ili strelice s tijelom; ime je u grupi 1 ili 2. */
@@ -161,9 +169,35 @@ function scrub(src: string, prazniStringove: boolean, prazniRegexe: boolean): st
       for (; i < stop; i++) out += src[i] === '\n' ? '\n' : ' ';
       continue;
     }
-    if (c === '"' || c === "'" || c === '`') {
+    if (c === '`') {
+      // Template: staticni dijelovi su string, a `${...}` je kod i obraduje se rekurzivno (R1e na #252).
       let j = i + 1;
-      while (j < n && src[j] !== c && !(c !== '`' && src[j] === '\n')) j += src[j] === '\\' ? 2 : 1;
+      let staticni = '';
+      out += '`';
+      const ispisiStaticni = (): void => {
+        out += prazniStringove && !ZADRZANI_STRING.test(staticni) ? staticni.replace(/[^\n]/g, ' ') : staticni;
+        staticni = '';
+      };
+      while (j < n && src[j] !== '`') {
+        if (src[j] === '\\') { staticni += src.slice(j, j + 2); j += 2; continue; }
+        if (src[j] === '$' && src[j + 1] === '{') {
+          ispisiStaticni();
+          const kraj = interpolationEnd(src, j + 2);
+          out += '${' + scrub(src.slice(j + 2, kraj), prazniStringove, prazniRegexe) + src.slice(kraj, kraj + 1);
+          j = kraj + 1;
+          continue;
+        }
+        staticni += src[j];
+        j++;
+      }
+      ispisiStaticni();
+      out += src.slice(j, j + 1);
+      i = j + 1;
+      continue;
+    }
+    if (c === '"' || c === "'") {
+      let j = i + 1;
+      while (j < n && src[j] !== c && src[j] !== '\n') j += src[j] === '\\' ? 2 : 1;
       const sadrzaj = src.slice(i + 1, j);
       out += prazniStringove && !ZADRZANI_STRING.test(sadrzaj)
         ? c + sadrzaj.replace(/[^\n]/g, ' ') + src.slice(j, j + 1)
@@ -190,6 +224,23 @@ function scrub(src: string, prazniStringove: boolean, prazniRegexe: boolean): st
     i++;
   }
   return out;
+}
+
+/** Polozaj `}` koja zatvara interpolaciju `${` otvorenu ispred `from`; stringovi unutra se preskacu. */
+function interpolationEnd(src: string, from: number): number {
+  let dubina = 0;
+  for (let j = from; j < src.length; j++) {
+    const c = src[j];
+    if (c === '"' || c === "'" || c === '`') {
+      for (j++; j < src.length && src[j] !== c; j++) if (src[j] === '\\') j++;
+    } else if (c === '{') {
+      dubina++;
+    } else if (c === '}') {
+      if (dubina === 0) return j;
+      dubina--;
+    }
+  }
+  return src.length;
 }
 
 /** Tijelo regexa trazi `\n` koji CRLF sadrzaj ne pogodi (ispred `\n` stoji nesto sto nije `\r`). */
@@ -220,16 +271,19 @@ export function stringSeeksBareLf(method: string, literal: string): boolean {
 interface Pogled {
   prazan: string;
   struktura: string;
-  imena: Set<string>;
 }
-/** Jednoclana memorija: `readNormalized` se zove po citanju, a pogledi i prijamnici su po datoteci. */
+/** Jednoclana memorija: `readNormalized` se zove po citanju, a pogledi su po datoteci. */
 let zadnji: (Pogled & { code: string }) | undefined;
 function pogled(code: string): Pogled {
   if (zadnji?.code !== code) {
-    const prazan = blankStrings(code);
-    zadnji = { code, prazan, struktura: structureOnly(code), imena: normalizedReceivers(prazan) };
+    zadnji = { code, prazan: blankStrings(code), struktura: structureOnly(code) };
   }
   return zadnji;
+}
+
+/** Sadrzi li izraz oznaku normalizacije (c). `search` krece od pocetka, pa zastavica `g` ne smeta. */
+function hasNormalization(izraz: string): boolean {
+  return NORMALIZACIJA_METODOM.some((re) => izraz.search(re) >= 0) || /\bnormalizeLf\s*\(/.test(izraz);
 }
 
 /** Kraj bloka koji sadrzi polozaj `from`: prva `}` koja zatvara vise nego sto se otvorilo. */
@@ -256,10 +310,14 @@ export function textReads(code: string): TextRead[] {
   return out;
 }
 
-/** Jedno osjetljivo trazenje (b): polozaj i ime nad kojim se trazi, ako se da procitati. */
+/**
+ * Jedno osjetljivo trazenje (b): polozaj, ime nad kojim se trazi (ako se da procitati) i je li lanac
+ * izmedju imena i trazenja vec normaliziran (`sql.replace(/\r\n/g, '\n').split('\n')`).
+ */
 export interface BareLfSearch {
   index: number;
   subject: string | undefined;
+  normalizedChain: boolean;
 }
 
 /** `expect(x)` ili `expect(x).not` neposredno ispred metode; grupa 1 je `x`. */
@@ -271,12 +329,11 @@ const EXEC_PREDMET = /^\s*\.\s*(?:exec|test)\(\s*(\w+)/;
 /** Metoda `expect`a koja prima regex: `.toMatch(`. */
 const TOMATCH_PRIJE = /\.\s*toMatch\(\s*$/;
 
-/** Ime nad kojim se zove metoda koja zavrsava tocno ispred `end`. */
-function subjectBefore(code: string, end: number): string | undefined {
+/** Ime nad kojim se zove metoda koja zavrsava tocno ispred `end`, i je li lanac do nje normaliziran. */
+function subjectBefore(code: string, end: number): { subject: string | undefined; normalizedChain: boolean } {
   const prije = code.slice(Math.max(0, end - 200), end);
-  const expectPredmet = EXPECT_PREDMET.exec(prije)?.[1];
-  if (expectPredmet) return expectPredmet;
-  return PRIJAMNIK.exec(prije)?.[1];
+  const m = EXPECT_PREDMET.exec(prije) ?? PRIJAMNIK.exec(prije);
+  return { subject: m?.[1], normalizedChain: m !== null && hasNormalization(m[0]) };
 }
 
 /** (b) Sva trazenja `\n` koja CRLF sadrzaj ne pogodi, s imenom nad kojim se trazi. */
@@ -288,14 +345,15 @@ export function bareLfSearches(code: string): BareLfSearch[] {
     if (!(SPLIT_PRIJE.test(prije) ? splitRegexSeeksBareLf(m[1]) : regexSeeksBareLf(m[1]))) continue;
     const metoda = METODA_S_REGEXOM.exec(prije);
     const exec = EXEC_PREDMET.exec(code.slice(index + m[0].length, index + m[0].length + 80));
-    let subject: string | undefined;
-    if (metoda) subject = subjectBefore(prije, metoda.index);
-    else if (TOMATCH_PRIJE.test(prije)) subject = EXPECT_PREDMET.exec(prije.slice(0, TOMATCH_PRIJE.exec(prije)?.index))?.[1];
-    else if (exec) subject = exec[1];
-    out.push({ index, subject });
+    const toMatch = TOMATCH_PRIJE.exec(prije);
+    let predmet: { subject: string | undefined; normalizedChain: boolean } = { subject: undefined, normalizedChain: false };
+    if (metoda) predmet = subjectBefore(prije, metoda.index);
+    else if (toMatch) predmet = subjectBefore(prije, toMatch.index);
+    else if (exec) predmet = { subject: exec[1], normalizedChain: false };
+    out.push({ index, ...predmet });
   }
   for (const m of code.matchAll(TRAZENJE_STRINGOM)) {
-    if (stringSeeksBareLf(m[1], m[3])) out.push({ index: m.index ?? 0, subject: subjectBefore(code, m.index ?? 0) });
+    if (stringSeeksBareLf(m[1], m[3])) out.push({ index: m.index ?? 0, ...subjectBefore(code, m.index ?? 0) });
   }
   return out;
 }
@@ -303,19 +361,6 @@ export function bareLfSearches(code: string): BareLfSearch[] {
 /** (b) na razini datoteke: postoji li ikoje osjetljivo trazenje. */
 export function seeksBareLf(code: string): boolean {
   return bareLfSearches(code).length > 0;
-}
-
-/** Imena prijamnika nad kojima izvor poziva normalizaciju (`x.replace(/\r\n/g`, `read(p).split('\r\n').join(`). */
-function normalizedReceivers(code: string): Set<string> {
-  const imena = new Set<string>();
-  for (const re of NORMALIZACIJA_METODOM) {
-    for (const m of code.matchAll(re)) {
-      const ime = PRIJAMNIK.exec(code.slice(Math.max(0, (m.index ?? 0) - 200), m.index))?.[1];
-      if (ime) imena.add(ime);
-    }
-  }
-  for (const m of code.matchAll(NORMALIZACIJA_OMOTACEM)) imena.add(m[1]);
-  return imena;
 }
 
 /** Kraj naredbe koja sadrzi polozaj `from`: prvi `;` iza njega (priblizno). */
@@ -357,14 +402,15 @@ function readBinding(code: string, read: TextRead): Binding | undefined {
   return { name, from: funkcija.index, to: scopeEnd(struktura, funkcija.index) };
 }
 
-/** (c) Je li ovo citanje normalizirano: u istoj naredbi, nad imenom dodjele ili nad funkcijom omotacem. */
+/**
+ * (c) Je li ovo citanje normalizirano: oznaka je u istoj naredbi kao citanje
+ * (`readFileSync(...).replace(/\r\n/g, '\n')`, `normalizeLf(readFileSync(...))`). Kasniji
+ * `x.replace(...)` ne mijenja `x`, pa ne oslobadja citanje (R1a na #252); kopija `const lf =
+ * x.replace(...)` je zasebno, normalizirano vezanje i ne prati se dalje.
+ */
 export function readNormalized(code: string, read: TextRead): boolean {
-  const { prazan, imena } = pogled(code);
-  const naredba = prazan.slice(read.index, statementEnd(prazan, read.index));
-  // `search` uvijek krece od pocetka, pa globalna zastavica i `lastIndex` ne smetaju.
-  if (NORMALIZACIJA_METODOM.some((re) => naredba.search(re) >= 0) || /\bnormalizeLf\s*\(/.test(naredba)) return true;
-  const ime = readName(code, read);
-  return ime !== undefined && imena.has(ime);
+  const { prazan } = pogled(code);
+  return hasNormalization(prazan.slice(read.index, statementEnd(prazan, read.index)));
 }
 
 /** Dodjela imenu; grupa 1 je ime, grupa 2 desna strana do kraja naredbe. */
@@ -373,17 +419,20 @@ const DODJELA_S_DESNOM = /\b(?:const|let|var)\s+(\w+)\s*(?::[^=;]+)?=([^;]*)/g;
 const IDENTIFIKATOR = /\b[A-Za-z_$][\w$]*\b/g;
 
 /**
- * Vezanje i sva vezanja izvedena iz njega (`const rest = CI.slice(...)`, `const src = X.map((r) =>
- * sourceOf(r))`): izvedeno je ako desna strana spominje vezano ime unutar njegovog dosega.
+ * Nenormalizirano vezanje i sva nenormalizirana vezanja izvedena iz njega (`const rest =
+ * CI.slice(...)`, `const src = X.map((r) => sourceOf(r))`): izvedeno je ako desna strana spominje
+ * vezano ime unutar njegovog dosega i sama ne normalizira.
  */
 function withAliases(code: string, korijen: Binding): Binding[] {
   const { prazan, struktura } = pogled(code);
   const vezanja = [korijen];
-  const dodjele = [...prazan.matchAll(DODJELA_S_DESNOM)].map((m) => ({
-    name: m[1],
-    at: m.index ?? 0,
-    spominje: new Set(m[2].match(IDENTIFIKATOR) ?? []),
-  }));
+  const dodjele = [...prazan.matchAll(DODJELA_S_DESNOM)]
+    .filter((m) => !hasNormalization(m[2]))
+    .map((m) => ({
+      name: m[1],
+      at: m.index ?? 0,
+      spominje: new Set(m[2].match(IDENTIFIKATOR) ?? []),
+    }));
   for (let promjena = true; promjena;) {
     promjena = false;
     for (const d of dodjele) {
@@ -407,7 +456,8 @@ export function readSearchedForBareLf(code: string, read: TextRead, searches: re
   const vezanje = readBinding(code, read);
   if (vezanje === undefined) return false;
   const vezanja = withAliases(code, vezanje);
-  return searches.some((s) => s.subject !== undefined && vezanja.some((v) => v.name === s.subject && s.index >= v.from && s.index <= v.to));
+  return searches.some((s) => !s.normalizedChain && s.subject !== undefined &&
+    vezanja.some((v) => v.name === s.subject && s.index >= v.from && s.index <= v.to));
 }
 
 export interface CrlfDetectors {
