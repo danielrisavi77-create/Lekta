@@ -44,7 +44,8 @@ izmijenjen izvor novi zapis, a stari ostaje u private mapi oznacen kao zastario.
 
 PRIVATNOST PAKETA (nalaz 04). Pretvoreni DOCX se slaze iz ALLOWLISTE dijelova (ALLOWED_PARTS); sve ostalo
 (docProps/thumbnail, custom.xml, comments, people, customXml, header, footer) se izbacuje, a odnosi i
-[Content_Types].xml se ciste. Dokument koji upucuje na izbaceni dio (zaglavlje, komentar, fusnota) se odbija:
+[Content_Types].xml se ciste. Revizijski identifikatori (w:rsid*, w:rsids u settings.xml) se brisu, a dokument
+s autorom revizije (w:author/w:initials u w:ins, w:del i slicnim) se odbija. Dokument koji upucuje na izbaceni dio (zaglavlje, komentar, fusnota) se odbija:
 privatnost se ne moze potvrditi. Ingest PDF vrste to ponovno provjerava i odbija dokument s praznim rjecnikom.
 
 MREZA (nalaz 08). Svaki skok, i prvi zahtjev: samo https, port 443, bez korisnickih podataka u URL-u, host nije
@@ -167,6 +168,12 @@ ALLOWED_PARTS = tuple(re.compile(p) for p in (
 ))
 # Upucivanja na dijelove kojih u allowlisti nema (komentar, fusnota, biljeska): takav dokument se odbija.
 FOREIGN_REFERENCES = re.compile(rb"<w:(?:commentReference|commentRangeStart|footnoteReference|endnoteReference)\b")
+# Autorstvo u zadrzanim XML dijelovima (nalaz 04): revizije (w:ins, w:del, w:rPrChange...) nose w:author i
+# w:initials, a takav dokument se odbija. Revizijski identifikatori (w:rsid*, blok w:rsids u settings.xml)
+# povezuju sesije uredjivanja i brisu se; vidljivi tekst se time ne mijenja.
+AUTHOR_ATTR = re.compile(rb'\bw:(?:author|initials)="[^"]*\S[^"]*"')
+RSID_ATTR = re.compile(rb'\s+w:rsid[A-Za-z]*="[^"]*"')
+RSIDS_BLOCK = re.compile(rb"<w:rsids\b[^>]*/>|<w:rsids\b.*?</w:rsids>", re.S)
 CT_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
 OFFICE_REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
@@ -847,6 +854,11 @@ def scrub_docx_parts(raw):
         if name.endswith(".rels"):
             data[name], rel_ids[_rels_owner(name)] = _filter_rels(data[name], name, kept_set)
     data["[Content_Types].xml"] = _filter_content_types(data["[Content_Types].xml"], kept_set)
+    for name in kept:
+        if name.endswith(".xml") and name not in SCRUBBED_PARTS:
+            if AUTHOR_ATTR.search(data[name]):
+                raise ConvertError(f"{name} nosi autora revizije ili komentara (w:author/w:initials); privatnost se ne moze potvrditi")
+            data[name] = RSID_ATTR.sub(b"", RSIDS_BLOCK.sub(b"", data[name]))
     if FOREIGN_REFERENCES.search(data["word/document.xml"]):
         raise ConvertError("word/document.xml upucuje na komentar, fusnotu ili biljesku, a ti dijelovi ne smiju u staging")
     for name in kept:
@@ -1217,6 +1229,31 @@ def selftest():
     assert b"thumbnail" not in zclean.read("_rels/.rels") and b"header1" not in zclean.read("[Content_Types].xml")
     assert scrub_docx(buf.getvalue()) == clean, "ciscenje mora biti deterministicko"
     assert scrub_docx(clean) == clean, "drugi prolaz ciscenja mora biti no-op"
+    # Revizijski identifikatori se brisu (drugi prolaz no-op), autor revizije u document.xml ili settings.xml odbija.
+    rs = io.BytesIO()
+    with zipfile.ZipFile(rs, "w") as z:
+        z.writestr("[Content_Types].xml", f'<Types xmlns="{CT_NS}"/>')
+        z.writestr("word/document.xml", '<w:document><w:p w:rsidR="00A1B2C3" w:rsidRDefault="00D4E5F6"><w:r><w:t>Tekst</w:t></w:r></w:p></w:document>')
+        z.writestr("word/settings.xml", '<w:settings><w:rsids><w:rsidRoot w:val="00A1B2C3"/><w:rsid w:val="00D4E5F6"/></w:rsids></w:settings>')
+    rclean, _ = scrub_docx_parts(rs.getvalue())
+    zr = zipfile.ZipFile(io.BytesIO(rclean))
+    assert not any(b"rsid" in zr.read(n) for n in zr.namelist()), "rsid mora nestati iz svih dijelova"
+    assert b"<w:t>Tekst</w:t>" in zr.read("word/document.xml"), "brisanje rsid ne smije dirati tekst"
+    assert scrub_docx(rclean) == rclean, "drugi prolaz brisanja rsid mora biti no-op"
+    for part, xml in (("word/document.xml", f'<w:document><w:ins w:id="1" w:author="{ime}"><w:r><w:t>x</w:t></w:r></w:ins></w:document>'),
+                      ("word/document.xml", f'<w:document><w:del w:id="2" w:author="{ime}" w:initials="AA"/></w:document>'),
+                      ("word/settings.xml", f'<w:settings><w:trackRevisions/><w:pPrChange w:author="{ime}"/></w:settings>')):
+        rv = io.BytesIO()
+        with zipfile.ZipFile(rv, "w") as z:
+            z.writestr("[Content_Types].xml", f'<Types xmlns="{CT_NS}"/>')
+            if part != "word/document.xml":
+                z.writestr("word/document.xml", "<w:document/>")
+            z.writestr(part, xml)
+        try:
+            scrub_docx_parts(rv.getvalue())
+            raise AssertionError(f"autor revizije u {part} mora odbiti dokument")
+        except ConvertError:
+            pass
     # Dokument koji upucuje na izbaceno zaglavlje se odbija: ime u zaglavlju ne smije ni izbaciti ni proci.
     ref = io.BytesIO()
     with zipfile.ZipFile(ref, "w") as z:

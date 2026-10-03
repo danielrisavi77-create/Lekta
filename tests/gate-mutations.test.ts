@@ -1233,6 +1233,20 @@ const pdfMutacija = (id: string, imitates: string, ...zamjene: Array<[string, st
  * razlogom (nalaz 12), a ne lazno crveni.
  */
 const PDF_KORPUS_MUTACIJE: Mutation[] = [
+  /** Autor revizije (w:ins, w:del, w:pPrChange) je ime studenta u zadrzanom dijelu paketa (koordinator lekta-37, nalaz 04). */
+  pdfMutacija(
+    'pdf-korpus/autor-revizije-prolazi',
+    'ciscenje paketa nije gledalo atribute w:author/w:initials, pa bi ime autora revizije u document.xml ili ' +
+      'settings.xml proslo u staging iako zaglavlja, komentari i docProps vec jesu bili izbaceni',
+    ['            if AUTHOR_ATTR.search(data[name]):', '            if False:'],
+  ),
+  /** Revizijski identifikatori (rsid) povezuju sesije uredjivanja istog autora (koordinator lekta-37, nalaz 04). */
+  pdfMutacija(
+    'pdf-korpus/rsid-ostaje',
+    'ciscenje paketa je zadrzavalo w:rsid atribute i blok w:rsids u settings.xml, koji povezuju dokument sa ' +
+      'sesijama uredjivanja izvornog autora',
+    ['data[name] = RSID_ATTR.sub(b"", RSIDS_BLOCK.sub(b"", data[name]))', 'pass'],
+  ),
   /** Javni PDF radovi (A-pdf korpus) smiju samo lokalno, izvan repozitorija (odluka vlasnika 2026-09-28). */
   pdfMutacija(
     'pdf-korpus/izlaz-unutar-repozitorija',
