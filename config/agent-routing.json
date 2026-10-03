@@ -27,6 +27,11 @@
       "output": 25,
       "status": "verified"
     },
+    "claude-sonnet-5-5": {
+      "status": "verified",
+      "verifiedAt": "2026-10-03",
+      "note": "doctor --model i model-fixture (medium, high) prosli 3. 10. (docs/agents/reports/SONNET55_VERIFIKACIJA.md); bez dodjele ulogama; cjenik neprovjeren: input/output i costWeight se ne upisuju bez izvora"
+    },
     "claude-sonnet-5": {
       "input": 2,
       "output": 10,
