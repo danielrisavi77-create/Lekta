@@ -897,7 +897,13 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
       selected: false,
     };
   });
-  const missingEntries = (Array.isArray(sync.missingEntries) ? sync.missingEntries : []).map((citation: any) => ({ id: `sync-entry-${citation.id}`, citationId: String(citation.id), text: '', selected: false }));
+  const lastEntry = bibliographyEntries.at(-1);
+  // Z36 (1): plan nudi dodavanje zapisa SAMO kad ga profil dopusta i postoji zapis uz koji se umece;
+  // inace bi ponudjeni redak na serveru pao kao nepoznat zapis i srusio cijelu stavku.
+  const insertionAllowed = rules.allowMissingEntryInsertion === true && !!lastEntry;
+  const missingEntries = insertionAllowed
+    ? (Array.isArray(sync.missingEntries) ? sync.missingEntries : []).map((citation: any) => ({ id: `sync-entry-${citation.id}`, citationId: String(citation.id), text: '', selected: false }))
+    : [];
   const duplicates = (Array.isArray(sync.duplicateCandidates) ? sync.duplicateCandidates : []).flatMap((group: any) => (group.entryIds || []).slice(1).map((entryId: string) => {
     const entry = bibliographyEntries.find((candidate: any) => String(candidate.id) === String(entryId));
     return { entryId: String(entryId), rawText: String(entry?.rawText || ''), selected: false };
@@ -917,6 +923,14 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
       if (!original) return [];
       return [{ id: citation.id, paragraphIndex: Number(original.paragraphIndex), start: Number(original.start), end: Number(original.end), anchorFingerprint: String(original.anchorFingerprint), replacementText: citation.replacementText.slice(0, 1000), reason: citation.reason }];
     });
+    const addedMissing = insertionAllowed ? current.missingEntries.filter((missing) => missing.selected) : [];
+    // Z36: citat uz koji se dodaje zapis ide u zahtjev nepromijenjen (otisak ga provjerava, a fixer iz
+    // njega cita prezime i godinu predloska); bez njega bi potvrdjena veza pala kao nepoznat citat.
+    for (const missing of addedMissing) {
+      const original = citationById.get(missing.citationId);
+      if (!original || citations.some((citation) => citation.id === missing.citationId)) continue;
+      citations.push({ id: missing.citationId, paragraphIndex: Number(original.paragraphIndex), start: Number(original.start), end: Number(original.end), anchorFingerprint: String(original.anchorFingerprint), replacementText: String(original.rawText).slice(0, 1000), reason: 'citat uz dodani zapis literature' });
+    }
     const entryById = new Map<string, any>(bibliographyEntries.map((entry: any) => [String(entry.id), entry]));
     const entries = rules.allowDuplicateMerge === true
       ? current.duplicates.filter((duplicate) => duplicate.selected).flatMap((duplicate) => {
@@ -924,12 +938,16 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
       return original ? [{ id: duplicate.entryId, paragraphIndices: original.paragraphIndices, anchorFingerprint: original.anchorFingerprint, action: 'remove' as const }] : [];
       })
       : [];
-    const lastEntry = bibliographyEntries.at(-1);
-    const added = rules.allowMissingEntryInsertion === true
-      ? current.missingEntries.filter((missing) => missing.selected && missing.text.trim() && lastEntry).map((missing) => ({ id: missing.id, paragraphIndices: [], anchorFingerprint: '', action: 'add' as const, replacementText: missing.text.trim().slice(0, 20_000), insertionAnchor: { paragraphIndex: Number(lastEntry.paragraphIndices[0]), anchorFingerprint: String(lastEntry.anchorFingerprint) } }))
-      : [];
+    // Z36 (2) i (3): upisan tekst ide doslovno; prazan tekst salje samo id citata, a predlozak s
+    // prezimenom i godinom iz tog citata gradi fixer. Klijent nikad ne salje tekst predloska.
+    const added = addedMissing.map((missing) => {
+      const text = missing.text.trim();
+      // anchorFingerprint nosi otisak sidra: ugovor zahtjeva (assisted-request-policy) odbija prazan
+      // otisak, pa je 'add' s praznim nizom padao prije fixera. Fixer za 'add' cita insertionAnchor.
+      return { id: missing.id, paragraphIndices: [], anchorFingerprint: String(lastEntry.anchorFingerprint), action: 'add' as const, ...(text ? { replacementText: text.slice(0, 20_000) } : { citationId: missing.citationId }), insertionAnchor: { paragraphIndex: Number(lastEntry.paragraphIndices[0]), anchorFingerprint: String(lastEntry.anchorFingerprint) } };
+    });
     const mappings = current.citations.filter((citation) => citation.selected && citation.selectedCandidate).map((citation) => ({ citationId: citation.id, bibliographyEntryId: citation.selectedCandidate as string, confirmed: true as const }));
-    const missingMappings = current.missingEntries.filter((missing) => missing.selected && missing.text.trim() && lastEntry).map((missing) => ({ citationId: missing.citationId, bibliographyEntryId: missing.id, confirmed: true as const }));
+    const missingMappings = addedMissing.map((missing) => ({ citationId: missing.citationId, bibliographyEntryId: missing.id, confirmed: true as const }));
     return { version: 1, ...(result?.details?.profileFingerprint ? { profileFingerprint: result.details.profileFingerprint } : {}), citations, entries: [...entries, ...added], mappings: [...mappings, ...missingMappings] };
   };
   const hasProblems = rows.some((row: any) => row.status !== 'matched') || missingEntries.length > 0 || duplicates.length > 0 || (sync.pageIssues || []).length > 0;

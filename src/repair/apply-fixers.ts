@@ -735,7 +735,7 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         const anchor = entry.insertionAnchor && typeof entry.insertionAnchor === 'object' ? entry.insertionAnchor as Record<string, unknown> : null;
         if (typeof entry.id !== 'string' || !entry.id.trim() || !action || !indices.every((index) => Number.isInteger(index) && index >= 1) || typeof entry.anchorFingerprint !== 'string') return [];
         if (action === 'add' && (!anchor || !Number.isInteger(anchor.paragraphIndex) || typeof anchor.anchorFingerprint !== 'string')) return [];
-        return [{ id: entry.id.trim().slice(0, 200), paragraphIndices: indices, anchorFingerprint: entry.anchorFingerprint.slice(0, 100), action: action as 'add' | 'replace' | 'remove', ...(typeof entry.replacementText === 'string' ? { replacementText: entry.replacementText.slice(0, 20_000) } : {}), ...(anchor ? { insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 100) } } : {}) }];
+        return [{ id: entry.id.trim().slice(0, 200), paragraphIndices: indices, anchorFingerprint: entry.anchorFingerprint.slice(0, 100), action: action as 'add' | 'replace' | 'remove', ...(typeof entry.replacementText === 'string' ? { replacementText: entry.replacementText.slice(0, 20_000) } : {}), ...(typeof entry.citationId === 'string' ? { citationId: entry.citationId.trim().slice(0, 200) } : {}), ...(anchor ? { insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 100) } } : {}) }];
       });
       const mappings = p.mappings.flatMap((raw) => {
         if (!raw || typeof raw !== 'object') return [];

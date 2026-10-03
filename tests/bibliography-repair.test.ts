@@ -69,7 +69,10 @@ describe('bibliography repair profile gate', () => {
     form.missingEntries[0].selected = true;
     form.missingEntries[0].text = 'Novak, N. (2022). Naslov.';
     const params = form.buildParams(form) as any;
-    expect(params.entries).toEqual([{ id: 'sync-entry-c1', paragraphIndices: [], anchorFingerprint: '', action: 'add', replacementText: 'Novak, N. (2022). Naslov.', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: 'biblio-zoric' } }]);
+    // Z36: jedina razlika od zatecenog oblika je otisak sidra umjesto praznog niza, jer ugovor zahtjeva
+    // prazan otisak odbija (tekst, mjesto i sidro umetanja ostaju isti).
+    expect(params.entries).toEqual([{ id: 'sync-entry-c1', paragraphIndices: [], anchorFingerprint: 'biblio-zoric', action: 'add', replacementText: 'Novak, N. (2022). Naslov.', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: 'biblio-zoric' } }]);
+    expect(params.citations).toEqual([{ id: 'c1', paragraphIndex: 1, start: 7, end: 18, anchorFingerprint: 'citation-x', replacementText: 'Novak, 2022', reason: 'citat uz dodani zapis literature' }]);
   });
 
   it('compiler prenosi legal-footnote-repair-rules', () => {

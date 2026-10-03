@@ -16,6 +16,12 @@ iznimke su samo:
 - kanonizacija DOI-ja
 - `toc-field-fixer`, jer Word izvodi sadrzaj iz stvarnih naslova
 - `required-section-fixer`, samo za propisani natpis iz verificiranog pravila, uz potvrdu
+- `citation-bibliography-sync-fixer`, samo umetanje novog zapisa literature uz citat bez zapisa,
+  i to samo kad profil to dopusta (`allowMissingEntryInsertion`) uz verificirano
+  `citation-sync-rules` u nacinu `author-year`. Zapis je (a) doslovno korisnikov potvrdjeni tekst ili
+  (b) predlozak `Prezime, [ime]. (godina). [Naslov djela]. [Mjesto: Izdavač].` u kojem prezime i
+  godinu fixer cita iz zagradnog citata u dokumentu, a ostalo su konstantne zagrade. Sav ostali
+  vidljivi tekst ostaje isti. Gard: `tests/repair-z36-zapis-literature.test.ts`.
 
 Preporuka bez fakultetskog pravila smije biti ponudena samo kao `violated:false`,
 `recommended:true`, bez `matchKeys`, bez utjecaja na ocjenu i bez umetanja novog teksta.
