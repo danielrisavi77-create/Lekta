@@ -246,7 +246,7 @@ function comparableProfileSourceUrl(value: string): string | null {
   } catch { return null; }
 }
 
-const UNIVERSITY_ROOTS = new Set(['unizg.hr', 'uniri.hr', 'unist.hr', 'unios.hr', 'unipu.hr', 'unidu.hr', 'unizd.hr']);
+const UNIVERSITY_ROOTS = new Set(['unizg.hr', 'uniri.hr', 'unist.hr', 'unios.hr', 'unipu.hr', 'unidu.hr', 'unizd.hr', 'unisb.hr']);
 
 // Službena domena Arhitektonskog fakulteta koristi dulji naziv sastavnice od kataloškog id-a.
 const UNIVERSITY_LABEL_ALIASES: Record<string, string[]> = { arh: ['arhitekt'] };
@@ -701,6 +701,5 @@ export function buildUpisnikProfileCandidates(
     programs,
   };
 }
-
 
 

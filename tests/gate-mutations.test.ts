@@ -713,6 +713,15 @@ function upisnikRitehRootFixture(sourceUrl: string) {
   );
 }
 
+function upisnikSfsbRootFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '2075', naziv: 'Strojarstvo', izvoditelj: 'SFSB', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '2075', executors: [{ componentIds: ['sfsb'] }] }],
+    [{ id: 'p', unitId: 'sfsb', programs: ['Strojarstvo'], workTypes: ['final'], sources: [{ url: 'https://unisb.hr/studij' }] }],
+    [{ programCode: '2075', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Strojarstvo' } }],
+  );
+}
+
 function upisnikFerFixture(sourceUrl: string) {
   return buildUpisnikProfileCandidates(
     [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'FER', vrsta: 'Sveučilišni prijediplomski studij' }],
@@ -1307,6 +1316,15 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => upisnikRitehRootFixture('https://riteh.uniri.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
       try { upisnikRitehRootFixture('https://medri.uniri.hr/studij'); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/unisb-domena-sestre-sastavnice',
+    imitates: 'Goli korijen unisb.hr u profilu propusta dokaz s teho.unisb.hr za SFSB',
+    cleanBefore: () => upisnikSfsbRootFixture('https://sfsb.unisb.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikSfsbRootFixture('https://teho.unisb.hr/studij'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
