@@ -1,0 +1,361 @@
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33, varijanta A): PRIKAZ. Lijeni modul; ucitava ga `progress-scan.ts`
+ * dinamickim uvozom tek kad analiza pocne, pa statican graf rute `/rad/` ne nosi ni ovaj kod ni
+ * njegov CSS.
+ *
+ * Sve odluke o tome STO se crta zive u `analysis-live-model.ts` (cist, testiran). Ovdje je samo
+ * DOM: kostur se gradi jednom, a svaki okvir mijenja tekst, atribute i CSS varijable. Pokret je
+ * iskljucivo `transform`, `opacity` i `clip-path` (Z31); let cedulje je Web Animations API na
+ * KLONU, pa original nikad ne mijenja raspored.
+ *
+ * Rezultat ne kasni vise od trajanja otkrivanja (`revealDuration`), a pod
+ * `prefers-reduced-motion`, u skrivenoj kartici i na "Pregledaj nalaze" ne kasni uopce.
+ */
+import './analysis-live.css';
+import { pokretPrigusen } from '../../shared/display-prefs';
+import { buildLivePlan, readingFrame, revealFrame, revealDuration, type LiveFrame, type LivePlan } from './analysis-live-model';
+
+export interface LiveHandle {
+  start(profile: unknown): void;
+  progress(pct: number): void;
+  reveal(result: unknown): Promise<void>;
+}
+
+const MARK_ROWS = ['font', 'margine', 'prored', 'uvlaka', 'brojevi'] as const;
+
+function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls: string, text = ''): HTMLElementTagNameMap[K] {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text) node.textContent = text;
+  return node;
+}
+
+function setText(node: Element | null | undefined, text: string): void {
+  if (node && node.textContent !== text) node.textContent = text;
+}
+
+function profileText(profile: unknown): { name: string; source: string } {
+  const p = (profile && typeof profile === 'object' ? profile : {}) as { name?: unknown; sources?: Array<{ title?: unknown }> };
+  const source = Array.isArray(p.sources) ? p.sources.find((s) => typeof s?.title === 'string')?.title : '';
+  return { name: typeof p.name === 'string' ? p.name : '', source: typeof source === 'string' ? source : '' };
+}
+
+/** Kostur iz predloska. Tekstovi su doslovno iz `Analysis.dc.html` (varijanta A). */
+function skeleton(): HTMLElement {
+  const root = el('div', 'z33');
+  root.innerHTML = [
+    '<section class="z33-desk">',
+    '<div class="z33-col" aria-hidden="true">',
+    '<div class="z33-status"><span data-z33="status"></span><span data-z33="pages"></span></div>',
+    '<div class="z33-sheetrow">',
+    '<div class="z33-stack">',
+    '<div class="z33-under z33-under--2"></div><div class="z33-under z33-under--1"></div><div class="z33-flip"></div>',
+    '<div class="z33-sheet" lang="hr"><div class="z33-text" data-z33="text"></div>',
+    MARK_ROWS.map((r) => `<div class="z33-mark z33-mark--${r}" data-z33-mark="${r}"><i class="z33-shape"></i><span class="z33-pencil"></span></div>`).join(''),
+    '<div class="z33-lamp"></div><div data-z33="edge"></div><div class="z33-stamp" data-z33="stamp"></div></div>',
+    '</div>',
+    '<div class="z33-notes" data-z33="notes"></div>',
+    '</div></div>',
+    '<div class="z33-aside">',
+    '<div class="z33-profile"><span class="z33-label">MJERI PREMA</span><span class="z33-profile-name" data-z33="profile"></span><span class="z33-faint" data-z33="source"></span></div>',
+    '<div class="z33-score" aria-hidden="true"><span class="z33-score-num" data-z33="score">100</span><span class="z33-score-note"><span>ocjena forme</span><span data-z33="scorenote"></span></span></div>',
+    '<ol class="z33-rows" data-z33="rows" aria-hidden="true"></ol>',
+    '<div class="z33-stats" aria-hidden="true"><span><b data-z33="s-pages"></b>stranica</span><span><b data-z33="s-words"></b>riječi</span><span><b data-z33="s-sources"></b>izvora</span></div>',
+    '<div class="z33-notify"><span data-z33="remaining" aria-hidden="true"></span><button type="button" class="z33-link" data-z33="notify" hidden>Javi mi kad bude gotovo</button></div>',
+    '</div>',
+    '</section>',
+    '<section class="z33-result">',
+    '<div class="z33-res-top">',
+    '<div class="z33-verdict-slot" data-z33="verdictslot">',
+    '<div class="z33-verdict-wait" aria-hidden="true">PRESUDA · PIŠE SE NAKON ZADNJE PROVJERE</div>',
+    '<div class="z33-verdict" data-z33="verdict" hidden><div class="z33-verdict-lead">',
+    '<span class="z33-eyebrow" data-z33="eyebrow"></span>',
+    '<h3 class="z33-verdict-title"><span data-z33="verdicttext"></span><span class="z33-caret" aria-hidden="true">|</span></h3>',
+    '<p class="z33-verdict-meta" data-z33="summary"></p>',
+    '<div class="z33-verdict-meta z33-verdict-actions"><button type="button" class="z33-link z33-link--paper" data-z33="open">Pregledaj nalaze</button></div>',
+    '</div><div class="z33-ring" data-z33="ring" aria-hidden="true"><span data-z33="ringnum"></span></div></div>',
+    '</div>',
+    '<div class="z33-cats" aria-hidden="true"><span class="z33-label z33-label--paper">KATEGORIJE</span><div data-z33="cats"></div></div>',
+    '</div>',
+    '<div class="z33-findings" aria-hidden="true"><div class="z33-findings-head"><span>NALAZI</span><span data-z33="found"></span></div><div data-z33="slots"></div></div>',
+    '</section>',
+  ].join('');
+  return root;
+}
+
+export function mountAnalysisLive(view: HTMLElement): LiveHandle {
+  const root = skeleton();
+  const q = (name: string): HTMLElement => root.querySelector(`[data-z33="${name}"]`) as HTMLElement;
+  const sidro = view.querySelector('.pv-local');
+  if (sidro) sidro.before(root); else view.append(root);
+  // Ekran provjere je `role=status` s `aria-live`; tipkanje presude i ispis nalaza u njemu bi se
+  // citali slovo po slovo. Recenicu za citac i dalje nosi samo `#progressMessage`.
+  view.setAttribute('aria-live', 'off');
+  const poruka = view.querySelector('#progressMessage');
+  poruka?.setAttribute('aria-live', 'polite');
+  view.dataset.z33 = '';
+
+  const notifyBtn = q('notify') as HTMLButtonElement;
+  const canNotify = typeof window.Notification === 'function';
+  notifyBtn.hidden = !canNotify;
+  let notify = false;
+  notifyBtn.addEventListener('click', async () => {
+    // Dopustenje se trazi TEK na klik, nikad pri ucitavanju.
+    let perm = Notification.permission;
+    if (!notify && perm === 'default') {
+      try { perm = await Notification.requestPermission(); } catch { perm = 'denied'; }
+    }
+    notify = !notify && perm === 'granted';
+    setText(notifyBtn, notify ? 'Javit ću ti kad bude gotovo ✓' : 'Javi mi kad bude gotovo');
+    notifyBtn.dataset.on = notify ? 'true' : 'false';
+  });
+
+  let loop = 0;
+  let finish: (() => void) | null = null;
+  let clones: HTMLElement[] = [];
+  let flown = new Set<number>();
+  let scrolled = false;
+  let renderedPlan: LivePlan | null = null;
+  // Dok je true, pomaci motora crtaju fazu citanja; nakon dolaska rezultata kasni pomak ne smije
+  // prebrisati otkriveno (ni zavrsno) stanje.
+  let reading = false;
+
+  const stop = (): void => {
+    if (loop) cancelAnimationFrame(loop);
+    loop = 0;
+    clones.forEach((c) => c.remove());
+    clones = [];
+    const f = finish;
+    finish = null;
+    f?.();
+  };
+
+  function buildPlanDom(plan: LivePlan | null): void {
+    if (renderedPlan === plan && plan) return;
+    renderedPlan = plan;
+    const text = q('text');
+    text.replaceChildren(...(plan && plan.sheet.length
+      ? plan.sheet.map((p) => el('p', p.heading ? 'z33-h' : '', p.text))
+      : Array.from({ length: 9 }, (_, i) => el('i', i % 4 === 0 ? 'z33-line z33-line--short' : 'z33-line'))));
+    const n = plan ? plan.findings.length : 0;
+    const top = (j: number): string => `${8 + j * (n > 1 ? 72 / (n - 1) : 0)}%`;
+    q('edge').replaceChildren(...Array.from({ length: n }, (_, j) => {
+      const m = el('i', 'z33-edge');
+      m.style.top = top(j);
+      m.style.setProperty('--z33-dy', `${(120 - (8 + j * (n > 1 ? 72 / (n - 1) : 0)) * 1.414).toFixed(1)}cqw`);
+      return m;
+    }));
+    q('notes').replaceChildren(...Array.from({ length: n }, (_, j) => {
+      const note = el('div', 'z33-note');
+      note.style.top = top(j);
+      note.style.setProperty('--z33-rot', j % 2 ? '-2deg' : '2deg');
+      note.append(el('span', 'z33-note-title'), el('span', 'z33-note-meta'));
+      return note;
+    }));
+  }
+
+  function rowsDom(frame: LiveFrame): void {
+    const list = q('rows');
+    if (list.children.length !== frame.rows.length) {
+      list.replaceChildren(...frame.rows.map(() => {
+        const li = el('li', 'z33-row');
+        li.append(el('span', 'z33-icon'), el('span', 'z33-row-label'), el('span', 'z33-count'));
+        return li;
+      }));
+    }
+    frame.rows.forEach((r, i) => {
+      const li = list.children[i] as HTMLElement;
+      li.dataset.state = r.state;
+      setText(li.children[0], r.icon);
+      setText(li.children[1], r.label);
+      setText(li.children[2], r.count);
+    });
+  }
+
+  function slotsDom(frame: LiveFrame): void {
+    const host = q('slots');
+    while (host.children.length > frame.slots.length) host.lastElementChild?.remove();
+    while (host.children.length < frame.slots.length) {
+      const slot = el('div', 'z33-slot');
+      const filled = el('div', 'z33-slot-on');
+      const meta = el('span', 'z33-slot-meta');
+      meta.append(el('s', ''), document.createTextNode(''));
+      filled.append(el('span', 'z33-slot-n'), el('span', 'z33-dot'), el('span', 'z33-slot-title'), meta);
+      slot.append(el('div', 'z33-slot-wait'), filled);
+      host.append(slot);
+    }
+    frame.slots.forEach((s, j) => {
+      const slot = host.children[j] as HTMLElement;
+      slot.dataset.state = s.state;
+      slot.dataset.severity = s.severity;
+      setText(slot.children[0], s.state === 'placeholder' ? s.label : '');
+      const on = slot.children[1];
+      setText(on.children[0], s.state === 'filled' ? s.label : '');
+      setText(on.children[2], s.title);
+      const meta = on.children[3] as HTMLElement;
+      meta.dataset.visible = s.metaVisible ? 'true' : 'false';
+      setText(meta.children[0], s.measured);
+      const rest = s.expected ? (s.measured ? ' → ' : '') + s.expected : '';
+      if (meta.lastChild && meta.lastChild.textContent !== rest) meta.lastChild.textContent = rest;
+    });
+  }
+
+  function apply(frame: LiveFrame, plan: LivePlan | null): void {
+    root.dataset.phase = frame.phase;
+    buildPlanDom(plan);
+    setText(q('status'), frame.statusLine);
+    setText(q('score'), frame.score);
+    q('score').dataset.long = frame.score.length > 3 ? 'true' : 'false';
+    setText(q('scorenote'), frame.scoreNote);
+    setText(q('s-pages'), frame.stats?.pages ?? '');
+    setText(q('s-words'), frame.stats?.words ?? '');
+    setText(q('s-sources'), frame.stats?.sources ?? '');
+    setText(q('remaining'), view.querySelector('#progressMessage')?.textContent ?? '');
+    rowsDom(frame);
+    for (const row of MARK_ROWS) {
+      const mark = root.querySelector(`[data-z33-mark="${row}"]`) as HTMLElement;
+      const m = frame.marks.find((x) => x.row === row);
+      mark.dataset.tone = m ? m.tone : 'off';
+      setText(mark.lastElementChild, m ? (m.tone === 'pass' ? '✓' : m.label) : '');
+    }
+    const notes = q('notes').children;
+    frame.notes.forEach((n, j) => {
+      const note = notes[j] as HTMLElement | undefined;
+      if (!note) return;
+      note.dataset.visible = n.visible ? 'true' : 'false';
+      setText(note.children[0], n.title);
+      setText(note.children[1], n.meta);
+    });
+    const edge = q('edge').children;
+    frame.edge.forEach((e, j) => {
+      const m = edge[j] as HTMLElement | undefined;
+      if (!m) return;
+      m.dataset.visible = e.visible ? 'true' : 'false';
+      m.dataset.gathered = e.gathered ? 'true' : 'false';
+    });
+    const stamp = q('stamp');
+    stamp.dataset.on = frame.stamp ? 'true' : 'false';
+    setText(stamp, frame.stamp ?? '');
+    slotsDom(frame);
+    setText(q('found'), frame.foundLine);
+    const cats = q('cats');
+    if (cats.children.length !== frame.cats.length) {
+      cats.replaceChildren(...frame.cats.map(() => {
+        const row = el('div', 'z33-cat');
+        row.append(el('span', 'z33-cat-label'), el('span', 'z33-cat-status'));
+        return row;
+      }));
+    }
+    frame.cats.forEach((c, i) => {
+      const row = cats.children[i] as HTMLElement;
+      row.dataset.tone = c.tone;
+      setText(row.children[0], c.label);
+      setText(row.children[1], c.status);
+    });
+    const verdict = q('verdict');
+    verdict.hidden = !frame.verdict.shown;
+    q('verdictslot').dataset.shown = frame.verdict.shown ? 'true' : 'false';
+    setText(q('verdicttext'), frame.verdict.text);
+    verdict.dataset.caret = frame.verdict.caret ? 'true' : 'false';
+    verdict.dataset.meta = frame.verdict.metaVisible ? 'true' : 'false';
+    for (const id of frame.flying) if (!flown.has(id)) fly(id);
+  }
+
+  function fly(j: number): void {
+    flown.add(j);
+    const src = q('notes').children[j] as HTMLElement | undefined;
+    const tgt = q('slots').children[j] as HTMLElement | undefined;
+    if (!src || !tgt || typeof src.animate !== 'function') return;
+    const a = src.getBoundingClientRect();
+    const b = tgt.getBoundingClientRect();
+    const clone = src.cloneNode(true) as HTMLElement;
+    clone.classList.add('z33-note--flying');
+    Object.assign(clone.style, { left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px` });
+    document.body.append(clone);
+    clones.push(clone);
+    const dx = b.left + 40 - a.left;
+    const dy = b.top + 8 - a.top;
+    const anim = clone.animate([
+      { transform: 'rotate(2deg)', opacity: 1 },
+      { transform: `translate(${dx * 0.5}px, ${dy * 0.5 - 60}px) rotate(-6deg)`, opacity: 1, offset: 0.5 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.9)`, opacity: 0 },
+    ], { duration: 1000, easing: 'cubic-bezier(.5, 0, .2, 1)' });
+    anim.onfinish = () => { clone.remove(); clones = clones.filter((c) => c !== clone); };
+  }
+
+  function ping(score: number | null, nalazi: string): void {
+    if (!notify || !canNotify || Notification.permission !== 'granted') return;
+    try {
+      new Notification('Lekta', { body: `Provjera je gotova: ${score == null ? '' : `ocjena ${score}, `}${nalazi}.` });
+    } catch { /* obavijest je usluga, ne uvjet */ }
+  }
+
+  function toVerdict(smooth: boolean): void {
+    const target = q('verdictslot');
+    try { target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' }); } catch { /* stari preglednik */ }
+  }
+
+  q('open').addEventListener('click', () => stop());
+
+  return {
+    start(profile) {
+      stop();
+      reading = true;
+      flown = new Set();
+      scrolled = false;
+      const p = profileText(profile);
+      setText(q('profile'), p.name);
+      setText(q('source'), p.source);
+      apply(readingFrame(0), null);
+    },
+    progress(pct) {
+      if (finish && pct === 0) { stop(); return; }
+      if (reading) apply(readingFrame(pct), null);
+    },
+    reveal(result) {
+      stop();
+      reading = false;
+      const plan = buildLivePlan(result);
+      const wide = window.matchMedia?.('(min-width: 980px)')?.matches ?? true;
+      flown = new Set();
+      scrolled = false;
+      setText(q('profile'), plan.profile);
+      if (plan.source) setText(q('source'), plan.source);
+      setText(q('eyebrow'), plan.eyebrow);
+      setText(q('summary'), plan.summary);
+      const ring = q('ring');
+      ring.hidden = plan.score == null;
+      ring.style.setProperty('--z33-ring', String(plan.score ?? 0));
+      setText(q('ringnum'), plan.score == null ? '' : String(plan.score));
+      const nalazi = revealFrame(plan, Infinity, wide).scoreNote;
+      // Zavrsno stanje odmah: prigusen pokret ili kartica koju nitko ne gleda.
+      if (pokretPrigusen(document) || document.hidden) {
+        apply(revealFrame(plan, Infinity, wide), plan);
+        ping(plan.score, nalazi);
+        return Promise.resolve();
+      }
+      return new Promise<void>((resolve) => {
+        const t0 = performance.now();
+        const onHidden = (): void => { if (document.hidden) stop(); };
+        finish = () => {
+          document.removeEventListener('visibilitychange', onHidden);
+          apply(revealFrame(plan, Infinity, wide), plan);
+          ping(plan.score, nalazi);
+          resolve();
+        };
+        document.addEventListener('visibilitychange', onHidden);
+        const tick = (): void => {
+          const frame = revealFrame(plan, performance.now() - t0, wide);
+          apply(frame, plan);
+          if (frame.scrollToVerdict && !scrolled) { scrolled = true; toVerdict(true); }
+          if (frame.done) { loop = 0; stop(); return; }
+          loop = requestAnimationFrame(tick);
+        };
+        loop = requestAnimationFrame(tick);
+        // Ograda: rAF stoji u nekim okruzenjima (pozadinska kartica, testni preglednik bez slika);
+        // rezultat ne smije cekati dulje od otkrivanja ni tada.
+        window.setTimeout(() => { if (finish) stop(); }, revealDuration(plan, wide) + 500);
+      });
+    },
+  };
+}
