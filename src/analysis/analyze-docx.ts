@@ -50,6 +50,7 @@ import { analyzeTypographyStructure } from './typography-structure';
 import { analyzeConsistencyStructure } from './consistency-structure';
 import { analyzeRequiredSectionsStructure } from './required-sections-structure';
 import { analyzeLinkDoiStructure } from './link-doi-structure';
+import { inspectionCoverageFromPackage, inspectionCoverageUnavailable } from './inspection-coverage';
 import { citationMeta } from '../citations/citation-meta';
 import { PROFILE_STATUS as PROFILE_STATUS_SRC } from '../profiles/profile-status-loader';
 const PROFILE_STATUS: any = PROFILE_STATUS_SRC;
@@ -372,9 +373,19 @@ export async function analyzeDocx(file: File, profile: any, settings: any, onPro
       paragraphs: Array.isArray(result.preview?.paragraphs) ? result.preview.paragraphs.map((p: any) => ({ index: Number(p.index), text: String(p.text || '') })) : [],
       rules: profile.effectiveRules?.linkRules || profile.linkRules,
     });
+
+    // Census cita tijelo, biljeske, komentare, glossary te zaglavlja i podnozja koja document.xml.rels
+    // stvarno povezuje (Codex M1 i M1b na #165); vec procitani document.xml i rels se predaju, da se
+    // ne dekomprimiraju dvaput i ne trose agregatni budzet ZipReadera. Rels iz `preloaded` census
+    // uzima samo kad taj zapis postoji u paketu, pa prazan niz za nepostojeci rels ne glumi sadrzaj.
+    // Kvar citanja ili brojanja daje `unknown`, nikad no-known-limits.
+    result.details.inspectionCoverage = await inspectionCoverageFromPackage(zip, result.details, {
+      preloaded: { 'word/document.xml': documentXml, 'word/_rels/document.xml.rels': documentRelsXml },
+    });
   } catch {
     result.details.requiredSectionsStructure = { version: 1, candidates: [], warnings: ['Nije bilo moguće ponovno analizirati strukturu obveznih dijelova.'], skipped: [], summary: { required: 0, present: 0, missing: 0, high: 0, medium: 0, low: 0, text: 'Analiza nije dostupna.' } };
     result.details.linkDoiStructure = { version: 1, occurrences: [], warnings: ['Nije bilo moguće analizirati poveznice.'], skipped: [], summary: { total: 0, plainUrls: 0, doiCandidates: 0, brokenUrls: 0, trackingUrls: 0, mismatches: 0, redirects: 0, unreachable: 0 } };
+    result.details.inspectionCoverage = inspectionCoverageUnavailable();
   }
   return result;
 }

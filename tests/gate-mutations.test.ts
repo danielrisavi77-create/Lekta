@@ -9009,3 +9009,124 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
     ]);
   });
 });
+
+describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
+  // Uvoz je lijen da ovaj blok ne mijenja redoslijed ucitavanja ostatka datoteke.
+  const load = async () => ({
+    cov: await import('../src/analysis/inspection-coverage'),
+    guard: await import('./helpers/inspection-coverage-guard'),
+  });
+
+  it('baseline: stvarni census je cist pod gardom', async () => {
+    const { cov, guard } = await load();
+    expect(await guard.inspectionCensusProblems(cov.inspectionCoverageFromPackage)).toEqual([]);
+  });
+
+  it('(a) census bez zaglavlja i podnozja (stanje na 265598f7) obara gard', async () => {
+    const { cov, guard } = await load();
+    const samoTijeloIBiljeske = (names: Iterable<string>) =>
+      [...names].filter((name) => /^word\/(?:document|footnotes|endnotes)\.xml$/.test(name)).sort();
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: samoTijeloIBiljeske });
+    const problems = await guard.inspectionCensusProblems(mutant);
+    expect(problems).toContain('tekstni okvir samo u zaglavlju nije prijavljen kao ogranicenje');
+    expect(problems).toContain('strukturirana kontrola samo u podnozju nije prijavljena kao ogranicenje');
+  });
+
+  it('(b) census koji izostavi jednu strukturu (txbx) obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezOkvira = cov.INSPECTION_STRUCTURES.filter((s) => s.kind !== 'text-box');
+    expect(bezOkvira.length).toBe(cov.INSPECTION_STRUCTURES.length - 1);
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { structures: bezOkvira });
+    expect(await guard.inspectionCensusProblems(mutant)).toContain('vrsta text-box nije prepoznata u census-u');
+  });
+
+  it('(c) lazni no-known-limits kad census baci izuzetak obara gard', async () => {
+    const { cov, guard } = await load();
+    const mutant: typeof cov.inspectionCoverageFromPackage = async (zip, details) => {
+      try {
+        return cov.buildInspectionCoverage(await cov.readInspectionParts(zip), details);
+      } catch {
+        return cov.buildInspectionCoverage([], details);
+      }
+    };
+    expect(await guard.inspectionCensusProblems(mutant)).toContain('kvar citanja dijela dao je no-known-limits, ne unknown');
+  });
+
+  it('(d) izbor zaglavlja i podnozja po imenu umjesto po relaciji (stanje na 9428b217) obara gard', async () => {
+    const { cov, guard } = await load();
+    const poImenu = (names: Iterable<string>) =>
+      [...names].filter((name) => /^word\/(?:document|footnotes|endnotes|header\d*|footer\d*)\.xml$/i.test(name)).sort();
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: poImenu });
+    const problems = await guard.inspectionCensusProblems(mutant);
+    expect(problems).toContain('zaglavlje povezano relacijom pod imenom izvan header*.xml nije prijavljeno kao ogranicenje');
+    expect(problems).toContain('nepovezano zaglavlje bez relacije promijenilo je status (partial)');
+    expect(problems).toContain('nevaljan document.xml.rels dao je no-known-limits, ne unknown');
+    expect(problems).toContain('referenca zaglavlja bez document.xml.rels dala je no-known-limits, ne unknown');
+  });
+
+  it('(e) dubina polja na razini cijelog dijela (stanje na 9428b217) obara gard', async () => {
+    const { cov, guard } = await load();
+    // Doslovno brojilo s 9428b217: jedna dubina za cijeli footnotes.xml.
+    const dubinaDijela = (xml: string): number => {
+      let depth = 0;
+      let orphanEnds = 0;
+      for (const match of xml.matchAll(/<w:fldChar\b[^>]*>/gi)) {
+        const type = /\bw:fldCharType\s*=\s*["']([A-Za-z]+)["']/i.exec(match[0])?.[1]?.toLowerCase();
+        if (type === 'begin') depth += 1;
+        else if (type === 'end') {
+          if (depth > 0) depth -= 1;
+          else orphanEnds += 1;
+        }
+      }
+      return depth + orphanEnds;
+    };
+    const structures = cov.INSPECTION_STRUCTURES.map((s) => (s.kind === 'unbalanced-field' ? { kind: s.kind, count: dubinaDijela } : s));
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { structures });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'polje otvoreno u jednoj fusnoti i zatvoreno u drugoj dalo je no-known-limits',
+    ]);
+  });
+
+  it('(f) census bez komentara i glossary dijela obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezKomentaraIGlossaryja: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, context).filter((name) => !/^word\/(?:comments\.xml|glossary\/)/i.test(name));
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezKomentaraIGlossaryja });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje',
+      'strukturirana kontrola samo u komentarima nije prijavljena kao ogranicenje',
+      'tekstni okvir samo u glossary dijelu nije prijavljen kao ogranicenje',
+    ]);
+  });
+
+  it('(g) census bez razrjesavanja r:id reference zaglavlja (stanje na efc94369) obara gard', async () => {
+    const { cov, guard } = await load();
+    // Mutant: reference u document.xml se ne provjeravaju prema rels dijelu.
+    const bezRazrjesavanja: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, context.documentRelsXml == null ? context : { ...context, documentXml: '' });
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezRazrjesavanja });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'nerazrijeseni r:id zaglavlja u postojecem rels dijelu dao je no-known-limits, ne unknown',
+      'headerReference na relaciju tipa footer dao je no-known-limits, ne unknown',
+    ]);
+  });
+
+  it('(h) census koji ignorira word/glossary/_rels (stanje na efc94369) obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezGlossaryRels: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, { ...context, glossaryRelsXml: null, glossaryXml: '' });
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezGlossaryRels });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje',
+      'nevaljan glossary rels dao je no-known-limits, ne unknown',
+      'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
+    ]);
+  });
+});
