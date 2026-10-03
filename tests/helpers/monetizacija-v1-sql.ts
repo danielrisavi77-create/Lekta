@@ -770,3 +770,43 @@ export async function constraintDropProblems(v1Sql: string = readMigration(V1_MI
   }
   return problems;
 }
+
+/**
+ * VLASNIK SECURITY DEFINER FUNKCIJA (Codex pregled PR #217 runda 2, M4). Funkcija s `security definer`
+ * izvodi se s pravima VLASNIKA, pa vlasnik ne smije ovisiti o tome koja je uloga migraciju primijenila.
+ * 0207 se ovdje izvodi pod DRUGOM superuser ulogom (`lekta_tudji_migrator`); tri funkcije moraju i
+ * tada pripasti `postgres` (vlasniku ostalih objekata sheme public), ostati SECURITY DEFINER i imati
+ * prazan search_path. Generator: tablica offer_codes koju 0207 stvara mora pripasti tudjoj ulozi, inace
+ * mjerenje ne razlikuje izricitog vlasnika od slucajnog. Stvarno vlasnistvo u ciljanoj bazi ovime NIJE
+ * provjereno (bez db push).
+ */
+export async function definerOwnerProblems(v1Sql: string = readMigration(V1_MIGRATION)): Promise<string[]> {
+  const problems: string[] = [];
+  const db = await baseDatabase();
+  try {
+    await db.exec('create role lekta_tudji_migrator superuser nologin; set role lekta_tudji_migrator;');
+    await db.exec(v1Sql);
+    await db.exec('reset role');
+    const tablica = await one(db, "select pg_get_userbyid(relowner) as vlasnik from pg_class where oid = 'public.offer_codes'::regclass");
+    if (tablica?.vlasnik !== 'lekta_tudji_migrator') {
+      problems.push(`generator: 0207 nije izvedena pod tudjom ulogom (offer_codes pripada ${String(tablica?.vlasnik)})`);
+      return problems;
+    }
+    for (const ime of ['apply_entitlement_upgrade', 'note_entitlement_partial_refund', 'revert_entitlement_upgrade']) {
+      const f = await rows(db, `select pg_get_userbyid(p.proowner) as vlasnik, p.prosecdef, p.proconfig
+                                  from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                                 where n.nspname = 'public' and p.proname = $1`, [ime]);
+      if (f.length !== 1) {
+        problems.push(`${ime}: ocekivana tocno jedna funkcija, nadjeno ${f.length}`);
+        continue;
+      }
+      if (f[0].vlasnik !== 'postgres') problems.push(`${ime}: vlasnik je ${String(f[0].vlasnik)}, ne postgres (ovisi o ulozi koja je primijenila migraciju)`);
+      if (f[0].prosecdef !== true) problems.push(`${ime}: nije SECURITY DEFINER`);
+      const config = Array.isArray(f[0].proconfig) ? (f[0].proconfig as string[]) : [];
+      if (!config.includes('search_path=""')) problems.push(`${ime}: search_path nije izricito prazan (${JSON.stringify(f[0].proconfig)})`);
+    }
+  } finally {
+    await db.close();
+  }
+  return problems;
+}

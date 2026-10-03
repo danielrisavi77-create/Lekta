@@ -138,6 +138,7 @@ import {
   V1_MIGRATION,
   catalogProblems,
   constraintDropProblems,
+  definerOwnerProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
   privilegeProblems,
@@ -8208,6 +8209,20 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan status CHECK/, "       or false then\n      raise exception '0207: neocekivan status CHECK");
     const p = await constraintDropProblems(mutated);
     expect(p.some((x) => x.includes('stroziji izraz (bonus_outbox.status)') && x.includes('tiho brise bonus_outbox_status_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: vlasnik SECURITY DEFINER funkcija baseline cist (0207 pod drugom ulogom)', async () => {
+    expect(await definerOwnerProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: funkcija bez izricitog owner to postgres (stanje 7ae20bba) pripada ulozi koja je migrirala i obara gard', async () => {
+    const mutated = mutirajRe(/alter function public\.revert_entitlement_upgrade\(text\) owner to postgres;\r?\n/, '');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('revert_entitlement_upgrade: vlasnik je lekta_tudji_migrator'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: SECURITY DEFINER funkcija bez praznog search_path obara gard', async () => {
+    const mutated = mutirajRe(/(create or replace function public\.note_entitlement_partial_refund\([\s\S]*?security definer\r?\n)set search_path = ''\r?\n/, '$1');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('note_entitlement_partial_refund: search_path nije izricito prazan'))).toBe(true);
   }, ROK_SQL);
 
   it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {

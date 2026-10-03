@@ -12,6 +12,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   catalogProblems,
   constraintDropProblems,
+  definerOwnerProblems,
   idempotencyProblems,
   partialRefundSqlProblems,
   privilegeProblems,
@@ -79,5 +80,11 @@ describe('0207: privilegije (Codex PR #217, M4)', () => {
 describe('0207: brisanje CHECK ogranicenja (Codex PR #217, M3)', () => {
   it('brisu se samo zadana ogranicenja s ocekivanim vrijednostima; nepoznato obara migraciju i ostaje', async () => {
     expect(await constraintDropProblems()).toEqual([]);
+  }, ROK);
+});
+
+describe('0207: vlasnik SECURITY DEFINER funkcija (Codex PR #217 runda 2, M4)', () => {
+  it('i kad 0207 primijeni druga uloga: tri funkcije pripadaju postgres, SECURITY DEFINER, prazan search_path', async () => {
+    expect(await definerOwnerProblems()).toEqual([]);
   }, ROK);
 });

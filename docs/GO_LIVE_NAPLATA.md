@@ -66,6 +66,14 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    (privremena tablica). Svaki drugi oblik, pa i stroži izraz istog imena i istih vrijednosti, je
    `RAISE EXCEPTION ... ne brise se naslijepo`: push pada glasno, ništa se ne briše, a čovjek
    pregleda ograničenje. Mjereno samo u PGliteu; živa baza nije provjerena.
+   **Vlasnik SECURITY DEFINER funkcija** (Codex pregled PR #217 runda 2, M4). `apply_entitlement_upgrade`,
+   `revert_entitlement_upgrade` i `note_entitlement_partial_refund` izvode se s pravima vlasnika, pa ih
+   0207 izričito predaje ulozi `postgres` (`alter function ... owner to postgres`), uz prazan
+   `search_path` i EXECUTE samo za `service_role`. Gard izvodi 0207 pod drugom ulogom u PGliteu.
+   **Stvarno vlasništvo u ciljanoj bazi NIJE provjereno** (ovaj krug nema `supabase db push` ni pristup
+   bazi). Nakon pusha provjeri: `select proname, pg_get_userbyid(proowner), prosecdef, proconfig from
+   pg_proc where proname in ('apply_entitlement_upgrade', 'revert_entitlement_upgrade',
+   'note_entitlement_partial_refund');` mora dati `postgres`, `true` i `search_path=""`.
 4. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
    id Merchant of Record providera i bio uvjet za checkout (`409 product_not_mapped`); prelaskom
    na Stripe taj uvjet je uklonjen. Iznos se računa iz `products.price_eur`, a webhook proizvod

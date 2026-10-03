@@ -583,6 +583,12 @@ begin
 end;
 $$;
 
+-- VLASNIK SECURITY DEFINER FUNKCIJE (Codex pregled PR #217 runda 2, M4): funkcija se izvodi s pravima
+-- vlasnika, pa vlasnik ne smije ovisiti o ulozi koja je migraciju primijenila. Izricito `postgres`,
+-- vlasnik ostalih objekata sheme public. Gard: tests/monetizacija-v1-sql.test.ts (definerOwnerProblems,
+-- 0207 izvedena pod drugom ulogom). Stvarno vlasnistvo u ciljanoj bazi NIJE provjereno (bez db push).
+alter function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)
+  owner to postgres;
 revoke all on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)
   from public, anon, authenticated;
 grant execute on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz)
@@ -660,6 +666,8 @@ begin
 end;
 $$;
 
+-- Vlasnik izricito (M4, isto obrazlozenje kao apply_entitlement_upgrade).
+alter function public.revert_entitlement_upgrade(text) owner to postgres;
 revoke all on function public.revert_entitlement_upgrade(text) from public, anon, authenticated;
 grant execute on function public.revert_entitlement_upgrade(text) to service_role;
 
@@ -739,6 +747,8 @@ begin
 end;
 $$;
 
+-- Vlasnik izricito (M4, isto obrazlozenje kao apply_entitlement_upgrade).
+alter function public.note_entitlement_partial_refund(text, integer) owner to postgres;
 revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;
 grant execute on function public.note_entitlement_partial_refund(text, integer) to service_role;
 
