@@ -109,11 +109,13 @@ function renderAuthorsPreview(raw: string): void {
 
 function render() {
   renderAuthorsPreview($('#f-authors')?.value || '');
-  const { citation, inText, missing } = formatWithCurrent(readInp());
+  const input = readInp();
+  const { citation, inText, missing } = formatWithCurrent(input);
+  const hasInput = (FIELDS_BY_TYPE[input.type] || []).some((key: string) => !!input[key]?.trim());
   const out = $('#out');
   const hint = $('#out-hint');
   const addBtn = $('#c-add-to-bulk');
-  if (!citation) {
+  if (!hasInput || !citation || !/[\p{L}\p{N}]/u.test(citation)) {
     out.textContent = 'Ispuni polja lijevo pa se citat pojavljuje ovdje.';
     out.classList.add('empty');
     hint.textContent = '';
@@ -127,9 +129,9 @@ function render() {
   out.classList.remove('empty');
   $('#copyBtn').disabled = false;
   if (addBtn) addBtn.disabled = false;
-  $('#c-success-cta')?.classList.add('is-visible');
+  $('#c-success-cta')?.classList.toggle('is-visible', missing.length === 0);
   renderInText(inText);
-  hint.textContent = missing.length ? 'Preporučeno dodati: ' + missing.join(', ') + '.' : 'Sva preporučena polja su ispunjena.';
+  hint.textContent = missing.length ? 'Nacrt citata. Provjeri podatke. Preporučeno dodati: ' + missing.join(', ') + '.' : 'Unesena su sva preporučena polja.';
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
 }
 

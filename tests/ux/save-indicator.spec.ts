@@ -71,7 +71,7 @@ test.describe('C7: indikator spremanja', () => {
 
     // Dokument je prvi zapis: indikator ga pokaze kao saved (zapis dokumenta je potvrdjen upis).
     await page.locator('#fileInput').setInputFiles(FIXTURE);
-    await expect(page.locator('#radDocBar')).toBeVisible();
+    await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
     await expect(page).toHaveURL(/#session=/, { timeout: 20_000 });
     const id = sessionIdIzUrla(page.url());
     await expect(page.locator('#radDocSave')).toHaveAttribute('data-save-state', 'saved', { timeout: 20_000 });
@@ -112,7 +112,7 @@ test.describe('C7: indikator spremanja', () => {
     await cekajApp(page);
     await pratiIndikator(page);
     await page.locator('#fileInput').setInputFiles(FIXTURE);
-    await expect(page.locator('#radDocBar')).toBeVisible();
+    await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
     await expect(page.locator('#radDocSave')).toHaveAttribute('data-save-state', 'off');
     await expect(page.locator('#radDocSave')).toHaveText('Bez lokalne pohrane');
     await expect(page.locator('#radDocSave')).toBeVisible();

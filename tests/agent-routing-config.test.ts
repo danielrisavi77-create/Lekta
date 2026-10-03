@@ -165,11 +165,15 @@ describe('config/agent-routing.json: costWeight je tocno izracunat', () => {
 describe('config/agent-routing.json: unverified modeli ne smiju biti u nijednoj ulozi', () => {
   it('nijedan model sa status "unverified" ne pojavljuje se kao role.model u routingu', () => {
     const config = readConfig();
-    const unverifiedModels = Object.entries(config.models).filter(([, spec]) => spec.status === 'unverified');
-    expect(unverifiedModels.length).toBeGreaterThan(0); // dokazi da test ima sto testirati (claude-opus-5-5)
-
     const problems = findUnverifiedModelUsages(config as unknown as import('./helpers/agent-routing-checks').RoutingConfig);
     expect(problems, problems.join('; ')).toHaveLength(0);
+
+    // Dokaz da provjera ima sto testirati i kad stvarni config nema nijedan neverificiran model
+    // (claude-opus-5-5 je verificiran 28. 9.): sinteticki neverificiran model u kopiji mora biti uhvacen.
+    const kopija = JSON.parse(JSON.stringify(config)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    kopija.models['claude-neverificiran-test'] = { status: 'unverified' };
+    kopija.routing.S.false.roles.implement.model = 'claude-neverificiran-test';
+    expect(findUnverifiedModelUsages(kopija).some((p) => p.includes('claude-neverificiran-test'))).toBe(true);
   });
 
   it('claude-fable-5-1 (neverImplements) se ne pojavljuje kao implement uloga', () => {

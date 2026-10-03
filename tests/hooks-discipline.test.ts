@@ -16,7 +16,7 @@ const judge = (command: string, env: Record<string, string> = {}) => judgeCpuDis
 // Okolina djeteta bez tokena i bez CI oznake, da odbijanje bude mjerljivo i na GitHub Actionsu.
 function cleanEnv(extra: Record<string, string> = {}): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = { ...process.env, ...extra };
-  for (const k of ['GITHUB_ACTIONS', 'LEKTA_GATE_LOCK_TOKEN', 'LEKTA_ROLE', 'LEKTA_CHECKLIST']) {
+  for (const k of ['GITHUB_ACTIONS', 'LEKTA_GATE_LOCK_TOKEN', 'LEKTA_ROLE', 'LEKTA_CHECKLIST', 'LEKTA_TASK_ID', 'LEKTA_SCOPE_ENFORCED']) {
     if (!(k in extra)) delete env[k];
   }
   return env;

@@ -30,3 +30,11 @@ seli na CI umjesto da se prekid proglasi prolazom.
 
 Povijesni primjeri zbog kojih ova pravila postoje sacuvani su u
 `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md`.
+
+## Poznate iznimke
+
+- T70: `tests/ux/workspace-entry.spec.ts:142` na `mobile-webkit` pod Windowsom povremeno padne
+  jer se proces WebKita srusi (`Target crashed`), oko 2 do 5 od 60 prolaza. To je nestabilnost
+  Playwrightova WebKita, ne kvar Lekte ni dokaz kvara u Safariju. Test ostaje u matrici, bez
+  retryja i bez preskakanja; pad s `Target crashed` u tom testu nije dokaz regresije, ali se
+  ne tumaci ni kao prolaz. Mjerenja: `docs/agents/reports/T70_WEBKIT_CRASH.md`.

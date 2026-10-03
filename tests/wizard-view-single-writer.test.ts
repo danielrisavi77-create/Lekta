@@ -1,6 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { renderView } from '../src/ui/wizard-view';
+import type { WizardState } from '../src/ui/wizard-machine';
+
+it('uskladuje chrome pri ulasku u popravak i povratku na dokument', () => {
+  document.body.innerHTML = '<header data-site-chrome><ol data-site-chrome-steps>'
+    + '<li data-site-chrome-step="findings"></li><li data-site-chrome-step="plan"></li>'
+    + '</ol></header>';
+  const states: [WizardState, string][] = [
+    ['dokument', 'scanning'], ['profil', 'scanning'], ['analiza', 'scanning'],
+    ['rezultat', 'findings'], ['popravak', 'plan'], ['rezultat', 'findings'], ['dokument', 'scanning'],
+  ];
+  for (const [state, expected] of states) {
+    renderView(state);
+    expect(document.querySelector<HTMLElement>('[data-site-chrome]')?.dataset.siteChromeStage).toBe(expected);
+    expect(document.querySelector<HTMLElement>('[data-site-chrome-steps]')?.hidden).toBe(expected === 'scanning');
+    expect(document.querySelectorAll('[aria-current="step"]')).toHaveLength(expected === 'scanning' ? 0 : 1);
+  }
+});
 
 /**
  * JEDAN PISAC PRIKAZA (T16, korak B4).

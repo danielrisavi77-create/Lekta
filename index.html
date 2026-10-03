@@ -92,6 +92,15 @@
          podnozje) ostaje iz Z7; tri koraka Z7 su otisla s rasporedom koji je Z32 zamijenio
          (predlozak B ih nema), a obecanje o uredjaju nose podnozje lista i redak ispod njega. -->
     <div class="intake-stol">
+    <div class="intake-deadline">
+      <div class="intake-polje">
+        <label class="intake-polje-oznaka" for="intakeRok">Rok predaje</label>
+        <div class="intake-polje-red">
+          <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
+          <label class="intake-kvacica"><input type="checkbox" id="intakeRokNeznam" data-intake-rok-neznam>Još ne znam rok</label>
+        </div>
+      </div>
+    </div>
     <div class="intake-desk" id="paperCover">
       <!-- PAPIR JE PLOHA, GUMB JE UNUTAR NJEGA (pregled Z7): uloga `button` bi sve potomke ucinila
            prezentacijskima, pa je na unutarnjem `.intake-paper__gumb`. Klik i ispustanje hvata
@@ -168,13 +177,7 @@
         </div>
         <a class="intake-promijeni" href="/fakulteti/" data-intake-promijeni hidden>Promijeni</a>
       </div>
-      <div class="intake-polje">
-        <label class="intake-polje-oznaka" for="intakeRok">Rok predaje</label>
-        <div class="intake-polje-red">
-          <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
-          <label class="intake-kvacica"><input type="checkbox" id="intakeRokNeznam" data-intake-rok-neznam>Još ne znam rok</label>
-        </div>
-      </div>
+
     </aside>
     </div>
 

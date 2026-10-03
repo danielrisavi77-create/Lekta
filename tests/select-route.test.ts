@@ -158,17 +158,18 @@ describe('selectRoute: pravilo drugog providera', () => {
 });
 
 describe('selectRoute: neverificiran model se nikad ne vraca', () => {
-  it.each(['brief', 'critic', 'implement'] as const)('%s s claude-opus-5-5 (unverified) baca gresku s imenom modela', (phase) => {
+  it.each(['brief', 'critic', 'implement'] as const)('%s s neverificiranim modelom baca gresku s imenom modela', (phase) => {
     const cfg = config();
-    expect(cfg.models['claude-opus-5-5'].status).toBe('unverified');
-    cfg.routing.S.false.roles[phase].model = 'claude-opus-5-5';
-    expect(() => route({ config: cfg, size: 'S', files: [], phase })).toThrow(/claude-opus-5-5/);
+    cfg.models['claude-neverificiran-test'] = { input: 1, output: 1, status: 'unverified' };
+    cfg.routing.S.false.roles[phase].model = 'claude-neverificiran-test';
+    expect(() => route({ config: cfg, size: 'S', files: [], phase })).toThrow(/claude-neverificiran-test/);
   });
 
   it('neverificiran reviewFallback baca gresku', () => {
     const cfg = config();
-    cfg.routing.S.false.roles.review.reviewFallback!.model = 'claude-opus-5-5';
-    expect(() => route({ config: cfg, size: 'S', files: [], phase: 'review' })).toThrow(/claude-opus-5-5/);
+    cfg.models['claude-neverificiran-test'] = { input: 1, output: 1, status: 'unverified' };
+    cfg.routing.S.false.roles.review.reviewFallback!.model = 'claude-neverificiran-test';
+    expect(() => route({ config: cfg, size: 'S', files: [], phase: 'review' })).toThrow(/claude-neverificiran-test/);
   });
 
   it('model koji uopce nije u configu baca gresku', () => {

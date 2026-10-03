@@ -9,7 +9,7 @@ import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from '../../results/document-dna-model';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
-import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
+import { setSiteChromeScore } from '../../shared/site-chrome';
 import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
@@ -46,7 +46,7 @@ export function isGeneralRepairEntry(action: ResultsCockpitAction): boolean {
  */
 export interface ResultsCockpitDesk {
   readonly items: readonly DeskItem<VisualFindingModel>[];
-  readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+  readonly mountDocument: (host: HTMLElement, signal: AbortSignal) => Promise<DeskDocument | null>;
   /**
    * Stavke popravka, u sirovom obliku. Plan se gradi OVDJE, a ne u `app.ts`, iz dva razloga:
    * `app.ts` je na svom budzetu, i klasifikacija pripada sloju rezultata koji vec drzi nalaze.
@@ -64,7 +64,7 @@ export interface ResultsCockpitOptions {
    */
   repairOutlook?: RepairOutlookModel;
   advancedOpen?: boolean;
-  onAction?: (action: ResultsCockpitAction) => void;
+  onAction?: (action: ResultsCockpitAction, opener?: HTMLElement) => void;
   onAdvancedToggle?: (open: boolean) => void;
   /** Kad je prisutan i ima nalaza, stol zamjenjuje popis tri kartice. */
   desk?: ResultsCockpitDesk;
@@ -108,8 +108,8 @@ function primaryAction(model: VisualResultModel, repairAvailable: boolean): Resu
     // tri nalaza, pa je dokument kojem je popravljiv tek cetvrti ostajao bez mete (i bez ulaza).
     const target = model.findings.document.find((finding) => finding.capabilities.repair);
     const meta = target ? { findingId: target.id } : {};
-    // Bez ijedne automatske stavke nema sto "sigurno" popraviti, pa je ulaz simulacija; natpis to
-    // i kaze, jer gumb koji obeca plan popravka nad praznim skupom laze.
+    // Interni naziv simulate-repair ostaje kompatibilan ulaz u pregled mogucnosti,
+    // ne obecanje simulacije ni automatskog izvrsenja.
     return model.signals.automaticFixes > 0
       ? { kind: 'repair-safe', ...meta }
       : { kind: 'simulate-repair', ...meta };
@@ -152,7 +152,7 @@ function statusCopy(model: VisualResultModel): { label: string; description: str
 function primaryButtonLabel(action: ResultsCockpitAction | null): string {
   if (!action) return 'Prikaži što treba provjeriti';
   if (action.kind === 'repair-safe') return 'Napravi plan popravka';
-  return action.kind === 'simulate-repair' ? 'Simuliraj popravak' : 'Otvori prvi nalaz';
+  return action.kind === 'simulate-repair' ? 'Pregledaj mogućnosti popravka' : 'Otvori prvi nalaz';
 }
 
 /**
@@ -315,9 +315,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // NEBODOVAN MODEL NEMA STO POKAZATI U TRAKI: `unscored` (profil bez bodovanih provjera) daje
   // `null`, pa celija ostaje skrivena umjesto da ispise nulu koja bi tvrdila ocjenu.
   setSiteChromeScore(mount.ownerDocument, model.score.kind === 'scored' ? model.score.value : null);
-  // FAZA U TRAKI (Z15 popravak). Kokpit je ovdje jedino mjesto koje zna da su nalazi STVARNO
-  // nacrtani (main.ts vec javi `scanning` cim je dokument prihvacen, prije nego citanje zavrsi).
-  setSiteChromeStage(mount.ownerDocument, 'findings');
+  // Fazu obiju traka vodi renderView; kokpit azurira samo ocjenu.
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
   mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [
@@ -339,8 +337,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '" aria-labelledby="cockpitVerdictTitle">',
     '<div class="cockpit-sheet__lead" data-cockpit-sheet-lead>',
     eyebrowHtml(model),
-    '<h1 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
-    status.tone, '">', escapeHtml(status.label), '</h1>',
+    '<h2 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
+    status.tone, '">', escapeHtml(status.label), '</h2>',
     // SAZETAK JE POSTOJECI MODUL. Ocjena se iz njega ISKLJUCUJE, jer je u listu presude crta
     // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
@@ -362,7 +360,11 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '>', primaryButtonLabel(action), ' <span aria-hidden="true">&#8594;</span></button>',
     '<button type="button" class="cockpit-link" data-cockpit-action="open-findings">Pregledaj nalaze',
     ' <span aria-hidden="true">&#8595;</span></button>',
-    '</div></div>',
+    '</div>',
+    action?.kind === 'simulate-repair'
+      ? '<p class="cockpit-caveat">Nema potvrđenih automatskih popravaka. Pregledaj dostupne mogućnosti. Oznaka AUTO znači da je zahvat dostupan za odabir, ne da je već odabran ili primijenjen.</p>'
+      : '',
+    '</div>',
     // MARKS UZ PRSTEN: `verdictRingHtml` prima model i crta oznake UNUTAR `cockpit-ring-wrap`,
     // ne u listu presude. `cockpit-sheet` ostaje grid od TOCNO dva izravna djeteta (`__lead` i
     // `.cockpit-ring-wrap`); da marks stoji kao trece dijete, dvostupcani raspored bi se raspao.
@@ -407,13 +409,9 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
         // Prazan plan se ne nudi: gumb koji vodi na "nema zahvata" je losiji od izostanka gumba.
         planHtml: plan.prazan ? null : repairPlanHtml(plan, escapeHtml),
         plan: plan.prazan ? null : plan,
-        // NA USKOM EKRANU SE DOKUMENT NE CRTA. Raspored 58/42 ondje nema smisla, pa ga CSS
-        // sakrije, a tada je `clientWidth` nula. Bez ove provjere bi se faksimil svejedno
-        // renderirao: desetci odlomaka u A4 listovima za posao koji nitko nece vidjeti, i to
-        // bas na uredaju s najmanje memorije. Odluka stoji OVDJE, a ne u `mountDesk`, jer je
-        // ovo mjesto koje zna za raspored; `mountDesk` ostaje cist i mjerljiv bez preglednika.
-        mountDocument: (host) => (host.clientWidth > 0 ? stol.mountDocument(host) : Promise.resolve(null)),
-        onAction: (action) => options.onAction?.(action),
+        // mountDesk odgadja prikaz dok host ne postane vidljiv, ukljucujuci kasniji resize.
+        mountDocument: (host, signal) => stol.mountDocument(host, signal),
+        onAction: (action, opener) => opener ? options.onAction?.(action, opener) : options.onAction?.(action),
       });
     }
   }
@@ -421,8 +419,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // DNA salje iste akcije kao kartice nalaza, pa ljuska ne mora znati odakle je klik dosao.
   bindDocumentDna(mount, (action) => options.onAction?.(action));
 
-  mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.addEventListener('click', () => {
-    if (action) options.onAction?.(action);
+  mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.addEventListener('click', (event) => {
+    if (action) options.onAction?.(action, event.currentTarget as HTMLElement);
     else options.onAdvancedToggle?.(true);
   });
   mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.addEventListener('click', () => options.onAction?.({ kind: 'open-findings' }));
@@ -440,7 +438,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     const findingId = button.dataset.findingId;
     const kind = button.dataset.findingAction;
     if (!findingId) return;
-    if (kind === 'repair') options.onAction?.({ kind: 'repair', findingId });
+    if (kind === 'repair') options.onAction?.({ kind: 'repair', findingId }, button);
     else if (kind === 'preview') options.onAction?.({ kind: 'preview', findingId });
     else options.onAdvancedToggle?.(true);
   }));

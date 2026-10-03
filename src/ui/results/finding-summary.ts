@@ -135,6 +135,8 @@ export function findingSummaryHtml(
   // pribrojnik, a on to nije.
   const auto = s.automatski === null
     ? ''
+    : s.automatski === 0
+      ? '<p class="fsum-auto">Automatski popravci nalaza nisu potvrđeni. Dodatna usklađivanja pregledaj u planu.</p>'
     // "mogu popraviti" je PRVO LICE (ja, Lekta), pa se ne mijenja po broju: "1 mogu popraviti"
     // i "3 mogu popraviti" su oba ispravna. Vlasnikova skica je vec tako napisana.
     : `<p class="fsum-auto"><span>od toga</span> <b>${s.automatski}</b> mogu popraviti automatski${strop}</p>`;

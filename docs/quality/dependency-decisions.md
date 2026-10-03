@@ -35,3 +35,65 @@ mutacija `supply-chain/porast-nalaza-nevidljiv`. Bez toga bi grupa C mogla naras
 
 - PR #63: `npm audit fix --package-lock-only`, pun graf 23 -> 14 (grupa C zatvorena).
 - Grana `deps/netlify-cli-27`: `netlify-cli` 26.2 -> 27.5.2, pun graf 14 -> 7. Preostalih 7: `@netlify/dev`, `@netlify/images`, `ipx`, `sharp`, `netlify-cli` (bez objavljenog popravka i u 27.x; iznimka grupe A ostaje do 2026-10-09) te `vite`/`vitest` (grupa B, zaseban PR s vitest 5).
+
+## Azuriranje 2026-09-30
+
+PR #236 zatvorio je tada poznati dug punog grafa: Vitest/Vite i Netlify alatni lanac bili su
+nadogradjeni tako da je `npm audit --audit-level=high` izmjerio **0 high/critical**, a
+`data/security/npm-audit-ratchet.json` spusten je na 0 bez aktivnih iznimki. Time su ranije
+iznimke A i B zatvorene; tablice iznad ostaju povijesni zapis odluke iz 9. rujna, ne aktualno stanje.
+
+## Novi vanjski advisory 2026-10-02: node-forge / Netlify tooling
+
+Dana 2. listopada 2026. `security-audit` je poceo padati bez promjene dependency grafa.
+Isti cache kljuc izveden iz `package-lock.json`
+`646dced83ea0188d187d0458af58f85ebe0b3fe14d9a0d08ba83b8e04f7f57ac`
+bio je 30. rujna zelen s 0 high/critical, a 2. listopada npm audit prijavljuje sest high
+identiteta:
+
+- `@netlify/dev`
+- `@netlify/images`
+- `ipx`
+- `listhen`
+- `netlify-cli`
+- `node-forge`
+
+Svi vode na isti tranzitivni uzrok:
+`netlify-cli 27.10.2 -> @netlify/images 2.0.1 -> ipx 3.1.1 -> listhen 1.10.1 -> node-forge 1.4.0`.
+
+Izvorni nalaz je GHSA-86w9-cpqp-85rv / CVE-2026-85393, RSA PKCS#1 v1.5 signature-verification
+bypass u `node-forge`. Na dan ove odluke:
+
+- `netlify-cli 27.10.2` je aktualni npm latest;
+- `node-forge 1.4.0` je aktualni npm latest;
+- upstream popravak postoji kao otvoreni `digitalbazaar/forge#1152`, s testom i planiranim
+  CHANGELOG unosom za 1.4.1, ali nije spojen niti objavljen;
+- `npm audit fix --force` predlaze downgrade Netlify CLI-ja na 23.x, sto nije prihvatljiv
+  sigurnosni popravak bez zasebne kompatibilnosne validacije;
+- produkcijski graf `npm audit --omit=dev --audit-level=high` ostaje **0**.
+
+### Reachability i mitigacija
+
+`node-forge` ulazi kroz `listhen`, koji ga koristi u razvojnom HTTP listeneru za HTTPS /
+self-signed certificate funkcionalnost. Kanonski Lektin local-repair release put koristi
+Netlify naredbe `status`, `build` i `deploy`; ne koristi `netlify dev --https`.
+Do zakrpe je zato zabranjeno uvoditi ili koristiti Netlify lokalni HTTPS dev server u
+release procesu.
+
+Ovo nije tvrdnja da je ranjivost uklonjena. To je vremenski ograniceno prihvacanje dev-tool
+rizika uz cist produkcijski graf.
+
+### Privremena ratchet odluka
+
+| polje | vrijednost |
+| --- | --- |
+| vlasnik | Daniel Risavi |
+| advisory | GHSA-86w9-cpqp-85rv / CVE-2026-85393 |
+| zahvaceni ratchet identiteti | `@netlify/dev`, `@netlify/images`, `ipx`, `listhen`, `netlify-cli`, `node-forge` |
+| produkcijski graf | 0 high/critical, mora ostati blokirajuci |
+| sljedeci pregled | 2026-10-05 |
+| istek | 2026-10-09 |
+| kriterij uklanjanja | objavljen `node-forge >=1.4.1` ili Netlify izdanje koje vise ne vuce ranjivi lanac; zatim puni audit 0 i ratchet natrag na 0 |
+
+Ako upstream zakrpa izadje prije 9. listopada, iznimka se uklanja odmah; rok nije razlog za cekanje.
+

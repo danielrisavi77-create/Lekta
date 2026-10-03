@@ -36,8 +36,6 @@ export function renderProfileCard(data: ProfileCardData, escapeHtml: Escape): st
   const redak = (oznaka: string, vrijednost: string | null | undefined): string => (vrijednost
     ? `<div class="ap-red"><span>${escapeHtml(oznaka)}</span><b>${escapeHtml(String(vrijednost))}</b></div>`
     : '');
-  const potvrdi = data.nesiguran ? 'btn-secondary' : 'btn-primary';
-  const promijeni = data.nesiguran ? 'btn-primary' : 'btn-ghost';
   return `<div class="ap-kartica${data.nesiguran ? ' ap-nesigurno' : ''}">`
     + `<div class="ap-head"><span class="profile-status ${escapeHtml(data.statusKey)}">`
     + `${data.statusKey === 'verified' ? '✓' : '●'} ${escapeHtml(data.statusLabel)}</span></div>`
@@ -56,8 +54,7 @@ export function renderProfileCard(data: ProfileCardData, escapeHtml: Escape): st
         + ' Provjeri ga prije provjere, inače rezultat neće odgovarati tvojoj ustanovi.</p>'
       : '')
     + '<div class="ap-akcije">'
-    + `<button class="btn ${potvrdi} btn-sm" type="button" data-confirm-profile>Potvrdi i provjeri →</button>`
-    + `<button class="btn ${promijeni} btn-sm" type="button" data-change-profile>Promijeni</button>`
+    + '<button class="btn btn-ghost btn-sm" type="button" data-change-profile>Promijeni profil</button>'
     + '</div></div>';
 }
 
