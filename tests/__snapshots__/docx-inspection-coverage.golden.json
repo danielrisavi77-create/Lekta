@@ -1,0 +1,289 @@
+{
+  "fer-diplomski-prazni-odlomci.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "fer-diplomski-puna-struktura.docx": {
+    "version": 1,
+    "status": "partial",
+    "items": [
+      {
+        "kind": "content-control",
+        "count": 1
+      }
+    ],
+    "analyzerSkips": [
+      {
+        "analyzer": "consistency",
+        "count": 1
+      }
+    ],
+    "summary": {
+      "limitedKinds": 1,
+      "limitedOccurrences": 1,
+      "analyzerSkips": 1
+    }
+  },
+  "fer-diplomski-uskladjen.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "ffzg-filozofija-diplomski.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "fpzg-novinarstvo-bibliografija.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "grf-diplomski-neuskladjen.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "lo-fpzg-zavrsni-neuskladjen.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "lo-fpzg-zavrsni-uskladjen.docx": {
+    "version": 1,
+    "status": "partial",
+    "items": [
+      {
+        "kind": "content-control",
+        "count": 1
+      }
+    ],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 1,
+      "limitedOccurrences": 1,
+      "analyzerSkips": 0
+    }
+  },
+  "mef-doktorski-disertacija.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "pmf-matematika-uskladjen.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "pmf-matematika-zasticeni-odlomci.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "pravo-integrirani-fusnote.docx": {
+    "version": 1,
+    "status": "partial",
+    "items": [],
+    "analyzerSkips": [
+      {
+        "analyzer": "legal-footnotes",
+        "count": 1
+      }
+    ],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 1
+    }
+  },
+  "pravo-socijalni-rad-fusnote.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "synthetic-formula-omath.docx": {
+    "version": 1,
+    "status": "partial",
+    "items": [
+      {
+        "kind": "math",
+        "count": 1
+      }
+    ],
+    "analyzerSkips": [
+      {
+        "analyzer": "typography",
+        "count": 1
+      },
+      {
+        "analyzer": "consistency",
+        "count": 1
+      },
+      {
+        "analyzer": "link-doi",
+        "count": 1
+      }
+    ],
+    "summary": {
+      "limitedKinds": 1,
+      "limitedOccurrences": 1,
+      "analyzerSkips": 3
+    }
+  },
+  "synthetic-fpzg-zavrsni-verzija-2.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "synthetic-hrvatski-naslov1-heading.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "synthetic-libreoffice-standard-default.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "synthetic-mentor-komentari.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "ttf-diplomski-arial.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "typografija-i-literatura.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "word-veliki-neuredan.docx": {
+    "version": 1,
+    "status": "partial",
+    "items": [
+      {
+        "kind": "tracked-change",
+        "count": 2
+      }
+    ],
+    "analyzerSkips": [
+      {
+        "analyzer": "typography",
+        "count": 1
+      },
+      {
+        "analyzer": "consistency",
+        "count": 2
+      },
+      {
+        "analyzer": "link-doi",
+        "count": 1
+      }
+    ],
+    "summary": {
+      "limitedKinds": 1,
+      "limitedOccurrences": 2,
+      "analyzerSkips": 4
+    }
+  }
+}
