@@ -63,6 +63,22 @@ function result(overrides: Record<string, unknown> = {}) {
 }
 
 describe('Results Cockpit V1', () => {
+  it('keeps one workspace H1 when analysis results are rendered', () => {
+    const page = document.createElement('div');
+    page.innerHTML = readFileSync(join(cssRoot, 'rad/index.html'), 'utf8');
+    expect(page.querySelectorAll('h1')).toHaveLength(1);
+    const mount = page.querySelector<HTMLElement>('#resultCockpit')!;
+    renderResultsCockpit(mount, buildVisualResultModel(result()), { repairAvailable: true });
+    expect(page.querySelectorAll('h1')).toHaveLength(1);
+    expect(mount.querySelector('#cockpitVerdictTitle')?.tagName).toBe('H2');
+  });
+
+  it('places the upload section one heading level below the workspace title', () => {
+    const page = document.createElement('div');
+    page.innerHTML = readFileSync(join(cssRoot, 'rad/index.html'), 'utf8');
+    expect(page.querySelector('#wordUploadTitle')?.tagName).toBe('H2');
+  });
+
   it('renders one clear status, one technical score and at most three priority findings', () => {
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result());
@@ -114,7 +130,8 @@ describe('Results Cockpit V1', () => {
     // `findings.document`), jer panel bez mete ne moze predodabrati redak; vidi `primaryAction`.
     const meta = model.findings.document.find((finding) => finding.capabilities.repair);
     expect(meta?.id).toBeTruthy();
-    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
+    // A pointer click need not focus a button (WebKit); the actual opener must travel with the action.
+    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id }, mount.querySelector('[data-cockpit-primary]'));
   });
 
   it('lets the user open a finding location and the advanced layer', () => {
@@ -524,7 +541,7 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(gumb?.hasAttribute('disabled')).toBe(false);
   });
 
-  it('bez ijedne automatske stavke ulaz je simulacija, jer plan popravka nad praznim skupom laze', () => {
+  it('bez automatskih nalaza otvara pregled mogucnosti bez obecanja simulacije', () => {
     const { mount } = renderaj({
       details: {
         ruleAuthority: 'official-source',
@@ -534,8 +551,17 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
 
     expect(gumb?.dataset.cockpitAction).toBe('simulate-repair');
-    expect(gumb?.textContent).toContain('Simuliraj popravak');
+    expect(gumb?.textContent).toContain('Pregledaj mogućnosti popravka');
+    expect(mount.textContent).toContain('Nema potvrđenih automatskih popravaka. Pregledaj dostupne mogućnosti.');
     expect(gumb?.dataset.testid).toBe('repair-entry');
+  });
+
+  it('bez potvrdenih automatskih nalaza ne obecava visu ocjenu automatike', () => {
+    const { mount } = renderaj({ details: { triage: { counts: { auto: 0 }, findings: [] } } }, { repairOutlook: OUTLOOK });
+    const summary = mount.querySelector('.fsum-auto')?.textContent ?? '';
+    expect(summary).toContain('Automatski popravci nalaza nisu potvrđeni');
+    expect(summary).not.toContain('automatika može doseći');
+    expect(mount.textContent).toContain('Oznaka AUTO');
   });
 
   it('bez dostupnog popravka nema oznake ulaza, jer bi tvrdila ponudu koje nema', () => {
@@ -625,7 +651,7 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
       expect(gumb?.dataset.findingId).toBe(meta?.id);
 
       gumb?.click();
-      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id }, mount.querySelector('[data-cockpit-primary]'));
     });
 
     it('MUTACIJA: bez ijednog popravljivog nalaza opci ulaz ostaje, ali mete nema', () => {
@@ -638,7 +664,7 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
       expect(gumbIz(mount)?.dataset.findingId).toBeUndefined();
 
       gumbIz(mount)?.click();
-      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' });
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' }, mount.querySelector('[data-cockpit-primary]'));
     });
   });
 

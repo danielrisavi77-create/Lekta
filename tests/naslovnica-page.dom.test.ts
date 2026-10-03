@@ -61,6 +61,18 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
     await ensureTemplatesHeavy();
   });
 
+  it('naslijedena ustanova bez autora i naslova nije gotova naslovnica', async () => {
+    setVal('#tp-faculty', 'Fakultet političkih znanosti');
+    setVal('#tp-author', ' ');
+    setVal('#tp-title', ' ');
+    await vi.waitFor(() => expect($('#tp-success-cta').classList.contains('is-visible')).toBe(false));
+    expect($('#tp-sheet').getAttribute('aria-label')).toBe('Prikaz predloška');
+    setVal('#tp-author', 'Ana Primjer');
+    await vi.waitFor(() => expect($('#tp-copy').textContent).toBe('Kopiraj nacrt'));
+    expect($('#tp-success-cta').classList.contains('is-visible')).toBe(false);
+    setVal('#tp-author', '');
+  });
+
   it('kaskada se popuni realnim katalogom', () => {
     expect($('#tp-institution').querySelector('option[value="unizg"]')).toBeTruthy();
   });
@@ -74,7 +86,9 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
     expect($('#tp-study').value).toBe('Gluma');
   });
 
-  it('B4: success-cta se pokaze uz gotovu naslovnicu i nosi ?unit= odabranog fakulteta', () => {
+  it('B4: success-cta ceka stvarno popunjenu naslovnicu i nosi ?unit=', () => {
+    expect($('#tp-success-cta').classList.contains('is-visible')).toBe(false);
+    for (const [id, value] of Object.entries({author: 'Ana Primjer', title: 'Sintetički naslov', mentor: 'Ivo Mentor', place: 'Zagreb', year: '2026', course: 'Primjer', studentid: '0000000000'})) setVal('#tp-' + id, value);
     expect($('#tp-success-cta').classList.contains('is-visible')).toBe(true);
     expect($('#tp-success-cta-link').getAttribute('href')).toBe('/?unit=adu');
   });

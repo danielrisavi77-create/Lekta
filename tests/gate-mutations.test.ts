@@ -7288,7 +7288,10 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
     expect(MUTATIONS.length).toBeGreaterThanOrEqual(40);
-  });
+  // Zbirni prolaz ponovno izvrsava stotine mutacija. Vitest 4 provjerava i
+  // sinkroni timeout; izmjereno 16 s bez opterecenja, 30 s uz diskovni rad.
+  // Pojedinacne mutacije zadrzavaju zadani rok i sve negativne kontrole.
+  }, 60_000);
 
   /**
    * Anti-regresija na najgori nacin da ovaj test oslabi: da sve mutacije vjezbaju JEDNU os. Prva
@@ -9127,6 +9130,16 @@ describe('lean workflow promptovi: vrijeme, omot zadatka, rad bez nadzora (odluk
   it('mutant: proracun iz sata (Date.now) umjesto iz args se hvata', () => {
     const m = mut('const timeBudgetSeconds = (args', 'const nowMs = Date.now()\nconst timeBudgetSeconds = (args');
     expect(leanPromptProblems(m)).toEqual(['skripta koristi sat ili slucajnost (Date/Math.random)']);
+  });
+
+  it('mutant: TIME_LINE bez upute o proteklom vremenu se hvata (E1)', () => {
+    const m = mut('Na pocetku svakog koraka izracunaj proteklo vrijeme', 'Pazi na vrijeme');
+    expect(leanPromptProblems(m)).toEqual(['TIME_LINE nema uputu o proteklom vremenu ("Na pocetku svakog koraka izracunaj proteklo vrijeme")']);
+  });
+
+  it('mutant: uputa o proteklom vremenu bez uvjeta poznatog pocetka se hvata (E1)', () => {
+    const m = mut('(startExpr\n', '(true\n');
+    expect(leanPromptProblems(m)).toEqual(['uputa o proteklom vremenu nije uvjetovana poznatim pocetkom']);
   });
 });
 

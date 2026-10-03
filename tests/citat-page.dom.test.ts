@@ -57,6 +57,21 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     await ensureFacultySpecsLoaded();
   });
 
+  it('prazan FPZG unos nije uspjeh niti kopirljiva interpunkcija; djelomicni je nacrt', () => {
+    fireChange('#f-faculty', 'fpzg');
+    for (const key of FIELDS) setVal('#f-' + key, ' ');
+    expect($('#copyBtn').disabled).toBe(true);
+    expect($('#c-add-to-bulk').disabled).toBe(true);
+    expect($('#c-success-cta').classList.contains('is-visible')).toBe(false);
+    setVal('#f-title', 'Sintetički naslov');
+    expect($('#copyBtn').disabled).toBe(false);
+    expect($('#c-success-cta').classList.contains('is-visible')).toBe(false);
+    expect($('#out-hint').textContent).toContain('Nacrt citata');
+    setVal('#f-title', '');
+    expect($('#copyBtn').disabled).toBe(true);
+    fireChange('#f-faculty', '');
+  });
+
   it('izbornik fakulteta se napuni (grupe + fakulteti)', () => {
     const fac = $('#f-faculty');
     expect(fac.querySelectorAll('optgroup').length).toBeGreaterThan(10);

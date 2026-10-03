@@ -32,11 +32,8 @@ function motionReduced(win: Window): boolean {
  */
 export function enterRepairPhase(opener: HTMLElement | null = null, doc: Document = document): boolean {
   // OKIDAC SE CITA PRIJE PRIJELAZA, i to iz `activeElement` kad ga pozivatelj ne prosljedjuje.
-  // Jedini produkcijski pozivatelj (`scrollToRepairPanel` u `app.ts`) salje `null`, pa je do
-  // 2026-09-13 (korak D) `okidac` UVIJEK bio prazan: povratak na nalaz nije imao kamo vratiti fokus
-  // i korisnik tipkovnice je padao na `body`, dok je jedinicni test to isto jamstvo dokazivao samo
-  // uz izricito proslijedjen gumb. Izmjereno u pregledniku (`workspace-a11y.spec.ts`): poslije
-  // Enter na "Natrag na nalaz" `document.activeElement` je bio `BODY`.
+  // Pointer ulazi salju stvarni gumb: WebKit klik ne mora promijeniti activeElement.
+  // Fallback ostaje za programske/tipkovnicke ulaze bez izricitog okidaca.
   // Citanje ide PRIJE `posalji`, jer prijelaz sakrije nalaz (`display:none`), a element koji nestane
   // iz prikaza istog trena prestaje biti aktivan.
   const aktivan = doc.activeElement as HTMLElement | null;
