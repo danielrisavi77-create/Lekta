@@ -1,19 +1,31 @@
 {
   "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI osim kad NOVI VANJSKI advisory pogodi nepromijenjeni alatni graf bez dostupnog patcha. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
-  "measuredAt": "2026-10-02",
-  "fullGraphHighCritical": 6,
+  "measuredAt": "2026-10-03",
+  "fullGraphHighCritical": 15,
   "fullGraphHighCriticalPackages": [
+    "@netlify/build",
     "@netlify/dev",
+    "@netlify/functions-dev",
+    "@netlify/functions-utils",
+    "@netlify/git-utils",
     "@netlify/images",
+    "@netlify/zip-it-and-ship-it",
+    "braces",
+    "fast-glob",
+    "http-proxy-middleware",
     "ipx",
     "listhen",
+    "micromatch",
     "netlify-cli",
     "node-forge"
   ],
-  "changeNote": "2026-10-02: novi GHSA-86w9-cpqp-85rv/CVE-2026-85393 pogodio je nepromijenjeni Netlify CLI dev-lanac netlify-cli -> @netlify/images -> ipx -> listhen -> node-forge. Isti package-lock cache key 646dced83ea0188d187d0458af58f85ebe0b3fe14d9a0d08ba83b8e04f7f57ac imao je 0 high/critical 2026-09-30, a 2026-10-02 npm audit prijavljuje 6 high identiteta zbog novog advisoryja. netlify-cli 27.10.2 i node-forge 1.4.0 su aktualni npm latest; upstream fix za node-forge je jos otvoren u digitalbazaar/forge#1152 i cilja 1.4.1. Produkcijski graf ostaje 0. Dodana je vremenski ogranicena iznimka do 2026-10-09, bez npm audit fix --force i bez downgradea Netlify CLI-ja.",
+  "changeNote": "2026-10-03: drugi novi vanjski advisory GHSA-vfj7-8cjw-p6xm (braces <=3.0.3, DoS iscrpljenjem stoga kroz duboko ugnijezdene uzorke) pogodio je isti nepromijenjeni Netlify CLI dev lanac: netlify-cli -> @netlify/build, @netlify/dev -> @netlify/functions-dev, @netlify/functions-utils, @netlify/zip-it-and-ship-it, @netlify/git-utils, http-proxy-middleware -> fast-glob, micromatch -> braces. package-lock.json nije mijenjan od 2026-09-30 (#236). Parsiran `npm audit --json` nad origin/master 7abdffeb daje 15 high identiteta: 6 od GHSA-86w9-cpqp-85rv (node-forge) i 9 novih od GHSA-vfj7-8cjw-p6xm (braces). netlify-cli 27.10.2, braces 3.0.3 i node-forge 1.4.0 su aktualni npm latest, pa nadogradnja ne uklanja nijedan nalaz. Produkcijski graf (`--omit=dev`) ostaje 0. Dodana je druga vremenski ogranicena iznimka do 2026-10-17 za tocno 9 novih identiteta; node-forge iznimka ostaje s istim rokom 2026-10-09. Bez npm audit fix --force. 2026-10-02: novi GHSA-86w9-cpqp-85rv/CVE-2026-85393 pogodio je nepromijenjeni Netlify CLI dev-lanac netlify-cli -> @netlify/images -> ipx -> listhen -> node-forge. Isti package-lock cache key 646dced83ea0188d187d0458af58f85ebe0b3fe14d9a0d08ba83b8e04f7f57ac imao je 0 high/critical 2026-09-30, a 2026-10-02 npm audit prijavljuje 6 high identiteta zbog novog advisoryja. netlify-cli 27.10.2 i node-forge 1.4.0 su aktualni npm latest; upstream fix za node-forge je jos otvoren u digitalbazaar/forge#1152 i cilja 1.4.1. Produkcijski graf ostaje 0. Dodana je vremenski ogranicena iznimka do 2026-10-09, bez npm audit fix --force i bez downgradea Netlify CLI-ja.",
   "exceptions": [
     {
       "id": "netlify-node-forge-cve-2026-85393",
+      "advisories": [
+        "GHSA-86w9-cpqp-85rv"
+      ],
       "packages": [
         "@netlify/dev",
         "@netlify/images",
@@ -26,11 +38,32 @@
       "mitigation": "Samo dev/tooling lanac; `npm audit --omit=dev --audit-level=high` mora ostati 0. Kanonski Lekta release koristi `netlify status`, `netlify build` i `netlify deploy`, ne `netlify dev --https`, gdje listhen koristi node-forge za self-signed cert podrsku. Ne pokretati Netlify lokalni HTTPS dev server do zakrpe. Pratiti digitalbazaar/forge#1152 i odmah ukloniti iznimku nakon objave node-forge 1.4.1 ili Netlify izdanja koje uklanja lanac.",
       "nextReviewOn": "2026-10-05",
       "expiresOn": "2026-10-09"
+    },
+    {
+      "id": "netlify-braces-ghsa-vfj7-8cjw-p6xm",
+      "advisories": [
+        "GHSA-vfj7-8cjw-p6xm"
+      ],
+      "packages": [
+        "@netlify/build",
+        "@netlify/functions-dev",
+        "@netlify/functions-utils",
+        "@netlify/git-utils",
+        "@netlify/zip-it-and-ship-it",
+        "braces",
+        "fast-glob",
+        "http-proxy-middleware",
+        "micromatch"
+      ],
+      "owner": "Daniel Risavi",
+      "mitigation": "Samo dev/tooling lanac pod netlify-cli (devDependency): ne ulazi u Vite bundle ni u Edge Functions, a `npm audit --omit=dev --audit-level=high` ostaje tvrdi gate i mora ostati 0. braces je u lockfileu dosegnut samo kroz micromatch, koji vuku fast-glob, @netlify/git-utils i http-proxy-middleware, svi pod netlify-cli. braces 3.0.3 je aktualni npm latest i nema zakrpe. netlify-cli i @netlify/dev pogodjeni su i ovim advisoryjem, ali ih pokriva iznimka netlify-node-forge-cve-2026-85393 jer validator dopusta tocno jednu iznimku po paketu; kad se ta iznimka ukloni, premjestiti ih ovamo ili zatvoriti obje. Odmah ukloniti nakon objave zakrpanog braces ili Netlify izdanja koje uklanja lanac.",
+      "nextReviewOn": "2026-10-10",
+      "expiresOn": "2026-10-17"
     }
   ],
   "priorMeasurement": {
-    "measuredAt": "2026-09-30",
-    "fullGraphHighCritical": 0,
-    "note": "PR #236: pun graf izmjeren na 0; iznimke uklonjene i strop spusten na 0 prije pojave novog vanjskog advisoryja."
+    "measuredAt": "2026-10-02",
+    "fullGraphHighCritical": 6,
+    "note": "PR #240: pun graf izmjeren na 6 (samo lanac GHSA-86w9-cpqp-85rv) uz iznimku do 2026-10-09; prije toga 2026-09-30 (#236) 0 bez iznimki."
   }
 }
