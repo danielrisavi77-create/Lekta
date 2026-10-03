@@ -9,7 +9,7 @@
 // Dogadjaji su namjerno malobrojni i bez payloada (path iz location.pathname vec razlikuje
 // alat): tool_view (ucitavanje stranice), tool_copy/tool_download (bindCopyButton/
 // bindDownloadButton iz tool-ui.ts, uspjeh), tool_to_analyzer_click (klik na bilo koju
-// #analyzer poveznicu, delegirano).
+// oznacenu CTA ili staru #analyzer poveznicu, delegirano).
 
 import { DEPLOYMENT_CONFIG } from '../config/deployment';
 
@@ -98,11 +98,11 @@ function renderBanner(): void {
   ensureBanner()?.classList.add('is-visible');
 }
 
-// Delegirano na document: hvata sve #analyzer poveznice (nav, mobilni nav, dnevni CTA)
+// Delegirano: oznaceni CTA-ovi i stare #analyzer poveznice (nav, mobilni nav, dnevni CTA)
 // jednim listenerom, bez obzira koliko ih stranica ima ili kako se ucitava DOM.
 function bindAnalyzerCtaTracking(): void {
   document.addEventListener('click', (e: any) => {
-    const a = e.target?.closest?.('a[href*="#analyzer"]');
+    const a = e.target?.closest?.('a[href*="#analyzer"], a[data-analyzer-cta]');
     if (a) void trackToolEvent('tool_to_analyzer_click');
   });
 }

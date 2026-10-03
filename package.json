@@ -137,32 +137,42 @@
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
     "branch-ci": "node scripts/master-ci-status.mjs --current",
     "agents": "node scripts/agents/cli.mjs",
+    "agents:scope-audit": "node scripts/agents/scope-audit.mjs",
+    "agents:lease": "node scripts/agents/control-plane-cli.mjs",
+    "agents:lease-edge-check": "deno check --no-lock --config ops/agent-control-plane/function/deno.json ops/agent-control-plane/function/index.ts",
+    "agents:lease-smoke": "node ops/agent-control-plane/smoke.mjs",
     "agents:usage-report": "node scripts/agents/usage-report.mjs",
+    "agents:usage-daily": "node scripts/agents/usage-daily.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
     "repair:runner:e2e": "vite-node scripts/run-repair-runner-e2e.mts",
     "release:repair:preflight": "tsx scripts/run-local-repair-release.mts",
     "release:repair:deploy": "tsx scripts/run-local-repair-release.mts --execute"
   },
   "overrides": {
-    "nanoid": "^3.3.18"
+    "nanoid": "^3.3.18",
+    "ipx": {
+      "sharp": "^0.35.5"
+    }
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@babel/parser": "^7.29.9",
+    "@electric-sql/pglite": "0.5.8",
     "@playwright/test": "^1.63.0",
+    "@types/node": "^20.19.43",
     "dictionary-hr": "^2.0.0",
     "esbuild": "^0.28.2",
     "happy-dom": "^20.14.5",
-    "netlify-cli": "^27.5.2",
+    "jscpd": "5.3.2",
+    "knip": "6.38.0",
+    "netlify-cli": "^27.10.2",
     "oxlint": "^1.85.0",
     "supabase": "^2.109.1",
+    "tsx": "4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
-    "vitest": "^2.1.4",
-    "@babel/parser": "^7.29.9",
-    "@electric-sql/pglite": "0.5.8",
-    "tsx": "4.23.15",
-    "knip": "6.38.0",
-    "jscpd": "5.3.2"
+    "vite-node": "^3.2.4",
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.3.0",
@@ -176,5 +186,16 @@
     "lucide": "^1.48.0",
     "motion": "^12.42.2",
     "open-props": "^1.7.23"
+  },
+  "knip": {
+    "entry": [
+      "{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "ops/agent-control-plane/function/index.ts"
+    ],
+    "ignoreDependencies": [
+      "jsr",
+      "postgres"
+    ]
   }
 }

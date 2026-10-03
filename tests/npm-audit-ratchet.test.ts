@@ -113,11 +113,28 @@ describe('npm audit ratchet: commitani zapis', () => {
     expect(ratchet.measuredAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(ratchet.changeNote.length).toBeGreaterThan(40);
     expect(ratchet.fullGraphHighCriticalPackages).toHaveLength(ratchet.fullGraphHighCritical);
-    expect(validateRatchet(ratchet, { today: '2026-09-21' })).toEqual([]);
+    expect(validateRatchet(ratchet, { today: '2026-10-02' })).toEqual([]);
   });
 
   it('prethodno mjerenje je zapisano da se promjena ne moze procitati kao tiha', () => {
-    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(7);
-    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-09');
+    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(0);
+    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-30');
+  });
+
+  it('nova tooling iznimka je vremenski ogranicena i pokriva tocno aktivne identitete', () => {
+    expect(ratchet.fullGraphHighCriticalPackages).toEqual([
+      '@netlify/dev',
+      '@netlify/images',
+      'ipx',
+      'listhen',
+      'netlify-cli',
+      'node-forge',
+    ]);
+    expect(ratchet.exceptions).toHaveLength(1);
+    expect(ratchet.exceptions[0]).toMatchObject({
+      id: 'netlify-node-forge-cve-2026-85393',
+      nextReviewOn: '2026-10-05',
+      expiresOn: '2026-10-09',
+    });
   });
 });

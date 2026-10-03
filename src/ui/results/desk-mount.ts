@@ -21,18 +21,19 @@ import type { VisualFindingModel } from './visual-result-model';
 /** Ono sto renderer dokumenta vrati; `renderFacsimile` ovo zadovoljava strukturno. */
 export interface DeskDocument {
   readonly flagTargets: ReadonlyMap<number, HTMLElement>;
+  readonly dispose?: () => void;
 }
 
 export interface DeskMountOptions {
   readonly items: readonly DeskItem<VisualFindingModel>[];
   readonly repairAvailable: boolean;
   readonly esc: (v: string) => string;
-  readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+  readonly mountDocument: (host: HTMLElement, signal: AbortSignal) => Promise<DeskDocument | null>;
   /** HTML plana ispravaka; bez njega stol nema drugi nacin rada i gumb se ne nudi. */
   readonly planHtml?: string | null;
   /** Model plana (T09); bez njega promjena odabira ne moze ponovno iscrtati podnozje. */
   plan?: RepairPlan | null;
-  readonly onAction?: (action: ResultsCockpitAction) => void;
+  readonly onAction?: (action: ResultsCockpitAction, opener?: HTMLElement) => void;
   /** Testovi ubacuju vlastito pomicanje; produkcija koristi `scrollIntoView`. */
   readonly scrollTo?: (el: HTMLElement) => void;
   /**
@@ -91,6 +92,10 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
   let nacin: 'nalazi' | 'plan' = 'nalazi';
   let mete: ReadonlyMap<number, HTMLElement> | null = null;
   let odbacen = false;
+  const controller = new AbortController();
+  let odveziDokument: (() => void) | undefined;
+  let prikaz: 'waiting' | 'loading' | 'ready' | 'error' = 'waiting';
+  const odveziMete: Array<() => void> = [];
 
   section.innerHTML = deskHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc, o.items, !!o.planHtml);
 
@@ -131,6 +136,7 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
   const naKlik = (e: Event): void => {
     const cilj = e.target as HTMLElement | null;
     if (!cilj || typeof cilj.closest !== 'function') return;
+    if (cilj.closest('[data-desk-retry]')) { montirajVidljivo(true); return; }
     const kamo = cilj.closest<HTMLElement>('[data-desk-go]');
     if (kamo) {
       // Prazan `data-desk-go` je ugasen gumb na kraju popisa; ne omata se na drugi kraj.
@@ -144,7 +150,7 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       // T09: plan NE izvodi popravak sam (motor, privola i naplata zive u panelu), ali ODABIR putuje s radnjom:
       // ljuska ga preda kontroleru toka (`RepairPanelHandle.applySelection`), pa je odabir u planu i prije slanja
       // ISTI. Do sada se odabir iz plana odbacivao i panel je sam birao "prekrseno".
-      o.onAction?.({ kind: 'repair-safe', ruleIds: planOdabir() });
+      o.onAction?.({ kind: 'repair-safe', ruleIds: planOdabir() }, cilj.closest<HTMLElement>('[data-repair-plan-go]') ?? undefined);
       return;
     }
     if (cilj.closest('[data-finding-ignore]')) {
@@ -156,7 +162,8 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       return;
     }
     const radnja = radnjaZaKlik(cilj);
-    if (radnja) o.onAction?.(radnja);
+    if (radnja?.kind === 'repair') o.onAction?.(radnja, cilj.closest<HTMLElement>('[data-finding-action]') ?? undefined);
+    else if (radnja) o.onAction?.(radnja);
   };
 
   section.addEventListener('click', naKlik);
@@ -179,31 +186,57 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
   section.addEventListener('change', naPromjenu);
 
   const domacin = section.querySelector<HTMLElement>('[data-desk-doc]');
-  if (domacin) {
-    void o.mountDocument(domacin).then((dokument) => {
+  const greskaPrikaza = (): void => {
+    if (odbacen || !domacin) return;
+    prikaz = 'error';
+    domacin.innerHTML = '<p role="status">Prikaz dokumenta nije dostupan.</p>'
+      + '<button type="button" class="btn btn-secondary" data-desk-retry>Pokušaj ponovno</button>';
+  };
+  const montirajVidljivo = (ponovi = false): void => {
+    if (odbacen || !domacin || domacin.clientWidth <= 0 || prikaz === 'loading' || prikaz === 'ready' || (prikaz === 'error' && !ponovi)) return;
+    prikaz = 'loading';
+    domacin.innerHTML = '<p class="desk-doc__cekanje" role="status">Pripremam prikaz dokumenta…</p>';
+    let ucitavanje: Promise<DeskDocument | null>;
+    try { ucitavanje = o.mountDocument(domacin, controller.signal); } catch { greskaPrikaza(); return; }
+    void ucitavanje.then((dokument) => {
       // Rezultat je mogao biti zamijenjen dok je tezak modul stizao; tada se nista ne dira.
-      if (odbacen || !dokument) return;
+      if (odbacen) { dokument?.dispose?.(); return; }
+      if (!dokument) { greskaPrikaza(); return; }
+      prikaz = 'ready';
+      odveziDokument = dokument.dispose;
+      promatrac?.disconnect();
+      section.ownerDocument.defaultView?.removeEventListener('resize', naSirinu);
       mete = dokument.flagTargets;
       mete.forEach((el, flagIndex) => {
-        el.addEventListener('click', () => {
+        const klik = (): void => {
           // OBRNUT SMJER: mjesto aktivira nalaz. Po `flagIndex`, jer zastavica bez nalaza (npr.
           // registar duge recenice) ne smije nista pomaknuti.
           const i = o.items.findIndex((it) => it.flagIndex === flagIndex);
           if (i >= 0) goTo(i);
-        });
+        };
+        el.addEventListener('click', klik);
+        odveziMete.push(() => el.removeEventListener('click', klik));
       });
       oznaciMjesto();
-    }).catch(() => {
-      // Dokument je POMOC, ne uvjet: nalazi i navigacija rade i bez njega. Stol bez dokumenta je
-      // losiji stol, ali prazna desna strana bi bila kvar.
-    });
-  }
+    }).catch(greskaPrikaza);
+  };
+  const naSirinu = (): void => montirajVidljivo();
+  const promatrac = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(naSirinu);
+  if (domacin) promatrac?.observe(domacin);
+  if (!promatrac) section.ownerDocument.defaultView?.addEventListener('resize', naSirinu);
+  montirajVidljivo();
 
   return {
     get index() { return index; },
     goTo,
     dispose() {
       odbacen = true;
+      controller.abort();
+      odveziDokument?.();
+      odveziDokument = undefined;
+      promatrac?.disconnect();
+      section.ownerDocument.defaultView?.removeEventListener('resize', naSirinu);
+      odveziMete.forEach((odvezi) => odvezi());
       section.removeEventListener('click', naKlik);
       section.removeEventListener('change', naPromjenu);
     },

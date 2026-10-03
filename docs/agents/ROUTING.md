@@ -24,8 +24,11 @@ relayed poruke); vidi odjeljak "Hookovi".
 Sesija koja preuzima zadatak upisuje svoje ime u polje `owner` tog zadatka u
 `docs/agents/tasks.json` (npr. `"owner": "lekta-32"`). Polje je neobvezno: stari zadaci bez
 njega ostaju valjani. Zauzimanje sprjecava da dvije sesije rade isti zadatak istovremeno u
-dijeljenom stablu; svaka sesija svejedno radi u vlastitom izoliranom worktreeu, `owner` je
-samo koordinacijska oznaka u redu zadataka, ne brava nad datotekama.
+dijeljenom stablu; svaka sesija svejedno radi u vlastitom izoliranom worktreeu. `owner` sam
+po sebi nije brava nad datotekama. Za implementatorske zadatke postupno se uvodi `workScope`
+(`read` / `write` / `forbidden`) i PreToolUse gard iz `docs/agents/PATH_SCOPE_V1.md`.
+Aktivni write/write presjek odbija `validateQueue`, a `npm run agents:scope-audit` mjeri
+legacy zadatke bez scopea.
 
 ## Uloge
 
@@ -330,6 +333,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 | SessionStart | `scripts/agents/session-bootstrap.mjs` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". |
 | PreToolUse (Bash, PowerShell) | `scripts/agents/tool-guard.mjs` | Postojeci gard opasnih git i brisanja naredbi. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
+| PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
 | Stop | `scripts/hooks/implementer-stop.mjs` | Implementatorska sesija ne zavrsava dok checklist ima otvorenih stavki. |
 
 **CPU disciplina (A1).** Prepoznaje se po poziciji naredbe, ne po podnizu, pa `grep vitest` ili
@@ -343,7 +347,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 **Implementatorska sesija (A3).** Oznacava se dvjema varijablama okoline pri pokretanju sesije:
 
 ```bash
-LEKTA_ROLE=implementer LEKTA_CHECKLIST=/put/do/T99-checklist.md claude
+LEKTA_ROLE=implementer LEKTA_TASK_ID=T99 LEKTA_SCOPE_ENFORCED=1 LEKTA_CHECKLIST=/put/do/T99-checklist.md claude
 ```
 
 Checklist je markdown sa stavkama `- [ ]` i `- [x]`. Dok ima otvorenih stavki, hook na zavrsetku
@@ -380,6 +384,10 @@ kostao ovaj PR", ne samo "koliko je potroseno ovaj tjedan". Do tada koordinator 
 `npm run agents:usage-report -- --since 7d` i, po potrebi, predlaze promjenu `routing` unosa u
 `config/agent-routing.json` (npr. spustanje efforta ako se pokazalo da nizi dovoljno pokriva
 klasu zadatka).
+
+Dnevni izvjestaj `npm run agents:usage-daily` cita lokalne transkripte Claude Codea i Codexa te
+Grok redke iz `usage.jsonl`, ostaje lokalno na stroju i ponedjeljkom dodaje prijedloge
+optimizacije izvedene iz brojeva (`docs/agents/USAGE_DAILY.md`).
 
 ## Kako dodati novi model
 

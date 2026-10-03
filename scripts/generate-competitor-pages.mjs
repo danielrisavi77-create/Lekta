@@ -171,7 +171,7 @@ function buildCompetitorPage(entry) {
 
 <div class="lekta-cta-box">
   <p>Provjeri svoj rad prema pravilima tvog fakulteta.</p>
-  <a class="btn" href="/index.html#analyzer">Besplatno provjeri rad</a>
+  <a class="btn" data-analyzer-cta href="/index.html#top">Besplatno provjeri rad</a>
   <p class="priv">Besplatna automatska provjera: dokument ostaje na tvom uređaju.</p>
 </div>
 
