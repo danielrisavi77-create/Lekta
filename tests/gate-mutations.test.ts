@@ -105,7 +105,7 @@ import {
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
 } from '../src/report/webhook';
-import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
+import { findBotsImplementingProtected, findImplementEffortDrift, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
 import {
@@ -7631,6 +7631,29 @@ describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
       effort: 'medium',
     };
     expect(findSameProviderWithoutFallback(saFallbackom)).toEqual([]);
+  });
+
+  it('implement effort vracen na stari xhigh ili odmaknut od effortPolicy obara tvrdnju (B1)', async () => {
+    const routingConfigModule = await import('../config/agent-routing.json');
+    const real = routingConfigModule.default as unknown as import('./helpers/agent-routing-checks').RoutingConfig;
+
+    // BASELINE: stvarni config slijedi effortPolicy (implement medium, zasticeno high).
+    expect(findImplementEffortDrift(real)).toEqual([]);
+
+    // MUTACIJA 1: zasticeni L implement vracen na prijasnji xhigh.
+    const staroZasticeno = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    staroZasticeno.routing.L.true.roles.implement.effort = 'xhigh';
+    expect(findImplementEffortDrift(staroZasticeno)).toEqual(['L/true/implement effort xhigh umjesto high']);
+
+    // MUTACIJA 2: nezasticeni M implement na opus-5-5 podignut na high mimo politike.
+    const nezasticeno = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    nezasticeno.routing.M.false.roles.implement.effort = 'high';
+    expect(findImplementEffortDrift(nezasticeno)).toEqual(['M/false/implement effort high umjesto medium']);
+
+    // MUTACIJA 3: politika bez implementProtected ne smije tiho proci.
+    const bezPolitike = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    delete bezPolitike.effortPolicy?.implementProtected;
+    expect(findImplementEffortDrift(bezPolitike)).toEqual(['effortPolicy.implement ili implementProtected nedostaje']);
   });
 });
 
