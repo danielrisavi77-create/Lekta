@@ -48,15 +48,15 @@ export function recoveryFor(outcome: RepairFailureLike, phase: RepairFailurePhas
   }
   // T87: iskljucen popravak nije slijepa ulica. Server je odbio prije obrade, pa nista nije naplaceno, a
   // nalazi lokalne analize i dalje vrijede: korisnik ih moze ispraviti sam ili pokusati kasnije.
-  if (outcome.kind === 'error' && outcome.code === 'disabled') {
+  if (outcome.kind === 'error' && outcome.status === 503 && outcome.code === 'disabled') {
     return {
       action: 'none',
       retryAllowed: false,
       message: 'Automatski popravak je trenutačno isključen. Ništa nije poslano na obradu ni naplaćeno. Nalazi analize i dalje vrijede: možeš ih ispraviti sam u Wordu prema popisu ili popravak pokušati kasnije.',
     };
   }
-  if (outcome.kind === 'error' && outcome.code === 'busy') {
-    return { action: 'retry', retryAllowed: true, message: 'Poslužitelj je trenutačno zauzet drugim popravcima. Ništa nije naplaćeno; pokušaj ponovno za minutu.' };
+  if (outcome.kind === 'error' && outcome.status === 503 && outcome.code === 'busy') {
+    return { action: 'retry', retryAllowed: true, message: 'Poslužitelj je trenutačno zauzet drugim popravcima. Popravak nije pokrenut i tvoj dokument nije mijenjan; ništa nije naplaćeno. Pokušaj ponovno za minutu.' };
   }
   if (outcome.kind === 'rate_limited' || outcome.kind === 'too_large' || outcome.kind === 'no_live_fixers' || outcome.kind === 'paywall') {
     return { action: 'none', retryAllowed: false, message: 'Ponovni pokušaj istim dokumentom i odabirom ne bi promijenio ishod.' };
