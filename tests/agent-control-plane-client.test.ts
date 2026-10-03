@@ -2,8 +2,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildLeaseClaim,
+  buildLeaseValidation,
   controlPlaneConfigFromEnv,
+  leaseCapabilityHash,
   requestControlPlane,
+  requestLeaseValidation,
+  workScopeHash,
 } from '../scripts/agents/control-plane-client.mjs';
 
 describe('agent control-plane config', () => {
@@ -84,6 +88,7 @@ describe('global lease claim contract', () => {
     });
     expect(first.scopeHash).toMatch(/^[0-9a-f]{64}$/);
     expect(second.scopeHash).toBe(first.scopeHash);
+    expect(workScopeHash(base.task.workScope, 'T01')).toBe(first.scopeHash);
   });
 
   it('prihvaca rezervirani cetveroznamenkasti smoke task ID', () => {
@@ -91,6 +96,29 @@ describe('global lease claim contract', () => {
       ...base,
       task: { ...base.task, id: 'T9000' },
     }).taskId).toBe('T9000');
+  });
+
+  it('hashira lease capability bez spremanja plaintexta u claim helper', () => {
+    const token = 'lease-capability-' + 'x'.repeat(32);
+    expect(leaseCapabilityHash(token)).toMatch(/^[0-9a-f]{64}$/);
+    expect(leaseCapabilityHash(token)).toBe(leaseCapabilityHash(token));
+    expect(() => leaseCapabilityHash('kratko')).toThrow(/32-256/);
+  });
+
+  it('gradi strogi worker validation identitet', () => {
+    expect(buildLeaseValidation({
+      leaseId: '123e4567-e89b-42d3-a456-426614174000',
+      taskId: 'T01',
+      sessionName: 'lekta-03',
+      baseSha: 'a'.repeat(40),
+      scopeHash: 'b'.repeat(64),
+    })).toEqual({
+      leaseId: '123e4567-e89b-42d3-a456-426614174000',
+      taskId: 'T01',
+      sessionName: 'lekta-03',
+      baseSha: 'a'.repeat(40),
+      scopeHash: 'b'.repeat(64),
+    });
   });
 
   it('odbija claim bez write scopea ili s nevaljanim identitetom/TTL-om', () => {
@@ -144,6 +172,44 @@ describe('control-plane HTTP boundary', () => {
       protocolVersion: 1,
       operation: 'claim',
       payload: { taskId: 'T01' },
+    });
+  });
+
+  it('worker validation koristi samo lease capability header', async () => {
+    const leaseToken = 'worker-capability-' + 'y'.repeat(32);
+    let seen: { url?: unknown; init?: RequestInit } = {};
+    const fakeFetch = async (url: unknown, init?: RequestInit) => {
+      seen = { url, init };
+      return new Response(JSON.stringify({
+        protocolVersion: 1,
+        ok: true,
+        leaseId: '123e4567-e89b-42d3-a456-426614174000',
+        expiresAt: '2026-10-02T22:00:00Z',
+      }), { status: 200 });
+    };
+
+    const payload = buildLeaseValidation({
+      leaseId: '123e4567-e89b-42d3-a456-426614174000',
+      taskId: 'T01',
+      sessionName: 'lekta-03',
+      baseSha: 'a'.repeat(40),
+      scopeHash: 'b'.repeat(64),
+    });
+    await requestLeaseValidation(payload, {
+      baseUrl: config.baseUrl,
+      leaseToken,
+      fetchImpl: fakeFetch as typeof fetch,
+    });
+
+    expect(seen.init?.headers).toMatchObject({
+      'content-type': 'application/json',
+      'x-lekta-lease-token': leaseToken,
+    });
+    expect(JSON.stringify(seen.init?.headers)).not.toContain('x-lekta-control-token');
+    expect(JSON.parse(String(seen.init?.body))).toEqual({
+      protocolVersion: 1,
+      operation: 'validate',
+      payload,
     });
   });
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { implementerHasControlPlaneAdminToken } from './global-lease.mjs';
+
 /**
  * Claude Code PreToolUse hook koji deterministicki odbija opasne naredbe, umjesto da se oslanja
  * na uputu u promptu (koja ne drzi 100% i kosta tokene svaki put kad se ponovi).
@@ -264,7 +266,14 @@ function judgeSingleCommand(tokens) {
  *   alate bez naredbe u ljusci.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command) {
+export function judgeCommand(toolName, command, env = {}) {
+  if (implementerHasControlPlaneAdminToken(env)) {
+    return {
+      allow: false,
+      reason: 'Enforced implementer ne smije imati LEKTA_CONTROL_PLANE_ADMIN_TOKEN u Bash/PowerShell okolini.',
+    };
+  }
+
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -328,7 +337,7 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command);
+    verdict = judgeCommand(toolName, command, process.env);
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);

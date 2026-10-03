@@ -5,6 +5,8 @@ const DEFAULT_TIMEOUT_MS = 8_000;
 const SESSION_RE = /^[A-Za-z0-9][A-Za-z0-9._:@-]{0,63}$/;
 const TASK_RE = /^T\d{2,4}$/;
 const SHA_RE = /^[0-9a-f]{40}$/i;
+const HASH_RE = /^[0-9a-f]{64}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function normalizedBaseUrl(raw) {
   let url;
@@ -30,12 +32,17 @@ export function validateSessionName(raw) {
   return value;
 }
 
-export function controlPlaneConfigFromEnv(env = process.env) {
+function controlPlaneUrlFromEnv(env = process.env) {
   const baseUrl = String(env.LEKTA_CONTROL_PLANE_URL || '').trim();
-  const adminToken = String(env.LEKTA_CONTROL_PLANE_ADMIN_TOKEN || '').trim();
   if (!baseUrl) throw new Error('Nedostaje LEKTA_CONTROL_PLANE_URL');
+  return normalizedBaseUrl(baseUrl);
+}
+
+export function controlPlaneConfigFromEnv(env = process.env) {
+  const baseUrl = controlPlaneUrlFromEnv(env);
+  const adminToken = String(env.LEKTA_CONTROL_PLANE_ADMIN_TOKEN || '').trim();
   if (!adminToken) throw new Error('Nedostaje LEKTA_CONTROL_PLANE_ADMIN_TOKEN');
-  return { baseUrl: normalizedBaseUrl(baseUrl), adminToken };
+  return { baseUrl, adminToken };
 }
 
 function canonicalScope(scope, taskId) {
@@ -49,6 +56,42 @@ function canonicalScope(scope, taskId) {
 
 function hashScope(scope) {
   return createHash('sha256').update(JSON.stringify(scope)).digest('hex');
+}
+
+export function workScopeHash(scope, taskId) {
+  return hashScope(canonicalScope(scope, taskId));
+}
+
+export function leaseCapabilityHash(rawToken) {
+  const token = String(rawToken || '').trim();
+  if (token.length < 32 || token.length > 256 || /\s/.test(token)) {
+    throw new Error('Lease capability token mora imati 32-256 znakova bez razmaka');
+  }
+  return createHash('sha256').update(token).digest('hex');
+}
+
+export function buildLeaseValidation({
+  leaseId,
+  taskId,
+  sessionName,
+  baseSha,
+  scopeHash,
+}) {
+  const normalizedLeaseId = String(leaseId || '').trim();
+  const normalizedTaskId = String(taskId || '').trim();
+  const normalizedBaseSha = String(baseSha || '').trim().toLowerCase();
+  const normalizedScopeHash = String(scopeHash || '').trim().toLowerCase();
+  if (!UUID_RE.test(normalizedLeaseId)) throw new Error('leaseId nije valjan UUID');
+  if (!TASK_RE.test(normalizedTaskId)) throw new Error('taskId nije valjan Txx-Txxxx');
+  if (!SHA_RE.test(normalizedBaseSha)) throw new Error('baseSha mora biti puni 40-znamenkasti Git SHA');
+  if (!HASH_RE.test(normalizedScopeHash)) throw new Error('scopeHash mora biti SHA-256 hex');
+  return {
+    leaseId: normalizedLeaseId,
+    taskId: normalizedTaskId,
+    sessionName: validateSessionName(sessionName),
+    baseSha: normalizedBaseSha,
+    scopeHash: normalizedScopeHash,
+  };
 }
 
 export function buildLeaseClaim({
@@ -84,7 +127,7 @@ export function buildLeaseClaim({
     sessionName: normalizedSession,
     baseSha: String(baseSha).toLowerCase(),
     scope,
-    scopeHash: hashScope(scope),
+    scopeHash: workScopeHash(scope, task.id),
     ttlSeconds,
     metadata,
   };
@@ -136,6 +179,56 @@ export async function requestControlPlane(operation, payload = {}, options = {})
   }
   if (!body || typeof body !== 'object' || body.ok !== true) {
     throw new Error('Control-plane odgovor nema ok=true');
+  }
+  return body;
+}
+
+
+export async function requestLeaseValidation(payload, options = {}) {
+  const baseUrl = options.baseUrl ?? controlPlaneUrlFromEnv(options.env);
+  const leaseToken = String(options.leaseToken ?? options.env?.LEKTA_GLOBAL_LEASE_TOKEN ?? process.env.LEKTA_GLOBAL_LEASE_TOKEN ?? '').trim();
+  if (!leaseToken) throw new Error('Nedostaje LEKTA_GLOBAL_LEASE_TOKEN');
+  leaseCapabilityHash(leaseToken);
+
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch;
+  if (typeof fetchImpl !== 'function') throw new Error('fetch nije dostupan');
+  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let response;
+  try {
+    response = await fetchImpl(baseUrl, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-lekta-lease-token': leaseToken,
+      },
+      body: JSON.stringify({ protocolVersion: 1, operation: 'validate', payload }),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error('Lease validation je istekla');
+    throw new Error(`Control-plane lease validation nije dostupna: ${error instanceof Error ? error.message : String(error)}`);
+  } finally {
+    clearTimeout(timer);
+  }
+
+  const raw = await response.text();
+  let body;
+  try {
+    body = raw ? JSON.parse(raw) : {};
+  } catch {
+    throw new Error(`Lease validation je vratila nevaljan JSON (HTTP ${response.status})`);
+  }
+  if (body?.protocolVersion !== 1) {
+    throw new Error(`Control-plane protocol nije kompatibilan: ${String(body?.protocolVersion ?? 'nedostaje')}`);
+  }
+  if (!response.ok || body?.ok !== true) {
+    const code = typeof body?.code === 'string' ? body.code : `http_${response.status}`;
+    const message = typeof body?.message === 'string' ? body.message : 'lease validation odbijena';
+    const safeMessage = message.split(leaseToken).join('[REDACTED]');
+    throw new Error(`Control-plane ${code}: ${safeMessage}`);
   }
   return body;
 }

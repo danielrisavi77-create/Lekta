@@ -5,6 +5,7 @@ import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 import { botPathViolations, changedPaths, resolveBot } from './grok-bots.mjs';
+import { buildImplementerEnvironment, validateGlobalLeaseSync } from './global-lease-runner.mjs';
 import { findTaskWriteConflicts, findWriteScopeConflicts, validateWorkScope, writeScopeViolations } from './task-scope.mjs';
 import { assertKnownClaudeModel, probeModel, runFixture } from './model-probe.mjs';
 
@@ -291,6 +292,7 @@ function main() {
   try {
     writeFileSync(lockFd, JSON.stringify({ pid: process.pid, task: id, agent, phase, root }));
     const baseHead = git('rev-parse', 'HEAD');
+    const task = queue.tasks.find((item) => item.id === id);
     const treeBefore = (botRun || phase === 'implement') ? worktreeSnapshot() : null;
     const out = join(root, '.artifacts/agents', `${id}-${Date.now()}-${process.pid}`);
     mkdirSync(out, { recursive: true });
@@ -302,13 +304,15 @@ function main() {
     const resolvedJob = invocation.argsPrefix.length
       ? { ...job, command: invocation.command, args: [...invocation.argsPrefix, ...job.args] }
       : job;
+    const globalLeasePreflight = phase === 'implement'
+      ? validateGlobalLeaseSync({ root, taskId: id, baseSha: baseHead, env: process.env })
+      : { enforced: false, leaseId: null, expiresAt: null };
     const taskEnv = phase === 'implement'
-      ? {
-          ...process.env,
-          LEKTA_ROLE: 'implementer',
-          LEKTA_TASK_ID: id,
-          LEKTA_SCOPE_ENFORCED: queue.tasks.find((task) => task.id === id)?.workScope?.write?.length ? '1' : '0',
-        }
+      ? buildImplementerEnvironment(process.env, {
+          taskId: id,
+          scopeEnforced: Boolean(task?.workScope?.write?.length),
+          baseSha: baseHead,
+        })
       : process.env;
     const result = spawnJob(resolvedJob, join(out, 'prompt.md'), root, spawnSync, taskEnv);
     releaseLock = !result.error && !result.signal;
@@ -317,13 +321,26 @@ function main() {
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
     const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
     const modelOk = modelMatches(AGENTS[agent].model, parsed.reportedModels);
+    let globalLeasePostflight = globalLeasePreflight;
+    let globalLeaseError = null;
+    if (phase === 'implement' && globalLeasePreflight.enforced) {
+      try {
+        globalLeasePostflight = validateGlobalLeaseSync({
+          root,
+          taskId: id,
+          baseSha: baseHead,
+          env: process.env,
+        });
+      } catch (error) {
+        globalLeaseError = error instanceof Error ? error.message : String(error);
+      }
+    }
     const changed = treeBefore ? [...new Set([
       ...git('diff', '--name-only', baseHead, 'HEAD').split('\n').filter(Boolean),
       ...changedPaths(treeBefore, worktreeSnapshot()),
     ])] : [];
     let violations = null;
     if (botRun) violations = botPathViolations(botRun.bot, changed, botRun.protectedPaths);
-    const task = queue.tasks.find((item) => item.id === id);
     const taskScopeViolations = phase === 'implement' && task?.workScope?.write?.length
       ? writeScopeViolations(changed, task.workScope, id)
       : [];
@@ -334,9 +351,18 @@ function main() {
       ...diagnosis,
       retainedLock: releaseLock ? null : lock,
       ...(botRun ? { bot: botRun.bot.name, botPathViolations: violations } : {}),
-      ...(phase === 'implement' ? { changedPaths: changed, taskScopeViolations } : {}),
+      ...(phase === 'implement' ? {
+        changedPaths: changed,
+        taskScopeViolations,
+        globalLease: {
+          preflight: globalLeasePreflight,
+          postflight: globalLeasePostflight,
+          error: globalLeaseError,
+        },
+      } : {}),
       status: parsed.ok && modelOk && !result.error
         && !(violations && violations.length) && taskScopeViolations.length === 0
+        && !globalLeaseError
         ? 'needs_verification' : 'failed',
       note: 'Queue unchanged. Coordinator must verify patch, required checks and independent review.' };
     writeFileSync(join(out, 'result.json'), JSON.stringify(report, null, 2) + '\n');

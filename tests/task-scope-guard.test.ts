@@ -10,7 +10,7 @@ import {
   validateWorkScope,
   writeScopeViolations,
 } from '../scripts/agents/task-scope.mjs';
-import { judgeTaskWrite } from '../scripts/hooks/task-scope-guard.mjs';
+import { judgeGlobalLeaseWrite, judgeTaskWrite } from '../scripts/hooks/task-scope-guard.mjs';
 
 describe('task workScope model', () => {
   it('podrzava tocnu putanju i zavrsni /**', () => {
@@ -151,5 +151,89 @@ describe('task-scope PreToolUse odluka', () => {
     });
     expect(result.allow).toBe(false);
     expect(result.reason).toContain('nema workScope.write');
+  });
+});
+
+
+describe('global lease PreToolUse odluka', () => {
+  const queue = {
+    tasks: [{
+      id: 'T99',
+      status: 'in_progress',
+      owner: 'lekta-03',
+      workScope: { write: ['src/ui/**'] },
+    }],
+  };
+  const payload = {
+    tool_name: 'Edit',
+    tool_input: { file_path: '/repo/src/ui/app.ts' },
+  };
+  const enforcedEnv = {
+    LEKTA_ROLE: 'implementer',
+    LEKTA_TASK_ID: 'T99',
+    LEKTA_GLOBAL_LEASE_ENFORCED: '1',
+  };
+
+  it('disabled global lease ne radi validator poziv', async () => {
+    let calls = 0;
+    await expect(judgeGlobalLeaseWrite({
+      env: { LEKTA_ROLE: 'implementer', LEKTA_TASK_ID: 'T99' },
+      payload,
+      queue,
+      validate: async () => {
+        calls += 1;
+        return {};
+      },
+    })).resolves.toEqual({ allow: true, reason: '' });
+    expect(calls).toBe(0);
+  });
+
+  it('propusta write kad udaljeni lease vrijedi', async () => {
+    await expect(judgeGlobalLeaseWrite({
+      env: enforcedEnv,
+      payload,
+      queue,
+      validate: async () => ({ enforced: true, expiresAt: '2026-10-02T22:00:00Z' }),
+    })).resolves.toEqual({ allow: true, reason: '' });
+  });
+
+  it('blokira write prije mreze ako enforced worker nosi admin token', async () => {
+    let calls = 0;
+    const result = await judgeGlobalLeaseWrite({
+      env: { ...enforcedEnv, LEKTA_CONTROL_PLANE_ADMIN_TOKEN: 'admin-secret' },
+      payload,
+      queue,
+      validate: async () => {
+        calls += 1;
+        return { enforced: true };
+      },
+    });
+    expect(result.allow).toBe(false);
+    expect(result.reason).toContain('LEKTA_CONTROL_PLANE_ADMIN_TOKEN');
+    expect(calls).toBe(0);
+  });
+
+  it('fail-closed blokira write kad lease validation padne', async () => {
+    const result = await judgeGlobalLeaseWrite({
+      env: enforcedEnv,
+      payload,
+      queue,
+      validate: async () => {
+        throw new Error('lease_expired');
+      },
+    });
+    expect(result.allow).toBe(false);
+    expect(result.reason).toContain('lease_expired');
+  });
+
+  it('enforcement bez task ID-a blokira write prije mreze', async () => {
+    const result = await judgeGlobalLeaseWrite({
+      env: { LEKTA_ROLE: 'implementer', LEKTA_GLOBAL_LEASE_ENFORCED: '1' },
+      payload,
+      queue,
+      validate: async () => ({ enforced: true }),
+    });
+    expect(result.allow).toBe(false);
+    expect(result.reason).toContain('LEKTA_TASK_ID');
   });
 });

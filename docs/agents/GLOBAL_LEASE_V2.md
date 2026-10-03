@@ -57,8 +57,8 @@ Edge Function; mutacije moraju biti atomarne u jednoj Postgres transakciji.
 Tek nakon sto 2B ima dokaz konkurentnih claimova:
 
 1. Fable orkestrator radi globalni `claim` prije predaje implementacijskog zadatka.
-2. Worker dobiva lease ID uz task brief.
-3. Lokalni hook provjerava i `workScope` i aktivni globalni lease.
+2. Worker dobiva lease ID i kratkotrajni lease capability token uz task brief; admin token ostaje samo kod Fablea.
+3. Lokalni hook provjerava i `workScope` i aktivni globalni lease preko least-privilege `validate` operacije.
 4. Scope expansion prvo mora atomarno proci na control planeu.
 5. Zavrsetak, blokada ili isteka rada otpusta lease.
 6. Nedostupan control plane blokira **novi write lease**; vec postojeci lease vrijedi samo do
@@ -144,6 +144,7 @@ odgovarajuceg leasea salje novi claim. `release` mora biti idempotentan, a ident
 - `expand`: atomarna zamjena scopea istog leasea nakon SCOPE EXPANSION odluke
 - `release`: eksplicitno zatvaranje leasea
 - `snapshot`: read-only pregled aktivnih sesija i leaseova
+- `validate`: worker-only, read-only provjera jednog aktivnog leasea; prihvaca samo lease capability, nema mutacijsku ovlast i ne uzima globalni write advisory lock
 
 Preporuceni pocetni TTL write leasea je 15 minuta, uz renew otprilike svakih 5 minuta dok
 implementator aktivno radi. TTL nije dokaz napretka; to je samo granica nakon koje napusteni lease
@@ -161,10 +162,17 @@ npm run agents:lease -- register \
   --machine laptop \
   --role implementer
 
+# Capability se generira lokalno i ostaje isti ako se isti claim retrya.
+# Primjer: postavi ga u LEKTA_GLOBAL_LEASE_TOKEN bez zapisivanja u shell history/PR.
 npm run agents:lease -- claim T99 \
   --session lekta-03 \
   --base-sha 0123456789abcdef0123456789abcdef01234567 \
   --branch agent/t99
+
+npm run agents:lease -- validate T99 \
+  --lease-id <id> \
+  --session lekta-03 \
+  --base-sha 0123456789abcdef0123456789abcdef01234567
 
 npm run agents:lease -- heartbeat --session lekta-03
 npm run agents:lease -- renew --lease-id <id>
@@ -189,12 +197,36 @@ npm run agents:lease -- expand T99 \
 - `LEKTA_CONTROL_PLANE_URL`
 - `LEKTA_CONTROL_PLANE_ADMIN_TOKEN`
 
-Token se ne commita, ne stavlja u `tasks.json`, prompt, PR opis ili result artifact. Workerima u
-pocetnoj arhitekturi nije potreban admin token: Fable radi claim/renew/release i worker dobiva samo
-lease ID i task brief. Time kompromitirana radna sesija ne dobiva ovlast preuzeti tudji scope.
+Admin token se ne commita, ne stavlja u `tasks.json`, prompt, PR opis ili result artifact.
+Fable radi `claim/renew/expand/release`. Za svaki novi claim Fable generira zaseban
+`LEKTA_GLOBAL_LEASE_TOKEN`; backend cuva samo SHA-256 toga capabilityja. Ako ishod claima nije
+poznat zbog izgubljenog HTTP odgovora, retry mora koristiti ISTI capability token kako bi
+idempotentni claim mogao vratiti isti lease. Worker dobiva samo
+`leaseId + lease capability` i s njima moze pozvati iskljucivo `validate`. Ne moze claimati novi
+task, produljiti lease, prosiriti scope niti otpustiti tudji lease.
 
 HTTP je dopusten samo za localhost razvoj; udaljeni endpoint mora biti HTTPS. Klijent ima kratak
 timeout i novi write claim je fail-closed kad control plane nije dostupan.
+
+### Phase 2C feature flag
+
+Repo-side enforcement postoji iza `LEKTA_GLOBAL_LEASE_ENFORCED=1`. Dok udaljeni 2B target nije
+deployan i `agents:lease-smoke` nije stvarno zelen, taj flag mora ostati iskljucen.
+
+Kad se ukljuci, implementer okolina mora imati:
+
+- `LEKTA_CONTROL_PLANE_URL`
+- `LEKTA_GLOBAL_LEASE_ID`
+- `LEKTA_GLOBAL_LEASE_TOKEN`
+- `LEKTA_SESSION_NAME`
+
+Runner automatski zakljucava `LEKTA_GLOBAL_LEASE_BASE_SHA` na pocetni HEAD i uklanja
+`LEKTA_CONTROL_PLANE_ADMIN_TOKEN` prije pokretanja workera. Ako je implementer pokrenut rucno
+i ipak naslijedi admin token, enforced Edit/Write hook i Bash/PowerShell tool-guard blokiraju
+mutacijske alate dok se admin token ne ukloni iz njegove okoline. Preflight i postflight validation su
+blokirajuci; Claude `Edit|Write` hook dodatno radi fail-closed validation prije svakog dopustenog
+write alata. Bash/generator promjene i dalje se hvataju diff-level scope provjerom, a postflight
+validation odbija rezultat ako lease vise nije aktivan.
 
 ## Atomski backend uvjet za 2B
 
@@ -210,8 +242,8 @@ transakcijska brava usko grlo.
 
 - nema udaljene baze ni Edge Functiona
 - nema dokaza da dva stroja ne mogu istodobno claimati isti write scope
-- nema automatskog renewa iz worker procesa
-- nema hook provjere lease ID-a
+- nema automatskog renewa iz worker procesa; Fable/scheduler mora obnoviti lease prije TTL-a
+- hook provjera postoji repo-side, ali ostaje feature-flagged dok 2B nije live-smokean
 - nema event-notification sloja prema Fableu
 - nema integracijskog reda
 

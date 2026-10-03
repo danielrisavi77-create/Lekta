@@ -9,6 +9,11 @@ function cleanEnv(): NodeJS.ProcessEnv {
   const env = { ...process.env };
   delete env.LEKTA_CONTROL_PLANE_URL;
   delete env.LEKTA_CONTROL_PLANE_ADMIN_TOKEN;
+  delete env.LEKTA_GLOBAL_LEASE_TOKEN;
+  delete env.LEKTA_GLOBAL_LEASE_ID;
+  delete env.LEKTA_GLOBAL_LEASE_ENFORCED;
+  delete env.LEKTA_SESSION_NAME;
+  delete env.LEKTA_GLOBAL_LEASE_BASE_SHA;
   return env;
 }
 
@@ -22,12 +27,13 @@ function run(args: string[]) {
 }
 
 describe('agents:lease CLI boundary', () => {
-  it('help je offline i dokumentira heartbeat/claim/expand/release', () => {
+  it('help je offline i dokumentira heartbeat/claim/validate/expand/release', () => {
     const result = run(['help']);
     expect(result.status).toBe(0);
     expect(result.stderr).toBe('');
     expect(result.stdout).toContain('agents:lease heartbeat');
     expect(result.stdout).toContain('agents:lease claim T01');
+    expect(result.stdout).toContain('agents:lease validate T01');
     expect(result.stdout).toContain('agents:lease expand T01');
     expect(result.stdout).toContain('agents:lease release');
   });

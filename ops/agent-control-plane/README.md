@@ -24,14 +24,16 @@ Postgres preko server-side `SUPABASE_DB_URL`.
 Edge Function se deploya s `verify_jwt=false` **iskljucivo zato sto implementira vlastitu
 server-to-server autentikaciju** preko `x-lekta-control-token`.
 
-Control token je zaseban nasumicni secret koji postoji u plaintextu samo na Fable orkestratoru.
-U bazi se cuva iskljucivo njegov SHA-256 hash pod
+Admin control token je zaseban nasumicni secret koji postoji u plaintextu samo na Fable
+orkestratoru. U bazi se cuva iskljucivo njegov SHA-256 hash pod
 `agent_control.control_settings.admin_token_sha256`. Edge Function hasha primljeni header i
 radi timing-safe usporedbu s tim hashom. Ne koristi Supabase secret/service-role kljuc kao
 control-plane credential.
 
-Worker sesijama se token ne daje. CLI na orkestratoru ga cita samo iz lokalnog
-`LEKTA_CONTROL_PLANE_ADMIN_TOKEN` enva.
+Svaki write lease dodatno ima zaseban capability hash. Fable generira
+`LEKTA_GLOBAL_LEASE_TOKEN`, u claim payload salje samo njegov SHA-256, a plaintext capability
+predaje samo tom workeru. Worker s njim moze pozvati samo `validate`; admin lifecycle operacije i
+dalje zahtijevaju Fableov control token.
 
 ## Atomski claim
 
@@ -87,7 +89,9 @@ troska. Produkcijski `Lekta` projekt i `Lekta staging` ne koriste se kao control
 Smoke dokazuje:
 
 - registraciju dviju sesija
-- idempotentni isti claim
+- idempotentni isti claim s istim capabilityjem
+- uspjesan worker `validate` s ispravnim capabilityjem
+- `lease_validation_mismatch` s pogresnim worker capabilityjem
 - `task_busy`
 - `session_busy`
 - write/write `lease_conflict`
@@ -96,7 +100,8 @@ Smoke dokazuje:
 
 ## Nije dokazano dok se 2B ne deploya
 
-Repo testovi mogu dokazati ugovor, strukturu SQL-a i client/backend hash kompatibilnost. Ne mogu
-dokazati Postgres concurrency, Edge networking ni stvarni Supabase secret/runtime. Zato 2B nije
-gotov dok `schema.sql` nije primijenjen na dedicated projekt, Edge Function deployana, advisori
-pregledani i `agents:lease-smoke` zelen protiv stvarnog endpointa.
+Repo testovi mogu dokazati ugovor, strukturu SQL-a, capability izolaciju i client/backend hash
+kompatibilnost. Ne mogu dokazati Postgres concurrency, Edge networking ni stvarni Supabase
+runtime. Zato udaljeni enforcement nije aktivan dok `schema.sql` nije primijenjen na izolirani
+target, Edge Function deployana, advisori pregledani i `agents:lease-smoke` zelen protiv stvarnog
+endpointa.
