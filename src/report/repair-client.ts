@@ -164,7 +164,11 @@ export type RepairOutcome =
    *  'ok' s praznim changelogom ("nema se sto popraviti"), inace UI tvrdi neistinu. */
   | { kind: 'integrity_failed'; part: string; problem: string; preexisting: boolean }
   | { kind: 'invalid_docx' }
-  | { kind: 'error'; status?: number; message: string };
+  /**
+   * `code` (T87): 503 iz repair-docx nosi razlog. `disabled` = kill switch REPAIR_DISABLED (ponovni pokusaj ne
+   * pomaze), `busy` = popunjen gate (pokusaj za minutu). Oba nastaju PRIJE ikakve obrade i naplate.
+   */
+  | { kind: 'error'; status?: number; code?: 'disabled' | 'busy'; message: string };
 
 /** base64 -> Uint8Array (cisto, bez Node Buffera; `atob` je globalan u pregledniku/Deno/vitest). */
 import {
@@ -382,6 +386,17 @@ export async function uploadRepair(
     return data?.error === 'consent_required'
       ? { kind: 'error', status: 400, message: 'Uvjeti su azurirani. Osvjezi stranicu i ponovno potvrdi privolu prije popravka.' }
       : { kind: 'error', status: 400, message: 'neispravan zahtjev' };
+  }
+  if (res.status === 503) {
+    // T87: do tada je i kill switch padao na "neocekivani odgovor 503" uz gumb za ponovni pokusaj koji ne
+    // moze uspjeti. Razlog iz tijela odvaja trajno iskljucenje od privremene guzve.
+    const data = await res.json().catch(() => ({}));
+    if (data?.error === 'disabled') {
+      return { kind: 'error', status: 503, code: 'disabled', message: 'Automatski popravak je trenutačno isključen.' };
+    }
+    if (data?.error === 'busy') {
+      return { kind: 'error', status: 503, code: 'busy', message: 'Poslužitelj je trenutačno zauzet drugim popravcima.' };
+    }
   }
   return { kind: 'error', status: res.status, message: `neocekivani odgovor ${res.status}` };
 }
