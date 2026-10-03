@@ -434,6 +434,41 @@ describe('tryGrantReferrerReward: uvjeti podobnosti (Codex r2, M2b)', () => {
     expect(admin.poziviDetalji.at(-1)?.operacije).toContainEqual({ metoda: 'update', argumenti: [{ status: 'fraud_blocked' }] });
   });
 
+  // POZNATI RIZIK (odluka vlasnika 2026-10-03, Codex PR #217 runda 3). IP blokada gleda SAMO
+  // report_generations.ip_hash preporucitelja. Preporucitelj koji ima kod, a nikad nije izradio
+  // izvjestaj, nema IP povijest, pa drugi stalni racun s iste mreze dobije nagradu. Signal uredjaja
+  // se ne cita. Rizik je svjesno prihvacen do zasebnog zadatka (signal pri izdavanju ili uporabi
+  // koda prije kraja bete); ogranicenja su u docs/GO_LIVE_NAPLATA.md, "Poznati rizik".
+  it('POZNATI RIZIK (odluka vlasnika 2026-10-03): preporucitelj bez izvjestaja nema IP povijest, isti IP prolazi', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: 'h-ista-mreza' }, error: null },
+      { data: [], error: null }, // preporucitelj nema nijedan izvjestaj, pa ni ip_hash
+      { data: null, error: null, count: 0 },
+      { data: { id: SIGNUP.id }, error: null }, // preuzimanje signupa
+      { data: { id: 'ent-1' }, error: null }, // entitlements insert
+      { data: null, error: null }, // referral_signups update
+    ]);
+    expect(
+      await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'),
+      'Ovaj test biljezi prihvaceni rizik. Kad se uvede signal (IP pri izdavanju ili uporabi koda), '
+      + 'promijeni ga zajedno s uklanjanjem rizika iz runbooka docs/GO_LIVE_NAPLATA.md.',
+    ).toEqual({ granted: true });
+    expect(nagradnoPravo(admin)).toHaveLength(1);
+  });
+
+  it('kontrola poznatog rizika: isti preporucitelj S izvjestajem s istim ip_hash daje ip_match_fraud', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: 'h-ista-mreza' }, error: null },
+      { data: [{ ip_hash: 'h-ista-mreza' }], error: null },
+      { data: { id: SIGNUP.id }, error: null }, // fraud_blocked
+    ]);
+    expect(
+      await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'),
+      'Kontrola uz test poznatog rizika: mijenja se zajedno s njim kad se rizik ukloni iz runbooka.',
+    ).toEqual({ granted: false, reason: 'ip_match_fraud' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+  });
+
   it('mjesecni strop (10 u 30 dana): monthly_cap_reached, signup converted bez nagrade', async () => {
     const admin = sequentialAdmin([
       { data: SIGNUP, error: null },

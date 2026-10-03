@@ -573,6 +573,16 @@ zatvaranja obveze, NE izvor istine o izdanoj nagradi: nagrada može biti izdana 
 koji to ne kaže, ako je kasniji korak (npr. upis u `referral_signups`) tiho pao. Izvor istine je
 `referral_signups.status` (`rewarded`) i `referral_signups.referrer_reward_entitlement_id`.
 
+**Poznati rizik (odluka vlasnika 2026-10-03).** IP blokada nagrade preporučitelju
+(`ip_match_fraud`) uspoređuje `referral_signups.referred_ip_hash` samo s `report_generations.ip_hash`
+preporučitelja. Preporučitelj koji ima kod, a nikad nije izradio izvještaj, nema IP povijest, pa drugi
+stalni račun s iste mreže dobije nagradu (`granted: true`); signal uređaja se ne čita. Ograničenja: drugi
+račun mora stvarno platiti, mjesečni strop je 10 nagrađenih po preporučitelju, a u beti nema naplate.
+Rizik je svjesno prihvaćen i bilježi ga test `POZNATI RIZIK` u `tests/process-bonus-outbox.test.ts`
+(uz kontrolni slučaj s izvještajem koji daje `ip_match_fraud`). Usporediv signal (npr. hash IP-a pri
+izradi checkouta preporučitelja ili pri uporabi koda) je zaseban zadatak prije kraja bete; kad se uvede,
+ovaj odlomak i taj test se mijenjaju zajedno.
+
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
 Dvije opcije, iste vrijednosti:
