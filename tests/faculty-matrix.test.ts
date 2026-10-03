@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import generatedReport from '../docs/generated/faculty-matrix.json';
-import { buildFacultyMatrixReport } from './helpers/faculty-matrix';
+import { buildFacultyMatrixReport, projectRuleEvidence } from './helpers/faculty-matrix';
+import type { RuleEntry, SourceEntry } from '../src/profiles/profile-schema';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 
 describe('fakultetska matrica Repair Enginea', () => {
   it('pokriva sve profile i ostaje sinkronizirana s generiranim izvještajem', () => {
@@ -50,5 +52,81 @@ describe('fakultetska matrica Repair Enginea', () => {
     const perProfile = report.cellSummary.cellCount / report.summary.profileCount;
     expect(perProfile).toBeGreaterThan(20);
     expect(Number.isInteger(perProfile)).toBe(true);
+  });
+
+  it('jedinstvena matrica veže profil uz izvor, citat, audit status i A-E dokaz po vrsti rada', () => {
+    const report = buildFacultyMatrixReport();
+    const example = report.faculties
+      .flatMap((faculty) => faculty.profiles)
+      .find((profile) => profile.profileId === 'efos-doktorski');
+    const fixture = createAiEvidenceAuditFixture();
+    const projected = projectRuleEvidence([{
+      ...fixture.rule, scored: true, status: 'verified', confirmedVia: 'ai-evidence-audit',
+      aiEvidence: fixture.evidence,
+    }], new Map([[fixture.source.id, fixture.source]]));
+
+    expect(report.summary.profileCount).toBe(report.faculties.reduce((count, faculty) => count + faculty.profileCount, 0));
+    expect(report.legalProfiles).toHaveLength(3);
+    expect(projected).toContainEqual(expect.objectContaining({
+      ruleId: fixture.rule.ruleId,
+      sourceId: fixture.source.id,
+      sourcePage: fixture.rule.sourcePage,
+      quote: fixture.rule.quote,
+      recordedStatus: 'verified',
+      verificationMethod: 'ai-evidence-audit',
+      aiEvidenceValidation: 'not-revalidated',
+      aiClaim: fixture.evidence.claim,
+      aiPasses: expect.arrayContaining([
+        expect.objectContaining({ pass: 'extract', verdict: 'confirm' }),
+        expect.objectContaining({ pass: 'quote-check', verdict: 'confirm' }),
+        expect.objectContaining({ pass: 'refute', verdict: 'confirm' }),
+      ]),
+      auditExecution: expect.objectContaining({
+        manifestId: fixture.manifest.manifestId,
+        testId: fixture.manifest.testId,
+        command: fixture.manifest.command,
+        inputHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        outputHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+      }),
+      scored: true,
+      fixerId: null,
+    }));
+    expect(example?.completionByWorkType).toEqual([
+      expect.objectContaining({
+        workType: 'doctoral',
+        level: expect.stringMatching(/^[A-E]$/),
+        blockedReasons: expect.any(Array),
+        claimSource: 'docs/generated/completion-ledger.json',
+      }),
+    ]);
+    expect(example?.automaticTests).toMatchObject({
+      realCorpus: 'not-run',
+      syntheticClosedLoop: 'pass',
+    });
+  });
+
+  it('ne skriva nedostajući izvor ili citat i dopušta profil bez staging pravila', () => {
+    const entries = [{
+      ruleId: 'profile--missing-source',
+      sourceId: 'unregistered-source',
+      status: 'verified',
+      scored: true,
+      value: 'A4',
+    }] as RuleEntry[];
+
+    expect(projectRuleEvidence(entries, new Map<string, SourceEntry>())).toEqual([
+      expect.objectContaining({
+        ruleId: 'profile--missing-source',
+        sourceId: 'unregistered-source',
+        sourceTitle: null,
+        sourceUrl: null,
+        sourcePage: null,
+        quote: null,
+        recordedStatus: 'verified',
+        aiEvidenceValidation: 'missing',
+        scored: true,
+      }),
+    ]);
+    expect(projectRuleEvidence([], new Map<string, SourceEntry>())).toEqual([]);
   });
 });

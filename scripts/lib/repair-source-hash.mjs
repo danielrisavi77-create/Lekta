@@ -169,3 +169,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const { hash, files, version } = repairSourceHash();
   console.log(`${hash}  (v${version}, ${files.length} produkcijskih .ts u ${REPAIR_SOURCE_DIR})`);
 }
+
+/** The AI manifest adapter uses the same versioned, production-only hash as the master gate. */
+export function hashRepairSourceTree(sourceRoot) {
+  const repairRoot = path.resolve(sourceRoot);
+  const root = path.resolve(repairRoot, '..', '..');
+  if (path.resolve(root, REPAIR_SOURCE_DIR) !== repairRoot) {
+    throw new Error(`Ocekivan ${REPAIR_SOURCE_DIR}, dobiven ${repairRoot}.`);
+  }
+  return repairSourceHash(root).hash;
+}

@@ -21,6 +21,7 @@
  */
 
 import { attestationContentDigestSync } from './attestation-content-digest';
+import { repairSourceFreshness } from '../../scripts/lib/repair-source-hash.mjs';
 
 /**
  * Jedna mjerena skupina, bez ijednog podatka o dokumentima.
@@ -176,8 +177,8 @@ export function measuredCodeProblem(
  * Razlozi zbog kojih PRAVA ovjera (izvorni Word dokumenti) ne vrijedi. Prazan niz znaci da vrijedi.
  * Uz zajednicke provjere oblika i potpisa odbija ovjeru nad radovima pretvorenim iz PDF-a.
  */
-export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
-  const p = sharedAttestationProblems(a);
+export function attestationProblems(a: CorpusAttestation | null | undefined, currentRepairSourceHash?: string | null): string[] {
+  const p = sharedAttestationProblems(a, currentRepairSourceHash);
   if (!a) return p;
   const izvor = realSourceKindProblem(a);
   if (izvor) p.push(izvor);
@@ -197,7 +198,7 @@ export function pdfAttestationProblems(a: CorpusAttestation | null | undefined):
 }
 
 /** Provjere oblika, potpisa i brojki zajednicke pravoj i PDF ovjeri. */
-function sharedAttestationProblems(a: CorpusAttestation | null | undefined): string[] {
+function sharedAttestationProblems(a: CorpusAttestation | null | undefined, currentRepairSourceHash?: string | null): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
   if (a.schemaVersion !== 1) p.push('nepoznata verzija sheme');
@@ -205,6 +206,14 @@ function sharedAttestationProblems(a: CorpusAttestation | null | undefined): str
   if (!a.signedAt) p.push('nema datuma potpisa');
   if (!Array.isArray(a.oracles) || a.oracles.length === 0) p.push('nema navedenih alata mjerenja');
   if (!a.corpusFingerprint) p.push('nema otiska korpusa');
+  if (currentRepairSourceHash !== undefined) {
+    const freshness = repairSourceFreshness(a.repairSourceHash, currentRepairSourceHash);
+    if (repairSourceFreshness(currentRepairSourceHash, currentRepairSourceHash).status === 'missing') {
+      p.push('nema otiska aktualnog koda popravka');
+    } else if (freshness.status === 'stale') {
+      p.push('kod popravka promijenjen nakon mjerenja');
+    }
+  }
   if (!a.measuredFromCommit) p.push('nema commita nad kojim je mjereno');
   // Vrijeme mjerenja je ono sto potpis pokriva; bez njega gard "potpis stariji od mjerenja" nema sto
   // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
@@ -274,15 +283,33 @@ function sharedAttestationProblems(a: CorpusAttestation | null | undefined): str
   return p;
 }
 
+/** Oba oblika para dijele istu provjeru potpisa, otiska i cistog mjerenja. */
+function provenPairs(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash: string | null | undefined,
+  keys: (entry: CorpusAttestationEntry) => readonly string[],
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
+  const out = new Set<string>();
+  for (const e of a!.entries) {
+    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
+      for (const key of keys(e)) out.add(key);
+    }
+  }
+  return out;
+}
+
 /**
  * Parovi `unitId::workType` kojima ovjera daje dokaz na stvarnom radu.
  *
  * Par ulazi SAMO ako je barem jedan rad zavrsio cisto I nijedna provjera nije regresirala. Mjerenje
  * koje je naslo regresiju nije dokaz da popravak radi; ono je dokaz da ne radi.
  */
-export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
-  return cleanUnitWorkTypes(a!);
+export function provenUnitWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash?: string | null,
+): Set<string> {
+  return provenPairs(a, currentRepairSourceHash, (e) => [`${e.unitId}::${e.workType}`]);
 }
 
 /**
@@ -313,13 +340,9 @@ function cleanUnitWorkTypes(a: CorpusAttestation): Set<string> {
  * 2026-09-08, nalaz 4: sucelje je 12 izmjerenih i 19 izvedenih profila pokrivalo istom recenicom).
  * Isti uvjet cistoce kao za par: unos s regresijom nista ne dokazuje.
  */
-export function attestedProfileWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
-  const out = new Set<string>();
-  for (const e of a!.entries) {
-    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
-      for (const p of e.profileIds ?? []) out.add(`${p}::${e.workType}`);
-    }
-  }
-  return out;
+export function attestedProfileWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash?: string | null,
+): Set<string> {
+  return provenPairs(a, currentRepairSourceHash, (e) => (e.profileIds ?? []).map((p) => `${p}::${e.workType}`));
 }

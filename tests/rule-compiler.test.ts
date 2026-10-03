@@ -4,8 +4,34 @@ import type { ThesisProfile } from '../src/profiles/profile-schema';
 
 import rawVerified from '../data/profiles/verified-profiles.json';
 import rawLegal from '../data/profiles/legal-departments.json';
+import { VERIFIED_PROFILES_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
 
 describe('rule-compiler faithfulness', () => {
+  it('skalarnu bodovanu velicinu fonta kompajlira u oblik koji analiza cita', () => {
+    const profile: ThesisProfile = {
+      id: 'ffos-size-scalar',
+      rules: { size: [12] },
+      ruleEntries: [{ ruleId: 'ffos-size-scalar--font-size', checkId: 'font-size', value: 12 }],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({ size: [12] });
+  });
+
+  it('normalizira svako aktivno scalarno pravilo velicine fonta iz registra', () => {
+    const scalarRules = VERIFIED_PROFILES_WITH_DRAFTS.flatMap((profile) =>
+      (profile.ruleEntries ?? [])
+        .filter((entry) => entry.checkId === 'font-size' && entry.status === 'verified' && typeof entry.value === 'number')
+        .map((entry) => ({ profile, entry })),
+    );
+    expect(scalarRules.length, 'baseline mora obuhvatiti scalarna bodovana pravila iz stvarnih draftova').toBeGreaterThan(0);
+
+    for (const { profile, entry } of scalarRules) {
+      expect(
+        compileEffectiveRules({ ...profile, rules: {}, ruleEntries: [entry] }).size,
+        `${profile.id}/${entry.ruleId}: scalarna vrijednost mora postati niz`,
+      ).toEqual([entry.value]);
+    }
+  });
+
   it('effectiveRules deep-equals rules kada nema ruleEntries', () => {
     const profile: ThesisProfile = {
       id: 'fpzg-politologija-diplomski',

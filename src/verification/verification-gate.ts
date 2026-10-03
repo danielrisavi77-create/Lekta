@@ -1,5 +1,6 @@
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../profiles/profile-schema';
 import { collectCompileDiagnostics } from '../profiles/rule-compiler';
+import { auditAiEvidence, type AiEvidenceExecutionManifest } from './ai-evidence-audit';
 
 /**
  * CI vrata verifikacije (VERIFICATION_PIPELINE.md sekcija 6).
@@ -35,6 +36,16 @@ export interface VerificationGateOptions {
   freshnessMonths?: number;
   /** ISO datum "danas" (za testove); zadano stvarno vrijeme. */
   now?: string;
+  /** Privatni izvorni bajtovi, tekst iz istih bajtova i manifesti razriješeni iz pouzdanih adaptera/harnessa. */
+  aiEvidence?: {
+    snapshotBytesBySourceId: Readonly<Record<string, Uint8Array>>;
+    snapshotTextsBySourceId: Readonly<Record<string, string>>;
+    snapshotHashesBySourceId?: Readonly<Record<string, string>>;
+    currentRepairSourceHash?: string;
+    currentAnalysisSourceHash?: string;
+    ruleValueHashesByRule?: Readonly<Record<string, string>>;
+    manifestsById: Readonly<Record<string, AiEvidenceExecutionManifest>>;
+  };
 }
 
 /**
@@ -87,6 +98,33 @@ export function runVerificationGate(
   for (const profile of profiles) {
     for (const entry of profile.ruleEntries ?? []) {
       const derived = isRuleScored(entry);
+
+      if (entry.confirmedVia === 'ai-evidence-audit') {
+        const source = entry.sourceId ? sourceById.get(entry.sourceId) : undefined;
+        const audit = auditAiEvidence({
+          profileId: profile.id,
+          rule: entry,
+          source,
+          snapshotBytes: entry.sourceId ? options.aiEvidence?.snapshotBytesBySourceId[entry.sourceId] ?? new Uint8Array() : new Uint8Array(),
+          snapshotSha256: entry.sourceId ? options.aiEvidence?.snapshotHashesBySourceId?.[entry.sourceId] : undefined,
+          currentRepairSourceHash: options.aiEvidence?.currentRepairSourceHash,
+          currentAnalysisSourceHash: options.aiEvidence?.currentAnalysisSourceHash,
+          ruleValueSha256: options.aiEvidence?.ruleValueHashesByRule?.[JSON.stringify([profile.id, entry.ruleId])],
+          snapshotText: entry.sourceId ? options.aiEvidence?.snapshotTextsBySourceId[entry.sourceId] ?? '' : '',
+          evidence: entry.aiEvidence ?? undefined,
+          manifest: entry.aiEvidence
+            ? options.aiEvidence?.manifestsById[entry.aiEvidence.execution.manifestId]
+            : undefined,
+        });
+        if (!audit.valid) {
+          push(
+            profile.id,
+            entry.ruleId,
+            'ai-evidence-invalid',
+            `AI-evidence paket nije valjan: ${audit.reasons.map((reason) => reason.code).join(', ')}.`,
+          );
+        }
+      }
 
       // Pohranjeni scored:true koji se ne moze izvesti je laz o izvoru.
       if (entry.scored === true && !derived) {
@@ -157,7 +195,7 @@ export function runVerificationGate(
           push(profile.id, entry.ruleId, 'scored-addsrc-no-quote', `Dopunski izvor "${add.sourceId}" nema quote.`);
         }
       }
-      if (entry.authority === 'binding' && !entry.reviewedBy) {
+      if (entry.authority === 'binding' && !entry.reviewedBy && entry.confirmedVia !== 'ai-evidence-audit') {
         push(profile.id, entry.ruleId, 'binding-no-review', 'Obvezujuce pravilo nema reviewedBy (drugi par ociju).');
       }
       // Freshness: stabilno bodovano pravilo mora biti potvrdeno unutar roka.

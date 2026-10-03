@@ -3,6 +3,8 @@ import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '..
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
+import { resolve } from 'node:path';
+import { loadRepositoryAiEvidenceContext } from '../scripts/ai-evidence-context-loader';
 
 /**
  * Globalni verifikacijski gate sweep (audit nalaz #3). Ranije se gate izvrsavao samo u
@@ -22,8 +24,9 @@ const ALL = [
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 
 describe('verifikacijski gate: globalni sweep svih objavljenih profila', () => {
-  it('nijedno bodovano pravilo ne laze o izvoru (0 gresaka)', () => {
-    const errors = runVerificationGate(ALL, SOURCES, { now: NOW });
+  it('nijedno bodovano pravilo ne laze o izvoru (0 gresaka)', async () => {
+    const context = await loadRepositoryAiEvidenceContext(resolve(__dirname, '..'), ALL, SOURCES);
+    const errors = runVerificationGate(ALL, SOURCES, { now: NOW, aiEvidence: context.gateContext });
     // Prvih nekoliko kodova/profila u poruci ako ikad padne, da je odmah jasno gdje.
     const summary = errors.slice(0, 8).map((e) => `${e.profileId}/${e.ruleId ?? '-'}:${e.code}`);
     expect(summary).toEqual([]);

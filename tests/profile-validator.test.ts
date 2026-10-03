@@ -5,6 +5,7 @@ import {
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
 } from '../src/profiles/drafts-runtime';
 import type { RuleEntry } from '../src/profiles/profile-schema';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 
 // Ovaj test je jedini pozivatelj validateProfiles u `npm run check`: bez njega su
 // autoFixable pravila validatora mrtvi kod (nalaz adversarijalne verifikacije).
@@ -57,6 +58,81 @@ describe('validateProfiles autoFixable pravila (jedinicno)', () => {
   it('pravilo bez autoFixable se ne provjerava (default false)', () => {
     const errors = validateProfiles(profileWith({ status: 'draft' }));
     expect(errors).toEqual([]);
+  });
+});
+
+describe('validateProfiles AI-evidence potvrda', () => {
+  const profileWith = (profileId: string, ruleId: string, entry: Partial<RuleEntry>) =>
+    [{ id: profileId, ruleEntries: [{ ruleId, ...entry } as RuleEntry] }] as any;
+
+  it('prihvaca valjan schema 2 paket u staging nacrtu', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const aiEvidence = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    expect(validateProfiles(profileWith(fixture.profileId, fixture.rule.ruleId, {
+      ...fixture.rule, status: 'verified', confirmedVia: 'ai-evidence-audit', aiEvidence,
+    }))).toEqual([]);
+  });
+
+  it('odbija ai-evidence status bez strukturiranog dokaznog paketa', () => {
+    const errors = validateProfiles(profileWith('p1', 'r1', { status: 'verified', confirmedVia: 'ai-evidence-audit' }));
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('bez strukturiranog aiEvidence paketa');
+  });
+
+  it('zahtijeva verified status kad je potvrda AI-audit', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const errors = validateProfiles(
+      profileWith(fixture.profileId, fixture.rule.ruleId, {
+        ...fixture.rule,
+        status: 'draft', confirmedVia: 'ai-evidence-audit', aiEvidence: fixture.evidence,
+      }),
+    );
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('zahtijeva status:"verified"');
+  });
+
+  it('valjan AI dokaz dopušta auto-fixable verified pravilo bez reviewedBy', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const errors = validateProfiles(
+      profileWith(fixture.profileId, fixture.rule.ruleId, {
+        ...fixture.rule,
+        status: 'verified',
+        confirmedVia: 'ai-evidence-audit',
+        aiEvidence: fixture.evidence,
+        autoFixable: true,
+        fixerId: 'font-fixer',
+        reviewedBy: null,
+      }),
+    );
+    expect(errors).toEqual([]);
+  });
+
+  it('odbija AI dokaz s pogresnim profilnim identitetom i bez ljudskog fallbacka', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const errors = validateProfiles(profileWith('other-profile', fixture.rule.ruleId, {
+      status: 'verified',
+      confirmedVia: 'ai-evidence-audit',
+      aiEvidence: fixture.evidence,
+      autoFixable: true,
+      fixerId: 'font-fixer',
+      reviewedBy: 'optional-human-does-not-repair-invalid-proof',
+    }));
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('nevaljan schema version, identitet ili snapshot hash');
+  });
+
+  it('ne dopušta pohranjen AI-evidence paket bez odgovarajuće metode potvrde', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const errors = validateProfiles(profileWith(fixture.profileId, fixture.rule.ruleId, {
+      status: 'draft',
+      aiEvidence: fixture.evidence,
+    }));
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('zahtijeva confirmedVia');
   });
 });
 

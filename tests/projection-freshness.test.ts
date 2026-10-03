@@ -69,6 +69,8 @@ describe('svjezina pecenih projekcija', () => {
       'completion-ledger',
       'faculty-matrix',
       'profile-claims',
+      // Ovaj popis prikiva registrirane projekcije, ne trenutačni rezultat provjere svježine.
+      'profile-rules-server',
       'real-corpus',
       'real-corpus-backlog',
       'reconcile-programs',
@@ -95,6 +97,7 @@ describe('svjezina pecenih projekcija', () => {
     expect(byId['real-corpus-backlog'].sources).toContain('docs/generated/faculty-matrix.json');
     expect(byId['profile-claims'].sources).toContain('docs/generated/completion-ledger.json');
     expect(byId['completion-ledger'].sources).toContain('data/verification/real-corpus-attestation.json');
+    expect(byId['worklist'].artifacts).toContain('data/verification/ai-evidence-worklist.json');
   });
 
   /**

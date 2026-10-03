@@ -17,7 +17,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import cells from '../docs/generated/coverage-cells.json';
-import { ASSISTED_RULE_GATE, PROFILE_GATE } from './helpers/coverage-cells';
+import { ASSISTED_RULE_GATE, buildCoverageCells, PROFILE_GATE } from './helpers/coverage-cells';
 
 type Cell = { profileId: string; fixerId: string; status: string; reason?: string };
 const CELLS = (cells as { cells: Cell[] }).cells;
@@ -36,6 +36,16 @@ describe('razlog nepokrivene celije', () => {
     // Da su mape prazne, `imaKapiju` bi uvijek bio `false` i glavna tvrdnja ne bi nista trazila.
     expect(Object.keys(PROFILE_GATE).length).toBeGreaterThanOrEqual(9);
     expect(Object.keys(ASSISTED_RULE_GATE).length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('prepoznaje UMAS required-sections kao propisano pravilo, iako pokrivenost još nedostaje', () => {
+    const report = buildCoverageCells(
+      { profiles: [{ profileId: 'umas-zavrsni', offeredOptionCount: 0 }], rows: [], surface: [] } as never,
+      { rows: [] },
+      { results: [] } as never,
+    );
+    expect(report.cells.find((cell) => cell.profileId === 'umas-zavrsni' && cell.fixerId === 'required-section-fixer'))
+      .toMatchObject({ status: 'nepokriveno', reason: 'nema-dokaza' });
   });
 
   /**

@@ -22,24 +22,33 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { computeWorklist } from '../src/verification/worklist';
 import { buildCompletionLedger, pdfSeparationProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
+import { loadRepositoryAiEvidenceContext } from './ai-evidence-context-loader';
+import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = <T,>(rel: string): T => JSON.parse(readFileSync(join(root, rel), 'utf8')) as T;
+const currentRepairSourceHash = hashRepairSourceTree(join(root, 'src', 'repair'));
 
 const profiles = [
   ...VERIFIED_PROFILES_WITH_DRAFTS,
   ...LEGAL_DEPARTMENTS_WITH_DRAFTS,
 ] as unknown as ThesisProfile[];
+const legalProfileIds = new Set(LEGAL_DEPARTMENTS_WITH_DRAFTS.map((profile) => profile.id));
+const aiEvidenceContext = await loadRepositoryAiEvidenceContext(root, profiles, SOURCE_REGISTRY as SourceEntry[]);
 
 const inputs: LedgerInputs = {
+  currentRepairSourceHash,
   registryProfiles: profiles.map((p) => ({
     id: p.id,
+    scope: legalProfileIds.has(p.id) ? 'legal' : 'faculty',
     unitId: (p as unknown as { unitId?: string }).unitId ?? null,
     workTypes: (p as unknown as { workTypes?: string[] }).workTypes ?? [],
   })),
   faculties: readJson<{ faculties: LedgerInputs['faculties'] }>('docs/generated/faculty-matrix.json').faculties,
   coverageCells: readJson<{ cells: LedgerInputs['coverageCells'] }>('data/coverage/scored-coverage.json').cells,
-  worklistRows: computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[]).rows,
+  worklistRows: computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[], [], {
+    aiEvidenceResults: aiEvidenceContext.resultsByRule,
+  }).rows,
   repairRows: readJson<{ rows: LedgerInputs['repairRows'] }>('docs/generated/repair-coverage.json').rows,
   programs: readJson<{ programs: LedgerInputs['programs'] }>('data/programs/program-registry.json').programs,
   titleTemplates: readJson<LedgerInputs['titleTemplates']>('data/title-pages/templates-index.json'),
@@ -98,6 +107,10 @@ console.log(`  naslovnica: ${fmt(s.byTitlePage)}`);
 console.log(`  citat     : ${fmt(s.byCitation)}`);
 console.log(`  izjava    : ${fmt(s.byDeclaration)}`);
 console.log(`tvrdnja : ${fmt(s.byClaim)}`);
+console.log(`A svi registri: ${ledger.globalA.profilesAtA}/${ledger.globalA.registeredProfileCount} | svi registrirani na A: ${ledger.globalA.allProfilesA ? 'DA' : 'NE'}`);
+console.log(`fakulteti A: ${ledger.facultyAllA.facultyAtA}/${ledger.facultyAllA.registeredFacultyCount} | cilj 407/407: ${ledger.facultyAllA.meetsFacultyAllA ? 'GO' : 'NO-GO'}`);
+console.log(`fakulteti >= B: ${ledger.facultyMinimumB.facultyAtLeastB}/${ledger.facultyMinimumB.registeredFacultyCount} | ${ledger.facultyMinimumB.meetsFacultyMinimumB ? 'GO' : 'NO-GO'}`);
+console.log(`pravni profili A: ${ledger.facultyMinimumB.legalProfilesAtA}/${ledger.facultyMinimumB.legalProfileCount} | ispod A: ${ledger.facultyMinimumB.legalProfilesBelowA.join(', ') || 'nema'}`);
 console.log(`A-pdf   : ${s.byPdfClaim['A-pdf']}  (zasebno, ne ulazi u tvrdnju)`);
 console.log('');
 if (s.nationalClaimBlockers.length) {

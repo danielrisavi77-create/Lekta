@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { resolve } from 'node:path';
 
 import rawSources from '../data/sources/source-registry.json';
 import rawLedger from '../data/verification/ledger.json';
@@ -17,6 +18,8 @@ import {
 import { planDegradations, changedSourceIds } from '../src/verification/source-change';
 import { compileEffectiveRules } from '../src/profiles/rule-compiler';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
+import { loadRepositoryAiEvidenceContext } from '../scripts/ai-evidence-context-loader';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 
 const NOW = '2026-06-30';
 
@@ -92,12 +95,20 @@ describe('isRuleScored: izvedeni scored (sekcija 2)', () => {
 });
 
 describe('runVerificationGate', () => {
-  it('zivi pravni i FPZG profili prolaze vrata (sve draft/advisory)', () => {
+  it('zivi pravni i FPZG profili prolaze vrata uz razrijeseni AI dokazni kontekst', async () => {
     const profiles = [
       ...VERIFIED_PROFILES_WITH_DRAFTS,
       ...LEGAL_DEPARTMENTS_WITH_DRAFTS,
     ] as unknown as ThesisProfile[];
-    const errors = runVerificationGate(profiles, SOURCE_REGISTRY, { now: NOW });
+    const aiEvidence = await loadRepositoryAiEvidenceContext(
+      resolve(__dirname, '..'),
+      profiles,
+      SOURCE_REGISTRY,
+    );
+    const errors = runVerificationGate(profiles, SOURCE_REGISTRY, {
+      now: NOW,
+      aiEvidence: aiEvidence.gateContext,
+    });
     expect(errors).toEqual([]);
   });
 
@@ -231,6 +242,80 @@ describe('runVerificationGate', () => {
     ];
     const c = codes(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW }));
     expect(c).toContain('scored-not-derivable');
+  });
+
+  it('AI-evidence verified binding pravilo prolazi bez reviewedBy uz razrijeseni dokazni kontekst', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const entry = {
+      ...fixture.rule,
+      status: 'verified' as const,
+      confirmedVia: 'ai-evidence-audit' as const,
+      aiEvidence: fixture.evidence,
+      verifiedBy: 'ai-evidence-audit',
+      reviewedBy: null,
+      lastVerified: '2026-09-24',
+      verifiedHash: fixture.source.snapshotHash,
+    };
+    const context = {
+      snapshotBytesBySourceId: { [fixture.source.id]: fixture.snapshotBytes },
+      snapshotTextsBySourceId: { [fixture.source.id]: fixture.snapshotText },
+      snapshotHashesBySourceId: { [fixture.source.id]: fixture.snapshotSha256 },
+      currentRepairSourceHash: fixture.currentRepairSourceHash,
+      ruleValueHashesByRule: { [JSON.stringify([fixture.profileId, fixture.rule.ruleId])]: fixture.ruleValueSha256 },
+      manifestsById: { [fixture.manifest.manifestId]: fixture.manifest },
+    };
+    expect(runVerificationGate(
+      [{ id: fixture.profileId, rules: {}, ruleEntries: [entry] }],
+      [fixture.source],
+      { now: '2026-09-24', aiEvidence: context },
+    )).toEqual([]);
+  });
+
+  it('AI-evidence oznaka bez razrijesenog manifesta pada zatvoreno', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const entry = {
+      ...fixture.rule,
+      status: 'verified' as const,
+      confirmedVia: 'ai-evidence-audit' as const,
+      aiEvidence: fixture.evidence,
+      verifiedBy: 'ai-evidence-audit',
+      lastVerified: '2026-09-24',
+      verifiedHash: fixture.source.snapshotHash,
+    };
+    const errors = runVerificationGate(
+      [{ id: fixture.profileId, rules: {}, ruleEntries: [entry] }],
+      [fixture.source],
+      { now: '2026-09-24', aiEvidence: { snapshotBytesBySourceId: { [fixture.source.id]: fixture.snapshotBytes }, snapshotTextsBySourceId: { [fixture.source.id]: fixture.snapshotText }, manifestsById: {} } },
+    );
+    expect(codes(errors)).toContain('ai-evidence-invalid');
+  });
+
+  it('AI-evidence sa zastarjelim snapshot hashom ne prolazi vrata ni uz reviewedBy', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const staleEvidence = { ...fixture.evidence, snapshotHash: '0'.repeat(64) };
+    const entry = {
+      ...fixture.rule,
+      status: 'verified' as const,
+      confirmedVia: 'ai-evidence-audit' as const,
+      aiEvidence: staleEvidence,
+      verifiedBy: 'ai-evidence-audit',
+      reviewedBy: 'legacy-human-reviewer',
+      lastVerified: '2026-09-24',
+      verifiedHash: fixture.source.snapshotHash,
+    };
+    const errors = runVerificationGate(
+      [{ id: fixture.profileId, rules: {}, ruleEntries: [entry] }],
+      [fixture.source],
+      {
+        now: '2026-09-24',
+        aiEvidence: {
+          snapshotBytesBySourceId: { [fixture.source.id]: fixture.snapshotBytes },
+          snapshotTextsBySourceId: { [fixture.source.id]: fixture.snapshotText },
+          manifestsById: { [fixture.manifest.manifestId]: fixture.manifest },
+        },
+      },
+    );
+    expect(codes(errors)).toContain('ai-evidence-invalid');
   });
 
   it('nemapiran checkId vraca compiler-diagnostic', () => {

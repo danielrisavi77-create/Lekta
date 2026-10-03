@@ -16,6 +16,11 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { installXmlDomParser } from '../src/docx/xml-dom-install';
+import { documentText } from '../src/verification/docx-visible-text.ts';
+import { textContractPreserved } from './closed-loop-text-contract';
+import { createClosedLoopExecutionManifest } from './closed-loop-execution-manifest';
+import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
+import type { AiEvidenceExecutionManifest } from '../src/verification/ai-evidence-audit';
 
 // Mora ici PRIJE uvoza analize: parser cita globalni DOMParser pri prvom pozivu.
 installXmlDomParser(true);
@@ -24,7 +29,7 @@ const { analyzeFixture, resolveProfile } = await import('../src/analysis/golden-
 const { applyFixers } = await import('../src/repair/apply-fixers');
 const { buildDefaultRepairRequests } = await import('../src/repair/default-selection');
 const { buildAllRepairableItems } = await import('../src/ui/repair-item-assembly');
-const { DEEP_CAPABLE } = await import('../src/ui/repair-panel');
+const { DEEP_CAPABLE } = await import('../src/repair/default-selection');
 const { detectPassRegressions } = await import('../src/analysis/repair-regression');
 const { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } = await import('../src/profiles/drafts-runtime');
 const { compileEffectiveRules } = await import('../src/profiles/rule-compiler');
@@ -34,6 +39,7 @@ const { SOURCE_REGISTRY } = await import('../src/verification/verification-regis
 const { buildViolatingDocx, VIOLATABLE_CHECK_IDS } = await import('../tests/helpers/violating-docx');
 const { APPLIED_AXIS_FIXER } = await import('../tests/helpers/coverage-cells');
 const { AXIS_SIGNAL, STRUCTURAL_WITHOUT_SCORED_CHECK, assertAxisEvidenceWiring } = await import('../tests/helpers/closed-loop-wiring');
+const { isRuleScored } = await import('../src/verification/verification-gate');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -114,6 +120,15 @@ const AXIS_CHECK_ID: Record<string, string> = {
   'heading-style': 'structure.heading.word-styles',
 };
 
+const MANIFEST_AXIS_BY_CHECK_ID: Readonly<Record<string, string>> = {
+  font: 'font',
+  'font-size': 'font-size',
+  'line-spacing': 'line-spacing',
+  justify: 'justify',
+  margins: 'margins',
+  'paper-size': 'paper-size',
+};
+
 /**
  * Strukturne osi koje NEMAJU bodovanu provjeru, pa ne smiju proizvoditi dokaz `resolved`.
  *
@@ -141,7 +156,7 @@ const AXIS_CHECK_ID: Record<string, string> = {
 assertAxisEvidenceWiring();
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
-function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
+function checkForAxis(checks: Array<{ id?: string | null; title?: string; earned?: number; max?: number }>, axis: string) {
   if (axis === 'paper-size') return checks.find((c) => typeof c.id === 'string' && c.id.startsWith('page.size'));
   const wanted = AXIS_CHECK_ID[axis];
   return wanted ? checks.find((c) => c.id === wanted) : undefined;
@@ -168,6 +183,26 @@ type Outcome =
   | 'regression'
   /** Fixer je bacio ili je paket ispao neispravan. */
   | 'error';
+
+const allProfileIds = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).map((p) => p.id);
+const profileFlag = process.argv.indexOf('--profile');
+const selectedProfileId = profileFlag >= 0 ? process.argv[profileFlag + 1] : undefined;
+if (profileFlag >= 0 && (!selectedProfileId || !allProfileIds.includes(selectedProfileId))) {
+  throw new Error(`Nepoznat ili nedostajući --profile ID: ${selectedProfileId ?? '(prazno)'}`);
+}
+const profileIds = selectedProfileId ? [selectedProfileId] : allProfileIds.slice(0, limit);
+const runAt = new Date().toISOString();
+const commandBase = process.env.npm_lifecycle_event === 'closed-loop'
+  ? 'npm run closed-loop'
+  : 'npx vite-node scripts/run-closed-loop.mts';
+const commandArgs = selectedProfileId
+  ? ` -- --profile ${selectedProfileId}${process.argv.includes('--no-structural') ? ' --no-structural' : ''}`
+  : Number.isFinite(limit)
+    ? ` -- --limit ${limit}`
+    : '';
+const executionCommand = `${commandBase}${commandArgs}`;
+const executionManifests: AiEvidenceExecutionManifest[] = [];
+const repairSourceHash = hashRepairSourceTree(join(root, 'src', 'repair'));
 
 interface Row {
   profileId: string;
@@ -234,6 +269,7 @@ async function runProfile(profileId: string): Promise<Row> {
     );
     if (!requests.length) return { ...base, outcome: 'no-repair', violated };
 
+    const beforeText = await documentText(bytes);
     const applied = await applyFixers(bytes, requests);
 
     /**
@@ -261,12 +297,23 @@ async function runProfile(profileId: string): Promise<Row> {
     if (applied.integrityFailure) {
       return { ...base, outcome: 'error', violated, requested: requests.length, note: 'integrityFailure' };
     }
+    const secondPass = await applyFixers(applied.docxBytes, requests);
+    const idempotent =
+      !secondPass.integrityFailure &&
+      secondPass.changelog.length === 0 &&
+      secondPass.docxBytes === applied.docxBytes;
+    if (!idempotent) {
+      return { ...base, outcome: 'regression', violated, requested: requests.length, note: 'second-pass-not-no-op' };
+    }
 
     const after = await analyzeFixture(
       new File([applied.docxBytes], `${profileId}-fixed.docx`, { type: DOCX_MIME }),
       { profileId, profile },
     );
+    const afterText = await documentText(applied.docxBytes);
+    const textPreserved = await textContractPreserved(bytes, beforeText, afterText, requests);
 
+    const beforeChecks = (before.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
     const afterChecks = (after.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
     // Os bez bodovane provjere ne moze biti `resolved`: `axisResolved` bi ju zbog `max === 0`
     // proglasio rijesenom bez ijednog dokaza.
@@ -322,6 +369,41 @@ async function runProfile(profileId: string): Promise<Row> {
     const profileAxesViolated = violated.filter((axis) => PROFILE_AXES.has(axis));
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
+    if (textPreserved && regressions === 0) {
+      const entries = draftRuleEntriesFor(profileId);
+      for (const entry of entries) {
+        const axis = entry.checkId ? MANIFEST_AXIS_BY_CHECK_ID[entry.checkId] : undefined;
+        if (
+          !axis ||
+          entry.status !== 'verified' ||
+          !isRuleScored(entry) ||
+          !violated.includes(axis) ||
+          !axesResolved.includes(axis) ||
+          entries.filter((candidate) => candidate.checkId === entry.checkId).length !== 1
+        ) continue;
+        const beforeCheck = checkForAxis(beforeChecks, axis);
+        const afterCheck = checkForAxis(afterChecks, axis);
+        if (!beforeCheck || !afterCheck) continue;
+        executionManifests.push(createClosedLoopExecutionManifest({
+          profileId,
+          ruleId: entry.ruleId,
+          ruleValue: entry.value,
+          repairSourceHash,
+          testId: `closed-loop:${profileId}:${entry.ruleId}`,
+          command: executionCommand,
+          inputBytes: bytes,
+          outputBytes: applied.docxBytes,
+          before: { earned: beforeCheck.earned ?? 0, max: beforeCheck.max ?? 0 },
+          after: { earned: afterCheck.earned ?? 0, max: afterCheck.max ?? 0 },
+          textPreserved,
+          integrityFailure: applied.integrityFailure ?? null,
+          idempotent,
+          regressions,
+          ranAt: runAt,
+        }));
+      }
+    }
+
     const row: Row = {
       profileId,
       outcome: 'pass',
@@ -334,9 +416,14 @@ async function runProfile(profileId: string): Promise<Row> {
       profileAxesViolated,
       resolved: axesResolved.length,
       regressions,
-      textPreserved: true,
+      textPreserved,
+      ...(beforeText !== afterText && textPreserved ? { note: 'allowed-visible-text-change' } : {}),
     };
     if (regressions > 0) return { ...row, outcome: 'regression' };
+    if (!textPreserved) {
+      const changedFixerIds = [...new Set(applied.changelog.map((entry) => entry.fixerId))].sort();
+      return { ...row, outcome: 'regression', note: `visible-text-changed; fixers=${changedFixerIds.join(',')}` };
+    }
     /**
      * `no-rules` se sudi po PROFILNIM osima, ne po svima.
      *
@@ -362,8 +449,6 @@ async function runProfile(profileId: string): Promise<Row> {
   }
 }
 
-const profileIds = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).map((p) => p.id).slice(0, limit);
-
 const rows: Row[] = [];
 for (const [index, profileId] of profileIds.entries()) {
   rows.push(await runProfile(profileId));
@@ -383,8 +468,30 @@ const report = {
   rows,
 };
 
-mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
-writeFileSync(join(root, 'docs', 'generated', 'closed-loop.json'), JSON.stringify(report, null, 2) + '\n');
+if (selectedProfileId) {
+  const manifestPath = join(root, 'data', 'verification', 'closed-loop-manifests', `${selectedProfileId}.json`);
+  mkdirSync(dirname(manifestPath), { recursive: true });
+  writeFileSync(manifestPath, JSON.stringify({
+    schemaVersion: 1,
+    generatedAt: runAt,
+    command: executionCommand,
+    profileId: selectedProfileId,
+    row: rows[0],
+    manifests: executionManifests,
+  }, null, 2) + '\n');
+} else {
+  mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
+  writeFileSync(join(root, 'docs', 'generated', 'closed-loop.json'), JSON.stringify(report, null, 2) + '\n');
+  const manifestPath = join(root, 'data', 'verification', 'closed-loop-execution-manifests.json');
+  mkdirSync(dirname(manifestPath), { recursive: true });
+  writeFileSync(manifestPath, JSON.stringify({
+    schemaVersion: 1,
+    generatedAt: runAt,
+    command: executionCommand,
+    profileCount: rows.length,
+    manifests: executionManifests,
+  }, null, 2) + '\n');
+}
 
 console.log('=== Closed-loop kroz katalog ===');
 console.log(`profila: ${rows.length}`);
@@ -399,5 +506,7 @@ if (bad.length) {
   if (bad.length > 20) console.log(`  ... jos ${bad.length - 20}`);
 }
 console.log('');
-console.log('zapisano: docs/generated/closed-loop.json');
+console.log(selectedProfileId
+  ? `zapisano: data/verification/closed-loop-manifests/${selectedProfileId}.json`
+  : 'zapisano: docs/generated/closed-loop.json i data/verification/closed-loop-execution-manifests.json');
 

@@ -5,14 +5,22 @@ import type {
   VerificationLedgerEntry,
 } from '../profiles/profile-schema';
 import { isRuleScored } from './verification-gate';
+import { hashString } from '../profiles/profile-fingerprint';
+import {
+  auditAiEvidence,
+  stableJson,
+  type AiEvidenceAudit,
+  type AiEvidenceAuditPass,
+  type AiEvidenceExecutionManifest,
+} from './ai-evidence-audit';
 
 /**
  * Cisti prijelazi statusa za verifikacijsku konzolu (VERIFICATION_PIPELINE.md sekcije 4,
  * 8 i 9). Konzola je samo tanki DOM nad ovim funkcijama.
  *
- * Covjek je jedini koji proglasava `verified` (sekcija 11). Ove funkcije ne diraju disk
- * ni globalno stanje: vracaju AZURIRANO pravilo plus ledger zapis koji pozivatelj
- * primjenjuje (u klijentu: preuzimanje zakrpe i ledger dodatka dok backend ne postoji).
+ * Funkcije ne diraju disk ni globalno stanje: vracaju AZURIRANO pravilo plus ledger zapis koji
+ * pozivatelj primjenjuje. `confirmVerification` je legacy ljudski put; `approveFromAi` prihvaca
+ * status verified samo nakon potpunog deterministickog AI-evidence audita.
  *
  * `confirmVerification` forsira ugovor iz sekcije 2: bez sluzbenog autoriteta, sourceId
  * sa snapshotom, sourcePage i quote ne moze postaviti `verified`. Obvezujuca pravila
@@ -120,88 +128,93 @@ export function confirmVerification(
   return { ok: true, entry: updated, ledger };
 }
 
-/** Jedan prolaz adversarijalne AI provjere (extract / quote-check / refute). */
-export interface AiPassVerdict {
-  pass: 'extract' | 'quote-check' | 'refute';
-  verdict: 'confirm' | 'mismatch' | 'refute';
-  note: string;
-}
-
-/** Dokazi 3-prolazne AI provjere za jedno pravilo. */
-export interface AiEvidence {
-  ruleId: string;
-  passes: AiPassVerdict[];
-  /** Sva tri prolaza slozna (extract confirm + quote-check confirm + refute nije refutirao). */
-  agree: boolean;
-  summary: string;
-}
+/** Pojedinačni prolaz i potpuni dokazni paket koji validator deterministički provjerava. */
+export type AiPassVerdict = AiEvidenceAuditPass;
+export type AiEvidence = AiEvidenceAudit;
 
 export interface BatchApproveResult {
   ok: boolean;
   errors?: string[];
   entry?: RuleEntry;
-  /** Dva zapisa: AI potvrda (actor ai-3pass) i ljudsko odobrenje (actor = approver). */
+  /** Jedan append-only zapis AI-evidence potvrde; nema ljudskog verified zapisa. */
   ledger?: VerificationLedgerEntry[];
 }
 
 /**
- * Batch odobrenje pravila koje je AI 3-prolazno potvrdio (opcija C). Covjek je odobravatelj
- * i preuzima akontabilnost (status postaje verified, boduje se), ali trag iskreno biljezi
- * da je citanje izvora radio AI (`confirmedVia: 'ai-3pass-batch'`, ledger action 'ai-confirmed'
- * uz 'verified'). Odbija ako se 3 prolaza ne slazu ili ako pravilo nije sljedivo do izvora.
+ * Potvrđuje pravilo samo ako deterministički audit veže profil, izvor, snapshot, citat, vrijednost,
+ * opseg, modalitet i razriješeni izvršni manifest. Nepotpun dokaz ostaje neverified bez ljudskog reda.
  */
 export function approveFromAi(
   profileId: string,
   entry: RuleEntry,
   source: SourceEntry | undefined,
-  input: { approver: string; now: string },
-  evidence: AiEvidence,
+  input: { now: string; snapshotBytes: Uint8Array; snapshotSha256?: string; currentRepairSourceHash?: string;
+    currentAnalysisSourceHash?: string;
+    ruleValueSha256?: string; snapshotText: string; manifest: AiEvidenceExecutionManifest | null },
+  evidence: AiEvidence | undefined,
 ): BatchApproveResult {
   const errors: string[] = [];
-  if (!evidence.agree) errors.push('AI prolazi se ne slazu; pravilo ide na rucnu provjeru, ne batch.');
-  if (!OFFICIAL.has(entry.authority)) errors.push('Pravilo nema sluzbeni autoritet.');
-  if (entry.sourceId == null) errors.push('Pravilo nema sourceId.');
-  else if (!source) errors.push(`Izvor "${entry.sourceId}" ne postoji.`);
-  else if (source.snapshotPath == null || source.snapshotHash == null) errors.push(`Izvor "${entry.sourceId}" nije snapshotiran.`);
-  if (!entry.sourcePage) errors.push('Pravilo nema sourcePage.');
-  if (!entry.quote) errors.push('Pravilo nema quote.');
-  if (!input.approver || !input.approver.trim()) errors.push('approver je obvezan (covjek koji odobrava).');
-  if (errors.length) return { ok: false, errors };
+  const legacyBatch = entry.status === 'verified'
+    && (
+      entry.verifiedBy === 'owner-bulk-approval'
+      || entry.confirmedVia === 'ai-1pass-batch'
+      || entry.confirmedVia === 'ai-3pass-batch'
+    );
+  const individuallyHumanVerified = entry.status === 'verified'
+    && (entry.confirmedVia === 'human' || entry.confirmedVia === 'human-audit');
+  const alreadyAiVerified = entry.status === 'verified' && entry.confirmedVia === 'ai-evidence-audit';
+  if (entry.status !== 'draft' && entry.status !== 'needs-recheck' && entry.status !== 'ai-confirmed'
+      && !legacyBatch && !individuallyHumanVerified && !alreadyAiVerified) {
+    errors.push('rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit.');
+  }
+  const audit = auditAiEvidence({
+    profileId,
+    rule: entry,
+    source,
+    snapshotBytes: input.snapshotBytes,
+    snapshotSha256: input.snapshotSha256,
+    currentRepairSourceHash: input.currentRepairSourceHash,
+    currentAnalysisSourceHash: input.currentAnalysisSourceHash,
+    ruleValueSha256: input.ruleValueSha256,
+    snapshotText: input.snapshotText,
+    evidence,
+    manifest: input.manifest,
+  });
+  if (!audit.valid) errors.push(...audit.reasons.map((reason) => `${reason.code}: ${reason.message}`));
+  if (errors.length || !evidence) return { ok: false, errors };
+  const canonicalEvidence = stableJson(evidence);
+  if (alreadyAiVerified && entry.aiEvidenceApprovedCanonical === canonicalEvidence) {
+    return { ok: true, entry, ledger: [] };
+  }
 
-  const approver = input.approver.trim();
   const updated: RuleEntry = {
     ...entry,
     status: 'verified',
-    verifiedBy: approver,
-    confirmedVia: 'ai-3pass-batch',
+    verifiedBy: 'ai-evidence-audit',
+    reviewedBy: null,
+    confirmedVia: 'ai-evidence-audit',
+    aiEvidence: evidence,
+    aiEvidenceApprovedCanonical: canonicalEvidence,
+    modalitySource: 'ai-evidence-audit',
     lastVerified: input.now,
     verifiedHash: source!.snapshotHash,
   };
-  const aiLedger: VerificationLedgerEntry = {
-    id: ledgerId(entry.ruleId, 'ai-confirmed', input.now),
+  updated.scored = isRuleScored(updated);
+  const ledger: VerificationLedgerEntry = {
+    id: alreadyAiVerified
+      ? `${ledgerId(entry.ruleId, 'ai-confirmed', input.now)}-${hashString(canonicalEvidence)}`
+      : ledgerId(entry.ruleId, 'ai-confirmed', input.now),
     ruleId: entry.ruleId,
     profileId,
     action: 'ai-confirmed',
-    actor: 'ai-3pass',
+    actor: 'ai-evidence-audit',
     timestamp: input.now,
     sourceId: entry.sourceId ?? null,
     sourcePage: entry.sourcePage ?? null,
     quote: entry.quote ?? null,
-    note: `3-prolazna AI provjera: ${evidence.summary}`,
+    note: `Deterministički AI-evidence audit; manifest ${evidence.execution.manifestId}: ${evidence.summary}`,
   };
-  const humanLedger: VerificationLedgerEntry = {
-    id: ledgerId(entry.ruleId, 'verified', input.now),
-    ruleId: entry.ruleId,
-    profileId,
-    action: 'verified',
-    actor: approver,
-    timestamp: input.now,
-    sourceId: entry.sourceId ?? null,
-    sourcePage: entry.sourcePage ?? null,
-    quote: entry.quote ?? null,
-    note: 'Batch odobrenje AI-potvrdjenog pravila; covjek preuzeo akontabilnost (confirmedVia ai-3pass-batch).',
-  };
-  return { ok: true, entry: updated, ledger: [aiLedger, humanLedger] };
+  return { ok: true, entry: updated, ledger: [ledger] };
 }
 
 /** Oznaka pravila kao advisory (savjet s linkom, ne boduje se). */

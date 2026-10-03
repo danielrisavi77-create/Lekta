@@ -4,12 +4,18 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { runRealCorpus } from '../tests/real-corpus/harness';
 import { withProvenance } from './lib/provenance.mjs';
+import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outIndex = process.argv.indexOf('--out');
 const outputDir = outIndex >= 0 && process.argv[outIndex + 1] ? resolve(root, process.argv[outIndex + 1]) : undefined;
 const includeLocal = process.argv.includes('--local') || process.env.LEKTA_LOCAL_CORPUS === '1';
+const repairSourceRoot = join(root, 'src', 'repair');
+const repairSourceHash = hashRepairSourceTree(repairSourceRoot);
 const report = await runRealCorpus(undefined, { ...(outputDir ? { outputDir } : {}), includeLocal });
+if (hashRepairSourceTree(repairSourceRoot) !== repairSourceHash) {
+  throw new Error('src/repair se promijenio tijekom mjerenja; rezultat nema stabilan identitet koda. Ponovi mjerenje.');
+}
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 // Commitani izvjestaj mora ostati REPRODUCIBILAN u CI-ju, pa opisuje iskljucivo commitane fixture
 // (tests/real-corpus.test.ts ga usporedjuje s vlastitim pokretanjem). Mjerenje koje ukljucuje
@@ -22,7 +28,7 @@ const reportPath = includeLocal ? 'repair-real-corpus.local.json' : 'repair-real
 // Commitani izvjestaj ostaje BEZ pecata: `tests/real-corpus.test.ts` ga usporedjuje s vlastitim
 // pokretanjem i vremenski pecat bi tu usporedbu trajno rusio.
 const izlaz = includeLocal
-  ? withProvenance(report, 'LEKTA_LOCAL_CORPUS=1 vite-node scripts/repair-real-corpus.mts')
+  ? withProvenance({ ...report, repairSourceHash }, 'LEKTA_LOCAL_CORPUS=1 vite-node scripts/repair-real-corpus.mts')
   : report;
 writeFileSync(join(root, 'docs', 'generated', reportPath), JSON.stringify(izlaz, null, 2) + '\n');
 

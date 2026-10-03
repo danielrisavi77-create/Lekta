@@ -3,8 +3,13 @@ import { buildRepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
 import generatedCorpusReport from '../../docs/generated/repair-real-corpus.json';
 import generatedClosedLoop from '../../docs/generated/closed-loop.json';
+import generatedCompletionLedger from '../../docs/generated/completion-ledger.json';
 import { buildCoverageCells, type ClosedLoopReport, type CoverageCellReport } from './coverage-cells';
 import { VERIFIED_PROFILE_REGISTRY } from '../../src/profiles/profile-registry';
+import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '../../src/profiles/drafts-runtime';
+import { SOURCE_REGISTRY } from '../../src/verification/verification-registry';
+import type { RuleEntry, SourceEntry, WorkType } from '../../src/profiles/profile-schema';
+import type { LedgerRow } from '../../src/verification/completion-ledger';
 import rawCatalog from '../../data/catalog/zagreb-catalog.json';
 
 const FACULTY_CATALOG = rawCatalog as Array<{
@@ -15,6 +20,54 @@ const FACULTY_BY_ID = new Map(
 );
 
 export type FacultyAutomaticStatus = 'pass' | 'review' | 'not-run';
+
+export interface FacultyRuleEvidence {
+  ruleId: string;
+  sourceId: string | null;
+  sourceTitle: string | null;
+  sourceUrl: string | null;
+  snapshotHash: string | null;
+  sourcePage: string | null;
+  quote: string | null;
+  value: unknown;
+  scope: RuleEntry['scope'] | null;
+  modality: RuleEntry['modality'] | null;
+  recordedStatus: RuleEntry['status'] | null;
+  verificationMethod: string | null;
+  aiEvidenceRecorded: boolean;
+  aiEvidenceValidation: 'not-revalidated' | 'missing';
+  aiClaim: { value: unknown; scope: RuleEntry['scope'] | null; modality: RuleEntry['modality'] | null } | null;
+  aiPasses: Array<{ pass: string; verdict: string; note: string }>;
+  aiModel: { provider: string; model: string; version: string } | null;
+  auditExecution: {
+    manifestId: string;
+    testId: string;
+    command: string;
+    inputHash: string;
+    outputHash: string;
+    ranAt: string;
+  } | null;
+  scored: boolean;
+  fixerId: string | null;
+}
+
+export interface ProfileCompletionEvidence {
+  workType: WorkType;
+  level: LedgerRow['claim'] | 'unknown';
+  blockedReasons: string[];
+  rules: LedgerRow['rules'] | 'unknown';
+  repair: LedgerRow['repair'] | 'unknown';
+  proof: LedgerRow['proof'] | 'unknown';
+  claimSource: 'docs/generated/completion-ledger.json';
+}
+
+export interface LegalProfileEvidence {
+  profileId: string;
+  programs: string[];
+  workTypes: string[];
+  ruleEvidence: FacultyRuleEvidence[];
+  completionByWorkType: ProfileCompletionEvidence[];
+}
 
 /**
  * Ishod `npm run closed-loop` za profil. Do 2026-08-29 je bio prikovan na `'not-run'` iako
@@ -44,6 +97,8 @@ export interface FacultyMatrixProfile {
   cellSummary: CoverageCellReport['summary'];
   realCorpusOutcomes: Record<string, number>;
   manualReviewReasons: string[];
+  ruleEvidence: FacultyRuleEvidence[];
+  completionByWorkType: ProfileCompletionEvidence[];
 }
 
 export interface FacultyMatrixRow {
@@ -74,7 +129,7 @@ export interface FacultyMatrixRow {
 }
 
 export interface FacultyMatrixReport {
-  schemaVersion: 1;
+  schemaVersion: 2;
   scope: {
     profileSource: string;
     repairSource: string;
@@ -82,6 +137,8 @@ export interface FacultyMatrixReport {
     closedLoopSource: string;
   };
   faculties: FacultyMatrixRow[];
+  /** Tri pravna profila nisu fakultetske jedinice i ostaju izvan nazivnika 407. */
+  legalProfiles: LegalProfileEvidence[];
   summary: {
     facultyCount: number;
     profileCount: number;
@@ -104,6 +161,102 @@ export interface FacultyMatrixReport {
     resolvedCellCount: number;
   };
   cellSummary: CoverageCellReport['summary'];
+}
+
+const DRAFT_PROFILES = [
+  ...VERIFIED_PROFILES_WITH_DRAFTS,
+  ...LEGAL_DEPARTMENTS_WITH_DRAFTS,
+] as Array<{ id: string; ruleEntries?: RuleEntry[]; programs?: string[]; workTypes?: string[] }>;
+const DRAFT_PROFILE_BY_ID = new Map(DRAFT_PROFILES.map((profile) => [profile.id, profile]));
+const SOURCE_BY_ID = new Map(SOURCE_REGISTRY.map((source) => [source.id, source]));
+const COMPLETION_ROWS = (generatedCompletionLedger as { rows?: LedgerRow[] }).rows ?? [];
+
+export function projectRuleEvidence(
+  entries: readonly RuleEntry[],
+  sources: ReadonlyMap<string, SourceEntry>,
+): FacultyRuleEvidence[] {
+  return entries.map((entry) => {
+    const source = entry.sourceId ? sources.get(entry.sourceId) : undefined;
+    const evidence = entry.aiEvidence as {
+      snapshotHash?: unknown;
+      claim?: { value?: unknown; scope?: RuleEntry['scope'] | null; modality?: RuleEntry['modality'] | null };
+      passes?: unknown;
+      model?: { provider?: unknown; model?: unknown; version?: unknown };
+      execution?: {
+        manifestId?: unknown;
+        testId?: unknown;
+        command?: unknown;
+        inputHash?: unknown;
+        outputHash?: unknown;
+        ranAt?: unknown;
+      };
+    } | null | undefined;
+    const execution = evidence?.execution;
+    const hasExecution = [execution?.manifestId, execution?.testId, execution?.command, execution?.inputHash, execution?.outputHash, execution?.ranAt]
+      .every((value) => typeof value === 'string');
+    const model = evidence?.model;
+    const passes = Array.isArray(evidence?.passes) ? evidence.passes.filter((pass): pass is { pass: string; verdict: string; note: string } =>
+      typeof pass === 'object' && pass !== null && !Array.isArray(pass)
+      && typeof (pass as Record<string, unknown>).pass === 'string'
+      && typeof (pass as Record<string, unknown>).verdict === 'string'
+      && typeof (pass as Record<string, unknown>).note === 'string',
+    ) : [];
+    return {
+      ruleId: entry.ruleId,
+      sourceId: entry.sourceId ?? null,
+      sourceTitle: source?.title ?? null,
+      sourceUrl: source?.url ?? null,
+      snapshotHash: typeof evidence?.snapshotHash === 'string' ? evidence.snapshotHash : entry.verifiedHash ?? null,
+      sourcePage: entry.sourcePage ?? null,
+      quote: entry.quote ?? null,
+      value: entry.value,
+      scope: entry.scope ?? null,
+      modality: entry.modality ?? null,
+      recordedStatus: entry.status ?? null,
+      verificationMethod: entry.confirmedVia ?? entry.verifiedBy ?? null,
+      aiEvidenceRecorded: Boolean(entry.aiEvidence),
+      aiEvidenceValidation: entry.aiEvidence ? 'not-revalidated' : 'missing',
+      aiClaim: evidence?.claim && Object.hasOwn(evidence.claim, 'value') ? {
+        value: evidence.claim.value,
+        scope: evidence.claim.scope ?? null,
+        modality: evidence.claim.modality ?? null,
+      } : null,
+      aiPasses: passes,
+      aiModel: typeof model?.provider === 'string' && typeof model.model === 'string' && typeof model.version === 'string'
+        ? { provider: model.provider, model: model.model, version: model.version }
+        : null,
+      auditExecution: hasExecution ? {
+        manifestId: execution!.manifestId as string,
+        testId: execution!.testId as string,
+        command: execution!.command as string,
+        inputHash: execution!.inputHash as string,
+        outputHash: execution!.outputHash as string,
+        ranAt: execution!.ranAt as string,
+      } : null,
+      scored: entry.scored === true,
+      fixerId: entry.fixerId ?? null,
+    };
+  }).sort((left, right) => left.ruleId.localeCompare(right.ruleId));
+}
+
+function ruleEvidenceFor(profileId: string): FacultyRuleEvidence[] {
+  const profile = DRAFT_PROFILE_BY_ID.get(profileId);
+  return projectRuleEvidence(profile?.ruleEntries ?? [], SOURCE_BY_ID);
+}
+
+function completionByWorkType(profileId: string, workTypes: readonly string[]): ProfileCompletionEvidence[] {
+  return workTypes.map((workType) => {
+    const row = COMPLETION_ROWS.find((candidate) => candidate.profileId === profileId && candidate.workType === workType);
+    return {
+      workType: workType as WorkType,
+      level: row?.claim ?? 'unknown',
+      blockedReasons: [...(row?.blockedReasons ?? ['nema-reda-u-generiranom-completion-ledgeru'])],
+      rules: row?.rules ?? 'unknown',
+      repair: row?.repair ?? 'unknown',
+      proof: row?.proof ?? 'unknown',
+      claimSource: 'docs/generated/completion-ledger.json',
+    };
+  });
 }
 
 function unique(values: string[]): string[] {
@@ -215,6 +368,8 @@ function buildProfileRow(
     cellSummary: summarizeCells(cells),
     realCorpusOutcomes: corpusOutcomes,
     manualReviewReasons: reasonsForProfile(profile.profileId, samples, coveragePass),
+    ruleEvidence: ruleEvidenceFor(profile.profileId),
+    completionByWorkType: completionByWorkType(profile.profileId, registryProfile.workTypes),
   };
 }
 
@@ -275,8 +430,15 @@ export function buildFacultyMatrixReport(
 
   const allProfiles = faculties.flatMap((faculty) => faculty.profiles);
   const allResults = corpus.results;
+  const legalProfiles: LegalProfileEvidence[] = LEGAL_DEPARTMENTS_WITH_DRAFTS.map((profile) => ({
+    profileId: profile.id,
+    programs: [...profile.programs],
+    workTypes: [...profile.workTypes],
+    ruleEvidence: ruleEvidenceFor(profile.id),
+    completionByWorkType: completionByWorkType(profile.id, profile.workTypes),
+  })).sort((left, right) => left.profileId.localeCompare(right.profileId));
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     scope: {
       profileSource: 'src/profiles/profile-registry.ts',
       repairSource: 'tests/helpers/repair-coverage.ts',
@@ -284,6 +446,7 @@ export function buildFacultyMatrixReport(
       closedLoopSource: 'docs/generated/closed-loop.json',
     },
     faculties,
+    legalProfiles,
     summary: {
       facultyCount: faculties.length,
       profileCount: allProfiles.length,
