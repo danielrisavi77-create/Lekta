@@ -54,6 +54,8 @@
     "check:claude-context": "node scripts/verify-claude-context.mjs",
     "check:laya": "tsc --noEmit --project scripts/laya/tsconfig.json",
     "test:laya": "vitest run tests/laya",
+    "laya:eval": "vite-node scripts/laya/eval-cli.ts",
+    "laya:zlatni": "vite-node scripts/laya-zlatni-skup.mts",
     "clean:tmp": "node scripts/clean-vitest-tmp.mjs",
     "master-ci": "node scripts/master-ci-status.mjs",
     "check:edge": "node scripts/check-edge.mjs",

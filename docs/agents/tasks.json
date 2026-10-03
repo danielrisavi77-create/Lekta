@@ -800,7 +800,7 @@
       "dependsOn": [
         "T47"
       ],
-      "note": "Prioritet nizak, nakon lansiranja. Razred: full. Zasticeno: ne. AUDIT 27.9.: Codex pregled #149; #149 V2.0 spojen, #102 zatvoren kao superseded"
+      "note": "Prioritet nizak, nakon lansiranja. Razred: full. Zasticeno: ne. AUDIT 27.9.: Codex pregled #149; #149 V2.0 spojen, #102 zatvoren kao superseded. 28.9. (#203): V2.1 i zlatni skup; prvi pravi prolaz na radnoj stanici (convaiinnovations/laya multilingual, pregledani commit 55cf4c4e, CPU fp32, 0,7 s po zahtjevu nakon zagrijavanja); model upisan u scripts/laya/registry.json bez praga. Odluke vlasnika 28.9. (sesija radne stanice): (1) D1 zlatni skup od owned_synthetic radova (generatori iz scripts/corpus-gen), pa kalibracija i GO/NO-GO za reference.completeness; (2) lokalno shadow mjerenje nad regresijskim korpusom radne stanice kao explicitly_permitted (vlasnik-2026-09-28-lokalno): nista iz korpusa ne izlazi sa stroja, u repo idu samo zbirne brojke bez teksta i pseudonima, model samo na 127.0.0.1. Status mijenja koordinator."
     },
     {
       "id": "T80",

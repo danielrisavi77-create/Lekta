@@ -272,7 +272,7 @@
           "maxLength": 64,
           "pattern": "^[0-9a-f]{64}$"
         },
-        "tokenizerSha256": {
+        "vocabularySha256": {
           "type": "string",
           "minLength": 64,
           "maxLength": 64,
@@ -305,7 +305,7 @@
         "modelId",
         "modelRevision",
         "weightsSha256",
-        "tokenizerSha256",
+        "vocabularySha256",
         "calibrationRevision",
         "runtimeVersion",
         "precision"

@@ -169,7 +169,7 @@ interface LayaDecisionResultV2 {
   probabilities: Record<verdict, number>;
   answerConfidence: number;
   runtime: { backend: 'laya-python' | 'laya-onnx'; modelId; modelRevision; weightsSha256;
-    tokenizerSha256; calibrationRevision; runtimeVersion; precision };
+    vocabularySha256; calibrationRevision; runtimeVersion; precision };
 }
 ```
 
@@ -198,7 +198,7 @@ verziju runtimea, preciznost i kalibracijsku reviziju. Cache kljuc je `inputDige
 | dodatno ili nedostajuce polje | `invalid_result` |
 | odgovor nije vezan uz `caseId` i `inputDigest` | `input_not_bound` |
 | hash tezina ne odgovara | `weights_mismatch` |
-| hash tokenizera ne odgovara | `tokenizer_mismatch` |
+| hash tokenizera ne odgovara | `vocabulary_mismatch` |
 | drugi backend, verzija, preciznost ili kalibracija | `runtime_mismatch` |
 | zbroj nije 1, verdict nije jedinstveni argmax, vrijednost izvan [0,1] | `invalid_distribution` |
 | nema kalibracijske politike | `calibration_missing` |
@@ -312,6 +312,19 @@ tests/laya/invariants.test.ts
 tests/helpers/laya-v2-fixtures.ts   D0
 tests/helpers/laya-src-boundary.ts  gard: src/** ne uvozi Layu (literal, require, nedoslovni import)
 tests/gate-mutations.test.ts        7 mutacija laya/*
+```
+
+Dodano u V2.1 bez modela:
+
+```
+scripts/laya/registry.ts            pouzdani registar manifesta i pragova (Codex A1), registry.json
+scripts/laya/runtime-client.ts      lokalni http klijent, samo loopback, fail-closed
+scripts/laya/snapshot-from-analysis.ts  snapshot iz details.incompleteReferences stvarne analize
+scripts/laya/runner.ts              runLaya i adjudicateCases, cache inputDigest:modelDigest
+scripts/laya/eval.ts                metrike, baselineovi, krivulja pokrivenosti, izbor praga
+scripts/laya/eval-run.ts, eval-cli.ts   npm run laya:eval
+tests/laya/{registry,runtime-client,runner,eval,eval-cli}.test.ts, tests/laya-analysis-snapshot.test.ts
+docs/laya/{RUNTIME_PROTOCOL,EVALUATION_PROTOCOL,RADNA_STANICA}.md
 ```
 
 Planirano: `scripts/laya/eval-runner.ts`, `parity-runner.ts`, `calibration.ts`,

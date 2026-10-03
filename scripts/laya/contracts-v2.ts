@@ -39,7 +39,7 @@ export interface LayaDecisionCaseV2 {
 }
 export interface LayaRuntime {
   backend: 'laya-python' | 'laya-onnx'; modelId: string; modelRevision: string;
-  weightsSha256: string; tokenizerSha256: string; calibrationRevision: string;
+  weightsSha256: string; vocabularySha256: string; calibrationRevision: string;
   runtimeVersion: string; precision: 'fp32' | 'fp16' | 'bf16' | 'int8' | 'int4';
 }
 export interface LayaDecisionResultV2 {
@@ -53,7 +53,7 @@ export interface LayaCalibrationPolicy {
 
 export type NoAdjudicationReason =
   | 'case_invalid' | 'runtime_unavailable' | 'manifest_invalid' | 'unknown_schema' | 'invalid_result'
-  | 'unknown_label' | 'input_not_bound' | 'weights_mismatch' | 'tokenizer_mismatch' | 'runtime_mismatch'
+  | 'unknown_label' | 'input_not_bound' | 'weights_mismatch' | 'vocabulary_mismatch' | 'runtime_mismatch'
   | 'invalid_distribution' | 'calibration_missing' | 'calibration_mismatch' | 'below_threshold';
 
 /** Savjetodavni zapis za buduci `details.semanticAdjudication`. Nikad ne sadrzi score ni status checka. */
@@ -179,7 +179,7 @@ export function decisionInputDigest(identity: LayaIdentity, engine: LayaEngine, 
 export function modelDigest(runtime: LayaRuntime): string {
   const r = validateRuntime(runtime);
   return sha256Hex(JSON.stringify(['laya:v2:model', r.backend, r.modelId, r.modelRevision, r.weightsSha256,
-    r.tokenizerSha256, r.runtimeVersion, r.precision, r.calibrationRevision]));
+    r.vocabularySha256, r.runtimeVersion, r.precision, r.calibrationRevision]));
 }
 
 export function validateDecisionCase(value: unknown): LayaDecisionCaseV2 {
@@ -246,7 +246,7 @@ function adjudicateChecked(result: unknown, expectedCase: unknown, manifest: unk
 
   if (r.caseId !== c.caseId || r.inputDigest !== c.inputDigest) return noAdjudication('input_not_bound', c);
   if (r.runtime.weightsSha256 !== pinned.weightsSha256) return noAdjudication('weights_mismatch', c);
-  if (r.runtime.tokenizerSha256 !== pinned.tokenizerSha256) return noAdjudication('tokenizer_mismatch', c);
+  if (r.runtime.vocabularySha256 !== pinned.vocabularySha256) return noAdjudication('vocabulary_mismatch', c);
   if (modelDigest(r.runtime) !== digest) return noAdjudication('runtime_mismatch', c);
 
   // Vjerojatnosti su zapis po oznaci, pa redoslijed opcija u odgovoru ne mijenja tumacenje.

@@ -1,0 +1,326 @@
+#!/usr/bin/env python3
+"""Lekta Laya runtime (V2.1): omotac oko sluzbenog Python paketa `laya` (Convai Innovations).
+
+Govori protokol iz docs/laya/RUNTIME_PROTOCOL.md: POST /v2/infer na 127.0.0.1. Pokrece se samo
+na radnoj stanici (docs/laya/RADNA_STANICA.md). Ne logira tekst zapisa, ne slusa izvan loopbacka
+i ne vraca prag ni politiku: prag dolazi iz Lektinog registra, nikad iz runtimea.
+
+Upstream (provjereno 28. 9. 2026 u sdistu laya-0.3.21, SHA-256 a3ddc55d...f416):
+    agent = laya.load("convaiinnovations/laya", subfolder="multilingual", revision=<commit>)
+    result = agent.predict(state, {"ime": {"type": "choice", "instructions": ..., "criteria": {...}}})
+    result["answers"]["ime"] -> {"choice", "probabilities", "confidence", "answer_confidence", ...}
+Checkpoint cine `rl_agent_config.json`, `model.safetensors`, `tokenizer/*` i `encoder/*`
+(agent.py:352). Upstream pri ucitavanju smije prepisati `tokenizer/tokenizer_config.json`
+(`_fix_tokenizer_config`), pa se manifest hashira NAKON ucitavanja, nad istom mapom.
+Nije pokretano s pravim modelom u razvojnoj okolini (Hugging Face nije bio dostupan).
+
+Pokretanje:
+    python scripts/laya/runtime/lekta_laya_runtime.py --model-revision <40-znamenkasti commit> \
+        --calibration-revision cal-2026-10-1 [--subfolder multilingual] [--precision fp32] [--port 8765]
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+import os
+import re
+import sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any, Callable
+
+SCHEMA_VERSION = 2
+TASK_ID = "reference.completeness/finding-v2"
+VERDICTS = ("finding_supported", "possible_false_positive", "extraction_uncertain", "insufficient_evidence")
+MAX_REQUEST_BYTES = 16 * 1024
+MAX_TEXT = 2000
+ID_PATTERN = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$")
+LOOPBACK = {"127.0.0.1"}
+COMMIT = re.compile(r"^[0-9a-f]{40}$")
+# Isti allow_patterns kao upstream `Agent.__init__`; samo te datoteke model ucitava.
+CHECKPOINT_PATTERNS = ("rl_agent_config.json", "model.safetensors", "tokenizer/*", "encoder/*")
+
+QUESTION = "nalaz"
+# Upstream cijelo pitanje (upute i sve opcije) slaze u `head_max_len` tokena (zadano 192), svaku
+# opciju reze na 48, a kad opcije pojedu budzet, upute reze na 8 do 16 tokena (common.py,
+# `build_sequence`). Prva, dvojezicna verzija nije stala: model nije vidio sto se pita (D1 na #203:
+# tocnost 0,044, nestabilnost redoslijeda 0,79). Zato su upute i opcije kratke, a `prepare` odbija
+# start ako pitanje ne stane (`assert_question_fits`).
+INSTRUCTIONS = "Je li ovaj zapis iz popisa literature stvarno nepotpun?"
+# Model vidi `oznaka: opis`; Lektin verdikt je samo kljuc za preslikavanje odgovora natrag.
+OPTIONS = {
+    "finding_supported": ("nepotpun", "nedostaje autor, godina ili naslov"),
+    "possible_false_positive": ("potpun", "potpun za svoju vrstu izvora, npr. zakon, presuda, institucija kao autor ili b. g."),
+    "extraction_uncertain": ("krivo izvucen", "nije jedan cijeli zapis: spojen s drugim, prekinut ili naslov popisa"),
+    "insufficient_evidence": ("neodlucivo", "iz samog teksta se ne moze odluciti"),
+}
+# Varijanta `da-ne` (pokus koordinatora prije zatvaranja T79): binarno pitanje tipa `noul`.
+# Upstream vraca `noul` = P(true); "true" znaci da je zapis potpun, dakle da je Lektin nalaz lazan.
+# Binarno pitanje ne moze izraziti `extraction_uncertain` ni `insufficient_evidence` (vjerojatnost 0).
+DA_NE_INSTRUCTIONS = "Je li ovaj zapis iz popisa literature potpun?"
+DA_NE_CRITERIA = {
+    "true": "potpun je za svoju vrstu izvora, npr. zakon, presuda, institucija kao autor ili b. g.",
+    "false": "nedostaje autor, godina ili naslov",
+}
+NOUL_LABELS = ("false", "true")  # upstream `_DEFAULT_NOUL_LABELS`, redoslijed [false, true]
+PITANJA = ("izbor", "da-ne")
+OPTION_TOKEN_CAP = 48  # upstream `build_sequence`: truncation max_length=48 po opciji
+OPTION_BUDGET_FLOOR = 16  # upstream: ispod ovoga opcije se dodatno skracuju
+
+
+class RequestError(Exception):
+    """Neispravan zahtjev; poruka nikad ne sadrzi vrijednosti iz zahtjeva."""
+
+
+def sha256_file(path: str) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def check_id(value: str, name: str) -> str:
+    if not isinstance(value, str) or not ID_PATTERN.match(value) or len(value) > 128:
+        raise ValueError(f"{name} nije valjan identifikator (dopusteno: slova, brojke, . _ : + -)")
+    return value
+
+
+def normalized(probabilities: dict[str, Any]) -> dict[str, float]:
+    """Vjerojatnosti za sve cetiri oznake, zbroj tocno 1 nakon zaokruzivanja na 6 decimala."""
+    raw: dict[str, float] = {}
+    for label in VERDICTS:
+        value = probabilities.get(label)
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value < 0:
+            raise ValueError("upstream nije vratio vjerojatnost za svaku oznaku")
+        raw[label] = float(value)
+    total = sum(raw.values())
+    if total <= 0:
+        raise ValueError("upstream je vratio nultu raspodjelu")
+    rounded = {label: round(value / total, 6) for label, value in raw.items()}
+    top = max(VERDICTS, key=lambda label: rounded[label])
+    rounded[top] = round(rounded[top] + (1.0 - sum(rounded.values())), 6)
+    return rounded
+
+
+class LektaLayaRuntime:
+    """Jedan zahtjev prema protokolu -> jedan poziv agent.predict -> LayaDecisionResultV2."""
+
+    def __init__(self, agent: Any, manifest: dict[str, str], pitanje: str = "izbor"):
+        if pitanje not in PITANJA:
+            raise ValueError("nepoznata varijanta pitanja")
+        self.agent = agent
+        self.manifest = dict(manifest)
+        self.pitanje = pitanje
+        self.question_budget: dict[str, Any] | None = None
+
+    def infer(self, request: Any) -> dict[str, Any]:
+        expected = {"schemaVersion", "taskId", "caseId", "inputDigest", "modelInput", "labelOrder"}
+        if not isinstance(request, dict) or set(request) != expected:
+            raise RequestError("zahtjev nema tocno polja protokola")
+        if request["schemaVersion"] != SCHEMA_VERSION or request["taskId"] != TASK_ID:
+            raise RequestError("nepoznata verzija ili zadatak")
+        case_id, input_digest = request["caseId"], request["inputDigest"]
+        if not isinstance(case_id, str) or not isinstance(input_digest, str) or not re.fullmatch(r"[0-9a-f]{64}", input_digest):
+            raise RequestError("caseId ili inputDigest nisu valjani")
+        order = request["labelOrder"]
+        if not isinstance(order, list) or sorted(order) != sorted(VERDICTS):
+            raise RequestError("labelOrder nije permutacija oznaka")
+        model_input = request["modelInput"]
+        if not isinstance(model_input, dict) or set(model_input) != {"text", "language", "ruleEvidence"}:
+            raise RequestError("modelInput nema tocno polja protokola")
+        text = model_input["text"]
+        if not isinstance(text, str) or not text.strip() or len(text) > MAX_TEXT:
+            raise RequestError("tekst zapisa nije valjan")
+
+        state: dict[str, Any] = {"zapis": text, "jezik": model_input["language"]}
+        rule = model_input["ruleEvidence"]
+        if isinstance(rule, dict) and isinstance(rule.get("excerpt"), str):
+            state["pravilo"] = rule["excerpt"]
+        if self.pitanje == "da-ne":
+            # labelOrder nema ucinka: upstream noul uvijek nudi [false, true].
+            questions = {QUESTION: {"type": "noul", "instructions": DA_NE_INSTRUCTIONS, "criteria": dict(DA_NE_CRITERIA)}}
+            answer = self.agent.predict(state, questions)["answers"][QUESTION]
+            complete = answer.get("noul")
+            if not isinstance(complete, (int, float)) or isinstance(complete, bool) or not 0 <= complete <= 1:
+                raise ValueError("upstream nije vratio noul vjerojatnost")
+            probabilities = normalized({"finding_supported": 1 - complete, "possible_false_positive": complete,
+                                        "extraction_uncertain": 0, "insufficient_evidence": 0})
+        else:
+            questions = {QUESTION: {"type": "choice", "instructions": INSTRUCTIONS,
+                                    "criteria": {OPTIONS[label][0]: OPTIONS[label][1] for label in order}}}
+            answer = self.agent.predict(state, questions)["answers"][QUESTION]
+            raw = answer["probabilities"]
+            # Upstream vraca vjerojatnosti po oznaci koju je model vidio; natrag u Lektin verdikt po imenu.
+            probabilities = normalized({label: raw.get(OPTIONS[label][0]) for label in VERDICTS})
+        verdict = max(VERDICTS, key=lambda label: probabilities[label])
+        # Upstream preporucuje odluke nad kalibriranom pouzdanoscu; bez nje koristi se vjerojatnost presude.
+        confidence = answer.get("answer_confidence", answer.get("confidence", probabilities[verdict]))
+        if not isinstance(confidence, (int, float)) or not math.isfinite(confidence) or not 0 <= confidence <= 1:
+            confidence = probabilities[verdict]
+        return {"schemaVersion": SCHEMA_VERSION, "caseId": case_id, "inputDigest": input_digest, "verdict": verdict,
+                "probabilities": probabilities, "answerConfidence": round(float(confidence), 6), "runtime": dict(self.manifest)}
+
+
+def make_handler(runtime: LektaLayaRuntime) -> type[BaseHTTPRequestHandler]:
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, format: str, *args: Any) -> None:  # noqa: A002
+            return  # nikad ne logira zahtjeve ni tekst zapisa
+
+        def _send(self, status: int, body: dict[str, Any]) -> None:
+            data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+            self.send_response(status)
+            self.send_header("content-type", "application/json")
+            self.send_header("content-length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+
+        def do_POST(self) -> None:  # noqa: N802
+            if self.path != "/v2/infer":
+                self._send(404, {})
+                return
+            length = int(self.headers.get("content-length") or 0)
+            if length <= 0 or length > MAX_REQUEST_BYTES:
+                self._send(413, {})
+                return
+            try:
+                request = json.loads(self.rfile.read(length).decode("utf-8"))
+                self._send(200, runtime.infer(request))
+            except (RequestError, json.JSONDecodeError, UnicodeDecodeError):
+                self._send(400, {})
+            except Exception:  # upstream kvar: Lekta ga vidi kao runtime_unavailable
+                self._send(500, {})
+
+    return Handler
+
+
+def tree_sha256(root: str, rel_paths: list[str]) -> str:
+    """Jedan SHA-256 za skup datoteka: sortirani retci `putanja NUL sha256(datoteke)`."""
+    digest = hashlib.sha256()
+    for rel in sorted(rel_paths):
+        digest.update(rel.encode("utf-8") + b"\0" + sha256_file(os.path.join(root, *rel.split("/"))).encode("ascii") + b"\n")
+    return digest.hexdigest()
+
+
+def checkpoint_digests(checkpoint_dir: str) -> tuple[str, str]:
+    """(weightsSha256, vocabularySha256) za mapu checkpointa.
+
+    Tezine pokrivaju `model.safetensors`, `rl_agent_config.json` i cijeli `encoder/`, jer model
+    bez istog enkodera i konfiguracije nije isti model. Tokenizer pokriva cijeli `tokenizer/`.
+    Skrivene datoteke (upstreamov `.tokenizer_config.*.tmp` usred zamjene) ne ulaze.
+    """
+    files = []
+    for dirpath, dirnames, names in os.walk(checkpoint_dir):
+        dirnames[:] = sorted(d for d in dirnames if not d.startswith("."))
+        for name in names:
+            if not name.startswith("."):
+                files.append(os.path.relpath(os.path.join(dirpath, name), checkpoint_dir).replace(os.sep, "/"))
+    weights = [f for f in files if f in ("model.safetensors", "rl_agent_config.json") or f.startswith("encoder/")]
+    tokenizer = [f for f in files if f.startswith("tokenizer/")]
+    if "model.safetensors" not in weights or "rl_agent_config.json" not in weights or not tokenizer:
+        raise ValueError("mapa checkpointa nema model.safetensors, rl_agent_config.json i tokenizer/")
+    return tree_sha256(checkpoint_dir, weights), tree_sha256(checkpoint_dir, tokenizer)
+
+
+def locate_checkpoint(args: argparse.Namespace) -> str:
+    """Mapa pinanog checkpointa u lokalnoj HF predmemoriji; bez mreze (local_files_only)."""
+    from huggingface_hub import snapshot_download
+    prefix = f"{args.subfolder}/" if args.subfolder else ""
+    root = snapshot_download(args.model, revision=args.model_revision, local_files_only=True,
+                             allow_patterns=[prefix + p for p in CHECKPOINT_PATTERNS])
+    return os.path.join(root, args.subfolder) if args.subfolder else root
+
+
+def build_manifest(args: argparse.Namespace, runtime_version: str, checkpoint_dir: str) -> dict[str, str]:
+    model_id = check_id(f"{args.model.replace('/', ':')}:{args.subfolder}" if args.subfolder else args.model.replace("/", ":"), "modelId")
+    weights, tokenizer = checkpoint_digests(checkpoint_dir)
+    return {"backend": "laya-python", "modelId": model_id, "modelRevision": check_id(args.model_revision, "modelRevision"),
+            "weightsSha256": weights, "vocabularySha256": tokenizer,
+            "calibrationRevision": check_id(args.calibration_revision, "calibrationRevision"),
+            "runtimeVersion": check_id(runtime_version, "runtimeVersion"), "precision": args.precision}
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Lekta Laya runtime (lokalni, samo 127.0.0.1)")
+    parser.add_argument("--model", default="convaiinnovations/laya")
+    parser.add_argument("--subfolder", default="multilingual", help="multilingual za hrvatski; prazno za engleski checkpoint")
+    parser.add_argument("--model-revision", required=True, help="40-znamenkasti commit Hugging Face repozitorija modela")
+    parser.add_argument("--calibration-revision", required=True)
+    parser.add_argument("--precision", default="fp32", choices=["fp32", "fp16", "bf16", "int8", "int4"])
+    parser.add_argument("--pitanje", default="izbor", choices=PITANJA,
+                        help="izbor: cetiri oznake; da-ne: binarno 'je li zapis potpun' (noul)")
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=8765)
+    return parser.parse_args(argv)
+
+
+class StartError(Exception):
+    """Runtime se ne smije pokrenuti; poruka ide operateru."""
+
+
+def question_budget(tok: Any, head_max_len: int, pitanje: str = "izbor") -> dict[str, Any]:
+    """Tokeni pitanja istim racunom kao upstream `build_sequence` (common.py)."""
+    def count(text: str) -> int:
+        return len(tok(text, add_special_tokens=False)["input_ids"])
+    # Svaka opcija je [MASK] + " oznaka: opis"; najgori slucaj ne ovisi o redoslijedu.
+    if pitanje == "da-ne":
+        head = count(f"noul question: {DA_NE_INSTRUCTIONS}")
+        options = {label: 1 + count(f" {label}: {DA_NE_CRITERIA[label]}") for label in NOUL_LABELS}
+    else:
+        head = count(f"choice question: {INSTRUCTIONS}")
+        options = {label: 1 + count(f" {OPTIONS[label][0]}: {OPTIONS[label][1]}") for label in VERDICTS}
+    return {"pitanje": pitanje, "headMaxLen": head_max_len, "head": head, "options": options,
+            "free": head_max_len - sum(options.values()) - head}
+
+
+def assert_question_fits(agent: Any, pitanje: str = "izbor") -> dict[str, Any]:
+    """Odbija start ako bi upstream skratio upute ili ijednu opciju: model bi odgovarao na drugo pitanje."""
+    tok = getattr(agent, "tok", None)
+    if tok is None:
+        raise StartError("Agent nema tokenizer (agent.tok); budzet pitanja se ne moze provjeriti.")
+    budget = question_budget(tok, int((getattr(agent, "cfg", None) or {}).get("head_max_len", 192)), pitanje)
+    options_total = sum(budget["options"].values())
+    too_long = [label for label, n in budget["options"].items() if n > 1 + OPTION_TOKEN_CAP]
+    if too_long or budget["headMaxLen"] - options_total < OPTION_BUDGET_FLOOR or budget["free"] < 0:
+        raise StartError(f"Pitanje ne stane u head_max_len bez rezanja: {json.dumps(budget)}")
+    return budget
+
+
+def prepare(args: argparse.Namespace, load: Callable[..., Any], runtime_version: str,
+            locate: Callable[[argparse.Namespace], str] = locate_checkpoint) -> LektaLayaRuntime:
+    if args.host not in LOOPBACK:
+        raise StartError("Runtime smije slusati samo na 127.0.0.1.")
+    if not COMMIT.match(args.model_revision):
+        raise StartError("--model-revision mora biti 40-znamenkasti commit (mala slova), ne grana ni oznaka.")
+    agent = load(args.model, subfolder=args.subfolder or None, revision=args.model_revision)
+    # Upstream biljezi commit na koji snapshot stvarno pokazuje; drugi commit znaci drugi model.
+    loaded = getattr(agent, "revision", None)
+    if loaded != args.model_revision:
+        raise StartError(f"Ucitan je commit {loaded!r}, a trazen {args.model_revision}.")
+    budget = assert_question_fits(agent, args.pitanje)
+    # Drugo pitanje je drugo ponasanje modela: varijanta ulazi u runtimeVersion, dakle i u modelDigest,
+    # pa se prag izmjeren za jednu varijantu ne moze primijeniti na drugu.
+    manifest = build_manifest(args, f"{runtime_version}+{args.pitanje}", locate(args))
+    runtime = LektaLayaRuntime(agent, manifest, args.pitanje)
+    runtime.question_budget = budget
+    return runtime
+
+
+def main(argv: list[str]) -> int:
+    args = parse_args(argv)
+    try:
+        import laya  # sluzbeni paket: python -m pip install "laya"
+        from importlib.metadata import version
+        runtime = prepare(args, laya.load, version("laya"))
+    except StartError as error:
+        print(error, file=sys.stderr)
+        return 2
+    print(json.dumps({"slusa": f"http://{args.host}:{args.port}", "runtime": runtime.manifest,
+                      "budzetPitanja": runtime.question_budget}, indent=2), flush=True)
+    HTTPServer((args.host, args.port), make_handler(runtime)).serve_forever()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

@@ -52,7 +52,11 @@ import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidat
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
-import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
+import { loadRegistry } from '../scripts/laya/registry.ts';
+import { assertLoopbackEndpoint } from '../scripts/laya/runtime-client.ts';
+import { evaluate as evaluateLaya } from '../scripts/laya/eval.ts';
+import { listZaOznacavanje, pripremiKandidate, sastaviZlatniSkup } from '../scripts/laya/zlatni-skup.ts';
+import { LAYA_FIXTURE_MODEL, makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
@@ -1095,6 +1099,16 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
   const j = src.indexOf(endMarker, i);
   if (j < 0 || j <= i) throw new Error(`kraj marker nije pronadjen iza pocetka: ${endMarker}`);
   return src.slice(0, i) + src.slice(j);
+}
+
+/** Cetiri sinteticka rada s po jednim nepotpunim zapisom; `predlosci[i]` je predlozak i-tog rada. */
+function layaZlatniSplit(predlosci: (string | null)[]) {
+  const k = pripremiKandidate(predlosci.map((templateFamily, i) => ({
+    naziv: `r${i}.docx`, sha256: String(i).repeat(64), profileId: 'synthetic-profile', profileRevision: 'a'.repeat(64),
+    language: 'hr' as const, sourceGroup: null, templateFamily,
+    analysis: { checks: [{ id: 'reference.completeness', status: 'warn' }], details: { references: [{ p: 1 }], incompleteReferences: [{ p: 1, text: `Zapis ${i} bez godine.` }] } },
+  })), { engineRevision: '9'.repeat(40), origin: 'owned_synthetic', permissionRef: 'owned-gate' });
+  return sastaviZlatniSkup(k, listZaOznacavanje(k).replace(/;;\r\n/g, ';S;\r\n'), { datasetId: 'd1-gate', testUdio: 0.25 });
 }
 
 const MUTATIONS: Mutation[] = [
@@ -7395,6 +7409,37 @@ const MUTATIONS: Mutation[] = [
     caught: () => formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'page.margins']).length === 1
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
+  },
+  // --- Laya V2.1 bez modela: registar, lokalni klijent, eval ---
+  {
+    id: 'laya/registar-prima-tudji-prag',
+    imitates: 'registar prihvati prag izmjeren za drugi model ili reviziju, pa runner presudjuje pragom koji ne pripada pinanom modelu (Codex A1 na #149)',
+    caught: () => {
+      const entry = { entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: { ...makePolicy(), modelDigest: 'f'.repeat(64) }, calibrationEvidence: 'x' };
+      try { loadRegistry({ schemaVersion: 1, entries: [entry] }); return false; } catch { return true; }
+    },
+    cleanBefore: () => loadRegistry({ schemaVersion: 1, entries: [{ entryId: LAYA_FIXTURE_MODEL, manifest: makeRuntime(), policy: makePolicy(), calibrationEvidence: 'x' }] }).entries.length === 1,
+  },
+  {
+    id: 'laya/udaljeni-runtime',
+    imitates: 'klijent prihvati udaljeni ili https runtime, pa tekst zapisa napusta stroj bez consenta (LAYA_V2_SPEC.md, odj. 13)',
+    caught: () => ['http://10.0.0.5:8765', 'https://127.0.0.1:8765', 'http://laya.example.com'].every((url) => {
+      try { assertLoopbackEndpoint(url); return false; } catch { return true; }
+    }),
+    cleanBefore: () => { try { assertLoopbackEndpoint('http://127.0.0.1:8765'); return true; } catch { return false; } },
+  },
+  {
+    id: 'laya/eval-skriva-opasnu-pogresku',
+    imitates: 'eval ne broji pravi nalaz proglasen moguce laznim, pa najskuplja pogreska nestane iz izvjestaja (odj. 18)',
+    caught: () => evaluateLaya([{ caseId: 'a', gold: 'finding_supported', prediction: 'possible_false_positive', probabilities: null }]).dangerousErrors === 1,
+    cleanBefore: () => evaluateLaya([{ caseId: 'a', gold: 'finding_supported', prediction: 'finding_supported', probabilities: null }]).dangerousErrors === 0,
+  },
+  {
+    id: 'laya/zlatni-skup-curi-split',
+    imitates: 'zlatni skup stavi dva rada istog predloska u calibration i test, pa prag izmjeren na jednom predlosku izgleda bolje nego sto jest (EVALUATION_PROTOCOL.md, D1)',
+    // Svi radovi dijele predlozak: jedina ispravna reakcija je odbiti split, ne podijeliti ih.
+    caught: () => { try { layaZlatniSplit(['isti', 'isti', 'isti', 'isti']); return false; } catch (e) { return /razdvojiti/.test((e as Error).message); } },
+    cleanBefore: () => { const { calibration, test } = layaZlatniSplit([null, null, null, null]); return calibration.items.length === 3 && test.items.length === 1; },
   },
   // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
   // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
