@@ -60,6 +60,12 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    `specijalisticki` je od 0207 prodajna vrsta rada i serverski je prihvaćaju i potrošači prava
    (`src/report/billable-work-type.ts`); klijentski izbornik i cjenik (`src/report/pricing.ts`) su
    M3 i ovdje se ne mijenjaju.
+   **Neočekivan CHECK ruši 0207** (Codex pregled PR #217 runda 2, M3). Prije zamjene `work_type` i
+   `bonus_outbox.status` CHECK-ova migracija uspoređuje CIJELI `pg_get_constraintdef` s točnim
+   oblicima iz 0001/0002/0011/0026/0054/0102/0100 i iz same 0207, deparsiranima istim serverom
+   (privremena tablica). Svaki drugi oblik, pa i stroži izraz istog imena i istih vrijednosti, je
+   `RAISE EXCEPTION ... ne brise se naslijepo`: push pada glasno, ništa se ne briše, a čovjek
+   pregleda ograničenje. Mjereno samo u PGliteu; živa baza nije provjerena.
 4. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
    id Merchant of Record providera i bio uvjet za checkout (`409 product_not_mapped`); prelaskom
    na Stripe taj uvjet je uklonjen. Iznos se računa iz `products.price_eur`, a webhook proizvod

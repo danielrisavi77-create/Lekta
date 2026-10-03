@@ -708,35 +708,52 @@ export async function privilegeProblems(withDefaults: PGlite, plain: PGlite): Pr
 
 /**
  * BRISANJE CHECK OGRANICENJA (Codex pregled PR #217, M3). 0207 smije obrisati SAMO zadana ogranicenja
- * `<tablica>_work_type_check` i `bonus_outbox_status_check` s ocekivanim skupom vrijednosti. Svako
- * drugo ogranicenje koje dira ta dva stupca mora oboriti migraciju (RAISE EXCEPTION) i ostati na
- * mjestu, umjesto da se tiho obrise kao prije (podniz `work_type` i `doktorski` u definiciji).
- * Generator: svaki slucaj dodaje stvarno ogranicenje u bazu prije 0207 i provjerava da postoji.
+ * `<tablica>_work_type_check` i `bonus_outbox_status_check` cija je CIJELA definicija tocan poznati
+ * oblik (runda 2: isti skup vrijednosti nije dovoljan). Svako drugo ogranicenje koje dira ta dva
+ * stupca mora oboriti migraciju (RAISE EXCEPTION) i ostati na mjestu, s nepromijenjenom definicijom.
+ * Generator: svaki slucaj stvarno mijenja bazu prije 0207 i provjerava da je definicija nova.
+ * Stroziji izraz istog imena koristi `= lower(...)` umjesto Codexova `<> 'doktorski'`: katalog vec ima
+ * doktorske proizvode, pa bi takav CHECK pao pri dodavanju, a ovaj ne uvodi novi literal.
  */
 export async function constraintDropProblems(v1Sql: string = readMigration(V1_MIGRATION)): Promise<string[]> {
   const problems: string[] = [];
-  const slucajevi = [
+  // `zamijeni`: zadano ogranicenje se zamjenjuje drugim izrazom POD ISTIM IMENOM. `istiLiterali`:
+  // izraz je stroziji, a skup navedenih vrijednosti isti kao kod zadanog (Codex runda 2, M3), pa
+  // usporedba imena i literala vise nije dovoljna; generator to i provjerava.
+  const slucajevi: ReadonlyArray<{ opis: string; tabela: string; ime: string; check?: string; zamijeni?: string; istiLiterali?: boolean }> = [
     { opis: 'visestupcani CHECK s work_type i doktorski', tabela: 'entitlements', ime: 'entitlements_doktorski_slotovi', check: "work_type <> 'doktorski' or slots_total <= 3" },
     { opis: 'jednostupcani CHECK na work_type pod drugim imenom', tabela: 'products', ime: 'products_bez_magistarskog', check: "work_type <> 'magistarski'" },
-    { opis: 'zadano ime s neocekivanim skupom vrijednosti', tabela: 'repair_jobs', ime: null, check: null },
+    { opis: 'zadano ime s neocekivanim skupom vrijednosti', tabela: 'repair_jobs', ime: 'repair_jobs_work_type_check', zamijeni: "work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski', 'magistarski')" },
+    {
+      opis: 'zadano ime i isti literali, stroziji izraz (work_type)', tabela: 'products', ime: 'products_work_type_check', istiLiterali: true,
+      zamijeni: "work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski') and work_type = lower(work_type)",
+    },
     { opis: 'visestupcani CHECK na bonus_outbox.status', tabela: 'bonus_outbox', ime: 'bonus_outbox_pending_pokusaji', check: "status <> 'pending' or attempts >= 0" },
-  ] as const;
+    {
+      opis: 'zadano ime i isti literali, stroziji izraz (bonus_outbox.status)', tabela: 'bonus_outbox', ime: 'bonus_outbox_status_check', istiLiterali: true,
+      zamijeni: "status in ('pending', 'done', 'failed') and status = lower(status)",
+    },
+  ];
+  const literali = (def: string) => [...new Set([...def.matchAll(/'([^']*)'/gu)].map((m) => m[1]))].sort().join(',');
   for (const c of slucajevi) {
     const db = await baseDatabase();
     try {
-      let ime: string;
-      if (c.ime === null) {
-        // Zadano ime, ali skup vrijednosti koji 0207 ne poznaje (npr. rucna izmjena u produkciji).
-        ime = 'repair_jobs_work_type_check';
-        await db.exec(`alter table public.repair_jobs drop constraint ${ime};
-                       alter table public.repair_jobs add constraint ${ime} check (work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski', 'magistarski'))`);
+      const definicija = async () => (await rows(db, 'select pg_get_constraintdef(oid) as def from pg_constraint where conname = $1', [c.ime]))
+        .map((r) => String(r.def))[0] ?? null;
+      const prije = await definicija();
+      if (c.zamijeni) {
+        await db.exec(`alter table public.${c.tabela} drop constraint ${c.ime};
+                       alter table public.${c.tabela} add constraint ${c.ime} check (${c.zamijeni})`);
       } else {
-        ime = c.ime;
-        await db.exec(`alter table public.${c.tabela} add constraint ${ime} check (${c.check})`);
+        await db.exec(`alter table public.${c.tabela} add constraint ${c.ime} check (${c.check})`);
       }
-      const ima = async () => (await rows(db, 'select 1 from pg_constraint where conname = $1', [ime])).length === 1;
-      if (!(await ima())) {
-        problems.push(`${c.opis}: generator ne proizvodi ogranicenje ${ime}`);
+      const ulaz = await definicija();
+      if (ulaz === null || ulaz === prije) {
+        problems.push(`${c.opis}: generator ne proizvodi ogranicenje ${c.ime}`);
+        continue;
+      }
+      if (c.istiLiterali && (prije === null || literali(prije) !== literali(ulaz))) {
+        problems.push(`${c.opis}: generator ne cuva skup literala zadanog ogranicenja (${prije} -> ${ulaz})`);
         continue;
       }
       let palo = false;
@@ -745,8 +762,8 @@ export async function constraintDropProblems(v1Sql: string = readMigration(V1_MI
       } catch (e) {
         palo = e instanceof Error && e.message.includes('ne brise se naslijepo');
       }
-      if (!palo) problems.push(`${c.opis}: 0207 ne pada glasno (RAISE EXCEPTION) na ${ime}`);
-      if (!(await ima())) problems.push(`${c.opis}: 0207 tiho brise ${ime}`);
+      if (!palo) problems.push(`${c.opis}: 0207 ne pada glasno (RAISE EXCEPTION) na ${c.ime}`);
+      if ((await definicija()) !== ulaz) problems.push(`${c.opis}: 0207 tiho brise ${c.ime}`);
     } finally {
       await db.close();
     }

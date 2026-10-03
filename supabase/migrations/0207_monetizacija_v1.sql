@@ -40,14 +40,28 @@
 -- Postgres daje zadano ime `<tablica>_work_type_check` (izmjereno nad stvarnim migracijama u PGliteu,
 -- tests/monetizacija-v1-sql.test.ts). BRISE SE SAMO TOCNO TO (Codex pregled PR #217, M3): nalazi se
 -- svaki CHECK koji referencira stupac work_type (pg_constraint.conkey, ne podniz teksta), a brise se
--- samo ako mu je ime zadano, referencira JEDINO work_type i dopusta tocno stari skup vrijednosti (ili
--- novi, pri drugom prolazu). Sve drugo je RAISE EXCEPTION: nepoznato ogranicenje se ne brise naslijepo,
--- migracija pada glasno i trazi covjeka. Nakon toga se dodaje imenovano ogranicenje.
+-- samo ako mu je ime zadano, referencira JEDINO work_type i njegova CIJELA definicija je jednaka
+-- tocnom poznatom obliku: staro ogranicenje iz 0001/0002/0026/0102 (0011/0054 za faculty_requests, uz
+-- `work_type is null or`) ili novo iz ove migracije (drugi prolaz). Skup vrijednosti nije dovoljan
+-- (Codex pregled PR #217 runda 2, M3): stroziji izraz istog imena i istih vrijednosti (npr. uz
+-- `and work_type <> 'doktorski'`) bi se inace obrisao. Poznati oblici se pisu doslovno kao u tim
+-- migracijama na privremenoj tablici i deparsiraju ISTIM serverom (pg_get_constraintdef), pa usporedba
+-- ne ovisi o verziji Postgresa ni o razmacima u izvoru. Sve drugo je RAISE EXCEPTION: nepoznato
+-- ogranicenje se ne brise naslijepo, migracija pada glasno i trazi covjeka. Nakon toga se dodaje
+-- imenovano ogranicenje.
 do $$
 declare
   r record;
-  v_vrijednosti text[];
+  v_poznat boolean;
 begin
+  drop table if exists pg_temp.lekta_0207_work_type_oblici;
+  create temp table lekta_0207_work_type_oblici (
+    work_type text,
+    constraint staro check (work_type in ('seminarski','zavrsni','diplomski','doktorski')),
+    constraint staro_null check (work_type is null or work_type in ('seminarski','zavrsni','diplomski','doktorski')),
+    constraint novo check (work_type in ('seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski')),
+    constraint novo_null check (work_type is null or work_type in ('seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski'))
+  );
   for r in
     select t.relname as tabela, c.conname as ime, c.conkey as stupci, pg_catalog.pg_get_constraintdef(c.oid) as def
       from pg_catalog.pg_constraint c
@@ -59,16 +73,21 @@ begin
        and t.relname in ('entitlements', 'products', 'faculty_requests', 'repair_jobs', 'corpus_contributions')
        and a.attnum = any (c.conkey)
   loop
-    select array_agg(distinct m[1] order by m[1]) into v_vrijednosti
-      from regexp_matches(r.def, '''([^'']*)''', 'g') as m;
+    select exists (
+      select 1
+        from pg_catalog.pg_constraint o
+       where o.conrelid = 'pg_temp.lekta_0207_work_type_oblici'::regclass
+         and o.conname::text = any (case when r.tabela = 'faculty_requests' then array['staro_null', 'novo_null'] else array['staro', 'novo'] end)
+         and pg_catalog.pg_get_constraintdef(o.oid) = r.def
+    ) into v_poznat;
     if r.ime <> r.tabela || '_work_type_check'
        or cardinality(r.stupci) <> 1
-       or (v_vrijednosti is distinct from array['diplomski', 'doktorski', 'seminarski', 'zavrsni']
-           and v_vrijednosti is distinct from array['diplomski', 'doktorski', 'seminarski', 'specijalisticki', 'zavrsni']) then
+       or not v_poznat then
       raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;
     end if;
     execute format('alter table public.%I drop constraint %I', r.tabela, r.ime);
   end loop;
+  drop table pg_temp.lekta_0207_work_type_oblici;
 end $$;
 
 alter table public.entitlements add constraint entitlements_work_type_check
@@ -353,13 +372,20 @@ select id, 'packaging', 'active=true', 'active=false',
 -- Puni povrat otkazuje obvezu koja jos ceka (webhook-mor closeRefundConsequences), a radnik
 -- (process-bonus-outbox) prije i poslije izvrsenja cita oznaku povrata. `cancelled` je zavrsno
 -- stanje: claim_due_bonus_outbox (0100) uzima samo `pending`.
--- Isto pravilo kao work_type (M3): CHECK nad stupcem status smije biti samo zadani
--- `bonus_outbox_status_check` iz 0100 (ili ovaj, pri drugom prolazu); sve drugo je RAISE EXCEPTION.
+-- Isto pravilo kao work_type (M3, runda 2): CHECK nad stupcem status smije biti samo zadani
+-- `bonus_outbox_status_check` cija je cijela definicija jednaka tocnom obliku iz 0100 (ili ovoga, pri
+-- drugom prolazu), deparsiranom istim serverom; sve drugo je RAISE EXCEPTION.
 do $$
 declare
   r record;
-  v_vrijednosti text[];
+  v_poznat boolean;
 begin
+  drop table if exists pg_temp.lekta_0207_status_oblici;
+  create temp table lekta_0207_status_oblici (
+    status text,
+    constraint staro check (status in ('pending', 'done', 'failed')),
+    constraint novo check (status in ('pending', 'done', 'failed', 'cancelled'))
+  );
   for r in
     select c.conname as ime, c.conkey as stupci, pg_catalog.pg_get_constraintdef(c.oid) as def
       from pg_catalog.pg_constraint c
@@ -371,16 +397,20 @@ begin
        and c.contype = 'c'
        and a.attnum = any (c.conkey)
   loop
-    select array_agg(distinct m[1] order by m[1]) into v_vrijednosti
-      from regexp_matches(r.def, '''([^'']*)''', 'g') as m;
+    select exists (
+      select 1
+        from pg_catalog.pg_constraint o
+       where o.conrelid = 'pg_temp.lekta_0207_status_oblici'::regclass
+         and pg_catalog.pg_get_constraintdef(o.oid) = r.def
+    ) into v_poznat;
     if r.ime <> 'bonus_outbox_status_check'
        or cardinality(r.stupci) <> 1
-       or (v_vrijednosti is distinct from array['done', 'failed', 'pending']
-           and v_vrijednosti is distinct from array['cancelled', 'done', 'failed', 'pending']) then
+       or not v_poznat then
       raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;
     end if;
     execute format('alter table public.bonus_outbox drop constraint %I', r.ime);
   end loop;
+  drop table pg_temp.lekta_0207_status_oblici;
 end $$;
 
 alter table public.bonus_outbox add constraint bonus_outbox_status_check

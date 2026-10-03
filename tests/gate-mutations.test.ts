@@ -8198,6 +8198,18 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     expect((await constraintDropProblems(mutated)).some((x) => x.includes('tiho brise bonus_outbox_pending_pokusaji'))).toBe(true);
   }, ROK_SQL);
 
+  it('Codex PR #217 r2 M3: work_type CHECK bez usporedbe cijelog izraza (samo ime i stupac) tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan work_type/, "       or false then\n      raise exception '0207: neocekivan work_type");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise products_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M3: bonus_outbox status CHECK bez usporedbe cijelog izraza tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan status CHECK/, "       or false then\n      raise exception '0207: neocekivan status CHECK");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (bonus_outbox.status)') && x.includes('tiho brise bonus_outbox_status_check'))).toBe(true);
+  }, ROK_SQL);
+
   it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
     const mutated = mutiraj('    if p.price_eur is distinct from v.price_eur::numeric then', '    if true then');
     const run = await runV1(mutated);
