@@ -1066,9 +1066,13 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   border-radius: 8px; padding: .45rem .8rem; font: inherit; cursor: pointer;
 }
 .desk-plan-open:hover { border-color: var(--ck-ink); }
+/* SCROLL-MARGIN: zaglavlje stranice (`header.site-chrome`) je ljepljivo. Kad se "Natrag" pomakne u
+   vidljivo podrucje (fokus tipkovnicom, scrollIntoView, Playwright prije klika), bez razmaka staje
+   tocno ispod trake i klik hvata zaglavlje ("Moji radovi"), ne gumb. 84px je isti razmak koji
+   `#resultView` vec drzi u page-app.css. */
 .desk-natrag {
   border: 0; background: transparent; color: var(--ck-muted); font: inherit; cursor: pointer;
-  padding: .2rem 0; text-align: left; justify-self: start;
+  padding: .2rem 0; text-align: left; justify-self: start; scroll-margin-top: 84px;
 }
 .desk-natrag:hover { color: var(--ck-ink); }
 
