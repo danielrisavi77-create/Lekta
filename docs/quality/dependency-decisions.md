@@ -97,3 +97,34 @@ rizika uz cist produkcijski graf.
 
 Ako upstream zakrpa izadje prije 9. listopada, iznimka se uklanja odmah; rok nije razlog za cekanje.
 
+## Drugi vanjski advisory 2026-10-03: braces / Netlify tooling
+
+Dana 3. listopada 2026. ratchet je poceo padati s 15 high identiteta uz strop 6, opet bez
+promjene grafa: `package-lock.json` nije mijenjan od 30. rujna (#236). Parsiran
+`npm audit --json` nad `origin/master` 7abdffeb razdvaja nalaze po advisoryju:
+
+- GHSA-86w9-cpqp-85rv (`node-forge <=1.4.0`): istih 6 identiteta kao 2. listopada;
+- GHSA-vfj7-8cjw-p6xm (`braces <=3.0.3`, DoS iscrpljenjem stoga kroz duboko ugnijezdene
+  uzorke): 9 novih identiteta, `@netlify/build`, `@netlify/functions-dev`,
+  `@netlify/functions-utils`, `@netlify/git-utils`, `@netlify/zip-it-and-ship-it`, `braces`,
+  `fast-glob`, `http-proxy-middleware`, `micromatch`.
+
+U lockfileu `braces 3.0.3` vuce samo `micromatch 4.0.8`, a njega `fast-glob 3.3.3`,
+`@netlify/git-utils` i `http-proxy-middleware`, svi pod `netlify-cli 27.10.2`. `netlify-cli`
+i `@netlify/dev` pogodjeni su objema advisoryjima. Na dan ove odluke `netlify-cli 27.10.2`,
+`braces 3.0.3` i `node-forge 1.4.0` su aktualni npm latest, pa nadogradnja ne uklanja nijedan
+nalaz; `npm audit --omit=dev --audit-level=high` ostaje **0**.
+
+| polje | vrijednost |
+| --- | --- |
+| vlasnik | Daniel Risavi |
+| iznimka | `netlify-braces-ghsa-vfj7-8cjw-p6xm` |
+| advisory | GHSA-vfj7-8cjw-p6xm |
+| zahvaceni ratchet identiteti | 9 novih navedenih iznad; `netlify-cli` i `@netlify/dev` ostaju u node-forge iznimci jer validator dopusta tocno jednu iznimku po paketu |
+| produkcijski graf | 0 high/critical, mora ostati blokirajuci |
+| sljedeci pregled | 2026-10-10 |
+| istek | 2026-10-17 |
+| kriterij uklanjanja | objavljen zakrpani `braces` ili Netlify izdanje koje vise ne vuce ranjivi lanac; kad se node-forge iznimka ukloni prije ove, `netlify-cli` i `@netlify/dev` prelaze ovamo |
+
+Node-forge iznimka zadrzava svoj rok 2026-10-09; ova odluka ga ne produljuje.
+
