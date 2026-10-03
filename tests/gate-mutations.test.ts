@@ -7884,6 +7884,11 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     // Codex pregled delte (G-1): filtri upita, ne samo grane odluke.
     ['signup vec nagradjen', "      .eq('referred_user_id', buyerUserId)\n      .eq('status', 'friend_rewarded')\n", "      .eq('referred_user_id', buyerUserId)\n"],
     ['IP trece osobe', "      .eq('user_id', signup.referrer_user_id)\n", ''],
+    // Filtri upita brojanja mjesecnog stropa (rezultat ispod stropa ne smije zbrajati tudje ni nenagradjene retke).
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('status', 'rewarded')\n"],
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('referrer_user_id', signup.referrer_user_id)\n"],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'false'],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'signup.converted_order_id && signup.converted_order_id === buyerOrderId'],
   ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
     const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
     expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);

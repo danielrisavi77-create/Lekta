@@ -633,10 +633,14 @@ describe('webhook-mor handler: samo potvrdjena naplata knjizi pravo', () => {
     [{ amount_received: undefined }, 'amount_received:nepoznat'],
   ])('amount_received %j: 200 ignored, bez prava', async (over, reason) => {
     const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const { res, body, calls } = await run(signedRequest(succeeded(over)));
+    const { res, body, calls, granted } = await run(signedRequest(succeeded(over)));
     expect(res.status).toBe(200);
     expect(body).toEqual({ ok: true, action: 'ignored', reason });
     expect(entitlementWrites(calls)).toHaveLength(0);
+    // Bez placenog iznosa nema ni obveze nagrade (bonus_outbox, referrer_reward) ni dodjele preporucitelju.
+    expect(calls.some((c) => (c.table === 'bonus_outbox' || c.table === 'coupon_grants') && writeOp(c) !== 'select')).toBe(false);
+    expect(calls.some((c) => JSON.stringify(c.ops).includes('referrer_reward'))).toBe(false);
+    expect(granted).toHaveLength(0);
     expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: reason });
     expect(logLines(err)).toContain('webhook-mor ignored_needs_attention');
   });
