@@ -114,6 +114,7 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -9007,5 +9008,44 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
       'styles: vise styleId u tagu, jedan > na kraju',
       'styles: > u navodnicima bez zatvaranja',
     ]);
+  });
+});
+
+describe('mobilna traka lista ne prekriva korake (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8').replace(/\r/g, '');
+  const PRAVILO = '@media(max-width:720px){.analyzer-wrap::before{left:auto;right:14px;top:-11px;width:84px;height:22px;transform:rotate(2deg)}}';
+
+  it('BASELINE: na uskom ekranu traka je uz desni rub i uska', () => {
+    expect(css()).toContain(PRAVILO);
+    expect(mobileTapeProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez pravila za uski ekran traka ostaje na sredini', () => {
+    expect(mobileTapeProblems(css().replace(PRAVILO, ''))).toEqual(['traka nema pravilo za uski ekran']);
+  });
+
+  it('mutant: traka na sredini i siroka kao na racunalu', () => {
+    const m = css().replace(PRAVILO, '@media(max-width:720px){.analyzer-wrap::before{top:-11px;width:150px;height:22px}}');
+    expect(mobileTapeProblems(m)).toEqual(['traka nije uz desni rub', 'traka je sira od 100 px']);
+  });
+});
+
+describe('zbijeni dokumentov red na mobitelu (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/site-chrome.css'), 'utf8').replace(/\r/g, '');
+
+  it('BASELINE: gumb nove verzije je meta od 44 px, ispod reda je razmak', () => {
+    expect(mobileDocMetaProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez prosirenja dodira meta je 28 px', () => {
+    const m = css().replace('  .rad-doc-meta .rad-doc-new-version::after { content: ""; position: absolute; inset: -8px 0; }\n', '');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['dodirna meta nove verzije 28 px, ispod 44']);
+  });
+
+  it('mutant: bez razmaka ispod reda list prekriva donji dio mete', () => {
+    const m = css().replace('margin-top: 6px; padding-bottom: 6px; }', 'margin-top: 6px; }');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['ispod reda nema razmaka za prosirenu metu']);
   });
 });

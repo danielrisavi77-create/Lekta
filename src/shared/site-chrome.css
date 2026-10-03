@@ -541,6 +541,17 @@ header.site-chrome--scrolled {
   gap: 8px 14px;
   margin-top: 14px;
 }
+/* Na mobitelu dokumentov red je zbijen (mobilni audit 2026-09-28, PR 2; odluka vlasnika 2026-10-03): zaglavlje je
+   imalo cetiri retka i list je na 390 px pocinjao na 174 px. "Spremljeno" i znacka "Lokalno" su sitniji i staju u
+   jedan redak, a gumb nove verzije je vizualno nizak (28 px) uz dodirnu metu od 44 px: `::after` siri podrucje
+   dodira 8 px gore i dolje, preko neinteraktivne znacke. Tekst i podaci su isti, znacka privatnosti ostaje vidljiva. */
+@media (max-width: 720px) {
+  .rad-doc-meta { gap: 0 10px; margin-top: 6px; padding-bottom: 6px; }
+  .rad-doc-meta .rad-doc-save { font-size: 12px; }
+  .rad-doc-meta .local-badge { margin-top: 0; padding: 3px 8px; font-size: 12px; }
+  .rad-doc-meta .rad-doc-new-version { position: relative; margin-left: 0; min-height: 28px; padding: 0 2px; font-size: 12px; }
+  .rad-doc-meta .rad-doc-new-version::after { content: ""; position: absolute; inset: -8px 0; }
+}
 
 @keyframes siteChromeDrop {
   from { opacity: 0; transform: translateY(-26px) rotate(-3deg); }
