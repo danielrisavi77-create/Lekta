@@ -15,7 +15,7 @@ import {
 import { attestationProblems, pdfAttestationProblems, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import { attestationContentDigestSync, sha256HexSync } from '../src/verification/attestation-content-digest';
 import {
-  FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
+  FINGERPRINT_VERSION, attestInvocationProblems, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
 } from '../scripts/lib/corpus-attestation-core.mjs';
 import { repairSourceHashAtCommit } from '../scripts/lib/repair-source-hash.mjs';
 
@@ -240,8 +240,9 @@ describe('T83-06: stvarna skripta ovjere', () => {
     generatedFromCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     scope: { duplicateDocumentCount: 0 },
     results: ids.map((documentId) => ({
+      // Codex #229 nalaz 02 (runda 3): DOCX ovjera trazi sourceKind source-docx na SVAKOM rezultatu.
       documentId, profileId: profil, holdout: holdoutIds.includes(documentId), expectationProvenance: 'derived', outcome: 'review',
-      statusChanges: [], integrityFailure: null, error: null, ...extra,
+      statusChanges: [], integrityFailure: null, error: null, sourceKind: 'source-docx', ...extra,
     })),
   });
   // Codex #225, nalaz 1: vrsta izvora je obvezan ulaz ovjere; zadano izvorni DOCX, `bezVrste` ga izostavlja.
@@ -314,6 +315,25 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(procitaj(dir).sourceKind).toBe('source-docx');
       expect(attestationProblems(procitaj(dir))).toEqual([]);
 
+      // Codex #229 nalaz 02, runda 3: rezultat BEZ vrste (stari ingest, fixture, PDF kojem je skinuta oznaka) obara DOCX ovjeru.
+      writeFileSync(
+        join(dir, 'mjerenje.json'),
+        JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z', { sourceKind: undefined })),
+      );
+      const bezVrsteRezultata = pokreni(dir, ['--sign', 'Vlasnik'], 'source-docx');
+      expect(bezVrsteRezultata.status).toBe(1);
+      expect(bezVrsteRezultata.stderr).toMatch(/2 rezultata nema sourceKind source-docx/);
+      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z')));
+
+      // Codex #229, nalaz 02: PDF ovjera prima samo rezultate s PDF sidecarom (sourceKind iz corpus-ingest).
+      const bezPdfSidecara = pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted');
+      expect(bezPdfSidecara.status).toBe(1);
+      expect(bezPdfSidecara.stderr).toMatch(/2 rezultata nema sourceKind public-pdf-converted/);
+      writeFileSync(
+        join(dir, 'mjerenje.json'),
+        JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z', { sourceKind: 'public-pdf-converted' })),
+      );
+      expect(pokreni(dir, ['--sign', 'Vlasnik'], 'source-docx').status).toBe(1);
       expect(pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted').status).toBe(0);
       const pdf = procitaj(dir);
       expect(pdf.sourceKind).toBe('public-pdf-converted');
@@ -323,6 +343,49 @@ describe('T83-06: stvarna skripta ovjere', () => {
       rmSync(dir, { recursive: true, force: true });
     }
   }, 60_000);
+
+  // Codex #229, krug popravka (blocker): `npm run attest-corpus` i naredba iz protokola nisu prosljedjivali
+  // --source-kind, pa je ovjera od #225 uvijek padala. Pokrece se STVARNA naredba iz package.json.
+  it('npm skripte attest-corpus i attest-corpus:pdf nose vrstu i prolaze nad cistim mjerenjem svoje vrste', () => {
+    const skripte = (JSON.parse(readFileSync(resolve('package.json'), 'utf8')) as { scripts: Record<string, string> }).scripts;
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-229-npm-attest-'));
+    const izSkripte = (ime: string, extra: Record<string, unknown>) => {
+      const [bin, ...argv] = skripte[ime].split(/\s+/);
+      expect(bin).toBe('node');
+      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z', extra)));
+      return spawnSync(process.execPath, [...argv, '--sign', 'Vlasnik'], {
+        encoding: 'utf8',
+        env: { ...process.env, LEKTA_ATTEST_INPUT: join(dir, 'mjerenje.json'), LEKTA_ATTEST_OUTPUT: join(dir, 'ovjera.json') },
+      });
+    };
+    try {
+      // Negativna kontrola (nalaz 02, runda 3): DOCX skripta nad mjerenjem bez vrste rezultata odbija.
+      expect(izSkripte('attest-corpus', { sourceKind: undefined }).status).toBe(1);
+      const docx = izSkripte('attest-corpus', {});
+      expect(docx.stderr).not.toMatch(/--source-kind/);
+      expect(docx.status).toBe(0);
+      expect(procitaj(dir).sourceKind).toBe('source-docx');
+      const pdf = izSkripte('attest-corpus:pdf', { sourceKind: 'public-pdf-converted' });
+      expect(pdf.status).toBe(0);
+      expect(procitaj(dir).sourceKind).toBe('public-pdf-converted');
+      // Negativna kontrola: PDF skripta nad mjerenjem bez PDF sidecara i dalje odbija.
+      expect(izSkripte('attest-corpus:pdf', {}).status).toBe(1);
+      expect(izSkripte('attest-corpus:pdf', { sourceKind: undefined }).status).toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }, 60_000);
+
+  it('svaki poziv ovjere u package.json, protokolu i zaglavlju PDF toka nosi --source-kind', () => {
+    for (const putanja of ['package.json', 'docs/quality/real-corpus-protocol.md', 'scripts/pdf-corpus/harvest_pdf_corpus.py']) {
+      const tekst = readFileSync(resolve(putanja), 'utf8');
+      expect(tekst).toMatch(/node scripts\/attest-real-corpus\.mjs/);
+      expect(attestInvocationProblems(tekst, putanja)).toEqual([]);
+    }
+    expect(attestInvocationProblems('"attest-corpus": "node scripts/attest-real-corpus.mjs",', 'p')).toHaveLength(1);
+    expect(attestInvocationProblems('node scripts/attest-real-corpus.mjs --source-kind pdf --sign "Ime"', 'p')).toHaveLength(1);
+    expect(attestInvocationProblems('node scripts/attest-real-corpus.mjs --source-kind source-docx-x', 'p')).toHaveLength(1);
+  });
 });
 
 describe('attestationProblems: dvostruko brojanje, verzija otiska i dosljednost brojeva', () => {

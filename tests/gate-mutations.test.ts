@@ -36,6 +36,7 @@ import { isSupported, renderDefectFragment, type DefectClass } from '../src/corp
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -191,7 +192,8 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
-import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { attestInvocationProblems, attestationContentDigest, attestationRefusals, harvestManifestShas, harvestedDocxProblem, ingestSourceKindProblem, inheritedSignature, pdfPackagePrivacyProblems, sourceKindRefusals } from '../scripts/lib/corpus-attestation-core.mjs';
+import { PYTHON, PYTHON_SKIP_REASON } from './helpers/python';
 import {
   measuredCodeProblem,
   provenPdfUnitWorkTypes,
@@ -528,6 +530,142 @@ function gardIzIzvora(staro: string, novo: string): (results: Array<Record<strin
   const blok = src.slice(a, b).replace('export function', 'function');
   if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
   return new Function(`${blok.replace(staro, novo)}\nreturn attestationRefusals;`)() as (results: Array<Record<string, unknown>>) => string[];
+}
+
+type VrstaFn = (results: Array<Record<string, unknown>>, kind: string) => string[];
+type IngestVrstaFn = (kind: string | null, marker: string | null, manifestPresent?: boolean) => string | null;
+
+/** Mutant imenovanog GARD bloka iz STVARNOG izvora scripts/lib/corpus-attestation-core.mjs (zamjena jednog izraza). */
+function gardBlokIzIzvora<T>(ime: string, staro: string, novo: string): T {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lib/corpus-attestation-core.mjs'), 'utf8').replace(/\r/g, '');
+  const a = src.indexOf(`// >>> GARD:${ime}`);
+  const b = src.indexOf(`// <<< GARD:${ime}`);
+  if (a < 0 || b < a) throw new Error(`blok GARD:${ime} nije pronadjen`);
+  const blok = src.slice(a, b).replace(/export (function|const)/g, '$1');
+  if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
+  return new Function(`${blok.replace(staro, novo)}\nreturn ${ime};`)() as T;
+}
+const gardVrsteIzIzvora = (staro: string, novo: string) => gardBlokIzIzvora<VrstaFn>('sourceKindRefusals', staro, novo);
+
+/**
+ * Tvrdnja garda vrste izvora u ingestu (Codex #229 nalaz 02): `--source-kind` je obavezan, izvor s oznakom se
+ * mora slagati sa zastavicom, a PDF vrsta bez oznake staging mape se odbija.
+ */
+function ingestVrstaSeProvjerava(problem: IngestVrstaFn): boolean {
+  const pdf = 'public-pdf-converted';
+  return (
+    problem(null, null) !== null &&
+    problem('pdf', null) !== null &&
+    problem('source-docx', null) === null &&
+    problem(pdf, pdf) === null &&
+    // Mapa koja se izjasnjava drugom vrstom dobiva upravo tu dijagnozu, ne opcenitu.
+    /izjasnjava kao "public-pdf-converted"/.test(problem('source-docx', pdf) ?? '') &&
+    problem(pdf, null) !== null &&
+    // Runda 3: manifest harvesta bez oznake i dalje obara source-docx; PDF vrsta s oznakom i manifestom prolazi.
+    problem('source-docx', null, true) !== null &&
+    problem('source-docx', null, false) === null &&
+    problem(pdf, pdf, true) === null
+  );
+}
+
+type ManifestFn = (json: unknown) => Set<string>;
+type HarvestedFn = (kind: string, sha: string, manifest: Set<string> | null) => string | null;
+const SHA_A = 'a'.repeat(64);
+
+/** Tvrdnja garda manifesta harvesta (nalaz 02, runda 3): DOCX s otiskom iz manifesta ne smije u source-docx. */
+function harvestiranDocxSeOdbija(problem: HarvestedFn): boolean {
+  const m = new Set([SHA_A]);
+  return (
+    problem('source-docx', SHA_A, m) !== null &&
+    problem('source-docx', 'b'.repeat(64), m) === null &&
+    problem('public-pdf-converted', SHA_A, m) === null &&
+    problem('source-docx', SHA_A, null) === null
+  );
+}
+
+/** Tvrdnja parsera manifesta: neispravan oblik ili otisak se ne prihvaca tiho. */
+function manifestSeValidira(parse: ManifestFn): boolean {
+  const baca = (json: unknown) => {
+    try {
+      parse(json);
+      return false;
+    } catch {
+      return true;
+    }
+  };
+  return (
+    parse({ kind: 'lekta-pdf-harvest-manifest', docxSha256: [SHA_A] }).has(SHA_A) &&
+    baca({ kind: 'lekta-pdf-harvest-manifest', docxSha256: ['nije-sha'] }) &&
+    baca({ kind: 'nesto-drugo', docxSha256: [SHA_A] }) &&
+    baca([SHA_A]) &&
+    baca(null)
+  );
+}
+
+type PrivatnostFn = (entries: Array<{ name: string; data: Uint8Array }>, terms: string[]) => string[];
+
+/**
+ * Tvrdnja garda privatnosti PDF vrste u ingestu (nalaz 04, runda 3): cist paket prolazi, a dio izvan allowliste,
+ * docProps s tekstom, prazan rjecnik i pojam u binarnom dijelu (UTF-8 i UTF-16LE) obaraju dokument.
+ */
+function privatnostPdfSeProvjerava(fn: PrivatnostFn): boolean {
+  const enc = (t: string) => new TextEncoder().encode(t);
+  const terms = ['Ivana Sintetić'];
+  const cist = [
+    { name: '[Content_Types].xml', data: enc('<Types/>') },
+    { name: 'word/document.xml', data: enc('<w:document>Student: OSOBA_1_ABCD</w:document>') },
+    { name: 'docProps/core.xml', data: enc('<?xml version="1.0"?>\n<cp:coreProperties/>') },
+    { name: 'word/media/image1.png', data: new Uint8Array([137, 80, 78, 71]) },
+  ];
+  const uz = (name: string, data: Uint8Array) => [...cist.filter((e) => e.name !== name), { name, data }];
+  return (
+    fn(cist, terms).length === 0 &&
+    fn([...cist, { name: 'word/header1.xml', data: enc('<w:hdr/>') }], terms).some((p) => /izvan dopustenog skupa/.test(p)) &&
+    fn([...cist, { name: 'docProps/thumbnail.jpeg', data: new Uint8Array([255, 216]) }], terms).some((p) => /izvan dopustenog skupa/.test(p)) &&
+    fn(uz('docProps/core.xml', enc('<cp:coreProperties><dc:title>Naslov</dc:title></cp:coreProperties>')), terms).some((p) => /docProps nisu prazni/.test(p)) &&
+    fn(cist, []).some((p) => /prazan rjecnik/.test(p)) &&
+    fn(uz('word/media/image1.png', new Uint8Array(Buffer.from('xxIvana Sintetićxx', 'utf8'))), terms).some((p) => /binarni/.test(p)) &&
+    fn(uz('word/media/image1.png', new Uint8Array(Buffer.from('Ivana Sintetić', 'utf16le'))), terms).some((p) => /binarni/.test(p))
+  );
+}
+
+/**
+ * Tvrdnja garda vrste izvora u ovjeri (A-pdf, Codex #229 nalaz 02): PDF ovjera prima samo rezultate s PDF
+ * sidecarom, a ovjera izvornog DOCX-a ne prima nijedan rezultat pretvoren iz PDF-a.
+ */
+function vrstaIzvoraSeProvjerava(refuse: VrstaFn): boolean {
+  const r = (documentId: string, sourceKind?: string | null) => ({ documentId, ...(sourceKind === undefined ? {} : { sourceKind }) });
+  const pdf = 'public-pdf-converted';
+  return (
+    refuse([r('a', pdf), r('b', pdf)], pdf).length === 0 &&
+    refuse([r('a', pdf), r('b')], pdf).length > 0 &&
+    refuse([r('a', pdf), r('b', null)], pdf).length > 0 &&
+    refuse([r('a', pdf), r('b', 'source-docx')], pdf).length > 0 &&
+    refuse([r('a', 'source-docx'), r('b', 'source-docx')], 'source-docx').length === 0 &&
+    refuse([r('a', 'source-docx'), r('b', pdf)], 'source-docx').length > 0 &&
+    // Runda 3: DOCX ovjera trazi vrstu na SVAKOM rezultatu; rezultat bez vrste (ili s null) se odbija.
+    refuse([r('a'), r('b', 'source-docx')], 'source-docx').length > 0 &&
+    refuse([r('a', null), r('b', 'source-docx')], 'source-docx').length > 0
+  );
+}
+
+type PozivOvjereFn = (text: string, source: string) => string[];
+
+/**
+ * Tvrdnja garda poziva ovjere (Codex #229, krug popravka): stvarni package.json i protokol nemaju poziv bez
+ * vrste, a poziv bez `--source-kind` ili s vrstom izvan zatvorenog skupa se prijavljuje.
+ */
+function poziviOvjereSeProvjeravaju(problemi: PozivOvjereFn): boolean {
+  const stvarno = ['package.json', 'docs/quality/real-corpus-protocol.md'].every(
+    (p) => problemi(readFileSync(resolve(process.cwd(), p), 'utf8'), p).length === 0,
+  );
+  return (
+    stvarno &&
+    problemi('"attest-corpus": "node scripts/attest-real-corpus.mjs",', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --source-kind nepoznato', 'p').length === 1 &&
+    problemi('node scripts/attest-real-corpus.mjs --source-kind public-pdf-converted --sign "Ime"', 'p').length === 0
+  );
 }
 
 type PotpisFn = (
@@ -1096,6 +1234,121 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
   if (j < 0 || j <= i) throw new Error(`kraj marker nije pronadjen iza pocetka: ${endMarker}`);
   return src.slice(0, i) + src.slice(j);
 }
+
+
+/**
+ * Gard lokalnog PDF korpusa (scripts/pdf-corpus/harvest_pdf_corpus.py): javni radovi smiju samo IZVAN
+ * repozitorija. Python skripta nema TS ulaz, pa se mutira kopija izvora u privremenom stablu istog oblika
+ * (`scripts/pdf-corpus/`), a signal je njezin `--selftest` koji tvrdi da izlaz unutar repoa pada.
+ */
+const PDF_KORPUS_IZVOR = readFileSync(join(__dirname, '..', 'scripts', 'pdf-corpus', 'harvest_pdf_corpus.py'), 'utf8').replace(/\r/g, '');
+/**
+ * Pokrece `--selftest` kopije izvora ISTOM otkrivenom Python naredbom kao tests/pdf-corpus-harvest.test.ts
+ * (tests/helpers/python.ts, nalaz 12). Bez interpretera se ovaj helper ne poziva: mutacije PDF korpusa su tada
+ * preskocene s razlogom u naslovu (describe.skipIf niže), umjesto da baseline lazno padne.
+ */
+function pdfKorpusSelftestProlazi(izvor: string): boolean {
+  if (!PYTHON) throw new Error(`pdfKorpusSelftestProlazi bez interpretera:${PYTHON_SKIP_REASON}`);
+  const dir = mkdtempSync(join(tmpdir(), 'lekta-pdf-korpus-'));
+  try {
+    mkdirSync(join(dir, 'scripts', 'pdf-corpus'), { recursive: true });
+    const put = join(dir, 'scripts', 'pdf-corpus', 'harvest_pdf_corpus.py');
+    writeFileSync(put, izvor);
+    return spawnSync(PYTHON, [put, '--selftest'], { encoding: 'utf8', env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } }).status === 0;
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/** Mutacija Python izvora: svaka zamjena mora pogoditi tocno jedno mjesto, inace mutacija ne vjezba gard. */
+function pdfMutant(...zamjene: Array<[string, string]>): string {
+  let out = PDF_KORPUS_IZVOR;
+  for (const [staro, novo] of zamjene) {
+    if (out.split(staro).length !== 2) throw new Error(`mutacija ne pogadja izvor tocno jednom: ${staro}`);
+    out = out.replace(staro, novo);
+  }
+  return out;
+}
+const pdfMutacija = (id: string, imitates: string, ...zamjene: Array<[string, string]>): Mutation => ({
+  id,
+  imitates,
+  caught: () => !pdfKorpusSelftestProlazi(pdfMutant(...zamjene)),
+  cleanBefore: () => zamjene.every(([staro]) => PDF_KORPUS_IZVOR.split(staro).length === 2) && pdfKorpusSelftestProlazi(PDF_KORPUS_IZVOR),
+});
+
+/**
+ * Gardovi Python skripte PDF korpusa. Odvojeni od MUTATIONS jer trebaju interpreter: bez njega su preskoceni s
+ * razlogom (nalaz 12), a ne lazno crveni.
+ */
+const PDF_KORPUS_MUTACIJE: Mutation[] = [
+  /** Autor revizije (w:ins, w:del, w:pPrChange) je ime studenta u zadrzanom dijelu paketa (koordinator lekta-37, nalaz 04). */
+  pdfMutacija(
+    'pdf-korpus/autor-revizije-prolazi',
+    'ciscenje paketa nije gledalo atribute w:author/w:initials, pa bi ime autora revizije u document.xml ili ' +
+      'settings.xml proslo u staging iako zaglavlja, komentari i docProps vec jesu bili izbaceni',
+    ['            if AUTHOR_ATTR.search(data[name]):', '            if False:'],
+  ),
+  /** Revizijski identifikatori (rsid) povezuju sesije uredjivanja istog autora (koordinator lekta-37, nalaz 04). */
+  pdfMutacija(
+    'pdf-korpus/rsid-ostaje',
+    'ciscenje paketa je zadrzavalo w:rsid atribute i blok w:rsids u settings.xml, koji povezuju dokument sa ' +
+      'sesijama uredjivanja izvornog autora',
+    ['data[name] = RSID_ATTR.sub(b"", RSIDS_BLOCK.sub(b"", data[name]))', 'pass'],
+  ),
+  /** Javni PDF radovi (A-pdf korpus) smiju samo lokalno, izvan repozitorija (odluka vlasnika 2026-09-28). */
+  pdfMutacija(
+    'pdf-korpus/izlaz-unutar-repozitorija',
+    'skripta PDF korpusa nije provjeravala izlaznu mapu, pa bi javni studentski radovi (PDF i pretvoreni DOCX) ' +
+      'zavrsili u radnom stablu repozitorija i jednim commitom u Gitu',
+    ['if out == repo or repo in out.parents:', 'if False:'],
+  ),
+  /** Codex #229 nalaz 03, runda 3: upis preko direktorijskih handleova ne smije pratiti poveznicu. */
+  pdfMutacija(
+    'pdf-korpus/dir-fd-prati-poveznicu',
+    'upis je otvarao mape bez O_NOFOLLOW, pa je poveznica unutar izlazne mape (records -> druga mapa), ili roditelj ' +
+      'zamijenjen poveznicom nakon provjere, preusmjeravala zapise bez ikakve greske',
+    [' | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)', ' | getattr(os, "O_CLOEXEC", 0)'],
+  ),
+  pdfMutacija(
+    'pdf-korpus/windows-junction-nije-poveznica',
+    'na Windowsu os.path.islink ne prepoznaje junction, pa bi korijen ili mapa zamijenjena junctionom prema ' +
+      'repozitoriju prosla provjeru putanje i upis bi zavrsio u repozitoriju',
+    ['bool(getattr(st, "st_file_attributes", 0) & FILE_ATTRIBUTE_REPARSE_POINT)', 'False'],
+  ),
+  /** Nalaz 08: preusmjeravanje (i prvi zahtjev) ne smije na nejavnu adresu ni na IP adresu. */
+  pdfMutacija(
+    'pdf-korpus/dohvat-na-nejavnu-adresu',
+    'odgovor javnog repozitorija 302 na host koji razrjesava 10.0.0.1 ili 169.254.169.254 slao je sljedeci zahtjev ' +
+      'u lokalnu mrezu ili na metapodatke oblaka',
+    ['        if not_public(ip):\n', '        if False:\n'],
+  ),
+  pdfMutacija(
+    'pdf-korpus/dohvat-na-ip-adresu',
+    'preusmjeravanje na https://127.0.0.1/ ili https://8.8.8.8/ prolazilo je sintaksnu provjeru hosta (oznake od ' +
+      'znamenki), pa je IP adresa zaobilazila svaku provjeru po imenu',
+    ['        return f"host {host!r} je IP adresa; dopusteno je samo ime hosta"', '        pass'],
+    ['    if host.rsplit(".", 1)[-1].isdigit():', '    if False:'],
+  ),
+  /** Nalaz 04: paket iz allowliste, a upucivanje na izbaceni dio obara dokument. */
+  pdfMutacija(
+    'pdf-korpus/paket-bez-allowliste',
+    'harvest je praznio samo core.xml, app.xml i custom.xml, a kopirao docProps/thumbnail (slika naslovnice s imenom), ' +
+      'komentare, zaglavlja i people.xml u staging',
+    ['    kept = [n for n in names if _allowed_part(n)]', '    kept = list(names)'],
+  ),
+  pdfMutacija(
+    'pdf-korpus/upucivanje-na-izbaceni-dio',
+    'dokument koji upucuje na izbaceno zaglavlje (headerReference r:id) isporucivao se kao da je cist, pa bi Word ' +
+      'prijavio ostecen paket, a tvrdnja o privatnosti pocivala na dijelu koji vise ne postoji',
+    ['            if missing:\n', '            if False:\n'],
+  ),
+  pdfMutacija(
+    'pdf-korpus/upucivanje-na-komentar',
+    'dokument s commentReference isporucivao se bez comments.xml: komentar s imenom bi se izgubio iz provjere, a paket ' +
+      'bi upucivao na nepostojeci dio',
+    ['    if FOREIGN_REFERENCES.search(data["word/document.xml"]):', '    if False:'],
+  ),
+];
 
 const MUTATIONS: Mutation[] = [
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
@@ -1896,6 +2149,130 @@ const MUTATIONS: Mutation[] = [
       const r = pdfRazdvajanje();
       return r.bBez === 1 && r.aPdf === 1 && r.problemi.length === 0;
     },
+  },
+
+  /**
+   * A-pdf tok ide preko ingesta (Codex #229 nalaz 02): svaki rezultat nosi `sourceKind` iz sidecara, a ovjera
+   * odbija mjerenje u kojem se vrste mijesaju.
+   */
+  {
+    id: 'korpus/ovjera-pdf-vrste-prihvaca-rezultat-bez-pdf-sidecara',
+    imitates:
+      'ovjera PDF vrste prihvaca rezultat bez PDF sidecara: mjerenje koje je uz izlaz ingesta pokupilo commitane ' +
+      'fixture ili izvorne DOCX radove dalo bi razinu A-pdf paru koji nije mjeren ni na jednom pretvorenom PDF-u',
+    caught: () => !vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) !== 'public-pdf-converted'", 'false')),
+    cleanBefore: () =>
+      vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) !== 'public-pdf-converted'", "vrsta(r) !== 'public-pdf-converted'")) &&
+      vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+  {
+    id: 'korpus/npm-skripta-ovjere-bez-vrste-izvora',
+    imitates:
+      'npm run attest-corpus i naredba iz docs/quality/real-corpus-protocol.md nisu prosljedjivali --source-kind, ' +
+      'pa je ovjera (od #225 obavezna vrsta) uvijek padala i vlasnikov tok ovjere A profila bio je slomljen',
+    caught: () =>
+      !poziviOvjereSeProvjeravaju(
+        gardBlokIzIzvora<PozivOvjereFn>('attestInvocationProblems', 'const imaVrstu = /--source-kind', 'const imaVrstu = true || /--source-kind'),
+      ),
+    cleanBefore: () => poziviOvjereSeProvjeravaju(attestInvocationProblems),
+  },
+  {
+    id: 'korpus/ovjera-docx-vrste-prihvaca-pdf-rezultat',
+    imitates:
+      'ovjera izvornog DOCX-a nije gledala sourceKind rezultata, pa bi rad pretvoren iz PDF-a, izmjeren zajedno s ' +
+      'lokalnim korpusom, podigao pravi A (odluka vlasnika 2026-09-28)',
+    caught: () => !vrstaIzvoraSeProvjerava(gardVrsteIzIzvora("vrsta(r) === 'public-pdf-converted'", 'false')),
+    cleanBefore: () => vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+
+  {
+    id: 'ingest/pdf-vrsta-bez-oznake-staging-mape',
+    imitates:
+      'corpus-ingest je prihvacao --source-kind public-pdf-converted nad bilo kojom mapom, pa bi rucno sastavljen ' +
+      'skup izvornih DOCX radova dobio PDF sidecar i usao u ovjeru razine A-pdf',
+    caught: () => !ingestVrstaSeProvjerava(gardBlokIzIzvora<IngestVrstaFn>('ingestSourceKindProblem', "kind === 'public-pdf-converted' && marker !== kind", 'false')),
+    cleanBefore: () => ingestVrstaSeProvjerava(ingestSourceKindProblem),
+  },
+  {
+    id: 'korpus/ovjera-docx-vrste-prihvaca-rezultat-bez-vrste',
+    imitates:
+      'ovjera izvornog DOCX-a prihvacala je rezultat bez sourceKind, pa je pretvoreni PDF kojem je netko uklonio ' +
+      'oznaku staging mape (ili stari ingest bez vrste) podizao pravi A (Codex #229 nalaz 02, runda 3)',
+    caught: () => !vrstaIzvoraSeProvjerava(gardVrsteIzIzvora('vrsta(r) === null).length', 'false).length')),
+    cleanBefore: () => vrstaIzvoraSeProvjerava(sourceKindRefusals),
+  },
+  {
+    id: 'ingest/docx-vrsta-nad-mapom-s-manifestom-harvesta',
+    imitates:
+      'corpus-ingest --source-kind source-docx gledao je samo oznaku .lekta-corpus-kind, pa je staging mapa kojoj je ' +
+      'netko obrisao oznaku, a manifest harvesta ostao, dobila sidecar izvornog DOCX-a',
+    caught: () =>
+      !ingestVrstaSeProvjerava(
+        gardBlokIzIzvora<IngestVrstaFn>('ingestSourceKindProblem', "kind === 'source-docx' && (marker !== null || manifestPresent)", 'false'),
+      ),
+    cleanBefore: () => ingestVrstaSeProvjerava(ingestSourceKindProblem),
+  },
+  {
+    id: 'ingest/docx-s-otiskom-iz-manifesta-harvesta',
+    imitates:
+      'corpus-ingest --harvest-manifest je citao manifest, ali nije odbijao DOCX ciji je sha256 harvest zapisao, pa je ' +
+      'pretvoreni PDF bez ikakve oznake usao u source-docx',
+    caught: () => !harvestiranDocxSeOdbija(gardBlokIzIzvora<HarvestedFn>('harvestedDocxProblem', 'manifestShas && manifestShas.has(sha)', 'false')),
+    cleanBefore: () => harvestiranDocxSeOdbija(harvestedDocxProblem),
+  },
+  {
+    id: 'ingest/manifest-harvesta-bez-provjere-oblika',
+    imitates:
+      'manifest harvesta s neispravnim otiscima prihvacao se tiho, pa bi pokvarena kopija manifesta ispala iz ' +
+      'provjere bez ikakve poruke',
+    caught: () =>
+      !manifestSeValidira(
+        gardBlokIzIzvora<ManifestFn>('harvestManifestShas', "shas.every((s) => typeof s === 'string' && /^[0-9a-f]{64}$/.test(s))", 'true'),
+      ),
+    cleanBefore: () => manifestSeValidira(harvestManifestShas),
+  },
+  {
+    id: 'ingest/pdf-dio-izvan-allowliste',
+    imitates:
+      'ingest PDF vrste prihvacao je docProps/thumbnail i zaglavlje: ime nacrtano u slicici naslovnice ili napisano u ' +
+      'zaglavlju bez oznake uloge prolazilo je pseudonimizaciju netaknuto (Codex #229 nalaz 04)',
+    caught: () =>
+      !privatnostPdfSeProvjerava(gardBlokIzIzvora<PrivatnostFn>('pdfPackagePrivacyProblems', '!PDF_DOPUSTENI_DIJELOVI.some((re) => re.test(e.name))', 'false')),
+    cleanBefore: () => privatnostPdfSeProvjerava(pdfPackagePrivacyProblems),
+  },
+  {
+    id: 'ingest/pdf-prazan-rjecnik',
+    imitates:
+      'ingest PDF vrste isporucivao je dokument s praznim rjecnikom pojmova: harvest prazni core.xml, pa bez imena na ' +
+      'naslovnici "0 procurjelih pojmova" ne tvrdi nista o imenu u tijelu rada',
+    caught: () => !privatnostPdfSeProvjerava(gardBlokIzIzvora<PrivatnostFn>('pdfPackagePrivacyProblems', 'if (terms.length === 0)', 'if (false)')),
+    cleanBefore: () => privatnostPdfSeProvjerava(pdfPackagePrivacyProblems),
+  },
+  {
+    id: 'ingest/pdf-pojam-u-binarnom-dijelu',
+    imitates:
+      'pseudonimizacija cita samo XML, pa bi ime u metapodacima slike (tEXt, EXIF, UTF-16 naziv) ostalo u isporucenom ' +
+      'paketu dok sidecar tvrdi 0 procurjelih pojmova',
+    caught: () =>
+      !privatnostPdfSeProvjerava(gardBlokIzIzvora<PrivatnostFn>('pdfPackagePrivacyProblems', 'terms.some((t) => sadrzi(', 'false && terms.some((t) => sadrzi(')),
+    cleanBefore: () => privatnostPdfSeProvjerava(pdfPackagePrivacyProblems),
+  },
+  {
+    id: 'ingest/pdf-docprops-s-tekstom',
+    imitates:
+      'ingest PDF vrste nije provjeravao da su docProps prazni, pa bi naslov ili kljucne rijeci s imenom (nisu nositelji ' +
+      'u rjecniku) prosli u DOCX koji je zaobisao harvest',
+    caught: () =>
+      !privatnostPdfSeProvjerava(gardBlokIzIzvora<PrivatnostFn>('pdfPackagePrivacyProblems', '/>[^<]*\\S[^<]*</.test(dekodiraj(e.data))', 'false')),
+    cleanBefore: () => privatnostPdfSeProvjerava(pdfPackagePrivacyProblems),
+  },
+  {
+    id: 'ingest/docx-vrsta-nad-pdf-staging-mapom',
+    imitates:
+      'corpus-ingest nije citao oznaku izvora, pa bi staging mapa pretvorenih PDF-ova ingestirana s --source-kind ' +
+      'source-docx dala sidecar izvornog DOCX-a i podigla pravi A',
+    caught: () => !ingestVrstaSeProvjerava(gardBlokIzIzvora<IngestVrstaFn>('ingestSourceKindProblem', 'marker !== null && marker !== kind', 'false')),
+    cleanBefore: () => ingestVrstaSeProvjerava(ingestSourceKindProblem),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
@@ -7843,7 +8220,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   }, 60_000);
 
   it('svaka mutacija imenuje stvaran kvar koji imitira', () => {
-    for (const mutation of MUTATIONS) {
+    for (const mutation of [...MUTATIONS, ...PDF_KORPUS_MUTACIJE]) {
       expect(mutation.imitates.length, mutation.id).toBeGreaterThan(20);
     }
   });
@@ -7886,6 +8263,22 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     const raw = readFileSync(resolve(process.cwd(), REAL_SOURCE.snapshotPath!));
     expect(raw.byteLength).toBeGreaterThan(1000);
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
+  });
+});
+
+/**
+ * Mutacije Python skripte PDF korpusa (Codex #229 nalaz 12): ista otkrivena Python naredba kao
+ * tests/pdf-corpus-harvest.test.ts. Bez interpretera je cijeli blok PRESKOCEN s razlogom u naslovu, a ne crven.
+ */
+if (!PYTHON) console.warn(`gate-mutations.test.ts: mutacije PDF korpusa${PYTHON_SKIP_REASON}`);
+describe.skipIf(!PYTHON)(`mutacijsko testiranje: gardovi PDF korpusa (Python ${PYTHON ?? 'nedostupan'})${PYTHON_SKIP_REASON}`, () => {
+  it.each(PDF_KORPUS_MUTACIJE.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
+    expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);
+    expect(mutation.caught(), `mutacija NIJE uhvacena: ${mutation.imitates}`).toBe(true);
+  }, 60_000);
+
+  it('broj mutacija PDF korpusa ne smije pasti', () => {
+    expect(PDF_KORPUS_MUTACIJE.length).toBeGreaterThanOrEqual(8);
   });
 });
 

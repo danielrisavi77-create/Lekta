@@ -1,19 +1,36 @@
 /**
  * F1: ULAZ STVARNIH RADOVA U KORPUS.
  *
- *   npx vite-node scripts/corpus-ingest.mts -- --in <izvor> --out <odrediste> --consent <zapis>
+ *   npx vite-node scripts/corpus-ingest.mts -- --in <izvor> --out <odrediste> --consent <zapis> \
+ *     --source-kind source-docx|public-pdf-converted
  *
  * Cita izvor SAMO ZA CITANJE, pseudonimizira u memoriji i pise ISKLJUCIVO u odrediste. Nema
  * zastavice za rad na mjestu i nijedan zapisni poziv ne prima putanju izvedenu iz `--in`.
  *
  * VRATA (svako je izlazni kod, ne upozorenje):
- *   2  nema zapisa o dopustenju, ili je neispravan
+ *   2  nema zapisa o dopustenju, ili je neispravan; nema `--source-kind` ili se ne slaze s izvorom
  *   3  `--in` i `--out` se preklapaju, ili je `--out` unutar repozitorija
  *   1  barem jedan dokument je ODBIJEN (procurio pojam, neispravan paket, nema dopustenja)
  *
  * Odrediste mora biti IZVAN repozitorija: gitignore je jedan `git add -f` daleko od objave, a
  * mjereno je da je bar jedna datoteka lokalnog korpusa (`_mapping.json`) vec nosila prezimena u
  * citljivom obliku.
+ *
+ * VRSTA IZVORA (`--source-kind`, obavezna, odluka vlasnika 2026-09-28): `source-docx` je izvorni Word
+ * dokument, `public-pdf-converted` javni rad pretvoren iz PDF-a (scripts/pdf-corpus/harvest_pdf_corpus.py).
+ * Upisuje se u sidecar svakog dokumenta, a `scripts/repair-real-corpus.mts` je prenosi u svaki rezultat,
+ * pa ovjera (`scripts/attest-real-corpus.mjs`) moze odbiti mjerenje u kojem se vrste mijesaju. Izvor koji
+ * se sam izjasnjava (`.lekta-corpus-kind`, pise ga harvest) mora se slagati sa zastavicom, a
+ * `public-pdf-converted` bez te oznake se odbija: rucno sastavljena mapa ne postaje PDF korpus.
+ *
+ * TRAG HARVESTA (Codex #229 nalaz 02, runda 3): `source-docx` odbija mapu s oznakom ili manifestom harvesta
+ * (`.lekta-harvest-manifest.json`), a uz `--harvest-manifest <datoteka>` i svaki DOCX ciji je sha256 harvest
+ * zapisao. Preostali rizik: covjek koji namjerno ukloni sve tragove i ne preda manifest moze lagati, isto kao
+ * i potpisom ovjere.
+ *
+ * PRIVATNOST PDF VRSTE (nalaz 04): dokument `public-pdf-converted` smije nositi samo dijelove s popisa
+ * (pdfPackagePrivacyProblems u scripts/lib/corpus-attestation-core.mjs, isti popis kao harvest), docProps bez
+ * teksta, neprazan rjecnik pojmova i nijedan pojam u binarnom dijelu; inace se odbija.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -25,6 +42,7 @@ import { deriveDocxFeatures } from '../src/corpus/docx-features';
 import { frontText, leadText } from '../src/corpus/front-text';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { detectCorpusProfile, type DetectOptions, type RegistryProfileLike } from '../src/corpus/detect-profile';
+import { harvestManifestShas, harvestedDocxProblem, ingestSourceKindProblem, pdfPackagePrivacyProblems } from './lib/corpus-attestation-core.mjs';
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..'));
 
@@ -33,6 +51,12 @@ function arg(name: string): string | null {
   return i >= 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : null;
 }
 const has = (name: string) => process.argv.includes(`--${name}`);
+
+type SourceKind = 'source-docx' | 'public-pdf-converted';
+/** Oznaka kojom se staging mapa sama izjasnjava (pise je scripts/pdf-corpus/harvest_pdf_corpus.py). */
+const KIND_MARKER = '.lekta-corpus-kind';
+/** Manifest harvesta u staging mapi: sha256 pretvorenih DOCX-ova (bez PID-a i URL-a). */
+const HARVEST_MANIFEST = '.lekta-harvest-manifest.json';
 
 /** Je li `child` unutar `parent` (ili jednak)? Koristi se za vrata 3. */
 function isInside(parent: string, child: string): boolean {
@@ -88,6 +112,29 @@ async function main() {
   }
   const src = resolve(inDir);
   const dst = resolve(outDir);
+
+  // Vrata 2: vrsta izvora je izricita i slaze se s oznakom izvora.
+  const markerPath = join(src, KIND_MARKER);
+  const marker = existsSync(markerPath) ? readFileSync(markerPath, 'utf8').trim() : null;
+  const kindProblem = ingestSourceKindProblem(arg('source-kind'), marker, existsSync(join(src, HARVEST_MANIFEST)));
+  if (kindProblem) {
+    console.error(`ODBIJENO: ${kindProblem}.`);
+    process.exit(2);
+  }
+  const sourceKind = arg('source-kind') as SourceKind;
+  // `--harvest-manifest <datoteka>`: kopija manifesta harvesta (npr. iz private mape); DOCX s tim sha256 ne
+  // smije u source-docx ni kad mu je netko uklonio oznaku i manifest iz izvora.
+  const manifestPath = arg('harvest-manifest');
+  let manifestShas: Set<string> | null = null;
+  if (has('harvest-manifest')) {
+    try {
+      if (!manifestPath) throw new Error('nema putanje');
+      manifestShas = harvestManifestShas(JSON.parse(readFileSync(resolve(manifestPath), 'utf8'))) as Set<string>;
+    } catch (error) {
+      console.error(`ODBIJENO: --harvest-manifest nije citljiv manifest harvesta (${(error as Error).message}).`);
+      process.exit(2);
+    }
+  }
 
   // Vrata 3: preklapanje putanja i pisanje unutar repozitorija.
   if (isInside(src, dst) || isInside(dst, src)) {
@@ -148,6 +195,12 @@ async function main() {
       console.error(`  ODBIJEN ${id}: nije pokriven zapisom o dopustenju`);
       continue;
     }
+    const harvested = harvestedDocxProblem(sourceKind, sha, manifestShas);
+    if (harvested) {
+      rejected += 1;
+      console.error(`  ODBIJEN ${id}: ${harvested}`);
+      continue;
+    }
 
     let parts: Record<string, string>;
     let entries: Array<{ name: string; data: Uint8Array }>;
@@ -175,6 +228,19 @@ async function main() {
       continue;
     }
 
+    const rebuilt = entries.map((e) =>
+      result.parts[e.name] !== undefined ? { name: e.name, data: new TextEncoder().encode(result.parts[e.name]) } : e,
+    );
+    // Vrata privatnosti PDF vrste: ono sto se ne moze potvrditi ne izlazi (nalaz 04).
+    if (sourceKind === 'public-pdf-converted') {
+      const privatnost = pdfPackagePrivacyProblems(rebuilt, Object.keys(result.mapping)) as string[];
+      if (privatnost.length) {
+        rejected += 1;
+        console.error(`  ODBIJEN ${id}: privatnost se ne moze potvrditi (${privatnost.join('; ')})`);
+        continue;
+      }
+    }
+
     const features = deriveDocxFeatures(result.parts);
     const docXml = result.parts['word/document.xml'] ?? '';
     // Naslovnica prva; iza nje prve stranice (izjava, sazetak) i ime datoteke kao rezerve (detect-profile.ts).
@@ -182,9 +248,6 @@ async function main() {
     if (!profile) noProfile += 1;
 
     if (!dryRun) {
-      const rebuilt = entries.map((e) =>
-        result.parts[e.name] !== undefined ? { name: e.name, data: new TextEncoder().encode(result.parts[e.name]) } : e,
-      );
       writeFileSync(join(dst, `${id}.docx`), await writeZip(rebuilt as never));
       writeFileSync(
         join(dst, `${id}.json`),
@@ -193,6 +256,7 @@ async function main() {
             // v1 ugovor koji `discoverRealCorpus` cita; bez profila dokument namjerno NE sudjeluje.
             ...(profile ? { profileId: profile.profileId } : {}),
             sidecar: 2,
+            sourceKind,
             document: { id, workType: profile?.workType ?? null, workTypeSource: profile?.source ?? null, origin: 'collected' },
             consent: { consentId: consent.consentId, scope: consent.scope, grantedAt: consent.grantedAt },
             pseudonymization: {
@@ -234,6 +298,7 @@ async function main() {
   console.log(`izvor:      ${src} (${files.length} .docx)`);
   console.log(`odrediste:  ${dryRun ? '(dry-run, nista nije zapisano)' : dst}`);
   console.log(`dopustenje: ${consent.consentId} (${consent.scope})`);
+  console.log(`vrsta:      ${sourceKind}`);
   console.log(`prihvaceno: ${accepted} | odbijeno: ${rejected} | bez prepoznatog profila: ${noProfile}`);
   const withProfile = rows.filter((r) => r.profileId);
   const distinct = new Set(withProfile.map((r) => r.profileId));

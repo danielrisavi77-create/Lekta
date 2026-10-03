@@ -10,7 +10,7 @@
 // postoji ali ljestvica je ne priznaje. Time se ne moze dogoditi da razina dokaza poraste zato sto
 // je netko pokrenuo skriptu.
 import { execFileSync } from 'node:child_process';
-import { FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
+import { FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature, sourceKindRefusals } from './lib/corpus-attestation-core.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -84,7 +84,9 @@ if (rezultati.length === 0) {
 }
 // T83: mjerenje s dvostrukim documentId (napuhani brojevi po skupini), s padom isporuke ili s
 // ostecenim paketom ne ovjerava se (scripts/lib/corpus-attestation-core.mjs, attestationRefusals).
-const odbijeno = attestationRefusals(rezultati);
+// Vrsta izvora mora vrijediti za SVAKI rezultat (sidecar corpus-ingest --source-kind): PDF ovjera ne prima
+// rezultat bez PDF sidecara, a ovjera izvornog DOCX-a ne prima rad pretvoren iz PDF-a.
+const odbijeno = [...attestationRefusals(rezultati), ...sourceKindRefusals(rezultati, vrstaIzvora)];
 if (odbijeno.length) {
   for (const razlog of odbijeno) console.error(`[ovjera] FAIL: ${razlog}.`);
   process.exit(1);
