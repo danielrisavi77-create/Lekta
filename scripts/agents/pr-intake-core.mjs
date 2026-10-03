@@ -20,7 +20,7 @@ export const MODEL_PREGLEDA = 'gpt-6-sol';
 /** Model pregleda kad PR dira zasticenu stazu iz `config/agent-routing.json`. */
 export const MODEL_PREGLEDA_ZASTICENO = 'gpt-6.1-sol';
 
-export const OZNAKA_PREGLEDA = 'Pregled drugog providera';
+const OZNAKA_PREGLEDA = 'Pregled drugog providera';
 
 const ZELENI_ZAKLJUCCI = new Set(['success', 'skipped', 'neutral']);
 const NETO_RE = /Neto redaka:\s*`?\s*\+(\d+)\s*\/\s*-(\d+)/;
