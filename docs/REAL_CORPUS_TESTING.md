@@ -383,26 +383,17 @@ usporediti. Posljedica u proizvodu je ipak stvarna: `detectPassRegressions` to v
 i demotira popravljeni dokument na sporedan izbor. Ispravak bi trazio promjenu SAME PROVJERE
 (kaznjavanje siroceg naslova bez roditelja), sto dira bodovanje svih dokumenata i nije napravljeno.
 
-**Otvoreno: `toc.coverage` daje LAZNU regresiju kad popravak doda naslov.** Izmjereno na
-`corpus-0084` (pravo-integrirani-diplomski):
+**Rijeseno 2026-08-30 (commit `a6be4f47`): `toc.coverage` vise ne daje LAZNU regresiju kad popravak doda naslov.**
+Povijesni problem: na `corpus-0084` (pravo-integrirani-diplomski) je `toc.coverage` pao s 3/3 na 1/3 jer je
+analiza citala POHRANJEN tekst zivog TOC polja (41 stavka prema 45 naslova), iako je popravak polja oznacio
+`w:dirty` i Word sadrzaj regenerira pri otvaranju.
 
-| mjera | prije | poslije |
-| --- | --- | --- |
-| `toc.coverage` | 3/3 | **1/3** ("3 naslova nije pronadjeno u sadrzaju") |
-| naslova u dokumentu | 42 | 45 |
-| stavki sadrzaja | 41 | **41** |
-| `hasTocField` | true | true (49 polja oznaceno `w:dirty`) |
-
-Dokument ima ZIVO TOC polje, a popravak je polja oznacio za osvjezavanje pri otvaranju. Word ce
-sadrzaj regenerirati i tri nova naslova ce se pojaviti; analiza cita POHRANJEN (ustajao) tekst
-sadrzaja, pa vidi 41 stavku prema 45 naslova. To je isto rasudjivanje kojim CLAUDE.md opravdava
-izuzece `toc-field-fixera` ("tekst sadrzaja GENERIRA Word iz polja").
-
-Posljedica u proizvodu je stvarna: `detectPassRegressions` to broji kao regresiju i demotira
-ISPRAVNO popravljen dokument na sporedan izbor, pa sucelje korisniku preporuci original koji je
-losiji. Popravak bi bio uzak (izuzeti `toc.coverage` iz regresije kad je `hasTocField` istinit i
-polja su oznacena `w:dirty`), ali dira ugovor isporuke, pa nije napravljen bez odluke vlasnika.
-Tier 2 (`npm run verify:word:toc`) je alat koji to moze presuditi doslovno.
+Popravak: `tocFieldWillRefresh()` i `dropStaleFieldRegressions()` u `src/analysis/repair-regression.ts`
+odbacuju regresije `toc.coverage` i `toc.page-numbers` kad postoji zivo TOC polje oznaceno `w:dirty` ili
+sa statusom `stale`; sve ostale regresije prolaze nedirnute. Koriste ih `src/ui/app.ts` i
+`src/ui/repair-panel.ts`, pa sucelje vise ne preporucuje losiji izvorni dokument. Uvjet je namjerno uzak:
+bez oznake osvjezavanja Word sam ne regenerira sadrzaj, pa bi pad bio stvaran. Tier 2
+(`npm run verify:word:toc`) ostaje alat koji to moze presuditi doslovno.
 
 ### Zatecen nalaz (prije popravka): `heading-style-fixer` obara provjere naslova
 
