@@ -27,6 +27,7 @@ import {
   listProcesses,
   readLock,
 } from '../gate-preflight.mjs';
+import { runDoctor, summaryLine } from '../env-doctor.mjs';
 
 /**
  * @typedef {Object} BootstrapInputs
@@ -289,7 +290,15 @@ async function collectInputsAndPrint() {
     claudeProcessCount,
   });
 
-  for (const line of [...lines, ...formatSessionRules()]) {
+  // Zavrsni redak env-doctora (fail-open): samo cita datoteke i najvise jedan `codex --version`.
+  let doctorLine = 'env-doctor: nije izmjereno';
+  try {
+    doctorLine = summaryLine(runDoctor({ root }));
+  } catch {
+    doctorLine = 'env-doctor: nije izmjereno';
+  }
+
+  for (const line of [...lines, doctorLine, ...formatSessionRules()]) {
     // eslint-disable-next-line no-console
     console.log(line);
   }
