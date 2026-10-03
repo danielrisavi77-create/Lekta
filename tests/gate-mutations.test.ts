@@ -279,6 +279,7 @@ import { INK_CLASS, wireInkSignature } from '../src/shared/site-footer-full';
 import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
+import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -4632,6 +4633,38 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  // T87 (kriterij 9 T81): iskljucen ili zauzet endpoint ne vodi u slijepu ulicu. Mutacije mijenjaju
+  // IZVOR modula; baseline je nad stvarnim datotekama.
+  ...([
+    ['t87/klijent-ne-prepoznaje-disabled', 'repairClient', "if (data?.error === 'disabled') {", "if (data?.error === 'iskljuceno') {",
+      'repair-client: 503 disabled nije prepoznat'],
+    ['t87/klijent-ne-prepoznaje-busy', 'repairClient', "if (data?.error === 'busy') {", "if (data?.error === 'zauzeto') {",
+      'repair-client: 503 busy nije prepoznat'],
+    ['t87/politika-disabled-bez-statusa', 'recoveryPolicy', "outcome.status === 503 && outcome.code === 'disabled'", "outcome.code === 'disabled'",
+      'recovery-policy: grana disabled nije vezana uz status 503'],
+    ['t87/politika-disabled-nudi-retry', 'recoveryPolicy', "action: 'none',\n      retryAllowed: false,\n      message: 'Automatski", "action: 'retry',\n      retryAllowed: true,\n      message: 'Automatski",
+      'recovery-policy: disabled ne zavrsava bez ponovnog pokusaja'],
+    ['t87/politika-busy-bez-statusa', 'recoveryPolicy', "outcome.status === 503 && outcome.code === 'busy'", "outcome.code === 'busy'",
+      'recovery-policy: grana busy nije vezana uz status 503'],
+    ['t87/render-disabled-bez-upute', 'fieldRender', 'warnings: [FIELD_RENDER_DISABLED_MESSAGE]', "warnings: ['Render nije uspio (503).']",
+      'field-render: 503 disabled ne daje uputu'],
+  ] as const).map(([id, key, from, to, problem]) => {
+    const real = (): DeadEndSources => ({
+      repairClient: readTextLf(resolve(process.cwd(), 'src', 'report', 'repair-client.ts')),
+      recoveryPolicy: readTextLf(resolve(process.cwd(), 'src', 'repair', 'recovery-policy.ts')),
+      fieldRender: readTextLf(resolve(process.cwd(), 'src', 'report', 'field-render-client.ts')),
+    });
+    return {
+      id,
+      imitates: `T87: ${problem}; korisnik bi opet vidio "neocekivani odgovor 503" ili gumb koji ne moze uspjeti.`,
+      caught: () => {
+        const src = real();
+        const mut = src[key].replace(from, to);
+        return mut !== src[key] && deadEndWiringProblems({ ...src, [key]: mut }).includes(problem);
+      },
+      cleanBefore: () => deadEndWiringProblems(real()).length === 0,
+    };
+  }),
   {
     id: 'csp/stripe-host-u-form-action',
     imitates:
