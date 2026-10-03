@@ -86,14 +86,25 @@ suite('DOCX golden snapshots', () => {
   it('stabilni rezultati svih fixtura', async () => {
     const analyzeFixture = await loadEntry();
     const out: Record<string, unknown> = {};
+    const inspection: Record<string, unknown> = {};
     for (const fileName of fixtures) {
       const bytes = readFileSync(join(FIXTURE_DIR, fileName));
       const file = new File([bytes], fileName, {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
-      out[fileName] = normalizeResult(await analyzeFixture(file, { profileId: fixtureProfileId(fileName) }));
+      const result: any = await analyzeFixture(file, { profileId: fixtureProfileId(fileName) });
+      out[fileName] = normalizeResult(result);
+      inspection[fileName] = result?.details?.inspectionCoverage ?? null;
     }
     expect(out).toMatchSnapshot();
+    // T64 inspectionCoverage ide u ZASEBAN golden nad istim fixturama, ne u normalizeResult:
+    // (1) postojeci snapshot ostaje bajt-identican i time sam dokazuje da se bodovanje nije
+    // pomaknulo; (2) normalizeResult je ugovor presude (score, checks, issues) i test u
+    // tests/inspection-coverage.test.ts namjerno trazi da inspectionCoverage ostane izvan njega.
+    // Census je content-free (fiksne oznake i brojaci), pa je stabilan izmedju pokretanja.
+    await expect(JSON.stringify(inspection, null, 2) + '\n').toMatchFileSnapshot(
+      './__snapshots__/docx-inspection-coverage.golden.json',
+    );
   // Svih 6 fixtura + setTimeout(250) po analizi u JEDNOM testu, pa 5 s default ne dolazi u obzir.
   // Podignuto 2026-08-20 s 30 s: sam po sebi traje ~20 s, ali dok na istom stroju tece drugi
   // vitest prijedje 30 s. Tada se dogodi gore od obicnog pada, isto kao kod repair-goldena
