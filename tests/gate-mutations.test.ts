@@ -9098,8 +9098,35 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
     const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
       cov.inspectionCoverageFromPackage(zip, details, { partNames: bezKomentaraIGlossaryja });
     expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje',
       'strukturirana kontrola samo u komentarima nije prijavljena kao ogranicenje',
       'tekstni okvir samo u glossary dijelu nije prijavljen kao ogranicenje',
+    ]);
+  });
+
+  it('(g) census bez razrjesavanja r:id reference zaglavlja (stanje na efc94369) obara gard', async () => {
+    const { cov, guard } = await load();
+    // Mutant: reference u document.xml se ne provjeravaju prema rels dijelu.
+    const bezRazrjesavanja: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, context.documentRelsXml == null ? context : { ...context, documentXml: '' });
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezRazrjesavanja });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'nerazrijeseni r:id zaglavlja u postojecem rels dijelu dao je no-known-limits, ne unknown',
+      'headerReference na relaciju tipa footer dao je no-known-limits, ne unknown',
+    ]);
+  });
+
+  it('(h) census koji ignorira word/glossary/_rels (stanje na efc94369) obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezGlossaryRels: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, { ...context, glossaryRelsXml: null, glossaryXml: '' });
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezGlossaryRels });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje',
+      'nevaljan glossary rels dao je no-known-limits, ne unknown',
+      'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
     ]);
   });
 });

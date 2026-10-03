@@ -20,11 +20,22 @@ export type InspectionCensus = (
 const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 const R = 'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
 const PLAIN_BODY = `<w:document ${W}><w:body><w:p><w:r><w:t>Obican tekst</w:t></w:r></w:p></w:body></w:document>`;
+const HEADER_REF = '<w:headerReference w:type="default" r:id="rIdH"/>';
+const FOOTER_REF = '<w:footerReference w:type="default" r:id="rIdF"/>';
+function bodyWithRefs(...refs: string[]): string {
+  return (
+    `<w:document ${W} ${R}><w:body><w:p><w:r><w:t>Obican tekst</w:t></w:r></w:p>` +
+    `<w:sectPr>${refs.join('')}</w:sectPr></w:body></w:document>`
+  );
+}
 /** Tijelo cija sekcija referencira zaglavlje (rIdH) i podnozje (rIdF), kao sto Word pise sectPr. */
-const BODY_WITH_REFS =
-  `<w:document ${W} ${R}><w:body><w:p><w:r><w:t>Obican tekst</w:t></w:r></w:p>` +
-  '<w:sectPr><w:headerReference w:type="default" r:id="rIdH"/><w:footerReference w:type="default" r:id="rIdF"/></w:sectPr>' +
-  '</w:body></w:document>';
+const BODY_WITH_REFS = bodyWithRefs(HEADER_REF, FOOTER_REF);
+const BODY_WITH_HEADER_REF = bodyWithRefs(HEADER_REF);
+const BODY_WITH_FOOTER_REF = bodyWithRefs(FOOTER_REF);
+const GLOSSARY_RELS_PATH = 'word/glossary/_rels/document.xml.rels';
+const GLOSSARY_WITH_HEADER_REF =
+  `<w:glossaryDocument ${W} ${R}><w:docParts><w:docPart><w:docPartBody><w:p/>` +
+  `<w:sectPr>${HEADER_REF}</w:sectPr></w:docPartBody></w:docPart></w:docParts></w:glossaryDocument>`;
 
 export const REL_BASE = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
 const RELS_PATH = 'word/_rels/document.xml.rels';
@@ -88,7 +99,7 @@ export async function inspectionCensusProblems(census: InspectionCensus): Promis
 
   // (a) zaglavlja i podnozja povezana relacijom moraju biti u census-u.
   const header = await census(memoryPackage({
-    'word/document.xml': BODY_WITH_REFS,
+    'word/document.xml': BODY_WITH_HEADER_REF,
     [RELS_PATH]: documentRels([['rIdH', 'header', 'header1.xml']]),
     'word/header1.xml': `<w:hdr ${W}>${STRUCTURE_SAMPLES['text-box']}</w:hdr>`,
   }), {});
@@ -96,7 +107,7 @@ export async function inspectionCensusProblems(census: InspectionCensus): Promis
     problems.push('tekstni okvir samo u zaglavlju nije prijavljen kao ogranicenje');
   }
   const footer = await census(memoryPackage({
-    'word/document.xml': BODY_WITH_REFS,
+    'word/document.xml': BODY_WITH_FOOTER_REF,
     [RELS_PATH]: documentRels([['rIdF', 'footer', 'footer3.xml']]),
     'word/footer3.xml': `<w:ftr ${W}>${STRUCTURE_SAMPLES['content-control']}</w:ftr>`,
   }), {});
@@ -106,7 +117,7 @@ export async function inspectionCensusProblems(census: InspectionCensus): Promis
 
   // (a2) Codex M1b: izbor ide po STVARNOJ relaciji, ne po imenu dijela.
   const custom = await census(memoryPackage({
-    'word/document.xml': BODY_WITH_REFS,
+    'word/document.xml': BODY_WITH_HEADER_REF,
     [RELS_PATH]: documentRels([['rIdH', 'header', 'headerCustom.xml']]),
     'word/headerCustom.xml': `<w:hdr ${W}>${STRUCTURE_SAMPLES['text-box']}</w:hdr>`,
   }), {});
@@ -133,6 +144,52 @@ export async function inspectionCensusProblems(census: InspectionCensus): Promis
   }), {});
   if (missingRels.status !== 'unknown') {
     problems.push(`referenca zaglavlja bez document.xml.rels dala je ${missingRels.status}, ne unknown`);
+  }
+
+  // (a3) Codex M1c: svaki r:id iz headerReference/footerReference mora se razrijesiti na relaciju
+  // tog tipa; inace zaglavlje ostaje nepregledano, pa census ne smije biti no-known-limits.
+  const unresolved = await census(memoryPackage({
+    'word/document.xml': BODY_WITH_HEADER_REF,
+    [RELS_PATH]: documentRels([['rIdS', 'styles', 'styles.xml']]),
+    'word/header1.xml': `<w:hdr ${W}>${STRUCTURE_SAMPLES['text-box']}</w:hdr>`,
+  }), {});
+  if (unresolved.status !== 'unknown') {
+    problems.push(`nerazrijeseni r:id zaglavlja u postojecem rels dijelu dao je ${unresolved.status}, ne unknown`);
+  }
+  const wrongType = await census(memoryPackage({
+    'word/document.xml': BODY_WITH_HEADER_REF,
+    [RELS_PATH]: documentRels([['rIdH', 'footer', 'footer1.xml']]),
+    'word/footer1.xml': `<w:ftr ${W}><w:p/></w:ftr>`,
+  }), {});
+  if (wrongType.status !== 'unknown') {
+    problems.push(`headerReference na relaciju tipa footer dao je ${wrongType.status}, ne unknown`);
+  }
+
+  // (a4) Codex M1d: zaglavlje koje povezuje word/glossary/_rels/document.xml.rels (putanje
+  // relativne na word/glossary/) mora biti u census-u, a nevaljan glossary rels daje unknown.
+  const glossaryPackage = (glossaryRels: string, extraParts: Record<string, string> = {}) => memoryPackage({
+    'word/document.xml': PLAIN_BODY,
+    'word/glossary/document.xml': GLOSSARY_WITH_HEADER_REF,
+    [GLOSSARY_RELS_PATH]: glossaryRels,
+    ...extraParts,
+  });
+  const glossaryHeader = await census(glossaryPackage(
+    documentRels([['rIdH', 'header', 'header1.xml']]),
+    { 'word/glossary/header1.xml': `<w:hdr ${W}>${STRUCTURE_SAMPLES['text-box']}</w:hdr>` },
+  ), {});
+  if (glossaryHeader.status !== 'partial' || kindCount(glossaryHeader, 'text-box') !== 1) {
+    problems.push('tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje');
+  }
+  const glossaryInvalid = await census(glossaryPackage('<Relationships><Relationship Id="rIdH"'), {});
+  if (glossaryInvalid.status !== 'unknown') {
+    problems.push(`nevaljan glossary rels dao je ${glossaryInvalid.status}, ne unknown`);
+  }
+  const glossaryMissingRels = await census(memoryPackage({
+    'word/document.xml': PLAIN_BODY,
+    'word/glossary/document.xml': GLOSSARY_WITH_HEADER_REF,
+  }), {});
+  if (glossaryMissingRels.status !== 'unknown') {
+    problems.push(`referenca zaglavlja u glossaryju bez glossary rels dala je ${glossaryMissingRels.status}, ne unknown`);
   }
 
   // (b) svaka vrsta census-a mora biti prepoznata.
@@ -180,7 +237,7 @@ export async function inspectionCensusProblems(census: InspectionCensus): Promis
 
   // (c) kvar census-a nikad ne smije postati no-known-limits.
   const failed = await census(memoryPackage({
-    'word/document.xml': BODY_WITH_REFS,
+    'word/document.xml': BODY_WITH_HEADER_REF,
     [RELS_PATH]: documentRels([['rIdH', 'header', 'header1.xml']]),
     'word/header1.xml': `<w:hdr ${W}/>`,
   }, ['word/header1.xml']), {});

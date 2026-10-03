@@ -5,7 +5,7 @@
  * Modul samo:
  *  1. radi content-free census poznatih OOXML struktura s ogranicenom podrskom, nad
  *     tijelom, fusnotama, endnotama, komentarima, glossary dijelom te zaglavljima i
- *     podnozjima koje glavni dokument stvarno povezuje relacijom (Codex M1 i M1b na #165);
+ *     podnozjima koje glavni dokument stvarno povezuje relacijom (Codex M1, M1b, M1c i M1d na #165);
  *  2. zbraja vec postojece skipped odluke strukturiranih analizatora.
  *
  * Nikad ne prenosi tekst dokumenta ni slobodni reason iz skipped zapisa.
@@ -165,19 +165,43 @@ const FIXED_INSPECTION_PARTS = [
 
 const DOCUMENT_RELS_PART = 'word/_rels/document.xml.rels';
 const DOCUMENT_PART = 'word/document.xml';
+const GLOSSARY_PART = 'word/glossary/document.xml';
+const GLOSSARY_RELS_PART = 'word/glossary/_rels/document.xml.rels';
 const RELATIONSHIP_BASES = [
   'http://schemas.openxmlformats.org/officeDocument/2006/relationships/',
   'http://purl.oclc.org/ooxml/officeDocument/relationships/',
 ];
 /** Tipovi relacija glavnog dokumenta ciji ciljevi ulaze u census. */
 const INSPECTED_RELATIONSHIP_TYPES = new Set(['header', 'footer', 'footnotes', 'endnotes', 'comments', 'glossaryDocument']);
-const HEADER_FOOTER_REFERENCE_RE = /<w:(?:headerReference|footerReference)\b/i;
+/** Glossary dio u census povlaci samo zaglavlja i podnozja koja sam povezuje. */
+const GLOSSARY_RELATIONSHIP_TYPES = new Set(['header', 'footer']);
+const HEADER_FOOTER_REFERENCE_RE = /<w:(header|footer)Reference\b[^>]*>/gi;
+const RELATIONSHIP_ID_ATTR_RE = /\b[A-Za-z_][\w.-]*:id\s*=\s*["']([^"']*)["']/;
 
 export interface InspectionPartContext {
   /** Sadrzaj word/_rels/document.xml.rels ili null kad dio ne postoji. */
   documentRelsXml?: string | null;
-  /** Sadrzaj word/document.xml (za provjeru postoje li reference zaglavlja bez rels dijela). */
+  /** Sadrzaj word/document.xml (za provjeru reference zaglavlja i podnozja prema rels dijelu). */
   documentXml?: string;
+  /** Sadrzaj word/glossary/_rels/document.xml.rels ili null kad dio ne postoji. */
+  glossaryRelsXml?: string | null;
+  /** Sadrzaj word/glossary/document.xml (isto za reference zaglavlja i podnozja u glossaryju). */
+  glossaryXml?: string;
+}
+
+interface DocumentRelationship {
+  id: string;
+  kind: string | null;
+  target: string;
+  external: boolean;
+}
+
+/** Reference zaglavlja i podnozja u dijelu: samo vrsta i vrijednost r:id, bez ikakvog teksta. */
+function headerFooterReferences(xml: string): Array<{ kind: 'header' | 'footer'; id: string | null }> {
+  return [...xml.matchAll(HEADER_FOOTER_REFERENCE_RE)].map((match) => ({
+    kind: match[1].toLowerCase() as 'header' | 'footer',
+    id: RELATIONSHIP_ID_ATTR_RE.exec(match[0])?.[1] ?? null,
+  }));
 }
 
 function relationshipKind(type: string): string | null {
@@ -185,11 +209,11 @@ function relationshipKind(type: string): string | null {
   return null;
 }
 
-/** Razrijesi Target relacije glavnog dokumenta (izvor je word/) u ime dijela paketa. */
-function resolveDocumentTarget(target: string): string {
+/** Razrijesi Target relacije (relativno na mapu dijela koji je posjeduje) u ime dijela paketa. */
+function resolveRelationshipTarget(target: string, baseDir: readonly string[]): string {
   let decoded = target;
   try { decoded = decodeURIComponent(target); } catch { /* neispravan escape ostaje doslovan */ }
-  const segments = decoded.startsWith('/') ? [] : ['word'];
+  const segments = decoded.startsWith('/') ? [] : [...baseDir];
   for (const segment of decoded.replace(/\\/g, '/').split('/')) {
     if (!segment || segment === '.') continue;
     if (segment === '..') {
@@ -201,15 +225,14 @@ function resolveDocumentTarget(target: string): string {
 }
 
 /**
- * Ciljevi relacija glavnog dokumenta tipa header, footer, footnotes, endnotes, comments i
- * glossaryDocument. Rels se PARSIRA; nevaljan XML, krivi korijen ili relacija bez Type/Target
- * baca, pa je census tada unknown.
+ * Relacije jednog rels dijela. Rels se PARSIRA; nevaljan XML, krivi korijen ili relacija bez
+ * Type/Target baca, pa je census tada unknown.
  */
-function relatedInspectionTargets(relsXml: string): string[] {
+function parseRelationships(relsXml: string): DocumentRelationship[] {
   const doc = parseXml(relsXml, 'Word veze');
   const root = doc.documentElement;
   if (!root || root.localName !== 'Relationships') throw new Error('rels nema korijen Relationships');
-  const targets: string[] = [];
+  const relationships: DocumentRelationship[] = [];
   for (let node = root.firstChild; node; node = node.nextSibling) {
     if (node.nodeType !== 1) continue;
     const el = node as Element;
@@ -217,12 +240,51 @@ function relatedInspectionTargets(relsXml: string): string[] {
     const type = el.getAttribute('Type') ?? '';
     const target = el.getAttribute('Target') ?? '';
     if (!type || !target) throw new Error('relacija bez Type ili Target');
-    const kind = relationshipKind(type);
-    if (!kind || !INSPECTED_RELATIONSHIP_TYPES.has(kind)) continue;
-    if ((el.getAttribute('TargetMode') ?? '').toLowerCase() === 'external') continue;
-    targets.push(resolveDocumentTarget(target));
+    relationships.push({
+      id: el.getAttribute('Id') ?? '',
+      kind: relationshipKind(type),
+      target,
+      external: (el.getAttribute('TargetMode') ?? '').toLowerCase() === 'external',
+    });
   }
-  return targets;
+  return relationships;
+}
+
+/**
+ * Ciljevi relacija (trazenih tipova) jednog dijela koji posjeduje rels, relativno na baseDir.
+ *
+ * Svaki r:id iz headerReference i footerReference u XML-u vlasnika mora se razrijesiti na
+ * relaciju s tim Id i tipom header odnosno footer (Codex M1c na #165); nerazrijesen r:id, vanjska
+ * relacija, dvostruki Id ili referenca bez rels dijela bacaju, pa je census tada unknown. Bez
+ * rels dijela i bez ijedne reference nema sto povezati (OPC: dio bez relacija nema rels dio).
+ */
+function linkedPartTargets(
+  relsXml: string | null | undefined,
+  ownerXml: string,
+  baseDir: readonly string[],
+  kinds: ReadonlySet<string>,
+): string[] {
+  const references = headerFooterReferences(ownerXml);
+  if (relsXml == null) {
+    if (references.length) throw new Error('zaglavlje ili podnozje je referencirano, a rels dio ne postoji');
+    return [];
+  }
+  const relationships = parseRelationships(relsXml);
+  const byId = new Map<string, DocumentRelationship>();
+  for (const relationship of relationships) {
+    if (!relationship.id) continue;
+    if (byId.has(relationship.id)) throw new Error('rels ima dvije relacije s istim Id');
+    byId.set(relationship.id, relationship);
+  }
+  for (const reference of references) {
+    const relationship = reference.id ? byId.get(reference.id) : undefined;
+    if (!relationship || relationship.external || relationship.kind !== reference.kind) {
+      throw new Error('referenca zaglavlja ili podnozja se ne razrjesava na relaciju');
+    }
+  }
+  return relationships
+    .filter((relationship) => relationship.kind !== null && kinds.has(relationship.kind) && !relationship.external)
+    .map((relationship) => resolveRelationshipTarget(relationship.target, baseDir));
 }
 
 /**
@@ -231,10 +293,19 @@ function relatedInspectionTargets(relsXml: string): string[] {
  * (npr. word/headerCustom.xml). Nepovezani header1.xml se ne ubraja: Word ga ne prikazuje
  * (Codex M1b na #165).
  *
+ * Ako postoji word/glossary/document.xml, isto vrijedi za njegov word/glossary/_rels/document.xml.rels:
+ * zaglavlja i podnozja koja glossary povezuje (putanje relativne na word/glossary/) ulaze u census
+ * (Codex M1d na #165).
+ *
  * Baca (census je tada unknown) kad je rels nevaljan, kad relacija pokazuje na dio kojeg nema,
- * ili kad document.xml referencira zaglavlje ili podnozje a rels dijela nema. Paket BEZ rels
- * dijela i bez ijedne takve reference je valjan (OPC: dio bez relacija nema rels dio); takav
- * dokument nema zaglavlja ni podnozja pa je citanje samo fiksnog skupa potpuno.
+ * kad se r:id iz headerReference ili footerReference ne razrjesava na relaciju tog tipa, ili
+ * kad dokument referencira zaglavlje ili podnozje a rels dijela nema. Paket BEZ rels dijela i
+ * bez ijedne takve reference je valjan (OPC: dio bez relacija nema rels dio); takav dokument
+ * nema zaglavlja ni podnozja pa je citanje samo fiksnog skupa potpuno.
+ *
+ * Svjesno konzervativno: komentari i glossary se i dalje biraju po fiksnom imenu, a ne samo kad
+ * ih relacija povezuje. To moze dati samo suvisan partial (nepovezan dio sa strukturom), nikad
+ * lazni no-known-limits.
  */
 export function inspectionPartNames(names: Iterable<string>, context: InspectionPartContext = {}): string[] {
   const byLower = new Map<string, string>();
@@ -244,17 +315,14 @@ export function inspectionPartNames(names: Iterable<string>, context: Inspection
     const hit = byLower.get(fixed);
     if (hit) selected.add(hit);
   }
-  const rels = context.documentRelsXml;
-  if (rels == null) {
-    if (HEADER_FOOTER_REFERENCE_RE.test(context.documentXml ?? '')) {
-      throw new Error('zaglavlje ili podnozje je referencirano, a rels dio ne postoji');
-    }
-  } else {
-    for (const target of relatedInspectionTargets(rels)) {
-      const hit = byLower.get(target.toLowerCase());
-      if (!hit) throw new Error('relacija pokazuje na dio kojeg nema u paketu');
-      selected.add(hit);
-    }
+  const linked = linkedPartTargets(context.documentRelsXml, context.documentXml ?? '', ['word'], INSPECTED_RELATIONSHIP_TYPES);
+  if (byLower.has(GLOSSARY_PART)) {
+    linked.push(...linkedPartTargets(context.glossaryRelsXml, context.glossaryXml ?? '', ['word', 'glossary'], GLOSSARY_RELATIONSHIP_TYPES));
+  }
+  for (const target of linked) {
+    const hit = byLower.get(target.toLowerCase());
+    if (!hit) throw new Error('relacija pokazuje na dio kojeg nema u paketu');
+    selected.add(hit);
   }
   return [...selected].sort();
 }
@@ -295,9 +363,13 @@ export async function readInspectionParts(
   const exact = (wanted: string) => names.find((name) => name.toLowerCase() === wanted);
   const relsName = exact(DOCUMENT_RELS_PART);
   const documentName = exact(DOCUMENT_PART);
+  const glossaryRelsName = exact(GLOSSARY_RELS_PART);
+  const glossaryName = exact(GLOSSARY_PART);
   const context: InspectionPartContext = {
     documentRelsXml: relsName ? await read(relsName) : null,
     documentXml: documentName ? await read(documentName) : '',
+    glossaryRelsXml: glossaryRelsName ? await read(glossaryRelsName) : null,
+    glossaryXml: glossaryName ? await read(glossaryName) : '',
   };
   const parts: InspectionXmlPart[] = [];
   for (const name of select(names, context)) parts.push({ part: name, xml: await read(name) });

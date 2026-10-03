@@ -438,3 +438,133 @@ describe('inspectionCoverage T64: census paketa (jedinice)', () => {
     ]);
   });
 });
+
+describe('inspectionCoverage T64 krug 4: razrjesavanje r:id i glossary rels (Codex M1c, M1d)', () => {
+  const NS =
+    'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const body = (refs: string) =>
+    `<w:document ${NS}><w:body><w:p/><w:sectPr>${refs}</w:sectPr></w:body></w:document>`;
+  const headerRef = '<w:headerReference w:type="default" r:id="rIdH"/>';
+  const footerRef = '<w:footerReference w:type="default" r:id="rIdF"/>';
+  const textBoxHeader = `<w:hdr ${NS}><w:p><w:r><w:txbxContent><w:p/></w:txbxContent></w:r></w:p></w:hdr>`;
+  const glossary = (refs: string) =>
+    `<w:glossaryDocument ${NS}><w:docParts><w:docPart><w:docPartBody><w:p/><w:sectPr>${refs}</w:sectPr></w:docPartBody></w:docPart></w:docParts></w:glossaryDocument>`;
+
+  it('A: rels sadrzi samo styles, a headerReference r:id="rIdH" ne razrjesava se: unknown, ne no-known-limits', async () => {
+    const out = await inspectionCoverageFromPackage(memoryPackage({
+      'word/document.xml': body(headerRef),
+      'word/_rels/document.xml.rels': documentRels([['rId1', 'styles', 'styles.xml']]),
+      'word/header1.xml': textBoxHeader,
+    }), {});
+    expect(out.status).toBe('unknown');
+    expect(out.items).toEqual([]);
+  });
+
+  it('A: kontrola generatora, isti paket s relacijom rIdH razrjesava se i daje partial (nije slucajno unknown)', async () => {
+    const out = await inspectionCoverageFromPackage(memoryPackage({
+      'word/document.xml': body(headerRef),
+      'word/_rels/document.xml.rels': documentRels([['rId1', 'styles', 'styles.xml'], ['rIdH', 'header', 'header1.xml']]),
+      'word/header1.xml': textBoxHeader,
+    }), {});
+    expect(out.status).toBe('partial');
+    expect(out.items).toEqual([{ kind: 'text-box', count: 1 }]);
+  });
+
+  it('A: r:id koji razrjesava relacija krivog tipa, vanjska relacija i dvostruki Id daju unknown', () => {
+    const names = ['word/document.xml', 'word/header1.xml', 'word/footer1.xml'];
+    const pick = (rels: string, refs = headerRef) =>
+      () => inspectionPartNames(names, { documentRelsXml: rels, documentXml: body(refs) });
+    expect(pick(documentRels([['rIdH', 'footer', 'footer1.xml']]))).toThrow();
+    expect(pick(documentRels([['rIdF', 'header', 'header1.xml']]), footerRef)).toThrow();
+    expect(pick(
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rIdH" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="https://x.example/h.xml" TargetMode="External"/></Relationships>',
+    )).toThrow();
+    expect(pick(documentRels([['rIdH', 'header', 'header1.xml'], ['rIdH', 'footer', 'footer1.xml']]))).toThrow();
+    // headerReference bez ikakvog r:id ne moze se razrijesiti.
+    expect(pick(documentRels([['rIdH', 'header', 'header1.xml']]), '<w:headerReference w:type="default"/>')).toThrow();
+    // Sve razrijeseno: header i footer idu u census, ime dijela je nebitno.
+    expect(
+      inspectionPartNames(names, {
+        documentRelsXml: documentRels([['rIdH', 'header', 'header1.xml'], ['rIdF', 'footer', 'footer1.xml']]),
+        documentXml: body(headerRef + footerRef),
+      }),
+    ).toEqual(['word/document.xml', 'word/footer1.xml', 'word/header1.xml']);
+  });
+
+  it('B: zaglavlje povezano iz word/glossary/_rels s tekstnim okvirom daje partial', async () => {
+    const out = await inspectionCoverageFromPackage(memoryPackage({
+      'word/document.xml': body(''),
+      'word/glossary/document.xml': glossary(headerRef),
+      'word/glossary/_rels/document.xml.rels': documentRels([['rIdH', 'header', 'header1.xml']]),
+      // Putanja je relativna na word/glossary/, pa glavni word/header1.xml ovdje nije cilj.
+      'word/glossary/header1.xml': textBoxHeader,
+      'word/header1.xml': `<w:hdr ${NS}><w:p/></w:hdr>`,
+    }), {});
+    expect(out.status).toBe('partial');
+    expect(out.items).toEqual([{ kind: 'text-box', count: 1 }]);
+  });
+
+  it('B: glossary rels bira samo header i footer, a putanja se razrjesava od word/glossary/', () => {
+    const names = [
+      'word/document.xml',
+      'word/glossary/document.xml',
+      'word/glossary/header1.xml',
+      'word/glossary/styles.xml',
+      'word/footer9.xml',
+    ];
+    const glossaryRelsXml = documentRels([
+      ['rId1', 'styles', 'styles.xml'],
+      ['rIdH', 'header', 'header1.xml'],
+      ['rIdF', 'footer', '../footer9.xml'],
+    ]);
+    expect(inspectionPartNames(names, {
+      documentRelsXml: null,
+      documentXml: '',
+      glossaryRelsXml,
+      glossaryXml: glossary(headerRef + footerRef),
+    })).toEqual(['word/document.xml', 'word/footer9.xml', 'word/glossary/document.xml', 'word/glossary/header1.xml']);
+  });
+
+  it('B: nevaljan glossary rels, nerazrijeseni r:id i referenca bez glossary rels daju unknown', async () => {
+    const parts = { 'word/document.xml': body(''), 'word/glossary/document.xml': glossary(headerRef) };
+    const invalid = await inspectionCoverageFromPackage(memoryPackage({
+      ...parts,
+      'word/glossary/_rels/document.xml.rels': '<Relationships><Relationship Id="rIdH"',
+    }), {});
+    expect(invalid.status).toBe('unknown');
+    const unresolved = await inspectionCoverageFromPackage(memoryPackage({
+      ...parts,
+      'word/glossary/_rels/document.xml.rels': documentRels([['rId1', 'styles', 'styles.xml']]),
+    }), {});
+    expect(unresolved.status).toBe('unknown');
+    const missing = await inspectionCoverageFromPackage(memoryPackage(parts), {});
+    expect(missing.status).toBe('unknown');
+    // Glossary bez referenci i bez rels dijela ostaje valjan i bez ogranicenja.
+    const clean = await inspectionCoverageFromPackage(memoryPackage({
+      'word/document.xml': body(''),
+      'word/glossary/document.xml': glossary(''),
+    }), {});
+    expect(clean.status).toBe('no-known-limits');
+  });
+
+  it('glossary rels bez word/glossary/document.xml ne utjece na census (nema sto povezivati)', async () => {
+    const out = await inspectionCoverageFromPackage(memoryPackage({
+      'word/document.xml': body(''),
+      'word/glossary/_rels/document.xml.rels': '<Relationships><Relationship Id="rIdH"',
+    }), {});
+    expect(out.status).toBe('no-known-limits');
+  });
+
+  it('idempotencija: dva census prolaza nad glossary paketom daju isti rezultat', async () => {
+    const zip = memoryPackage({
+      'word/document.xml': body(''),
+      'word/glossary/document.xml': glossary(headerRef),
+      'word/glossary/_rels/document.xml.rels': documentRels([['rIdH', 'header', 'header1.xml']]),
+      'word/glossary/header1.xml': textBoxHeader,
+    });
+    const first = await inspectionCoverageFromPackage(zip, {});
+    expect(await inspectionCoverageFromPackage(zip, {})).toEqual(first);
+  });
+});
