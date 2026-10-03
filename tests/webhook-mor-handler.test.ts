@@ -2443,11 +2443,11 @@ describe('webhook-mor handler: ishod nagrade preporucitelju (M2)', () => {
     expect(err.mock.calls.find((c) => c[0] === 'webhook-mor referrer_reward_retry')?.[1]).toEqual({ orderId: 'pi_1', reason });
   });
 
-  it('trajna odluka (ip_match_fraud): done uz razlog, samo dok obveza ceka', async () => {
-    const { res, nagradaDone } = await uplataSNagradom({ granted: false, reason: 'ip_match_fraud' });
+  it.each(['ip_match_fraud', 'ineligible_buyer', 'self_referral'])('trajna odluka (%s): done uz razlog, samo dok obveza ceka', async (reason) => {
+    const { res, nagradaDone } = await uplataSNagradom({ granted: false, reason });
     expect(res.status).toBe(200);
     expect(nagradaDone).toHaveLength(1);
-    expect(argOf(nagradaDone[0], 'update')).toMatchObject({ status: 'done', last_error: null, done_reason: 'ip_match_fraud' });
+    expect(argOf(nagradaDone[0], 'update')).toMatchObject({ status: 'done', last_error: null, done_reason: reason });
     expect(eqs(nagradaDone[0])).toEqual({ order_id: 'pi_1', kind: 'referrer_reward', status: 'pending' });
   });
 

@@ -26,8 +26,17 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
  * `referrer_reward` u bonus_outboxu smije zavrsiti kao `done` s tim razlogom. `no_pending_referral`
  * pokriva i kupca bez preporuke i vec nagradjenu preporuku (status vise nije friend_rewarded).
  * Pad citanja ili nedovrsen upis signupa nije trajna odluka: obveza se mora ponoviti.
+ *
+ * UVJETI PODOBNOSTI (Codex pregled PR #217 runda 2, M2b). Ova funkcija je jedina odluka za oba
+ * ulaza (webhook-mor inline i process-bonus-outbox radnik) i sama provjerava: kupac nije anoniman
+ * (`ineligible_buyer`), postoji signup tog kupca u stanju friend_rewarded (`no_pending_referral`),
+ * preporucitelj nije sam kupac (`self_referral`), signup nije preuzeo drugi order (prva kupnja,
+ * `no_pending_referral`), IP preporucitelja se ne poklapa (`ip_match_fraud`) i mjesecni strop
+ * (`monthly_cap_reached`). Placen iznos > 0 i iznos >= katalog (classifyStripeEvent,
+ * chargedAmountVerdict), nadogradnja bez nagrade (bookUpgradePayment ne pise obveze) i puni povrat
+ * (oznaka prije i poslije dodjele) provodi pozivatelj, jer ova funkcija iznos i povrat ne vidi.
  */
-const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'ip_match_fraud', 'monthly_cap_reached']);
+const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'monthly_cap_reached']);
 
 /**
  * Smije li se obveza nagrade zatvoriti. `grant_failed`, `error` i svaki nepoznat oblik rezultata NISU
@@ -65,6 +74,9 @@ export async function tryGrantReferrerReward(
     // Pad citanja nije "nema preporuke" (trajno), nego prolazna greska: obveza se ponavlja (M2).
     if (signupError) return { granted: false, reason: 'error' };
     if (!signup) return { granted: false, reason: 'no_pending_referral' };
+    // Samopreporuka: redeem-referral-signup je odbija pri upisu, ali baza nema CHECK koji bi je
+    // zabranio, pa odluka o placenom pravu ne vjeruje samo tom jednom mjestu (M2b).
+    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };
     // Jedan signup moze imati vise istodobnih kupnji. Prva uplata koja ga preuzme zadrzava
     // identitet izvornog ordera i pri ponovljenom pokusaju nakon prekida izmedju dva upisa.
     if (signup.converted_order_id && signup.converted_order_id !== buyerOrderId) {

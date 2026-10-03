@@ -175,7 +175,7 @@ describe('process-bonus-outbox: ishod dodjele nagrade (M2)', () => {
     ).rejects.toThrow('referrer_reward_retry: nepoznat_ishod');
   });
 
-  it.each(['ip_match_fraud', 'monthly_cap_reached', 'no_pending_referral'])('trajna odluka %s: done s razlogom, samo dok redak ceka', async (reason) => {
+  it.each(['ip_match_fraud', 'monthly_cap_reached', 'no_pending_referral', 'ineligible_buyer', 'self_referral'])('trajna odluka %s: done s razlogom, samo dok redak ceka', async (reason) => {
     const { db } = scenario();
     const ishod = await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async () => ({ granted: false, reason }));
     expect(ishod).toBe('declined');
@@ -388,5 +388,69 @@ describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara ide
 
   it('already_granted bez potvrdenog signupa nije trajna odluka', () => {
     expect(referrerRewardSettlement({ granted: false, reason: 'already_granted' })).toEqual({ settled: false, reason: 'already_granted' });
+  });
+});
+
+/**
+ * Codex pregled PR #217 runda 2, M2b: svaki uvjet podobnosti koji provodi zajednicka odluka ima
+ * negativni test na razini tryGrantReferrerReward (ne ubrizganog granta). Uvjeti koje provodi
+ * pozivatelj (iznos > 0, nadogradnja, povrat) mjere se u tests/webhook-mor-handler.test.ts i gore.
+ */
+describe('tryGrantReferrerReward: uvjeti podobnosti (Codex r2, M2b)', () => {
+  const nagradnoPravo = (admin: ReturnType<typeof sequentialAdmin>) =>
+    admin.poziviDetalji.filter((p) => p.tablica === 'entitlements' && p.operacije.some((o) => o.metoda === 'insert'));
+
+  it('samopreporuka (preporucitelj je sam kupac): self_referral, bez prava i bez daljnjih upita', async () => {
+    const admin = sequentialAdmin([{ data: { ...SIGNUP, referrer_user_id: 'buyer-1' }, error: null }]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'self_referral' });
+    expect(admin.pozivi).toEqual(['referral_signups']);
+  });
+
+  it('samopreporuka trajno zatvara obvezu (ponovni pokusaj je ne mijenja)', () => {
+    expect(referrerRewardSettlement({ granted: false, reason: 'self_referral' })).toEqual({ settled: true, reason: 'self_referral' });
+  });
+
+  it('kupac bez preporuke u stanju friend_rewarded: no_pending_referral, bez prava', async () => {
+    const admin = sequentialAdmin([{ data: null, error: null }]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'no_pending_referral' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+  });
+
+  it('IP preporucitelja se poklapa: ip_match_fraud, signup fraud_blocked, bez prava', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: 'h-ista-mreza' }, error: null },
+      { data: [{ ip_hash: 'h-ista-mreza' }], error: null },
+      { data: { id: SIGNUP.id }, error: null }, // fraud_blocked
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ip_match_fraud' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+    expect(admin.poziviDetalji.at(-1)?.operacije).toContainEqual({ metoda: 'update', argumenti: [{ status: 'fraud_blocked' }] });
+  });
+
+  it('mjesecni strop (10 u 30 dana): monthly_cap_reached, signup converted bez nagrade', async () => {
+    const admin = sequentialAdmin([
+      { data: SIGNUP, error: null },
+      { data: [], error: null },
+      { data: null, error: null, count: 10 },
+      { data: { id: SIGNUP.id }, error: null }, // converted uz ovaj order
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'monthly_cap_reached' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+  });
+
+  it('BASELINE: podoban kupac (ne anoniman, tudja preporuka, druga mreza, ispod stropa) dodjeljuje pravo preporucitelju', async () => {
+    const admin = sequentialAdmin([
+      ...PRIJE_INSERTA,
+      { data: { id: 'ent-svjez' }, error: null },
+      { data: null, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1')).toEqual({ granted: true });
+    const pravo = nagradnoPravo(admin);
+    expect(pravo).toHaveLength(1);
+    expect(pravo[0].operacije.find((o) => o.metoda === 'insert')?.argumenti[0]).toMatchObject({ user_id: 'ref-1', provider: 'internal' });
   });
 });
