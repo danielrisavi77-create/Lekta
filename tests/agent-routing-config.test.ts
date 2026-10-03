@@ -13,6 +13,7 @@ import { botPathViolations, pathMatches, resolveBot } from '../scripts/agents/gr
 import {
   allRoutingRoleEntries,
   findBotsImplementingProtected,
+  findImplementEffortDrift,
   type BotSpec,
   findSameProviderWithoutFallback,
   findUnverifiedModelUsages,
@@ -129,6 +130,23 @@ describe('config/agent-routing.json: effort je iz dopustenog skupa i nikad "max"
         expect(VALID_EFFORTS.has(role.reviewFallback.effort)).toBe(true);
         expect(role.reviewFallback.effort).not.toBe('max');
       }
+    }
+  });
+
+  it('B1: implementator je claude-opus-5-5, effortPolicy implement medium i implementProtected high', () => {
+    const config = readConfig();
+    expect(config.effortPolicy.implement).toBe('medium');
+    expect(config.effortPolicy.implementProtected).toBe('high');
+    expect(config.models['claude-opus-5-5']?.status).toBe('verified');
+    const problems = findImplementEffortDrift(config as unknown as import('./helpers/agent-routing-checks').RoutingConfig);
+    expect(problems, problems.join('; ')).toHaveLength(0);
+    for (const size of SIZES) {
+      expect(config.routing[size].true.roles.implement.model).toBe('claude-opus-5-5');
+    }
+    expect(config.routing.M.false.roles.implement.model).toBe('claude-opus-5-5');
+    expect(config.routing.L.false.roles.implement.model).toBe('claude-opus-5-5');
+    for (const { roleName, role } of allRoutingRoles(config)) {
+      if (roleName === 'implement') expect(role.effort).not.toBe('xhigh');
     }
   });
 

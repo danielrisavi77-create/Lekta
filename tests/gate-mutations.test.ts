@@ -108,7 +108,7 @@ import {
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
 } from '../src/report/webhook';
-import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
+import { findBotsImplementingProtected, findImplementEffortDrift, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
 import {
@@ -117,6 +117,7 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -7679,6 +7680,29 @@ describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
     };
     expect(findSameProviderWithoutFallback(saFallbackom)).toEqual([]);
   });
+
+  it('implement effort vracen na stari xhigh ili odmaknut od effortPolicy obara tvrdnju (B1)', async () => {
+    const routingConfigModule = await import('../config/agent-routing.json');
+    const real = routingConfigModule.default as unknown as import('./helpers/agent-routing-checks').RoutingConfig;
+
+    // BASELINE: stvarni config slijedi effortPolicy (implement medium, zasticeno high).
+    expect(findImplementEffortDrift(real)).toEqual([]);
+
+    // MUTACIJA 1: zasticeni L implement vracen na prijasnji xhigh.
+    const staroZasticeno = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    staroZasticeno.routing.L.true.roles.implement.effort = 'xhigh';
+    expect(findImplementEffortDrift(staroZasticeno)).toEqual(['L/true/implement effort xhigh umjesto high']);
+
+    // MUTACIJA 2: nezasticeni M implement na opus-5-5 podignut na high mimo politike.
+    const nezasticeno = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    nezasticeno.routing.M.false.roles.implement.effort = 'high';
+    expect(findImplementEffortDrift(nezasticeno)).toEqual(['M/false/implement effort high umjesto medium']);
+
+    // MUTACIJA 3: politika bez implementProtected ne smije tiho proci.
+    const bezPolitike = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    delete bezPolitike.effortPolicy?.implementProtected;
+    expect(findImplementEffortDrift(bezPolitike)).toEqual(['effortPolicy.implement ili implementProtected nedostaje']);
+  });
 });
 
 describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
@@ -9054,6 +9078,49 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
       'styles: vise styleId u tagu, jedan > na kraju',
       'styles: > u navodnicima bez zatvaranja',
     ]);
+  });
+});
+
+describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8');
+  const bytes = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/docx/synthetic-mentor-komentari.docx')));
+
+  it('BASELINE: nagnut list na uskom ekranu stoji ravno', () => {
+    expect(mobileTiltProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez pravila za uski ekran nagib ostaje i gard ga hvata', () => {
+    const bez = css().replace('@media(max-width:720px){.analyzer-wrap{transform:none}}', '');
+    expect(bez).not.toBe(css());
+    expect(mobileTiltProblems(bez)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('BASELINE: blok komentara je sklopljen na uskom i otvoren na sirokom ekranu', async () => {
+    expect(await mentorCollapseProblems(await mentorModuleFromSource([]), bytes)).toEqual([]);
+  });
+
+  it('mutant: blok uvijek otvoren se hvata na uskom ekranu', async () => {
+    const mod = await mentorModuleFromSource([['let otvoreno = !(opts.uzak ?? medij?.matches ?? false);', 'let otvoreno = true;']]);
+    expect(await mentorCollapseProblems(mod, bytes)).toEqual(['uzak ekran: blok komentara je otvoren']);
+  });
+
+  it('mutant: blok opet obican div (bez sklapanja) se hvata', async () => {
+    const mod = await mentorModuleFromSource([["return `<details class=\"mt\"${otvoreno ? ' open' : ''}><summary class=\"mt-kicker\">", "return `<div class=\"mt\"><p class=\"mt-kicker\">"]]);
+    expect(await mentorCollapseProblems(mod, bytes)).toEqual(['blok komentara nije <details>', 'blok komentara nije <details>']);
+  });
+
+  it('BASELINE: otvorenost prati sirinu, rucni odabir ima prednost (Codex F6)', async () => {
+    expect(await mentorResizeProblems(await mentorModuleFromSource([]), bytes)).toEqual([]);
+  });
+
+  it('mutant: odluka samo pri montazi (bez pracenja medija) se hvata', async () => {
+    const mod = await mentorModuleFromSource([['      if (rucno) return;', '      return;']]);
+    expect(await mentorResizeProblems(mod, bytes)).toEqual(['suzeno na uzak ekran: blok ostaje otvoren']);
+  });
+
+  it('mutant: promjena sirine gazi rucni odabir se hvata', async () => {
+    const mod = await mentorModuleFromSource([['      if (rucno) return;', '']]);
+    expect(await mentorResizeProblems(mod, bytes)).toEqual(['rucno otvoren blok sklopljen promjenom sirine']);
   });
 });
 
