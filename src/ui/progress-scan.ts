@@ -17,6 +17,8 @@
 //      popis je aria-hidden ukras.
 
 import './progress-scan.css';
+import { resultRendererFor } from './results/results-cockpit';
+import type { LiveHandle } from './analysis-live/analysis-live';
 
 /** Pragovi su DOSLOVNI postoci iz onProgress poziva u src/analysis/analyze-docx.ts.
  *  Ako se ondje promijene, ovdje se mora promijeniti isto (gard: tests/progress-scan.test.ts). */
@@ -89,10 +91,37 @@ function mount(view: HTMLElement): { root: HTMLElement; items: HTMLElement[] } |
   return { root, items };
 }
 
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33) zamjenjuje ovaj popis faza. Njezin kod i CSS zive u LIJENOM
+ * modulu `./analysis-live/analysis-live`, koji se ucitava tek kad analiza pocne, pa statican graf
+ * rute `/rad/` raste samo za ovih nekoliko redaka. Iza `?resultRenderer=legacy` ostaje stari
+ * popis faza, kao i stari ekran rezultata. Gard granice: tests/analysis-live.test.ts.
+ */
+let live: Promise<LiveHandle | null> | null = null;
+
+/** Poziva se iz runAnalysis u app.ts kad analiza krene; `profile` je profil po kojem se mjeri. */
+export function startLiveAnalysis(profile: unknown): void {
+  const view = document.getElementById('progressView');
+  if (!view || resultRendererFor(document) === 'legacy') return;
+  live ??= import('./analysis-live/analysis-live').then((m) => m.mountAnalysisLive(view), () => null);
+  void live.then((h) => h?.start(profile));
+}
+
+/** Rezultat stigao: otkrij ga uzivo. Rjesava se kad ekran rezultata smije preuzeti. */
+export async function revealLiveAnalysis(result: unknown): Promise<void> {
+  const h = live && await live;
+  try {
+    if (h) await h.reveal(result);
+  } catch {
+    // Prikaz ne smije srusiti analizu: bez otkrivanja rezultat se prikazuje odmah, kao prije Z33.
+  }
+}
+
 /** Poziva se iz progress() u app.ts uz svaki stvarni pomak analize. */
 export function renderProgressScan(pct: number): void {
   const view = document.getElementById('progressView');
   if (!view) return;
+  if (live) void live.then((h) => h?.progress(Number.isFinite(pct) ? pct : 0));
   if (!mounted) mounted = mount(view);
   if (!mounted) return;
   const states = phaseStates(Number.isFinite(pct) ? pct : 0);
