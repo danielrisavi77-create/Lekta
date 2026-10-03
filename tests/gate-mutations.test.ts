@@ -9009,3 +9009,63 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
     ]);
   });
 });
+
+/**
+ * WORKTREE GC (odluka vlasnika 2026-10-03). Dva kvara koja bi ciscenje pretvorila u brisanje rada:
+ *  (a) presuda bez provjere cistoce uklonila bi worktree s necommitanim promjenama;
+ *  (b) presuda bez provjere pretka uklonila bi worktree s nespojenom granom (commiti se gube).
+ * Mutira se kopija izvora u privremenom direktoriju (uz kopiju `gate-preflight.mjs` koju uvozi),
+ * nikad datoteka u repozitoriju; presudu racuna cisti node, kao u mutacijama gate preflighta.
+ */
+describe('mutacije: worktree-gc presuda', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+  const clean = { tracked: [], untracked: [], ignored: [] };
+  const merged = {
+    main: false, bare: false, locked: false, prunable: false, current: false, ancestor: true,
+    status: clean, lockHeld: false, processPids: [], newestMtimeMs: 0,
+  };
+  const dirty = { ...merged, status: { ...clean, tracked: ['src/a.ts'] } };
+  const unmerged = { ...merged, ancestor: false };
+
+  /** @returns presude `removable` za zadane cinjenice, izracunate nad kopijom izvora. */
+  async function removableFor(source: string, facts: object[]): Promise<boolean[]> {
+    const { mkdtempSync: mkd, writeFileSync: write, rmSync: rm } = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkd(join(tmp(), 'lekta-wtgc-mut-'));
+    try {
+      write(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+      const file = join(dir, 'worktree-gc.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(${JSON.stringify(facts)}.map((f) => m.judgeWorktree(f, { nowMs: 36e6 }).removable)));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rm(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(a) presuda bez provjere cistoce obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: spojeno i cisto je uklonjivo, necommitana promjena zadrzava.
+    expect(await removableFor(source, [merged, dirty])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera pracenih promjena (stvaran kvar: brojanje samo neprac. datoteka).
+    const mutated = source.replace(/\n {4}if \(facts\.status\.tracked\.length > 0\) reasons\.push\([^\n]*\);/, '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, dirty])).toEqual([true, true]);
+  }, 120_000);
+
+  it('(b) presuda bez provjere pretka obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: nespojena grana se zadrzava.
+    expect(await removableFor(source, [merged, unmerged])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera `merge-base --is-ancestor` (stvaran kvar: "cisto" shvaceno kao "spojeno").
+    const mutated = source.replace("  if (facts.ancestor !== true) reasons.push('HEAD nije spojen u bazu');\n", '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, unmerged])).toEqual([true, true]);
+  }, 120_000);
+});

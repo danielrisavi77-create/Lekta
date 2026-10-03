@@ -27,6 +27,39 @@ import {
   listProcesses,
   readLock,
 } from '../gate-preflight.mjs';
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+/**
+ * Pokrece `scripts/worktree-gc.mjs --apply --quiet` (odluka vlasnika 2026-10-03: worktree se nakon
+ * spajanja uklanja, a start sesije je jedino mjesto koje sigurno dolazi nakon spajanja). FAIL-OPEN:
+ * nedostajuca skripta, pad, istek vremena ili izlaz razlicit od 0 daju jedan citljiv redak i nikad
+ * ne ruse start sesije. Vraca uvijek tocno jedan redak.
+ * @param {{ root: string, spawn?: typeof spawnSync, timeoutMs?: number }} options
+ * @returns {string}
+ */
+export function runWorktreeGc({ root, spawn = spawnSync, timeoutMs = 45_000 }) {
+  try {
+    const script = join(root, 'scripts', 'worktree-gc.mjs');
+    if (!existsSync(script)) return 'worktree-gc: preskoceno (skripta ne postoji)';
+    const res = spawn(process.execPath, [script, '--apply', '--quiet'], {
+      cwd: root,
+      encoding: 'utf8',
+      timeout: timeoutMs,
+      windowsHide: true,
+    });
+    const out = String(res.stdout ?? '').trim().split(/\r?\n/).filter(Boolean);
+    const last = out.length ? out[out.length - 1] : '';
+    if (res.error) return `worktree-gc: nije uspjelo (${res.error.message}); start sesije se nastavlja`;
+    if (res.status === 0 && last.startsWith('worktree-gc: ')) return last;
+    const errLine = String(res.stderr ?? '').trim().split(/\r?\n/).filter(Boolean)[0] ?? '';
+    const detail = (errLine || last || `izlaz ${res.status}`).slice(0, 200);
+    return `worktree-gc: nije uspjelo (${detail}); start sesije se nastavlja`;
+  } catch (error) {
+    return `worktree-gc: nije uspjelo (${error instanceof Error ? error.message : String(error)}); start sesije se nastavlja`;
+  }
+}
 
 /**
  * @typedef {Object} BootstrapInputs
@@ -292,6 +325,12 @@ async function collectInputsAndPrint() {
   for (const line of [...lines, ...formatSessionRules()]) {
     // eslint-disable-next-line no-console
     console.log(line);
+  }
+  // Samo SessionStart hook (`--worktree-gc` u .claude/settings.json) uklanja stabla. Rucni poziv
+  // (intake-analiza) i test (hooks-discipline) bez zastavice ne smiju dirati worktreeove stroja.
+  if (process.argv.includes('--worktree-gc')) {
+    // eslint-disable-next-line no-console
+    console.log(runWorktreeGc({ root }));
   }
 }
 
