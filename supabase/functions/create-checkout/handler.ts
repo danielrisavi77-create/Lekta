@@ -14,6 +14,14 @@ import {
   type StripePaymentIntentResponse,
 } from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
+import {
+  mapUpgradeSourceRow,
+  quoteUpgrade,
+  upgradeIdempotencyKey,
+  readBoundSlotIntact,
+  readSourcePartiallyRefunded,
+  UPGRADE_SOURCE_COLUMNS,
+} from '../../../src/report/upgrade.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { canonicalConsentText, consentTextMatches } from '../../../src/legal/consent-text.ts';
 
@@ -37,6 +45,9 @@ export interface CheckoutDeps {
   fetchImpl?: typeof fetch;
   now?: () => number;
 }
+
+/** Oblik id-a prava (uuid); sve drugo je los zahtjev prije ikakvog upita. */
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Promise<Response> {
  return async (req: Request): Promise<Response> => {
@@ -66,6 +77,11 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
   const productId = String(body.productId ?? '');
   const referralCode = body.referralCode ? String(body.referralCode) : null;
   if (!productId) return json({ error: 'bad_request' }, 400);
+  // Nadogradnja (Monetizacija V1, odjeljak 14): klijent salje SAMO namjeru, id vlastitog prava koje
+  // se pretvara u Final Pass. Iznos, popust ili "vec placeno" iz tijela se nikad ne citaju.
+  const upgradeFromRaw = body.upgradeFromEntitlementId;
+  const upgradeFrom = upgradeFromRaw == null ? null : String(upgradeFromRaw);
+  if (upgradeFrom !== null && !UUID_RE.test(upgradeFrom)) return json({ error: 'bad_request' }, 400);
 
   // WS-5 signali za provjeru vrste rada: SANITIZIRANI (broj rijeci + enum marker), nikad doslovni
   // tekst rada. confirmedMismatch=true znaci da je korisnik svjesno potvrdio kupnju nizeg tiera.
@@ -149,10 +165,55 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
     console.error('[create-checkout] stripe_not_configured');
     return json({ error: 'checkout_unavailable' }, 503);
   }
-  const amountCents = stripeAmountCents(Number(product!.priceEur));
+  let amountCents = stripeAmountCents(Number(product!.priceEur));
   if (!Number.isFinite(amountCents) || amountCents <= 0) {
     console.error('[create-checkout] invalid_price', { productId, priceEur: product!.priceEur });
     return json({ error: 'product_misconfigured' }, 500);
+  }
+
+  // NADOGRADNJA Repair -> Final Pass (Monetizacija V1, odjeljak 14). Iznos je
+  //   ciljna cijena (products.price_eur) - stvarno placeno za ISTO pravo (entitlements.paid_amount_cents),
+  // oboje procitano ovdje, na serveru. Pravo se cita SAMO medju pravima prijavljenog korisnika.
+  // Pravila (isti rad i vrsta rada, jednom, rok, priznaje se samo placeno) provodi quoteUpgrade;
+  // webhook istu odluku ponavlja prije pretvorbe, a apply_entitlement_upgrade (0207) je atomska.
+  if (upgradeFrom !== null) {
+    const { data: srow, error: sourceErr } = await admin
+      .from('entitlements')
+      .select(UPGRADE_SOURCE_COLUMNS)
+      .eq('id', upgradeFrom)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (sourceErr) {
+      console.error('[create-checkout] upgrade_source_lookup_failed', { error: sourceErr.message ?? String(sourceErr) });
+      return json({ error: 'internal' }, 500);
+    }
+    const source = mapUpgradeSourceRow(srow);
+    if (source) {
+      // Djelomican povrat izvorne uplate: entitlement ne biljezi vraceni dio, pa se priznati iznos
+      // vise ne zna. Isto citanje radi i webhook prije pretvorbe. Pad citanja je 500, ne "nema povrata".
+      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');
+      if (!partial.ok) {
+        console.error('[create-checkout] upgrade_refund_lookup_failed', { error: partial.error });
+        return json({ error: 'internal' }, 500);
+      }
+      source.partiallyRefunded = partial.partial;
+      // Vezani rad mora biti jos prepoznatljiv: otisak slota netaknut (nije anonimiziran). Istek
+      // prozora slota nije granica (krug 4, odjeljak 14); nadogradnja isti slot ozivi. Cita se samo
+      // za vezano pravo (nevezanom slot ne treba). Pad citanja je 500, ne "anonimiziran" ni "netaknut".
+      if (source.slotsUsed > 0) {
+        const slot = await readBoundSlotIntact(admin, source.id);
+        if (!slot.ok) {
+          console.error('[create-checkout] upgrade_slot_lookup_failed', { error: slot.error });
+          return json({ error: 'internal' }, 500);
+        }
+        source.boundSlotIntact = slot.intact;
+      }
+    }
+    const quote = quoteUpgrade(product, source, user.id, nowMs);
+    if (!quote.ok) {
+      return json({ error: quote.error }, quote.error === 'upgrade_source_not_found' ? 404 : 409);
+    }
+    amountCents = quote.amountCents;
   }
 
   // WS-5 enforcement: nedvosmislen nesklad vrste rada -> 409 PRIJE biljezenja pristanka i Stripe
@@ -196,15 +257,22 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
       Authorization: `Bearer ${deps.stripeSecretKey}`,
       // Deterministican kljuc: mrezni retry istog pokusaja ne stvara drugi PaymentIntent.
       // Ne pokriva dva odvojena klika (vidi komentar uz stripeIdempotencyKey).
-      'Idempotency-Key': stripeIdempotencyKey(user.id, productId, consentedAt),
+      // Nadogradnja ima kljuc BEZ vremena privole: dva klika na nadogradnju istog prava vracaju isti
+      // PaymentIntent, pa se ista nadogradnja ne placa dvaput (upgradeIdempotencyKey). Kljuc nosi
+      // i iznos: nova ciljna cijena daje novi PaymentIntent, ne stari iznos pod istim kljucem.
+      'Idempotency-Key': upgradeFrom !== null
+        ? upgradeIdempotencyKey(user.id, upgradeFrom, productId, amountCents)
+        : stripeIdempotencyKey(user.id, productId, consentedAt),
     },
     body: buildStripePaymentIntentParams({
       amountCents,
       currency: 'eur',
       userId: user.id,
       productId,
-      referralCode,
+      // Referral kod vrijedi za prvu kupnju, ne za nadogradnju istog prava.
+      referralCode: upgradeFrom !== null ? null : referralCode,
       receiptEmail: user.email ?? null,
+      upgradeFromEntitlementId: upgradeFrom,
     }),
   });
   if (!stripeRes.ok) {
