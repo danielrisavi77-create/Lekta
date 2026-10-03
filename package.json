@@ -199,7 +199,8 @@
     ],
     "ignoreDependencies": [
       "jsr",
-      "postgres"
+      "postgres",
+      "word-extractor"
     ]
   }
 }
