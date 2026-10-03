@@ -417,7 +417,7 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
     // checkout naplacuje fiksni tier po vrsti rada (src/report/pricing.ts) bez obzira na odabir.
     // Tezine iz repair-pricing.ts i dalje odredjuju REDOSLIJED i korak klizaca, samo se vise ne
     // prevode u novac.
-    const countTxt = `${selected.size} od ${items.length} ${pluralPopravaka(items.length)}`;
+    const countTxt = `Odabrano: ${selected.size} od ${items.length} ${pluralPopravaka(items.length)}`;
     totalPrice.textContent = String(selected.size);
     totalCount.textContent = countTxt;
     infoEl.innerHTML = '';

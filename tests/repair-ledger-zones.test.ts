@@ -44,6 +44,17 @@ const advanced = (label: string, over: Partial<TestItem> = {}): TestItem =>
 beforeEach(() => { document.body.innerHTML = ''; });
 
 describe('ledger: dvije zone umjesto ravnog popisa', () => {
+  it('brojac imenuje odabrane popravke i prati promjenu odabira', () => {
+    const items = [safe('Font'), safe('Margine')];
+    const listEl = mountList(items);
+    const trigger = renderRepairLedgerModal({ items, listEl });
+    document.body.appendChild(trigger);
+    expect(trigger.querySelector('.lekta-repair-trigger__price')?.textContent).toBe('Odabrano: 2 od 2 popravka');
+    trigger.querySelector<HTMLButtonElement>('.lekta-repair-trigger__btn')!.click();
+    document.querySelector<HTMLButtonElement>('.lekta-repair-ledger-row')!.click();
+    expect(trigger.querySelector('.lekta-repair-trigger__price')?.textContent).toBe('Odabrano: 1 od 2 popravka');
+  });
+
   it('kad postoje obje vrste, prikazuju se dva naslova s tocnim brojevima', () => {
     const ledger = openLedger([safe('Font'), safe('Margine'), advanced('Sadržaj')]);
     const zones = [...ledger.querySelectorAll('.lekta-repair-ledger-zone strong')].map((z) => z.textContent);

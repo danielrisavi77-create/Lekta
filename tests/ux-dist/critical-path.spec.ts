@@ -75,7 +75,6 @@ test.describe('dist: kriticni put', () => {
     await page.locator('#fileInput').setInputFiles(fixture);
     await cekajKorak(page, '2');
     await expect(page.locator('#analyzeBtn')).toBeEnabled();
-    await page.locator('#analyzeBtn').click();
     await potvrdiProfil(page);
     await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 

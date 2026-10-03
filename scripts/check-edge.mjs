@@ -27,6 +27,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FUNCTIONS_DIR = path.join(ROOT, 'supabase', 'functions');
 const CONFIG = path.join(FUNCTIONS_DIR, 'deno.json');
+const CONTROL_PLANE_DIR = path.join(ROOT, 'ops', 'agent-control-plane', 'function');
+const CONTROL_PLANE_ENTRY = path.join(CONTROL_PLANE_DIR, 'index.ts');
+const CONTROL_PLANE_CONFIG = path.join(CONTROL_PLANE_DIR, 'deno.json');
 
 const probe = spawnSync('deno', ['--version'], { encoding: 'utf8' });
 if (probe.status !== 0) {
@@ -36,39 +39,54 @@ if (probe.status !== 0) {
   process.exit(1);
 }
 
-const entries = fs
+const targets = fs
   .readdirSync(FUNCTIONS_DIR, { withFileTypes: true })
   .filter((d) => d.isDirectory() && !d.name.startsWith('_'))
-  .map((d) => path.join(FUNCTIONS_DIR, d.name, 'index.ts'))
-  .filter((f) => fs.existsSync(f));
+  .map((d) => ({
+    name: d.name,
+    entry: path.join(FUNCTIONS_DIR, d.name, 'index.ts'),
+    config: CONFIG,
+  }))
+  .filter((target) => fs.existsSync(target.entry));
 
-if (!entries.length) {
-  console.error('[check-edge] FAIL: nijedna Edge funkcija nije pronadjena (ocekivano supabase/functions/*/index.ts)');
+if (fs.existsSync(CONTROL_PLANE_ENTRY)) {
+  if (!fs.existsSync(CONTROL_PLANE_CONFIG)) {
+    console.error('[check-edge] FAIL: agent control-plane postoji bez ops/agent-control-plane/function/deno.json');
+    process.exit(1);
+  }
+  targets.push({
+    name: 'agent-control-plane',
+    entry: CONTROL_PLANE_ENTRY,
+    config: CONTROL_PLANE_CONFIG,
+  });
+}
+
+if (!targets.length) {
+  console.error('[check-edge] FAIL: nijedna Edge funkcija nije pronadjena.');
   process.exit(1);
 }
 
 const failed = [];
-for (const entry of entries) {
-  const name = path.basename(path.dirname(entry));
+for (const target of targets) {
   try {
-    execFileSync('deno', ['check', '--no-lock', '--config', CONFIG, entry], {
+    execFileSync('deno', ['check', '--no-lock', '--config', target.config, target.entry], {
       stdio: 'pipe',
       encoding: 'utf8',
     });
-    console.log(`  ok    ${name}`);
+    console.log(`  ok    ${target.name}`);
   } catch (e) {
-    failed.push(name);
-    console.log(`  FAIL  ${name}`);
+    failed.push(target.name);
+    console.log(`  FAIL  ${target.name}`);
     const out = `${e.stdout ?? ''}${e.stderr ?? ''}`.trim();
     if (out) console.log(out.split('\n').map((l) => `        ${l}`).join('\n'));
   }
 }
 
 if (failed.length) {
-  console.error(`[check-edge] FAIL: ${failed.length} od ${entries.length} funkcija ne prolazi typecheck: ${failed.join(', ')}`);
+  console.error(`[check-edge] FAIL: ${failed.length} od ${targets.length} funkcija ne prolazi typecheck: ${failed.join(', ')}`);
   process.exit(1);
 }
-console.log(`[check-edge] OK: ${entries.length} Edge funkcija prolazi deno typecheck.`);
+console.log(`[check-edge] OK: ${targets.length} Edge funkcija prolazi deno typecheck.`);
 
 // Academic Core sav: IZVRSNI smoke u samom Denu (ne samo typecheck). Ciste evaluacije
 // (formatting + structure) vrte se nad sintetickim mjerenjima s tocno poznatim

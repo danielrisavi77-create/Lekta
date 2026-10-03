@@ -19,6 +19,7 @@
 /** Ono sto stol treba natrag: mjesta koja se mogu oznaciti. */
 export interface DeskDocumentMount {
   readonly flagTargets: ReadonlyMap<number, HTMLElement>;
+  readonly dispose: () => void;
 }
 
 type PreviewModel = Parameters<typeof import('../../preview/render-facsimile')['renderFacsimile']>[0];
@@ -28,15 +29,20 @@ export async function mountFacsimileInto(
   host: HTMLElement,
   preview: PreviewModel,
   flags: PreviewFlags,
+  signal?: AbortSignal,
 ): Promise<DeskDocumentMount | null> {
   const { renderFacsimile } = await import('../../preview/render-facsimile');
+  if (signal?.aborted) return null;
   const iscrtano = renderFacsimile(preview, flags);
   host.textContent = '';
   host.appendChild(iscrtano.root);
 
+  let destroy: (() => void) | undefined;
   try {
     const { attachFacsimileZoom } = await import('../../preview/facsimile-zoom');
+    if (signal?.aborted) return null;
     const zoom = attachFacsimileZoom(host, iscrtano.root);
+    destroy = () => zoom.destroy();
     zoom.remeasure();
     zoom.fitWidth();
   } catch (e) {
@@ -45,5 +51,5 @@ export async function mountFacsimileInto(
     console.warn('Uklapanje faksimila po sirini nije uspjelo; dokument ostaje u punoj velicini.', e);
   }
 
-  return { flagTargets: iscrtano.flagTargets };
+  return { flagTargets: iscrtano.flagTargets, dispose: () => { destroy?.(); destroy = undefined; } };
 }

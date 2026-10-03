@@ -42,6 +42,15 @@ const read = (f: string): string => readFileSync(resolve(ROOT, f), 'utf8').repla
 const HTML = read('index.html');
 const CSS = read('src/routes/intake/intake.css');
 
+it('rok prethodi uploadu u DOM i tipkovnickom slijedu, izvan klikabilnog papira', () => {
+  const doc = ulaz();
+  const rok = doc.querySelector('#intakeRok')!;
+  const upload = doc.querySelector('.intake-paper__gumb')!;
+  expect(rok.compareDocumentPosition(upload) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(rok.closest('#intakeDropzone')).toBeNull();
+  expect(doc.querySelectorAll('#intakeRok')).toHaveLength(1);
+});
+
 /**
  * KOMENTARI NISU KOD, i to je u ovom repozitoriju vec izmjereno (gard nad UX specovima prijavljivao
  * je FANTOM zbog biljeske koja opisuje samo pravilo; isto za graf modula, gdje su uvozi u

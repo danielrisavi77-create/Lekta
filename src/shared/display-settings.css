@@ -216,8 +216,8 @@ html:root[data-motion="reduce"] *::after {
 .ps-seg__opcija {
   display: grid;
   place-items: center;
-  min-height: 38px;
-  padding: 0 10px;
+  min-height: 44px;
+  padding: 0;
   cursor: pointer;
 }
 
@@ -234,10 +234,15 @@ html:root[data-motion="reduce"] *::after {
 }
 
 .ps-seg__tekst {
-  display: block;
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  height: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
   width: 100%;
   text-align: center;
-  font: 600 var(--fs-ui-sm)/38px var(--ui);
+  font: 600 var(--fs-ui-sm)/1.25 var(--ui);
   color: var(--paper-muted);
 }
 

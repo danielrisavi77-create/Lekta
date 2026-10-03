@@ -16,7 +16,7 @@
  * Izlazni kodovi: kod naredbe; 2 kad preflight odbije (naredba se tada ne pokrece).
  */
 import { spawn } from 'node:child_process';
-import { acquireGate, lockFilePath, releaseLock } from './gate-preflight.mjs';
+import { acquireGate, lockFilePath, measureMachine, releaseLock, weakMachineWorkerEnv } from './gate-preflight.mjs';
 
 export function parseWrapperArgs(argv) {
   const sep = argv.indexOf('--');
@@ -73,6 +73,12 @@ async function main(argv) {
 
   const childEnv = { ...env, ...extraEnv };
   if (gate.token) childEnv.LEKTA_GATE_LOCK_TOKEN = gate.token;
+  // Slab stroj: jedan Vitest radnik, osim kad je VITEST_MAX_THREADS vec postavljen (ROUTING.md).
+  const workers = weakMachineWorkerEnv({ ...measureMachine(), env: childEnv });
+  if (workers) {
+    Object.assign(childEnv, workers);
+    console.error('preflight: slab stroj, VITEST_MAX_THREADS=1');
+  }
 
   try {
     const code = await new Promise((resolvePromise) => {

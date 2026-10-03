@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { DeskItem } from '../src/ui/results/desk-model';
 import { mountDesk, type DeskDocument } from '../src/ui/results/desk-mount';
 import type { ResultsCockpitAction } from '../src/ui/results/results-cockpit';
@@ -45,6 +45,7 @@ function dokument(): DeskDocument {
 }
 
 beforeEach(() => {
+  vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(800);
   document.body.innerHTML = '<section id="stol"></section>';
   sekcija = document.getElementById('stol') as HTMLElement;
   pomaknuto = [];
@@ -55,6 +56,50 @@ beforeEach(() => {
     el.dataset.flag = String(i);
     document.body.appendChild(el);
     mete.set(i, el);
+  });
+});
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+describe('odgodeno montiranje vidljivog dokumenta', () => {
+  it('ceka vidljiv host, montira jednom i ne pise nakon dispose', async () => {
+    let width = 0;
+    vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(() => width);
+    let resized: () => void = () => {};
+    const disconnect = vi.fn();
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(cb: () => void) { resized = cb; }
+      observe() {} disconnect = disconnect;
+    });
+    let finish!: (d: DeskDocument) => void;
+    let mountSignal: AbortSignal | undefined;
+    const mountDocument = vi.fn((_host: HTMLElement, signal: AbortSignal) => { mountSignal = signal; return new Promise<DeskDocument>(resolve => { finish = resolve; }); });
+    const handle = mountDesk(sekcija, { items: stavke(), repairAvailable: true, esc, mountDocument });
+    expect(mountDocument).not.toHaveBeenCalled();
+    width = 800; resized(); resized();
+    expect(mountDocument).toHaveBeenCalledTimes(1);
+    handle.dispose();
+    expect(mountSignal?.aborted).toBe(true);
+    const cleanup = vi.fn();
+    finish({ ...dokument(), dispose: cleanup });
+    await Promise.resolve();
+    expect(mete.get(0)?.hasAttribute('data-desk-active')).toBe(false);
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(disconnect).toHaveBeenCalled();
+  });
+
+  it('neuspjeli prikaz ima lokalni retry bez ponovne analize', async () => {
+    let attempts = 0;
+    const mountDocument = async (host: HTMLElement) => {
+      if (++attempts === 1) throw new Error('synthetic render failure');
+      host.textContent = 'Sintetička stranica';
+      return dokument();
+    };
+    const handle = mountDesk(sekcija, { items: stavke(), repairAvailable: true, esc, mountDocument, scrollTo: () => {} });
+    await vi.waitFor(() => expect(sekcija.querySelector('[data-desk-retry]')).toBeTruthy());
+    sekcija.querySelector<HTMLButtonElement>('[data-desk-retry]')!.click();
+    await vi.waitFor(() => expect(sekcija.querySelector('[data-desk-doc]')?.textContent).toBe('Sintetička stranica'));
+    expect(attempts).toBe(2);
+    handle.dispose();
   });
 });
 
