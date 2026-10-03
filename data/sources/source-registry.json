@@ -1567,6 +1567,19 @@
     "note": "Tekstualni PDF; pogl. 4-5. A4 nije naveden -> izostavljen. Citiranje slobodan izbor stila -> advisory."
   },
   {
+    "id": "efst-upute-studentski-radovi-2013-https",
+    "kind": "guidelines",
+    "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+    "url": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+    "publisher": "Ekonomski fakultet u Splitu, Sveuciliste u Splitu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/efst/efst-upute-studentski-radovi-2013.pdf",
+    "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+    "validityClass": "stable",
+    "lastChecked": "2026-10-03",
+    "note": "Isti dokument preko https (sha256 bajt-identican snimci zapisa efst-upute-studentski-radovi-2013, izmjereno 2026-10-03). Builder trazi https dokaz Upisnika."
+  },
+  {
     "id": "ktf-prilog3-zavrsni",
     "kind": "template",
     "title": "Prilog 3 - Izgled obveznih stranica zavrsnog rada (KTF Split)",

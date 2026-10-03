@@ -361,8 +361,9 @@ function studyKindForEvidenceQuote(quote: string): StudyKind | 'both' | null {
   const kind = (root: string): StudyKind => root === 'sveucilisn' ? 'university' : 'vocational';
   const nextToStudy = new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\s+(?:\w+\s+){0,3}studij\w*\b/gu)]
     .map((match) => kind(match[1])));
+  // Pricuvno citanje bez rijeci studij ne broji vrstu rada: "strucni rad" nije strucni studij (EFST 2026-10-03).
   const found = nextToStudy.size > 0 ? nextToStudy
-    : new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\b/gu)].map((match) => kind(match[1])));
+    : new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\b(?!\s+rad(?:a|u|om|ovi|ova|ove|ovima)?\b)/gu)].map((match) => kind(match[1])));
   if (found.size === 2) return 'both';
   return found.values().next().value ?? null;
 }

@@ -1313,6 +1313,20 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'upisnik/strucni-rad-nije-vrsta-studija',
+    imitates: 'Pricuvno citanje vrste broji "strucni rad" kao strucni studij i odbija sveucilisni program 3',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; upute vrijede za zavrsni i strucni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      // Iznimka vrijedi samo za imenicu rad: "strucni radi" (glagol) i dalje tvrdi strucnu vrstu (Astra 2026-10-03).
+      const rejects = (quote: string) => {
+        try { upisnikGuardFixture('3', quote); return false; }
+        catch (error) { return /study type/u.test(String(error)); }
+      };
+      return rejects('Elektrotehnika; strucni rad na strucnom prijediplomskom studiju')
+        && rejects('Studij elektrotehnike je strucni radi usmjerenosti na praksu');
+    },
+  },
+  {
     id: 'upisnik/samo-puna-rijec-strucni',
     imitates: 'Vraća prepoznavanje samo pune riječi strucni: stručnog studija za sveučilišni program 3 prolazi',
     cleanBefore: () => upisnikGuardFixture('3', 'Prijediplomski studij elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
