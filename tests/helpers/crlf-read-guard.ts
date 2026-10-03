@@ -36,6 +36,12 @@
  * - dodjela u `beforeAll` vrijedi samo do kraja tog bloka, pa se trazenje u `it` ne poveze (R1c);
  * - granica izmedju datoteka: helper koji cita, a test koji trazi, ne vide jedan drugog (R1d);
  *   ugovor `readTextLf` stiti njegov vlastiti test;
+ * - normalizirana druga vrijednost u ISTOJ deklaraciji (`const s = readFileSync(...), lf =
+ *   s.replace(/\r\n/g, '\n')`) oznaci citanje normaliziranim, jer je naredba do `;` (runda 3, R1a);
+ * - template sa staticnim prefiksom ispred citanja (`` `a${readFileSync(...)}` ``) ne stvara vezanje,
+ *   a `}` u komentaru unutar `${...}` zatvara interpolaciju (runda 3, R1e);
+ * - privremena mapa se prepoznaje po imenu, pa i repozitorijska datoteka cije ime pocinje s
+ *   `temp`/`tmp` iza kojeg slijedi znak koji nije slovo (`src/temp-dirs.ts`) ispada iz (a) (runda 3, R2);
  * - niz spremljen u lokalnu konstantu pa predan `includes(needle)` se ne vidi (R3);
  * - `$` uz zastavicu `m` se ne trazi; skeniraju se `*.test.ts` i `tests/helpers/**`, ne Playwright
  *   `*.spec.ts` (R7).

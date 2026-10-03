@@ -141,7 +141,7 @@ describe('T92 gard: citanje teksta iz repozitorija normalizira CR', () => {
     expect(blankStrings('const s = `readFileSync(p, x)`;')).not.toContain('readFileSync');
   });
 
-  it('poznate granice (R1b, R1c, R1d na #252) su zabiljezene, ne skrivene', () => {
+  it('poznate granice (R1b, R1c, R1d i runda 3 na #252) su zabiljezene, ne skrivene', () => {
     // Poznata granica R1b: destrukturiranje ne stvara vezanje, pa trazenje nad `s` ostaje nepovezano.
     expect(nalazi("const { s } = { s: readFileSync(resolve('a.sql'), 'utf8') };\nexpect(s).toContain('a\\nb');\n")).toEqual([]);
     // Poznata granica R1c: dodjela u beforeAll vrijedi do kraja tog bloka; trazenje u `it` se ne poveze.
@@ -149,6 +149,14 @@ describe('T92 gard: citanje teksta iz repozitorija normalizira CR', () => {
       "let s: string;\nbeforeAll(() => { s = readFileSync(resolve('a.sql'), 'utf8'); });\n" +
       "it('x', () => { expect(s).toContain('a\\nb'); });\n",
     )).toEqual([]);
+    // Poznata granica (runda 3, R1a): normalizirana druga vrijednost u istoj deklaraciji oslobadja citanje.
+    expect(nalazi(
+      "const s = readFileSync(resolve('a.sql'), 'utf8'), lf = s.replace(/\\r\\n/g, '\\n');\nexpect(s).toContain('a\\nb');\n",
+    )).toEqual([]);
+    // Poznata granica (runda 3, R1e): staticni prefiks templatea ispred citanja prekida vezanje.
+    expect(nalazi("const s = `a${readFileSync(resolve('a.sql'), 'utf8')}`;\nexpect(s).toContain('a\\nb');\n")).toEqual([]);
+    // Poznata granica (runda 3, R2): `temp` na pocetku imena datoteke iza kojeg ide `-` izgleda kao privremena mapa.
+    expect(nalazi("const s = readFileSync(resolve('src/temp-dirs.ts'), 'utf8');\nexpect(s).toContain('a\\nb');\n")).toEqual([]);
     // Poznata granica R1d: helper koji cita i test koji trazi su razlicite datoteke; nijedna sama nije nalaz.
     expect(crlfReadProblems([
       { path: 'tests/helpers/h.ts', source: "export const readTextLf = (p: string) => readFileSync(p, 'utf8');\n" },
