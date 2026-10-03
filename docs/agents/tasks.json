@@ -676,9 +676,9 @@
     {
       "id": "T64",
       "title": "details.inspectionCoverage: sto analiza NIJE provjerila (sdt, txbx, oMath, ins/del, object, ugnijezdene tablice)",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
-      "note": "Plan: spaja postojece skipped[] iz details.*Structure u analyzeDocx omotacu; ime NE smije biti coverage (vec profilna pokrivenost); golden prvo; UI jedan redak Nije provjereno. Zasticeno (analysis+golden): lekta-no-fable-coding + Codex pregled.",
+      "note": "Plan: spaja postojece skipped[] iz details.*Structure u analyzeDocx omotacu; ime NE smije biti coverage (vec profilna pokrivenost); golden prvo; UI jedan redak Nije provjereno. Zasticeno (analysis+golden): lekta-no-fable-coding + Codex pregled. PR #165 spojen kao 88407f5f 2026-10-03; Codex 4 kruga, zadnji 0 blockera/0 majora.",
       "owner": "word-truth-gate"
     },
     {
@@ -691,9 +691,9 @@
     {
       "id": "T66",
       "title": "Drift dokumentacije: REAL_CORPUS_TESTING.md toc.coverage rijesen (a6be4f47), AUDIT_MASTER upucuje na generirani status",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
-      "note": "",
+      "note": "PR: ovaj PR",
       "owner": "word-truth-gate"
     },
     {
