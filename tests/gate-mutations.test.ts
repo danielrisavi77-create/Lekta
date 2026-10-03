@@ -9053,4 +9053,53 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
     };
     expect(await guard.inspectionCensusProblems(mutant)).toContain('kvar citanja dijela dao je no-known-limits, ne unknown');
   });
+
+  it('(d) izbor zaglavlja i podnozja po imenu umjesto po relaciji (stanje na 9428b217) obara gard', async () => {
+    const { cov, guard } = await load();
+    const poImenu = (names: Iterable<string>) =>
+      [...names].filter((name) => /^word\/(?:document|footnotes|endnotes|header\d*|footer\d*)\.xml$/i.test(name)).sort();
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: poImenu });
+    const problems = await guard.inspectionCensusProblems(mutant);
+    expect(problems).toContain('zaglavlje povezano relacijom pod imenom izvan header*.xml nije prijavljeno kao ogranicenje');
+    expect(problems).toContain('nepovezano zaglavlje bez relacije promijenilo je status (partial)');
+    expect(problems).toContain('nevaljan document.xml.rels dao je no-known-limits, ne unknown');
+    expect(problems).toContain('referenca zaglavlja bez document.xml.rels dala je no-known-limits, ne unknown');
+  });
+
+  it('(e) dubina polja na razini cijelog dijela (stanje na 9428b217) obara gard', async () => {
+    const { cov, guard } = await load();
+    // Doslovno brojilo s 9428b217: jedna dubina za cijeli footnotes.xml.
+    const dubinaDijela = (xml: string): number => {
+      let depth = 0;
+      let orphanEnds = 0;
+      for (const match of xml.matchAll(/<w:fldChar\b[^>]*>/gi)) {
+        const type = /\bw:fldCharType\s*=\s*["']([A-Za-z]+)["']/i.exec(match[0])?.[1]?.toLowerCase();
+        if (type === 'begin') depth += 1;
+        else if (type === 'end') {
+          if (depth > 0) depth -= 1;
+          else orphanEnds += 1;
+        }
+      }
+      return depth + orphanEnds;
+    };
+    const structures = cov.INSPECTION_STRUCTURES.map((s) => (s.kind === 'unbalanced-field' ? { kind: s.kind, count: dubinaDijela } : s));
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { structures });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'polje otvoreno u jednoj fusnoti i zatvoreno u drugoj dalo je no-known-limits',
+    ]);
+  });
+
+  it('(f) census bez komentara i glossary dijela obara gard', async () => {
+    const { cov, guard } = await load();
+    const bezKomentaraIGlossaryja: typeof cov.inspectionPartNames = (names, context) =>
+      cov.inspectionPartNames(names, context).filter((name) => !/^word\/(?:comments\.xml|glossary\/)/i.test(name));
+    const mutant: typeof cov.inspectionCoverageFromPackage = (zip, details) =>
+      cov.inspectionCoverageFromPackage(zip, details, { partNames: bezKomentaraIGlossaryja });
+    expect(await guard.inspectionCensusProblems(mutant)).toEqual([
+      'strukturirana kontrola samo u komentarima nije prijavljena kao ogranicenje',
+      'tekstni okvir samo u glossary dijelu nije prijavljen kao ogranicenje',
+    ]);
+  });
 });
