@@ -103,7 +103,7 @@ export interface VisualRepairSignal {
   findingIds?: readonly string[];
 }
 
-export interface VisualInspectionCoverageModel {
+interface VisualInspectionCoverageModel {
   status: InspectionCoverage['status'];
   limitedOccurrences: number;
   analyzerSkips: number;
