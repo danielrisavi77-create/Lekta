@@ -2,8 +2,10 @@
 # Instalacija na radnoj stanici, u zasebnom venv-u:
 #   python -m venv .venv-pdf-korpus && .venv-pdf-korpus/Scripts/pip install --require-hashes -r scripts/pdf-corpus/requirements.txt
 # Hashovi su sha256 SVIH datoteka izdanja s PyPI JSON API-ja (2026-09-28), pa vrijede i za Windows kotace;
-# linux x86_64 kotaci preuzeti pip downloadom podudaraju se s njima. Skripta pri pokretanju usporedjuje
-# instalirane pdf2docx, pymupdf i requests s ovim pinovima i odbija rad kad se razlikuju.
+# linux x86_64 kotaci preuzeti pip downloadom podudaraju se s njima.
+# INTEGRITET jamci SAMO ova instalacija (--require-hashes, cist venv). Skripta pri pokretanju provjerava SAMO VERZIJE
+# pdf2docx, pymupdf i requests (importlib.metadata) prema ovim pinovima; ne provjerava hash instaliranih datoteka
+# ni tranzitivne ovisnosti, pa paket zamijenjen uz istu oznaku verzije tu provjeru prolazi (Codex #229 nalaz 09).
 
 certifi==2026.7.22 \
     --hash=sha256:62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775 \

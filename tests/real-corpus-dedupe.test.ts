@@ -240,8 +240,9 @@ describe('T83-06: stvarna skripta ovjere', () => {
     generatedFromCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     scope: { duplicateDocumentCount: 0 },
     results: ids.map((documentId) => ({
+      // Codex #229 nalaz 02 (runda 3): DOCX ovjera trazi sourceKind source-docx na SVAKOM rezultatu.
       documentId, profileId: profil, holdout: holdoutIds.includes(documentId), expectationProvenance: 'derived', outcome: 'review',
-      statusChanges: [], integrityFailure: null, error: null, ...extra,
+      statusChanges: [], integrityFailure: null, error: null, sourceKind: 'source-docx', ...extra,
     })),
   });
   // Codex #225, nalaz 1: vrsta izvora je obvezan ulaz ovjere; zadano izvorni DOCX, `bezVrste` ga izostavlja.
@@ -314,6 +315,16 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(procitaj(dir).sourceKind).toBe('source-docx');
       expect(attestationProblems(procitaj(dir))).toEqual([]);
 
+      // Codex #229 nalaz 02, runda 3: rezultat BEZ vrste (stari ingest, fixture, PDF kojem je skinuta oznaka) obara DOCX ovjeru.
+      writeFileSync(
+        join(dir, 'mjerenje.json'),
+        JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z', { sourceKind: undefined })),
+      );
+      const bezVrsteRezultata = pokreni(dir, ['--sign', 'Vlasnik'], 'source-docx');
+      expect(bezVrsteRezultata.status).toBe(1);
+      expect(bezVrsteRezultata.stderr).toMatch(/2 rezultata nema sourceKind source-docx/);
+      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z')));
+
       // Codex #229, nalaz 02: PDF ovjera prima samo rezultate s PDF sidecarom (sourceKind iz corpus-ingest).
       const bezPdfSidecara = pokreni(dir, ['--sign', 'Vlasnik'], 'public-pdf-converted');
       expect(bezPdfSidecara.status).toBe(1);
@@ -348,6 +359,8 @@ describe('T83-06: stvarna skripta ovjere', () => {
       });
     };
     try {
+      // Negativna kontrola (nalaz 02, runda 3): DOCX skripta nad mjerenjem bez vrste rezultata odbija.
+      expect(izSkripte('attest-corpus', { sourceKind: undefined }).status).toBe(1);
       const docx = izSkripte('attest-corpus', {});
       expect(docx.stderr).not.toMatch(/--source-kind/);
       expect(docx.status).toBe(0);
@@ -357,6 +370,7 @@ describe('T83-06: stvarna skripta ovjere', () => {
       expect(procitaj(dir).sourceKind).toBe('public-pdf-converted');
       // Negativna kontrola: PDF skripta nad mjerenjem bez PDF sidecara i dalje odbija.
       expect(izSkripte('attest-corpus:pdf', {}).status).toBe(1);
+      expect(izSkripte('attest-corpus:pdf', { sourceKind: undefined }).status).toBe(1);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

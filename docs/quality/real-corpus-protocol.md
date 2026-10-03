@@ -132,8 +132,12 @@ Sto iz toga slijedi, po redu vaznosti:
    `null` jer izlaz korpusa nije otvoren u Wordu. Ledger i tvrdnje profila regenerirani u cistom worktreeu u istom
    commitu. Ponavljanje ili prosirenje (holdout, Word):
 
+   Od Codex #229 runde 3 (odjeljak 5) ovaj se put mora ponoviti kroz NOVI ingest: sidecari `03-ingest` i
+   `docx-local` nemaju `sourceKind`, pa ih ovjera izvornog DOCX-a vise ne prima.
+
    ```bash
-   LEKTA_LOCAL_CORPUS=1 LEKTA_CORPUS_SOURCE="<put do 03-ingest>" NODE_OPTIONS=--max-old-space-size=3072 npx vite-node scripts/repair-real-corpus.mts
+   npx vite-node scripts/corpus-ingest.mts -- --in "<izvorni DOCX radovi>" --out "<06-docx-ingest>" --consent <zapis> --source-kind source-docx [--harvest-manifest <manifest harvesta>]
+   NODE_OPTIONS=--max-old-space-size=3072 npx vite-node scripts/repair-real-corpus.mts --only-root "<06-docx-ingest>"
    npm run verify:word:corpus                 # Word, pa verziju iz COM-a upisati dolje
    node scripts/attest-real-corpus.mjs --source-kind source-docx --sign "Ime" --word-version 14.0 [--holdout-confirmed]
    npm run completion-ledger && npm run gen-profile-claims                # u cistom worktreeu, artefakti u istom commitu
@@ -142,3 +146,35 @@ Sto iz toga slijedi, po redu vaznosti:
 Sto ostaje otvoreno: 2.1 (konacni popis profila je vlasnikova odluka; mjerenje pokriva svih 8 predlozenih), 2.5
 (endnote i Google Docs izvoz i dalje nema u korpusu), te sidecar polja `expectedBy`/`expectedAt` koja nitko jos nije
 popunio.
+
+## 5. Vrsta izvora na svakom rezultatu (Codex #229, runda 3, 2026-10-03)
+
+Ovjera SVAKE vrste (`--source-kind source-docx` i `public-pdf-converted`) trazi da SVAKI rezultat mjerenja nosi
+upravo tu vrstu iz sidecara (`sourceKindRefusals` u `scripts/lib/corpus-attestation-core.mjs`). Do runde 3 je ovjera
+izvornog DOCX-a prihvacala rezultat bez vrste, pa je pretvoreni PDF kojem je netko uklonio oznaku staging mape mogao
+podignuti pravi A.
+
+Posljedice za postojeci korpus:
+
+1. Lokalni korpus ingestiran prije `--source-kind` (`03-ingest`, `docx-local`) i commitane fixture nemaju vrstu u
+   sidecaru. Mjerenje koje ih ukljucuje DOCX ovjera odbija (`N rezultata nema sourceKind source-docx`).
+2. Izvorne DOCX radove treba ponovno provuci kroz `corpus-ingest --source-kind source-docx` u jednu novu mapu i
+   mjeriti je s `repair-real-corpus --only-root` (naredbe u odjeljku 4). ID-ovi se racunaju iz sadrzaja izvora, pa
+   isti izvor daje isti ID; otisak korpusa se ipak mijenja jer commitane fixture vise nisu u mjerenju, pa je potreban
+   novi potpis.
+3. Postojeca ovjera (`data/verification/real-corpus-attestation.json`, `measuredAt` 2026-09-27) se ne dira; citac je
+   i dalje prihvaca kao mjerenu prije 2026-09-28. Nova DOCX ovjera bez ponovnog ingesta nije moguca.
+
+Trag harvesta (`scripts/pdf-corpus/harvest_pdf_corpus.py`):
+
+- staging mapa nosi oznaku `.lekta-corpus-kind` i manifest `.lekta-harvest-manifest.json` (sha256 svih DOCX-ova koje je
+  harvest dao, bez PID-a i URL-a);
+- `corpus-ingest --source-kind source-docx` odbija mapu s oznakom ILI manifestom (izlaz 2), a uz
+  `--harvest-manifest <kopija>` odbija i svaki DOCX ciji je sha256 u manifestu (izlaz 1, bez sidecara);
+- PREOSTALI RIZIK: covjek koji namjerno ukloni oznaku i manifest i ne preda kopiju manifesta moze lagati o vrsti
+  izvora, isto kao sto moze lagati potpisom. Manifest je provjerljiv trag, ne dokaz podrijetla. Kopiju manifesta drzi
+  uz private mapu harvesta i predaj je svakom DOCX ingestu.
+
+Privatnost PDF vrste (`pdfPackagePrivacyProblems`): DOCX pretvoren iz PDF-a smije nositi samo dijelove s popisa
+(isti popis kao `ALLOWED_PARTS` u harvestu), prazne docProps, neprazan rjecnik pojmova i nijedan pojam u binarnom
+dijelu. Inace ingest dokument odbija. Slika u kojoj je ime nacrtano pikselima ostaje izvan dosega te provjere.
