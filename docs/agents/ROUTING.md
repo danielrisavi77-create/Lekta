@@ -62,18 +62,37 @@ dok status ne postane `verified`; to provjerava `tests/agent-routing-config.test
 
 Effort se bira PRIJE modela: prvo koliko truda uloga stvarno treba, tek onda koji model to
 najjeftinije odradi na tom effortu. Noviji/skuplji model na niskom effortu je cesto losiji
-izbor od jeftinijeg modela na odgovarajucem effortu za taj zadatak; `xhigh` je rezerviran za
-zasticeni kod (parser, citati, repair, docx, supabase, security) gdje cijena greske
-nadmasuje cijenu poziva. `max` effort postoji samo kao politika, ne kao dodijeljena
+izbor od jeftinijeg modela na odgovarajucem effortu za taj zadatak; najvisi dodijeljeni effort
+(`high`) je rezerviran za zasticeni kod (parser, citati, repair, docx, supabase, security) gdje
+cijena greske nadmasuje cijenu poziva. `max` effort postoji samo kao politika, ne kao dodijeljena
 vrijednost: koristi se iskljucivo na izricitu rijec vlasnika, nikad automatski
 (`effortPolicy.max` u configu je recenica, ne broj).
 
 Redoslijed po ulozi (nizi prema visem): `brief`/`scout`/`gate` su `low`, `review` je
-`medium`, `implement` je `high`, a `implement` u zasticenom podrucju je `xhigh`
+`medium`, `implement` je `medium`, a `implement` u zasticenom podrucju je `high`
 (`implementProtected`).
 
-Spustanje efforta na medium vrijedi tek kad implementator bude na verificiranom Opusu 5.5; do tada
-high/xhigh ostaju.
+**B1 (28. 9. 2026, odluka vlasnika).** Implementator je verificirani `claude-opus-5-5`, pa je effort
+spusten. Mjerenje je u `docs/agents/reports/OPUS55_VERIFIKACIJA.md`, odjeljci "Fixture" i
+"B1 mjerenje".
+
+| Velicina / zasticeno | Implementator prije | Implementator poslije |
+|---|---|---|
+| S / ne (light) | `claude-sonnet-5` high | `claude-sonnet-5` high (nepromijenjeno) |
+| S / da | `claude-opus-5` xhigh | `claude-opus-5-5` high |
+| M / ne | `claude-opus-5` high | `claude-opus-5-5` medium |
+| M / da | `claude-opus-5` xhigh | `claude-opus-5-5` high |
+| L / ne | `claude-opus-5` xhigh | `claude-opus-5-5` medium |
+| L / da | `claude-opus-5` xhigh | `claude-opus-5-5` high |
+| `effortPolicy.implement` | high | medium |
+| `effortPolicy.implementProtected` | xhigh | high |
+
+Pregledavac (`review`, Codex s Claude `reviewFallback`), brief, critic, gate i design su
+nepromijenjeni. `xhigh` vise nije dodijeljen ni jednoj ulozi, ali ostaje valjana vrijednost za
+izricitu odluku.
+
+Zadane vrijednosti u `scripts/agents/select-route.mjs` (`ROUTE_DEFAULTS`, `ROUTE_EFFORT_POLICY`)
+vrijede samo kad config ne postoji ili nema ulogu. B1 ih ne mijenja, jer je config izvor istine.
 
 ## Pravilo drugog providera
 
