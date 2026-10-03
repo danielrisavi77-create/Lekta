@@ -119,6 +119,7 @@ import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import * as prIntake from '../scripts/agents/pr-intake-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
@@ -9227,6 +9228,55 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
       'tekstni okvir u zaglavlju povezanom iz glossary rels nije prijavljen kao ogranicenje',
       'nevaljan glossary rels dao je no-known-limits, ne unknown',
       'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
+    ]);
+  });
+});
+
+describe('mutacije: pr-intake (najnoviji check-run po imenu, zasticene staze)', () => {
+  // Gard: sazetak sintetickog PR-a mora prijaviti crveni `orphan` (noviji pad preko starijeg
+  // zelenog) i ne smije prijaviti `check` (stariji pad, noviji zeleni rerun). PR koji dira
+  // src/docx mora dati tu zasticenu stazu i jaci model pregleda.
+  type PrIntakeInputT = import('../scripts/agents/pr-intake-core.mjs').PrIntakeInput;
+  type PrIntakeOpcije = Parameters<typeof prIntake.summarizePr>[1];
+  const ulaz = (): PrIntakeInputT =>
+    JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/pr-intake/pr-osnova.json'), 'utf8')) as PrIntakeInputT;
+
+  function prIntakeProblems(opcije: PrIntakeOpcije): string[] {
+    const problemi: string[] = [];
+    const s = prIntake.summarizePr(ulaz(), opcije);
+    if (JSON.stringify(s.ci.imenaCrvenih) !== JSON.stringify(['orphan'])) {
+      problemi.push(`crveni check-runi nisu najnoviji po imenu: ${s.ci.imenaCrvenih.join(', ')}`);
+    }
+    const zasticeni = ulaz();
+    zasticeni.files = [...zasticeni.files, { filename: 'src/docx/parser.ts', additions: 0, deletions: 0 }];
+    const z = prIntake.summarizePr(zasticeni, opcije);
+    if (JSON.stringify(z.zasticeneStaze) !== JSON.stringify(['src/docx']) || z.modelPregleda !== prIntake.MODEL_PREGLEDA_ZASTICENO) {
+      problemi.push(`zasticena staza src/docx nije prijavljena (model ${z.modelPregleda})`);
+    }
+    return problemi;
+  }
+
+  it('baseline: stvarna pravila daju cist ishod', () => {
+    expect(prIntakeProblems({})).toEqual([]);
+  });
+
+  it('mutant: uzima najstariji check-run umjesto najnovijeg (obara gard)', () => {
+    const najstariji: typeof prIntake.latestCheckRunsByName = (runs) => {
+      const m = new Map<string, (typeof runs)[number]>();
+      for (const r of runs) {
+        const p = m.get(r.name);
+        if (!p || r.id < p.id) m.set(r.name, r);
+      }
+      return [...m.values()];
+    };
+    expect(prIntakeProblems({ latestByName: najstariji })).toEqual([
+      'crveni check-runi nisu najnoviji po imenu: check',
+    ]);
+  });
+
+  it('mutant: ignorira protectedPaths (obara gard)', () => {
+    expect(prIntakeProblems({ protectedTouched: () => [] })).toEqual([
+      'zasticena staza src/docx nije prijavljena (model gpt-6-sol)',
     ]);
   });
 });
