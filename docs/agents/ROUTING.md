@@ -84,6 +84,15 @@ Claude, ali s DRUGIM modelom od implementatora; to je eksplicitno polje `reviewF
 svaki `review` unos. Test `tests/agent-routing-config.test.ts` provjerava da svaka kombinacija
 ima ili razlicitog providera ili valjan `reviewFallback` s razlicitim modelom.
 
+## Model Codex pregleda
+
+Odluka vlasnika 3. 10. 2026: Codex pregled delte koja dira ijednu stazu iz `protectedPaths`
+(`src/repair`, `src/citations`, `src/docx`, `supabase`, security) ide modelom `gpt-6.1-sol`. Svi
+ostali PR-ovi i dalje idu modelom `gpt-6-sol`. Uvjet je Codex CLI 0.160.0 ili noviji; 0.156.1 odbija
+model. Naredbe su u `.claude/skills/codex-review/SKILL.md`, odjeljak 3. Dokaz i ogranicenja
+(jedno mjerenje, ne prosjek): `docs/agents/reports/SOL61_USPOREDBA.md`. `config/agent-routing.json`
+i `config/agent-providers.json` se ovom odlukom ne mijenjaju.
+
 ## Korak 2: lean workflow cita routing
 
 `.claude/workflows/lekta-lean.js` vise ne hardkodira model i effort po fazi. Za svaku fazu (`brief`,
