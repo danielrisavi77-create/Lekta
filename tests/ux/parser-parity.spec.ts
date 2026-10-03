@@ -72,7 +72,6 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
-  await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 

@@ -85,7 +85,8 @@ describe('ruta /saznaj-vise/', () => {
   });
 
   it('sidra koja vode na alat idu na `/`, jer alat ovdje ne zivi', () => {
-    expect(STRANICA).toContain('href="/#analyzer"');
+    expect(STRANICA).toContain('href="/#top"');
+    expect(STRANICA).not.toContain('href="/#analyzer"');
     expect(STRANICA).not.toMatch(/href="#analyzer"/);
   });
 

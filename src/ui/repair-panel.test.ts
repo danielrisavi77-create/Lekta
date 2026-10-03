@@ -586,7 +586,7 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
     expect(mountEl.querySelector('.lekta-repair-trigger')).toBeTruthy();
     expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(true);
     // Ledger prikazuje OPSEG, nikad iznos: cijena je fiksna po vrsti rada i ne ovisi o odabiru.
-    expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/^\d+ od \d+ poprav/);
+    expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/^Odabrano: \d+ od \d+ poprav/);
     expect(mountEl.textContent).not.toMatch(/€/);
   });
 

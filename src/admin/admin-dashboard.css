@@ -103,6 +103,27 @@ button,input,select{font:inherit;color:inherit}
    display:table child, which inflates body.scrollHeight and leaves a blank page tail. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
 
+/* Authentication replaces the dashboard body, so it needs its own layout and fields. */
+.admin-auth-gate{min-height:100svh;display:grid;place-items:center;padding:clamp(1rem,4vw,3rem)}
+.admin-auth-card{width:100%;max-width:28rem;padding:clamp(1.25rem,5vw,2.5rem);background:var(--surface);border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-2);overflow-wrap:anywhere}
+.admin-auth-title{font:400 2rem/1.15 var(--display-serif);margin-bottom:.75rem}
+.admin-auth-desc{color:var(--ink-2);margin-bottom:1.5rem}
+.admin-auth-card .field{display:grid;gap:.5rem;margin-bottom:1rem}
+.admin-auth-card label{font:500 .8rem/1.5 var(--mono)}
+.admin-auth-card .input{width:100%;min-width:0;min-height:44px;padding:.65rem .75rem;border:1px solid var(--hairline);border-radius:var(--r-chip);background:var(--surface-sunk);color:var(--ink);font:400 1rem/1.5 var(--mono)}
+.admin-auth-card .input::placeholder{color:var(--ink-2);opacity:1}
+.admin-auth-card .btn{width:100%;min-height:44px;justify-content:center;white-space:normal;line-height:1.5}
+.admin-auth-card .btn-primary{background:var(--accent);color:var(--on-accent)}
+.admin-auth-card .btn-ghost{background:var(--surface-sunk);color:var(--ink)}
+.admin-auth-card .btn:disabled{opacity:.6;cursor:wait}
+.admin-auth-actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.admin-auth-actions .btn{flex:1 1 9rem}
+.admin-auth-status{margin-top:.65rem;color:var(--ink-2);font:400 .8rem/1.6 var(--mono)}
+.admin-auth-status:empty{display:none}
+.admin-auth-status.is-error{color:var(--critical-ink)}
+.admin-auth-divider{display:flex;align-items:center;gap:.75rem;margin:1.5rem 0;color:var(--ink-2);font:400 .8rem var(--mono)}
+.admin-auth-divider::before,.admin-auth-divider::after{content:"";height:1px;flex:1;background:var(--hairline)}
+
 /* ══════════ TOPBAR ══════════ */
 .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--plane) 88%,transparent);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--hairline)}
 .topbar-in{max-width:1440px;margin:0 auto;padding:.85rem var(--sp4);display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap}
@@ -194,10 +215,16 @@ main{max-width:1440px;margin:0 auto;padding:var(--sp4) var(--sp4) 4rem}
 .bento>div:not(.card)>*{flex:1;min-width:0}
 @media(max-width:1100px){.c3,.c4,.c5{grid-column:span 6}.c7,.c8{grid-column:span 12}.tall{grid-row:span 1}}
 @media(max-width:719px){
-  .filters .seg,.range-custom{display:none}
+  .filters .seg{display:none}
+  .filters:has(.range-custom.hidden){display:none}
+  .filters{order:3;width:100%;border-radius:var(--r-card)}
+  .range-custom{flex-wrap:wrap;width:100%}
+  .range-custom input[type="date"],.range-custom .btn{min-height:44px;font-size:16px}
+  .range-custom input[type="date"]{flex:1 1 10rem;min-width:0}
   .range-select{display:inline-block;border:1px solid var(--hairline);background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:.4rem .6rem;font:600 .78rem var(--sans)}
   .tabs{display:none}
   .tabs-select{display:block;width:calc(100% - 2*var(--sp4));margin:var(--sp2) var(--sp4);border:1px solid var(--hairline);background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:.5rem .7rem;font:600 .82rem var(--sans)}
+  .range-select,.tabs-select{min-height:44px;font-size:16px}
 }
 @media(max-width:680px){.bento{gap:var(--sp2)}.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
 

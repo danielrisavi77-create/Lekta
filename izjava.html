@@ -39,6 +39,10 @@
 .field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--line-strong);border-radius:10px;background:var(--panel-2);color:var(--text);font:inherit}
 .field input:focus,.field select:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.statement-date-row,.statement-date-controls{min-width:0}
+.statement-date-controls{grid-template-columns:minmax(0,1fr)}
+.statement-date-row input{width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:600px){.statement-date-row,.statement-date-controls{grid-template-columns:minmax(0,1fr)!important}.statement-date-row input{width:100%;min-width:0;box-sizing:border-box}}
 
 .out-panel{position:sticky;top:88px}
 .out-hint{font-size:13px;margin:12px 0 0}
@@ -223,10 +227,10 @@
         <div class="field"><label for="st-jmbag">JMBAG (opcionalno)</label><input id="st-jmbag" type="text" inputmode="numeric" placeholder="npr. 0000000000"></div>
         <div class="field"><label for="st-oib">OIB (opcionalno)</label><input id="st-oib" type="text" inputmode="numeric" placeholder="npr. 00000000000"></div>
       </div>
-      <div class="row2">
+      <div class="row2 statement-date-row">
         <div class="field"><label for="st-place">Mjesto</label><input id="st-place" type="text" placeholder="Zagreb"></div>
         <div class="field"><label for="st-date">Datum</label>
-          <div class="row2" style="grid-template-columns:auto 1fr;gap:8px">
+          <div class="row2 statement-date-controls" style="gap:8px">
             <input id="st-date-picker" type="date" aria-label="Odaberi datum iz kalendara">
             <input id="st-date" type="text" placeholder="3. srpnja 2026.">
           </div>
@@ -285,7 +289,7 @@
     <div class="cta">
       <h2>Izjava je gotova. Provjeri cijeli rad.</h2>
       <p>Lekta mjeri margine, stilove, numeraciju, sadržaj, citatnice i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uređaju.</p>
-      <a class="btn btn-primary" href="index.html?utm_source=alat_izjava&utm_medium=organic&utm_campaign=free_tool#analyzer">Besplatno provjeri rad &rarr;</a>
+      <a class="btn btn-primary" data-analyzer-cta href="index.html?utm_source=alat_izjava&utm_medium=organic&utm_campaign=free_tool#top">Besplatno provjeri rad &rarr;</a>
       <p class="cta-upsell">Za cijeli rad usklađen s pravilima fakulteta: <a href="/saznaj-vise/#pricing">puni izvještaj ili ljudska lektura &rarr;</a></p>
     </div>
     <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>
