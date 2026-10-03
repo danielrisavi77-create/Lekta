@@ -190,6 +190,28 @@ function caveatHtml(model: VisualResultModel): string {
 }
 
 /**
+ * T64: jedan redak "Nije provjereno u cijelosti". Imenuje vrste slozenih Word struktura i
+ * PROVJERE koje nisu obuhvatile sve dijelove (Codex M3 na #165), oboje iz fiksnih mapiranja u
+ * modelu; slobodni reason iz skipped zapisa i tekst rada ovdje nikad ne dolaze.
+ */
+function inspectionLimitHtml(model: VisualResultModel): string {
+  const inspection = model.inspectionCoverage;
+  if (!inspection || inspection.status === 'no-known-limits') return '';
+  if (inspection.status === 'unknown') {
+    return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
+      + '<strong>Nije provjereno u cijelosti:</strong> nije bilo moguće utvrditi opseg složenih Word struktura.</p>';
+  }
+  const parts: string[] = [];
+  if (inspection.labels.length) parts.push(inspection.labels.map(escapeHtml).join(', '));
+  if (inspection.analyzerLabels.length) {
+    parts.push('provjere koje nisu obuhvatile sve dijelove: ' + inspection.analyzerLabels.map(escapeHtml).join(', '));
+  }
+  const detail = parts.length ? parts.join('; ') : 'postoje složene Word strukture s ograničenom automatskom provjerom';
+  return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
+    + '<strong>Nije provjereno u cijelosti:</strong> ' + detail + '.</p>';
+}
+
+/**
  * Dva sitna cipa: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u zaglavlju
  * koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo na cemu ta
  * pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
@@ -321,6 +343,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
     caveatHtml(model),
+    inspectionLimitHtml(model),
     '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
     findingIdAttr(action),
