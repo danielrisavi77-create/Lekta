@@ -70,7 +70,6 @@ async function analyzeAndEnterRepairPhase(page: Page) {
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
-  await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   // DO PANELA SE OD 2026-09-12 DOLAZI ULASKOM U FAZU POPRAVKA (korak B3).

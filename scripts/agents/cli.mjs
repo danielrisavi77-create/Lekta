@@ -5,6 +5,8 @@ import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 import { botPathViolations, changedPaths, resolveBot } from './grok-bots.mjs';
+import { findTaskWriteConflicts, findWriteScopeConflicts, validateWorkScope, writeScopeViolations } from './task-scope.mjs';
+import { assertKnownClaudeModel, probeModel, runFixture } from './model-probe.mjs';
 
 export function diagnoseProviderFailure(command, stderr) {
   if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
@@ -24,11 +26,11 @@ export function buildSpawnArgs(job, promptFile) {
   return args;
 }
 
-export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
+export function spawnJob(job, promptFile, cwd, spawn = spawnSync, env = process.env) {
   const args = buildSpawnArgs(job, promptFile);
   const promptInFile = job.args.includes(PROMPT_FILE_PLACEHOLDER);
   return spawn(job.command, args, {
-    cwd, input: promptInFile ? undefined : job.prompt, encoding: 'utf8', shell: false,
+    cwd, env, input: promptInFile ? undefined : job.prompt, encoding: 'utf8', shell: false,
     timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
   });
 }
@@ -168,11 +170,32 @@ function worktreeSnapshot() {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--bot grok-review|grok-scout|grok-docs|grok-triage] [--execute]');
+    console.log('agents doctor [--model claude-...] | model-fixture --model claude-... --effort low|medium|high|xhigh | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--bot grok-review|grok-scout|grok-docs|grok-triage] [--execute]');
+    return;
+  }
+  if (command === 'doctor' && rest.length) {
+    // Doctor za jedan model: stvaran poziv kroz pretplatu (ROUTING.md, "Kako dodati novi model", korak 1).
+    if (rest.length !== 2 || rest[0] !== '--model') throw new Error('doctor takes no arguments or --model <claude model>');
+    assertKnownClaudeModel(JSON.parse(readFileSync(join(root, 'config/agent-routing.json'), 'utf8')), rest[1]);
+    const probe = probeModel(rest[1], { cwd: root });
+    console.log(probe.line);
+    if (!probe.ok) process.exitCode = 1;
+    return;
+  }
+  if (command === 'model-fixture') {
+    // Korak 2: implement na malom zadatku u privremenoj mapi; jedan run po pozivu.
+    if (rest.length !== 4 || rest[0] !== '--model' || rest[2] !== '--effort') throw new Error('model-fixture --model <claude model> --effort <level>');
+    const [, model, , effort] = rest;
+    assertKnownClaudeModel(JSON.parse(readFileSync(join(root, 'config/agent-routing.json'), 'utf8')), model);
+    const report = { observedAt: new Date().toISOString(), ...runFixture(model, effort) };
+    const out = join(root, '.artifacts/agents');
+    mkdirSync(out, { recursive: true });
+    writeFileSync(join(out, `model-fixture-${model}-${effort}-${Date.now()}.json`), JSON.stringify(report, null, 2) + '\n');
+    console.log(JSON.stringify(report, null, 2));
+    if (!report.ok) process.exitCode = 1;
     return;
   }
   if (command === 'doctor') {
-    if (rest.length) throw new Error('doctor takes no arguments');
     for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) console.log(probeCli(cli, { cwd: root }));
     console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
@@ -183,6 +206,12 @@ function main() {
     if (rest.length) throw new Error('list takes no arguments');
     for (const task of queue.tasks) console.log(`${task.id}\t${task.status}\t${task.title}`);
     return;
+  }
+  for (const task of queue.tasks) validateWorkScope(task.workScope, task.id);
+  const activeScopeConflicts = findWriteScopeConflicts(queue);
+  if (activeScopeConflicts.length) {
+    const first = activeScopeConflicts[0];
+    throw new Error(`Write scope conflict: ${first.taskA} ${first.pathA} <-> ${first.taskB} ${first.pathB}`);
   }
   if (!['prepare', 'run'].includes(command)) throw new Error('Unknown command');
   const id = rest.shift();
@@ -217,6 +246,13 @@ function main() {
   }
   if (overrideStatus !== undefined && phase !== 'review') throw new Error('Override options apply to --phase review only');
   const overrideTask = overrideStatus === undefined ? undefined : { status: overrideStatus, implementationAgent: overrideImplementer };
+  if (phase === 'implement') {
+    const conflicts = findTaskWriteConflicts(queue, id);
+    if (conflicts.length) {
+      const first = conflicts[0];
+      throw new Error(`Task write scope conflict: ${first.taskA} ${first.pathA} <-> ${first.taskB} ${first.pathB}`);
+    }
+  }
   const job = prepareJob(queue, id, phase, agent, budget, overrideTask ? { billingMode, overrideTask } : { billingMode });
   // Grok bot (odluka vlasnika 27. 9.): uloga iz config/agent-routing.json. Bot ide iskljucivo na
   // pretplatu, a nakon pokretanja se provjerava da nije dirao nista izvan dopustenih putanja.
@@ -255,7 +291,7 @@ function main() {
   try {
     writeFileSync(lockFd, JSON.stringify({ pid: process.pid, task: id, agent, phase, root }));
     const baseHead = git('rev-parse', 'HEAD');
-    const treeBefore = botRun ? worktreeSnapshot() : null;
+    const treeBefore = (botRun || phase === 'implement') ? worktreeSnapshot() : null;
     const out = join(root, '.artifacts/agents', `${id}-${Date.now()}-${process.pid}`);
     mkdirSync(out, { recursive: true });
     writeFileSync(join(out, 'prompt.md'), job.prompt);
@@ -266,21 +302,31 @@ function main() {
     const resolvedJob = invocation.argsPrefix.length
       ? { ...job, command: invocation.command, args: [...invocation.argsPrefix, ...job.args] }
       : job;
-    const result = spawnJob(resolvedJob, join(out, 'prompt.md'), root);
+    const taskEnv = phase === 'implement'
+      ? {
+          ...process.env,
+          LEKTA_ROLE: 'implementer',
+          LEKTA_TASK_ID: id,
+          LEKTA_SCOPE_ENFORCED: queue.tasks.find((task) => task.id === id)?.workScope?.write?.length ? '1' : '0',
+        }
+      : process.env;
+    const result = spawnJob(resolvedJob, join(out, 'prompt.md'), root, spawnSync, taskEnv);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
     const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
     const modelOk = modelMatches(AGENTS[agent].model, parsed.reportedModels);
+    const changed = treeBefore ? [...new Set([
+      ...git('diff', '--name-only', baseHead, 'HEAD').split('\n').filter(Boolean),
+      ...changedPaths(treeBefore, worktreeSnapshot()),
+    ])] : [];
     let violations = null;
-    if (botRun) {
-      const changed = [...new Set([
-        ...git('diff', '--name-only', baseHead, 'HEAD').split('\n').filter(Boolean),
-        ...changedPaths(treeBefore, worktreeSnapshot()),
-      ])];
-      violations = botPathViolations(botRun.bot, changed, botRun.protectedPaths);
-    }
+    if (botRun) violations = botPathViolations(botRun.bot, changed, botRun.protectedPaths);
+    const task = queue.tasks.find((item) => item.id === id);
+    const taskScopeViolations = phase === 'implement' && task?.workScope?.write?.length
+      ? writeScopeViolations(changed, task.workScope, id)
+      : [];
     const report = { task: id, phase, agent, baseHead, requestedModel: AGENTS[agent].model,
       reportedModels: parsed.reportedModels, usage: parsed.usage, exitCode: result.status, signal: result.signal,
       error: result.error?.message ?? null,
@@ -288,7 +334,10 @@ function main() {
       ...diagnosis,
       retainedLock: releaseLock ? null : lock,
       ...(botRun ? { bot: botRun.bot.name, botPathViolations: violations } : {}),
-      status: parsed.ok && modelOk && !result.error && !(violations && violations.length) ? 'needs_verification' : 'failed',
+      ...(phase === 'implement' ? { changedPaths: changed, taskScopeViolations } : {}),
+      status: parsed.ok && modelOk && !result.error
+        && !(violations && violations.length) && taskScopeViolations.length === 0
+        ? 'needs_verification' : 'failed',
       note: 'Queue unchanged. Coordinator must verify patch, required checks and independent review.' };
     writeFileSync(join(out, 'result.json'), JSON.stringify(report, null, 2) + '\n');
     appendFileSync(join(root, '.artifacts/agents/usage.jsonl'), JSON.stringify({

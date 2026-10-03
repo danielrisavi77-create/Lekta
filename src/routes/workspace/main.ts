@@ -1,5 +1,5 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyConfirmedFacultySelection,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyFacultyIds,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
 import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
@@ -7,6 +7,7 @@ import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
 import { readSelectionIds } from '../../ui/profile-selection-ids';
+import { primijeniFakultetUlaza, primijeniProfilUlaza, zakljucajObnovljeniFakultet } from '../../ui/confirmed-faculty';
 import { createRepairSelectionMemory } from './repair-selection';
 import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
@@ -17,7 +18,7 @@ import {
 import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
-import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
+import { setSiteChromeScore } from '../../shared/site-chrome';
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
@@ -201,10 +202,7 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
-    // Z15 popravak: faza u traci prati tok analize, ne stoji zauvijek na "01 Nalazi". Prihvacen
-    // dokument (prvi ili nova verzija) znaci da citanje POCINJE, pa traka gubi korake dok
-    // `renderResultsCockpit` (results-cockpit.ts) ne javi da su nalazi stvarno nacrtani.
-    setSiteChromeStage(document, 'scanning');
+    // Fazu trake vodi renderView; ovdje se uklanja samo ocjena prethodnog dokumenta.
     // Ocjena starog dokumenta se prazni OVDJE, ne cim kokpit nacrta novu: bez ovoga traka
     // pokazuje tudju ocjenu (proslog dokumenta) dok Lekta cita novi, sto je tvrdnja koja u tom
     // trenutku nije istinita.
@@ -257,7 +255,8 @@ async function start(): Promise<void> {
     // Z32: fakultet potvrdjen uz list na `/` za OVU sesiju ide ISTIM putem kao obnova (C4), pa ga
     // `/rad/` ne pita ponovo; potvrda bez studija (`?unit=`) postavi samo fakultet, a studij
     // ostaje na detekciji. Isti redoslijedni ugovor: poslije postavki, prije detekcije iz
-    // dokumenta (gard: tests/intake-live.test.ts). Bez vazece potvrde je no-op.
+    // dokumenta (gard: tests/intake-live.test.ts). Bez vazece potvrde je no-op. Oba oblika
+    // zakljucavaju fakultet, pa rad drugog fakulteta dobije napomenu (src/ui/confirmed-faculty.ts).
     // Dinamicki uvoz: intake-confirmation vuce intake-choice + deadline-stamp; ne smiju u
     // pocetni staticki graf ulaza `rad` (bundle-guard 960 KB).
     const { primijeniPotvrduUlaza } = await import('./intake-confirmation');
@@ -265,8 +264,9 @@ async function start(): Promise<void> {
       sessionId: outcome.session.id,
       sessionHasProfile: Boolean(outcome.session.profile),
       readForm: () => readSelectionIds(document),
-      apply: applyConfirmedProfileSelection,
-      applyFaculty: applyConfirmedFacultySelection,
+      apply: (ids, pamcenje) => primijeniProfilUlaza(ids, applyConfirmedProfileSelection, pamcenje),
+      applyFaculty: (ids, pamcenje) => primijeniFakultetUlaza(ids, applyFacultyIds, pamcenje),
+      zakljucajObnovljeno: (pamcenje) => { zakljucajObnovljeniFakultet(pamcenje); },
       confirm: (event) => profil.onConfirmed(event),
     });
     odabir.restore(outcome.session.workspace?.repairSelection);

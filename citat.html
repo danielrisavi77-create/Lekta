@@ -49,12 +49,12 @@
 .out-doc:before{content:"";position:absolute;left:16px;top:16px;bottom:16px;width:1.5px;background:color-mix(in srgb,var(--brand) 55%,transparent);opacity:.45}
 .out{font-family:var(--ink-serif);font-size:16.5px;line-height:1.65;word-break:break-word;padding-left:20px;text-indent:-20px}
 .out.empty{color:var(--muted);font-style:italic;text-indent:0;padding-left:0}
-.out-bar{display:flex;gap:10px;align-items:center;margin-top:14px}
+.out-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
 .out-hint{font-size:13px;margin:12px 0 0}
 .out-hint.warn{color:var(--warn)}.out-hint.ok{color:var(--ok)}
 .out-intext{margin:12px 0 0;font-size:14px;color:var(--text)}
 .out-intext-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:6px}
-.out-intext code{font-family:var(--ink-serif);background:var(--brand-soft);color:var(--brand);padding:2px 8px;border-radius:6px;font-size:15px}
+.out-intext code{font-family:var(--ink-serif);background:var(--brand-soft);color:var(--text);padding:2px 8px;border-radius:6px;font-size:15px}
 .note b{color:var(--text)}
 
 .cit-tabs{display:flex;gap:8px;margin-top:16px;border-bottom:1px solid var(--line)}
@@ -326,7 +326,7 @@
         <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
         <p class="out-hint" id="out-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobičajenim hrvatskim akademskim stilovima, kao čist tekst bez oblikovanja (nema kurziva). Naslove knjiga i časopisa nakon lijepljenja ručno kurziviraj gdje to stil traži. Točan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
-        <p class="success-cta" id="c-success-cta">✓ Citat je spreman.&nbsp;<a href="/" id="c-success-cta-link">Provjeri jesu li svi citati usklađeni s literaturom →</a></p>
+        <p class="success-cta" id="c-success-cta">✓ Unesena su sva preporučena polja.&nbsp;<a href="/" id="c-success-cta-link">Provjeri jesu li svi citati usklađeni s literaturom →</a></p>
       </div>
     </div>
       </div>
@@ -407,7 +407,7 @@
     <div class="cta">
       <h2>Citat je sitni dio. Provjeri cijeli rad.</h2>
       <p>Lekta mjeri margine, stilove, numeraciju, sadržaj, citatnice i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uređaju.</p>
-      <a class="btn btn-primary" id="cta-analyzer" href="index.html?utm_source=alat_citat&utm_medium=organic&utm_campaign=free_tool#analyzer">Besplatno provjeri rad &rarr;</a>
+      <a class="btn btn-primary" id="cta-analyzer" data-analyzer-cta href="index.html?utm_source=alat_citat&utm_medium=organic&utm_campaign=free_tool#top">Besplatno provjeri rad &rarr;</a>
       <p class="cta-upsell">Za provjeru svih citata i literature u radu: <a href="/saznaj-vise/#pricing">puni izvještaj ili ljudska lektura &rarr;</a></p>
     </div>
     <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>

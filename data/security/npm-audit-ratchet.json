@@ -1,54 +1,36 @@
 {
-  "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI. Osvjezi: `npm run audit:ratchet` ispisuje izmjereno, pa upisi ovdje uz razlog u changeNote. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
-  "measuredAt": "2026-09-21",
-  "fullGraphHighCritical": 7,
+  "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI osim kad NOVI VANJSKI advisory pogodi nepromijenjeni alatni graf bez dostupnog patcha. Od 2026-09-21 strop prati i IDENTITET paketa te iznimke s vlasnikom, mitigacijom i rokom.",
+  "measuredAt": "2026-10-02",
+  "fullGraphHighCritical": 6,
   "fullGraphHighCriticalPackages": [
     "@netlify/dev",
     "@netlify/images",
     "ipx",
+    "listhen",
     "netlify-cli",
-    "sharp",
-    "vite",
-    "vitest"
+    "node-forge"
   ],
-  "changeNote": "Prvi T41 korak: ratchet sada usporeduje i broj i identitet high/critical paketa, odbija nevaljan npm audit JSON (error / bez vulnerabilities), te zahtijeva iznimke s vlasnikom, mitigacijom i rokom. Strop ostaje 7 (izmjereno 2026-09-21 na origin/master 9cbd132b). Broader nadogradnje (vitest/vite, toolchain) ostaju za kasniji PR.",
+  "changeNote": "2026-10-02: novi GHSA-86w9-cpqp-85rv/CVE-2026-85393 pogodio je nepromijenjeni Netlify CLI dev-lanac netlify-cli -> @netlify/images -> ipx -> listhen -> node-forge. Isti package-lock cache key 646dced83ea0188d187d0458af58f85ebe0b3fe14d9a0d08ba83b8e04f7f57ac imao je 0 high/critical 2026-09-30, a 2026-10-02 npm audit prijavljuje 6 high identiteta zbog novog advisoryja. netlify-cli 27.10.2 i node-forge 1.4.0 su aktualni npm latest; upstream fix za node-forge je jos otvoren u digitalbazaar/forge#1152 i cilja 1.4.1. Produkcijski graf ostaje 0. Dodana je vremenski ogranicena iznimka do 2026-10-09, bez npm audit fix --force i bez downgradea Netlify CLI-ja.",
   "exceptions": [
     {
-      "id": "netlify-cli-image-pipeline",
+      "id": "netlify-node-forge-cve-2026-85393",
       "packages": [
         "@netlify/dev",
         "@netlify/images",
         "ipx",
+        "listhen",
         "netlify-cli",
-        "sharp"
+        "node-forge"
       ],
       "owner": "Daniel Risavi",
-      "mitigation": "Lanac je devDependency i ne ulazi u browser bundle ni Edge funkcije. Ne pokretati netlify dev nad nepouzdanim slikama. Zadrzati produkcijski npm audit --omit=dev kao tvrdi gate i nadograditi kad @netlify/images/ipx dopuste sharp >=0.35.4.",
-      "expiresOn": "2026-10-09",
-      "nextReviewOn": "2026-09-28",
-      "advisories": [
-        "GHSA-f88m-g3jw-g9cj",
-        "GHSA-rgj7-g3m4-5g8c"
-      ]
-    },
-    {
-      "id": "vitest-vite-dev-toolchain",
-      "packages": [
-        "vite",
-        "vitest"
-      ],
-      "owner": "Daniel Risavi",
-      "mitigation": "Vitest/Vite su samo test/build alati; ne ulaze u produkcijski bundle. Produkcijski audit --omit=dev ostaje tvrdi gate. Planirani zasebni PR: nadogradnja vitest (i uskladjeni vite) nakon sto prolaze check i orphan-scan.",
-      "expiresOn": "2026-10-09",
-      "nextReviewOn": "2026-09-28",
-      "advisories": [
-        "GHSA-5xrq-8626-4rwp"
-      ]
+      "mitigation": "Samo dev/tooling lanac; `npm audit --omit=dev --audit-level=high` mora ostati 0. Kanonski Lekta release koristi `netlify status`, `netlify build` i `netlify deploy`, ne `netlify dev --https`, gdje listhen koristi node-forge za self-signed cert podrsku. Ne pokretati Netlify lokalni HTTPS dev server do zakrpe. Pratiti digitalbazaar/forge#1152 i odmah ukloniti iznimku nakon objave node-forge 1.4.1 ili Netlify izdanja koje uklanja lanac.",
+      "nextReviewOn": "2026-10-05",
+      "expiresOn": "2026-10-09"
     }
   ],
   "priorMeasurement": {
-    "measuredAt": "2026-09-09",
-    "fullGraphHighCritical": 7,
-    "note": "Nakon nadogradnje netlify-cli 26.2 na 27.5.2 (broj bez registra identiteta)."
+    "measuredAt": "2026-09-30",
+    "fullGraphHighCritical": 0,
+    "note": "PR #236: pun graf izmjeren na 0; iznimke uklonjene i strop spusten na 0 prije pojave novog vanjskog advisoryja."
   }
 }

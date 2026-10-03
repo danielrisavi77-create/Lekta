@@ -114,7 +114,6 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   // Zasebno skeniranje koraka 3 otpada jer taj ekran vise ne postoji; ono sto je nosio
   // (gumb za pokretanje) skenira se gore, u sklopu koraka 2.
 
-  await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
   nalazi.push(...(await skeniraj(page, 'rezultat')));

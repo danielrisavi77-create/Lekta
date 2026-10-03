@@ -1,15 +1,18 @@
 /**
- * scripts/register-clean-task.ps1 (stavka G): Windows Scheduled Task 'Lekta clean:tmp'.
+ * scripts/register-clean-task.ps1 (stavka G): Windows Scheduled Task 'Lekta clean-tmp'.
  *
- * Task se u testu NIKAD ne registrira. Dokazuje se oblik datoteke (bez BOM-a, samo ASCII, bez
- * S4U, s -Unregister i Interactive) i, na Windowsu, stvarna definicija koju skripta gradi u
- * `-DryRun` nacinu (isti objekti koje bi predala Register-ScheduledTask).
+ * Vecina testova ne registrira nista: dokazuje se oblik datoteke (bez BOM-a, samo ASCII, bez S4U,
+ * s -Unregister i Interactive) i, na Windowsu, stvarna definicija koju skripta gradi u `-DryRun`
+ * nacinu (isti objekti koje bi predala Register-ScheduledTask). Stavka G, tocka 1 je iznimka: na
+ * win32, kad je Register-ScheduledTask dostupan, jedan test STVARNO registrira i odmah odjavljuje
+ * task pod privremenim imenom 'Lekta-test-<pid>' (task se nikad ne pokrece), s bezuvjetnim
+ * ciscenjem u afterAll.
  */
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 
 const SCRIPT = resolve(process.cwd(), 'scripts/register-clean-task.ps1');
 const bytes = readFileSync(SCRIPT);
@@ -33,7 +36,7 @@ describe('register-clean-task.ps1: oblik datoteke', () => {
     expect(code).toMatch(/New-ScheduledTaskTrigger -AtLogOn -User \$korisnik/);
     expect(code).toContain("Join-Path $RepoRoot 'scripts\\clean-vitest-tmp.mjs'");
     expect(code).toMatch(/New-ScheduledTaskAction -Execute \$node .*-WorkingDirectory \$RepoRoot/);
-    expect(code).toContain("$TaskName = 'Lekta clean:tmp'");
+    expect(code).toContain("$TaskName = 'Lekta clean-tmp'");
   });
 
   it('ima -Unregister i na kraju ispisuje Get-ScheduledTaskInfo (LastRunTime, LastTaskResult)', () => {
@@ -43,6 +46,29 @@ describe('register-clean-task.ps1: oblik datoteke', () => {
     const info = code.indexOf('Get-ScheduledTaskInfo -TaskName $TaskName');
     expect(info).toBeGreaterThan(lastRegister);
     expect(code.slice(info)).toMatch(/LastRunTime, LastTaskResult/);
+  });
+});
+
+/**
+ * Izmjereno 2026-09-28: Register-ScheduledTask s ':' u imenu taska pada u redku ~106 s
+ * 'The parameter is incorrect' (HRESULT 0x80070057). Ime Scheduled Taska ne smije sadrzavati
+ * nijedan od znakova nedopustenih za ime, isti skup kao za nazive datoteka: \ / : * ? " < > |.
+ * `npm run clean:tmp` je zaseban, nepromijenjen npm skript naziv i ne prolazi kroz ovaj gard.
+ */
+const TASK_NAME_FORBIDDEN_CHARS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+
+function taskNameFromSource(src: string): string | null {
+  const m = src.match(/\$TaskName\s*=\s*'([^']*)'/);
+  return m ? m[1] : null;
+}
+
+describe('register-clean-task.ps1: ime taska bez znakova nedopustenih u Task Scheduleru', () => {
+  it('$TaskName parsiran iz izvora ne sadrzi nijedan od \\ / : * ? " < > |', () => {
+    const ime = taskNameFromSource(text);
+    expect(ime).not.toBeNull();
+    for (const znak of TASK_NAME_FORBIDDEN_CHARS) {
+      expect(ime, `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`).not.toContain(znak);
+    }
   });
 });
 
@@ -123,14 +149,14 @@ function powershell(args: string[]) {
 describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: -DryRun na Windowsu', () => {
   it('gradi Interactive task s node akcijom u korijenu repozitorija i nista ne registrira', () => {
     const exists = () => powershell(['-Command',
-      "if (Get-ScheduledTask -TaskName 'Lekta clean:tmp' -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }"]).stdout.trim();
+      "if (Get-ScheduledTask -TaskName 'Lekta clean-tmp' -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }"]).stdout.trim();
     const prije = exists();
     const repo = process.cwd();
     const r = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-DryRun']);
     expect(r.status, r.stderr).toBe(0);
     const line = r.stdout.replace(/\r/g, '').split('\n').find((l) => l.startsWith('{')) ?? '';
     const def = JSON.parse(line) as Record<string, unknown>;
-    expect(def.TaskName).toBe('Lekta clean:tmp');
+    expect(def.TaskName).toBe('Lekta clean-tmp');
     expect(String(def.Execute)).toMatch(/node(\.exe)?$/i);
     expect(def.Arguments).toBe(`"${resolve(repo, 'scripts', 'clean-vitest-tmp.mjs')}"`);
     expect(String(def.WorkingDirectory).toLowerCase()).toBe(resolve(repo).toLowerCase());
@@ -175,3 +201,105 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-Lek
     expect(out).toContain('POWERSHELL_EXECUTE=False');
   });
 });
+
+function psQuote(s: string): string {
+  return `'${s.replace(/'/g, "''")}'`;
+}
+
+function taskExists(name: string): string {
+  return powershell(['-Command',
+    `if (Get-ScheduledTask -TaskName ${psQuote(name)} -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }`,
+  ]).stdout.trim();
+}
+
+/**
+ * Stavka G, tocka 2: -TaskName kao PARAMETAR (ne samo zadano ime u izvoru) mora biti odbijen ako
+ * sadrzi bilo koji od \ / : * ? " < > | , PRIJE ikakvog poziva Register-ScheduledTask ili grane
+ * -Unregister, s exit 1 i jasnom porukom. Skripta se stvarno pokrece; nijedan task se ne registrira.
+ */
+describe.skipIf(process.platform !== 'win32')(
+  `register-clean-task.ps1: -TaskName parametar odbija nedopusteni znak${process.platform !== 'win32' ? ' (preskoceno: nije win32)' : ''}`,
+  () => {
+    const lose = 'Lekta:test-nedopusteno';
+
+    it("odbija ':' u -TaskName pri registraciji, exit 1, bez ikakvog poziva Register-ScheduledTask", () => {
+      const prije = taskExists(lose);
+      const r = powershell(['-File', SCRIPT, '-RepoRoot', process.cwd(), '-TaskName', lose]);
+      expect(r.status).toBe(1);
+      expect(r.stdout).toMatch(/Odbijam:.*-TaskName.*nedopusteni znak/);
+      expect(taskExists(lose)).toBe(prije);
+      expect(taskExists(lose)).toBe('NE');
+    });
+
+    it("odbija ':' u -TaskName i uz -Unregister, prije Get-/Unregister-ScheduledTask", () => {
+      const r = powershell(['-File', SCRIPT, '-RepoRoot', process.cwd(), '-TaskName', lose, '-Unregister']);
+      expect(r.status).toBe(1);
+      expect(r.stdout).toMatch(/Odbijam:.*-TaskName.*nedopusteni znak/);
+    });
+  },
+);
+
+const REGISTER_TEST_IS_WIN = process.platform === 'win32';
+function registerTestHasCmdlet(): boolean {
+  if (!REGISTER_TEST_IS_WIN) return false;
+  const r = powershell(['-Command',
+    "if (Get-Command Register-ScheduledTask -ErrorAction SilentlyContinue) { 'DA' } else { 'NE' }"]);
+  return r.status === 0 && r.stdout.trim() === 'DA';
+}
+const REGISTER_TEST_HAS_CMDLET = registerTestHasCmdlet();
+const REGISTER_TEST_SKIP_REASON = !REGISTER_TEST_IS_WIN
+  ? 'nije win32'
+  : (!REGISTER_TEST_HAS_CMDLET ? 'Register-ScheduledTask nedostupan' : '');
+const REGISTER_TEST_TASK_NAME = `Lekta-test-${process.pid}`;
+
+/**
+ * Stavka G, tocka 1: STVARNA registracija i odjava pod PRIVREMENIM imenom 'Lekta-test-<pid>', samo
+ * na win32 i samo ako je Register-ScheduledTask dostupan kroz powershell. Task se NIKAD ne pokrece
+ * (Start-ScheduledTask se ne poziva), samo registrira i odmah odjavi. Ciscenje je bezuvjetno u
+ * afterAll, pa ostaje i ako expect u testu padne.
+ */
+describe.skipIf(!REGISTER_TEST_HAS_CMDLET)(
+  `register-clean-task.ps1: stvarna registracija i odjava pod privremenim imenom${REGISTER_TEST_SKIP_REASON ? ` (preskoceno: ${REGISTER_TEST_SKIP_REASON})` : ''}`,
+  () => {
+    afterAll(() => {
+      try {
+        powershell(['-File', SCRIPT, '-RepoRoot', process.cwd(), '-TaskName', REGISTER_TEST_TASK_NAME, '-Unregister']);
+      } catch {
+        /* zadnja mreza ispod pokusava izravno */
+      }
+      if (taskExists(REGISTER_TEST_TASK_NAME) === 'DA') {
+        powershell(['-Command',
+          `Unregister-ScheduledTask -TaskName ${psQuote(REGISTER_TEST_TASK_NAME)} -Confirm:$false`]);
+      }
+    });
+
+    it('registrira ocekivanu akciju (node, argument, WorkingDirectory) i LogonType Interactive, pa se cisto odjavljuje', () => {
+      const repo = process.cwd();
+      const reg = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-TaskName', REGISTER_TEST_TASK_NAME]);
+      expect(reg.status, reg.stderr || reg.stdout).toBe(0);
+
+      const infoCmd = [
+        `$t = Get-ScheduledTask -TaskName ${psQuote(REGISTER_TEST_TASK_NAME)} -ErrorAction SilentlyContinue`,
+        'if ($null -eq $t) { Write-Output "MISSING" } else {',
+        '  $a = $t.Actions[0]',
+        '  [pscustomobject]@{ Execute = $a.Execute; Arguments = $a.Arguments; '
+          + 'WorkingDirectory = $a.WorkingDirectory; LogonType = [string]$t.Principal.LogonType } '
+          + '| ConvertTo-Json -Compress | Write-Output',
+        '}',
+      ].join('; ');
+      const info = powershell(['-Command', infoCmd]);
+      expect(info.status, info.stderr).toBe(0);
+      const linija = info.stdout.replace(/\r/g, '').trim().split('\n').pop() ?? '';
+      expect(linija).not.toBe('MISSING');
+      const def = JSON.parse(linija) as Record<string, unknown>;
+      expect(String(def.Execute).toLowerCase()).toMatch(/node(\.exe)?$/);
+      expect(def.Arguments).toBe(`"${resolve(repo, 'scripts', 'clean-vitest-tmp.mjs')}"`);
+      expect(String(def.WorkingDirectory).toLowerCase()).toBe(resolve(repo).toLowerCase());
+      expect(def.LogonType).toBe('Interactive');
+
+      const unreg = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-TaskName', REGISTER_TEST_TASK_NAME, '-Unregister']);
+      expect(unreg.status, unreg.stderr || unreg.stdout).toBe(0);
+      expect(taskExists(REGISTER_TEST_TASK_NAME)).toBe('NE');
+    });
+  },
+);

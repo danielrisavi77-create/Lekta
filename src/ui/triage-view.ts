@@ -54,7 +54,7 @@ function locJumpValue(l: TriageLocation): string {
 /** Lijevak za manual nalaze: uputa (alat) prvo, rucna usluga kao opcija. */
 export function triageFunnelHtml(f: TriageFinding): string {
   if (f.category === 'citations') {
-    return `<div class="triage-funnel">Provjeri u alatima <a href="citat.html">Citati</a> i <a href="literatura.html">Literatura</a>, ili <button type="button" data-triage-order>ovo riješi ručna usluga</button>.</div>`;
+    return `<div class="triage-funnel">Provjeri u alatima <a href="/citat.html">Citati</a> i <a href="/literatura.html">Literatura</a>, ili <button type="button" data-triage-order>ovo riješi ručna usluga</button>.</div>`;
   }
   return `<div class="triage-funnel"><button type="button" data-triage-order>Ovo rješava ručna usluga →</button></div>`;
 }

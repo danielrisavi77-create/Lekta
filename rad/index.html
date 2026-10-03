@@ -71,6 +71,7 @@
   </nav>
 </header>
 <main id="workspace" data-premium-surface="analyzer">
+<h1 class="sr-only">Provjera akademskog rada</h1>
 <!-- C7 / T12 / ZNACKA: DOKUMENTOV RED ZAGLAVLJA, PRESELJEN IZ TRAKE U TIJELO (Z15, KRUG POPRAVKA).
      Do ovog kruga su ova tri elementa zivjela UNUTAR pilule `.site-chrome__doc`, koja se na 1180px
      lomila u vise redaka (natpis "Spremljeno HH:MM", znacka i gumb nisu stali u jedan red pilule
@@ -113,7 +114,7 @@
       <div class="wizard-rail" role="group" aria-label="Faze provjere"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="dokument" data-state="aktivan" aria-current="step"><b>1</b> <span class="rail-lbl">Dokument</span><span class="sr-only" data-rail-state>trenutačno</span></span><span class="rail-step" data-rail="provjera" data-state="slijedi"><b>2</b> <span class="rail-lbl">Provjera</span><span class="sr-only" data-rail-state>slijedi</span></span><span class="rail-step" data-rail="popravak" data-state="slijedi"><b>3</b> <span class="rail-lbl">Popravak</span><span class="sr-only" data-rail-state>slijedi</span></span></div>
       <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
         <div class="wizard-grid">
-          <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · ostaje na tvom uređaju</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
+          <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h2 id="wordUploadTitle">Učitaj rad u Wordu</h2><p id="wordUploadDescription">Glavna analiza dokumenta · ostaje na tvom uređaju</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
         </div>
         <div class="lek-stepnav lek-stepnav-1"><button class="btn btn-primary btn-sm" id="stepToProfile" type="button">Nastavi na profil →</button></div>
         <div class="lek-stepnav lek-stepnav-2"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="stepBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="stepFileName"></span></div><button class="btn btn-primary btn-sm" id="stepToAnalyze" type="button">Nastavi na provjeru →</button></div>
@@ -143,7 +144,7 @@
             </div>
           </div>
         </details>
-        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite" data-testid="document-profile"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
+        <div class="analyze-row"><div class="faculty-conflict" id="facultyConflict" role="status" aria-live="polite" data-testid="faculty-conflict"></div><div class="analyze-profile" id="analyzeProfile" aria-live="polite" data-testid="document-profile"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite">
   <!-- PROVJERA, NE UCITAVANJE. Do 2026-09-07 su ovdje bili spinner, "Analiziram dokument...",

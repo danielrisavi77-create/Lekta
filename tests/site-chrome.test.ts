@@ -621,17 +621,11 @@ describe('Z15 stanje nakon skrola', () => {
     expect(nalazi.hasAttribute('aria-current')).toBe(false);
   });
 
-  it('tok analize STVARNO zove `setSiteChromeStage`, ne samo definira ga (mutacija: brisanje poziva)', () => {
-    // Tekstualna tvrdnja umjesto punog mounta rute: `main.ts` i `results-cockpit.ts` vuku puni
-    // analizator i DOM cijele radne povrsine, sto ovaj list namjerno ne mounta. Gard je zato nad
-    // IZVOROM, kao `ui-boot.ts vise ne ozicuje izbornik` gore - ista disciplina, ista slabost
-    // (ne vidi da je poziv na krivom mjestu), ista snaga (vidi da je poziv uklonjen).
-    const main = read('src/routes/workspace/main.ts');
-    expect(main).toContain('setSiteChromeStage');
-    expect(main).toContain("setSiteChromeStage(document, 'scanning')");
-    const kokpit = read('src/ui/results/results-cockpit.ts');
-    expect(kokpit).toContain('setSiteChromeStage');
-    expect(kokpit).toContain("setSiteChromeStage(mount.ownerDocument, 'findings')");
+  it('wizard je jedini pisac koraka analize, kokpit i ruta ga ne nadglasavaju', () => {
+    // Ponasanje niza faza provjerava wizard-view-single-writer.test.ts; ovdje cuvamo vlasnistvo.
+    expect(read('src/ui/wizard-view.ts')).toContain('setSiteChromeStage(doc,');
+    expect(read('src/routes/workspace/main.ts')).not.toContain('setSiteChromeStage');
+    expect(read('src/ui/results/results-cockpit.ts')).not.toContain('setSiteChromeStage');
   });
 
   it('`setSiteChromePlate` je uzak izlaz prema traci: ponovno cita pohranu bez reloada', () => {

@@ -43,7 +43,7 @@ function renderCjenik(receiptRoot: HTMLElement | null, letterRoot: HTMLElement |
   // ODREDISTE CTA-a: ova ruta NEMA analizator ni modal narudzbe (vidi biljesku iznad), pa kupnja
   // ovdje ne moze poceti. Vodi se na ulaz, isto kamo vode i ostale CTA poveznice ove stranice, jer
   // je poveznica koja vodi dalje bolja od gumba bez ucinka.
-  if (receiptRoot) renderPricingReceipt(receiptRoot, { workType: 'diplomski', live, cta: { href: '/#analyzer' } });
+  if (receiptRoot) renderPricingReceipt(receiptRoot, { workType: 'diplomski', live, cta: { href: '/#top' } });
   if (letterRoot) renderPricingLetter(letterRoot, { contactEmail });
 }
 
