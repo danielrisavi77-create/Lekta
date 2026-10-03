@@ -12,7 +12,7 @@ import { describe, it, expect } from 'vitest';
 import { runReferrerRewardObligation, orderFullyRefunded, type ReferrerRewardDb } from '../supabase/functions/process-bonus-outbox/referrer-reward';
 import { referrerRewardSettlement, tryGrantReferrerReward } from '../supabase/functions/_shared/grant-referrer-reward';
 import { fakeAdmin, argOf, eqs, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
-import { referrerRewardRetryProblems } from './helpers/monetizacija-v1-guards';
+import { referrerRewardDecisionProblems, referrerRewardRetryProblems } from './helpers/monetizacija-v1-guards';
 
 const ROW = { id: 'ob-1', user_id: 'buyer-1', order_id: 'pi_1', payload: { userId: 'buyer-1', workType: 'diplomski' } };
 const REFUND_DETAILS = ['refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded'];
@@ -397,6 +397,10 @@ describe('tryGrantReferrerReward: nagrada vec dodijeljena (23505) se zatvara ide
  * pozivatelj (iznos > 0, nadogradnja, povrat) mjere se u tests/webhook-mor-handler.test.ts i gore.
  */
 describe('tryGrantReferrerReward: uvjeti podobnosti (Codex r2, M2b)', () => {
+  it('gard referrerRewardDecisionProblems je cist nad pravim modulom (mutacije izvora su u gate-mutations)', async () => {
+    expect(await referrerRewardDecisionProblems({ tryGrantReferrerReward, referrerRewardSettlement })).toEqual([]);
+  });
+
   const nagradnoPravo = (admin: ReturnType<typeof sequentialAdmin>) =>
     admin.poziviDetalji.filter((p) => p.tablica === 'entitlements' && p.operacije.some((o) => o.metoda === 'insert'));
 

@@ -14,6 +14,7 @@ import type { checkoutMismatch } from '../../src/report/checkout';
 import type { entitlementRowFromDb, readAccessRows } from '../../src/report/entitlement-access';
 import { decideReportAccess } from '../../src/report/slot-logic';
 import type { ReferrerRewardDb, runReferrerRewardObligation } from '../../supabase/functions/process-bonus-outbox/referrer-reward';
+import type { referrerRewardSettlement, tryGrantReferrerReward } from '../../supabase/functions/_shared/grant-referrer-reward';
 import { argOf, fakeAdmin, writeOp, type FakeCall } from './fake-supabase';
 
 type BuildFn = typeof buildEntitlementInsert;
@@ -650,6 +651,97 @@ export async function referrerRewardRetryProblems(run: typeof runReferrerRewardO
   const zatvoreno = outboxPisanja(db.calls).find((c) => (argOf(c, 'update') as Record<string, unknown> | undefined)?.status === 'done');
   if (trajno !== 'declined' || !zatvoreno || (argOf(zatvoreno, 'update') as Record<string, unknown>).done_reason !== 'ip_match_fraud') {
     problems.push(`trajna odluka ip_match_fraud se ponavlja ili se zatvara bez razloga (${trajno})`);
+  }
+  return problems;
+}
+
+type ReferrerGrantModule = {
+  tryGrantReferrerReward: typeof tryGrantReferrerReward;
+  referrerRewardSettlement: typeof referrerRewardSettlement;
+};
+
+interface NagradniSvijet {
+  anon?: boolean;
+  signup?: Record<string, unknown> | null;
+  ip?: string[];
+  count?: number;
+}
+
+/** Lazna baza za tryGrantReferrerReward: odgovor po tablici i operaciji, biljezi svako pisanje. */
+function nagradniSvijet(s: NagradniSvijet) {
+  const pisanja: Array<{ tablica: string; op: string; vrijednost: unknown }> = [];
+  const from = (tablica: string) => {
+    let op = 'select';
+    let brojanje = false;
+    let vrijednost: unknown;
+    const b: Record<string, unknown> = {};
+    for (const m of ['eq', 'not', 'gte', 'is', 'maybeSingle', 'single']) b[m] = () => b;
+    b.select = (_stupci: unknown, opcije?: { count?: string }) => {
+      if (opcije?.count) brojanje = true;
+      return b;
+    };
+    for (const m of ['insert', 'update']) {
+      b[m] = (v: unknown) => {
+        op = m;
+        vrijednost = v;
+        return b;
+      };
+    }
+    const odgovor = (): { data: unknown; error: null; count: number | null } => {
+      if (op !== 'select') pisanja.push({ tablica, op, vrijednost });
+      if (tablica === 'referral_signups' && op === 'select') {
+        return brojanje ? { data: null, error: null, count: s.count ?? 0 } : { data: s.signup ?? null, error: null, count: null };
+      }
+      if (tablica === 'report_generations') return { data: (s.ip ?? []).map((ip_hash) => ({ ip_hash })), error: null, count: null };
+      if (tablica === 'referral_signups') return { data: { id: 'signup-1' }, error: null, count: null };
+      if (tablica === 'entitlements' && op === 'insert') return { data: { id: 'ent-nagrada' }, error: null, count: null };
+      return { data: null, error: null, count: null };
+    };
+    // oxlint-disable-next-line unicorn/no-thenable
+    b.then = (ok: (v: unknown) => unknown, fail?: (e: unknown) => unknown) => Promise.resolve(odgovor()).then(ok, fail);
+    return b;
+  };
+  const admin = {
+    from,
+    auth: { admin: { getUserById: async () => ({ data: { user: { is_anonymous: s.anon === true } }, error: null }) } },
+  };
+  return { admin, nagrade: () => pisanja.filter((p) => p.tablica === 'entitlements' && p.op === 'insert') };
+}
+
+/**
+ * Codex pregled PR #217 runda 2, M2b: zajednicka odluka o nagradi preporucitelju (jedina za webhook
+ * i radnika) sama provodi svaki uvjet podobnosti koji vidi, a svako odbijanje zatvara obvezu trajno;
+ * prolazan pad je ostavlja za ponovni pokusaj. Mjeri se IZVRSEN modul, pa mutacija teksta
+ * produkcijskog izvora (tests/gate-mutations.test.ts) mora oboriti ovaj gard.
+ */
+export async function referrerRewardDecisionProblems(mod: ReferrerGrantModule): Promise<string[]> {
+  const problems: string[] = [];
+  const tudji = { id: 'signup-1', referrer_user_id: 'ref-1', referred_user_id: 'buyer-1', referred_ip_hash: 'h-kupac', converted_order_id: null };
+  const slucajevi: Array<{ ime: string; svijet: NagradniSvijet; razlog: string }> = [
+    { ime: 'anonimni kupac', svijet: { anon: true, signup: tudji }, razlog: 'ineligible_buyer' },
+    { ime: 'kupac bez preporuke', svijet: { signup: null }, razlog: 'no_pending_referral' },
+    { ime: 'samopreporuka', svijet: { signup: { ...tudji, referrer_user_id: 'buyer-1' } }, razlog: 'self_referral' },
+    { ime: 'signup preuzeo drugi order', svijet: { signup: { ...tudji, converted_order_id: 'pi_drugi' } }, razlog: 'no_pending_referral' },
+    { ime: 'IP preporucitelja se poklapa', svijet: { signup: tudji, ip: ['h-kupac'] }, razlog: 'ip_match_fraud' },
+    { ime: 'mjesecni strop', svijet: { signup: tudji, count: 10 }, razlog: 'monthly_cap_reached' },
+  ];
+  for (const s of slucajevi) {
+    const w = nagradniSvijet(s.svijet);
+    const r = await mod.tryGrantReferrerReward(w.admin as never, 'buyer-1', 'diplomski', 'pi_1');
+    if (w.nagrade().length > 0 || r.granted !== false || r.reason !== s.razlog) {
+      problems.push(`${s.ime}: dodjela ${JSON.stringify(r)}, upisa nagrade ${w.nagrade().length} (ocekivano ${s.razlog} bez upisa)`);
+    }
+    if (!mod.referrerRewardSettlement({ granted: false, reason: s.razlog }).settled) {
+      problems.push(`${s.ime}: odbijanje ${s.razlog} ne zatvara obvezu trajno (ponavlja se)`);
+    }
+  }
+  const w = nagradniSvijet({ signup: tudji });
+  const r = await mod.tryGrantReferrerReward(w.admin as never, 'buyer-1', 'diplomski', 'pi_1');
+  if (r.granted !== true || w.nagrade().length !== 1 || (w.nagrade()[0].vrijednost as Record<string, unknown>).user_id !== 'ref-1') {
+    problems.push(`podoban kupac ne nagradjuje preporucitelja (${JSON.stringify(r)})`);
+  }
+  for (const prolazno of [{ granted: false, reason: 'grant_failed' }, { granted: false, reason: 'error' }, undefined]) {
+    if (mod.referrerRewardSettlement(prolazno).settled) problems.push(`prolazan ishod ${JSON.stringify(prolazno)} zatvara obvezu (nagrada se vise ne pokusava)`);
   }
   return problems;
 }

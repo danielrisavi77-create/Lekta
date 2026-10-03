@@ -35,6 +35,7 @@ import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -110,6 +111,7 @@ import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src
 import {
   accessRowsProblems,
   bonusOutboxWorkerProblems,
+  referrerRewardDecisionProblems,
   referrerRewardRetryProblems,
   boundSlotReadProblems,
   entitlementAccessProblems,
@@ -123,7 +125,8 @@ import {
   upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
-import { runReferrerRewardObligation } from '../supabase/functions/process-bonus-outbox/referrer-reward';
+import type * as GrantModul from '../supabase/functions/_shared/grant-referrer-reward';
+import type * as RadnikModul from '../supabase/functions/process-bonus-outbox/referrer-reward';
 import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
 import type { SlotRow } from '../src/report/slot-logic';
 import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
@@ -7812,25 +7815,74 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
 describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
   const ROK_SQL = 180_000;
 
-  it('Codex PR #217 M2: nagrada preporucitelju, baseline cist; zanemaren ishod dodjele (stanje f466d454) obara gard', async () => {
-    expect(await referrerRewardRetryProblems(runReferrerRewardObligation)).toEqual([]);
-    const zanemaruje: typeof runReferrerRewardObligation = (admin, row, grant) =>
-      runReferrerRewardObligation(admin, row, async (a, u, w, o) => {
-        await grant?.(a, u, w, o);
-        return { granted: true };
-      });
-    const p = await referrerRewardRetryProblems(zanemaruje);
-    expect(p.some((x) => x.startsWith('grant_failed:'))).toBe(true);
-    expect(p.some((x) => x.startsWith('error:'))).toBe(true);
+  /**
+   * Codex pregled PR #217 runda 2: mutacija nagrade mora pogoditi PRODUKCIJSKI izvor, ne ubrizganu
+   * funkciju. Tekst supabase/functions/_shared/grant-referrer-reward.ts se mijenja zamjenom, a
+   * mutirani modul i radnik koji ga uvozi (process-bonus-outbox/referrer-reward.ts) prevode se
+   * esbuildom i stvarno izvrsavaju; radnikov uvoz zajednicke odluke dobiva MUTIRANI modul. Zamjena
+   * koja ne pogodi tekst obara test, pa gard ne moze tiho postati slijep nakon preoblikovanja izvora.
+   * Bez privremenih datoteka: modulski runner Vitesta odbija uvoz izvan korijena projekta.
+   */
+  const GRANT_IZVOR = resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-referrer-reward.ts');
+
+  function mutirajNagradu(od: string, u: string): string {
+    const izvor = readTextLf(GRANT_IZVOR);
+    const mutiran = izvor.replace(od, u);
+    expect(mutiran, `zamjena nije pogodila izvor nagrade: ${od}`).not.toBe(izvor);
+    return mutiran;
+  }
+
+  /** Izvrsi TypeScript izvor kao CommonJS modul; svaki uvoz mora biti zadan u `uvozi`. */
+  function izvrsiIzvor(izvor: string, uvozi: Record<string, unknown>): unknown {
+    const { code } = esbuild.transformSync(izvor, { loader: 'ts', format: 'cjs' });
+    const modul: { exports: Record<string, unknown> } = { exports: {} };
+    const zahtjev = (ime: string): unknown => {
+      if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
+      return uvozi[ime];
+    };
+    new Function('module', 'exports', 'require', code)(modul, modul.exports, zahtjev);
+    return modul.exports;
+  }
+
+  async function nagradniModuliIz(grantIzvor: string) {
+    const grant = izvrsiIzvor(grantIzvor, {}) as typeof GrantModul;
+    const worker = izvrsiIzvor(bonusOutboxModuleSource(), {
+      '../_shared/grant-referrer-reward.ts': grant,
+      '../webhook-mor/handler.ts': await import('../supabase/functions/webhook-mor/handler'),
+    }) as typeof RadnikModul;
+    return { grant, worker };
+  }
+
+  it('Codex PR #217 r2: nemutirani izvor nagrade kroz isti ucitavac je cist (gard odluke i gard radnika)', async () => {
+    const { grant, worker } = await nagradniModuliIz(readTextLf(GRANT_IZVOR));
+    expect(await referrerRewardDecisionProblems(grant)).toEqual([]);
+    expect(await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).toEqual([]);
   });
 
-  it('Codex PR #217 M2: trajna odluka koja se tretira kao prolazan pad (ponavlja se) obara gard', async () => {
-    const ponavlja: typeof runReferrerRewardObligation = (admin, row, grant) =>
-      runReferrerRewardObligation(admin, row, async (a, u, w, o) => {
-        const r = await grant?.(a, u, w, o);
-        return (r as { reason?: string } | undefined)?.reason === 'ip_match_fraud' ? { granted: false, reason: 'grant_failed' } : r;
-      });
-    expect((await referrerRewardRetryProblems(ponavlja)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
+  it('Codex PR #217 M2: izvor koji svaki ishod zatvara (stanje f466d454, zanemaren ishod) obara oba garda', async () => {
+    const { grant, worker } = await nagradniModuliIz(mutirajNagradu(
+      'return { settled: r.granted === false && TRAJNI_RAZLOZI.has(reason), reason };',
+      'return { settled: true, reason };',
+    ));
+    const radnik = await referrerRewardRetryProblems(worker.runReferrerRewardObligation);
+    expect(radnik.some((x) => x.startsWith('grant_failed:'))).toBe(true);
+    expect(radnik.some((x) => x.startsWith('error:'))).toBe(true);
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith('prolazan ishod'))).toBe(true);
+  });
+
+  it('Codex PR #217 M2: izvor u kojem je ip_match_fraud prolazan pad (ponavlja se) obara gard radnika', async () => {
+    const { worker } = await nagradniModuliIz(mutirajNagradu("'self_referral', 'ip_match_fraud', ", "'self_referral', "));
+    expect((await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
+  });
+
+  it.each([
+    ['anonimni kupac', "    if (buyer.user.is_anonymous) return { granted: false, reason: 'ineligible_buyer' };\n", ''],
+    ['samopreporuka', "    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };\n", ''],
+    ['IP preporucitelja se poklapa', 'referrerIpHashes.has(signup.referred_ip_hash)', 'false'],
+    ['mjesecni strop', 'count >= MAX_REWARDED_PER_MONTH && !signup.converted_order_id', 'false'],
+  ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
+    const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);
   });
 
   it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
