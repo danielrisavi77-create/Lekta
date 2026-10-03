@@ -328,6 +328,9 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
   (`until node scripts/gate-preflight.mjs --check-only; do sleep 60; done`, najvise 60 min).
   `LEKTA_GATE_FORCE=1` nadjacava sve (ispisuje NADJACANO i svejedno upisuje lock) i koristi se
   samo uz vlasnikovu odluku. Na CI-ju (`CI` postavljen) preflight samo mjeri i propusta.
+- **Env-doctor.** `node scripts/env-doctor.mjs` (`--strict` za exit 1) usporeduje Node, vitest, lockfile, Codex CLI, dijeljeno stablo i CRLF; zavrsni redak `env-doctor: OK` ili `N raskoraka` ispisuju i session bootstrap i preflight, samo kao informaciju.
+- **Straza.** `with-gate-lock` svakih 60 s mjeri stablo djeteta; glavni proces bez potomaka i CPU bez pomaka 5 min znaci: ubija stablo, otpusta lock, exit 124. Ljusku bez vidljivih potomaka (`-- bash skripta.sh`, Git Bash kida stablo) ne dira.
+- **Iskljucivanje straze.** `LEKTA_GATE_WATCHDOG_MIN=0` je iskljucuje, drugi broj mijenja prag u minutama (zadano 5).
 - **Lokalno samo Chromium.** `playwright.config.ts` lokalno ima samo `chromium` i
   `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
   `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).
