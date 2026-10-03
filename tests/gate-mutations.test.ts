@@ -237,6 +237,8 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
+import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -320,6 +322,12 @@ const DOKAZ_BAZA = {
   missingRequired: [] as string[],
   results: requiredTierIds().map((id: string) => ({ id, label: id, status: 'pass' })),
 };
+
+/** Paket iz `package-lock.json` (T99); polja koja gard izvora cita. */
+type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; [k: string]: unknown };
+/** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
+const realLock = (): { packages: Record<string, LockPkg> } =>
+  JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -4622,6 +4630,43 @@ const MUTATIONS: Mutation[] = [
       cleanBefore: () => deadEndWiringProblems(real()).length === 0,
     };
   }),
+  // T99 (issue #220): gard izvora u lockfileu. Baseline je stvarni package-lock.json (0 prekrsaja);
+  // svaka mutacija podmece jedan los izvor u kopiju tog lockfilea, u memoriji. Baseline sadrzi i
+  // `inBundle` paket bez `resolved`, pa cist baseline dokazuje i da izuzetak nije lazni pozitiv.
+  ...([
+    ['t99/lockfile-drugi-host', 'resolved na tudji host (lockfile injection)',
+      (p: LockPkg) => ({ ...p, resolved: 'https://evil.example/x/-/x-1.0.0.tgz' })],
+    ['t99/lockfile-http', 'resolved preko http:// bez TLS-a',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('https://', 'http://') })],
+    ['t99/lockfile-git-izvor', 'resolved na git izvor mimo registryja',
+      (p: LockPkg) => ({ ...p, resolved: 'git+https://github.com/x/x.git#0000000' })],
+    ['t99/lockfile-bez-integrity', 'paket bez integrity, pa se sadrzaj ne provjerava',
+      (p: LockPkg) => { const { integrity: _i, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha1', 'integrity sa slabim sha1 umjesto sha512',
+      (p: LockPkg) => ({ ...p, integrity: 'sha1-AAAAAAAAAAAAAAAAAAAAAAAAAAA=' })],
+  ] as const).map(([id, imitates, mutate]) => ({
+    id,
+    imitates: `T99: ${imitates}; npm audit to ne vidi jer gleda samo poznate CVE-ove.`,
+    caught: () => {
+      const lock = realLock();
+      const name = Object.keys(lock.packages).find((k) => k !== '' && !lock.packages[k].inBundle && !lock.packages[k].link);
+      if (!name) return false;
+      lock.packages[name] = mutate(lock.packages[name]);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${name}:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  })),
+  {
+    id: 't99/lockfile-gard-nije-u-ci',
+    imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/lockfile-sources.mjs\n', '');
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes('npm-audit: nema mjerenja garda izvora');
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
   {
     id: 'csp/stripe-host-u-form-action',
     imitates:

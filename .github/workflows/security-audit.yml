@@ -40,6 +40,15 @@ jobs:
         with:
           node-version: 24
 
+      # IZVOR PAKETA (T99, issue #220). `npm audit` gleda poznate CVE-ove, ne odakle se paket preuzima:
+      # PR moze u lockfile podmetnuti `resolved` na drugi host, `http://` ili git izvor (lockfile
+      # injection). Svaki paket mora biti s https://registry.npmjs.org/ i nositi sha512 integrity.
+      # Tvrdi gate, ne ratchet: lockfile je na dan uvodjenja bio cist. Selftest prije mjerenja.
+      - name: Izvori paketa u lockfileu (selftest pa mjerenje)
+        run: |
+          node scripts/lockfile-sources.mjs --selftest
+          node scripts/lockfile-sources.mjs
+
       - name: Audit produkcijskih ovisnosti (high+)
         run: npm audit --omit=dev --audit-level=high
 
