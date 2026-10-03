@@ -27,35 +27,59 @@ import {
   listProcesses,
   readLock,
 } from '../gate-preflight.mjs';
-import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { spawn as spawnChild } from 'node:child_process';
+import { closeSync, existsSync, openSync, readFileSync as readFileSyncFs } from 'node:fs';
+import os from 'node:os';
 import { join } from 'node:path';
 
+/** Log pozadinskog GC-a: zadnji redak prethodnog runa ispisuje sljedeci SessionStart. */
+function worktreeGcLogPath(env = process.env) {
+  if (env.LEKTA_WORKTREE_GC_LOG) return env.LEKTA_WORKTREE_GC_LOG;
+  if (process.platform === 'win32' && env.LOCALAPPDATA) return join(env.LOCALAPPDATA, 'Temp', 'lekta-worktree-gc.log');
+  return join(os.tmpdir(), 'lekta-worktree-gc.log');
+}
+
+/** Zadnji neprazan redak loga, ili null kad loga nema ili je prazan. */
+export function lastLogLine(path) {
+  try {
+    const lines = readFileSyncFs(path, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter(Boolean);
+    return lines.length ? lines.at(-1).slice(0, 300) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
- * Pokrece `scripts/worktree-gc.mjs --apply --quiet` (odluka vlasnika 2026-10-03: worktree se nakon
- * spajanja uklanja, a start sesije je jedino mjesto koje sigurno dolazi nakon spajanja). FAIL-OPEN:
- * nedostajuca skripta, pad, istek vremena ili izlaz razlicit od 0 daju jedan citljiv redak i nikad
- * ne ruse start sesije. Vraca uvijek tocno jedan redak.
- * @param {{ root: string, spawn?: typeof spawnSync, timeoutMs?: number }} options
+ * Pokrece `scripts/worktree-gc.mjs --apply --quiet` ODVOJENO u pozadini (odluka vlasnika
+ * 2026-10-03: worktree se nakon spajanja uklanja, a start sesije je jedino mjesto koje sigurno
+ * dolazi nakon spajanja). Start sesije NE CEKA GC: dijete je `detached`, `unref`, a izlaz mu ide u
+ * log (`worktreeGcLogPath`), ne u cijev hooka. Ispisuje se zadnji redak PRETHODNOG runa. FAIL-OPEN:
+ * nedostajuca skripta ili pad pokretanja daju jedan citljiv redak i nikad ne ruse start sesije.
+ * Istodobne sesije serijalizira GC lock u samoj skripti. Vraca uvijek tocno jedan redak.
+ * @param {{ root: string, env?: NodeJS.ProcessEnv, spawn?: typeof spawnChild }} options
  * @returns {string}
  */
-export function runWorktreeGc({ root, spawn = spawnSync, timeoutMs = 45_000 }) {
+export function runWorktreeGc({ root, env = process.env, spawn = spawnChild }) {
   try {
     const script = join(root, 'scripts', 'worktree-gc.mjs');
     if (!existsSync(script)) return 'worktree-gc: preskoceno (skripta ne postoji)';
-    const res = spawn(process.execPath, [script, '--apply', '--quiet'], {
-      cwd: root,
-      encoding: 'utf8',
-      timeout: timeoutMs,
-      windowsHide: true,
-    });
-    const out = String(res.stdout ?? '').trim().split(/\r?\n/).filter(Boolean);
-    const last = out.length ? out[out.length - 1] : '';
-    if (res.error) return `worktree-gc: nije uspjelo (${res.error.message}); start sesije se nastavlja`;
-    if (res.status === 0 && last.startsWith('worktree-gc: ')) return last;
-    const errLine = String(res.stderr ?? '').trim().split(/\r?\n/).filter(Boolean)[0] ?? '';
-    const detail = (errLine || last || `izlaz ${res.status}`).slice(0, 200);
-    return `worktree-gc: nije uspjelo (${detail}); start sesije se nastavlja`;
+    const logPath = worktreeGcLogPath(env);
+    const previous = lastLogLine(logPath);
+    const fd = openSync(logPath, 'w');
+    try {
+      const child = spawn(process.execPath, [script, '--apply', '--quiet'], {
+        cwd: root,
+        env,
+        detached: true,
+        stdio: ['ignore', fd, fd],
+        windowsHide: true,
+      });
+      child.on('error', () => {});
+      child.unref();
+    } finally {
+      closeSync(fd);
+    }
+    return `worktree-gc: pokrenut u pozadini (log ${logPath}); prethodni run: ${previous ?? 'nema zapisa'}`;
   } catch (error) {
     return `worktree-gc: nije uspjelo (${error instanceof Error ? error.message : String(error)}); start sesije se nastavlja`;
   }

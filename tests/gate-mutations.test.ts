@@ -9021,8 +9021,9 @@ describe('mutacije: worktree-gc presuda', () => {
   const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
   const clean = { tracked: [], untracked: [], ignored: [] };
   const merged = {
-    main: false, bare: false, locked: false, prunable: false, current: false, ancestor: true,
-    status: clean, lockHeld: false, processPids: [], newestMtimeMs: 0,
+    main: false, bare: false, locked: false, prunable: false, current: false, originFresh: true, ancestor: true,
+    unreachableCommits: 0, status: clean, mainNodeModulesLink: false, foreignLinks: [],
+    lockHeld: false, lockAmbiguous: false, processPids: [], newestMtimeMs: 0,
   };
   const dirty = { ...merged, status: { ...clean, tracked: ['src/a.ts'] } };
   const unmerged = { ...merged, ancestor: false };
@@ -9068,4 +9069,85 @@ describe('mutacije: worktree-gc presuda', () => {
     expect(mutated).not.toBe(source);
     expect(await removableFor(mutated, [merged, unmerged])).toEqual([true, true]);
   }, 120_000);
+
+  /**
+   * Runda 2 (Codex pregled PR #253): svaki novi uvjet uklanjanja ima cist baseline i mutanta koji
+   * vraca zateceni kvar. Tablica: [oznaka, cinjenice koje uvjet mora zadrzati, zamjena izvora].
+   */
+  const round2: Array<[string, object, (s: string) => string]> = [
+    ['B1 ignorirana dist/ mapa', { ...merged, status: { ...clean, ignored: ['dist/'] } },
+      (s) => s.replace("  return !path.endsWith('/') && /\\.log$/i.test(bare);\n", '  return true;\n')],
+    ['B2 nepracen src/progress.log', { ...merged, status: { ...clean, untracked: ['src/progress.log'] } },
+      (s) => s.replace("  return !path.includes('/') && ALLOWED_UNTRACKED_ROOT.has(path);\n", '  return /\\.log$/i.test(path) || ALLOWED_UNTRACKED_ROOT.has(path);\n')],
+    ['M1 aktivan lock bez putanje', { ...merged, lockAmbiguous: true },
+      (s) => s.replace("  if (facts.lockAmbiguous === true) reasons.push('aktivan gate lock bez citljive putanje stabla');\n", '')],
+    ['M3 commit samo u reflogu', { ...merged, unreachableCommits: 1 },
+      (s) => s.replace(/\n {2}else if \(facts\.unreachableCommits > 0\) reasons\.push\([^\n]*\);/, '')],
+    ['M4 origin nedostupan', { ...merged, originFresh: false },
+      (s) => s.replace("  if (facts.originFresh !== true) reasons.push('origin nedostupan (fetch nije uspio)');\n", '')],
+    ['M6 skriveni junction', { ...merged, foreignLinks: ['.tmp-cache/shared'] },
+      (s) => s.replace(/\n {2}else if \(facts\.foreignLinks\.length > 0\) reasons\.push\([^\n]*\);/, '')],
+  ];
+  for (const [label, keptFacts, mutate] of round2) {
+    it(`(runda 2) ${label}: mutant bez provjere obara tvrdnju`, async () => {
+      const source = readLf('scripts/worktree-gc.mjs');
+      expect(await removableFor(source, [merged, keptFacts])).toEqual([true, false]);
+      const mutated = mutate(source);
+      expect(mutated).not.toBe(source);
+      expect(await removableFor(mutated, [merged, keptFacts])).toEqual([true, true]);
+    }, 120_000);
+  }
+
+  /**
+   * M2: medjuprocesni GC lock. Mutant koji ne postuje zauzet lock uklanja stablo dok drugi GC radi.
+   * Kopija skripte radi nad stvarnim privremenim repoom (lokalni bare `origin`).
+   */
+  it('(runda 2) M2 zauzet GC lock: mutant bez provjere locka uklanja stablo', async () => {
+    const fs = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { spawnSync } = await import('node:child_process');
+    const g = (cwd: string, ...args: string[]) => {
+      const r = spawnSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
+    };
+    const root = fs.realpathSync(fs.mkdtempSync(join(tmp(), 'lekta-wtgc-mut2-')));
+    try {
+      const main = join(root, 'main');
+      fs.mkdirSync(main);
+      g(root, 'init', '-q', '--bare', 'origin.git');
+      g(main, 'init', '-q', '-b', 'master');
+      g(main, 'config', 'user.email', 't@example.invalid');
+      g(main, 'config', 'user.name', 't');
+      fs.writeFileSync(join(main, 'a.txt'), 'a\n');
+      g(main, 'add', 'a.txt');
+      g(main, 'commit', '-q', '-m', 'a');
+      g(main, 'remote', 'add', 'origin', join(root, 'origin.git'));
+      g(main, 'push', '-q', 'origin', 'master');
+      const lockPath = join(root, 'gc.lock');
+      const run = (source: string, wt: string) => {
+        g(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+        const old = new Date(Date.now() - 2 * 60 * 60 * 1000);
+        const gd = join(main, '.git', 'worktrees', wt.split(/[\\/]/).pop() ?? '');
+        for (const p of [join(wt, '.git'), join(gd, 'HEAD'), join(gd, 'index')]) fs.utimesSync(p, old, old);
+        const dir = fs.mkdtempSync(join(root, 'src-'));
+        fs.writeFileSync(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+        fs.writeFileSync(join(dir, 'worktree-gc.mjs'), source);
+        fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), label: 'worktree-gc', token: 'x' }));
+        spawnSync(process.execPath, [join(dir, 'worktree-gc.mjs'), '--repo', main, '--apply', '--quiet'], {
+          cwd: root, encoding: 'utf8', windowsHide: true, timeout: 60_000,
+          env: { ...process.env, LEKTA_WORKTREE_GC_LOCK_PATH: lockPath, LEKTA_GATE_LOCK_PATH: join(root, 'gate.lock') },
+        });
+        return fs.existsSync(wt);
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: dok drugi GC drzi lock, stablo ostaje.
+      expect(run(source, join(root, 'wt-a'))).toBe(true);
+      // MUTACIJA: zauzet lock se ignorira (zateceno stanje prije runde 2: nije bilo locka).
+      const mutated = source.replace("  if ('busy' in gcLock) {", '  if (false) {');
+      expect(mutated).not.toBe(source);
+      expect(run(mutated, join(root, 'wt-b'))).toBe(false);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }, 180_000);
 });
