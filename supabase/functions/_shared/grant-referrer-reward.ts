@@ -30,11 +30,13 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
  * UVJETI PODOBNOSTI (Codex pregled PR #217 runda 2, M2b). Ova funkcija je jedina odluka za oba
  * ulaza (webhook-mor inline i process-bonus-outbox radnik) i sama provjerava: kupac nije anoniman
  * (`ineligible_buyer`), postoji signup tog kupca u stanju friend_rewarded (`no_pending_referral`),
- * preporucitelj nije sam kupac (`self_referral`), signup nije preuzeo drugi order (prva kupnja,
- * `no_pending_referral`), IP preporucitelja se ne poklapa (`ip_match_fraud`) i mjesecni strop
- * (`monthly_cap_reached`). Placen iznos > 0 i iznos >= katalog (classifyStripeEvent,
- * chargedAmountVerdict), nadogradnja bez nagrade (bookUpgradePayment ne pise obveze) i puni povrat
- * (oznaka prije i poslije dodjele) provodi pozivatelj, jer ova funkcija iznos i povrat ne vidi.
+ * preporucitelj nije sam kupac (`self_referral`), signup nije preuzeo drugi order (jedna nagrada po
+ * signupu, za prvu kupnju NAKON preporuke, `no_pending_referral`), IP preporucitelja se ne poklapa
+ * (`ip_match_fraud`) i mjesecni strop (`monthly_cap_reached`). Placen iznos > 0 i iznos >= katalog
+ * (classifyStripeEvent, chargedAmountVerdict), nadogradnja bez nagrade (bookUpgradePayment ne pise
+ * obveze) i puni povrat (oznaka prije i poslije dodjele) provodi pozivatelj, jer ova funkcija iznos i
+ * povrat ne vidi. NIJE uvjet: da kupac nikad prije nije platio (MONETIZACIJA_V1.md odjeljak 21 i 0013
+ * to ne traze); kupac s ranijom kupnjom koji tek kasnije iskoristi kod moze donijeti nagradu.
  */
 const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'monthly_cap_reached']);
 

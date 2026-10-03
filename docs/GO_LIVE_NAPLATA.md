@@ -74,6 +74,9 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    bazi). Nakon pusha provjeri: `select proname, pg_get_userbyid(proowner), prosecdef, proconfig from
    pg_proc where proname in ('apply_entitlement_upgrade', 'revert_entitlement_upgrade',
    'note_entitlement_partial_refund');` mora dati `postgres`, `true` i `search_path=""`.
+   Gard migrira kao superuser, koji prijenos vlasništva smije uvijek; Supabaseov `postgres` nije
+   superuser. Ako `db push` ide kroz ulogu koja nije `postgres` ni njegov član, `alter function ...
+   owner to postgres` pada glasno i migracija se ne primjenjuje (Codex pregled delte, G-3).
 4. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
    id Merchant of Record providera i bio uvjet za checkout (`409 product_not_mapped`); prelaskom
    na Stripe taj uvjet je uklonjen. Iznos se računa iz `products.price_eur`, a webhook proizvod

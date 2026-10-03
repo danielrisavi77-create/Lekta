@@ -663,19 +663,29 @@ type ReferrerGrantModule = {
 interface NagradniSvijet {
   anon?: boolean;
   signup?: Record<string, unknown> | null;
-  ip?: string[];
+  ip?: Array<{ user_id: string; ip_hash: string }>;
   count?: number;
 }
 
-/** Lazna baza za tryGrantReferrerReward: odgovor po tablici i operaciji, biljezi svako pisanje. */
+/**
+ * Lazna baza za tryGrantReferrerReward: odgovor po tablici i operaciji, biljezi svako pisanje. `eq`
+ * filtri se STVARNO primjenjuju na signup i na IP retke (Codex pregled delte, G-1), pa uklonjen filtar
+ * statusa ili preporucitelja u produkcijskom upitu mijenja odgovor i obara gard.
+ */
 function nagradniSvijet(s: NagradniSvijet) {
   const pisanja: Array<{ tablica: string; op: string; vrijednost: unknown }> = [];
   const from = (tablica: string) => {
     let op = 'select';
     let brojanje = false;
     let vrijednost: unknown;
+    const filtri: Array<[string, unknown]> = [];
+    const prolazi = (red: Record<string, unknown>) => filtri.every(([k, v]) => red[k] === v);
     const b: Record<string, unknown> = {};
-    for (const m of ['eq', 'not', 'gte', 'is', 'maybeSingle', 'single']) b[m] = () => b;
+    for (const m of ['not', 'gte', 'is', 'maybeSingle', 'single']) b[m] = () => b;
+    b.eq = (stupac: string, v: unknown) => {
+      filtri.push([stupac, v]);
+      return b;
+    };
     b.select = (_stupci: unknown, opcije?: { count?: string }) => {
       if (opcije?.count) brojanje = true;
       return b;
@@ -690,9 +700,10 @@ function nagradniSvijet(s: NagradniSvijet) {
     const odgovor = (): { data: unknown; error: null; count: number | null } => {
       if (op !== 'select') pisanja.push({ tablica, op, vrijednost });
       if (tablica === 'referral_signups' && op === 'select') {
-        return brojanje ? { data: null, error: null, count: s.count ?? 0 } : { data: s.signup ?? null, error: null, count: null };
+        if (brojanje) return { data: null, error: null, count: s.count ?? 0 };
+        return { data: s.signup && prolazi(s.signup) ? s.signup : null, error: null, count: null };
       }
-      if (tablica === 'report_generations') return { data: (s.ip ?? []).map((ip_hash) => ({ ip_hash })), error: null, count: null };
+      if (tablica === 'report_generations') return { data: (s.ip ?? []).filter((red) => prolazi(red)), error: null, count: null };
       if (tablica === 'referral_signups') return { data: { id: 'signup-1' }, error: null, count: null };
       if (tablica === 'entitlements' && op === 'insert') return { data: { id: 'ent-nagrada' }, error: null, count: null };
       return { data: null, error: null, count: null };
@@ -716,13 +727,14 @@ function nagradniSvijet(s: NagradniSvijet) {
  */
 export async function referrerRewardDecisionProblems(mod: ReferrerGrantModule): Promise<string[]> {
   const problems: string[] = [];
-  const tudji = { id: 'signup-1', referrer_user_id: 'ref-1', referred_user_id: 'buyer-1', referred_ip_hash: 'h-kupac', converted_order_id: null };
+  const tudji = { id: 'signup-1', referrer_user_id: 'ref-1', referred_user_id: 'buyer-1', status: 'friend_rewarded', referred_ip_hash: 'h-kupac', converted_order_id: null };
   const slucajevi: Array<{ ime: string; svijet: NagradniSvijet; razlog: string }> = [
     { ime: 'anonimni kupac', svijet: { anon: true, signup: tudji }, razlog: 'ineligible_buyer' },
     { ime: 'kupac bez preporuke', svijet: { signup: null }, razlog: 'no_pending_referral' },
+    { ime: 'signup vec nagradjen', svijet: { signup: { ...tudji, status: 'rewarded' } }, razlog: 'no_pending_referral' },
     { ime: 'samopreporuka', svijet: { signup: { ...tudji, referrer_user_id: 'buyer-1' } }, razlog: 'self_referral' },
     { ime: 'signup preuzeo drugi order', svijet: { signup: { ...tudji, converted_order_id: 'pi_drugi' } }, razlog: 'no_pending_referral' },
-    { ime: 'IP preporucitelja se poklapa', svijet: { signup: tudji, ip: ['h-kupac'] }, razlog: 'ip_match_fraud' },
+    { ime: 'IP preporucitelja se poklapa', svijet: { signup: tudji, ip: [{ user_id: 'ref-1', ip_hash: 'h-kupac' }] }, razlog: 'ip_match_fraud' },
     { ime: 'mjesecni strop', svijet: { signup: tudji, count: 10 }, razlog: 'monthly_cap_reached' },
   ];
   for (const s of slucajevi) {
@@ -739,6 +751,12 @@ export async function referrerRewardDecisionProblems(mod: ReferrerGrantModule): 
   const r = await mod.tryGrantReferrerReward(w.admin as never, 'buyer-1', 'diplomski', 'pi_1');
   if (r.granted !== true || w.nagrade().length !== 1 || (w.nagrade()[0].vrijednost as Record<string, unknown>).user_id !== 'ref-1') {
     problems.push(`podoban kupac ne nagradjuje preporucitelja (${JSON.stringify(r)})`);
+  }
+  // Isti IP hash kod TRECE osobe nije prijevara preporucitelja: provjera mora citati samo njegove retke.
+  const treci = nagradniSvijet({ signup: tudji, ip: [{ user_id: 'netko-treci', ip_hash: 'h-kupac' }] });
+  const rTreci = await mod.tryGrantReferrerReward(treci.admin as never, 'buyer-1', 'diplomski', 'pi_1');
+  if (rTreci.granted !== true || treci.nagrade().length !== 1) {
+    problems.push(`IP trece osobe: blokira nagradu preporucitelju (${JSON.stringify(rTreci)})`);
   }
   for (const prolazno of [{ granted: false, reason: 'grant_failed' }, { granted: false, reason: 'error' }, undefined]) {
     if (mod.referrerRewardSettlement(prolazno).settled) problems.push(`prolazan ishod ${JSON.stringify(prolazno)} zatvara obvezu (nagrada se vise ne pokusava)`);

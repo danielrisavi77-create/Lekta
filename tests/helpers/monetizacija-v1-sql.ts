@@ -712,26 +712,32 @@ export async function privilegeProblems(withDefaults: PGlite, plain: PGlite): Pr
  * oblik (runda 2: isti skup vrijednosti nije dovoljan). Svako drugo ogranicenje koje dira ta dva
  * stupca mora oboriti migraciju (RAISE EXCEPTION) i ostati na mjestu, s nepromijenjenom definicijom.
  * Generator: svaki slucaj stvarno mijenja bazu prije 0207 i provjerava da je definicija nova.
- * Stroziji izraz istog imena koristi `= lower(...)` umjesto Codexova `<> 'doktorski'`: katalog vec ima
- * doktorske proizvode, pa bi takav CHECK pao pri dodavanju, a ovaj ne uvodi novi literal.
+ * Stroziji izraz istog imena je Codexov primjer (`and work_type <> 'doktorski'`) na praznoj tablici
+ * (products vec ima doktorske proizvode, pa bi tamo CHECK pao pri dodavanju). Generator dokazuje da je
+ * izraz STVARNO stroziji: vrijednost `odbijena` prolazi stari izraz, a novi je odbija.
  */
 export async function constraintDropProblems(v1Sql: string = readMigration(V1_MIGRATION)): Promise<string[]> {
   const problems: string[] = [];
   // `zamijeni`: zadano ogranicenje se zamjenjuje drugim izrazom POD ISTIM IMENOM. `istiLiterali`:
   // izraz je stroziji, a skup navedenih vrijednosti isti kao kod zadanog (Codex runda 2, M3), pa
   // usporedba imena i literala vise nije dovoljna; generator to i provjerava.
-  const slucajevi: ReadonlyArray<{ opis: string; tabela: string; ime: string; check?: string; zamijeni?: string; istiLiterali?: boolean }> = [
+  const slucajevi: ReadonlyArray<{
+    opis: string; tabela: string; ime: string; check?: string; zamijeni?: string;
+    istiLiterali?: { stupac: string; staro: string; odbijena: string };
+  }> = [
     { opis: 'visestupcani CHECK s work_type i doktorski', tabela: 'entitlements', ime: 'entitlements_doktorski_slotovi', check: "work_type <> 'doktorski' or slots_total <= 3" },
     { opis: 'jednostupcani CHECK na work_type pod drugim imenom', tabela: 'products', ime: 'products_bez_magistarskog', check: "work_type <> 'magistarski'" },
     { opis: 'zadano ime s neocekivanim skupom vrijednosti', tabela: 'repair_jobs', ime: 'repair_jobs_work_type_check', zamijeni: "work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski', 'magistarski')" },
     {
-      opis: 'zadano ime i isti literali, stroziji izraz (work_type)', tabela: 'products', ime: 'products_work_type_check', istiLiterali: true,
-      zamijeni: "work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski') and work_type = lower(work_type)",
+      opis: 'zadano ime i isti literali, stroziji izraz (work_type)', tabela: 'corpus_contributions', ime: 'corpus_contributions_work_type_check',
+      istiLiterali: { stupac: 'work_type', staro: "work_type in ('seminarski','zavrsni','diplomski','doktorski')", odbijena: 'doktorski' },
+      zamijeni: "work_type in ('seminarski', 'zavrsni', 'diplomski', 'doktorski') and work_type <> 'doktorski'",
     },
     { opis: 'visestupcani CHECK na bonus_outbox.status', tabela: 'bonus_outbox', ime: 'bonus_outbox_pending_pokusaji', check: "status <> 'pending' or attempts >= 0" },
     {
-      opis: 'zadano ime i isti literali, stroziji izraz (bonus_outbox.status)', tabela: 'bonus_outbox', ime: 'bonus_outbox_status_check', istiLiterali: true,
-      zamijeni: "status in ('pending', 'done', 'failed') and status = lower(status)",
+      opis: 'zadano ime i isti literali, stroziji izraz (bonus_outbox.status)', tabela: 'bonus_outbox', ime: 'bonus_outbox_status_check',
+      istiLiterali: { stupac: 'status', staro: "status in ('pending', 'done', 'failed')", odbijena: 'failed' },
+      zamijeni: "status in ('pending', 'done', 'failed') and status <> 'failed'",
     },
   ];
   const literali = (def: string) => [...new Set([...def.matchAll(/'([^']*)'/gu)].map((m) => m[1]))].sort().join(',');
@@ -755,6 +761,14 @@ export async function constraintDropProblems(v1Sql: string = readMigration(V1_MI
       if (c.istiLiterali && (prije === null || literali(prije) !== literali(ulaz))) {
         problems.push(`${c.opis}: generator ne cuva skup literala zadanog ogranicenja (${prije} -> ${ulaz})`);
         continue;
+      }
+      if (c.istiLiterali && c.zamijeni) {
+        const { stupac, staro, odbijena } = c.istiLiterali;
+        const ocjena = await one(db, `select (${staro}) as staro, (${c.zamijeni}) as novo from (values ($1::text)) as v(${stupac})`, [odbijena]);
+        if (ocjena?.staro !== true || ocjena?.novo !== false) {
+          problems.push(`${c.opis}: generator ne proizvodi stroziji izraz (${odbijena}: staro=${String(ocjena?.staro)}, novo=${String(ocjena?.novo)})`);
+          continue;
+        }
       }
       let palo = false;
       try {

@@ -7881,6 +7881,9 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     ['samopreporuka', "    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };\n", ''],
     ['IP preporucitelja se poklapa', 'referrerIpHashes.has(signup.referred_ip_hash)', 'false'],
     ['mjesecni strop', 'count >= MAX_REWARDED_PER_MONTH && !signup.converted_order_id', 'false'],
+    // Codex pregled delte (G-1): filtri upita, ne samo grane odluke.
+    ['signup vec nagradjen', "      .eq('referred_user_id', buyerUserId)\n      .eq('status', 'friend_rewarded')\n", "      .eq('referred_user_id', buyerUserId)\n"],
+    ['IP trece osobe', "      .eq('user_id', signup.referrer_user_id)\n", ''],
   ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
     const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
     expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);
@@ -8202,7 +8205,7 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
   it('Codex PR #217 r2 M3: work_type CHECK bez usporedbe cijelog izraza (samo ime i stupac) tiho brise stroziji izraz istog imena i obara gard', async () => {
     const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan work_type/, "       or false then\n      raise exception '0207: neocekivan work_type");
     const p = await constraintDropProblems(mutated);
-    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise products_work_type_check'))).toBe(true);
+    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise corpus_contributions_work_type_check'))).toBe(true);
   }, ROK_SQL);
 
   it('Codex PR #217 r2 M3: bonus_outbox status CHECK bez usporedbe cijelog izraza tiho brise stroziji izraz istog imena i obara gard', async () => {
