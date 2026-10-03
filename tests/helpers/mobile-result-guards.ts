@@ -6,6 +6,7 @@
  * - `mentorModuleFromSource`: `mentor-tasks.ts` iz STVARNOG izvora uz zamjene izraza (esbuild bundle), bez upisa u
  *   repozitorij, da mutacija mijenja sam kod.
  * - `mentorCollapseProblems`: na uskom ekranu blok komentara je sklopljen, na sirokom otvoren.
+ * - `mentorResizeProblems`: otvorenost prati promjenu sirine dok korisnik sam ne odabere (Codex F6 na #235).
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -20,8 +21,9 @@ export function mobileTiltProblems(css: string): string[] {
   return ravno ? [] : ['list je nagnut i na uskom ekranu'];
 }
 
+type Medij = { matches: boolean; addEventListener: (t: string, f: (e: { matches: boolean }) => void) => void; removeEventListener: (t: string, f: (e: { matches: boolean }) => void) => void };
 type MentorMod = {
-  mountMentorTasks: (mount: HTMLElement, bytes: Uint8Array, checks: readonly unknown[], opts?: { uzak?: boolean }) => Promise<boolean>;
+  mountMentorTasks: (mount: HTMLElement, bytes: Uint8Array, checks: readonly unknown[], opts?: { uzak?: boolean; medij?: Medij | null }) => Promise<boolean>;
 };
 
 const MENTOR = 'src/ui/results/mentor-tasks.ts';
@@ -65,5 +67,36 @@ export async function mentorCollapseProblems(mod: MentorMod, bytes: Uint8Array):
     if (uzak && d.open) problemi.push('uzak ekran: blok komentara je otvoren');
     if (!uzak && !d.open) problemi.push('sirok ekran: blok komentara je sklopljen');
   }
+  return problemi;
+}
+
+/** Sirok pa uzak ekran sklapa blok; rucni odabir korisnika nadjacava sirinu. Vraca opis svakog odstupanja. */
+export async function mentorResizeProblems(mod: MentorMod, bytes: Uint8Array): Promise<string[]> {
+  const problemi: string[] = [];
+  const medij = (matches: boolean) => {
+    const sl = new Set<(e: { matches: boolean }) => void>();
+    return {
+      matches,
+      addEventListener: (_t: string, f: (e: { matches: boolean }) => void) => { sl.add(f); },
+      removeEventListener: (_t: string, f: (e: { matches: boolean }) => void) => { sl.delete(f); },
+      promijeni(m: boolean) { this.matches = m; for (const f of sl) f({ matches: m }); },
+    };
+  };
+  document.body.innerHTML = '<section id="m" class="hidden"></section>';
+  let mount = document.getElementById('m')!;
+  const sirok = medij(false);
+  await mod.mountMentorTasks(mount, bytes, [], { medij: sirok });
+  sirok.promijeni(true);
+  if (mount.querySelector<HTMLDetailsElement>('details.mt')?.open !== false) problemi.push('suzeno na uzak ekran: blok ostaje otvoren');
+
+  document.body.innerHTML = '<section id="m" class="hidden"></section>';
+  mount = document.getElementById('m')!;
+  const uzak = medij(true);
+  await mod.mountMentorTasks(mount, bytes, [], { medij: uzak });
+  const d = mount.querySelector<HTMLDetailsElement>('details.mt');
+  if (d) { d.open = true; d.dispatchEvent(new Event('toggle')); }
+  uzak.promijeni(false);
+  uzak.promijeni(true);
+  if (mount.querySelector<HTMLDetailsElement>('details.mt')?.open !== true) problemi.push('rucno otvoren blok sklopljen promjenom sirine');
   return problemi;
 }

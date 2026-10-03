@@ -114,7 +114,7 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
-import { mentorCollapseProblems, mentorModuleFromSource, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -9030,13 +9030,27 @@ describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
   });
 
   it('mutant: blok uvijek otvoren se hvata na uskom ekranu', async () => {
-    const mod = await mentorModuleFromSource([['let otvoreno = !(opts.uzak ?? uskiEkran());', 'let otvoreno = true;']]);
+    const mod = await mentorModuleFromSource([['let otvoreno = !(opts.uzak ?? medij?.matches ?? false);', 'let otvoreno = true;']]);
     expect(await mentorCollapseProblems(mod, bytes)).toEqual(['uzak ekran: blok komentara je otvoren']);
   });
 
   it('mutant: blok opet obican div (bez sklapanja) se hvata', async () => {
     const mod = await mentorModuleFromSource([["return `<details class=\"mt\"${otvoreno ? ' open' : ''}><summary class=\"mt-kicker\">", "return `<div class=\"mt\"><p class=\"mt-kicker\">"]]);
     expect(await mentorCollapseProblems(mod, bytes)).toEqual(['blok komentara nije <details>', 'blok komentara nije <details>']);
+  });
+
+  it('BASELINE: otvorenost prati sirinu, rucni odabir ima prednost (Codex F6)', async () => {
+    expect(await mentorResizeProblems(await mentorModuleFromSource([]), bytes)).toEqual([]);
+  });
+
+  it('mutant: odluka samo pri montazi (bez pracenja medija) se hvata', async () => {
+    const mod = await mentorModuleFromSource([['      if (rucno) return;', '      return;']]);
+    expect(await mentorResizeProblems(mod, bytes)).toEqual(['suzeno na uzak ekran: blok ostaje otvoren']);
+  });
+
+  it('mutant: promjena sirine gazi rucni odabir se hvata', async () => {
+    const mod = await mentorModuleFromSource([['      if (rucno) return;', '']]);
+    expect(await mentorResizeProblems(mod, bytes)).toEqual(['rucno otvoren blok sklopljen promjenom sirine']);
   });
 });
 

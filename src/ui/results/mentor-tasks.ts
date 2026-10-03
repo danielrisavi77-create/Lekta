@@ -124,10 +124,16 @@ export function mentorTasksHtml(tasks: readonly MentorTaskView[], titleOf: (id: 
     + `<p class="muted" data-mentor-open="${open}">Otvoreno: ${open}.</p></details>`;
 }
 
-/** Uzak ekran: isti prag kao ostala mobilna pravila rezultata (720 px). Bez `matchMedia` (stariji preglednik) nije uzak. */
-function uskiEkran(): boolean {
-  try { return typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 720px)').matches; } catch { return false; }
+/** Medijski upit uskog ekrana, onoliko koliko ga montaza treba (u testu se podmece lazni). */
+export type UskiMedij = Pick<MediaQueryList, 'matches' | 'addEventListener' | 'removeEventListener'>;
+
+/** Uzak ekran: isti prag kao ostala mobilna pravila rezultata (720 px). Bez `matchMedia` (stariji preglednik) nema upita. */
+function uskiMedij(): UskiMedij | null {
+  try { return typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 720px)') : null; } catch { return null; }
 }
+
+/** Odjava pracenja medija prethodne montaze u isti mount, da ponovna analiza ne gomila slusace. */
+const odjavaMedija = new WeakMap<HTMLElement, () => void>();
 
 /**
  * Montaza u rutu: cita paket, gradi zadatke i vodi stanje u memoriji. Vraca `false` kad dokument nema komentara (mount
@@ -137,23 +143,40 @@ export async function mountMentorTasks(
   mount: HTMLElement,
   bytes: Uint8Array,
   checks: readonly MentorCheckLike[],
-  opts: { uzak?: boolean } = {},
+  opts: { uzak?: boolean; medij?: UskiMedij | null } = {},
 ): Promise<boolean> {
+  odjavaMedija.get(mount)?.();
+  odjavaMedija.delete(mount);
   const parts = await readCommentParts(bytes);
   if (!parts) { mount.innerHTML = ''; mount.classList.add('hidden'); return false; }
   let tasks = buildMentorTasks({ ...parts, checks });
   const formal = toFormal(checks);
   const titleOf = (id: string) => checks.find((c) => c.id === id)?.title ?? id;
+  const medij = opts.medij === undefined ? uskiMedij() : opts.medij;
   // Otvorenost bloka nadzivi ponovno iscrtavanje nakon "Označi kao obrađeno" (render zamjenjuje innerHTML).
-  let otvoreno = !(opts.uzak ?? uskiEkran());
+  let otvoreno = !(opts.uzak ?? medij?.matches ?? false);
+  // Dok korisnik sam ne otvori ili zatvori blok, otvorenost prati sirinu ekrana: rezultat otvoren na sirokom
+  // ekranu pa suzen na mobitel opet se sklapa (Codex F6 na #235). Rucni odabir korisnika ima prednost.
+  let rucno = false;
   const render = () => {
     mount.innerHTML = mentorTasksHtml(tasks, titleOf, otvoreno);
     mount.classList.toggle('hidden', tasks.length === 0);
   };
   mount.addEventListener('toggle', (e) => {
     const d = e.target as HTMLDetailsElement | null;
-    if (d && d.classList.contains('mt')) otvoreno = d.open;
+    // Programska promjena prvo postavi `otvoreno`, pa njezin `toggle` nije korisnikov odabir.
+    if (d && d.classList.contains('mt') && d.open !== otvoreno) { otvoreno = d.open; rucno = true; }
   }, true);
+  if (medij) {
+    const naPromjenu = (e: { matches: boolean }) => {
+      if (rucno) return;
+      otvoreno = !e.matches;
+      const d = mount.querySelector<HTMLDetailsElement>('details.mt');
+      if (d) d.open = otvoreno;
+    };
+    medij.addEventListener('change', naPromjenu);
+    odjavaMedija.set(mount, () => medij.removeEventListener('change', naPromjenu));
+  }
   mount.addEventListener('click', (e) => {
     const el = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-mentor-address],[data-mentor-link]');
     if (!el) return;

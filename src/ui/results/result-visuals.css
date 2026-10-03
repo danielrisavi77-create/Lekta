@@ -1145,6 +1145,9 @@ summary.mt-kicker:focus-visible { outline: 2px solid var(--ck-accent, #c8102e); 
 .mt-popis { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .7rem; }
 .mt-zadatak { border-top: 1px solid var(--ck-line); padding-top: .6rem; }
 .mt-zadatak[data-user-status="addressed"] .mt-tekst { color: var(--ck-muted); }
+/* Komentar mentora s dugim nizom bez razmaka (poveznica, putanja) lomi se unutar kartice, ne siri list preko ruba
+   ekrana od 360 px (Codex F4 na #235). */
+.mt-tekst { overflow-wrap: anywhere; }
 .mt-napomena { display: block; color: var(--ck-muted); font-size: .8rem; }
 .mt-status { font-size: .85rem; margin: .3rem 0; }
 .mt-zadatak[data-verification="formal-check-passed"] .mt-strojno { color: var(--ck-green-text, #1a7f5a); }

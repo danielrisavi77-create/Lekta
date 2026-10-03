@@ -124,6 +124,49 @@ describe('montaza: obradjeno naspram provjereno', () => {
     expect(poslije.querySelector('summary')!.textContent).toContain('otvoreno 1');
   });
 
+  // Codex F6 na #235: otvorenost se ne odlucuje samo pri montazi. Rezultat otvoren na sirokom ekranu pa suzen na
+  // mobitel opet se sklapa; rucni odabir korisnika ima prednost pred sirinom.
+  function lazniMedij(matches: boolean) {
+    const slusaci = new Set<(e: { matches: boolean }) => void>();
+    return {
+      matches,
+      addEventListener: (_t: string, f: (e: { matches: boolean }) => void) => { slusaci.add(f); },
+      removeEventListener: (_t: string, f: (e: { matches: boolean }) => void) => { slusaci.delete(f); },
+      promijeni(m: boolean) { this.matches = m; for (const f of slusaci) f({ matches: m }); },
+      slusaca: () => slusaci.size,
+    };
+  }
+
+  it('sirok pa uzak ekran: blok se sklopi, natrag na sirok opet se otvori', async () => {
+    const medij = lazniMedij(false);
+    await mountMentorTasks(mount, bytes, CHECKS, { medij: medij as never });
+    const d = () => mount.querySelector<HTMLDetailsElement>('details.mt')!;
+    expect(d().open).toBe(true);
+    medij.promijeni(true);
+    expect(d().open, 'suzeno na mobitel').toBe(false);
+    medij.promijeni(false);
+    expect(d().open, 'natrag na sirok').toBe(true);
+  });
+
+  it('rucni odabir korisnika ima prednost pred promjenom sirine', async () => {
+    const medij = lazniMedij(true);
+    await mountMentorTasks(mount, bytes, CHECKS, { medij: medij as never });
+    const d = mount.querySelector<HTMLDetailsElement>('details.mt')!;
+    expect(d.open).toBe(false);
+    d.open = true;
+    d.dispatchEvent(new Event('toggle'));
+    medij.promijeni(false);
+    medij.promijeni(true);
+    expect(mount.querySelector<HTMLDetailsElement>('details.mt')!.open, 'korisnik je otvorio, ostaje otvoreno').toBe(true);
+  });
+
+  it('ponovna montaza u isti mount odjavljuje slusaca prethodne', async () => {
+    const medij = lazniMedij(false);
+    await mountMentorTasks(mount, bytes, CHECKS, { medij: medij as never });
+    await mountMentorTasks(mount, bytes, CHECKS, { medij: medij as never });
+    expect(medij.slusaca()).toBe(1);
+  });
+
   it('bez komentara mount ostaje skriven', async () => {
     const bez = new Uint8Array(readFileSync(join(__dirname, 'fixtures', 'docx', 'lo-fpzg-zavrsni-neuskladjen.docx')));
     expect(await mountMentorTasks(mount, bez, CHECKS)).toBe(false);
