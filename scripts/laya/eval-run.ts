@@ -12,11 +12,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { VERDICTS, validateDecisionCase } from './contracts-v2.ts';
 import type { LayaDecisionCaseV2, LayaVerdict } from './contracts-v2.ts';
-import { loadRegistry } from './registry.ts';
+import { loadRegistry, pinnedModel } from './registry.ts';
 import { httpLayaClient } from './runtime-client.ts';
 import { adjudicateCases } from './runner.ts';
 import type { CaseRunOutput } from './runner.ts';
-import { baselineCurrentHeuristic, baselineMajority, coverageCurve, evaluate, optionOrderInstability, selectThreshold } from './eval.ts';
+import { baselineCurrentHeuristic, baselineMajority, coverageCurve, evaluate, optionOrderInstability, orderInstabilityApplies, selectThreshold } from './eval.ts';
 import type { EvalRow } from './eval.ts';
 
 export interface GoldSet {
@@ -87,7 +87,8 @@ export async function runEvalCli(args: string[]): Promise<number> {
 
   const natural = await adjudicateCases({ cases, client, registry, modelKey });
   if (!natural.modelDigest) { console.error(`Kljuc "${modelKey}" nije u registru; bez pinanog modela nema evaluacije.`); return 1; }
-  const reversed = await adjudicateCases({ cases, client, registry, modelKey, labelOrder: [...VERDICTS].reverse() });
+  const orderApplies = orderInstabilityApplies(pinnedModel(registry, modelKey)?.manifest.runtimeVersion ?? '');
+  const reversed = orderApplies ? await adjudicateCases({ cases, client, registry, modelKey, labelOrder: [...VERDICTS].reverse() }) : null;
 
   const rows = rowsFrom(gold, natural);
   const reasons: Record<string, number> = {};
@@ -105,7 +106,8 @@ export async function runEvalCli(args: string[]): Promise<number> {
     noAdjudicationReasons: reasons,
     laya: evaluate(rows),
     coverageCurve: coverageCurve(rows, thresholds),
-    optionOrderInstability: optionOrderInstability(verdicts(natural), verdicts(reversed)),
+    optionOrderInstability: reversed ? optionOrderInstability(verdicts(natural), verdicts(reversed)) : null,
+    optionOrderInstabilityApplicable: orderApplies,
     latencyMs: { median: percentile(natural.latenciesMs, 0.5), p95: percentile(natural.latenciesMs, 0.95) },
     baselines: { currentHeuristic: evaluate(baselineCurrentHeuristic(rows)), majority: evaluate(baselineMajority(rows)) },
     suggestedThreshold: args.includes('--calibrate')

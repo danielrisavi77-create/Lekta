@@ -102,8 +102,10 @@ Brojke se ispisuju pri startu kao `budzetPitanja`.
 - `da-ne`: binarno pitanje tipa `noul`, "Je li ovaj zapis iz popisa literature potpun?". Upstream
   vraća `noul` = P(potpun), a runtime ga preslikava ovako: `possible_false_positive` = P(potpun),
   `finding_supported` = 1 - P(potpun), a `extraction_uncertain` i `insufficient_evidence` = 0.
-  `labelOrder` na ovu varijantu nema učinka (upstream uvijek nudi [false, true]), pa je njezina
-  `optionOrderInstability` trivijalno 0.
+  `labelOrder` na ovu varijantu nema učinka (upstream uvijek nudi [false, true]), pa njezina
+  stabilnost redoslijeda nije mjerljiva. `laya:eval` za nju preskače obrnuti run i ispisuje
+  `optionOrderInstability: null` uz `optionOrderInstabilityApplicable: false`, a ne 0 koja bi lažno
+  izgledala kao stabilnost.
 
 Varijanta ulazi u `runtimeVersion` (npr. `0.3.21+da-ne`), a time i u `modelDigest`. Prag izmjeren
 za jednu varijantu zato se ne može primijeniti na drugu.

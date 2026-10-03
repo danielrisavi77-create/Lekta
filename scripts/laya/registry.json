@@ -10,7 +10,7 @@
         "weightsSha256": "1793ac850c9b50a324737e7b62f68993415bce62e806a1533e72d7dd03578d4b",
         "vocabularySha256": "6852bbf6ae96eb7f9a550306f31a6fe617efc89231d18d5235517e4ab6450840",
         "calibrationRevision": "cal-2026-10-1",
-        "runtimeVersion": "0.3.21",
+        "runtimeVersion": "0.3.21+izbor",
         "precision": "fp32"
       },
       "policy": null,

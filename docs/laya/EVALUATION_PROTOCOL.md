@@ -43,6 +43,8 @@ Sadrži samo brojeve, bez teksta zapisa i bez caseId:
   `dangerousErrors`, `falsePositiveAdjudicationPrecision`, Brier i ECE;
 - `coverageCurve` za pragove 0,05 do 0,95;
 - `optionOrderInstability`: udio caseova čija se presuda promijeni kad se redoslijed oznaka obrne;
+  za varijantu `da-ne` je `null`, a `optionOrderInstabilityApplicable` je `false` (vidi
+  `RUNTIME_PROTOCOL.md`);
 - `latencyMs`: medijan i p95;
 - `baselines`: A je trenutna Lekta (svaki nalaz je stvaran), uz većinsku klasu;
 - `noAdjudicationReasons`: koliko je suzdržavanja i zašto.

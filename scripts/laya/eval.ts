@@ -119,6 +119,14 @@ export function optionOrderInstability(original: ReadonlyMap<string, LayaVerdict
   return ids.filter((id) => original.get(id) !== permuted.get(id)).length / ids.length;
 }
 
+/**
+ * Varijanta `da-ne` (RUNTIME_PROTOCOL.md) uvijek nudi [false, true] i ignorira `labelOrder`, pa joj
+ * nestabilnost redoslijeda nije mjerljiva: 0 bi lazno izgledalo kao stabilnost.
+ */
+export function orderInstabilityApplies(runtimeVersion: string): boolean {
+  return !runtimeVersion.endsWith('+da-ne');
+}
+
 /** Baseline A: trenutna Lekta, koja svaki `warn`/`fail` zapis tretira kao stvaran nalaz. */
 export function baselineCurrentHeuristic(rows: readonly Pick<EvalRow, 'caseId' | 'gold'>[]): EvalRow[] {
   return rows.map((r) => ({ caseId: r.caseId, gold: r.gold, prediction: 'finding_supported', probabilities: null }));

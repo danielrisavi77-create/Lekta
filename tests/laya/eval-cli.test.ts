@@ -56,10 +56,24 @@ describe('laya:eval nad lokalnim runtimeom', () => {
     expect(report.laya.coverage).toBe(1);
     expect(report.laya.accuracyOnCovered).toBeCloseTo(2 / 3);
     expect(report.optionOrderInstability).toBeCloseTo(1 / 3);
+    expect(report.optionOrderInstabilityApplicable).toBe(true);
     expect(report.baselines.currentHeuristic.accuracyOnCovered).toBeCloseTo(2 / 3);
     expect(typeof report.suggestedThreshold).toBe('number');
     expect(text).not.toContain(makeCase().modelInput.text);
     expect(text).not.toContain(cases[0].caseId);
+  });
+
+  it('varijanta da-ne: nestabilnost redoslijeda je neprimjenjiva (null), ne lazna nula', async () => {
+    // Runtime iznad u obrnutom redoslijedu mijenja presudu za cases[2]; da se obrnuti run izvrsio, dobili bismo 1/3.
+    const daNe = write('registry-da-ne.json', { schemaVersion: 1, entries: [{ entryId: LAYA_FIXTURE_MODEL,
+      manifest: { ...makeRuntime(), runtimeVersion: '0.3.21+da-ne' }, policy: null, calibrationEvidence: null }] });
+    const out = join(dir, 'report-da-ne.json');
+    expect(await runEvalCli(['--gold', gold('calibration'), '--endpoint', endpoint, '--model-key', LAYA_FIXTURE_MODEL,
+      '--registry', daNe, '--out', out])).toBe(0);
+    const report = JSON.parse(readFileSync(out, 'utf8'));
+    expect(report.runtimeAnswered).toBe(3);
+    expect(report.optionOrderInstability).toBeNull();
+    expect(report.optionOrderInstabilityApplicable).toBe(false);
   });
 
   it('nepoznat kljuc modela ne pokrece evaluaciju', async () => {

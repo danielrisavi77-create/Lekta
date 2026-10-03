@@ -19,6 +19,13 @@ describe('Laya registar pinanih manifesta i pragova (V2.1)', () => {
     expect(r.entries[0].calibrationEvidence).toBeNull();
   });
 
+  it('commitani unos odgovara stvarnom runtimeu varijante izbor s radne stanice (#203, 28. 9.)', () => {
+    // Python prepare() gradi runtimeVersion "<verzija>+<pitanje>"; bez sufiksa manifest se ne bi podudario.
+    const pinned = pinnedModel(loadRegistry(JSON.parse(JSON.stringify(committed))), 'laya-multilingual-fp32-55cf4c4');
+    expect(pinned?.manifest.runtimeVersion).toBe('0.3.21+izbor');
+    expect(pinned?.modelDigest).toBe('400cb0084f6d2c995569aa67e81b62aeb942f6fc3972debe339ba6f7a7ea64e4');
+  });
+
   it('valjan unos daje pinani manifest, politiku i modelDigest', () => {
     const r = loadRegistry({ schemaVersion: 1, entries: [entry()] });
     const pinned = pinnedModel(r, LAYA_FIXTURE_MODEL);
