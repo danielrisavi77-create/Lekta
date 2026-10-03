@@ -2,6 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem } from '../src/ui/repair-items';
 
+const syncResult = () => ({
+  details: {
+    citationBibliographySync: {
+      citations: [{ id: 'c1', paragraphIndex: 1, start: 7, end: 18, rawText: 'Novak, 2022', author: 'Novak', year: '2022', anchorFingerprint: 'citation-x', confidence: 'high' }],
+      links: [{ citationId: 'c1', status: 'missing', candidates: [], reason: 'nedostaje' }],
+      missingEntries: [{ id: 'c1' }],
+      duplicateCandidates: [],
+      summary: { citations: 1, matched: 0, missing: 1, ambiguous: 0, pageIssues: 0 },
+    },
+    bibliographyStructure: { entries: [
+      { id: 'bibliography-3', paragraphIndices: [3], anchorFingerprint: 'biblio-horvat', rawText: 'Horvat, I. (2020). Naslov.' },
+      { id: 'bibliography-4', paragraphIndices: [4], anchorFingerprint: 'biblio-zoric', rawText: 'Zorić, P. (2021). Naslov.' },
+    ] },
+  },
+});
+const syncProfile = (value: Record<string, unknown>) => ({ ruleEntries: [{ checkId: 'citation-sync-rules', status: 'verified', sourceId: 's', sourcePage: '1', quote: 'pravilo', value }] });
+
 describe('bibliography repair profile gate', () => {
   it('compiler prenosi verificirano bibliography-rules pravilo', () => {
     const profile: any = {
@@ -43,6 +60,16 @@ describe('bibliography repair profile gate', () => {
     expect(compileEffectiveRules(profile).citationSyncRules).toEqual({ mode: 'author-year' });
     const result = { details: { citationBibliographySync: { citations: [{ id: 'c1', rawText: '(Horvat, 2022)', author: 'Horvat', year: '2022', confidence: 'high' }], links: [{ citationId: 'c1', status: 'missing', candidates: [], reason: 'nedostaje' }], missingEntries: [{ id: 'c1' }], duplicateCandidates: [], summary: { citations: 1, matched: 0, missing: 1, ambiguous: 0, pageIssues: 0 } }, bibliographyStructure: { entries: [] } } };
     expect(citationBibliographySyncRepairableItem(result, { citationSyncRules: { mode: 'author-year' }, ruleEntries: [] })).toEqual([]);
+  });
+
+  it('karakterizacija (Z36): uz dozvolu profila odabran zapis s tekstom daje add iza zadnjeg zapisa', () => {
+    const result = syncResult();
+    const [item] = citationBibliographySyncRepairableItem(result, syncProfile({ mode: 'author-year', allowMissingEntryInsertion: true }));
+    const form = item!.citationBibliographySyncForm!;
+    form.missingEntries[0].selected = true;
+    form.missingEntries[0].text = 'Novak, N. (2022). Naslov.';
+    const params = form.buildParams(form) as any;
+    expect(params.entries).toEqual([{ id: 'sync-entry-c1', paragraphIndices: [], anchorFingerprint: '', action: 'add', replacementText: 'Novak, N. (2022). Naslov.', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: 'biblio-zoric' } }]);
   });
 
   it('compiler prenosi legal-footnote-repair-rules', () => {

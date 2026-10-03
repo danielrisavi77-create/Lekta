@@ -79,3 +79,24 @@ describe('citationBibliographySyncFixer', () => {
     expect(result.parts.documentXml).toContain('Horvat, I. (2022). Naslov.');
   });
 });
+
+/** Spojeni tekst svakog odlomka (w:t unutar w:p), ne sirovi XML. */
+function paragraphTexts(xml: string): string[] {
+  return [...xml.matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].map((match) => [...match[1].matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((t) => t[1]).join(''));
+}
+
+describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zapisa (Z36)', () => {
+  it('korisnikov potvrdjeni tekst ulazi doslovno i iza sidra, bez abecednog mjesta', () => {
+    const horvat = 'Horvat, I. (2022). Naslov.';
+    const zoric = 'Zorić, P. (2020). Naslov Z.';
+    const parts = { documentXml: `<w:document><w:body>${paragraph('Literatura')}${paragraph(horvat)}${paragraph(zoric)}<w:sectPr/></w:body></w:document>`, stylesXml: '' };
+    const result = citationBibliographySyncFixer(parts, {
+      version: 1,
+      citations: [],
+      entries: [{ id: 'new', paragraphIndices: [], anchorFingerprint: '', action: 'add', replacementText: 'Novak, N. (2021). Drugi naslov.', insertionAnchor: { paragraphIndex: 3, anchorFingerprint: bibliographyAnchorFingerprint([3], zoric) } }],
+      mappings: [],
+    });
+    expect(result.applied).toBe(true);
+    expect(paragraphTexts(result.parts.documentXml)).toEqual(['Literatura', horvat, zoric, 'Novak, N. (2021). Drugi naslov.']);
+  });
+});
