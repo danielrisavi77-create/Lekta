@@ -4,7 +4,8 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const schemaPath = resolve('ops/agent-control-plane/schema.sql');
-const sql = readFileSync(schemaPath, 'utf8');
+// Normalizira CR (CLAUDE.md): na Windows checkoutu je schema.sql CRLF, pa `\nas \$\$\n` ne nalazi nista.
+const sql = readFileSync(schemaPath, 'utf8').replace(/\r\n/g, '\n');
 
 describe('agent control-plane SQL contract', () => {
   it('ostaje izvan produkcijskog Supabase migration stabla', () => {
