@@ -976,3 +976,113 @@ describe('Z33-04: sest stabilnih mjesta za nalaze do prelaska na rezultat', () =
     expect(v.querySelectorAll('.z33-slot[data-state="filled"]')).toHaveLength(1);
   });
 });
+
+/**
+ * Z33-02 i Z33-03: LIJENI MODUL. `progress-scan.ts` drzi stanje modula, pa svaki test uvozi svjez
+ * primjerak (`vi.resetModules`) uz podmetnut modul Z33: onaj koji NIKAD ne stigne, onaj koji stigne
+ * kasno i onaj koji baci pri montazi.
+ */
+describe('Z33-02/03: rezultat ne ceka lijeni modul', () => {
+  const MODUL = '../src/ui/analysis-live/analysis-live';
+  afterEach(() => {
+    vi.doUnmock(MODUL);
+    vi.resetModules();
+    vi.useRealTimers();
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+  function ekranProvjere(): HTMLElement {
+    document.body.innerHTML = '<div id="progressView" role="status" aria-live="polite"><h3>Provjeravam rad</h3>'
+      + '<p class="sr-only" id="progressMessage">Gotovo</p><p class="pv-local">x</p></div>';
+    return document.getElementById('progressView')!;
+  }
+  /** Rjesava se `true` ako obecanje zavrsi unutar `ms` stvarnog vremena; nikad ne visi. */
+  const zavrsiUnutar = (p: Promise<unknown>, ms: number): Promise<boolean> => Promise.race([
+    p.then(() => true, () => true),
+    new Promise<boolean>((r) => { setTimeout(() => r(false), ms); }),
+  ]);
+
+  it('modul koji nikad ne stigne: rezultat stize odmah, kompaktni popis faza ostaje', async () => {
+    vi.resetModules();
+    vi.doMock(MODUL, () => new Promise(() => {}));
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(0);
+    ps.renderProgressScan(52);
+    expect(await zavrsiUnutar(ps.revealLiveAnalysis(sampleResult()), 1500), 'rezultat ceka modul koji ne stize').toBe(true);
+    expect(v.querySelector('.pscan')).not.toBeNull();
+    expect(v.querySelector('.z33')).toBeNull();
+    expect(v.dataset.z33).toBeUndefined();
+  });
+
+  it('modul koji baci pri montazi: rezultat stize, analiza ne pada', async () => {
+    vi.resetModules();
+    vi.doMock(MODUL, () => ({ mountAnalysisLive: () => { throw new Error('montaza pala'); } }));
+    ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(0);
+    await new Promise((r) => { setTimeout(r, 0); });
+    await expect(ps.revealLiveAnalysis(sampleResult())).resolves.toBeUndefined();
+  });
+
+  /** Modul koji stigne tek na `pusti()`; do tada uvoz visi. */
+  function kasniModul(): () => void {
+    let pusti: () => void = () => {};
+    const stigao = new Promise<void>((r) => { pusti = r; });
+    vi.doMock(MODUL, async () => { await stigao; return vi.importActual(MODUL); });
+    return pusti;
+  }
+  const pricekajUvoz = (): Promise<void> => new Promise((r) => { setTimeout(r, 300); });
+
+  it('KONTROLA: modul stigne dok analiza traje, a korisnik nije skrolao: prikaz uzivo preuzima ekran', async () => {
+    vi.resetModules();
+    const pusti = kasniModul();
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(8);
+    expect(v.querySelector('.z33')).toBeNull();
+    pusti();
+    await pricekajUvoz();
+    expect(v.querySelector('.z33')).not.toBeNull();
+    expect(v.querySelector('.z33')!.getAttribute('data-phase')).toBe('reading');
+  });
+
+  it('modul stigne nakon sto je korisnik skrolao: nema zamjene pod prstom; sljedeca analiza ga koristi odmah', async () => {
+    vi.resetModules();
+    const pusti = kasniModul();
+    document.documentElement.dataset.motion = 'reduce';
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(8);
+    expect(v.querySelector('.pscan'), 'prijelazni kompaktni prikaz').not.toBeNull();
+    window.dispatchEvent(new Event('touchmove'));
+    pusti();
+    await pricekajUvoz();
+    ps.renderProgressScan(52);
+    expect(v.querySelector('.z33'), 'veliki prikaz je zamijenio popis usred skrola').toBeNull();
+    expect(v.dataset.z33).toBeUndefined();
+    await ps.revealLiveAnalysis(sampleResult());
+    // Sljedeca analiza: modul je tu, montaza je sinkrona, bez prijelaza.
+    ps.startLiveAnalysis(null);
+    expect(v.querySelector('.z33')).not.toBeNull();
+    await ps.revealLiveAnalysis(sampleResult());
+    expect(v.querySelector('.z33')!.getAttribute('data-phase')).toBe('final');
+  });
+
+  it('modul stigne tek nakon rezultata: rezultat ga ne ceka, a kasni modul ne preuzima ekran', async () => {
+    vi.resetModules();
+    const pusti = kasniModul();
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(52);
+    expect(await zavrsiUnutar(ps.revealLiveAnalysis(sampleResult()), 1500), 'rezultat ceka modul').toBe(true);
+    pusti();
+    await pricekajUvoz();
+    expect(v.querySelector('.z33')).toBeNull();
+  });
+});
