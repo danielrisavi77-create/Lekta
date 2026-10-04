@@ -206,6 +206,10 @@ if ($PlanOnly) {
 }
 
 # --- 4. GENERIRANJE -------------------------------------------------------------------------------------
+# Plan za SVE profile prije ijednog zapisa: profil koji ne moze dati svjedoka (npr. dopusta Letter) mora
+# zaustaviti skriptu prije nego sto raniji profili ostave djelomican skup svjedoka na disku.
+$planovi = [ordered]@{}
+foreach ($profileId in $Profiles) { $planovi[$profileId] = @(Get-Plan $profileId) }
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Path $OutDir -Force | Out-Null }
 $OutDir = (Resolve-Path $OutDir).Path
 
@@ -219,7 +223,7 @@ try {
   $word.Visible = $false
   $word.DisplayAlerts = 0
   foreach ($profileId in $Profiles) {
-    $violations = @(Get-Plan $profileId)
+    $violations = $planovi[$profileId]
     $base = "svjedok-$profileId"
     $docxPath = Join-Path $OutDir "$base.docx"
     if (Test-Path $docxPath) { Remove-Item $docxPath -Force }

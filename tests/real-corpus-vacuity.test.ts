@@ -102,6 +102,10 @@ describe('commitani korpus: praznina mora biti glasna', () => {
  * granicu: dok je 0, prazan skup bi inace prosao i nakon sto svjedoci udju pa nestanu, a dodani svjedoci
  * bez podignutog ratcheta ne bi nista zakljucali.
  *
+ * Svjesno ogranicenje: dok je ratchet 0, prazan skup prolazi, jer svjedoke tek treba generirati u Wordu.
+ * Jednakost zato vrijedi od prvog commita sa svjedocima: oni ne mogu uci bez podizanja ratcheta, a nakon
+ * podizanja njihov gubitak obara test.
+ *
  * Zasto 0: svjedoke generira radna stanica s Wordom (`scripts/corpus-gen/word/make-violation-witnesses.ps1`),
  * a laptop koji je uveo skup Word dokument ne pise u commit. Ratchet se dize u ISTOM commitu u kojem
  * svjedoci i regenerirani `docs/generated/repair-real-corpus.json` ulaze u stablo.
