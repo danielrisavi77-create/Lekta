@@ -34,7 +34,21 @@ export function normalizePaymentProvider(value: unknown): PaymentLinkProvider {
   return (PAYMENT_LINK_PROVIDERS as readonly unknown[]).includes(value) ? (value as PaymentLinkProvider) : 'custom';
 }
 
-export function loadProductionConfig(){const saved=safeStorageGet(STORAGE_KEYS.production,{});return{...structuredClone(DEFAULT_PRODUCTION_CONFIG),...(saved||{}),paymentProvider:normalizePaymentProvider(saved?.paymentProvider),paymentLinks:{...DEFAULT_PRODUCTION_CONFIG.paymentLinks,...(saved?.paymentLinks||{})}}}
+/**
+ * Ranije ZADANE kontakt adrese. Spremljena konfiguracija iz vremena kad je ovo bila zadana vrijednost
+ * nosi je doslovno, pa bi pravni modal u istom pregledniku i dalje pokazivao staru adresu dok
+ * staticka pravna stranica pokazuje novu (T49, Codex nalaz 5 na #273). Migrira se samo tocno ova
+ * vrijednost; adresu koju je netko svjesno spremio u postavkama ne diramo.
+ */
+export const RETIRED_DEFAULT_CONTACT_EMAILS: readonly string[] = ['lekta.kontakt@gmail.com'];
+
+export function migrateContactEmail(saved: unknown): string {
+  const value = typeof saved === 'string' ? saved.trim() : '';
+  if (!value || RETIRED_DEFAULT_CONTACT_EMAILS.includes(value)) return DEFAULT_PRODUCTION_CONFIG.contactEmail;
+  return value;
+}
+
+export function loadProductionConfig(){const saved=safeStorageGet(STORAGE_KEYS.production,{});return{...structuredClone(DEFAULT_PRODUCTION_CONFIG),...(saved||{}),contactEmail:migrateContactEmail(saved?.contactEmail),paymentProvider:normalizePaymentProvider(saved?.paymentProvider),paymentLinks:{...DEFAULT_PRODUCTION_CONFIG.paymentLinks,...(saved?.paymentLinks||{})}}}
 
 export function productionStatus(productionConfig: any){const links=Object.values(productionConfig?.paymentLinks||{}).filter(Boolean).length,endpoint=String(productionConfig?.orderEndpoint||'').trim();return{active:!!productionConfig?.enabled&&!!endpoint,links,endpoint,provider:productionConfig?.paymentProvider||'stripe'}}
 
