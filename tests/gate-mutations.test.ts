@@ -22,7 +22,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { afterAll, beforeAll, describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -60,6 +60,7 @@ import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
+import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -9942,6 +9943,42 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
     };
     expect(netoGrize(tiho)).toBe(false);
   });
+});
+
+/**
+ * Dependabot iznimka u pr-opis (koordinator lekta-37, Codex #290 nalaz 2). Mutacije mijenjaju STVARNI
+ * izvor scripts/agents/pr-lines.mjs u izoliranoj kopiji i pokrecu CLI nad privremenim git repozitorijem
+ * (tests/helpers/pr-lines-cli.ts): Dependabot bez redaka prolazi, isti opis s covjekom pada, nepodrzan
+ * manifest pada, a bump nije nova ovisnost.
+ */
+describe('mutacije: pr-opis iznimka samo za Dependabot (stvarni CLI)', () => {
+  let repo = '';
+  beforeAll(() => { repo = napraviPrLinesRepo(); });
+  afterAll(() => { if (repo) rmSync(repo, { recursive: true, force: true }); });
+
+  const mutant = (staro: string, novo: string): string => {
+    if (PR_LINES_IZVOR.split(staro).length !== 2) throw new Error(`mutacija ne pogadja izvor tocno jednom: ${staro}`);
+    return PR_LINES_IZVOR.replace(staro, novo);
+  };
+  const MUTACIJE: Array<[string, string, string]> = [
+    ['(a) CLI uvijek postavi autora na Dependabot', "login: process.env.PR_AUTHOR ?? ''", "login: 'dependabot[bot]'"],
+    ['(b) iznimka izgubljena (Dependabot opet trazi rucne retke)', 'if (!jeDependabot(autor)) return provjeriOpisPr(body, stvarneNove);', 'return provjeriOpisPr(body, stvarneNove);'],
+    ['(c) prepoznavanje samo po loginu, bez tipa racuna', "autor.login === DEPENDABOT_LOGIN && autor.type === 'Bot'", 'autor.login === DEPENDABOT_LOGIN'],
+    ['(d) nepodrzan manifest (requirements.txt) prolazi', 'if (izvan.length) {', 'if (false) {'],
+    ['(e) bump se ispisuje kao nova ovisnost', '...retciOpisa({ diffShortstat, basePkg, headPkg }),', '`Neto redaka: ${netoRedaka(diffShortstat)}`, `Nove ovisnosti: ${verzije.join(\', \') || \'nema\'}`,'],
+  ];
+
+  it('baseline: stvarni izvor zadovoljava tvrdnju', () => {
+    expect(dependabotIznimkaDrzi(PR_LINES_IZVOR, repo)).toBe(true);
+  }, 60_000);
+
+  it.each(MUTACIJE)('%s obara tvrdnju', (_opis, staro, novo) => {
+    const m = staro.includes('PR_AUTHOR ??')
+      ? mutant(staro, novo).replace("type: process.env.PR_AUTHOR_TYPE ?? ''", "type: 'Bot'")
+      : mutant(staro, novo);
+    expect(m).not.toBe(PR_LINES_IZVOR);
+    expect(dependabotIznimkaDrzi(m, repo)).toBe(false);
+  }, 60_000);
 });
 
 describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
