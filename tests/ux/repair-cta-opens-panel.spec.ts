@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
+import { otvoriLadicu } from './result-live-ladica';
 
 /**
  * Glavni poziv na popravak MORA dovesti do VIDLJIVOG panela popravka.
@@ -131,8 +132,8 @@ test.describe('CTA popravka otvara panel', () => {
       expect(await go.count()).toBe(0);
       return;
     }
-    const otvori = page.locator('[data-desk-plan-open]');
-    if ((await otvori.count()) > 0) await otvori.first().click();
+    // Z34: plan se salje iz ladice, koja se pojavi kad presuda izadje iz pogleda.
+    await otvoriLadicu(page);
     await expect(go.first()).toBeVisible();
     await go.first().click();
     await expect(page.locator('#repairView')).toBeVisible();

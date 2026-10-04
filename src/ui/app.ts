@@ -1239,7 +1239,7 @@ function renderResultsCockpitForResult(r: any){
   // `topFindings` VEC izbacuje zanemarene i sortira po prioritetu; drugo filtriranje ovdje bilo bi
   // drugo mjesto koje odrzava isto pravilo.
   const _deskItems=deskItems(topFindings(model.findings.document,model.findings.document.length),_deskFlags);
-  const _desk=_deskItems.length?{items:_deskItems,planItems:[...repairPanelItems,...repairPanelTextItems],mountDocument:async(host: HTMLElement,signal: AbortSignal)=>(await import('./results/desk-document')).mountFacsimileInto(host,r.preview,_deskFlags,signal)}:undefined;
+  const _desk=_deskItems.length?{items:_deskItems,planItems:[...repairPanelItems,...repairPanelTextItems],live:{preview:r.preview,storedPages:r?.stats?.storedPages},mountDocument:async(host: HTMLElement,signal: AbortSignal)=>(await import('./results/desk-document')).mountFacsimileInto(host,r.preview,_deskFlags,signal)}:undefined;
   renderResultsCockpit(mount,model,{
     desk:_desk,
     repairAvailable:!r?.demo,

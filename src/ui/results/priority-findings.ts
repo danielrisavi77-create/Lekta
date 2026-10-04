@@ -32,7 +32,8 @@ function locationHtml(finding: VisualFindingModel): string {
   if (finding.scope.kind === 'anchor') return '<button type="button" class="cockpit-finding__location" data-finding-jump>Gdje: ' + escapeHtml(scopeLabel(finding.scope)) + ' <span aria-hidden="true">&#8594;</span></button>';
   return '<p class="cockpit-finding__location">Gdje: ' + escapeHtml(scopeLabel(finding.scope)) + '</p>';
 }
-function decisionHtml(finding: VisualFindingModel): string {
+/** Odluka nad nalazom (rucna potvrda, zanemarivanje uz razlog, povratak). Dijeli je i stol Z34. */
+export function decisionHtml(finding: VisualFindingModel): string {
   if (finding.status === 'open') return [
     '<button type="button" class="button button-quiet" data-finding-confirm>Ozna\u010Di kao provjereno</button>',
     '<button type="button" class="button button-quiet" data-finding-ignore>Zanemari uz razlog</button>',

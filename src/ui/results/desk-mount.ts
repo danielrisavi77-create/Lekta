@@ -64,9 +64,10 @@ function zadanoPomicanje(el: HTMLElement): void {
 
 /**
  * Prevede klik unutar kartice u radnju ljuske. Isti skup radnji koji `renderResultsCockpit` vec
- * salje, jer kartica je ISTA (`priority-findings.ts`); stol joj samo mijenja okvir.
+ * salje, jer kartica je ISTA (`priority-findings.ts`); stol joj samo mijenja okvir. Dijeli ga i
+ * stol Z34 (`result-live.ts`), da odluka nad nalazom ima jedan prevoditelj.
  */
-function radnjaZaKlik(cilj: HTMLElement): ResultsCockpitAction | null {
+export function radnjaZaKlik(cilj: HTMLElement): ResultsCockpitAction | null {
   const kartica = cilj.closest<HTMLElement>('[data-finding-id]');
   const findingId = kartica?.dataset.findingId;
   if (!findingId) return null;
