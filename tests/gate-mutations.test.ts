@@ -10596,6 +10596,12 @@ describe('zbijeni dokumentov red na mobitelu (mobilni audit 2026-09-28, PR 2)', 
     expect(m).not.toBe(css());
     expect(mobileDocMetaProblems(m)).toEqual(['ispod reda nema razmaka za prosirenu metu']);
   });
+
+  it('mutant: bez razmaka redaka prelomljen gumb otima dodir znacki (Codex R1 na #286)', () => {
+    const m = css().replace('gap: 8px 10px;', 'gap: 0 10px;');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['razmak redaka manji od prosirenja: prelomljen gumb otima dodir retku iznad']);
+  });
 });
 
 describe('mutacije: Upisnik dokaz u snimci', () => {
@@ -11116,6 +11122,18 @@ describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
 
   it('kontrola: nagib samo za siroki ekran ne vrijedi na 360 px', () => {
     expect(mobileTiltProblems(`${css()}\n@media(min-width:900px){.analyzer-wrap{transform:rotate(.3deg)!important}}`)).toEqual([]);
+  });
+
+  it('mutant: samostalni rotate nagne list iako je transform none (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:.3deg}`)).toEqual(['list je nagnut samostalnim rotate na uskom ekranu']);
+  });
+
+  it('mutant: samostalni translate pomakne list (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{translate:18px 0}}`)).toEqual(['list je pomaknut samostalnim translate na uskom ekranu']);
+  });
+
+  it('kontrola: rotate:none i translate:0 ne dizu gard', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:none;translate:0}`)).toEqual([]);
   });
 
   it('BASELINE: blok komentara je sklopljen na uskom i otvoren na sirokom ekranu', async () => {

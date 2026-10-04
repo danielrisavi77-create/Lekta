@@ -2,7 +2,10 @@
  * Gardovi za mobilni rezultat (mobilni audit 2026-09-28, PR 1).
  *
  * - `mobileTiltProblems`: ako list (`.analyzer-wrap`) ima nagib, uski ekran (720 px) ga mora ponistiti. Nagib na
- *   listu visokom tisucama piksela gura gornji rub preko ruba ekrana.
+ *   listu visokom tisucama piksela gura gornji rub preko ruba ekrana. To je OGRANICENA PROVJERA IZVORA, ne izracun
+ *   kaskade (Codex R2 na #286): cita samo `page-app.css` i samo tocan selektor `.analyzer-wrap`; ugnijezdeni
+ *   `@media` gubi vanjski uvjet, a `@layer` i `var()` se ne razrjesavaju. Izracunati stil u pregledniku
+ *   (`transform`, `rotate`, `translate` i okvir lista) mjeri `tests/ux/mobile-result-first.spec.ts`.
  * - `mentorModuleFromSource`: `mentor-tasks.ts` iz STVARNOG izvora uz zamjene izraza (esbuild bundle), bez upisa u
  *   repozitorij, da mutacija mijenja sam kod.
  * - `mentorCollapseProblems`: na uskom ekranu blok komentara je sklopljen, na sirokom otvoren.
@@ -12,9 +15,10 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { build } from 'esbuild';
 
-type TransformDekl = { media: string | null; vrijednost: string; important: boolean };
+type Svojstvo = 'transform' | 'rotate' | 'translate';
+type TransformDekl = { svojstvo: Svojstvo; media: string | null; vrijednost: string; important: boolean };
 
-/** Deklaracije `transform` za tocno `.analyzer-wrap` (bez pseudoelementa i potomaka), redom pojave u listu. */
+/** Deklaracije `transform`, `rotate` i `translate` za tocno `.analyzer-wrap` (bez pseudoelementa i potomaka), redom pojave u listu. */
 function analyzerWrapTransforms(src: string): TransformDekl[] {
   const out: TransformDekl[] = [];
   const pravila = (tekst: string, media: string | null): void => {
@@ -33,9 +37,9 @@ function analyzerWrapTransforms(src: string): TransformDekl[] {
       const tijelo = tekst.slice(otv + 1, j - 1);
       if (glava.startsWith('@media')) pravila(tijelo, glava.slice('@media'.length).trim());
       else if (!glava.startsWith('@') && glava.split(',').some((s) => s.trim() === '.analyzer-wrap')) {
-        for (const m of tijelo.matchAll(/(?:^|;)\s*transform\s*:\s*([^;]+)/g)) {
-          const v = m[1].trim();
-          out.push({ media, vrijednost: v.replace(/\s*!important$/, ''), important: /!important$/.test(v) });
+        for (const m of tijelo.matchAll(/(?:^|;)\s*(transform|rotate|translate)\s*:\s*([^;]+)/g)) {
+          const v = m[2].trim();
+          out.push({ svojstvo: m[1] as Svojstvo, media, vrijednost: v.replace(/\s*!important$/, ''), important: /!important$/.test(v) });
         }
       }
       i = j;
@@ -58,14 +62,24 @@ function vrijediNa360(media: string | null): boolean {
 /**
  * Problemi pravila nagiba lista u CSS tekstu `src/shared/page-app.css`. Prati kaskadu za selektor `.analyzer-wrap`
  * na 360 px: zadnja deklaracija pobjeduje, a `!important` pobjeduje sve obicne (Codex F5, runda 2 na #235).
- * Pravila s jacim selektorom ne vidi; njih hvata izracunati `transform` u `tests/ux/mobile-result-first.spec.ts`.
+ * Pravila s jacim selektorom ne vidi; njih hvata izracunati stil u `tests/ux/mobile-result-first.spec.ts`.
+ * Samostalni `rotate` naginje list i kad je `transform` none, a `translate` ga pomice (Codex R2 na #286).
  */
 export function mobileTiltProblems(css: string): string[] {
-  const dekl = analyzerWrapTransforms(css.replace(/\r/g, '')).filter((d) => vrijediNa360(d.media));
-  if (!dekl.some((d) => /rotate\(/.test(d.vrijednost))) return [];
-  const vazne = dekl.filter((d) => d.important);
-  const pobjednik = (vazne.length > 0 ? vazne : dekl).at(-1);
-  return pobjednik?.vrijednost === 'none' ? [] : ['list je nagnut i na uskom ekranu'];
+  const sve = analyzerWrapTransforms(css.replace(/\r/g, '')).filter((d) => vrijediNa360(d.media));
+  const pobjednik = (svojstvo: Svojstvo): string | undefined => {
+    const dekl = sve.filter((d) => d.svojstvo === svojstvo);
+    const vazne = dekl.filter((d) => d.important);
+    return (vazne.length > 0 ? vazne : dekl).at(-1)?.vrijednost;
+  };
+  const nula = (v: string | undefined) => v === undefined || /^(none|0(deg|px|%)?(\s+0(px|%)?)*)$/.test(v);
+  const problemi: string[] = [];
+  if (sve.some((d) => d.svojstvo === 'transform' && /rotate\(/.test(d.vrijednost)) && pobjednik('transform') !== 'none') {
+    problemi.push('list je nagnut i na uskom ekranu');
+  }
+  if (!nula(pobjednik('rotate'))) problemi.push('list je nagnut samostalnim rotate na uskom ekranu');
+  if (!nula(pobjednik('translate'))) problemi.push('list je pomaknut samostalnim translate na uskom ekranu');
+  return problemi;
 }
 
 type Medij = { matches: boolean; addEventListener: (t: string, f: (e: { matches: boolean }) => void) => void; removeEventListener: (t: string, f: (e: { matches: boolean }) => void) => void };
