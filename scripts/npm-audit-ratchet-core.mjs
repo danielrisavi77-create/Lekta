@@ -79,35 +79,59 @@ const GHSA_ID = /^GHSA(?:-[0-9a-z]{4}){3}$/;
  * Parovi (paket, GHSA advisory) za high/critical pakete (T93, Codex R1 na #246). `npm audit --json`
  * paketu s izravnim advisoryjem daje u `via` objekt s URL-om advisoryja, a tranzitivnom paketu samo ime
  * drugog paketa; tranzitivni paket nasljeduje advisoryje high/critical paketa kroz koje je ranjiv.
- * Paket bez ijednog prepoznatog GHSA id-a ide u `unresolved`, jer mu se pokrice ne moze provjeriti.
+ * Paket ide u `unresolved` kad mu se pokrice ne moze provjeriti: nema ijednog prepoznatog GHSA id-a,
+ * ili ima barem jedan high/critical advisory bez prepoznatog id-a (izravno ili kroz `via`). Drugi
+ * slucaj je Codex R1 na #282: prepoznat GHSA uz neprepoznat advisory na istom paketu prije je tiho
+ * zatvarao neprepoznati.
+ *
+ * Tranzitivni skupovi se racunaju zatvaranjem do fiksne tocke, ne rekurzijom s globalnim memoom:
+ * memo je u ciklusu (a kroz b, b kroz a) spremao skup nastao prekidom ciklusa, pa je par `b A`
+ * nedostajao (Codex R2 na #282).
  */
 export function highCriticalAdvisoryPairs(auditJson) {
   const v = auditJson && typeof auditJson === 'object' ? auditJson.vulnerabilities : null;
   const vulns = v && typeof v === 'object' ? v : {};
-  const memo = new Map();
-  const advisoriesOf = (name, stack) => {
-    if (memo.has(name)) return memo.get(name);
-    const out = new Set();
-    if (stack.has(name)) return out;
-    stack.add(name);
+  const names = highCriticalPackageNames(auditJson);
+  // Po paketu: prepoznati GHSA id-ovi, ima li nerazrijesen high/critical advisory, i high/critical
+  // paketi iz `via` kroz koje je ranjiv.
+  const advisories = new Map();
+  const problem = new Map();
+  const through = new Map();
+  for (const name of names) {
+    const own = new Set();
+    let bad = false;
+    const deps = [];
     for (const entry of Array.isArray(vulns[name]?.via) ? vulns[name].via : []) {
       if (typeof entry === 'string') {
-        if (HIGH_CRITICAL.has(vulns[entry]?.severity)) for (const a of advisoriesOf(entry, stack)) out.add(a);
+        if (HIGH_CRITICAL.has(vulns[entry]?.severity)) deps.push(entry);
       } else if (entry && typeof entry === 'object' && HIGH_CRITICAL.has(entry.severity)) {
         const m = GHSA_URL.exec(String(entry.url ?? ''));
-        if (m) out.add(m[1]);
+        if (m) own.add(m[1]);
+        else bad = true;
       }
     }
-    stack.delete(name);
-    memo.set(name, out);
-    return out;
-  };
+    advisories.set(name, own);
+    problem.set(name, bad);
+    through.set(name, deps);
+  }
+  // Zatvaranje do fiksne tocke: svaki prolaz prenosi advisoryje i nerazrijesenost s paketa iz `via`;
+  // skupovi samo rastu i konacni su, pa petlja staje.
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const name of names) {
+      const own = advisories.get(name);
+      for (const dep of through.get(name)) {
+        for (const a of advisories.get(dep) ?? []) if (!own.has(a)) { own.add(a); changed = true; }
+        if (problem.get(dep) && !problem.get(name)) { problem.set(name, true); changed = true; }
+      }
+    }
+  }
   const pairs = [];
   const unresolved = [];
-  for (const name of highCriticalPackageNames(auditJson)) {
-    const advisories = [...advisoriesOf(name, new Set())].sort();
-    if (advisories.length === 0) unresolved.push(name);
-    for (const advisory of advisories) pairs.push(`${name} ${advisory}`);
+  for (const name of names) {
+    const list = [...advisories.get(name)].sort();
+    if (list.length === 0 || problem.get(name)) unresolved.push(name);
+    for (const advisory of list) pairs.push(`${name} ${advisory}`);
   }
   return { pairs, unresolved };
 }

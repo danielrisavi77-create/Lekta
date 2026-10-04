@@ -123,6 +123,39 @@ describe('npm audit ratchet: jezgra', () => {
     expect(bezId).toMatchObject({ verdict: 'above', unresolvedPackages: ['a'] });
   });
 
+  it('T93 (Codex R1 na #282): neprepoznat high advisory uz prepoznat GHSA na istom paketu nije tiho zatvoren', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [{ packages: ['a'], advisories: [GA] }] };
+    const s = compareAuditToRatchet({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), { severity: 'high', url: 'https://example.invalid/new' }] },
+    } }, r);
+    expect(s.verdict).toBe('above');
+    expect(s.unresolvedPackages).toEqual(['a']);
+    // Nerazrijesenost se prenosi i na paket koji je ranjiv KROZ a.
+    expect(highCriticalAdvisoryPairs({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), { severity: 'high', url: 'https://example.invalid/new' }] },
+      gore: { severity: 'high', via: ['a'] },
+    } }).unresolved).toEqual(['a', 'gore']);
+  });
+
+  it('T93 (Codex R2 na #282): ciklus kroz via ne gubi par; skupovi su zatvoreni do fiksne tocke', () => {
+    const audit = { vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), 'b'] },
+      b: { severity: 'high', via: [adv(GB), 'a'] },
+    } };
+    expect(highCriticalAdvisoryPairs(audit)).toEqual({
+      pairs: [`a ${GA}`, `a ${GB}`, `b ${GA}`, `b ${GB}`],
+      unresolved: [],
+    });
+    const r = {
+      fullGraphHighCritical: 2,
+      fullGraphHighCriticalPackages: ['a', 'b'],
+      exceptions: [{ packages: ['a'], advisories: [GA, GB] }, { packages: ['b'], advisories: [GB] }],
+    };
+    const s = compareAuditToRatchet(audit, r);
+    expect(s.verdict).toBe('above');
+    expect(s.uncoveredPairs).toEqual([`b ${GA}`]);
+  });
+
   it('T93: iznimka bez advisoryja, s nevaljanim GHSA id-om ili duplim parom ne prolazi validaciju', () => {
     const base = { owner: 'o', mitigation: 'm', nextReviewOn: '2026-10-05', expiresOn: '2026-10-09' };
     const r = (exceptions: unknown[]) => ({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions });
