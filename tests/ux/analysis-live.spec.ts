@@ -209,6 +209,37 @@ test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ pa
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
 });
 
+test('Z33 na 360 px s popravljivim nalazima: plan popravka i "Pregledaj nalaze" stanu i ne preklapaju se', async ({ page }) => {
+  test.setTimeout(150_000);
+  await page.setViewportSize({ width: 360, height: 780 });
+  await pripremi(page, 'dark');
+  await pokreni(page, FIXTURE_POPRAVAK);
+  await expect(z33(page).locator('.z33-verdict[data-meta="true"]')).toBeVisible({ timeout: 60_000 });
+  const planGumb = z33(page).locator('[data-z33="plan"]');
+  // Za razliku od FIXTURE-a, ovdje gumb plana MORA postojati; inace provjera ispod ne mjeri nista.
+  await expect(planGumb).toBeVisible();
+  const mjere = await page.evaluate(() => {
+    const gumb = (s: string) => {
+      const el = document.querySelector<HTMLElement>(s);
+      if (!el || el.hidden) return null;
+      const r = el.getBoundingClientRect();
+      return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height };
+    };
+    return { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]'), prozor: innerWidth, sirina: document.documentElement.scrollWidth };
+  });
+  const { plan, otvori } = mjere;
+  expect(plan, 'gumb plana mora biti prikazan').not.toBeNull();
+  expect(otvori, 'gumb "Pregledaj nalaze" mora biti prikazan').not.toBeNull();
+  for (const k of [plan!, otvori!]) {
+    expect(k.l).toBeGreaterThanOrEqual(0);
+    expect(k.r).toBeLessThanOrEqual(mjere.prozor + 1);
+    expect(k.w).toBeGreaterThan(0);
+  }
+  expect(plan!.b <= otvori!.t + 1 || plan!.r <= otvori!.l + 1 || otvori!.b <= plan!.t + 1 || otvori!.r <= plan!.l + 1, 'gumbi se preklapaju').toBe(true);
+  expect(mjere.sirina).toBeLessThanOrEqual(mjere.prozor);
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
+});
+
 test('Z33 na 360 px: "Preskoči" stane u prozor i radi', async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 360, height: 780 });

@@ -209,6 +209,9 @@
 .z33-stats b { min-height: 1.2em; font-weight: 400; font-size: 18px; color: var(--desk-ink) }
 /* Broj koji Word nije zapisao: "-" prigusenim tonom, razlog je u `title` celije. */
 .z33-stats b[data-unknown='true'] { color: var(--desk-faint) }
+/* Kratka oznaka ispod "-": vidljiva i citacu zaslona, ne samo u `title`. */
+.z33-stats small { font-size: 10px; line-height: 1.25; overflow-wrap: anywhere }
+.z33-stats small:empty { display: none }
 .z33-notify { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--desk-muted) }
 .z33-link {
   display: inline-flex;

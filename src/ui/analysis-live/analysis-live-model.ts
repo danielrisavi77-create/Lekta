@@ -291,7 +291,7 @@ type RowState = 'pending' | 'active' | 'pass' | 'finding' | 'unchecked';
 type SlotState = 'placeholder' | 'empty' | 'filled';
 
 /** Celija brojaca: broj, ili "-" uz `title` koji kaze zasto broja nema. Nikad prazna oznaka. */
-interface StatCell { text: string; title: string }
+interface StatCell { text: string; title: string; note: string }
 
 export interface LiveFrame {
   phase: 'reading' | 'revealing' | 'final';
@@ -365,7 +365,7 @@ const placeholderSlots = (n: number): LiveFrame['slots'] => Array.from({ length:
 }));
 
 /** Dok analiza traje brojaca jos nema; celija to kaze umjesto da stoji prazna. */
-const WAITING: StatCell = { text: '-', title: 'Broj je poznat kad provjera završi.' };
+const WAITING: StatCell = { text: '-', title: 'Broj je poznat kad provjera završi.', note: 'mjeri se' };
 
 /** Stanje dok analiza traje: samo prag faze motora. */
 export function readingFrame(pct: number): LiveFrame {
@@ -427,7 +427,7 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
   const score = scoreAt(plan, t);
   const revealed = plan.findings.filter((_, j) => found[j]).length;
   const final = t >= revealDuration(plan, wide);
-  const cell = (n: number | null, why: string): StatCell => (n == null ? { text: '-', title: why } : { text: n.toLocaleString('hr-HR'), title: '' });
+  const cell = (n: number | null, why: string, note: string): StatCell => (n == null ? { text: '-', title: why, note } : { text: n.toLocaleString('hr-HR'), title: '', note: '' });
 
   return {
     phase: final ? 'final' : 'revealing',
@@ -441,9 +441,9 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
     score: score == null ? 'Nije bodovano' : String(score),
     scoreNote: doneCount < ROWS.length ? 'mijenja se dok mjerim' : `${plan.total} ${plural(plan.total)}`,
     stats: {
-      pages: cell(plan.stats.pages, 'Word nije zapisao broj stranica u datoteku.'),
-      words: cell(plan.stats.words, 'Broj riječi nije izmjeren.'),
-      sources: cell(plan.stats.sources, 'Broj izvora nije izmjeren.'),
+      pages: cell(plan.stats.pages, 'Word nije zapisao broj stranica u datoteku.', 'Word nije zapisao'),
+      words: cell(plan.stats.words, 'Broj riječi nije izmjeren.', 'nije izmjereno'),
+      sources: cell(plan.stats.sources, 'Broj izvora nije izmjeren.', 'nije izmjereno'),
     },
     notify: false,
     skip: !final,

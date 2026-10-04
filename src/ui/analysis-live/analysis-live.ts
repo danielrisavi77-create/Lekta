@@ -108,7 +108,7 @@ function skeleton(): HTMLElement {
     '<div class="z33-profile"><span class="z33-label">MJERI PREMA</span><span class="z33-profile-name" data-z33="profile"></span><span class="z33-faint" data-z33="source"></span></div>',
     '<div class="z33-score" aria-hidden="true"><span class="z33-score-num" data-z33="score">100</span><span class="z33-score-note"><span>ocjena forme</span><span data-z33="scorenote"></span></span></div>',
     '<ol class="z33-rows" data-z33="rows" aria-hidden="true"></ol>',
-    '<div class="z33-stats" aria-hidden="true"><span><b data-z33="s-pages"></b>stranica</span><span><b data-z33="s-words"></b>riječi</span><span><b data-z33="s-sources"></b>izvora</span></div>',
+    '<div class="z33-stats"><span><b data-z33="s-pages"></b>stranica<small data-z33="n-pages"></small></span><span><b data-z33="s-words"></b>riječi<small data-z33="n-words"></small></span><span><b data-z33="s-sources"></b>izvora<small data-z33="n-sources"></small></span></div>',
     '<div class="z33-notify"><span data-z33="remaining" aria-hidden="true"></span><button type="button" class="z33-link" data-z33="notify" hidden>Javi mi kad bude gotovo</button><button type="button" class="z33-link" data-z33="skip" hidden>Preskoči</button></div>',
     '</div>',
     '</section>',
@@ -171,6 +171,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   // Dok je true, pomaci motora crtaju fazu citanja; nakon dolaska rezultata kasni pomak ne smije
   // prebrisati otkriveno (ni zavrsno) stanje.
   let reading = false;
+  // True samo dok `izadji` zavrsava otkrivanje; razlikuje klik od prirodnog kraja.
+  let rucniIzlaz = false;
 
   // prirodno=true samo kad otkrivanje zavrsi samo od sebe ili rezultat preuzima ekran;
   // otkazivanje i zamjena analize zavrsavaju bez obavijesti.
@@ -266,7 +268,9 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       const b = q(name);
       setText(b, c.text);
       b.dataset.unknown = c.title ? 'true' : 'false';
-      // Brojac bez broja nosi razlog u `title` cijele celije, ne praznu oznaku.
+      // Brojac bez broja nosi razlog u `title` cijele celije, ne praznu oznaku; kratka vidljiva
+      // oznaka ispod brojke vrijedi i za citac zaslona i na dodir, gdje `title` ne postoji.
+      setText(q(name.replace('s-', 'n-')), c.note);
       if (c.title) b.parentElement?.setAttribute('title', c.title); else b.parentElement?.removeAttribute('title');
     }
     setText(q('remaining'), view.querySelector('#progressMessage')?.textContent ?? '');
@@ -363,7 +367,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     if (!finish) return;
     cekaRezultat();
     cekaRezultat = poSpremnostiRezultata(kamo === 'plan' ? otvoriPlan : fokusNaPresudu);
-    stop(true);
+    rucniIzlaz = true;
+    try { stop(true); } finally { rucniIzlaz = false; }
   };
   q('open').addEventListener('click', () => izadji('presuda'));
   skipBtn.addEventListener('click', () => izadji('presuda'));
@@ -412,7 +417,14 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
         const onHidden = (): void => { if (document.hidden) stop(true); };
         finish = (prirodno) => {
           document.removeEventListener('visibilitychange', onHidden);
+          // Fokus je bio na gumbu koji sad nestaje (otkrivanje je zavrsilo samo od sebe): bez ovoga
+          // pada na `body`. Klik vec ceka spremnost rezultata u `izadji`.
+          const fokusNestaje = prirodno && !rucniIzlaz && (document.activeElement === skipBtn || document.activeElement === notifyBtn);
           apply(revealFrame(plan, Infinity, wide), plan);
+          if (fokusNestaje) {
+            cekaRezultat();
+            cekaRezultat = poSpremnostiRezultata(fokusNaPresudu);
+          }
           if (prirodno) ping(plan.score, nalazi);
           resolve();
         };

@@ -9,6 +9,9 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { analyzeDocx } from '../src/analysis/analyze-docx';
+import { resolveProfile } from '../src/analysis/golden-entry';
+import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { buildLivePlan, readingFrame, revealFrame, revealDuration } from '../src/ui/analysis-live/analysis-live-model';
 import { mountAnalysisLive } from '../src/ui/analysis-live/analysis-live';
 import { SCAN_PHASES } from '../src/ui/progress-scan';
@@ -97,9 +100,9 @@ describe('Z33 model: stvarni nalazi u redoslijed animacije', () => {
     expect(kraj.foundLine).toBe('7 od 7 pronađeno');
     expect(kraj.verdict.text).toBe('Nije spremno za predaju');
     expect(kraj.stats).toEqual({
-      pages: { text: '41', title: '' },
-      words: { text: (11240).toLocaleString('hr-HR'), title: '' },
-      sources: { text: '38', title: '' },
+      pages: { text: '41', title: '', note: '' },
+      words: { text: (11240).toLocaleString('hr-HR'), title: '', note: '' },
+      sources: { text: '38', title: '', note: '' },
     });
     expect(plan.summary).toBe('7 stvari traži tvoju pažnju. Od toga 3 mogu popraviti automatski.');
   });
@@ -165,9 +168,9 @@ describe('Z33 model: ne izmislja podatke', () => {
     expect(kraj.score).toBe('Nije bodovano');
     // Brojac bez broja nikad nije prazna oznaka: "-" uz razlog u `title`.
     expect(kraj.stats).toEqual({
-      pages: { text: '-', title: 'Word nije zapisao broj stranica u datoteku.' },
-      words: { text: '-', title: 'Broj riječi nije izmjeren.' },
-      sources: { text: '-', title: 'Broj izvora nije izmjeren.' },
+      pages: { text: '-', title: 'Word nije zapisao broj stranica u datoteku.', note: 'Word nije zapisao' },
+      words: { text: '-', title: 'Broj riječi nije izmjeren.', note: 'nije izmjereno' },
+      sources: { text: '-', title: 'Broj izvora nije izmjeren.', note: 'nije izmjereno' },
     });
     expect(kraj.verdict.plan, 'bez automatskog popravka nema gumba plana').toBe(false);
     expect(kraj.rows.every((r) => r.icon === '○' && r.state === 'unchecked')).toBe(true);
@@ -287,7 +290,7 @@ describe('Z33 brojac stranica bez storedPages', () => {
     const r = sampleResult();
     const plan = buildLivePlan({ ...r, stats: { words: 11240, references: 38 } });
     const s = revealFrame(plan, Infinity, true).stats;
-    expect(s.pages).toEqual({ text: '-', title: 'Word nije zapisao broj stranica u datoteku.' });
+    expect(s.pages).toEqual({ text: '-', title: 'Word nije zapisao broj stranica u datoteku.', note: 'Word nije zapisao' });
     expect(s.words.text).toBe((11240).toLocaleString('hr-HR'));
     expect(s.sources.text).toBe('38');
     for (const t of [0, 500, 2000]) {
@@ -365,6 +368,37 @@ describe('Z33 tragovi i cedulje po stvarnom mjestu nalaza (F31 d)', () => {
         if (i) expect(v - n[i - 1]).toBeGreaterThanOrEqual(12 - 1e-9);
       });
     }
+  });
+});
+
+describe('Z33 tragovi po sidru nad STVARNOM analizom (F31 d)', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+
+  it('analyzeDocx nad fixtureom s nalazima daje barem jedan trag sa sidrom, a DOM ga oznaci data-located', async () => {
+    const ime = 'fer-diplomski-prazni-odlomci.docx'; // izmjereno: 1 od 6 nalaza nosi sidro (par=172)
+    const profile = resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id);
+    const settings = { profileId: VERIFIED_PROFILE_REGISTRY[0].id, workType: profile.selection.workType, citationStyle: 'fpzg',
+      language: 'hr', strictness: 'standard', methodology: 'auto', selectionIds: {} };
+    const file = new File([readFileSync(resolve('tests/fixtures/docx', ime))], ime);
+    const result: any = await analyzeDocx(file, profile, settings, () => {});
+    const plan = buildLivePlan(result);
+    expect(plan.findings.length, 'fixture mora imati nalaze').toBeGreaterThan(0);
+    const sSidrom = plan.findings.filter((f) => f.at != null);
+    expect(sSidrom.length, 'ni jedan stvarni nalaz ne nosi sidro: izmjereno, nije pretpostavljeno').toBeGreaterThan(0);
+    for (const f of sSidrom) expect(f.at!).toBeGreaterThanOrEqual(0);
+
+    document.documentElement.dataset.motion = 'reduce';
+    document.body.innerHTML = '<div id="progressView"><p class="sr-only" id="progressMessage">Gotovo</p><p class="pv-local">x</p></div>';
+    const v = document.getElementById('progressView')!;
+    const h = mountAnalysisLive(v);
+    h.start(null);
+    await h.reveal(result);
+    const tragovi = [...v.querySelectorAll<HTMLElement>('[data-z33="edge"] .z33-edge')];
+    expect(tragovi).toHaveLength(plan.findings.length);
+    expect(tragovi.some((t) => t.dataset.located === 'true')).toBe(true);
   });
 });
 
@@ -458,6 +492,40 @@ describe('Z33 prikaz', () => {
       expect(document.activeElement?.id).toBe('cockpitVerdictTitle');
     });
 
+    it('fokus na "Preskoči" kad otkrivanje zavrsi samo od sebe: ne pada na body, ide na presudu', async () => {
+      const { v, rv } = viewSRezultatom();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      const skip = v.querySelector<HTMLButtonElement>('[data-z33="skip"]')!;
+      vi.useFakeTimers();
+      const p = h.reveal(sampleResult());
+      expect(skip.hidden).toBe(false);
+      skip.focus();
+      expect(document.activeElement).toBe(skip);
+      await vi.advanceTimersByTimeAsync(10_000);
+      await p;
+      vi.useRealTimers();
+      expect(skip.hidden, 'Preskoči nestaje kad otkrivanje zavrsi').toBe(true);
+      await objaviSpremnost(rv);
+      expect(document.activeElement?.id).toBe('cockpitVerdictTitle');
+    });
+
+    it('prirodni kraj bez fokusa na nestajucem gumbu ne otima fokus', async () => {
+      const { v, rv } = viewSRezultatom();
+      const drugi = document.createElement('input');
+      document.body.append(drugi);
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      vi.useFakeTimers();
+      const p = h.reveal(sampleResult());
+      drugi.focus();
+      await vi.advanceTimersByTimeAsync(10_000);
+      await p;
+      vi.useRealTimers();
+      await objaviSpremnost(rv);
+      expect(document.activeElement).toBe(drugi);
+    });
+
     it('"Napravi plan popravka" otvara rezultat i, kad je gotov, pokrece ulaz u popravak kokpita', async () => {
       const { v, rv, primarni } = viewSRezultatom();
       rv.setAttribute('data-result-ready', '1'); // prethodni rezultat
@@ -516,6 +584,22 @@ describe('Z33 prikaz', () => {
       expect(b.textContent).toBe('-');
       expect(b.parentElement?.getAttribute('title')).toBe('Word nije zapisao broj stranica u datoteku.');
       expect(v.querySelector('[data-z33="s-words"]')?.parentElement?.hasAttribute('title')).toBe(false);
+    });
+
+    it('brojac bez broja ima vidljivu kratku oznaku koja nije u aria-hidden podrucju', async () => {
+      document.documentElement.dataset.motion = 'reduce';
+      const v = view();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      const oznaka = (n: string): HTMLElement => v.querySelector<HTMLElement>(`[data-z33="n-${n}"]`)!;
+      // Dok provjera traje: sva tri brojaca kazu da se mjere.
+      expect(['pages', 'words', 'sources'].map((n) => oznaka(n).textContent)).toEqual(['mjeri se', 'mjeri se', 'mjeri se']);
+      await h.reveal({ ...sampleResult(), stats: { words: 11240, references: 38 } });
+      expect(oznaka('pages').textContent).toBe('Word nije zapisao');
+      expect(oznaka('words').textContent, 'izmjeren broj nema oznaku').toBe('');
+      expect(oznaka('sources').textContent).toBe('');
+      expect(oznaka('pages').closest('[aria-hidden="true"]'), 'citac zaslona mora doci do oznake').toBeNull();
+      expect(v.querySelector('[data-z33="s-pages"]')?.closest('[aria-hidden="true"]')).toBeNull();
     });
 
     it('kad rezultat stigne, ponuda obavijesti nestaje i ne obecaje buducu obavijest', async () => {
