@@ -150,6 +150,7 @@ function pageShell(doc, allDocs) {
 ${doc.html}
 </main>
 <footer>
+<p>${esc(legal.BETA_FOOTER_NOTE)}.</p>
 <p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 Pravni dokumenti:
 <nav>${nav}</nav>

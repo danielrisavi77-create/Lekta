@@ -59,6 +59,8 @@ import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
+import { legalSyntheticDist, runLegalPlaceholderBlock } from './helpers/legal-placeholder-wiring';
+import { findLegalPlaceholders } from '../scripts/lib/legal-placeholders.mjs';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -7981,6 +7983,71 @@ const MUTATIONS: Mutation[] = [
     },
   },
 
+  /**
+   * T86: pravni tekst bete nosi oznake `[ODLUKA VLASNIKA: ...]` (Z36) i `[PROVJERITI: ...]` dok ih
+   * vlasnik ne zamijeni. Gard 3a u verify-deploy-dist obara objavu dok ijedna stoji u dist/, i to
+   * na pravnim stranicama I u JS bundleu (modal na indexu puni ista funkcija). Blok garda se
+   * izvrsava stvarno nad sintetickim distom (`tests/helpers/legal-placeholder-wiring.ts`).
+   */
+  {
+    id: 'pravno/oznaka-bez-fail',
+    imitates: 'gard 3a nadje oznaku ODLUKA VLASNIKA u pravnoj stranici, ali je ne pretvori u fail, pa se nedovrsen pravni tekst objavi',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const mut = src.replace('if (problems.length) fail(', 'if (problems.length) void (');
+      const dist = legalSyntheticDist({ stranica: '[ODLUKA VLASNIKA: Z36]' });
+      try {
+        return mut !== src && runLegalPlaceholderBlock(mut, dist).length === 0;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const ok = legalSyntheticDist({});
+      const zlo = legalSyntheticDist({ stranica: '[ODLUKA VLASNIKA: Z36]' });
+      try {
+        return runLegalPlaceholderBlock(src, ok).length === 0 && runLegalPlaceholderBlock(src, zlo).length === 1;
+      } finally {
+        rmSync(ok, { recursive: true, force: true });
+        rmSync(zlo, { recursive: true, force: true });
+      }
+    },
+  },
+  {
+    id: 'pravno/oznaka-samo-u-bundleu',
+    imitates: 'gard 3a gleda samo pravne stranice, pa oznaka koja stoji u modalu (JS bundle) prolazi u objavu',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const mut = src.replace("for (const f of assets) scan(path.join('assets', f));", '');
+      const dist = legalSyntheticDist({ bundle: '[PROVJERITI: Resend DPA]' });
+      try {
+        return mut !== src && runLegalPlaceholderBlock(mut, dist).length === 0;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const dist = legalSyntheticDist({ bundle: '[PROVJERITI: Resend DPA]' });
+      try {
+        return runLegalPlaceholderBlock(src, dist).length === 1;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+  },
+  {
+    id: 'pravno/prepoznaje-samo-jednu-vrstu-oznake',
+    imitates: 'prepoznavanje oznaka zna samo za ODLUKA VLASNIKA, pa neprovjerena cinjenica [PROVJERITI: ...] prolazi u objavu',
+    caught: () => {
+      const samoOdluka = (t: string) => t.match(/\[ODLUKA VLASNIKA:[^\]]*\]/g) ?? [];
+      return samoOdluka('x [PROVJERITI: y] z').length === 0 && findLegalPlaceholders('x [PROVJERITI: y] z').length === 1;
+    },
+    cleanBefore: () =>
+      findLegalPlaceholders('Pravni tekst bez oznaka [1] i [vidi 2].').length === 0
+      && findLegalPlaceholders('[ODLUKA VLASNIKA: Z36] i [PROVJERITI: DPA]').length === 2,
+  },
 ];
 
 /**
