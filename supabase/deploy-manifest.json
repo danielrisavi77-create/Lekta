@@ -340,8 +340,10 @@
         "REPAIR_LOCAL_ENABLED",
         "REPAIR_MAX_CONCURRENT",
         "REPAIR_MAX_DOCX_BYTES",
+        "REPAIR_MAX_PER_USER",
         "REPAIR_SLOT_LEASE_SECONDS",
         "REPAIR_STORAGE_DAILY_CAP",
+        "REPAIR_UNCOUNTED_DAILY_CAP",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -460,7 +462,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-26T22:42:57.888Z",
-  "generatedFromCommit": "a2b76fbb0f255eb082c2cbd28736d913bd8dc6c5",
+  "generatedAt": "2026-10-04T17:50:47.548Z",
+  "generatedFromCommit": "94f41003cb79a43ef846d559d802c82298e7a743",
   "generator": "npm run deploy-manifest"
 }

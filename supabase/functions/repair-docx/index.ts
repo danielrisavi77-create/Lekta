@@ -60,6 +60,7 @@ import { persistIssuedLocalRepairJob } from '../../../src/repair/local-runner/su
 import type { IssuedLocalRepairJob, LocalRepairJobRecord } from '../../../src/repair/local-runner/issue-service.ts';
 import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../src/repair/local-runner/storage-handoff.ts';
 import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
+import { acquireRepairSlot } from './global-slot.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -149,51 +150,16 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
 /** Koliko dugo slot vrijedi ako ga nitko ne oslobodi (proces umro, runtime presjekao). */
 const REPAIR_SLOT_LEASE_SECONDS = Number(Deno.env.get('REPAIR_SLOT_LEASE_SECONDS') ?? '300');
 
+/** Najvise istodobnih popravaka po korisniku (T84 RD-3); 0 iskljucuje limit. */
+const REPAIR_MAX_PER_USER = Number(Deno.env.get('REPAIR_MAX_PER_USER') ?? '1');
+
 /**
- * Preuzmi GLOBALNI slot popravka iz baze (audit DOCX-06).
- *
- * Tri ishoda, i sva tri su namjerna:
- *   - `ok`     : slot dobiven, `release()` ga vraca (jednokratno);
- *   - `full`   : globalni limit dosegnut -> 503, kao i kod per-instance gatea;
- *   - `absent` : RPC ne postoji ili je pao. Tada se NE blokira popravak, nego se pada natrag na
- *                per-instance gate, uz glasan log. Razlog: isporuka koda i isporuka migracije nisu
- *                atomarne, pa bi tvrdo ponasanje znacilo da svaki popravak pada u prozoru izmedju
- *                dva deploya. To NIJE tiho popustanje: stanje se logira, a nestaje cim 0094 prodje.
+ * Dnevni strop ishoda koji NE trose kvotu ni slot (T84 RD-2): popravak bez izmjena i odbijena
+ * isporuka na vratima integriteta. Korisnik za njih ne placa, ali svaki je puni rad (citanje do
+ * 20 MB, readZip, applyFixers), pa bez stropa jedan racun moze ponavljati isti dokument bez kraja.
  */
-async function acquireGlobalSlot(
-  admin: any,
-): Promise<{ kind: 'ok'; release: () => Promise<void> } | { kind: 'full' } | { kind: 'absent'; release: null }> {
-  try {
-    const { data, error } = await admin.rpc('try_acquire_repair_slot', {
-      p_max: Number(Deno.env.get('REPAIR_MAX_CONCURRENT') ?? '4'),
-      p_lease_seconds: REPAIR_SLOT_LEASE_SECONDS,
-    });
-    if (error) {
-      console.error('[repair-docx] globalni slot nedostupan, padam na per-instance gate', error.message);
-      return { kind: 'absent', release: null };
-    }
-    if (!data) return { kind: 'full' };
-
-    let released = false;
-    return {
-      kind: 'ok',
-      release: async () => {
-        if (released) return;
-        released = true;
-        const { error: relErr } = await admin.rpc('release_repair_slot', { p_id: data });
-        // Neoslobodjen slot nije trajan kvar: lease ga pocisti pri sljedecem preuzimanju. Log
-        // postoji da se ne cini kao da je sve u redu dok se kapacitet tise smanjuje.
-        if (relErr) console.error('[repair-docx] globalni slot nije oslobodjen', relErr.message);
-      },
-    };
-  } catch (e) {
-    console.error('[repair-docx] globalni slot: neocekivana greska, padam na per-instance gate', e);
-    return { kind: 'absent', release: null };
-  }
-}
-
-
-
+const REPAIR_UNCOUNTED_DAILY_CAP = Number(Deno.env.get('REPAIR_UNCOUNTED_DAILY_CAP') ?? '30');
+const UNCOUNTED_STATUSES = ['no_change', 'integrity_failed'];
 
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
 // 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
@@ -292,7 +258,7 @@ Deno.serve(async (req: Request) => {
   // Postavlja se true tek nakon uspjesnog REPAIR_GATE.tryAcquire(); finally ispod smije zvati
   // release() SAMO tada (ranije 401/disabled/OPTIONS izlazi nikad nisu uzeli slot).
   let releaseGate: (() => void) | null = null;
-  /** Oslobadjanje GLOBALNOG (bazom vodjenog) slota; null kad ga nema (vidi acquireGlobalSlot). */
+  /** Oslobadjanje GLOBALNOG (bazom vodjenog) slota; null kad ga nema (vidi acquireRepairSlot u global-slot.ts). */
   let releaseGlobalSlot: (() => Promise<void>) | null = null;
   /**
    * Je li oslobadjanje slota PREDANO pozadinskom zadatku (audit DOCX-07).
@@ -338,9 +304,27 @@ Deno.serve(async (req: Request) => {
      * na svakom pozivu dok se migracija ne primijeni, a to bi znacilo da isporuka koda i isporuka
      * migracije moraju biti atomarne, sto nisu. Zato se pad RPC-a NE tretira kao "nema mjesta".
      */
-    const globalSlot = await acquireGlobalSlot(admin);
-    if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);
+    // T84 RD-3: uz globalni limit i limit po korisniku, da jedan racun ne zauzme sve slotove.
+    const globalSlot = await acquireRepairSlot(admin, {
+      userId: user.id,
+      maxGlobal: Number(Deno.env.get('REPAIR_MAX_CONCURRENT') ?? '4'),
+      maxPerUser: REPAIR_MAX_PER_USER,
+      leaseSeconds: REPAIR_SLOT_LEASE_SECONDS,
+    });
+    if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);
     releaseGlobalSlot = globalSlot.release;
+
+    // T84 RD-2: strop ishoda bez potrosnje provjerava se PRIJE citanja tijela i readZip-a, jer je
+    // upravo taj rad ono sto bez stropa nije ograniceno. Greska upita propusta (isto kao free cap).
+    {
+      const { count: uncounted } = await admin.from('report_generations')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).in('status', UNCOUNTED_STATUSES)
+        .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+      if (REPAIR_UNCOUNTED_DAILY_CAP > 0 && (uncounted ?? 0) >= REPAIR_UNCOUNTED_DAILY_CAP) {
+        return json({ error: 'rate_limited', reason: FREE_MODE ? 'free_user' : 'paid_daily' }, 429);
+      }
+    }
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -514,7 +498,8 @@ Deno.serve(async (req: Request) => {
         // usporedbu (TS2589), pa ide kroz unknown.
         readAccessRows(admin as unknown as AccessDb, user.id, workType, now),
         admin.from('report_generations').select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
+          .eq('user_id', user.id).not('status', 'in', `(${UNCOUNTED_STATUSES.join(',')})`)
+          .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
       ]);
 
       // Greska upita NIJE "nema prava" (inace bi npr. PGRST201 placenom korisniku vratio 402).
@@ -591,6 +576,7 @@ Deno.serve(async (req: Request) => {
         `[repair-docx] vrata integriteta odbila isporuku: ${result.integrityFailure.part}: ${result.integrityFailure.problem}` +
         (result.integrityFailure.offset != null ? ` (offset ${result.integrityFailure.offset})` : ''),
       );
+      await log('integrity_failed', null); // T84 RD-2: ne trosi kvotu, ali ulazi u UNCOUNTED strop
       return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
     }
 
@@ -599,6 +585,7 @@ Deno.serve(async (req: Request) => {
       const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
+      await log('no_change', null); // T84 RD-2: ne trosi kvotu, ali ulazi u UNCOUNTED strop
       return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,

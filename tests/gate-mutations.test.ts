@@ -294,6 +294,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { repairCostGuardProblems } from './helpers/repair-cost-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -4911,6 +4912,29 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RD-2 i RD-3: limit po korisniku i strop ishoda bez potrosnje u repair-docx.
+  ...([
+    ['t84/repair-slot-bez-korisnika', 'slot se trazi bez limita po korisniku, pa jedan racun s cetiri paralelna popravka drzi sve ostale na 503',
+      'maxPerUser: REPAIR_MAX_PER_USER,', 'maxPerUser: 0,', 'repair-docx: slot se ne trazi s korisnikom i limitom po korisniku'],
+    ['t84/repair-user-busy-prolazi', 'user_busy se ne odbija, pa limit po korisniku postoji u bazi ali ne djeluje',
+      "if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);",
+      "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
+    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se opet ne biljezi, pa ga strop ne vidi i isti dokument se ponavlja bez kraja',
+      "      await log('no_change', null);", '', 'repair-docx: ishod bez izmjena se ne biljezi'],
+    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka na vratima integriteta se ne biljezi, pa zaobilazi strop',
+      "      await log('integrity_failed', null);", '', 'repair-docx: odbijena isporuka se ne biljezi'],
+    ['t84/repair-placeni-strop-broji-nista', 'placeni dnevni strop broji i ishode bez potrosnje, pa placeni korisnik gubi zahtjeve za dokumente koji nista nisu dobili',
+      ".not('status', 'in', `(${UNCOUNTED_STATUSES.join(',')})`)", '', 'repair-docx: placeni dnevni strop broji i ishode bez potrosnje'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && repairCostGuardProblems(mut).includes(problem);
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  })),
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
