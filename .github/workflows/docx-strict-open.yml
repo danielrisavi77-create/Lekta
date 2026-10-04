@@ -45,7 +45,7 @@ jobs:
           python-version: '3.12'
 
       - name: Instaliraj Python ovisnosti
-        run: pip install python-docx lxml
+        run: pip install python-docx==1.2.0 lxml==6.1.3
 
       - name: Ulazni fixturi se otvaraju
         run: npm run verify:strict-open
