@@ -79,6 +79,28 @@ Dokaz koji trazi koordinator:
 - testni mail na `support@lekta.hr` stigne u Gmail; mail-tester.com za mail poslan kroz Resend
   pokazuje SPF, DKIM i DMARC kao prolaz.
 
+## Kontakt adresa
+
+Odluka vlasnika 4. 10. 2026.: javna kontakt adresa je `support@lekta.hr` (prije
+`lekta.kontakt@gmail.com`) u `src/config/production-config.ts`, `data/legal/provider.json` i
+footeru statickih stranica. Prosljeduje se na vlasnikov Gmail kroz Email Routing, pa ovaj PR smije
+na produkciju tek kad Email Routing radi i testni mail na `support@lekta.hr` stigne.
+
+## Zatecen nalaz: produkcija starija od repoa (T20/T84)
+
+CORS proba 4. 10. 2026. nakon postavljanja `ALLOWED_ORIGIN`: deployani `faculty-request` (verzija
+13) vraca `Access-Control-Allow-Origin: *`, dok `supabase/functions/faculty-request/index.ts` u repou
+odabire origin s popisa. Ostale probane funkcije (`profile-rules`, `repair-docx`, `source-check`)
+vracaju trazeni origin.
+
+`npm run deploy-drift` nad produkcijom (isti dan, samo citanje) usporedjuje POSTOJANJE funkcija, ne
+sadrzaj: repo 27, deployano 19; samo u repou su `client-error`, `field-render`, `integrity-check`,
+`preflight-result`, `preflight-start`, `process-bonus-outbox`, `repair-local-claim` i
+`repair-local-status`. Razliku sadrzaja kao kod `faculty-request` alat ne vidi, pa nije izmjerena za
+ostale deployane funkcije.
+
+Deploy Edge funkcija nije dio promjene domene; ide kao zasebna stavka samo uz vlasnikovu rijec.
+
 ## Povratak
 
 - Do koraka 6 nista javno ne pokazuje na `lekta.hr`; povratak je brisanje zapisa.
