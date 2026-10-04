@@ -290,7 +290,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
-import { netlifyPinProblems, type NetlifyPinSources } from './helpers/netlify-cli-pin';
+import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -859,16 +859,6 @@ function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): 
 }
 
 /** Izvor preflighta naplate s diska (LF). Mutacije ga mijenjaju samo u memoriji. */
-function netlifyPinRealSources(): NetlifyPinSources {
-  const r = (...p: string[]) => readTextLf(resolve(process.cwd(), ...p));
-  return {
-    packageJson: r('package.json'),
-    packageLock: r('package-lock.json'),
-    releaseScript: r('scripts', 'run-local-repair-release.mts'),
-    releaseDoc: r('docs', 'deploy', 'RELEASE_PROOF_WORKFLOW.md'),
-  };
-}
-
 function preflightIzvor(): string {
   return readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
 }
@@ -4907,12 +4897,23 @@ const MUTATIONS: Mutation[] = [
     ['popravak-a/netlify-cli-natrag-u-devdeps', 'netlify-cli se vrati u devDependencies pa 15 high nalaza opet ulazi u graf',
       'packageJson', '"devDependencies": {\n', '"devDependencies": {\n    "netlify-cli": "^27.10.2",\n', 'package.json: netlify-cli je u devDependencies'],
     ['popravak-a/skripta-iz-node-modules', 'release skripta opet trazi netlify u node_modules umjesto pinanog npx',
-      'releaseScript', "args: ['--yes', NETLIFY_CLI_PIN, ...args]", "args", 'release skripta: netlify ne ide kroz npx --yes s pinom'],
+      'releaseScript', "args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args]", "args", 'release skripta: netlify ne ide kroz npx --yes s pinom'],
     ['popravak-a/pin-raspon', 'pin postane raspon (^27) pa npx tiho uzme drugu verziju',
       'releaseScript', "export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';", "export const NETLIFY_CLI_PIN = 'netlify-cli@^27';", 'release skripta: pin nije tocna verzija (netlify-cli@^27)'],
     ['popravak-a/dokument-drift', 'dokument objave zadrzi staru verziju dok skripta dobije novu',
       'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build', 'npx --yes netlify-cli@27.10.1 deploy --prod --dir dist --no-build',
       'RELEASE_PROOF_WORKFLOW.md: nema "npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build"'],
+    ['popravak-a/npx-cmd-bez-shella', 'netlify se opet pokrece kao npx.cmd kroz spawnSync bez shella, pa Windows objava pada s EINVAL (Codex F1 na #283)',
+      'releaseScript', "return { executable: process.execPath, args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      "return { executable: platform === 'win32' ? 'npx.cmd' : 'npx', args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      'release skripta: npx se pokrece s PATH-a ili kao .cmd umjesto kroz process.execPath'],
+    ['popravak-a/aktivni-poziv-uz-pin-u-komentaru', 'dokument dobije aktivni nepinani deploy, a pinani ostane u komentaru (Codex F2 na #283)',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build',
+      '<!-- npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build -->\nnpx --yes netlify-cli deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/npm-skripta-gola-naredba', 'package.json dobije skriptu s golom netlify naredbom iz globalne instalacije (Codex F2 na #283)',
+      'packageJson', '"scripts": {\n', '"scripts": {\n    "deploy:netlify": "netlify deploy --prod",\n',
+      'package.json scripts.deploy:netlify: gola netlify naredba "netlify deploy"'],
   ] as const).map(([id, imitates, field, from, to, problem]) => ({
     id,
     imitates: `Popravak A: ${imitates}.`,
@@ -4923,6 +4924,16 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
   })),
+  {
+    id: 'popravak-a/workflow-drugi-pin',
+    imitates: 'Popravak A: workflow objavljuje kroz npx s drugim pinom, a gard gleda samo release skriptu i dokument (Codex F2 na #283).',
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const files = [...(src.files ?? []), { path: '.github/workflows/mutacija.yml', text: '      - run: npx --yes netlify-cli@27.10.1 deploy --prod\n' }];
+      return netlifyPinProblems({ ...src, files }).includes('.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli@27.10.1"');
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  },
   ...([
     ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
       '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],

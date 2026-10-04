@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, posix, resolve, win32 } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
@@ -226,22 +226,57 @@ export function readAuthenticodeEvidence(artifactPath: string): AuthenticodeEvid
 export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';
 
 /**
+ * JS ulaz `npx`-a uz Node koji izvodi ovu skriptu. `npx.cmd` se na Windowsu ne smije predati
+ * `spawnSync`-u bez shella (EINVAL na Node 20/22, Codex F1 na #283), pa se `npx-cli.js` pokrece
+ * izravno kroz `process.execPath`. Redoslijed: uz `npm_execpath` (kad skriptu pokrece npm), pa
+ * standardni raspored Windows i POSIX instalacije Nodea. Bez pronadjenog ulaza naredba pada.
+ */
+export function npxCliPath(
+  execPath: string = process.execPath,
+  platform: NodeJS.Platform = process.platform,
+  env: NodeJS.ProcessEnv = process.env,
+  exists: (path: string) => boolean = existsSync,
+): string {
+  const p = platform === 'win32' ? win32 : posix;
+  const candidates: string[] = [];
+  const npmExec = env.npm_execpath ?? '';
+  if (/npm-cli\.js$/i.test(npmExec)) candidates.push(p.join(p.dirname(npmExec), 'npx-cli.js'));
+  const nodeDir = p.dirname(execPath);
+  candidates.push(platform === 'win32'
+    ? p.join(nodeDir, 'node_modules', 'npm', 'bin', 'npx-cli.js')
+    : p.join(p.dirname(nodeDir), 'lib', 'node_modules', 'npm', 'bin', 'npx-cli.js'));
+  const found = candidates.find((c) => exists(c));
+  if (!found) throw new Error(`npx-cli.js nije pronadjen uz Node (${candidates.join(', ')}).`);
+  return found;
+}
+
+/**
  * Izvrsna datoteka i argumenti za logicku release naredbu. `netlify` ide kroz `npx --yes` s pinanom
- * verzijom, nikad kroz node_modules ni globalnu instalaciju.
+ * verzijom, nikad kroz node_modules ni globalnu instalaciju, i to kroz `process.execPath` + `npx-cli.js`.
  */
 export function releaseInvocation(
   command: string,
   args: string[],
   root: string,
   platform: NodeJS.Platform = process.platform,
+  npxCli: () => string = () => npxCliPath(process.execPath, platform),
 ): { executable: string; args: string[] } {
   if (command === 'supabase') return { executable: join(root, 'node_modules', '.bin', 'supabase.cmd'), args };
   if (command === 'netlify') {
-    return { executable: platform === 'win32' ? 'npx.cmd' : 'npx', args: ['--yes', NETLIFY_CLI_PIN, ...args] };
+    return { executable: process.execPath, args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };
   }
   if (command === 'npm') return { executable: platform === 'win32' ? 'npm.cmd' : 'npm', args };
   if (command === 'node') return { executable: process.execPath, args };
   throw new Error(`Nepodrzana release naredba: ${command}`);
+}
+
+/** Gornja granica jedne release naredbe (Codex F4 na #283): zaglavljen dohvat ili poziv ne blokira objavu. */
+export const RELEASE_COMMAND_TIMEOUT_MS = 20 * 60 * 1000;
+
+/** Prekid zbog `timeout`-a ili greske pokretanja mora pasti s jasnim razlogom, ne s praznim statusom. */
+function assertCompleted(completed: { status: number | null; error?: Error }, label: string): void {
+  if (completed.error) throw new Error(`Release naredba nije uspjela (${label}): ${completed.error.message}`);
+  if (completed.status !== 0) throw new Error(`Release naredba nije uspjela: ${label}`);
 }
 
 function executableFor(command: string, root: string): string {
@@ -272,11 +307,10 @@ function runReleaseCommand(parts: string[], root: string, env: NodeJS.ProcessEnv
     cwd: root,
     env: buildLocalRepairChildEnvironment(env),
     stdio: 'inherit',
+    timeout: RELEASE_COMMAND_TIMEOUT_MS,
     windowsHide: true,
   });
-  if (completed.status !== 0) {
-    throw new Error(`Release naredba nije uspjela: ${command} ${rest.join(' ')}`);
-  }
+  assertCompleted(completed, `${command} ${rest.join(' ')}`);
 }
 
 function runReleaseCommandCaptured(
@@ -290,13 +324,12 @@ function runReleaseCommandCaptured(
     cwd: root,
     env: buildLocalRepairChildEnvironment({ ...env, NO_COLOR: '1' }),
     encoding: 'utf8',
+    timeout: RELEASE_COMMAND_TIMEOUT_MS,
     windowsHide: true,
   });
   if (completed.stdout) process.stdout.write(completed.stdout);
   if (completed.stderr) process.stderr.write(completed.stderr);
-  if (completed.status !== 0) {
-    throw new Error(`Release naredba nije uspjela: ${command} ${rest.join(' ')}`);
-  }
+  assertCompleted(completed, `${command} ${rest.join(' ')}`);
   return completed.stdout || '';
 }
 
@@ -315,8 +348,10 @@ function readNetlifyLinkedStatus(root: string, childEnv: NodeJS.ProcessEnv): unk
     cwd: root,
     encoding: 'utf8',
     env: buildLocalRepairChildEnvironment(childEnv),
+    timeout: RELEASE_COMMAND_TIMEOUT_MS,
     windowsHide: true,
   });
+  if (completed.error) throw new Error(`Netlify status nije dovrsen: ${completed.error.message}`);
   if (completed.status !== 0) {
     throw new Error('Netlify globalna prijava ili povezani Lekta site nisu dostupni.');
   }
