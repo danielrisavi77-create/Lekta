@@ -9829,6 +9829,47 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
   });
 });
 
+/**
+ * Dependabot iznimka u pr-opis (koordinator lekta-37, 2026-10-04): Dependabot PR bez redaka prolazi,
+ * isti PR s ljudskim autorom pada. Gard ne smije ni oslabiti provjeru za ljude ni zaboraviti iznimku.
+ */
+describe('mutacije: pr-opis iznimka samo za Dependabot', () => {
+  type ZaAutora = (body: string, nove: string[], autor: { login: string; type: string }) => string[];
+  const TIJELO = 'Bumps vite from 7.1.0 to 7.1.2.';
+  const DEPENDABOT = { login: 'dependabot[bot]', type: 'Bot' };
+  const LJUDSKI = { login: 'danielrisavi77-create', type: 'User' };
+  const LAZNI_TIP = { login: 'dependabot[bot]', type: 'User' };
+  /** Tvrdnja garda: sinteticki Dependabot dogadjaj bez redaka prolazi, isti dogadjaj s drugim autorom pada. */
+  const iznimkaUska = (p: ZaAutora): boolean =>
+    p(TIJELO, [], DEPENDABOT).length === 0
+    && p(TIJELO, [], LJUDSKI).length > 0
+    && p(TIJELO, [], LAZNI_TIP).length > 0;
+
+  it('baseline: stvarna provjera zadovoljava tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    expect(iznimkaUska(m.provjeriPrZaAutora)).toBe(true);
+  });
+
+  it('(a) iznimka primijenjena na svakog autora (provjera za ljude oslabljena) obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const zaSve: ZaAutora = (body, nove) => m.provjeriPrZaAutora(body, nove, DEPENDABOT);
+    expect(iznimkaUska(zaSve)).toBe(false);
+  });
+
+  it('(b) iznimka izgubljena (Dependabot opet trazi rucne retke) obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const bezIznimke: ZaAutora = (body, nove) => m.provjeriOpisPr(body, nove);
+    expect(iznimkaUska(bezIznimke)).toBe(false);
+  });
+
+  it('(c) prepoznavanje samo po loginu, bez tipa racuna, obara tvrdnju', async () => {
+    const m = await import('../scripts/agents/pr-lines.mjs');
+    const samoLogin: ZaAutora = (body, nove, autor) =>
+      autor.login === m.DEPENDABOT_LOGIN ? [] : m.provjeriOpisPr(body, nove);
+    expect(iznimkaUska(samoLogin)).toBe(false);
+  });
+});
+
 describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
   const poziv = (npmCache?: string) => `
 jobs:

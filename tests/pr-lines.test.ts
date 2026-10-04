@@ -5,7 +5,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  netoRedaka, noveOvisnosti, provjeriOpisPr, retciOpisa,
+  jeDependabot, netoRedaka, noveOvisnosti, promijenjeneOvisnosti, provjeriOpisPr, provjeriPrZaAutora,
+  retciDependabot, retciOpisa,
 } from '../scripts/agents/pr-lines.mjs';
 
 describe('netoRedaka', () => {
@@ -113,5 +114,49 @@ describe('provjeriOpisPr', () => {
   it('prazno tijelo daje obje greske', () => {
     expect(provjeriOpisPr('', [])).toHaveLength(2);
     expect(provjeriOpisPr(null as unknown as string, [])).toHaveLength(2);
+  });
+});
+
+describe('Dependabot autor (koordinator lekta-37)', () => {
+  const DEPENDABOT = { login: 'dependabot[bot]', type: 'Bot' };
+  const LJUDSKI = { login: 'danielrisavi77-create', type: 'User' };
+
+  it('prepoznaje Dependabot samo po loginu I tipu Bot', () => {
+    expect(jeDependabot(DEPENDABOT)).toBe(true);
+    expect(jeDependabot(LJUDSKI)).toBe(false);
+    expect(jeDependabot({ login: 'dependabot[bot]', type: 'User' })).toBe(false);
+    expect(jeDependabot({ login: 'dependabot', type: 'Bot' })).toBe(false);
+    expect(jeDependabot({ login: '', type: '' })).toBe(false);
+    expect(jeDependabot(null)).toBe(false);
+  });
+
+  it('isti opis bez redaka: Dependabot prolazi, ljudski autor pada', () => {
+    const tijelo = 'Bumps vite from 7.1.0 to 7.1.2.';
+    expect(provjeriPrZaAutora(tijelo, [], DEPENDABOT)).toEqual([]);
+    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI).length).toBe(2);
+  });
+
+  it('za ljudskog autora ponasanje je jednako provjeriOpisPr', () => {
+    const tijelo = 'Neto redaka: +1/-1\nNove ovisnosti: nema';
+    expect(provjeriPrZaAutora(tijelo, ['zod'], LJUDSKI)).toEqual(provjeriOpisPr(tijelo, ['zod']));
+    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI)).toEqual([]);
+  });
+
+  it('promijenjene ovisnosti: nova i promijenjena verzija kao ime@verzija, nepromijenjena izostavljena', () => {
+    const base = { dependencies: { vite: '7.1.0', zod: '3.0.0' }, devDependencies: { vitest: '4.0.0' } };
+    const head = { dependencies: { vite: '7.1.2', zod: '3.0.0' }, devDependencies: { vitest: '4.0.0', 'left-pad': '1.3.0' } };
+    expect(promijenjeneOvisnosti(base, head)).toEqual(['left-pad@1.3.0', 'vite@7.1.2']);
+    expect(promijenjeneOvisnosti(base, base)).toEqual([]);
+  });
+
+  it('retci za Dependabot su izracunati iz diffa i prolaze provjeru za ljudskog autora', () => {
+    const r = retciDependabot({
+      diffShortstat: ' 2 files changed, 5 insertions(+), 5 deletions(-)',
+      basePkg: { dependencies: { vite: '7.1.0' } },
+      headPkg: { dependencies: { vite: '7.1.2' } },
+    });
+    expect(r).toEqual(['Neto redaka: +5/-5', 'Nove ovisnosti: vite@7.1.2']);
+    expect(provjeriOpisPr(r.join('\n'), [])).toEqual([]);
+    expect(retciDependabot({ diffShortstat: '', basePkg: null, headPkg: null })).toEqual(['Neto redaka: +0/-0', 'Nove ovisnosti: nema']);
   });
 });
