@@ -7696,9 +7696,26 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'z36/upis-citata-na-pomaknute-odmake',
     imitates: 'upis izmijenjenog citata ne provjerava da odmaci plana vrijede u w:t; w:ptab (koji unsupported ne vidi) '
-      + 'pomakne raspon i upis prepolovi citat ("Tekstviše (NNovak, 2022 i ...")',
+      + 'pomakne raspon i upis prepolovi citat ("Tekstviše (NNovak, 2022 i ..."); nakon pregleda kruga 4 upis zaustavi i provjera raspona, '
+      + 'pa se gard vidi po razlogu (struktura odlomka, ne kriv plan)',
     caught: () => zapisLiteratureProblemi(z36Fixer(' || analysisText(block) !== current) return', ') return'))
       .some((p) => p.startsWith('ptab-izmjena:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/formula-izvan-teksta-analize',
+    imitates: 'tekst analize u fixeru broji samo elemente s prefiksom w:, a parser svaki localName t (i OMML m:t); '
+      + 'formula ispred citata pomakne odmake plana, citanje nepromijenjenog citata ne uspije i zapis ne ude (pregled kruga 4)',
+    caught: () => zapisLiteratureProblemi(z36Fixer('((?:[A-Za-z_][\\w.-]*:)?)', '((?:w:)?)'))
+      .some((p) => p.startsWith('formula:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/upis-citata-bez-provjere-raspona',
+    imitates: 'upis citata ne provjerava da raspon plana pokazuje citat; pomaknut raspon nad cistim odlomkom '
+      + 'prepise nepromijenjen citat njegovim rawText ("(NNovak, 2022", pregled kruga 4)',
+    caught: () => zapisLiteratureProblemi(z36Fixer("    if (!citationAt(current, citation.start, citation.end)) return noOp(parts, 'invalid-params');\n", ''))
+      .some((p) => p.startsWith('pomak')),
     cleanBefore: z36FixerCist,
   },
   {

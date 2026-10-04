@@ -237,7 +237,7 @@ function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
   }
 }
 
-const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"';
 
 /** Tekst odlomka kakav ga vidi ANALIZA: stvarni parser (src/docx/parser.ts) nad parsiranim XML-om, odrezan. */
 function analysisParagraphText(paragraphXml: string): string {
@@ -278,8 +278,74 @@ function odmaciProblemi(fixer: SyncFixer, problems: string[]): void {
       if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${tag}:${variant}: drugi prolaz nije no-op (${second.reason})`);
     }
     // Izmijenjen citat (dodan lokator) u istom odlomku: odmaci se ne poklapaju, pa se nista ne pise.
+    // Razlog je struktura odlomka (znak koji w:t nema), ne kriv plan.
     const changed = fixer(shifted.parts, { ...shifted.params, citations: [{ ...shifted.params.citations[0], replacementText: 'Novak, 2022, str. 5' }], entries: [], mappings: [] });
     if (changed.applied || changed.parts.documentXml !== shifted.parts.documentXml) problems.push(`${tag}-izmjena: citat je upisan na pomaknute odmake (${JSON.stringify(paragraphTexts(changed.parts.documentXml)[0])})`);
+    else if (changed.reason !== 'unsupported-structure') problems.push(`${tag}-izmjena: razlog nije struktura odlomka (${changed.reason})`);
+  }
+  formulaProblemi(fixer, problems);
+  pomaknutPlanProblemi(fixer, problems);
+}
+
+/**
+ * Formula (OMML) ispred citata: parser cita `m:t` (localName t) kao tekst, w:t ga nema. Znak bez
+ * slova i znamenke ne mijenja otisak odlomka, pa samo citanje u tekstu analize stiti citat. Ulazi iz
+ * pregleda kruga 4: predlozak, korisnikov zapis i sama potvrdjena veza (bez 'add', bez dozvole).
+ */
+const FORMULA_CASES: Array<{ tag: string; symbol: string; before: string; after: string }> = [
+  { tag: 'formula:≈', symbol: '≈', before: 'Tekst ', after: ' više (Novak, 2022) i (Horvat, 2020).' },
+  { tag: 'formula:→', symbol: '→', before: 'Rast ', after: ' pad (Novak, 2022) i (Horvat, 2020).' },
+  { tag: 'formula:+', symbol: '+', before: 'Tekst ', after: ' više (Novak, 2022) i (Horvat, 2020).' },
+];
+
+function formulaProblemi(fixer: SyncFixer, problems: string[]): void {
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const horvatEntry = `bibliography-${3 + BASE.findIndex(([surname]) => surname === 'Horvat')}`;
+  for (const { tag, symbol, before, after } of FORMULA_CASES) {
+    const citationXml = `<w:p><w:r><w:t xml:space="preserve">${before}</w:t></w:r><m:oMath><m:r><m:t>${symbol}</m:t></m:r></m:oMath><w:r><w:t xml:space="preserve">${after}</w:t></w:r></w:p>`;
+    const seen = analysisParagraphText(citationXml);
+    const shifted = syncCase(seen, 'Novak, 2022', BASE, { citationXml });
+    const { start, end } = shifted.params.citations[0];
+    // Generator: parser cita znak formule, w:t ga nema, a otisak (samo slova i znamenke) je isti.
+    if (!seen.includes(symbol) || shifted.before[0].includes(symbol) || shifted.before[0].slice(start, end) === 'Novak, 2022' || citationAnchorFingerprint(1, shifted.before[0]) !== shifted.params.citations[0].anchorFingerprint) problems.push(`${tag}: ulaz ne pomice odmake citata izmedju analize i w:t`);
+    for (const [variant, params] of [
+      ['predlozak', shifted.params],
+      ['korisnikov-zapis', { ...shifted.params, entries: [{ ...shifted.params.entries[0], citationId: undefined, replacementText: literalText }] }],
+    ] as const) {
+      const first = fixer(shifted.parts, params);
+      const expected = variant === 'predlozak' ? template('Novak', '2022') : literalText;
+      if (!first.parts.documentXml.includes(citationXml)) problems.push(`${tag}:${variant}: odlomak citata je prepisan (${JSON.stringify(paragraphTexts(first.parts.documentXml)[0])})`);
+      if (!first.applied || !paragraphTexts(first.parts.documentXml).includes(expected)) problems.push(`${tag}:${variant}: zapis nije umetnut (${first.reason})`);
+      const second = fixer(first.parts, params);
+      if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${tag}:${variant}: drugi prolaz nije no-op (${second.reason})`);
+    }
+    // Samo potvrdjena veza na postojeci zapis (Horvat), bez 'add': citat se cita, nista se ne pise.
+    const horvat = seen.indexOf('Horvat, 2020');
+    const mapped = fixer(shifted.parts, { version: 1, citations: [{ ...shifted.params.citations[0], id: 'c2', start: horvat, end: horvat + 'Horvat, 2020'.length, replacementText: 'Horvat, 2020', reason: 'potvrdjena veza' }], entries: [], mappings: [{ citationId: 'c2', bibliographyEntryId: horvatEntry, confirmed: true }] });
+    if (mapped.applied || mapped.parts.documentXml !== shifted.parts.documentXml || mapped.reason !== 'already-ok') problems.push(`${tag}:veza: potvrdjena veza mijenja dokument ili ne prolazi (${mapped.reason}, ${JSON.stringify(paragraphTexts(mapped.parts.documentXml)[0])})`);
+  }
+}
+
+/**
+ * Plan s pomaknutim odmacima nad cistim odlomkom (samo w:t): otisak odlomka vrijedi, ali raspon ne
+ * pokazuje citat (zastario ili kriv zahtjev klijenta). Nepromijenjen citat se tada ne smije prepisati
+ * svojim rawText, ni uz dodani zapis; izmijenjen se ne pise uopce. Razlog je kriv plan.
+ */
+function pomaknutPlanProblemi(fixer: SyncFixer, problems: string[]): void {
+  const text = 'Tekst više (Novak, 2022) i (Horvat, 2020).';
+  const base = syncCase(text, 'Novak, 2022', BASE);
+  for (const delta of [-1, 1]) {
+    const start = base.params.citations[0].start + delta;
+    const end = base.params.citations[0].end + delta;
+    // Generator: odlomak je cist (samo w:t), a pomaknut raspon nije citat koji parser nalazi.
+    if (analysisParagraphText(paragraph(text)) !== text || extractCitationOccurrences([{ index: 1, text }]).some((found) => found.start === start && found.end === end)) problems.push(`pomak${delta}: ulaz nije cist odlomak s pomaknutim rasponom`);
+    for (const [variant, replacementText] of [['nepromijenjen', 'Novak, 2022'], ['izmjena', 'Novak, 2022, str. 5']] as const) {
+      const result = fixer(base.parts, { ...base.params, citations: [{ ...base.params.citations[0], start, end, replacementText }], entries: [], mappings: [] });
+      if (result.applied || result.parts.documentXml !== base.parts.documentXml) problems.push(`pomak${delta}:${variant}: citat je upisan na pomaknut raspon (${JSON.stringify(paragraphTexts(result.parts.documentXml)[0])})`);
+      else if (result.reason !== 'invalid-params') problems.push(`pomak${delta}:${variant}: razlog nije kriv plan (${result.reason})`);
+    }
+    const withEntry = fixer(base.parts, { ...base.params, citations: [{ ...base.params.citations[0], start, end }] });
+    if (paragraphTexts(withEntry.parts.documentXml)[0] !== text) problems.push(`pomak${delta}:zapis: odlomak citata je prepisan (${JSON.stringify(paragraphTexts(withEntry.parts.documentXml)[0])})`);
   }
 }
 

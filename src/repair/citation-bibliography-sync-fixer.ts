@@ -172,18 +172,55 @@ const SECTION_PROPERTIES = /<w:sectPr\b(?:[^>]*\/>|[\s\S]*?<\/w:sectPr>)/i;
 /** Revizije (Track Changes) u svojstvima: novi odlomak ne smije nositi tudju reviziju. */
 const PROPERTY_REVISION = /<w:(?:pPrChange|rPrChange|sectPrChange|ins|del|moveFrom|moveTo)\b/i;
 
-const ANALYSIS_TOKEN = /<w:t\b[^>]*\/>|<w:t\b[^>]*>([\s\S]*?)<\/w:t>|<w:p?tab\b[^>]*>|<w:(?:br|cr)\b[^>]*>/gi;
+/**
+ * Elementi koje parser cita po `localName`, U BILO KOJEM prostoru imena: t (i OMML `m:t`), tab, ptab,
+ * br, cr, te odlomci (`p`, i `a:p`), koji odredjuju cije je dijete. Komentari se preskacu.
+ */
+const ANALYSIS_TOKEN = /<!--[\s\S]*?-->|<(\/?)((?:[A-Za-z_][\w.-]*:)?)(p|t|tab|ptab|br|cr)(?=[\s/>])[^>]*?(\/?)>/g;
 
 /**
- * Z36 krug 4: tekst odlomka kakav ga cita analiza (src/docx/parser.ts `paragraphText`): w:t, a w:tab i
- * w:ptab kao tabulator, w:br i w:cr kao prijelom retka. Odmaci citata u planu vrijede u OVOM tekstu;
- * `paragraphText` vidi samo w:t, pa se uz tabulator ili prijelom ispred citata odmaci razilaze.
- * Svojstva odlomka se preskacu: tab stopove iz pPr parser cita kao vodece tabulatore i odmah ih odreze.
+ * Z36 krug 4: tekst odlomka kakav ga cita analiza (src/docx/parser.ts `paragraphText`): svaki element
+ * s `localName` t (ukljucujuci formulu, OMML `m:t`), tab i ptab kao tabulator, br i cr kao prijelom
+ * retka, samo ako pripada BAS ovom odlomku (tekst ugnijezdenog odlomka, npr. okvira, se ne broji).
+ * Odmaci citata u planu vrijede u OVOM tekstu; `paragraphText` vidi samo w:t, pa se uz tabulator,
+ * prijelom ili formulu ispred citata odmaci razilaze. Svojstva odlomka se preskacu: tab stopove iz pPr
+ * parser cita kao vodece tabulatore i odmah ih odreze.
  */
 function analysisText(block: string): string {
-  return [...block.replace(PARAGRAPH_PROPERTIES, '').matchAll(ANALYSIS_TOKEN)]
-    .map((match) => (match[1] !== undefined ? decodeXml(match[1]) : /^<w:p?tab\b/i.test(match[0]) ? '\t' : /^<w:t\b/i.test(match[0]) ? '' : '\n'))
-    .join('');
+  const source = block.replace(PARAGRAPH_PROPERTIES, '');
+  const token = new RegExp(ANALYSIS_TOKEN.source, 'g');
+  let depth = 0;
+  let out = '';
+  let match: RegExpExecArray | null;
+  while ((match = token.exec(source))) {
+    const [whole, closing, prefix, name, selfClosing] = match;
+    if (whole.startsWith('<!--')) continue;
+    if (name === 'p') {
+      if (closing) depth -= 1;
+      else if (!selfClosing) depth += 1;
+      continue;
+    }
+    if (closing || depth !== 1) continue;
+    if (name === 't') {
+      if (selfClosing) continue;
+      const close = source.indexOf(`</${prefix}t>`, token.lastIndex);
+      if (close < 0) break;
+      out += decodeXml(source.slice(token.lastIndex, close));
+      token.lastIndex = close;
+      continue;
+    }
+    out += name === 'br' || name === 'cr' ? '\n' : '\t';
+  }
+  return out;
+}
+
+/**
+ * Z36 krug 4: odmaci plana pokazuju citat koji parser citata nalazi u tekstu odlomka. Plan ih je
+ * dobio iz `extractCitationOccurrences` nad tekstom analize; pomaknut raspon (zastario ili kriv plan,
+ * ili znak koji w:t nema) ovdje ne pogadja nijedan citat, pa se ne pise nista.
+ */
+function citationAt(text: string, start: number, end: number): boolean {
+  return extractCitationOccurrences([{ index: 1, text: asAnalysisText(text).trim() }]).some((found) => found.start === start && found.end === end);
 }
 
 /**
@@ -391,12 +428,15 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       }
     }
     // Upis smije samo kad su odmaci plana i odmaci u w:t isti. w:ptab `unsupported` ne vidi, a pomice
-    // ih kao i w:tab; upis rawText na pomaknut raspon prepolovio bi citat (krug 4).
+    // ih kao i w:tab ili formula (m:t); upis rawText na pomaknut raspon prepolovio bi citat (krug 4).
     if (excludedContainer(parts.documentXml, range) || unsupported(block) || analysisText(block) !== current) return noOp(parts, 'unsupported-structure');
     if (!fingerprintMatches) {
       if (asAnalysisText(current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length)) === asAnalysisText(citation.replacementText)) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
       return noOp(parts, 'invalid-params');
     }
+    // Druga, neovisna brana: upisuje se samo raspon koji je citat. Nepromijenjen citat koji se nije dao
+    // procitati na odmacima plana ovdje ne pogadja citat i nikad se ne prepisuje svojim rawText.
+    if (!citationAt(current, citation.start, citation.end)) return noOp(parts, 'invalid-params');
     verifiedCitations.add(citation.id);
     citationParagraphs.add(citation.paragraphIndex);
     const group = citationGroups.get(citation.paragraphIndex) || { range, block, citations: [] };
