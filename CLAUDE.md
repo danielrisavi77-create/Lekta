@@ -51,6 +51,7 @@ opcu provjeru, ali ne smije tiho bodovati djelomicni light profil.
 
 Sav rad koji pise ide u vlastiti izolirani worktree ili clone izvan repozitorija.
 Zajednicko stablo sluzi samo citanju i mjerenju. Vise pisaca u istom stablu nije dopusteno.
+Nakon spajanja worktree se uklanja; `scripts/worktree-gc.mjs` to radi na startu sesije.
 
 Prije commita provjeri obje strane ciljnih putanja:
 
