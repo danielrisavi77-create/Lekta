@@ -37,7 +37,7 @@ const SPECS_VERIFIED_DIR = path.join(ROOT, 'data/tools/citation-specs/verified')
 const OUT_DIR = path.join(ROOT, 'dist/alati');
 const CITATI_OUT_DIR = path.join(OUT_DIR, 'citati');
 
-// SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lektahr.netlify.app).
+// SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lekta.hr od T49).
 const GENERAL_TOOL_URL = `${SITE_ORIGIN}/citat.html`;
 
 function loadJson(filePath) {

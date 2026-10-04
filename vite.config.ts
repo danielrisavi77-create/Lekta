@@ -35,7 +35,8 @@ function htmlCharsetUtf8() {
 
 // Staging site ima vlastiti javni origin. Početne MPA stranice nose SEO meta-podatke
 // iz izvornog HTML-a, pa ih build mora uskladiti s generatorima koji već čitaju
-// LEKTA_SITE_ORIGIN. U produkciji je zamjena no-op.
+// LEKTA_SITE_ORIGIN. Izvorni HTML i dalje nosi lektahr.netlify.app kao zamjenski token;
+// od T49 build ga u produkciji zamjenjuje s https://lekta.hr.
 function siteOriginHtml(siteOrigin: string) {
   const productionOrigin = 'https://lektahr.netlify.app';
   return {
@@ -479,7 +480,7 @@ function fixHunspellNanoid() {
 
 export default defineConfig(({ command }) => {
   const devTools = resolveDevTools(command, process.env);
-  const siteOrigin = (process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app').replace(/\/+$/, '');
+  const siteOrigin = (process.env.LEKTA_SITE_ORIGIN || 'https://lekta.hr').replace(/\/+$/, '');
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
     rad: resolve(__dirname, 'rad', 'index.html'),

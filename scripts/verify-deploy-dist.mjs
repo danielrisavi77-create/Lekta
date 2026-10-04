@@ -11,7 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { SITE_ORIGIN } from './site-origin.mjs';
+import { RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
@@ -174,10 +174,13 @@ for (const [file, marker] of LEGAL_PAGES) {
 // 4. interna verifikacijska konzola ne smije u javni build (postojeca DEPLOY invarijanta)
 if (fs.existsSync(path.join(DIST, 'verification.html'))) fail('dist/verification.html postoji u DEPLOY buildu');
 
-// 5. SEO origin: nijedan generirani artefakt ne smije nositi neregistriranu domenu lekta.hr,
-//    a kanonik/og:url/loc mora biti unutar LEKTA_SITE_ORIGIN (BL-P0-01-4). Hvata build bez
-//    env-a s razidenim fallbackom. `lekta.hr` (s tockom) NIJE podniz zive lektahr.netlify.app.
-const WRONG_DOMAIN = /https?:\/\/lekta\.hr\b/i;
+// 5. SEO origin: nijedan generirani artefakt ne smije nositi umirovljeni origin
+//    lektahr.netlify.app (od T49 samo preusmjerava na lekta.hr), a kanonik/og:url/loc mora biti
+//    unutar LEKTA_SITE_ORIGIN (BL-P0-01-4). Hvata build kojem zamjena tokena u vite.config.ts
+//    ili generator nije prosao. Build kojem je SITE_ORIGIN bas taj origin (npr. rucni povratak)
+//    ga smije nositi.
+const RETIRED_HOST = /https?:\/\/lektahr\.netlify\.app\b/i;
+const WRONG_DOMAIN = SITE_ORIGIN === RETIRED_ORIGIN ? /(?!)/ : RETIRED_HOST;
 const collectFiles = (dir, ext, acc = []) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -189,7 +192,7 @@ const collectFiles = (dir, ext, acc = []) => {
 for (const p of collectFiles(DIST, '.html')) {
   const html = fs.readFileSync(p, 'utf8');
   const rel = path.relative(DIST, p);
-  if (WRONG_DOMAIN.test(html)) fail(`dist/${rel} sadrzi neregistriranu domenu lekta.hr (origin fallback nije ujednacen)`);
+  if (WRONG_DOMAIN.test(html)) fail(`dist/${rel} sadrzi umirovljeni origin ${RETIRED_ORIGIN} umjesto ${SITE_ORIGIN}`);
   const canonicalTag = html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*>/i);
   const href = canonicalTag && canonicalTag[0].match(/\bhref=["']([^"']+)["']/i);
   if (href && /^https?:\/\//i.test(href[1]) && !href[1].startsWith(SITE_ORIGIN)) {
@@ -197,7 +200,7 @@ for (const p of collectFiles(DIST, '.html')) {
   }
 }
 for (const p of collectFiles(DIST, '.xml')) {
-  if (WRONG_DOMAIN.test(fs.readFileSync(p, 'utf8'))) fail(`dist/${path.relative(DIST, p)} (sitemap) sadrzi lekta.hr`);
+  if (WRONG_DOMAIN.test(fs.readFileSync(p, 'utf8'))) fail(`dist/${path.relative(DIST, p)} (sitemap) sadrzi ${RETIRED_ORIGIN}`);
 }
 
 // 6. CSP script-src whitelist: public/_headers NEMA 'unsafe-inline' za skripte, samo par
