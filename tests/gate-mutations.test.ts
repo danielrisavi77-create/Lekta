@@ -11265,10 +11265,11 @@ describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
 
   it('MUTACIJA: dinamicki uvoz zamijenjen statickim u progress-scan.ts obara gard', () => {
     const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
-    const dinamicki = "import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null)";
+    // Od runde 2 (Z33-02, rok uvoza) dinamicki uvoz stoji u vlastitom pokusaju s rokom.
+    const dinamicki = "import('./analysis-live/analysis-live')";
     const src = izvori['src/ui/progress-scan.ts'];
     expect(src).toContain(dinamicki);
-    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve(mountAnalysisLive)') };
+    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve({ mountAnalysisLive })') };
     expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual([
       'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
       'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
