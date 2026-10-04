@@ -166,6 +166,7 @@ import {
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { mobileConsentProblems } from './helpers/mobile-consent-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -11657,5 +11658,47 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, PR 3)', () => {
+  const lf = (p: string) => readFileSync(resolve(process.cwd(), p), 'utf8').replace(/\r/g, '');
+  const izvor = () => ({
+    pageApp: lf('src/shared/page-app.css'),
+    pageChrome: lf('src/shared/page-chrome.css'),
+    toolPage: lf('src/shared/tool-page.css'),
+    appTs: lf('src/ui/app.ts'),
+  });
+
+  it('BASELINE: obje trake u toku na uskom ekranu, rezerva samo za fiksnu traku', () => {
+    expect(mobileConsentProblems(izvor())).toEqual([]);
+  });
+
+  it('mutant: /rad/ traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.pageApp.replace('.consent-banner{position:static;', '.consent-banner{');
+    expect(m).not.toBe(s.pageApp);
+    expect(mobileConsentProblems({ ...s, pageApp: m })).toEqual(['/rad/: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: alatna traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('.lekta-consent-banner{position:static;', '.lekta-consent-banner{');
+    expect(m).not.toBe(s.toolPage);
+    expect(mobileConsentProblems({ ...s, toolPage: m })).toEqual(['alati: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: rezerva bez praga sirine se hvata', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (min-width:721px){body:has(.consent-banner', '@media screen{body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(mobileConsentProblems({ ...s, pageChrome: m })).toEqual(['rezerva za traku bez praga sirine']);
+  });
+
+  it('mutant: inline rezerva i za traku u toku se hvata', () => {
+    const s = izvor();
+    const m = s.appTs.replace("fiksna?`${h+34}px`:''", "skriven?'':`${h+34}px`");
+    expect(m).not.toBe(s.appTs);
+    expect(mobileConsentProblems({ ...s, appTs: m })).toEqual(['inline rezerva ne ovisi o fiksnoj traci']);
   });
 });

@@ -551,7 +551,9 @@ function syncConsentBannerInset(){const b=$('#consentBanner');if(!b)return;const
   // 169px (mjereno), ali to ovisi o duljini teksta i sirini, pa svaka konstanta brzo postane kriva.
   document.body.style.setProperty('--consent-h',`${h}px`);
   document.body.classList.toggle('has-consent-banner',!skriven);
-  document.body.style.paddingBottom=skriven?'':`${h+34}px`}catch(e: any){}}
+  // Rezerva samo za fiksnu traku; na uskom ekranu traka stoji u toku stranice (mobilni audit PR 3).
+  const fiksna=!skriven&&getComputedStyle(b).position==='fixed';
+  document.body.style.paddingBottom=fiksna?`${h+34}px`:''}catch(e: any){}}
 /* REZERVA SE MJERI ZIVO, ne jednom. Izmjereno 2026-09-05 na `/rad/` (1440x900): traka je pri prvom
    racunu bila visoka 55 px, pa je rezerva ispala 89; do trenutka kad je korisnik vidi narasla je na
    75 px uz vlastiti odmak od 18, dakle treba 93. Razliku od 20 px platila je zadnja poveznica u

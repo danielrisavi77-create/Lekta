@@ -50,8 +50,8 @@ h1{font-family:var(--display-serif);font-weight:400;font-size:clamp(2.6rem,6vw,4
 
    Rezerva se vezuje na `:not(.hidden)`, jer se traka skriva bas tom klasom, pa praznina nestaje
    cim je privola rijesena. */
-@media screen{body:has(.consent-banner:not(.hidden)){padding-bottom:104px}}
-@media screen and (max-width:720px){body:has(.consent-banner:not(.hidden)){padding-bottom:206px}}
+/* Ispod 721 px traka stoji u toku stranice (page-app.css, mobilni audit PR 3), pa rezerve nema. */
+@media screen and (min-width:721px){body:has(.consent-banner:not(.hidden)){padding-bottom:104px}}
 @keyframes stampIn{from{opacity:0;transform:rotate(7deg) scale(1.7)}to{opacity:1;transform:rotate(-11deg) scale(1)}}
 @keyframes hd-float{from{transform:translateY(0)}to{transform:translateY(-3px)}}
 @keyframes hd-guides{0%{opacity:0}40%{opacity:.95}100%{opacity:.35}}
@@ -230,6 +230,5 @@ body{position:relative}
      svakoj visini i svakom skrolu, a CTA ostaje dostupan skrolanjem. Cim je privola rijesena,
      sticky ponasanje se vraca. */
   body:has(.consent-banner:not(.hidden)) #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:static;padding:0;background:none;border-top:0;box-shadow:none}
-  body:has(#wizardView[data-step="1"] #dropzone.has-file):has(.consent-banner:not(.hidden)){padding-bottom:calc(206px + env(safe-area-inset-bottom))}
   .finding-actions .btn{min-height:44px;font-size:15px}
   .guide-cta .btn,.guide-cta .guide-more{width:100%;margin:0;min-height:46px}}
