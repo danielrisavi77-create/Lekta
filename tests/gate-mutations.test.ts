@@ -7795,6 +7795,91 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: z36FixerCist,
   },
   {
+    id: 'z36/komentar-zatvara-polje',
+    imitates: 'granica polja i kontrole cita i komentare (pregled drugog providera): komentirani fldChar end ili '
+      + '</w:sdtContent> spusti dubinu na nulu, pa zapis zavrsi unutar stvarnog polja BIBLIOGRAPHY ili kontrole',
+    caught: () => {
+      const problemi = zapisLiteratureProblemi(z36Fixer(".replace(NOT_MARKUP, '')", ''));
+      return problemi.some((p) => p.startsWith('polje:komentar-zatvara:')) && problemi.some((p) => p.startsWith('kontrola:komentar-zatvara:'));
+    },
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-izvora',
+    imitates: 'novi zapis kopira w:pPr zapisa sidra zajedno s w:framePr (pregled drugog providera), pa predlozak '
+      + 'ili korisnikov zapis postane dio plutajuceg okvira',
+    caught: () => {
+      const problemi = zapisLiteratureProblemi(z36Fixer('return framed(source) || ', 'return '));
+      return problemi.some((p) => p.startsWith('okvir:izvor:'));
+    },
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-susjeda',
+    imitates: 'provjera okvira ne gleda odlomak ispred mjesta umetanja: predlozak bez okvira razdvoji okvir susjeda',
+    caught: () => zapisLiteratureProblemi(z36Fixer('if (range.end <= offset && (!before || range.end > before.end)) before = range;', ''))
+      .some((p) => p.startsWith('okvir:susjed:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-susjed-po-odmaku',
+    imitates: 'susjed mjesta umetanja trazi se jednakoscu XML odmaka (pregled drugog providera, runda 2): prijelom '
+      + 'retka ili komentar izmedju odlomaka sakrije susjeda u okviru, pa predlozak razdvoji okvir',
+    caught: () => zapisLiteratureProblemi(z36Fixer('if (range.end <= offset && (!before || range.end > before.end)) before = range;\n    if (range.start >= offset && (!after || range.start < after.start)) after = range;', 'if (range.end === offset) before = range;\n    if (range.start === offset) after = range;'))
+      .some((p) => p.startsWith('okvir:susjed-razmak:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-skriven-komentarom',
+    imitates: 'svojstva odlomka citaju se s komentarima (pregled drugog providera, runda 2): komentirani </w:pPr> '
+      + 'ispred w:framePr sakrije aktivni okvir susjeda, pa predlozak razdvoji zajednicki okvir',
+    caught: () => zapisLiteratureProblemi(z36Fixer("block.replace(NOT_MARKUP, '').replace(PROPERTY_HISTORY, '')", "block.replace(PROPERTY_HISTORY, '')"))
+      .some((p) => p.startsWith('okvir:komentar-u-svojstvima:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-iz-povijesti',
+    imitates: 'okvir samo u prethodnim svojstvima (w:pPrChange) broji se kao aktivan (pregled drugog providera, runda 2), '
+      + 'pa se valjano umetanje uz susjeda bez okvira odbije',
+    caught: () => zapisLiteratureProblemi(z36Fixer(".replace(PROPERTY_HISTORY, '')", ''))
+      .some((p) => p.startsWith('okvir:povijesni:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/svojstva-s-komentarom',
+    imitates: 'novi zapis kopira svojstva sidra bez skidanja komentara (pregled drugog providera, runde 2 i 3): regex ih '
+      + 'presijece na komentiranom </w:pPr> (neispravan XML) ili uzme lazni pPr s okvirom iz komentara',
+    caught: () => {
+      const problemi = zapisLiteratureProblemi(z36Fixer("const plain = block.replace(NOT_MARKUP, '');", 'const plain = block;'));
+      return problemi.some((p) => p.startsWith('svojstva:komentar:')) && problemi.some((p) => p.startsWith('svojstva:komentar-ispred:'));
+    },
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/okvir-ugnijezdenog-odlomka',
+    imitates: 'svojstva susjeda traze se bilo gdje u odlomku (pregled drugog providera, runda 3): framePr odlomka u '
+      + 'tekstnom okviru susjeda cita se kao susjedov, pa se valjan korisnikov zapis odbije',
+    caught: () => zapisLiteratureProblemi(z36Fixer('const match = plain.match(OWN_PARAGRAPH_PROPERTIES);', 'const match = plain.match(/(<w:pPr\\b[\\s\\S]*?<\\/w:pPr>)/i);'))
+      .some((p) => p.startsWith('okvir:ugnijezdeni-susjed:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/samozatvorena-svojstva',
+    imitates: 'svojstva odlomka bez alternative za samozatvoreni <w:pPr/> (pregled drugog providera, runda 4): regex '
+      + 'ih cita do </w:pPr> ugnijezdenog odlomka, pa novi zapis dobije run, sliku i nezatvorene spremnike (neispravan XML)',
+    caught: () => zapisLiteratureProblemi(z36Fixer('(<w:pPr\\b[^>]*\\/>|<w:pPr\\b[^>]*>', '(<w:pPr\\b[^>]*>'))
+      .some((p) => p.startsWith('svojstva:prazna:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/sekcija-s-komentarom',
+    imitates: 'prijelom sekcije sidra cita se s komentarima (pregled drugog providera, runda 4): komentirani </w:sectPr> '
+      + 'presijece prijelom koji prelazi na korisnikov zapis, pa rezultat nosi nezatvoren komentar',
+    caught: () => zapisLiteratureProblemi(z36Fixer(".replace(NOT_MARKUP, (match) => ' '.repeat(match.length))", ''))
+      .some((p) => p.startsWith('sekcija:komentar:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
     id: 'z36/predlozak-kopira-prijelom-sekcije',
     imitates: 'novi zapis kopira cijeli w:pPr sidra zajedno s w:sectPr, pa predlozak na vrhu ili usred '
       + 'popisa unese prijelom sekcije (nova stranica) i razlomi literaturu',

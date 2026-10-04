@@ -176,6 +176,7 @@ function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
   sekcijeIVisodlomacniProblemi(fixer, problems);
   odmaciProblemi(fixer, problems);
   poljaIKontroleProblemi(fixer, problems);
+  okviriProblemi(fixer, problems);
 }
 
 const FIELD_BEGIN = '<w:r><w:fldChar w:fldCharType="begin"/></w:r>';
@@ -197,7 +198,10 @@ function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
   const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
   const literal = (params: ReturnType<typeof syncCase>['params']) => ({ ...params, entries: [{ ...params.entries[0], citationId: undefined, replacementText: literalText }] });
   // Polje preko tri zapisa: begin i separate u prvom, end u zadnjem (endInTrailing: u praznom odlomku iza).
-  const fieldEntry = (endInTrailing: boolean, nested = false) => (text: string, index: number) => `<w:p>${LIST_PPR}${index === 0 ? `${FIELD_BEGIN}${instruction('BIBLIOGRAPHY')}${FIELD_SEPARATE}` : ''}${nested && index === 1 ? `${FIELD_BEGIN}${instruction('HYPERLINK "https://doi.org/10.1/x"')}${FIELD_SEPARATE}${run(text)}${FIELD_END}` : run(text)}${!endInTrailing && index === surnames.length - 1 ? FIELD_END : ''}</w:p>`;
+  const fieldEntry = (endInTrailing: boolean, nested = false, comment = '') => (text: string, index: number) => `<w:p>${LIST_PPR}${index === 0 ? `${FIELD_BEGIN}${instruction('BIBLIOGRAPHY')}${FIELD_SEPARATE}` : ''}${nested && index === 1 ? `${FIELD_BEGIN}${instruction('HYPERLINK "https://doi.org/10.1/x"')}${FIELD_SEPARATE}${run(text)}${FIELD_END}` : run(text)}${index === 1 ? comment : ''}${!endInTrailing && index === surnames.length - 1 ? FIELD_END : ''}</w:p>`;
+  // Pregled drugog providera: komentar s oznakom kraja polja ili kontrole nije oznaka i ne zatvara ih.
+  const commentedEnd = '<!-- <w:fldChar w:fldCharType="end"/> -->';
+  const commentedControlEnd = '<!-- </w:sdtContent> -->';
   const trailingEnd = `<w:p>${FIELD_END}</w:p>`;
   const cases: Array<{ tag: string; options: CaseOptions; literal: boolean; inserted: boolean; inside: 'polje' | 'kontrola' | null }> = [
     { tag: 'polje:predlozak', options: { rawEntries: texts, entryXml: fieldEntry(false) }, literal: false, inserted: false, inside: 'polje' },
@@ -206,6 +210,8 @@ function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
     { tag: 'polje:korisnikov-zapis-iza-polja', options: { rawEntries: texts, entryXml: fieldEntry(false) }, literal: true, inserted: true, inside: null },
     { tag: 'kontrola:predlozak', options: { rawEntries: texts, listWrap: ['<w:sdt><w:sdtPr><w:docPartObj><w:docPartGallery w:val="Bibliographies"/></w:docPartObj></w:sdtPr><w:sdtContent>', '</w:sdtContent></w:sdt>'] }, literal: false, inserted: false, inside: 'kontrola' },
     { tag: 'kontrola:korisnikov-zapis', options: { rawEntries: texts, listWrap: ['<w:sdt><w:sdtContent>', '</w:sdtContent></w:sdt>'] }, literal: true, inserted: false, inside: 'kontrola' },
+    { tag: 'polje:komentar-zatvara', options: { rawEntries: texts, entryXml: fieldEntry(false, false, commentedEnd) }, literal: false, inserted: false, inside: 'polje' },
+    { tag: 'kontrola:komentar-zatvara', options: { rawEntries: texts, listWrap: [`<w:sdt><w:sdtContent>${commentedControlEnd}`, '</w:sdtContent></w:sdt>'] }, literal: true, inserted: false, inside: 'kontrola' },
     { tag: 'bez-polja:predlozak', options: { rawEntries: texts }, literal: false, inserted: true, inside: null },
     { tag: 'bez-polja:korisnikov-zapis', options: { rawEntries: texts }, literal: true, inserted: true, inside: null },
   ];
@@ -216,12 +222,15 @@ function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
     if (JSON.stringify(built.before.slice(2, 5)) !== JSON.stringify(texts)) problems.push(`${item.tag}: ulaz nema ista tri zapisa`);
     const zubak = xml.indexOf(texts[2]);
     const fieldSpansTarget = xml.indexOf('fldCharType="begin"') >= 0 && xml.indexOf('fldCharType="begin"') < zubak && xml.lastIndexOf('fldCharType="end"') > zubak;
-    const controlSpans = xml.indexOf('<w:sdtContent>') >= 0 && xml.indexOf('<w:sdtContent>') < zubak && xml.indexOf('</w:sdtContent>') > zubak;
+    const controlSpans = xml.indexOf('<w:sdtContent>') >= 0 && xml.indexOf('<w:sdtContent>') < zubak && xml.lastIndexOf('</w:sdtContent>') > zubak;
     // Korisnikov zapis ide iza sidra: kad end polja stoji u odlomku sidra, mjesto je iza polja.
     const endInAnchor = xml.lastIndexOf('fldCharType="end"') > zubak && xml.lastIndexOf('fldCharType="end"') < xml.indexOf('</w:p>', zubak);
     if (item.tag === 'polje:korisnikov-zapis-iza-polja' ? !(fieldSpansTarget && endInAnchor) : (item.inside === 'polje') !== fieldSpansTarget) problems.push(`${item.tag}: ulaz nema polje preko zapisa kako slucaj tvrdi`);
     if ((item.inside === 'kontrola') !== controlSpans) problems.push(`${item.tag}: ulaz nema kontrolu oko zapisa kako slucaj tvrdi`);
     if (item.tag === 'polje:ugnijezdeno' && (xml.match(/fldCharType="end"/g) ?? []).length !== 2) problems.push(`${item.tag}: ulaz nema ugnijezdeno polje`);
+    // Generator: komentirani kraj stoji IZMEDJU stvarnog pocetka i mjesta umetanja (ispred Zupka).
+    const comment = item.tag === 'polje:komentar-zatvara' ? commentedEnd : item.tag === 'kontrola:komentar-zatvara' ? commentedControlEnd : null;
+    if (comment && !(xml.indexOf(comment) > xml.indexOf(item.inside === 'polje' ? 'fldCharType="begin"' : '<w:sdtContent>') && xml.indexOf(comment) < zubak)) problems.push(`${item.tag}: ulaz nema komentirani kraj unutar ${item.inside}`);
     const params = item.literal ? literal(built.params) : built.params;
     const first = fixer(built.parts, params);
     const expected = item.literal ? literalText : template('Novak', '2022');
@@ -231,6 +240,117 @@ function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
     } else {
       if (first.applied || first.parts.documentXml !== xml || after.includes(expected)) problems.push(`${item.tag}: zapis je umetnut unutar ${item.inside}`);
       if (!first.skippedActions?.some((note) => note.includes('unutar Wordova polja'))) problems.push(`${item.tag}: preskok nema razlog (${JSON.stringify(first.skippedActions)})`);
+    }
+    const second = fixer(first.parts, params);
+    if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${item.tag}: drugi prolaz nije no-op (${second.reason})`);
+  }
+}
+
+const FRAME = '<w:framePr w:w="9000" w:hSpace="180" w:wrap="around" w:vAnchor="text" w:hAnchor="page" w:x="1500" w:y="1"/>';
+const IND = '<w:ind w:left="720" w:hanging="720"/>';
+const FRAME_PPR = `<w:pPr>${FRAME}${IND}</w:pPr>`;
+/** Komentar s laznim krajem svojstava ispred okvira (pregled drugog providera, runda 2). */
+const COMMENTED_FRAME_PPR = `<w:pPr><!-- </w:pPr> -->${FRAME}${IND}</w:pPr>`;
+/** Okvir samo u prethodnim svojstvima (Track Changes): aktualni odlomak nije u okviru. */
+const HISTORIC_FRAME_PPR = `<w:pPr>${IND}<w:pPrChange w:id="1" w:author="A" w:date="2026-01-01T00:00:00Z"><w:pPr>${FRAME}</w:pPr></w:pPrChange></w:pPr>`;
+/** Komentar s laznim krajem svojstava bez okvira: kopija svojstava bila bi presjecena unutar komentara. */
+const COMMENTED_PPR = `<w:pPr><!-- </w:pPr> -->${IND}</w:pPr>`;
+/** Lazna svojstva s okvirom u komentaru ISPRED stvarnih (pregled drugog providera, runda 3). */
+const COMMENTED_FAKE_PPR = `<!-- <w:pPr>${FRAME}</w:pPr> --><w:pPr>${IND}</w:pPr>`;
+/** Odlomak bez vlastitih svojstava s tekstnim okvirom ciji unutarnji odlomak nosi framePr. */
+const NESTED_FRAMED_PARAGRAPH = `<w:p><w:r><w:pict><v:shape><v:textbox><w:txbxContent><w:p>${FRAME_PPR}<w:r><w:t>Okvir</w:t></w:r></w:p></w:txbxContent></v:textbox></v:shape></w:pict></w:r></w:p>`;
+
+/** Prijelom sekcije s komentiranim `</w:sectPr>` u svojstvima zadnjeg zapisa (pregled, runda 4). */
+const COMMENTED_SECTION_PPR = `<w:pPr>${IND}<w:sectPr><!-- </w:sectPr> --><w:type w:val="nextPage"/></w:sectPr></w:pPr>`;
+/** Tekstni okvir s praznim unutarnjim odlomkom koji ima obicna svojstva (iza samozatvorenog `<w:pPr/>`). */
+const NESTED_EMPTY_PARAGRAPH_RUN = '<w:r><w:pict><v:shape><v:textbox><w:txbxContent><w:p><w:pPr><w:jc w:val="center"/></w:pPr></w:p></w:txbxContent></v:textbox></v:shape></w:pict></w:r>';
+
+/** Dokument je ispravan XML (parser analize baca na svaku dijagnostiku). */
+function wellFormed(documentXml: string): boolean {
+  try {
+    parseXml(documentXml.replace('<w:document>', `<w:document ${WORD_NS} xmlns:v="urn:schemas-microsoft-com:vml">`), 'test');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const encodeText = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+
+/** Aktualna svojstva odlomka u generatoru: bez komentara i bez povijesti (w:pPrChange). */
+const activeFramed = (paragraphXml: string) => /<w:framePr\b/.test((paragraphXml.replace(/<!--[\s\S]*?-->/g, '').replace(/<w:pPrChange\b[\s\S]*?<\/w:pPrChange>/g, '').match(/<w:pPr\b[\s\S]*?<\/w:pPr>/) ?? [''])[0]);
+
+/**
+ * Z36 (pregled drugog providera, dvije runde): popis u okviru (w:framePr, stari Wordov plutajuci blok).
+ * Zapis se ne umece kad okvir nosi izvor oblikovanja (zapis sidra) ili susjedni odlomak mjesta umetanja,
+ * i kad ih od mjesta dijeli razmak ili komentar: novi odlomak bi kopirao okvir ili razdvojio okvir
+ * susjeda. Komentar u svojstvima ne skriva okvir, a okvir samo u povijesti (w:pPrChange) ili u
+ * ugnijezdenom odlomku susjeda ne odbija umetanje. Svojstva se kopiraju bez komentara: ni presjecena
+ * ni lazna (pPr iz komentara) ne ulaze u novi zapis. Razlog preskoka ide u
+ * skippedActions, dokument ostaje bajt-isti, drugi prolaz isti. Generator dokazuje gdje je okvir.
+ */
+function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
+  const base: Array<[string, string]> = [['Cvitan', '2015'], ['Horvat', '2020'], ['Zubak', '2019']];
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const cases: Array<{
+    tag: string; pPr: Record<number, string>; active: number[]; expect: 'preskok' | 'umetnut';
+    literal?: boolean; cite?: [string, string]; surnames?: Array<[string, string]>; separator?: string; after?: string[];
+    /** Dodatni sadrzaj odlomka zapisa iza teksta; ocekivana svojstva umetnutog zapisa (zadano: svojstva popisa). */
+    extra?: Record<number, string>; props?: string;
+  }> = [
+    { tag: 'okvir:predlozak', pPr: { 0: FRAME_PPR, 1: FRAME_PPR, 2: FRAME_PPR }, active: [0, 1, 2], expect: 'preskok' },
+    // Samo izvor oblikovanja (zapis sidra, Zubak) je u okviru; predlozak ide na pocetak, uz susjede bez okvira.
+    { tag: 'okvir:izvor', pPr: { 2: FRAME_PPR }, active: [2], expect: 'preskok', cite: ['Babić', '2021'] },
+    { tag: 'okvir:korisnikov-zapis', pPr: { 0: FRAME_PPR, 1: FRAME_PPR, 2: FRAME_PPR }, active: [0, 1, 2], expect: 'preskok', literal: true },
+    // Samo susjed ispred mjesta predloska (Horvat) je u okviru; izvor oblikovanja (Zubak) nije.
+    { tag: 'okvir:susjed', pPr: { 1: FRAME_PPR }, active: [1], expect: 'preskok' },
+    // Isto, ali Horvata od mjesta umetanja dijele prijelom retka i komentar u XML-u.
+    { tag: 'okvir:susjed-razmak', pPr: { 1: FRAME_PPR }, active: [1], expect: 'preskok', separator: '\n<!-- razmak -->\n' },
+    // Horvat i Zubak dijele okvir, a komentar s laznim </w:pPr> stoji ispred framePr; sidro (Zupan) je obicno.
+    { tag: 'okvir:komentar-u-svojstvima', pPr: { 1: COMMENTED_FRAME_PPR, 2: COMMENTED_FRAME_PPR }, active: [1, 2], expect: 'preskok', surnames: [...base, ['Zupan', '2014']] },
+    // Okvir samo u povijesti susjeda: umetanje je valjano.
+    { tag: 'okvir:povijesni', pPr: { 1: HISTORIC_FRAME_PPR }, active: [], expect: 'umetnut' },
+    // Svojstva sidra s komentarom: novi zapis nosi cista svojstva (bez komentara, bez laznog okvira).
+    { tag: 'svojstva:komentar', pPr: { 2: COMMENTED_PPR }, active: [], expect: 'umetnut', literal: true },
+    { tag: 'svojstva:komentar-ispred', pPr: { 2: COMMENTED_FAKE_PPR }, active: [], expect: 'umetnut', literal: true },
+    // Odlomak iza popisa (susjed korisnikova zapisa) nema vlastiti okvir; okvir je samo u njegovom tekstnom okviru.
+    { tag: 'okvir:ugnijezdeni-susjed', pPr: {}, active: [], expect: 'umetnut', literal: true, after: [NESTED_FRAMED_PARAGRAPH] },
+    // Samozatvoreni <w:pPr/> sidra uz tekstni okvir s praznim odlomkom: novi zapis je bez svojstava, ispravan XML.
+    { tag: 'svojstva:prazna', pPr: { 2: '<w:pPr/>' }, active: [], expect: 'umetnut', literal: true, extra: { 2: NESTED_EMPTY_PARAGRAPH_RUN }, props: '' },
+    // Prijelom sekcije sidra s komentiranim </w:sectPr> prelazi na korisnikov zapis cijel (ispravan XML).
+    { tag: 'sekcija:komentar', pPr: { 2: COMMENTED_SECTION_PPR }, active: [], expect: 'umetnut', literal: true },
+  ];
+  for (const item of cases) {
+    const surnames = item.surnames ?? base;
+    const texts = surnames.map(([surname, year]) => entryText(surname, year));
+    const [surname, year] = item.cite ?? ['Novak', '2022'];
+    const entryXml = (text: string, index: number) => `${index === 2 && item.separator ? item.separator : ''}<w:p>${item.pPr[index] ?? LIST_PPR}${run(text)}${item.extra?.[index] ?? ''}</w:p>`;
+    const built = syncCase(`Tekst rada (${surname}, ${year}).`, `${surname}, ${year}`, [], { rawEntries: texts, entryXml, after: item.after });
+    const xml = built.parts.documentXml;
+    // Generator: aktivni okvir je bas na zapisima koje slucaj tvrdi, a tekst zapisa je isti kao bez okvira
+    // (odlomci izvan popisa, npr. tekstni okvir iza njega, provjeravaju se zasebno ispod).
+    const activeTexts = [...xml.matchAll(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g)].filter((match) => activeFramed(match[0])).map((match) => paragraphTexts(match[0].replace(/<!--[\s\S]*?-->/g, ''))[0]).filter((text) => texts.includes(text));
+    if (JSON.stringify(activeTexts) !== JSON.stringify(item.active.map((index) => texts[index]))) problems.push(`${item.tag}: ulaz nema okvir na zapisima kako slucaj tvrdi (${JSON.stringify(activeTexts)})`);
+    if (JSON.stringify(built.before.slice(2, 2 + texts.length).map((text) => text.trim())) !== JSON.stringify(texts)) problems.push(`${item.tag}: ulaz nema iste zapise`);
+    if (item.separator && !xml.includes(`</w:p>${item.separator}<w:p>`)) problems.push(`${item.tag}: ulaz nema razmak izmedju susjeda`);
+    if (item.tag === 'okvir:povijesni' && !/<w:pPrChange\b[\s\S]*?<w:framePr\b[\s\S]*?<\/w:pPrChange>/.test(xml)) problems.push(`${item.tag}: ulaz nema okvir u povijesti`);
+    if ((item.tag === 'okvir:komentar-u-svojstvima' || item.tag === 'svojstva:komentar') && !xml.includes('<!-- </w:pPr> -->')) problems.push(`${item.tag}: ulaz nema komentar u svojstvima`);
+    if (item.tag === 'svojstva:komentar-ispred' && !xml.includes(`<!-- <w:pPr>${FRAME}</w:pPr> -->`)) problems.push(`${item.tag}: ulaz nema lazna svojstva u komentaru`);
+    if (item.tag === 'svojstva:prazna' && !xml.includes(`<w:p><w:pPr/>${run(texts[2])}${NESTED_EMPTY_PARAGRAPH_RUN}</w:p>`)) problems.push(`${item.tag}: ulaz nema sidro s <w:pPr/> i ugnijezdenim odlomkom`);
+    if (item.tag === 'sekcija:komentar' && !(xml.includes('<w:sectPr><!-- </w:sectPr> -->') && JSON.stringify(sectionEndTexts(xml)) === JSON.stringify([texts[2]]))) problems.push(`${item.tag}: ulaz nema prijelom s komentarom na zadnjem zapisu`);
+    if (item.tag === 'okvir:ugnijezdeni-susjed' && !(xml.includes(NESTED_FRAMED_PARAGRAPH) && xml.indexOf(NESTED_FRAMED_PARAGRAPH) > xml.indexOf(texts[texts.length - 1]))) problems.push(`${item.tag}: ulaz nema odlomak s ugnijezdenim okvirom iza popisa`);
+    const params = item.literal ? { ...built.params, entries: [{ ...built.params.entries[0], citationId: undefined, replacementText: literalText }] } : built.params;
+    const first = fixer(built.parts, params);
+    const expected = item.literal ? literalText : template(surname, year);
+    if (item.expect === 'umetnut') {
+      if (!first.applied || !paragraphTexts(first.parts.documentXml).includes(expected)) problems.push(`${item.tag}: zapis nije umetnut (${first.reason}, ${JSON.stringify(first.skippedActions)})`);
+      // Umetnuti odlomak nosi samo cista svojstva popisa: bez komentara i bez okvira.
+      else if (item.tag.startsWith('svojstva:') && !first.parts.documentXml.includes(`<w:p>${item.props ?? LIST_PPR}<w:r><w:t xml:space="preserve">${encodeText(expected)}</w:t></w:r></w:p>`)) problems.push(`${item.tag}: umetnuti zapis nema cista svojstva popisa`);
+      if (!wellFormed(first.parts.documentXml)) problems.push(`${item.tag}: rezultat nije ispravan XML`);
+      if (item.tag === 'sekcija:komentar' && JSON.stringify(sectionEndTexts(first.parts.documentXml)) !== JSON.stringify([expected])) problems.push(`${item.tag}: prijelom sekcije nije presao na umetnuti zapis`);
+    } else {
+      if (first.applied || first.parts.documentXml !== xml) problems.push(`${item.tag}: zapis je umetnut (${first.reason})`);
+      if (!first.skippedActions?.some((note) => note.includes('u okviru'))) problems.push(`${item.tag}: preskok nema razlog (${JSON.stringify(first.skippedActions)})`);
     }
     const second = fixer(first.parts, params);
     if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${item.tag}: drugi prolaz nije no-op (${second.reason})`);

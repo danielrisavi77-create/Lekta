@@ -47,18 +47,23 @@ const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mo
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
 const SKIPPED_IN_FIELD = 'zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
 
+const SKIPPED_IN_FRAME = 'zapis literature nije umetnut: popis literature je u okviru (w:framePr), a novi odlomak bi promijenio okvir';
+
 const FIELD_OR_CONTROL_TOKEN = /<w:fldChar\b[^>]*\bw:fldCharType=["'](begin|end)["'][^>]*>|<w:sdtContent\b[^>]*>|<\/w:sdtContent\s*>/gi;
+/** Komentar, CDATA i instrukcija obrade nisu oznake: tekst u njima ne otvara ni ne zatvara polje. */
+const NOT_MARKUP = /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g;
 
 /**
  * Z36 krug 4: je li pomak `offset` u document.xml izmedju fldChar begin i end nekog polja (npr. popis
  * literature kao BIBLIOGRAPHY polje) ili unutar w:sdtContent. Word rezultat polja pri osvjezavanju
  * izgradi iznova, a kontrolu drzi kao cjelinu, pa umetnuti odlomak tamo ne smije zavrsiti. Ugnijezdeno
- * polje broji se dubinom: njegov end ne zatvara vanjsko polje.
+ * polje broji se dubinom: njegov end ne zatvara vanjsko polje. Pregled drugog providera: komentirani
+ * `end` ili `</w:sdtContent>` ne smije zatvoriti stvarno polje, pa se komentari prije brojanja skidaju.
  */
 function insideFieldOrControl(xml: string, offset: number): boolean {
   let field = 0;
   let control = 0;
-  for (const match of xml.slice(0, offset).matchAll(FIELD_OR_CONTROL_TOKEN)) {
+  for (const match of xml.slice(0, offset).replace(NOT_MARKUP, '').matchAll(FIELD_OR_CONTROL_TOKEN)) {
     if (match[1] === 'begin') field += 1;
     else if (match[1] === 'end') field = Math.max(0, field - 1);
     else if (match[0].startsWith('</')) control = Math.max(0, control - 1);
@@ -172,6 +177,45 @@ const SECTION_PROPERTIES = /<w:sectPr\b(?:[^>]*\/>|[\s\S]*?<\/w:sectPr>)/i;
 /** Revizije (Track Changes) u svojstvima: novi odlomak ne smije nositi tudju reviziju. */
 const PROPERTY_REVISION = /<w:(?:pPrChange|rPrChange|sectPrChange|ins|del|moveFrom|moveTo)\b/i;
 
+/** Prethodna svojstva odlomka (Track Changes): povijest, ne aktualno oblikovanje. */
+const PROPERTY_HISTORY = /<w:pPrChange\b[\s\S]*?<\/w:pPrChange>/gi;
+
+/**
+ * Vlastita svojstva odlomka: w:pPr kao prvo dijete w:p, procitana bez komentara, CDATA i PI. Lazni pPr
+ * u komentaru i pPr ugnijezdenog odlomka (tekstni okvir) nisu svojstva ovog odlomka.
+ */
+const OWN_PARAGRAPH_PROPERTIES = /^<w:p\b[^>]*>\s*(<w:pPr\b[^>]*\/>|<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>)/i;
+
+/**
+ * Vlastita svojstva odlomka i njihov pomak u bloku, iz bloka bez komentara (ili s komentarima maskiranim
+ * razmacima). Samozatvoreni `<w:pPr/>` nema svojstava; bez prve alternative regex bi ga citao do
+ * `</w:pPr>` ugnijezdenog odlomka (pregled drugog providera, runda 4).
+ */
+function ownProperties(plain: string): { xml: string; index: number } | null {
+  const match = plain.match(OWN_PARAGRAPH_PROPERTIES);
+  if (!match || /\/>$/.test(match[1])) return null;
+  return { xml: match[1], index: match[0].length - match[1].length };
+}
+
+/** Aktualna svojstva odlomka nose okvir; komentar ih ne skriva, a okvir samo u povijesti nije aktualan. */
+const framed = (block: string) => /<w:framePr\b/i.test(ownProperties(block.replace(NOT_MARKUP, '').replace(PROPERTY_HISTORY, ''))?.xml || '');
+
+/**
+ * Z36 (pregled drugog providera): okvir (w:framePr) je stari Wordov plutajuci blok, kao tekstni okvir.
+ * Novi odlomak bi kopirao okvir izvora ili razdvojio okvir susjeda, pa se zapis ne umece kad okvir
+ * nosi izvor oblikovanja ili susjedni odlomak mjesta umetanja. Susjedi su strukturni (zadnji odlomak
+ * koji zavrsava prije mjesta i prvi koji pocinje iza njega), pa ih razmak ili komentar ne skriva.
+ */
+function framedAt(xml: string, ranges: ParagraphRange[], offset: number, source: string): boolean {
+  let before: ParagraphRange | undefined;
+  let after: ParagraphRange | undefined;
+  for (const range of ranges) {
+    if (range.end <= offset && (!before || range.end > before.end)) before = range;
+    if (range.start >= offset && (!after || range.start < after.start)) after = range;
+  }
+  return framed(source) || [before, after].some((range) => range !== undefined && framed(xml.slice(range.start, range.end)));
+}
+
 /**
  * Elementi koje parser cita po `localName`, U BILO KOJEM prostoru imena: t (i OMML `m:t`), tab, ptab,
  * br, cr, te odlomci (`p`, i `a:p`), koji odredjuju cije je dijete. Komentari se preskacu.
@@ -229,8 +273,11 @@ function citationAt(text: string, start: number, end: number): boolean {
  * odlomak usred popisa bi ga razlomio. `sectPr` dobiva samo odlomak koji preuzima prijelom sidra.
  */
 function paragraphTemplate(block: string, replacement: string, sectPr = ''): string | null {
-  const pPr = block.match(PARAGRAPH_PROPERTIES)?.[0] || '';
-  const rPr = block.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1] || '';
+  // Svojstva se citaju bez komentara (pregled drugog providera): komentar ih ne presijece u neispravan XML,
+  // a lazni pPr iz komentara ne postaje oblikovanje novog zapisa.
+  const plain = block.replace(NOT_MARKUP, '');
+  const pPr = ownProperties(plain)?.xml || '';
+  const rPr = plain.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1] || '';
   if (PROPERTY_REVISION.test(pPr) || PROPERTY_REVISION.test(rPr)) return null;
   const own = pPr.replace(SECTION_PROPERTIES, '');
   const properties = !sectPr ? own : own ? own.replace(/<\/w:pPr>$/i, `${sectPr}</w:pPr>`) : `<w:pPr>${sectPr}</w:pPr>`;
@@ -239,11 +286,13 @@ function paragraphTemplate(block: string, replacement: string, sectPr = ''): str
 
 /** Prijelom sekcije u svojstvima odlomka `range` (apsolutni raspon u dokumentu), ili null. */
 function sectionBreak(xml: string, range: ParagraphRange): { xml: string; start: number; end: number } | null {
-  const block = xml.slice(range.start, range.end);
-  const pPr = block.match(PARAGRAPH_PROPERTIES);
-  const sectPr = pPr?.[0].match(SECTION_PROPERTIES);
+  // Komentari se maskiraju razmacima iste duljine (kao u paragraphRanges): odmaci ostaju tocni, a
+  // komentirani `</w:sectPr>` ne presijece prijelom koji prelazi na novi zapis (pregled, runda 4).
+  const block = xml.slice(range.start, range.end).replace(NOT_MARKUP, (match) => ' '.repeat(match.length));
+  const pPr = ownProperties(block);
+  const sectPr = pPr?.xml.match(SECTION_PROPERTIES);
   if (!pPr || !sectPr) return null;
-  const start = range.start + (pPr.index ?? 0) + (sectPr.index ?? 0);
+  const start = range.start + pPr.index + (sectPr.index ?? 0);
   return { xml: sectPr[0], start, end: start + sectPr[0].length };
 }
 
@@ -501,12 +550,14 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
         // Korisnikov potvrdjeni zapis: zateceno ponasanje, doslovno i iza sidra.
         offset = range.end;
         if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }
+        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }
         literalInsertions.push({ offset, text, source });
       } else {
         const position = alphabeticalPosition(parts.documentXml, ranges, paragraphs, anchor.paragraphIndex, text);
         if (!position) { skippedActions.push(SKIPPED_NO_LIST); continue; }
         offset = position.offset;
         if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }
+        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }
         const group = templateInsertions.get(offset) || [];
         group.push({ key: position.key, text, source });
         templateInsertions.set(offset, group);
