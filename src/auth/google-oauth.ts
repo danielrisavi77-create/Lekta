@@ -17,11 +17,6 @@
  */
 import { parseTokenResponse, type AuthConfig, type SessionResult } from './session';
 
-export { googleAuthEnabled } from './google-flag';
-
-/** Kljuc pod kojim app.ts sprema PKCE verifier (sigurni omotac pohrane, ne sirovi localStorage). */
-export const GOOGLE_PKCE_KEY = 'lekta.oauth.pkce';
-
 /** Verifier stariji od ovoga ne vrijedi: povratak s Googlea traje sekunde, ne sate. */
 export const PKCE_MAX_AGE_MS = 10 * 60_000;
 

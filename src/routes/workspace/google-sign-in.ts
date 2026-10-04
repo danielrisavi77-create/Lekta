@@ -14,7 +14,8 @@ import { googleAuthEnabled } from '../../auth/google-flag';
 import type { AuthConfig, Session } from '../../auth/session';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../../shared/browser-storage';
 
-export const PKCE_STORAGE_KEY = 'lekta.oauth.pkce';
+/** PKCE verifier pod sigurnim omotacem pohrane (ne sirovi localStorage). */
+const PKCE_STORAGE_KEY = 'lekta.oauth.pkce';
 
 export interface GoogleSignInDeps {
   enabled: boolean;
