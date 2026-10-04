@@ -298,6 +298,7 @@ import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
+import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -4987,6 +4988,50 @@ const MUTATIONS: Mutation[] = [
       return mut !== src && repairCostGuardProblems(mut).includes('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
     },
     cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  },
+  // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
+  {
+    id: 't84/xff-prvi-unos',
+    imitates: 'T84 XFF: kljuc se opet uzima iz PRVOG unosa x-forwarded-for, koji bira klijent, pa svaki izmisljen unos daje nov brojac IP limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops[0] ?? 'unknown';");
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije zadnji unos x-forwarded-for');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-obrnuti-hopovi',
+    imitates: 'T84 XFF: hopovi se obrnu prije at(-1), pa tekst jos sadrzi zadnji unos, a kljuc je opet PRVI (klijentov) unos (Codex XFF-4 na #295).',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops.reverse().at(-1) ?? 'unknown';");
+      return mut !== hashIp && xffBehaviourProblems(loadClientIpFromForwarded(mut)).length > 0;
+    },
+    cleanBefore: () => xffBehaviourProblems(loadClientIpFromForwarded(xffRealSources().hashIp)).length === 0,
+  },
+  {
+    id: 't84/xff-header-velikim-slovima-u-shared',
+    imitates: 'T84 XFF: _shared modul cita X-Forwarded-For velikim slovima mimo pomocnika, a skener je gledao samo index.ts i samo mala slova (Codex XFF-2 i XFF-3 na #295).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: 'export const ip = (req: Request) => req.headers.get("X-Forwarded-For");\n' };
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-cijeli-header-u-faculty-request',
+    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen prvi unos otvara nov prozor limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = "hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE)";
+      const to = "sha256(IP_HASH_SALT + '|' + (req.headers.get('x-forwarded-for') ?? ''))";
+      const mutated = functions.map((f) => (f.path.endsWith('faculty-request/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
   },
   ...([
     ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',
