@@ -1,7 +1,7 @@
 # Dependabot (BL-P3-14): automatski PR-ovi za sigurnosne i verzijske zakrpe.
 # Tri ekosustava: npm (ovisnosti aplikacije), github-actions (verzije akcija u workflowima) i pip za
 # training-pipeline (T99, issue #220, korak 3). Deno Dependabot ne podrzava; tamo je osv-scan job.
-# Teski dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom i nisu u produkcijskom bundleu
+# Teski dev CLI (supabase) i, do 2026-10-04, netlify-cli dominirali su lockfileom i nisu u produkcijskom bundleu
 # (BL-P2-09), pa im se NE prate major i minor nadogradnje: to je bio cist sum.
 #
 # PATCH nadogradnje se od 2026-08-17 vise NE ignoriraju (audit TEST-20). Prije su bili iskljuceni
@@ -22,8 +22,6 @@ updates:
           - "minor"
           - "patch"
     ignore:
-      - dependency-name: "netlify-cli"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
       - dependency-name: "supabase"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
