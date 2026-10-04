@@ -46,6 +46,17 @@
  * uklanjanje) daje 1: nepotpuno mjerenje nikad nije tiha nula. Nedostupan origin nije pad nego
  * izricito stanje: sva stabla su zadrzana s razlogom "origin nedostupan" i nema nikakve mutacije.
  *
+ * Prihvacene granice (Codex pregled #253, runde 2 i 3; odluka koordinatora 4. 10. 2026):
+ *  1. izmedju zavrsnog mjerenja statusa i `git worktree remove` ostaje prozor od nekoliko ms;
+ *     rad nastao bas tada u stablu koje nitko nije dirao 60 min moze biti izgubljen;
+ *  2. brisanje zastarjelog `wx` cuvara GC locka nije atomarno (provjera pa unlink); utrka vise GC
+ *     procesa nad mrtvim cuvarom zavrsava odustajanjem, ne dvostrukim brisanjem;
+ *  3. reflog provjera gleda HEAD reflog stabla i lokalne grane; commit koji postoji samo u
+ *     reflogu grane (ne HEAD-a) nije pokriven;
+ *  4. `prune` nakon uspjesnog fetcha moze obuhvatiti stablo koje je postalo `prunable` izmedju
+ *     `--dry-run` i `prune` (nekoliko ms).
+ * Ove granice se ne zatvaraju daljnjim krugovima; novi incident ih otvara kao zaseban zadatak.
+ *
  * Uporaba:
  *   node scripts/worktree-gc.mjs                  # suhi rad, tablica
  *   node scripts/worktree-gc.mjs --apply          # ukloni uklonjive
