@@ -21,6 +21,10 @@ Kad vlasnik zalijepi vanjsku analizu ili audit bez daljnjih uputa, vrijedi fiksn
 | Implementator | Sol | `gpt-5.6-sol` | Dodijeljena implementacija i dokazi |
 | Implementator | Build | `build` | Grok Build implementacija i dokazi (`command: grok`) |
 
+Aktivni koordinator: `lekta-37` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
+rijecju ili commitom ovog retka). Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
+nepovratne radnje navedene u CLAUDE.md, "Implementatorske sesije".
+
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
