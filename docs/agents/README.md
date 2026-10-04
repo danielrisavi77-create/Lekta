@@ -22,7 +22,8 @@ Kad vlasnik zalijepi vanjsku analizu ili audit bez daljnjih uputa, vrijedi fiksn
 | Implementator | Build | `build` | Grok Build implementacija i dokazi (`command: grok`) |
 
 Aktivni koordinator: `lekta-37` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
-rijecju ili commitom ovog retka). Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
+rijecju ili commitom ovog retka). Ime sesije mijenja se pri svakom resetu sesije, pa se pri zamjeni
+ovaj redak azurira commitom; vrijedi uloga, ne ime. Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
 nepovratne radnje navedene u CLAUDE.md, "Implementatorske sesije".
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
