@@ -12,13 +12,60 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { build } from 'esbuild';
 
-/** Problemi pravila nagiba lista u CSS tekstu `src/shared/page-app.css`. */
+type TransformDekl = { media: string | null; vrijednost: string; important: boolean };
+
+/** Deklaracije `transform` za tocno `.analyzer-wrap` (bez pseudoelementa i potomaka), redom pojave u listu. */
+function analyzerWrapTransforms(src: string): TransformDekl[] {
+  const out: TransformDekl[] = [];
+  const pravila = (tekst: string, media: string | null): void => {
+    let i = 0;
+    while (i < tekst.length) {
+      const otv = tekst.indexOf('{', i);
+      if (otv < 0) return;
+      const glava = tekst.slice(i, otv).trim();
+      let dubina = 1;
+      let j = otv + 1;
+      while (j < tekst.length && dubina > 0) {
+        if (tekst[j] === '{') dubina++;
+        else if (tekst[j] === '}') dubina--;
+        j++;
+      }
+      const tijelo = tekst.slice(otv + 1, j - 1);
+      if (glava.startsWith('@media')) pravila(tijelo, glava.slice('@media'.length).trim());
+      else if (!glava.startsWith('@') && glava.split(',').some((s) => s.trim() === '.analyzer-wrap')) {
+        for (const m of tijelo.matchAll(/(?:^|;)\s*transform\s*:\s*([^;]+)/g)) {
+          const v = m[1].trim();
+          out.push({ media, vrijednost: v.replace(/\s*!important$/, ''), important: /!important$/.test(v) });
+        }
+      }
+      i = j;
+    }
+  };
+  pravila(src.replace(/\/\*[\s\S]*?\*\//g, ''), null);
+  return out;
+}
+
+/** Vrijedi li medijski upit na ekranu sirine 360 px. Nepoznat uvjet racuna se kao da vrijedi (strozi gard). */
+function vrijediNa360(media: string | null): boolean {
+  if (media === null) return true;
+  const max = /max-width:\s*(\d+)px/.exec(media);
+  const min = /min-width:\s*(\d+)px/.exec(media);
+  if (max && Number(max[1]) < 360) return false;
+  if (min && Number(min[1]) > 360) return false;
+  return true;
+}
+
+/**
+ * Problemi pravila nagiba lista u CSS tekstu `src/shared/page-app.css`. Prati kaskadu za selektor `.analyzer-wrap`
+ * na 360 px: zadnja deklaracija pobjeduje, a `!important` pobjeduje sve obicne (Codex F5, runda 2 na #235).
+ * Pravila s jacim selektorom ne vidi; njih hvata izracunati `transform` u `tests/ux/mobile-result-first.spec.ts`.
+ */
 export function mobileTiltProblems(css: string): string[] {
-  const src = css.replace(/\r/g, '');
-  const nagnut = /\.analyzer-wrap\{[^}]*transform:\s*rotate\(/.test(src);
-  if (!nagnut) return [];
-  const ravno = /@media\s*\(max-width:\s*720px\)\s*\{\s*\.analyzer-wrap\s*\{\s*transform:\s*none;?\s*\}\s*\}/.test(src);
-  return ravno ? [] : ['list je nagnut i na uskom ekranu'];
+  const dekl = analyzerWrapTransforms(css.replace(/\r/g, '')).filter((d) => vrijediNa360(d.media));
+  if (!dekl.some((d) => /rotate\(/.test(d.vrijednost))) return [];
+  const vazne = dekl.filter((d) => d.important);
+  const pobjednik = (vazne.length > 0 ? vazne : dekl).at(-1);
+  return pobjednik?.vrijednost === 'none' ? [] : ['list je nagnut i na uskom ekranu'];
 }
 
 type Medij = { matches: boolean; addEventListener: (t: string, f: (e: { matches: boolean }) => void) => void; removeEventListener: (t: string, f: (e: { matches: boolean }) => void) => void };

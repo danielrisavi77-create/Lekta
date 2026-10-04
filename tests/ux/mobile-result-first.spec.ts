@@ -110,6 +110,16 @@ test('mobitel: rezultat otvoren na sirokom ekranu pa suzen sklapa blok komentara
   await analiziraj(page);
   const blok = page.getByTestId('mentor-tasks').locator('details.mt');
   await expect(blok, 'na sirokom ekranu blok je otvoren').toHaveAttribute('open', /.*/);
+
+  // Codex D1 (runda 2 na #235): `<details>` i lomljenje dugog komentara namjerno vrijede na svim sirinama. Na
+  // 1024 px naslov je meta od 44 px, a komentar s dugim URL-om ne izlazi preko ruba. Snimka ide u izvjestaj.
+  const naslov = await blok.locator('summary.mt-kicker').boundingBox();
+  expect(naslov?.height ?? 0, 'siroki ekran: naslov bloka je meta od najmanje 44 px').toBeGreaterThanOrEqual(44);
+  await page.locator('.mt-tekst').first().evaluate((el) => { el.append(` https://example.org/${'dugisegment'.repeat(30)}`); });
+  expect(await izvanEkrana(page), 'siroki ekran: komentar s dugim URL-om ne izlazi preko ruba ekrana').toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth), 'siroki ekran: bez vodoravnog preljeva').toBeLessThanOrEqual(1024);
+  await test.info().attach('komentari-mentora-1024', { body: await blok.screenshot(), contentType: 'image/png' });
+
   await page.setViewportSize({ width: SIRINA, height: 740 });
   await expect(blok, 'suzeno na mobitel: blok se sklopi').not.toHaveAttribute('open', /.*/);
 });

@@ -9088,6 +9088,18 @@ describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
     expect(mobileTiltProblems(bez)).toEqual(['list je nagnut i na uskom ekranu']);
   });
 
+  it('mutant: kasnije pravilo s !important ponovno nagne list (Codex F5, runda 2)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{transform:rotate(.3deg)!important}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('mutant: kasnije mobilno pravilo ponovno nagne list', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{transform:rotate(.3deg)}}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('kontrola: nagib samo za siroki ekran ne vrijedi na 360 px', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(min-width:900px){.analyzer-wrap{transform:rotate(.3deg)!important}}`)).toEqual([]);
+  });
+
   it('BASELINE: blok komentara je sklopljen na uskom i otvoren na sirokom ekranu', async () => {
     expect(await mentorCollapseProblems(await mentorModuleFromSource([]), bytes)).toEqual([]);
   });
