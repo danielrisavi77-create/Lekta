@@ -279,7 +279,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
       const ind = traka.poStranici.get(n);
       if (!ind) return '<span class="rl-cell" aria-hidden="true"></span>';
       return `<button type="button" class="rl-cell rl-cell--hit${sel === n ? ' rl-cell--cur' : ''}" data-rl-page-go="${n}"`
-        + ` aria-label="Stranica ${n}, ${ind.length} ${pluralHr(ind.length, ['nalaz', 'nalaza', 'nalaza'])}"></button>`;
+        + ` aria-label="Oko stranice ${n}, ${ind.length} ${pluralHr(ind.length, ['nalaz', 'nalaza', 'nalaza'])}"></button>`;
     }).join('');
     const c = traka.cijeliRad.length;
     const crvena = c

@@ -392,6 +392,9 @@ describe('Z34 prikaz: rezultat sve u jednom', () => {
     const { mount } = await montiraj();
     expect(mount.querySelectorAll('.rl-cell')).toHaveLength(4);
     expect(mount.querySelectorAll('.rl-cell--hit')).toHaveLength(2);
+    for (const c of mount.querySelectorAll('.rl-cell--hit')) {
+      expect(c.getAttribute('aria-label')).toMatch(/^Oko stranice [0-9]+, [0-9]+ nalaz/);
+    }
     expect(mount.querySelector('.rl-strip__line')).not.toBeNull();
     expect(mount.querySelector('.rl-strip__legend')?.textContent).toBe('Crvena crta: 1 nalaz vrijedi za cijeli rad. Jantarna stranica ima nalaze na točno jednom mjestu.');
     klikni(mount.querySelector('[data-rl-page-go="4"]'));
