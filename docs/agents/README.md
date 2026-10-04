@@ -134,20 +134,25 @@ Izmjereno 2026-10-04 (lekta-00, cloud izvrsitelj):
 
 - cloud sesija NE MOZE poslati `SendMessage` drugoj sesiji; poziv vraca
   `this cloud session cannot message other sessions yet`. Smjer koordinator -> cloud radi;
-- jednokratni Routine (`create_trigger` s `persistent_session_id`) isporucio je 14 od 14 poruka
-  (`ROUTINE_RUN_STATUS_SUCCEEDED`). Isporuka nije gubitak; problem je kasnjenje (poruka stize tek u
-  zakazano vrijeme), red cekanja kad je koordinator usred posla i to sto koordinator Routine vidi kao
-  zakazani zadatak, a ne kao izvjestaj izvrsitelja. `SUCCEEDED` znaci isporuceno, ne procitano.
+- jednokratni Routine (`create_trigger` s `persistent_session_id`): svih 14 runova prema koordinatoru
+  ima `ROUTINE_RUN_STATUS_SUCCEEDED` (`list_triggers`), pa u 14 pokusaja nije opazen gubitak.
+  `SUCCEEDED` potvrdjuje samo isporuku u sesiju, ne i da ju je koordinator procitao ili postupio po
+  njoj. Opazeni problemi su kasnjenje (poruka stize tek u zakazano vrijeme), red cekanja kad je
+  koordinator usred posla i to sto koordinator Routine vidi kao zakazani zadatak, a ne kao izvjestaj
+  izvrsitelja. Sirovi zapis mjerenja je u opisu PR-a #270.
 
 Operativno pravilo za Lektu (vrijedi za koordinatora i za svaku sadasnju i buducu cloud sesiju):
 
 1. **Kanal istine je PR.** Izvrsitelj svaki status (PR otvoren, popravak pushan, blokada, pitanje
    koordinatoru) pise kao komentar na svoj PR, s headom (SHA) i onim sto je dokazano i sto nije.
-   Poruka izvan PR-a samo upucuje na taj komentar; nikad ga ne zamjenjuje. Zadatak bez PR-a
-   izvjestava na svom GitHub issueu.
+   Taj komentar je samostalna poruka iz tocke 8. Poruka izvan PR-a samo upucuje na njega; nikad
+   ga ne zamjenjuje. Dok PR ne postoji, izvrsitelj izvjestava na GitHub issueu svog zadatka (broj
+   je u briefu ili u `docs/agents/tasks.json`); bez issuea javlja koordinatoru da ga otvori.
 2. **Koordinator se pretplacuje na svaki PR izvrsitelja** (`subscribe_pr_activity`) cim dozna
-   broj PR-a, i ostaje pretplacen do spajanja ili zatvaranja. Komentar, review i CI na PR-u tada
-   pouzdano bude koordinatora.
+   broj PR-a, i ostaje pretplacen do spajanja ili zatvaranja. Ocekivano ponasanje alata (nije
+   zasebno izmjereno): komentar, review i CI na PR-u bude koordinatora. Alat postoji u cloud
+   sesijama; lokalni koordinator ga nema, pa mu je ekvivalent petlja spajanja (`pr-merge` skill) i
+   koordinatorov `pr-intake` na svakom krugu (alat nije u ovom repozitoriju). Povlacenje iz tocke 3 ostaje provjerljiva rezerva.
 3. **Koordinator sam povlaci stanje.** Na svakom svom check-inu, za svaku sesiju s aktivnim
    zadatkom, procita stanje njezina PR-a i zadnje dogadjaje sesije (`get_session`, `list_events`).
    Izgubljena ili zakasnjela poruka tada ne blokira nista.
@@ -158,7 +163,11 @@ Operativno pravilo za Lektu (vrijedi za koordinatora i za svaku sadasnju i buduc
    izvrsitelj salje jednokratni Routine:
    - `run_once_at` tocno 1 minutu unaprijed (ne vise; proslo vrijeme se odbija);
    - prvi redak uvijek u formatu
-     `[<sesija> -> koordinator] PR #<n> head <sha> | stanje: <...> | treba: <...>`;
+     `[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n> head <sha> | stanje: <...> | treba: <...>`,
+     gdje je `<VRSTA>` jedna od `BLOKER`, `PREGLED` ili `INFO` (redoslijed obrade iz
+     `docs/agents/ROUTING.md`), a bez PR-a umjesto `PR #<n>` stoji `issue #<n>`;
+   - Routine je pokazivac: ostatak poruke kratko kaze sto se promijenilo, a puni dokaz je u
+     komentaru na PR ili issue iz tocke 1;
    - nakon okidanja izvrsitelj provjeri `get_trigger`: `last_run` mora biti `SUCCEEDED`. Ako nije
      ili nema runa 5 minuta nakon zakazanog vremena, salje jos jednom i to zapise u PR komentar.
 6. **Koordinator Routine s tim zaglavljem cita kao izvjestaj izvrsitelja**, a ne kao zakazani
