@@ -2,7 +2,8 @@
  * T84 RD-2 i RD-3: repair-docx trazi slot s limitom po korisniku i ima fail-closed strop ishoda koji ne
  * trose kvotu (bez izmjena, vrata integriteta), provjeren PRIJE citanja tijela. Gard cita izvor
  * index.ts; baseline je u tests/repair-global-slot.test.ts, mutacije u tests/gate-mutations.test.ts.
- * Handler uvozi esm.sh pa se u Vitestu ne izvrsava; moduli global-slot.ts i attempt-cap.ts se izvrsavaju.
+ * Moduli global-slot.ts i attempt-cap.ts izvrsavaju se u tests/repair-global-slot.test.ts, a sam handler
+ * (uz lazni esm.sh klijent) u tests/repair-docx-attempt-cap-handler.test.ts.
  */
 export function repairCostGuardProblems(src: string): string[] {
   const out: string[] = [];
@@ -23,11 +24,16 @@ export function repairCostGuardProblems(src: string): string[] {
   if (over < 0 || (body >= 0 && over > body)) out.push('repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela');
   const err = src.indexOf("if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);");
   if (err < 0 || (body >= 0 && err > body)) out.push('repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela');
-  if (!/if \(!\(await recordAttempt\(admin, user\.id, 'no_change'\)\)\) return json\(\{ error: 'unavailable' \}, 503\);/.test(src)) {
-    out.push('repair-docx: ishod bez izmjena se ne biljezi fail-closed');
+  const reserve = src.indexOf('const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);');
+  const reserveFail = src.indexOf("if (!attempt) return json({ error: 'unavailable' }, 503);");
+  if (reserve < 0 || (body >= 0 && reserve > body)) out.push('repair-docx: pokusaj se ne rezervira prije citanja tijela');
+  if (reserveFail < 0 || reserveFail < reserve || (body >= 0 && reserveFail > body)) {
+    out.push('repair-docx: neuspjela rezervacija ne vraca 503 prije citanja tijela');
   }
-  if (!/if \(!\(await recordAttempt\(admin, user\.id, 'integrity_failed'\)\)\) return json\(\{ error: 'unavailable' \}, 503\);/.test(src)) {
-    out.push('repair-docx: odbijena isporuka se ne biljezi fail-closed');
+  if (!src.includes("await finishAttempt(admin, attempt, 'no_change');")) out.push('repair-docx: ishod bez izmjena se ne dopisuje na rezervaciju');
+  if (!src.includes("await finishAttempt(admin, attempt, 'integrity_failed');")) out.push('repair-docx: odbijena isporuka se ne dopisuje na rezervaciju');
+  if (!/const log = async \(status: string, sId: string \| null\) => \{[\s\S]*?if \(!written\.error\) await dropAttempt\(admin, attempt\);/.test(src)) {
+    out.push('repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)');
   }
   if (/log\('(no_change|integrity_failed)'/.test(src)) out.push('repair-docx: ishod bez potrosnje ide u report_generations');
   return out;

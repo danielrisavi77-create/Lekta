@@ -78,18 +78,23 @@ $$;
 -- ne smije ovisiti o tome tko je pokrenuo migraciju.
 alter function public.try_acquire_repair_slot_for_user(int, int, uuid, int) owner to postgres;
 revoke all on function public.try_acquire_repair_slot_for_user(int, int, uuid, int) from anon, authenticated, public;
+-- Pravo servisne uloge je izricito (Codex R4-G na #294): ne oslanja se na zadane grantove projekta.
+grant execute on function public.try_acquire_repair_slot_for_user(int, int, uuid, int) to service_role;
 
 -- RD-2: dnevnik ishoda koji ne trose kvotu ni slot. Servisna tablica: pise je iskljucivo repair-docx
 -- preko service role kljuca; deny-all za javne uloge je izricit (RLS bez politika i revoke).
+-- `pending` je rezervacija upisana PRIJE citanja tijela (Codex R3 na #294); ishod se dopisuje na kraju,
+-- a rezervacija koju vec broji report_generations se brise.
 create table if not exists public.repair_attempt_log (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null,
-  outcome text not null check (outcome in ('no_change', 'integrity_failed')),
+  outcome text not null default 'pending' check (outcome in ('pending', 'no_change', 'integrity_failed')),
   created_at timestamptz not null default now()
 );
 create index if not exists repair_attempt_log_user_created on public.repair_attempt_log (user_id, created_at);
 alter table public.repair_attempt_log enable row level security;
 revoke all on table public.repair_attempt_log from anon, authenticated;
+grant select, insert, update, delete on table public.repair_attempt_log to service_role;
 
 comment on table public.repair_attempt_log is
   'Popravci bez izmjena i odbijene isporuke (T84 RD-2): ne trose kvotu ni slot, ali imaju vlastiti dnevni strop u repair-docx.';
@@ -109,14 +114,24 @@ as $$
 $$;
 revoke all on function public.purge_repair_attempt_log(int) from anon, authenticated, public;
 
+-- Zakazivanje retencije (Codex R4-P i R6-I na #294). pg_cron je OBVEZAN: bez njega migracija pada
+-- umjesto da tiho prode bez retencije (staging i produkcija ga imaju od 0055). Drugi prolaz ne dira
+-- posao kad su raspored i naredba isti; inace se posao zamjenjuje.
 do $$
+declare
+  v_name constant text := 'purge-repair-attempt-log';
+  v_schedule constant text := '25 3 * * *';
+  v_command constant text := 'select public.purge_repair_attempt_log(7);';
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-repair-attempt-log');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-repair-attempt-log', '25 3 * * *', 'select public.purge_repair_attempt_log(7);');
+  if to_regprocedure('cron.schedule(text,text,text)') is null or to_regclass('cron.job') is null then
+    raise exception '0209: pg_cron nije dostupan, retencija repair_attempt_log se ne moze zakazati'
+      using errcode = '55000';
   end if;
+  if exists (select 1 from cron.job where jobname = v_name and schedule = v_schedule and command = v_command) then
+    return;
+  end if;
+  if exists (select 1 from cron.job where jobname = v_name) then
+    perform cron.unschedule(v_name);
+  end if;
+  perform cron.schedule(v_name, v_schedule, v_command);
 end $$;

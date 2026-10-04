@@ -8,7 +8,7 @@ export type RepairRateLimitReason = 'free_user' | 'free_ip' | 'paid_daily' | 'at
 export function repairRateLimitMessage(reason: RepairRateLimitReason): string {
   switch (reason) {
     case 'attempts_daily':
-      return '<strong>Dnevni limit pokušaja bez izmjena je dosegnut.</strong> Dokument je već usklađen ili ga nije bilo moguće sigurno popraviti, pa besplatna kvota nije potrošena. Prozor je 24 sata, pa pokušaj ponovno sutra.';
+      return '<strong>Dnevni limit pokušaja bez izmjena je dosegnut.</strong> Dokument je već usklađen, nije ga bilo moguće sigurno popraviti ili zahtjev nije uspio, pa besplatna kvota nije potrošena. Prozor je 24 sata, pa pokušaj ponovno sutra.';
     case 'paid_daily':
       return '<strong>Dnevni limit zahtjeva je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra.';
     case 'free_ip':

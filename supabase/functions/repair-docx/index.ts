@@ -61,7 +61,7 @@ import type { IssuedLocalRepairJob, LocalRepairJobRecord } from '../../../src/re
 import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../src/repair/local-runner/storage-handoff.ts';
 import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
 import { acquireRepairSlot } from './global-slot.ts';
-import { attemptCapStatus, recordAttempt } from './attempt-cap.ts';
+import { attemptCapStatus, dropAttempt, finishAttempt, reserveAttempt } from './attempt-cap.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -320,6 +320,10 @@ Deno.serve(async (req: Request) => {
     const attemptCap = await attemptCapStatus(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);
     if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);
     if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);
+    // Rezervacija PRIJE tijela (Codex R3 na #294): skupi rad ispod uvijek ima zapis koji strop broji,
+    // pa ni neuspjelo dopisivanje ishoda na kraju ne ostavlja ga nezabiljezenog.
+    const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);
+    if (!attempt) return json({ error: 'unavailable' }, 503);
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -443,8 +447,14 @@ Deno.serve(async (req: Request) => {
       return json({ error: 'invalid_docx' }, 422);
     }
     const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
-    const log = (status: string, sId: string | null) =>
-      admin.from('report_generations').insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
+    // Svaki zapis u report_generations broji drugi strop (besplatna kvota ili placeni dnevni), pa se
+    // rezervacija u repair_attempt_log tada brise da se isti pokusaj ne broji dvaput (T84 RD-2).
+    const log = async (status: string, sId: string | null) => {
+      const written = await admin.from('report_generations')
+        .insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
+      if (!written.error) await dropAttempt(admin, attempt);
+      return written;
+    };
 
     // Naplatni gate ILI besplatna beta (FREE_MODE): ODLUCI ovdje (rate_limited/payment_required
     // vracaju odmah, ne trose nista), ali STVARNU potrosnju (RPC/log upis) odgodi u `commit` do
@@ -570,8 +580,8 @@ Deno.serve(async (req: Request) => {
         `[repair-docx] vrata integriteta odbila isporuku: ${result.integrityFailure.part}: ${result.integrityFailure.problem}` +
         (result.integrityFailure.offset != null ? ` (offset ${result.integrityFailure.offset})` : ''),
       );
-      // T84 RD-2: ne trosi kvotu, ali ulazi u strop pokusaja; neuspjeli upis se ne propusta tiho.
-      if (!(await recordAttempt(admin, user.id, 'integrity_failed'))) return json({ error: 'unavailable' }, 503);
+      // T84 RD-2: ne trosi kvotu, ali ostaje u stropu pokusaja (rezervacija je vec upisana).
+      await finishAttempt(admin, attempt, 'integrity_failed');
       return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
     }
 
@@ -580,8 +590,8 @@ Deno.serve(async (req: Request) => {
       const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
-      // T84 RD-2: ne trosi kvotu, ali ulazi u strop pokusaja; neuspjeli upis se ne propusta tiho.
-      if (!(await recordAttempt(admin, user.id, 'no_change'))) return json({ error: 'unavailable' }, 503);
+      // T84 RD-2: ne trosi kvotu, ali ostaje u stropu pokusaja (rezervacija je vec upisana).
+      await finishAttempt(admin, attempt, 'no_change');
       return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,

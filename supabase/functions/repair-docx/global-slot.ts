@@ -10,11 +10,12 @@
 //   - `ok`        : slot dobiven, `release()` ga vraca (jednokratno);
 //   - `full`      : globalni limit dosegnut -> 503 busy;
 //   - `user_busy` : korisnik vec drzi svoje slotove -> 503 busy (klijent vec zna taj odgovor);
-//   - `error`     : novi RPC postoji, ali je pao (baza, mreza, NULL korisnik) -> 503. Ne pada se na
-//                   stari RPC jer on nema limit po korisniku (Codex R1 na #294);
-//   - `absent`    : ni novi ni stari RPC ne postoje (ili stari padne). Popravak se tada NE blokira,
-//                   nego pada na per-instance gate uz glasan log, jer isporuka koda i migracije nisu
-//                   atomarne.
+//   - `error`     : bilo koji RPC je pao operativno (baza, mreza, NULL korisnik, bacena iznimka)
+//                   -> 503. Ne pada se na stari RPC kad novi postoji jer stari nema limit po
+//                   korisniku (Codex R1 na #294, runde 1 i 2);
+//   - `absent`    : ni novi ni stari RPC NE POSTOJE (oba PGRST202 ili 42883). Samo tada se popravak
+//                   ne blokira, nego pada na per-instance gate uz glasan log, jer isporuka koda i
+//                   migracije nisu atomarne.
 // Stari globalni RPC (0094) koristi se SAMO kad novi ne postoji (PGRST202 ili 42883), tj. dok 0209
 // nije primijenjena, pa zastita nikad ne padne ispod danasnje.
 //
@@ -76,13 +77,18 @@ export async function acquireRepairSlot(admin: any, limits: RepairSlotLimits): P
       p_lease_seconds: limits.leaseSeconds,
     });
     if (global.error) {
-      console.error('[repair-docx] globalni slot nedostupan, padam na per-instance gate', global.error.message);
+      if (!isMissingFunction(global.error)) {
+        console.error('[repair-docx] stari globalni slot pao, odbijam', global.error.message);
+        return { kind: 'error' };
+      }
+      console.error('[repair-docx] nijedan RPC slota ne postoji, padam na per-instance gate', global.error.message);
       return { kind: 'absent', release: null };
     }
     if (!global.data) return { kind: 'full' };
     return { kind: 'ok', release: releaser(admin, String(global.data)) };
   } catch (e) {
-    console.error('[repair-docx] globalni slot: neocekivana greska, padam na per-instance gate', e);
-    return { kind: 'absent', release: null };
+    // Bacena iznimka nije dokaz da RPC ne postoji, pa je odbijanje, ne per-instance gate (Codex R1).
+    console.error('[repair-docx] slot: neocekivana greska, odbijam', e);
+    return { kind: 'error' };
   }
 }

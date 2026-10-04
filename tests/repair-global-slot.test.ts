@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { acquireRepairSlot, isMissingFunction } from '../supabase/functions/repair-docx/global-slot';
-import { attemptCapStatus, recordAttempt } from '../supabase/functions/repair-docx/attempt-cap';
+import { attemptCapStatus, dropAttempt, finishAttempt, reserveAttempt } from '../supabase/functions/repair-docx/attempt-cap';
 import { argOf, eqs, fakeAdmin, writeOp, type FakeCall, type FakeResult } from './helpers/fake-supabase';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
 
@@ -65,18 +65,44 @@ describe('T84 RD-3: acquireRepairSlot', () => {
     expect(isMissingFunction(null)).toBe(false);
   });
 
-  it('novi RPC ne postoji, a stari pao: absent (per-instance gate); stari pun: full', async () => {
+  it('absent SAMO kad ni novi ni stari RPC ne postoje; stari pun: full', async () => {
     const missing = { error: { message: 'missing', code: 'PGRST202' } };
-    const absent = await acquireRepairSlot(db({
-      'rpc:try_acquire_repair_slot_for_user': missing,
-      'rpc:try_acquire_repair_slot': { error: { message: 'y' } },
-    }).admin, LIMITS);
-    expect(absent.kind).toBe('absent');
+    for (const code of ['PGRST202', '42883']) {
+      const absent = await acquireRepairSlot(db({
+        'rpc:try_acquire_repair_slot_for_user': missing,
+        'rpc:try_acquire_repair_slot': { error: { message: 'missing', code } },
+      }).admin, LIMITS);
+      expect(absent.kind).toBe('absent');
+    }
     const full = await acquireRepairSlot(db({
       'rpc:try_acquire_repair_slot_for_user': missing,
       'rpc:try_acquire_repair_slot': { data: null },
     }).admin, LIMITS);
     expect(full.kind).toBe('full');
+  });
+
+  it('operativna greska starog RPC-a nakon PGRST202 je error (503), ne absent (Codex R1 runda 2)', async () => {
+    for (const error of [{ message: 'timeout' }, { message: 'x', code: '57014' }, { message: 'x', code: 'PGRST301' }]) {
+      const slot = await acquireRepairSlot(db({
+        'rpc:try_acquire_repair_slot_for_user': { error: { message: 'missing', code: 'PGRST202' } },
+        'rpc:try_acquire_repair_slot': { error },
+      }).admin, LIMITS);
+      expect(slot.kind).toBe('error');
+    }
+  });
+
+  it('bacena iznimka novog ili starog RPC-a je error (503), ne absent (Codex R1 runda 2)', async () => {
+    const throwsOn = (fn: string, before?: Record<string, FakeResult>) => fakeAdmin((c: FakeCall) => {
+      if (c.table === fn) throw new Error('fetch failed');
+      return before?.[c.table];
+    });
+    const newThrows = throwsOn('rpc:try_acquire_repair_slot_for_user');
+    expect((await acquireRepairSlot(newThrows.admin, LIMITS)).kind).toBe('error');
+    expect(newThrows.calls.map((c) => c.table)).toEqual(['rpc:try_acquire_repair_slot_for_user']);
+    const oldThrows = throwsOn('rpc:try_acquire_repair_slot', {
+      'rpc:try_acquire_repair_slot_for_user': { error: { message: 'missing', code: 'PGRST202' } },
+    });
+    expect((await acquireRepairSlot(oldThrows.admin, LIMITS)).kind).toBe('error');
   });
 
   it('strop pokusaja: 30 ishoda je over, 29 ok, greska i null su error (fail-closed), cap 0 bez upita (Codex R2, R7)', async () => {
@@ -93,15 +119,39 @@ describe('T84 RD-3: acquireRepairSlot', () => {
     expect(off.calls).toEqual([]);
   });
 
-  it('upis pokusaja: tocan redak u repair_attempt_log, greska upisa je false (Codex R3)', async () => {
-    const ok = fakeAdmin(() => undefined);
-    expect(await recordAttempt(ok.admin, 'u', 'no_change')).toBe(true);
+  it('rezervacija: pending redak s id-om; greska, iznimka ili bez id-a je null (503); cap 0 je off bez upita (Codex R3 runda 2)', async () => {
+    const ok = fakeAdmin(() => ({ data: { id: 'r-1' } }));
+    expect(await reserveAttempt(ok.admin, 'u', 30)).toEqual({ kind: 'reserved', id: 'r-1' });
     expect(ok.calls).toHaveLength(1);
     expect(ok.calls[0].table).toBe('repair_attempt_log');
     expect(writeOp(ok.calls[0])).toBe('insert');
-    expect(argOf(ok.calls[0], 'insert')).toEqual({ user_id: 'u', outcome: 'no_change' });
-    const fail = fakeAdmin(() => ({ error: { message: 'relation does not exist', code: '42P01' } }));
-    expect(await recordAttempt(fail.admin, 'u', 'integrity_failed')).toBe(false);
+    expect(argOf(ok.calls[0], 'insert')).toEqual({ user_id: 'u', outcome: 'pending' });
+    expect(await reserveAttempt(fakeAdmin(() => ({ error: { message: 'denied', code: '42501' } })).admin, 'u', 30)).toBeNull();
+    expect(await reserveAttempt(fakeAdmin(() => ({ data: null })).admin, 'u', 30)).toBeNull();
+    expect(await reserveAttempt(fakeAdmin(() => { throw new Error('fetch failed'); }).admin, 'u', 30)).toBeNull();
+    const off = fakeAdmin(() => undefined);
+    expect(await reserveAttempt(off.admin, 'u', 0)).toEqual({ kind: 'off' });
+    expect(off.calls).toEqual([]);
+  });
+
+  it('dopisivanje ishoda i brisanje rezervacije ciljaju tocno taj redak; off ne pise nista', async () => {
+    const reserved = { kind: 'reserved', id: 'r-1' } as const;
+    const fin = fakeAdmin(() => undefined);
+    expect(await finishAttempt(fin.admin, reserved, 'no_change')).toBe(true);
+    expect(writeOp(fin.calls[0])).toBe('update');
+    expect(argOf(fin.calls[0], 'update')).toEqual({ outcome: 'no_change' });
+    expect(eqs(fin.calls[0])).toEqual({ id: 'r-1' });
+    const drop = fakeAdmin(() => undefined);
+    expect(await dropAttempt(drop.admin, reserved)).toBe(true);
+    expect(writeOp(drop.calls[0])).toBe('delete');
+    expect(eqs(drop.calls[0])).toEqual({ id: 'r-1' });
+    const fail = fakeAdmin(() => ({ error: { message: 'x' } }));
+    expect(await finishAttempt(fail.admin, reserved, 'integrity_failed')).toBe(false);
+    expect(await dropAttempt(fail.admin, reserved)).toBe(false);
+    const off = fakeAdmin(() => undefined);
+    expect(await finishAttempt(off.admin, { kind: 'off' }, 'no_change')).toBe(true);
+    expect(await dropAttempt(off.admin, { kind: 'off' })).toBe(true);
+    expect(off.calls).toEqual([]);
   });
 
   it('izvor repair-docx: slot po korisniku, strop ishoda bez potrosnje prije tijela, biljezenje (baseline garda)', () => {

@@ -7,6 +7,7 @@ describe('repairRateLimitMessage', () => {
     const msg = repairRateLimitMessage('attempts_daily');
     expect(msg).toContain('pokušaja bez izmjena');
     expect(msg).toContain('besplatna kvota nije potrošena');
+    expect(msg).toContain('zahtjev nije uspio');
     expect(msg).toContain('24 sata');
   });
 
