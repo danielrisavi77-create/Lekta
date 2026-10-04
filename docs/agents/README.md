@@ -219,6 +219,13 @@ Obavezni gateovi iz AGENTS.md ostaju mjerodavni: `npm run check`, `npm run orpha
 i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI dokaz;
 `.artifacts` se ne commita. Ne lijepi studentske dokumente, tajne ili cijele privatne logove u PR.
 
+### Stanje 2026-10-04
+
+Zamrzavanje novih zadataka uvedeno je i ukinuto istog dana. Kao smjernica ostaje: dok je otvoreno
+8 ili vise PR-ova, koordinator prvo zatvara ili spaja postojece, a tek onda dodjeljuje nove zadatke.
+Vlasnik je 4. 10. zatvorio bez spajanja PR-ove #242, #244, #255, #203, #229, #192, #183, #170, #262,
+#264, #211, #276 i #265; grane ostaju. Statusi zadataka su u `tasks.json`.
+
 ## Ogranicenja prve verzije
 
 - Prijava, dostupnost modela i stvarni poziv svakog od tri providera moraju se provjeriti na racunalu

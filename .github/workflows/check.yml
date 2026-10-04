@@ -126,7 +126,7 @@ jobs:
         # isti lanac pod drugim uvjetima i zeleno ovdje ne znaci zeleno ondje. Gard nad tom
         # jednakoscu: `tests/deploy-runtime-parity.test.ts`.
         env:
-          LEKTA_SITE_ORIGIN: https://lektahr.netlify.app
+          LEKTA_SITE_ORIGIN: https://lekta.hr
           DEPLOY: "1"
         run: node scripts/build-production.mjs --skip-verify
 
