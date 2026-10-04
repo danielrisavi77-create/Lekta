@@ -40,6 +40,10 @@ interface CaseOptions {
   citationXml?: string;
   /** Zadnji zapis zavrsava sekciju (`w:sectPr` u svojstvima odlomka), npr. kad Prilozi idu u novu sekciju. */
   sectionBreakOnLast?: boolean;
+  /** Gotov `<w:p>` za zapis (npr. s poljem); tekst mu mora biti `text`. */
+  entryXml?: (text: string, index: number) => string;
+  /** Omot oko zapisa popisa (npr. `w:sdt` s `w:sdtContent`). */
+  listWrap?: [string, string];
 }
 
 /** Prijelom sekcije u svojstvima odlomka, kakav Word pise na zadnji odlomak sekcije. */
@@ -55,8 +59,9 @@ export function sectionEndTexts(xml: string): string[] {
 export function syncCase(citationText: string, citationRaw: string, surnames: Array<[string, string]>, options: CaseOptions = {}) {
   const entries = options.rawEntries ?? surnames.map(([surname, year]) => entryText(surname, year));
   const after = (options.after ?? []).map((item) => (item.startsWith('<w:p') ? item : paragraph(item))).join('');
-  const entryXml = entries.map((text, index) => (options.sectionBreakOnLast && index === entries.length - 1 ? sectionEndParagraph(text) : paragraph(text))).join('');
-  const documentXml = `<w:document><w:body>${options.citationXml ?? paragraph(citationText)}${paragraph(options.heading ?? 'Literatura')}${entryXml}${after}<w:sectPr/></w:body></w:document>`;
+  const entryXml = entries.map((text, index) => (options.entryXml ? options.entryXml(text, index) : options.sectionBreakOnLast && index === entries.length - 1 ? sectionEndParagraph(text) : paragraph(text))).join('');
+  const [open, close] = options.listWrap ?? ['', ''];
+  const documentXml = `<w:document><w:body>${options.citationXml ?? paragraph(citationText)}${paragraph(options.heading ?? 'Literatura')}${open}${entryXml}${close}${after}<w:sectPr/></w:body></w:document>`;
   const start = citationText.indexOf(citationRaw);
   const lastIndex = 2 + entries.length;
   const params: Parameters<SyncFixer>[1] = {
@@ -168,6 +173,66 @@ function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
   uvodiIRazmaciProblemi(fixer, problems);
   sekcijeIVisodlomacniProblemi(fixer, problems);
   odmaciProblemi(fixer, problems);
+  poljaIKontroleProblemi(fixer, problems);
+}
+
+const FIELD_BEGIN = '<w:r><w:fldChar w:fldCharType="begin"/></w:r>';
+const FIELD_SEPARATE = '<w:r><w:fldChar w:fldCharType="separate"/></w:r>';
+const FIELD_END = '<w:r><w:fldChar w:fldCharType="end"/></w:r>';
+const instruction = (code: string) => `<w:r><w:instrText xml:space="preserve"> ${code} </w:instrText></w:r>`;
+const run = (text: string) => `<w:r><w:t xml:space="preserve">${text}</w:t></w:r>`;
+const LIST_PPR = '<w:pPr><w:ind w:left="720" w:hanging="720"/></w:pPr>';
+
+/**
+ * Z36 krug 4: popis literature kao Wordovo polje (BIBLIOGRAPHY, fldChar begin u prvom zapisu) ili u
+ * kontroli sadrzaja (w:sdtContent). Zapis koji bi zavrsio izmedju begin i end polja ili unutar
+ * kontrole se ne umece (razlog u skippedActions, dokument bajt-isti, drugi prolaz isti); bez polja se
+ * umece kao i prije. Generator za svaki ulaz dokazuje gdje su granice polja i kontrole.
+ */
+function poljaIKontroleProblemi(fixer: SyncFixer, problems: string[]): void {
+  const surnames: Array<[string, string]> = [['Cvitan', '2015'], ['Horvat', '2020'], ['Zubak', '2019']];
+  const texts = surnames.map(([surname, year]) => entryText(surname, year));
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const literal = (params: ReturnType<typeof syncCase>['params']) => ({ ...params, entries: [{ ...params.entries[0], citationId: undefined, replacementText: literalText }] });
+  // Polje preko tri zapisa: begin i separate u prvom, end u zadnjem (endInTrailing: u praznom odlomku iza).
+  const fieldEntry = (endInTrailing: boolean, nested = false) => (text: string, index: number) => `<w:p>${LIST_PPR}${index === 0 ? `${FIELD_BEGIN}${instruction('BIBLIOGRAPHY')}${FIELD_SEPARATE}` : ''}${nested && index === 1 ? `${FIELD_BEGIN}${instruction('HYPERLINK "https://doi.org/10.1/x"')}${FIELD_SEPARATE}${run(text)}${FIELD_END}` : run(text)}${!endInTrailing && index === surnames.length - 1 ? FIELD_END : ''}</w:p>`;
+  const trailingEnd = `<w:p>${FIELD_END}</w:p>`;
+  const cases: Array<{ tag: string; options: CaseOptions; literal: boolean; inserted: boolean; inside: 'polje' | 'kontrola' | null }> = [
+    { tag: 'polje:predlozak', options: { rawEntries: texts, entryXml: fieldEntry(false) }, literal: false, inserted: false, inside: 'polje' },
+    { tag: 'polje:korisnikov-zapis', options: { rawEntries: texts, entryXml: fieldEntry(true), after: [trailingEnd] }, literal: true, inserted: false, inside: 'polje' },
+    { tag: 'polje:ugnijezdeno', options: { rawEntries: texts, entryXml: fieldEntry(false, true) }, literal: false, inserted: false, inside: 'polje' },
+    { tag: 'polje:korisnikov-zapis-iza-polja', options: { rawEntries: texts, entryXml: fieldEntry(false) }, literal: true, inserted: true, inside: null },
+    { tag: 'kontrola:predlozak', options: { rawEntries: texts, listWrap: ['<w:sdt><w:sdtPr><w:docPartObj><w:docPartGallery w:val="Bibliographies"/></w:docPartObj></w:sdtPr><w:sdtContent>', '</w:sdtContent></w:sdt>'] }, literal: false, inserted: false, inside: 'kontrola' },
+    { tag: 'kontrola:korisnikov-zapis', options: { rawEntries: texts, listWrap: ['<w:sdt><w:sdtContent>', '</w:sdtContent></w:sdt>'] }, literal: true, inserted: false, inside: 'kontrola' },
+    { tag: 'bez-polja:predlozak', options: { rawEntries: texts }, literal: false, inserted: true, inside: null },
+    { tag: 'bez-polja:korisnikov-zapis', options: { rawEntries: texts }, literal: true, inserted: true, inside: null },
+  ];
+  for (const item of cases) {
+    const built = syncCase('Tekst rada (Novak, 2022).', 'Novak, 2022', [], item.options);
+    const xml = built.parts.documentXml;
+    // Generator: tekst zapisa je isti kao bez polja, a granice polja i kontrole su tamo gdje slucaj tvrdi.
+    if (JSON.stringify(built.before.slice(2, 5)) !== JSON.stringify(texts)) problems.push(`${item.tag}: ulaz nema ista tri zapisa`);
+    const zubak = xml.indexOf(texts[2]);
+    const fieldSpansTarget = xml.indexOf('fldCharType="begin"') >= 0 && xml.indexOf('fldCharType="begin"') < zubak && xml.lastIndexOf('fldCharType="end"') > zubak;
+    const controlSpans = xml.indexOf('<w:sdtContent>') >= 0 && xml.indexOf('<w:sdtContent>') < zubak && xml.indexOf('</w:sdtContent>') > zubak;
+    // Korisnikov zapis ide iza sidra: kad end polja stoji u odlomku sidra, mjesto je iza polja.
+    const endInAnchor = xml.lastIndexOf('fldCharType="end"') > zubak && xml.lastIndexOf('fldCharType="end"') < xml.indexOf('</w:p>', zubak);
+    if (item.tag === 'polje:korisnikov-zapis-iza-polja' ? !(fieldSpansTarget && endInAnchor) : (item.inside === 'polje') !== fieldSpansTarget) problems.push(`${item.tag}: ulaz nema polje preko zapisa kako slucaj tvrdi`);
+    if ((item.inside === 'kontrola') !== controlSpans) problems.push(`${item.tag}: ulaz nema kontrolu oko zapisa kako slucaj tvrdi`);
+    if (item.tag === 'polje:ugnijezdeno' && (xml.match(/fldCharType="end"/g) ?? []).length !== 2) problems.push(`${item.tag}: ulaz nema ugnijezdeno polje`);
+    const params = item.literal ? literal(built.params) : built.params;
+    const first = fixer(built.parts, params);
+    const expected = item.literal ? literalText : template('Novak', '2022');
+    const after = paragraphTexts(first.parts.documentXml);
+    if (item.inserted) {
+      if (!first.applied || !after.includes(expected)) problems.push(`${item.tag}: zapis nije umetnut (${first.reason})`);
+    } else {
+      if (first.applied || first.parts.documentXml !== xml || after.includes(expected)) problems.push(`${item.tag}: zapis je umetnut unutar ${item.inside}`);
+      if (!first.skippedActions?.some((note) => note.includes('unutar Wordova polja'))) problems.push(`${item.tag}: preskok nema razlog (${JSON.stringify(first.skippedActions)})`);
+    }
+    const second = fixer(first.parts, params);
+    if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${item.tag}: drugi prolaz nije no-op (${second.reason})`);
+  }
 }
 
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';

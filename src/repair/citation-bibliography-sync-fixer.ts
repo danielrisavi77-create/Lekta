@@ -45,6 +45,27 @@ const noOp = (parts: DocxXmlParts, reason: FixerOutput['reason'], skippedActions
  */
 const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mogu se sigurno procitati iz citata';
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
+const SKIPPED_IN_FIELD = 'zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
+
+const FIELD_OR_CONTROL_TOKEN = /<w:fldChar\b[^>]*\bw:fldCharType=["'](begin|end)["'][^>]*>|<w:sdtContent\b[^>]*>|<\/w:sdtContent\s*>/gi;
+
+/**
+ * Z36 krug 4: je li pomak `offset` u document.xml izmedju fldChar begin i end nekog polja (npr. popis
+ * literature kao BIBLIOGRAPHY polje) ili unutar w:sdtContent. Word rezultat polja pri osvjezavanju
+ * izgradi iznova, a kontrolu drzi kao cjelinu, pa umetnuti odlomak tamo ne smije zavrsiti. Ugnijezdeno
+ * polje broji se dubinom: njegov end ne zatvara vanjsko polje.
+ */
+function insideFieldOrControl(xml: string, offset: number): boolean {
+  let field = 0;
+  let control = 0;
+  for (const match of xml.slice(0, offset).matchAll(FIELD_OR_CONTROL_TOKEN)) {
+    if (match[1] === 'begin') field += 1;
+    else if (match[1] === 'end') field = Math.max(0, field - 1);
+    else if (match[0].startsWith('</')) control = Math.max(0, control - 1);
+    else if (!/\/\s*>$/.test(match[0])) control += 1;
+  }
+  return field > 0 || control > 0;
+}
 
 function entryTemplate(author: string, year: string): string {
   return `${author}, ${ENTRY_TEMPLATE_FIELDS.name}. (${year}). ${ENTRY_TEMPLATE_FIELDS.title}. ${ENTRY_TEMPLATE_FIELDS.publisher}.`;
@@ -439,11 +460,13 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       if (literal !== null) {
         // Korisnikov potvrdjeni zapis: zateceno ponasanje, doslovno i iza sidra.
         offset = range.end;
+        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }
         literalInsertions.push({ offset, text, source });
       } else {
         const position = alphabeticalPosition(parts.documentXml, ranges, paragraphs, anchor.paragraphIndex, text);
         if (!position) { skippedActions.push(SKIPPED_NO_LIST); continue; }
         offset = position.offset;
+        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }
         const group = templateInsertions.get(offset) || [];
         group.push({ key: position.key, text, source });
         templateInsertions.set(offset, group);

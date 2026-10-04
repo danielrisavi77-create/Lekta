@@ -7676,6 +7676,43 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: z36FixerCist,
   },
   {
+    id: 'z36/umetanje-unutar-polja',
+    imitates: 'mjesto umetanja ne gleda Wordova polja (stanje kruga 3): predlozak zavrsi izmedju fldChar begin i end '
+      + 'polja BIBLIOGRAPHY, a Word ga pri osvjezavanju polja izbrise ili prepise',
+    caught: () => zapisLiteratureProblemi(z36Fixer("if (match[1] === 'begin') field += 1;", "if (match[1] === 'begin') field += 0;"))
+      .some((p) => p.startsWith('polje:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/umetanje-unutar-kontrole',
+    imitates: 'mjesto umetanja ne gleda kontrole sadrzaja: zapis zavrsi unutar w:sdtContent (Wordov blok literature)',
+    caught: () => zapisLiteratureProblemi(z36Fixer('else if (!/\\/\\s*>$/.test(match[0])) control += 1;', 'else if (!/\\/\\s*>$/.test(match[0])) control += 0;'))
+      .some((p) => p.startsWith('kontrola:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/ugnijezdeno-polje-zatvara-vanjsko',
+    imitates: 'granica polja se trazi zadnjim begin/end umjesto dubinom: end ugnijezdenog polja (HYPERLINK u zapisu) '
+      + 'zatvori i BIBLIOGRAPHY, pa predlozak ipak zavrsi u polju',
+    caught: () => zapisLiteratureProblemi(z36Fixer("else if (match[1] === 'end') field = Math.max(0, field - 1);", "else if (match[1] === 'end') field = 0;"))
+      .some((p) => p.startsWith('polje:ugnijezdeno')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/korisnikov-zapis-bez-provjere-polja',
+    imitates: 'provjera polja i kontrole vrijedi samo za predlozak; korisnikov zapis iza sidra zavrsi unutar polja ili kontrole',
+    caught: () => zapisLiteratureProblemi(z36Fixer('offset = range.end;\n        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }', 'offset = range.end;'))
+      .some((p) => /^(polje|kontrola):korisnikov-zapis:/.test(p)),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/predlozak-bez-provjere-polja',
+    imitates: 'provjera polja i kontrole vrijedi samo za korisnikov zapis; predlozak na abecednom mjestu zavrsi u polju',
+    caught: () => zapisLiteratureProblemi(z36Fixer('offset = position.offset;\n        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }', 'offset = position.offset;'))
+      .some((p) => /^(polje|kontrola):predlozak:/.test(p)),
+    cleanBefore: z36FixerCist,
+  },
+  {
     id: 'z36/predlozak-kopira-prijelom-sekcije',
     imitates: 'novi zapis kopira cijeli w:pPr sidra zajedno s w:sectPr, pa predlozak na vrhu ili usred '
       + 'popisa unese prijelom sekcije (nova stranica) i razlomi literaturu',

@@ -130,6 +130,25 @@ describe('Z36 fixer: rubni slucajevi', () => {
     expect(second.parts.documentXml).toBe(first.parts.documentXml);
   });
 
+  it('krug 4: popis kao BIBLIOGRAPHY polje preko tri zapisa: nista se ne umece u polje; bez polja se umece', () => {
+    const texts = [entryText('Cvitan', '2015'), entryText('Horvat', '2020'), entryText('Zubak', '2019')];
+    const field = (text: string, index: number) => `<w:p>${index === 0 ? '<w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> BIBLIOGRAPHY </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r>' : ''}<w:r><w:t>${text}</w:t></w:r>${index === 2 ? '<w:r><w:fldChar w:fldCharType="end"/></w:r>' : ''}</w:p>`;
+    const inField = syncCase('Tekst (Novak, 2022).', 'Novak, 2022', [], { rawEntries: texts, entryXml: field });
+    const plain = syncCase('Tekst (Novak, 2022).', 'Novak, 2022', [], { rawEntries: texts });
+    // Generator: isti zapisi, a jedina razlika je polje oko njih.
+    expect(inField.before).toEqual(plain.before);
+    expect(inField.parts.documentXml).toContain('BIBLIOGRAPHY');
+    for (const pass of [1, 2]) {
+      const blocked = citationBibliographySyncFixer(inField.parts, inField.params);
+      expect(blocked.applied, `prolaz ${pass}`).toBe(false);
+      expect(blocked.parts.documentXml, `prolaz ${pass}`).toBe(inField.parts.documentXml);
+      expect(blocked.skippedActions?.join(' '), `prolaz ${pass}`).toContain('unutar Wordova polja');
+    }
+    const inserted = citationBibliographySyncFixer(plain.parts, plain.params);
+    expect(paragraphTexts(inserted.parts.documentXml).slice(2)).toEqual([texts[0], texts[1], template('Novak', '2022'), texts[2]]);
+    expect(citationBibliographySyncFixer(inserted.parts, plain.params).parts.documentXml).toBe(inserted.parts.documentXml);
+  });
+
   it('predlozak nasljeduje oblikovanje odlomka sidra (pPr), kao i korisnikov zapis', () => {
     const { parts, params } = syncCase('Tekst (Babić, 2021).', 'Babić, 2021', [['Horvat', '2020']]);
     const xml = citationBibliographySyncFixer(parts, params).parts.documentXml;
