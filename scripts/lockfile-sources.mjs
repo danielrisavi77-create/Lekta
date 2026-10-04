@@ -14,9 +14,10 @@
 //  - `integrity` mora biti JEDAN SRI zapis `sha512-<base64>` s digestom od tocno 64 bajta. npm-ov
 //    `ssri` iz niza s vise zapisa bira algoritam po svom redu, pa `sha512- sha1-...` ili prazan
 //    `sha512-` nisu dokaz SHA512.
-//  - `inBundle: true` je izuzet od `resolved`/`integrity` SAMO kad mu je neposredni roditelj stvaran
-//    provjeren paket koji ga navodi u `bundleDependencies` (stize u roditeljevom tarballu); ako ipak
-//    nosi `resolved` ili `integrity`, oni se provjeravaju kao kod obicnog paketa.
+//  - `inBundle: true` je izuzet od `resolved`/`integrity` SAMO kao dio dokazanog lanca do vlasnika
+//    tarballa, stvarnog provjerenog paketa s `bundleDependencies` (vidi `inBundleProblem`). Tranzitivni
+//    bundle `a` -> `a/b` -> `a/b/c` prolazi (Codex runda 2 na #258, F2). Ako ipak nosi `resolved` ili
+//    `integrity`, oni se provjeravaju kao kod obicnog paketa.
 //  - `link: true` (workspace) nije dopusten: repo nema workspaceove, pa je svaki link podmetanje
 //    izvora mimo registryja. Uvodjenje workspaceova trazi svjesnu izmjenu ovog garda.
 //
@@ -50,10 +51,78 @@ function sourceProblems(name, meta) {
   return out;
 }
 
-/** Ime paketa iz kljuca `.../node_modules/<ime>` (s opsegom `@a/b`). */
-function packageName(key) {
-  const i = key.lastIndexOf('node_modules/');
-  return i === -1 ? key : key.slice(i + 'node_modules/'.length);
+/** Kljuc roditelja: `a/node_modules/b` -> `a`; prazno za paket na vrhu. */
+function parentKeyOf(key) {
+  const cut = key.lastIndexOf('/node_modules/');
+  return cut === -1 ? '' : key.slice(0, cut);
+}
+
+/** Imena ovisnosti zapisa (dependencies, optionalDependencies, peerDependencies). */
+function depNames(meta) {
+  const out = new Set();
+  for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    const v = meta?.[field];
+    if (v && typeof v === 'object' && !Array.isArray(v)) for (const k of Object.keys(v)) out.add(k);
+  }
+  return out;
+}
+
+/** Vlasnik tarballa za `inBundle` zapis: prvi predak koji nije `inBundle` (prazno ako ga nema). */
+function bundleOwnerOf(key, entries) {
+  let k = parentKeyOf(key);
+  while (k && entries[k]?.inBundle === true) k = parentKeyOf(k);
+  return k;
+}
+
+/**
+ * Razrjesenje ovisnosti `dep` iz zapisa `fromKey` kao u Nodeu: najblizi postojeci `<dir>/node_modules/<dep>`
+ * idući od zapisa prema gore, ali ne iznad vlasnika tarballa (bundled paket ne vidi nista izvan njega).
+ */
+function resolveInBundle(fromKey, dep, owner, existsKey) {
+  for (let dir = fromKey; ; dir = parentKeyOf(dir)) {
+    const candidate = `${dir}/node_modules/${dep}`;
+    if (existsKey(candidate)) return candidate;
+    if (dir === owner || !dir) return null;
+  }
+}
+
+/**
+ * Skup `inBundle` kljuceva dosegljivih od DEKLARIRANIH `bundleDependencies` vlasnika (Codex R2 na #274):
+ * pocetak su `owner/node_modules/<ime>` iz `bundleDependencies`, a dalje samo ovisnosti dosegnutih zapisa
+ * razrijesene po putanji. Ciklus bundled paketa bez veze s deklariranim bundleom ostaje izvan skupa.
+ */
+function reachableBundle(owner, entries, existsKey) {
+  const reached = new Set();
+  const bundled = Array.isArray(entries[owner]?.bundleDependencies) ? entries[owner].bundleDependencies : [];
+  const queue = bundled.map((name) => `${owner}/node_modules/${name}`);
+  while (queue.length) {
+    const key = queue.shift();
+    if (reached.has(key) || !existsKey(key) || entries[key]?.inBundle !== true) continue;
+    reached.add(key);
+    for (const dep of depNames(entries[key])) {
+      const resolved = resolveInBundle(key, dep, owner, existsKey);
+      if (resolved) queue.push(resolved);
+    }
+  }
+  return reached;
+}
+
+/**
+ * Je li `inBundle` zapis dio dokazanog lanca. Bundled paket stize u tarballu svog vlasnika (prvi predak
+ * koji nije `inBundle`), pa je valjan samo kad je dosegljiv od vlasnikovih deklariranih
+ * `bundleDependencies` (tranzitivno i podignuto, kao u Nodeu). Vlasnik mora biti obican paket (ne
+ * korijen, ne link) s nepraznim `bundleDependencies`; njegov izvor provjerava glavna petlja.
+ */
+function inBundleProblem(key, entries, cache) {
+  const owner = bundleOwnerOf(key, entries);
+  const ownerMeta = owner ? entries[owner] : undefined;
+  if (!ownerMeta) return `${key}: \`inBundle\` bez vlasnika tarballa (${owner || 'nema roditelja'})`;
+  const bundled = Array.isArray(ownerMeta.bundleDependencies) ? ownerMeta.bundleDependencies : [];
+  if (ownerMeta.link === true || bundled.length === 0) {
+    return `${key}: \`inBundle\` bez vlasnika tarballa s bundleDependencies (${owner})`;
+  }
+  if (!cache.has(owner)) cache.set(owner, reachableBundle(owner, entries, (k) => Object.prototype.hasOwnProperty.call(entries, k)));
+  return cache.get(owner).has(key) ? null : `${key}: \`inBundle\` nije dosegljiv od bundleDependencies vlasnika ${owner}`;
 }
 
 /**
@@ -76,6 +145,7 @@ export function lockfileSourceProblems(lock) {
   const problems = [];
   let checked = 0;
   let skipped = 0;
+  const bundleCache = new Map();
   for (const [name, raw] of Object.entries(entries)) {
     const meta = raw && typeof raw === 'object' ? raw : {};
     if (name === '') {
@@ -87,12 +157,9 @@ export function lockfileSourceProblems(lock) {
       continue;
     }
     if (meta.inBundle === true) {
-      const cut = name.lastIndexOf('/node_modules/');
-      const parentKey = cut === -1 ? '' : name.slice(0, cut);
-      const parent = parentKey ? entries[parentKey] : undefined;
-      const bundled = parent && Array.isArray(parent.bundleDependencies) ? parent.bundleDependencies : [];
-      if (!parent || parent.inBundle === true || parent.link === true || !bundled.includes(packageName(name))) {
-        problems.push(`${name}: \`inBundle\` bez roditelja koji ga navodi u bundleDependencies (${parentKey || 'nema roditelja'})`);
+      const bundleProblem = inBundleProblem(name, entries, bundleCache);
+      if (bundleProblem) {
+        problems.push(bundleProblem);
         continue;
       }
       if (meta.resolved !== undefined || meta.integrity !== undefined) problems.push(...sourceProblems(name, meta));
@@ -140,12 +207,15 @@ function selftest() {
       return 1;
     }
   }
-  const bundled = lockfileSourceProblems(lock({ 'node_modules/a/node_modules/c': { version: '1.0.0', inBundle: true } }));
+  const bundled = lockfileSourceProblems(lock({
+    'node_modules/a/node_modules/c': { version: '1.0.0', inBundle: true, dependencies: { d: '^1.0.0' } },
+    'node_modules/a/node_modules/c/node_modules/d': { version: '1.0.0', inBundle: true },
+  }));
   if (bundled.problems.length !== 0) {
     console.error(`[lockfile-sources] FAIL selftest: \`inBundle\` s pravim roditeljem je lazno prijavljen: ${bundled.problems.join('; ')}`);
     return 1;
   }
-  console.log(`[lockfile-sources] SELF-TEST OK: ${Object.keys(mustFail).length} losih ulaza se hvata, inBundle s roditeljem prolazi.`);
+  console.log(`[lockfile-sources] SELF-TEST OK: ${Object.keys(mustFail).length} losih ulaza se hvata, inBundle lanac (i tranzitivni) prolazi.`);
   return 0;
 }
 
