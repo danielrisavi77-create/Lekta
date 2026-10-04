@@ -378,13 +378,16 @@ test('/rad/?resultRenderer=legacy ekran provjere: faze i ime dokumenta, bez post
    * je zato vidio 30 ocitanja "hidden" kroz punih 15 s (retry na ISTOM commitu prolazi, jer je
    * drugi stroj/trenutak sporiji; lokalno na Windowsu isto prolazi).
    *
-   * POPRAVAK ostaje deterministican bez slabljenja tvrdnje: usporava se MREZNI zahtjev za
-   * skriptu workera (jedini mrezni trag analize; sama provjera dokumenta je lokalna), tako da
-   * spekulacija sigurno jos traje kad klik na potvrdu stigne, a ekran provjere ostane vidljiv
-   * dovoljno dugo da ga se stvarno izmjeri.
+   * POPRAVAK ostaje deterministican bez slabljenja tvrdnje: MREZNI zahtjev za skriptu workera
+   * (jedini mrezni trag analize; sama provjera dokumenta je lokalna) STOJI dok test ne izmjeri
+   * ekran provjere, pa spekulacija sigurno jos traje kad klik na potvrdu stigne. Fiksno kasnjenje
+   * od 2,5 s pucalo bi cim potvrda profila potraje dulje (isti kvar kao Codex Z33-08), pa je
+   * zamijenjeno cekanjem na stanje.
    */
+  let pustiWorker: () => void = () => {};
+  const pusten = new Promise<void>((r) => { pustiWorker = r; });
   await page.route('**/analyze-docx.worker*', async (route) => {
-    await new Promise((r) => { setTimeout(r, 2_500); });
+    await pusten;
     await route.continue();
   });
 
@@ -431,6 +434,7 @@ test('/rad/?resultRenderer=legacy ekran provjere: faze i ime dokumenta, bez post
   expect(stanje.gotoviProslo, 'gotova faza mora biti u proslom vremenu').toBe(true);
   expect(stanje.spinnera, 'spinner, traka ili postotak su se vratili').toBe(0);
   expect(stanje.tekst, `postotak je ponovno na ekranu: ${stanje.tekst}`).not.toMatch(/\d+\s*%/);
+  pustiWorker();
 });
 
 test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom', async ({ page }) => {

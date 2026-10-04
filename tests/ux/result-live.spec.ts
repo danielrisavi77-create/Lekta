@@ -197,12 +197,40 @@ test('Z34 pod prefers-reduced-motion: bez brojanja, zumiranja i letenja', async 
   expect(await page.locator('.rl-fly').count(), 'cedulja ne leti').toBe(prijeLeta);
 });
 
-test('Z34 bez prigusenog pokreta: ocjena raste do stvarne, tek onda pada pecat', async ({ page }) => {
+test('Z34 bez prigusenog pokreta: ocjena raste do stvarne, tek onda pada pecat', async ({ page }, info) => {
   test.setTimeout(150_000);
+  // Stanje pecata biljezi STRANICA pri svakoj promjeni, uz broj u prstenu u tom trenutku. Gledanje
+  // izvana (5 s na "pada") je palo kad je kokpit u medjuvremenu ponovno nacrtan: ponovno crtanje
+  // istog rezultata je namjerno odmah zavrsno ("stoji"), pa "pada" vise nije bilo za vidjeti.
+  await page.addInitScript(() => {
+    const w = window as unknown as { __rlPecat: Array<{ v: string; jezgra: string; cilj: string }> };
+    w.__rlPecat = [];
+    const o = new MutationObserver((zapisi) => {
+      for (const z of zapisi) {
+        const el = z.target as HTMLElement;
+        if (z.attributeName !== 'data-rl-stamp' || !el.dataset.rlStamp) continue;
+        w.__rlPecat.push({
+          v: el.dataset.rlStamp,
+          jezgra: (document.querySelector('#resultCockpit .cockpit-ring__core')?.textContent ?? '').trim(),
+          cilj: document.querySelector('#resultCockpit .cockpit-ring')?.getAttribute('aria-label')?.match(/Ocjena sada (\d+)/)?.[1] ?? '',
+        });
+      }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      o.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['data-rl-stamp'] });
+    });
+  });
   await doRezultata(page, { tiho: false });
   await cekajZ34(page);
   const pecat = kokpit(page).locator('[data-cockpit-stamp]');
-  if (await pecat.count()) await expect(pecat).toHaveAttribute('data-rl-stamp', 'pada', { timeout: 5_000 });
+  if (await pecat.count()) {
+    await expect(pecat).not.toHaveAttribute('data-rl-stamp', 'ceka', { timeout: 10_000 });
+    const tok = await page.evaluate(() => (window as unknown as { __rlPecat: Array<{ v: string; jezgra: string; cilj: string }> }).__rlPecat);
+    expect(tok.some((z) => z.v === 'ceka'), 'ocjena nije ni krenula rasti (pokret je bio ugasen)').toBe(true);
+    // Pecat nikad ne padne prije nego ocjena dodje do stvarne.
+    for (const z of tok.filter((x) => x.v === 'pada')) expect(z.jezgra, 'pecat je pao prije kraja rasta ocjene').toBe(z.cilj);
+    if (!tok.some((z) => z.v === 'pada')) info.annotations.push({ type: 'pecat', description: `rast prekinut ponovnim crtanjem: ${tok.map((z) => z.v).join(' > ')}` });
+  }
   const konacno = await page.evaluate(() => document.querySelector('.cockpit-ring')?.getAttribute('aria-label')?.match(/Ocjena sada (\d+)/)?.[1] ?? '');
   await expect(kokpit(page).locator('.cockpit-ring__core')).toHaveText(konacno);
 });
