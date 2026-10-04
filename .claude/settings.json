@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/agents/session-bootstrap.mjs"
+            "command": "node scripts/agents/session-bootstrap.mjs --worktree-gc"
           }
         ]
       }

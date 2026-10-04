@@ -15,6 +15,8 @@
   "type": "module",
   "scripts": {
     "bootstrap": "node scripts/split-prototype.mjs",
+    "upisnik:snapshot-ratchet": "node scripts/build-upisnik-snapshot-ratchet.mjs",
+    "upisnik:ocr-snapshot": "node scripts/ocr-snapshot.mjs",
     "extract-data": "node scripts/extract-data.mjs",
     "discovery": "node discovery/ingest.mjs && node discovery/generate-coverage.mjs",
     "demand-signal": "node discovery/demand-signal.mjs",
@@ -130,6 +132,7 @@
     "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
     "audit:lockfile": "node scripts/lockfile-sources.mjs",
+    "audit:osv": "node scripts/osv-query.mjs",
     "audit:ratchet": "node scripts/npm-audit-ratchet.mjs",
     "status": "node scripts/generate-status.mjs",
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
@@ -171,9 +174,11 @@
     "supabase": "^2.109.1",
     "tsx": "4.23.15",
     "typescript": "^7.0.2",
+    "unpdf": "1.7.0",
     "vite": "^8.3.1",
     "vite-node": "^6.0.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "word-extractor": "1.0.4"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.3.0",
@@ -196,7 +201,8 @@
     ],
     "ignoreDependencies": [
       "jsr",
-      "postgres"
+      "postgres",
+      "word-extractor"
     ]
   }
 }
