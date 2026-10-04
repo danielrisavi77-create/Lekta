@@ -31,7 +31,32 @@ describe('mapProductRow', () => {
       manualFulfillment: false,
       active: true,
       sort: 30,
+      // Redak bez offer_code (stariji red ili Katedra) se mapira bez bacanja (Monetizacija V1).
+      offerCode: null,
+      capabilities: null,
     });
+  });
+  it('offer_code i ugradjena prava (offer_codes(capabilities)) se mapiraju; fail-closed ostaje samo na cijeni', () => {
+    const p = mapProductRow({
+      id: 'pass_specijalisticki', kind: 'pass', audience: 'retail', work_type: 'specijalisticki',
+      price_eur: 29.99, active: true, offer_code: 'final_pass_v1',
+      offer_codes: { capabilities: ['full_report', 'repair', 'citation_audit'] },
+    });
+    expect(p.offerCode).toBe('final_pass_v1');
+    expect(p.capabilities).toEqual(['full_report', 'repair', 'citation_audit']);
+    expect(p.active).toBe(true);
+    expect(p.workType).toBe('specijalisticki');
+  });
+  it.each([
+    ['bez ugradnje', undefined],
+    ['prazan niz', { capabilities: [] }],
+    ['niz s nevaljanim clanom', { capabilities: ['repair', 3] }],
+    ['niz umjesto objekta', [{ capabilities: ['repair'] }]],
+  ])('djelomicna ugradnja prava (%s) je null, ne pola snapshota', (_ime, embed) => {
+    const p = mapProductRow({ id: 'slot_diplomski', kind: 'slot', price_eur: 9.99, offer_code: 'repair_v1', offer_codes: embed });
+    expect(p.offerCode).toBe('repair_v1');
+    expect(p.capabilities).toBeNull();
+    expect(p.active, 'nedostatak prava ne gasi proizvod u paywallu').toBe(true);
   });
   it('null work_type i mor_product_id ostaju null (premium_human)', () => {
     const p = mapProductRow({ id: 'premium_human', kind: 'premium_human', audience: 'retail', work_type: null, price_eur: 49, manual_fulfillment: true });

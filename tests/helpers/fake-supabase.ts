@@ -26,7 +26,7 @@ const CHAIN_METHODS = [
 ] as const;
 
 export interface FakeAdmin {
-  admin: { from(table: string): unknown };
+  admin: { from(table: string): unknown; rpc(fn: string, args?: unknown): PromiseLike<FakeResult> };
   calls: FakeCall[];
 }
 
@@ -49,6 +49,15 @@ export function fakeAdmin(resolve: FakeResolver): FakeAdmin {
       builder.then = (ok: (v: FakeResult) => unknown, fail?: (e: unknown) => unknown) =>
         Promise.resolve({ data: null, error: null, count: null, ...(resolve(call) ?? {}) }).then(ok, fail);
       return builder;
+    },
+    /**
+     * RPC poziv (`admin.rpc(fn, args)`) se biljezi kao lanac na "tablici" `rpc:<fn>` s jednom
+     * operacijom `rpc`, pa ga resolver razlikuje od upita nad pravom tablicom istog imena.
+     */
+    rpc(fn: string, args?: unknown): PromiseLike<FakeResult> {
+      const call: FakeCall = { table: `rpc:${fn}`, ops: [{ op: 'rpc', args: [fn, args] }] };
+      calls.push(call);
+      return Promise.resolve({ data: null, error: null, count: null, ...(resolve(call) ?? {}) });
     },
   };
   return { admin, calls };

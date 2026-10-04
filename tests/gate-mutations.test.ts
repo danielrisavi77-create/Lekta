@@ -15,7 +15,9 @@
  *    bez ijednog `ruleEntry`: prolazi vakuumski.
  *
  * PRAVILA OVOG TESTA:
- *  1. Mutira se SAMO u memoriji. Nijedna datoteka na disku se ne dira.
+ *  1. Mutira se SAMO u memoriji. Nijedna datoteka repozitorija se ne dira. Jedina iznimka su
+ *     privremene datoteke izvan repozitorija (`mkdtemp` pod `tmpdir()`, obrisane u `finally`) kad gard
+ *     po ugovoru cita stablo s diska, npr. `crlf/citanje-bez-normalizacije` (T92).
  *  2. Svaka mutacija ima i BASELINE tvrdnju: nemutiran ulaz mora biti cist. Bez toga mutacija koja
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
@@ -33,8 +35,9 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -52,6 +55,7 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -104,7 +108,49 @@ import {
   IGNORE_REASON_PREFIXES,
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
+  buildEntitlementInsert,
 } from '../src/report/webhook';
+import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src/report/upgrade';
+import {
+  accessRowsProblems,
+  bonusOutboxWorkerProblems,
+  referrerRewardDecisionProblems,
+  referrerRewardRetryProblems,
+  boundSlotReadProblems,
+  entitlementAccessProblems,
+  entitlementConsumerProblems,
+  entitlementProductFkCount,
+  entitlementSnapshotProblems,
+  specialistFallbackProblems,
+  specialistTierGateProblems,
+  stripeSyncSafetyProblems,
+  upgradeQuoteProblems,
+  upgradeRefundTraceProblems,
+  upgradeWiringProblems,
+} from './helpers/monetizacija-v1-guards';
+import type * as GrantModul from '../supabase/functions/_shared/grant-referrer-reward';
+import type * as RadnikModul from '../supabase/functions/process-bonus-outbox/referrer-reward';
+import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
+import type { SlotRow } from '../src/report/slot-logic';
+import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
+import { applyGuard as stripeSyncApplyGuard, parseArgs as stripeSyncParseArgs } from '../scripts/stripe-sync-products.mjs';
+import { checkoutMismatch } from '../src/report/checkout';
+import { estimateWorkType, unambiguousMismatch } from '../src/report/work-type-estimate';
+import { isReportWorkType } from '../src/report/pricing';
+import {
+  V1_MIGRATION,
+  catalogProblems,
+  constraintDropProblems,
+  definerOwnerProblems,
+  idempotencyProblems,
+  partialRefundSqlProblems,
+  privilegeProblems,
+  readMigration,
+  runV1,
+  snapshotProblems,
+  upgradeRevertSqlProblems,
+  upgradeSqlProblems,
+} from './helpers/monetizacija-v1-sql';
 import { findBotsImplementingProtected, findImplementEffortDrift, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
@@ -165,7 +211,7 @@ import {
   auditClaudeContext,
 } from '../scripts/verify-claude-context-core.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
-import { sidecarAdmitted } from './real-corpus/corpus-track';
+import { corpusSetOf, sidecarAdmitted, witnessIsolationProblems, type CorpusSidecar } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
@@ -2421,6 +2467,41 @@ const MUTATIONS: Mutation[] = [
     // Baseline: `undefined` NIJE nepoznata vrijednost nego izostanak polja, i mora proci, jer su
     // svi postojeci sidecari nastali prije uvodjenja trake.
     cleanBefore: () => sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: undefined }),
+  },
+  // --- svjedoci (T68): traka `witness` ide u zaseban skup, nikad u `results` -------------------
+  {
+    id: 'korpus/witness-traka-ulazi-u-results',
+    imitates:
+      'svjedok s NAMJERNIM prekrsajima (traka `witness`) udje u `results`: napravljen je da padne i da ' +
+      'ga popravak rijesi, pa bi napuhao stopu rjesavanja (sinteticki 84,6 posto naspram stvarnih 39,8 ' +
+      'posto) i usao u matricu kao dokaz profila koji nije studentski rad',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) => (m.track === 'witness' ? 'results' : corpusSetOf(m))).length > 0,
+    // Baseline: pravi razvrstavac nema nijedan problem, ukljucujuci kontrolne trake.
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-pada-u-synthetic',
+    imitates:
+      'zateceno ponasanje prije T68: `discoverExcludedCorpus` uzima sve sto `sidecarAdmitted` odbije, pa ' +
+      'svjedok zavrsi u `syntheticResults` i izgubi izravni signal (koji je namjerni prekrsaj ciljan, ' +
+      'razrijesen ili ostavljen korisniku)',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        typeof m.profileId === 'string' && m.profileId.length > 0 ? (sidecarAdmitted(m) ? 'results' : 'synthetic') : null,
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-bez-zastavice-synthetic',
+    imitates:
+      'prva verzija T68 razvrstavaca: `track: witness` sam je bio dovoljan, pa bi stvaran rad s greskom ' +
+      'pridruzenim witness sidecarom (bez `synthetic: true` ili sa `synthetic: false`) usao u mjerenje svjedoka',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        m.track === 'witness' && typeof m.profileId === 'string' && m.profileId.length > 0 ? 'witness' : corpusSetOf(m),
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
   },
   {
     // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne
@@ -6050,7 +6131,7 @@ const MUTATIONS: Mutation[] = [
     imitates: 'pad sporednih posljedica zapisan u inbox kao detalj koji nije oznaka punog povrata: uplata koja stigne prije Stripeova retryja povrata ne vidi povrat i otvori ili ostavi rucnu narudzbu za vracen novac',
     caught: () => {
       const src = webhookMorSource();
-      const mutated = src.replace("await settle('failed', 'refund_consequences_failed');", "await settle('failed', 'posljedice_povrata_pale');");
+      const mutated = src.replace("await settle('failed', 'refund_consequences_failed', ", "await settle('failed', 'posljedice_povrata_pale', ");
       if (mutated === src) return false;
       return webhookHandlerProblems(mutated).some((p) => p.includes('ne ostavlja oznaku punog povrata'));
     },
@@ -6068,6 +6149,579 @@ const MUTATIONS: Mutation[] = [
         && webhookHandlerProblems(b).some((p) => p.includes('(x as any).code'));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2), snapshot prava i nadogradnja Repair -> Final Pass -----------
+  {
+    id: 'naplata/snapshot-bez-offer-code',
+    imitates: 'buildEntitlementInsert kakav je bio do Monetizacije V1: redak bez offer_code i prava, pa buduca promjena kataloga mijenja ono sto je korisnik vec kupio (MONETIZACIJA_V1.md odjeljak 13)',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.offer_code;
+        delete row.capabilities;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      const problems = entitlementSnapshotProblems(mutant);
+      return problems.some((p) => p.includes('ne snapshotira offer_code')) && problems.some((p) => p.includes('ne snapshotira prava'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/snapshot-dijeli-niz-s-katalogom',
+    imitates: 'pola snapshota: prava se upisuju kao referenca na niz iz kataloga umjesto kopije, pa izmjena kataloga u istom procesu tiho mijenja upisano pravo',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => ({
+        ...buildEntitlementInsert(p, ev, prov, now),
+        capabilities: p.capabilities as string[],
+      });
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('dijeli niz s katalogom'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/webhook-snapshot-iz-drugog-upita',
+    imitates: 'webhook cita proizvod kao select(*) bez offer_codes(capabilities): prava ostaju null, pa se svaka kupnja zaustavi na product_without_offer ili bi se snapshot slagao iz drugog izvora nego cijena',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const mutated = webhook.replace(".select('*, offer_codes(capabilities)')", ".select('*')");
+      if (mutated === webhook) return false;
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('prava ponude u istom upitu'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-naplacuje-punu-cijenu',
+    imitates: 'nadogradnja bez odbitka: korisnik koji je vec platio Repair placa puni Final Pass ponovno (MONETIZACIJA_V1.md odjeljak 14, "nikad ne naplatiti puni Final Pass ponovno")',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => {
+        const q = quoteUpgrade(t, s, u, n);
+        return q.ok ? { ...q, amountCents: q.targetCents } : q;
+      };
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('punu cijenu Final Passa'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-dvaput',
+    imitates: 'izracun nadogradnje koji ne gleda upgrade_order_id: vec nadogradjeno pravo daje drugi PaymentIntent s istim odbitkom, pa se isti Repair iznos priznaje dvaput',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, upgradeOrderId: null } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije jednom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-druga-vrsta-rada',
+    imitates: 'nadogradnja bez usporedbe vrste rada: diplomski Repair postaje doktorski Final Pass uz odbitak diplomskog iznosa',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s && t ? { ...s, workType: t.workType ?? s.workType } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('drugu vrstu rada'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-klijentski-iznos',
+    imitates: 'create-checkout koji iznos nadogradnje uzima iz tijela zahtjeva (klijent salje "vec placeno" ili iznos), pa izmijenjen klijent placa 1 cent za Final Pass',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace('amountCents = quote.amountCents;', 'amountCents = Number(body.amountCents);');
+      if (mutated === checkout) return false;
+      const problems = upgradeWiringProblems(mutated, webhookMorSource());
+      return problems.some((p) => p.includes('ne uzima iz quoteUpgrade')) && problems.some((p) => p.includes('iz tijela zahtjeva'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-tudje-pravo',
+    imitates: 'create-checkout cita pravo za nadogradnju samo po id-u: tudji entitlement id (npr. iz loga) daje odbitak tudje uplate',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace(".eq('id', upgradeFrom)\n      .eq('user_id', user.id)", ".eq('id', upgradeFrom)");
+      if (mutated === checkout) return false;
+      return upgradeWiringProblems(mutated, webhookMorSource()).some((p) => p.includes('bez filtra na prijavljenog korisnika'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-kroz-punu-cijenu-u-webhooku',
+    imitates: 'webhook bez grane nadogradnje: uplata razlike (10,00) se usporedjuje s punom cijenom Final Passa (19,99) i zavrsi na rucnom pregledu, ili bi uz popusten gard stvorila DRUGO pravo za isti rad',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const od = webhook.indexOf('  if (ev.upgradeFromEntitlementId) {');
+      const _do = webhook.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = webhook.slice(0, od) + webhook.slice(_do + 4);
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('usporedbu s punom cijenom'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2) krug 2, potrosnja kupljenog prava --------------------------------
+  {
+    id: 'naplata/snapshot-bez-prozora',
+    imitates: 'buildEntitlementInsert iz kruga 1: offer_code i prava se snapshotiraju, ali prozor slota ne, pa ga odluka o pristupu i dalje cita iz zivog kataloga',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.slot_window_days;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('ne snapshotira prozor slota'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/pristup-cita-zivi-katalog',
+    imitates: 'krug 1: generate-report i repair-docx citaju slot_window_days iz products uzivo, pa buduce skracenje prozora Final Passa skrati vec kupljeno pravo (odjeljak 29)',
+    caught: () => {
+      const mutant: typeof entitlementRowFromDb = (e) => {
+        const row = entitlementRowFromDb(e);
+        return row ? { ...row, slotWindowDays: e.products?.slot_window_days ?? row.slotWindowDays } : row;
+      };
+      return entitlementAccessProblems(mutant, ENTITLEMENT_ACCESS_SELECT).some((p) => p.includes('iz zivog kataloga umjesto snapshota'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/ugradnja-products-bez-hinta',
+    imitates: 'upit prava s golom ugradnjom products(slot_window_days): uz drugi FK entitlements -> products PostgREST vraca PGRST201 i placeno pravo nestaje iz odluke',
+    caught: () => {
+      const mutated = ENTITLEMENT_ACCESS_SELECT.replace('products!product_id(', 'products(');
+      if (mutated === ENTITLEMENT_ACCESS_SELECT) return false;
+      return entitlementAccessProblems(entitlementRowFromDb, mutated).some((p) => p.includes('nema eksplicitan hint'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/drugi-fk-entitlements-products',
+    imitates: '0207 iz kruga 1: upgraded_from_product_id references products dodaje drugi FK prema products, pa ugradnja products(...) u generate-report i repair-docx postaje dvosmislena (PGRST201)',
+    caught: () => {
+      const migracije = migrationsForFkGuard();
+      const idx = migracije.findIndex((m) => m.name === '0207_monetizacija_v1.sql');
+      if (idx < 0) return false;
+      const sql = migracije[idx].sql;
+      const mutated = sql.replace('add column if not exists upgraded_from_product_id text,', 'add column if not exists upgraded_from_product_id text references public.products(id),');
+      if (mutated === sql) return false;
+      const kopija = migracije.map((m, i) => (i === idx ? { ...m, sql: mutated } : m));
+      return entitlementProductFkCount(kopija).count === 2;
+    },
+    cleanBefore: () => entitlementProductFkCount(migrationsForFkGuard()).count === 1,
+  },
+  {
+    id: 'naplata/pristup-guta-gresku-upita',
+    imitates: 'krug 1: potrosac bez provjere greske citanja prava; PGRST201 ili pad baze postaju "nema prava" i placeni korisnik dobiva 402 s ponudom da plati ponovno',
+    caught: () => {
+      const src = generateReportSource();
+      const od = src.indexOf('  if (!access.ok) {');
+      const _do = od < 0 ? -1 : src.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do + 4);
+      return entitlementConsumerProblems({ 'generate-report': mutated }).some((p) => p.includes('greska upita prava se guta'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-odbijen-pri-potrosnji',
+    imitates: 'krug 1: repair-docx vrstu rada provjerava klijentskim isReportWorkType, pa kupljeni slot_specijalisticki (16,99) na svaki popravak dobiva 400 bad_request',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('!isBillableWorkType(meta.workType)', '!isReportWorkType(meta.workType)');
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('klijentskim popisom'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2) krug 3 -----------------------------------------------------------
+  {
+    id: 'naplata/pristup-mimo-zajednickog-citanja',
+    imitates: 'krug 2: repair-docx cita entitlements vlastitim inline upitom pokraj readAccessRows, pa izvrseni test zajednickog citanja ne dokazuje nista o stvarnom putu',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('readAccessRows(admin as unknown as AccessDb, user.id, workType, now),', "admin.from('entitlements').select(ENTITLEMENT_ACCESS_SELECT),");
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('zajednickim citanjem readAccessRows'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-anonimiziran-slot',
+    imitates: 'krug 2: quoteUpgrade gleda samo purchase_expires_at, pa se Repair ciji je slot cron anonimizirao (purge 0016) nadogradi u Final Pass koji ne prepoznaje nijednu verziju rada',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('anonimiziranim vezanim slotom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-slot-neprocitan-kao-netaknut',
+    imitates: 'fail-open citanje slota: pozivatelj koji zaboravi procitati vezani slot (boundSlotIntact undefined) dobiva nadogradnju kao da je otisak netaknut',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: s.boundSlotIntact ?? true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije fail-closed'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-rok-potrosnje-za-vezani',
+    imitates: 'krug 4 (nalaz pregleda): quoteUpgrade odbija vezan Repair cim istekne purchase_expires_at, iako otisak nije anonimiziran; slot_diplomski vezan dan 85 odbijen na dan 92 dok mu slot jos zivi',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) =>
+        s && Date.parse(s.purchaseExpiresAt) <= n ? { ok: false, error: 'upgrade_source_expired' } : quoteUpgrade(t, s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('rok potrosnje'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-nevezan-bez-roka',
+    imitates: 'krug 4: presiroko olabavljen rok, pa se i NEVEZAN Repair nadogradjuje nakon isteka roka potrosnje (rok vezivanja uz rad nestaje)',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, purchaseExpiresAt: new Date(n + 86_400_000).toISOString() } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('(rok)'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-specijalisticki-ukljucen-prije-m3',
+    imitates: 'krug 4: SPECIALIST_TIER_ENABLED zadano true prije M3, pa server specijalisticku naslovnicu na seminarskom, zavrsnom i diplomskom blokira s prijedlogom specijalisticki koji klijent ne nudi',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug, tier = true) => billableMismatch(sel, sig, sug, tier);
+      const c: typeof checkoutMismatch = (sel, sig, conf, tier = true) => checkoutMismatch(sel, sig, conf, tier);
+      const p = specialistTierGateProblems(b, c, true);
+      return p.some((x) => x.includes('ukljucen prije M3')) && p.some((x) => x.includes('predlaze specijalisticki'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-ignoriran-u-billable',
+    imitates: 'pola prekidaca: konstanta je false, ali billableMismatch granu specijalisticke naslovnice i dalje primjenjuje bezuvjetno (stanje kruga 3)',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug) => billableMismatch(sel, sig, sug, true);
+      return specialistTierGateProblems(b, checkoutMismatch, SPECIALIST_TIER_ENABLED).some((x) => x.includes('ne odlucuje kao prije M2'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-zadano',
+    imitates: 'krug 4: parseArgs bez argumenata vraca apply=true, pa obicno pokretanje skripte salje zahtjeve Stripeu umjesto dry-runa',
+    caught: () => {
+      const mutant: typeof stripeSyncParseArgs = (argv) => ({ ...stripeSyncParseArgs(argv), apply: !argv.includes('--dry-run') });
+      return stripeSyncSafetyProblems(mutant, stripeSyncApplyGuard, stripeSyncSource()).some((p) => p.includes('zadano nije dry-run'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-bez-kljuca',
+    imitates: 'krug 4: --apply bez STRIPE_SECRET_KEY se ne odbija nego nastavlja s praznim kljucem prema Stripeu',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => (opts.apply ? String(env.STRIPE_SECRET_KEY ?? '') : null);
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez STRIPE_SECRET_KEY'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-live-bez-zastavice',
+    imitates: 'krug 4: sk_live_ kljuc prolazi bez --live, pa se tijekom bete s iskljucenom naplatom dira live Stripe racun',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez --live'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-sjeme-migracija',
+    imitates: 'krug 4 (6d) / M2: gard se vraca na staru provjeru (fromExplicit umjesto from === "db"), pa --apply --from=migrations opet zrcali sjeme cijena iz migracija u Stripe umjesto zivog kataloga',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        if (secret.startsWith('sk_live_') && !opts.live) throw new Error('--live');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('--from=migrations zrcali'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/webhook-inline-nagrada-bez-ponovnog-citanja-povrata',
+    imitates: 'krug 4 nalaz pregleda (6a): handler inline izdaje nagradu preporucitelju bez ponovnog citanja oznake povrata (upisane izmedju prvog citanja i ove tocke), pa puni povrat u tom prozoru ostavlja nagradu izdanu',
+    caught: () => {
+      const izvor = "  const { data: povratPrijeNagrade, error: povratPrijeNagradeErr } = await admin\n"
+        + "    .from('webhook_events')\n"
+        + "    .select('id')\n"
+        + "    .eq('provider', PROVIDER)\n"
+        + "    .eq('order_id', ev.orderId)\n"
+        + "    .in('outcome_detail', REFUND_MARKERS)\n"
+        + "    .limit(1);\n"
+        + "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {\n"
+        + "    console.error('webhook-mor referrer_reward_deferred', {\n"
+        + "      orderId: ev.orderId,\n"
+        + "      reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',\n"
+        + "    });\n"
+        + "  } else {\n";
+      // Codex PR #217 (M2): blok nagrade cita ishod dodjele; mutacija uklanja samo ponovno citanje
+      // oznake povrata ispred njega, a blok ostaje.
+      const bezPonovnogCitanja = "  {\n";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezPonovnogCitanja);
+      return mutated !== src && !mutated.includes('povratPrijeNagrade');
+    },
+    cleanBefore: () => webhookMorSource().includes(
+      "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {",
+    ),
+  },
+  {
+    id: 'naplata/webhook-markbonusdone-bez-uvjeta-pending',
+    imitates: 'krug 4 nalaz pregleda (6a): markBonusDone oznacava obvezu izvrsenom i kad ju je puni povrat u medjuvremenu vec otkazao (cancelled), pa se otkaz izgubi',
+    caught: () => {
+      const izvor = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');\n"
+        + "  } catch (e) {";
+      const bezUvjeta = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind);\n"
+        + "  } catch (e) {";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezUvjeta);
+      const fnStart = mutated.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !/\.eq\('status', 'pending'\)/.test(fn);
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return /\.eq\('status', 'pending'\)/.test(fn);
+    },
+  },
+  {
+    id: 'naplata/webhook-nadogradnja-bez-ponovnog-citanja-partial-refund',
+    imitates: 'krug 4 nalaz pregleda (6b): bookUpgradePayment ne cita partial_refund_noted izvorne uplate ponovno prije pretvorbe, pa djelomican povrat zabiljezen izmedju checkouta i uplate nadogradnje prolazi s odbitkom punog iznosa',
+    caught: () => {
+      const izvor = "    if (source) {\n"
+        + "      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');\n"
+        + "      if (!partial.ok) {\n"
+        + "        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: partial.error });\n"
+        + "        await settle('failed', `upgrade_refund_lookup: ${partial.error}`);\n"
+        + "        return json({ error: 'internal' }, 500);\n"
+        + "      }\n"
+        + "      source.partiallyRefunded = partial.partial;\n"
+        + "    }\n\n";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, '');
+      const fnStart = mutated.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !fn.includes('readSourcePartiallyRefunded(');
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return fn.includes('readSourcePartiallyRefunded(');
+    },
+  },
+  {
+    id: 'naplata/upgrade-idempotency-key-bez-iznosa',
+    imitates: 'krug 4 nalaz pregleda (6e): kljuc idempotencije za nadogradnju ne nosi iznos, pa nova ciljna cijena (npr. promjena kataloga izmedju dva klika) vraca STARI PaymentIntent po starom iznosu umjesto novog',
+    caught: () => {
+      const stariKljuc = (userId: string, sourceEntitlementId: string, targetProductId: string, _amountCents: number): string =>
+        `lekta:pi:upgrade:${userId}:${sourceEntitlementId}:${targetProductId}`;
+      const a = stariKljuc('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = stariKljuc('u1', 'ent1', 'pass_diplomski', 2999);
+      return a === b;
+    },
+    cleanBefore: () => {
+      const a = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 2999);
+      return a !== b;
+    },
+  },
+  {
+    id: 'naplata/stripe-sync-zastita-poslije-mreze',
+    imitates: 'krug 4: main cita zivi katalog (mreza, service role) PRIJE provjere kljuca, pa odbijen --apply ipak zove Supabase',
+    caught: () => {
+      const src = stripeSyncSource();
+      const guard = '  const secret = applyGuard(opts, env);\n';
+      const read = "  const rows = opts.from === 'db' ? await catalogFromDb(env, fetchImpl) : catalogFromMigrations();\n";
+      const mutated = src.replace(guard + read, read + guard);
+      if (mutated === src) return false;
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, mutated).some((p) => p.includes('prije provjere'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-popravak',
+    imitates: 'krug 2: billableMismatch za nize vrste zove samo dijeljenu unambiguousMismatch, koja specijalisticku naslovnicu mapira na diplomski, pa specijalisticki rad trosi diplomski slot (9,99 umjesto 16,99)',
+    caught: () => {
+      const mutant: typeof billableMismatch = (sel, sig, sug) =>
+        billableMismatch(sel, sig.titleMarker === 'specialist' ? { ...sig, titleMarker: 'graduate' } : sig, sug);
+      return specialistFallbackProblems(mutant, checkoutMismatch).some((p) => p.includes('repair-docx: specijalisticka naslovnica trosi'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-kupnja',
+    imitates: 'krug 2: checkoutMismatch provjerava samo klijentske vrste (isReportWorkType + unambiguousMismatch), pa se slot_diplomski prodaje za specijalisticki rad',
+    caught: () => {
+      const stari: typeof checkoutMismatch = (sel, sig, confirmed) => {
+        if (confirmed || !sig || !sel || !isReportWorkType(sel)) return { block: false };
+        const signals = { words: sig.words, titleMarker: (sig.titleMarker ?? null) as Parameters<typeof unambiguousMismatch>[1]['titleMarker'] };
+        return unambiguousMismatch(sel, signals) ? { block: true, suggestedWorkType: estimateWorkType(signals).workType } : { block: false };
+      };
+      return specialistFallbackProblems(billableMismatch, stari).some((p) => p.includes('create-checkout: specijalisticka naslovnica kupuje diplomski'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-samo-u-logu',
+    imitates: 'krug 2: puni povrat Repaira nadogradjenog prava gasi Final Pass, a uplata nadogradnje ostaje naplacena uz inbox processed/refunded; trag je samo redak u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("await settle('needs_manual_review', 'refunded', rucniPregled);", "await settle('processed', 'refunded');");
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('bez trajnog traga'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-bez-traga-izvorne-uplate',
+    imitates: 'pola popravka: trajan trag samo za povrat izvorne uplate, a povrat uplate nadogradnje (placeni Repair ostaje bez prava) i dalje samo u logu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('        rucniPregled = `upgrade_refunded: ${upgradeSources.join(\'; \')}`;\n', '');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 prvi pokusaj: puni povrat SAMO uplate nadogradnje gasi cijelo pravo u refunded, pa placeni Repair ostaje bez prava i bez re-checka (odjeljak 14)',
+    caught: () => {
+      const src = webhookMorSource();
+      // Grana povrata bez vracanja: pricuvno gasenje se izvrsava uvijek.
+      const mutated = src.replace('    if (upgradeIds.length > 0 && !nadogradnjaVracena) {', '    if (upgradeIds.length > 0) {');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('gasi pravo umjesto da ga vrati'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/istodobni-povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 nalaz pregleda: u bookUpgradePayment istodobni povrat (pretvorba pa oznaka) gasi pravo u refunded uz processed/refunded_before_payment, bez traga i bez placenog Repaira',
+    caught: () => {
+      const src = webhookMorSource();
+      const start = src.indexOf('async function bookUpgradePayment(');
+      const od = src.indexOf("    const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {", start);
+      const _do = src.indexOf('    // Stanje prije pretvorbe nije zapamceno', od);
+      if (start < 0 || od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('istodobni povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
+  {
+    id: 'naplata/f21-povrat-ne-otkazuje-obvezu',
+    imitates: 'F21 (1) stanje do 2026-09-27: closeRefundConsequences ne dira bonus_outbox, pa obveza referrer_reward ostaje pending i radnik je kasnije isplati za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf("    const { data: obveze, error: obvezeErr } = await admin\n      .from('bonus_outbox')");
+      const _do = src.indexOf('    return {\n      ok: true,\n      manualOrderFound', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne otkazuje obvezu iz bonus_outbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-korak-povrata-samo-u-logu',
+    imitates: 'F21 (2) stanje do 2026-09-27: pad sporednog koraka povrata upisuje u inbox samo refund_consequences_failed, a korak i greska ostaju samo u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "await settle('failed', 'refund_consequences_failed', `${posljedice.step}: ${posljedice.error}`);",
+        "await settle('failed', 'refund_consequences_failed');",
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne zapisuje korak i gresku u inbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-any-u-zatvaranju-placanja',
+    imitates: 'F21 (3) stanje do 2026-09-27: closePaymentAfterRefund(admin: any, ...), pa krivo ime tablice ili stupca pri opozivu prolazi tsc i deno check',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('async function closePaymentAfterRefund(\n  admin: PaymentRefundDb,', 'async function closePaymentAfterRefund(\n  admin: any,');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('closePaymentAfterRefund prima admin: any'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-catalog-price-unusable-odluka-ne-gleda-cijenu',
+    imitates: 'F21 (4): druga grana garda catalog_price_unusable. cijenaUpotrebljiva se izracuna, ali odluka o iznosu je ne gleda, pa neupotrebljiva cijena (0 centi) i dalje ide u chargedAmountVerdict i daje pravo',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('    cijenaUpotrebljiva\n      ? chargedAmountVerdict(ev, ocekivanoCenti)', '    true\n      ? chargedAmountVerdict(ev, ocekivanoCenti)');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('odluka o iznosu ne ovisi o upotrebljivoj cijeni'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-bez-provjere-povrata',
+    imitates: 'F21 (1) strana radnika do 2026-09-27: process-bonus-outbox zove tryGrantReferrerReward izravno, bez citanja oznake povrata, pa isplacuje nagradu za vracen novac',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace('await runReferrerRewardObligation(admin as unknown as ReferrerRewardDb, row);', "await tryGrantReferrerReward(admin, row.user_id, 'diplomski', row.order_id);");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('mimo runReferrerRewardObligation'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-samo-prvo-citanje',
+    imitates: 'pola popravka F21 na strani radnika: povrat se cita samo prije dodjele. Povrat koji stigne izmedju citanja i dodjele procita referral_signups prije nagrade, pa nagrada ostaje isplacena',
+    caught: () => {
+      const mod = bonusOutboxModuleSource();
+      const od = mod.indexOf('  if (await orderFullyRefunded(admin, row.order_id)) {\n    // Povrat je stigao izmedju');
+      const _do = mod.indexOf("  return 'granted';", od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = mod.slice(0, od) + mod.slice(_do);
+      return bonusOutboxWorkerProblems(mutated, bonusOutboxIndexSource()).some((p) => p.includes('ne cita povrat ponovno'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-pregazi-otkazano',
+    imitates: 'radnik koji zavrsni status pise bez uvjeta: obvezu koju je webhook upravo otkazao (cancelled) vrati u done, pa trag otkazivanja nestane',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace("          .eq('id', row.id)\n          .eq('status', 'pending');\n        done++;", "          .eq('id', row.id);\n        done++;");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('done bez uvjeta pending'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
   },
   {
     id: 'naplata/rucno-vezivanje-bez-provjere-postojeceg-zapisa',
@@ -6875,8 +7529,52 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
+  /**
+   * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;
+   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka.
+   *
+   * Svjesna iznimka od pravila 1 iz zaglavlja: prva mutacija PISE jednu sinteticku test datoteku, ali
+   * u privremenu mapu izvan repozitorija (`mkdtemp` pod `tmpdir()`), koju gard skenira preko parametra
+   * `root` isto kao pravo stablo, i brise je u `finally`. Datoteke repozitorija se ne diraju. Druga
+   * mutacija ne mijenja izvor garda na disku: ubrizgava detektor `readNormalized` koji uvijek kaze
+   * "nije normalizirano" i trazi da presuda nad pravim stablom tada ne bude prazna.
+   */
+  {
+    id: 'crlf/citanje-bez-normalizacije',
+    imitates:
+      'test koji readFileSync(..., utf8) cita datoteku iz repozitorija i trazi `\\nas \\$\\$\\n` bez normalizacije CR-a; ' +
+      'Linux CI zelen, Windows checkout (CRLF) crven (#243, popravak #245)',
+    caught: () => crlfSintetickoStablo(false).length === 1,
+    cleanBefore: () => crlfSintetickoStablo(true).length === 0,
+  },
+  {
+    id: 'crlf/gard-bez-provjere-normalizacije',
+    imitates:
+      'gard kojem netko ukloni provjeru normalizacije (c): svako citanje koje ispravno normalizira CR postane ' +
+      'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
+    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
+    cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
 
 ];
+
+/**
+ * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
+ * (cita schema.sql i trazi `\nas \$\$\n`), sa ili bez normalizacije CR-a.
+ */
+function crlfSintetickoStablo(normalizira: boolean): string[] {
+  const root = mkdtempSync(join(tmpdir(), 'lekta-t92-'));
+  try {
+    mkdirSync(join(root, 'tests'));
+    const citanje = normalizira
+      ? "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8').replace(/\\r\\n/g, '\\n');"
+      : "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8');";
+    writeFileSync(join(root, 'tests', 'sinteticki.test.ts'), `${citanje}\nexpect((sql.match(/\\nas \\$\\$\\n/g) ?? []).length).toBe(1);\n`);
+    return crlfReadProblems(collectScannedSources(root));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
 type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
@@ -7144,6 +7842,39 @@ function webhookMorSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'handler.ts'));
 }
 
+function stripeSyncSource(): string {
+  return readTextLf(resolve(process.cwd(), 'scripts', 'stripe-sync-products.mjs'));
+}
+
+function createCheckoutSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+}
+
+function generateReportSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+}
+
+function repairDocxSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+}
+
+/** Sve migracije, za gard jednog FK entitlements -> products (mutira se kopija u memoriji). */
+function migrationsForFkGuard(): { name: string; sql: string }[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((name) => ({ name, sql: readTextLf(resolve(dir, name)) }));
+}
+
+function bonusOutboxModuleSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'referrer-reward.ts'));
+}
+
+function bonusOutboxIndexSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'index.ts'));
+}
+
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
 function corpusMigrations(): MigrationFile[] {
   const dir = resolve(process.cwd(), 'supabase', 'migrations');
@@ -7236,6 +7967,473 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     expect(raw.byteLength).toBeGreaterThan(1000);
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
   });
+});
+
+/**
+ * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0207 se
+ * izvrsava u stvarnom Postgresu (PGlite, tests/helpers/monetizacija-v1-sql.ts). Isti ugovor kao
+ * MUTATIONS: cisti baseline, pa mutacija koja mora oboriti gard.
+ */
+describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
+  const ROK_SQL = 180_000;
+
+  /**
+   * Codex pregled PR #217 runda 2: mutacija nagrade mora pogoditi PRODUKCIJSKI izvor, ne ubrizganu
+   * funkciju. Tekst supabase/functions/_shared/grant-referrer-reward.ts se mijenja zamjenom, a
+   * mutirani modul i radnik koji ga uvozi (process-bonus-outbox/referrer-reward.ts) prevode se
+   * esbuildom i stvarno izvrsavaju; radnikov uvoz zajednicke odluke dobiva MUTIRANI modul. Zamjena
+   * koja ne pogodi tekst obara test, pa gard ne moze tiho postati slijep nakon preoblikovanja izvora.
+   * Bez privremenih datoteka: modulski runner Vitesta odbija uvoz izvan korijena projekta.
+   */
+  const GRANT_IZVOR = resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-referrer-reward.ts');
+
+  function mutirajNagradu(od: string, u: string): string {
+    const izvor = readTextLf(GRANT_IZVOR);
+    const mutiran = izvor.replace(od, u);
+    expect(mutiran, `zamjena nije pogodila izvor nagrade: ${od}`).not.toBe(izvor);
+    return mutiran;
+  }
+
+  /** Izvrsi TypeScript izvor kao CommonJS modul; svaki uvoz mora biti zadan u `uvozi`. */
+  function izvrsiIzvor(izvor: string, uvozi: Record<string, unknown>): unknown {
+    const { code } = esbuild.transformSync(izvor, { loader: 'ts', format: 'cjs' });
+    const modul: { exports: Record<string, unknown> } = { exports: {} };
+    const zahtjev = (ime: string): unknown => {
+      if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
+      return uvozi[ime];
+    };
+    new Function('module', 'exports', 'require', code)(modul, modul.exports, zahtjev);
+    return modul.exports;
+  }
+
+  async function nagradniModuliIz(grantIzvor: string) {
+    const grant = izvrsiIzvor(grantIzvor, {}) as typeof GrantModul;
+    const worker = izvrsiIzvor(bonusOutboxModuleSource(), {
+      '../_shared/grant-referrer-reward.ts': grant,
+      '../webhook-mor/handler.ts': await import('../supabase/functions/webhook-mor/handler'),
+    }) as typeof RadnikModul;
+    return { grant, worker };
+  }
+
+  it('Codex PR #217 r2: nemutirani izvor nagrade kroz isti ucitavac je cist (gard odluke i gard radnika)', async () => {
+    const { grant, worker } = await nagradniModuliIz(readTextLf(GRANT_IZVOR));
+    expect(await referrerRewardDecisionProblems(grant)).toEqual([]);
+    expect(await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).toEqual([]);
+  });
+
+  it('Codex PR #217 M2: izvor koji svaki ishod zatvara (stanje f466d454, zanemaren ishod) obara oba garda', async () => {
+    const { grant, worker } = await nagradniModuliIz(mutirajNagradu(
+      'return { settled: r.granted === false && TRAJNI_RAZLOZI.has(reason), reason };',
+      'return { settled: true, reason };',
+    ));
+    const radnik = await referrerRewardRetryProblems(worker.runReferrerRewardObligation);
+    expect(radnik.some((x) => x.startsWith('grant_failed:'))).toBe(true);
+    expect(radnik.some((x) => x.startsWith('error:'))).toBe(true);
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith('prolazan ishod'))).toBe(true);
+  });
+
+  it('Codex PR #217 M2: izvor u kojem je ip_match_fraud prolazan pad (ponavlja se) obara gard radnika', async () => {
+    const { worker } = await nagradniModuliIz(mutirajNagradu("'self_referral', 'ip_match_fraud', ", "'self_referral', "));
+    expect((await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
+  });
+
+  it.each([
+    ['anonimni kupac', "    if (buyer.user.is_anonymous) return { granted: false, reason: 'ineligible_buyer' };\n", ''],
+    ['samopreporuka', "    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };\n", ''],
+    ['IP preporucitelja se poklapa', 'referrerIpHashes.has(signup.referred_ip_hash)', 'false'],
+    ['mjesecni strop', 'count >= MAX_REWARDED_PER_MONTH && !signup.converted_order_id', 'false'],
+    // Codex pregled delte (G-1): filtri upita, ne samo grane odluke.
+    ['signup vec nagradjen', "      .eq('referred_user_id', buyerUserId)\n      .eq('status', 'friend_rewarded')\n", "      .eq('referred_user_id', buyerUserId)\n"],
+    ['IP trece osobe', "      .eq('user_id', signup.referrer_user_id)\n", ''],
+    // Filtri upita brojanja mjesecnog stropa (rezultat ispod stropa ne smije zbrajati tudje ni nenagradjene retke).
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('status', 'rewarded')\n"],
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('referrer_user_id', signup.referrer_user_id)\n"],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'false'],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'signup.converted_order_id && signup.converted_order_id === buyerOrderId'],
+  ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
+    const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);
+  });
+
+  it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      return r.ok ? r : { ok: true, activeSlots: [], entitlements: [] };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
+  });
+
+  it('krug 4: citanje pristupa koje slot uzima bez obzira na status prava (stanje kruga 3) obara gard povrata nadogradnje', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      if (!r.ok) return r;
+      // Slotovi kao prije kruga 4: svaki zivi slot, bez veze na entitlement_id i status prava.
+      const raw = await db.from('document_slots').select(ACTIVE_SLOT_SELECT).eq('user_id', u).eq('work_type', w).gt('slot_expires_at', n);
+      const activeSlots = (Array.isArray(raw.data) ? raw.data : []).map((x) => {
+        const s = x as Record<string, unknown>;
+        return { id: String(s.id), workType: w, fingerprint: s.fingerprint, slotExpiresAt: String(s.slot_expires_at) } as SlotRow;
+      });
+      return { ...r, activeSlots };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('povrat nadogradnje') && p.includes('umjesto 402'))).toBe(true);
+  });
+
+  it('krug 4: citanje vezanog slota po isteku prozora (stara granica) obara gard kredita za popravak', async () => {
+    expect(await boundSlotReadProblems(readBoundSlotIntact, quoteUpgrade)).toEqual([]);
+    const staro: typeof readBoundSlotIntact = async (admin, id) => {
+      const q = admin.from('document_slots').select('id, fingerprint, slot_expires_at').eq('entitlement_id', id);
+      const { data, error } = await q;
+      if (error) return { ok: false, error: String(error) };
+      const zivi = (Array.isArray(data) ? data : []).filter((r) => Date.parse(String((r as Record<string, unknown>).slot_expires_at)) > Date.UTC(2026, 8, 27));
+      return { ok: true, intact: zivi.length > 0 };
+    };
+    expect((await boundSlotReadProblems(staro, quoteUpgrade)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    const bezOtiska: typeof readBoundSlotIntact = async (admin, id) => {
+      const r = await readBoundSlotIntact(admin, id);
+      return r.ok ? { ok: true, intact: true } : r;
+    };
+    expect((await boundSlotReadProblems(bezOtiska, quoteUpgrade)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+  });
+
+  it('catalogProblems: baseline cist nad 0207', async () => {
+    const run = await runV1();
+    try {
+      expect(await catalogProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: do_obrane ostaje active=true -> gard obara', async () => {
+    const mutated = mutirajRe(/set active = false(\r?\n\s+where id in \('slot_zavrsni_do_obrane')/, 'set active = true$1');
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('slot_zavrsni_do_obrane:') || p.startsWith('slot_diplomski_do_obrane:'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: cijena mimo set_product_price (bez pricing_changelog traga) -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /perform public\.set_product_price\(v\.id, v\.price_eur::numeric,\s*'[^']*'\);/,
+      'update public.products set price_eur = v.price_eur::numeric where id = v.id;',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.includes('nije u pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: specijalisticki izostavljen iz work_type CHECK-a repair_jobs -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /(add constraint repair_jobs_work_type_check\r?\n\s+check \(work_type in \('seminarski', 'zavrsni', 'diplomski', )'specijalisticki', /,
+      '$1',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('repair_jobs: work_type CHECK'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('0207 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
+    const run = await runV1();
+    try {
+      // Nadogradnja prva: snapshotProblems mijenja katalog (namjerno, da dokaze da kupljeno ostaje).
+      expect(await upgradeSqlProblems(run.db)).toEqual([]);
+      expect(await snapshotProblems(run)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+    const drugi = await runV1();
+    try {
+      expect(await idempotencyProblems(drugi)).toEqual([]);
+    } finally {
+      await drugi.db.close();
+    }
+  }, ROK_SQL);
+
+  function mutiraj(od: string, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  /** Kao mutiraj, ali regexom (neovisno o CRLF-u radne kopije). */
+  function mutirajRe(od: RegExp, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.source.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja anonimiziranog rada obara gard', async () => {
+    const mutated = mutiraj('  if v_ent.slots_used > 0 and not found then', '  if false then');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade sa starom granicom (slot_expires_at > now) odbija istekao, a netaknut slot i obara gard', async () => {
+    const mutated = mutirajRe(/and s\.fingerprint \?\| array\['authorNorm', 'titleNorm', 'headings'\]/, 'and s.slot_expires_at > now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade s rokom potrosnje i za vezano pravo odbija vezan Repair izvan roka i obara gard', async () => {
+    const mutated = mutirajRe(/(or v_ent\.status <> 'active')/, '$1 or v_ent.purchase_expires_at <= now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('rok potrosnje istekao'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade bez roka potrosnje za nevezano pravo obara gard', async () => {
+    const mutated = mutirajRe(/if v_ent\.slots_used = 0 and v_ent\.purchase_expires_at <= now\(\) then/, 'if false then');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('nevezan izvan roka potrosnje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: revert_entitlement_upgrade bez vracanja slota ostavlja produljen prozor i obara gard (dan 60 besplatan)', async () => {
+    const mutated = mutirajRe(/  update public\.document_slots s\r?\n     set slot_expires_at = least\(/, '  update public.document_slots s\n     set slot_expires_at = greatest(');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('dan 60'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji gasi pravo (umjesto vracanja Repaira) obara gard placenog Repaira', async () => {
+    const mutated = mutirajRe(/         upgrade_reverted_at = now\(\)\r?\n   where id = v_ent\.id;/, "         upgrade_reverted_at = now(),\n         status = 'refunded'\n   where id = v_ent.id;");
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('Repair kupac kaznjen'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: pretvorba koja ne pamti istek slota prije nadogradnje obara gard (ozivljen slot ostaje produljen)', async () => {
+    const mutated = mutirajRe(/upgraded_from_slot_expires_at = v_slot_prije,/, 'upgraded_from_slot_expires_at = null,');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ozivljen slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji ozivljava vec ugaseno pravo obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.status <> 'active' then\r?\n    return 'inactive';\r?\n  end if;\r?\n/, '');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ugasenog prava'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: djelomican povrat baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await partialRefundSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba bez provjere djelomicnog povrata (stanje f466d454) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if false\n     and exists (');
+    const run = await runV1(mutated);
+    try {
+      const p = await partialRefundSqlProblems(run.db);
+      expect(p.some((x) => x.startsWith('povrat prije pretvorbe: apply_entitlement_upgrade vraca upgraded'))).toBe(true);
+      expect(p.some((x) => x.includes('povrat uplate nadogradnje prije pretvorbe'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba koja cita samo oznaku izvorne uplate (ne refunded_cents) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if exists (');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('samo refunded_cents'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat nakon pretvorbe koji ne javlja nadogradjeno pravo obara gard', async () => {
+    const mutated = mutirajRe(/      v_ishod := 'upgraded_needs_review';/, "      v_ishod := 'noted';");
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('Final Pass tiho ostaje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat koji ne vodi iznos u bazi obara gard', async () => {
+    const mutated = mutirajRe(/set refunded_cents = greatest\(refunded_cents, coalesce\(p_refunded_cents, 0\)\)/, 'set refunded_cents = refunded_cents');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('iznos se ne vodi u bazi'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  /** M4: privilegije se mjere u bazi sa zadanim privilegijama Supabasea i u bazi bez njih. */
+  async function privilegijeNad(sql: string): Promise<string[]> {
+    const sZadanima = await runV1(sql, { supabaseDefaults: true });
+    const bez = await runV1(sql);
+    try {
+      return await privilegeProblems(sZadanima.db, bez.db);
+    } finally {
+      await sZadanima.db.close();
+      await bez.db.close();
+    }
+  }
+
+  it('Codex PR #217 M4: privilegije baseline ciste', async () => {
+    expect(await privilegijeNad(readMigration(V1_MIGRATION))).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez revoke (stanje f466d454) daje anon zadane privilegije i obara gard', async () => {
+    const mutated = mutiraj('revoke all on table public.offer_codes from public, anon, authenticated;', '');
+    const p = await privilegijeNad(mutated);
+    expect(p.some((x) => x.startsWith('anon ima INSERT na offer_codes'))).toBe(true);
+    expect(p.some((x) => x.startsWith('authenticated ima TRUNCATE na offer_codes'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez izricitog grant execute service_role (stanje f466d454) obara gard u bazi bez zadanih', async () => {
+    const mutated = mutirajRe(/grant execute on function public\.apply_entitlement_upgrade\([^)]*\)\r?\n  to service_role;/, '');
+    expect((await privilegijeNad(mutated)).some((x) => x.includes('service_role nema EXECUTE na public.apply_entitlement_upgrade') && x.includes('bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez revoke za anon obara gard', async () => {
+    const mutated = mutiraj('revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('anon ima EXECUTE na public.note_entitlement_partial_refund'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez grant service_role obara gard u bazi bez zadanih', async () => {
+    const mutated = mutiraj('grant select, insert, update, delete on table public.offer_codes to service_role;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('service_role nema SELECT na offer_codes (bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: brisanje CHECK-ova baseline cisto', async () => {
+    expect(await constraintDropProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: work_type CHECK se brise bez provjere imena i definicije (stanje f466d454) i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;", 'null;');
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('tiho brise entitlements_doktorski_slotovi'))).toBe(true);
+    expect(p.some((x) => x.includes('ne pada glasno (RAISE EXCEPTION) na repair_jobs_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: bonus_outbox status CHECK se brise bez provjere i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;", 'null;');
+    expect((await constraintDropProblems(mutated)).some((x) => x.includes('tiho brise bonus_outbox_pending_pokusaji'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M3: work_type CHECK bez usporedbe cijelog izraza (samo ime i stupac) tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan work_type/, "       or false then\n      raise exception '0207: neocekivan work_type");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise corpus_contributions_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M3: bonus_outbox status CHECK bez usporedbe cijelog izraza tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan status CHECK/, "       or false then\n      raise exception '0207: neocekivan status CHECK");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (bonus_outbox.status)') && x.includes('tiho brise bonus_outbox_status_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: vlasnik SECURITY DEFINER funkcija baseline cist (0207 pod drugom ulogom)', async () => {
+    expect(await definerOwnerProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: funkcija bez izricitog owner to postgres (stanje 7ae20bba) pripada ulozi koja je migrirala i obara gard', async () => {
+    const mutated = mutirajRe(/alter function public\.revert_entitlement_upgrade\(text\) owner to postgres;\r?\n/, '');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('revert_entitlement_upgrade: vlasnik je lekta_tudji_migrator'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: SECURITY DEFINER funkcija bez praznog search_path obara gard', async () => {
+    const mutated = mutirajRe(/(create or replace function public\.note_entitlement_partial_refund\([\s\S]*?security definer\r?\n)set search_path = ''\r?\n/, '$1');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('note_entitlement_partial_refund: search_path nije izricito prazan'))).toBe(true);
+  }, ROK_SQL);
+
+  it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
+    const mutated = mutiraj('    if p.price_eur is distinct from v.price_eur::numeric then', '    if true then');
+    const run = await runV1(mutated);
+    try {
+      expect((await idempotencyProblems(run, mutated)).some((p) => p.includes('dopisuje pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('backfill prozora POSLIJE promjene kataloga: staro pravo dobiva novi prozor i obara gard snapshota', async () => {
+    const sql = readMigration(V1_MIGRATION);
+    const backfill = sql.slice(
+      sql.indexOf('update public.entitlements e\n   set slot_window_days = p.slot_window_days'),
+      sql.indexOf('-- Snapshot pri svakom upisu prava'),
+    );
+    expect(backfill.length).toBeGreaterThan(50);
+    const bez = sql.replace(backfill, '');
+    const mutated = bez.replace('-- 6. Kanibalizirajuci', `${backfill}\n-- 6. Kanibalizirajuci`);
+    expect(mutated).not.toBe(sql);
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('umjesto kupljenih 14'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('bez triggera snapshota: pravo upisano mimo webhooka ostaje bez ponude i obara gard', async () => {
+    const mutated = mutiraj(
+      'create trigger entitlements_snapshot_offer\n  before insert on public.entitlements\n  for each row execute function public.entitlements_snapshot_offer();',
+      '',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('trigger ne snapshotira'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
 });
 
 // Agent result success cannot bypass dependency or independent-review gates.

@@ -13,8 +13,8 @@
  */
 
 import { isSoldByLektaCheckout, type Product } from '../catalog/products-catalog.ts';
-import { isReportWorkType, type ReportWorkType } from './pricing.ts';
-import { estimateWorkType, unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate.ts';
+import { estimateWorkType, type WorkTypeSignals } from './work-type-estimate.ts';
+import { billableMismatch, isBillableWorkType, SPECIALIST_TIER_ENABLED, type BillableWorkType } from './billable-work-type.ts';
 
 /** Ishod serverske provjere prava na checkout za dani proizvod i kontekst korisnika. */
 export type CheckoutResolution =
@@ -54,7 +54,7 @@ export interface CheckoutMismatchSignals {
 
 export type CheckoutMismatchDecision =
   | { block: false }
-  | { block: true; suggestedWorkType: ReportWorkType };
+  | { block: true; suggestedWorkType: BillableWorkType };
 
 /**
  * WS-5 enforcement (serverski backstop pri KUPNJI): blokiraj kupnju jeftinijeg tiera SAMO kad je
@@ -68,15 +68,19 @@ export function checkoutMismatch(
   selectedWorkType: string | null | undefined,
   signals: CheckoutMismatchSignals | null | undefined,
   confirmed: boolean,
+  specialistTier: boolean = SPECIALIST_TIER_ENABLED,
 ): CheckoutMismatchDecision {
   if (confirmed || !signals) return { block: false };
-  if (!selectedWorkType || !isReportWorkType(selectedWorkType)) return { block: false };
+  // Prodajne vrste rada ukljucuju specijalisticki (0207): odluka je ista kao u repair-docx
+  // (billableMismatch). Uz prekidac M3 (SPECIALIST_TIER_ENABLED) specijalisticka naslovnica ne kupuje
+  // diplomski slot (odjeljak 18); do M3 vrijedi ponasanje prije M2.
+  if (!selectedWorkType || !isBillableWorkType(selectedWorkType)) return { block: false };
   const sig: WorkTypeSignals = {
     words: signals.words,
     titleMarker: (signals.titleMarker ?? null) as WorkTypeSignals['titleMarker'],
   };
-  if (!unambiguousMismatch(selectedWorkType, sig)) return { block: false };
-  return { block: true, suggestedWorkType: estimateWorkType(sig).workType };
+  const mm = billableMismatch(selectedWorkType, sig, (s) => estimateWorkType(s).workType, specialistTier);
+  return mm.block && mm.suggestedWorkType ? { block: true, suggestedWorkType: mm.suggestedWorkType } : { block: false };
 }
 
 /** Kontekst iz kojeg se gradi Stripe PaymentIntent. Iznos je uvijek serverski izveden. */
@@ -91,6 +95,11 @@ export interface StripePaymentIntentContext {
   referralCode?: string | null;
   /** E-mail iz JWT-a; Stripe na njega salje potvrdu o placanju. */
   receiptEmail?: string | null;
+  /**
+   * Nadogradnja Repair -> Final Pass (Monetizacija V1, odjeljak 14): id prava koje se pretvara.
+   * Webhook po njemu pretvara ISTO pravo umjesto da stvara drugo.
+   */
+  upgradeFromEntitlementId?: string | null;
 }
 
 /** Iznos u centima iz cijene u eurima. Zaokruzuje se, jer Stripe prima samo cijele cente. */
@@ -120,6 +129,7 @@ export function buildStripePaymentIntentParams(ctx: StripePaymentIntentContext):
   params.set('metadata[user_id]', ctx.userId);
   params.set('metadata[product_id]', ctx.productId);
   if (ctx.referralCode) params.set('metadata[referral_code]', ctx.referralCode);
+  if (ctx.upgradeFromEntitlementId) params.set('metadata[upgrade_from_entitlement_id]', ctx.upgradeFromEntitlementId);
   if (ctx.receiptEmail) params.set('receipt_email', ctx.receiptEmail);
   return params.toString();
 }
