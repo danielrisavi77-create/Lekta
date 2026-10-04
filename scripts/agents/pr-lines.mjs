@@ -106,6 +106,72 @@ export function provjeriOpisPr(body, stvarneNove = []) {
   return greske;
 }
 
+/**
+ * Dependabot (koordinator lekta-37, 2026-10-04). `@dependabot rebase` prepisuje tijelo PR-a i brise rucno
+ * dodane retke, a close/reopen brise granu (#280). Za PR ciji je autor Dependabot provjera zato ne trazi
+ * retke u opisu: oba retka racuna sama iz diffa (`retciDependabot`) i prolazi. Autor se prepoznaje po
+ * loginu I tipu racuna iz dogadjaja PR-a; za svakog drugog autora ponasanje je nepromijenjeno.
+ *
+ * Iznimka vrijedi SAMO kad PR mijenja iskljucivo podrzane manifeste (korijenski package.json i
+ * package-lock.json), jer samo za njih provjera zna izracunati `Nove ovisnosti`. Bilo koja druga datoteka
+ * (requirements*.txt, deno.lock, ugnijezdeni package.json...) obara provjeru s jasnom porukom: provjera
+ * nikad ne tvrdi `nema` za ekosustav koji ne cita.
+ *
+ * Ovo je opisni gate, ne sigurnosni: pull_request job iz forka moze mijenjati i ovu skriptu.
+ */
+export const DEPENDABOT_LOGIN = 'dependabot[bot]';
+export const DEPENDABOT_PODRZANE_DATOTEKE = ['package.json', 'package-lock.json'];
+
+export function jeDependabot(autor) {
+  return autor != null && autor.login === DEPENDABOT_LOGIN && autor.type === 'Bot';
+}
+
+/** Ovisnosti koje postoje i u bazi i u headu, a verzija se promijenila, kao `ime@verzija` (samo informativno). */
+export function promjeneVerzija(basePkg, headPkg) {
+  const base = kaoPaket(basePkg, 'base');
+  const head = kaoPaket(headPkg, 'head');
+  const verzija = (pkg, ime) => SEKCIJE_OVISNOSTI.map((s) => pkg[s]?.[ime]).find((v) => v !== undefined);
+  const uBazi = imenaOvisnosti(base);
+  return [...imenaOvisnosti(head)]
+    .filter((ime) => uBazi.has(ime) && verzija(base, ime) !== verzija(head, ime))
+    .sort()
+    .map((ime) => `${ime}@${verzija(head, ime)}`);
+}
+
+/**
+ * Retci koje provjera sama racuna za Dependabot PR. `Nove ovisnosti` koristi ISTU definiciju kao za ljude
+ * (`noveOvisnosti`: kljuc kojeg u bazi nije bilo); promjena verzije nije nova ovisnost i ide u zaseban redak.
+ */
+export function retciDependabot({ diffShortstat, basePkg, headPkg }) {
+  const verzije = promjeneVerzija(basePkg, headPkg);
+  return [
+    ...retciOpisa({ diffShortstat, basePkg, headPkg }),
+    `Promjene verzija: ${verzije.length ? verzije.join(', ') : 'nema'}`,
+  ];
+}
+
+/** Datoteke diffa koje iznimka za Dependabot ne podrzava (izvan DEPENDABOT_PODRZANE_DATOTEKE). */
+export function nepodrzaneDatoteke(datoteke) {
+  if (!Array.isArray(datoteke)) throw new TypeError('nepodrzaneDatoteke: ocekivan popis datoteka diffa');
+  return datoteke.filter((d) => !DEPENDABOT_PODRZANE_DATOTEKE.includes(d)).sort();
+}
+
+/**
+ * Provjera opisa za zadanog autora. Dependabot prolazi bez redaka samo kad diff dira iskljucivo podrzane
+ * manifeste; inace pada s porukom. Svi ostali autori idu kroz `provjeriOpisPr`, nepromijenjeno.
+ */
+export function provjeriPrZaAutora(body, stvarneNove, autor, datoteke) {
+  if (!jeDependabot(autor)) return provjeriOpisPr(body, stvarneNove);
+  const izvan = nepodrzaneDatoteke(datoteke);
+  if (izvan.length) {
+    return [
+      `Dependabot iznimka podrzava samo ${DEPENDABOT_PODRZANE_DATOTEKE.join(' i ')}; ovaj PR mijenja i: ${izvan.join(', ')}. `
+        + 'Nove ovisnosti za te datoteke se ne racunaju, pa retke treba dodati u opis rucno.',
+    ];
+  }
+  return [];
+}
+
 function gitShowPackage(ref) {
   try {
     return execFileSync('git', ['show', `${ref}:package.json`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -121,6 +187,8 @@ function gitShowPackage(ref) {
 function ulazIzGita(baseRef, headRef) {
   return {
     diffShortstat: execFileSync('git', ['diff', '--shortstat', `${baseRef}...${headRef}`], { encoding: 'utf8' }),
+    datoteke: execFileSync('git', ['diff', '--name-only', `${baseRef}...${headRef}`], { encoding: 'utf8' })
+      .replace(/\r/g, '').split('\n').filter(Boolean),
     basePkg: gitShowPackage(baseRef),
     headPkg: gitShowPackage(headRef),
   };
@@ -134,13 +202,17 @@ function glavni(argv) {
     const ulaz = ulazIzGita(baseRef, headRef);
     console.log(`Izracunato za ovaj PR: ${retciOpisa(ulaz).join(' | ')}`);
     const nove = noveOvisnosti(ulaz.basePkg, ulaz.headPkg);
-    const greske = provjeriOpisPr(process.env.PR_BODY ?? '', nove);
+    const autor = { login: process.env.PR_AUTHOR ?? '', type: process.env.PR_AUTHOR_TYPE ?? '' };
+    if (jeDependabot(autor)) {
+      console.log(`Dependabot PR: retci se ne traze u opisu, izracunati su iz diffa: ${retciDependabot(ulaz).join(' | ')}`);
+    }
+    const greske = provjeriPrZaAutora(process.env.PR_BODY ?? '', nove, autor, ulaz.datoteke);
     for (const g of greske) console.log(`::error title=pr-opis::${g}`);
     if (greske.length) {
       console.log('Opis PR-a mora sadrzavati oba retka (vidi .github/PULL_REQUEST_TEMPLATE.md). Nakon uredjivanja opisa ponovno pokreni job pr-opis.');
       return 1;
     }
-    console.log('Opis PR-a sadrzi oba obvezna retka.');
+    console.log(jeDependabot(autor) ? 'Dependabot PR: provjera opisa prolazi bez rucnih redaka.' : 'Opis PR-a sadrzi oba obvezna retka.');
     return 0;
   }
   if (naredba === '--izracunaj') {
