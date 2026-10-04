@@ -10308,6 +10308,20 @@ describe('mutacije: Upisnik dokaz u snimci', () => {
     expect((await scannedRun(staleHeader, pdfSource)).join(' ')).toMatch(/hashu vlastitog tijela/);
     expect(await scannedRun(staleHeader, pdfSource, (s) => s.replace('if (lines[1] !== `# ocrTextHash: ${bodyHash}`)', 'if (false && lines[1] !== `# ocrTextHash: ${bodyHash}`)'))).toEqual([]);
   });
+  it('kljuc predmemorije bez potvrde prijepisa propusta nepotvrdjen zapis iste snimke (Codex runda 2)', async () => {
+    const { scan, pdfSource } = scanned();
+    const plain = { url: 'http://example.test/isti-pdf', snapshotPath: pdfPath, snapshotHash: hash(scan) };
+    const twoFile = { decisions: [
+      { programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } },
+      { programCode: '2', evidence: { sourceUrl: plain.url, sourceLocator: 'test', quote: fixture } },
+    ], exclusions: [] };
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companionWith(hash(scan), sha(fixture)) : null;
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).join(' ')).toMatch(/decision 2: .*rucno potvrdjenog prijepisa/);
+    const mutant = await copyWith((s) => s.replace(
+      'transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);', ']);'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).toEqual([]);
+  });
   it('uklanjanje zahtjeva za rucno potvrdjenim prijepisom propusta strojni OCR kao dokaz (Codex R1)', async () => {
     const { scan, pdfSource } = scanned();
     const unverified = { ...pdfSource, ocrTranscript: undefined };

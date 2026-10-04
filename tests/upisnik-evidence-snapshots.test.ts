@@ -99,6 +99,27 @@ describe('Upisnik citati u registriranim snimkama', () => {
     const stale = new TextDecoder().decode(companionOf(confirmed, data)).replace(confirmed, forged);
     expect((await synthetic(forged, data, { ...source(scanPath, data), ocrTranscript: verified(confirmed) }, { [path]: new TextEncoder().encode(stale) })).join(' ')).toMatch(/hashu vlastitog tijela/);
   });
+  it('Codex runda 2: potvrdjen i nepotvrdjen zapis iste snimke ne dijele predmemoriju', async () => {
+    const data = bytes(scanPath);
+    const companionPath = scanPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+    const verifiedUrl = 'https://example.test/potvrdjen';
+    const plainUrl = 'http://example.test/potvrdjen';
+    const file: UpisnikEvidenceFile = {
+      decisions: [
+        { programCode: '1', evidence: { sourceUrl: verifiedUrl, sourceLocator: 'test', quote: good } },
+        { programCode: '2', evidence: { sourceUrl: plainUrl, sourceLocator: 'test', quote: good } },
+      ],
+      exclusions: [],
+    };
+    const registry: SnapshotSource[] = [
+      { url: verifiedUrl, snapshotPath: scanPath, snapshotHash: hash(data), ocrTranscript: verified(good) },
+      { url: plainUrl, snapshotPath: scanPath, snapshotHash: hash(data) },
+    ];
+    const read = (p: string) => p === scanPath ? data : p === companionPath ? companionOf(good, data) : null;
+    const problems = await verifyUpisnikEvidenceSnapshots(file, registry, read, empty, baseline);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toMatch(/^decision 2: .*rucno potvrdjenog prijepisa/);
+  });
   it('DOC citat se nalazi', async () => {
     const registry = JSON.parse(readFileSync(resolve(root, 'data/sources/source-registry.json'), 'utf8')) as SnapshotSource[];
     const doc = registry.find((r) => r.snapshotPath?.endsWith('.doc'));

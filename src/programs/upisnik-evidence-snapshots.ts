@@ -252,7 +252,11 @@ export async function verifyUpisnikEvidenceSnapshots(
     if (!source.snapshotPath || !source.snapshotHash || !/^[a-f0-9]{64}$/u.test(source.snapshotHash)) {
       problems.push(`${label}: snimka ili hash nisu registrirani`); continue;
     }
-    const cacheKey = JSON.stringify([source.snapshotPath, source.snapshotHash]);
+    // Kljuc nosi i potvrdu prijepisa: dva zapisa iste snimke (npr. http i https URL) s razlicitom potvrdom
+    // ne smiju dijeliti rezultat, jer provjera ocrTranscript ide unutar citanja (Codex runda 2).
+    const transcript = source.ocrTranscript;
+    const cacheKey = JSON.stringify([source.snapshotPath, source.snapshotHash,
+      transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);
     if (!cache.has(cacheKey)) cache.set(cacheKey, (async () => {
       const bytes = readBytes(source.snapshotPath!);
       if (!bytes) throw new Error('snimka nedostaje');
