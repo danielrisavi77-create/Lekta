@@ -294,6 +294,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -4911,6 +4912,30 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
+  {
+    id: 't84/xff-prvi-unos',
+    imitates: 'T84 XFF: kljuc se opet uzima iz PRVOG unosa x-forwarded-for, koji bira klijent, pa svaki izmisljen unos daje nov brojac IP limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops[0] ?? 'unknown';");
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije zadnji unos x-forwarded-for');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-cijeli-header-u-faculty-request',
+    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen prvi unos otvara nov prozor limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = "hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE)";
+      const to = "sha256(IP_HASH_SALT + '|' + (req.headers.get('x-forwarded-for') ?? ''))";
+      const mutated = functions.map((f) => (f.path.endsWith('faculty-request/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
