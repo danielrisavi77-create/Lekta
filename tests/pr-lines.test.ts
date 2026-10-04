@@ -3,11 +3,13 @@
  * T58: dva obvezna retka opisa PR-a. `scripts/agents/pr-lines.mjs` je cist modul; ovaj test nikad
  * ne pokrece git. Svaki slucaj ima i cisti baseline i pokvaren ulaz koji mora pasti.
  */
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-  jeDependabot, netoRedaka, noveOvisnosti, promijenjeneOvisnosti, provjeriOpisPr, provjeriPrZaAutora,
-  retciDependabot, retciOpisa,
+  jeDependabot, nepodrzaneDatoteke, netoRedaka, noveOvisnosti, promjeneVerzija, provjeriOpisPr,
+  provjeriPrZaAutora, retciDependabot, retciOpisa,
 } from '../scripts/agents/pr-lines.mjs';
+import { rmSync } from 'node:fs';
+import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR, pokreniPrLinesCli } from './helpers/pr-lines-cli';
 
 describe('netoRedaka', () => {
   it('cita dodano i uklonjeno iz punog shortstata', () => {
@@ -120,6 +122,7 @@ describe('provjeriOpisPr', () => {
 describe('Dependabot autor (koordinator lekta-37)', () => {
   const DEPENDABOT = { login: 'dependabot[bot]', type: 'Bot' };
   const LJUDSKI = { login: 'danielrisavi77-create', type: 'User' };
+  const PAKET = ['package.json', 'package-lock.json'];
 
   it('prepoznaje Dependabot samo po loginu I tipu Bot', () => {
     expect(jeDependabot(DEPENDABOT)).toBe(true);
@@ -132,31 +135,57 @@ describe('Dependabot autor (koordinator lekta-37)', () => {
 
   it('isti opis bez redaka: Dependabot prolazi, ljudski autor pada', () => {
     const tijelo = 'Bumps vite from 7.1.0 to 7.1.2.';
-    expect(provjeriPrZaAutora(tijelo, [], DEPENDABOT)).toEqual([]);
-    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI).length).toBe(2);
+    expect(provjeriPrZaAutora(tijelo, [], DEPENDABOT, PAKET)).toEqual([]);
+    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI, PAKET).length).toBe(2);
   });
 
-  it('za ljudskog autora ponasanje je jednako provjeriOpisPr', () => {
+  it('za ljudskog autora ponasanje je jednako provjeriOpisPr, bez obzira na datoteke', () => {
     const tijelo = 'Neto redaka: +1/-1\nNove ovisnosti: nema';
-    expect(provjeriPrZaAutora(tijelo, ['zod'], LJUDSKI)).toEqual(provjeriOpisPr(tijelo, ['zod']));
-    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI)).toEqual([]);
+    expect(provjeriPrZaAutora(tijelo, ['zod'], LJUDSKI, ['requirements.txt'])).toEqual(provjeriOpisPr(tijelo, ['zod']));
+    expect(provjeriPrZaAutora(tijelo, [], LJUDSKI, ['deno.lock'])).toEqual([]);
   });
 
-  it('promijenjene ovisnosti: nova i promijenjena verzija kao ime@verzija, nepromijenjena izostavljena', () => {
-    const base = { dependencies: { vite: '7.1.0', zod: '3.0.0' }, devDependencies: { vitest: '4.0.0' } };
-    const head = { dependencies: { vite: '7.1.2', zod: '3.0.0' }, devDependencies: { vitest: '4.0.0', 'left-pad': '1.3.0' } };
-    expect(promijenjeneOvisnosti(base, head)).toEqual(['left-pad@1.3.0', 'vite@7.1.2']);
-    expect(promijenjeneOvisnosti(base, base)).toEqual([]);
+  it('Dependabot PR koji dira nepodrzan manifest pada s porukom, nikad ne tvrdi nema', () => {
+    const g = provjeriPrZaAutora('', [], DEPENDABOT, ['requirements.txt', 'package.json']);
+    expect(g).toHaveLength(1);
+    expect(g[0]).toContain('requirements.txt');
+    expect(nepodrzaneDatoteke(['deno.lock', 'package.json', 'web/package.json'])).toEqual(['deno.lock', 'web/package.json']);
+    expect(() => nepodrzaneDatoteke(undefined as unknown as string[])).toThrow();
   });
 
-  it('retci za Dependabot su izracunati iz diffa i prolaze provjeru za ljudskog autora', () => {
-    const r = retciDependabot({
-      diffShortstat: ' 2 files changed, 5 insertions(+), 5 deletions(-)',
-      basePkg: { dependencies: { vite: '7.1.0' } },
-      headPkg: { dependencies: { vite: '7.1.2' } },
-    });
-    expect(r).toEqual(['Neto redaka: +5/-5', 'Nove ovisnosti: vite@7.1.2']);
-    expect(provjeriOpisPr(r.join('\n'), [])).toEqual([]);
-    expect(retciDependabot({ diffShortstat: '', basePkg: null, headPkg: null })).toEqual(['Neto redaka: +0/-0', 'Nove ovisnosti: nema']);
+  it('bump nije nova ovisnost: Nove ovisnosti koristi istu definiciju kao za ljude, bump ide zasebno', () => {
+    const base = { dependencies: { vite: '7.1.0' }, devDependencies: { vitest: '4.0.0' } };
+    const head = { dependencies: { vite: '7.1.2' }, devDependencies: { vitest: '4.0.0', 'left-pad': '1.3.0' } };
+    expect(promjeneVerzija(base, head)).toEqual(['vite@7.1.2']);
+    const r = retciDependabot({ diffShortstat: ' 2 files changed, 5 insertions(+), 5 deletions(-)', basePkg: base, headPkg: head });
+    expect(r).toEqual(['Neto redaka: +5/-5', 'Nove ovisnosti: left-pad', 'Promjene verzija: vite@7.1.2']);
+    expect(r.slice(0, 2)).toEqual(retciOpisa({ diffShortstat: ' 2 files changed, 5 insertions(+), 5 deletions(-)', basePkg: base, headPkg: head }));
   });
 });
+
+describe('pr-lines CLI: isti opis s botom i covjekom (Codex #290 nalaz 2)', () => {
+  let repo = '';
+  beforeAll(() => { repo = napraviPrLinesRepo(); });
+  afterAll(() => { if (repo) rmSync(repo, { recursive: true, force: true }); });
+
+  it('stvarni CLI zadovoljava tvrdnju garda', () => {
+    expect(dependabotIznimkaDrzi(PR_LINES_IZVOR, repo)).toBe(true);
+  });
+
+  it('Dependabot bez redaka prolazi i ispisuje izracunate retke; ljudski autor s istim opisom pada', () => {
+    const bot = pokreniPrLinesCli(PR_LINES_IZVOR, repo, 'bump', DEPENDABOT_AUTOR);
+    expect(bot.status).toBe(0);
+    expect(bot.stdout).toContain('Dependabot PR: retci se ne traze u opisu, izracunati su iz diffa: Neto redaka: +2/-2 | Nove ovisnosti: nema | Promjene verzija: vite@7.1.2');
+    const covjek = pokreniPrLinesCli(PR_LINES_IZVOR, repo, 'bump', { login: 'danielrisavi77-create', type: 'User' });
+    expect(covjek.status).toBe(1);
+    expect(covjek.stdout).toContain('::error title=pr-opis::Nedostaje redak `Neto redaka');
+  });
+
+  it('Dependabot koji dodaje requirements.txt pada s porukom o nepodrzanom manifestu', () => {
+    const r = pokreniPrLinesCli(PR_LINES_IZVOR, repo, 'requirements', DEPENDABOT_AUTOR);
+    expect(r.status).toBe(1);
+    expect(r.stdout).toContain('requirements.txt');
+  });
+});
+
+const DEPENDABOT_AUTOR = { login: 'dependabot[bot]', type: 'Bot' };
