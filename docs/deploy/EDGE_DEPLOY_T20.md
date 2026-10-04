@@ -38,8 +38,9 @@ npm run migration-identity
 Dokaz: `migration-identity` prije i poslije; u bazi postoje `try_acquire_repair_slot_for_user`
 (vlasnik `postgres`, SECURITY DEFINER, bez EXECUTE za `anon` i `authenticated`) i tablica
 `repair_attempt_log` s RLS-om. Isto se lokalno dokazuje `scripts/repair-slot-per-user-smoke.sql`.
-**0209 mora biti u bazi prije vala 2** (repair-docx bez nje pada na stari globalni RPC, sto je
-sigurno, ali RD-2 dnevnik tada odbija upis i ishod bez izmjena vraca 503).
+**0209 mora biti u bazi prije deploya `repair-docx` (val 1).** Bez nje tablica `repair_attempt_log`
+ne postoji, pa fail-closed strop pokusaja iz #294 vraca 503 na SVAKI popravak. Slot bi pao na stari
+globalni RPC, ali strop ne pada nigdje. Migracija trazi pg_cron (bez njega pada s 55000).
 
 ### Val 1: zajednicki IP kljuc (#295), sve funkcije koje hashiraju IP, ODJEDNOM
 
@@ -79,7 +80,7 @@ glavni tok poziva; ostale ostaju nedeployane uz zapis u `supabase/deploy-manifes
 | Funkcija | Promjena | Rizik | Dokaz nakon deploya |
 | --- | --- | --- | --- |
 | `faculty-request` | v13 vraca `ACAO: *`; #295 mijenja IP kljuc | stari kod pusta svaki origin; novi ima jednokratni reset prozora limita | `curl -sI -X OPTIONS -H "Origin: https://evil.example" .../faculty-request` NEMA `Access-Control-Allow-Origin`; s `Origin: https://lektahr.netlify.app` ga ima |
-| `repair-docx` | #294 (slot po korisniku, dnevnik pokusaja), #291, #295 | bez 0209: 503 na ishodima bez izmjena; drugi istodobni popravak istog korisnika dobiva `busy` | jedan popravak prolazi; drugi istodobni istog korisnika `503 busy`; ponovljeni vec uskladjen dokument se biljezi u `repair_attempt_log` |
+| `repair-docx` | #294 (slot po korisniku, rezervacija pokusaja), #291, #295 | bez 0209: 503 na svakom popravku; drugi istodobni popravak istog korisnika dobiva `busy` | jedan popravak prolazi; drugi istodobni istog korisnika `503 busy`; ponovljeni vec uskladjen dokument se biljezi u `repair_attempt_log` |
 | `generate-report` | #289 (anonimni bez nagrade prijatelju), #295 | anonimni racun vise ne dobiva prijateljski slot | anonimni racun sa signupom: `payment_required`, nema novog `entitlements` retka `reward:ref-friend:*` |
 | `source-check` | #291 (granica kljuca 400), #295 | nema vidljive promjene za stvarne naslove | provjera izvora vraca rezultat; naslov > 400 znakova ne produljuje odgovor |
 | `redeem-referral-signup` | #295 | `referred_ip_hash` od sad zadnji hop | redeem s valjanim kodom vraca `ok` |
