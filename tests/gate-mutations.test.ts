@@ -4910,16 +4910,24 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
-  {
-    id: 't84/korpus-naslov-bez-granice',
-    imitates: 'T84 SC-1: naslov ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji.',
+  ...([
+    ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',
+      'qs: keys.map(corpusQueryKey),', 'qs: keys,', 'corpus-check: kljuc ide bazi bez gornje granice duljine'],
+    ['t84/korpus-granica-povecana', 'granica podignuta na 5000 pa gard koji prihvaca bilo koji broj prolazi, a zastita vise ne djeluje (Codex R2 na #291)',
+      'export const CORPUS_TITLE_MAX = 400;', 'export const CORPUS_TITLE_MAX = 5000;', 'corpus-check: CORPUS_TITLE_MAX je 5000, ocekivano 400'],
+    ['t84/korpus-bodovanje-nad-rezanim', 'naslov za bodovanje se reze, pa dug jednak naslov pada s found, a razliciti podnaslovi mogu podici presudu (Codex R1 na #291)',
+      "title: typeof r?.title === 'string' ? r.title : null,", "title: typeof r?.title === 'string' ? r.title.slice(0, CORPUS_TITLE_MAX) : null,",
+      'corpus-check: naslov za bodovanje je skracen'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84 SC-1: ${imitates}.`,
     caught: () => {
       const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'));
-      const mut = src.replace('r.title.slice(0, CORPUS_TITLE_MAX)', 'r.title');
-      return mut !== src && corpusTitleBoundProblems(mut).includes('corpus-check: naslov ide bazi bez gornje granice duljine');
+      const mut = src.replace(from, to);
+      return mut !== src && corpusTitleBoundProblems(mut).includes(problem);
     },
     cleanBefore: () => corpusTitleBoundProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'))).length === 0,
-  },
+  })),
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
