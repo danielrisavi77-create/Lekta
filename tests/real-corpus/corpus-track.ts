@@ -131,14 +131,15 @@ export function sidecarAdmitted(metadata: CorpusSidecar): boolean {
  * - `witness`   svjedok s namjernim prekrsajima (`witnessResults`); nikad `results`.
  * - `null`      bez profila, ne mjeri se nigdje.
  *
- * Traka `witness` se provjerava PRIJE dopustenosti i neovisno o zastavici `synthetic`: svjedok s krivom
- * zastavicom (`synthetic: false`) i dalje je svjedok, a ne stvaran rad.
+ * Traka `witness` se provjerava PRIJE dopustenosti i nikad ne vodi u `results`. Svjedok mora nositi i
+ * `synthetic: true` (generator je uvijek pise): stvaran rad kojem je greskom pridruzen witness sidecar bez
+ * te zastavice ne smije oneciscavati mjerenje svjedoka, pa ne ulazi ni u jedan skup (`null`).
  */
 export type CorpusSet = 'results' | 'synthetic' | 'witness';
 
 export function corpusSetOf(metadata: CorpusSidecar): CorpusSet | null {
   if (typeof metadata.profileId !== 'string' || metadata.profileId.length === 0) return null;
-  if (metadata.track === WITNESS_TRACK) return 'witness';
+  if (metadata.track === WITNESS_TRACK) return metadata.synthetic === true ? 'witness' : null;
   return sidecarAdmitted(metadata) ? 'results' : 'synthetic';
 }
 
@@ -152,9 +153,10 @@ export function witnessIsolationProblems(
 ): string[] {
   const p = 'apuri-zavrsni';
   const cases: Array<[string, CorpusSidecar, CorpusSet | null]> = [
-    ['svjedok', { profileId: p, track: WITNESS_TRACK }, 'witness'],
     ['svjedok sa synthetic: true', { profileId: p, track: WITNESS_TRACK, synthetic: true }, 'witness'],
-    ['svjedok sa synthetic: false', { profileId: p, track: WITNESS_TRACK, synthetic: false }, 'witness'],
+    // Bez zastavice ni s krivom zastavicom: nigdje, a nikako u `results` ni u witness mjerenje.
+    ['witness sidecar bez zastavice synthetic', { profileId: p, track: WITNESS_TRACK }, null],
+    ['witness sidecar sa synthetic: false', { profileId: p, track: WITNESS_TRACK, synthetic: false }, null],
     ['svjedok bez profila', { track: WITNESS_TRACK }, null],
     // Kontrole: zid ne smije "hvatati" tako da sve odbije ili sve proglasi svjedokom.
     ['sidecar bez trake', { profileId: p }, 'results'],

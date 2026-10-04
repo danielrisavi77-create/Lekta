@@ -116,7 +116,12 @@ function Pick-Violation([string]$checkId, $rules) {
       }
       return @{ expected = $m; set = $set }
     }
-    'paper-size' { return @{ expected = 'A4'; set = 'Letter' } }
+    'paper-size' {
+      # Letter je prekrsaj samo ako ga profil ne dopusta; inace bi sidecar imenovao prekrsaj koji to nije.
+      $allowed = @($rules.paperSizes | Where-Object { $null -ne $_ })
+      if ($allowed -contains 'Letter') { throw "Profil dopusta Letter; generator nema drugi format kojim bi krsio paper-size." }
+      return @{ expected = $(if ($allowed.Count -gt 0) { $allowed } else { 'A4' }); set = 'Letter' }
+    }
     'justify' { return @{ expected = 'obostrano'; set = 'lijevo' } }
   }
   throw "Nepoznat checkId $checkId."

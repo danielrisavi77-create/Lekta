@@ -2477,10 +2477,21 @@ const MUTATIONS: Mutation[] = [
     imitates:
       'zateceno ponasanje prije T68: `discoverExcludedCorpus` uzima sve sto `sidecarAdmitted` odbije, pa ' +
       'svjedok zavrsi u `syntheticResults` i izgubi izravni signal (koji je namjerni prekrsaj ciljan, ' +
-      'razrijesen ili ostavljen korisniku); isto vrijedi za svjedoka s krivom zastavicom `synthetic: false`',
+      'razrijesen ili ostavljen korisniku)',
     caught: () =>
       witnessIsolationProblems((m: CorpusSidecar) =>
         typeof m.profileId === 'string' && m.profileId.length > 0 ? (sidecarAdmitted(m) ? 'results' : 'synthetic') : null,
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-bez-zastavice-synthetic',
+    imitates:
+      'prva verzija T68 razvrstavaca: `track: witness` sam je bio dovoljan, pa bi stvaran rad s greskom ' +
+      'pridruzenim witness sidecarom (bez `synthetic: true` ili sa `synthetic: false`) usao u mjerenje svjedoka',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        m.track === 'witness' && typeof m.profileId === 'string' && m.profileId.length > 0 ? 'witness' : corpusSetOf(m),
       ).length > 0,
     cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
   },

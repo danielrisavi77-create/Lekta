@@ -98,7 +98,9 @@ describe('commitani korpus: praznina mora biti glasna', () => {
 // ============================================================================================
 
 /**
- * Zbroj ciljanih provjera nad SVJEDOCIMA u commitanom artefaktu. Smije samo RASTI.
+ * Zbroj ciljanih provjera nad SVJEDOCIMA u commitanom artefaktu. Test trazi JEDNAKOST, ne samo donju
+ * granicu: dok je 0, prazan skup bi inace prosao i nakon sto svjedoci udju pa nestanu, a dodani svjedoci
+ * bez podignutog ratcheta ne bi nista zakljucali.
  *
  * Zasto 0: svjedoke generira radna stanica s Wordom (`scripts/corpus-gen/word/make-violation-witnesses.ps1`),
  * a laptop koji je uveo skup Word dokument ne pise u commit. Ratchet se dize u ISTOM commitu u kojem
@@ -163,14 +165,14 @@ describe('svjedoci (T68): commitani artefakt', () => {
     expect(witnessIsolationProblems()).toEqual([]);
   });
 
-  it('witnessSummary postoji, zbroj se slaze i ne pada ispod ratcheta', () => {
+  it('witnessSummary postoji, zbroj se slaze i tocno odgovara ratchetu', () => {
     expect(izvjestajSvjedoka.witnessSummary, 'artefakt nema witnessSummary; regeneriraj ga').toBeDefined();
     const zbroj = izvjestajSvjedoka.witnessResults.reduce((n, r) => n + r.targetedCheckCount, 0);
     expect(izvjestajSvjedoka.witnessSummary.targetedCheckCount).toBe(zbroj);
     expect(
       izvjestajSvjedoka.witnessSummary.targetedCheckCount,
-      'pokrivenost svjedoka je pala ispod ratcheta',
-    ).toBeGreaterThanOrEqual(WITNESS_CILJANIH_RATCHET);
+      'pokrivenost svjedoka razlikuje se od ratcheta: pad je gubitak svjedoka, rast trazi podizanje WITNESS_CILJANIH_RATCHET u istom commitu',
+    ).toBe(WITNESS_CILJANIH_RATCHET);
   });
 
   it('svaki ciljani check svjedoka zavrsi pass ili izricito needsAssistance, drugi prolaz je no-op', () => {
