@@ -370,10 +370,13 @@ const DOKAZ_BAZA = {
 };
 
 /** Paket iz `package-lock.json` (T99); polja koja gard izvora cita. */
-type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; [k: string]: unknown };
+type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; bundleDependencies?: string[]; [k: string]: unknown };
 /** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
-const realLock = (): { packages: Record<string, LockPkg> } =>
-  JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
+type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
+const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
+/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
+const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -4725,6 +4728,18 @@ const MUTATIONS: Mutation[] = [
       (p: LockPkg) => { const { integrity: _i, ...rest } = p; return rest; }],
     ['t99/lockfile-sha1', 'integrity sa slabim sha1 umjesto sha512',
       (p: LockPkg) => ({ ...p, integrity: 'sha1-AAAAAAAAAAAAAAAAAAAAAAAAAAA=' })],
+    ['t99/lockfile-git-ssh', 'resolved na git+ssh izvor',
+      (p: LockPkg) => ({ ...p, resolved: 'git+ssh://git@github.com/x/x.git#0000000' })],
+    ['t99/lockfile-drugi-registry', 'resolved na drugi javni registry (yarn)',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('registry.npmjs.org', 'registry.yarnpkg.com') })],
+    ['t99/lockfile-bez-resolved', 'paket bez resolved, pa npm sam bira izvor',
+      (p: LockPkg) => { const { resolved: _r, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha512-sha1-rezerva', 'integrity "sha512- sha1-..." koji ssri cita kao sha1 (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512- sha1-EfatjsUqKYSrqv18O1FlA3hcIHI=' })],
+    ['t99/lockfile-prazan-sha512', 'integrity "sha512-" bez digesta (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512-' })],
+    ['t99/lockfile-link', 'obican paket pretvoren u link na lokalnu putanju (Codex F2)',
+      (p: LockPkg) => ({ ...p, link: true, resolved: '../izvan' })],
   ] as const).map(([id, imitates, mutate]) => ({
     id,
     imitates: `T99: ${imitates}; npm audit to ne vidi jer gleda samo poznate CVE-ove.`,
@@ -4736,6 +4751,57 @@ const MUTATIONS: Mutation[] = [
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${name}:`));
     },
     cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  })),
+  ...([
+    ['t99/lockfile-verzija-4', 'lockfileVersion 4 uz valjan packages; gard ga ne bi citao (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = 4; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-verzija-tekst', 'lockfileVersion kao tekst "3" (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = '3'; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-inbundle-strani-resolved', 'inBundle zapis sa stranim resolved, dosad bezuvjetno izuzet (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_KEY] = { ...l.packages[INBUNDLE_KEY], resolved: 'https://evil.example/c.tgz' }; }, `${INBUNDLE_KEY}:`],
+    ['t99/lockfile-inbundle-bez-roditelja', 'roditelj vise ne navodi paket u bundleDependencies, a inBundle ostaje (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_PARENT] = { ...l.packages[INBUNDLE_PARENT], bundleDependencies: [] }; }, `${INBUNDLE_KEY}:`],
+  ] as const).map(([id, imitates, mutate, expected]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const lock = realLock();
+      mutate(lock);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
+    },
+    cleanBefore: () => {
+      const lock = realLock();
+      return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
+    },
+  })),
+  ...([
+    ['t99/lockfile-gard-nakon-instalacije', 'gard vraćen iza setup-deps: npm ci izvrsi instalacijsku skriptu prije odbijanja (Codex F1)',
+      (wf: string) => {
+        const step = wf.slice(wf.indexOf('      - name: Izvori paketa u lockfileu'), wf.indexOf('      - name: Ovisnosti (kesirano)'));
+        const setup = '      - name: Ovisnosti (kesirano)\n        uses: ./.github/actions/setup-deps\n        with:\n          node-version: 24\n\n';
+        return wf.replace(step, '').replace(setup, setup + step);
+      }, 'npm-audit: gard izvora tek nakon instalacije (setup-deps)'],
+    ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
+      'npm-audit: gard izvora ima continue-on-error'],
+    ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
+      'npm-audit: gard izvora ima uvjet if'],
+    ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
+      (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
+      'npm-audit: nema mjerenja garda izvora'],
+  ] as const).map(([id, imitates, mutate, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = mutate(wf);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   {
     id: 't99/lockfile-gard-nije-u-ci',
