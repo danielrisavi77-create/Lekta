@@ -37,27 +37,74 @@ export const SCANNED = [
 ];
 
 const ESM = /^https:\/\/esm\.sh\/((?:@[a-z0-9][\w.-]*\/)?[a-z0-9][\w.-]*)@(\d+\.\d+\.\d+[\w.+-]*)(?:[/?#]|$)/i;
+/** Kljuc u sekciji `npm` deno.locka: `ime@verzija` ili `ime@verzija_peer@verzija`. */
+const DENO_NPM_KEY = /^((?:@[a-z0-9][\w.-]*\/)?[a-z0-9][\w.-]*)@(\d+\.\d+\.\d+[\w.+-]*?)(?:_.*)?$/i;
+/** Sekcije deno.locka v5 koje parser zna; svaka druga je pad, ne tiho preskakanje (Codex R1 na #274). */
+const DENO_SECTIONS = new Set(['version', 'remote', 'redirects', 'workspace', 'specifiers', 'npm', 'jsr']);
 
-/** npm paketi s tocnom verzijom iz parsiranog deno.lock; nepoznat URL je problem, ne tisina. */
+const isPlainObject = (v) => Boolean(v) && typeof v === 'object' && !Array.isArray(v);
+
+/**
+ * npm paketi s tocnom verzijom iz parsiranog deno.lock (v5). Cita `remote` (esm.sh URL-ovi), ciljeve
+ * `redirects` i nativni `npm` graf. `specifiers` samo preslikava na `npm`/`jsr` pa nema vlastitih verzija.
+ * `workspace.packageJson` smije nositi samo `npm:` ovisnosti, koje vec pokrivaju package.json i npm audit.
+ * JSR graf, nepoznata sekcija, nepoznat URL ili krivi oblik su imenovani problemi: necitani dio grafa
+ * ne smije ostati zelen.
+ */
 export function denoLockPackages(lock, file) {
+  if (!isPlainObject(lock)) return { packages: [], problems: [`${file}: nije JSON objekt`] };
   const problems = [];
-  const urls = [];
-  if (!lock || typeof lock !== 'object' || Array.isArray(lock)) return { packages: [], problems: [`${file}: nije JSON objekt`] };
-  const remote = lock.remote;
-  if (remote !== undefined && (typeof remote !== 'object' || remote === null || Array.isArray(remote))) problems.push(`${file}: \`remote\` nije objekt`);
-  else if (remote) urls.push(...Object.keys(remote));
-  const redirects = lock.redirects;
-  if (redirects !== undefined && (typeof redirects !== 'object' || redirects === null || Array.isArray(redirects))) problems.push(`${file}: \`redirects\` nije objekt`);
-  else if (redirects) urls.push(...Object.values(redirects).filter((v) => typeof v === 'string'));
+  if (lock.version !== '5') problems.push(`${file}: deno.lock verzija mora biti "5", a je ${JSON.stringify(lock.version)}`);
+  for (const key of Object.keys(lock)) if (!DENO_SECTIONS.has(key)) problems.push(`${file}: nepoznata sekcija \`${key}\``);
   const seen = new Map();
+  const add = (name, version) => {
+    const k = `${name}@${version}`;
+    if (!seen.has(k)) seen.set(k, { ecosystem: 'npm', name, version, file });
+  };
+  const urls = [];
+  if (lock.remote !== undefined) {
+    if (!isPlainObject(lock.remote)) problems.push(`${file}: \`remote\` nije objekt`);
+    else urls.push(...Object.keys(lock.remote));
+  }
+  if (lock.redirects !== undefined) {
+    if (!isPlainObject(lock.redirects)) problems.push(`${file}: \`redirects\` nije objekt`);
+    else {
+      for (const [from, to] of Object.entries(lock.redirects)) {
+        if (typeof to === 'string') urls.push(to);
+        else problems.push(`${file}: redirect ${from} nema tekstualni cilj`);
+      }
+    }
+  }
   for (const url of urls) {
     const m = ESM.exec(url);
-    if (!m) {
-      problems.push(`${file}: URL bez tocne npm verzije na esm.sh (${url})`);
-      continue;
+    if (m) add(m[1], m[2]);
+    else problems.push(`${file}: URL bez tocne npm verzije na esm.sh (${url})`);
+  }
+  if (lock.npm !== undefined) {
+    if (!isPlainObject(lock.npm)) problems.push(`${file}: \`npm\` nije objekt`);
+    else {
+      for (const key of Object.keys(lock.npm)) {
+        const m = DENO_NPM_KEY.exec(key);
+        if (m) add(m[1], m[2]);
+        else problems.push(`${file}: npm zapis bez tocne verzije (${key})`);
+      }
     }
-    const key = `${m[1]}@${m[2]}`;
-    if (!seen.has(key)) seen.set(key, { ecosystem: 'npm', name: m[1], version: m[2], file });
+  }
+  if (lock.jsr !== undefined && !(isPlainObject(lock.jsr) && Object.keys(lock.jsr).length === 0)) {
+    problems.push(`${file}: JSR graf nije podrzan (OSV ga ovdje ne provjerava); dodaj podrsku ili ukloni JSR ovisnosti`);
+  }
+  if (lock.specifiers !== undefined && (!isPlainObject(lock.specifiers) || Object.values(lock.specifiers).some((v) => typeof v !== 'string'))) {
+    problems.push(`${file}: \`specifiers\` nije objekt tekstualnih vrijednosti`);
+  }
+  if (lock.workspace !== undefined) {
+    if (!isPlainObject(lock.workspace)) problems.push(`${file}: \`workspace\` nije objekt`);
+    else {
+      for (const key of Object.keys(lock.workspace)) if (key !== 'packageJson') problems.push(`${file}: nepoznata sekcija \`workspace.${key}\``);
+      const deps = lock.workspace.packageJson?.dependencies;
+      if (deps !== undefined && (!Array.isArray(deps) || deps.some((d) => typeof d !== 'string' || !d.startsWith('npm:')))) {
+        problems.push(`${file}: \`workspace.packageJson.dependencies\` smije nositi samo npm: ovisnosti (pokriva ih npm audit)`);
+      }
+    }
   }
   return { packages: [...seen.values()], problems };
 }
@@ -104,9 +151,19 @@ export function collectPackages(read = (f) => readFileSync(path.join(ROOT, f), '
   return { packages: [...unique.values()], perFile, problems };
 }
 
+/** Najvise upita u jednom /v1/querybatch zahtjevu (granica OSV API-ja). */
+export const OSV_BATCH_LIMIT = 1000;
+
 /** Tijelo zahtjeva za /v1/querybatch. */
 export function batchQuery(packages) {
   return { queries: packages.map((p) => ({ package: { name: p.name, ecosystem: p.ecosystem }, version: p.version })) };
+}
+
+/** Paketi podijeljeni u batchove od najvise OSV_BATCH_LIMIT (Codex R4 na #274). */
+export function batches(packages, limit = OSV_BATCH_LIMIT) {
+  const out = [];
+  for (let i = 0; i < packages.length; i += limit) out.push(packages.slice(i, i + limit));
+  return out;
 }
 
 /**
@@ -170,6 +227,17 @@ export function compareOsvToRatchet(found, ratchet) {
   return { verdict, count: found.length, ceiling, unexpected, resolved };
 }
 
+/** Svi batchovi redom; prvi NE ZNAM prekida, rezultat se prihvaca tek kad su svi batchovi obradjeni. */
+export async function queryAllBatches(packages, fetchImpl = fetch) {
+  const found = [];
+  for (const chunk of batches(packages)) {
+    const { unknown, response } = await queryOsv(chunk, fetchImpl);
+    if (unknown) return { unknown };
+    found.push(...findingsFromBatch(response, chunk));
+  }
+  return { found: [...new Set(found)].sort() };
+}
+
 async function queryOsv(packages, fetchImpl = fetch) {
   let res;
   try {
@@ -201,9 +269,13 @@ function selftest() {
     ['cist odgovor je jednak', () => compareOsvToRatchet(findingsFromBatch({ results: [{}, {}] }, pkgs), ratchet).verdict === 'equal'],
     ['krivi broj rezultata', () => { try { findingsFromBatch({ results: [{}] }, pkgs); return false; } catch { return true; } }],
     ['nepotpun rezultat', () => { try { findingsFromBatch({ results: [{ next_page_token: 'x' }, {}] }, pkgs); return false; } catch { return true; } }],
-    ['nepoznat URL u deno locku', () => denoLockPackages({ remote: { 'https://evil.example/x.js': 'h' } }, 'd').problems.length === 1],
+    ['nepoznat URL u deno locku', () => denoLockPackages({ version: '5', remote: { 'https://evil.example/x.js': 'h' } }, 'd').problems.length === 1],
     ['raspon nije pin', () => requirementsPins('fastapi==0.115.*\nlxml>=5\n', 'r').packages.length === 0],
-    ['datoteka s 0 paketa', () => collectPackages((f) => (f.endsWith('.lock') ? '{"remote":{}}' : 'a==1.0.0')).problems.some((p) => p.includes('0 paketa'))],
+    ['datoteka s 0 paketa', () => collectPackages((f) => (f.endsWith('.lock') ? '{"version":"5","remote":{}}' : 'a==1.0.0')).problems.some((p) => p.includes('0 paketa'))],
+    ['nepoznata sekcija deno locka', () => denoLockPackages({ version: '5', remote: {}, novo: {} }, 'd').problems.length === 1],
+    ['JSR graf', () => denoLockPackages({ version: '5', jsr: { '@std/path@1.0.0': {} } }, 'd').problems.length === 1],
+    ['nativni npm graf se cita', () => denoLockPackages({ version: '5', npm: { 'lodash@4.17.20': {} } }, 'd').packages.length === 1],
+    ['batch do 1000', () => batches(Array.from({ length: 1001 }, () => pkgs[0])).map((b) => b.length).join() === '1000,1'],
     ['nalaz bez iznimke', () => validateOsvRatchet({ findings: ['npm:a@1.0.0 GHSA-x'], exceptions: [], knownGaps: [] }, { exists: () => true }).length === 1],
   ];
   for (const [label, ok] of checks) {
@@ -229,17 +301,17 @@ async function main() {
     for (const p of problems) console.error(`  - ${p}`);
     return 1;
   }
-  const { unknown, response } = await queryOsv(packages);
+  console.log(`[osv] ${perFile.reduce((n, f) => n + f.count, 0)} pojavljivanja po datotekama, ${packages.length} jedinstvenih upita u ${batches(packages).length} batchu`);
+  const { unknown, found } = await queryAllBatches(packages);
   if (unknown) {
     console.error(`[osv] NE ZNAM: ${unknown}. Ovo nije zeleno.`);
     summary(`### OSV: NE ZNAM (${unknown})`);
     return 2;
   }
-  const found = findingsFromBatch(response, packages);
   const status = compareOsvToRatchet(found, ratchet);
-  console.log(`[osv] ${packages.length} paketa, ${status.count} nalaza, strop ${status.ceiling}, presuda ${status.verdict}`);
+  console.log(`[osv] ${packages.length} jedinstvenih paketa, ${status.count} nalaza, strop ${status.ceiling}, presuda ${status.verdict}`);
   for (const f of found) console.log(`  ${status.unexpected.includes(f) ? 'NOVO ' : ''}${f}`);
-  summary(`### OSV: ${status.count} nalaza u ${packages.length} paketa (strop ${status.ceiling}, ${status.verdict})`);
+  summary(`### OSV: ${status.count} nalaza u ${packages.length} jedinstvenih paketa (strop ${status.ceiling}, ${status.verdict})`);
   if (status.verdict === 'above') return 1;
   if (status.verdict === 'below') console.log(`::notice::OSV nalaza je ${status.count}, strop ${status.ceiling}: spusti strop (rijeseno: ${status.resolved.join(', ')})`);
   return 0;

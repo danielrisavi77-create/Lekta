@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import {
-  SCANNED, batchQuery, collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch,
-  requirementsPins, validateOsvRatchet,
+  OSV_BATCH_LIMIT, SCANNED, batchQuery, batches, collectPackages, compareOsvToRatchet, denoLockPackages,
+  findingsFromBatch, queryAllBatches, requirementsPins, validateOsvRatchet,
 } from '../scripts/osv-query.mjs';
 import { osvWiringProblems } from './helpers/lockfile-sources';
 
@@ -28,6 +28,7 @@ describe('T99 OSV: citanje ulaza', () => {
 
   it('deno.lock: remote i ciljevi redirecta, bez raspona iz kljuceva redirecta', () => {
     const out = denoLockPackages({
+      version: '5',
       remote: {
         'https://esm.sh/@supabase/supabase-js@2.110.2': 'h',
         'https://esm.sh/@supabase/supabase-js@2.110.2/denonext/supabase-js.mjs': 'h',
@@ -40,10 +41,24 @@ describe('T99 OSV: citanje ulaza', () => {
   });
 
   it('deno.lock: nepoznat host, raspon u remoteu i krivi oblik su problemi, ne tisina', () => {
-    expect(denoLockPackages({ remote: { 'https://evil.example/x@1.0.0/x.js': 'h' } }, 'd').problems).toHaveLength(1);
-    expect(denoLockPackages({ remote: { 'https://esm.sh/x@^1.0.0': 'h' } }, 'd').problems).toHaveLength(1);
-    expect(denoLockPackages({ remote: [] }, 'd').problems).toHaveLength(1);
+    expect(denoLockPackages({ version: '5', remote: { 'https://evil.example/x@1.0.0/x.js': 'h' } }, 'd').problems).toHaveLength(1);
+    expect(denoLockPackages({ version: '5', remote: { 'https://esm.sh/x@^1.0.0': 'h' } }, 'd').problems).toHaveLength(1);
+    expect(denoLockPackages({ version: '5', remote: [] }, 'd').problems).toHaveLength(1);
+    expect(denoLockPackages({ version: '5', redirects: { a: 1 } }, 'd').problems).toEqual(['d: redirect a nema tekstualni cilj']);
+    expect(denoLockPackages({ version: '4', remote: {} }, 'd').problems).toHaveLength(1);
     expect(denoLockPackages(null, 'd').problems).toHaveLength(1);
+  });
+
+  it('deno.lock: nativni npm graf se cita, JSR i nepoznata sekcija padaju (Codex R1)', () => {
+    const real = JSON.parse(read('supabase', 'functions', 'deno.lock'));
+    const mixed = denoLockPackages({ ...real, specifiers: { 'npm:lodash@4': '4.17.20' }, npm: { 'lodash@4.17.20': {}, '@a/b@1.2.3_react@18.0.0': {} } }, 'e');
+    expect(mixed.problems).toEqual([]);
+    expect(mixed.packages.map((p: { name: string; version: string }) => `${p.name}@${p.version}`)).toEqual(expect.arrayContaining(['lodash@4.17.20', '@a/b@1.2.3']));
+    expect(mixed.packages).toHaveLength(11);
+    expect(denoLockPackages({ ...real, jsr: { '@std/path@1.0.0': {} } }, 'e').problems).toHaveLength(1);
+    expect(denoLockPackages({ ...real, buducaSekcija: {} }, 'e').problems).toEqual(['e: nepoznata sekcija `buducaSekcija`']);
+    expect(denoLockPackages({ ...real, npm: { 'lodash@^4': {} } }, 'e').problems).toHaveLength(1);
+    expect(denoLockPackages({ version: '5', workspace: { packageJson: { dependencies: ['jsr:@std/path@1'] } } }, 'e').problems).toHaveLength(1);
   });
 
   it('requirements.txt: samo tocni pinovi, normalizirano ime, ostalo je imenovano', () => {
@@ -53,13 +68,33 @@ describe('T99 OSV: citanje ulaza', () => {
   });
 
   it('datoteka s 0 paketa ili bez pina ruši mjerenje', () => {
-    const out = collectPackages((f: string) => (f.endsWith('.lock') ? '{"remote":{}}' : 'lxml>=5'));
+    const out = collectPackages((f: string) => (f.endsWith('.lock') ? '{"version":"5","remote":{}}' : 'lxml>=5'));
     expect(out.problems.filter((p: string) => p.includes('0 paketa'))).toHaveLength(3);
     expect(out.problems.some((p: string) => p.includes('redak bez tocnog pina (lxml>=5)'))).toBe(true);
   });
 });
 
 describe('T99 OSV: odgovor i ratchet', () => {
+  it('batchovi do 1000 upita; NE ZNAM u bilo kojem batchu prekida (Codex R4)', async () => {
+    const many = Array.from({ length: OSV_BATCH_LIMIT + 1 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0', file: 'x' }));
+    expect(batches(many).map((b: unknown[]) => b.length)).toEqual([1000, 1]);
+    const sizes: number[] = [];
+    const ok = (async (_u: string, init: { body: string }) => {
+      const n = JSON.parse(init.body).queries.length;
+      sizes.push(n);
+      return new Response(JSON.stringify({ results: Array.from({ length: n }, (_, i) => (i === 0 ? { vulns: [{ id: `G-${n}` }] } : {})) }), { status: 200 });
+    }) as unknown as typeof fetch;
+    expect(await queryAllBatches(many, ok)).toEqual({ found: ['npm:p0@1.0.0 G-1000', 'npm:p1000@1.0.0 G-1'] });
+    expect(sizes).toEqual([1000, 1]);
+    let calls = 0;
+    const second503 = (async (_u: string, init: { body: string }) => {
+      calls += 1;
+      const n = JSON.parse(init.body).queries.length;
+      return calls === 1 ? new Response(JSON.stringify({ results: Array.from({ length: n }, () => ({})) }), { status: 200 }) : new Response('x', { status: 503 });
+    }) as unknown as typeof fetch;
+    expect(await queryAllBatches(many, second503)).toEqual({ unknown: 'OSV vratio HTTP 503' });
+  });
+
   it('upit ima jedan zapis po paketu', () => {
     expect(batchQuery(pkgs).queries[2]).toEqual({ package: { name: 'pymupdf', ecosystem: 'PyPI' }, version: '1.26.3' });
   });

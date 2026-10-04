@@ -20,7 +20,7 @@ const lf = (s: string) => s.replace(/\r\n?/g, '\n');
 const GATING = /^["']?(if|continue-on-error)["']?\s*:/;
 
 /**
- * Aktivni retci (bez komentara i praznih) joba: kljucevi joba prije `steps:` i retci svakog koraka.
+ * Aktivni retci (bez komentara i praznih) joba: kljucevi joba (prije i poslije `steps:`) i retci svakog koraka.
  * Kraj joba je sljedeci kljuc na razini jobova, pa redoslijed jobova u datoteci nije bitan.
  */
 function jobBlock(workflow: string, job: string): { header: string[]; steps: string[][] } | null {
@@ -34,8 +34,9 @@ function jobBlock(workflow: string, job: string): { header: string[]; steps: str
     if (/^ {2}["']?[\w-]+["']?:/.test(line) || /^\S/.test(line)) break;
     const t = line.trim();
     if (!t || t.startsWith('#')) continue;
-    if (/^ {4}steps:/.test(line)) { inSteps = true; continue; }
-    if (!inSteps) { if (/^ {4}\S/.test(line)) header.push(t); continue; }
+    // Svaki kljuc na razini joba (4 razmaka) je zaglavlje joba, i kad stoji IZA `steps` (Codex R3 na #274).
+    if (/^ {4}\S/.test(line)) { inSteps = /^ {4}["']?steps["']?\s*:/.test(line); if (!inSteps) header.push(t); continue; }
+    if (!inSteps) continue;
     if (line.startsWith('      - ')) steps.push([t.slice(2)]);
     else if (steps.length && line.startsWith('        ')) steps[steps.length - 1].push(t);
   }

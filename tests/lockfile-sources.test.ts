@@ -91,6 +91,10 @@ describe('T99: lockfileSourceProblems', () => {
       expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': b,
         [key]: { version: '1.0.0', inBundle: true } })).problems, key).toHaveLength(1);
     }
+    // ciklus bundled paketa bez veze s deklariranim bundleom (Codex R2 na #274)
+    expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': { version: '1.0.0', inBundle: true },
+      'node_modules/a/node_modules/x': { version: '1.0.0', inBundle: true, dependencies: { y: '1' } },
+      'node_modules/a/node_modules/y': { version: '1.0.0', inBundle: true, dependencies: { x: '1' } } })).problems).toHaveLength(2);
     // vlasnik bez bundleDependencies ne moze nositi bundle
     expect(lockfileSourceProblems(lock({ 'node_modules/a': ok('a'), 'node_modules/a/node_modules/b': b,
       'node_modules/a/node_modules/b/node_modules/c': { version: '1.0.0', inBundle: true } })).problems.length).toBeGreaterThan(0);

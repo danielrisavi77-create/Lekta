@@ -51,12 +51,6 @@ function sourceProblems(name, meta) {
   return out;
 }
 
-/** Ime paketa iz kljuca `.../node_modules/<ime>` (s opsegom `@a/b`). */
-function packageName(key) {
-  const i = key.lastIndexOf('node_modules/');
-  return i === -1 ? key : key.slice(i + 'node_modules/'.length);
-}
-
 /** Kljuc roditelja: `a/node_modules/b` -> `a`; prazno za paket na vrhu. */
 function parentKeyOf(key) {
   const cut = key.lastIndexOf('/node_modules/');
@@ -73,30 +67,62 @@ function depNames(meta) {
   return out;
 }
 
+/** Vlasnik tarballa za `inBundle` zapis: prvi predak koji nije `inBundle` (prazno ako ga nema). */
+function bundleOwnerOf(key, entries) {
+  let k = parentKeyOf(key);
+  while (k && entries[k]?.inBundle === true) k = parentKeyOf(k);
+  return k;
+}
+
 /**
- * Je li `inBundle` zapis dio dokazanog lanca (Codex F2 na #258). Bundled paket stize u tarballu svog
- * vlasnika, a to je prvi predak koji NIJE `inBundle`. Zapis je valjan kad ga treba njegov `inBundle`
- * roditelj (tranzitivni bundle `a` -> `a/b` -> `a/b/c`) ili, kad je neposredno pod vlasnikom, kad ga
- * vlasnik navodi u `bundleDependencies` ili ga treba neki drugi bundled paket istog vlasnika (podignut
- * tranzitivni bundle). Vlasnik mora biti obican paket (ne korijen, ne link) s nepraznim
- * `bundleDependencies`; njegov izvor provjerava glavna petlja.
+ * Razrjesenje ovisnosti `dep` iz zapisa `fromKey` kao u Nodeu: najblizi postojeci `<dir>/node_modules/<dep>`
+ * idući od zapisa prema gore, ali ne iznad vlasnika tarballa (bundled paket ne vidi nista izvan njega).
  */
-function inBundleProblem(key, entries) {
-  const parentKey = parentKeyOf(key);
-  const parent = parentKey ? entries[parentKey] : undefined;
-  const name = packageName(key);
-  if (!parent) return `${key}: \`inBundle\` bez roditelja (${parentKey || 'nema roditelja'})`;
-  if (parent.inBundle === true) {
-    return depNames(parent).has(name) ? null : `${key}: \`inBundle\` koji bundled roditelj ${parentKey} ne treba`;
+function resolveInBundle(fromKey, dep, owner, existsKey) {
+  for (let dir = fromKey; ; dir = parentKeyOf(dir)) {
+    const candidate = `${dir}/node_modules/${dep}`;
+    if (existsKey(candidate)) return candidate;
+    if (dir === owner || !dir) return null;
   }
-  const bundled = Array.isArray(parent.bundleDependencies) ? parent.bundleDependencies : [];
-  if (parent.link === true || bundled.length === 0) {
-    return `${key}: \`inBundle\` bez vlasnika tarballa s bundleDependencies (${parentKey})`;
+}
+
+/**
+ * Skup `inBundle` kljuceva dosegljivih od DEKLARIRANIH `bundleDependencies` vlasnika (Codex R2 na #274):
+ * pocetak su `owner/node_modules/<ime>` iz `bundleDependencies`, a dalje samo ovisnosti dosegnutih zapisa
+ * razrijesene po putanji. Ciklus bundled paketa bez veze s deklariranim bundleom ostaje izvan skupa.
+ */
+function reachableBundle(owner, entries, existsKey) {
+  const reached = new Set();
+  const bundled = Array.isArray(entries[owner]?.bundleDependencies) ? entries[owner].bundleDependencies : [];
+  const queue = bundled.map((name) => `${owner}/node_modules/${name}`);
+  while (queue.length) {
+    const key = queue.shift();
+    if (reached.has(key) || !existsKey(key) || entries[key]?.inBundle !== true) continue;
+    reached.add(key);
+    for (const dep of depNames(entries[key])) {
+      const resolved = resolveInBundle(key, dep, owner, existsKey);
+      if (resolved) queue.push(resolved);
+    }
   }
-  if (bundled.includes(name)) return null;
-  const prefix = `${parentKey}/node_modules/`;
-  const neededByBundle = Object.entries(entries).some(([k, m]) => k !== key && k.startsWith(prefix) && m?.inBundle === true && depNames(m).has(name));
-  return neededByBundle ? null : `${key}: \`inBundle\` koji vlasnik ${parentKey} ne navodi u bundleDependencies ni ga treba bundled paket`;
+  return reached;
+}
+
+/**
+ * Je li `inBundle` zapis dio dokazanog lanca. Bundled paket stize u tarballu svog vlasnika (prvi predak
+ * koji nije `inBundle`), pa je valjan samo kad je dosegljiv od vlasnikovih deklariranih
+ * `bundleDependencies` (tranzitivno i podignuto, kao u Nodeu). Vlasnik mora biti obican paket (ne
+ * korijen, ne link) s nepraznim `bundleDependencies`; njegov izvor provjerava glavna petlja.
+ */
+function inBundleProblem(key, entries, cache) {
+  const owner = bundleOwnerOf(key, entries);
+  const ownerMeta = owner ? entries[owner] : undefined;
+  if (!ownerMeta) return `${key}: \`inBundle\` bez vlasnika tarballa (${owner || 'nema roditelja'})`;
+  const bundled = Array.isArray(ownerMeta.bundleDependencies) ? ownerMeta.bundleDependencies : [];
+  if (ownerMeta.link === true || bundled.length === 0) {
+    return `${key}: \`inBundle\` bez vlasnika tarballa s bundleDependencies (${owner})`;
+  }
+  if (!cache.has(owner)) cache.set(owner, reachableBundle(owner, entries, (k) => Object.prototype.hasOwnProperty.call(entries, k)));
+  return cache.get(owner).has(key) ? null : `${key}: \`inBundle\` nije dosegljiv od bundleDependencies vlasnika ${owner}`;
 }
 
 /**
@@ -119,6 +145,7 @@ export function lockfileSourceProblems(lock) {
   const problems = [];
   let checked = 0;
   let skipped = 0;
+  const bundleCache = new Map();
   for (const [name, raw] of Object.entries(entries)) {
     const meta = raw && typeof raw === 'object' ? raw : {};
     if (name === '') {
@@ -130,7 +157,7 @@ export function lockfileSourceProblems(lock) {
       continue;
     }
     if (meta.inBundle === true) {
-      const bundleProblem = inBundleProblem(name, entries);
+      const bundleProblem = inBundleProblem(name, entries, bundleCache);
       if (bundleProblem) {
         problems.push(bundleProblem);
         continue;
