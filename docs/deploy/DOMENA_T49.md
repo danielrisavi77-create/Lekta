@@ -19,8 +19,8 @@ primarna prije te tajne vraca CORS odbijanje na svaki poziv backendu.
 | 2 | vlasnik | Cloudflare: Add site `lekta.hr` (Free), dva nameservera upisati kod registrara | `Resolve-DnsName lekta.hr -Type NS` vraca Cloudflare |
 | 3 | vlasnik ili sesija s tokenom | DNS zapisi iz tablice niže | upiti iz odjeljka "Provjera" |
 | 4 | sesija, rijec vlasnika | Supabase prod: `ALLOWED_ORIGIN` dobiva `https://lekta.hr,https://www.lekta.hr,https://lektahr.netlify.app` | `secrets list` digest; CORS proba |
-| 5 | sesija, rijec vlasnika | Supabase Auth: Site URL `https://lekta.hr`, redirect URL-ovi za `lekta.hr` uz postojece | Auth postavke procitane |
-| 6 | sesija, rijec vlasnika | Netlify: custom domena `lekta.hr` i `www.lekta.hr`, `lekta.hr` primarna, HTTPS certifikat | `curl -I https://lekta.hr` 200, `lektahr.netlify.app` 301 |
+| 5 | sesija, rijec vlasnika | Supabase Auth: Site URL `https://lekta.hr` I redirect URL-ovi za `lekta.hr` u ISTOM operativnom koraku, prije provjere prijave na `lekta.hr` (vidi "Prijava") | Auth postavke procitane, prijava e-mailom na `lekta.hr` uspjela |
+| 6 | sesija, rijec vlasnika | Netlify: custom domena `lekta.hr` i `www.lekta.hr`, `lekta.hr` primarna, HTTPS certifikat | `curl -I https://lekta.hr` 200; `lektahr.netlify.app` ostaje 200 BEZ preusmjeravanja (vidi "Stari origin") |
 | 7 | sesija, PR | Kod: `LEKTA_SITE_ORIGIN` u `netlify.toml` i `check.yml`, gard `WRONG_DOMAIN` u `scripts/verify-deploy-dist.mjs`, zadani origin u `post-deploy-smoke.mjs` i Edge fallbackovi | `npm run check`, deploy |
 | 8 | vlasnik + sesija | Resend: domena `lekta.hr` verificirana, `RESEND_API_KEY` u prod tajnama, Supabase Auth custom SMTP kroz Resend | Resend "Verified", testni mail stigao |
 | 9 | sesija | Provjera i dokaz izdanja | odjeljak "Provjera" |
@@ -79,6 +79,35 @@ Dokaz koji trazi koordinator:
 - testni mail na `support@lekta.hr` stigne u Gmail; mail-tester.com za mail poslan kroz Resend
   pokazuje SPF, DKIM i DMARC kao prolaz.
 
+## Stari origin ostaje ziv (izricit uvjet)
+
+`lektahr.netlify.app` mora ostati ziv i BEZ 301/308 na `lekta.hr` dok ne postoji provjeren prijenos ili
+oporavak lokalnog stanja korisnika (Codex nalaz 2 na #273). Anonimni popravak i lokalna povijest
+radova zive u `localStorage` i sesiji vezanima uz origin; preusmjeravanje bi ih korisniku na starom
+originu tiho odsjeklo. Stanje 4. 10. 2026.: `lektahr.netlify.app` vraca 200 bez preusmjeravanja.
+Uvodjenje preusmjeravanja je zaseban korak s vlastitim dokazom (prijenos ili oporavak testiran na
+stvarnom pregledniku) i uz vlasnikovu rijec.
+
+Prolaz garda #5 i `post-deploy-smoke` NIJE dokaz da je stari origin umirovljen (Codex nalaz 3 na
+#273): oni gledaju sadrzaj builda, ne ponasanje hosta. Tvrdnja "stari origin preusmjerava" smije se
+izreci tek uz opazen `301` ili `308` s `Location: https://lekta.hr/...` na `lektahr.netlify.app`.
+
+## Prijava
+
+Supabase Auth `site_url` i popis dopustenih redirecta mijenjaju se zajedno, u istom operativnom
+koraku, i to PRIJE provjere prijave na `lekta.hr` (Codex nalaz 4 na #273). Link za prijavu e-mailom
+(OTP) ne salje `redirect_to`, pa vodi na `site_url`; dok je `site_url` jos `lektahr.netlify.app`,
+korisnik koji se prijavi na `lekta.hr` dobiva sesiju na drugom originu. Stanje 4. 10. 2026.: popis
+redirecta vec sadrzi `https://lekta.hr/**` i `https://www.lekta.hr/**` (uz Katedrine unose), a
+`site_url` je jos `https://lektahr.netlify.app`; mijenja se nakon spajanja ovog PR-a, uz vlasnikovu
+rijec, i odmah se provjerava prijava e-mailom na `lekta.hr`.
+
+## Staging
+
+Staging build (`LEKTA_SITE_ORIGIN=https://lekta-staging.netlify.app`) prepisuje `sitemap.xml` i
+`robots.txt` na svoj origin i dobiva `Disallow: /` (`rewritePublicSeo` u `scripts/site-origin.mjs`,
+Codex nalaz 1 na #273). Javni su samo `lekta.hr` i, za povratak, `lektahr.netlify.app`.
+
 ## Kontakt adresa
 
 Odluka vlasnika 4. 10. 2026.: javna kontakt adresa je `support@lekta.hr` (prije
@@ -104,6 +133,6 @@ Deploy Edge funkcija nije dio promjene domene; ide kao zasebna stavka samo uz vl
 ## Povratak
 
 - Do koraka 6 nista javno ne pokazuje na `lekta.hr`; povratak je brisanje zapisa.
-- Nakon koraka 6: u Netlifyju vratiti `lektahr.netlify.app` kao primarnu; `ALLOWED_ORIGIN` i dalje
+- Nakon koraka 6: u Netlifyju ukloniti `lekta.hr` kao primarnu domenu; `ALLOWED_ORIGIN` i dalje
   sadrzi oba origina, pa backend radi na obje adrese.
 - `LEKTA_SITE_ORIGIN` u kodu se vraca revertom PR-a iz koraka 7.

@@ -55,6 +55,7 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { isInOrigin } from '../scripts/site-origin.mjs';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -7509,6 +7510,23 @@ const MUTATIONS: Mutation[] = [
       'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
     caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
     cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
+  /**
+   * T49, Codex nalaz 7 na #273: gard #5 i #7 u verify-deploy-dist su provjeravali kanonik,
+   * sitemap i robots s `startsWith(SITE_ORIGIN)`, pa je `https://lekta.hr.evil.example/` prolazio
+   * kao unutar `https://lekta.hr`. Mutant je ta stara provjera prefiksom; isInOrigin je mora odbiti.
+   */
+  {
+    id: 'origin/prefiks-umjesto-origina',
+    imitates:
+      'kanonik ili sitemap <loc> na tudjoj domeni koja samo pocinje s SITE_ORIGIN (https://lekta.hr.evil.example/) ' +
+      'prolazi gard jer se usporedjuje prefiks niza umjesto URL.origin',
+    caught: () => {
+      const zlo = 'https://lekta.hr.evil.example/';
+      const prefiksPrihvaca = zlo.startsWith('https://lekta.hr');
+      return prefiksPrihvaca && !isInOrigin(zlo, 'https://lekta.hr');
+    },
+    cleanBefore: () => isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr'),
   },
 
 ];

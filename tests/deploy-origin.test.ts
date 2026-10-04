@@ -10,14 +10,14 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { RETIRED_ORIGIN, SITE_ORIGIN } from '../scripts/site-origin.mjs';
+import { isInOrigin, PRIMARY_ORIGIN, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
 
 describe('SEO generator origin (BL-P0-01-4)', () => {
   it('dijeljeni fallback je ziva primarna domena lekta.hr (T49), nikad umirovljeni netlify origin', () => {
-    // Neovisno o env-u: kanonik nikad ne smije biti Netlify adresa koja od T49 preusmjerava.
+    // Neovisno o env-u: kanonik nikad ne smije biti stara Netlify adresa (od T49 nije kanonik).
     expect(SITE_ORIGIN).not.toBe(RETIRED_ORIGIN);
     // Bez postavljenog env-a fallback mora biti ziva primarna domena.
     if (!process.env.LEKTA_SITE_ORIGIN) {
@@ -45,11 +45,41 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     const sitemapXml = read('public/sitemap.xml');
     const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
     expect(locs.length).toBeGreaterThan(0);
-    for (const loc of locs) expect(loc.startsWith(SITE_ORIGIN)).toBe(true);
+    for (const loc of locs) expect(isInOrigin(loc, SITE_ORIGIN), loc).toBe(true);
 
     const robotsTxt = read('public/robots.txt');
     const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((mm) => mm[1]);
     expect(sitemapLines.length).toBeGreaterThan(0);
-    for (const url of sitemapLines) expect(url.startsWith(SITE_ORIGIN)).toBe(true);
+    for (const url of sitemapLines) expect(isInOrigin(url, SITE_ORIGIN), url).toBe(true);
+  });
+
+  it('isInOrigin usporedjuje origin, ne prefiks niza (Codex nalaz 7 na #273)', () => {
+    expect(isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr')).toBe(true);
+    expect(isInOrigin('https://lekta.hr.evil.example/', 'https://lekta.hr')).toBe(false);
+    expect(isInOrigin('https://lekta.hr:8443/', 'https://lekta.hr')).toBe(false);
+    expect(isInOrigin('http://lekta.hr/', 'https://lekta.hr')).toBe(false);
+    expect(isInOrigin('nije-url', 'https://lekta.hr')).toBe(false);
+  });
+
+  it('staging build prepisuje sitemap i robots na svoj origin i ne dopusta indeksiranje (Codex nalaz 1 na #273)', () => {
+    const staging = 'https://lekta-staging.netlify.app';
+    const robots = rewritePublicSeo('robots.txt', read('public/robots.txt'), staging);
+    expect(robots).toMatch(/^Disallow: \/$/m);
+    expect(robots).not.toMatch(/^Allow: \/$/m);
+    for (const url of [...robots.matchAll(/^Sitemap:\s*(\S+)/gim)].map((mm) => mm[1])) {
+      expect(isInOrigin(url, staging), url).toBe(true);
+    }
+    const sitemap = rewritePublicSeo('sitemap.xml', read('public/sitemap.xml'), staging);
+    const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
+    expect(locs.length).toBeGreaterThan(0);
+    for (const loc of locs) expect(isInOrigin(loc, staging), loc).toBe(true);
+  });
+
+  it('produkcijski build ne dira sitemap ni robots i ostaje indeksiran', () => {
+    for (const name of ['robots.txt', 'sitemap.xml']) {
+      const src = read(`public/${name}`);
+      expect(rewritePublicSeo(name, src, PRIMARY_ORIGIN)).toBe(src);
+    }
+    expect(rewritePublicSeo('robots.txt', read('public/robots.txt'), RETIRED_ORIGIN)).toMatch(/^Allow: \/$/m);
   });
 });

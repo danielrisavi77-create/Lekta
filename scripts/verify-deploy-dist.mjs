@@ -11,7 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
+import { isInOrigin, RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
@@ -175,7 +175,7 @@ for (const [file, marker] of LEGAL_PAGES) {
 if (fs.existsSync(path.join(DIST, 'verification.html'))) fail('dist/verification.html postoji u DEPLOY buildu');
 
 // 5. SEO origin: nijedan generirani artefakt ne smije nositi umirovljeni origin
-//    lektahr.netlify.app (od T49 samo preusmjerava na lekta.hr), a kanonik/og:url/loc mora biti
+//    lektahr.netlify.app (od T49 vise nije kanonik), a kanonik/og:url/loc mora biti
 //    unutar LEKTA_SITE_ORIGIN (BL-P0-01-4). Hvata build kojem zamjena tokena u vite.config.ts
 //    ili generator nije prosao. Build kojem je SITE_ORIGIN bas taj origin (npr. rucni povratak)
 //    ga smije nositi.
@@ -195,7 +195,7 @@ for (const p of collectFiles(DIST, '.html')) {
   if (WRONG_DOMAIN.test(html)) fail(`dist/${rel} sadrzi umirovljeni origin ${RETIRED_ORIGIN} umjesto ${SITE_ORIGIN}`);
   const canonicalTag = html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*>/i);
   const href = canonicalTag && canonicalTag[0].match(/\bhref=["']([^"']+)["']/i);
-  if (href && /^https?:\/\//i.test(href[1]) && !href[1].startsWith(SITE_ORIGIN)) {
+  if (href && /^https?:\/\//i.test(href[1]) && !isInOrigin(href[1], SITE_ORIGIN)) {
     fail(`dist/${rel} canonical ${href[1]} nije unutar ${SITE_ORIGIN}`);
   }
 }
@@ -251,7 +251,7 @@ if (fs.existsSync(sitemapPath)) {
   const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   if (!locs.length) fail('dist/sitemap.xml nema <loc> unosa');
   for (const loc of locs) {
-    if (!loc.startsWith(SITE_ORIGIN)) fail(`dist/sitemap.xml <loc>${loc}</loc> nije unutar ${SITE_ORIGIN}`);
+    if (!isInOrigin(loc, SITE_ORIGIN)) fail(`dist/sitemap.xml <loc>${loc}</loc> nije unutar ${SITE_ORIGIN}`);
   }
 }
 const robotsPath = path.join(DIST, 'robots.txt');
@@ -260,7 +260,7 @@ if (fs.existsSync(robotsPath)) {
   const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
   if (!sitemapLines.length) fail('dist/robots.txt nema Sitemap: retka');
   for (const url of sitemapLines) {
-    if (!url.startsWith(SITE_ORIGIN)) fail(`dist/robots.txt "Sitemap: ${url}" nije unutar ${SITE_ORIGIN}`);
+    if (!isInOrigin(url, SITE_ORIGIN)) fail(`dist/robots.txt "Sitemap: ${url}" nije unutar ${SITE_ORIGIN}`);
   }
 }
 

@@ -6,6 +6,7 @@ import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 import { classificationGuard } from './scripts/security/classification-guard.mjs';
 import { substituteCspTokens } from './scripts/lib/csp-headers.mjs';
+import { rewritePublicSeo } from './scripts/site-origin.mjs';
 import { checkEntryBudgets, type BundleLike } from './src/build/bundle-entry-graph';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
@@ -56,12 +57,13 @@ function siteOriginHtml(siteOrigin: string) {
     },
     writeBundle() {
       // Vite kopira public/ nakon bundlanja, pa sitemap i robots.txt ne prolaze kroz
-      // generateBundle. Obradi ih ovdje da staging nema javne URL-ove produkcije.
+      // generateBundle. Obradi ih ovdje da staging nema javne URL-ove produkcije i da nije
+      // indeksiran (rewritePublicSeo u scripts/site-origin.mjs).
       for (const name of ['sitemap.xml', 'robots.txt']) {
         const file = resolve(__dirname, 'dist', name);
         if (!existsSync(file)) continue;
         const source = readFileSync(file, 'utf8');
-        const replaced = source.replaceAll(productionOrigin, siteOrigin);
+        const replaced = rewritePublicSeo(name, source, siteOrigin);
         if (replaced !== source) writeFileSync(file, replaced, 'utf8');
       }
     },
