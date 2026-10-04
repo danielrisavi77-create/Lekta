@@ -85,6 +85,41 @@ const docekaj = async (page: Page, trenutak: number): Promise<void> => {
   if (ostalo > 0) await page.waitForTimeout(ostalo);
 };
 
+/**
+ * MJERA U TRENUTKU KRAJA. Zavrsni list (presuda otipkana) stoji najvise `HOLD_SETTLED` (1,5 s), a
+ * kad otkrivanje udari u `REVEAL_MAX` i krace, pa ekran rezultata preuzme i `#progressView` se
+ * skrije. `expect(...).toBeVisible()` pita stranicu u razmacima do 1 s, a opterecen stroj svaki
+ * povratak jos produlji: test koji tek tada mjeri zna zakasniti cijeli prozor i vidi samo skriven
+ * cvor (mobile-chromium, Z34 krug 3, 87 pokusaja "hidden"). Zato mjeri STRANICA: MutationObserver
+ * na `data-meta` presude radi u mikrozadaci istog kadra u kojem je presuda otipkana, prije nego
+ * nastavak otkrivanja preda ekran rezultatu. `mjeri` mora biti samostalna (bez zatvorenih varijabli),
+ * jer se prenosi kao izvorni kod.
+ */
+async function mjeriNaKraju(page: Page, mjeri: () => unknown): Promise<void> {
+  await page.addInitScript(`(() => {
+    const mjeri = ${mjeri.toString()};
+    const w = window;
+    const promatrac = new MutationObserver(() => {
+      if (w.__z33kraj) return;
+      const pv = document.getElementById('progressView');
+      const v = document.querySelector('#progressView .z33 .z33-verdict');
+      if (!pv || !v || v.hidden || v.getAttribute('data-meta') !== 'true') return;
+      if (pv.hidden || pv.classList.contains('hidden')) return;
+      w.__z33kraj = mjeri();
+      promatrac.disconnect();
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      promatrac.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['data-meta'] });
+    });
+  })()`);
+}
+
+/** Ceka mjeru iz `mjeriNaKraju` (presuda se u ovom pokretanju stvarno prikazala) i vraca je. */
+async function mjeraKraja<T>(page: Page): Promise<T> {
+  await page.waitForFunction(() => (window as unknown as { __z33kraj?: unknown }).__z33kraj != null, null, { timeout: 60_000 });
+  return page.evaluate(() => (window as unknown as { __z33kraj: unknown }).__z33kraj) as Promise<T>;
+}
+
 for (const tema of ['dark', 'light'] as const) {
   test(`Z33 tok na /rad/ (${tema}): citanje, otkrivanje, presuda, rezultat`, async ({ page }, info) => {
     test.setTimeout(180_000);
@@ -160,43 +195,48 @@ for (const tema of ['dark', 'light'] as const) {
   });
 }
 
+interface Kutija { l: number; t: number; r: number; b: number }
+interface Mjere360 { preklapanja: string[]; izvan: string[]; gumbi: { plan: Kutija | null; otvori: Kutija | null }; sirina: number; prozor: number; blokova: number }
+
+/** Blokovi i gumbi zavrsnog lista na 360 px, izmjereni u stranici (vidi `mjeriNaKraju`). */
+function mjere360(): Mjere360 {
+  const kutija = (s: string) => {
+    const el = document.querySelector(s);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return { s, l: r.left, t: r.top + scrollY, r: r.right, b: r.bottom + scrollY };
+  };
+  const blokovi = ['.z33-col', '.z33-profile', '.z33-score', '.z33-rows', '.z33-stats', '.z33-notify', '.z33-verdict-slot', '.z33-cats', '.z33-findings']
+    .map(kutija).filter((k): k is NonNullable<typeof k> => !!k);
+  const preklapanja: string[] = [];
+  for (let i = 0; i < blokovi.length; i += 1) {
+    for (let j = i + 1; j < blokovi.length; j += 1) {
+      const a = blokovi[i], b = blokovi[j];
+      if (a.l < b.r - 1 && b.l < a.r - 1 && a.t < b.b - 1 && b.t < a.b - 1) preklapanja.push(`${a.s} x ${b.s}`);
+    }
+  }
+  const izvan = [...document.querySelectorAll('.z33 *')].filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1) && !el.closest('.z33-sheet, .z33-under, .z33-flip');
+  }).map((el) => el.className);
+  // Gumbi lista presude, u istom trenutku kao i blokovi (otkrivanje traje kratko).
+  const gumb = (s: string) => {
+    const el = document.querySelector<HTMLElement>(s);
+    if (!el || el.hidden) return null;
+    const r = el.getBoundingClientRect();
+    return { l: r.left, t: r.top, r: r.right, b: r.bottom };
+  };
+  const gumbi = { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]') };
+  return { preklapanja, izvan, gumbi, sirina: document.documentElement.scrollWidth, prozor: innerWidth, blokova: blokovi.length };
+}
+
 test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ page }) => {
   test.setTimeout(150_000);
   await page.setViewportSize({ width: 360, height: 780 });
   await pripremi(page, 'dark');
+  await mjeriNaKraju(page, mjere360);
   await pokreni(page);
-  await expect(z33(page).locator('.z33-verdict[data-meta="true"]')).toBeVisible({ timeout: 60_000 });
-
-  const mjere = await page.evaluate(() => {
-    const kutija = (s: string) => {
-      const el = document.querySelector(s);
-      if (!el) return null;
-      const r = el.getBoundingClientRect();
-      return { s, l: r.left, t: r.top + scrollY, r: r.right, b: r.bottom + scrollY };
-    };
-    const blokovi = ['.z33-col', '.z33-profile', '.z33-score', '.z33-rows', '.z33-stats', '.z33-notify', '.z33-verdict-slot', '.z33-cats', '.z33-findings']
-      .map(kutija).filter((k): k is NonNullable<typeof k> => !!k);
-    const preklapanja: string[] = [];
-    for (let i = 0; i < blokovi.length; i += 1) {
-      for (let j = i + 1; j < blokovi.length; j += 1) {
-        const a = blokovi[i], b = blokovi[j];
-        if (a.l < b.r - 1 && b.l < a.r - 1 && a.t < b.b - 1 && b.t < a.b - 1) preklapanja.push(`${a.s} x ${b.s}`);
-      }
-    }
-    const izvan = [...document.querySelectorAll('.z33 *')].filter((el) => {
-      const r = el.getBoundingClientRect();
-      return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1) && !el.closest('.z33-sheet, .z33-under, .z33-flip');
-    }).map((el) => el.className);
-    // Gumbi lista presude, u istom trenutku kao i blokovi (otkrivanje traje kratko).
-    const gumb = (s: string) => {
-      const el = document.querySelector<HTMLElement>(s);
-      if (!el || el.hidden) return null;
-      const r = el.getBoundingClientRect();
-      return { l: r.left, t: r.top, r: r.right, b: r.bottom };
-    };
-    const gumbi = { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]') };
-    return { preklapanja, izvan, gumbi, sirina: document.documentElement.scrollWidth, prozor: innerWidth, blokova: blokovi.length };
-  });
+  const mjere = await mjeraKraja<Mjere360>(page);
   expect(mjere.blokova).toBe(9);
   expect(mjere.preklapanja).toEqual([]);
   expect(mjere.izvan).toEqual([]);
@@ -209,24 +249,30 @@ test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ pa
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
 });
 
+interface GumbPresude { l: number; t: number; r: number; b: number; w: number; h: number; vidljiv: boolean }
+interface GumbiPresude { plan: GumbPresude | null; otvori: GumbPresude | null; prozor: number; sirina: number }
+
+/** Gumbi zavrsnog lista presude, izmjereni u stranici (vidi `mjeriNaKraju`). */
+function gumbiPresude(): GumbiPresude {
+  const gumb = (s: string): GumbPresude | null => {
+    const el = document.querySelector<HTMLElement>(s);
+    if (!el || el.hidden) return null;
+    const r = el.getBoundingClientRect();
+    // Gumb je dohvatljiv tek kad je presuda otipkana (prije toga `visibility: hidden`).
+    return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height, vidljiv: getComputedStyle(el).visibility !== 'hidden' && r.width > 0 };
+  };
+  return { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]'), prozor: innerWidth, sirina: document.documentElement.scrollWidth };
+}
+
 test('Z33 na 360 px s popravljivim nalazima: plan popravka i "Pregledaj nalaze" stanu i ne preklapaju se', async ({ page }) => {
   test.setTimeout(150_000);
   await page.setViewportSize({ width: 360, height: 780 });
   await pripremi(page, 'dark');
+  await mjeriNaKraju(page, gumbiPresude);
   await pokreni(page, FIXTURE_POPRAVAK);
-  await expect(z33(page).locator('.z33-verdict[data-meta="true"]')).toBeVisible({ timeout: 60_000 });
-  const planGumb = z33(page).locator('[data-z33="plan"]');
-  // Za razliku od FIXTURE-a, ovdje gumb plana MORA postojati; inace provjera ispod ne mjeri nista.
-  await expect(planGumb).toBeVisible();
-  const mjere = await page.evaluate(() => {
-    const gumb = (s: string) => {
-      const el = document.querySelector<HTMLElement>(s);
-      if (!el || el.hidden) return null;
-      const r = el.getBoundingClientRect();
-      return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height };
-    };
-    return { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]'), prozor: innerWidth, sirina: document.documentElement.scrollWidth };
-  });
+  const mjere = await mjeraKraja<GumbiPresude>(page);
+  // Za razliku od FIXTURE-a, ovdje gumb plana MORA postojati i biti vidljiv; inace provjera ispod ne mjeri nista.
+  expect(mjere.plan?.vidljiv, 'gumb plana mora biti vidljiv na zavrsnom listu').toBe(true);
   const { plan, otvori } = mjere;
   expect(plan, 'gumb plana mora biti prikazan').not.toBeNull();
   expect(otvori, 'gumb "Pregledaj nalaze" mora biti prikazan').not.toBeNull();
