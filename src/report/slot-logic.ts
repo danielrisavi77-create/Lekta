@@ -1,5 +1,6 @@
 import { fingerprintMatch, type DocumentFingerprint } from '../fingerprint/fingerprint.ts';
-import { windowDaysFor, type ReportWorkType } from './pricing.ts';
+import { windowDaysFor } from './pricing.ts';
+import type { BillableWorkType } from './billable-work-type.ts';
 
 /**
  * Cista odluka o pravu na placeni izvjestaj (MONETIZATION_AND_ANTI_ABUSE.md sekcije 5,
@@ -13,28 +14,29 @@ import { windowDaysFor, type ReportWorkType } from './pricing.ts';
 
 export interface SlotRow {
   id: string;
-  workType: ReportWorkType;
+  workType: BillableWorkType;
   fingerprint: DocumentFingerprint;
   slotExpiresAt: string; // ISO
 }
 
 export interface EntitlementRow {
   id: string;
-  workType: ReportWorkType;
+  workType: BillableWorkType;
   status: 'active' | 'refunded' | 'void';
   slotsUsed: number;
   slotsTotal: number;
   purchaseExpiresAt: string; // ISO
   /**
-   * Prozor slota s proizvoda (products.slot_window_days preko product_id joina),
-   * npr. Do obrane SKU nosi 120. Izostavljeno pada na windowDaysFor(workType).
+   * Prozor slota za ovo pravo: snapshot iz trenutka kupnje (entitlements.slot_window_days, 0207),
+   * a za stariji redak bez snapshota prozor proizvoda (vidi entitlementRowFromDb u
+   * entitlement-access.ts). Izostavljeno pada na windowDaysFor(workType).
    */
   slotWindowDays?: number;
 }
 
 export interface AccessContext {
   now: string; // ISO; server vrijeme
-  workType: ReportWorkType;
+  workType: BillableWorkType;
   fingerprint: DocumentFingerprint;
   activeSlots: SlotRow[];
   entitlements: EntitlementRow[];
@@ -51,7 +53,7 @@ export interface AccessOptions {
 
 /** Slot koji treba kreirati kad se trosi entitlement (caller upisuje transakcijski). */
 export interface NewSlotPlan {
-  workType: ReportWorkType;
+  workType: BillableWorkType;
   fingerprint: DocumentFingerprint;
   boundAt: string;
   slotExpiresAt: string;
@@ -61,7 +63,7 @@ export type AccessDecision =
   | { decision: 'rate_limited'; http: 429 }
   | { decision: 'recheck'; http: 200; slotId: string }
   | { decision: 'new_slot'; http: 200; entitlementId: string; newSlot: NewSlotPlan }
-  | { decision: 'payment_required'; http: 402; workType: ReportWorkType };
+  | { decision: 'payment_required'; http: 402; workType: BillableWorkType };
 
 function addDays(iso: string, days: number): string {
   const d = new Date(iso);
@@ -138,7 +140,7 @@ export interface PurchaseEvent {
   provider: string;
   orderId: string;
   userId: string;
-  workType: ReportWorkType;
+  workType: BillableWorkType;
   slotsTotal: number;
   purchaseExpiresAt: string;
 }

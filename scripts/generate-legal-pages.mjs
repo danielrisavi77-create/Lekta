@@ -150,7 +150,7 @@ function pageShell(doc, allDocs) {
 ${doc.html}
 </main>
 <footer>
-<p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="${SITE_ORIGIN}/#top">Provjeri rad</a></p>
+<p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 Pravni dokumenti:
 <nav>${nav}</nav>
 </footer>

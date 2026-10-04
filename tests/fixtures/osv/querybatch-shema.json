@@ -1,0 +1,8 @@
+{
+  "_napomena": "Slozeno po shemi OSV /v1/querybatch odgovora (https://google.github.io/osv.dev/post-v1-querybatch/), NE snimljeno: api.osv.dev je blokiran u izvrsnom containeru 2026-10-04. Redoslijed rezultata prati redoslijed upita; querybatch vraca samo id i modified.",
+  "results": [
+    { "vulns": [{ "id": "GHSA-0000-0000-0001", "modified": "2026-09-01T00:00:00Z" }] },
+    {},
+    { "vulns": [{ "id": "PYSEC-2026-0001", "modified": "2026-09-02T00:00:00Z" }, { "id": "GHSA-0000-0000-0002", "modified": "2026-09-03T00:00:00Z" }] }
+  ]
+}

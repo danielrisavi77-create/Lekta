@@ -1,5 +1,10 @@
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
+/** Poruka kad je renderiranje polja na posluzitelju iskljuceno (T87). */
+export const FIELD_RENDER_DISABLED_MESSAGE =
+  'Renderiranje polja trenutačno nije uključeno. Preuzmi popravljeni dokument pa u Wordu osvježi polja: Ctrl+A pa F9 u tekstu; ' +
+  'sadržaj osvježi naredbom Ažuriraj tablicu (cijela tablica); polja u fusnotama osvježi tako da klikneš u fusnotu pa ponoviš Ctrl+A i F9.';
+
 export interface FieldRenderResult {
   jobId: string;
   status: 'queued' | 'running' | 'done' | 'failed';
@@ -35,6 +40,11 @@ export async function requestFieldRender(
     return { jobId: '', status: 'failed', warnings: [error instanceof Error ? error.message : 'Render nije dostupan'], fieldsUpdated: 0, unresolvedFields: 0, source: 'libreoffice' };
   }
   const body = await response.json().catch(() => ({})) as Record<string, unknown>;
+  // T87: iskljucen render (503 `disabled`) nije kvar koji treba ponavljati. Render je dostupan i prije
+  // preuzimanja, pa poruka upucuje na preuzimanje i na osvjezavanje polja u Wordu (tekst, sadrzaj, fusnote).
+  if (response.status === 503 && body.error === 'disabled') {
+    return { jobId: '', status: 'failed', warnings: [FIELD_RENDER_DISABLED_MESSAGE], fieldsUpdated: 0, unresolvedFields: 0, source: 'libreoffice' };
+  }
   const status = body.status === 'queued' || body.status === 'running' || body.status === 'done' || body.status === 'failed' ? body.status : response.ok ? 'queued' : 'failed';
   const encoded = typeof body.renderedDocxBase64 === 'string' ? body.renderedDocxBase64 : typeof body.docxBase64 === 'string' ? body.docxBase64 : undefined;
   return {

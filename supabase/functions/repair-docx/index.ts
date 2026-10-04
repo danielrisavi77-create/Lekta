@@ -42,11 +42,12 @@ import {
   REPAIR_BINARY_REQUEST_VALUE,
 } from '../../../src/report/repair-framing.ts';
 import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
-import { isReportWorkType } from '../../../src/report/pricing.ts';
+import { isBillableWorkType, billableMismatch } from '../../../src/report/billable-work-type.ts';
+import { readAccessRows, type AccessDb } from '../../../src/report/entitlement-access.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
-import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-type-estimate.ts';
+import { estimateWorkType } from '../../../src/report/work-type-estimate.ts';
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
 import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
 import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts';
@@ -383,7 +384,7 @@ Deno.serve(async (req: Request) => {
     //
     // Stariji klijenti iz predmemorije ga jos salju; polje se jednostavno ignorira, pa nema
     // prijelaznog razdoblja u kojem bi im popravak pukao.
-    if (!meta || !isReportWorkType(meta.workType)) return json({ error: 'bad_request' }, 400);
+    if (!meta || !isBillableWorkType(meta.workType)) return json({ error: 'bad_request' }, 400);
     const workType = meta.workType;
     const now = new Date().toISOString();
 
@@ -398,8 +399,11 @@ Deno.serve(async (req: Request) => {
     // 3. WS-2 enforcement: nedvosmislen nesklad vrste rada -> 409 (osim ako je korisnik potvrdio).
     //    Signali su sanitizirani (broj rijeci + enum marker), nikad doslovni tekst.
     const signals = { words: Number(meta.signals?.words) || null, titleMarker: meta.signals?.titleMarker ?? null };
-    if (meta.confirmedMismatch !== true && unambiguousMismatch(workType, signals)) {
-      return json({ error: 'tier_mismatch', workType, suggestedWorkType: estimateWorkType(signals).workType }, 409);
+    // specijalisticki (0207) nema izvedenog raspona opsega, pa ga blokira samo doktorska naslovnica
+    // (billable-work-type.ts); za ostale vrste odluka je doslovno unambiguousMismatch.
+    const mismatch = billableMismatch(workType, signals, (s) => estimateWorkType(s).workType);
+    if (meta.confirmedMismatch !== true && mismatch.block) {
+      return json({ error: 'tier_mismatch', workType, suggestedWorkType: mismatch.suggestedWorkType }, 409);
     }
 
     // 4. validacija fixer-zahtjeva: samo poznati I ZIVI fixeri (K5/K6/K7 tamni dok WS-4 ne prodje).
@@ -504,20 +508,26 @@ Deno.serve(async (req: Request) => {
       const dailyCap = resolveDailyCap(
         partner ? { status: (partner as any).status, dailyCap: (partner as any).daily_cap } : null, DAILY_CAP);
 
-      const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
-        admin.from('document_slots').select('id, work_type, fingerprint, slot_expires_at')
-          .eq('user_id', user.id).eq('work_type', workType).gt('slot_expires_at', now),
-        admin.from('entitlements')
-          .select('id, work_type, status, slots_used, slots_total, purchase_expires_at, products(slot_window_days)')
-          .eq('user_id', user.id).eq('work_type', workType).eq('status', 'active'),
+      // Slotovi i prava zajednickim citanjem (entitlement-access.ts, snapshot prozora s prava).
+      const [access, { count: recent }] = await Promise.all([
+        // supabase-js klijent je strukturni nadskup AccessDb, ali je njegov tip predubok za izravnu
+        // usporedbu (TS2589), pa ide kroz unknown.
+        readAccessRows(admin as unknown as AccessDb, user.id, workType, now),
         admin.from('report_generations').select('id', { count: 'exact', head: true })
           .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
       ]);
 
+      // Greska upita NIJE "nema prava" (inace bi npr. PGRST201 placenom korisniku vratio 402).
+      // Nista jos nije potroseno, pa se odgovara 500 bez biljezenja pokusaja.
+      if (!access.ok) {
+        console.error('[repair-docx] entitlement_lookup_failed', access.error);
+        return json({ error: 'internal' }, 500);
+      }
+
       const decision = decideReportAccess({
         now, workType, fingerprint,
-        activeSlots: (slots ?? []).map((s: any) => ({ id: s.id, workType: s.work_type, fingerprint: s.fingerprint, slotExpiresAt: s.slot_expires_at })),
-        entitlements: (entitlements ?? []).map((e: any) => ({ id: e.id, workType: e.work_type, status: e.status, slotsUsed: e.slots_used, slotsTotal: e.slots_total, purchaseExpiresAt: e.purchase_expires_at, slotWindowDays: e.products?.slot_window_days ?? undefined })),
+        activeSlots: access.activeSlots,
+        entitlements: access.entitlements,
         recentGenerationCount: recent ?? 0,
       }, { dailyCap });
 
