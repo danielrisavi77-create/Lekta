@@ -168,6 +168,7 @@ import {
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { mobileFieldsProblems } from './helpers/mobile-fields-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -11713,5 +11714,33 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mobilna polja i mete alata (mobilni audit 2026-09-28, PR 4)', () => {
+  const lf = (p: string) => readFileSync(resolve(process.cwd(), p), 'utf8').replace(/\r/g, '');
+  const TOOL = 'src/shared/tool-page.css';
+  const CHROME = 'src/shared/site-chrome.css';
+
+  it('BASELINE: polja 16 px, .row2 u jednom stupcu, pravne poveznice 44 px', () => {
+    expect(mobileFieldsProblems(lf(TOOL), lf(CHROME))).toEqual([]);
+  });
+
+  it('mutant: bez 16 px u poljima se hvata', () => {
+    const m = lf(TOOL).replace('select,textarea){font-size:16px}', 'select,textarea){font-size:14px}');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['polja alata nemaju 16 px na uskom ekranu']);
+  });
+
+  it('mutant: .row2 u dva stupca se hvata', () => {
+    const m = lf(TOOL).replace('.tool-workspace .row2{grid-template-columns:1fr}', '');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['.row2 ostaje u dva stupca na uskom ekranu']);
+  });
+
+  it('mutant: pravne poveznice opet 24 px se hvata', () => {
+    const m = lf(CHROME).replace('.site-footer__pravno a { min-height: 44px; }', '.site-footer__pravno a { min-height: 24px; }');
+    expect(m).not.toBe(lf(CHROME));
+    expect(mobileFieldsProblems(lf(TOOL), m)).toEqual(['pravne poveznice u podnozju nisu mete od 44 px na uskom ekranu']);
   });
 });
