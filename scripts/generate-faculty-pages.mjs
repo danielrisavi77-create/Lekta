@@ -28,6 +28,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
+import { publicSourceUrl } from '../src/shared/source-url.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -102,15 +103,8 @@ function escapeHtml(value) {
 
 export function sourceLinkHtml(source) {
   const title = escapeHtml(source.title);
-  try {
-    const url = new URL(source.url);
-    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password || /\s/.test(source.url)) {
-      throw new Error('Unavailable source URL');
-    }
-    return `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${title}</a>`;
-  } catch {
-    return `${title} <span>(Poveznica nije dostupna)</span>`;
-  }
+  const url = publicSourceUrl(source.url);
+  return url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${title}</a>` : `${title} <span>(Poveznica nije dostupna)</span>`;
 }
 
 function jsonInline(value) {

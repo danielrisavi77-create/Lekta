@@ -286,6 +286,9 @@ import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends'
 import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { acceptedInvalidUrls, committedSourceAddresses, findSourceUrlProblems } from './helpers/source-url-checks';
+import { publicSourceUrl } from '../src/shared/source-url.mjs';
+import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -10571,5 +10574,38 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mutacije: javne adrese izvora (sourceLinkHtml, profile-source-links)', () => {
+  it('validator bez provjere razmaka ili protokola obara gard', () => {
+    // BASELINE: stvarni validator odbija svaku klasu nevaljane adrese, a sourceLinkHtml je ne linka.
+    expect(acceptedInvalidUrls(publicSourceUrl)).toEqual([]);
+    expect(sourceLinkHtml({ title: 'Upute', url: 'https://x.hr/upute.pdf (opis dokumenta)' })).not.toContain('href=');
+
+    // MUTANT 1: izgubljena provjera razmaka (stari oblik "adresa (opis)" opet postaje poveznica).
+    const bezRazmaka = (raw: unknown) => { try { const u = new URL(String(raw)); return ['https:', 'http:'].includes(u.protocol) && !u.username && !u.password ? String(raw) : null; } catch { return null; } };
+    expect(acceptedInvalidUrls(bezRazmaka)).toEqual(['https://x.hr/upute.pdf (opis dokumenta)']);
+
+    // MUTANT 2: izgubljena provjera protokola.
+    const bezProtokola = (raw: unknown) => { if (typeof raw !== 'string' || /\s/.test(raw)) return null; try { const u = new URL(raw); return u.username || u.password ? null : raw; } catch { return null; } };
+    expect(acceptedInvalidUrls(bezProtokola)).toEqual(['javascript:alert(1)', 'ftp://x.hr/upute.pdf']);
+  });
+
+  it('stari URL s razmakom ili gola domena u podacima obara profile-source-links', () => {
+    const files = committedSourceAddresses();
+    // BASELINE: commitani podaci su cisti u sve tri datoteke.
+    for (const sources of Object.values(files)) expect(findSourceUrlProblems(sources)).toEqual([]);
+
+    // MUTANT 1: vracen stari FESB zapis s imenom clana uz adresu (oblik prije #238).
+    const stari = 'https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)';
+    const registar = files['source-registry.json'].map((s) => (s.label.endsWith(' fesb-upute-diplomski-2017') ? { ...s, url: stari } : s));
+    expect(findSourceUrlProblems(registar)).toEqual([`source-registry.json fesb-upute-diplomski-2017: nije javna adresa dokumenta (${stari})`]);
+
+    // MUTANT 2: profilni izvor sveden na golu domenu bez dokumenta.
+    const profili = files['verified-profiles.json'];
+    const prvi = profili.findIndex((s) => s.url !== undefined);
+    const gola = profili.map((s, i) => (i === prvi ? { ...s, url: 'https://www.unidu.hr' } : s));
+    expect(findSourceUrlProblems(gola)).toEqual([`${profili[prvi].label}: gola domena bez dokumenta (https://www.unidu.hr)`]);
   });
 });

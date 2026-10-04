@@ -1,48 +1,99 @@
-# Remaining audit and production proof implementation plan
+# Plan: preostali audit i dokaz produkcijske verzije
 
-> **For agentic workers:** Use superpowers:executing-plans to implement this plan task-by-task, with one writer in the isolated worktree.
+> **Za agente:** plan se izvodi zadatak po zadatak, uz jednog pisca u izoliranom worktreeu.
 
-**Goal:** Close the recorded navigation defects and remaining feasible audit checks, then publish and prove the tested production version.
-**Architecture:** Preserve the existing Vite application and deterministic document processing. Repair URLs at their owning source; regenerate only affected projections. Keep credentials and detailed runtime evidence outside tracked files.
-**Tech Stack:** TypeScript, Vite, Vitest, Playwright, Deno, Supabase, Netlify, Windows Word.
-**Spec:** User request in this thread, 2026-09-30: verify remaining items and provide production deployment proof. Existing evidence: output/playwright/complete-audit-2026-09-30/AUDIT.md and output/playwright/audit-followup-2026-09-30/FOLLOWUP.md.
+**Cilj:** zatvoriti zabilježene kvarove navigacije i preostale izvedive provjere audita, zatim
+objaviti i dokazati testiranu produkcijsku verziju.
 
-## Global constraints
+**Arhitektura:** postojeća Vite aplikacija i deterministička obrada dokumenta ostaju iste.
+Adrese se popravljaju u izvoru koji ih posjeduje, a regeneriraju se samo pogođene projekcije.
+Vjerodajnice i detaljni dokazi izvođenja ostaju izvan praćenih datoteka.
 
-- One writer, feature branch from fe0d1b0159dba6d53847b47214561d9ff6857ac9.
-- Synthetic documents/accounts only; preserve author text. No activation of production payments.
-- Missing credentials or unavailable external services remain explicitly unverified.
-- Heavy commands run through scripts/with-gate-lock.mjs; VITEST_MAX_THREADS=1.
-- Before commit: full npm run check, orphan-scan and read-only cross-provider review.
-- Release: clean candidate, full release:check, proof-only commit, strict production build, identified Netlify artifact and strict live smoke.
+**Tehnologije:** TypeScript, Vite, Vitest, Playwright, Deno, Supabase, Netlify, Word na Windowsu.
 
-## Review focus
+**Zahtjev:** korisnički zahtjev u ovoj niti, 30. 9. 2026.: provjeriti preostale stavke i dati
+dokaz produkcijske isporuke. Postojeći dokazi su
+`output/playwright/complete-audit-2026-09-30/AUDIT.md` i
+`output/playwright/audit-followup-2026-09-30/FOLLOWUP.md`. Ta mapa nije u repozitoriju, pa se
+tvrdnje koje upućuju na nju iz repozitorija ne mogu ponoviti.
 
-- Tool links resolve correctly from /rad/ while retaining faculty/level query parameters.
-- Source links identify the actual existing evidence document, not a guessed address or a different edition.
-- Public bundles contain no private source registry, credentials or student text.
-- Downloaded files contain expected synthetic content and open correctly, not merely enabled download buttons.
-- Production build identity, asset hashes and observed routes agree with the tested release.
+## Opća ograničenja
 
-## Tasks
+- Jedan pisac, grana od `fe0d1b0159dba6d53847b47214561d9ff6857ac9`.
+- Samo sintetički dokumenti i računi; autorski tekst ostaje netaknut. Produkcijska naplata se ne
+  uključuje.
+- Nedostajuće vjerodajnice ili nedostupni vanjski servisi ostaju izričito neprovjereni.
+- Teške naredbe idu kroz `scripts/with-gate-lock.mjs`, uz `VITEST_MAX_THREADS=1`.
+- Prije commita: puni `npm run check`, `orphan-scan` i pregled drugog providera (samo čitanje).
+- Izdanje: čist kandidat, puni `release:check`, commit samo s dokazom, strogi produkcijski build,
+  identificiran Netlify artefakt i strogi smoke test nad živom stranicom.
 
-- [x] Inventory prior audit gaps, route families, skipped tests and release caveats; record a coverage matrix in output/playwright/production-proof-2026-09-30.
-- [x] Add failing URL resolution tests in tests/tool-suggestions.test.ts; fix src/ui/tool-suggestions.ts and run targeted tests.
-- [ ] Resolve malformed faculty source links (23 registry records confirmed against snapshots) using official publisher pages and snapshot identity. Correct data/sources/source-registry.json and affected profile metadata where confirmed; add regression coverage and regenerate affected split/server projections twice. Where identity cannot be confirmed, explicitly present unavailable source links instead of inventing them.
-- [ ] Verify generated routes/internal links, source link validity, actual DOCX/PDF exports, fresh-session analysis/history, source lookup, mobile accessibility and logged-in flows. Use screenshots and synthetic data. Record SMTP/Stripe prerequisites separately.
-- [ ] Exercise feasible previously skipped checks: OS-specific tests on their supported platform, Academic Suite DB workflow, projection content verification and staging extraction probe.
-- [ ] Run full local check, orphan-scan and bounded independent review; fix any introduced findings; commit/push and merge after current CI.
-- [ ] Run clean full release:check including Word tiers. Commit only the resulting proof and validate the strict proof gate. Build production with exact candidate SHA and correct production settings.
-- [ ] Publish the verified artifact to the existing production site. Verify Netlify published deploy identity, public build-info, matching asset hashes, strict post-deploy-smoke and fresh browser screenshots/interactions.
-- [ ] Deliver a concise evidence report with exact commits, deploy ID, checks, screenshots and remaining external blockers. Do not claim all possible states were tested.
+## Fokus pregleda
 
-## Findings confirmed during execution
+- Poveznice na alate iz `/rad/` vode na ispravnu adresu i zadržavaju parametre fakulteta i razine.
+- Poveznice na izvore identificiraju stvarni postojeći dokument, ne pogođenu adresu ni drugo
+  izdanje.
+- Javni bundle ne sadrži privatni registar izvora, vjerodajnice ni studentski tekst.
+- Preuzete datoteke sadrže očekivani sintetički sadržaj i ispravno se otvaraju; nije dovoljno da je
+  gumb za preuzimanje aktivan.
+- Identitet produkcijskog builda, hashevi resursa i opažene rute odgovaraju testiranom izdanju.
 
-- Nine actual DOCX downloads passed across Chromium, Firefox and WebKit. Two print PDFs retain extractable synthetic text; decorative shadows/3D paper were removed and browser regression tests passed.
-- Mobile /rad/ upload accessibility and benchmark table keyboard access were corrected after observed axe failures.
-- Real CrossRef lookup passed in the UI for existing and nonexistent DOI controls. Staging extraction probe passed; Academic Suite DB run 36767139225 passed on base fe0d1b01.
-- Source fixes expanded from the initial eight records to all 23 malformed registry records used by public profile URLs. All downloaded PDF/DOC/DOCX bytes (including two ZIP members) match archived hashes. No academic rule value changed.
-- External prerequisites remain: staging Stripe keys and an authorized email recipient. The local management token returns HTTP 403 for production, but the connected Supabase plugin has verified access. Production public profile-rules reports an older dataset version; production admin-stats lacks the already-staged opportunities view. Back up both deployed functions, verify migration/RPC readiness, review their precise deployment diffs, and deploy the tested versions after gates.
-- Full gate found dependent metadata drift in the generated repair recipe and Katedra export, plus one old relative-link expectation. Regenerate those exact projections twice, verify URL-only semantic differences and unchanged repair parameters, and rerun the full gate. Preserve the failed run as evidence (9115 passed, 3 failed, 10 skipped).
-- Dependent regeneration is stable: recipe changes 105 URL occurrences, Katedra export 22; repair parameter authority is unchanged. All 27 targeted regression tests and 15 Firefox/WebKit/mobile-WebKit cases passed; new browser tests are included in the permanent matrix.
-- Production read-only SQL smoke returned valid objects for all seven admin RPCs; metadata confirms anon/authenticated cannot execute them and service_role can. This is database proof, not a logged-in production browser session.
+## Zadaci
+
+- [x] Popisati prijašnje praznine audita, obitelji ruta, preskočene testove i ograde izdanja;
+  zapisati matricu pokrivenosti u `output/playwright/production-proof-2026-09-30`.
+- [x] Dodati testove razrješavanja adresa koji padaju u `tests/tool-suggestions.test.ts`; popraviti
+  `src/ui/tool-suggestions.ts` i pokrenuti ciljane testove.
+- [ ] Popraviti neispravne poveznice na izvore fakulteta (23 zapisa registra, potvrđena prema
+  snimkama) preko službenih stranica izdavača i identiteta snimke. Ispraviti
+  `data/sources/source-registry.json` i pogođene metapodatke profila gdje je identitet potvrđen;
+  dodati regresijsko pokrivanje i dvaput regenerirati pogođene split i serverske projekcije. Gdje se
+  identitet ne može potvrditi, poveznicu izričito prikazati kao nedostupnu, ne izmišljati je.
+- [ ] Provjeriti generirane rute i interne poveznice, valjanost poveznica na izvore, stvarne DOCX i
+  PDF izvoze, analizu i povijest u svježoj sesiji, pretragu izvora, mobilnu pristupačnost i tokove
+  prijavljenog korisnika. Koristiti snimke zaslona i sintetičke podatke. Preduvjete za SMTP i Stripe
+  zapisati zasebno.
+- [ ] Izvesti izvedive dosad preskočene provjere: testove vezane uz operacijski sustav na
+  podržanoj platformi, DB tok Academic Suitea, provjeru sadržaja projekcija i probu ekstrakcije na
+  stagingu.
+- [ ] Pokrenuti puni lokalni check, `orphan-scan` i ograničeni neovisni pregled; popraviti uvedene
+  nalaze; commitati, pushati i spojiti nakon aktualnog CI-ja.
+- [ ] Pokrenuti čist puni `release:check` uključujući Word razine. Commitati samo dobiveni dokaz i
+  potvrditi strogi gate dokaza. Izgraditi produkciju s točnim SHA kandidata i ispravnim
+  produkcijskim postavkama.
+- [ ] Objaviti potvrđeni artefakt na postojeću produkcijsku stranicu. Provjeriti identitet
+  objavljenog Netlify deploya, javni `build-info`, podudarnost hasheva resursa, strogi
+  `post-deploy-smoke` te svježe snimke zaslona i interakcije u pregledniku.
+- [ ] Isporučiti sažet izvještaj s dokazima: točni commitovi, ID deploya, provjere, snimke zaslona i
+  preostale vanjske blokade. Ne tvrditi da su testirana sva moguća stanja.
+
+## Nalazi potvrđeni tijekom izvođenja
+
+- Devet stvarnih DOCX preuzimanja prošlo je u Chromiumu, Firefoxu i WebKitu. Dva PDF-a za ispis
+  zadržavaju sintetički tekst koji se može izvući; ukrasne sjene i 3D papir su uklonjeni, a
+  regresijski testovi preglednika su prošli.
+- Pristupačnost učitavanja na mobilnom `/rad/` i pristup tipkovnicom tablici benchmarka ispravljeni
+  su nakon opaženih axe padova.
+- Stvarna CrossRef pretraga prošla je u sučelju za postojeći i nepostojeći DOI. Proba ekstrakcije
+  na stagingu je prošla; DB run Academic Suitea 36767139225 prošao je na bazi `fe0d1b01`.
+- Popravak izvora proširen je s početnih osam zapisa na sva 23 neispravna zapisa registra koja
+  koriste javne adrese profila. Bajtovi svih preuzetih PDF, DOC i DOCX datoteka (uključujući dva
+  člana ZIP arhive) odgovaraju arhiviranim hashevima. Nijedna vrijednost akademskog pravila nije
+  promijenjena.
+- Vanjski preduvjeti ostaju: Stripe ključevi za staging i ovlašteni primatelj e-pošte. Lokalni
+  upravljački token vraća HTTP 403 za produkciju, ali povezani Supabase dodatak ima provjeren
+  pristup. Javni `profile-rules` u produkciji javlja stariju verziju skupa podataka, a produkcijski
+  `admin-stats` nema prikaz prilika koji je već na stagingu. Prije deploya treba napraviti sigurnosnu
+  kopiju obiju objavljenih funkcija, provjeriti spremnost migracija i RPC-ova i pregledati točne
+  razlike deploya, pa tek nakon gateova objaviti testirane verzije.
+- Puni gate otkrio je drift ovisnih metapodataka u generiranom receptu popravka i Katedra izvozu te
+  jedno staro očekivanje relativne poveznice. Te projekcije treba dvaput regenerirati, potvrditi da
+  su semantičke razlike samo u adresama i da su parametri popravka nepromijenjeni, pa ponovno
+  pokrenuti puni gate. Neuspjeli run ostaje kao dokaz (9115 prošlo, 3 palo, 10 preskočeno).
+- Ovisna regeneracija je stabilna: recept mijenja 105 pojava adrese, Katedra izvoz 22; autoritet
+  parametara popravka je nepromijenjen. Svih 27 ciljanih regresijskih testova i 15 slučajeva u
+  Firefoxu, WebKitu i mobilnom WebKitu je prošlo; novi testovi preglednika uključeni su u trajnu
+  matricu.
+- Produkcijski SQL smoke (samo čitanje) vratio je valjane objekte za svih sedam admin RPC-ova;
+  metapodaci potvrđuju da ih `anon` i `authenticated` ne mogu izvršiti, a `service_role` može. To je
+  dokaz baze, ne prijavljene sesije u produkcijskom pregledniku.

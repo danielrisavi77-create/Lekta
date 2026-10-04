@@ -3639,8 +3639,9 @@
   {
     "id": "fesb-upute-diplomski-2017",
     "kind": "guidelines",
-    "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+    "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova; ZIP arhiva, dokument: Upute za pisanje diplomskog rada.doc)",
     "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip",
+    "archiveMember": "Upute za pisanje diplomskog rada.doc",
     "publisher": "Fakultet elektrotehnike, strojarstva i brodogradnje, Sveuciliste u Splitu",
     "fetchedAt": "2026-07-30",
     "snapshotPath": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
@@ -3652,8 +3653,9 @@
   {
     "id": "fesb-upute-zavrsni-2017",
     "kind": "guidelines",
-    "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+    "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova; ZIP arhiva, dokument: Upute za pisanje zavrsnog rada.doc)",
     "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip",
+    "archiveMember": "Upute za pisanje zavrsnog rada.doc",
     "publisher": "Fakultet elektrotehnike, strojarstva i brodogradnje, Sveuciliste u Splitu",
     "fetchedAt": "2026-07-30",
     "snapshotPath": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",

@@ -72,6 +72,19 @@ describe('FindingViewModel', () => {
     expect(html).toContain('Složi naslovnicu');
   });
 
+  it('izvor pravila: adresa s prozom ili bez http(s) ne postaje poveznica (ista provjera kao stranice fakulteta)', () => {
+    const base = buildFindingViewModels(result)[0];
+    const valjan = findingCardHtml({ ...base, source: { title: 'Upute', url: 'https://x.hr/upute.pdf?a=1&b=2', exact: true } }, false);
+    expect(valjan).toContain('href="https://x.hr/upute.pdf?a=1&amp;b=2"');
+    for (const url of ['https://x.hr/upute.pdf (opis dokumenta)', 'javascript:alert(1)', '/lokalno.pdf', 'https://u:p@x.hr/a.pdf']) {
+      const html = findingCardHtml({ ...base, source: { title: '<Upute>', url, exact: true } }, false);
+      const izvor = html.match(/<div class="finding-source">.*?<\/div>/)?.[0] ?? '';
+      expect(izvor, url).toContain('Izvor pravila:');
+      expect(izvor, url).not.toContain('href=');
+      expect(html, url).toContain('&lt;Upute&gt; <span>(Poveznica nije dostupna)</span>');
+    }
+  });
+
   it('tool: nepovezan problem (npr. font) ostaje bez CTA (nema lazne ponude)', () => {
     const finding = buildFindingViewModels(result)[0]; // "Margine", formatting, ne odgovara nijednom obrascu
     expect(finding.tool).toBeUndefined();

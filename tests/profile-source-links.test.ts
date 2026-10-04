@@ -1,22 +1,27 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { acceptedInvalidUrls, committedSourceAddresses, findSourceUrlProblems, NEVALJANE_ADRESE } from './helpers/source-url-checks';
 
-describe('public faculty source addresses', () => {
-  it('contains document URLs, without prose appended to the address', () => {
-    const profiles = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../data/profiles/verified-profiles.json'), 'utf8'));
-    let checked = 0;
-    for (const profile of profiles) {
-      for (const source of profile.sources ?? []) {
-        if (source.url === undefined) continue; // A source may have a title without a public address.
-        expect(source.url, `${profile.id}: ${source.title}`).not.toMatch(/\s/);
-        const url = new URL(source.url);
-        expect(['https:', 'http:']).toContain(url.protocol);
-        expect(url.username + url.password).toBe('');
-        checked++;
-      }
+describe('javne adrese izvora fakulteta', () => {
+  it('lagani i teski profili te registar sadrze adrese dokumenata, bez proze uz adresu i bez gole domene', () => {
+    const files = committedSourceAddresses();
+    expect(Object.keys(files)).toEqual(['verified-profiles.json', 'verified-profiles-heavy.json', 'source-registry.json']);
+    for (const [file, sources] of Object.entries(files)) {
+      const withUrl = sources.filter((s) => s.url !== undefined).length;
+      // Sentinel: prazno citanje ne smije proci kao cisto.
+      expect(withUrl, `${file}: premalo provjerenih adresa`).toBeGreaterThan(100);
+      const problems = findSourceUrlProblems(sources);
+      expect(problems, problems.join('\n')).toEqual([]);
     }
-    expect(checked).toBeGreaterThan(100);
+  });
+
+  it('validator adresa (src/shared/source-url.mjs) odbija svaku klasu nevaljane adrese', () => {
+    expect(NEVALJANE_ADRESE.length).toBeGreaterThan(0);
+    expect(acceptedInvalidUrls()).toEqual([]);
+  });
+
+  it('gola domena bez dokumenta je problem, adresa stranice s upitom nije', () => {
+    expect(findSourceUrlProblems([{ label: 'x', url: 'https://www.unidu.hr' }])).toEqual(['x: gola domena bez dokumenta (https://www.unidu.hr)']);
+    expect(findSourceUrlProblems([{ label: 'x', url: 'https://hrri.erf.unizg.hr/?page_id=17' }])).toEqual([]);
+    expect(findSourceUrlProblems([{ label: 'x' }])).toEqual([]);
   });
 });

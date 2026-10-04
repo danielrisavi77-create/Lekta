@@ -372,7 +372,7 @@ function initLegacy(doc: Document,signal: AbortSignal){
 }
 function bind(){
  /* Tema i mobilni izbornik su sada u shared/ui-boot (jedan izvor za sve stranice). */
- ctl('#browseBtn').onclick=(e: any)=>{e.stopPropagation();$('#fileInput')?.click()};ctl('#dropzone').onclick=(e: any)=>{if(!e.target.closest('button'))$('#fileInput')?.click()};
+ ctl('#browseBtn').onclick=(e: any)=>{e.stopPropagation();$('#fileInput')?.click()};ctl('#dropzone').onclick=(e: any)=>{if(!e.target.closest('button'))$('#fileInput')?.click()};ctl('#dropzone').onkeydown=(e: any)=>{if(e.target.closest('button'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#fileInput')?.click()}};
  ctl('#fileInput').onchange=(e: any)=>setFile(e.target.files[0]);ctl('#browsePdf').onclick=()=>$('#pdfInput')?.click();ctl('#pdfInput').onchange=(e: any)=>setAuxFile('pdf',e.target.files[0]);ctl('#removePdf').onclick=()=>setAuxFile('pdf',null);ctl('#browseMetadata').onclick=()=>$('#metadataInput')?.click();ctl('#metadataInput').onchange=(e: any)=>setAuxFile('metadata',e.target.files[0]);ctl('#removeMetadata').onclick=()=>setAuxFile('metadata',null);ctl('#browseAv').onclick=()=>$('#avInput')?.click();ctl('#avInput').onchange=(e: any)=>setAuxFile('av',e.target.files[0]);ctl('#removeAv').onclick=()=>setAuxFile('av',null);
  for(const ev of ['dragenter','dragover'])$('#dropzone')?.addEventListener(ev,(e: any)=>{e.preventDefault();$('#dropzone')?.classList.add('drag')});
  for(const ev of ['dragleave','drop'])$('#dropzone')?.addEventListener(ev,(e: any)=>{e.preventDefault();$('#dropzone')?.classList.remove('drag')});
