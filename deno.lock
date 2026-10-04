@@ -21,7 +21,6 @@
         "npm:hunspell-asm@^4.0.2",
         "npm:lucide@^1.24.0",
         "npm:motion@^12.42.2",
-        "npm:netlify-cli@^26.2.0",
         "npm:open-props@^1.7.23",
         "npm:supabase@^2.109.1",
         "npm:typescript@^7.0.2",

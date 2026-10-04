@@ -56,9 +56,17 @@ function selftest() {
     console.error('[audit-ratchet] FAIL selftest: podmetnut novi identitet NIJE prijavljen. Gard ne grize.');
     return 1;
   }
-  // T93: novi advisory na VEC prihvacenom paketu mora pasti i kad su ime i broj isti.
-  const newAdvisory = compareAuditToRatchet(syntheticAudit(ratchet, accepted, { [accepted[0]]: ['GHSA-zzzz-zzzz-zzzz'] }), ratchet);
-  if (newAdvisory.verdict !== 'above' || !newAdvisory.uncoveredPairs.includes(`${accepted[0]} GHSA-zzzz-zzzz-zzzz`)) {
+  // T93 se provjerava na zasebnom fixtureu jer produkcijski ratchet sada namjerno nema iznimke.
+  const advisoryProbeRatchet = {
+    fullGraphHighCritical: 1,
+    fullGraphHighCriticalPackages: ['__accepted__'],
+    exceptions: [{ packages: ['__accepted__'], advisories: ['GHSA-aaaa-aaaa-aaaa'] }],
+  };
+  const newAdvisory = compareAuditToRatchet(
+    syntheticAudit(advisoryProbeRatchet, ['__accepted__'], { __accepted__: ['GHSA-zzzz-zzzz-zzzz'] }),
+    advisoryProbeRatchet,
+  );
+  if (newAdvisory.verdict !== 'above' || !newAdvisory.uncoveredPairs.includes('__accepted__ GHSA-zzzz-zzzz-zzzz')) {
     console.error('[audit-ratchet] FAIL selftest: novi advisory na prihvacenom paketu NIJE prijavljen. Gard ne grize.');
     return 1;
   }
