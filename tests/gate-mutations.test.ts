@@ -48,6 +48,7 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
@@ -11263,6 +11264,94 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
       'nevaljan glossary rels dao je no-known-limits, ne unknown',
       'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
     ]);
+  });
+});
+
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33). Dva garda iz `tests/helpers/analysis-live-guard.ts`:
+ *  - Z31 pokret: list Z33 smije animirati samo transform, opacity i clip-path, bez backdrop-filter.
+ *    Predlozak sam animira `left` i `box-shadow` na drugim ekranima; prepisivanje inline stilova u
+ *    klase je upravo trenutak u kojem se takav literal tiho prenese.
+ *  - Granica lijenog modula: ulaz `/rad/` je tik ispod bundle-guarda (960 KB), pa bi jedan
+ *    staticki uvoz modula Z33 gurnuo njegov kod i CSS u statican graf rute.
+ */
+describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const css = citaj('src/ui/analysis-live/analysis-live.css');
+  const izvori = {
+    'src/ui/progress-scan.ts': citaj('src/ui/progress-scan.ts'),
+    'src/ui/app.ts': citaj('src/ui/app.ts'),
+  };
+
+  it('BASELINE: stvarni list i stvarni ulaz su cisti', () => {
+    expect(motionCssProblems(css)).toEqual([]);
+    expect(liveBoundaryProblems(izvori, 'src/ui/progress-scan.ts')).toEqual([]);
+  });
+
+  it('MUTACIJA: prijelaz sirine (layout u petlji) obara gard', () => {
+    const mutant = css.replace('.z33-slot { display: grid;', '.z33-slot { transition: width .3s; display: grid;');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['transition mijenja width']);
+  });
+
+  it('MUTACIJA: keyframes koji animiraju left (kao predlozak) obaraju gard', () => {
+    const mutant = css.replace('@keyframes z33-caret { 50% { opacity: 0 } }', '@keyframes z33-caret { 50% { opacity: 0; left: 4px } }');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['@keyframes z33-caret animira left']);
+  });
+
+  it('MUTACIJA: backdrop-filter na listu obara gard', () => {
+    const mutant = css.replace('.z33-verdict-wait {', '.z33-verdict-wait { backdrop-filter: blur(4px);');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toContain('backdrop-filter je zabranjen (Z31)');
+  });
+
+  it('MUTACIJA: staticki uvoz modula Z33 u app.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const mutant = { ...izvori, 'src/ui/app.ts': uvoz + '\n' + izvori['src/ui/app.ts'] };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual(['src/ui/app.ts: staticki uvoz ./analysis-live/analysis-live']);
+  });
+
+  it('MUTACIJA: dinamicki uvoz zamijenjen statickim u progress-scan.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const dinamicki = "import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null)";
+    const src = izvori['src/ui/progress-scan.ts'];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve(mountAnalysisLive)') };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual([
+      'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
+      'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
+    ]);
+  });
+});
+
+/**
+ * Z33 COPY (F31, odluka vlasnika 2026-10-04): natpisi gumba na ekranu analize uzivo su doslovno iz
+ * predloska `Analysis.dc.html`; "Preskoči" je jedino zapisano odstupanje. Gard `copyProblems`.
+ */
+describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const modul = citaj('src/ui/analysis-live/analysis-live.ts');
+  const predlozak = citaj('design/templates/analysis/Analysis.dc.html');
+  const ODSTUPANJA = ['Preskoči'];
+
+  it('BASELINE: stvarni kostur i predlozak su cisti', () => {
+    expect(copyProblems(modul, predlozak, ODSTUPANJA)).toEqual([]);
+  });
+
+  it('MUTACIJA: preformuliran natpis plana popravka obara gard', () => {
+    // Natpis koji NIJE podniz predloska ("Napravi plan" bi to bio, pa ne bi bio mutacija copyja).
+    const mutant = modul.replace('>Napravi plan popravka</button>', '>Izradi plan popravka</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, ODSTUPANJA)).toEqual(['natpis "Izradi plan popravka" nije u predlosku']);
+  });
+
+  it('MUTACIJA: odstupanje izbrisano s popisa obara gard', () => {
+    expect(copyProblems(modul, predlozak, [])).toEqual(['natpis "Preskoči" nije u predlosku']);
+  });
+
+  it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
+    expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
   });
 });
 
