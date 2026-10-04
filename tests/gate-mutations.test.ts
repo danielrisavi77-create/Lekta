@@ -11697,7 +11697,7 @@ describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, P
 
   it('mutant: inline rezerva i za traku u toku se hvata', () => {
     const s = izvor();
-    const m = s.appTs.replace("fiksna?`${h+34}px`:''", "skriven?'':`${h+34}px`");
+    const m = s.appTs.replace("!skriven&&getComputedStyle(b).position==='fixed'?`${h+34}px`:''", "skriven?'':`${h+34}px`");
     expect(m).not.toBe(s.appTs);
     expect(mobileConsentProblems({ ...s, appTs: m })).toEqual(['inline rezerva ne ovisi o fiksnoj traci']);
   });

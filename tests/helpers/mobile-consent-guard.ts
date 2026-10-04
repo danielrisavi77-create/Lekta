@@ -15,6 +15,6 @@ export function mobileConsentProblems(src: { pageApp: string; pageChrome: string
   if (!/@media\(max-width:720px\)\{\.lekta-consent-banner\{position:static[;}]/.test(tool)) problemi.push('alati: traka nije u toku na uskom ekranu');
   if (/max-width:720px\)\s*\{\s*body:has\([^)]*consent-banner/.test(chrome + tool)) problemi.push('rezerva za traku i na uskom ekranu');
   if (/@media screen\{\s*body:has\([^)]*consent-banner/.test(chrome + tool)) problemi.push('rezerva za traku bez praga sirine');
-  if (!/fiksna\?`\$\{h\+34\}px`:''/.test(src.appTs) || !/getComputedStyle\(b\)\.position==='fixed'/.test(src.appTs)) problemi.push('inline rezerva ne ovisi o fiksnoj traci');
+  if (!/!skriven&&getComputedStyle\(b\)\.position==='fixed'\?`\$\{h\+34\}px`:''/.test(src.appTs)) problemi.push('inline rezerva ne ovisi o fiksnoj traci');
   return problemi;
 }
