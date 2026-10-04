@@ -1552,15 +1552,476 @@
     "holdoutCount": 3,
     "independentlyConfirmedCount": 0
   },
-  "witnessResults": [],
+  "witnessResults": [
+    {
+      "documentId": "svjedok-apuri-zavrsni",
+      "fileName": "svjedok-apuri-zavrsni.docx",
+      "profileId": "apuri-zavrsni",
+      "holdout": true,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 19,
+        "passCount": 7,
+        "score": 57
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 92
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [
+        "paper-size"
+      ],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-effectus-diplomski",
+      "fileName": "svjedok-effectus-diplomski.docx",
+      "profileId": "effectus-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 21,
+        "passCount": 7,
+        "score": 58
+      },
+      "after": {
+        "checkCount": 21,
+        "passCount": 13,
+        "score": 92
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "margins-fixer",
+        "font-fixer",
+        "alignment-fixer",
+        "line-spacing-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "margins-fixer",
+        "font-fixer",
+        "alignment-fixer",
+        "line-spacing-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [
+        "paper-size"
+      ],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-efri-diplomski",
+      "fileName": "svjedok-efri-diplomski.docx",
+      "profileId": "efri-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 24,
+        "passCount": 10,
+        "score": 67
+      },
+      "after": {
+        "checkCount": 24,
+        "passCount": 16,
+        "score": 96
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "margins-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "margins-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [
+        "paper-size"
+      ],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-grf-zavrsni",
+      "fileName": "svjedok-grf-zavrsni.docx",
+      "profileId": "grf-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 19,
+        "passCount": 7,
+        "score": 53
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 86
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 4,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [
+        "paper-size"
+      ],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-hks-diplomski",
+      "fileName": "svjedok-hks-diplomski.docx",
+      "profileId": "hks-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 19,
+        "passCount": 7,
+        "score": 60
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 97
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "margins-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "margins-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 2,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [
+        "paper-size"
+      ],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    }
+  ],
   "witnessSummary": {
-    "documents": 0,
-    "targetedCheckCount": 0,
-    "resolved": 0,
+    "documents": 5,
+    "targetedCheckCount": 25,
+    "resolved": 25,
     "needsAssistance": 0,
     "regressions": 0,
-    "secondPassNoOp": 0,
+    "secondPassNoOp": 5,
     "unexplainedUnresolved": 0,
-    "intendedUntargeted": 0
+    "intendedUntargeted": 5
   }
 }

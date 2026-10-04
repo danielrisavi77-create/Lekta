@@ -1,0 +1,61 @@
+{
+    "profileId":  "hks-diplomski",
+    "track":  "witness",
+    "synthetic":  true,
+    "generator":  "scripts/corpus-gen/word/make-violation-witnesses.ps1",
+    "wordVersion":  "14.0",
+    "violations":  [
+                       {
+                           "ruleId":  "hks-diplomski--paper-size",
+                           "checkId":  "paper-size",
+                           "expected":  "A4",
+                           "set":  "Letter"
+                       },
+                       {
+                           "ruleId":  "hks-diplomski--font",
+                           "checkId":  "font",
+                           "expected":  [
+                                            "Book Antiqua"
+                                        ],
+                           "set":  "Courier New"
+                       },
+                       {
+                           "ruleId":  "hks-diplomski--font-size",
+                           "checkId":  "font-size",
+                           "expected":  [
+                                            11
+                                        ],
+                           "set":  9
+                       },
+                       {
+                           "ruleId":  "hks-diplomski--margins",
+                           "checkId":  "margins",
+                           "expected":  {
+                                            "top":  2.5,
+                                            "right":  2.5,
+                                            "bottom":  2.5,
+                                            "left":  2.5
+                                        },
+                           "set":  {
+                                       "top":  1.5,
+                                       "right":  1.5,
+                                       "bottom":  1.5,
+                                       "left":  1.5
+                                   }
+                       },
+                       {
+                           "ruleId":  "hks-diplomski--line-spacing",
+                           "checkId":  "line-spacing",
+                           "expected":  [
+                                            1.5
+                                        ],
+                           "set":  1
+                       },
+                       {
+                           "ruleId":  "hks-diplomski--justify",
+                           "checkId":  "justify",
+                           "expected":  "obostrano",
+                           "set":  "lijevo"
+                       }
+                   ]
+}

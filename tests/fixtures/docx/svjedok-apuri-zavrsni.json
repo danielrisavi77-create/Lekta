@@ -1,0 +1,61 @@
+{
+    "profileId":  "apuri-zavrsni",
+    "track":  "witness",
+    "synthetic":  true,
+    "generator":  "scripts/corpus-gen/word/make-violation-witnesses.ps1",
+    "wordVersion":  "14.0",
+    "violations":  [
+                       {
+                           "ruleId":  "apuri-zavrsni--paper-size",
+                           "checkId":  "paper-size",
+                           "expected":  "A4",
+                           "set":  "Letter"
+                       },
+                       {
+                           "ruleId":  "apuri-zavrsni--font",
+                           "checkId":  "font",
+                           "expected":  [
+                                            "Times New Roman"
+                                        ],
+                           "set":  "Courier New"
+                       },
+                       {
+                           "ruleId":  "apuri-zavrsni--font-size",
+                           "checkId":  "font-size",
+                           "expected":  [
+                                            12
+                                        ],
+                           "set":  9
+                       },
+                       {
+                           "ruleId":  "apuri-zavrsni--line-spacing",
+                           "checkId":  "line-spacing",
+                           "expected":  [
+                                            1.5
+                                        ],
+                           "set":  1
+                       },
+                       {
+                           "ruleId":  "apuri-zavrsni--margins",
+                           "checkId":  "margins",
+                           "expected":  {
+                                            "top":  2.5,
+                                            "right":  2.5,
+                                            "bottom":  2.5,
+                                            "left":  2.5
+                                        },
+                           "set":  {
+                                       "top":  1.5,
+                                       "right":  1.5,
+                                       "bottom":  1.5,
+                                       "left":  1.5
+                                   }
+                       },
+                       {
+                           "ruleId":  "apuri-zavrsni--justify",
+                           "checkId":  "justify",
+                           "expected":  "obostrano",
+                           "set":  "lijevo"
+                       }
+                   ]
+}

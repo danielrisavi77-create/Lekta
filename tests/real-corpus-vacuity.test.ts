@@ -106,11 +106,13 @@ describe('commitani korpus: praznina mora biti glasna', () => {
  * Jednakost zato vrijedi od prvog commita sa svjedocima: oni ne mogu uci bez podizanja ratcheta, a nakon
  * podizanja njihov gubitak obara test.
  *
- * Zasto 0: svjedoke generira radna stanica s Wordom (`scripts/corpus-gen/word/make-violation-witnesses.ps1`),
- * a laptop koji je uveo skup Word dokument ne pise u commit. Ratchet se dize u ISTOM commitu u kojem
- * svjedoci i regenerirani `docs/generated/repair-real-corpus.json` ulaze u stablo.
+ * Svjedoke generira radna stanica s Wordom (`scripts/corpus-gen/word/make-violation-witnesses.ps1`).
+ * Izmjereno 2026-10-04 (T68 dio 2): 5 svjedoka (apuri-zavrsni, hks-diplomski, effectus-diplomski,
+ * efri-diplomski, grf-zavrsni), 25 ciljanih provjera, 25 rijeseno, 0 regresija, drugi prolaz 5 od 5 no-op.
+ * Ratchet se dize u ISTOM commitu u kojem svjedoci i regenerirani `docs/generated/repair-real-corpus.json`
+ * ulaze u stablo.
  */
-const WITNESS_CILJANIH_RATCHET = 0;
+const WITNESS_CILJANIH_RATCHET = 25;
 
 const izvjestajSvjedoka = baked as unknown as RealCorpusReport;
 

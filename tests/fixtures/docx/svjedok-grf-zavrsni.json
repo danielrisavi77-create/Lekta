@@ -1,0 +1,61 @@
+{
+    "profileId":  "grf-zavrsni",
+    "track":  "witness",
+    "synthetic":  true,
+    "generator":  "scripts/corpus-gen/word/make-violation-witnesses.ps1",
+    "wordVersion":  "14.0",
+    "violations":  [
+                       {
+                           "ruleId":  "grf-zavrsni--font",
+                           "checkId":  "font",
+                           "expected":  [
+                                            "Times New Roman"
+                                        ],
+                           "set":  "Courier New"
+                       },
+                       {
+                           "ruleId":  "grf-zavrsni--font-size",
+                           "checkId":  "font-size",
+                           "expected":  [
+                                            12
+                                        ],
+                           "set":  9
+                       },
+                       {
+                           "ruleId":  "grf-zavrsni--line-spacing",
+                           "checkId":  "line-spacing",
+                           "expected":  [
+                                            1.5
+                                        ],
+                           "set":  1
+                       },
+                       {
+                           "ruleId":  "grf-zavrsni--margins",
+                           "checkId":  "margins",
+                           "expected":  {
+                                            "top":  2,
+                                            "right":  2.5,
+                                            "bottom":  2,
+                                            "left":  3.5
+                                        },
+                           "set":  {
+                                       "top":  1,
+                                       "right":  1.5,
+                                       "bottom":  1,
+                                       "left":  2.5
+                                   }
+                       },
+                       {
+                           "ruleId":  "grf-zavrsni--paper-size",
+                           "checkId":  "paper-size",
+                           "expected":  "A4",
+                           "set":  "Letter"
+                       },
+                       {
+                           "ruleId":  "grf-zavrsni--justify",
+                           "checkId":  "justify",
+                           "expected":  "obostrano",
+                           "set":  "lijevo"
+                       }
+                   ]
+}
