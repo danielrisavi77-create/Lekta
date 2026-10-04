@@ -99,4 +99,28 @@ describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zap
     expect(result.applied).toBe(true);
     expect(paragraphTexts(result.parts.documentXml)).toEqual(['Literatura', horvat, zoric, 'Novak, N. (2021). Drugi naslov.']);
   });
+
+  it('krug 4: w:ptab ispred nepromijenjenog citata ne pomice upis; vidljivi tekst odlomka ostaje isti', () => {
+    // Ulaz iz pregleda: analiza cita w:ptab kao tabulator, w:t ga nema, pa odmaci plana ne vrijede u w:t.
+    const citationXml = '<w:p><w:r><w:t>Tekst</w:t><w:ptab w:relativeTo="margin" w:alignment="right" w:leader="none"/><w:t>više (Novak, 2022) i (Horvat, 2020).</w:t></w:r></w:p>';
+    const seen = 'Tekst\tviše (Novak, 2022) i (Horvat, 2020).';
+    const anchor = 'Horvat, I. (2020). Naslov.';
+    const parts = { documentXml: `<w:document><w:body>${citationXml}${paragraph('Literatura')}${paragraph(anchor)}<w:sectPr/></w:body></w:document>`, stylesXml: '' };
+    const start = seen.indexOf('Novak, 2022');
+    const params: CitationBibliographySyncParams = {
+      version: 1,
+      citations: [{ id: 'c1', paragraphIndex: 1, start, end: start + 'Novak, 2022'.length, anchorFingerprint: citationAnchorFingerprint(1, seen), replacementText: 'Novak, 2022', reason: 'citat uz dodani zapis literature' }],
+      entries: [{ id: 'e1', paragraphIndices: [], anchorFingerprint: '', action: 'add', replacementText: 'Novak, N. (2022). Naslov.', insertionAnchor: { paragraphIndex: 3, anchorFingerprint: bibliographyAnchorFingerprint([3], anchor) } }],
+      mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }],
+    };
+    // Generator: u tekstu w:t isti odmaci pokazuju drugi isjecak nego u tekstu analize.
+    expect(paragraphTexts(parts.documentXml)[0].slice(start, start + 'Novak, 2022'.length)).not.toBe('Novak, 2022');
+    const result = citationBibliographySyncFixer(parts, params);
+    expect(result.applied).toBe(true);
+    expect(result.parts.documentXml).toContain(citationXml);
+    expect(paragraphTexts(result.parts.documentXml)).toEqual(['Tekstviše (Novak, 2022) i (Horvat, 2020).', 'Literatura', anchor, 'Novak, N. (2022). Naslov.']);
+    const second = citationBibliographySyncFixer(result.parts, params);
+    expect(second.reason).toBe('already-ok');
+    expect(second.parts.documentXml).toBe(result.parts.documentXml);
+  });
 });

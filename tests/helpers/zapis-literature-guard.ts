@@ -11,6 +11,7 @@
 import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../../src/analysis/bibliography-structure';
 import { citationAnchorFingerprint } from '../../src/analysis/citation-bibliography-sync';
 import { extractCitationOccurrences } from '../../src/citations/author-year';
+import { parseXml, paragraphText as parserParagraphText } from '../../src/docx/parser';
 import type { citationBibliographySyncFixer } from '../../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../../src/repair/contract/assisted-request-policy';
 import type { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../../src/ui/repair-items';
@@ -166,6 +167,53 @@ function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
 
   uvodiIRazmaciProblemi(fixer, problems);
   sekcijeIVisodlomacniProblemi(fixer, problems);
+  odmaciProblemi(fixer, problems);
+}
+
+const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+
+/** Tekst odlomka kakav ga vidi ANALIZA: stvarni parser (src/docx/parser.ts) nad parsiranim XML-om, odrezan. */
+function analysisParagraphText(paragraphXml: string): string {
+  const doc = parseXml(`<w:document ${WORD_NS}><w:body>${paragraphXml}</w:body></w:document>`, 'test');
+  return parserParagraphText(doc.getElementsByTagName('w:p')[0]).trim();
+}
+
+/** Citatni odlomci u kojima znak ispred citata analiza cita, a w:t ga nema (krug 4). */
+const SHIFT_CASES: Array<[string, string]> = [
+  ['ptab', '<w:ptab w:relativeTo="margin" w:alignment="right" w:leader="none"/>'],
+  ['tab', '<w:tab/>'],
+  ['br', '<w:br/>'],
+];
+
+/**
+ * Z36 krug 4: w:ptab, w:tab ili w:br ispred citata pomice odmake. Analiza ih cita kao znak, a w:t ih
+ * nema. Nepromijenjen citat se tada cita u tekstu analize i nikad ne pise; izmijenjen citat se ne pise
+ * uopce. Generator dokazuje da se tekst analize i tekst w:t ispred citata razilaze.
+ */
+function odmaciProblemi(fixer: SyncFixer, problems: string[]): void {
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  for (const [tag, shifter] of SHIFT_CASES) {
+    const citationXml = `<w:p><w:r><w:t>Tekst</w:t>${shifter}<w:t>više (Novak, 2022) i (Horvat, 2020).</w:t></w:r></w:p>`;
+    const seen = analysisParagraphText(citationXml);
+    const shifted = syncCase(seen, 'Novak, 2022', BASE, { citationXml });
+    const parsed = extractCitationOccurrences([{ index: 1, text: seen }]).find((citation) => citation.author === 'Novak');
+    const { start, end } = shifted.params.citations[0];
+    if (!parsed || parsed.start !== start || parsed.end !== end || shifted.before[0].slice(start, end) === 'Novak, 2022') problems.push(`${tag}: ulaz ne pomice odmake citata izmedju analize i w:t`);
+    for (const [variant, params] of [
+      ['predlozak', shifted.params],
+      ['korisnikov-zapis', { ...shifted.params, entries: [{ ...shifted.params.entries[0], citationId: undefined, replacementText: literalText }] }],
+    ] as const) {
+      const first = fixer(shifted.parts, params);
+      const expected = variant === 'predlozak' ? template('Novak', '2022') : literalText;
+      if (!first.parts.documentXml.includes(citationXml)) problems.push(`${tag}:${variant}: odlomak citata je prepisan (${JSON.stringify(paragraphTexts(first.parts.documentXml)[0])})`);
+      if (!first.applied || !paragraphTexts(first.parts.documentXml).includes(expected)) problems.push(`${tag}:${variant}: zapis nije umetnut (${first.reason})`);
+      const second = fixer(first.parts, params);
+      if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${tag}:${variant}: drugi prolaz nije no-op (${second.reason})`);
+    }
+    // Izmijenjen citat (dodan lokator) u istom odlomku: odmaci se ne poklapaju, pa se nista ne pise.
+    const changed = fixer(shifted.parts, { ...shifted.params, citations: [{ ...shifted.params.citations[0], replacementText: 'Novak, 2022, str. 5' }], entries: [], mappings: [] });
+    if (changed.applied || changed.parts.documentXml !== shifted.parts.documentXml) problems.push(`${tag}-izmjena: citat je upisan na pomaknute odmake (${JSON.stringify(paragraphTexts(changed.parts.documentXml)[0])})`);
+  }
 }
 
 /**

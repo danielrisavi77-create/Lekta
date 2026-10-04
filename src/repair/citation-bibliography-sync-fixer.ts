@@ -151,6 +151,20 @@ const SECTION_PROPERTIES = /<w:sectPr\b(?:[^>]*\/>|[\s\S]*?<\/w:sectPr>)/i;
 /** Revizije (Track Changes) u svojstvima: novi odlomak ne smije nositi tudju reviziju. */
 const PROPERTY_REVISION = /<w:(?:pPrChange|rPrChange|sectPrChange|ins|del|moveFrom|moveTo)\b/i;
 
+const ANALYSIS_TOKEN = /<w:t\b[^>]*\/>|<w:t\b[^>]*>([\s\S]*?)<\/w:t>|<w:p?tab\b[^>]*>|<w:(?:br|cr)\b[^>]*>/gi;
+
+/**
+ * Z36 krug 4: tekst odlomka kakav ga cita analiza (src/docx/parser.ts `paragraphText`): w:t, a w:tab i
+ * w:ptab kao tabulator, w:br i w:cr kao prijelom retka. Odmaci citata u planu vrijede u OVOM tekstu;
+ * `paragraphText` vidi samo w:t, pa se uz tabulator ili prijelom ispred citata odmaci razilaze.
+ * Svojstva odlomka se preskacu: tab stopove iz pPr parser cita kao vodece tabulatore i odmah ih odreze.
+ */
+function analysisText(block: string): string {
+  return [...block.replace(PARAGRAPH_PROPERTIES, '').matchAll(ANALYSIS_TOKEN)]
+    .map((match) => (match[1] !== undefined ? decodeXml(match[1]) : /^<w:p?tab\b/i.test(match[0]) ? '\t' : /^<w:t\b/i.test(match[0]) ? '' : '\n'))
+    .join('');
+}
+
 /**
  * Novi odlomak s oblikovanjem odlomka `block` (pPr i rPr prvog runa). Cita samo svojstva, pa ga
  * poveznica ili polje u tekstu izvora ne rusi. Prijelom sekcije (`w:sectPr`) se nikad ne kopira:
@@ -345,14 +359,19 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       claimed.set(citation.paragraphIndex, [...(claimed.get(citation.paragraphIndex) || []), adjusted]);
       // Z36: nepromijenjen citat (izvor zapisa ili potvrdjena veza) se samo cita, nikad ne pise. Zato
       // ga ne rusi oznaka, poveznica, polje ni tablica u odlomku (Word cesto zapise _GoBack oznaku).
-      if (asAnalysisText(current.slice(adjusted.start, adjusted.end)) === asAnalysisText(citation.replacementText)) {
+      // Cita se u tekstu analize, u kojem vrijede odmaci plana (krug 4: w:ptab, w:tab ili w:br ispred).
+      const readable = analysisText(block);
+      const lead = readable.length - readable.trimStart().length;
+      if (asAnalysisText(readable.slice(citation.start + lead, citation.end + lead)) === asAnalysisText(citation.replacementText)) {
         verifiedCitations.add(citation.id);
         citationParagraphs.add(citation.paragraphIndex);
         readOnlyCitations += 1;
         continue;
       }
     }
-    if (excludedContainer(parts.documentXml, range) || unsupported(block)) return noOp(parts, 'unsupported-structure');
+    // Upis smije samo kad su odmaci plana i odmaci u w:t isti. w:ptab `unsupported` ne vidi, a pomice
+    // ih kao i w:tab; upis rawText na pomaknut raspon prepolovio bi citat (krug 4).
+    if (excludedContainer(parts.documentXml, range) || unsupported(block) || analysisText(block) !== current) return noOp(parts, 'unsupported-structure');
     if (!fingerprintMatches) {
       if (asAnalysisText(current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length)) === asAnalysisText(citation.replacementText)) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
       return noOp(parts, 'invalid-params');
@@ -387,7 +406,8 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       let insertionText = literal;
       if (literal === null) {
         const citation = params.citations.find((candidate) => candidate.id === entry.citationId)!;
-        const current = paragraphText(blocks.get(citation.paragraphIndex) || '').trim();
+        // Isti tekst u kojem je analiza nasla citat (odmaci plana vrijede u njemu).
+        const current = asAnalysisText(analysisText(blocks.get(citation.paragraphIndex) || '')).trim();
         let source: { author: string; year: string } | null = null;
         if (verifiedCitations.has(citation.id)) {
           source = citationSource(current, citation.start, citation.end);

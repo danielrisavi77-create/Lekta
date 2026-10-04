@@ -7655,8 +7655,24 @@ const MUTATIONS: Mutation[] = [
     id: 'z36/tvrdi-razmak-prepisuje-citat',
     imitates: 'nepromijenjen citat se usporeduje s rawText analize bajt po bajt; analiza tvrdi razmak '
       + '(U+00A0, "str. 5") cita kao obican, pa citat ode u zamjenu i odlomak dobije obican razmak',
-    caught: () => zapisLiteratureProblemi(z36Fixer('if (asAnalysisText(current.slice(adjusted.start, adjusted.end)) === asAnalysisText(citation.replacementText)) {', 'if (current.slice(adjusted.start, adjusted.end) === citation.replacementText) {'))
+    caught: () => zapisLiteratureProblemi(z36Fixer('if (asAnalysisText(readable.slice(citation.start + lead, citation.end + lead)) === asAnalysisText(citation.replacementText)) {', 'if (readable.slice(citation.start + lead, citation.end + lead) === citation.replacementText) {'))
       .some((p) => p.startsWith('nbsp:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/nepromijenjen-citat-po-odmacima-w-t',
+    imitates: 'nepromijenjen citat se cita po odmacima plana u tekstu w:t (stanje kruga 3); w:ptab, w:tab ili w:br '
+      + 'ispred citata analiza broji kao znak, pa se isjecak ne poklopi i recept pada ili pise rawText na pomaknut raspon',
+    caught: () => zapisLiteratureProblemi(z36Fixer('const readable = analysisText(block);', 'const readable = current;'))
+      .some((p) => /^(ptab|tab|br):/.test(p)),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/upis-citata-na-pomaknute-odmake',
+    imitates: 'upis izmijenjenog citata ne provjerava da odmaci plana vrijede u w:t; w:ptab (koji unsupported ne vidi) '
+      + 'pomakne raspon i upis prepolovi citat ("Tekstviše (NNovak, 2022 i ...")',
+    caught: () => zapisLiteratureProblemi(z36Fixer(' || analysisText(block) !== current) return', ') return'))
+      .some((p) => p.startsWith('ptab-izmjena:')),
     cleanBefore: z36FixerCist,
   },
   {
