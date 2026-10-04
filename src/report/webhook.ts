@@ -42,7 +42,7 @@ export interface StripeWebhookPayload {
       amount_refunded?: number;
       currency?: string;
       refunded?: boolean;
-      metadata?: { user_id?: string; product_id?: string; referral_code?: string };
+      metadata?: { user_id?: string; product_id?: string; referral_code?: string; upgrade_from_entitlement_id?: string };
     };
   };
 }
@@ -66,6 +66,12 @@ export interface StripeEvent {
   productId: string;
   /** Referral kod iz metadata (atribucija, sekcija 8); prazno ako ga nema. */
   referralCode: string;
+  /**
+   * Nadogradnja Repair -> Final Pass (Monetizacija V1, odjeljak 14): id prava koje ova uplata
+   * pretvara, iz `metadata[upgrade_from_entitlement_id]` koju postavlja create-checkout. Prazno =
+   * obicna kupnja.
+   */
+  upgradeFromEntitlementId: string;
   refunded: boolean;
   /** `livemode` iz payloada; null kad ga payload ne nosi (vidi acceptEvent, fail-closed). */
   livemode: boolean | null;
@@ -233,6 +239,7 @@ export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
     userId: String(meta.user_id ?? ''),
     productId: String(meta.product_id ?? ''),
     referralCode: String(meta.referral_code ?? ''),
+    upgradeFromEntitlementId: String(meta.upgrade_from_entitlement_id ?? '').trim(),
     refunded,
     livemode,
     testMode: livemode === false,
@@ -436,6 +443,12 @@ export interface EntitlementProduct {
   workType: string | null;
   slotsTotal: number;
   purchaseWindowDays: number;
+  /** Prozor slota proizvoda u trenutku kupnje; snapshotira se na pravo (0207). */
+  slotWindowDays: number;
+  /** Verzionirana ponuda (products.offer_code, migracija 0207). */
+  offerCode: string;
+  /** Prava ponude (offer_codes.capabilities) u trenutku kupnje. */
+  capabilities: readonly string[];
 }
 
 export interface EntitlementInsert {
@@ -446,18 +459,47 @@ export interface EntitlementInsert {
   order_id: string;
   provider: string;
   purchase_expires_at: string;
+  /** SNAPSHOT ponude pri kupnji (MONETIZACIJA_V1.md odjeljak 13, Snapshot prava). */
+  offer_code: string;
+  /** SNAPSHOT prava pri kupnji: kopija, ne referenca na katalog. */
+  capabilities: string[];
+  /**
+   * SNAPSHOT prozora slota pri kupnji. Ovo je stvarno provedeno pravo: odluka o pristupu ga cita
+   * prije zivog products retka (src/report/entitlement-access.ts).
+   */
+  slot_window_days: number;
+  /** Stvarno naplaceno u centima; jedino ono smije umanjiti cijenu nadogradnje (odjeljak 14). */
+  paid_amount_cents: number | null;
+}
+
+/**
+ * Proizvod kojem se prava ne mogu snapshotirati (nema offer_code ili ugradjenih prava). Webhook ga
+ * NE knjizi s praznim snapshotom nego vraca 500 (`product_without_offer`), isto kao proizvod bez
+ * work_type: pravo bez zapisa o tome sto je kupljeno ne bi se kasnije moglo obraniti.
+ */
+export function entitlementSnapshotOf(product: {
+  offerCode: string | null;
+  capabilities: readonly string[] | null;
+}): { offerCode: string; capabilities: readonly string[] } | null {
+  if (!product.offerCode || !product.capabilities || product.capabilities.length === 0) return null;
+  return { offerCode: product.offerCode, capabilities: product.capabilities };
 }
 
 /**
  * Redak entitlementa iz proizvoda + eventa (kriteriji 14.3/14.4): tocni product_id, work_type,
  * slots_total (npr. pass -> 6) i purchase_expires_at = now + purchase_window_days.
+ *
+ * SNAPSHOT PRAVA (Monetizacija V1). offer_code i prava se prepisuju u redak u trenutku kupnje, kao
+ * KOPIJA niza, pa kasnija promjena kataloga (drugi offer_code, drugi skup prava) ne mijenja ono sto
+ * je vec kupljeno. `paid_amount_cents` je stvarno naplacen iznos iz dogadjaja; nepoznat ostaje null.
  */
 export function buildEntitlementInsert(
   product: EntitlementProduct,
-  ev: { userId: string; orderId: string },
+  ev: { userId: string; orderId: string; amountReceivedCents?: number | null; totalCents?: number | null },
   provider: string,
   nowMs: number,
 ): EntitlementInsert {
+  const paid = ev.amountReceivedCents ?? ev.totalCents ?? null;
   return {
     user_id: ev.userId,
     work_type: product.workType ?? '',
@@ -466,6 +508,10 @@ export function buildEntitlementInsert(
     order_id: ev.orderId,
     provider,
     purchase_expires_at: isoAfterDays(nowMs, product.purchaseWindowDays),
+    offer_code: product.offerCode,
+    capabilities: [...product.capabilities],
+    slot_window_days: product.slotWindowDays,
+    paid_amount_cents: typeof paid === 'number' && Number.isInteger(paid) && paid >= 0 ? paid : null,
   };
 }
 
