@@ -22,7 +22,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -291,8 +291,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
-import { idempotenceProperty, realRepair, type RepairFn } from './helpers/repair-arbitraries';
-import { readZip as readRepairZip, writeZip as writeRepairZip } from '../src/repair/zip-codec';
+import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -11340,33 +11339,71 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
   });
 });
 
-describe('mutacije: T96 svojstvo idempotencije popravka (fast-check)', () => {
-  // Mutant imitira stvaran kvar fixera koji ne provjerava je li cilj vec postignut: svaki prolaz
-  // doda razmak na kraj prvog w:t u document.xml. Svojstvo mora pasti na generiranom ulazu i
-  // smanjiti protuprimjer na jedan run koji nosi tekst.
-  const dodajRazmak: RepairFn = async (bytes, deep) => {
-    const enc = new TextEncoder();
-    const dec = new TextDecoder();
-    const entries = await readRepairZip(await realRepair(bytes, deep));
-    return writeRepairZip(entries.map((e) => (e.name === 'word/document.xml'
-      ? { ...e, data: enc.encode(dec.decode(e.data).replace('</w:t>', ' </w:t>')) }
-      : e)));
-  };
+describe('mutacije: T96 svojstva popravka (fast-check), mutant unutar stvarnog applyFixers', () => {
+  // Mutant se podmece kao JEDAN fixer u stvarnom lancu: vi.doMock zamijeni alignmentFixer u
+  // src/repair/fixers samo za svjeze ucitan apply-fixers (redoslijed, changelog i vrata integriteta
+  // ostaju stvarni), a produkcijski fixer se trajno ne mijenja (Codex R6 na #287).
+  type XmlParts = { documentXml: string };
+  async function repairSMutantom(mutiraj: (documentXml: string) => string): Promise<RepairFn> {
+    vi.resetModules();
+    vi.doMock('../src/repair/fixers', async (importOriginal) => {
+      const orig = await importOriginal<typeof import('../src/repair/fixers')>();
+      return {
+        ...orig,
+        alignmentFixer: (...args: Parameters<typeof orig.alignmentFixer>) => {
+          const out = orig.alignmentFixer(...args);
+          const parts = out.parts as typeof out.parts & XmlParts;
+          const documentXml = mutiraj(parts.documentXml);
+          return documentXml === parts.documentXml
+            ? out
+            : { ...out, applied: true, beforeLabel: out.beforeLabel || 'mutant', afterLabel: out.afterLabel || 'mutant', parts: { ...parts, documentXml } };
+        },
+      };
+    });
+    try {
+      const { applyFixers: mutiraniApply } = await import('../src/repair/apply-fixers');
+      return repairWith(mutiraniApply);
+    } finally {
+      vi.doUnmock('../src/repair/fixers');
+      vi.resetModules();
+    }
+  }
 
-  it('BASELINE: stvarni recept forme prolazi svojstvo idempotencije', async () => {
-    const out = await idempotenceProperty(realRepair);
-    expect(out.error).toBeNull();
-  }, 60_000);
+  // Stvaran kvar koji imitira: fixer koji ne provjerava je li cilj vec postignut, pa svakim
+  // prolazom doda razmak na kraj prvog w:t.
+  const dodajRazmak = (xml: string) => xml.replace('</w:t>', ' </w:t>');
+  // Stvaran kvar koji imitira: idempotentna zamjena znaka u autorskom tekstu (svako 'č' u 'c'; slovo a bi pokvarilo entitet &amp; pa bi ga odbila vrata integriteta).
+  // Idempotencija je prolazi, pa je hvata samo svojstvo vidljivog teksta.
+  const cUc = (xml: string) => xml.replace(/(<w:t\b[^>]*>)([^<]*)/g, (_m, o: string, t: string) => o + t.replace(/č/g, 'c'));
 
-  it('mutant: fixer koji svakim prolazom doda razmak obara svojstvo uz smanjen protuprimjer', async () => {
-    const out = await idempotenceProperty(dodajRazmak);
+  it('BASELINE: stvarni recept forme prolazi oba svojstva', async () => {
+    expect((await idempotenceProperty(realRepair)).error).toBeNull();
+    expect((await visibleTextProperty(realRepair)).error).toBeNull();
+  }, 120_000);
+
+  it('BASELINE: identitetski mutant kroz isti mock prolazi oba svojstva (mock sam po sebi ne obara)', async () => {
+    const repair = await repairSMutantom((xml) => xml);
+    expect((await idempotenceProperty(repair)).error).toBeNull();
+    expect((await visibleTextProperty(repair)).error).toBeNull();
+  }, 120_000);
+
+  it('mutant: fixer koji svakim prolazom doda razmak obara idempotenciju uz smanjen protuprimjer', async () => {
+    const out = await idempotenceProperty(await repairSMutantom(dodajRazmak));
     expect(out.failed).toBe(true);
     expect(out.error).toContain('word/document.xml: drugi prolaz nije no-op');
     expect(out.numShrinks).toBeGreaterThan(0);
+    // Smanjen na jedan nositelj teksta: shrinker ostavlja jedan run, a moze ostaviti i prazan odlomak.
     const ce = out.counterexample!;
-    // Smanjen na jedan nositelj teksta: shrinker uklanja sve runove osim jednog, a moze ostaviti
-    // prazan odlomak bez runova (seed 20261004 daje fldSimple PAGE i prazan odlomak iza njega).
     expect(ce.paragraphs.flatMap((p) => p.runs)).toHaveLength(1);
     expect(ce.paragraphs.length).toBeLessThanOrEqual(2);
-  }, 60_000);
+  }, 120_000);
+
+  it('mutant: idempotentna zamjena č u c prolazi idempotenciju, a obara svojstvo vidljivog teksta', async () => {
+    const repair = await repairSMutantom(cUc);
+    expect((await idempotenceProperty(repair)).error).toBeNull();
+    const out = await visibleTextProperty(repair);
+    expect(out.failed).toBe(true);
+    expect(out.error).toContain('vidljivi tekst promijenjen');
+    expect(out.numShrinks).toBeGreaterThan(0);
+  }, 120_000);
 });
