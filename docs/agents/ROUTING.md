@@ -282,13 +282,24 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
 
 | Stroj | Najvise sesija | Najvise teskih poslova odjednom |
 | --- | --- | --- |
-| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2) | 1 |
+| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2), plus trajna sesija kvalitete lekta-q | 1 |
 | radna stanica (16 GB, Word runner) | 7 | 2; Word runner ima prednost |
 | cloud | 4 aktivne sesije sa zadatkom (sesije u mirovanju se ne broje) | po sesiji, u njezinom kontejneru |
 
 Granica vrijedi pri dodjeli zadataka: koordinator ne otvara novu sesiju preko nje. Postojece
 sesije se ne gase. Upozorenje "vise od 3 interaktivne sesije" iz "Pravila za stroj" je
 deterministicki signal iste granice na laptopu.
+
+Trajna sesija kvalitete lekta-q (odluka vlasnika 4. 10. 2026) je izuzetak od laptopske granice:
+stalno je otvorena, a ne broji se u 3 sesije koje koordinator dodjeljuje. Njezin rad su ponavljani
+kvarovi, gardovi i automatizacija. Sama gradi gardove u `scripts/`, `tests/`, `.claude/` i
+`docs/agents/`, a za `src/` i `supabase/` upisuje zadatak koji dodjeljuje koordinator. Uvjeti
+izuzetka:
+- vecinu vremena miruje (oko 300 MB RAM-a);
+- tezak posao pokrece samo kroz `with-gate-lock`;
+- ne drzi bravu za dva puna gatea zaredom, nego je izmedju njih pusta barem 20 minuta;
+- do PR-a vrti samo ciljane testove.
+Upozorenje preflighta o broju sesija s njom pokazuje 4 i to je ocekivano.
 
 Radna stanica: granica je 28. 9. 2026. dignuta s 5 na 7, jer je izmjereno da 16 GB podnosi pet
 CLI sesija uz Claude Desktop. Broj teskih poslova odjednom ostaje 2, a Word runner i dalje ima
