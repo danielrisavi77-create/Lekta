@@ -128,3 +128,36 @@ nalaz; `npm audit --omit=dev --audit-level=high` ostaje **0**.
 
 Node-forge iznimka zadrzava svoj rok 2026-10-09; ova odluka ga ne produljuje.
 
+
+## Popravak A 2026-10-04: netlify-cli izlazi iz ovisnosti
+
+Odluka vlasnika (2026-10-03): `netlify-cli` vise nije `devDependency`. Rucna objava ide kroz
+tocno pinanu verziju `npx --yes netlify-cli@27.10.2` (release skripta `NETLIFY_CLI_PIN` i
+`docs/deploy/RELEASE_PROOF_WORKFLOW.md`, gard `tests/netlify-cli-pin.test.ts`). Netlify build
+i dalje koristi vlastiti CLI.
+
+- Lockfile regeneriran (`npm install --package-lock-only`, dokaz `npm ci`): 1377 -> 274 zapisa u
+  `packages`, ukljucujuci korijenski zapis (1376 -> 273 paketa bez korijena).
+- Puni graf: 15 -> **0** high/critical; `npm audit --omit=dev --audit-level=high` ostaje 0.
+- Obje iznimke iznad (node-forge i braces) uklonjene su iz ratcheta jer vise ne pokrivaju
+  nijedan paket; strop je 0. Odjeljci iznad ostaju kao povijesni zapis.
+- Grupa A tablice gore vise nije u grafu; Dependabot ignore za `netlify-cli` uklonjen.
+- Pin se dize rucno, u zasebnom PR-u, u skripti i dokumentu zajedno (gard rusi razliku).
+
+### Prihvaceni rizik: deploy alat izvan projektnog audita
+
+Izlaskom iz `devDependencies` Netlify CLI i cijeli njegov tranzitivni graf vise nisu u
+`package-lock.json`, pa ih ne vide `npm audit`, ratchet, `lockfile-sources` ni Dependabot. Pin
+`netlify-cli@27.10.2` zamrzava samo glavni paket: njegove ovisnosti imaju raspone (npr.
+`@netlify/build: ^37.3.3`), pa svjez `npx` cache nakon nove kompatibilne objave moze povuci drugaciji
+graf od onoga koji je pregledan.
+
+| polje | vrijednost |
+| --- | --- |
+| vlasnik | Daniel Risavi |
+| sto je izvan audita | `netlify-cli` i njegov tranzitivni graf; koristi se samo na vlasnikovom racunalu za rucnu objavu |
+| sto ostaje pokriveno | produkcijski bundle i projektni dev graf (`npm audit`, ratchet na 0, lockfile-sources) |
+| nacin pregleda | prije podizanja pina i najmanje jednom mjesecno: u praznoj privremenoj mapi `npm init -y`, `npm install --package-lock-only netlify-cli@<pin>`, zatim `npm audit --audit-level=high`; nalaz se biljezi ovdje |
+| sljedeci pregled | 2026-11-04 |
+| ublazavanje | tocan pin glavnog paketa (gard `tests/netlify-cli-pin.test.ts`), objava samo kroz `--no-build` nad vec izgradjenim `dist`, bez `netlify dev` |
+| alternativa za kasnije | zaseban alatni lock (npr. `tools/netlify/package-lock.json`) ili pregledani artefakt, ako pregled pokaze nestabilan graf |

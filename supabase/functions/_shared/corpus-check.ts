@@ -30,6 +30,21 @@ export interface CorpusCheckConfig {
   chunkSize: number;
 }
 
+/**
+ * T84 SC-1: gornja granica duljine naslova prije `corpus_search_many`. Trosak trigram upita raste s
+ * duljinom (~2,8 ms po znaku), a budzet se provjerava tek izmedju serija i ne prekida RPC u tijeku.
+ * Bez granice jedan zahtjev sa 60 naslova od ~4 000 znakova drzi dijeljenu bazu desetke sekundi po
+ * seriji. Pravi akademski naslov s podnaslovom stane u 400 znakova. Granica vrijedi samo za kljuc
+ * dohvata; presuda (found/weak) uvijek se racuna nad punim naslovom (Codex R1 na #291).
+ */
+const CORPUS_TITLE_MAX = 400;
+
+/** Kljuc za `corpus_search_many`: normalizirani kljuc (corpusKey) kracen na CORPUS_TITLE_MAX code pointa. */
+function corpusQueryKey(key: string): string {
+  const points = Array.from(key);
+  return points.length <= CORPUS_TITLE_MAX ? key : points.slice(0, CORPUS_TITLE_MAX).join('');
+}
+
 export function corpusConfigFromEnv(env: { get(key: string): string | undefined }): CorpusCheckConfig {
   return {
     enabled: (env.get('CORPUS_SOURCE_CHECK') ?? 'true') !== 'false',
@@ -68,8 +83,10 @@ export async function runCorpusCheck(
     if (!items.length) return null;
 
     const batch = await verifyCorpusBatch(items, async (keys, o) => {
+      // T84 SC-1: reze se SAMO kljuc za dohvat, i to normalizirani kljuc po code pointima, nikad
+      // naslov za bodovanje (corpusMatchFrom i dalje usporeduje PUNI naslov s kandidatom).
       const { data, error } = await admin.rpc('corpus_search_many', {
-        qs: keys, min_sim: o.min, top_n: o.top,
+        qs: keys.map(corpusQueryKey), min_sim: o.min, top_n: o.top,
       });
       if (error) throw new Error(error.message);
       // RPC vraca plosnat popis s q_index; presloziti u niz kandidata po indeksu unutar serije.

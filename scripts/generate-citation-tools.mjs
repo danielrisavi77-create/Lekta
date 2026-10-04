@@ -37,8 +37,8 @@ const SPECS_VERIFIED_DIR = path.join(ROOT, 'data/tools/citation-specs/verified')
 const OUT_DIR = path.join(ROOT, 'dist/alati');
 const CITATI_OUT_DIR = path.join(OUT_DIR, 'citati');
 
-// SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lektahr.netlify.app).
-const GENERAL_TOOL_URL = `${SITE_ORIGIN}/citat.html`;
+// SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lekta.hr od T49).
+const GENERAL_TOOL_URL = '/citat.html';
 
 function loadJson(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -513,7 +513,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <link rel="stylesheet" href="/alati/citation-style.css">
 </head>
 <body>
-<header class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></header>
+<header class="lekta-brand"><a href="/">Lekta</a><span>Besplatan alat, bez registracije</span></header>
 <main>
 ${bodyHtml}
 </main>
@@ -562,9 +562,9 @@ function ctaHtml(backHref, backLabel, unitId = '') {
   return `<div class="lekta-cta">
   <strong>Provjeri cijeli rad na Lekti</strong>
   <p>Citat je samo jedan dio. Lekta provjerava oblikovanje, strukturu i citiranje odjednom, prema stvarnim pravilima tvog fakulteta.</p>
-  <a href="${SITE_ORIGIN}/?utm_source=alat_citati${unitParam}">Provjeri cijeli rad</a>
+  <a href="/?utm_source=alat_citati${unitParam}">Provjeri cijeli rad</a>
   <a class="lekta-back" href="${backHref}">${escapeHtml(backLabel)}</a>
-  <a class="lekta-back" href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a>
+  <a class="lekta-back" href="/alati.html">Svi besplatni alati</a>
 </div>`;
 }
 
@@ -826,7 +826,7 @@ function buildIndexPage(faculties, catalog) {
   const body = `<h1>Generator citata po fakultetu</h1>
 <p class="lekta-tool-meta">Odaberi fakultet pa se učita njegov citatni stil, prema profilima Lekte (razina potvrde ovisi o dostupnom izvoru).</p>
 ${toolFormHtml({ withFacultyPicker: true })}
-${ctaHtml(`${SITE_ORIGIN}/alati/brojac-kartica.html`, 'Brojač kartica')}
+${ctaHtml(`/alati/brojac-kartica.html`, 'Brojač kartica')}
 ${facultyLinksHtml(catalog, faculties)}`;
   return pageShell({
     title: 'Generator citata po fakultetu | Lekta',
@@ -1019,7 +1019,7 @@ function buildCharCounterHtml() {
 </style>
 </head>
 <body>
-<header class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></header>
+<header class="lekta-brand"><a href="/">Lekta</a><span>Besplatan alat, bez registracije</span></header>
 <main>
 <h1>Brojač kartica</h1>
 <p class="lekta-tool-meta">1 kartica = 1800 znakova (uključujući razmake), standardna jedinica za akademske i lektorske radove.</p>
@@ -1029,7 +1029,7 @@ function buildCharCounterHtml() {
   <span>Kartica: <strong id="page-count">0,00</strong></span>
   <span>Riječi: <strong id="word-count">0</strong></span>
 </div>
-${ctaHtml(`${SITE_ORIGIN}/alati/citati/index.html`, 'Generator citata po fakultetu')}
+${ctaHtml(`/alati/citati/index.html`, 'Generator citata po fakultetu')}
 </main>
 <script src="/alati/brojac-kartica.js"></script>
 </body>

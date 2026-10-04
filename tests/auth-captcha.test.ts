@@ -155,6 +155,24 @@ function sources(dir: string): SourceFile[] {
 describe('T89: gard ozicenja captche nad stvarnim src/ i supabase/functions', () => {
   const real = () => [...sources(resolve(process.cwd(), 'src')), ...sources(resolve(process.cwd(), 'supabase', 'functions'))];
 
+  it('gard prepoznaje OTP kada je URL omotan redirect query helperom', () => {
+    const source: SourceFile = {
+      path: 'src/auth/session.ts',
+      text: [
+        'await fetchImpl(withRedirectQuery(`https://proj.supabase.co/auth/v1/otp`, redirectTo), {',
+        '    body: withCaptcha({ email }, captchaToken),',
+        '    });',
+        'await fetchImpl(`https://proj.supabase.co/auth/v1/signup`, {',
+        '    body: withCaptcha({}, captchaToken),',
+        '    });',
+        'await fetchImpl(`https://proj.supabase.co/auth/v1/token?grant_type=password`, {',
+        '    body: withCaptcha({ email, password }, captchaToken),',
+        '    });',
+      ].join('\n'),
+    };
+    expect(captchaWiringProblems([source])).toEqual([]);
+  });
+
   it('svaki zasticeni Auth poziv ide kroz withCaptcha s tokenom', () => {
     expect(captchaWiringProblems(real())).toEqual([]);
   });
