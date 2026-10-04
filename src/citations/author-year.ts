@@ -63,6 +63,29 @@ function referenceAuthor(before: any){
  return a.replace(/[.(\[]+$/,'').trim()
 }
 const NO_DATE_MARK=/\((?:b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)/i;
+const REF_YEAR=/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i;
+const URL_START=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i;
+/**
+ * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi samo u
+ * polozaju datuma, tj. ispred prve godine u zapisu; "Horvat, A. (2011). Mediji (u tisku)." zadrzava 2011.
+ */
+function referenceMeta(t: string){
+ const nd=t.match(NO_DATE_MARK),y=t.match(REF_YEAR);
+ const noDate=nd&&(!y||(nd.index as number)<(y.index as number))?nd:null;
+ const ym=noDate||y,urlOnly=URL_START.test(t);
+ const author=ym?referenceAuthor(t.slice(0,ym.index)):'';
+ const year=ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'';
+ return{ym,noDate:noDate?noDate[0]:'',author,year,urlOnly,
+  numbered:/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t),
+  // T91: zapis bez autora koji pocinje s "(2012)." je NOV zapis, ne nastavak prethodnoga (D1: 4 od 72 prijavljeno).
+  leadYear:/^\s*\((?:18|19|20)\d{2}[a-z]?\)\./.test(t)};
+}
+/** Zapis kakav bi nastao od ovog teksta kao JEDNOG odlomka bez prethodnika (ista grananja kao petlja nize). */
+function referenceFields(t: string){
+ const m=referenceMeta(t);
+ if((m.ym&&m.author&&!m.urlOnly)||m.numbered||(m.leadYear&&!m.urlOnly))return{author:m.author,year:m.year,...(m.noDate?{noDate:m.noDate}:{})};
+ return{author:'',year:''};
+}
 /**
  * Predikat `reference.completeness` za autor-godina profil. Zapis s izricitom oznakom bez godine
  * ("b.g.", "s. a.", "u tisku") nije nepotpun zbog godine; bez autora ili prekratak i dalje jest.
@@ -83,13 +106,8 @@ function extractReferences(paragraphs: any,lang: any){
   // "(b.d.)" i "(s.a.)" su jednako cesti kao "(b.g.)"; bez njih zapis bez godine nije prepoznat kao NOV.
   // T91: i razmaknuti oblici ("s. a.", "n. d.", "b. g.") te "u tisku"/"in press"; bez njih je potpun zapis bez
   // godine izgledao nepotpun (D1: 128 od 144 laznih nalaza). Godina ostaje prazna, oznaka ide u `noDate`.
-  const noDate=t.match(NO_DATE_MARK),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);
-  // T91: zapis bez autora koji pocinje s "(2012)." je NOV zapis, ne nastavak prethodnoga (D1: 4 od 72 prijavljeno).
-  const leadYear=/^\s*\((?:18|19|20)\d{2}[a-z]?\)\./.test(t);
   // Numeracija u uglatim zagradama ("[3] Steel Alliance...") je standardni IEEE zapis; bez nje se svaki takav zapis lijepio na prethodni.
-  const numbered=/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t);
-  const urlOnly=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i.test(t);
-  const before=ym?t.slice(0,ym.index):t.slice(0,100);const author=ym?referenceAuthor(before):'';const startsNew=!!ym&&!!author&&!urlOnly;
+  const{ym,author,urlOnly,numbered,leadYear}=referenceMeta(t);const startsNew=!!ym&&!!author&&!urlOnly;
   /**
    * NASTAVAK ILI NOV ODLOMAK. Do 2026-09-05 se SVAKI odlomak koji nije izgledao kao nov zapis lijepio na
    * prethodni, ukljucujuci rucno oblikovane podnaslove popisa ("Propisi i norme", "ZNANSTVENI I STRUCNI
@@ -108,10 +126,16 @@ function extractReferences(paragraphs: any,lang: any){
   const podnaslov=zavrsen&&!ym&&/^\p{Lu}/u.test(t)&&!/\d/.test(t)&&t.length<=60&&!urlOnly;
   if(podnaslov){current=null;continue}
   const nastavak=!!current&&!(zavrsen&&/^\p{Lu}/u.test(t)&&!urlOnly);
-  if(startsNew||numbered||(leadYear&&!urlOnly)){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1,ps:[i+1]};if(noDate)current.noDate=noDate[0];entries.push(current)}
+  // T91 (pregled R2): "(2011)." iza odlomka koji izgleda kao autorov dio (bez godine, bez zavrsne tocke) je
+  // drugi red istog zapisa ("Hrvatski zavod za zaposljavanje" / "(2011). Godisnje izvjesce.").
+  const autorskiDio=!!current&&!zavrsen&&!/\b(?:18|19|20)\d{2}/.test(current.text)&&!NO_DATE_MARK.test(current.text);
+  if(startsNew||numbered||(leadYear&&!urlOnly&&!autorskiDio)){current={text:t,...referenceFields(t),p:i+1,ps:[i+1]};entries.push(current)}
   else if(nastavak){current.text+=' '+t;current.ps.push(i+1)}
   else if(t.length>20){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};entries.push(current)}
  }
+ // T91 (pregled R4): metapodaci viserednog zapisa izvode se tek nakon zavrsenog spajanja, iz cijelog teksta,
+ // istim pravilom kao za jedan odlomak; inace drugi prolaz nad spojenim tekstom daje drugog autora ili godinu.
+ for(const e of entries){if(e.ps.length<2)continue;const f: { author: string; year: string; noDate?: string }=referenceFields(e.text);e.author=f.author;e.year=f.year;if(f.noDate)e.noDate=f.noDate;else delete e.noDate}
  return{start,entries}
 }
 

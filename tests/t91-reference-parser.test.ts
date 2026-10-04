@@ -15,7 +15,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import { extractReferences, isIncompleteReference } from '../src/citations/author-year';
-import { referenceParserProblems } from './helpers/reference-parser-guard';
+import { loadReferenceParser, referenceParserProblems } from './helpers/reference-parser-guard';
+import { analyzeBibliographyStructure } from '../src/analysis/bibliography-structure';
 
 type Ref = { text: string; author: string; year: string; noDate?: string };
 const nepotpun = (r: Ref) => isIncompleteReference(r);
@@ -89,8 +90,35 @@ describe('T91 golden: parser literature nakon popravka', () => {
     expect({ zapisa: r.length, nepotpunih: r.filter(nepotpun).length }).toEqual({ zapisa: 8, nepotpunih: 0 });
   });
 
-  it('gard (tests/helpers/reference-parser-guard.ts) je cist nad stvarnim parserom', () => {
-    expect(referenceParserProblems(extractReferences, isIncompleteReference)).toEqual([]);
+  it('gard (tests/helpers/reference-parser-guard.ts) je cist nad stvarnim parserom, uvezenim i izvrsenim iz izvora', () => {
+    expect(referenceParserProblems({ extractReferences, isIncompleteReference } as Parameters<typeof referenceParserProblems>[0])).toEqual([]);
+    expect(referenceParserProblems(loadReferenceParser())).toEqual([]);
+  });
+
+  it('pregled R1: oznaka bez godine u naslovu iza godine ne brise godinu', () => {
+    const [r] = refs(['Horvat, A. (2011). Mediji (u tisku). Zagreb: Primjer naklada.']);
+    expect({ author: r.author, year: r.year, noDate: r.noDate }).toEqual({ author: 'Horvat', year: '2011', noDate: undefined });
+  });
+
+  it('pregled R2: "(godina)." iza autorova dijela bez godine i tocke ostaje isti zapis', () => {
+    const r = refs(['Hrvatski zavod za zaposljavanje', '(2011). Godisnje izvjesce. Zagreb: Ogledni izdavac.']);
+    expect(r.map((x) => ({ author: x.author, year: x.year, nepotpun: nepotpun(x) }))).toEqual([{ author: 'Hrvatski zavod za zaposljavanje', year: '2011', nepotpun: false }]);
+  });
+
+  it('pregled R3: ponovljeni autor "(2011b)." ostaje zaseban zapis i nalaz', () => {
+    const r = refs(['Horvat, A. (2011a). Lokalna samouprava u praksi. Zagreb: Primjer naklada.', '(2011b). Lokalna samouprava danas. Zagreb: Primjer naklada.']);
+    expect(r.map((x) => ({ author: x.author, year: x.year, nepotpun: nepotpun(x) }))).toEqual([
+      { author: 'Horvat', year: '2011a', nepotpun: false },
+      { author: '', year: '2011b', nepotpun: true },
+    ]);
+  });
+
+  it('pregled R6: struktura literature ne daje missing-year za oznaku bez godine', () => {
+    const paragraphs = [{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada.' }, { text: 'Literatura', headingLevel: 1 }, ...BEZ_GODINE.map((text) => ({ text }))]
+      .map((p, index) => ({ ...p, index }));
+    const s = analyzeBibliographyStructure(paragraphs, 'hr');
+    expect(s.entries.length).toBe(BEZ_GODINE.length);
+    expect(s.entries.filter((e) => e.flags.includes('missing-year')).map((e) => e.rawText)).toEqual([]);
   });
 
   it('pomak prema zatecenom: tocno 8 zapisa bez autora odvojeno, 7 laznih nalaza (b) nestaje', () => {

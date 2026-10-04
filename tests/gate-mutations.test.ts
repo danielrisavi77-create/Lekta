@@ -46,8 +46,7 @@ import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
-import { extractReferences, isIncompleteReference } from '../src/citations/author-year';
-import { referenceParserProblems } from './helpers/reference-parser-guard';
+import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -1054,26 +1053,22 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 
 const MUTATIONS: Mutation[] = [
   // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
-  {
-    id: 'citations/godina-bez-autora-lijepi-se',
-    imitates: 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)',
+  // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
+  ...([
+    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!autorskiDio)', '', '(a)'],
+    ['citations/oznaka-bez-godine-nepotpuna', 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)', '(!r.year&&!r.noDate)', '!r.year', '(b)'],
+    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1: oznaka "(u tisku)" u naslovu iza stvarne godine pobijedi godinu, pa "Horvat, A. (2011). Mediji (u tisku)." izgubi 2011', '(!y||(nd.index as number)<(y.index as number))', 'true', '(r1)'],
+    ['citations/godina-razdvaja-viseredni', 'pregled R2: bezuvjetni leadYear razdvoji viseredni zapis "Hrvatski zavod za zaposljavanje" / "(2011). Godisnje izvjesce."', '&&!autorskiDio)', ')', '(r2)'],
+    ['citations/metapodaci-prije-spajanja', 'pregled R4: metapodaci viserednog zapisa iz prvog odlomka umjesto iz spojenog teksta, pa drugi prolaz daje drugog autora', 'for(const e of entries){if(e.ps.length<2)continue;', 'for(const e of entries){if(e.ps.length>=0)continue;', '(r4)'],
+  ] as const).map(([id, imitates, staro, novo, oznaka]): Mutation => ({
+    id,
+    imitates,
     caught: () => {
-      const lijepi = (paragraphs: { text: string; headingLevel?: number }[], lang: string) => {
-        const { entries } = extractReferences(paragraphs, lang) as { entries: { text: string; author: string }[] };
-        const out: typeof entries = [];
-        for (const e of entries) { if (!e.author && /^\(\d{4}\)\./.test(e.text) && out.length) out[out.length - 1] = { ...out[out.length - 1], text: `${out[out.length - 1].text} ${e.text}` }; else out.push(e); }
-        return { entries: out };
-      };
-      return referenceParserProblems(lijepi, isIncompleteReference).some((p) => p.startsWith('(a)'));
+      if (!referenceParserSource().includes(staro)) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return referenceParserProblems(loadReferenceParser((x) => x.split(staro).join(novo))).some((p) => p.startsWith(oznaka));
     },
-    cleanBefore: () => referenceParserProblems(extractReferences, isIncompleteReference).length === 0,
-  },
-  {
-    id: 'citations/oznaka-bez-godine-nepotpuna',
-    imitates: 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)',
-    caught: () => referenceParserProblems(extractReferences, (r) => !r.year || !r.author || r.text.length < 25).some((p) => p.startsWith('(b)')),
-    cleanBefore: () => referenceParserProblems(extractReferences, isIncompleteReference).length === 0,
-  },
+    cleanBefore: () => referenceParserProblems(loadReferenceParser()).length === 0,
+  })),
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
   {
     id: 'agents/model-probe-prima-api-kljuc',
