@@ -5,14 +5,19 @@ import { potvrdiProfil } from './confirm-profile';
 import { cekajApp } from './app-ready';
 
 /**
- * ANALIZA UZIVO (ALIGNMENT Z33) na `/rad/` s pravim .docx-om: tok, snimke u 0 s, 6 s, 12 s i na
- * kraju u obje teme, 360 px bez preklapanja, prigusen pokret i dostupnost rezultata.
+ * ANALIZA UZIVO (ALIGNMENT Z33) na `/rad/` s pravim .docx-om: tok, snimke u 0 s, 2 s, 6 s, 12 s i
+ * na kraju u obje teme, 360 px bez preklapanja, prigusen pokret i dostupnost rezultata. Od odluke
+ * vlasnika 2026-10-04 (F31): otkrivanje traje najvise oko 4 s, "Preskoči" ga zavrsava odmah, a
+ * "Napravi plan popravka" vodi u plan popravka; snimka u 6 s smije biti vec zavrsno stanje.
  *
  * Model (istinitost, redoslijed, zavrsno stanje) mjeri `tests/analysis-live.test.ts`; ovdje se
  * mjeri ono sto model ne moze: da ga preglednik stvarno crta, da rezultat stigne i da se nista
  * ne preklapa. Snimke idu u `LEKTA_Z33_SNIMKE` ako je zadan, inace u izlaz testa.
  */
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
+// Fixture S AUTOMATSKIM zahvatima (kokpit nudi `repair-safe`, vidi repair-entry-visible.spec.ts); FIXTURE
+// ih nema, pa je on kontrola: ondje "Napravi plan popravka" ne smije postojati.
+const FIXTURE_POPRAVAK = path.resolve('tests/fixtures/docx/lo-fpzg-zavrsni-neuskladjen.docx');
 
 async function odbijAnalitiku(page: Page): Promise<void> {
   await page.locator('#analyticsDecline').click({ timeout: 3_000 }).catch(() => {});
@@ -54,18 +59,19 @@ async function pripremi(page: Page, tema: 'light' | 'dark'): Promise<void> {
     w.Notification = LaznaObavijest;
   }, tema);
   // Isti postupak kao `workspace-entry.spec.ts`: sporiji dohvat skripte workera drzi fazu citanja
-  // vidljivom dovoljno dugo da se izmjeri. Sama analiza ostaje lokalna i nepromijenjena.
+  // vidljivom dovoljno dugo da se izmjeri. Sama analiza ostaje lokalna i nepromijenjena. 4 s, jer
+  // ponuda obavijesti postoji SAMO dok provjera traje, a mobilna snimka u 0 s zna potrositi 1,5 s.
   await page.route('**/analyze-docx.worker*', async (route) => {
-    await new Promise((r) => { setTimeout(r, 1_500); });
+    await new Promise((r) => { setTimeout(r, 4_000); });
     await route.continue();
   });
 }
 
-async function pokreni(page: Page, url = '/rad/'): Promise<void> {
-  await page.goto(url);
+async function pokreni(page: Page, datoteka = FIXTURE): Promise<void> {
+  await page.goto('/rad/');
   await cekajApp(page);
   await odbijAnalitiku(page);
-  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await page.locator('#fileInput').setInputFiles(datoteka);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await potvrdiProfil(page);
 }
@@ -108,18 +114,24 @@ for (const tema of ['dark', 'light'] as const) {
     expect((await biljeg(page)).trazeno).toBe(1);
 
     // Snimke po proteklom vremenu od pojave ekrana. "Kraj" (presuda otipkana, prije nego ekran
-    // rezultata preuzme) traje oko 2 s, pa ga hvata ZASEBNO cekanje koje tece usporedo sa snimkama
-    // u 6 i 12 s; inace bi spora snimka na hladnom posluzitelju znala pojesti cijeli prozor.
+    // rezultata preuzme) traje oko 1 s, pa ga hvata ZASEBNO cekanje koje tece usporedo sa snimkama
+    // u 2, 6 i 12 s; inace bi spora snimka na hladnom posluzitelju znala pojesti cijeli prozor.
     // Snimke tijekom otkrivanja su velicine prozora (brze); cijela stranica je samo rezultat.
     const kraj = z33(page).locator('.z33-verdict[data-meta="true"]');
     let nalazi: string[] = [];
     let presuda = '';
+    let obavijestNaKraju: boolean | null = null;
+    let planNaKraju: boolean | null = null;
+    let stranice = '';
     const krajSnimljen = kraj.waitFor({ state: 'visible', timeout: 60_000 }).then(async () => {
       presuda = await z33(page).locator('[data-z33="verdicttext"]').innerText();
       nalazi = await z33(page).locator('.z33-slot[data-state="filled"] .z33-slot-title').allInnerTexts();
+      obavijestNaKraju = await z33(page).locator('[data-z33="notify"]').isVisible();
+      planNaKraju = await z33(page).locator('[data-z33="plan"]').isVisible();
+      stranice = (await z33(page).locator('[data-z33="s-pages"]').textContent()) ?? '';
       await page.screenshot({ path: snimka(info, `${tema}-kraj`) });
     });
-    for (const sekunda of [6, 12]) {
+    for (const sekunda of [2, 6, 12]) {
       await docekaj(page, t0 + sekunda * 1000);
       await page.screenshot({ path: snimka(info, `${tema}-${String(sekunda).padStart(2, '0')}s`) });
     }
@@ -127,10 +139,18 @@ for (const tema of ['dark', 'light'] as const) {
 
     await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
     await page.screenshot({ path: snimka(info, `${tema}-rezultat`), fullPage: true });
-    // Rezultat kasni najvise za trajanje otkrivanja (u modelu najvise 9 s), izmjereno u stranici.
+    // Rezultat kasni najvise za trajanje otkrivanja (u modelu najvise 4 s), izmjereno u stranici.
     const b = await biljeg(page);
     expect(b.otkrivanje, 'otkrivanje se nije ni pokrenulo').toBeGreaterThan(0);
-    expect(b.rezultat - b.otkrivanje, 'rezultat je cekao dulje od otkrivanja').toBeLessThan(10_000);
+    expect(b.rezultat - b.otkrivanje, 'rezultat je cekao dulje od otkrivanja').toBeLessThan(5_000);
+    // Gotova provjera ne obecaje buducu obavijest; brojac stranica nikad nije prazna oznaka.
+    expect(obavijestNaKraju, 'uz gotovu provjeru stoji "Javit ću ti kad bude gotovo"').toBe(false);
+    expect(stranice.trim(), 'brojac stranica bez broja').not.toBe('');
+    // KONTROLA: ovaj fixture nema automatskih zahvata, pa kokpit nema `repair-safe`, a list presude
+    // nema "Napravi plan popravka". Isti uvjet, isti ishod.
+    await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 30_000 });
+    expect(await page.locator('#resultCockpit [data-cockpit-action="repair-safe"]').count()).toBe(0);
+    expect(planNaKraju, 'gumb plana bez dostupnog popravka').toBe(false);
 
     // Isto sto je otkrivanje pokazalo stoji i na ekranu rezultata.
     await expect(page.locator('#resultCockpit [data-cockpit-verdict-title]')).toHaveText(presuda);
@@ -167,13 +187,83 @@ test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ pa
       const r = el.getBoundingClientRect();
       return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1) && !el.closest('.z33-sheet, .z33-under, .z33-flip');
     }).map((el) => el.className);
-    return { preklapanja, izvan, sirina: document.documentElement.scrollWidth, prozor: innerWidth, blokova: blokovi.length };
+    // Gumbi lista presude, u istom trenutku kao i blokovi (otkrivanje traje kratko).
+    const gumb = (s: string) => {
+      const el = document.querySelector<HTMLElement>(s);
+      if (!el || el.hidden) return null;
+      const r = el.getBoundingClientRect();
+      return { l: r.left, t: r.top, r: r.right, b: r.bottom };
+    };
+    const gumbi = { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]') };
+    return { preklapanja, izvan, gumbi, sirina: document.documentElement.scrollWidth, prozor: innerWidth, blokova: blokovi.length };
   });
   expect(mjere.blokova).toBe(9);
   expect(mjere.preklapanja).toEqual([]);
   expect(mjere.izvan).toEqual([]);
   expect(mjere.sirina).toBeLessThanOrEqual(mjere.prozor);
+  // Gumbi lista presude stanu u 360 px i ne prelaze jedan drugog.
+  const { plan, otvori } = mjere.gumbi;
+  expect(otvori).not.toBeNull();
+  for (const k of [plan, otvori]) if (k) expect(k.r).toBeLessThanOrEqual(mjere.prozor + 1);
+  if (plan && otvori) expect(plan.b <= otvori.t + 1 || plan.r <= otvori.l + 1).toBe(true);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
+});
+
+test('Z33 na 360 px: "Preskoči" stane u prozor i radi', async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 360, height: 780 });
+  await pripremi(page, 'light');
+  await pokreni(page);
+  const skip = z33(page).locator('[data-z33="skip"]');
+  await expect(skip).toBeVisible({ timeout: 60_000 });
+  const k = await skip.boundingBox();
+  expect(k).not.toBeNull();
+  if (k) {
+    expect(k.x).toBeGreaterThanOrEqual(0);
+    expect(k.x + k.width).toBeLessThanOrEqual(361);
+    expect(k.height, 'cilj dodira najmanje 44 px').toBeGreaterThanOrEqual(44);
+  }
+  await skip.click();
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 10_000 });
+});
+
+test('Z33 "Preskoči" s tipkovnice: odmah zavrsno stanje i rezultat, fokus na presudi', async ({ page }) => {
+  test.setTimeout(120_000);
+  await pripremi(page, 'dark');
+  await pokreni(page);
+  const skip = z33(page).locator('[data-z33="skip"]');
+  await expect(skip).toBeVisible({ timeout: 60_000 });
+  await expect(skip).toHaveText('Preskoči');
+  // Tipkovnica, ne mis: fokus na gumb pa Enter.
+  await skip.focus();
+  await page.keyboard.press('Enter');
+  const b0 = Date.now();
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 10_000 });
+  expect(Date.now() - b0, 'Preskoči mora odmah otvoriti rezultat').toBeLessThan(3_000);
+  await expect(page.locator('#progressView .z33')).toHaveAttribute('data-phase', 'final');
+  await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 30_000 });
+  await expect.poll(() => page.evaluate(() => document.activeElement?.id ?? ''), { message: 'fokus mora stati na presudu rezultata' })
+    .toBe('cockpitVerdictTitle');
+});
+
+test('Z33 "Napravi plan popravka" otvara rezultat i vodi u plan popravka', async ({ page }) => {
+  test.setTimeout(150_000);
+  await pripremi(page, 'light');
+  await pokreni(page, FIXTURE_POPRAVAK);
+  const plan = z33(page).locator('[data-z33="plan"]');
+  // Gumb je dohvatljiv tek kad je presuda otipkana (prije toga `visibility: hidden`).
+  await expect(plan).toBeVisible({ timeout: 60_000 });
+  await expect(plan).toHaveText('Napravi plan popravka');
+  await plan.click();
+  // Rezultat preuzima ekran, a kad je gotov (i panel popravka montiran), otvara se faza popravka.
+  await expect(page.locator('#repairView'), 'plan popravka se mora otvoriti').toBeVisible({ timeout: 30_000 });
+  await expect(page.locator('#repairPanelMount')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => {
+    const m = document.getElementById('repairPanelMount');
+    return !!m && !!document.activeElement && m.contains(document.activeElement);
+  }), { message: 'fokus mora biti u panelu popravka' }).toBe(true);
+  // Isti uvjet kao na ekranu rezultata: kokpit nudi isti natpis na istom ulazu.
+  await expect(page.locator('#resultCockpit [data-cockpit-primary][data-cockpit-action="repair-safe"]')).toHaveCount(1);
 });
 
 test('Z33 pod prefers-reduced-motion: zavrsno stanje odmah, rezultat ne ceka', async ({ page }) => {
