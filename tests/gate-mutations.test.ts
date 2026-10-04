@@ -4925,6 +4925,25 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
   })),
+  ...([
+    ['popravak-a/dinamicni-paket-u-varijabli', 'objava ide kroz varijablu s netlify-cli@latest, pa u pozivu nema doslovnog pina (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: |\n          CLI=netlify-cli@latest\n          npx --yes "$CLI" deploy --prod\n',
+      '.github/workflows/mutacija.yml: dinamican paket u pozivu "npx --yes "$CLI"'],
+    ['popravak-a/yaml-presavijeni-blok', 'YAML presavijeni blok razlomi npx i nepinani paket u dva retka (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: >\n          npx --yes\n          netlify-cli deploy --prod\n',
+      '.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/akcija-js-nepinano', 'JS kod lokalne akcije objavljuje nepinanim CLI-jem (Codex F2b na #283)',
+      '.github/actions/publish/index.js', "execSync('npx --yes netlify-cli deploy --prod');\n",
+      '.github/actions/publish/index.js: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+  ] as const).map(([id, imitates, path, text, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      return netlifyPinProblems({ ...src, files: [...(src.files ?? []), { path, text }] }).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
   {
     id: 'popravak-a/workflow-drugi-pin',
     imitates: 'Popravak A: workflow objavljuje kroz npx s drugim pinom, a gard gleda samo release skriptu i dokument (Codex F2 na #283).',

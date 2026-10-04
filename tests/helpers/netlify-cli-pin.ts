@@ -22,16 +22,50 @@ export interface NetlifyPinSources {
 }
 
 const PIN = /export const NETLIFY_CLI_PIN = '(netlify-cli@[^']*)';/;
-const RUNNER_CALL = /\b(?:npx|npm\s+exec|pnpm\s+dlx|yarn\s+dlx|bunx)\b[^\n]*?\bnetlify-cli(@[^\s'"`)]*)?/g;
+const RUNNER = String.raw`\b(?:npx|npm\s+exec|pnpm\s+dlx|yarn\s+dlx|bunx)\b`;
+const RUNNER_CALL = new RegExp(String.raw`${RUNNER}[^\n]*?\bnetlify-cli(@[^\s'"\`)]*)?`, 'g');
+/** Runner kojem je paket dinamican (varijabla, env, GitHub izraz): pin se ne moze provjeriti (Codex F2a na #283). */
+const DYNAMIC_CALL = new RegExp(String.raw`${RUNNER}(?:\s+(?:--?[\w-]+(?:=\S+)?|--))*\s+["']?(?:\$|%[A-Za-z_]|\$\{\{)[^\s'"]*`, 'g');
+/** Svaki doslovni `netlify-cli@<verzija>` (i u varijabli ili env-u) mora biti tocno pin. */
+const ANY_SPEC = /\bnetlify-cli@([^\s'"`)\]},;]*)/g;
 const BARE_CALL = /(?:^|[\s;&|`'"(])netlify\s+(?:deploy|build|status|dev|link|unlink|init|login|logout|open|watch|serve|api|env|sites|functions|blobs|switch|recipes)\b/gm;
+
+/**
+ * Logicki retci za provjeru poziva (Codex F2a na #283): nastavci retka (`\`, PowerShell `` ` ``, cmd `^`)
+ * se spajaju, a YAML presavijeni blok (`key: >`) postaje jedan redak kao sto ga shell i vidi.
+ */
+export function logicalCommandText(text: string): string {
+  const lines = text.replace(/\r\n?/g, '\n').replace(/[\\`^][ \t]*\n[ \t]*/g, ' ').split('\n');
+  const out: string[] = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (!/:\s*>[-+]?\d*\s*(?:#.*)?$/.test(line)) { out.push(line); continue; }
+    const parentIndent = line.length - line.trimStart().length;
+    const parts: string[] = [];
+    let j = i + 1;
+    for (; j < lines.length; j += 1) {
+      const next = lines[j];
+      if (next.trim() !== '' && next.length - next.trimStart().length <= parentIndent) break;
+      parts.push(next.trim());
+    }
+    out.push(`${line} ${parts.filter(Boolean).join(' ')}`);
+    i = j - 1;
+  }
+  return out.join('\n');
+}
 
 /** Pozivi Netlify CLI-ja koji ne koriste tocno `pin`; svaki poziv se provjerava zasebno. */
 export function netlifyCallProblems(path: string, text: string, pin: string): string[] {
   const out: string[] = [];
-  for (const m of text.matchAll(RUNNER_CALL)) {
+  const logical = logicalCommandText(text);
+  for (const m of logical.matchAll(RUNNER_CALL)) {
     if (`netlify-cli${m[1] ?? ''}` !== pin) out.push(`${path}: nepinani Netlify CLI poziv "${m[0].trim()}"`);
   }
-  for (const m of text.matchAll(BARE_CALL)) out.push(`${path}: gola netlify naredba "${m[0].trim()}"`);
+  for (const m of logical.matchAll(DYNAMIC_CALL)) out.push(`${path}: dinamican paket u pozivu "${m[0].trim()}"`);
+  for (const m of logical.matchAll(ANY_SPEC)) {
+    if (`netlify-cli@${m[1]}` !== pin) out.push(`${path}: netlify-cli s drugim ili nedoslovnim pinom "${m[0]}"`);
+  }
+  for (const m of logical.matchAll(BARE_CALL)) out.push(`${path}: gola netlify naredba "${m[0].trim()}"`);
   return out;
 }
 
@@ -66,6 +100,11 @@ export function netlifyPinProblems(s: NetlifyPinSources): string[] {
   return out;
 }
 
+/** Izvrsni i konfiguracijski izvori pod `.github` (workflowi i kod lokalnih akcija, Codex F2b na #283). */
+export const NETLIFY_SCAN_GITHUB = /\.(?:ya?ml|[cm]?[jt]s|sh|ps1)$/;
+/** Skripte, ukljucujuci `.cts` (Codex F2b na #283). */
+export const NETLIFY_SCAN_SCRIPTS = /\.(?:[cm]?[jt]s|sh|ps1|cmd|bat)$/;
+
 /**
  * Stvarne datoteke za baseline i mutacije: package.json, lock, release skripta i dokument, te svi
  * workflowi, lokalne akcije, deploy dokumenti, skripte i netlify.toml.
@@ -80,11 +119,12 @@ export function netlifyPinRealSources(root: string = process.cwd()): NetlifyPinS
       return keep.test(e.name) ? [rel] : [];
     });
   };
+  const rootConfigs = readdirSync(root).filter((name) => /^netlify(?:\.[\w-]+)?\.toml$/.test(name));
   const paths = [
-    ...walk('.github', /\.ya?ml$/),
+    ...walk('.github', NETLIFY_SCAN_GITHUB),
     ...walk('docs/deploy', /\.md$/),
-    ...walk('scripts', /\.(?:m?[jt]s|mts|cjs|sh|ps1|cmd|bat)$/),
-    'netlify.toml',
+    ...walk('scripts', NETLIFY_SCAN_SCRIPTS),
+    ...rootConfigs,
   ].filter((p) => p !== 'scripts/run-local-repair-release.mts' && p !== 'docs/deploy/RELEASE_PROOF_WORKFLOW.md' && existsSync(join(root, p)));
   return {
     packageJson: read('package.json'),
