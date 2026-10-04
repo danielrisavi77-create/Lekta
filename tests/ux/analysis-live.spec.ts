@@ -30,8 +30,11 @@ function snimka(info: TestInfo, ime: string): string {
   return path.join(dir, `${info.project.name}-${ime}.png`);
 }
 
-/** Tema i lazna Notification (broji trazenja dopustenja i obavijesti) prije ucitavanja. */
-async function pripremi(page: Page, tema: 'light' | 'dark'): Promise<void> {
+/**
+ * Tema i lazna Notification (broji trazenja dopustenja i obavijesti) prije ucitavanja. Vraca
+ * `pusti`: skripta workera analize stoji dok je test ne pusti (vidi dolje).
+ */
+async function pripremi(page: Page, tema: 'light' | 'dark'): Promise<() => void> {
   await page.addInitScript((t) => {
     try { localStorage.setItem('lekta.theme', t); } catch { /* privatni prozor */ }
     const w = window as unknown as { __z33: Z33Biljeg; Notification: unknown };
@@ -58,13 +61,18 @@ async function pripremi(page: Page, tema: 'light' | 'dark'): Promise<void> {
     }
     w.Notification = LaznaObavijest;
   }, tema);
-  // Isti postupak kao `workspace-entry.spec.ts`: sporiji dohvat skripte workera drzi fazu citanja
-  // vidljivom dovoljno dugo da se izmjeri. Sama analiza ostaje lokalna i nepromijenjena. 4 s, jer
-  // ponuda obavijesti postoji SAMO dok provjera traje, a mobilna snimka u 0 s zna potrositi 1,5 s.
+  // Skripta workera STOJI dok je test ne pusti, pa je faza citanja vidljiva dok god test u njoj
+  // nesto tvrdi. Fiksno kasnjenje (prije 4 s od zahtjeva) je pucalo cim potvrda profila potraje:
+  // spekulativna analiza trazi worker vec pri odabiru datoteke, pa je znala zavrsiti prije
+  // potvrde i faza citanja nije ni postojala (Codex Z33-08, sonda nad 58cb5091). Sama analiza
+  // ostaje lokalna i nepromijenjena.
+  let pusti: () => void = () => {};
+  const pusten = new Promise<void>((r) => { pusti = r; });
   await page.route('**/analyze-docx.worker*', async (route) => {
-    await new Promise((r) => { setTimeout(r, 4_000); });
+    await pusten;
     await route.continue();
   });
+  return pusti;
 }
 
 async function pokreni(page: Page, datoteka = FIXTURE): Promise<void> {
@@ -80,6 +88,43 @@ const z33 = (page: Page) => page.locator('#progressView .z33');
 
 interface Z33Biljeg { trazeno: number; obavijesti: string[]; otkrivanje: number; rezultat: number }
 const biljeg = (page: Page): Promise<Z33Biljeg> => page.evaluate(() => (window as unknown as { __z33: Z33Biljeg }).__z33);
+interface Kutija { l: number; t: number; r: number; b: number; w: number; h: number }
+interface GotovaPresuda { plan: Kutija | null; otvori: Kutija | null; prozor: number; sirina: number; dohvatljiv: boolean }
+
+/**
+ * Ceka U STRANICI da list presude bude gotov (gumbi vidljivi) i u ISTOM trenutku mjeri gumbe, a uz
+ * `klikni` i klikne plan popravka. Gotov list stoji oko 1,5 s prije nego rezultat preuzme ekran;
+ * na opterecenom stroju Playwrightovi koraci izvana znaju potrositi vise od toga, pa je lov na
+ * prozor izvana bio nepouzdan (Codex Z33-08, pad na chromium pod opterecenjem). `dohvatljiv`:
+ * gumb je u prozoru i na svom sredistu je on, a ne nesto preko njega, kao sto trazi pravi klik.
+ */
+async function naGotovojPresudi(page: Page, klikni: boolean): Promise<GotovaPresuda> {
+  return page.evaluate((klik) => new Promise<GotovaPresuda>((resolve) => {
+    const kutija = (s: string): Kutija | null => {
+      const el = document.querySelector<HTMLElement>(s);
+      if (!el || el.hidden) return null;
+      const r = el.getBoundingClientRect();
+      return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height };
+    };
+    const pokusaj = (): boolean => {
+      const list = document.querySelector('#progressView .z33-verdict[data-meta="true"]');
+      const gumb = document.querySelector<HTMLButtonElement>('#progressView .z33 [data-z33="plan"]');
+      if (!list || !gumb || gumb.hidden || getComputedStyle(gumb).visibility !== 'visible') return false;
+      gumb.scrollIntoView({ block: 'center', behavior: 'auto' });
+      const r = gumb.getBoundingClientRect();
+      const naSredistu = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      const dohvatljiv = !!naSredistu && gumb.contains(naSredistu);
+      const out = { plan: kutija('.z33 [data-z33="plan"]'), otvori: kutija('.z33 [data-z33="open"]'), prozor: innerWidth, sirina: document.documentElement.scrollWidth, dohvatljiv };
+      if (klik && dohvatljiv) gumb.click();
+      resolve(out);
+      return true;
+    };
+    if (pokusaj()) return;
+    const o = new MutationObserver(() => { if (pokusaj()) o.disconnect(); });
+    o.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['data-meta', 'hidden'] });
+  }), klikni);
+}
+
 const docekaj = async (page: Page, trenutak: number): Promise<void> => {
   const ostalo = trenutak - Date.now();
   if (ostalo > 0) await page.waitForTimeout(ostalo);
@@ -88,10 +133,11 @@ const docekaj = async (page: Page, trenutak: number): Promise<void> => {
 for (const tema of ['dark', 'light'] as const) {
   test(`Z33 tok na /rad/ (${tema}): citanje, otkrivanje, presuda, rezultat`, async ({ page }, info) => {
     test.setTimeout(180_000);
-    await pripremi(page, tema);
+    const pusti = await pripremi(page, tema);
     await pokreni(page);
 
     await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+    await expect(z33(page)).toHaveAttribute('data-phase', 'reading');
     const t0 = Date.now();
     await page.screenshot({ path: snimka(info, `${tema}-00s`), fullPage: true });
 
@@ -113,8 +159,10 @@ for (const tema of ['dark', 'light'] as const) {
     await expect(z33(page).locator('[data-z33="notify"]')).toHaveText('Javit ću ti kad bude gotovo ✓');
     expect((await biljeg(page)).trazeno).toBe(1);
 
-    // Snimke po proteklom vremenu od pojave ekrana. "Kraj" (presuda otipkana, prije nego ekran
-    // rezultata preuzme) traje oko 1 s, pa ga hvata ZASEBNO cekanje koje tece usporedo sa snimkama
+    // Snimke po proteklom vremenu od pojave ekrana su samo slike; tvrdnje iznad i ispod vezane su
+    // uz stanja (Z33-08). Worker se pusta nakon snimke u 2 s, pa je ona jos faza citanja. "Kraj"
+    // (presuda otipkana, prije nego ekran rezultata preuzme) traje oko 1 s, pa ga hvata ZASEBNO
+    // cekanje koje tece usporedo sa snimkama
     // u 2, 6 i 12 s; inace bi spora snimka na hladnom posluzitelju znala pojesti cijeli prozor.
     // Snimke tijekom otkrivanja su velicine prozora (brze); cijela stranica je samo rezultat.
     const kraj = z33(page).locator('.z33-verdict[data-meta="true"]');
@@ -134,6 +182,7 @@ for (const tema of ['dark', 'light'] as const) {
     for (const sekunda of [2, 6, 12]) {
       await docekaj(page, t0 + sekunda * 1000);
       await page.screenshot({ path: snimka(info, `${tema}-${String(sekunda).padStart(2, '0')}s`) });
+      if (sekunda === 2) pusti();
     }
     await krajSnimljen;
 
@@ -163,8 +212,10 @@ for (const tema of ['dark', 'light'] as const) {
 test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ page }) => {
   test.setTimeout(150_000);
   await page.setViewportSize({ width: 360, height: 780 });
-  await pripremi(page, 'dark');
+  const pusti = await pripremi(page, 'dark');
   await pokreni(page);
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   await expect(z33(page).locator('.z33-verdict[data-meta="true"]')).toBeVisible({ timeout: 60_000 });
 
   const mjere = await page.evaluate(() => {
@@ -212,21 +263,13 @@ test('Z33 na 360 px: nista se ne preklapa i nema vodoravnog skrola', async ({ pa
 test('Z33 na 360 px s popravljivim nalazima: plan popravka i "Pregledaj nalaze" stanu i ne preklapaju se', async ({ page }) => {
   test.setTimeout(150_000);
   await page.setViewportSize({ width: 360, height: 780 });
-  await pripremi(page, 'dark');
+  const pusti = await pripremi(page, 'dark');
   await pokreni(page, FIXTURE_POPRAVAK);
-  await expect(z33(page).locator('.z33-verdict[data-meta="true"]')).toBeVisible({ timeout: 60_000 });
-  const planGumb = z33(page).locator('[data-z33="plan"]');
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   // Za razliku od FIXTURE-a, ovdje gumb plana MORA postojati; inace provjera ispod ne mjeri nista.
-  await expect(planGumb).toBeVisible();
-  const mjere = await page.evaluate(() => {
-    const gumb = (s: string) => {
-      const el = document.querySelector<HTMLElement>(s);
-      if (!el || el.hidden) return null;
-      const r = el.getBoundingClientRect();
-      return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height };
-    };
-    return { plan: gumb('.z33 [data-z33="plan"]'), otvori: gumb('.z33 [data-z33="open"]'), prozor: innerWidth, sirina: document.documentElement.scrollWidth };
-  });
+  const mjere = await naGotovojPresudi(page, false);
+  expect(mjere.dohvatljiv, 'gumb plana nije dohvatljiv').toBe(true);
   const { plan, otvori } = mjere;
   expect(plan, 'gumb plana mora biti prikazan').not.toBeNull();
   expect(otvori, 'gumb "Pregledaj nalaze" mora biti prikazan').not.toBeNull();
@@ -243,8 +286,10 @@ test('Z33 na 360 px s popravljivim nalazima: plan popravka i "Pregledaj nalaze" 
 test('Z33 na 360 px: "Preskoči" stane u prozor i radi', async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 360, height: 780 });
-  await pripremi(page, 'light');
+  const pusti = await pripremi(page, 'light');
   await pokreni(page);
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   const skip = z33(page).locator('[data-z33="skip"]');
   await expect(skip).toBeVisible({ timeout: 60_000 });
   const k = await skip.boundingBox();
@@ -260,8 +305,10 @@ test('Z33 na 360 px: "Preskoči" stane u prozor i radi', async ({ page }) => {
 
 test('Z33 "Preskoči" s tipkovnice: odmah zavrsno stanje i rezultat, fokus na presudi', async ({ page }) => {
   test.setTimeout(120_000);
-  await pripremi(page, 'dark');
+  const pusti = await pripremi(page, 'dark');
   await pokreni(page);
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   const skip = z33(page).locator('[data-z33="skip"]');
   await expect(skip).toBeVisible({ timeout: 60_000 });
   await expect(skip).toHaveText('Preskoči');
@@ -279,13 +326,16 @@ test('Z33 "Preskoči" s tipkovnice: odmah zavrsno stanje i rezultat, fokus na pr
 
 test('Z33 "Napravi plan popravka" otvara rezultat i vodi u plan popravka', async ({ page }) => {
   test.setTimeout(150_000);
-  await pripremi(page, 'light');
+  const pusti = await pripremi(page, 'light');
   await pokreni(page, FIXTURE_POPRAVAK);
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   const plan = z33(page).locator('[data-z33="plan"]');
-  // Gumb je dohvatljiv tek kad je presuda otipkana (prije toga `visibility: hidden`).
-  await expect(plan).toBeVisible({ timeout: 60_000 });
   await expect(plan).toHaveText('Napravi plan popravka');
-  await plan.click();
+  // Gumb je dohvatljiv tek kad je presuda otipkana (prije toga `visibility: hidden`); klik ide u
+  // tom trenutku, u stranici, nakon provjere da je gumb na svom mjestu vidljiv i nepokriven.
+  const stanje = await naGotovojPresudi(page, true);
+  expect(stanje.dohvatljiv, 'gumb plana nije dohvatljiv za klik').toBe(true);
   // Rezultat preuzima ekran, a kad je gotov (i panel popravka montiran), otvara se faza popravka.
   await expect(page.locator('#repairView'), 'plan popravka se mora otvoriti').toBeVisible({ timeout: 30_000 });
   await expect(page.locator('#repairPanelMount')).toBeVisible();
@@ -300,9 +350,10 @@ test('Z33 "Napravi plan popravka" otvara rezultat i vodi u plan popravka', async
 test('Z33 pod prefers-reduced-motion: zavrsno stanje odmah, rezultat ne ceka', async ({ page }) => {
   test.setTimeout(120_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await pripremi(page, 'dark');
+  const pusti = await pripremi(page, 'dark');
   await pokreni(page);
   await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  pusti();
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 60_000 });
   // Otkrivanje se nije ni pokrenulo: korijen je preskocio `revealing` i stoji u zavrsnom stanju.
   await expect(page.locator('#progressView .z33')).toHaveAttribute('data-phase', 'final');
