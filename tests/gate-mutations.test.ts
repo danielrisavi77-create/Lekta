@@ -166,7 +166,8 @@ import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, m
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
-import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, syntheticAudit } from '../scripts/npm-audit-ratchet-core.mjs';
+import * as prIntake from '../scripts/agents/pr-intake-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
@@ -368,6 +369,26 @@ const DOKAZ_BAZA = {
   missingRequired: [] as string[],
   results: requiredTierIds().map((id: string) => ({ id, label: id, status: 'pass' })),
 };
+
+/** Paket iz `package-lock.json` (T99); polja koja gard izvora cita. */
+type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; bundleDependencies?: string[]; [k: string]: unknown };
+/** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
+type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
+const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
+/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
+const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
+
+/** Jezgra npm-audit ratcheta izvedena iz (mutiranog) izvora u memoriji; izvor nema importa (T93). */
+type RatchetCore = {
+  compareAuditToRatchet: typeof compareAuditToRatchet;
+  syntheticAudit: typeof syntheticAudit;
+  validateRatchet: (r: unknown, o?: { today?: string }) => string[];
+};
+function loadRatchetCore(src: string): RatchetCore {
+  const body = src.replace(/^export /gm, '');
+  return new Function(`${body}\nreturn { compareAuditToRatchet, syntheticAudit, validateRatchet };`)() as RatchetCore;
+}
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -3045,18 +3066,56 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       const packages = auditRatchet.fullGraphHighCriticalPackages;
       const mutated = [...packages.slice(0, -1), '__novi-ranjivi-paket__'];
-      const audit = { vulnerabilities: Object.fromEntries(mutated.map((name) => [name, { severity: 'high' }])) };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'above';
+      return compareAuditToRatchet(syntheticAudit(auditRatchet, mutated), auditRatchet).verdict === 'above';
     },
-    cleanBefore: () => {
-      const audit = {
-        vulnerabilities: Object.fromEntries(
-          auditRatchet.fullGraphHighCriticalPackages.map((name) => [name, { severity: 'high' }]),
-        ),
-      };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'equal';
-    },
+    cleanBefore: () =>
+      compareAuditToRatchet(syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages), auditRatchet).verdict === 'equal',
   },
+  // T93 (Codex R1 na #246): iznimka pokriva par (paket, GHSA), ne samo ime paketa. Mutacije mijenjaju
+  // IZVOR jezgre (scripts/npm-audit-ratchet-core.mjs, bez importa) i izvrsavaju ga u memoriji.
+  ...([
+    ['t93/usporedba-bez-advisoryja', 'compareAuditToRatchet gleda samo ime i broj, pa novi GHSA na prihvacenom paketu prolazi',
+      'uncoveredPairs.length > 0 || unresolvedPackages.length > 0', 'false',
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+    ['t93/pokrice-po-imenu', 'iznimka pokriva paket za bilo koji advisory (pokrice po imenu, kao prije T93)',
+      'const uncoveredPairs = pairs.filter((pair) => !covered.has(pair));',
+      "const uncoveredPairs = pairs.filter((pair) => ![...covered].some((c) => c.split(' ')[0] === pair.split(' ')[0]));",
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+    ['t93/validator-bez-advisoryja', 'iznimka bez advisories prolazi validaciju, pa pokriva sve buduce advisoryje paketa',
+      "problems.push(`${label}.advisories je prazan (iznimka pokriva advisory, ne samo ime paketa)`);", '',
+      (core: RatchetCore) => core.validateRatchet({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'],
+        exceptions: [{ owner: 'o', mitigation: 'm', nextReviewOn: '2999-01-01', expiresOn: '2999-01-02', packages: ['a'] }] }).length > 0],
+    // Codex R2 na #282: bez propagacije kroz via tranzitivni paket ne nasljeduje advisory iz ciklusa.
+    ['t93/bez-propagacije-kroz-via', 'advisoryji i nerazrijesenost se ne prenose kroz via, pa par b/A iz ciklusa a<->b nestaje i ratchet kaze equal',
+      'for (const dep of through.get(name)) {', 'for (const dep of []) {',
+      (core: RatchetCore) => core.compareAuditToRatchet({ vulnerabilities: {
+        a: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-aaaa-aaaa-aaaa' }, 'b'] },
+        b: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-bbbb-bbbb-bbbb' }, 'a'] },
+      } }, { fullGraphHighCritical: 2, fullGraphHighCriticalPackages: ['a', 'b'], exceptions: [
+        { packages: ['a'], advisories: ['GHSA-aaaa-aaaa-aaaa', 'GHSA-bbbb-bbbb-bbbb'] },
+        { packages: ['b'], advisories: ['GHSA-bbbb-bbbb-bbbb'] },
+      ] }).verdict === 'above'],
+    // Codex R1 na #282: prepoznat GHSA ne smije zatvoriti neprepoznat high advisory na istom paketu.
+    ['t93/nerazrijesen-uz-prepoznat', 'paket s jednim prepoznatim GHSA-om tiho odbacuje drugi high advisory bez prepoznatog id-a',
+      'if (list.length === 0 || problem.get(name)) unresolved.push(name);', 'if (list.length === 0) unresolved.push(name);',
+      (core: RatchetCore) => core.compareAuditToRatchet({ vulnerabilities: {
+        a: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-aaaa-aaaa-aaaa' },
+          { severity: 'high', url: 'https://example.invalid/new' }] },
+      } }, { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [
+        { packages: ['a'], advisories: ['GHSA-aaaa-aaaa-aaaa'] },
+      ] }).verdict === 'above'],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T93: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadRatchetCore(mut));
+    },
+    cleanBefore: () => holds(loadRatchetCore(readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs')))),
+  })),
   /**
    * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
    * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
