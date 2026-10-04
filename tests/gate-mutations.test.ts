@@ -22,7 +22,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { afterAll, beforeAll, describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -51,12 +51,16 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { isInOrigin } from '../scripts/site-origin.mjs';
+import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
+import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -162,6 +166,7 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
@@ -292,6 +297,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -1143,6 +1149,24 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
+  // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
+  ...([
+    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!iza)', '', '(a)'],
+    ['citations/oznaka-bez-godine-nepotpuna', 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)', '(!r.year&&!r.noDate)', '!r.year', '(b)'],
+    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1 (runda 3): svaka godina u zapisu, i goli broj u naslovu, brise oznaku bez godine, pa "Horvat, A. (u tisku). Mediji 2011." dobije 2011 iz naslova', 'nd&&!DATE_POSITION_YEAR.test(t)?nd:null', 'nd&&!y?nd:null', '(r1)'],
+    ['citations/godina-razdvaja-viseredni', 'pregled R2: autorov red ("Horvat, A.", "HZZ.", ustanova) ispred "(2011)." se ne prepozna, pa kratak nestane ili se zapis razdvoji u dva nepotpuna', 'authorOnlyParagraph(t)&&datumNaPocetku(iduci)', 'false', '(r2)'],
+    ['citations/zapis-bez-godine-guta-iduci', 'pregled R2b: autorov red bez pozitivnog dokaza (svaki odlomak velikim slovom bez interpunkcije), pa naslov "Socijalna politika" proguta iduci "(2011). Prirucnik." i nalaz nepotpunosti nestane', 'return osoba||ustanova;', 'return /^\\p{Lu}/u.test(t);', '(r2b)'],
+    ['citations/metapodaci-prije-spajanja', 'pregled R4: metapodaci viserednog zapisa iz prvog odlomka umjesto iz spojenog teksta, pa drugi prolaz daje drugog autora', 'for(const e of entries){if(e.ps.length<2)continue;', 'for(const e of entries){if(e.ps.length>=0)continue;', '(r4)'],
+  ] as const).map(([id, imitates, staro, novo, oznaka]): Mutation => ({
+    id,
+    imitates,
+    caught: () => {
+      if (!referenceParserSource().includes(staro)) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return referenceParserProblems(loadReferenceParser((x) => x.split(staro).join(novo))).some((p) => p.startsWith(oznaka));
+    },
+    cleanBefore: () => referenceParserProblems(loadReferenceParser()).length === 0,
+  })),
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
   {
     id: 'agents/model-probe-prima-api-kljuc',
@@ -4909,6 +4933,32 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RF-1: nagrada prijatelju (placeni slot) ne smije pripasti anonimnom Auth racunu.
+  ...([
+    ['t84/friend-nagrada-anonimnom', 'helper izgubi rani izlaz za anonimni racun, pa svaki novi anonimni racun s istim kodom dobije placeni slot',
+      'helper', "  if (caller.isAnonymous !== false) return { granted: false, reason: 'ineligible_anonymous' };\n", '',
+      'grant-friend-referral-reward: nema ranog izlaza za anonimni racun'],
+    ['t84/friend-isanonymous-konstanta', 'generate-report prosljedi konstantu umjesto pozivatelja iz auth.getUser, pa gard nikad ne okine',
+      'report', 'friendRewardCaller(user));', '{ isAnonymous: false });',
+      'generate-report: pozivatelj ne dolazi iz friendRewardCaller(user) (admin, user.id, workType, { isAnonymous: false })'],
+    ['t84/friend-nepoznato-je-pravi-racun', 'nepoznat is_anonymous (undefined ili null) postane pravi racun, pa promijenjen oblik Auth odgovora dodijeli slot (Codex RF-1A)',
+      'helper', 'return { isAnonymous: user.is_anonymous !== false };', 'return { isAnonymous: user.is_anonymous === true };',
+      'grant-friend-referral-reward: nepoznat is_anonymous se ne tretira kao anonimno'],
+  ] as const).map(([id, imitates, which, from, to, problem]) => ({
+    id,
+    imitates: `T84 RF-1: ${imitates}.`,
+    caught: () => {
+      const helper = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts'));
+      const report = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+      const mutHelper = which === 'helper' ? helper.replace(from, to) : helper;
+      const mutReport = which === 'report' ? report.replace(from, to) : report;
+      return (mutHelper !== helper || mutReport !== report) && friendRewardAnonGuardProblems(mutHelper, mutReport).includes(problem);
+    },
+    cleanBefore: () => friendRewardAnonGuardProblems(
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts')),
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts')),
+    ).length === 0,
+  })),
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
@@ -7931,6 +7981,53 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
   },
   /**
+   * T49, Codex nalaz 7 na #273: gard #5 i #7 u verify-deploy-dist su provjeravali kanonik,
+   * sitemap i robots s `startsWith(SITE_ORIGIN)`, pa je `https://lekta.hr.evil.example/` prolazio
+   * kao unutar `https://lekta.hr`. Mutant je ta stara provjera prefiksom; isInOrigin je mora odbiti.
+   */
+  {
+    id: 'origin/prefiks-umjesto-origina',
+    imitates:
+      'kanonik ili sitemap <loc> na tudjoj domeni koja samo pocinje s SITE_ORIGIN (https://lekta.hr.evil.example/) ' +
+      'prolazi gard jer se usporedjuje prefiks niza umjesto URL.origin',
+    caught: () => {
+      const zlo = 'https://lekta.hr.evil.example/';
+      const prefiksPrihvaca = zlo.startsWith('https://lekta.hr');
+      return prefiksPrihvaca && !isInOrigin(zlo, 'https://lekta.hr');
+    },
+    cleanBefore: () => isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr'),
+  },
+  /**
+   * T49, Codex runde 3 i 4 nalaz 7b na #273: gard #5 racuna probleme u `seoOriginProblems`, a
+   * verify-deploy-dist za svaki zove `fail`. Mutant zakomentira `fail`; stvarni blok garda izvrsen
+   * nad sintetickim distom s kanonikom //evil.example/ tada ne zove fail nijednom.
+   */
+  {
+    id: 'origin/gard5-bez-fail',
+    imitates:
+      'verify-deploy-dist racuna probleme SEO origina (stari host, kanonik //evil.example/) ali ih ne pretvara ' +
+      'u fail, pa build s krivim kanonikom tiho prolazi',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const mut = src.replace('for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);',
+        '// for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);');
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return mut !== src && runGuard5Block(mut, dist, 'https://lekta.hr').length === 0;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+    cleanBefore: () => {
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return runGuard5Block(readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs')), dist, 'https://lekta.hr').length === 1;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+  },
+  /**
    * T101: deploy-drift po SADRZAJU. Mutanti iz izvora scripts/deploy-drift-core.mjs (bez importa),
    * izvrseni u memoriji: (1) usporedba sadrzaja koja nikad ne prijavi razliku, pa deployani
    * faculty-request s `Access-Control-Allow-Origin: *` prolazi kao jednak; (2) bundle bez source
@@ -9861,6 +9958,42 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
   });
 });
 
+/**
+ * Dependabot iznimka u pr-opis (koordinator lekta-37, Codex #290 nalaz 2). Mutacije mijenjaju STVARNI
+ * izvor scripts/agents/pr-lines.mjs u izoliranoj kopiji i pokrecu CLI nad privremenim git repozitorijem
+ * (tests/helpers/pr-lines-cli.ts): Dependabot bez redaka prolazi, isti opis s covjekom pada, nepodrzan
+ * manifest pada, a bump nije nova ovisnost.
+ */
+describe('mutacije: pr-opis iznimka samo za Dependabot (stvarni CLI)', () => {
+  let repo = '';
+  beforeAll(() => { repo = napraviPrLinesRepo(); });
+  afterAll(() => { if (repo) rmSync(repo, { recursive: true, force: true }); });
+
+  const mutant = (staro: string, novo: string): string => {
+    if (PR_LINES_IZVOR.split(staro).length !== 2) throw new Error(`mutacija ne pogadja izvor tocno jednom: ${staro}`);
+    return PR_LINES_IZVOR.replace(staro, novo);
+  };
+  const MUTACIJE: Array<[string, string, string]> = [
+    ['(a) CLI uvijek postavi autora na Dependabot', "login: process.env.PR_AUTHOR ?? ''", "login: 'dependabot[bot]'"],
+    ['(b) iznimka izgubljena (Dependabot opet trazi rucne retke)', 'if (!jeDependabot(autor)) return provjeriOpisPr(body, stvarneNove);', 'return provjeriOpisPr(body, stvarneNove);'],
+    ['(c) prepoznavanje samo po loginu, bez tipa racuna', "autor.login === DEPENDABOT_LOGIN && autor.type === 'Bot'", 'autor.login === DEPENDABOT_LOGIN'],
+    ['(d) nepodrzan manifest (requirements.txt) prolazi', 'if (izvan.length) {', 'if (false) {'],
+    ['(e) bump se ispisuje kao nova ovisnost', '...retciOpisa({ diffShortstat, basePkg, headPkg }),', '`Neto redaka: ${netoRedaka(diffShortstat)}`, `Nove ovisnosti: ${verzije.join(\', \') || \'nema\'}`,'],
+  ];
+
+  it('baseline: stvarni izvor zadovoljava tvrdnju', () => {
+    expect(dependabotIznimkaDrzi(PR_LINES_IZVOR, repo)).toBe(true);
+  }, 60_000);
+
+  it.each(MUTACIJE)('%s obara tvrdnju', (_opis, staro, novo) => {
+    const m = staro.includes('PR_AUTHOR ??')
+      ? mutant(staro, novo).replace("type: process.env.PR_AUTHOR_TYPE ?? ''", "type: 'Bot'")
+      : mutant(staro, novo);
+    expect(m).not.toBe(PR_LINES_IZVOR);
+    expect(dependabotIznimkaDrzi(m, repo)).toBe(false);
+  }, 60_000);
+});
+
 describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
   const poziv = (npmCache?: string) => `
 jobs:
@@ -10717,6 +10850,51 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
   });
 });
 
+describe('mobilna traka lista ne prekriva korake (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8').replace(/\r/g, '');
+  const PRAVILO = '@media(max-width:720px){.analyzer-wrap::before{left:auto;right:14px;top:-11px;width:84px;height:22px;transform:rotate(2deg)}}';
+
+  it('BASELINE: na uskom ekranu traka je uz desni rub i uska', () => {
+    expect(css()).toContain(PRAVILO);
+    expect(mobileTapeProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez pravila za uski ekran traka ostaje na sredini', () => {
+    expect(mobileTapeProblems(css().replace(PRAVILO, ''))).toEqual(['traka nema pravilo za uski ekran']);
+  });
+
+  it('mutant: traka na sredini i siroka kao na racunalu', () => {
+    const m = css().replace(PRAVILO, '@media(max-width:720px){.analyzer-wrap::before{top:-11px;width:150px;height:22px}}');
+    expect(mobileTapeProblems(m)).toEqual(['traka nije uz desni rub', 'traka je sira od 100 px']);
+  });
+});
+
+describe('zbijeni dokumentov red na mobitelu (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/site-chrome.css'), 'utf8').replace(/\r/g, '');
+
+  it('BASELINE: gumb nove verzije je meta od 44 px, ispod reda je razmak', () => {
+    expect(mobileDocMetaProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez prosirenja dodira meta je 28 px', () => {
+    const m = css().replace('  .rad-doc-meta .rad-doc-new-version::after { content: ""; position: absolute; inset: -8px 0; }\n', '');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['dodirna meta nove verzije 28 px, ispod 44']);
+  });
+
+  it('mutant: bez razmaka ispod reda list prekriva donji dio mete', () => {
+    const m = css().replace('margin-top: 6px; padding-bottom: 6px; }', 'margin-top: 6px; }');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['ispod reda nema razmaka za prosirenu metu']);
+  });
+
+  it('mutant: bez razmaka redaka prelomljen gumb otima dodir znacki (Codex R1 na #286)', () => {
+    const m = css().replace('gap: 8px 10px;', 'gap: 0 10px;');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['razmak redaka manji od prosirenja: prelomljen gumb otima dodir retku iznad']);
+  });
+});
+
 describe('mutacije: Upisnik dokaz u snimci', () => {
   const baselineRatchet = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as import('../src/programs/upisnik-evidence-snapshots').SnapshotRatchet;
   const sourcePath = resolve(process.cwd(), 'src/programs/upisnik-evidence-snapshots.ts');
@@ -11223,6 +11401,30 @@ describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
     const bez = css().replace('@media(max-width:720px){.analyzer-wrap{transform:none}}', '');
     expect(bez).not.toBe(css());
     expect(mobileTiltProblems(bez)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('mutant: kasnije pravilo s !important ponovno nagne list (Codex F5, runda 2)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{transform:rotate(.3deg)!important}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('mutant: kasnije mobilno pravilo ponovno nagne list', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{transform:rotate(.3deg)}}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('kontrola: nagib samo za siroki ekran ne vrijedi na 360 px', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(min-width:900px){.analyzer-wrap{transform:rotate(.3deg)!important}}`)).toEqual([]);
+  });
+
+  it('mutant: samostalni rotate nagne list iako je transform none (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:.3deg}`)).toEqual(['list je nagnut samostalnim rotate na uskom ekranu']);
+  });
+
+  it('mutant: samostalni translate pomakne list (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{translate:18px 0}}`)).toEqual(['list je pomaknut samostalnim translate na uskom ekranu']);
+  });
+
+  it('kontrola: rotate:none i translate:0 ne dizu gard', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:none;translate:0}`)).toEqual([]);
   });
 
   it('BASELINE: blok komentara je sklopljen na uskom i otvoren na sirokom ekranu', async () => {

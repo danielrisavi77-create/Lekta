@@ -1,0 +1,317 @@
+{
+  "capture": {
+    "url": "https://api.crossref.org/works/10.1007%2Fs12652-021-02990-8",
+    "capturedAt": "2026-10-04T16:05:24.890Z",
+    "status": 200,
+    "contentType": "application/json",
+    "removedFields": [
+      "author",
+      "reference"
+    ],
+    "note": "\"RETRACTED ARTICLE\": isti zapis nosi i update-to i updated-by (sam sebe azurira)"
+  },
+  "response": {
+    "status": "ok",
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "message": {
+      "indexed": {
+        "date-parts": [
+          [
+            2025,
+            12,
+            31
+          ]
+        ],
+        "date-time": "2025-12-31T01:05:55Z",
+        "timestamp": 1767143155379,
+        "version": "build-2238731810"
+      },
+      "update-to": [
+        {
+          "DOI": "10.1007/s12652-021-02990-8",
+          "type": "retraction",
+          "label": "Retraction",
+          "source": "publisher",
+          "updated": {
+            "date-parts": [
+              [
+                2021,
+                3,
+                14
+              ]
+            ],
+            "date-time": "2021-03-14T00:00:00Z",
+            "timestamp": 1615680000000
+          }
+        }
+      ],
+      "reference-count": 30,
+      "publisher": "Springer Science and Business Media LLC",
+      "issue": "S1",
+      "license": [
+        {
+          "start": {
+            "date-parts": [
+              [
+                2021,
+                3,
+                14
+              ]
+            ],
+            "date-time": "2021-03-14T00:00:00Z",
+            "timestamp": 1615680000000
+          },
+          "content-version": "tdm",
+          "delay-in-days": 0,
+          "URL": "https://www.springernature.com/gp/researchers/text-and-data-mining"
+        },
+        {
+          "start": {
+            "date-parts": [
+              [
+                2021,
+                3,
+                14
+              ]
+            ],
+            "date-time": "2021-03-14T00:00:00Z",
+            "timestamp": 1615680000000
+          },
+          "content-version": "vor",
+          "delay-in-days": 0,
+          "URL": "https://www.springernature.com/gp/researchers/text-and-data-mining"
+        }
+      ],
+      "content-domain": {
+        "domain": [
+          "link.springer.com"
+        ],
+        "crossmark-restriction": false
+      },
+      "short-container-title": [
+        "J Ambient Intell Human Comput"
+      ],
+      "published-print": {
+        "date-parts": [
+          [
+            2022,
+            12
+          ]
+        ]
+      },
+      "DOI": "10.1007/s12652-021-02990-8",
+      "type": "journal-article",
+      "created": {
+        "date-parts": [
+          [
+            2021,
+            3,
+            14
+          ]
+        ],
+        "date-time": "2021-03-14T13:02:52Z",
+        "timestamp": 1615726972000
+      },
+      "page": "53-53",
+      "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+      "source": "Crossref",
+      "is-referenced-by-count": 1,
+      "title": [
+        "RETRACTED ARTICLE: How avatar gender may influence users’ intention to use the second life environment: an empirical study"
+      ],
+      "prefix": "10.1007",
+      "volume": "13",
+      "member": "297",
+      "published-online": {
+        "date-parts": [
+          [
+            2021,
+            3,
+            14
+          ]
+        ]
+      },
+      "updated-by": [
+        {
+          "DOI": "10.1007/s12652-021-02990-8",
+          "type": "retraction",
+          "label": "Retraction",
+          "source": "publisher",
+          "updated": {
+            "date-parts": [
+              [
+                2021,
+                3,
+                14
+              ]
+            ],
+            "date-time": "2021-03-14T00:00:00Z",
+            "timestamp": 1615680000000
+          }
+        }
+      ],
+      "container-title": [
+        "Journal of Ambient Intelligence and Humanized Computing"
+      ],
+      "original-title": [],
+      "language": "en",
+      "link": [
+        {
+          "URL": "https://link.springer.com/content/pdf/10.1007/s12652-021-02990-8.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://link.springer.com/article/10.1007/s12652-021-02990-8/fulltext.html",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://link.springer.com/content/pdf/10.1007/s12652-021-02990-8.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ],
+      "deposited": {
+        "date-parts": [
+          [
+            2023,
+            10,
+            22
+          ]
+        ],
+        "date-time": "2023-10-22T23:53:00Z",
+        "timestamp": 1698018780000
+      },
+      "score": 1,
+      "resource": {
+        "primary": {
+          "URL": "https://link.springer.com/10.1007/s12652-021-02990-8"
+        }
+      },
+      "subtitle": [],
+      "short-title": [],
+      "issued": {
+        "date-parts": [
+          [
+            2021,
+            3,
+            14
+          ]
+        ]
+      },
+      "references-count": 30,
+      "journal-issue": {
+        "issue": "S1",
+        "published-print": {
+          "date-parts": [
+            [
+              2022,
+              12
+            ]
+          ]
+        }
+      },
+      "alternative-id": [
+        "2990"
+      ],
+      "URL": "https://doi.org/10.1007/s12652-021-02990-8",
+      "relation": {},
+      "ISSN": [
+        "1868-5137",
+        "1868-5145"
+      ],
+      "issn-type": [
+        {
+          "value": "1868-5137",
+          "type": "print"
+        },
+        {
+          "value": "1868-5145",
+          "type": "electronic"
+        }
+      ],
+      "subject": [],
+      "published": {
+        "date-parts": [
+          [
+            2021,
+            3,
+            14
+          ]
+        ]
+      },
+      "assertion": [
+        {
+          "value": "17 November 2020",
+          "order": 1,
+          "name": "received",
+          "label": "Received",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "1 March 2021",
+          "order": 2,
+          "name": "accepted",
+          "label": "Accepted",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "14 March 2021",
+          "order": 3,
+          "name": "first_online",
+          "label": "First Online",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "30 October 2022",
+          "order": 4,
+          "name": "change_date",
+          "label": "Change Date",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "Clarification",
+          "order": 5,
+          "name": "change_type",
+          "label": "Change Type",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "This article was retracted on 30 October 2022.",
+          "order": 6,
+          "name": "change_details",
+          "label": "Change Details",
+          "group": {
+            "name": "ArticleHistory",
+            "label": "Article History"
+          }
+        },
+        {
+          "value": "This content has been made available to all.",
+          "name": "free",
+          "label": "Free to read"
+        }
+      ]
+    }
+  }
+}
