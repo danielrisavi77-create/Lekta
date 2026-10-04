@@ -24,7 +24,7 @@
  *
  * `judgeGate` je cista funkcija: prima vec izmjereno stanje, ne dira OS, pa je test deterministican.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { readFileSync, statSync, statfsSync, unlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
@@ -653,6 +653,42 @@ export function canTakeOverLock(status, age, thresholds = THRESHOLDS) {
   return age === null || age >= thresholds.minTakeoverAgeMs;
 }
 
+/** Je li izmjereni slobodni disk ispod praga (null nije ispod: nemjerljivo ne blokira). */
+function diskBelowThreshold(state, thresholds = THRESHOLDS) {
+  return typeof state.freeDiskBytes === 'number' && state.freeDiskBytes < thresholds.minFreeDiskBytes;
+}
+
+/**
+ * Redak za poruku odbijanja kad je disk ispod praga: koliko worktreeova se moze ukloniti i kojom
+ * naredbom (`scripts/worktree-gc.mjs`, odluka vlasnika 2026-10-03). Prvi signal neprovodjenja
+ * ciscenja bio je upravo ovaj prag, pa poruka sada imenuje lijek. Mjerenje je fail-open: pad ili
+ * istek daju redak s naredbom bez broja. Uz podmetnuto mjerenje (testovi) se pravi repo ne mjeri.
+ * @param {{ root: string, injected?: boolean, spawn?: typeof spawnSync, timeoutMs?: number }} options
+ * @returns {string}
+ */
+export function worktreeGcHint({ root, injected = false, spawn = spawnSync, timeoutMs = 60_000 }) {
+  const command = 'node scripts/worktree-gc.mjs --apply';
+  if (!injected) {
+    try {
+      const res = spawn(process.execPath, [join(root, 'scripts', 'worktree-gc.mjs'), '--json'], {
+        cwd: root,
+        encoding: 'utf8',
+        timeout: timeoutMs,
+        windowsHide: true,
+      });
+      if (!res.error && res.status === 0) {
+        const parsed = JSON.parse(String(res.stdout ?? '').trim().split(/\r?\n/).pop() ?? '');
+        if (Number.isInteger(parsed.removable) && Number.isInteger(parsed.removableMb)) {
+          return `uklonjivih worktreeova: ${parsed.removable} (${parsed.removableMb} MB); oslobodi: ${command}`;
+        }
+      }
+    } catch {
+      // pada na nize
+    }
+  }
+  return `uklonjivi worktreeovi nisu izmjereni; provjeri i oslobodi: node scripts/worktree-gc.mjs, zatim ${command}`;
+}
+
 /**
  * Mjeri, presudi i (ako smije) upise lock. Zajednicko za CLI i omotac.
  * @returns {{ allow: boolean, verdict: ReturnType<typeof judgeGate>, state: object, token: string|null, nested: boolean }}
@@ -674,6 +710,7 @@ export function acquireGate({ label, ownerPid, env = process.env, root = REPO_RO
     if (!verdict.allow) {
       log(`${prefix}: ODBIJENO (exit 2). Stroj nije slobodan za gate:`);
       for (const r of verdict.reasons) log(`  - ${r}`);
+      if (diskBelowThreshold(state, thresholds)) log(`  - ${worktreeGcHint({ root, injected: state.injected })}`);
       log('  Pricekaj (`node scripts/gate-preflight.mjs --check-only` u petlji) ili, samo uz vlasnikovu odluku, LEKTA_GATE_FORCE=1.');
       return { allow: false, verdict, state, token: null, nested: false };
     }
@@ -758,6 +795,7 @@ function main(argv) {
     }
     console.log('  presuda: ZAUZETO (exit 2)');
     for (const r of verdict.reasons) console.log(`  - ${r}`);
+    if (diskBelowThreshold(state)) console.log(`  - ${worktreeGcHint({ root: REPO_ROOT, injected: state.injected })}`);
     return 2;
   }
 

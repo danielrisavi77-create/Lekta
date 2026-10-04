@@ -23,6 +23,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
@@ -47,6 +48,7 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
@@ -283,7 +285,10 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
-import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { messagingRuleProblems, type MessagingSources } from './helpers/session-messaging';
+import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
+import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch, requestPlan } from '../scripts/osv-query.mjs';
+import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 import { acceptedInvalidUrls, committedSourceAddresses, findSourceUrlProblems } from './helpers/source-url-checks';
@@ -4685,6 +4690,39 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  // Komunikacija koordinatora i cloud sesija (vlasnik 2026-10-04). Mutacije mijenjaju tekst pravila;
+  // baseline je nad stvarnim datotekama.
+  ...([
+    ['poruke/kanal-nije-pr', 'readme', '**Kanal istine je PR.**', '**Kanal je bilo koji.**', 'README: nema pravila "kanal istine je PR"'],
+    ['poruke/bez-pretplate', 'readme', 'pretplacuje na svaki PR izvrsitelja** (`subscribe_pr_activity`)', 'pretplacuje po potrebi**', 'README: nema pravila "koordinator se pretplacuje na PR"'],
+    ['poruke/bez-povlacenja', 'readme', '**Koordinator sam povlaci stanje.**', '**Koordinator ceka poruke.**', 'README: nema pravila "koordinator sam povlaci stanje"'],
+    ['poruke/routine-10-minuta', 'readme', '`run_once_at` tocno 1 minutu unaprijed', '`run_once_at` 10 minuta unaprijed', 'README: nema pravila "Routine 1 minutu unaprijed"'],
+    ['poruke/bez-provjere-isporuke', 'readme', '`last_run` mora biti `SUCCEEDED`', '`last_run` se ne gleda', 'README: nema pravila "provjera isporuke Routinea"'],
+    ['poruke/routine-kao-zakazani-zadatak', 'readme', '**Koordinator Routine s tim zaglavljem cita kao izvjestaj izvrsitelja**', '**Koordinator Routine cita kao zakazani zadatak**', 'README: nema pravila "Routine kao izvjestaj izvrsitelja"'],
+    ['poruke/relay-kao-odobrenje', 'readme', '**Vlasnikove odluke izvrsitelj trazi izravno od vlasnika**', '**Vlasnikove odluke prenosi koordinator**', 'README: nema pravila "vlasnikove odluke izravno"'],
+    ['poruke/brief-bez-zaglavlja', 'brief', '"[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '"[status] PR #<n>', 'brief: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/negiran-status-na-pr', 'readme', 'koordinatoru) pise kao komentar na svoj PR', 'koordinatoru) ne pise kao komentar na svoj PR', 'README: nema pravila "status kao komentar na PR"'],
+    ['poruke/zaglavlje-bez-zadatka', 'readme', '`[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '`[<sesija> -> koordinator] PR #<n>', 'README: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/brief-bez-issuea', 'brief', 'dok PR ne postoji, na GitHub issue zadatka', 'dok PR ne postoji, cekaj', 'brief: nema izvjestaja na issueu prije PR-a'],
+    ['poruke/isporuceno-kao-procitano', 'readme', '`SUCCEEDED` potvrdjuje samo isporuku u sesiju, ne i da ju je koordinator procitao', '`SUCCEEDED` potvrdjuje da je koordinator procitao', 'README: nema pravila "isporuceno nije procitano"'],
+    ['poruke/pr-merge-bez-pretplate', 'prMerge', 'Budi pretplacen na PR (`subscribe_pr_activity`)', 'Gledaj PR kad stignes', 'pr-merge: nema pretplate na PR'],
+  ] as const).map(([id, key, from, to, problem]) => {
+    const real = (): MessagingSources => ({
+      readme: readTextLf(resolve(process.cwd(), 'docs', 'agents', 'README.md')),
+      brief: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'brief', 'SKILL.md')),
+      prMerge: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'pr-merge', 'SKILL.md')),
+    });
+    return {
+      id,
+      imitates: `Komunikacija sesija: ${problem}; poruka iz clouda tada opet tiho ne stigne do koordinatora ili vrijedi kao nalog.`,
+      caught: () => {
+        const src = real();
+        const mut = src[key].replace(from, to);
+        return mut !== src[key] && messagingRuleProblems({ ...src, [key]: mut }).includes(problem);
+      },
+      cleanBefore: () => messagingRuleProblems(real()).length === 0,
+    };
+  }),
   // T87 (kriterij 9 T81): iskljucen ili zauzet endpoint ne vodi u slijepu ulicu. Mutacije mijenjaju
   // IZVOR modula; baseline je nad stvarnim datotekama.
   ...([
@@ -4787,11 +4825,11 @@ const MUTATIONS: Mutation[] = [
     ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
-      'npm-audit: gard izvora ima continue-on-error'],
+      'npm-audit: korak lockfile-sources.mjs ima continue-on-error'],
     ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
-      'npm-audit: gard izvora ima uvjet if'],
+      'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
     ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
       (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
       'npm-audit: nema mjerenja garda izvora'],
@@ -4806,6 +4844,150 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
+  // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  {
+    id: 't99/osv-novi-nalaz',
+    imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
+    caught: () => {
+      const { packages } = collectPackages();
+      const results = packages.map((_: unknown, i: number) => (i === 0 ? { vulns: [{ id: 'GHSA-mutacija' }] } : {}));
+      return compareOsvToRatchet(findingsFromBatch({ results }, packages), osvRatchet).verdict === 'above';
+    },
+    cleanBefore: () => {
+      const { packages, problems } = collectPackages();
+      return problems.length === 0 && compareOsvToRatchet(findingsFromBatch({ results: packages.map(() => ({})) }, packages), osvRatchet).verdict === 'equal';
+    },
+  },
+  {
+    id: 't99/osv-lockfile-bez-paketa',
+    imitates: 'T99: supabase/functions/deno.lock postane necitljiv ili prazan, pa OSV pita za nula paketa i lazno je zelen.',
+    caught: () => collectPackages((f: string) => (f === 'supabase/functions/deno.lock' ? '{"version":"5","remote":{}}' : readTextLf(resolve(process.cwd(), f))))
+      .problems.includes('supabase/functions/deno.lock: 0 paketa; necitljiv lockfile ne smije biti zelen'),
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-nepotpun-odgovor',
+    imitates: 'T99: OSV vrati manje rezultata od upita ili next_page_token, a skripta to cita kao nula nalaza.',
+    caught: () => {
+      const { packages } = collectPackages();
+      try { findingsFromBatch({ results: packages.slice(1).map(() => ({})) }, packages); return false; } catch { return true; }
+    },
+    cleanBefore: () => {
+      const { packages } = collectPackages();
+      return findingsFromBatch({ results: packages.map(() => ({})) }, packages).length === 0;
+    },
+  },
+  {
+    id: 't99/osv-nije-u-ci',
+    imitates: 'T99: osv-scan job ostane bez mjerenja (samo selftest), pa Edge i Python ostaju neprovjereni a CI zelen.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/osv-query.mjs\n', '');
+      return mut !== wf && osvWiringProblems(mut).includes('osv-scan: nema mjerenja OSV ratcheta');
+    },
+    cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
+  ...([
+    ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-job-continue-on-error', 'job npm-audit dobije continue-on-error pa crveni gard ne blokira (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    continue-on-error: true\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-korak-if-u-navodnicima', 'korak garda dobije "if": false u navodnicima (Codex runda 2, F5)',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        "if": false\n', 'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/osv-deno-npm-graf-necitan',
+    imitates: 'T99: Edge lock dobije nativni npm graf (npm:lodash), a parser cita samo esm.sh, pa lodash ostaje neprovjeren a job zelen (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      const out = denoLockPackages({ ...lock, npm: { 'lodash@4.17.20': {} } }, 'e');
+      return out.packages.some((p: { name: string }) => p.name === 'lodash');
+    },
+    cleanBefore: () => !denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e')
+      .packages.some((p: { name: string }) => p.name === 'lodash'),
+  },
+  {
+    id: 't99/osv-deno-jsr-tiho',
+    imitates: 'T99: Edge lock dobije JSR graf koji OSV ovdje ne provjerava, a parser ga preskoci (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, jsr: { '@std/path@1.0.0': {} } }, 'e').problems.some((p: string) => p.includes('JSR graf nije podrzan'));
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-specifier-bez-grafa',
+    imitates: 'T99: deno.lock dobije npm: specifier bez zapisa u npm grafu (ili jsr:), a parser provjeri samo tip vrijednosti (Codex runda 2 na #274, A1).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, specifiers: { 'npm:lodash@4': '4.17.20', 'jsr:@std/path@1': '1.0.0' } }, 'e').problems.length === 2;
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-workspace-nedokazano-izuzece',
+    imitates: 'T99: korijenski deno.lock dobije workspace ovisnost koje nema u package-lock.json i nepoznat kljuc, a parser ih izuzme kao da ih pokriva npm audit (Codex runda 2 na #274, A2).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'deno.lock')));
+      lock.workspace.packageJson.dependencies = [...lock.workspace.packageJson.dependencies, 'npm:nepostojeci-paket@1.0.0'];
+      lock.workspace.packageJson.futureGraph = {};
+      return collectPackages((f: string) => (f === 'deno.lock' ? JSON.stringify(lock) : readTextLf(resolve(process.cwd(), f)))).problems.length === 2;
+    },
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-jedan-batch-preko-granice',
+    imitates: 'T99: graf preraste 1000 paketa i ide kao jedan querybatch zahtjev preko granice API-ja (Codex R4 na #274).',
+    // Gadja requestPlan, tj. tocno ona tijela koja queryAllBatches salje (veza dokazana u osv-query.test.ts, Codex R4-M).
+    caught: () => requestPlan(Array.from({ length: 1001 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0' })))
+      .every((r: { body: string }) => JSON.parse(r.body).queries.length <= 1000),
+    cleanBefore: () => requestPlan([{ ecosystem: 'npm', name: 'a', version: '1.0.0' }]).length === 1,
+  },
+  ...([
+    ['t99/lockfile-job-kljuc-iza-steps', 'npm-audit', '\n  # OSV ZA DENO I PYTHON', '\n    if: false\n  # OSV ZA DENO I PYTHON', 'npm-audit: job ima if ili continue-on-error', lockfileGuardWiringProblems],
+    ['t99/osv-job-kljuc-iza-steps', 'osv-scan', '          node scripts/osv-query.mjs\n', '          node scripts/osv-query.mjs\n    continue-on-error: true\n', 'osv-scan: job ima if ili continue-on-error', osvWiringProblems],
+  ] as const).map(([id, job, from, to, problem, check]) => ({
+    id,
+    imitates: `T99: job ${job} dobije kljuc iza steps (if/continue-on-error), a helper gleda samo kljuceve prije steps (Codex R3 na #274).`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && check(mut).includes(problem);
+    },
+    cleanBefore: () => check(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-bundle-ciklus',
+    imitates: 'T99: dva bundled paketa jedan drugoga trebaju, a nijedan nije dosegljiv od bundleDependencies vlasnika (Codex R2 na #274).',
+    caught: () => {
+      const lock = realLock();
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/x`] = { version: '1.0.0', inBundle: true, dependencies: { y: '1' } };
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/y`] = { version: '1.0.0', inBundle: true, dependencies: { x: '1' } };
+      return lockfileSourceProblems(lock).problems.filter((x: string) => x.includes('nije dosegljiv')).length === 2;
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  },
+  {
+    id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
+    imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
+    caught: () => {
+      const lock = realLock();
+      lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  },
   {
     id: 't99/lockfile-gard-nije-u-ci',
     imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
@@ -10379,6 +10561,500 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
   });
 });
 
+describe('mutacije: Upisnik dokaz u snimci', () => {
+  const baselineRatchet = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as import('../src/programs/upisnik-evidence-snapshots').SnapshotRatchet;
+  const sourcePath = resolve(process.cwd(), 'src/programs/upisnik-evidence-snapshots.ts');
+  const fixture = 'Doslovni citat iz registrirane snimke izvora.';
+  const url = 'https://example.test/source';
+  const path = 'data/sources/test.html';
+  const encoder = new TextEncoder();
+  const goodBytes = encoder.encode(fixture);
+  const hash = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
+  const file = { decisions: [{ programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+  const ratchet = { schemaVersion: 1, entries: [] };
+  const source = { url, snapshotPath: path, snapshotHash: hash(goodBytes) };
+
+  async function copyWith(replace: (s: string) => string, readZipMock: (bytes: Uint8Array) => Promise<any[]> = async () => []) {
+    const { createRequire } = await import('node:module');
+    const { transform } = await import('esbuild');
+    const original = readFileSync(sourcePath, 'utf8');
+    let edited = replace(original);
+    expect(edited).not.toBe(original);
+    edited = edited
+      .replace("import { extractText, getDocumentProxy } from 'unpdf';", "const extractText = async () => ({ text: '' }); const getDocumentProxy = async () => ({});")
+      .replace("import { readZip } from '../repair/zip-codec';", "const readZip = readZipMock;")
+      .replace('createRequire(import.meta.url)', 'createRequire(' + JSON.stringify(sourcePath) + ')');
+    // Mutant se ne pise na disk (vitestov loader ne ucitava modul izvan korijena projekta): CJS kod se
+    // izvodi s pravim require modula, pa radi jednako na Node 20 i 24.
+    const js = (await transform(edited, { loader: 'ts', format: 'cjs' })).code;
+    const mod = { exports: {} as Record<string, unknown> };
+    new Function('require', 'module', 'exports', 'readZipMock', js)(createRequire(sourcePath), mod, mod.exports, readZipMock);
+    return mod.exports as typeof import('../src/programs/upisnik-evidence-snapshots');
+  }
+  async function baseline(data: Uint8Array, src = source, companion?: Uint8Array, registry = [src]) {
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    return verifyUpisnikEvidenceSnapshots(file, registry, (p) => p === path ? data : p.endsWith('.snapshot-ocr.txt') ? companion ?? null : null, ratchet, baselineRatchet);
+  }
+  it('uklanjanje provjere hasha snimke propusta zamijenjene bajtove', async () => {
+    const wrong = encoder.encode(fixture + ' promjena');
+    expect((await baseline(wrong)).join(' ')).toMatch(/hash snimke/);
+    const mutant = await copyWith((s) => s.replace("if (createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)", "if (false && createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [source], () => wrong, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje ratchet provjere propusta novu neregistriranu odluku', async () => {
+    expect((await baseline(goodBytes, source, undefined, [])).join(' ')).toMatch(/nova obvezujuca odluka/);
+    const mutant = await copyWith((s) => s.replace('if (!ratchetKeys.has(key))', 'if (false && !ratchetKeys.has(key))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [], () => null, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('provjera svake rijeci propusta citat koji nije podniz', async () => {
+    const rearranged = encoder.encode('snimke izvora. Doslovni citat iz registrirane');
+    expect((await baseline(rearranged, { ...source, snapshotHash: hash(rearranged) })).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace(
+      String.raw`if (!(await cache.get(cacheKey)!).split(/\n\s*\n/u).some((paragraph) => normalizeSnapshotQuote(paragraph).includes(quote)))`,
+      "const text = normalizeSnapshotQuote(await cache.get(cacheKey)!); if (!quote.split(' ').every((word) => text.includes(word)))",
+    ));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [{ ...source, snapshotHash: hash(rearranged) }], () => rearranged, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zamrznute osnovice propusta zamjenu ratchet zapisa', async () => {
+    const entry = { ...baselineRatchet.entries[0], sourceUrl: 'https://replacement.example.test' };
+    const changed = { schemaVersion: 1, entries: [entry] };
+    const changedFile = { decisions: [{ programCode: entry.programCode, evidence: { sourceUrl: entry.sourceUrl, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).join(' ')).toMatch(/ratchet zapis izvan zamrznute osnovice/);
+    const mutant = await copyWith((s) => s.replace('if (!baselineKeys.has(ratchetKey(entry)))', 'if (false && !baselineKeys.has(ratchetKey(entry)))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje hidden provjere propusta skriveni HTML citat', async () => {
+    const hidden = encoder.encode('<p hidden>' + fixture + '</p>');
+    const hiddenSource = { ...source, snapshotHash: hash(hidden) };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace("element.hasAttribute('hidden') ||", "false ||"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('iskljucen DOCX onError propusta atribut bez navodnika', async () => {
+    // xmldom 0.9.12: atribut bez navodnika prijavljuje SAMO kroz onError (nije fatalError i nije goli ampersand).
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii=Arial/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("onError: () => { throw new Error('DOCX XML nije ispravan'); }", 'onError: () => {}'), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje provjere golog ampersanda propusta neispravan DOCX XML', async () => {
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii="A & B"/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("if (/&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/u.test(xml)) throw new Error('DOCX XML nije ispravan');", ''), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  // Skenirani PDF: pratitelj = "# snapshotHash: <PDF>", "# ocrTextHash: <tijelo>", tijelo; dokaz samo uz rucno
+  // potvrdjen prijepis u registru (ocrTranscript.textHash). Mutant stubira unpdf na prazan tekst, pa ide istim putem.
+  const pdfPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  const companionPath = pdfPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+  const sha = (s: string) => createHash('sha256').update(s, 'utf8').digest('hex');
+  const scanned = () => {
+    const scan = new Uint8Array(readFileSync(resolve(process.cwd(), pdfPath)));
+    const transcript = { textHash: sha(fixture), verifiedBy: 'test', verifiedAt: '2026-10-04' };
+    return { scan, pdfSource: { url, snapshotPath: pdfPath, snapshotHash: hash(scan), ocrTranscript: transcript } };
+  };
+  const companionWith = (pdfHash: string, bodyHash: string, body = fixture) => encoder.encode(`# snapshotHash: ${pdfHash}\n# ocrTextHash: ${bodyHash}\n${body}`);
+  async function scannedRun(companion: Uint8Array, src: Record<string, unknown>, mutantSource?: (s: string) => string) {
+    const { scan } = scanned();
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companion : null;
+    const mod = mutantSource ? await copyWith(mutantSource) : await import('../src/programs/upisnik-evidence-snapshots');
+    return mod.verifyUpisnikEvidenceSnapshots(file, [src as never], read, ratchet, baselineRatchet);
+  }
+  it('BASELINE: nemutirani gard prihvaca valjan HTML i valjan potvrdjen prijepis skena (Codex R4)', async () => {
+    expect(await baseline(goodBytes)).toEqual([]);
+    const { scan, pdfSource } = scanned();
+    expect(await scannedRun(companionWith(hash(scan), sha(fixture)), pdfSource)).toEqual([]);
+  });
+  it('uklanjanje provjere prvog retka zaglavlja propusta pratitelj tudjeg PDF-a', async () => {
+    const { pdfSource } = scanned();
+    const wrongPdf = companionWith('0'.repeat(64), sha(fixture));
+    expect((await scannedRun(wrongPdf, pdfSource)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
+    expect(await scannedRun(wrongPdf, pdfSource, (s) => s.replace("if (lines[0] !== `# snapshotHash: ${source.snapshotHash}`)", "if (false && lines[0] !== `# snapshotHash: ${source.snapshotHash}`)"))).toEqual([]);
+  });
+  it('uklanjanje provjere hasha tijela propusta pratitelj kojem drugi redak ne odgovara tijelu', async () => {
+    const { scan, pdfSource } = scanned();
+    const staleHeader = companionWith(hash(scan), '1'.repeat(64));
+    expect((await scannedRun(staleHeader, pdfSource)).join(' ')).toMatch(/hashu vlastitog tijela/);
+    expect(await scannedRun(staleHeader, pdfSource, (s) => s.replace('if (lines[1] !== `# ocrTextHash: ${bodyHash}`)', 'if (false && lines[1] !== `# ocrTextHash: ${bodyHash}`)'))).toEqual([]);
+  });
+  it('kljuc predmemorije bez potvrde prijepisa propusta nepotvrdjen zapis iste snimke (Codex runda 2)', async () => {
+    const { scan, pdfSource } = scanned();
+    const plain = { url: 'http://example.test/isti-pdf', snapshotPath: pdfPath, snapshotHash: hash(scan) };
+    const twoFile = { decisions: [
+      { programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } },
+      { programCode: '2', evidence: { sourceUrl: plain.url, sourceLocator: 'test', quote: fixture } },
+    ], exclusions: [] };
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companionWith(hash(scan), sha(fixture)) : null;
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).join(' ')).toMatch(/decision 2: .*rucno potvrdjenog prijepisa/);
+    const mutant = await copyWith((s) => s.replace(
+      'transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);', ']);'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zahtjeva za rucno potvrdjenim prijepisom propusta strojni OCR kao dokaz (Codex R1)', async () => {
+    const { scan, pdfSource } = scanned();
+    const unverified = { ...pdfSource, ocrTranscript: undefined };
+    const companion = companionWith(hash(scan), sha(fixture));
+    expect((await scannedRun(companion, unverified)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+    expect(await scannedRun(companion, unverified, (s) => s.replace('if (!transcript || transcript.textHash !== bodyHash || !transcript.verifiedBy?.trim() || !transcript.verifiedAt?.trim()) {', 'if (false) {'))).toEqual([]);
+  });
+});
+
+/**
+ * WORKTREE GC (odluka vlasnika 2026-10-03). Dva kvara koja bi ciscenje pretvorila u brisanje rada:
+ *  (a) presuda bez provjere cistoce uklonila bi worktree s necommitanim promjenama;
+ *  (b) presuda bez provjere pretka uklonila bi worktree s nespojenom granom (commiti se gube).
+ * Mutira se kopija izvora u privremenom direktoriju (uz kopiju `gate-preflight.mjs` koju uvozi),
+ * nikad datoteka u repozitoriju; presudu racuna cisti node, kao u mutacijama gate preflighta.
+ */
+describe('mutacije: worktree-gc presuda', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+  const clean = { tracked: [], untracked: [], ignored: [] };
+  const merged = {
+    main: false, bare: false, locked: false, prunable: false, current: false, originFresh: true, ancestor: true,
+    unreachableCommits: 0, status: clean, mainNodeModulesLink: false, foreignLinks: [],
+    lockHeld: false, lockAmbiguous: false, processPids: [], newestMtimeMs: 0,
+  };
+  const dirty = { ...merged, status: { ...clean, tracked: ['src/a.ts'] } };
+  const unmerged = { ...merged, ancestor: false };
+
+  /** @returns presude `removable` za zadane cinjenice, izracunate nad kopijom izvora. */
+  async function removableFor(source: string, facts: object[]): Promise<boolean[]> {
+    const { mkdtempSync: mkd, writeFileSync: write, rmSync: rm } = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkd(join(tmp(), 'lekta-wtgc-mut-'));
+    try {
+      write(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+      const file = join(dir, 'worktree-gc.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(${JSON.stringify(facts)}.map((f) => m.judgeWorktree(f, { nowMs: 36e6 }).removable)));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rm(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(a) presuda bez provjere cistoce obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: spojeno i cisto je uklonjivo, necommitana promjena zadrzava.
+    expect(await removableFor(source, [merged, dirty])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera pracenih promjena (stvaran kvar: brojanje samo neprac. datoteka).
+    const mutated = source.replace(/\n {4}if \(facts\.status\.tracked\.length > 0\) reasons\.push\([^\n]*\);/, '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, dirty])).toEqual([true, true]);
+  }, 120_000);
+
+  it('(b) presuda bez provjere pretka obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: nespojena grana se zadrzava.
+    expect(await removableFor(source, [merged, unmerged])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera `merge-base --is-ancestor` (stvaran kvar: "cisto" shvaceno kao "spojeno").
+    const mutated = source.replace("  if (facts.ancestor !== true) reasons.push('HEAD nije spojen u bazu');\n", '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, unmerged])).toEqual([true, true]);
+  }, 120_000);
+
+  /**
+   * Runda 2 (Codex pregled PR #253): svaki novi uvjet uklanjanja ima cist baseline i mutanta koji
+   * vraca zateceni kvar. Tablica: [oznaka, cinjenice koje uvjet mora zadrzati, zamjena izvora].
+   */
+  const round2: Array<[string, object, (s: string) => string]> = [
+    ['B1 ignorirana .env', { ...merged, status: { ...clean, ignored: ['.env'] } },
+      (s) => s.replace("  return path === 'dist/';\n", '  return true;\n')],
+    ['B2 nepracen src/progress.log', { ...merged, status: { ...clean, untracked: ['src/progress.log'] } },
+      (s) => s.replace("  return !path.includes('/') && ALLOWED_UNTRACKED_ROOT.has(path);\n", '  return /\\.log$/i.test(path) || ALLOWED_UNTRACKED_ROOT.has(path);\n')],
+    ['M1 aktivan lock bez putanje', { ...merged, lockAmbiguous: true },
+      (s) => s.replace("  if (facts.lockAmbiguous === true) reasons.push('aktivan gate lock bez citljive putanje stabla');\n", '')],
+    ['M3 commit samo u reflogu', { ...merged, unreachableCommits: 1 },
+      (s) => s.replace(/\n {2}else if \(facts\.unreachableCommits > 0\) reasons\.push\([^\n]*\);/, '')],
+    ['M4 origin nedostupan', { ...merged, originFresh: false },
+      (s) => s.replace("  if (facts.originFresh !== true) reasons.push('origin nedostupan (fetch nije uspio)');\n", '')],
+    ['M6 skriveni junction', { ...merged, foreignLinks: ['.tmp-cache/shared'] },
+      (s) => s.replace(/\n {2}else if \(facts\.foreignLinks\.length > 0\) reasons\.push\([^\n]*\);/, '')],
+  ];
+  for (const [label, keptFacts, mutate] of round2) {
+    it(`(runda 2) ${label}: mutant bez provjere obara tvrdnju`, async () => {
+      const source = readLf('scripts/worktree-gc.mjs');
+      expect(await removableFor(source, [merged, keptFacts])).toEqual([true, false]);
+      const mutated = mutate(source);
+      expect(mutated).not.toBe(source);
+      expect(await removableFor(mutated, [merged, keptFacts])).toEqual([true, true]);
+    }, 120_000);
+  }
+
+  /**
+   * M2: medjuprocesni GC lock. Mutant koji ne postuje zauzet lock uklanja stablo dok drugi GC radi.
+   * Kopija skripte radi nad stvarnim privremenim repoom (lokalni bare `origin`).
+   */
+  it('(runda 2) M2 zauzet GC lock: mutant bez provjere locka uklanja stablo', async () => {
+    const fs = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { spawnSync } = await import('node:child_process');
+    const g = (cwd: string, ...args: string[]) => {
+      const r = spawnSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
+    };
+    const root = fs.realpathSync(fs.mkdtempSync(join(tmp(), 'lekta-wtgc-mut2-')));
+    try {
+      const main = join(root, 'main');
+      fs.mkdirSync(main);
+      g(root, 'init', '-q', '--bare', 'origin.git');
+      g(main, 'init', '-q', '-b', 'master');
+      g(main, 'config', 'user.email', 't@example.invalid');
+      g(main, 'config', 'user.name', 't');
+      fs.writeFileSync(join(main, 'a.txt'), 'a\n');
+      g(main, 'add', 'a.txt');
+      g(main, 'commit', '-q', '-m', 'a');
+      g(main, 'remote', 'add', 'origin', join(root, 'origin.git'));
+      g(main, 'push', '-q', 'origin', 'master');
+      const lockPath = join(root, 'gc.lock');
+      const run = (source: string, wt: string) => {
+        g(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+        const old = new Date(Date.now() - 2 * 60 * 60 * 1000);
+        const gd = join(main, '.git', 'worktrees', wt.split(/[\\/]/).pop() ?? '');
+        for (const p of [join(wt, '.git'), join(gd, 'HEAD'), join(gd, 'index')]) fs.utimesSync(p, old, old);
+        const dir = fs.mkdtempSync(join(root, 'src-'));
+        fs.writeFileSync(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+        fs.writeFileSync(join(dir, 'worktree-gc.mjs'), source);
+        fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), label: 'worktree-gc', token: 'x' }));
+        spawnSync(process.execPath, [join(dir, 'worktree-gc.mjs'), '--repo', main, '--apply', '--quiet'], {
+          cwd: root, encoding: 'utf8', windowsHide: true, timeout: 60_000,
+          env: { ...process.env, LEKTA_WORKTREE_GC_LOCK_PATH: lockPath, LEKTA_GATE_LOCK_PATH: join(root, 'gate.lock') },
+        });
+        return fs.existsSync(wt);
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: dok drugi GC drzi lock, stablo ostaje.
+      expect(run(source, join(root, 'wt-a'))).toBe(true);
+      // MUTACIJA: zauzet lock se ignorira (zateceno stanje prije runde 2: nije bilo locka).
+      const mutated = source.replace("  if ('busy' in gcLock) {", '  if (false) {');
+      expect(mutated).not.toBe(source);
+      expect(run(mutated, join(root, 'wt-b'))).toBe(false);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }, 180_000);
+
+  /**
+   * Runda 3 (Codex runda 2 nad 121a9b44, odluke koordinatora): ignorirane iznimke su samo
+   * `node_modules` link i korijenski `dist/`; prunable stablo ne preskace reflog.
+   */
+  const round3: Array<[string, object, (s: string) => string]> = [
+    ['B1 vracena .tmp-* iznimka', { ...merged, status: { ...clean, ignored: ['.tmp-word-verify/'] } },
+      (s) => s.replace("  return path === 'dist/';\n", "  return path === 'dist/' || path.startsWith('.tmp-');\n")],
+    ['B2 vracena *.log iznimka', { ...merged, status: { ...clean, ignored: ['debug.log'] } },
+      (s) => s.replace("  return path === 'dist/';\n", "  return path === 'dist/' || /\\.log$/i.test(path);\n")],
+    ['M3 prunable bez refloga', { ...merged, prunable: true, unreachableCommits: 1 },
+      (s) => s.replace(/\n {4}else if \(facts\.unreachableCommits > 0\) pr\.push\([^\n]*\);/, '')],
+  ];
+  for (const [label, keptFacts, mutate] of round3) {
+    it(`(runda 3) ${label}: mutant obara tvrdnju`, async () => {
+      const source = readLf('scripts/worktree-gc.mjs');
+      expect(await removableFor(source, [merged, keptFacts])).toEqual([true, false]);
+      const mutated = mutate(source);
+      expect(mutated).not.toBe(source);
+      expect(await removableFor(mutated, [merged, keptFacts])).toEqual([true, true]);
+    }, 120_000);
+  }
+
+  /**
+   * Runda 3, stvarni procesi nad privremenim repoom: kopija skripte se zaustavlja u testnim
+   * tockama (`LEKTA_WORKTREE_GC_TEST_BARRIER`) dok test mijenja svijet izmedju mjerenja i brisanja.
+   */
+  async function gcSandbox() {
+    const fs = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const cp = await import('node:child_process');
+    const g = (cwd: string, ...args: string[]) => {
+      const r = cp.spawnSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
+    };
+    const root = fs.realpathSync(fs.mkdtempSync(join(tmp(), 'lekta-wtgc-mut3-')));
+    const main = join(root, 'main');
+    fs.mkdirSync(main);
+    g(root, 'init', '-q', '--bare', 'origin.git');
+    g(main, 'init', '-q', '-b', 'master');
+    g(main, 'config', 'user.email', 't@example.invalid');
+    g(main, 'config', 'user.name', 't');
+    fs.writeFileSync(join(main, 'a.txt'), 'a\n');
+    fs.writeFileSync(join(main, '.gitignore'), 'debug.log\n');
+    g(main, 'add', 'a.txt', '.gitignore');
+    g(main, 'commit', '-q', '-m', 'a');
+    g(main, 'remote', 'add', 'origin', join(root, 'origin.git'));
+    g(main, 'push', '-q', 'origin', 'master');
+    let n = 0;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const waitFor = async (pred: () => boolean, ms = 90_000) => {
+      const deadline = Date.now() + ms;
+      while (!pred() && Date.now() < deadline) await sleep(50);
+      return pred();
+    };
+    /** Novo staro spojeno stablo, svjeza mapa za barijeru i kopija izvora. */
+    const prepare = (source: string) => {
+      n += 1;
+      const wt = join(root, `wt-${n}`);
+      g(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+      const old = new Date(Date.now() - 2 * 60 * 60 * 1000);
+      const gd = join(main, '.git', 'worktrees', `wt-${n}`);
+      for (const p of [join(wt, '.git'), join(gd, 'HEAD'), join(gd, 'index')]) fs.utimesSync(p, old, old);
+      const barrier = join(root, `barrier-${n}`);
+      fs.mkdirSync(barrier);
+      const dir = join(root, `src-${n}`);
+      fs.mkdirSync(dir);
+      fs.writeFileSync(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+      fs.writeFileSync(join(dir, 'worktree-gc.mjs'), source);
+      return { wt, barrier, script: join(dir, 'worktree-gc.mjs') };
+    };
+    const start = (script: string, barrier: string, lockPath = join(root, 'gc.lock')) => {
+      const child = cp.spawn(process.execPath, [script, '--repo', main, '--apply'], {
+        cwd: root,
+        windowsHide: true,
+        env: {
+          ...process.env,
+          LEKTA_WORKTREE_GC_LOCK_PATH: lockPath,
+          LEKTA_GATE_LOCK_PATH: join(root, 'gate.lock'),
+          LEKTA_WORKTREE_GC_STASH: join(root, 'odlozeno'),
+          LEKTA_WORKTREE_GC_TEST_BARRIER: barrier,
+        },
+      });
+      let out = '';
+      child.stdout.on('data', (d) => { out += String(d); });
+      child.stderr.on('data', (d) => { out += String(d); });
+      const done = new Promise<string>((r) => child.on('close', () => r(out)));
+      return { child, done };
+    };
+    const ready = (barrier: string, point: string) => fs.readdirSync(barrier)
+      .filter((f) => f.startsWith(`${point}-`) && f.endsWith('.ready'))
+      .map((f) => Number(f.slice(point.length + 1, -'.ready'.length)));
+    const go = (barrier: string, name: string) => fs.writeFileSync(join(barrier, `${name}.go`), '');
+    const cleanup = () => fs.rmSync(root, { recursive: true, force: true, maxRetries: 20, retryDelay: 250 });
+    return { fs, cp, root, main, prepare, start, ready, go, waitFor, cleanup };
+  }
+
+  it('(runda 3) M2b ponovna provjera bez svjezeg snimka procesa: mutant uklanja stablo u kojem proces radi', async () => {
+    const sb = await gcSandbox();
+    try {
+      const scenario = async (source: string) => {
+        const { wt, barrier, script } = sb.prepare(source);
+        for (const p of ['preuzimanje', 'uzet', 'provjereno']) sb.go(barrier, p);
+        const gc = sb.start(script, barrier);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'izmjereno').length === 1)).toBe(true);
+        // Proces s putanjom stabla u naredbenom retku nastaje TEK nakon prvog mjerenja.
+        const holder = sb.cp.spawn(process.execPath, ['-e', 'setTimeout(() => {}, 120000)', wt], { cwd: sb.root, windowsHide: true });
+        try {
+          await new Promise((r) => setTimeout(r, 500));
+          sb.go(barrier, 'izmjereno');
+          const out = await gc.done;
+          return { kept: sb.fs.existsSync(wt), out };
+        } finally {
+          const exited = new Promise((r) => holder.once('exit', r));
+          holder.kill();
+          await exited;
+        }
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: svjez snimak procesa vidi novi proces i stablo ostaje.
+      const base = await scenario(source);
+      expect(base.kept, base.out).toBe(true);
+      expect(base.out).toMatch(/zadrzan pri ponovnoj provjeri: .*proces radi u stablu/);
+      // MUTACIJA: ponovna provjera koristi snimak procesa iz prvog mjerenja (nalaz M2b runde 2).
+      const mutated = source.replace(
+        "{ sizes: 'none', nowMs: Date.now(), foreignProcesses: lazyForeignProcesses() }",
+        "{ sizes: 'none', nowMs: Date.now() }",
+      );
+      expect(mutated).not.toBe(source);
+      const mut = await scenario(mutated);
+      expect(mut.kept, mut.out).toBe(false);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+
+  it('(runda 3) M2b zadnja provjera prije remove preskocena: mutant brise ignorirani debug.log nastao nakon ponovnog mjerenja', async () => {
+    const sb = await gcSandbox();
+    try {
+      const scenario = async (source: string) => {
+        const { wt, barrier, script } = sb.prepare(source);
+        for (const p of ['preuzimanje', 'uzet', 'izmjereno']) sb.go(barrier, p);
+        const gc = sb.start(script, barrier);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'provjereno').length === 1)).toBe(true);
+        sb.fs.writeFileSync(join(wt, 'debug.log'), 'korisnicki podaci\n');
+        sb.go(barrier, 'provjereno');
+        const out = await gc.done;
+        const log = join(wt, 'debug.log');
+        return { kept: sb.fs.existsSync(log) && sb.fs.readFileSync(log, 'utf8') === 'korisnicki podaci\n', out };
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: svjez status s ignoriranim stavkama neposredno prije remove vidi debug.log.
+      const base = await scenario(source);
+      expect(base.kept, base.out).toBe(true);
+      expect(base.out).toMatch(/zadrzan neposredno prije uklanjanja: .*ignorirane datoteke: debug\.log/);
+      // MUTACIJA: bez zadnje provjere git worktree remove brise ignoriranu datoteku.
+      const mutated = source.replace('    changed = finalChangeReason(row);\n    if (changed) throw new Error(changed);\n', '');
+      expect(mutated).not.toBe(source);
+      const mut = await scenario(mutated);
+      expect(mut.kept, mut.out).toBe(false);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+
+  it('(runda 3) M2a utrka dva --apply nad mrtvim GC lockom: mutant s neatomarnim preuzimanjem pusta oba', async () => {
+    const sb = await gcSandbox();
+    try {
+      const deadPid = sb.cp.spawnSync(process.execPath, ['-e', ''], { windowsHide: true }).pid;
+      const scenario = async (source: string) => {
+        const { barrier, script } = sb.prepare(source);
+        const lockPath = join(barrier, 'gc.lock');
+        sb.fs.writeFileSync(lockPath, JSON.stringify({
+          pid: deadPid, startedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), label: 'worktree-gc', token: 'mrtav',
+        }));
+        for (const p of ['izmjereno', 'provjereno']) sb.go(barrier, p);
+        const gcs = [sb.start(script, barrier, lockPath), sb.start(script, barrier, lockPath)];
+        // Oba procesa su procitala ISTI mrtav lock prije nego sto ijedan djeluje.
+        expect(await sb.waitFor(() => sb.ready(barrier, 'preuzimanje').length === 2)).toBe(true);
+        const [a, b] = sb.ready(barrier, 'preuzimanje') as [number, number];
+        sb.go(barrier, `preuzimanje-${a}`);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'uzet').includes(a))).toBe(true);
+        sb.go(barrier, `preuzimanje-${b}`);
+        const exitedB = gcs.find((x) => x.child.pid === b)!;
+        let bDone = false;
+        void exitedB.done.then(() => { bDone = true; });
+        await sb.waitFor(() => bDone || sb.ready(barrier, 'uzet').includes(b), 60_000);
+        sb.go(barrier, 'uzet');
+        const outs = await Promise.all(gcs.map((x) => x.done));
+        return outs.filter((o) => /preskoceno \(drugi worktree-gc radi \(PID \d+\)\)/.test(o)).length;
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: tocno jedan proces preuzima mrtav lock; drugi pod cuvarom vidi zivi lock i odustaje.
+      expect(await scenario(source)).toBe(1);
+      // MUTACIJA: preuzimanje bez cuvara (zateceno stanje runde 2: unlink pa wx).
+      const mutated = source.replace(
+        '  return takeOverDeadGcLock(path, record, nowMs);\n',
+        "  try { unlinkSync(path); } catch { /* vec maknut */ }\n  return writeLock(path, record) ? { token } : { busy: 'GC lock nije uzet' };\n",
+      );
+      expect(mutated).not.toBe(source);
+      expect(await scenario(mutated)).toBe(0);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+});
+
 describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
   const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8');
   const bytes = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/docx/synthetic-mentor-komentari.docx')));
@@ -10540,6 +11216,94 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
       'nevaljan glossary rels dao je no-known-limits, ne unknown',
       'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
     ]);
+  });
+});
+
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33). Dva garda iz `tests/helpers/analysis-live-guard.ts`:
+ *  - Z31 pokret: list Z33 smije animirati samo transform, opacity i clip-path, bez backdrop-filter.
+ *    Predlozak sam animira `left` i `box-shadow` na drugim ekranima; prepisivanje inline stilova u
+ *    klase je upravo trenutak u kojem se takav literal tiho prenese.
+ *  - Granica lijenog modula: ulaz `/rad/` je tik ispod bundle-guarda (960 KB), pa bi jedan
+ *    staticki uvoz modula Z33 gurnuo njegov kod i CSS u statican graf rute.
+ */
+describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const css = citaj('src/ui/analysis-live/analysis-live.css');
+  const izvori = {
+    'src/ui/progress-scan.ts': citaj('src/ui/progress-scan.ts'),
+    'src/ui/app.ts': citaj('src/ui/app.ts'),
+  };
+
+  it('BASELINE: stvarni list i stvarni ulaz su cisti', () => {
+    expect(motionCssProblems(css)).toEqual([]);
+    expect(liveBoundaryProblems(izvori, 'src/ui/progress-scan.ts')).toEqual([]);
+  });
+
+  it('MUTACIJA: prijelaz sirine (layout u petlji) obara gard', () => {
+    const mutant = css.replace('.z33-slot { display: grid;', '.z33-slot { transition: width .3s; display: grid;');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['transition mijenja width']);
+  });
+
+  it('MUTACIJA: keyframes koji animiraju left (kao predlozak) obaraju gard', () => {
+    const mutant = css.replace('@keyframes z33-caret { 50% { opacity: 0 } }', '@keyframes z33-caret { 50% { opacity: 0; left: 4px } }');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['@keyframes z33-caret animira left']);
+  });
+
+  it('MUTACIJA: backdrop-filter na listu obara gard', () => {
+    const mutant = css.replace('.z33-verdict-wait {', '.z33-verdict-wait { backdrop-filter: blur(4px);');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toContain('backdrop-filter je zabranjen (Z31)');
+  });
+
+  it('MUTACIJA: staticki uvoz modula Z33 u app.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const mutant = { ...izvori, 'src/ui/app.ts': uvoz + '\n' + izvori['src/ui/app.ts'] };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual(['src/ui/app.ts: staticki uvoz ./analysis-live/analysis-live']);
+  });
+
+  it('MUTACIJA: dinamicki uvoz zamijenjen statickim u progress-scan.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const dinamicki = "import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null)";
+    const src = izvori['src/ui/progress-scan.ts'];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve(mountAnalysisLive)') };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual([
+      'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
+      'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
+    ]);
+  });
+});
+
+/**
+ * Z33 COPY (F31, odluka vlasnika 2026-10-04): natpisi gumba na ekranu analize uzivo su doslovno iz
+ * predloska `Analysis.dc.html`; "Preskoči" je jedino zapisano odstupanje. Gard `copyProblems`.
+ */
+describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const modul = citaj('src/ui/analysis-live/analysis-live.ts');
+  const predlozak = citaj('design/templates/analysis/Analysis.dc.html');
+  const ODSTUPANJA = ['Preskoči'];
+
+  it('BASELINE: stvarni kostur i predlozak su cisti', () => {
+    expect(copyProblems(modul, predlozak, ODSTUPANJA)).toEqual([]);
+  });
+
+  it('MUTACIJA: preformuliran natpis plana popravka obara gard', () => {
+    // Natpis koji NIJE podniz predloska ("Napravi plan" bi to bio, pa ne bi bio mutacija copyja).
+    const mutant = modul.replace('>Napravi plan popravka</button>', '>Izradi plan popravka</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, ODSTUPANJA)).toEqual(['natpis "Izradi plan popravka" nije u predlosku']);
+  });
+
+  it('MUTACIJA: odstupanje izbrisano s popisa obara gard', () => {
+    expect(copyProblems(modul, predlozak, [])).toEqual(['natpis "Preskoči" nije u predlosku']);
+  });
+
+  it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
+    expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
   });
 });
 
