@@ -10,10 +10,12 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { canonicalProblem, isInOrigin, PRIMARY_ORIGIN, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
+import { guard5Wired } from './helpers/seo-origin-wiring';
+import { canonicalProblem, isInOrigin, PRIMARY_ORIGIN, seoOriginProblems, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
+// CR se normalizira (CLAUDE.md): na Windows checkoutu su robots.txt i sitemap CRLF, a testovi traze `$` uz `m`.
+const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n?/g, '\n');
 
 describe('SEO generator origin (BL-P0-01-4)', () => {
   it('dijeljeni fallback je ziva primarna domena lekta.hr (T49), nikad umirovljeni netlify origin', () => {
@@ -88,22 +90,68 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     expect(canonicalProblem(html('https://lekta.hr/alati/'), PRIMARY_ORIGIN)).toBeNull();
     expect(canonicalProblem(html('/alati/'), PRIMARY_ORIGIN)).toBeNull();
     expect(canonicalProblem('<html></html>', PRIMARY_ORIGIN)).toBeNull();
-    // verify-deploy-dist stvarno koristi ovu funkciju, a ne vlastitu provjeru prefiksa.
-    const gard = read('scripts/verify-deploy-dist.mjs');
-    expect(gard).toContain('canonicalProblem(html, SITE_ORIGIN)');
-    expect(gard).not.toMatch(/startsWith\(SITE_ORIGIN\)\)\s*\{\s*fail\(`dist\/\$\{rel\} canonical/);
   });
 
-  it('generatori grade interne poveznice relativno, apsolutni origin samo za kanonik, og i sitemap (Codex runda 2, nalaz 2)', () => {
+  it('kanonik se cita kao HTML atribut: razmaci, vise rel tokena, entiteti (Codex runda 3, 7a)', () => {
+    expect(canonicalProblem('<link rel = "canonical" href="//evil.example/">', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem('<link rel="canonical" href="&#x2f;&#x2f;evil.example/">', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem('<link rel="canonical" href="&#47;&#47;evil.example/">', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem('<link rel="canonical" href="&sol;&sol;evil.example/">', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem('<LINK REL="Alternate Canonical" HREF=\'//evil.example/\'>', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem('<link href=//evil.example/ rel=canonical>', PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    // Druge link relacije nisu kanonik.
+    expect(canonicalProblem('<link rel="stylesheet" href="//cdn.example/a.css">', PRIMARY_ORIGIN)).toBeNull();
+    expect(canonicalProblem('<link rel = "canonical" href = "https://lekta.hr/alati/">', PRIMARY_ORIGIN)).toBeNull();
+  });
+
+  it('gard #5 kroz svoju ulaznu tocku nad sintetickim artefaktom pada, a cist artefakt prolazi (Codex runda 3, 7b)', () => {
+    const cist = [
+      { rel: 'index.html', text: '<link rel="canonical" href="https://lekta.hr/">' },
+      { rel: 'alati/a.html', text: '<a href="/alati.html">x</a><link rel="canonical" href="https://lekta.hr/alati/a.html">' },
+      { rel: 'sitemap.xml', text: '<loc>https://lekta.hr/</loc>' },
+    ];
+    expect(seoOriginProblems(cist, PRIMARY_ORIGIN)).toEqual([]);
+    expect(seoOriginProblems([...cist, { rel: 'x.html', text: '<link rel = "canonical" href="//evil.example/">' }], PRIMARY_ORIGIN))
+      .toEqual([expect.stringMatching(/^dist\/x\.html: canonical .*nije unutar/)]);
+    expect(seoOriginProblems([...cist, { rel: 'y.html', text: '<a href="https://lektahr.netlify.app/">' }], PRIMARY_ORIGIN))
+      .toEqual([expect.stringMatching(/umirovljeni origin/)]);
+    expect(seoOriginProblems([...cist, { rel: 's.xml', text: '<loc>https://lektahr.netlify.app/</loc>' }], PRIMARY_ORIGIN))
+      .toEqual([expect.stringMatching(/sitemap/)]);
+    // Build kojem je SITE_ORIGIN bas stari host smije ga nositi (rucni povratak).
+    expect(seoOriginProblems([{ rel: 'y.html', text: '<a href="https://lektahr.netlify.app/">' }], RETIRED_ORIGIN)).toEqual([]);
+    // Svaki problem garda vodi u fail: mutacija u gate-mutations uklanja fail i mora pasti.
+    expect(guard5Wired(read('scripts/verify-deploy-dist.mjs'))).toBe(true);
+  });
+
+  it('generatori: kanonik apsolutan iz SITE_ORIGIN, navigacija relativna (Codex runda 2 i 3, nalazi 2a i 2b)', () => {
     // Isti artefakt sluzi i na lekta.hr i na lektahr.netlify.app (bez 301). Apsolutna interna
-    // poveznica na lekta.hr bi korisnika na starom hostu odvela s njegovog lokalnog stanja.
+    // poveznica na lekta.hr bi korisnika na starom hostu odvela s njegovog lokalnog stanja, a
+    // relativan kanonik bi na starom hostu kanonizirao stari host.
     const generatori = ['generate-citation-tools.mjs', 'generate-coverage-page.mjs', 'generate-legal-pages.mjs',
       'generate-title-page-tools.mjs', 'generate-faculty-pages.mjs', 'generate-competitor-pages.mjs'];
+    let kanonika = 0;
     for (const g of generatori) {
       const src = read(`scripts/${g}`);
-      expect(src, g).not.toMatch(/href="\$\{SITE_ORIGIN/);
+      for (const tag of src.match(/<[a-z]+\b[^>]*\bhref="[^"]*"[^>]*>/gi) ?? []) {
+        const href = /\bhref="([^"]*)"/i.exec(tag)?.[1] ?? '';
+        const jeKanonik = /^<link\b[^>]*\brel="canonical"/i.test(tag);
+        if (jeKanonik) {
+          kanonika++;
+          if (href === '${canonical}') {
+            // Kanonik kroz varijablu: svaka dodjela `canonical` u generatoru mora poceti s SITE_ORIGIN.
+            const dodjele = [...src.matchAll(/\bcanonical\s*[=:]\s*`([^`]*)`/g)].map((m) => m[1]);
+            expect(dodjele.length, `${g}: kanonik kroz varijablu bez vidljive dodjele`).toBeGreaterThan(0);
+            for (const d of dodjele) expect(d, `${g}: dodjela kanonika`).toMatch(/^\$\{SITE_ORIGIN\}/);
+          } else {
+            expect(href, `${g}: kanonik mora biti apsolutan iz SITE_ORIGIN: ${tag}`).toMatch(/^\$\{SITE_ORIGIN\}/);
+          }
+        } else {
+          expect(href, `${g}: navigacija ne smije biti apsolutna na SITE_ORIGIN: ${tag}`).not.toMatch(/^\$\{SITE_ORIGIN\}/);
+        }
+      }
       expect(src, g).not.toMatch(/ctaHtml\(`\$\{SITE_ORIGIN/);
     }
+    expect(kanonika, 'generator test mora vidjeti stvarne kanonike').toBeGreaterThanOrEqual(2);
     expect(read('scripts/generate-citation-tools.mjs')).toContain("const GENERAL_TOOL_URL = '/citat.html';");
   });
 

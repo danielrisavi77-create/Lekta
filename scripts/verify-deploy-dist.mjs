@@ -11,7 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { canonicalProblem, isInOrigin, RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
+import { isInOrigin, seoOriginProblems, SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
@@ -178,9 +178,8 @@ if (fs.existsSync(path.join(DIST, 'verification.html'))) fail('dist/verification
 //    lektahr.netlify.app (od T49 vise nije kanonik), a kanonik/og:url/loc mora biti
 //    unutar LEKTA_SITE_ORIGIN (BL-P0-01-4). Hvata build kojem zamjena tokena u vite.config.ts
 //    ili generator nije prosao. Build kojem je SITE_ORIGIN bas taj origin (npr. rucni povratak)
-//    ga smije nositi.
-const RETIRED_HOST = /https?:\/\/lektahr\.netlify\.app\b/i;
-const WRONG_DOMAIN = SITE_ORIGIN === RETIRED_ORIGIN ? /(?!)/ : RETIRED_HOST;
+//    ga smije nositi. Logika je `seoOriginProblems` u site-origin.mjs (testirana nad sintetickim
+//    artefaktom); ovdje je samo citanje dista i `fail` za svaki problem.
 const collectFiles = (dir, ext, acc = []) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -189,16 +188,9 @@ const collectFiles = (dir, ext, acc = []) => {
   }
   return acc;
 };
-for (const p of collectFiles(DIST, '.html')) {
-  const html = fs.readFileSync(p, 'utf8');
-  const rel = path.relative(DIST, p);
-  if (WRONG_DOMAIN.test(html)) fail(`dist/${rel} sadrzi umirovljeni origin ${RETIRED_ORIGIN} umjesto ${SITE_ORIGIN}`);
-  const kanonik = canonicalProblem(html, SITE_ORIGIN);
-  if (kanonik) fail(`dist/${rel}: ${kanonik}`);
-}
-for (const p of collectFiles(DIST, '.xml')) {
-  if (WRONG_DOMAIN.test(fs.readFileSync(p, 'utf8'))) fail(`dist/${path.relative(DIST, p)} (sitemap) sadrzi ${RETIRED_ORIGIN}`);
-}
+const seoFiles = [...collectFiles(DIST, '.html'), ...collectFiles(DIST, '.xml')]
+  .map((p) => ({ rel: path.relative(DIST, p).split(path.sep).join('/'), text: fs.readFileSync(p, 'utf8') }));
+for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);
 
 // 6. CSP script-src whitelist: public/_headers NEMA 'unsafe-inline' za skripte, samo par
 //    sha256 hasheva. Svaki inline <script> u distu (bez src=, bez inertnog type-a poput

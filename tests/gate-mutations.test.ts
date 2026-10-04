@@ -56,6 +56,7 @@ import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './h
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { isInOrigin } from '../scripts/site-origin.mjs';
+import { GUARD5_WIRING, guard5Wired } from './helpers/seo-origin-wiring';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -7527,6 +7528,22 @@ const MUTATIONS: Mutation[] = [
       return prefiksPrihvaca && !isInOrigin(zlo, 'https://lekta.hr');
     },
     cleanBefore: () => isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr'),
+  },
+  /**
+   * T49, Codex runda 3 nalaz 7b na #273: gard #5 racuna probleme u `seoOriginProblems`, a
+   * verify-deploy-dist za svaki zove `fail`. Mutant uklanja `fail`, pa bi gard racunao i sutio.
+   */
+  {
+    id: 'origin/gard5-bez-fail',
+    imitates:
+      'verify-deploy-dist racuna probleme SEO origina (stari host, kanonik //evil.example/) ali ih ne pretvara ' +
+      'u fail, pa build s krivim kanonikom tiho prolazi',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const mut = src.replace(GUARD5_WIRING, GUARD5_WIRING.replace('fail(problem);', 'void problem;'));
+      return mut !== src && !guard5Wired(mut);
+    },
+    cleanBefore: () => guard5Wired(readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'))),
   },
 
 ];

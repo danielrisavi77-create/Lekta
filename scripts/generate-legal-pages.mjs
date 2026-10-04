@@ -139,7 +139,7 @@ function pageShell(doc, allDocs) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(doc.title)} - Lekta</title>
 <meta name="description" content="${esc(doc.description)}">
-<link rel="canonical" href="/${doc.slug}.html">
+<link rel="canonical" href="${SITE_ORIGIN}/${doc.slug}.html">
 <meta name="robots" content="index,follow">
 <style>${PAGE_STYLE}</style>
 </head>
