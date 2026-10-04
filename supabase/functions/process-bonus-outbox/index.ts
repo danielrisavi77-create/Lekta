@@ -23,7 +23,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { isCronAuthorized } from '../_shared/cron-auth.ts';
-import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
+import { runReferrerRewardObligation, type ReferrerRewardDb } from './referrer-reward.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -67,13 +67,27 @@ Deno.serve(async (req: Request) => {
     const rows = (data ?? []) as OutboxRow[];
     let done = 0;
     let failed = 0;
+    let cancelled = 0;
 
     for (const row of rows) {
       try {
         if (row.kind === 'referrer_reward') {
-          const workType = String(row.payload?.workType ?? '');
-          if (!workType) throw new Error('payload bez workType');
-          await tryGrantReferrerReward(admin, row.user_id, workType, row.order_id);
+          // F21 (stavka 1): nagrada se ne isplacuje za vracen novac. Modul cita oznaku povrata
+          // prije i poslije dodjele; kod povrata sam otkazuje redak (samo dok je jos `pending`).
+          // Supabase klijent je nadskup ReferrerRewardDb; strukturna usporedba cijelog tipa klijenta
+          // je za tsc preduboka (TS2589), pa se suzava na granici.
+          const ishod = await runReferrerRewardObligation(admin as unknown as ReferrerRewardDb, row);
+          // Trajna odluka bez dodjele (Codex PR #217, M2): modul je redak vec zatvorio kao `done`
+          // uz razlog. Prolazan pad dodjele modul BACA, pa redak ostaje `pending` (catch nize).
+          if (ishod === 'declined') {
+            done++;
+            continue;
+          }
+          if (ishod !== 'granted') {
+            cancelled++;
+            console.warn('[process-bonus-outbox] obveza otkazana povratom', { id: row.id, ishod });
+            continue;
+          }
         } else if (row.kind === 'pass_coupon' || row.kind === 'referral_attribution') {
           // OVE DVIJE OVISE O PODACIMA KOJI ZIVE U webhook-mor MODULU (kod kupona, katalog
           // proizvoda, oblik dogadjaja za atribuciju). Ne rekonstruiraju se ovdje iz payloada, jer
@@ -88,9 +102,11 @@ Deno.serve(async (req: Request) => {
           throw new Error(`nepoznata vrsta obveze: ${row.kind}`);
         }
 
+        // Samo redak koji jos ceka: puni povrat ga je mozda u medjuvremenu otkazao (`cancelled`).
         await admin.from('bonus_outbox')
           .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })
-          .eq('id', row.id);
+          .eq('id', row.id)
+          .eq('status', 'pending');
         done++;
       } catch (e) {
         const poruka = e instanceof Error ? e.message : String(e);
@@ -98,14 +114,15 @@ Deno.serve(async (req: Request) => {
         const iscrpljeno = row.attempts >= MAX_ATTEMPTS;
         await admin.from('bonus_outbox')
           .update({ status: iscrpljeno ? 'failed' : 'pending', last_error: poruka.slice(0, 500) })
-          .eq('id', row.id);
+          .eq('id', row.id)
+          .eq('status', 'pending');
         if (iscrpljeno) failed++;
         console.error('[process-bonus-outbox] obveza', { id: row.id, kind: row.kind, poruka });
       }
     }
 
-    console.log(`[process-bonus-outbox] preuzeto=${rows.length} izvrseno=${done} odustalo=${failed}`);
-    return json({ ok: true, claimed: rows.length, done, failed }, 200);
+    console.log(`[process-bonus-outbox] preuzeto=${rows.length} izvrseno=${done} odustalo=${failed} otkazano=${cancelled}`);
+    return json({ ok: true, claimed: rows.length, done, failed, cancelled }, 200);
   } catch (e) {
     console.error('[process-bonus-outbox]', e);
     return json({ error: 'internal' }, 500);

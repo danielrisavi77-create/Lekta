@@ -2,6 +2,8 @@
 
 Datum konsolidacije: 28. srpnja 2026. Pregledan commit: `1329c43` (grana `audit/remediation-2026-07-16`).
 
+**Mjerodavno stanje zadataka je `docs/agents/tasks.json` te CI i generirani artefakti (`docs/generated/`); ovaj dokument je povijesni pregled.**
+
 **Zadnje ažuriranje: 12. rujna 2026.** (poglavlje 17, program do javnog lansiranja). Ažuriranje od 17.
 kolovoza 2026. (grana `fix/audit-remediation-2026-08`) napravljeno je nakon vanjskog
 audita repozitorija i verifikacije njegovih tvrdnji protiv žive produkcije, staginga i GitHub
@@ -939,3 +941,281 @@ spremnost proizvoda: produkcijska verzija nije pouzdano identificirana, dokaz iz
 zastario, dio Edge koda i podataka nije usklađen s repozitorijem, naplata nije potpuno
 konfigurirana. Kontrolne točke G0 do G6 i matrica scenarija E01 do E36 su u odjeljcima 7 i 8
 vendoranog plana; njihovi dokazi nastaju u T44, T46 i T47, a ne ovim unosom.
+
+## 18. Vizualni audit sučelja i koda — 2026-09-29
+
+### 18.1 Opseg i dokaz
+
+Pregledan je lokalni HEAD/base `07ae8dd502900c4dd3741211012bb022929c3587`, u izoliranom
+worktreeu na grani `codex/visual-audit-2026-09-29`. Aplikacijski kod nije mijenjan.
+Ovo je audit, ne potvrda popravaka ili spremnosti izdanja.
+
+[Detaljni lokalni izvještaj s galerijom](../output/playwright/visual-audit-2026-09-29/report.html)
+sadrži reprodukciju, opažanje, učinak, granicu tvrdnje, lokacije u kodu, preporuku i
+kriterij prihvata za svaki nalaz. Uz njega su `findings.json` i `manifest.json` sa SHA-256
+i dimenzijama snimki. Artefakti u `output/` su lokalni i ignorirani u Gitu; nisu objavljeni.
+
+Spremljeno je 30 izvornih JPEG snimki; 28 je prihvaćeno kao dokaz. Full-page snimke 02 i 09
+isključene su zbog kvalitete prikaza i zamijenjene viewport snimkama. Pregledani su viewporti
+širine 320, 375, 390, 768 i 1440 CSS px te svijetla i tamna tema prema scenariju;
+nije testirana svaka kombinacija rute, širine i teme niti fizički mobilni uređaj.
+
+Pregledani koraci:
+
+1. Ulaz, rok, nepoznati rok, prvi i povratnički prikaz te lokalni upload.
+2. Dokument, prijedlog/odabir i potvrda profila FPZG završnog rada.
+3. Nalazi, promjena širine prozora, ulaz u obrazac popravka i povratak na dokument.
+4. Mobilni izbornik, postavke prikaza, dvije teme i opcija manje pokreta.
+5. Pregled alata, brojač kartica, citat, literatura, naslovnica i izjava; relevantna
+   prazna i popunjena stanja s ugrađenim primjerima.
+6. Marketinško podnožje i mobilni cjenik, bez kupnje.
+7. Moji radovi s lokalnim sintetičkim dokumentom i dugim nazivom.
+
+Dokument za pregled bio je `tests/fixtures/docx/synthetic-fpzg-zavrsni-verzija-2.docx`.
+Pristanak na serverski popravak nije dan i popravak nije izvršen. Ocjena i nalazi prikazani
+u sučelju nisu ovim auditom potvrđeni kao akademski točni.
+
+### 18.2 Nalazi po prioritetu
+
+Nema P0 nalaza. P1 ovdje označava pogrešno očekivanje na ključnom prijelazu, ne automatsko
+slanje dokumenta. P2 su funkcionalni ili bitni UX nedostaci, P3 poboljšanja jasnoće i rasporeda.
+
+| ID | Prioritet i nalaz | Dokaz i minimalni smjer popravka |
+| --- | --- | --- |
+| F01 | **P1 — Simulacija otvara stvarni repair obrazac.** | `src/ui/results/results-cockpit.ts:39,155`, `src/ui/app.ts:1162,1404`. „Simuliraj popravak” vodi na „Popravi sve jednim klikom”, uz 0 automatskih popravaka u rezultatima i 5/12 odabranih stavki u obrascu. Snimke 11, 13, 24. Razdvojiti simulaciju/izvršenje ili točno imenovati ulaz i objasniti različite brojače. Zaseban pristanak postoji; nije opažen automatski submit. |
+| F02 | **P2 — CTA se reže na mobilnim alatima.** | `src/shared/tool-page.css:222-223`, `kartice.html:249`. `white-space:nowrap` drži poveznicu u jednom retku. Na širini 375 px brojač ima desni rub poveznice 496,6 px; na 390 px izlaze i citat, literatura i naslovnica. Snimke 08, 16–19. Dopustiti prelamanje i prilagoditi flex/min-width. |
+| F03 | **P2 — Datum izjave stisnut je na 27,6 px.** | `izjava.html:41,226,229`. Ugniježđena mreža dva stupca ostavlja tekstualnom datumu 27,6 px uz nativni birač od 159,4 px; mjesto je na 320 px široko samo 44,4 px. Snimke 22, 23, 25; tabletna kontrola 21. Slagati kontrole okomito na uskom zaslonu. |
+| F04 | **P2 — Prazni obrasci prikazuju uspjeh.** | `src/tools/citat-page.ts:112-130`, `src/tools/naslovnica-page.ts:193`. Prazan citat u FPZG stilu daje interpunkcijski izlaz, aktivne gumbe i „Citat je spreman”. Naslovnica s naslijeđenom ustanovom pokazuje uspjeh bez autora/naslova. Snimke 15, 18. Razlikovati nacrt od spremnog sadržaja; provjeriti sadržajne obavezne podatke. |
+| F05 | **P2 — Pregled dokumenta ne oživi nakon širenja prozora.** | `src/ui/results/results-cockpit.ts:392`, `src/ui/results/desk-mount.ts:181`, `src/ui/results/desk-view.ts:161`. Analiza na uskom viewportu pa širenje na 1440 px ostavlja poruku pripreme; svježa desktop analiza istog dokumenta radi. Snimke 12, 14 nasuprot 24. Ponoviti odgođeno montiranje kada host postane vidljiv, uz uredan životni ciklus i oporavak. |
+| F06 | **P2 — Pokazivači koraka nisu usklađeni.** | `src/ui/results/results-cockpit.ts:298`, `src/ui/repair-phase.ts:44`, `src/shared/site-chrome.ts:562`. Gornji „Nalazi” ostaje aktivan uz glavni korak „Popravak” i nakon povratka na dokument. Snimke 13, 30. Izvoditi pokazivače iz zajedničkog stanja ili jasno razdvojiti njihovo značenje. |
+| F07 | **P2 — Dvije primarne radnje potvrde/analize.** | `src/ui/profile-card.ts:59`, `rad/index.html:146`. „Potvrdi i provjeri” i „Analiziraj dokument” istodobno konkuriraju. Snimka 30; kontekst profila 10. Odrediti jednu primarnu radnju po stanju. Nije dokazan zaobilazak validacije. |
+| F08 | **P3 — Preduvjet roka dolazi iza blokiranog uploada.** | `src/routes/intake/intake.css:371`, `src/routes/intake/intake-live.ts:114,257`, `index.html:174`. Na 375 × 667 px kontrola roka dolazi ispod prvog ekrana, dok upload već traži potvrdu. Snimka 29; desktop kontrola 01. Približiti preduvjet radnji. Postojeći onBlocked fokusira rok, pa ovo nije blokada bez oporavka. |
+| F09 | **P3 — Previsok prored višerednih oznaka postavki.** | `src/shared/display-settings.css:216,240`. `line-height:38px` daje 76 px teksta za dvoredne oznake osvjetljenja. Snimka 04. Normalizirati prored, a veličinu cilja održati paddingom/min-heightom. Kontrole rade; funkcionalna nedostupnost nije utvrđena. |
+
+### 18.3 Kontinuitet, provjere i ograničenja
+
+U cijelosti je pročitan raniji `docs/audit/FREE_TOOLS_VISUAL_UX_AUDIT_2026-08-06.md`.
+Zajednički tool-workspace i minimalne visine kontrola postoje u aktualnom CSS-u; povijesni
+rezultat 12/12 nije prihvaćen kao svjež test. Ciljano su pregledani ovaj kanonski audit,
+`docs/PLAN_AUDIT_2026-09-03.md` i `design/README.md`.
+
+U cijelosti pročitani izvori: `src/ui/profile-card.ts`, `src/ui/results/desk-document.ts`,
+`src/ui/results/desk-mount.ts`, `src/ui/repair-phase.ts` i `src/shared/a11y.css`.
+Ostali izvori uz nalaze pregledani su ciljanim odjeljcima i pretragom, ne u cijelosti.
+
+Potrebni alati već su instalirani: Node 24.14.1, Vite 8.3.1, Playwright 1.63.0,
+@axe-core/playwright i axe-core 4.13.0. Nije mijenjan dependency manifest/lockfile.
+Vite je pokrenut naredbom:
+
+```text
+node scripts/with-gate-lock.mjs visual-audit-preview -- node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4189 --strictPort
+```
+
+Interaktivni pregled i snimke izvedeni su u Codexovu pregledniku. Nisu pokrenuti CLI
+Playwright/axe suite ni `npm run check`; ovo nije zeleni projektni gate. Projektna pravila
+za teške Playwright poslove zahtijevaju koordinirani termin. Nisu provjereni čitač zaslona,
+automatizirani kontrast, fizički iOS/Android, Safari/Firefox, izvoz, naplata ni serverski repair.
+
+Postojeći `free-tools-audit.spec.ts` preskače mobilni axe i koristi desktop širinu;
+`a11y-states.spec.ts` preskače mobilni puni tok. Druge mobilne provjere postoje, uključujući
+`workspace-a11y.spec.ts`; ne tvrdi se da projekt nema mobilne testove. Nakon popravaka treba
+dodati/pokrenuti provjere upravo reproduciranih stanja i obavezni lokalni gate.
+
+Preporučeni redoslijed: F01/F04/F06/F07 (značenje radnji i stanja), F02/F03 (mobilni raspored),
+F05 (prikaz dokumenta), zatim F08/F09. Identitet s tipografijom, papirom i crvenim naglaskom
+vrijedi zadržati; problemi većinom traže ciljane popravke komponenti i prijelaza.
+
+
+### 18.4 Provedba nalaza u izoliranoj grani — 2026-09-29
+
+**Završni status: F01–F09 popravljeni s lokalnim vizualnim dokazom; puni `npm run check` PASS, exit 0.**
+Ovaj nastavak ažurira stanje popravaka; odjeljci 18.1–18.3 ostaju povijesni zapis izvornog audita.
+
+HEAD/base: `07ae8dd502900c4dd3741211012bb022929c3587`. Grana: `codex/visual-audit-2026-09-29`.
+Worktree: `C:\Users\PC\.codex\worktrees\lekta-visual-audit-2026-09-29\Lekta`.
+Izmjene su necommitane; nema pusha, mergea ili deploya.
+
+[Izvještaj provedbe s usporedbama prije/poslije](../output/playwright/visual-audit-implementation-2026-09-29/report.html),
+[rezultati provjera](../output/playwright/visual-audit-implementation-2026-09-29/verification.json) i
+[manifest snimki](../output/playwright/visual-audit-implementation-2026-09-29/manifest.json) lokalni su artefakti.
+Izvornih 30 snimki nije promijenjeno: SHA-256 ponovno je uspoređen s izvornim manifestom.
+Izvještaj povezuje devet nalaza s odabranim pregledanim snimkama, uz dimenzije, scenarij i granicu dokaza.
+
+| Nalaz | Provedena promjena | Dokaz |
+| --- | --- | --- |
+| F01 | „Pregledaj mogućnosti popravka”, pojašnjenje AUTO i nule, bez obećanog stropa pri nuli; brojač „Odabrano” | Cockpit/summary/ledger testovi; pregled panela bez slanja, prazna privola, sačuvan odabir i fokus |
+| F02 | Zajednički CTA normalno prelama tekst u sva četiri alata | 320/375/390/768/1440 CSS px, obje teme, desktop i mobilna emulacija |
+| F03 | Mjesto i datum na mobitelu u stupcu; unutarnji birači datuma okomiti na svim širinama | Datum više nije 28 px; kratki i dugi datum, tablet, 200% ekvivalentni reflow |
+| F04 | Prazno / nacrt / popunjeno izvedeno iz unosa i postojećeg missing popisa | DOM regresije i stvarno odgođeni fakultetski moduli; zadnji unos ostaje aktualan |
+| F05 | Vidljivost hosta pokreće jedan mount, lokalni retry, AbortSignal i čišćenje zooma | 375 → 1440 → 375 → 1440 bez reloada; RED/GREEN kasnog renderera |
+| F06 | `renderView` jedini postavlja gornje korake | Niz faza, repair povratak, Tab/Enter i fokus |
+| F07 | Jedan primarni `analyzeBtn`; „Promijeni profil” sekundaran | Predloženi/promijenjeni/vraćeni profil, dvostruki klik i neovisni docgate u stvarnoj aplikaciji |
+| F08 | Rok izvan upload papira, prije radnje u mobilnom i DOM redoslijedu | Novi/povratnički ulaz, unknown rok, drop, obnova i mobilni raspored |
+| F09 | Prored 1,25 i najmanje 44 px mete osvjetljenja | Pregledane obje teme; postojeći testovi odabira, zatvaranja i povrata fokusa |
+
+Dodatne minimalne korekcije kontrasta otkrivene su obveznim axe provjerama istih površina:
+success CTA, citat unutar teksta i oznake upozorenja literature koriste postojeći čitljivi token.
+Nisu mijenjani parser, formatteri citata, akademska pravila, repair motor/eligibility, cijene ni backend.
+
+Svježi završeni prolazi:
+
+- Puni `npm run check` (`VITEST_MAX_THREADS=2`): **670/670 datoteka, 8976 prolaznih testova, 10 postojećih Windows skipova**, exit 0. Lint/TypeScript, svih 27 Edge funkcija i Deno smoke prolaze; Vite build 3,69 s. Log: `check-release-final.log`.
+- Posljednja korekcija bundlea: dinamički import adaptera dokumenta, nepromijenjen limit 960 KiB; ciljano **45/45**, mobilno–desktop **2/2**, izravan desktop **1/1**, novi screenshotovi pregledani.
+- Ciljani Vitest: 338/338; lifecycle/stage/budget 217/217; profil/desk 39/39; ledger 20/20; završni UI 124/124.
+  Skupovi se preklapaju i ne zbrajaju se kao jedinstveni testovi.
+- Završna preglednička regresija: **42/42**, oba Chromium projekta, bez skipova.
+- Dopunska provjera: **2/2**; izravna desktop analiza u obje teme, postavke 320/375/390 px i
+  ekvivalentni 200% reflow, stvarni Tab redoslijed roka/uploada i strelice/Space/Escape.
+- Novi axe popunjenih mobilnih alata: **2/2**, četiri rute × obje teme, bez serious/critical nalaza.
+- Postojeći axe glavnog toka: **1/1** na desktop Chromiumu. Njegov postojeći mobilni skip nije uklonjen;
+  mobilna tipkovnica/fokus pokriveni su zasebnim `workspace-a11y` prolazom.
+- Odgođeno učitavanje citata/naslovnice: **4/4** async scenarija; prvotne greške testa i datumskog
+  reflowa zabilježene su i popravljene, ne preimenovane u prolaz.
+- `--list` novih triju specova: **55 testova**, po 11 u pet browser projekata.
+- `node scripts/with-gate-lock.mjs visual-audit-orphans -- npm run orphan-scan`: čisto.
+- `git diff --check`: bez whitespace grešaka.
+
+Točne naredbe i povijesni/neuspjeli prolazi sačuvani su u
+`.superpowers/sdd/2026-09-29-visual-audit-implementation/`; rezultat svakog završnog opsega
+naveden je i u `verification.json`. Read-only pregled zatvorio je pronađeni lifecycle propust;
+ne zamjenjuje zasebni cross-provider pregled prije eventualnog budućeg commita.
+
+Granice: lokalni Chromium/mobilna emulacija; Firefox/WebKit samo prikupljanje, bez fizičkog uređaja,
+čitača zaslona, browser zoom kontrole, kupnje, serverskog repaira ili produkcijskog dokaza.
+Usporedbe nisu pixel-diff; dio profila, skrola i širina razlikuje se, pa se ne tvrdi jednakost ocjene rada.
+
+Završne okolnosti: prostor oslobođen NTFS kompresijom triju potvrđenih cacheva ove sesije, bez brisanja sadržaja. Prethodni pad CRLF testa riješen je lokalnim LF zapisom workflowa, identičnim HEAD blobu (bez logičkog diffa). Deset skipova su postojeći POSIX CLI/permission scenariji na Windowsu. Završni read-only pregled dinamičkog importa nema nalaza; završni orphan-scan čist. Nema aktivnog testnog procesa ni zaostalog gate locka.
+
+### 18.5 Dopunski Firefox i WebKit — 2026-09-29
+
+**Proširena browser matrica nije zelena: 85/90, bez skipova.** Ovaj odjeljak proširuje
+granice dokaza iz 18.4 i ponovno otvara WebKit povrat fokusa u F06. HEAD/base ostaje
+`07ae8dd502900c4dd3741211012bb022929c3587`, grana `codex/visual-audit-2026-09-29`.
+Aplikacijski kod i izvorni testovi nisu mijenjani; svih 51 otisaka prethodnog source-manifesta
+podudaralo se prije ove dopune dokumentacije.
+
+Instalirani su Firefox 155.0 / build 1543 i WebKit 26.6 / build 2359. Prvi pokušaj nije mogao
+pokrenuti preglednike zbog nedostajućih izvršnih datoteka; sačuvan je kao infrastrukturni neuspjeh.
+Nakon instalacije, `npm run test:ux:browsers` izvršio je šest specova (`free-tools-responsive`,
+`visual-audit-surfaces`, `visual-audit-edge-cases`, `workspace-viewports`, `workspace-a11y`,
+`workspace-entry`) jednim radnikom kroz gate lock, bez automatskih retryja, za 30,6 minuta.
+
+| Projekt | Prvi izvršeni prolaz | Izolirano ponavljanje padova |
+| --- | --- | --- |
+| Firefox | 29/30 | Isti test zaglavlja 2/2 PASS, nepromijenjen timeout |
+| WebKit | 28/30 | Axe i povrat fokusa 0/2, isti padovi |
+| mobile-webkit | 28/30 | Axe i povrat fokusa 0/2, isti padovi |
+
+1. **F06 — potvrđen povrat fokusa na pogrešan element.** Nakon klika na ulaz u popravak i
+   „Natrag na nalaz”, `repair-entry` nije fokusiran. Dijagnostika capture-click pokazuje
+   `main#workspace` kao aktivni element pri otvaranju i nakon povratka. `src/ui/app.ts:1394`
+   šalje `enterRepairPhase(null, ...)`; `src/ui/repair-phase.ts` pamti `activeElement`.
+   Potrebno je proslijediti stvarni okidač. Sam prikaz dokumenta nakon promjene širine,
+   panel popravka i oznake koraka prolaze; završna asercija fokusa pada u oba WebKit projekta.
+2. **Sinkronizacija axe mjerenja s temom.** `free-tools-responsive.spec.ts:53` u oba WebKita
+   ponovljivo prijavljuje tri naslova `h2.sec-h` na `citat/dark`, omjer 1,14:1.
+   Dopunsko mjerenje odmah nakon axe vidi ispravne boje `#ede7dc` / `#191512`; nakon dva
+   animacijska kadra axe nema serious/critical nalaza, kao ni nakon skrola i screenshota.
+   Trajno loš kontrast nije potvrđen. Izvorni test nije promijenjen niti proglašen zelenim;
+   treba stabilizirati preduvjet mjerenja, uz očuvane kontrastne provjere.
+3. **Firefox — nestabilno čekanje.** `workspace-entry.spec.ts:127` nije vidio `radDocBar`
+   unutar pet sekundi; na snimci nakon pada traka je vidljiva. Dva nepromijenjena izolirana
+   ponavljanja prolaze. Prvi pad ostaje u izvještaju, ne prepisuje se uspjehom ponavljanja.
+
+[Dopunski izvještaj i 43 vizualno pregledane snimke](../output/playwright/visual-audit-implementation-2026-09-29/cross-browser-report.html),
+[rezultati s greškama i SHA-256](../output/playwright/visual-audit-implementation-2026-09-29/cross-browser-verification.json),
+[izmjerene boje i fokus](../output/playwright/visual-audit-implementation-2026-09-29/cross-browser-diagnostic-measurements.json).
+Po 14 snimki iz svakog projekta pokriva CTA, datum, prazna stanja, postavke, rok,
+rezultate, dokument i plan; dodatna snimka pokazuje dijagnostički naslov citata.
+Tema u imenu slike označava traženi `data-theme`, ne zaseban dokaz završenog bojanja.
+Točne naredbe, traceovi i exit kodovi ostaju u lokalnim `cross-browser*` artefaktima i
+`.superpowers/sdd/2026-09-29-visual-audit-implementation/` zapisima.
+
+Prethodni puni `npm run check` PASS odnosi se na isti aplikacijski kod; nije ponavljan za
+ovu dopunu izvještaja. WebKit na Windowsu / iPhone emulacija nisu fizički Safari/iPhone.
+Nema commita, pusha, mergea, deploya, kupnje ili serverskog repaira.
+
+
+### 18.6 Dovrsetak testova i zatvaranje F06 — 2026-09-29
+
+HEAD/base: `07ae8dd502900c4dd3741211012bb022929c3587`; grana `codex/visual-audit-2026-09-29`.
+Aplikacijski popravak prenosi stvarni kliknuti opener kroz cockpit/desk/app u `enterRepairPhase`.
+F06 povrat fokusa sada prolazi u svih pet projekata. TDD nova asercija prvo pada; potom **91/91**
+ciljanih testova prolazi. Axe ceka stvarnu computed ink boju prije mjerenja; namjerno losa boja
+mora proizvesti color-contrast nalaz. Nema gasenja pravila ni ponavljanja axe do prolaza.
+
+Zavrsni rezultat nije jedan neprekinuti zeleni 150-testni run:
+
+| Skup | Stvarni rezultat |
+| --- | --- |
+| Puni `npm run check`, nakon svih izmjena (`check-completion-final.log`) | **PASS exit 0: 670 datoteka, 8976 testova, 10 postojecih Windows skipova**, lint/TS, 27 Edge typecheckova, Deno smoke i build; jedan worker |
+| Pocetna matrica sest audit specova (`completion-browser.log`) | Prekinuta bez exit/JSON-a; log potvrduje Chromium **30/30**, mobile-chromium **30/30**, Firefox 26 zavrsenih prolaza |
+| Zavrseni nastavak (`completion-resumed-results.json`) | **89/90**, exit 1: Firefox 29/30; WebKit 30/30; mobile-webkit 30/30; bez skipova/retryja |
+| Pogodeni test obnove nakon korekcije (`session-ready-results.json`) | **10/10**, exit 0, dva izvođenja u svakom od pet projekata; bez skipova/retryja |
+
+Jedini pad nastavka bio je `workspace-entry.spec.ts`, prije reloada: korak profila vec postoji,
+ali DOCX intake jos nije objavio prihvacanje, pa je `radDocBar` skriven. `setFile` postavlja korak
+prije async `admitFile`, a `wireDocumentBar` reagira tek na settled/accepted. Postojece cekanje
+`#session=` zato je premjesteno ispred pocetne asercije zaglavlja. Timeouti i sve provjere nakon
+reloada su ocuvani. Prvotni pad, trace i screenshot ostaju dostupni. Napredak je ranije pogresno
+prenesen kao broj prolaza prema rednom broju testa; konacni JSON i ova tablica ispravljaju to.
+
+Svih 150 odabranih scenarija sada ima prolaz kroz navedene runove; to nije tvrdnja da je cijeli
+repozitorijski UX suite zelen. Jedina izmjena izmedju matrice i ciljanog ponavljanja jest redoslijed
+u jednom UX testu; 52 otiska provjerena su prije i poslije. Dokumentacija je dopunjena nakon gatea.
+
+Pregledano je **16 novih izvornih screenshotova** (po tri iz pet projekata i screenshot Firefox
+pada), uz 43 prethodno pregledana dopunska. Slike povratka prikazuju vraceni ekran, dok fokus
+dokazuje `toBeFocused`, ne pretpostavljeni pointer focus ring. `resized-document-dark` u mobilnom
+WebKitu uhvatio je jos svijetlu vanjsku pozadinu pri prijelazu: ime je trazena tema, ne potvrda
+stabilizirane boje. Axe alata ima zasebnu provjeru stabilizacije.
+
+**Novi otvoren nalaz F10 (P2, zaseban nastavak):** `citat.html:321-324`, mobile-chromium, 320 CSS px:
+red gumba Kopiraj / Kopiraj u tekstu / +Dodaj u popis literature izlazi iz papira i desnog ruba.
+Dokaz je `completion-browser/free-tools-responsive-cita-22097-ni-CTA-stane-na-uski-zaslon-mobile-chromium/citat-320-dark.png`.
+Postojeci responzivni test provjerava zasebnu success CTA poveznicu; taj prolaz nije dokaz ovog
+reda. Nije mijenjano u opsegu zatvaranja F01-F09. Nije potvrđena funkcionalna nedostupnost gumba.
+
+[Izvjestaj, sva povijest i pregledane snimke](../output/playwright/visual-audit-implementation-2026-09-29/cross-browser-report.html).
+Izvorni audit JPG-ovi, neuspjeli runovi i traceovi sacuvani su. Lokalni WebKit/iPhone emulacija
+nisu fizicki Safari/iPhone. Nema produkcijskog, kupovnog ili serverskog repair dokaza, commita,
+pusha, mergea ili deploya. Prije eventualnog commita i dalje vrijedi projektni cross-provider gate.
+
+Zavrsni `visual-completion-orphans -- npm run orphan-scan`: PASS exit 0. Vitest 2522,20 s; Vite build 3,85 s.
+
+### 18.7. Zatvaranje F10 i F11 — 2026-09-30
+
+Vlasnik je nakon ponovne provjere zatrazio "Popravi sve". HEAD/base ostaje
+`07ae8dd502900c4dd3741211012bb022929c3587`, grana `codex/visual-audit-2026-09-29`.
+Ova dopuna zatvara otvoreni F10 iz 18.6 i F11 iz naknadne provjere; prethodni dokazi ostaju sacuvani.
+
+- **F10 zatvoren:** `citat.html` dopusta prelamanje reda gumba. Nova browser regresija mjeri
+  rubove gumba, citljivost njihovog teksta i sirinu dokumenta prema zadanom viewportu, umjesto
+  potencijalno prosirenog mobilnog `innerWidth`. Matrica: 320/375/390/768/1440 CSS px, obje teme,
+  Chromium, mobile-chromium, Firefox, WebKit i mobile-webkit.
+- **F11 zatvoren:** `workspace-entry.spec.ts` (identitet i dugo ime) te `save-indicator.spec.ts`
+  cekaju stvarnu vidljivost prihvacenog dokumenta do 20 s. Provjere imena, lokalne obrade,
+  skracivanja imena i stvarne pohrane ostaju. Kontrolirano kasnjenje intake modula od 12 s
+  prolazi u svih pet projekata; vidljivost nakon 12,5–14,5 s pokazuje zasto starih 5 s nije dosta.
+- Dodatna korekcija testnog cekanja teme: WebKit izlozi novu CSS varijablu prije naslijedjene
+  computed boje. Dva render-framea cekaju se prije provjere boja. Rok, asercije boja, axe pravila
+  i negativna kontrola losim kontrastom nisu uklonjeni niti ublazeni.
+
+| Svjeza provjera | Rezultat |
+| --- | --- |
+| Pocetna dva cijela UX speca | 84/85; jedan mobile-webkit pad cekanja boje na 1440 px, exit 1, sacuvan trace |
+| Geometrija i axe nakon korekcije cekanja | 10/10, exit 0, svih pet projekata |
+| Identitet, dugo ime i indikator spremanja | 25/25, exit 0, svih pet projekata |
+| Prihvat s namjernim kasnjenjem 12 s | 5/5, exit 0, svih pet projekata |
+| `npm run check` | exit 0; 670 datoteka, 8976 PASS, 10 postojecih Windows skipova; lint/TS, 27 Deno Edge provjera, Deno smoke i build |
+| `orphan-scan` i `git diff --check` | oba exit 0 |
+
+Nema retryja ni skipova u navedenim browser runovima; nema tvrdnje o jednom neprekinutom 85/85
+prolazu. Vitest je trajao 2293,40 s, build 4,08 s. Ukupno 375 novih PNG-ova; 19 izravno
+pregledanih, ukljucujuci screenshot sacuvanog pada. Svih 53 hashova datoteka odgovaralo je stanju
+prije zavrsnih provjera; nakon gatea dopunjeni su samo ovaj audit i plan.
+
+[Zavrsni izvjestaj, naredbe, JSON rezultati, manifesti i screenshotovi](../output/playwright/visual-audit-fixes-2026-09-30/report.html).
+Rad ostaje lokalno u worktreeu. Nema commita, pusha, mergea ili deploya. Lokalna emulacija nije
+provjera fizickog iPhonea/Safarija niti produkcije; cijeli repozitorijski UX suite nije izvrsen.
+Projektni pregled drugog providera i dalje je obvezan prije eventualnog commita.

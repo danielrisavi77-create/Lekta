@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { sampleSummary } from '../src/ui/profile-card';
+import { sampleSummary, renderProfileCard } from '../src/ui/profile-card';
+
+it.each([true, false])('kartica ne duplicira primarnu analizu (nesiguran=%s)', (nesiguran) => {
+  const host = document.createElement('div');
+  host.innerHTML = renderProfileCard({ naslov: 'FPZG', vrsta: 'Završni rad', statusKey: 'verified', statusLabel: 'Verificirano', nesiguran }, (s) => s);
+  expect(host.querySelector('[data-confirm-profile]')).toBeNull();
+  expect(host.querySelector('.btn-primary')).toBeNull();
+  expect(host.querySelector('[data-change-profile]')).toBeTruthy();
+  expect(!!host.querySelector('.ap-upozorenje')).toBe(nesiguran);
+});
 
 /**
  * `sampleSummary` je izdvojen iz `app.ts` u `src/ui/profile-card.ts` (2026-09-26, ratchet u

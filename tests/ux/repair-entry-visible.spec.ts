@@ -37,7 +37,6 @@ async function analyzeToResult(page: Page) {
   await cekajKorak(page, '2');
   await expect(page.getByTestId('document-profile'), 'kartica profila mora biti vidljiva prije analize').toBeVisible();
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
-  await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   await expect(page.getByTestId('analysis-results')).toBeVisible();

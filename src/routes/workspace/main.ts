@@ -18,7 +18,7 @@ import {
 import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
-import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
+import { setSiteChromeScore } from '../../shared/site-chrome';
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
@@ -202,10 +202,7 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
-    // Z15 popravak: faza u traci prati tok analize, ne stoji zauvijek na "01 Nalazi". Prihvacen
-    // dokument (prvi ili nova verzija) znaci da citanje POCINJE, pa traka gubi korake dok
-    // `renderResultsCockpit` (results-cockpit.ts) ne javi da su nalazi stvarno nacrtani.
-    setSiteChromeStage(document, 'scanning');
+    // Fazu trake vodi renderView; ovdje se uklanja samo ocjena prethodnog dokumenta.
     // Ocjena starog dokumenta se prazni OVDJE, ne cim kokpit nacrta novu: bez ovoga traka
     // pokazuje tudju ocjenu (proslog dokumenta) dok Lekta cita novi, sto je tvrdnja koja u tom
     // trenutku nije istinita.

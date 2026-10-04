@@ -25,7 +25,6 @@ test.describe('T13: mentorovi komentari kao lokalni zadaci', () => {
     await page.locator('#fileInput').setInputFiles(fixture);
     await cekajKorak(page, '2');
     await expect(page.locator('#analyzeBtn')).toBeEnabled();
-    await page.locator('#analyzeBtn').click();
     await potvrdiProfil(page);
     await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
 
@@ -34,6 +33,13 @@ test.describe('T13: mentorovi komentari kao lokalni zadaci', () => {
     await expect(tasks).toContainText('Komentari mentora u dokumentu (4)');
     await expect(tasks).toContainText('Prored osnovnog teksta mora biti 1,5; ovdje je jednostruki.');
     await expect(tasks).toContainText('Argument u ovom odlomku nije potkrijepljen izvorom');
+    // Na uskom ekranu (mobilni projekt) blok je sklopljen u jedan redak; student ga otvara dodirom, kao i ovdje.
+    const blok = tasks.locator('details.mt');
+    if ((page.viewportSize()?.width ?? 1280) <= 720) {
+      await expect(blok).not.toHaveAttribute('open', /.*/);
+      await blok.locator('summary').click();
+    }
+    await expect(blok).toHaveAttribute('open', /.*/);
 
     const sadrzajni = tasks.locator('[data-mentor-task]').nth(1);
     await expect(sadrzajni).toHaveAttribute('data-user-status', 'open');

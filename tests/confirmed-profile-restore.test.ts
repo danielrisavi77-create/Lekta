@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { buildDocxFile } from './helpers/docx-builder';
 import { readSelectionIds, type SelectionIds } from '../src/ui/profile-selection-ids';
 import { subscribeProfileConfirmed, type ProfileConfirmed } from '../src/ui/profile-confirmed-events';
 import { createConfirmedProfile, NOTICE_PROFILE_MISMATCH } from '../src/routes/workspace/confirmed-profile';
@@ -261,4 +262,41 @@ describe('obnova potvrdjenog profila iz sesije', () => {
     const profil = createConfirmedProfile({ store: () => null, sessionId: () => null, apply: () => 'fpzg-politologija-diplomski', status: () => {} });
     expect(profil.restore({ profileDefinitionId: 'drugi', selectionIds: {}, confirmedAt: 1 }), 'stvarni modul usporedjuje').toBe('mismatch');
   });
+});
+
+
+describe('jedina primarna analiza: aktualni profil, dupli klik i neovisni docgate', () => {
+  for (const mode of ['predlozeni', 'promijenjeni', 'vraceni']) {
+    it(`${mode}: potvrda pripada trenutnom profilu i ne preskace sumnjivi dokument`, async () => {
+      await withMountedApp(async (api, doc) => {
+        const file = buildDocxFile({ paragraphs: Array.from({ length: 40 }, () => ({ text: 'Sinteticki odlomak za provjeru korisnickog toka. '.repeat(5) })) }, 'audit-sumnjivi.docx', [{
+          name: 'docProps/app.xml', data: new TextEncoder().encode('<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Words>120</Words></Properties>'),
+        }]);
+        expect((await api.loadAnalyzerDocument(file)).kind).toBe('accepted');
+        await settle();
+        if (mode === 'vraceni') sessionSnapshot(api, doc);
+        if (mode === 'promijenjeni') {
+          const unit = doc.getElementById('unitSelect') as HTMLSelectElement;
+          unit.value = unit.value === 'fer' ? 'fpzg' : 'fer';
+          unit.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        await settle();
+        const expected = readSelectionIds(doc);
+        const confirmations: ProfileConfirmed[] = [];
+        const off = subscribeProfileConfirmed(e => confirmations.push(e));
+        try {
+          const button = doc.getElementById('analyzeBtn') as HTMLButtonElement;
+          expect(button.disabled).toBe(false);
+          expect(doc.querySelector('[data-confirm-profile]')).toBeNull();
+          button.click(); button.click();
+          expect(confirmations).toHaveLength(1);
+          expect(confirmations[0].selectionIds).toEqual(expected);
+          expect(await waitFor(() => !!doc.querySelector('[data-confirm-docgate]'), 30_000)).toBeGreaterThanOrEqual(0);
+          expect(doc.getElementById('progressView')?.classList.contains('hidden')).toBe(true);
+          expect(doc.querySelector('[data-confirm-docgate]')?.textContent).toBe('Svejedno analiziraj');
+          expect(readSelectionIds(doc)).toEqual(expected);
+        } finally { off(); }
+      });
+    }, 180_000);
+  }
 });

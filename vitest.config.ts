@@ -1,8 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import { resolveMaxWorkers } from './scripts/agents/resolve-max-workers.mjs';
 
-// Zadani broj radnika (Vitest 2.1.9, `minWorkers`/`maxWorkers` su generalizirani preko `threads`
-// i `forks` poola; ovaj repo ne postavlja `pool` pa vrijedi Vitestov zadani `forks`).
+// Vitest 4 koristi maxWorkers za ogranicenje zadanog forks poola.
 // VLASNIK 2026-09-26: default podignut s 1 na 2 (optimizacijski popis, stavka 9), s eksplicitnom
 // mogucnoscu nadjacavanja kroz env varijablu kad je stroj uzak. `VITEST_MAX_THREADS` nadjacava
 // SAMO kad je postavljena i parsira se kao pozitivan cijeli broj; inace vrijedi zadano 2.
@@ -27,7 +26,6 @@ export default defineConfig({
     // Ovaj paket istodobno drži stvarne DOCX ZIP-ove, happy-dom i esbuild procese. Broj radnika
     // je zadano 2 (vidi `resolvedMaxWorkers` iznad), s nadjacavanjem kroz `VITEST_MAX_THREADS`
     // kad je stroj uzak (npr. `VITEST_MAX_THREADS=1`).
-    minWorkers: 1,
     maxWorkers: resolvedMaxWorkers,
     // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
     // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +

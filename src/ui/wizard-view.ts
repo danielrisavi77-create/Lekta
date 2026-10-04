@@ -16,6 +16,7 @@ import {
   phaseFor, SVE_FAZE, transition, viewFor,
   type WizardEvent, type WizardPhase, type WizardState,
 } from './wizard-machine';
+import { setSiteChromeStage } from '../shared/site-chrome';
 
 const PRIKAZI = ['wizardView', 'progressView', 'resultView', 'repairView'] as const;
 
@@ -64,6 +65,7 @@ export function renderView(stanje: WizardState, doc: Document = document): void 
   }
   if (korak !== null) doc.getElementById('wizardView')?.setAttribute('data-step', korak);
   renderRail(phaseFor(stanje), doc);
+  setSiteChromeStage(doc, stanje === 'rezultat' ? 'findings' : stanje === 'popravak' ? 'plan' : 'scanning');
   trenutno = stanje;
 }
 

@@ -86,7 +86,8 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   // profila (`ensureProfileRules`, mrezni dohvat). Na hladnom posluzitelju to premasi zadanih
   // 5 s, pa bi kraci rok mjerio brzinu prvog prevodjenja modula, a ne postojanje kartice.
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
-  await expect(page.locator('[data-confirm-profile]')).toBeVisible();
+  await expect(page.locator('[data-confirm-profile]')).toHaveCount(0);
+  await expect(page.locator('#analyzeBtn')).toBeVisible();
   await expect(page.locator('[data-change-profile]')).toBeVisible();
   // Provjera se pokrece s OVOG koraka: spajanje 2 i 3.
   await expect(page.locator('#analyzeBtn')).toBeVisible();
@@ -123,7 +124,10 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
 
   await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
-  await expect(page.locator('#radDocBar')).toBeVisible();
+  // Korak 2 nastupa prije asinkronog prihvata DOCX-a. Traka se prikazuje tek nakon
+  // document-settled dogadjaja, pa joj dajemo isti rok kao obnovi prihvacene sesije.
+  await cekajKorak(page, '2');
+  await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
   // ZNACKA "Lokalno" je od Z15 KRUGA POPRAVKA preselila iz pilule trake (`.site-chrome__doc`) u
   // `#radDocMeta`, redak u tijelu ispod trake (izmjereno: pilula se na 1180px lomila u cetiri
@@ -163,7 +167,7 @@ test('/rad/ zaglavlje: dugo ime datoteke se skracuje, a ne gura kontrole s ekran
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     buffer: (await import('node:fs')).readFileSync(FIXTURE),
   });
-  await expect(page.locator('#radDocBar')).toBeVisible();
+  await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
 
   const lampa = await page.locator('#themeBtn').boundingBox();
   expect(lampa, 'lampa mora imati mjerljiv polozaj').toBeTruthy();
@@ -192,10 +196,11 @@ test('/rad/ zaglavlje: preziviljava obnovu sesije, jer se pretplacuje prije nje'
   await page.goto('/rad/');
   await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
-  await expect(page.locator('#radDocBar')).toBeVisible();
-  // Sesija je zapisana tek kad se fragment pojavi u URL-u; bez tog cekanja bi ponovno ucitavanje
-  // otislo na golu `/rad/` i test bi mjerio prvi dolazak, ne obnovu.
+  await cekajKorak(page, '2');
+  // Korak profila nastaje prije async prijema DOCX-a. Fragment potvrduje prihvacanje i zapis
+  // sesije; tek tada provjeravamo zaglavlje i ponovno ucitavamo stvarnu spremljenu sesiju.
   await expect(page).toHaveURL(/#session=/, { timeout: 20_000 });
+  await expect(page.locator('#radDocBar')).toBeVisible();
 
   await page.reload();
   await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });

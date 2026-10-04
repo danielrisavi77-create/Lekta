@@ -51,7 +51,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
 
   // Rang signala ovisi o zdravlju ANALITIKE; zdrava repair telemetrija bez ijedne analize ne daje
   // "najjaci signal". Prazan nazivnik je prazno stanje, nikad 0 % (Codex V3-03 na #163).
-  bento.appendChild(heroCard({
+  const hero = heroCard({
     label: !strongest
       ? 'Nema izmjerenog signala'
       : health.kind === 'partial'
@@ -62,7 +62,9 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     sub: strongest
       ? `${opportunityLabel(strongest)} · ${fmtCount(strongest.affected)}/${fmtCount(strongest.denominator)} opažanja`
       : 'Nijedna prilika nema nazivnik u odabranom razdoblju.',
-  }));
+  });
+  hero.classList.add('c12');
+  bento.appendChild(hero);
 
   const healthCard = el('div', 'card c12 rise');
   healthCard.appendChild(el('div', 'card-title', 'Zdravlje mjerenja'));
@@ -86,7 +88,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   }
   bento.appendChild(healthCard);
 
-  bento.appendChild(statTile({
+  const tile1 = statTile({
     label: 'Opportunity eventi',
     icon: 'file',
     hue: s[0],
@@ -94,9 +96,11 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     render: fmtCount,
     delta: computeDelta(stats.current.opportunityEvents, stats.previous.opportunityEvents, 'neutral'),
     note: 'anonimni uzorak s privolom',
-  }));
+  });
+  tile1.classList.add('c3');
+  bento.appendChild(tile1);
 
-  bento.appendChild(statTile({
+  const tile2 = statTile({
     label: 'Manual gap',
     icon: 'warn',
     hue: s[1],
@@ -104,9 +108,11 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     render: fmtCount,
     delta: computeDelta(stats.current.manualAnalyses, stats.previous.manualAnalyses, 'down'),
     note: 'analize s barem jednim manual nalazom',
-  }));
+  });
+  tile2.classList.add('c3');
+  bento.appendChild(tile2);
 
-  bento.appendChild(statTile({
+  const tile3 = statTile({
     label: 'Nemjerljivo',
     icon: 'inbox',
     hue: s[2],
@@ -114,9 +120,11 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     render: fmtCount,
     delta: computeDelta(stats.current.unmeasurableAnalyses, stats.previous.unmeasurableAnalyses, 'down'),
     note: 'analize s barem jednom unmeasurable provjerom',
-  }));
+  });
+  tile3.classList.add('c3');
+  bento.appendChild(tile3);
 
-  bento.appendChild(statTile({
+  const tile4 = statTile({
     label: 'Repair gap',
     icon: 'wrench',
     hue: s[3],
@@ -124,7 +132,9 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     render: fmtCount,
     delta: computeDelta(stats.current.repairGapRuns, stats.previous.repairGapRuns, 'down'),
     note: `${fmtCount(stats.current.repairUnresolvedChecks)} ciljnih provjera ostalo otvoreno`,
-  }));
+  });
+  tile4.classList.add('c3');
+  bento.appendChild(tile4);
 
   const structureColumns: Array<Column<(typeof stats.current.structureGaps)[number]>> = [
     { header: 'Profil · vrsta', render: (r) => scopeLabel(r) },

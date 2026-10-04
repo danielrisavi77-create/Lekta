@@ -143,7 +143,7 @@
   line-height: 1.5;
 }
 
-/* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je H1 u display
+/* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je naslov rezultata ispod H1 stranice, u display
    serifu, jer je to prva recenica koju korisnik cita i jedina koja odgovara na "smijem li
    predati". Ton NE nosi lijevi rub (design/README.md, pravilo 3) nego prsten i pecat. */
 .cockpit-verdict-title {
@@ -1066,9 +1066,13 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   border-radius: 8px; padding: .45rem .8rem; font: inherit; cursor: pointer;
 }
 .desk-plan-open:hover { border-color: var(--ck-ink); }
+/* SCROLL-MARGIN: zaglavlje stranice (`header.site-chrome`) je ljepljivo. Kad se "Natrag" pomakne u
+   vidljivo podrucje (fokus tipkovnicom, scrollIntoView, Playwright prije klika), bez razmaka staje
+   tocno ispod trake i klik hvata zaglavlje ("Moji radovi"), ne gumb. 84px je isti razmak koji
+   `#resultView` vec drzi u page-app.css. */
 .desk-natrag {
   border: 0; background: transparent; color: var(--ck-muted); font: inherit; cursor: pointer;
-  padding: .2rem 0; text-align: left; justify-self: start;
+  padding: .2rem 0; text-align: left; justify-self: start; scroll-margin-top: 84px;
 }
 .desk-natrag:hover { color: var(--ck-ink); }
 
@@ -1133,9 +1137,21 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .mentor-tasks { margin: .8rem 0 0; }
 .mt { border: 1px solid var(--ck-line); border-radius: 10px; padding: .8rem 1rem; background: var(--ck-paper, #fff); }
 .mt-kicker { margin: 0 0 .3rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ck-muted); font-weight: 600; }
+/* Sklopivi naslov bloka: cijeli redak je meta od 44 px, strelica pokazuje stanje (mobilni audit 2026-09-28). */
+summary.mt-kicker { display: flex; align-items: center; gap: .35rem; min-height: 44px; margin: -.8rem -1rem 0; padding: 0 1rem; cursor: pointer; list-style: none; }
+summary.mt-kicker::-webkit-details-marker { display: none; }
+summary.mt-kicker::after { content: ""; margin-left: auto; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform .2s ease; }
+.mt[open] > summary.mt-kicker::after { transform: rotate(225deg); }
+.mt:not([open]) { padding-bottom: 0; }
+.mt-sazetak { color: var(--ck-ink, inherit); }
+summary.mt-kicker:focus-visible { outline: 2px solid var(--ck-accent, #c8102e); outline-offset: -2px; }
+@media (prefers-reduced-motion: reduce) { summary.mt-kicker::after { transition: none; } }
 .mt-popis { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .7rem; }
 .mt-zadatak { border-top: 1px solid var(--ck-line); padding-top: .6rem; }
 .mt-zadatak[data-user-status="addressed"] .mt-tekst { color: var(--ck-muted); }
+/* Komentar mentora s dugim nizom bez razmaka (poveznica, putanja) lomi se unutar kartice, ne siri list preko ruba
+   ekrana od 360 px (Codex F4 na #235). */
+.mt-tekst { overflow-wrap: anywhere; }
 .mt-napomena { display: block; color: var(--ck-muted); font-size: .8rem; }
 .mt-status { font-size: .85rem; margin: .3rem 0; }
 .mt-zadatak[data-verification="formal-check-passed"] .mt-strojno { color: var(--ck-green-text, #1a7f5a); }

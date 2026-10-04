@@ -29,9 +29,26 @@ Prompt ide u datoteku, ne u naredbeni redak. Obvezno sadrzi:
 
 ## 3. Pokretanje
 
+Izbor modela (odluka vlasnika 3. 10. 2026): ako delta dira ijednu stazu iz `protectedPaths`
+(`config/agent-routing.json`: `src/repair`, `src/citations`, `src/docx`, `supabase`, security),
+pregled ide modelom `gpt-6.1-sol`; inace `gpt-6-sol`.
+
+Zasticena delta:
+
+```bash
+codex exec --sandbox read-only -C <wt> -m gpt-6.1-sol -o <izlaz.md> "$(cat <prompt>)" < /dev/null
+```
+
+Ostale delte:
+
 ```bash
 codex exec --sandbox read-only -C <wt> -m gpt-6-sol -o <izlaz.md> "$(cat <prompt>)" < /dev/null
 ```
+
+Korak prije pregleda zasticene delte: `codex --version` mora ispisati 0.160.0 ili vise. Inace stani
+i nadogradi (`npm install -g @openai/codex@latest`); stariji CLI (0.156.1) odbija model porukom
+'not supported when using Codex with a ChatGPT account'. Dokaz za odluku je u
+`docs/agents/reports/SOL61_USPOREDBA.md`.
 
 `--sandbox read-only` je obvezan; `< /dev/null` sprjecava da proces ceka na ulaz.
 
