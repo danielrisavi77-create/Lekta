@@ -21,6 +21,7 @@ export interface RoutingConfig {
   models: Record<string, { status?: string }>;
   costWeight: Record<string, number>;
   routing: Record<string, Record<string, RoutingCell>>;
+  effortPolicy?: Record<string, string>;
 }
 
 export const ROUTING_SIZES = ['S', 'M', 'L'] as const;
@@ -85,6 +86,27 @@ export function findSameProviderWithoutFallback(config: RoutingConfig): string[]
       if (sameProvider && !validFallback) {
         problems.push(`${size}/${protectedFlag}: review i implement isti provider (${review.provider}) bez valjanog reviewFallbacka`);
       }
+    }
+  }
+  return problems;
+}
+
+/**
+ * B1 (28. 9.): implement effort mora slijediti `effortPolicy`. Zasticena implement uloga ima
+ * tocno `implementProtected`; nezasticena implement uloga na implementatorskom modelu ima tocno
+ * `implement`. Vraca imenovane pogotke, ukljucujuci nedostajucu politiku.
+ */
+export function findImplementEffortDrift(config: RoutingConfig, implementModel = 'claude-opus-5-5'): string[] {
+  const policy = config.effortPolicy;
+  if (!policy?.implement || !policy.implementProtected) return ['effortPolicy.implement ili implementProtected nedostaje'];
+  const problems: string[] = [];
+  for (const { size, protectedFlag, roleName, role } of allRoutingRoleEntries(config)) {
+    if (roleName !== 'implement') continue;
+    const expected = protectedFlag === 'true' ? policy.implementProtected
+      : role.model === implementModel ? policy.implement
+        : null;
+    if (expected !== null && role.effort !== expected) {
+      problems.push(`${size}/${protectedFlag}/implement effort ${role.effort ?? 'nema'} umjesto ${expected}`);
     }
   }
   return problems;

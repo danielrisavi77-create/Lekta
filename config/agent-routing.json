@@ -20,7 +20,7 @@
       "status": "verified",
       "verifiedAt": "2026-09-28",
       "defaultEffort": "medium",
-      "note": "doctor --model i model-fixture prosli 28. 9. (docs/agents/reports/OPUS55_VERIFIKACIJA.md); dodjela ulogama je zaseban PR"
+      "note": "doctor --model i model-fixture prosli 28. 9. (docs/agents/reports/OPUS55_VERIFIKACIJA.md); implementator od B1 (28. 9.), effort medium, zasticeno high"
     },
     "claude-opus-5": {
       "input": 5,
@@ -73,8 +73,8 @@
     "scout": "low",
     "gate": "low",
     "review": "medium",
-    "implement": "high",
-    "implementProtected": "xhigh",
+    "implement": "medium",
+    "implementProtected": "high",
     "max": "samo na rijec vlasnika"
   },
   "routing": {
@@ -100,7 +100,7 @@
         "roles": {
           "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
           "critic": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
-          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "implement": { "provider": "claude", "model": "claude-opus-5-5", "effort": "high" },
           "review": {
             "provider": "codex",
             "model": null,
@@ -118,7 +118,7 @@
         "roles": {
           "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
           "critic": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
-          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "high" },
+          "implement": { "provider": "claude", "model": "claude-opus-5-5", "effort": "medium" },
           "review": {
             "provider": "codex",
             "model": null,
@@ -134,7 +134,7 @@
         "roles": {
           "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
           "critic": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
-          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "implement": { "provider": "claude", "model": "claude-opus-5-5", "effort": "high" },
           "review": {
             "provider": "codex",
             "model": null,
@@ -153,7 +153,7 @@
         "roles": {
           "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
           "critic": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
-          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "implement": { "provider": "claude", "model": "claude-opus-5-5", "effort": "medium" },
           "review": {
             "provider": "codex",
             "model": null,
@@ -170,7 +170,7 @@
         "roles": {
           "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
           "critic": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
-          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "implement": { "provider": "claude", "model": "claude-opus-5-5", "effort": "high" },
           "review": {
             "provider": "codex",
             "model": null,
