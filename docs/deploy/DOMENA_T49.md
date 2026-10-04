@@ -88,6 +88,23 @@ originu tiho odsjeklo. Stanje 4. 10. 2026.: `lektahr.netlify.app` vraca 200 bez 
 Uvodjenje preusmjeravanja je zaseban korak s vlastitim dokazom (prijenos ili oporavak testiran na
 stvarnom pregledniku) i uz vlasnikovu rijec.
 
+Isti artefakt sluzi na oba hosta, pa interne poveznice u generiranim stranicama (logo, "Svi
+besplatni alati", CTA, pravne stranice) moraju biti relativne: apsolutni origin ostaje samo za
+kanonik, `og:url`, `og:image`, JSON-LD i sitemap (Codex runda 2, nalaz 2 na #273). Gard je u
+`tests/deploy-origin.test.ts`.
+
+Mjerljiv kriterij prijenosa prije ikakvog 301/308 sa starog hosta; sve na stvarnom pregledniku, od
+korisnika koji je radio na `lektahr.netlify.app` do istog korisnika na `lekta.hr`:
+
+1. isti anonimni identitet (isti `user.id` iz Auth sesije prije i poslije);
+2. pristup postojecem popravku (stranica popravka i preuzimanje rade bez nove prijave);
+3. lokalna povijest radova (`lekta.history.v2`) vidljiva na odredistu;
+4. dokument pohranjen u IndexedDB dostupan na odredistu;
+5. put oporavka kad prijenos ne uspije: korisnik dobiva jasnu uputu i moze se vratiti na stari
+   host, gdje je stanje netaknuto.
+
+Dok svih pet tocaka nije dokazano, `lektahr.netlify.app` ostaje bez preusmjeravanja.
+
 Prolaz garda #5 i `post-deploy-smoke` NIJE dokaz da je stari origin umirovljen (Codex nalaz 3 na
 #273): oni gledaju sadrzaj builda, ne ponasanje hosta. Tvrdnja "stari origin preusmjerava" smije se
 izreci tek uz opazen `301` ili `308` s `Location: https://lekta.hr/...` na `lektahr.netlify.app`.
@@ -101,6 +118,18 @@ korisnik koji se prijavi na `lekta.hr` dobiva sesiju na drugom originu. Stanje 4
 redirecta vec sadrzi `https://lekta.hr/**` i `https://www.lekta.hr/**` (uz Katedrine unose), a
 `site_url` je jos `https://lektahr.netlify.app`; mijenja se nakon spajanja ovog PR-a, uz vlasnikovu
 rijec, i odmah se provjerava prijava e-mailom na `lekta.hr`.
+
+Od ovog PR-a prijava e-mailom i povezivanje e-maila salju `redirect_to` za origin i stranicu s koje
+je prijava zatrazena (query parametar, `src/auth/session.ts`), pa link vraca na isti origin
+(Codex runda 2, nalaz 4). Zato redoslijed koraka 5:
+
+1. potvrditi HTTPS novog odredista (`curl -sI https://lekta.hr` daje 200, ispravan certifikat)
+   PRIJE promjene `site_url`;
+2. u istom operativnom koraku: `site_url` na `https://lekta.hr` i na popis dopustenih redirecta
+   dodati i `https://lektahr.netlify.app/**`. Dok je stari host `site_url`, on je dopusten implicitno;
+   kad prestane biti, bez izricitog unosa bi se `redirect_to` sa starog hosta odbio i link bi vodio
+   na `lekta.hr`, dakle na drugi origin od korisnikovog stanja;
+3. odmah provjeriti prijavu e-mailom na oba hosta: link vraca na host s kojeg je zatrazen.
 
 ## Staging
 

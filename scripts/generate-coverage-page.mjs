@@ -283,7 +283,7 @@ const html = `<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pokrivenost profila - Lekta</title>
 <meta name="description" content="Koje ustanove i studiji su strojno provjereni prema službenim izvorima, koji su djelomično pokriveni i koji tek čekaju obradu - potpun i ažuran popis.">
-<link rel="canonical" href="${SITE_ORIGIN}/pokrivenost.html">
+<link rel="canonical" href="/pokrivenost.html">
 <meta name="robots" content="index,follow">
 <style>${PAGE_STYLE}</style>
 </head>
@@ -298,7 +298,7 @@ ${legendHtml}
 ${unitGroupsHtml}
 </main>
 <footer>
-<p>Ne vidiš svoju ustanovu ili studij kako očekuješ? Puni izvještaj uvijek jasno pokazuje što je od pravila stvarno provjereno. <a href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="${SITE_ORIGIN}/#top">Provjeri rad</a></p>
+<p>Ne vidiš svoju ustanovu ili studij kako očekuješ? Puni izvještaj uvijek jasno pokazuje što je od pravila stvarno provjereno. <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 </footer>
 </body>
 </html>

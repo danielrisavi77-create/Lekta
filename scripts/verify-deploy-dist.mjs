@@ -11,7 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { isInOrigin, RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
+import { canonicalProblem, isInOrigin, RETIRED_ORIGIN, SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
@@ -193,11 +193,8 @@ for (const p of collectFiles(DIST, '.html')) {
   const html = fs.readFileSync(p, 'utf8');
   const rel = path.relative(DIST, p);
   if (WRONG_DOMAIN.test(html)) fail(`dist/${rel} sadrzi umirovljeni origin ${RETIRED_ORIGIN} umjesto ${SITE_ORIGIN}`);
-  const canonicalTag = html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*>/i);
-  const href = canonicalTag && canonicalTag[0].match(/\bhref=["']([^"']+)["']/i);
-  if (href && /^https?:\/\//i.test(href[1]) && !isInOrigin(href[1], SITE_ORIGIN)) {
-    fail(`dist/${rel} canonical ${href[1]} nije unutar ${SITE_ORIGIN}`);
-  }
+  const kanonik = canonicalProblem(html, SITE_ORIGIN);
+  if (kanonik) fail(`dist/${rel}: ${kanonik}`);
 }
 for (const p of collectFiles(DIST, '.xml')) {
   if (WRONG_DOMAIN.test(fs.readFileSync(p, 'utf8'))) fail(`dist/${path.relative(DIST, p)} (sitemap) sadrzi ${RETIRED_ORIGIN}`);

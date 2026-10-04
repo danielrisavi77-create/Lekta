@@ -33,6 +33,31 @@ export function isInOrigin(url, origin) {
   }
 }
 
+/**
+ * Problem s kanonikom u HTML-u, ili null. Svaki `<link rel="canonical">` se razrjesava prema
+ * `siteOrigin` i mora pasti u taj origin; relativni (`/a`) je u redu, a protokol-relativni
+ * (`//evil.example/`) ili tudji apsolutni nije (Codex runda 2, nalaz 7 na #273). Ovo je
+ * provjera koju zove gard #5 u verify-deploy-dist, pa ga testovi vjezbaju izravno.
+ *
+ * @param {string} html
+ * @param {string} siteOrigin
+ * @returns {string | null}
+ */
+export function canonicalProblem(html, siteOrigin) {
+  for (const tag of html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*>/gi) ?? []) {
+    const href = tag.match(/\bhref=["']([^"']*)["']/i)?.[1];
+    if (href === undefined || href.trim() === '') return `canonical bez href: ${tag}`;
+    let resolved;
+    try {
+      resolved = new URL(href, `${siteOrigin}/`).href;
+    } catch {
+      return `canonical ${href} nije valjan URL`;
+    }
+    if (!isInOrigin(resolved, siteOrigin)) return `canonical ${href} nije unutar ${siteOrigin}`;
+  }
+  return null;
+}
+
 /** Javna primarna domena; samo ona (i povratak na RETIRED_ORIGIN) smije biti indeksirana. */
 export const PRIMARY_ORIGIN = 'https://lekta.hr';
 
@@ -51,9 +76,10 @@ export const PRIMARY_ORIGIN = 'https://lekta.hr';
 export function rewritePublicSeo(name, source, siteOrigin) {
   let out = source;
   for (const origin of [PRIMARY_ORIGIN, RETIRED_ORIGIN]) {
-    if (origin !== siteOrigin) out = out.replaceAll(`${origin}/`, `${siteOrigin}/`);
+    if (!isInOrigin(siteOrigin, origin)) out = out.replaceAll(`${origin}/`, `${siteOrigin}/`);
   }
-  const javni = siteOrigin === PRIMARY_ORIGIN || siteOrigin === RETIRED_ORIGIN;
+  // Usporedba origina, ne nizova: `https://lekta.hr:443` je isti javni origin (Codex runda 2, nalaz 1).
+  const javni = isInOrigin(siteOrigin, PRIMARY_ORIGIN) || isInOrigin(siteOrigin, RETIRED_ORIGIN);
   if (name === 'robots.txt' && !javni) out = out.replace(/^Allow:[ \t]*\/[ \t]*(?=\r?$)/m, 'Disallow: /');
   return out;
 }

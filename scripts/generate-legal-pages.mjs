@@ -139,7 +139,7 @@ function pageShell(doc, allDocs) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(doc.title)} - Lekta</title>
 <meta name="description" content="${esc(doc.description)}">
-<link rel="canonical" href="${SITE_ORIGIN}/${doc.slug}.html">
+<link rel="canonical" href="/${doc.slug}.html">
 <meta name="robots" content="index,follow">
 <style>${PAGE_STYLE}</style>
 </head>
@@ -150,7 +150,7 @@ function pageShell(doc, allDocs) {
 ${doc.html}
 </main>
 <footer>
-<p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="${SITE_ORIGIN}/#top">Provjeri rad</a></p>
+<p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 Pravni dokumenti:
 <nav>${nav}</nav>
 </footer>

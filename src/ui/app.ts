@@ -214,10 +214,10 @@ async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryCl
 let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
 function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
 async function getValidAccessToken(...args: any[]){return (await loadAuthClient()).getValidAccessToken(args[0],args[1])}
-async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1])}
+async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1],fetch,location.origin+location.pathname)}
 async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
 async function signInAnonymously(...args: any[]){return (await loadAuthClient()).signInAnonymously(args[0])}
-async function linkEmailToAnonymous(...args: any[]){return (await loadAuthClient()).linkEmailToAnonymous(args[0],args[1],args[2])}
+async function linkEmailToAnonymous(...args: any[]){return (await loadAuthClient()).linkEmailToAnonymous(args[0],args[1],args[2],fetch,location.origin+location.pathname)}
 async function confirmEmailLink(...args: any[]){return (await loadAuthClient()).confirmEmailLink(args[0],args[1],args[2],args[3])}
 let _checkoutClientPromise: Promise<typeof import('../report/checkout')>|null=null;
 function loadCheckoutClient(){return _checkoutClientPromise??=import('../report/checkout')}

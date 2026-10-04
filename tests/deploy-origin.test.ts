@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isInOrigin, PRIMARY_ORIGIN, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
+import { canonicalProblem, isInOrigin, PRIMARY_ORIGIN, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
@@ -73,6 +73,42 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
     expect(locs.length).toBeGreaterThan(0);
     for (const loc of locs) expect(isInOrigin(loc, staging), loc).toBe(true);
+  });
+
+  it('gard #5 nad sintetickim artefaktom: kanonik mora biti u originu (Codex runda 2, nalaz 7)', () => {
+    const html = (href: string) => `<html><head><link rel="canonical" href="${href}"></head></html>`;
+    // Negativne kontrole kroz ISTU funkciju koju zove verify-deploy-dist.
+    expect(canonicalProblem(html('//evil.example/'), PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem(html('https://lekta.hr.evil.example/'), PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem(html('https://lektahr.netlify.app/'), PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    expect(canonicalProblem(html(''), PRIMARY_ORIGIN)).toMatch(/bez href/);
+    // Drugi kanonik u istom dokumentu se takodjer provjerava.
+    expect(canonicalProblem(html('https://lekta.hr/') + html('//evil.example/'), PRIMARY_ORIGIN)).toMatch(/nije unutar/);
+    // Cisti slucajevi.
+    expect(canonicalProblem(html('https://lekta.hr/alati/'), PRIMARY_ORIGIN)).toBeNull();
+    expect(canonicalProblem(html('/alati/'), PRIMARY_ORIGIN)).toBeNull();
+    expect(canonicalProblem('<html></html>', PRIMARY_ORIGIN)).toBeNull();
+    // verify-deploy-dist stvarno koristi ovu funkciju, a ne vlastitu provjeru prefiksa.
+    const gard = read('scripts/verify-deploy-dist.mjs');
+    expect(gard).toContain('canonicalProblem(html, SITE_ORIGIN)');
+    expect(gard).not.toMatch(/startsWith\(SITE_ORIGIN\)\)\s*\{\s*fail\(`dist\/\$\{rel\} canonical/);
+  });
+
+  it('generatori grade interne poveznice relativno, apsolutni origin samo za kanonik, og i sitemap (Codex runda 2, nalaz 2)', () => {
+    // Isti artefakt sluzi i na lekta.hr i na lektahr.netlify.app (bez 301). Apsolutna interna
+    // poveznica na lekta.hr bi korisnika na starom hostu odvela s njegovog lokalnog stanja.
+    const generatori = ['generate-citation-tools.mjs', 'generate-coverage-page.mjs', 'generate-legal-pages.mjs',
+      'generate-title-page-tools.mjs', 'generate-faculty-pages.mjs', 'generate-competitor-pages.mjs'];
+    for (const g of generatori) {
+      const src = read(`scripts/${g}`);
+      expect(src, g).not.toMatch(/href="\$\{SITE_ORIGIN/);
+      expect(src, g).not.toMatch(/ctaHtml\(`\$\{SITE_ORIGIN/);
+    }
+    expect(read('scripts/generate-citation-tools.mjs')).toContain("const GENERAL_TOOL_URL = '/citat.html';");
+  });
+
+  it('javni origin se prepoznaje po URL.origin, ne po nizu (Codex runda 2, nalaz 1)', () => {
+    expect(rewritePublicSeo('robots.txt', read('public/robots.txt'), 'https://lekta.hr:443')).toMatch(/^Allow: \/$/m);
   });
 
   it('produkcijski build ne dira sitemap ni robots i ostaje indeksiran', () => {

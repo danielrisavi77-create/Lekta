@@ -65,6 +65,17 @@ describe('requestEmailOtp', () => {
     await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (_u, i) => { body = JSON.parse(i.body as string); }), 'http://localhost:5199/admin.html');
     expect(body).toEqual({ email: 'a@b.hr', create_user: true, redirect_to: 'http://localhost:5199/admin.html' });
   });
+  it('s redirectTo salje redirect_to i kao QUERY parametar, jer ga GoTrue tamo cita (T49, Codex nalaz 4)', async () => {
+    let url = '';
+    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (u) => { url = u; }), 'https://lekta.hr/rad/');
+    expect(url).toBe('https://proj.supabase.co/auth/v1/otp?redirect_to=https%3A%2F%2Flekta.hr%2Frad%2F');
+    expect(new URL(url).searchParams.get('redirect_to')).toBe('https://lekta.hr/rad/');
+  });
+  it('bez redirectTo URL ostaje bez query parametra', async () => {
+    let url = '';
+    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (u) => { url = u; }));
+    expect(url).toBe('https://proj.supabase.co/auth/v1/otp');
+  });
   it('429 daje jasnu poruku', async () => {
     const r = await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(429)));
     expect(r).toEqual({ ok: false, message: 'previše pokušaja, pričekaj minutu' });
@@ -256,6 +267,12 @@ describe('linkEmailToAnonymous (P0-07)', () => {
     expect(body.email).toBe('a@b.hr');
     // Ne smije nositi create_user: to je ono sto pravi nov racun.
     expect(body.create_user).toBeUndefined();
+  });
+
+  it('s redirectTo potvrda e-maila vraca na isti origin kroz query redirect_to (T49)', async () => {
+    let seenUrl = '';
+    await linkEmailToAnonymous(CFG, 'anon-jwt', 'a@b.hr', fetchOnce(res(200, {}), (u) => { seenUrl = u; }), 'https://lekta.hr/moji-radovi/');
+    expect(new URL(seenUrl).searchParams.get('redirect_to')).toBe('https://lekta.hr/moji-radovi/');
   });
 
   it('bez tokena ne pokusava nista (nema identiteta koji bi se povezao)', async () => {
