@@ -292,6 +292,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -4909,6 +4910,16 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  {
+    id: 't84/korpus-naslov-bez-granice',
+    imitates: 'T84 SC-1: naslov ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji.',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'));
+      const mut = src.replace('r.title.slice(0, CORPUS_TITLE_MAX)', 'r.title');
+      return mut !== src && corpusTitleBoundProblems(mut).includes('corpus-check: naslov ide bazi bez gornje granice duljine');
+    },
+    cleanBefore: () => corpusTitleBoundProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'))).length === 0,
+  },
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',

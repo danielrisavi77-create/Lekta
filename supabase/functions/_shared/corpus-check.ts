@@ -30,6 +30,14 @@ export interface CorpusCheckConfig {
   chunkSize: number;
 }
 
+/**
+ * T84 SC-1: gornja granica duljine naslova prije `corpus_search_many`. Trosak trigram upita raste s
+ * duljinom (~2,8 ms po znaku), a budzet se provjerava tek izmedju serija i ne prekida RPC u tijeku.
+ * Bez granice jedan zahtjev sa 60 naslova od ~4 000 znakova drzi dijeljenu bazu desetke sekundi po
+ * seriji. Pravi akademski naslov s podnaslovom stane u 400 znakova.
+ */
+export const CORPUS_TITLE_MAX = 400;
+
 export function corpusConfigFromEnv(env: { get(key: string): string | undefined }): CorpusCheckConfig {
   return {
     enabled: (env.get('CORPUS_SOURCE_CHECK') ?? 'true') !== 'false',
@@ -62,7 +70,7 @@ export async function runCorpusCheck(
   try {
     const rawRefs: any[] = Array.isArray(references) ? references : [];
     const items = rawRefs.slice(0, config.maxRefs).map((r) => ({
-      title: typeof r?.title === 'string' ? r.title : null,
+      title: typeof r?.title === 'string' ? r.title.slice(0, CORPUS_TITLE_MAX) : null,
       year: Number.isFinite(Number(r?.year)) ? Number(r.year) : null,
     }));
     if (!items.length) return null;
