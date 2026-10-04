@@ -70,6 +70,16 @@ export function hasUnfilledTemplateField(text: string): boolean {
   return Object.values(ENTRY_TEMPLATE_FIELDS).some((field) => text.includes(field));
 }
 
+/**
+ * Z36 krug 4: oznake "Prezime (godina)" nepopunjenih predlozaka, ali SAMO kad su predlosci jedini razlog
+ * nepotpunosti. Ako ijedan nepotpun zapis nema polje predloska ili mu fali jos nesto (autor, godina,
+ * duljina), vraca prazno: pad provjere potpunosti je tada stvaran i ploca ga prikazuje kao i prije.
+ */
+export function unfilledTemplateLabels(incomplete: ReadonlyArray<{ text: string; author?: string; year?: string }>): string[] {
+  if (!incomplete.length || !incomplete.every((ref) => hasUnfilledTemplateField(ref.text) && !!ref.author && !!ref.year && ref.text.length >= 25)) return [];
+  return [...new Set(incomplete.map((ref) => `${ref.text.split(',')[0].trim()} (${ref.year})`))];
+}
+
 function firstAuthor(fields: Partial<CitationInput>, fallback: string): string {
   const parsed = String(fields.authors || fallback).split(/[;\n]/)[0] || '';
   return normalize(parsed.split(',')[0] || parsed).trim();

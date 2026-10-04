@@ -40,7 +40,7 @@ import { detectTitleWorkTypeMarker } from '../report/work-type-estimate';
 import { analyzeSectionStructure } from './section-structure';
 import { buildTriage } from './triage';
 import { analyzeElementStructure } from './element-structure';
-import { analyzeBibliographyStructure, hasUnfilledTemplateField } from './bibliography-structure';
+import { analyzeBibliographyStructure, hasUnfilledTemplateField, unfilledTemplateLabels } from './bibliography-structure';
 import { analyzeCitationBibliographySync } from './citation-bibliography-sync';
 import { analyzeLegalFootnoteStructure } from './legal-footnote-structure';
 import { analyzeFinalDocumentInspector } from './final-document-inspector';
@@ -295,7 +295,9 @@ ok=!missingTitle.length;checks.push(makeCheck('structure','Elementi naslovne str
  let legalFootnoteStructure: any = null;
  if(legalNotesSupported){legalFootnoteStructure=analyzeLegalFootnoteStructure({paragraphs,footnotes,bibliography:refs.map((r: any)=>({id:`bibliography-${r.p}`,text:r.text})),engine:legalCitationEngine,rules:profile.effectiveRules?.legalFootnoteRepairRules||profile.legalFootnoteRepairRules});}
  else {issues.push(issue('info','citations','Odabrani citatni stil nije u potpunosti automatiziran',`Za stil ${citationMeta(settings.citationStyle).label} citatnice i literaturu treba dodatno ručno pregledati.`,'Citatni profil'));checks.push(unmeasurableCheck('citations','Automatizacija citatnog stila',`${citationMeta(settings.citationStyle).label}: ručna završna provjera potrebna`))}
- checks.push(makeCheck('citations','Potpunost bibliografskih zapisa',incomplete.length?'warn':'pass',incomplete.length?Math.max(1,5-incomplete.length):5,5,incomplete.length?`${incomplete.length} mogućih nepotpunih zapisa`:'Nisu pronađeni očito nepotpuni zapisi',incomplete.length?issue('warning','citations','Mogući nepotpuni izvori u literaturi',incomplete.slice(0,6).map(r=>`odlomak ${r.p}: ${r.text.slice(0,70)}`).join('; ')):null));
+ // Z36 krug 4: kad su nepopunjeni predlosci JEDINI razlog nepotpunosti, provjera ih imenuje (`unfilledTemplates`),
+ // pa ploca nakon popravka umjesto regresije trazi popunu polja (src/analysis/repair-regression.ts). Status i bodovi isti.
+ const _completeness=makeCheck('citations','Potpunost bibliografskih zapisa',incomplete.length?'warn':'pass',incomplete.length?Math.max(1,5-incomplete.length):5,5,incomplete.length?`${incomplete.length} mogućih nepotpunih zapisa`:'Nisu pronađeni očito nepotpuni zapisi',incomplete.length?issue('warning','citations','Mogući nepotpuni izvori u literaturi',incomplete.slice(0,6).map(r=>`odlomak ${r.p}: ${r.text.slice(0,70)}`).join('; ')):null),_unfilled=legalNotesSupported?[]:unfilledTemplateLabels(incomplete);checks.push(_unfilled.length?{..._completeness,unfilledTemplates:_unfilled}:_completeness);
  // `[^)]*` a NE `[^)]+` ispred godine (2026-09-08): uz `+` je zagrada morala imati barem jedan znak
  // prije godine, pa je pripovjedna citatnica `Maric (2023a, str. 47)` bila nevidljiva ovoj provjeri
  // jer godina stoji na pocetku zagrade. Isti razred kao kvar u `extractCitations` (AUD-16), samo na

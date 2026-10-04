@@ -16,7 +16,7 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
-import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
+import { detectPassRegressions, dropStaleFieldRegressions, splitTemplateFillRegressions } from '../analysis/repair-regression';
 import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { trackRepairResultOk } from '../analytics/repair-result';
@@ -1880,11 +1880,19 @@ async function renderRecheck(
     return { unavailable: true, regressions: 0, outcome: null, verified: null };
   }
   const box = buildBeforeAfter(before, after);
-  // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju.
-  const regressions = before.checks && after.checks
+  // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju. Z36: ni predlozak zapisa koji je
+  // umetnuo isti popravak; on postaje kratka stavka za popunu (splitTemplateFillRegressions).
+  const split = splitTemplateFillRegressions(before.checks && after.checks
     ? dropStaleFieldRegressions(detectPassRegressions(before.checks, after.checks), after)
-    : [];
+    : [], after.checks);
+  const regressions = split.regressions;
   const regression = buildRegressionWarning(regressions);
+  if (split.fill) {
+    const fill = document.createElement('p');
+    fill.className = 'lekta-repair-panel__fill';
+    fill.textContent = split.fill;
+    box.insertBefore(fill, box.firstChild?.nextSibling ?? null);
+  }
   // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
   if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);

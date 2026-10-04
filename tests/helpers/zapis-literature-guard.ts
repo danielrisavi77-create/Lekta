@@ -16,6 +16,8 @@ import type { citationBibliographySyncFixer } from '../../src/repair/citation-bi
 import type { validateAssistedParams } from '../../src/repair/contract/assisted-request-policy';
 import type { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../../src/ui/repair-items';
 import type { ParamAuthorityMap, resolveParams } from '../../src/repair/param-authority';
+import type { PassRegression, RegressionCheckLike } from '../../src/analysis/repair-regression';
+import type { VerifiedOutcomeSource, VerifiedRepairOutcome } from '../../src/repair/repair-outcome-verified';
 
 type SyncFixer = typeof citationBibliographySyncFixer;
 
@@ -626,5 +628,46 @@ export function brTabPotvrdeProblemi(build: PlanBuilder, fixer: SyncFixer): stri
   for (const xml of paragraphsXml.slice(0, 2)) if (!first.parts.documentXml.includes(xml)) problems.push('br-tab: odlomak citata s w:br ili w:tab je prepisan');
   const second = fixer(first.parts, params);
   if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`br-tab: drugi prolaz nije no-op (${second.reason})`);
+  return problems;
+}
+
+const COMPLETENESS_ID = 'reference.completeness';
+
+/**
+ * Z36 krug 4, tocka 4: predlozak umetnut istim popravkom nije regresija ploce, ali stvaran pad jest.
+ * (a) analiza imenuje predloske samo kad su JEDINI razlog nepotpunosti; (b) ploca takvu regresiju
+ * izdvaja u stavku "Popuni polja u zagradama: ..."; (c) provjereni ishod ne preporucuje izvornik.
+ * Uz predlozak i stvaran pad (druga provjera, ili kratak zapis u istom popisu) regresija ostaje.
+ */
+export function predlozakNaPlociProblemi(
+  labels: (incomplete: Array<{ text: string; author?: string; year?: string }>) => string[],
+  split: (regressions: PassRegression[], after: RegressionCheckLike[]) => { regressions: PassRegression[]; fill: string | null },
+  verified: (src: VerifiedOutcomeSource) => VerifiedRepairOutcome,
+): string[] {
+  const problems: string[] = [];
+  const novak = { text: template('Novak', '2022'), author: 'novak', year: '2022' };
+  if (JSON.stringify(labels([novak])) !== JSON.stringify(['Novak (2022)'])) problems.push(`oznake: predlozak nije imenovan (${JSON.stringify(labels([novak]))})`);
+  if (labels([novak, { text: 'Kratko.', author: 'kratko', year: '2020' }]).length) problems.push('jedini-razlog: uz kratak zapis predlozak je imenovan kao jedini razlog');
+  if (labels([novak, { text: 'Horvat, A. Naslov bez godine. Zagreb: Izdavač.', author: 'horvat', year: '' }]).length) problems.push('jedini-razlog: uz zapis bez godine predlozak je imenovan kao jedini razlog');
+  if (labels([{ ...novak, text: 'Novak, N. (2022). Naslov.' }]).length) problems.push('jedini-razlog: kratak zapis bez polja imenovan je kao predlozak');
+
+  const check = (id: string, title: string, status: string, earned: number, max: number, extra: Record<string, unknown> = {}) => ({ id, title, status, earned, max, ...extra });
+  const before = [check(COMPLETENESS_ID, 'Potpunost bibliografskih zapisa', 'pass', 5, 5), check('notes.format', 'Oblikovanje fusnota', 'pass', 4, 4)];
+  const filled = check(COMPLETENESS_ID, 'Potpunost bibliografskih zapisa', 'warn', 4, 5, { unfilledTemplates: ['Novak (2022)'] });
+  const realFall = check(COMPLETENESS_ID, 'Potpunost bibliografskih zapisa', 'warn', 3, 5);
+  const regression = (title: string, id: string) => ({ id, title, after: 'warn', lostPoints: 1 });
+  const onlyTemplate = split([regression('Potpunost bibliografskih zapisa', COMPLETENESS_ID)], [filled, before[1]]);
+  if (onlyTemplate.regressions.length || onlyTemplate.fill !== 'Popuni polja u zagradama: Novak (2022)') problems.push(`ploca: predlozak je prikazan kao regresija (${JSON.stringify(onlyTemplate)})`);
+  const withReal = split([regression('Potpunost bibliografskih zapisa', COMPLETENESS_ID), regression('Oblikovanje fusnota', 'notes.format')], [filled, check('notes.format', 'Oblikovanje fusnota', 'fail', 0, 4)]);
+  if (JSON.stringify(withReal.regressions.map((r) => r.id)) !== JSON.stringify(['notes.format'])) problems.push(`ploca-stvarna: stvarna regresija uz predlozak nije prikazana (${JSON.stringify(withReal.regressions)})`);
+  const realOnly = split([regression('Potpunost bibliografskih zapisa', COMPLETENESS_ID)], [realFall]);
+  if (realOnly.regressions.length !== 1 || realOnly.fill !== null) problems.push('ploca-stvarna: pad potpunosti bez oznake predloska nije regresija');
+
+  const outcome = (after: Array<Record<string, unknown>>) => verified({ before, after, selected: [], skippedRuleIds: [], integrity: 'passed' });
+  const templated = outcome([filled, before[1]]);
+  if (templated.regressedIds.length || !templated.recommendRepairedCopy) problems.push(`ishod: predlozak obara preporuku popravljene kopije (${JSON.stringify(templated.regressedIds)})`);
+  const real = outcome([filled, check('notes.format', 'Oblikovanje fusnota', 'fail', 0, 4)]);
+  if (JSON.stringify(real.regressedIds) !== JSON.stringify(['notes.format']) || real.recommendRepairedCopy) problems.push(`ishod-stvarna: stvarna regresija ne obara preporuku (${JSON.stringify(real.regressedIds)})`);
+  if (!outcome([realFall, before[1]]).regressedIds.includes(COMPLETENESS_ID)) problems.push('ishod-stvarna: pad potpunosti bez oznake predloska nije regresija');
   return problems;
 }

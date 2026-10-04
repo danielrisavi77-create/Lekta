@@ -224,10 +224,14 @@ import * as bibliographyStructureModul from '../src/analysis/bibliography-struct
 import * as authorYearModul from '../src/citations/author-year';
 import * as parseReferenceModul from '../src/citations/parse-reference';
 import * as helpersModul from '../src/utils/helpers';
+import * as repairOutcomeModul from '../src/repair/repair-outcome';
+import * as checkIdRegistryModul from '../src/scoring/check-id-registry';
+import * as repairRegressionModul from '../src/analysis/repair-regression';
+import { verifiedOutcomeFrom } from '../src/repair/repair-outcome-verified';
 import { PARAM_AUTHORITY, type resolveParams } from '../src/repair/param-authority';
 import type { citationBibliographySyncFixer } from '../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
-import { brTabPotvrdeProblemi, nepopunjenPredlozakProblemi, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { brTabPotvrdeProblemi, nepopunjenPredlozakProblemi, planZapisaProblemi, predlozakNaPlociProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
@@ -1149,6 +1153,20 @@ const z36Literatura = (od?: string, u?: string) => z36Izvrsi('src/analysis/bibli
   '../citations/parse-reference.ts': parseReferenceModul,
   '../utils/helpers.ts': helpersModul,
 }, od, u).analyzeBibliographyStructure as typeof bibliographyStructureModul.analyzeBibliographyStructure;
+
+/** Z36 krug 4: oznake predlozaka (bibliography-structure), izdvajanje na ploci (repair-regression) i provjereni ishod. */
+const z36Oznake = (od?: string, u?: string) => z36Izvrsi('src/analysis/bibliography-structure.ts', {
+  '../citations/author-year.ts': authorYearModul,
+  '../citations/parse-reference.ts': parseReferenceModul,
+  '../utils/helpers.ts': helpersModul,
+}, od, u).unfilledTemplateLabels as typeof bibliographyStructureModul.unfilledTemplateLabels;
+const z36Ploca = (od?: string, u?: string) => z36Izvrsi('src/analysis/repair-regression.ts', {}, od, u).splitTemplateFillRegressions as typeof repairRegressionModul.splitTemplateFillRegressions;
+const z36Ishod = (od?: string, u?: string) => z36Izvrsi('src/repair/repair-outcome-verified.ts', {
+  './repair-outcome': repairOutcomeModul,
+  '../scoring/check-id-registry': checkIdRegistryModul,
+  '../analysis/repair-regression': repairRegressionModul,
+}, od, u).verifiedOutcomeFrom as typeof verifiedOutcomeFrom;
+const z36PlocaCista = () => predlozakNaPlociProblemi(z36Oznake(), z36Ploca(), z36Ishod()).length === 0;
 
 const z36FixerCist = () => zapisLiteratureProblemi(z36Fixer()).length === 0;
 const z36DozvolaCista = () => serverDozvolaProblemi(z36Autoritet(), citationEntryInsertionAllowed).length === 0;
@@ -7690,6 +7708,29 @@ const MUTATIONS: Mutation[] = [
     caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer("const current = asAnalysisText(analysisText(blocks.get(citation.paragraphIndex) || '')).trim();", "const current = paragraphText(blocks.get(citation.paragraphIndex) || '').trim();"))
       .some((p) => p.startsWith('br-tab: zapis')),
     cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
+    id: 'z36/predlozak-imenovan-uz-drugi-razlog',
+    imitates: 'analiza imenuje predloske i kad nisu jedini razlog nepotpunosti (kratak zapis ili zapis bez godine u '
+      + 'istom popisu), pa ploca stvaran pad potpunosti sakrije kao stavku za popunu',
+    caught: () => predlozakNaPlociProblemi(z36Oznake('!incomplete.every((ref) => hasUnfilledTemplateField(ref.text) && !!ref.author && !!ref.year && ref.text.length >= 25)', '!incomplete.some((ref) => hasUnfilledTemplateField(ref.text))'), z36Ploca(), z36Ishod())
+      .some((p) => p.startsWith('jedini-razlog:')),
+    cleanBefore: z36PlocaCista,
+  },
+  {
+    id: 'z36/predlozak-na-ploci-kao-regresija',
+    imitates: 'ploca nakon popravka predlozak koji je umetnuo isti popravak prikaze kao regresiju (stanje kruga 3) i '
+      + 'preporuci izvorni dokument, iako je jedini posao popuniti polja u zagradama',
+    caught: () => predlozakNaPlociProblemi(z36Oznake(), z36Ploca('    return own.length === 0;', '    return true;'), z36Ishod())
+      .some((p) => p.startsWith('ploca:')),
+    cleanBefore: z36PlocaCista,
+  },
+  {
+    id: 'z36/predlozak-obara-preporuku',
+    imitates: 'provjereni ishod (T10) predlozak istog popravka broji kao regresiju, pa panel i dalje nudi izvornik kao glavno preuzimanje',
+    caught: () => predlozakNaPlociProblemi(z36Oznake(), z36Ploca(), z36Ishod(" && !templateFill.has(id)) regressedIds.push(id);", ') regressedIds.push(id);'))
+      .some((p) => p.startsWith('ishod:')),
+    cleanBefore: z36PlocaCista,
   },
   {
     id: 'z36/umetanje-unutar-polja',

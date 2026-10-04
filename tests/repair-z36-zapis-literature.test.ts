@@ -12,7 +12,9 @@
  */
 import { describe, expect, it } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
-import { analyzeBibliographyStructure } from '../src/analysis/bibliography-structure';
+import { analyzeBibliographyStructure, unfilledTemplateLabels } from '../src/analysis/bibliography-structure';
+import { detectPassRegressions, dropStaleFieldRegressions, splitTemplateFillRegressions } from '../src/analysis/repair-regression';
+import { verifiedOutcomeFrom } from '../src/repair/repair-outcome-verified';
 import { citationBibliographySyncFixer } from '../src/repair/citation-bibliography-sync-fixer';
 import { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
 import { parseContractRequests } from '../src/repair/contract';
@@ -22,7 +24,7 @@ import { PARAM_AUTHORITY, resolveParams } from '../src/repair/param-authority';
 import { packageDoc, paragraph, documentXml } from './helpers/repair-templates';
 import { runClosedLoopCase, documentText } from './helpers/closed-loop-runner';
 import { readZip } from '../src/repair/zip-codec';
-import { brTabPotvrdeProblemi, entryText, nepopunjenPredlozakProblemi, paragraphTexts, planZapisaProblemi, sectionEndTexts, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { brTabPotvrdeProblemi, entryText, nepopunjenPredlozakProblemi, predlozakNaPlociProblemi, paragraphTexts, planZapisaProblemi, sectionEndTexts, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
@@ -70,6 +72,10 @@ describe('Z36 gardovi nad stvarnom implementacijom', () => {
 
   it('plan i fixer: w:br i w:tab ispred citata ne obaraju ostale potvrde iste stavke (krug 4)', () => {
     expect(brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, citationBibliographySyncFixer)).toEqual([]);
+  });
+
+  it('ploca: predlozak istog popravka nije regresija ni razlog za izvornik; stvaran pad jest (krug 4)', () => {
+    expect(predlozakNaPlociProblemi(unfilledTemplateLabels, splitTemplateFillRegressions, verifiedOutcomeFrom)).toEqual([]);
   });
 
   it('analiza: zapis s ijednim poljem predloska u uglatim zagradama je nepopunjen', () => {
@@ -233,6 +239,52 @@ describe('Z36 kroz cijeli lanac: analiza, plan, ugovor, popravak, ponovna analiz
     expect(completenessAfter?.status).toBe('warn');
     expect(JSON.stringify(after.issues)).toContain('[Naslov djela]');
     expect(analyzeBibliographyStructure(afterTexts.map((text, i) => ({ index: i + 1, text })), 'hr').alphabetical.expected).toBe(true);
+  }, 60_000);
+
+  it('krug 4: ploca nakon popravka: samo predlozak daje stavku za popunu, bez regresije i bez preporuke izvornika', async () => {
+    const bytes = await brokenDoc();
+    const before = await analyzeFixture(new File([bytes], 'z36-ploca.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true });
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }]);
+    const after = await analyzeFixture(new File([applied.docxBytes], 'z36-ploca-poslije.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    const completeness = after.checks.find((check: any) => check.title === COMPLETENESS);
+    // Analiza ostaje istinita: provjera je warn i imenuje predlozak kao jedini razlog.
+    expect(completeness?.status).toBe('warn');
+    expect(completeness?.unfilledTemplates).toEqual(['Novak (2022)']);
+    const raw = dropStaleFieldRegressions(detectPassRegressions(before.checks, after.checks), after);
+    // Generator: bez izuzeca bi ovo bila regresija potpunosti.
+    expect(raw.map((regression) => regression.title)).toContain(COMPLETENESS);
+    const split = splitTemplateFillRegressions(raw, after.checks);
+    expect(split.regressions).toEqual([]);
+    expect(split.fill).toBe('Popuni polja u zagradama: Novak (2022)');
+    const verified = verifiedOutcomeFrom({ before: before.checks, after: after.checks, selected: [item], skippedRuleIds: applied.skipped, integrity: 'passed' });
+    expect(verified.regressedIds).not.toContain('reference.completeness');
+    expect(verified.recommendRepairedCopy).toBe(true);
+  }, 60_000);
+
+  it('krug 4: stvarna regresija uz predlozak (kratak korisnikov zapis) ostaje regresija', async () => {
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${paragraph('Tekst koji navodi izvor (Novak, 2022) i (Babić, 2018) te (Horvat, 2020) i (Zorić, 2021).')}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(entryText('Zorić', '2021'))}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-stvarna.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    expect(before.checks.find((check: any) => check.title === COMPLETENESS)?.status).toBe('pass');
+    const [item] = citationBibliographySyncRepairableItem(before, syncProfile({ mode: 'author-year', allowMissingEntryInsertion: true }));
+    const form = item.citationBibliographySyncForm!;
+    const authorOf = new Map<string, string>(before.details.citationBibliographySync.missingEntries.map((c: any) => [String(c.id), String(c.author)]));
+    for (const row of form.missingEntries) { row.selected = true; row.text = authorOf.get(row.citationId) === 'Babić' ? 'Babić (2018).' : ''; }
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: form.buildParams(form) }]);
+    const texts = await bodyParagraphs(applied.docxBytes);
+    // Generator: isti popravak umetnuo je predlozak I kratak zapis koji je stvarno nepotpun.
+    expect(texts).toContain(template('Novak', '2022'));
+    expect(texts).toContain('Babić (2018).');
+    const after = await analyzeFixture(new File([applied.docxBytes], 'z36-stvarna-poslije.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    expect(after.checks.find((check: any) => check.title === COMPLETENESS)?.unfilledTemplates).toBeUndefined();
+    const split = splitTemplateFillRegressions(dropStaleFieldRegressions(detectPassRegressions(before.checks, after.checks), after), after.checks);
+    expect(split.regressions.map((regression) => regression.title)).toContain(COMPLETENESS);
+    expect(split.fill).toBeNull();
+    const verified = verifiedOutcomeFrom({ before: before.checks, after: after.checks, selected: [item], skippedRuleIds: applied.skipped, integrity: 'passed' });
+    expect(verified.recommendRepairedCopy).toBe(false);
   }, 60_000);
 
   it('tvrdi razmak u citatu (U+00A0): odlomak citata ostaje bajt-isti, umece se samo zapis', async () => {

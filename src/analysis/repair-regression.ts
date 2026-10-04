@@ -114,3 +114,35 @@ export function dropStaleFieldRegressions(
   if (!tocFieldWillRefresh(afterResult)) return [...regressions];
   return regressions.filter((regression) => !(regression.id && STALE_FIELD_CHECK_IDS.has(regression.id)));
 }
+
+/**
+ * Z36 krug 4: oznake nepopunjenih predlozaka koje provjera nosi (`Check.unfilledTemplates`). Analiza ih
+ * postavlja samo kad su predlosci JEDINI razlog pada (src/analysis/bibliography-structure.ts).
+ */
+export function unfilledTemplatesOf(check: unknown): string[] {
+  const value = (check as { unfilledTemplates?: unknown } | null | undefined)?.unfilledTemplates;
+  return Array.isArray(value) ? value.filter((label): label is string => typeof label === 'string' && label.length > 0) : [];
+}
+
+/**
+ * Z36 krug 4: regresija kojoj je jedini razlog predlozak umetnut istim popravkom nije steta nego posao
+ * za studenta. Provjera je prije prolazila, pa dokument tada nije imao nijedan nepopunjen predlozak;
+ * poslije su predlosci jedino sto je obara, a umetnuo ih je samo ovaj popravak. Takva regresija se
+ * izdvaja u kratku stavku "Popuni polja u zagradama: ..." i ne preporucuje izvorni dokument. Svaka
+ * druga regresija (i pad potpunosti s ijednim drugim razlogom) ostaje nedirnuta.
+ */
+export function splitTemplateFillRegressions(
+  regressions: readonly PassRegression[],
+  after: readonly RegressionCheckLike[] = [],
+): { regressions: PassRegression[]; fill: string | null } {
+  const labels: string[] = [];
+  const kept = regressions.filter((regression) => {
+    const check = regression.id
+      ? after.find((candidate) => candidate.id === regression.id)
+      : after.find((candidate) => !candidate.id && candidate.title === regression.title);
+    const own = unfilledTemplatesOf(check);
+    labels.push(...own);
+    return own.length === 0;
+  });
+  return { regressions: kept, fill: labels.length ? `Popuni polja u zagradama: ${[...new Set(labels)].join(', ')}` : null };
+}

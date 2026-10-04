@@ -52,6 +52,11 @@ export interface Check {
   detail: string;
   issue: Issue | null;
   scored: boolean;
+  /**
+   * Z36 krug 4, samo provjera "Potpunost bibliografskih zapisa": oznake ("Novak (2022)") nepopunjenih
+   * predlozaka kad su oni JEDINI razlog nepotpunosti. Izostaje inace, pa golden snapshoti ostaju isti.
+   */
+  unfilledTemplates?: string[];
 }
 
 /** Status provjere ciju vrijednost dokument nije zapisao, pa se NIJE MOGLA izmjeriti. */
