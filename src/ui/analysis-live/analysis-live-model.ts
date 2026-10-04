@@ -364,6 +364,9 @@ const placeholderSlots = (n: number): LiveFrame['slots'] => Array.from({ length:
   state: 'placeholder' as const, label: `NALAZ ${i + 1} · ČEKA PROVJERU`, title: '', measured: '', expected: '', metaVisible: false, severity: 'info' as const,
 }));
 
+/** Mjesto koje nije dobilo nalaz: stoji prazno (ista visina), da se sadrzaj ispod ne sazme (Z33-04). */
+const EMPTY_SLOT: LiveFrame['slots'][number] = { state: 'empty', label: '', title: '', measured: '', expected: '', metaVisible: false, severity: 'info' };
+
 /** Dok analiza traje brojaca jos nema; celija to kaze umjesto da stoji prazna. */
 const WAITING: StatCell = { text: '-', title: 'Broj je poznat kad provjera završi.', note: 'mjeri se' };
 
@@ -472,6 +475,11 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
           severity: f.severity,
         };
       }),
+      // Svih SLOTS mjesta stoji do prelaska na rezultat. Visak ceka provjeru dok retci traju, a kad
+      // je provjera gotova postaje prazan redak, nikad izmisljen nalaz.
+      ...Array.from({ length: Math.max(0, SLOTS - plan.findings.length) }, (_, k) => (doneCount >= ROWS.length
+        ? EMPTY_SLOT
+        : placeholderSlots(plan.findings.length + k + 1)[plan.findings.length + k])),
     ],
     foundLine: plan.total === 0 && doneCount >= ROWS.length ? summaryNaslov(0)
       : revealed ? `${doneCount >= ROWS.length ? plan.total : revealed} od ${plan.total} pronađeno` : 'još ništa',

@@ -354,6 +354,9 @@ p.z33-verdict-meta { margin: 0; font-size: 13px; line-height: 1.55; color: var(-
 }
 .z33-slot[data-state='filled'] .z33-slot-wait,
 .z33-slot[data-state='placeholder'] .z33-slot-on { display: none }
+/* Mjesto bez nalaza zadrzava visinu retka (Z33-04), samo bez sadrzaja. */
+.z33-slot[data-state='empty'] .z33-slot-on { display: none }
+.z33-slot[data-state='empty'] .z33-slot-wait { visibility: hidden }
 .z33-slot-on { display: grid; grid-template-columns: 28px 10px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 14px 0 }
 .z33-slot-n { font-size: 11px; color: var(--paper-muted) }
 .z33-dot { align-self: center; width: 8px; height: 8px; border-radius: 50%; background: var(--paper-muted) }

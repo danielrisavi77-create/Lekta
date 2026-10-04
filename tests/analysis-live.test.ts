@@ -163,7 +163,9 @@ describe('Z33 model: ne izmislja podatke', () => {
     const plan = buildLivePlan({ file: { name: 'x.docx' }, checks: [], issues: [] });
     const kraj = revealFrame(plan, Infinity, true);
     expect(plan.findings).toEqual([]);
-    expect(kraj.slots).toEqual([]);
+    // Svih sest mjesta stoji (Z33-04), nijedno nije nalaz.
+    expect(kraj.slots).toHaveLength(6);
+    expect(kraj.slots.every((s) => s.state === 'empty')).toBe(true);
     expect(kraj.foundLine).toBe('Nema otvorenih nalaza');
     expect(kraj.score).toBe('Nije bodovano');
     // Brojac bez broja nikad nije prazna oznaka: "-" uz razlog u `title`.
@@ -928,5 +930,49 @@ describe('Z33-06 i Z33-07: najava za citac i fokus na kraju', () => {
     await p;
     await spremnost(rv);
     expect(document.activeElement).toBe(drugi);
+  });
+});
+
+describe('Z33-04: sest stabilnih mjesta za nalaze do prelaska na rezultat', () => {
+  /** Generator: tocno JEDAN otvoren nalaz (pet mjesta bi inace nestalo). */
+  function jedanNalaz() {
+    const r = sampleResult();
+    const i = issue('warning', 'formatting', 'Font nije po pravilniku');
+    return { ...r, checks: [check('formatting', 'Dominantni font', 'warn', 4, 8, 'Calibri 11 pt', i)], issues: [i] };
+  }
+  afterEach(() => {
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+
+  it('generator: jedan nalaz', () => {
+    expect(buildLivePlan(jedanNalaz()).findings).toHaveLength(1);
+  });
+
+  it('broj mjesta je 6 u citanju, kroz cijelo otkrivanje i u zavrsnom stanju, siroko i usko', () => {
+    expect(readingFrame(52).slots).toHaveLength(6);
+    for (const result of [jedanNalaz(), { file: { name: 'x.docx' }, checks: [], issues: [] }, sampleResult()]) {
+      const plan = buildLivePlan(result);
+      for (const wide of [true, false]) {
+        for (let t = 0; t <= revealDuration(plan, wide) + 100; t += 50) expect(revealFrame(plan, t, wide).slots).toHaveLength(6);
+        const kraj = revealFrame(plan, Infinity, wide);
+        expect(kraj.slots).toHaveLength(6);
+        expect(kraj.slots.filter((s) => s.state === 'filled').map((s) => s.title)).toEqual(plan.findings.map((f) => f.title));
+        // Mjesto bez nalaza ne izmislja nalaz ni "ceka provjeru" nakon kraja provjere.
+        expect(kraj.slots.filter((s) => s.state !== 'filled').every((s) => s.state === 'empty' && s.title === '' && s.label === '')).toBe(true);
+      }
+    }
+  });
+
+  it('DOM: jedan nalaz zadrzava sest redaka', async () => {
+    document.documentElement.dataset.motion = 'reduce';
+    document.body.innerHTML = '<div id="progressView"><p class="sr-only" id="progressMessage">Gotovo</p><p class="pv-local">x</p></div>';
+    const v = document.getElementById('progressView')!;
+    const h = mountAnalysisLive(v);
+    h.start(null);
+    expect(v.querySelectorAll('.z33-slot')).toHaveLength(6);
+    await h.reveal(jedanNalaz());
+    expect(v.querySelectorAll('.z33-slot')).toHaveLength(6);
+    expect(v.querySelectorAll('.z33-slot[data-state="filled"]')).toHaveLength(1);
   });
 });
