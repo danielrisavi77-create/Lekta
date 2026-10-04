@@ -61,6 +61,7 @@ import type { IssuedLocalRepairJob, LocalRepairJobRecord } from '../../../src/re
 import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../src/repair/local-runner/storage-handoff.ts';
 import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
 import { acquireRepairSlot } from './global-slot.ts';
+import { attemptCapStatus, recordAttempt } from './attempt-cap.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -159,7 +160,6 @@ const REPAIR_MAX_PER_USER = Number(Deno.env.get('REPAIR_MAX_PER_USER') ?? '1');
  * 20 MB, readZip, applyFixers), pa bez stropa jedan racun moze ponavljati isti dokument bez kraja.
  */
 const REPAIR_UNCOUNTED_DAILY_CAP = Number(Deno.env.get('REPAIR_UNCOUNTED_DAILY_CAP') ?? '30');
-const UNCOUNTED_STATUSES = ['no_change', 'integrity_failed'];
 
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
 // 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
@@ -312,19 +312,14 @@ Deno.serve(async (req: Request) => {
       leaseSeconds: REPAIR_SLOT_LEASE_SECONDS,
     });
     if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);
+    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);
     releaseGlobalSlot = globalSlot.release;
 
     // T84 RD-2: strop ishoda bez potrosnje provjerava se PRIJE citanja tijela i readZip-a, jer je
-    // upravo taj rad ono sto bez stropa nije ograniceno. Greska upita propusta (isto kao free cap).
-    {
-      const { count: uncounted } = await admin.from('report_generations')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', user.id).in('status', UNCOUNTED_STATUSES)
-        .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-      if (REPAIR_UNCOUNTED_DAILY_CAP > 0 && (uncounted ?? 0) >= REPAIR_UNCOUNTED_DAILY_CAP) {
-        return json({ error: 'rate_limited', reason: FREE_MODE ? 'free_user' : 'paid_daily' }, 429);
-      }
-    }
+    // upravo taj rad ono sto bez stropa nije ograniceno. Fail-closed: necitljiv dnevnik je 503.
+    const attemptCap = await attemptCapStatus(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);
+    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);
+    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -498,8 +493,7 @@ Deno.serve(async (req: Request) => {
         // usporedbu (TS2589), pa ide kroz unknown.
         readAccessRows(admin as unknown as AccessDb, user.id, workType, now),
         admin.from('report_generations').select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id).not('status', 'in', `(${UNCOUNTED_STATUSES.join(',')})`)
-          .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
+          .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
       ]);
 
       // Greska upita NIJE "nema prava" (inace bi npr. PGRST201 placenom korisniku vratio 402).
@@ -576,7 +570,8 @@ Deno.serve(async (req: Request) => {
         `[repair-docx] vrata integriteta odbila isporuku: ${result.integrityFailure.part}: ${result.integrityFailure.problem}` +
         (result.integrityFailure.offset != null ? ` (offset ${result.integrityFailure.offset})` : ''),
       );
-      await log('integrity_failed', null); // T84 RD-2: ne trosi kvotu, ali ulazi u UNCOUNTED strop
+      // T84 RD-2: ne trosi kvotu, ali ulazi u strop pokusaja; neuspjeli upis se ne propusta tiho.
+      if (!(await recordAttempt(admin, user.id, 'integrity_failed'))) return json({ error: 'unavailable' }, 503);
       return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
     }
 
@@ -585,7 +580,8 @@ Deno.serve(async (req: Request) => {
       const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
-      await log('no_change', null); // T84 RD-2: ne trosi kvotu, ali ulazi u UNCOUNTED strop
+      // T84 RD-2: ne trosi kvotu, ali ulazi u strop pokusaja; neuspjeli upis se ne propusta tiho.
+      if (!(await recordAttempt(admin, user.id, 'no_change'))) return json({ error: 'unavailable' }, 503);
       return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,

@@ -462,7 +462,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-10-04T17:50:47.548Z",
-  "generatedFromCommit": "94f41003cb79a43ef846d559d802c82298e7a743",
+  "generatedAt": "2026-10-04T18:29:20.140Z",
+  "generatedFromCommit": "adc543f31a640fc8da0d7bb25624a2fca057967d",
   "generator": "npm run deploy-manifest"
 }

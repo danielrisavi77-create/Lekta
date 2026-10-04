@@ -4912,19 +4912,27 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
-  // T84 RD-2 i RD-3: limit po korisniku i strop ishoda bez potrosnje u repair-docx.
+  // T84 RD-2 i RD-3: limit po korisniku i fail-closed strop ishoda bez potrosnje u repair-docx.
   ...([
     ['t84/repair-slot-bez-korisnika', 'slot se trazi bez limita po korisniku, pa jedan racun s cetiri paralelna popravka drzi sve ostale na 503',
       'maxPerUser: REPAIR_MAX_PER_USER,', 'maxPerUser: 0,', 'repair-docx: slot se ne trazi s korisnikom i limitom po korisniku'],
     ['t84/repair-user-busy-prolazi', 'user_busy se ne odbija, pa limit po korisniku postoji u bazi ali ne djeluje',
       "if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);",
       "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
-    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se opet ne biljezi, pa ga strop ne vidi i isti dokument se ponavlja bez kraja',
-      "      await log('no_change', null);", '', 'repair-docx: ishod bez izmjena se ne biljezi'],
-    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka na vratima integriteta se ne biljezi, pa zaobilazi strop',
-      "      await log('integrity_failed', null);", '', 'repair-docx: odbijena isporuka se ne biljezi'],
-    ['t84/repair-placeni-strop-broji-nista', 'placeni dnevni strop broji i ishode bez potrosnje, pa placeni korisnik gubi zahtjeve za dokumente koji nista nisu dobili',
-      ".not('status', 'in', `(${UNCOUNTED_STATUSES.join(',')})`)", '', 'repair-docx: placeni dnevni strop broji i ishode bez potrosnje'],
+    ['t84/repair-greska-slota-prolazi', 'greska novog RPC-a se ne odbija pa popravak tece bez ikakvog slota (Codex R1 na #294)',
+      "    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);\n", '', 'repair-docx: greska slota ne vraca 503'],
+    ['t84/repair-strop-bez-429', 'grana 429 za strop pokusaja uklonjena, pa korisnik preko stropa i dalje salje pune popravke (Codex R7 na #294)',
+      "    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela'],
+    ['t84/repair-dnevnik-fail-open', 'necitljiv dnevnik pokusaja se tumaci kao nula, pa strop nestane bas kad dnevnik ne radi (Codex R2 na #294)',
+      "    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela'],
+    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se ne biljezi ili se neuspjeli upis tiho propusta (Codex R3 na #294)',
+      "      if (!(await recordAttempt(admin, user.id, 'no_change'))) return json({ error: 'unavailable' }, 503);", "      await recordAttempt(admin, user.id, 'no_change');",
+      'repair-docx: ishod bez izmjena se ne biljezi fail-closed'],
+    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka se ne biljezi ili se neuspjeli upis tiho propusta (Codex R3 na #294)',
+      "      if (!(await recordAttempt(admin, user.id, 'integrity_failed'))) return json({ error: 'unavailable' }, 503);", '',
+      'repair-docx: odbijena isporuka se ne biljezi fail-closed'],
   ] as const).map(([id, imitates, from, to, problem]) => ({
     id,
     imitates: `T84: ${imitates}.`,
@@ -4935,6 +4943,19 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
   })),
+  {
+    id: 't84/repair-strop-nakon-tijela',
+    imitates: 'T84: strop pokusaja premjesten iza citanja tijela, pa se 20 MB i dalje cita prije odbijanja (Codex R7 na #294).',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const block = src.slice(src.indexOf('    const attemptCap = await attemptCapStatus('), src.indexOf("    if (attemptCap === 'over')"));
+      const without = src.replace(block, '');
+      const bodyLineEnd = without.indexOf('\n', without.indexOf('    const bounded = await readFormDataBounded(')) + 1;
+      const mut = without.slice(0, bodyLineEnd) + block + without.slice(bodyLineEnd);
+      return mut !== src && repairCostGuardProblems(mut).includes('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  },
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',

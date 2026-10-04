@@ -1,9 +1,10 @@
--- Smoke za try_acquire_repair_slot_for_user (T84 RD-3) i nove statuse report_generations (RD-2).
+-- Smoke za try_acquire_repair_slot_for_user (T84 RD-3) i dnevnik repair_attempt_log (RD-2).
 --
 -- Dokazuje: (1) jedan korisnik ne moze zauzeti vise od p_max_per_user slotova, (2) drugi korisnik
 -- i dalje dobiva slot dok globalni limit nije pun, (3) globalni limit i dalje vrijedi, (4) istekli
--- slotovi se oslobadjaju, (5) stara funkcija iz 0094 i dalje radi, (6) no_change i integrity_failed
--- prolaze CHECK, a nepoznat status pada. Vrti se nad praznim clusterom, nikad nad produkcijom.
+-- slotovi se oslobadjaju, (5) stara funkcija iz 0094 i dalje radi, (6) NULL korisnik se odbija,
+-- (7) vlasnik definer funkcije je postgres, (8) dnevnik prima samo dva ishoda, nije dostupan klijentskim
+-- ulogama i retencija brise stare retke. Vrti se nad praznim clusterom, nikad nad produkcijom.
 \set ON_ERROR_STOP on
 \timing off
 
@@ -13,13 +14,6 @@ do $$ begin
   if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon; end if;
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated; end if;
 end $$;
-
--- Minimalna kopija report_generations iz 0001 (smoke ne treba auth.users ni ostale stupce).
-create table if not exists public.report_generations (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid,
-  status text not null
-);
 
 \i supabase/migrations/0094_repair_global_concurrency.sql
 \i supabase/migrations/0209_repair_limit_po_korisniku.sql
@@ -60,14 +54,40 @@ select assert_eq((select reason from try_acquire_repair_slot_for_user(3, 300, '0
 select assert_eq(has_function_privilege('anon', 'public.try_acquire_repair_slot_for_user(int,int,uuid,int)', 'execute')::text, 'false', 'anon nema execute');
 select assert_eq(has_function_privilege('authenticated', 'public.try_acquire_repair_slot_for_user(int,int,uuid,int)', 'execute')::text, 'false', 'authenticated nema execute');
 
--- RD-2 statusi.
-insert into report_generations (status) values ('no_change'), ('integrity_failed'), ('free');
-select assert_eq((select count(*)::text from report_generations where status in ('no_change', 'integrity_failed')), '2', 'novi statusi prolaze CHECK');
+-- R8: NULL korisnik se odbija.
 do $$ begin
-  insert into report_generations (status) values ('izmisljen');
-  raise exception 'FAIL nepoznat status je prosao CHECK';
-exception when check_violation then
-  raise notice 'ok: nepoznat status pada na CHECK';
+  perform * from try_acquire_repair_slot_for_user(3, 300, null, 1);
+  raise exception 'FAIL NULL p_user_id je prosao';
+exception when null_value_not_allowed then
+  raise notice 'ok: NULL p_user_id se odbija';
 end $$;
+
+-- R5: vlasnik definer funkcije je izricito postgres.
+select assert_eq((select pg_get_userbyid(proowner) from pg_proc where proname = 'try_acquire_repair_slot_for_user'), 'postgres', 'vlasnik funkcije je postgres');
+select assert_eq((select prosecdef::text from pg_proc where proname = 'try_acquire_repair_slot_for_user'), 'true', 'funkcija je security definer');
+
+-- RD-2: dnevnik pokusaja.
+insert into repair_attempt_log (user_id, outcome) values
+  ('00000000-0000-0000-0000-00000000000a', 'no_change'),
+  ('00000000-0000-0000-0000-00000000000a', 'integrity_failed');
+select assert_eq((select count(*)::text from repair_attempt_log), '2', 'dnevnik prima no_change i integrity_failed');
+do $$ begin
+  insert into repair_attempt_log (user_id, outcome) values ('00000000-0000-0000-0000-00000000000a', 'free');
+  raise exception 'FAIL nepoznat ishod je prosao CHECK';
+exception when check_violation then
+  raise notice 'ok: nepoznat ishod pada na CHECK';
+end $$;
+do $$ begin
+  insert into repair_attempt_log (user_id, outcome) values (null, 'no_change');
+  raise exception 'FAIL dnevnik bez korisnika je prosao';
+exception when not_null_violation then
+  raise notice 'ok: dnevnik bez korisnika pada';
+end $$;
+select assert_eq(has_table_privilege('anon', 'public.repair_attempt_log', 'select')::text, 'false', 'anon ne cita dnevnik');
+select assert_eq(has_table_privilege('authenticated', 'public.repair_attempt_log', 'insert')::text, 'false', 'authenticated ne pise dnevnik');
+select assert_eq((select relrowsecurity::text from pg_class where relname = 'repair_attempt_log'), 'true', 'dnevnik ima RLS');
+update repair_attempt_log set created_at = now() - interval '8 days' where outcome = 'no_change';
+select assert_eq(purge_repair_attempt_log(7)::text, '1', 'retencija brise retke starije od 7 dana');
+select assert_eq((select count(*)::text from repair_attempt_log), '1', 'svjezi redak ostaje');
 
 rollback;

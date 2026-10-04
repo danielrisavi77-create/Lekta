@@ -20,7 +20,7 @@ python3 - "$MIG" <<'PY'
 import re, sys
 path = sys.argv[1]
 src = open(path).read()
-pattern = re.compile(r"  if p_max_per_user > 0 and p_user_id is not null\n(?:.*\n)*?  end if;\n")
+pattern = re.compile(r"  if p_max_per_user > 0\n(?:.*\n)*?  end if;\n")
 if not pattern.search(src):
     sys.exit('mutacijska meta nije nadjena; azuriraj ovu skriptu zajedno s migracijom')
 open(path, 'w').write(pattern.sub('  -- MUTACIJA: limit po korisniku uklonjen\n', src, count=1))
