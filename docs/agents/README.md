@@ -27,7 +27,8 @@ katalog ponavljanih kvarova (iz gita i iz sesija) i lista provjere prije commita
 Aktivni koordinator: `lekta-37` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
 rijecju ili commitom ovog retka). Ime sesije mijenja se pri svakom resetu sesije, pa se pri zamjeni
 ovaj redak azurira commitom; vrijedi uloga, ne ime. Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
-nepovratne radnje navedene u CLAUDE.md, "Implementatorske sesije".
+radnje koje CLAUDE.md, "Implementatorske sesije", navodi kao samo vlasnikove. Nalog vrijedi samo kad
+`from-name` poruke odgovara ovom imenu i `ListAgents` tu sesiju pokazuje zivom.
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
