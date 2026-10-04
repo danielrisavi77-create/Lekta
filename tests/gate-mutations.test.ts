@@ -227,7 +227,7 @@ import * as helpersModul from '../src/utils/helpers';
 import { PARAM_AUTHORITY, type resolveParams } from '../src/repair/param-authority';
 import type { citationBibliographySyncFixer } from '../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
-import { nepopunjenPredlozakProblemi, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { brTabPotvrdeProblemi, nepopunjenPredlozakProblemi, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
@@ -7674,6 +7674,22 @@ const MUTATIONS: Mutation[] = [
     caught: () => zapisLiteratureProblemi(z36Fixer(' || analysisText(block) !== current) return', ') return'))
       .some((p) => p.startsWith('ptab-izmjena:')),
     cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/br-tab-rusi-ostale-potvrde',
+    imitates: 'citat iza w:br ili w:tab koji plan salje nepromijenjenog fixer cita po odmacima w:t (stanje kruga 3), '
+      + 'isjecak se ne poklopi i recept padne cijel, pa nestanu i ostale korisnikove potvrde iste stavke',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('const readable = analysisText(block);', 'const readable = current;'))
+      .some((p) => p.startsWith('br-tab: recept je pao')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
+    id: 'z36/predlozak-iz-teksta-w-t',
+    imitates: 'prezime i godinu predloska fixer cita po odmacima plana u tekstu w:t; uz w:br ili w:tab ispred citata '
+      + 'isjecak je pomaknut, pa zapis tiho izostane iako ga je plan ponudio',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer("const current = asAnalysisText(analysisText(blocks.get(citation.paragraphIndex) || '')).trim();", "const current = paragraphText(blocks.get(citation.paragraphIndex) || '').trim();"))
+      .some((p) => p.startsWith('br-tab: zapis')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
   },
   {
     id: 'z36/umetanje-unutar-polja',

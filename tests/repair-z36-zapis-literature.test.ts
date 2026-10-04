@@ -22,7 +22,7 @@ import { PARAM_AUTHORITY, resolveParams } from '../src/repair/param-authority';
 import { packageDoc, paragraph, documentXml } from './helpers/repair-templates';
 import { runClosedLoopCase, documentText } from './helpers/closed-loop-runner';
 import { readZip } from '../src/repair/zip-codec';
-import { entryText, nepopunjenPredlozakProblemi, paragraphTexts, planZapisaProblemi, sectionEndTexts, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { brTabPotvrdeProblemi, entryText, nepopunjenPredlozakProblemi, paragraphTexts, planZapisaProblemi, sectionEndTexts, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
@@ -66,6 +66,10 @@ describe('Z36 gardovi nad stvarnom implementacijom', () => {
 
   it('server: add bez teksta trazi poznat citat iz istog zahtjeva', () => {
     expect(serverZapisaProblemi(validateAssistedParams)).toEqual([]);
+  });
+
+  it('plan i fixer: w:br i w:tab ispred citata ne obaraju ostale potvrde iste stavke (krug 4)', () => {
+    expect(brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, citationBibliographySyncFixer)).toEqual([]);
   });
 
   it('analiza: zapis s ijednim poljem predloska u uglatim zagradama je nepopunjen', () => {
@@ -306,6 +310,36 @@ describe('Z36 kroz cijeli lanac: analiza, plan, ugovor, popravak, ponovna analiz
       expect(applied.changelog.length, text || 'predlozak').toBe(1);
       expect(await bodyParagraphs(applied.docxBytes)).toContain(text || template('Novak', '2022'));
     }
+  }, 60_000);
+
+  it('krug 4: w:br i w:tab ispred citata: zapisi se dodaju, a ostale potvrde iste stavke ostaju', async () => {
+    const withBreak = '<w:p><w:r><w:t>Tekst koji</w:t><w:br/><w:t xml:space="preserve">navodi izvor (Novak, 2022).</w:t></w:r></w:p>';
+    const withTab = '<w:p><w:r><w:t>Drugi</w:t><w:tab/><w:t xml:space="preserve">odlomak (Babić, 2018).</w:t></w:r></w:p>';
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${withBreak}${withTab}${paragraph('Treći odlomak (Horvat, 2020) i (Zorić, 2021).')}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(entryText('Zorić', '2021'))}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-br-tab.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    const missing = before.details.citationBibliographySync.missingEntries;
+    // Generator: analiza nalazi oba citata bez zapisa, iza prijeloma retka i iza tabulatora.
+    expect(missing.map((citation: any) => citation.author)).toEqual(['Novak', 'Babić']);
+    const [item] = citationBibliographySyncRepairableItem(before, syncProfile({ mode: 'author-year', allowMissingEntryInsertion: true }));
+    const form = item.citationBibliographySyncForm!;
+    for (const row of form.missingEntries) row.selected = true;
+    const horvat = form.citations.find((row) => row.rawText === 'Horvat, 2020')!;
+    horvat.selected = true;
+    horvat.replacementText = 'Horvat, 2020, str. 5';
+    const params = form.buildParams(form);
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params }]);
+    expect(applied.integrityFailure ?? null).toBeNull();
+    expect(applied.skipped).toEqual([]);
+    const texts = await bodyParagraphs(applied.docxBytes);
+    expect(texts).toEqual(['Tekst kojinavodi izvor (Novak, 2022).', 'Drugiodlomak (Babić, 2018).', 'Treći odlomak (Horvat, 2020, str. 5) i (Zorić, 2021).', 'Literatura', template('Babić', '2018'), entryText('Horvat', '2020'), template('Novak', '2022'), entryText('Zorić', '2021')]);
+    const xml = new TextDecoder().decode((await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/document.xml')!.data);
+    expect(xml).toContain(withBreak);
+    expect(xml).toContain(withTab);
+    const again = await applyFixers(applied.docxBytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params }]);
+    expect(again.changelog).toEqual([]);
   }, 60_000);
 
   it('narativni citat: plan nudi redak, ali bez upisanog teksta ne salje predlozak', async () => {

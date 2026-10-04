@@ -571,3 +571,60 @@ export function nepopunjenPredlozakProblemi(analyze: typeof analyzeBibliographyS
   if (complete.entries.length !== 3 || complete.entries.some((entry) => entry.flags.includes('unfilled-template'))) problems.push('nepopunjen:popunjen: popunjen zapis je oznacen kao predlozak');
   return problems;
 }
+
+/**
+ * Z36 krug 4, tocka 3: citat bez zapisa u odlomku s w:br ili w:tab ispred citata. Plan ga salje
+ * nepromijenjenog uz dodani zapis; fixer ga mora procitati (tekst analize), pa recept ne pada, a
+ * OSTALE potvrde iste stavke (izmijenjen citat u drugom odlomku) se primjenjuju. Plan se gradi
+ * stvarnim graditeljem iz ulaza kakav daje analiza: odmaci i otisci iz teksta koji vidi parser.
+ */
+export function brTabPotvrdeProblemi(build: PlanBuilder, fixer: SyncFixer): string[] {
+  const problems: string[] = [];
+  const paragraphsXml = [
+    '<w:p><w:r><w:t>Tekst</w:t><w:br/><w:t xml:space="preserve">navodi izvor (Novak, 2022).</w:t></w:r></w:p>',
+    '<w:p><w:r><w:t>Drugi</w:t><w:tab/><w:t xml:space="preserve">odlomak (Babić, 2021).</w:t></w:r></w:p>',
+    paragraph('Treći odlomak (Horvat, 2020) i (Zorić, 2021).'),
+    paragraph('Literatura'),
+    paragraph(entryText('Horvat', '2020')),
+    paragraph(entryText('Zorić', '2021')),
+  ];
+  const documentXml = `<w:document><w:body>${paragraphsXml.join('')}<w:sectPr/></w:body></w:document>`;
+  const seen = paragraphsXml.map(analysisParagraphText);
+  const occurrences = seen.slice(0, 3).flatMap((text, i) => extractCitationOccurrences([{ index: i + 1, text }]));
+  if (!/\n/.test(seen[0]) || !/\t/.test(seen[1]) || occurrences.length !== 4) problems.push(`br-tab: ulaz nema citate iza w:br i w:tab (${JSON.stringify(seen.slice(0, 2))})`);
+  const citations = occurrences.map((occurrence) => ({ id: `citation-${occurrence.paragraphIndex}-${occurrence.start}`, paragraphIndex: occurrence.paragraphIndex, start: occurrence.start, end: occurrence.end, rawText: occurrence.rawText, author: occurrence.author, year: occurrence.year, form: occurrence.form, anchorFingerprint: citationAnchorFingerprint(occurrence.paragraphIndex, seen[occurrence.paragraphIndex - 1]), confidence: 'high' }));
+  const missing = citations.filter((citation) => citation.paragraphIndex < 3);
+  const entries = [5, 6].map((index) => ({ id: `bibliography-${index}`, paragraphIndices: [index], anchorFingerprint: bibliographyAnchorFingerprint([index], seen[index - 1]), rawText: seen[index - 1] }));
+  const result = {
+    details: {
+      citationBibliographySync: {
+        citations,
+        links: citations.map((citation) => (citation.paragraphIndex < 3
+          ? { citationId: citation.id, status: 'missing', candidates: [], reason: 'nedostaje' }
+          : { citationId: citation.id, status: 'matched', bibliographyEntryId: citation.author === 'Horvat' ? 'bibliography-5' : 'bibliography-6', candidates: [], reason: 'podudaranje' })),
+        missingEntries: missing,
+        duplicateCandidates: [],
+        summary: { citations: 4, matched: 2, missing: 2, ambiguous: 0, pageIssues: 0 },
+      },
+      bibliographyStructure: { entries },
+    },
+  };
+  const form = build(result, planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0]?.citationBibliographySyncForm;
+  if (!form || form.missingEntries.length !== 2) return [...problems, 'br-tab: plan ne nudi oba zapisa'];
+  for (const row of form.missingEntries) row.selected = true;
+  const horvat = form.citations.find((row) => row.rawText === 'Horvat, 2020');
+  if (!horvat) return [...problems, 'br-tab: plan nema citat Horvat'];
+  horvat.selected = true;
+  horvat.replacementText = 'Horvat, 2020, str. 5';
+  const params = form.buildParams(form) as unknown as Parameters<SyncFixer>[1];
+  const parts = { documentXml, stylesXml: '' };
+  const first = fixer(parts, params);
+  const texts = paragraphTexts(first.parts.documentXml);
+  if (!first.applied) problems.push(`br-tab: recept je pao (${first.reason})`);
+  if (!texts.includes('Treći odlomak (Horvat, 2020, str. 5) i (Zorić, 2021).')) problems.push('br-tab: ostala potvrda (izmijenjen citat) nije primijenjena');
+  for (const [surname, year] of [['Novak', '2022'], ['Babić', '2021']]) if (!texts.includes(template(surname, year))) problems.push(`br-tab: zapis ${surname} nije umetnut (${JSON.stringify(first.skippedActions)})`);
+  for (const xml of paragraphsXml.slice(0, 2)) if (!first.parts.documentXml.includes(xml)) problems.push('br-tab: odlomak citata s w:br ili w:tab je prepisan');
+  const second = fixer(first.parts, params);
+  if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`br-tab: drugi prolaz nije no-op (${second.reason})`);
+  return problems;
+}
