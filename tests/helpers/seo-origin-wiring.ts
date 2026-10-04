@@ -1,14 +1,51 @@
 /**
- * Ozicenje garda #5 u scripts/verify-deploy-dist.mjs (T49, Codex runda 3, nalaz 7b na #273).
+ * Gard #5 iz scripts/verify-deploy-dist.mjs izvrsen stvarno (T49, Codex runde 3 i 4, nalaz 7b na #273).
  *
- * Logika garda je `seoOriginProblems` u scripts/site-origin.mjs i testira se nad sintetickim
- * artefaktom. Ostaje pitanje vodi li svaki problem stvarno u `fail`: gard koji racuna probleme a
- * ne rusi build tiho propusta. Ovaj helper to provjerava nad izvorom skripte; mutacija u
- * tests/gate-mutations.test.ts uklanja `fail` i mora pasti.
+ * Logika je `seoOriginProblems` u scripts/site-origin.mjs, ali pitanje je vodi li svaki problem
+ * stvarno u `fail`. Provjera nad tekstom izvora (`includes`) to ne dokazuje: redak se moze
+ * zakomentirati, a tekst ostaje. Zato se iz izvora skripte izrezuje BLOK garda #5 (od komentara
+ * `// 5. SEO origin` do `// 6. CSP`) i izvrsava nad sintetickim distom, s `fail` koji biljezi poruke.
+ * Zakomentiran ili uklonjen `fail` daje nula zabiljezenih poruka i test pada.
  */
-export const GUARD5_WIRING = 'for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);';
+import fs from 'node:fs';
+import path from 'node:path';
+import { tmpdir } from 'node:os';
+import { seoOriginProblems } from '../../scripts/site-origin.mjs';
 
-/** True kad izvor verify-deploy-dist za svaki problem garda #5 zove `fail`. */
-export function guard5Wired(source: string): boolean {
-  return source.replace(/\r\n?/g, '\n').includes(GUARD5_WIRING);
+const POCETAK = '// 5. SEO origin';
+const KRAJ = '// 6. CSP';
+
+/** Izrezani blok garda #5 iz izvora verify-deploy-dist; baca ako granice nisu nadjene. */
+export function guard5Block(source: string): string {
+  const src = source.replace(/\r\n?/g, '\n');
+  const od = src.indexOf(POCETAK);
+  const doKraja = src.indexOf(KRAJ, od);
+  if (od < 0 || doKraja < 0) throw new Error('blok garda #5 nije nadjen u verify-deploy-dist.mjs');
+  return src.slice(od, doKraja);
+}
+
+/**
+ * Izvrsava blok garda #5 nad direktorijem `distDir` i vraca poruke koje je proslijedio u `fail`.
+ * Blok dobiva isto okruzenje kao u skripti: `fs`, `path`, `DIST`, `SITE_ORIGIN`, `seoOriginProblems`
+ * i `fail`.
+ */
+export function runGuard5Block(source: string, distDir: string, siteOrigin: string): string[] {
+  const failovi: string[] = [];
+  const fail = (poruka: string) => { failovi.push(poruka); };
+  const blok = guard5Block(source);
+  new Function('fs', 'path', 'DIST', 'SITE_ORIGIN', 'seoOriginProblems', 'fail', blok)(
+    fs, path, distDir, siteOrigin, seoOriginProblems, fail,
+  );
+  return failovi;
+}
+
+/** Sinteticki dist: datoteke iz mape `{ relativnaPutanja: sadrzaj }` u novoj privremenoj mapi. */
+export function writeSyntheticDist(files: Record<string, string>): string {
+  const dir = fs.mkdtempSync(path.join(fs.realpathSync(tmpdir()), 'lekta-t49-dist-'));
+  for (const [rel, text] of Object.entries(files)) {
+    const p = path.join(dir, rel);
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    fs.writeFileSync(p, text, 'utf8');
+  }
+  return dir;
 }

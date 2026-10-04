@@ -19,13 +19,14 @@ primarna prije te tajne vraca CORS odbijanje na svaki poziv backendu.
 | 2 | vlasnik | Cloudflare: Add site `lekta.hr` (Free), dva nameservera upisati kod registrara | `Resolve-DnsName lekta.hr -Type NS` vraca Cloudflare |
 | 3 | vlasnik ili sesija s tokenom | DNS zapisi iz tablice niže | upiti iz odjeljka "Provjera" |
 | 4 | sesija, rijec vlasnika | Supabase prod: `ALLOWED_ORIGIN` dobiva `https://lekta.hr,https://www.lekta.hr,https://lektahr.netlify.app` | `secrets list` digest; CORS proba |
-| 5 | sesija, rijec vlasnika | Supabase Auth: tek nakon dokaza domene i HTTPS-a; stari host na popis redirecta PRIJE promjene Site URL-a na `https://lekta.hr` (vidi "Prijava") | Auth postavke procitane; prijava kodom na oba hosta s istim `userId` prije i poslije |
-| 6 | sesija, rijec vlasnika | Netlify: custom domena `lekta.hr` i `www.lekta.hr`, `lekta.hr` primarna, HTTPS certifikat | `curl -I https://lekta.hr` 200; `lektahr.netlify.app` ostaje 200 BEZ preusmjeravanja (vidi "Stari origin") |
-| 7 | sesija, PR | Kod: `LEKTA_SITE_ORIGIN` u `netlify.toml` i `check.yml`, gard `WRONG_DOMAIN` u `scripts/verify-deploy-dist.mjs`, zadani origin u `post-deploy-smoke.mjs` i Edge fallbackovi | `npm run check`, deploy |
+| 5 | sesija, rijec vlasnika | Netlify: custom domena `lekta.hr` i `www.lekta.hr` povezana, HTTPS certifikat izdan. Mora biti dokazano PRIJE koraka 6 | `curl -I https://lekta.hr` 200 bez greske certifikata; `lektahr.netlify.app` ostaje 200 BEZ preusmjeravanja (vidi "Stari origin") |
+| 6 | sesija, rijec vlasnika | Supabase Auth, tek nakon dokaza iz koraka 5: stari host na popis redirecta PRIJE promjene Site URL-a na `https://lekta.hr` (vidi "Prijava") | Auth postavke procitane natrag; prijava kodom na oba hosta s istim `userId` prije i poslije |
+| 7 | sesija, PR | Kod: `LEKTA_SITE_ORIGIN` u `netlify.toml` i `check.yml`, gard #5 (`seoOriginProblems` u `scripts/site-origin.mjs`, poziva ga `scripts/verify-deploy-dist.mjs`), zadani origin u `post-deploy-smoke.mjs` | CI `dist-gate`, deploy |
 | 8 | vlasnik + sesija | Resend: domena `lekta.hr` verificirana, `RESEND_API_KEY` u prod tajnama, Supabase Auth custom SMTP kroz Resend | Resend "Verified", testni mail stigao |
 | 9 | sesija | Provjera i dokaz izdanja | odjeljak "Provjera" |
 
 Koraci 4, 5, 6 i 8 diraju produkciju i idu samo uz vlasnikovu rijec u sesiji koja ih izvodi.
+Prije koraka 6 zapisuje se zatecena vrijednost `site_url` i popisa redirecta (za povratak).
 
 ## DNS zapisi (Cloudflare)
 
@@ -107,20 +108,25 @@ Dok svih pet tocaka nije dokazano, `lektahr.netlify.app` ostaje bez preusmjerava
 
 Reproducibilan postupak mjerenja (Codex runda 3, nalaz 2c):
 
-- **Preglednik i profil:** Chrome ili Edge, NOVI profil (ne gost, ne postojeci), da nema tudjeg stanja;
-  isti profil se koristi za oba hosta.
-- **Polaziste na starom hostu:** otvoriti `https://lektahr.netlify.app`, ucitati jedan `.docx`,
-  pokrenuti analizu i (ako je ukljucen) popravak. Zapisati:
+- **Profili:** Chrome ili Edge, dva NOVA imenovana profila (ne gost, ne postojeci):
+  `Lekta-T49-A` za mjerenje prijenosa i `Lekta-T49-B` za simulirani neuspjeh.
+- **Polaziste, profil A, stari host, uspostaviti i provjeriti PRIJE mjerenja:** otvoriti
+  `https://lektahr.netlify.app`, ucitati jedan `.docx`, pokrenuti analizu i (ako je ukljucen)
+  popravak do kraja. Prije mjerenja provjeriti da stanje stvarno postoji: `lekta.session` ima
+  `userId` anonimne sesije, popravak se otvara iz povijesti, a dokument je u IndexedDB. Ako bilo
+  sto od toga nedostaje, polaziste nije uspostavljeno i mjerenje se ne radi. Zapisati:
   - identitet: `JSON.parse(localStorage.getItem('lekta.session')).userId`;
   - povijest: `JSON.parse(localStorage.getItem('lekta.history.v2'))`, broj zapisa i id svakog;
   - dokument: u DevToolsu, Application, IndexedDB `lekta-local-documents`, store `sessions`, broj
     zapisa i kljuc zapisa ucitanog dokumenta.
-- **Odrediste:** isti profil, `https://lekta.hr`, isti mjerni koraci. Kriterij je jednakost po
+- **Odrediste, profil A:** `https://lekta.hr`, isti mjerni koraci. Kriterij je jednakost po
   zapisima: isti `userId`, svaki id povijesti prisutan, isti kljuc u `sessions`, a popravak se
   otvara bez nove prijave.
-- **Simuliran neuspjeh:** u novom profilu na odredistu (bez prijenosa) potvrditi da korisnik dobiva
-  jasnu uputu kako se vratiti na stari host, i da je na starom hostu stanje netaknuto (isti
-  `userId`, povijest i zapis u `sessions` kao u polazistu).
+- **Staro stanje u A ocuvano:** nakon mjerenja na odredistu ponovno otvoriti stari host u profilu
+  A i provjeriti da su `userId`, povijest i zapis u `sessions` jednaki zapisanima u polazistu.
+- **Simuliran neuspjeh, profil B:** u profilu B uspostaviti isto polaziste na starom hostu, zatim
+  otvoriti odrediste bez prijenosa; potvrditi da korisnik dobiva jasnu uputu kako se vratiti na
+  stari host, i da je na starom hostu stanje u B netaknuto.
 
 Danas (4. 10. 2026.) mehanizam prijenosa ne postoji: `localStorage` i IndexedDB su vezani uz origin,
 pa bi mjerenje dalo razliku. Zato stari host ostaje bez preusmjeravanja; postupak je kriterij za
@@ -138,7 +144,7 @@ origin (Codex runda 2, nalaz 4). Stanje 4. 10. 2026.: popis dopustenih redirecta
 `https://lekta.hr/**` i `https://www.lekta.hr/**` (uz Katedrine unose), a `site_url` je
 `https://lektahr.netlify.app`.
 
-Redoslijed koraka 5 (Codex runda 3, nalaz 4a), svaki s dokazom prije sljedeceg:
+Redoslijed koraka 6 (Codex runda 3, nalaz 4a), svaki s dokazom prije sljedeceg:
 
 1. **Domena i HTTPS prije ikakve promjene Autha.** `Resolve-DnsName lekta.hr -Type NS` vraca
    Cloudflare, `curl.exe -sI https://lekta.hr` daje 200 bez greske certifikata. Bez toga Auth se ne
@@ -155,12 +161,19 @@ mjerenja provjeriti da produkcijski predlozak e-maila (Supabase Auth, Email Temp
 prikazuje kod (`{{ .Token }}`); ako prikazuje samo link, to je nalaz i ide vlasniku prije mjerenja.
 Mjeri se identitet, ne samo uspjeh:
 
-1. u svjezem profilu preglednika otvoriti host, pokrenuti tok koji stvara anonimnu sesiju i u
-   DevToolsu zapisati `JSON.parse(localStorage.getItem('lekta.session')).userId`;
-2. zatraziti kod na vlastiti e-mail, upisati ga u obrazac;
-3. nakon potvrde ponovno procitati `userId` iz `lekta.session`: mora biti ISTI kao u koraku 1
-   (anonimni racun je povezan, nije stvoren novi);
-4. ponoviti na drugom hostu u zasebnom profilu.
+Dvije RAZLICITE kontrolirane e-mail adrese (nalaz 4b), npr. dvije adrese preko Email Routinga
+(`t49-a@lekta.hr` i `t49-b@lekta.hr`, obje na vlasnikov Gmail; 4. 10. 2026. jos ne postoje, pa se
+prije mjerenja dodaju kao pravila u Email Routingu), da drugi host ne potvrdjuje racun koji je vec
+povezan na prvom:
+
+1. profil A na `https://lekta.hr`: pokrenuti tok koji stvara anonimnu sesiju i u DevToolsu
+   zapisati `JSON.parse(localStorage.getItem('lekta.session')).userId` (A0);
+2. zatraziti kod na adresu A, upisati ga u obrazac;
+3. nakon potvrde ponovno procitati `userId` (A1): mora biti A1 = A0 (anonimni racun je povezan,
+   nije stvoren novi);
+4. profil B na `https://lektahr.netlify.app`, adresa B: isti koraci, B1 = B0;
+5. identiteti su zasebni po profilu: A0 i B0 su razliciti, i nijedan profil nakon prijave ne vidi
+   identitet drugog.
 
 ## Staging
 
@@ -192,7 +205,10 @@ Deploy Edge funkcija nije dio promjene domene; ide kao zasebna stavka samo uz vl
 
 ## Povratak
 
-- Do koraka 6 nista javno ne pokazuje na `lekta.hr`; povratak je brisanje zapisa.
-- Nakon koraka 6: u Netlifyju ukloniti `lekta.hr` kao primarnu domenu; `ALLOWED_ORIGIN` i dalje
+- Do koraka 5 nista javno ne pokazuje na `lekta.hr`; povratak je brisanje zapisa.
+- Nakon koraka 5: u Netlifyju ukloniti `lekta.hr` kao primarnu domenu; `ALLOWED_ORIGIN` i dalje
   sadrzi oba origina, pa backend radi na obje adrese.
+- Nakon koraka 6: vratiti zapisanu prethodnu vrijednost `site_url` (4. 10. 2026.:
+  `https://lektahr.netlify.app`) i procitati je natrag. Unosi za `lekta.hr`, `www.lekta.hr` i
+  `lektahr.netlify.app` na popisu redirecta smiju ostati, jer samo dopustaju povratak na te hostove.
 - `LEKTA_SITE_ORIGIN` u kodu se vraca revertom PR-a iz koraka 7.

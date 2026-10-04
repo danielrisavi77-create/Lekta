@@ -10,7 +10,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { guard5Wired } from './helpers/seo-origin-wiring';
+import { rmSync } from 'node:fs';
+import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { canonicalProblem, isInOrigin, PRIMARY_ORIGIN, seoOriginProblems, RETIRED_ORIGIN, rewritePublicSeo, SITE_ORIGIN } from '../scripts/site-origin.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -119,8 +120,34 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
       .toEqual([expect.stringMatching(/sitemap/)]);
     // Build kojem je SITE_ORIGIN bas stari host smije ga nositi (rucni povratak).
     expect(seoOriginProblems([{ rel: 'y.html', text: '<a href="https://lektahr.netlify.app/">' }], RETIRED_ORIGIN)).toEqual([]);
-    // Svaki problem garda vodi u fail: mutacija u gate-mutations uklanja fail i mora pasti.
-    expect(guard5Wired(read('scripts/verify-deploy-dist.mjs'))).toBe(true);
+  });
+
+  it('stvarni blok garda #5 iz verify-deploy-dist zove fail nad sintetickim distom (Codex runda 4, 7b)', () => {
+    const izvor = read('scripts/verify-deploy-dist.mjs');
+    const zli = writeSyntheticDist({
+      'index.html': '<link rel="canonical" href="https://lekta.hr/">',
+      'x.html': '<link rel = "canonical" href="//evil.example/">',
+      'sitemap.xml': '<loc>https://lektahr.netlify.app/</loc>',
+    });
+    const cisti = writeSyntheticDist({
+      'index.html': '<a href="/alati.html">x</a><link rel="canonical" href="https://lekta.hr/">',
+      'sitemap.xml': '<loc>https://lekta.hr/</loc>',
+    });
+    try {
+      const failovi = runGuard5Block(izvor, zli, PRIMARY_ORIGIN);
+      expect(failovi).toEqual([
+        expect.stringMatching(/^dist\/x\.html: canonical \/\/evil\.example\/ nije unutar/),
+        expect.stringMatching(/^dist\/sitemap\.xml \(sitemap\) sadrzi/),
+      ]);
+      expect(runGuard5Block(izvor, cisti, PRIMARY_ORIGIN)).toEqual([]);
+      // Zakomentiran fail u bloku: gard racuna, ali ne rusi build. To mora biti vidljivo.
+      const bezFail = izvor.replace(/^(for \(const problem of seoOriginProblems\(seoFiles, SITE_ORIGIN\)\)) fail\(problem\);$/m, '// $1 fail(problem);');
+      expect(bezFail).not.toBe(izvor);
+      expect(runGuard5Block(bezFail, zli, PRIMARY_ORIGIN)).toEqual([]);
+    } finally {
+      rmSync(zli, { recursive: true, force: true });
+      rmSync(cisti, { recursive: true, force: true });
+    }
   });
 
   it('generatori: kanonik apsolutan iz SITE_ORIGIN, navigacija relativna (Codex runda 2 i 3, nalazi 2a i 2b)', () => {

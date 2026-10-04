@@ -56,7 +56,7 @@ import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './h
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { isInOrigin } from '../scripts/site-origin.mjs';
-import { GUARD5_WIRING, guard5Wired } from './helpers/seo-origin-wiring';
+import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -7530,8 +7530,9 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr'),
   },
   /**
-   * T49, Codex runda 3 nalaz 7b na #273: gard #5 racuna probleme u `seoOriginProblems`, a
-   * verify-deploy-dist za svaki zove `fail`. Mutant uklanja `fail`, pa bi gard racunao i sutio.
+   * T49, Codex runde 3 i 4 nalaz 7b na #273: gard #5 racuna probleme u `seoOriginProblems`, a
+   * verify-deploy-dist za svaki zove `fail`. Mutant zakomentira `fail`; stvarni blok garda izvrsen
+   * nad sintetickim distom s kanonikom //evil.example/ tada ne zove fail nijednom.
    */
   {
     id: 'origin/gard5-bez-fail',
@@ -7540,10 +7541,23 @@ const MUTATIONS: Mutation[] = [
       'u fail, pa build s krivim kanonikom tiho prolazi',
     caught: () => {
       const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
-      const mut = src.replace(GUARD5_WIRING, GUARD5_WIRING.replace('fail(problem);', 'void problem;'));
-      return mut !== src && !guard5Wired(mut);
+      const mut = src.replace('for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);',
+        '// for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);');
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return mut !== src && runGuard5Block(mut, dist, 'https://lekta.hr').length === 0;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
     },
-    cleanBefore: () => guard5Wired(readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'))),
+    cleanBefore: () => {
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return runGuard5Block(readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs')), dist, 'https://lekta.hr').length === 1;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
   },
 
 ];
