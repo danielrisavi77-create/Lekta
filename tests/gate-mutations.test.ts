@@ -15,12 +15,15 @@
  *    bez ijednog `ruleEntry`: prolazi vakuumski.
  *
  * PRAVILA OVOG TESTA:
- *  1. Mutira se SAMO u memoriji. Nijedna datoteka na disku se ne dira.
+ *  1. Mutira se SAMO u memoriji. Nijedna datoteka repozitorija se ne dira. Jedina iznimka su
+ *     privremene datoteke izvan repozitorija (`mkdtemp` pod `tmpdir()`, obrisane u `finally`) kad gard
+ *     po ugovoru cita stablo s diska, npr. `crlf/citanje-bez-normalizacije` (T92).
  *  2. Svaka mutacija ima i BASELINE tvrdnju: nemutiran ulaz mora biti cist. Bez toga mutacija koja
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
@@ -33,8 +36,9 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -53,6 +57,7 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -105,7 +110,49 @@ import {
   IGNORE_REASON_PREFIXES,
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
+  buildEntitlementInsert,
 } from '../src/report/webhook';
+import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src/report/upgrade';
+import {
+  accessRowsProblems,
+  bonusOutboxWorkerProblems,
+  referrerRewardDecisionProblems,
+  referrerRewardRetryProblems,
+  boundSlotReadProblems,
+  entitlementAccessProblems,
+  entitlementConsumerProblems,
+  entitlementProductFkCount,
+  entitlementSnapshotProblems,
+  specialistFallbackProblems,
+  specialistTierGateProblems,
+  stripeSyncSafetyProblems,
+  upgradeQuoteProblems,
+  upgradeRefundTraceProblems,
+  upgradeWiringProblems,
+} from './helpers/monetizacija-v1-guards';
+import type * as GrantModul from '../supabase/functions/_shared/grant-referrer-reward';
+import type * as RadnikModul from '../supabase/functions/process-bonus-outbox/referrer-reward';
+import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
+import type { SlotRow } from '../src/report/slot-logic';
+import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
+import { applyGuard as stripeSyncApplyGuard, parseArgs as stripeSyncParseArgs } from '../scripts/stripe-sync-products.mjs';
+import { checkoutMismatch } from '../src/report/checkout';
+import { estimateWorkType, unambiguousMismatch } from '../src/report/work-type-estimate';
+import { isReportWorkType } from '../src/report/pricing';
+import {
+  V1_MIGRATION,
+  catalogProblems,
+  constraintDropProblems,
+  definerOwnerProblems,
+  idempotencyProblems,
+  partialRefundSqlProblems,
+  privilegeProblems,
+  readMigration,
+  runV1,
+  snapshotProblems,
+  upgradeRevertSqlProblems,
+  upgradeSqlProblems,
+} from './helpers/monetizacija-v1-sql';
 import { findBotsImplementingProtected, findImplementEffortDrift, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
@@ -166,7 +213,7 @@ import {
   auditClaudeContext,
 } from '../scripts/verify-claude-context-core.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
-import { sidecarAdmitted } from './real-corpus/corpus-track';
+import { corpusSetOf, sidecarAdmitted, witnessIsolationProblems, type CorpusSidecar } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
@@ -238,6 +285,9 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
+import { messagingRuleProblems, type MessagingSources } from './helpers/session-messaging';
+import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -321,6 +371,15 @@ const DOKAZ_BAZA = {
   missingRequired: [] as string[],
   results: requiredTierIds().map((id: string) => ({ id, label: id, status: 'pass' })),
 };
+
+/** Paket iz `package-lock.json` (T99); polja koja gard izvora cita. */
+type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; bundleDependencies?: string[]; [k: string]: unknown };
+/** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
+type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
+const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
+/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
+const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -2414,6 +2473,41 @@ const MUTATIONS: Mutation[] = [
     // Baseline: `undefined` NIJE nepoznata vrijednost nego izostanak polja, i mora proci, jer su
     // svi postojeci sidecari nastali prije uvodjenja trake.
     cleanBefore: () => sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: undefined }),
+  },
+  // --- svjedoci (T68): traka `witness` ide u zaseban skup, nikad u `results` -------------------
+  {
+    id: 'korpus/witness-traka-ulazi-u-results',
+    imitates:
+      'svjedok s NAMJERNIM prekrsajima (traka `witness`) udje u `results`: napravljen je da padne i da ' +
+      'ga popravak rijesi, pa bi napuhao stopu rjesavanja (sinteticki 84,6 posto naspram stvarnih 39,8 ' +
+      'posto) i usao u matricu kao dokaz profila koji nije studentski rad',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) => (m.track === 'witness' ? 'results' : corpusSetOf(m))).length > 0,
+    // Baseline: pravi razvrstavac nema nijedan problem, ukljucujuci kontrolne trake.
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-pada-u-synthetic',
+    imitates:
+      'zateceno ponasanje prije T68: `discoverExcludedCorpus` uzima sve sto `sidecarAdmitted` odbije, pa ' +
+      'svjedok zavrsi u `syntheticResults` i izgubi izravni signal (koji je namjerni prekrsaj ciljan, ' +
+      'razrijesen ili ostavljen korisniku)',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        typeof m.profileId === 'string' && m.profileId.length > 0 ? (sidecarAdmitted(m) ? 'results' : 'synthetic') : null,
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-bez-zastavice-synthetic',
+    imitates:
+      'prva verzija T68 razvrstavaca: `track: witness` sam je bio dovoljan, pa bi stvaran rad s greskom ' +
+      'pridruzenim witness sidecarom (bez `synthetic: true` ili sa `synthetic: false`) usao u mjerenje svjedoka',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        m.track === 'witness' && typeof m.profileId === 'string' && m.profileId.length > 0 ? 'witness' : corpusSetOf(m),
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
   },
   {
     // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne
@@ -4591,6 +4685,39 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  // Komunikacija koordinatora i cloud sesija (vlasnik 2026-10-04). Mutacije mijenjaju tekst pravila;
+  // baseline je nad stvarnim datotekama.
+  ...([
+    ['poruke/kanal-nije-pr', 'readme', '**Kanal istine je PR.**', '**Kanal je bilo koji.**', 'README: nema pravila "kanal istine je PR"'],
+    ['poruke/bez-pretplate', 'readme', 'pretplacuje na svaki PR izvrsitelja** (`subscribe_pr_activity`)', 'pretplacuje po potrebi**', 'README: nema pravila "koordinator se pretplacuje na PR"'],
+    ['poruke/bez-povlacenja', 'readme', '**Koordinator sam povlaci stanje.**', '**Koordinator ceka poruke.**', 'README: nema pravila "koordinator sam povlaci stanje"'],
+    ['poruke/routine-10-minuta', 'readme', '`run_once_at` tocno 1 minutu unaprijed', '`run_once_at` 10 minuta unaprijed', 'README: nema pravila "Routine 1 minutu unaprijed"'],
+    ['poruke/bez-provjere-isporuke', 'readme', '`last_run` mora biti `SUCCEEDED`', '`last_run` se ne gleda', 'README: nema pravila "provjera isporuke Routinea"'],
+    ['poruke/routine-kao-zakazani-zadatak', 'readme', '**Koordinator Routine s tim zaglavljem cita kao izvjestaj izvrsitelja**', '**Koordinator Routine cita kao zakazani zadatak**', 'README: nema pravila "Routine kao izvjestaj izvrsitelja"'],
+    ['poruke/relay-kao-odobrenje', 'readme', '**Vlasnikove odluke izvrsitelj trazi izravno od vlasnika**', '**Vlasnikove odluke prenosi koordinator**', 'README: nema pravila "vlasnikove odluke izravno"'],
+    ['poruke/brief-bez-zaglavlja', 'brief', '"[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '"[status] PR #<n>', 'brief: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/negiran-status-na-pr', 'readme', 'koordinatoru) pise kao komentar na svoj PR', 'koordinatoru) ne pise kao komentar na svoj PR', 'README: nema pravila "status kao komentar na PR"'],
+    ['poruke/zaglavlje-bez-zadatka', 'readme', '`[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '`[<sesija> -> koordinator] PR #<n>', 'README: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/brief-bez-issuea', 'brief', 'dok PR ne postoji, na GitHub issue zadatka', 'dok PR ne postoji, cekaj', 'brief: nema izvjestaja na issueu prije PR-a'],
+    ['poruke/isporuceno-kao-procitano', 'readme', '`SUCCEEDED` potvrdjuje samo isporuku u sesiju, ne i da ju je koordinator procitao', '`SUCCEEDED` potvrdjuje da je koordinator procitao', 'README: nema pravila "isporuceno nije procitano"'],
+    ['poruke/pr-merge-bez-pretplate', 'prMerge', 'Budi pretplacen na PR (`subscribe_pr_activity`)', 'Gledaj PR kad stignes', 'pr-merge: nema pretplate na PR'],
+  ] as const).map(([id, key, from, to, problem]) => {
+    const real = (): MessagingSources => ({
+      readme: readTextLf(resolve(process.cwd(), 'docs', 'agents', 'README.md')),
+      brief: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'brief', 'SKILL.md')),
+      prMerge: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'pr-merge', 'SKILL.md')),
+    });
+    return {
+      id,
+      imitates: `Komunikacija sesija: ${problem}; poruka iz clouda tada opet tiho ne stigne do koordinatora ili vrijedi kao nalog.`,
+      caught: () => {
+        const src = real();
+        const mut = src[key].replace(from, to);
+        return mut !== src[key] && messagingRuleProblems({ ...src, [key]: mut }).includes(problem);
+      },
+      cleanBefore: () => messagingRuleProblems(real()).length === 0,
+    };
+  }),
   // T87 (kriterij 9 T81): iskljucen ili zauzet endpoint ne vodi u slijepu ulicu. Mutacije mijenjaju
   // IZVOR modula; baseline je nad stvarnim datotekama.
   ...([
@@ -4623,6 +4750,106 @@ const MUTATIONS: Mutation[] = [
       cleanBefore: () => deadEndWiringProblems(real()).length === 0,
     };
   }),
+  // T99 (issue #220): gard izvora u lockfileu. Baseline je stvarni package-lock.json (0 prekrsaja);
+  // svaka mutacija podmece jedan los izvor u kopiju tog lockfilea, u memoriji. Baseline sadrzi i
+  // `inBundle` paket bez `resolved`, pa cist baseline dokazuje i da izuzetak nije lazni pozitiv.
+  ...([
+    ['t99/lockfile-drugi-host', 'resolved na tudji host (lockfile injection)',
+      (p: LockPkg) => ({ ...p, resolved: 'https://evil.example/x/-/x-1.0.0.tgz' })],
+    ['t99/lockfile-http', 'resolved preko http:// bez TLS-a',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('https://', 'http://') })],
+    ['t99/lockfile-git-izvor', 'resolved na git izvor mimo registryja',
+      (p: LockPkg) => ({ ...p, resolved: 'git+https://github.com/x/x.git#0000000' })],
+    ['t99/lockfile-bez-integrity', 'paket bez integrity, pa se sadrzaj ne provjerava',
+      (p: LockPkg) => { const { integrity: _i, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha1', 'integrity sa slabim sha1 umjesto sha512',
+      (p: LockPkg) => ({ ...p, integrity: 'sha1-AAAAAAAAAAAAAAAAAAAAAAAAAAA=' })],
+    ['t99/lockfile-git-ssh', 'resolved na git+ssh izvor',
+      (p: LockPkg) => ({ ...p, resolved: 'git+ssh://git@github.com/x/x.git#0000000' })],
+    ['t99/lockfile-drugi-registry', 'resolved na drugi javni registry (yarn)',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('registry.npmjs.org', 'registry.yarnpkg.com') })],
+    ['t99/lockfile-bez-resolved', 'paket bez resolved, pa npm sam bira izvor',
+      (p: LockPkg) => { const { resolved: _r, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha512-sha1-rezerva', 'integrity "sha512- sha1-..." koji ssri cita kao sha1 (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512- sha1-EfatjsUqKYSrqv18O1FlA3hcIHI=' })],
+    ['t99/lockfile-prazan-sha512', 'integrity "sha512-" bez digesta (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512-' })],
+    ['t99/lockfile-link', 'obican paket pretvoren u link na lokalnu putanju (Codex F2)',
+      (p: LockPkg) => ({ ...p, link: true, resolved: '../izvan' })],
+  ] as const).map(([id, imitates, mutate]) => ({
+    id,
+    imitates: `T99: ${imitates}; npm audit to ne vidi jer gleda samo poznate CVE-ove.`,
+    caught: () => {
+      const lock = realLock();
+      const name = Object.keys(lock.packages).find((k) => k !== '' && !lock.packages[k].inBundle && !lock.packages[k].link);
+      if (!name) return false;
+      lock.packages[name] = mutate(lock.packages[name]);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${name}:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  })),
+  ...([
+    ['t99/lockfile-verzija-4', 'lockfileVersion 4 uz valjan packages; gard ga ne bi citao (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = 4; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-verzija-tekst', 'lockfileVersion kao tekst "3" (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = '3'; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-inbundle-strani-resolved', 'inBundle zapis sa stranim resolved, dosad bezuvjetno izuzet (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_KEY] = { ...l.packages[INBUNDLE_KEY], resolved: 'https://evil.example/c.tgz' }; }, `${INBUNDLE_KEY}:`],
+    ['t99/lockfile-inbundle-bez-roditelja', 'roditelj vise ne navodi paket u bundleDependencies, a inBundle ostaje (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_PARENT] = { ...l.packages[INBUNDLE_PARENT], bundleDependencies: [] }; }, `${INBUNDLE_KEY}:`],
+  ] as const).map(([id, imitates, mutate, expected]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const lock = realLock();
+      mutate(lock);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
+    },
+    cleanBefore: () => {
+      const lock = realLock();
+      return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
+    },
+  })),
+  ...([
+    ['t99/lockfile-gard-nakon-instalacije', 'gard vraćen iza setup-deps: npm ci izvrsi instalacijsku skriptu prije odbijanja (Codex F1)',
+      (wf: string) => {
+        const step = wf.slice(wf.indexOf('      - name: Izvori paketa u lockfileu'), wf.indexOf('      - name: Ovisnosti (kesirano)'));
+        const setup = '      - name: Ovisnosti (kesirano)\n        uses: ./.github/actions/setup-deps\n        with:\n          node-version: 24\n\n';
+        return wf.replace(step, '').replace(setup, setup + step);
+      }, 'npm-audit: gard izvora tek nakon instalacije (setup-deps)'],
+    ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
+      'npm-audit: gard izvora ima continue-on-error'],
+    ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
+      'npm-audit: gard izvora ima uvjet if'],
+    ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
+      (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
+      'npm-audit: nema mjerenja garda izvora'],
+  ] as const).map(([id, imitates, mutate, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = mutate(wf);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-gard-nije-u-ci',
+    imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/lockfile-sources.mjs\n', '');
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes('npm-audit: nema mjerenja garda izvora');
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
   {
     id: 'csp/stripe-host-u-form-action',
     imitates:
@@ -6006,7 +6233,7 @@ const MUTATIONS: Mutation[] = [
     imitates: 'pad sporednih posljedica zapisan u inbox kao detalj koji nije oznaka punog povrata: uplata koja stigne prije Stripeova retryja povrata ne vidi povrat i otvori ili ostavi rucnu narudzbu za vracen novac',
     caught: () => {
       const src = webhookMorSource();
-      const mutated = src.replace("await settle('failed', 'refund_consequences_failed');", "await settle('failed', 'posljedice_povrata_pale');");
+      const mutated = src.replace("await settle('failed', 'refund_consequences_failed', ", "await settle('failed', 'posljedice_povrata_pale', ");
       if (mutated === src) return false;
       return webhookHandlerProblems(mutated).some((p) => p.includes('ne ostavlja oznaku punog povrata'));
     },
@@ -6024,6 +6251,579 @@ const MUTATIONS: Mutation[] = [
         && webhookHandlerProblems(b).some((p) => p.includes('(x as any).code'));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2), snapshot prava i nadogradnja Repair -> Final Pass -----------
+  {
+    id: 'naplata/snapshot-bez-offer-code',
+    imitates: 'buildEntitlementInsert kakav je bio do Monetizacije V1: redak bez offer_code i prava, pa buduca promjena kataloga mijenja ono sto je korisnik vec kupio (MONETIZACIJA_V1.md odjeljak 13)',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.offer_code;
+        delete row.capabilities;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      const problems = entitlementSnapshotProblems(mutant);
+      return problems.some((p) => p.includes('ne snapshotira offer_code')) && problems.some((p) => p.includes('ne snapshotira prava'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/snapshot-dijeli-niz-s-katalogom',
+    imitates: 'pola snapshota: prava se upisuju kao referenca na niz iz kataloga umjesto kopije, pa izmjena kataloga u istom procesu tiho mijenja upisano pravo',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => ({
+        ...buildEntitlementInsert(p, ev, prov, now),
+        capabilities: p.capabilities as string[],
+      });
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('dijeli niz s katalogom'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/webhook-snapshot-iz-drugog-upita',
+    imitates: 'webhook cita proizvod kao select(*) bez offer_codes(capabilities): prava ostaju null, pa se svaka kupnja zaustavi na product_without_offer ili bi se snapshot slagao iz drugog izvora nego cijena',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const mutated = webhook.replace(".select('*, offer_codes(capabilities)')", ".select('*')");
+      if (mutated === webhook) return false;
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('prava ponude u istom upitu'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-naplacuje-punu-cijenu',
+    imitates: 'nadogradnja bez odbitka: korisnik koji je vec platio Repair placa puni Final Pass ponovno (MONETIZACIJA_V1.md odjeljak 14, "nikad ne naplatiti puni Final Pass ponovno")',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => {
+        const q = quoteUpgrade(t, s, u, n);
+        return q.ok ? { ...q, amountCents: q.targetCents } : q;
+      };
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('punu cijenu Final Passa'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-dvaput',
+    imitates: 'izracun nadogradnje koji ne gleda upgrade_order_id: vec nadogradjeno pravo daje drugi PaymentIntent s istim odbitkom, pa se isti Repair iznos priznaje dvaput',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, upgradeOrderId: null } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije jednom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-druga-vrsta-rada',
+    imitates: 'nadogradnja bez usporedbe vrste rada: diplomski Repair postaje doktorski Final Pass uz odbitak diplomskog iznosa',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s && t ? { ...s, workType: t.workType ?? s.workType } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('drugu vrstu rada'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-klijentski-iznos',
+    imitates: 'create-checkout koji iznos nadogradnje uzima iz tijela zahtjeva (klijent salje "vec placeno" ili iznos), pa izmijenjen klijent placa 1 cent za Final Pass',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace('amountCents = quote.amountCents;', 'amountCents = Number(body.amountCents);');
+      if (mutated === checkout) return false;
+      const problems = upgradeWiringProblems(mutated, webhookMorSource());
+      return problems.some((p) => p.includes('ne uzima iz quoteUpgrade')) && problems.some((p) => p.includes('iz tijela zahtjeva'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-tudje-pravo',
+    imitates: 'create-checkout cita pravo za nadogradnju samo po id-u: tudji entitlement id (npr. iz loga) daje odbitak tudje uplate',
+    caught: () => {
+      const checkout = createCheckoutSource();
+      const mutated = checkout.replace(".eq('id', upgradeFrom)\n      .eq('user_id', user.id)", ".eq('id', upgradeFrom)");
+      if (mutated === checkout) return false;
+      return upgradeWiringProblems(mutated, webhookMorSource()).some((p) => p.includes('bez filtra na prijavljenog korisnika'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-kroz-punu-cijenu-u-webhooku',
+    imitates: 'webhook bez grane nadogradnje: uplata razlike (10,00) se usporedjuje s punom cijenom Final Passa (19,99) i zavrsi na rucnom pregledu, ili bi uz popusten gard stvorila DRUGO pravo za isti rad',
+    caught: () => {
+      const webhook = webhookMorSource();
+      const od = webhook.indexOf('  if (ev.upgradeFromEntitlementId) {');
+      const _do = webhook.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = webhook.slice(0, od) + webhook.slice(_do + 4);
+      return upgradeWiringProblems(createCheckoutSource(), mutated).some((p) => p.includes('usporedbu s punom cijenom'));
+    },
+    cleanBefore: () => upgradeWiringProblems(createCheckoutSource(), webhookMorSource()).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2) krug 2, potrosnja kupljenog prava --------------------------------
+  {
+    id: 'naplata/snapshot-bez-prozora',
+    imitates: 'buildEntitlementInsert iz kruga 1: offer_code i prava se snapshotiraju, ali prozor slota ne, pa ga odluka o pristupu i dalje cita iz zivog kataloga',
+    caught: () => {
+      const mutant: typeof buildEntitlementInsert = (p, ev, prov, now) => {
+        const row = buildEntitlementInsert(p, ev, prov, now) as unknown as Record<string, unknown>;
+        delete row.slot_window_days;
+        return row as unknown as ReturnType<typeof buildEntitlementInsert>;
+      };
+      return entitlementSnapshotProblems(mutant).some((p) => p.includes('ne snapshotira prozor slota'));
+    },
+    cleanBefore: () => entitlementSnapshotProblems(buildEntitlementInsert).length === 0,
+  },
+  {
+    id: 'naplata/pristup-cita-zivi-katalog',
+    imitates: 'krug 1: generate-report i repair-docx citaju slot_window_days iz products uzivo, pa buduce skracenje prozora Final Passa skrati vec kupljeno pravo (odjeljak 29)',
+    caught: () => {
+      const mutant: typeof entitlementRowFromDb = (e) => {
+        const row = entitlementRowFromDb(e);
+        return row ? { ...row, slotWindowDays: e.products?.slot_window_days ?? row.slotWindowDays } : row;
+      };
+      return entitlementAccessProblems(mutant, ENTITLEMENT_ACCESS_SELECT).some((p) => p.includes('iz zivog kataloga umjesto snapshota'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/ugradnja-products-bez-hinta',
+    imitates: 'upit prava s golom ugradnjom products(slot_window_days): uz drugi FK entitlements -> products PostgREST vraca PGRST201 i placeno pravo nestaje iz odluke',
+    caught: () => {
+      const mutated = ENTITLEMENT_ACCESS_SELECT.replace('products!product_id(', 'products(');
+      if (mutated === ENTITLEMENT_ACCESS_SELECT) return false;
+      return entitlementAccessProblems(entitlementRowFromDb, mutated).some((p) => p.includes('nema eksplicitan hint'));
+    },
+    cleanBefore: () => entitlementAccessProblems(entitlementRowFromDb, ENTITLEMENT_ACCESS_SELECT).length === 0,
+  },
+  {
+    id: 'naplata/drugi-fk-entitlements-products',
+    imitates: '0207 iz kruga 1: upgraded_from_product_id references products dodaje drugi FK prema products, pa ugradnja products(...) u generate-report i repair-docx postaje dvosmislena (PGRST201)',
+    caught: () => {
+      const migracije = migrationsForFkGuard();
+      const idx = migracije.findIndex((m) => m.name === '0207_monetizacija_v1.sql');
+      if (idx < 0) return false;
+      const sql = migracije[idx].sql;
+      const mutated = sql.replace('add column if not exists upgraded_from_product_id text,', 'add column if not exists upgraded_from_product_id text references public.products(id),');
+      if (mutated === sql) return false;
+      const kopija = migracije.map((m, i) => (i === idx ? { ...m, sql: mutated } : m));
+      return entitlementProductFkCount(kopija).count === 2;
+    },
+    cleanBefore: () => entitlementProductFkCount(migrationsForFkGuard()).count === 1,
+  },
+  {
+    id: 'naplata/pristup-guta-gresku-upita',
+    imitates: 'krug 1: potrosac bez provjere greske citanja prava; PGRST201 ili pad baze postaju "nema prava" i placeni korisnik dobiva 402 s ponudom da plati ponovno',
+    caught: () => {
+      const src = generateReportSource();
+      const od = src.indexOf('  if (!access.ok) {');
+      const _do = od < 0 ? -1 : src.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do + 4);
+      return entitlementConsumerProblems({ 'generate-report': mutated }).some((p) => p.includes('greska upita prava se guta'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-odbijen-pri-potrosnji',
+    imitates: 'krug 1: repair-docx vrstu rada provjerava klijentskim isReportWorkType, pa kupljeni slot_specijalisticki (16,99) na svaki popravak dobiva 400 bad_request',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('!isBillableWorkType(meta.workType)', '!isReportWorkType(meta.workType)');
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('klijentskim popisom'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2) krug 3 -----------------------------------------------------------
+  {
+    id: 'naplata/pristup-mimo-zajednickog-citanja',
+    imitates: 'krug 2: repair-docx cita entitlements vlastitim inline upitom pokraj readAccessRows, pa izvrseni test zajednickog citanja ne dokazuje nista o stvarnom putu',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('readAccessRows(admin as unknown as AccessDb, user.id, workType, now),', "admin.from('entitlements').select(ENTITLEMENT_ACCESS_SELECT),");
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('zajednickim citanjem readAccessRows'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-anonimiziran-slot',
+    imitates: 'krug 2: quoteUpgrade gleda samo purchase_expires_at, pa se Repair ciji je slot cron anonimizirao (purge 0016) nadogradi u Final Pass koji ne prepoznaje nijednu verziju rada',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('anonimiziranim vezanim slotom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-slot-neprocitan-kao-netaknut',
+    imitates: 'fail-open citanje slota: pozivatelj koji zaboravi procitati vezani slot (boundSlotIntact undefined) dobiva nadogradnju kao da je otisak netaknut',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotIntact: s.boundSlotIntact ?? true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije fail-closed'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-rok-potrosnje-za-vezani',
+    imitates: 'krug 4 (nalaz pregleda): quoteUpgrade odbija vezan Repair cim istekne purchase_expires_at, iako otisak nije anonimiziran; slot_diplomski vezan dan 85 odbijen na dan 92 dok mu slot jos zivi',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) =>
+        s && Date.parse(s.purchaseExpiresAt) <= n ? { ok: false, error: 'upgrade_source_expired' } : quoteUpgrade(t, s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('rok potrosnje'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-nevezan-bez-roka',
+    imitates: 'krug 4: presiroko olabavljen rok, pa se i NEVEZAN Repair nadogradjuje nakon isteka roka potrosnje (rok vezivanja uz rad nestaje)',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, purchaseExpiresAt: new Date(n + 86_400_000).toISOString() } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('(rok)'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-specijalisticki-ukljucen-prije-m3',
+    imitates: 'krug 4: SPECIALIST_TIER_ENABLED zadano true prije M3, pa server specijalisticku naslovnicu na seminarskom, zavrsnom i diplomskom blokira s prijedlogom specijalisticki koji klijent ne nudi',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug, tier = true) => billableMismatch(sel, sig, sug, tier);
+      const c: typeof checkoutMismatch = (sel, sig, conf, tier = true) => checkoutMismatch(sel, sig, conf, tier);
+      const p = specialistTierGateProblems(b, c, true);
+      return p.some((x) => x.includes('ukljucen prije M3')) && p.some((x) => x.includes('predlaze specijalisticki'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/m3-prekidac-ignoriran-u-billable',
+    imitates: 'pola prekidaca: konstanta je false, ali billableMismatch granu specijalisticke naslovnice i dalje primjenjuje bezuvjetno (stanje kruga 3)',
+    caught: () => {
+      const b: typeof billableMismatch = (sel, sig, sug) => billableMismatch(sel, sig, sug, true);
+      return specialistTierGateProblems(b, checkoutMismatch, SPECIALIST_TIER_ENABLED).some((x) => x.includes('ne odlucuje kao prije M2'));
+    },
+    cleanBefore: () => specialistTierGateProblems(billableMismatch, checkoutMismatch, SPECIALIST_TIER_ENABLED).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-zadano',
+    imitates: 'krug 4: parseArgs bez argumenata vraca apply=true, pa obicno pokretanje skripte salje zahtjeve Stripeu umjesto dry-runa',
+    caught: () => {
+      const mutant: typeof stripeSyncParseArgs = (argv) => ({ ...stripeSyncParseArgs(argv), apply: !argv.includes('--dry-run') });
+      return stripeSyncSafetyProblems(mutant, stripeSyncApplyGuard, stripeSyncSource()).some((p) => p.includes('zadano nije dry-run'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-bez-kljuca',
+    imitates: 'krug 4: --apply bez STRIPE_SECRET_KEY se ne odbija nego nastavlja s praznim kljucem prema Stripeu',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => (opts.apply ? String(env.STRIPE_SECRET_KEY ?? '') : null);
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez STRIPE_SECRET_KEY'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-live-bez-zastavice',
+    imitates: 'krug 4: sk_live_ kljuc prolazi bez --live, pa se tijekom bete s iskljucenom naplatom dira live Stripe racun',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('bez --live'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/stripe-sync-apply-sjeme-migracija',
+    imitates: 'krug 4 (6d) / M2: gard se vraca na staru provjeru (fromExplicit umjesto from === "db"), pa --apply --from=migrations opet zrcali sjeme cijena iz migracija u Stripe umjesto zivog kataloga',
+    caught: () => {
+      const mutant: typeof stripeSyncApplyGuard = (opts, env) => {
+        if (!opts.apply) return null;
+        if (!opts.fromExplicit) throw new Error('--apply trazi --from=db');
+        const secret = String(env.STRIPE_SECRET_KEY ?? '');
+        if (!secret) throw new Error('--apply trazi STRIPE_SECRET_KEY');
+        if (secret.startsWith('sk_live_') && !opts.live) throw new Error('--live');
+        return secret;
+      };
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, mutant, stripeSyncSource()).some((p) => p.includes('--from=migrations zrcali'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/webhook-inline-nagrada-bez-ponovnog-citanja-povrata',
+    imitates: 'krug 4 nalaz pregleda (6a): handler inline izdaje nagradu preporucitelju bez ponovnog citanja oznake povrata (upisane izmedju prvog citanja i ove tocke), pa puni povrat u tom prozoru ostavlja nagradu izdanu',
+    caught: () => {
+      const izvor = "  const { data: povratPrijeNagrade, error: povratPrijeNagradeErr } = await admin\n"
+        + "    .from('webhook_events')\n"
+        + "    .select('id')\n"
+        + "    .eq('provider', PROVIDER)\n"
+        + "    .eq('order_id', ev.orderId)\n"
+        + "    .in('outcome_detail', REFUND_MARKERS)\n"
+        + "    .limit(1);\n"
+        + "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {\n"
+        + "    console.error('webhook-mor referrer_reward_deferred', {\n"
+        + "      orderId: ev.orderId,\n"
+        + "      reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',\n"
+        + "    });\n"
+        + "  } else {\n";
+      // Codex PR #217 (M2): blok nagrade cita ishod dodjele; mutacija uklanja samo ponovno citanje
+      // oznake povrata ispred njega, a blok ostaje.
+      const bezPonovnogCitanja = "  {\n";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezPonovnogCitanja);
+      return mutated !== src && !mutated.includes('povratPrijeNagrade');
+    },
+    cleanBefore: () => webhookMorSource().includes(
+      "  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {",
+    ),
+  },
+  {
+    id: 'naplata/webhook-markbonusdone-bez-uvjeta-pending',
+    imitates: 'krug 4 nalaz pregleda (6a): markBonusDone oznacava obvezu izvrsenom i kad ju je puni povrat u medjuvremenu vec otkazao (cancelled), pa se otkaz izgubi',
+    caught: () => {
+      const izvor = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');\n"
+        + "  } catch (e) {";
+      const bezUvjeta = "async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {\n"
+        + "  try {\n"
+        + "    await admin.from('bonus_outbox')\n"
+        + "      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })\n"
+        + "      .eq('order_id', orderId).eq('kind', kind);\n"
+        + "  } catch (e) {";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, bezUvjeta);
+      const fnStart = mutated.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !/\.eq\('status', 'pending'\)/.test(fn);
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function markBonusDone(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return /\.eq\('status', 'pending'\)/.test(fn);
+    },
+  },
+  {
+    id: 'naplata/webhook-nadogradnja-bez-ponovnog-citanja-partial-refund',
+    imitates: 'krug 4 nalaz pregleda (6b): bookUpgradePayment ne cita partial_refund_noted izvorne uplate ponovno prije pretvorbe, pa djelomican povrat zabiljezen izmedju checkouta i uplate nadogradnje prolazi s odbitkom punog iznosa',
+    caught: () => {
+      const izvor = "    if (source) {\n"
+        + "      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');\n"
+        + "      if (!partial.ok) {\n"
+        + "        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: partial.error });\n"
+        + "        await settle('failed', `upgrade_refund_lookup: ${partial.error}`);\n"
+        + "        return json({ error: 'internal' }, 500);\n"
+        + "      }\n"
+        + "      source.partiallyRefunded = partial.partial;\n"
+        + "    }\n\n";
+      const src = webhookMorSource();
+      if (!src.includes(izvor)) return false;
+      const mutated = src.replace(izvor, '');
+      const fnStart = mutated.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? mutated.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? mutated.slice(fnStart, fnEnd) : '';
+      return mutated !== src && !fn.includes('readSourcePartiallyRefunded(');
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      const fnStart = src.indexOf('async function bookUpgradePayment(');
+      const fnEnd = fnStart >= 0 ? src.indexOf('\n}\n', fnStart) : -1;
+      const fn = fnStart >= 0 && fnEnd > fnStart ? src.slice(fnStart, fnEnd) : '';
+      return fn.includes('readSourcePartiallyRefunded(');
+    },
+  },
+  {
+    id: 'naplata/upgrade-idempotency-key-bez-iznosa',
+    imitates: 'krug 4 nalaz pregleda (6e): kljuc idempotencije za nadogradnju ne nosi iznos, pa nova ciljna cijena (npr. promjena kataloga izmedju dva klika) vraca STARI PaymentIntent po starom iznosu umjesto novog',
+    caught: () => {
+      const stariKljuc = (userId: string, sourceEntitlementId: string, targetProductId: string, _amountCents: number): string =>
+        `lekta:pi:upgrade:${userId}:${sourceEntitlementId}:${targetProductId}`;
+      const a = stariKljuc('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = stariKljuc('u1', 'ent1', 'pass_diplomski', 2999);
+      return a === b;
+    },
+    cleanBefore: () => {
+      const a = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 1999);
+      const b = upgradeIdempotencyKey('u1', 'ent1', 'pass_diplomski', 2999);
+      return a !== b;
+    },
+  },
+  {
+    id: 'naplata/stripe-sync-zastita-poslije-mreze',
+    imitates: 'krug 4: main cita zivi katalog (mreza, service role) PRIJE provjere kljuca, pa odbijen --apply ipak zove Supabase',
+    caught: () => {
+      const src = stripeSyncSource();
+      const guard = '  const secret = applyGuard(opts, env);\n';
+      const read = "  const rows = opts.from === 'db' ? await catalogFromDb(env, fetchImpl) : catalogFromMigrations();\n";
+      const mutated = src.replace(guard + read, read + guard);
+      if (mutated === src) return false;
+      return stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, mutated).some((p) => p.includes('prije provjere'));
+    },
+    cleanBefore: () => stripeSyncSafetyProblems(stripeSyncParseArgs, stripeSyncApplyGuard, stripeSyncSource()).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-popravak',
+    imitates: 'krug 2: billableMismatch za nize vrste zove samo dijeljenu unambiguousMismatch, koja specijalisticku naslovnicu mapira na diplomski, pa specijalisticki rad trosi diplomski slot (9,99 umjesto 16,99)',
+    caught: () => {
+      const mutant: typeof billableMismatch = (sel, sig, sug) =>
+        billableMismatch(sel, sig.titleMarker === 'specialist' ? { ...sig, titleMarker: 'graduate' } : sig, sug);
+      return specialistFallbackProblems(mutant, checkoutMismatch).some((p) => p.includes('repair-docx: specijalisticka naslovnica trosi'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-kupnja',
+    imitates: 'krug 2: checkoutMismatch provjerava samo klijentske vrste (isReportWorkType + unambiguousMismatch), pa se slot_diplomski prodaje za specijalisticki rad',
+    caught: () => {
+      const stari: typeof checkoutMismatch = (sel, sig, confirmed) => {
+        if (confirmed || !sig || !sel || !isReportWorkType(sel)) return { block: false };
+        const signals = { words: sig.words, titleMarker: (sig.titleMarker ?? null) as Parameters<typeof unambiguousMismatch>[1]['titleMarker'] };
+        return unambiguousMismatch(sel, signals) ? { block: true, suggestedWorkType: estimateWorkType(signals).workType } : { block: false };
+      };
+      return specialistFallbackProblems(billableMismatch, stari).some((p) => p.includes('create-checkout: specijalisticka naslovnica kupuje diplomski'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-samo-u-logu',
+    imitates: 'krug 2: puni povrat Repaira nadogradjenog prava gasi Final Pass, a uplata nadogradnje ostaje naplacena uz inbox processed/refunded; trag je samo redak u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("await settle('needs_manual_review', 'refunded', rucniPregled);", "await settle('processed', 'refunded');");
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('bez trajnog traga'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-bez-traga-izvorne-uplate',
+    imitates: 'pola popravka: trajan trag samo za povrat izvorne uplate, a povrat uplate nadogradnje (placeni Repair ostaje bez prava) i dalje samo u logu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('        rucniPregled = `upgrade_refunded: ${upgradeSources.join(\'; \')}`;\n', '');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 prvi pokusaj: puni povrat SAMO uplate nadogradnje gasi cijelo pravo u refunded, pa placeni Repair ostaje bez prava i bez re-checka (odjeljak 14)',
+    caught: () => {
+      const src = webhookMorSource();
+      // Grana povrata bez vracanja: pricuvno gasenje se izvrsava uvijek.
+      const mutated = src.replace('    if (upgradeIds.length > 0 && !nadogradnjaVracena) {', '    if (upgradeIds.length > 0) {');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('gasi pravo umjesto da ga vrati'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/istodobni-povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 nalaz pregleda: u bookUpgradePayment istodobni povrat (pretvorba pa oznaka) gasi pravo u refunded uz processed/refunded_before_payment, bez traga i bez placenog Repaira',
+    caught: () => {
+      const src = webhookMorSource();
+      const start = src.indexOf('async function bookUpgradePayment(');
+      const od = src.indexOf("    const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {", start);
+      const _do = src.indexOf('    // Stanje prije pretvorbe nije zapamceno', od);
+      if (start < 0 || od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('istodobni povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
+  {
+    id: 'naplata/f21-povrat-ne-otkazuje-obvezu',
+    imitates: 'F21 (1) stanje do 2026-09-27: closeRefundConsequences ne dira bonus_outbox, pa obveza referrer_reward ostaje pending i radnik je kasnije isplati za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf("    const { data: obveze, error: obvezeErr } = await admin\n      .from('bonus_outbox')");
+      const _do = src.indexOf('    return {\n      ok: true,\n      manualOrderFound', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne otkazuje obvezu iz bonus_outbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-korak-povrata-samo-u-logu',
+    imitates: 'F21 (2) stanje do 2026-09-27: pad sporednog koraka povrata upisuje u inbox samo refund_consequences_failed, a korak i greska ostaju samo u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "await settle('failed', 'refund_consequences_failed', `${posljedice.step}: ${posljedice.error}`);",
+        "await settle('failed', 'refund_consequences_failed');",
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne zapisuje korak i gresku u inbox'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-any-u-zatvaranju-placanja',
+    imitates: 'F21 (3) stanje do 2026-09-27: closePaymentAfterRefund(admin: any, ...), pa krivo ime tablice ili stupca pri opozivu prolazi tsc i deno check',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('async function closePaymentAfterRefund(\n  admin: PaymentRefundDb,', 'async function closePaymentAfterRefund(\n  admin: any,');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('closePaymentAfterRefund prima admin: any'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-catalog-price-unusable-odluka-ne-gleda-cijenu',
+    imitates: 'F21 (4): druga grana garda catalog_price_unusable. cijenaUpotrebljiva se izracuna, ali odluka o iznosu je ne gleda, pa neupotrebljiva cijena (0 centi) i dalje ide u chargedAmountVerdict i daje pravo',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('    cijenaUpotrebljiva\n      ? chargedAmountVerdict(ev, ocekivanoCenti)', '    true\n      ? chargedAmountVerdict(ev, ocekivanoCenti)');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('odluka o iznosu ne ovisi o upotrebljivoj cijeni'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-bez-provjere-povrata',
+    imitates: 'F21 (1) strana radnika do 2026-09-27: process-bonus-outbox zove tryGrantReferrerReward izravno, bez citanja oznake povrata, pa isplacuje nagradu za vracen novac',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace('await runReferrerRewardObligation(admin as unknown as ReferrerRewardDb, row);', "await tryGrantReferrerReward(admin, row.user_id, 'diplomski', row.order_id);");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('mimo runReferrerRewardObligation'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-samo-prvo-citanje',
+    imitates: 'pola popravka F21 na strani radnika: povrat se cita samo prije dodjele. Povrat koji stigne izmedju citanja i dodjele procita referral_signups prije nagrade, pa nagrada ostaje isplacena',
+    caught: () => {
+      const mod = bonusOutboxModuleSource();
+      const od = mod.indexOf('  if (await orderFullyRefunded(admin, row.order_id)) {\n    // Povrat je stigao izmedju');
+      const _do = mod.indexOf("  return 'granted';", od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = mod.slice(0, od) + mod.slice(_do);
+      return bonusOutboxWorkerProblems(mutated, bonusOutboxIndexSource()).some((p) => p.includes('ne cita povrat ponovno'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
+  },
+  {
+    id: 'naplata/f21-radnik-pregazi-otkazano',
+    imitates: 'radnik koji zavrsni status pise bez uvjeta: obvezu koju je webhook upravo otkazao (cancelled) vrati u done, pa trag otkazivanja nestane',
+    caught: () => {
+      const index = bonusOutboxIndexSource();
+      const mutated = index.replace("          .eq('id', row.id)\n          .eq('status', 'pending');\n        done++;", "          .eq('id', row.id);\n        done++;");
+      if (mutated === index) return false;
+      return bonusOutboxWorkerProblems(bonusOutboxModuleSource(), mutated).some((p) => p.includes('done bez uvjeta pending'));
+    },
+    cleanBefore: () => bonusOutboxWorkerProblems(bonusOutboxModuleSource(), bonusOutboxIndexSource()).length === 0,
   },
   {
     id: 'naplata/rucno-vezivanje-bez-provjere-postojeceg-zapisa',
@@ -6831,8 +7631,52 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
+  /**
+   * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;
+   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka.
+   *
+   * Svjesna iznimka od pravila 1 iz zaglavlja: prva mutacija PISE jednu sinteticku test datoteku, ali
+   * u privremenu mapu izvan repozitorija (`mkdtemp` pod `tmpdir()`), koju gard skenira preko parametra
+   * `root` isto kao pravo stablo, i brise je u `finally`. Datoteke repozitorija se ne diraju. Druga
+   * mutacija ne mijenja izvor garda na disku: ubrizgava detektor `readNormalized` koji uvijek kaze
+   * "nije normalizirano" i trazi da presuda nad pravim stablom tada ne bude prazna.
+   */
+  {
+    id: 'crlf/citanje-bez-normalizacije',
+    imitates:
+      'test koji readFileSync(..., utf8) cita datoteku iz repozitorija i trazi `\\nas \\$\\$\\n` bez normalizacije CR-a; ' +
+      'Linux CI zelen, Windows checkout (CRLF) crven (#243, popravak #245)',
+    caught: () => crlfSintetickoStablo(false).length === 1,
+    cleanBefore: () => crlfSintetickoStablo(true).length === 0,
+  },
+  {
+    id: 'crlf/gard-bez-provjere-normalizacije',
+    imitates:
+      'gard kojem netko ukloni provjeru normalizacije (c): svako citanje koje ispravno normalizira CR postane ' +
+      'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
+    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
+    cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
 
 ];
+
+/**
+ * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
+ * (cita schema.sql i trazi `\nas \$\$\n`), sa ili bez normalizacije CR-a.
+ */
+function crlfSintetickoStablo(normalizira: boolean): string[] {
+  const root = mkdtempSync(join(tmpdir(), 'lekta-t92-'));
+  try {
+    mkdirSync(join(root, 'tests'));
+    const citanje = normalizira
+      ? "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8').replace(/\\r\\n/g, '\\n');"
+      : "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8');";
+    writeFileSync(join(root, 'tests', 'sinteticki.test.ts'), `${citanje}\nexpect((sql.match(/\\nas \\$\\$\\n/g) ?? []).length).toBe(1);\n`);
+    return crlfReadProblems(collectScannedSources(root));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
 type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
@@ -7100,6 +7944,39 @@ function webhookMorSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'handler.ts'));
 }
 
+function stripeSyncSource(): string {
+  return readTextLf(resolve(process.cwd(), 'scripts', 'stripe-sync-products.mjs'));
+}
+
+function createCheckoutSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+}
+
+function generateReportSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+}
+
+function repairDocxSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+}
+
+/** Sve migracije, za gard jednog FK entitlements -> products (mutira se kopija u memoriji). */
+function migrationsForFkGuard(): { name: string; sql: string }[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((name) => ({ name, sql: readTextLf(resolve(dir, name)) }));
+}
+
+function bonusOutboxModuleSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'referrer-reward.ts'));
+}
+
+function bonusOutboxIndexSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'index.ts'));
+}
+
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
 function corpusMigrations(): MigrationFile[] {
   const dir = resolve(process.cwd(), 'supabase', 'migrations');
@@ -7192,6 +8069,473 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     expect(raw.byteLength).toBeGreaterThan(1000);
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
   });
+});
+
+/**
+ * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0207 se
+ * izvrsava u stvarnom Postgresu (PGlite, tests/helpers/monetizacija-v1-sql.ts). Isti ugovor kao
+ * MUTATIONS: cisti baseline, pa mutacija koja mora oboriti gard.
+ */
+describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
+  const ROK_SQL = 180_000;
+
+  /**
+   * Codex pregled PR #217 runda 2: mutacija nagrade mora pogoditi PRODUKCIJSKI izvor, ne ubrizganu
+   * funkciju. Tekst supabase/functions/_shared/grant-referrer-reward.ts se mijenja zamjenom, a
+   * mutirani modul i radnik koji ga uvozi (process-bonus-outbox/referrer-reward.ts) prevode se
+   * esbuildom i stvarno izvrsavaju; radnikov uvoz zajednicke odluke dobiva MUTIRANI modul. Zamjena
+   * koja ne pogodi tekst obara test, pa gard ne moze tiho postati slijep nakon preoblikovanja izvora.
+   * Bez privremenih datoteka: modulski runner Vitesta odbija uvoz izvan korijena projekta.
+   */
+  const GRANT_IZVOR = resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-referrer-reward.ts');
+
+  function mutirajNagradu(od: string, u: string): string {
+    const izvor = readTextLf(GRANT_IZVOR);
+    const mutiran = izvor.replace(od, u);
+    expect(mutiran, `zamjena nije pogodila izvor nagrade: ${od}`).not.toBe(izvor);
+    return mutiran;
+  }
+
+  /** Izvrsi TypeScript izvor kao CommonJS modul; svaki uvoz mora biti zadan u `uvozi`. */
+  function izvrsiIzvor(izvor: string, uvozi: Record<string, unknown>): unknown {
+    const { code } = esbuild.transformSync(izvor, { loader: 'ts', format: 'cjs' });
+    const modul: { exports: Record<string, unknown> } = { exports: {} };
+    const zahtjev = (ime: string): unknown => {
+      if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
+      return uvozi[ime];
+    };
+    new Function('module', 'exports', 'require', code)(modul, modul.exports, zahtjev);
+    return modul.exports;
+  }
+
+  async function nagradniModuliIz(grantIzvor: string) {
+    const grant = izvrsiIzvor(grantIzvor, {}) as typeof GrantModul;
+    const worker = izvrsiIzvor(bonusOutboxModuleSource(), {
+      '../_shared/grant-referrer-reward.ts': grant,
+      '../webhook-mor/handler.ts': await import('../supabase/functions/webhook-mor/handler'),
+    }) as typeof RadnikModul;
+    return { grant, worker };
+  }
+
+  it('Codex PR #217 r2: nemutirani izvor nagrade kroz isti ucitavac je cist (gard odluke i gard radnika)', async () => {
+    const { grant, worker } = await nagradniModuliIz(readTextLf(GRANT_IZVOR));
+    expect(await referrerRewardDecisionProblems(grant)).toEqual([]);
+    expect(await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).toEqual([]);
+  });
+
+  it('Codex PR #217 M2: izvor koji svaki ishod zatvara (stanje f466d454, zanemaren ishod) obara oba garda', async () => {
+    const { grant, worker } = await nagradniModuliIz(mutirajNagradu(
+      'return { settled: r.granted === false && TRAJNI_RAZLOZI.has(reason), reason };',
+      'return { settled: true, reason };',
+    ));
+    const radnik = await referrerRewardRetryProblems(worker.runReferrerRewardObligation);
+    expect(radnik.some((x) => x.startsWith('grant_failed:'))).toBe(true);
+    expect(radnik.some((x) => x.startsWith('error:'))).toBe(true);
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith('prolazan ishod'))).toBe(true);
+  });
+
+  it('Codex PR #217 M2: izvor u kojem je ip_match_fraud prolazan pad (ponavlja se) obara gard radnika', async () => {
+    const { worker } = await nagradniModuliIz(mutirajNagradu("'self_referral', 'ip_match_fraud', ", "'self_referral', "));
+    expect((await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
+  });
+
+  it.each([
+    ['anonimni kupac', "    if (buyer.user.is_anonymous) return { granted: false, reason: 'ineligible_buyer' };\n", ''],
+    ['samopreporuka', "    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };\n", ''],
+    ['IP preporucitelja se poklapa', 'referrerIpHashes.has(signup.referred_ip_hash)', 'false'],
+    ['mjesecni strop', 'count >= MAX_REWARDED_PER_MONTH && !signup.converted_order_id', 'false'],
+    // Codex pregled delte (G-1): filtri upita, ne samo grane odluke.
+    ['signup vec nagradjen', "      .eq('referred_user_id', buyerUserId)\n      .eq('status', 'friend_rewarded')\n", "      .eq('referred_user_id', buyerUserId)\n"],
+    ['IP trece osobe', "      .eq('user_id', signup.referrer_user_id)\n", ''],
+    // Filtri upita brojanja mjesecnog stropa (rezultat ispod stropa ne smije zbrajati tudje ni nenagradjene retke).
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('status', 'rewarded')\n"],
+    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('referrer_user_id', signup.referrer_user_id)\n"],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'false'],
+    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'signup.converted_order_id && signup.converted_order_id === buyerOrderId'],
+  ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
+    const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
+    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);
+  });
+
+  it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      return r.ok ? r : { ok: true, activeSlots: [], entitlements: [] };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
+  });
+
+  it('krug 4: citanje pristupa koje slot uzima bez obzira na status prava (stanje kruga 3) obara gard povrata nadogradnje', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      if (!r.ok) return r;
+      // Slotovi kao prije kruga 4: svaki zivi slot, bez veze na entitlement_id i status prava.
+      const raw = await db.from('document_slots').select(ACTIVE_SLOT_SELECT).eq('user_id', u).eq('work_type', w).gt('slot_expires_at', n);
+      const activeSlots = (Array.isArray(raw.data) ? raw.data : []).map((x) => {
+        const s = x as Record<string, unknown>;
+        return { id: String(s.id), workType: w, fingerprint: s.fingerprint, slotExpiresAt: String(s.slot_expires_at) } as SlotRow;
+      });
+      return { ...r, activeSlots };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('povrat nadogradnje') && p.includes('umjesto 402'))).toBe(true);
+  });
+
+  it('krug 4: citanje vezanog slota po isteku prozora (stara granica) obara gard kredita za popravak', async () => {
+    expect(await boundSlotReadProblems(readBoundSlotIntact, quoteUpgrade)).toEqual([]);
+    const staro: typeof readBoundSlotIntact = async (admin, id) => {
+      const q = admin.from('document_slots').select('id, fingerprint, slot_expires_at').eq('entitlement_id', id);
+      const { data, error } = await q;
+      if (error) return { ok: false, error: String(error) };
+      const zivi = (Array.isArray(data) ? data : []).filter((r) => Date.parse(String((r as Record<string, unknown>).slot_expires_at)) > Date.UTC(2026, 8, 27));
+      return { ok: true, intact: zivi.length > 0 };
+    };
+    expect((await boundSlotReadProblems(staro, quoteUpgrade)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    const bezOtiska: typeof readBoundSlotIntact = async (admin, id) => {
+      const r = await readBoundSlotIntact(admin, id);
+      return r.ok ? { ok: true, intact: true } : r;
+    };
+    expect((await boundSlotReadProblems(bezOtiska, quoteUpgrade)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+  });
+
+  it('catalogProblems: baseline cist nad 0207', async () => {
+    const run = await runV1();
+    try {
+      expect(await catalogProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: do_obrane ostaje active=true -> gard obara', async () => {
+    const mutated = mutirajRe(/set active = false(\r?\n\s+where id in \('slot_zavrsni_do_obrane')/, 'set active = true$1');
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('slot_zavrsni_do_obrane:') || p.startsWith('slot_diplomski_do_obrane:'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: cijena mimo set_product_price (bez pricing_changelog traga) -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /perform public\.set_product_price\(v\.id, v\.price_eur::numeric,\s*'[^']*'\);/,
+      'update public.products set price_eur = v.price_eur::numeric where id = v.id;',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.includes('nije u pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('catalogProblems: specijalisticki izostavljen iz work_type CHECK-a repair_jobs -> gard obara', async () => {
+    const mutated = mutirajRe(
+      /(add constraint repair_jobs_work_type_check\r?\n\s+check \(work_type in \('seminarski', 'zavrsni', 'diplomski', )'specijalisticki', /,
+      '$1',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await catalogProblems(run.db)).some((p) => p.startsWith('repair_jobs: work_type CHECK'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('0207 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
+    const run = await runV1();
+    try {
+      // Nadogradnja prva: snapshotProblems mijenja katalog (namjerno, da dokaze da kupljeno ostaje).
+      expect(await upgradeSqlProblems(run.db)).toEqual([]);
+      expect(await snapshotProblems(run)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+    const drugi = await runV1();
+    try {
+      expect(await idempotencyProblems(drugi)).toEqual([]);
+    } finally {
+      await drugi.db.close();
+    }
+  }, ROK_SQL);
+
+  function mutiraj(od: string, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  /** Kao mutiraj, ali regexom (neovisno o CRLF-u radne kopije). */
+  function mutirajRe(od: RegExp, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.source.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja anonimiziranog rada obara gard', async () => {
+    const mutated = mutiraj('  if v_ent.slots_used > 0 and not found then', '  if false then');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade sa starom granicom (slot_expires_at > now) odbija istekao, a netaknut slot i obara gard', async () => {
+    const mutated = mutirajRe(/and s\.fingerprint \?\| array\['authorNorm', 'titleNorm', 'headings'\]/, 'and s.slot_expires_at > now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade s rokom potrosnje i za vezano pravo odbija vezan Repair izvan roka i obara gard', async () => {
+    const mutated = mutirajRe(/(or v_ent\.status <> 'active')/, '$1 or v_ent.purchase_expires_at <= now()');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('rok potrosnje istekao'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: apply_entitlement_upgrade bez roka potrosnje za nevezano pravo obara gard', async () => {
+    const mutated = mutirajRe(/if v_ent\.slots_used = 0 and v_ent\.purchase_expires_at <= now\(\) then/, 'if false then');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('nevezan izvan roka potrosnje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: revert_entitlement_upgrade bez vracanja slota ostavlja produljen prozor i obara gard (dan 60 besplatan)', async () => {
+    const mutated = mutirajRe(/  update public\.document_slots s\r?\n     set slot_expires_at = least\(/, '  update public.document_slots s\n     set slot_expires_at = greatest(');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('dan 60'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji gasi pravo (umjesto vracanja Repaira) obara gard placenog Repaira', async () => {
+    const mutated = mutirajRe(/         upgrade_reverted_at = now\(\)\r?\n   where id = v_ent\.id;/, "         upgrade_reverted_at = now(),\n         status = 'refunded'\n   where id = v_ent.id;");
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('Repair kupac kaznjen'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: pretvorba koja ne pamti istek slota prije nadogradnje obara gard (ozivljen slot ostaje produljen)', async () => {
+    const mutated = mutirajRe(/upgraded_from_slot_expires_at = v_slot_prije,/, 'upgraded_from_slot_expires_at = null,');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ozivljen slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji ozivljava vec ugaseno pravo obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.status <> 'active' then\r?\n    return 'inactive';\r?\n  end if;\r?\n/, '');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ugasenog prava'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: djelomican povrat baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await partialRefundSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba bez provjere djelomicnog povrata (stanje f466d454) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if false\n     and exists (');
+    const run = await runV1(mutated);
+    try {
+      const p = await partialRefundSqlProblems(run.db);
+      expect(p.some((x) => x.startsWith('povrat prije pretvorbe: apply_entitlement_upgrade vraca upgraded'))).toBe(true);
+      expect(p.some((x) => x.includes('povrat uplate nadogradnje prije pretvorbe'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: pretvorba koja cita samo oznaku izvorne uplate (ne refunded_cents) obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if exists (');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('samo refunded_cents'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat nakon pretvorbe koji ne javlja nadogradjeno pravo obara gard', async () => {
+    const mutated = mutirajRe(/      v_ishod := 'upgraded_needs_review';/, "      v_ishod := 'noted';");
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('Final Pass tiho ostaje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('Codex PR #217 M1: povrat koji ne vodi iznos u bazi obara gard', async () => {
+    const mutated = mutirajRe(/set refunded_cents = greatest\(refunded_cents, coalesce\(p_refunded_cents, 0\)\)/, 'set refunded_cents = refunded_cents');
+    const run = await runV1(mutated);
+    try {
+      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('iznos se ne vodi u bazi'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  /** M4: privilegije se mjere u bazi sa zadanim privilegijama Supabasea i u bazi bez njih. */
+  async function privilegijeNad(sql: string): Promise<string[]> {
+    const sZadanima = await runV1(sql, { supabaseDefaults: true });
+    const bez = await runV1(sql);
+    try {
+      return await privilegeProblems(sZadanima.db, bez.db);
+    } finally {
+      await sZadanima.db.close();
+      await bez.db.close();
+    }
+  }
+
+  it('Codex PR #217 M4: privilegije baseline ciste', async () => {
+    expect(await privilegijeNad(readMigration(V1_MIGRATION))).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez revoke (stanje f466d454) daje anon zadane privilegije i obara gard', async () => {
+    const mutated = mutiraj('revoke all on table public.offer_codes from public, anon, authenticated;', '');
+    const p = await privilegijeNad(mutated);
+    expect(p.some((x) => x.startsWith('anon ima INSERT na offer_codes'))).toBe(true);
+    expect(p.some((x) => x.startsWith('authenticated ima TRUNCATE na offer_codes'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez izricitog grant execute service_role (stanje f466d454) obara gard u bazi bez zadanih', async () => {
+    const mutated = mutirajRe(/grant execute on function public\.apply_entitlement_upgrade\([^)]*\)\r?\n  to service_role;/, '');
+    expect((await privilegijeNad(mutated)).some((x) => x.includes('service_role nema EXECUTE na public.apply_entitlement_upgrade') && x.includes('bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: RPC bez revoke za anon obara gard', async () => {
+    const mutated = mutiraj('revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('anon ima EXECUTE na public.note_entitlement_partial_refund'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M4: offer_codes bez grant service_role obara gard u bazi bez zadanih', async () => {
+    const mutated = mutiraj('grant select, insert, update, delete on table public.offer_codes to service_role;', '');
+    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('service_role nema SELECT na offer_codes (bez zadanih'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: brisanje CHECK-ova baseline cisto', async () => {
+    expect(await constraintDropProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: work_type CHECK se brise bez provjere imena i definicije (stanje f466d454) i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;", 'null;');
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('tiho brise entitlements_doktorski_slotovi'))).toBe(true);
+    expect(p.some((x) => x.includes('ne pada glasno (RAISE EXCEPTION) na repair_jobs_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 M3: bonus_outbox status CHECK se brise bez provjere i obara gard', async () => {
+    const mutated = mutiraj("raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;", 'null;');
+    expect((await constraintDropProblems(mutated)).some((x) => x.includes('tiho brise bonus_outbox_pending_pokusaji'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M3: work_type CHECK bez usporedbe cijelog izraza (samo ime i stupac) tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan work_type/, "       or false then\n      raise exception '0207: neocekivan work_type");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise corpus_contributions_work_type_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M3: bonus_outbox status CHECK bez usporedbe cijelog izraza tiho brise stroziji izraz istog imena i obara gard', async () => {
+    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan status CHECK/, "       or false then\n      raise exception '0207: neocekivan status CHECK");
+    const p = await constraintDropProblems(mutated);
+    expect(p.some((x) => x.includes('stroziji izraz (bonus_outbox.status)') && x.includes('tiho brise bonus_outbox_status_check'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: vlasnik SECURITY DEFINER funkcija baseline cist (0207 pod drugom ulogom)', async () => {
+    expect(await definerOwnerProblems()).toEqual([]);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: funkcija bez izricitog owner to postgres (stanje 7ae20bba) pripada ulozi koja je migrirala i obara gard', async () => {
+    const mutated = mutirajRe(/alter function public\.revert_entitlement_upgrade\(text\) owner to postgres;\r?\n/, '');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('revert_entitlement_upgrade: vlasnik je lekta_tudji_migrator'))).toBe(true);
+  }, ROK_SQL);
+
+  it('Codex PR #217 r2 M4: SECURITY DEFINER funkcija bez praznog search_path obara gard', async () => {
+    const mutated = mutirajRe(/(create or replace function public\.note_entitlement_partial_refund\([\s\S]*?security definer\r?\n)set search_path = ''\r?\n/, '$1');
+    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('note_entitlement_partial_refund: search_path nije izricito prazan'))).toBe(true);
+  }, ROK_SQL);
+
+  it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
+    const mutated = mutiraj('    if p.price_eur is distinct from v.price_eur::numeric then', '    if true then');
+    const run = await runV1(mutated);
+    try {
+      expect((await idempotencyProblems(run, mutated)).some((p) => p.includes('dopisuje pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('backfill prozora POSLIJE promjene kataloga: staro pravo dobiva novi prozor i obara gard snapshota', async () => {
+    const sql = readMigration(V1_MIGRATION);
+    const backfill = sql.slice(
+      sql.indexOf('update public.entitlements e\n   set slot_window_days = p.slot_window_days'),
+      sql.indexOf('-- Snapshot pri svakom upisu prava'),
+    );
+    expect(backfill.length).toBeGreaterThan(50);
+    const bez = sql.replace(backfill, '');
+    const mutated = bez.replace('-- 6. Kanibalizirajuci', `${backfill}\n-- 6. Kanibalizirajuci`);
+    expect(mutated).not.toBe(sql);
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('umjesto kupljenih 14'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('bez triggera snapshota: pravo upisano mimo webhooka ostaje bez ponude i obara gard', async () => {
+    const mutated = mutiraj(
+      'create trigger entitlements_snapshot_offer\n  before insert on public.entitlements\n  for each row execute function public.entitlements_snapshot_offer();',
+      '',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('trigger ne snapshotira'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
 });
 
 // Agent result success cannot bypass dependency or independent-review gates.
@@ -9068,6 +10412,500 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
   });
 });
 
+describe('mutacije: Upisnik dokaz u snimci', () => {
+  const baselineRatchet = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as import('../src/programs/upisnik-evidence-snapshots').SnapshotRatchet;
+  const sourcePath = resolve(process.cwd(), 'src/programs/upisnik-evidence-snapshots.ts');
+  const fixture = 'Doslovni citat iz registrirane snimke izvora.';
+  const url = 'https://example.test/source';
+  const path = 'data/sources/test.html';
+  const encoder = new TextEncoder();
+  const goodBytes = encoder.encode(fixture);
+  const hash = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
+  const file = { decisions: [{ programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+  const ratchet = { schemaVersion: 1, entries: [] };
+  const source = { url, snapshotPath: path, snapshotHash: hash(goodBytes) };
+
+  async function copyWith(replace: (s: string) => string, readZipMock: (bytes: Uint8Array) => Promise<any[]> = async () => []) {
+    const { createRequire } = await import('node:module');
+    const { transform } = await import('esbuild');
+    const original = readFileSync(sourcePath, 'utf8');
+    let edited = replace(original);
+    expect(edited).not.toBe(original);
+    edited = edited
+      .replace("import { extractText, getDocumentProxy } from 'unpdf';", "const extractText = async () => ({ text: '' }); const getDocumentProxy = async () => ({});")
+      .replace("import { readZip } from '../repair/zip-codec';", "const readZip = readZipMock;")
+      .replace('createRequire(import.meta.url)', 'createRequire(' + JSON.stringify(sourcePath) + ')');
+    // Mutant se ne pise na disk (vitestov loader ne ucitava modul izvan korijena projekta): CJS kod se
+    // izvodi s pravim require modula, pa radi jednako na Node 20 i 24.
+    const js = (await transform(edited, { loader: 'ts', format: 'cjs' })).code;
+    const mod = { exports: {} as Record<string, unknown> };
+    new Function('require', 'module', 'exports', 'readZipMock', js)(createRequire(sourcePath), mod, mod.exports, readZipMock);
+    return mod.exports as typeof import('../src/programs/upisnik-evidence-snapshots');
+  }
+  async function baseline(data: Uint8Array, src = source, companion?: Uint8Array, registry = [src]) {
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    return verifyUpisnikEvidenceSnapshots(file, registry, (p) => p === path ? data : p.endsWith('.snapshot-ocr.txt') ? companion ?? null : null, ratchet, baselineRatchet);
+  }
+  it('uklanjanje provjere hasha snimke propusta zamijenjene bajtove', async () => {
+    const wrong = encoder.encode(fixture + ' promjena');
+    expect((await baseline(wrong)).join(' ')).toMatch(/hash snimke/);
+    const mutant = await copyWith((s) => s.replace("if (createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)", "if (false && createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [source], () => wrong, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje ratchet provjere propusta novu neregistriranu odluku', async () => {
+    expect((await baseline(goodBytes, source, undefined, [])).join(' ')).toMatch(/nova obvezujuca odluka/);
+    const mutant = await copyWith((s) => s.replace('if (!ratchetKeys.has(key))', 'if (false && !ratchetKeys.has(key))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [], () => null, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('provjera svake rijeci propusta citat koji nije podniz', async () => {
+    const rearranged = encoder.encode('snimke izvora. Doslovni citat iz registrirane');
+    expect((await baseline(rearranged, { ...source, snapshotHash: hash(rearranged) })).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace(
+      String.raw`if (!(await cache.get(cacheKey)!).split(/\n\s*\n/u).some((paragraph) => normalizeSnapshotQuote(paragraph).includes(quote)))`,
+      "const text = normalizeSnapshotQuote(await cache.get(cacheKey)!); if (!quote.split(' ').every((word) => text.includes(word)))",
+    ));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [{ ...source, snapshotHash: hash(rearranged) }], () => rearranged, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zamrznute osnovice propusta zamjenu ratchet zapisa', async () => {
+    const entry = { ...baselineRatchet.entries[0], sourceUrl: 'https://replacement.example.test' };
+    const changed = { schemaVersion: 1, entries: [entry] };
+    const changedFile = { decisions: [{ programCode: entry.programCode, evidence: { sourceUrl: entry.sourceUrl, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).join(' ')).toMatch(/ratchet zapis izvan zamrznute osnovice/);
+    const mutant = await copyWith((s) => s.replace('if (!baselineKeys.has(ratchetKey(entry)))', 'if (false && !baselineKeys.has(ratchetKey(entry)))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje hidden provjere propusta skriveni HTML citat', async () => {
+    const hidden = encoder.encode('<p hidden>' + fixture + '</p>');
+    const hiddenSource = { ...source, snapshotHash: hash(hidden) };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace("element.hasAttribute('hidden') ||", "false ||"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('iskljucen DOCX onError propusta atribut bez navodnika', async () => {
+    // xmldom 0.9.12: atribut bez navodnika prijavljuje SAMO kroz onError (nije fatalError i nije goli ampersand).
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii=Arial/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("onError: () => { throw new Error('DOCX XML nije ispravan'); }", 'onError: () => {}'), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje provjere golog ampersanda propusta neispravan DOCX XML', async () => {
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii="A & B"/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("if (/&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/u.test(xml)) throw new Error('DOCX XML nije ispravan');", ''), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  // Skenirani PDF: pratitelj = "# snapshotHash: <PDF>", "# ocrTextHash: <tijelo>", tijelo; dokaz samo uz rucno
+  // potvrdjen prijepis u registru (ocrTranscript.textHash). Mutant stubira unpdf na prazan tekst, pa ide istim putem.
+  const pdfPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  const companionPath = pdfPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+  const sha = (s: string) => createHash('sha256').update(s, 'utf8').digest('hex');
+  const scanned = () => {
+    const scan = new Uint8Array(readFileSync(resolve(process.cwd(), pdfPath)));
+    const transcript = { textHash: sha(fixture), verifiedBy: 'test', verifiedAt: '2026-10-04' };
+    return { scan, pdfSource: { url, snapshotPath: pdfPath, snapshotHash: hash(scan), ocrTranscript: transcript } };
+  };
+  const companionWith = (pdfHash: string, bodyHash: string, body = fixture) => encoder.encode(`# snapshotHash: ${pdfHash}\n# ocrTextHash: ${bodyHash}\n${body}`);
+  async function scannedRun(companion: Uint8Array, src: Record<string, unknown>, mutantSource?: (s: string) => string) {
+    const { scan } = scanned();
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companion : null;
+    const mod = mutantSource ? await copyWith(mutantSource) : await import('../src/programs/upisnik-evidence-snapshots');
+    return mod.verifyUpisnikEvidenceSnapshots(file, [src as never], read, ratchet, baselineRatchet);
+  }
+  it('BASELINE: nemutirani gard prihvaca valjan HTML i valjan potvrdjen prijepis skena (Codex R4)', async () => {
+    expect(await baseline(goodBytes)).toEqual([]);
+    const { scan, pdfSource } = scanned();
+    expect(await scannedRun(companionWith(hash(scan), sha(fixture)), pdfSource)).toEqual([]);
+  });
+  it('uklanjanje provjere prvog retka zaglavlja propusta pratitelj tudjeg PDF-a', async () => {
+    const { pdfSource } = scanned();
+    const wrongPdf = companionWith('0'.repeat(64), sha(fixture));
+    expect((await scannedRun(wrongPdf, pdfSource)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
+    expect(await scannedRun(wrongPdf, pdfSource, (s) => s.replace("if (lines[0] !== `# snapshotHash: ${source.snapshotHash}`)", "if (false && lines[0] !== `# snapshotHash: ${source.snapshotHash}`)"))).toEqual([]);
+  });
+  it('uklanjanje provjere hasha tijela propusta pratitelj kojem drugi redak ne odgovara tijelu', async () => {
+    const { scan, pdfSource } = scanned();
+    const staleHeader = companionWith(hash(scan), '1'.repeat(64));
+    expect((await scannedRun(staleHeader, pdfSource)).join(' ')).toMatch(/hashu vlastitog tijela/);
+    expect(await scannedRun(staleHeader, pdfSource, (s) => s.replace('if (lines[1] !== `# ocrTextHash: ${bodyHash}`)', 'if (false && lines[1] !== `# ocrTextHash: ${bodyHash}`)'))).toEqual([]);
+  });
+  it('kljuc predmemorije bez potvrde prijepisa propusta nepotvrdjen zapis iste snimke (Codex runda 2)', async () => {
+    const { scan, pdfSource } = scanned();
+    const plain = { url: 'http://example.test/isti-pdf', snapshotPath: pdfPath, snapshotHash: hash(scan) };
+    const twoFile = { decisions: [
+      { programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } },
+      { programCode: '2', evidence: { sourceUrl: plain.url, sourceLocator: 'test', quote: fixture } },
+    ], exclusions: [] };
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companionWith(hash(scan), sha(fixture)) : null;
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).join(' ')).toMatch(/decision 2: .*rucno potvrdjenog prijepisa/);
+    const mutant = await copyWith((s) => s.replace(
+      'transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);', ']);'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zahtjeva za rucno potvrdjenim prijepisom propusta strojni OCR kao dokaz (Codex R1)', async () => {
+    const { scan, pdfSource } = scanned();
+    const unverified = { ...pdfSource, ocrTranscript: undefined };
+    const companion = companionWith(hash(scan), sha(fixture));
+    expect((await scannedRun(companion, unverified)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+    expect(await scannedRun(companion, unverified, (s) => s.replace('if (!transcript || transcript.textHash !== bodyHash || !transcript.verifiedBy?.trim() || !transcript.verifiedAt?.trim()) {', 'if (false) {'))).toEqual([]);
+  });
+});
+
+/**
+ * WORKTREE GC (odluka vlasnika 2026-10-03). Dva kvara koja bi ciscenje pretvorila u brisanje rada:
+ *  (a) presuda bez provjere cistoce uklonila bi worktree s necommitanim promjenama;
+ *  (b) presuda bez provjere pretka uklonila bi worktree s nespojenom granom (commiti se gube).
+ * Mutira se kopija izvora u privremenom direktoriju (uz kopiju `gate-preflight.mjs` koju uvozi),
+ * nikad datoteka u repozitoriju; presudu racuna cisti node, kao u mutacijama gate preflighta.
+ */
+describe('mutacije: worktree-gc presuda', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+  const clean = { tracked: [], untracked: [], ignored: [] };
+  const merged = {
+    main: false, bare: false, locked: false, prunable: false, current: false, originFresh: true, ancestor: true,
+    unreachableCommits: 0, status: clean, mainNodeModulesLink: false, foreignLinks: [],
+    lockHeld: false, lockAmbiguous: false, processPids: [], newestMtimeMs: 0,
+  };
+  const dirty = { ...merged, status: { ...clean, tracked: ['src/a.ts'] } };
+  const unmerged = { ...merged, ancestor: false };
+
+  /** @returns presude `removable` za zadane cinjenice, izracunate nad kopijom izvora. */
+  async function removableFor(source: string, facts: object[]): Promise<boolean[]> {
+    const { mkdtempSync: mkd, writeFileSync: write, rmSync: rm } = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkd(join(tmp(), 'lekta-wtgc-mut-'));
+    try {
+      write(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+      const file = join(dir, 'worktree-gc.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(${JSON.stringify(facts)}.map((f) => m.judgeWorktree(f, { nowMs: 36e6 }).removable)));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rm(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(a) presuda bez provjere cistoce obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: spojeno i cisto je uklonjivo, necommitana promjena zadrzava.
+    expect(await removableFor(source, [merged, dirty])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera pracenih promjena (stvaran kvar: brojanje samo neprac. datoteka).
+    const mutated = source.replace(/\n {4}if \(facts\.status\.tracked\.length > 0\) reasons\.push\([^\n]*\);/, '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, dirty])).toEqual([true, true]);
+  }, 120_000);
+
+  it('(b) presuda bez provjere pretka obara tvrdnju', async () => {
+    const source = readLf('scripts/worktree-gc.mjs');
+    // BASELINE: nespojena grana se zadrzava.
+    expect(await removableFor(source, [merged, unmerged])).toEqual([true, false]);
+
+    // MUTACIJA: izgubljena provjera `merge-base --is-ancestor` (stvaran kvar: "cisto" shvaceno kao "spojeno").
+    const mutated = source.replace("  if (facts.ancestor !== true) reasons.push('HEAD nije spojen u bazu');\n", '');
+    expect(mutated).not.toBe(source);
+    expect(await removableFor(mutated, [merged, unmerged])).toEqual([true, true]);
+  }, 120_000);
+
+  /**
+   * Runda 2 (Codex pregled PR #253): svaki novi uvjet uklanjanja ima cist baseline i mutanta koji
+   * vraca zateceni kvar. Tablica: [oznaka, cinjenice koje uvjet mora zadrzati, zamjena izvora].
+   */
+  const round2: Array<[string, object, (s: string) => string]> = [
+    ['B1 ignorirana .env', { ...merged, status: { ...clean, ignored: ['.env'] } },
+      (s) => s.replace("  return path === 'dist/';\n", '  return true;\n')],
+    ['B2 nepracen src/progress.log', { ...merged, status: { ...clean, untracked: ['src/progress.log'] } },
+      (s) => s.replace("  return !path.includes('/') && ALLOWED_UNTRACKED_ROOT.has(path);\n", '  return /\\.log$/i.test(path) || ALLOWED_UNTRACKED_ROOT.has(path);\n')],
+    ['M1 aktivan lock bez putanje', { ...merged, lockAmbiguous: true },
+      (s) => s.replace("  if (facts.lockAmbiguous === true) reasons.push('aktivan gate lock bez citljive putanje stabla');\n", '')],
+    ['M3 commit samo u reflogu', { ...merged, unreachableCommits: 1 },
+      (s) => s.replace(/\n {2}else if \(facts\.unreachableCommits > 0\) reasons\.push\([^\n]*\);/, '')],
+    ['M4 origin nedostupan', { ...merged, originFresh: false },
+      (s) => s.replace("  if (facts.originFresh !== true) reasons.push('origin nedostupan (fetch nije uspio)');\n", '')],
+    ['M6 skriveni junction', { ...merged, foreignLinks: ['.tmp-cache/shared'] },
+      (s) => s.replace(/\n {2}else if \(facts\.foreignLinks\.length > 0\) reasons\.push\([^\n]*\);/, '')],
+  ];
+  for (const [label, keptFacts, mutate] of round2) {
+    it(`(runda 2) ${label}: mutant bez provjere obara tvrdnju`, async () => {
+      const source = readLf('scripts/worktree-gc.mjs');
+      expect(await removableFor(source, [merged, keptFacts])).toEqual([true, false]);
+      const mutated = mutate(source);
+      expect(mutated).not.toBe(source);
+      expect(await removableFor(mutated, [merged, keptFacts])).toEqual([true, true]);
+    }, 120_000);
+  }
+
+  /**
+   * M2: medjuprocesni GC lock. Mutant koji ne postuje zauzet lock uklanja stablo dok drugi GC radi.
+   * Kopija skripte radi nad stvarnim privremenim repoom (lokalni bare `origin`).
+   */
+  it('(runda 2) M2 zauzet GC lock: mutant bez provjere locka uklanja stablo', async () => {
+    const fs = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const { spawnSync } = await import('node:child_process');
+    const g = (cwd: string, ...args: string[]) => {
+      const r = spawnSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
+    };
+    const root = fs.realpathSync(fs.mkdtempSync(join(tmp(), 'lekta-wtgc-mut2-')));
+    try {
+      const main = join(root, 'main');
+      fs.mkdirSync(main);
+      g(root, 'init', '-q', '--bare', 'origin.git');
+      g(main, 'init', '-q', '-b', 'master');
+      g(main, 'config', 'user.email', 't@example.invalid');
+      g(main, 'config', 'user.name', 't');
+      fs.writeFileSync(join(main, 'a.txt'), 'a\n');
+      g(main, 'add', 'a.txt');
+      g(main, 'commit', '-q', '-m', 'a');
+      g(main, 'remote', 'add', 'origin', join(root, 'origin.git'));
+      g(main, 'push', '-q', 'origin', 'master');
+      const lockPath = join(root, 'gc.lock');
+      const run = (source: string, wt: string) => {
+        g(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+        const old = new Date(Date.now() - 2 * 60 * 60 * 1000);
+        const gd = join(main, '.git', 'worktrees', wt.split(/[\\/]/).pop() ?? '');
+        for (const p of [join(wt, '.git'), join(gd, 'HEAD'), join(gd, 'index')]) fs.utimesSync(p, old, old);
+        const dir = fs.mkdtempSync(join(root, 'src-'));
+        fs.writeFileSync(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+        fs.writeFileSync(join(dir, 'worktree-gc.mjs'), source);
+        fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), label: 'worktree-gc', token: 'x' }));
+        spawnSync(process.execPath, [join(dir, 'worktree-gc.mjs'), '--repo', main, '--apply', '--quiet'], {
+          cwd: root, encoding: 'utf8', windowsHide: true, timeout: 60_000,
+          env: { ...process.env, LEKTA_WORKTREE_GC_LOCK_PATH: lockPath, LEKTA_GATE_LOCK_PATH: join(root, 'gate.lock') },
+        });
+        return fs.existsSync(wt);
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: dok drugi GC drzi lock, stablo ostaje.
+      expect(run(source, join(root, 'wt-a'))).toBe(true);
+      // MUTACIJA: zauzet lock se ignorira (zateceno stanje prije runde 2: nije bilo locka).
+      const mutated = source.replace("  if ('busy' in gcLock) {", '  if (false) {');
+      expect(mutated).not.toBe(source);
+      expect(run(mutated, join(root, 'wt-b'))).toBe(false);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }, 180_000);
+
+  /**
+   * Runda 3 (Codex runda 2 nad 121a9b44, odluke koordinatora): ignorirane iznimke su samo
+   * `node_modules` link i korijenski `dist/`; prunable stablo ne preskace reflog.
+   */
+  const round3: Array<[string, object, (s: string) => string]> = [
+    ['B1 vracena .tmp-* iznimka', { ...merged, status: { ...clean, ignored: ['.tmp-word-verify/'] } },
+      (s) => s.replace("  return path === 'dist/';\n", "  return path === 'dist/' || path.startsWith('.tmp-');\n")],
+    ['B2 vracena *.log iznimka', { ...merged, status: { ...clean, ignored: ['debug.log'] } },
+      (s) => s.replace("  return path === 'dist/';\n", "  return path === 'dist/' || /\\.log$/i.test(path);\n")],
+    ['M3 prunable bez refloga', { ...merged, prunable: true, unreachableCommits: 1 },
+      (s) => s.replace(/\n {4}else if \(facts\.unreachableCommits > 0\) pr\.push\([^\n]*\);/, '')],
+  ];
+  for (const [label, keptFacts, mutate] of round3) {
+    it(`(runda 3) ${label}: mutant obara tvrdnju`, async () => {
+      const source = readLf('scripts/worktree-gc.mjs');
+      expect(await removableFor(source, [merged, keptFacts])).toEqual([true, false]);
+      const mutated = mutate(source);
+      expect(mutated).not.toBe(source);
+      expect(await removableFor(mutated, [merged, keptFacts])).toEqual([true, true]);
+    }, 120_000);
+  }
+
+  /**
+   * Runda 3, stvarni procesi nad privremenim repoom: kopija skripte se zaustavlja u testnim
+   * tockama (`LEKTA_WORKTREE_GC_TEST_BARRIER`) dok test mijenja svijet izmedju mjerenja i brisanja.
+   */
+  async function gcSandbox() {
+    const fs = await import('node:fs');
+    const { tmpdir: tmp } = await import('node:os');
+    const cp = await import('node:child_process');
+    const g = (cwd: string, ...args: string[]) => {
+      const r = cp.spawnSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
+    };
+    const root = fs.realpathSync(fs.mkdtempSync(join(tmp(), 'lekta-wtgc-mut3-')));
+    const main = join(root, 'main');
+    fs.mkdirSync(main);
+    g(root, 'init', '-q', '--bare', 'origin.git');
+    g(main, 'init', '-q', '-b', 'master');
+    g(main, 'config', 'user.email', 't@example.invalid');
+    g(main, 'config', 'user.name', 't');
+    fs.writeFileSync(join(main, 'a.txt'), 'a\n');
+    fs.writeFileSync(join(main, '.gitignore'), 'debug.log\n');
+    g(main, 'add', 'a.txt', '.gitignore');
+    g(main, 'commit', '-q', '-m', 'a');
+    g(main, 'remote', 'add', 'origin', join(root, 'origin.git'));
+    g(main, 'push', '-q', 'origin', 'master');
+    let n = 0;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const waitFor = async (pred: () => boolean, ms = 90_000) => {
+      const deadline = Date.now() + ms;
+      while (!pred() && Date.now() < deadline) await sleep(50);
+      return pred();
+    };
+    /** Novo staro spojeno stablo, svjeza mapa za barijeru i kopija izvora. */
+    const prepare = (source: string) => {
+      n += 1;
+      const wt = join(root, `wt-${n}`);
+      g(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+      const old = new Date(Date.now() - 2 * 60 * 60 * 1000);
+      const gd = join(main, '.git', 'worktrees', `wt-${n}`);
+      for (const p of [join(wt, '.git'), join(gd, 'HEAD'), join(gd, 'index')]) fs.utimesSync(p, old, old);
+      const barrier = join(root, `barrier-${n}`);
+      fs.mkdirSync(barrier);
+      const dir = join(root, `src-${n}`);
+      fs.mkdirSync(dir);
+      fs.writeFileSync(join(dir, 'gate-preflight.mjs'), readLf('scripts/gate-preflight.mjs'));
+      fs.writeFileSync(join(dir, 'worktree-gc.mjs'), source);
+      return { wt, barrier, script: join(dir, 'worktree-gc.mjs') };
+    };
+    const start = (script: string, barrier: string, lockPath = join(root, 'gc.lock')) => {
+      const child = cp.spawn(process.execPath, [script, '--repo', main, '--apply'], {
+        cwd: root,
+        windowsHide: true,
+        env: {
+          ...process.env,
+          LEKTA_WORKTREE_GC_LOCK_PATH: lockPath,
+          LEKTA_GATE_LOCK_PATH: join(root, 'gate.lock'),
+          LEKTA_WORKTREE_GC_STASH: join(root, 'odlozeno'),
+          LEKTA_WORKTREE_GC_TEST_BARRIER: barrier,
+        },
+      });
+      let out = '';
+      child.stdout.on('data', (d) => { out += String(d); });
+      child.stderr.on('data', (d) => { out += String(d); });
+      const done = new Promise<string>((r) => child.on('close', () => r(out)));
+      return { child, done };
+    };
+    const ready = (barrier: string, point: string) => fs.readdirSync(barrier)
+      .filter((f) => f.startsWith(`${point}-`) && f.endsWith('.ready'))
+      .map((f) => Number(f.slice(point.length + 1, -'.ready'.length)));
+    const go = (barrier: string, name: string) => fs.writeFileSync(join(barrier, `${name}.go`), '');
+    const cleanup = () => fs.rmSync(root, { recursive: true, force: true, maxRetries: 20, retryDelay: 250 });
+    return { fs, cp, root, main, prepare, start, ready, go, waitFor, cleanup };
+  }
+
+  it('(runda 3) M2b ponovna provjera bez svjezeg snimka procesa: mutant uklanja stablo u kojem proces radi', async () => {
+    const sb = await gcSandbox();
+    try {
+      const scenario = async (source: string) => {
+        const { wt, barrier, script } = sb.prepare(source);
+        for (const p of ['preuzimanje', 'uzet', 'provjereno']) sb.go(barrier, p);
+        const gc = sb.start(script, barrier);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'izmjereno').length === 1)).toBe(true);
+        // Proces s putanjom stabla u naredbenom retku nastaje TEK nakon prvog mjerenja.
+        const holder = sb.cp.spawn(process.execPath, ['-e', 'setTimeout(() => {}, 120000)', wt], { cwd: sb.root, windowsHide: true });
+        try {
+          await new Promise((r) => setTimeout(r, 500));
+          sb.go(barrier, 'izmjereno');
+          const out = await gc.done;
+          return { kept: sb.fs.existsSync(wt), out };
+        } finally {
+          const exited = new Promise((r) => holder.once('exit', r));
+          holder.kill();
+          await exited;
+        }
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: svjez snimak procesa vidi novi proces i stablo ostaje.
+      const base = await scenario(source);
+      expect(base.kept, base.out).toBe(true);
+      expect(base.out).toMatch(/zadrzan pri ponovnoj provjeri: .*proces radi u stablu/);
+      // MUTACIJA: ponovna provjera koristi snimak procesa iz prvog mjerenja (nalaz M2b runde 2).
+      const mutated = source.replace(
+        "{ sizes: 'none', nowMs: Date.now(), foreignProcesses: lazyForeignProcesses() }",
+        "{ sizes: 'none', nowMs: Date.now() }",
+      );
+      expect(mutated).not.toBe(source);
+      const mut = await scenario(mutated);
+      expect(mut.kept, mut.out).toBe(false);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+
+  it('(runda 3) M2b zadnja provjera prije remove preskocena: mutant brise ignorirani debug.log nastao nakon ponovnog mjerenja', async () => {
+    const sb = await gcSandbox();
+    try {
+      const scenario = async (source: string) => {
+        const { wt, barrier, script } = sb.prepare(source);
+        for (const p of ['preuzimanje', 'uzet', 'izmjereno']) sb.go(barrier, p);
+        const gc = sb.start(script, barrier);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'provjereno').length === 1)).toBe(true);
+        sb.fs.writeFileSync(join(wt, 'debug.log'), 'korisnicki podaci\n');
+        sb.go(barrier, 'provjereno');
+        const out = await gc.done;
+        const log = join(wt, 'debug.log');
+        return { kept: sb.fs.existsSync(log) && sb.fs.readFileSync(log, 'utf8') === 'korisnicki podaci\n', out };
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: svjez status s ignoriranim stavkama neposredno prije remove vidi debug.log.
+      const base = await scenario(source);
+      expect(base.kept, base.out).toBe(true);
+      expect(base.out).toMatch(/zadrzan neposredno prije uklanjanja: .*ignorirane datoteke: debug\.log/);
+      // MUTACIJA: bez zadnje provjere git worktree remove brise ignoriranu datoteku.
+      const mutated = source.replace('    changed = finalChangeReason(row);\n    if (changed) throw new Error(changed);\n', '');
+      expect(mutated).not.toBe(source);
+      const mut = await scenario(mutated);
+      expect(mut.kept, mut.out).toBe(false);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+
+  it('(runda 3) M2a utrka dva --apply nad mrtvim GC lockom: mutant s neatomarnim preuzimanjem pusta oba', async () => {
+    const sb = await gcSandbox();
+    try {
+      const deadPid = sb.cp.spawnSync(process.execPath, ['-e', ''], { windowsHide: true }).pid;
+      const scenario = async (source: string) => {
+        const { barrier, script } = sb.prepare(source);
+        const lockPath = join(barrier, 'gc.lock');
+        sb.fs.writeFileSync(lockPath, JSON.stringify({
+          pid: deadPid, startedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), label: 'worktree-gc', token: 'mrtav',
+        }));
+        for (const p of ['izmjereno', 'provjereno']) sb.go(barrier, p);
+        const gcs = [sb.start(script, barrier, lockPath), sb.start(script, barrier, lockPath)];
+        // Oba procesa su procitala ISTI mrtav lock prije nego sto ijedan djeluje.
+        expect(await sb.waitFor(() => sb.ready(barrier, 'preuzimanje').length === 2)).toBe(true);
+        const [a, b] = sb.ready(barrier, 'preuzimanje') as [number, number];
+        sb.go(barrier, `preuzimanje-${a}`);
+        expect(await sb.waitFor(() => sb.ready(barrier, 'uzet').includes(a))).toBe(true);
+        sb.go(barrier, `preuzimanje-${b}`);
+        const exitedB = gcs.find((x) => x.child.pid === b)!;
+        let bDone = false;
+        void exitedB.done.then(() => { bDone = true; });
+        await sb.waitFor(() => bDone || sb.ready(barrier, 'uzet').includes(b), 60_000);
+        sb.go(barrier, 'uzet');
+        const outs = await Promise.all(gcs.map((x) => x.done));
+        return outs.filter((o) => /preskoceno \(drugi worktree-gc radi \(PID \d+\)\)/.test(o)).length;
+      };
+      const source = readLf('scripts/worktree-gc.mjs');
+      // BASELINE: tocno jedan proces preuzima mrtav lock; drugi pod cuvarom vidi zivi lock i odustaje.
+      expect(await scenario(source)).toBe(1);
+      // MUTACIJA: preuzimanje bez cuvara (zateceno stanje runde 2: unlink pa wx).
+      const mutated = source.replace(
+        '  return takeOverDeadGcLock(path, record, nowMs);\n',
+        "  try { unlinkSync(path); } catch { /* vec maknut */ }\n  return writeLock(path, record) ? { token } : { busy: 'GC lock nije uzet' };\n",
+      );
+      expect(mutated).not.toBe(source);
+      expect(await scenario(mutated)).toBe(0);
+    } finally {
+      sb.cleanup();
+    }
+  }, 300_000);
+});
+
 describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
   const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8');
   const bytes = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/docx/synthetic-mentor-komentari.docx')));
@@ -9317,5 +11155,39 @@ describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
 
   it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
     expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
+  });
+});
+
+describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog vlasnika 2026-10-04)', () => {
+  type Validator = (queue: unknown) => unknown;
+  const IZVORNI_UZORAK = '/^T(?:\\d{2}|[1-9]\\d{2})$/';
+  /** validateQueue iz STVARNOG izvora, s jednim zamijenjenim regexom; mutacija mijenja sam gard. */
+  const validatorIzIzvora = (uzorak: string): Validator => {
+    const src = readFileSync(resolve(process.cwd(), 'scripts/agents/core.mjs'), 'utf8').replace(/\r/g, '');
+    const a = src.indexOf('export function validateQueue(');
+    const b = src.indexOf('\n}\n', a);
+    if (a < 0 || b < a) throw new Error('validateQueue nije pronadjen u scripts/agents/core.mjs');
+    const blok = src.slice(a, b + 2).replace('export function', 'function');
+    if (!blok.includes(IZVORNI_UZORAK)) throw new Error(`mutacija ne pogadja izvor: ${IZVORNI_UZORAK}`);
+    return new Function(`${blok.replace(IZVORNI_UZORAK, uzorak)}\nreturn validateQueue;`)() as Validator;
+  };
+  const stvarniRed = () => JSON.parse(readFileSync(resolve(process.cwd(), 'docs/agents/tasks.json'), 'utf8'));
+  const jedan = (id: string) => ({ tasks: [{ id, title: 'x', status: 'ready', dependsOn: [] }] });
+  const prolazi = (v: Validator, q: unknown) => { try { v(q); return true; } catch { return false; } };
+  /** Tvrdnja garda: stvarni red (s T100) prolazi, a vodeca nula i cetiri znamenke padaju. */
+  const gardDrzi = (v: Validator): boolean =>
+    prolazi(v, stvarniRed()) && !prolazi(v, jedan('T017')) && !prolazi(v, jedan('T1000')) && !prolazi(v, jedan('T7'));
+
+  it('baseline: stvarni red sadrzi troznamenkasti ID i gard drzi', () => {
+    expect(stvarniRed().tasks.some((t: { id: string }) => /^T\d{3}$/.test(t.id))).toBe(true);
+    expect(gardDrzi(validatorIzIzvora(IZVORNI_UZORAK))).toBe(true);
+  });
+
+  it('mutant: stari oblik samo s dvije znamenke obara stvarni red', () => {
+    expect(gardDrzi(validatorIzIzvora('/^T\\d{2}$/'))).toBe(false);
+  });
+
+  it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
+    expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
   });
 });
