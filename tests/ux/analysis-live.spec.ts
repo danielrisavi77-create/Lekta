@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { mkdirSync } from 'node:fs';
-import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import { expect, test, type Page, type Route, type TestInfo } from '@playwright/test';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp } from './app-ready';
 
@@ -365,4 +365,72 @@ test('Z33 pod prefers-reduced-motion: zavrsno stanje odmah, rezultat ne ceka', a
   expect(stanje.prazna).toBe(0);
   expect(stanje.puna).toBeGreaterThan(0);
   expect(stanje.presuda.length).toBeGreaterThan(0);
+});
+
+/**
+ * Z33-09 (Codex): ISTI DOCX i profil kroz dva toka s ISTIM zavrsnim rendererom. Kontrola je tok bez
+ * analize uzivo: dohvat modula Z33 je odbijen, pa ekran provjere ostaje kompaktni popis faza i
+ * rezultat se prikazuje odmah (Z33-02). `?resultRenderer=legacy` za to ne valja, jer mijenja i
+ * zavrsni renderer. Ekran rezultata mora biti isti, a zavrsno stanje uzivo isto kao on.
+ */
+const MODUL_Z33 = /\/analysis-live\/analysis-live\.ts(?:\?|$)|\/analysis-live-[\w-]+\.js(?:\?|$)/;
+
+interface EkranRezultata { presuda: string; ocjena: string; sazetak: string; auto: string; radnja: string; nalazi: string[] }
+
+async function ekranRezultata(page: Page): Promise<EkranRezultata> {
+  await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 60_000 });
+  const popis = '#resultCockpit .dq-title, #resultCockpit [data-cockpit-priority-card] h3';
+  await expect.poll(() => page.locator(popis).count(), { timeout: 20_000, message: 'ekran rezultata nema popis nalaza' }).toBeGreaterThan(0);
+  return page.evaluate((sel) => {
+    const t = (s: string): string => (document.querySelector(s)?.textContent ?? '').replace(/\s+/g, ' ').trim();
+    return {
+      presuda: t('#cockpitVerdictTitle'),
+      ocjena: t('#resultCockpit .cockpit-ring__core'),
+      sazetak: t('#resultCockpit .fsum-naslov'),
+      auto: t('#resultCockpit .fsum-auto'),
+      radnja: document.querySelector('#resultCockpit [data-cockpit-primary]')?.getAttribute('data-cockpit-action') ?? '',
+      nalazi: [...document.querySelectorAll(sel)].map((n) => (n.textContent ?? '').trim()),
+    };
+  }, popis);
+}
+
+test('Z33-09 isti ulaz: rezultat uz analizu uzivo jednak je rezultatu bez nje, a zavrsno stanje uzivo je isto', async ({ page }) => {
+  test.setTimeout(240_000);
+  const pusti = await pripremi(page, 'dark');
+  pusti();
+
+  // KONTROLA: bez modula Z33.
+  let odbijeno = 0;
+  const odbij = async (route: Route): Promise<void> => { odbijeno += 1; await route.abort(); };
+  await page.route(MODUL_Z33, odbij);
+  await pokreni(page, FIXTURE_POPRAVAK);
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 60_000 });
+  expect(odbijeno, 'kontrola mora stvarno odbiti modul Z33').toBeGreaterThan(0);
+  expect(await page.locator('#progressView .z33').count(), 'kontrola je ipak imala analizu uzivo').toBe(0);
+  expect(await page.locator('#progressView .pscan').count()).toBe(1);
+  const bez = await ekranRezultata(page);
+
+  // Isti ulaz uz analizu uzivo, u svjezem dokumentu i bez zapamcenog stanja.
+  await page.unroute(MODUL_Z33, odbij);
+  await page.evaluate(() => { try { localStorage.clear(); sessionStorage.clear(); } catch { /* privatni prozor */ } });
+  await pokreni(page, FIXTURE_POPRAVAK);
+  await expect(z33(page)).toBeVisible({ timeout: 20_000 });
+  const uz = await ekranRezultata(page);
+  await expect(z33(page)).toHaveAttribute('data-phase', 'final');
+
+  expect(uz).toEqual(bez);
+  // Zavrsno stanje uzivo (ostaje u skrivenom ekranu provjere) govori isto sto i rezultat.
+  const kraj = await z33(page).evaluate((root) => ({
+    presuda: (root.querySelector('[data-z33="verdicttext"]')?.textContent ?? '').trim(),
+    ocjena: (root.querySelector('[data-z33="ringnum"]')?.textContent ?? '').trim(),
+    sazetak: (root.querySelector('[data-z33="summary"]')?.textContent ?? '').trim(),
+    nalazi: [...root.querySelectorAll('.z33-slot[data-state="filled"] .z33-slot-title')].map((n) => (n.textContent ?? '').trim()),
+    plan: !(root.querySelector<HTMLElement>('[data-z33="plan"]')?.hidden ?? true),
+  }));
+  expect(kraj.presuda).toBe(bez.presuda);
+  expect(kraj.ocjena).toBe(bez.ocjena);
+  expect(kraj.sazetak.startsWith(bez.sazetak + '.'), `${kraj.sazetak} / ${bez.sazetak}`).toBe(true);
+  expect(kraj.nalazi.length).toBeGreaterThan(0);
+  for (const n of kraj.nalazi) expect(bez.nalazi).toContain(n);
+  expect(kraj.plan).toBe(bez.radnja === 'repair-safe');
 });

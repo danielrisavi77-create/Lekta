@@ -15,6 +15,8 @@ import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { buildLivePlan, readingFrame, revealFrame, revealDuration } from '../src/ui/analysis-live/analysis-live-model';
 import { mountAnalysisLive } from '../src/ui/analysis-live/analysis-live';
 import { SCAN_PHASES } from '../src/ui/progress-scan';
+import { renderResultsCockpit } from '../src/ui/results/results-cockpit';
+import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 
 const read = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').replace(/\r/g, '');
@@ -1085,4 +1087,62 @@ describe('Z33-02/03: rezultat ne ceka lijeni modul', () => {
     await pricekajUvoz();
     expect(v.querySelector('.z33')).toBeNull();
   });
+});
+
+/**
+ * Z33-09: ISTI ULAZ, DVA PRIKAZA. Stvarna analiza fixturea ide kroz postojeci prikaz rezultata
+ * (`renderResultsCockpit` nad `buildVisualResultModel`, kao u `app.ts`) i kroz zavrsno stanje
+ * analize uzivo. Presuda, ocjena, broj nalaza, broj automatskih popravaka i najvazniji nalazi
+ * moraju biti isti; uzivo smije pokazati vise nalaza (do sest), nikad drugacije.
+ */
+describe('Z33-09: zavrsno stanje uzivo = postojeci prikaz rezultata nad istim ulazom', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+
+  for (const ime of ['lo-fpzg-zavrsni-neuskladjen.docx', 'fer-diplomski-prazni-odlomci.docx']) {
+    it(ime, async () => {
+      const profile = resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id);
+      const settings = { profileId: VERIFIED_PROFILE_REGISTRY[0].id, workType: profile.selection.workType, citationStyle: 'fpzg',
+        language: 'hr', strictness: 'standard', methodology: 'auto', selectionIds: {} };
+      const result: any = await analyzeDocx(new File([readFileSync(resolve('tests/fixtures/docx', ime))], ime), profile, settings, () => {});
+
+      document.documentElement.dataset.motion = 'reduce';
+      document.body.innerHTML = '<div id="progressView"><p class="sr-only" id="progressMessage">Gotovo</p><p class="pv-local">x</p></div><div id="resultCockpit"></div>';
+      const v = document.getElementById('progressView')!;
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      await h.reveal(result);
+      const kokpit = document.getElementById('resultCockpit')!;
+      renderResultsCockpit(kokpit, buildVisualResultModel(result), { repairAvailable: !result.demo });
+
+      const t = (root: ParentNode, s: string): string => (root.querySelector(s)?.textContent ?? '').trim();
+      // Presuda.
+      expect(t(v, '[data-z33="verdicttext"]')).toBe(t(kokpit, '#cockpitVerdictTitle'));
+      // Ocjena: prsten kokpita i prsten uzivo.
+      const bodovano = kokpit.querySelector('.cockpit-ring')?.getAttribute('data-cockpit-score') === 'scored';
+      expect(bodovano).toBe(typeof result.score === 'number');
+      if (bodovano) expect(t(v, '[data-z33="ringnum"]')).toBe(t(kokpit, '.cockpit-ring__core'));
+      // Broj nalaza i broj automatskih popravaka (sazetak kokpita).
+      const sazetak = t(v, '[data-z33="summary"]');
+      expect(sazetak.startsWith(t(kokpit, '.fsum-naslov') + '.')).toBe(true);
+      const auto = t(kokpit, '.fsum-auto b');
+      if (auto && auto !== '0') expect(sazetak).toContain(`Od toga ${auto} mogu popraviti automatski.`);
+      else expect(sazetak).not.toContain('Od toga');
+      // Najvazniji nalazi kokpita su medju nalazima uzivo; uzivo nema nijednog nalaza izvan rezultata.
+      const kartice = [...kokpit.querySelectorAll('[data-cockpit-priority-card] h3')].map((n) => n.textContent?.trim());
+      const uzivo = [...v.querySelectorAll('.z33-slot[data-state="filled"] .z33-slot-title')].map((n) => n.textContent?.trim());
+      expect(kartice.length, 'fixture mora imati nalaze').toBeGreaterThan(0);
+      for (const k of kartice) expect(uzivo).toContain(k);
+      const svi = buildVisualResultModel(result).findings.document.map((f) => f.title);
+      for (const u of uzivo) expect(svi).toContain(u);
+      // Gumb plana uzivo postoji tocno kad kokpit nudi `repair-safe`.
+      const plan = !v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!.hidden;
+      expect(plan).toBe(!!kokpit.querySelector('[data-cockpit-primary][data-cockpit-action="repair-safe"]'));
+      // Na stvarnom ulazu list presude stoji gotov barem 1,2 s prije kraja, siroko i usko.
+      const zivi = buildLivePlan(result);
+      for (const wide of [true, false]) expect(revealFrame(zivi, revealDuration(zivi, wide) - 1200, wide).verdict.metaVisible).toBe(true);
+    });
+  }
 });
