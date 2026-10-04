@@ -11440,18 +11440,22 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 });
 
 describe('mutacije: straza with-gate-lock i env-doctor (odluka vlasnika 2026-10-03)', () => {
-  type Sample = { cpuSec: number; descendants: number; opaque?: boolean } | null;
+  type Sample = { cpuSec: number; descendants: number; opaque?: boolean; treeSignature?: string; processes?: { pid: number; identity: string; cpuSec: number }[] } | null;
   type Verdict = (samples: Sample[], options: { windowSamples: number }) => { kill: boolean };
+
+  function stableSample(descendants: number, opaque = false): Exclude<Sample, null> {
+    return { cpuSec: 4, descendants, opaque, treeSignature: '10@a', processes: [{ pid: 10, identity: 'a', cpuSec: 4 }] };
+  }
 
   /** Gard: straza ne ubija dijete ciji glavni proces ima potomke, ni kad CPU stoji. */
   function sparesChildWithDescendants(verdict: Verdict): boolean {
-    const withWorker = [1, 2, 3, 4].map(() => ({ cpuSec: 4, descendants: 1 }));
+    const withWorker = [1, 2, 3, 4].map(() => stableSample(1));
     return verdict(withWorker, { windowSamples: 3 }).kill === false;
   }
 
   /** Gard je ziv samo ako istu situaciju BEZ potomaka ipak ubija (inace bi stedio sve). */
   function killsStuckChild(verdict: Verdict): boolean {
-    const stuck = [1, 2, 3, 4].map(() => ({ cpuSec: 4, descendants: 0 }));
+    const stuck = [1, 2, 3, 4].map(() => stableSample(0));
     return verdict(stuck, { windowSamples: 3 }).kill === true;
   }
 
@@ -11467,7 +11471,7 @@ describe('mutacije: straza with-gate-lock i env-doctor (odluka vlasnika 2026-10-
 
   /** Gard: neproziran list (Git Bash pokidao stablo, bash bez vidljivih potomaka) se ne ubija. */
   function sparesOpaqueShell(verdict: Verdict): boolean {
-    const opaque = [1, 2, 3, 4].map(() => ({ cpuSec: 0.06, descendants: 0, opaque: true }));
+    const opaque = [1, 2, 3, 4].map(() => stableSample(0, true));
     return verdict(opaque, { windowSamples: 3 }).kill === false;
   }
 

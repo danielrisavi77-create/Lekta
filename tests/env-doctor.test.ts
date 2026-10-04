@@ -17,6 +17,7 @@ import {
   checkVitest,
   codexMinimum,
   detectCodexVersion,
+  strictExitCode,
   runDoctor,
   satisfiesRange,
   summaryLine,
@@ -47,6 +48,11 @@ function healthyTree() {
 
 const noGit = () => null;
 const codexOk = () => ({ installed: true, version: '0.160.0' });
+const healthyGit = (args: string[]) => {
+  if (args[0] === 'rev-parse') return 'abc1234';
+  if (args[0] === 'rev-list') return '0\t0';
+  return null;
+};
 
 beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), 'lekta-env-doctor-'));
@@ -73,6 +79,10 @@ describe('env-doctor: rasponi verzija', () => {
     ['22.0.0', '20', false],
     ['20.5.0', '>=20 <21', true],
     ['18.0.0', '^18 || ^20', true],
+    ['4.1.11-beta.1', '^4.1.11', null],
+    ['20.0.0-rc.1', '>=20', null],
+    ['20.0.1', '>20', false],
+    ['21.0.0', '>20', true],
   ])('%s u "%s" = %s', (version, range, expected) => {
     expect(satisfiesRange(version, range)).toBe(expected);
   });
@@ -84,7 +94,7 @@ describe('env-doctor: rasponi verzija', () => {
 
 describe('env-doctor: provjere nad sintetickom mapom', () => {
   it('BASELINE: zdrava okolina nema raskoraka i zavrsni redak je "env-doctor: OK"', () => {
-    const report = runDoctor({ root, nodeVersion: '24.14.1', codex: codexOk, git: noGit });
+    const report = runDoctor({ root, nodeVersion: '24.14.1', codex: codexOk, git: healthyGit });
     expect(report.mismatches, JSON.stringify(report.results)).toBe(0);
     expect(summaryLine(report)).toBe('env-doctor: OK');
     expect(report.results).toHaveLength(6);
@@ -103,8 +113,8 @@ describe('env-doctor: provjere nad sintetickom mapom', () => {
     const r = checkVitest({ root });
     expect(r.status).toBe('raskorak');
     expect(r.message).toMatch(/2\.1\.9 NE zadovoljava "\^4\.1\.11"; npm ci potreban/);
-    const report = runDoctor({ root, nodeVersion: '24.14.1', codex: codexOk, git: noGit });
-    expect(summaryLine(report)).toBe('env-doctor: 1 raskoraka');
+    const report = runDoctor({ root, nodeVersion: '24.14.1', codex: codexOk, git: healthyGit });
+    expect(summaryLine(report)).toBe('env-doctor: 2 raskoraka');
   });
 
   it('(b) neinstaliran vitest je raskorak', () => {
@@ -112,23 +122,30 @@ describe('env-doctor: provjere nad sintetickom mapom', () => {
     expect(checkVitest({ root }).status).toBe('raskorak');
   });
 
-  it('(c) razlicita verzija u instalaciji je raskorak s "npm ci potreban"', () => {
+  it('(c) stvarni instalirani manifest s drugom verzijom je raskorak', () => {
+    writeJson('node_modules/vitest/package.json', { version: '2.1.9' });
     writeJson('node_modules/.package-lock.json', { packages: { 'node_modules/vitest': { version: '2.1.9' } } });
     const r = checkLockfile({ root });
     expect(r.status).toBe('raskorak');
-    expect(r.message).toMatch(/1 razlicitih verzija, 0 nedostaje .*npm ci potreban/);
+    expect(r.message).toMatch(/1 razlicitih verzija, 0 nedostaje, 0 nepoznato .*npm ci potreban/);
+  });
+
+  it('(c) zastarjeli skriveni npm lock ne obara stvarni uskladjeni paket', () => {
+    writeJson('node_modules/.package-lock.json', { packages: { 'node_modules/vitest': { version: '2.1.9' } } });
+    expect(checkLockfile({ root }).status).toBe('ok');
   });
 
   it('(c) paket koji nedostaje je raskorak, opcionalni (fsevents) nije', () => {
+    rmSync(join(root, 'node_modules', 'vitest'), { recursive: true, force: true });
     writeJson('node_modules/.package-lock.json', { packages: {} });
     const r = checkLockfile({ root });
     expect(r.status).toBe('raskorak');
-    expect(r.message).toMatch(/0 razlicitih verzija, 1 nedostaje \(vitest nedostaje\)/);
+    expect(r.message).toMatch(/0 razlicitih verzija, 1 nedostaje, 0 nepoznato \(vitest nedostaje\)/);
   });
 
-  it('(c) bez skrivenog lockfilea je raskorak', () => {
+  it('(c) bez skrivenog lockfilea stvarni instalirani paketi se i dalje provjeravaju', () => {
     rmSync(join(root, 'node_modules', '.package-lock.json'));
-    expect(checkLockfile({ root }).message).toMatch(/npm ci potreban/);
+    expect(checkLockfile({ root }).status).toBe('ok');
   });
 
   it('(d) Codex ispod minimuma iz codex-review skilla je raskorak; neinstaliran nije', () => {
@@ -176,9 +193,13 @@ describe('env-doctor: provjere nad sintetickom mapom', () => {
     expect(r.message).toBe('crlf: core.autocrlf=true, .gitattributes eol pravila: 2');
   });
 
-  it('provjera koja baci iznimku postaje "nepoznato", ne rusi doktora i ne broji se', () => {
+  it('nepoznata provjera ne ispisuje lazni OK i strict vraca neuspjeh', () => {
     const report = runDoctor({ root, checks: [() => { throw new Error('bum'); }] });
     expect(report.mismatches).toBe(0);
     expect(report.results[0].status).toBe('nepoznato');
+    expect(report.unknowns).toBe(1);
+    expect(summaryLine(report)).toBe('env-doctor: 1 nepoznata provjera');
+    expect(strictExitCode(report)).toBe(1);
+    expect(strictExitCode(report, false)).toBe(0);
   });
 });

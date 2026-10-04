@@ -81,6 +81,25 @@ jobs:
       - name: Klasifikacijski sken dist artefakata
         run: node scripts/verify-dist-classification.mjs
 
+  # M4: Linuxov /proc test izvrsava se unutar potpunog build-gatea; Windows job dodatno vrti stvarni
+  # Git Bash `-- bash all.sh` lanac kako promjena stabla procesa ne bi bila pokrivena samo fixtureom.
+  watchdog-git-bash:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+          npm-version: 11.11.0
+
+      - name: Watchdog i Git Bash procesno stablo
+        run: npx vitest run tests/with-gate-lock-watchdog.test.ts
+
   ux-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 30

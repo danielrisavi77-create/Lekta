@@ -8,11 +8,11 @@
  * davao lazne padove koji su izgledali kao kvar koda. Ovaj alat samo cita datoteke (i najvise jedan
  * `codex --version` s timeoutom 3 s), nikad ne pokrece npm i nikad nista ne mijenja.
  *
- * Ispis: jedan redak po provjeri, zatim zavrsni redak `env-doctor: OK` ili
- * `env-doctor: N raskoraka`. Izlazni kod je uvijek 0, osim uz `--strict` (tada 1 kad ima raskoraka).
+ * Ispis: jedan redak po provjeri i sazetak. Izlazni kod je uvijek 0, osim uz `--strict` (tada 1
+ * kad ima raskoraka ili nepoznatih provjera).
  *
  * Statusi provjere: `ok`, `raskorak` (broji se), `info` (samo obavijest, ne broji se),
- * `nepoznato` (nije se moglo izmjeriti; fail-open, ne broji se kao raskorak).
+ * `nepoznato` (nije se moglo izmjeriti; ne broji se kao raskorak, ali se ne prikazuje kao OK).
  */
 import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -25,9 +25,11 @@ export const CODEX_MIN_FALLBACK = '0.160.0';
 /** @returns {[number, number, number] | null} */
 export function parseVersion(text) {
   if (typeof text !== 'string') return null;
-  const m = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(text.trim().replace(/^v/, ''));
+  // Strogi SemVer: prerelease je namjerno unknown jer ovaj mali usporednik ne implementira
+  // SemVerovu prednost stabilnog izdanja nad prereleaseom.
+  const m = /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:\+[0-9A-Za-z.-]+)?$/.exec(text.trim());
   if (!m) return null;
-  return [Number(m[1]), Number(m[2] ?? 0), Number(m[3] ?? 0)];
+  return [Number(m[1]), Number(m[2]), Number(m[3])];
 }
 
 export function compareVersions(a, b) {
@@ -39,18 +41,28 @@ export function compareVersions(a, b) {
 
 /** Jedan komparator semvera (^, ~, >=, >, <=, <, =, x.y.z, djelomicno `20`). null = ne razumije. */
 function satisfiesComparator(version, comparator) {
-  const m = /^(\^|~|>=|<=|>|<|=)?\s*v?(\d+(?:\.(?:\d+|x|\*))?(?:\.(?:\d+|x|\*))?)$/.exec(comparator.trim());
+  const m = /^(\^|~|>=|<=|>|<|=)?\s*v?(\d+)(?:\.(\d+|x|\*))?(?:\.(\d+|x|\*))?$/.exec(comparator.trim());
   if (!m) return null;
   const op = m[1] ?? '';
-  const parts = m[2].split('.');
+  const parts = [m[2], m[3], m[4]].filter((p) => p !== undefined);
+  if (parts.some((part, index) => part === 'x' || part === '*' ? parts.slice(index + 1).some((later) => later !== 'x' && later !== '*') : false)) return null;
   const given = parts.filter((p) => /^\d+$/.test(p)).length;
-  const base = parseVersion(parts.map((p) => (/^\d+$/.test(p) ? p : '0')).join('.'));
+  const padded = [...parts];
+  while (padded.length < 3) padded.push('0');
+  const base = parseVersion(padded.map((p) => (/^\d+$/.test(p) ? p : '0')).join('.'));
   if (!base) return null;
   const cmp = compareVersions(version, base);
+  const nextBoundary = () => {
+    const out = [...base];
+    const index = Math.max(0, given - 1);
+    out[index] += 1;
+    for (let i = index + 1; i < out.length; i += 1) out[i] = 0;
+    return out;
+  };
   switch (op) {
     case '>=': return cmp >= 0;
-    case '>': return cmp > 0;
-    case '<=': return cmp <= 0;
+    case '>': return given < 3 ? compareVersions(version, nextBoundary()) >= 0 : cmp > 0;
+    case '<=': return given < 3 ? compareVersions(version, nextBoundary()) < 0 : cmp <= 0;
     case '<': return cmp < 0;
     case '^': {
       if (cmp < 0) return false;
@@ -61,11 +73,13 @@ function satisfiesComparator(version, comparator) {
     case '~':
       if (cmp < 0) return false;
       return given < 2 ? version[0] === base[0] : version[0] === base[0] && version[1] === base[1];
-    default:
+    case '=':
+    case '':
       // Gola ili `=` verzija; djelomicna (`20`, `20.1`) znaci isti major/minor.
       if (given === 1) return version[0] === base[0];
       if (given === 2) return version[0] === base[0] && version[1] === base[1];
       return cmp === 0;
+    default: return null;
   }
 }
 
@@ -136,39 +150,44 @@ export function checkVitest({ root }) {
 }
 
 /**
- * (c) package-lock.json naspram instaliranog stanja (`node_modules/.package-lock.json`, skriveni
- * lockfile koji npm pise pri instalaciji). Broji pakete s razlicitom verzijom i one koji u
- * instalaciji nedostaju (osim opcionalnih, koji se na drugoj platformi legitimno ne instaliraju).
+ * (c) package-lock.json naspram stvarnih instaliranih package.json manifesta. Skriveni npm lock
+ * moze biti zastario nakon rucne promjene ili nepostojati u alternativnom package manageru, pa
+ * nije izvor istine. Broje se razlicite verzije i nedostajuci obavezni paketi.
  */
 export function checkLockfile({ root }) {
   const lock = readJson(join(root, 'package-lock.json'));
   if (!lock?.packages) return { id: 'lockfile', status: 'info', message: 'lockfile: nema package-lock.json s "packages"' };
-  const hidden = readJson(join(root, 'node_modules', '.package-lock.json'));
-  if (!hidden?.packages) {
-    return { id: 'lockfile', status: 'raskorak', message: 'lockfile: nema node_modules/.package-lock.json; npm ci potreban' };
-  }
   let differ = 0;
   let missing = 0;
+  let unknown = 0;
   const examples = [];
   for (const [key, entry] of Object.entries(lock.packages)) {
     if (!key.startsWith('node_modules/') || !entry || typeof entry !== 'object') continue;
-    const installed = hidden.packages[key];
-    if (!installed) {
+    if (!entry.version) continue;
+    const installedPath = join(root, 'node_modules', key.slice('node_modules/'.length), 'package.json');
+    if (!existsSync(installedPath)) {
       if (entry.optional || entry.devOptional || entry.peer) continue;
       missing += 1;
       if (examples.length < 3) examples.push(`${key.slice('node_modules/'.length)} nedostaje`);
       continue;
     }
-    if (entry.version && installed.version && entry.version !== installed.version) {
+    const installed = readJson(installedPath);
+    if (typeof installed?.version !== 'string') {
+      unknown += 1;
+      if (examples.length < 3) examples.push(`${key.slice('node_modules/'.length)} verzija nepoznata`);
+      continue;
+    }
+    if (entry.version !== installed.version) {
       differ += 1;
       if (examples.length < 3) examples.push(`${key.slice('node_modules/'.length)} ${installed.version} umjesto ${entry.version}`);
     }
   }
-  if (differ === 0 && missing === 0) return { id: 'lockfile', status: 'ok', message: 'lockfile: instalacija odgovara package-lock.json' };
+  if (differ === 0 && missing === 0 && unknown === 0) return { id: 'lockfile', status: 'ok', message: 'lockfile: stvarni instalirani paketi odgovaraju package-lock.json' };
+  if (differ === 0 && missing === 0) return { id: 'lockfile', status: 'nepoznato', message: `lockfile: verzija se nije mogla procitati za ${unknown} paketa (${examples.join('; ')})` };
   return {
     id: 'lockfile',
     status: 'raskorak',
-    message: `lockfile: ${differ} razlicitih verzija, ${missing} nedostaje (${examples.join('; ')}); npm ci potreban`,
+    message: `lockfile: ${differ} razlicitih verzija, ${missing} nedostaje, ${unknown} nepoznato (${examples.join('; ')}); npm ci potreban`,
   };
 }
 
@@ -264,7 +283,7 @@ export const DEFAULT_CHECKS = Object.freeze([
 
 /**
  * Pokrece sve provjere. Svaka je fail-open: iznimka postaje redak `nepoznato`.
- * @returns {{ results: { id: string, status: string, message: string }[], mismatches: number }}
+ * @returns {{ results: { id: string, status: string, message: string }[], mismatches: number, unknowns: number }}
  */
 export function runDoctor({
   root = REPO_ROOT,
@@ -281,11 +300,23 @@ export function runDoctor({
       return { id: `provjera-${index}`, status: 'nepoznato', message: `provjera pala: ${error instanceof Error ? error.message : String(error)}` };
     }
   });
-  return { results, mismatches: results.filter((r) => r.status === 'raskorak').length };
+  return {
+    results,
+    mismatches: results.filter((r) => r.status === 'raskorak').length,
+    unknowns: results.filter((r) => r.status === 'nepoznato').length,
+  };
 }
 
-export function summaryLine({ mismatches }) {
-  return mismatches === 0 ? 'env-doctor: OK' : `env-doctor: ${mismatches} raskoraka`;
+export function summaryLine({ mismatches, unknowns = 0 }) {
+  if (mismatches === 0 && unknowns === 0) return 'env-doctor: OK';
+  const parts = [];
+  if (mismatches > 0) parts.push(`${mismatches} ${mismatches === 1 ? 'raskorak' : 'raskoraka'}`);
+  if (unknowns > 0) parts.push(`${unknowns} ${unknowns === 1 ? 'nepoznata provjera' : 'nepoznatih provjera'}`);
+  return `env-doctor: ${parts.join(', ')}`;
+}
+
+export function strictExitCode({ mismatches, unknowns = 0 }, strict = true) {
+  return strict && (mismatches > 0 || unknowns > 0) ? 1 : 0;
 }
 
 export function formatDoctor(report) {
@@ -297,5 +328,5 @@ const isDirectRun = (process.argv[1] ?? '').replace(/\\/g, '/').endsWith('script
 if (isDirectRun) {
   const report = runDoctor();
   for (const line of formatDoctor(report)) console.log(line);
-  process.exitCode = process.argv.includes('--strict') && report.mismatches > 0 ? 1 : 0;
+  process.exitCode = strictExitCode(report, process.argv.includes('--strict'));
 }
