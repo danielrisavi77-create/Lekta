@@ -6,6 +6,118 @@
 // Bez ovoga se usporedba nije mogla provjeriti nijednim testom, a upravo je usporedba ono sto
 // laze kad je kriva (vidi `labelForOnlyLive` i `verifyJwtDrift` nize).
 
+/**
+ * Source mape iz deployanog bundlea (ESZIP koji vraca `GET /functions/{slug}/body`). Svaki lokalni
+ * modul nosi mapu `{"version":3,"sources":[...],"sourcesContent":[...]}` s IZVORNIM TS-om, pa se
+ * deployani izvor moze usporediti s repoom bajt po bajt (T101). JSON se izrezuje skeniranjem do
+ * pripadajuce zatvorene zagrade uz pracenje stringova; neparsiran isjecak se preskace.
+ *
+ * @param {string} text bundle dekodiran kao UTF-8
+ * @returns {{ sources: string[], sourcesContent: (string | null)[] }[]}
+ */
+export function extractSourceMaps(text) {
+  const out = [];
+  let from = 0;
+  for (;;) {
+    const start = text.indexOf('{"version":3,', from);
+    if (start < 0) break;
+    let depth = 0;
+    let inString = false;
+    let end = -1;
+    for (let i = start; i < text.length; i++) {
+      const c = text[i];
+      if (inString) {
+        if (c === '\\') i++;
+        else if (c === '"') inString = false;
+      } else if (c === '"') inString = true;
+      else if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) { end = i; break; }
+    }
+    if (end < 0) break;
+    try {
+      const map = JSON.parse(text.slice(start, end + 1));
+      if (Array.isArray(map.sources) && Array.isArray(map.sourcesContent)) {
+        out.push({ sources: map.sources, sourcesContent: map.sourcesContent });
+      }
+    } catch {
+      // Nije valjan JSON (slucajni niz u bundleu); nastavi trazenje iza pocetka.
+    }
+    from = end + 1;
+  }
+  return out;
+}
+
+/**
+ * Lokalni moduli deployane funkcije kao `putanja u repou -> izvor`. Supabase CLI je mijenjao oblik
+ * (izmjereno na produkciji 4. 10. 2026.): `source/index.ts` (korijen je mapa funkcije),
+ * `health/index.ts` (korijen je `supabase/functions/`), `functions/<slug>/index.ts` (korijen je
+ * `supabase/`) i `source/supabase/functions/<slug>/index.ts` uz `source/src/...` (korijen je repo). Udaljeni moduli (`https://`, `npm:`, `jsr:`) nisu dio repoa
+ * i preskacu se.
+ *
+ * @param {{ sources: string[], sourcesContent: (string | null)[] }[]} maps
+ * @param {string} slug
+ * @returns {Map<string, string>}
+ */
+export function deployedLocalSources(maps, slug) {
+  const out = new Map();
+  const lokalni = (src) => typeof src === 'string' && !/^[a-z][a-z0-9+.-]*:/i.test(src);
+  const bezKorijena = (src) => src.replace(/^\.?\/?source\//, '');
+  // Korijen je zajednicki za cijeli bundle i CLI ga je mijenjao, pa se izvodi iz ULAZA funkcije: ulaz je
+  // u repou uvijek `supabase/functions/<slug>/index.ts`, a u bundleu njegov sufiks (`index.ts`,
+  // `<slug>/index.ts`, `functions/<slug>/index.ts`, `supabase/functions/<slug>/index.ts`). Prefiks je
+  // ono sto sufiksu nedostaje do pune putanje. Bez ulaza vrijedi mapa funkcije (presuda je NE ZNAM).
+  const ulazURepou = `supabase/functions/${slug}/index.ts`;
+  const rels = maps.flatMap((m) => m.sources.filter(lokalni).map(bezKorijena));
+  const ulaz = rels
+    .filter((r) => r === 'index.ts' || ulazURepou.endsWith(`/${r}`) || r === ulazURepou)
+    .sort((a, b) => b.length - a.length)[0];
+  const prefiks = ulaz === undefined ? `supabase/functions/${slug}/` : ulazURepou.slice(0, ulazURepou.length - ulaz.length);
+  for (const { sources, sourcesContent } of maps) {
+    sources.forEach((src, i) => {
+      const content = sourcesContent[i];
+      if (!lokalni(src) || typeof content !== 'string') return;
+      const joined = `${prefiks}${bezKorijena(src)}`;
+      const parts = [];
+      for (const seg of joined.split('/')) {
+        if (seg === '..') parts.pop();
+        else if (seg && seg !== '.') parts.push(seg);
+      }
+      out.set(parts.join('/'), content);
+    });
+  }
+  return out;
+}
+
+/**
+ * Presuda po SADRZAJU za jednu funkciju (T101). `jednako` samo kad je ulaz `index.ts` medju
+ * deployanim modulima i svaki deployani lokalni modul je bajtno jednak repou (uz normalizaciju CR);
+ * jednak ulaz znaci iste importe, pa je i skup lokalnih modula isti. `drift` kad se ijedan modul
+ * razlikuje ili ga u repou nema. `ne-znam` kad bundle nema citljivih source mapa ili ulaza: tada se
+ * ne tvrdi ni jednakost ni razlika.
+ *
+ * @param {string} slug
+ * @param {Map<string, string>} deployed iz `deployedLocalSources`
+ * @param {(repoPath: string) => string | null} readRepo sadrzaj datoteke iz repoa ili null
+ */
+export function contentDrift(slug, deployed, readRepo) {
+  const entry = `supabase/functions/${slug}/index.ts`;
+  if (deployed.size === 0 || !deployed.has(entry)) {
+    return { status: 'ne-znam', entry, differ: [], missingInRepo: [], equal: [] };
+  }
+  const norm = (s) => s.replace(/\r\n?/g, '\n');
+  const differ = [];
+  const missingInRepo = [];
+  const equal = [];
+  for (const [file, content] of [...deployed].sort(([a], [b]) => a.localeCompare(b))) {
+    const repo = readRepo(file);
+    if (repo === null) missingInRepo.push(file);
+    else if (norm(repo) !== norm(content)) differ.push(file);
+    else equal.push(file);
+  }
+  const status = differ.length || missingInRepo.length ? 'drift' : 'jednako';
+  return { status, entry, differ, missingInRepo, equal };
+}
+
 /** Razlika po POSTOJANJU funkcije: sto je samo u repou, sto samo na okolini, sto na obje. */
 export function driftFor(repo, deployed) {
   const live = new Map(deployed.map((f) => [f.slug, f]));

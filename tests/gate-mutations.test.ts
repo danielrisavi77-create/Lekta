@@ -7930,8 +7930,40 @@ const MUTATIONS: Mutation[] = [
     caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
     cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
   },
+  /**
+   * T101: deploy-drift po SADRZAJU. Mutanti iz izvora scripts/deploy-drift-core.mjs (bez importa),
+   * izvrseni u memoriji: (1) usporedba sadrzaja koja nikad ne prijavi razliku, pa deployani
+   * faculty-request s `Access-Control-Allow-Origin: *` prolazi kao jednak; (2) bundle bez source
+   * mape ulaza proglasen jednakim umjesto NE ZNAM.
+   */
+  ...([
+    ['deploy-drift/sadrzaj-uvijek-jednak', 'usporedba sadrzaja nikad ne prijavi razliku, pa deployana funkcija koja salje ACAO * a repo odabire origin izgleda jednako',
+      'else if (norm(repo) !== norm(content)) differ.push(file);', 'else if (false) differ.push(file);',
+      (core: DriftCore) => core.contentDrift('faculty-request', new Map([['supabase/functions/faculty-request/index.ts', "'Access-Control-Allow-Origin': '*'"]]),
+        (p: string) => (p === 'supabase/functions/faculty-request/index.ts' ? 'const ALLOWED_ORIGINS = []' : null)).status === 'drift'],
+    ['deploy-drift/bez-mape-jednako', 'bundle bez citljive source mape ulaza proglasen jednakim, iako se sadrzaj nije mogao usporediti (lazno zeleno umjesto NE ZNAM)',
+      "return { status: 'ne-znam', entry, differ: [], missingInRepo: [], equal: [] };", "return { status: 'jednako', entry, differ: [], missingInRepo: [], equal: [] };",
+      (core: DriftCore) => core.contentDrift('f', new Map(), () => null).status === 'ne-znam'],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T101: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadDriftCore(mut));
+    },
+    cleanBefore: () => holds(loadDriftCore(readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs')))),
+  })),
 
 ];
+
+/** Jezgra deploy-drifta iz (mutiranog) izvora u memoriji; izvor nema importa (T101). */
+type DriftCore = {
+  contentDrift: (slug: string, deployed: Map<string, string>, readRepo: (p: string) => string | null) => { status: string };
+};
+function loadDriftCore(src: string): DriftCore {
+  return new Function(`${src.replace(/^export /gm, '')}\nreturn { contentDrift };`)() as DriftCore;
+}
 
 /**
  * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243

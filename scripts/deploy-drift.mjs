@@ -23,7 +23,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { driftFor, labelForOnlyLive, configVerifyJwt, verifyJwtDrift } from './deploy-drift-core.mjs';
+import {
+  configVerifyJwt,
+  contentDrift,
+  deployedLocalSources,
+  driftFor,
+  extractSourceMaps,
+  labelForOnlyLive,
+  verifyJwtDrift,
+} from './deploy-drift-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FUNCTIONS_DIR = path.join(ROOT, 'supabase', 'functions');
@@ -51,6 +59,42 @@ function repoFunctions() {
     .sort();
 }
 
+/**
+ * Deployani bundle funkcije (ESZIP) kao UTF-8 tekst, ili null kad ga API ne da. Null nije
+ * "jednako": presuda za tu funkciju je tada NE ZNAM.
+ */
+async function deployedBundle(ref, slug) {
+  try {
+    const res = await fetch(`${API}/projects/${ref}/functions/${slug}/body`, {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      signal: AbortSignal.timeout(180_000),
+    });
+    if (!res.ok) return null;
+    return new TextDecoder().decode(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+/** Sadrzaj datoteke iz repoa po putanji relativnoj na korijen, ili null kad je nema. */
+function readRepo(repoPath) {
+  const p = path.join(ROOT, ...repoPath.split('/'));
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
+}
+
+/** Presuda po sadrzaju za svaku funkciju koja je i u repou i deployana (T101). */
+async function contentVerdicts(ref, both) {
+  const verdicts = [];
+  for (const slug of [...both].sort()) {
+    const bundle = await deployedBundle(ref, slug);
+    const verdict = bundle === null
+      ? { status: 'ne-znam', entry: `supabase/functions/${slug}/index.ts`, differ: [], missingInRepo: [], equal: [], why: 'API nije vratio bundle' }
+      : contentDrift(slug, deployedLocalSources(extractSourceMaps(bundle), slug), readRepo);
+    verdicts.push({ slug, ...verdict });
+  }
+  return verdicts;
+}
+
 async function deployedFunctions(ref) {
   const res = await fetch(`${API}/projects/${ref}/functions`, {
     headers: { Authorization: `Bearer ${TOKEN}` },
@@ -59,7 +103,32 @@ async function deployedFunctions(ref) {
   return await res.json();
 }
 
-function section(label, ref, { onlyRepo, onlyLive, both, live }) {
+const OZNAKA_SADRZAJA = { jednako: 'JEDNAKO', drift: 'DRIFT', 'ne-znam': 'NE ZNAM' };
+
+/** Tablica po sadrzaju: jednako / drift / ne znam, uz datoteke koje se razlikuju. */
+function contentSection(verdicts) {
+  const lines = ['### Sadrzaj deployanih funkcija nasuprot repou (T101)', ''];
+  lines.push(
+    'Izvor se cita iz source mapa deployanog bundlea (`GET /functions/{slug}/body`) i usporedjuje s',
+    'repoom bajt po bajt (CR normaliziran). NE ZNAM znaci da bundle nije dostupan ili nema citljivih',
+    'source mapa; to nije prolaz.',
+    '',
+  );
+  lines.push('| Funkcija | Sadrzaj | Razlike |', '| --- | --- | --- |');
+  for (const v of verdicts) {
+    const razlike = [
+      ...v.differ.map((f) => `\`${f}\` razlicit`),
+      ...v.missingInRepo.map((f) => `\`${f}\` nema u repou`),
+      ...(v.why ? [v.why] : []),
+      ...(v.status === 'ne-znam' && !v.why ? ['bundle bez source mape ulaza'] : []),
+    ].join('; ');
+    lines.push(`| \`${v.slug}\` | ${OZNAKA_SADRZAJA[v.status]} | ${razlike} |`);
+  }
+  lines.push('');
+  return lines;
+}
+
+function section(label, ref, { onlyRepo, onlyLive, both, live }, verdicts = []) {
   const lines = [`## ${label} (\`${ref}\`)`, ''];
   lines.push(`Repo: ${both.length + onlyRepo.length} funkcija. Deployano: ${live.size}.`, '');
 
@@ -71,6 +140,8 @@ function section(label, ref, { onlyRepo, onlyLive, both, live }) {
     for (const slug of onlyLive) lines.push(`| \`${slug}\` | ${labelForOnlyLive(label)} |`);
     lines.push('');
   }
+
+  if (verdicts.length) lines.push(...contentSection(verdicts));
 
   // Konfiguracijski raskorak: do 2026-08-30 se usporedjivalo samo POSTOJANJE funkcije, pa je
   // funkcija bez `[functions.<slug>]` bloka izgledala uredno sve dok je prvi deploy ne zatvori.
@@ -116,13 +187,21 @@ const out = [
 ];
 
 let drifted = 0;
+let contentDrifted = 0;
+let unknown = 0;
 for (const env of ENVIRONMENTS) {
   const deployed = await deployedFunctions(env.ref);
   const d = driftFor(repo, deployed);
   drifted += d.onlyRepo.length + d.onlyLive.length;
-  out.push(...section(env.label, env.ref, d));
+  const verdicts = await contentVerdicts(env.ref, d.both);
+  contentDrifted += verdicts.filter((v) => v.status === 'drift').length;
+  unknown += verdicts.filter((v) => v.status === 'ne-znam').length;
+  out.push(...section(env.label, env.ref, d, verdicts));
 }
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, out.join('\n'), 'utf8');
-console.log(`[deploy-drift] zapisano ${path.relative(ROOT, OUT)}; stavki drifta: ${drifted}`);
+console.log(
+  `[deploy-drift] zapisano ${path.relative(ROOT, OUT)}; postojanje: ${drifted}, ` +
+  `sadrzaj DRIFT: ${contentDrifted}, NE ZNAM: ${unknown}`,
+);

@@ -16,7 +16,15 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 // @ts-expect-error - .mjs bez tipova; namjerno, jer je rijec o build/ops skripti, ne o src modulu.
-import { driftFor, labelForOnlyLive, configVerifyJwt, verifyJwtDrift } from '../scripts/deploy-drift-core.mjs';
+import {
+  configVerifyJwt,
+  contentDrift,
+  deployedLocalSources,
+  driftFor,
+  extractSourceMaps,
+  labelForOnlyLive,
+  verifyJwtDrift,
+} from '../scripts/deploy-drift-core.mjs';
 
 const fn = (slug: string, verify_jwt?: boolean) => ({ slug, version: 1, status: 'ACTIVE', verify_jwt });
 
@@ -171,5 +179,72 @@ describe('verifyJwtDrift: sentinel protiv tihog vakuuma', () => {
 
   it('prazna okolina NE baca (nema sto tvrditi)', () => {
     expect(() => verifyJwtDrift(new Map(), new Map())).not.toThrow();
+  });
+});
+
+/**
+ * T101: usporedba po SADRZAJU. Do sada se mjerilo samo postojanje, pa je deployani faculty-request
+ * (v14, deploy 9. 7. 2026.) s `Access-Control-Allow-Origin: *` prolazio kao "deployano", iako repo
+ * odabire origin s popisa. Bundle nosi source mape s izvornim TS-om; sinteticki bundle ispod ima
+ * isti oblik (binarni sum, mapa po modulu, dva oblika putanja i udaljeni modul).
+ */
+describe('deploy-drift po sadrzaju (T101)', () => {
+  const mapa = (sources: string[], contents: string[]) => JSON.stringify({ version: 3, sources, sourcesContent: contents, mappings: 'AAAA' });
+  const bundle = (...maps: string[]) => `ESZIP2.3\u0000\u0001\u00ff garbage {"not":"a map"} ${maps.join('\u0000\u0002')} \u0000 kraj`;
+
+  it('generator: sinteticki bundle stvarno sadrzi oba oblika putanja i udaljeni modul', () => {
+    const b = bundle(
+      mapa(['source/index.ts'], ['stari ulaz']),
+      mapa(['source/supabase/functions/x/index.ts', 'source/supabase/functions/_shared/cors.ts'], ['novi ulaz', 'cors']),
+      mapa(['https://esm.sh/lib.mjs'], ['udaljeno']),
+    );
+    const maps = extractSourceMaps(b);
+    expect(maps).toHaveLength(3);
+    expect(maps.flatMap((m: { sources: string[] }) => m.sources)).toEqual([
+      'source/index.ts', 'source/supabase/functions/x/index.ts', 'source/supabase/functions/_shared/cors.ts', 'https://esm.sh/lib.mjs',
+    ]);
+  });
+
+  it('putanje oba oblika i ../ mapiraju se na repo; udaljeni moduli se preskacu', () => {
+    const stari = deployedLocalSources(extractSourceMaps(bundle(mapa(['source/index.ts', 'source/../_shared/cors.ts'], ['a', 'b']))), 'faculty-request');
+    expect([...stari.keys()]).toEqual(['supabase/functions/faculty-request/index.ts', 'supabase/functions/_shared/cors.ts']);
+    const novi = deployedLocalSources(extractSourceMaps(bundle(
+      mapa(['source/supabase/functions/profile-rules/index.ts', 'source/supabase/functions/_shared/hash-ip.ts'], ['a', 'b']),
+      mapa(['https://esm.sh/x.mjs', 'npm:lib'], ['c', 'd']),
+    )), 'profile-rules');
+    expect([...novi.keys()]).toEqual(['supabase/functions/profile-rules/index.ts', 'supabase/functions/_shared/hash-ip.ts']);
+    // Korijen repoa i za `src/...`: putanja bez `supabase/functions/` NIJE relativna na mapu funkcije.
+    const sSrc = deployedLocalSources(extractSourceMaps(bundle(
+      mapa(['source/supabase/functions/admin-stats/index.ts', 'source/src/admin/admin-range.ts'], ['a', 'b']),
+    )), 'admin-stats');
+    expect([...sSrc.keys()]).toEqual(['supabase/functions/admin-stats/index.ts', 'src/admin/admin-range.ts']);
+    // Treci oblik: korijen je `supabase/functions/` (`health/index.ts`, bez `source/`).
+    const fn = deployedLocalSources(extractSourceMaps(bundle(mapa(['health/index.ts', '_shared/cors.ts'], ['a', 'b']))), 'health');
+    expect([...fn.keys()]).toEqual(['supabase/functions/health/index.ts', 'supabase/functions/_shared/cors.ts']);
+    // Cetvrti oblik: korijen je `supabase/` (`functions/<slug>/index.ts`).
+    const sup = deployedLocalSources(extractSourceMaps(bundle(
+      mapa(['functions/send-reminders/index.ts'], ['a']), mapa(['functions/_shared/cron-auth.ts'], ['b']),
+    )), 'send-reminders');
+    expect([...sup.keys()]).toEqual(['supabase/functions/send-reminders/index.ts', 'supabase/functions/_shared/cron-auth.ts']);
+  });
+
+  it('jednako, drift i ne-znam', () => {
+    const repo: Record<string, string> = {
+      'supabase/functions/f/index.ts': 'export const a = 1;\n',
+      'supabase/functions/_shared/cors.ts': 'cors\n',
+    };
+    const read = (p: string) => repo[p] ?? null;
+    const dep = (entries: [string, string][]) => new Map(entries);
+    // CRLF u deployu nije razlika.
+    expect(contentDrift('f', dep([['supabase/functions/f/index.ts', 'export const a = 1;\r\n'], ['supabase/functions/_shared/cors.ts', 'cors\n']]), read))
+      .toMatchObject({ status: 'jednako', differ: [], missingInRepo: [] });
+    // Stvarni oblik faculty-request drifta: repo odabire origin, deploy salje *.
+    expect(contentDrift('f', dep([['supabase/functions/f/index.ts', "'Access-Control-Allow-Origin': '*'"]]), read))
+      .toMatchObject({ status: 'drift', differ: ['supabase/functions/f/index.ts'] });
+    expect(contentDrift('f', dep([['supabase/functions/f/index.ts', 'export const a = 1;\n'], ['supabase/functions/_shared/stari.ts', 'x']]), read))
+      .toMatchObject({ status: 'drift', missingInRepo: ['supabase/functions/_shared/stari.ts'] });
+    // Bez mapa ili bez ulaza: NE ZNAM, nikad jednako.
+    expect(contentDrift('f', dep([]), read).status).toBe('ne-znam');
+    expect(contentDrift('f', dep([['supabase/functions/_shared/cors.ts', 'cors\n']]), read).status).toBe('ne-znam');
   });
 });
