@@ -551,7 +551,7 @@ function syncConsentBannerInset(){const b=$('#consentBanner');if(!b)return;const
   // 169px (mjereno), ali to ovisi o duljini teksta i sirini, pa svaka konstanta brzo postane kriva.
   document.body.style.setProperty('--consent-h',`${h}px`);
   document.body.classList.toggle('has-consent-banner',!skriven);
-  // Rezerva samo za fiksnu traku; na uskom ekranu traka stoji u toku stranice (mobilni audit PR 3).
+  // Rezerva samo za fiksnu traku (mobilni audit PR 3).
   const fiksna=!skriven&&getComputedStyle(b).position==='fixed';
   document.body.style.paddingBottom=fiksna?`${h+34}px`:''}catch(e: any){}}
 /* REZERVA SE MJERI ZIVO, ne jednom. Izmjereno 2026-09-05 na `/rad/` (1440x900): traka je pri prvom
