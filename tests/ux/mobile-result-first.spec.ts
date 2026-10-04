@@ -34,6 +34,34 @@ async function analiziraj(page: Page): Promise<void> {
   await expect(page.getByTestId('mentor-tasks'), 'fixture mora imati komentare mentora')
     .toContainText('Komentari mentora u dokumentu (4)', { timeout: 30_000 });
   await expect(page.locator('#resultCockpit')).toBeVisible({ timeout: 30_000 });
+  // Codex R5 na #286: geometrija se mjeri tek kad su fontovi stigli (font-display:swap mijenja raspored).
+  await page.evaluate(async () => { await document.fonts.ready; });
+}
+
+/**
+ * Opisi komentara mentora ciji tekst je odrezan (Codex R4 na #286): sakriven preljev u samom bloku, ili blok siri od
+ * ruba nekog pretka koji reze ili od ekrana. Dijagnoza 2026-10-04: uz `white-space:nowrap` blok naraste na 3762 px
+ * i reze ga predak, pa `scrollWidth` samog bloka ostaje jednak `clientWidth`.
+ */
+async function odrezanTekst(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const out: string[] = [];
+    for (const el of document.querySelectorAll<HTMLElement>('.mt-tekst')) {
+      const r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      if (el.scrollWidth > el.clientWidth + 1) out.push(`.mt-tekst sakriva ${el.scrollWidth - el.clientWidth} px teksta`);
+      let lijevo = 0;
+      let desno = window.innerWidth;
+      for (let p = el.parentElement; p; p = p.parentElement) {
+        if (!/(hidden|clip|auto|scroll)/.test(getComputedStyle(p).overflowX)) continue;
+        const q = p.getBoundingClientRect();
+        lijevo = Math.max(lijevo, q.left);
+        desno = Math.min(desno, q.right);
+      }
+      if (r.left < lijevo - 0.5 || r.right > desno + 0.5) out.push(`.mt-tekst ${Math.round(r.left)}..${Math.round(r.right)} izlazi iz vidljivog podrucja ${Math.round(lijevo)}..${Math.round(desno)}`);
+    }
+    return out;
+  });
 }
 
 /** Opisi potomaka lista koji izlaze preko ruba viewporta, osim onih unutar vlastitog spremnika s pomicanjem. */
@@ -72,6 +100,9 @@ test('mobitel: rezultat je na prvom ekranu, a list nakon nalaza ne izlazi preko 
 
   // F5: izracunati stil, ne tekst pravila; kasnije jace pravilo s nagibom pada ovdje.
   expect(await page.locator('.analyzer-wrap').evaluate((el) => getComputedStyle(el).transform), 'list stoji ravno').toBe('none');
+  // Codex R2 na #286: samostalna svojstva naginju ili pomicu list mimo `transform`.
+  expect(await page.locator('.analyzer-wrap').evaluate((el) => [getComputedStyle(el).rotate, getComputedStyle(el).translate]),
+    'list nema samostalni nagib ni pomak').toEqual(['none', 'none']);
 
   // F4: otvoren komentar s nizom od 200 znakova bez razmaka ne smije siriti list ni stranicu.
   await page.getByTestId('mentor-tasks').locator('summary.mt-kicker').click();
@@ -110,6 +141,24 @@ test('mobitel: rezultat otvoren na sirokom ekranu pa suzen sklapa blok komentara
   await analiziraj(page);
   const blok = page.getByTestId('mentor-tasks').locator('details.mt');
   await expect(blok, 'na sirokom ekranu blok je otvoren').toHaveAttribute('open', /.*/);
+
+  // Codex D1 (runda 2 na #235): `<details>` i lomljenje dugog komentara namjerno vrijede na svim sirinama. Na
+  // 1024 px naslov je meta od 44 px, a komentar s dugim URL-om ne izlazi preko ruba. Snimka ide u izvjestaj.
+  const naslov = await blok.locator('summary.mt-kicker').boundingBox();
+  expect(naslov?.height ?? 0, 'siroki ekran: naslov bloka je meta od najmanje 44 px').toBeGreaterThanOrEqual(44);
+  await page.locator('.mt-tekst').first().evaluate((el) => { el.append(` https://example.org/${'dugisegment'.repeat(30)}`); });
+  expect(await izvanEkrana(page), 'siroki ekran: komentar s dugim URL-om ne izlazi preko ruba ekrana').toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth), 'siroki ekran: bez vodoravnog preljeva').toBeLessThanOrEqual(1024);
+  expect(await odrezanTekst(page), 'siroki ekran: dugi URL je citljiv do kraja, nije odrezan').toEqual([]);
+
+  // Codex R4 na #286, negativna kontrola: komentar u jednom retku sa skrivenim preljevom prolazi provjere okvira i
+  // sirine stranice, pa provjera odrezanog teksta mora pasti. Bez toga ne znamo da ista grize.
+  await page.addStyleTag({ content: '.mt-tekst{white-space:nowrap!important;overflow:hidden!important}' }).then((h) => h.evaluate((el) => el.setAttribute('id', 'r4-mutant')));
+  expect(await izvanEkrana(page), 'kontrola: mutant prolazi provjeru okvira').toEqual([]);
+  expect((await odrezanTekst(page)).length, 'kontrola: mutant sa skrivenim preljevom rusi provjeru odrezanog teksta').toBeGreaterThan(0);
+  await page.locator('#r4-mutant').evaluate((el) => el.remove());
+  await test.info().attach('komentari-mentora-1024', { body: await blok.screenshot(), contentType: 'image/png' });
+
   await page.setViewportSize({ width: SIRINA, height: 740 });
   await expect(blok, 'suzeno na mobitel: blok se sklopi').not.toHaveAttribute('open', /.*/);
 });
