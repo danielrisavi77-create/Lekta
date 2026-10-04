@@ -103,6 +103,23 @@ describe('produkcijski build: Netlify i CI se ne smiju razici', () => {
       `netlify.toml postavlja, a dist-gate ne: ${nedostaju.join(', ')}. `
       + 'Dodaj ih u `env:` produkcijskog build koraka ILI ih svjesno stavi u SAMO_PRI_OBJAVI uz razlog.',
     ).toEqual([]);
+
+    // Prisutnost nije dovoljna (Codex nalaz 6 na #273): promjena samo CI vrijednosti, npr.
+    // LEKTA_SITE_ORIGIN, prolazila bi. Zajednicke varijable moraju imati ISTU vrijednost.
+    // `.trim()` jer radna kopija na Windowsu ima CRLF, pa `(.*)` pokupi i `\r`.
+    const bezNavodnika = (v: string) => v.trim().replace(/^["']|["']$/g, '');
+    const netlifyVrijednosti = new Map(
+      [...blok.matchAll(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)$/gm)].map((m) => [m[1], bezNavodnika(m[2])] as const),
+    );
+    const ciVrijednosti = new Map(
+      [...gate.matchAll(/^\s*([A-Z_][A-Z0-9_]*):\s*(.*)$/gm)].map((m) => [m[1], bezNavodnika(m[2])] as const),
+    );
+    const razlike = [...netlifyVrijednosti]
+      .filter(([v]) => v !== 'NODE_VERSION' && !SAMO_PRI_OBJAVI.has(v) && ciVrijednosti.has(v))
+      .filter(([v, vrijednost]) => ciVrijednosti.get(v) !== vrijednost)
+      .map(([v, vrijednost]) => `${v}: netlify.toml "${vrijednost}", dist-gate "${ciVrijednosti.get(v)}"`);
+    expect(netlifyVrijednosti.size, 'nijedna vrijednost nije procitana iz netlify.toml').toBeGreaterThan(2);
+    expect(razlike, `vrijednosti se razilaze: ${razlike.join('; ')}`).toEqual([]);
   });
 
   it('MUTACIJA: iznimka NIJE prazan popis koji sve propusta', () => {

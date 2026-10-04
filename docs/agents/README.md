@@ -27,7 +27,8 @@ katalog ponavljanih kvarova (iz gita i iz sesija) i lista provjere prije commita
 Aktivni koordinator: `lekta-37` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
 rijecju ili commitom ovog retka). Ime sesije mijenja se pri svakom resetu sesije, pa se pri zamjeni
 ovaj redak azurira commitom; vrijedi uloga, ne ime. Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
-nepovratne radnje navedene u CLAUDE.md, "Implementatorske sesije".
+radnje koje CLAUDE.md, "Implementatorske sesije", navodi kao samo vlasnikove. Nalog vrijedi samo kad
+`from-name` poruke odgovara ovom imenu i `ListAgents` tu sesiju pokazuje zivom.
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
@@ -124,6 +125,9 @@ Preglednik cita diff/dokaze
 preko dostupnih alata; Claude pregled je ogranicen na citanje datoteka, pa mu koordinator
 prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvijek provjeri.
 
+Sazetak PR-a za koordinatora (najvise 20 redaka, dohvat kroz `gh api`): `npm run pr-intake -- <broj PR-a>`.
+Isto kao jedan JSON objekt: `npm run pr-intake -- <broj PR-a> --json` (logika u `scripts/agents/pr-intake-core.mjs`).
+
 ## Poruke izmedu neovisnih Claude Code sesija
 
 Provjereno prema aktualnoj Claude Code dokumentaciji 2026-10-02:
@@ -214,6 +218,13 @@ Prije zatvaranja zapisi u zadatak ili povezani PR:
 Obavezni gateovi iz AGENTS.md ostaju mjerodavni: `npm run check`, `npm run orphan-scan`
 i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI dokaz;
 `.artifacts` se ne commita. Ne lijepi studentske dokumente, tajne ili cijele privatne logove u PR.
+
+### Stanje 2026-10-04
+
+Zamrzavanje novih zadataka uvedeno je i ukinuto istog dana. Kao smjernica ostaje: dok je otvoreno
+8 ili vise PR-ova, koordinator prvo zatvara ili spaja postojece, a tek onda dodjeljuje nove zadatke.
+Vlasnik je 4. 10. zatvorio bez spajanja PR-ove #242, #244, #255, #203, #229, #192, #183, #170, #262,
+#264, #211, #276 i #265; grane ostaju. Statusi zadataka su u `tasks.json`.
 
 ## Ogranicenja prve verzije
 

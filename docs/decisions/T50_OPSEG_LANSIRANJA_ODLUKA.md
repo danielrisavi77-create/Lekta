@@ -30,6 +30,10 @@ Svaki kriterij ima dokaz; nepoznato je NO-GO, ne GO. Kriteriji su dosje zadatka 
 6. Pravni tekstovi bete objavljeni (privatnost, uvjeti, "tijekom besplatne bete").
 7. T49: domena i support sanducic rade, SPF/DKIM/DMARC postavljeni.
 8. Mini pilot: najmanje pet korisnika prolazi glavni tok bez P0 i blokirajuceg P1 (kriterij T15).
+   **Izmjena 2026-10-04 (odluka vlasnika):** kriterij 8 sada glasi: vlasnik sam prodje glavni tok na
+   lekta.hr s 2 do 3 vlastita rada; provjera opterecenja prije objave je obvezna (rate limit
+   besplatnog popravka, T45 granice troska, `REPAIR_FREE_MODE`). Mali pilot (T15) je ukinut: objava
+   ide odmah siroko (WhatsApp grupe, Instagram, studentski zborovi).
 9. Nijedan `*_DISABLED` ili prazan endpoint ne vodi korisnika u slijepu ulicu: iskljucene
    funkcije su skrivene ili jasno oznacene kao "uskoro".
 
@@ -47,6 +51,7 @@ Svaki kriterij ima dokaz; nepoznato je NO-GO, ne GO. Kriteriji su dosje zadatka 
 - **T44** ostaje gate za placeno i puno lansiranje (opsezi B i C); beta je zaseban, imenovani
   opseg i nista se ne proglasava gotovim skrivanjem.
 - **T15:** pilot provodi vlasnik (pozivi i testiranje); beta je javna.
+  Izmjena 2026-10-04: T15 je ukinut, vidi kriterij 8.
 - **T50** je zatvoren ovom odlukom.
 
 ## 4. Sto ova odluka ne radi

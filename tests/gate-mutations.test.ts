@@ -48,6 +48,7 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
@@ -56,6 +57,8 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { isInOrigin } from '../scripts/site-origin.mjs';
+import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -165,7 +168,8 @@ import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, m
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
-import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, syntheticAudit } from '../scripts/npm-audit-ratchet-core.mjs';
+import * as prIntake from '../scripts/agents/pr-intake-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
@@ -285,9 +289,12 @@ import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
 import { messagingRuleProblems, type MessagingSources } from './helpers/session-messaging';
-import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
+import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch, requestPlan } from '../scripts/osv-query.mjs';
+import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -376,9 +383,36 @@ type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link
 /** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
 type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
 const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
-/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
-const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+/**
+ * `inBundle` lanac za T99 mutacije (Codex F2). Stvarni lockfile ga je imao samo u netlify-cli stablu;
+ * nakon Popravka A (netlify-cli van) nema nijednog, pa se valjan lanac cijepi na stvarni paket.
+ */
+const INBUNDLE_PARENT = 'node_modules/vite';
 const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
+const bundledLock = (): RealLock => {
+  const lock = realLock();
+  lock.packages[INBUNDLE_PARENT] = { ...lock.packages[INBUNDLE_PARENT], bundleDependencies: ['napi-wasm'] };
+  lock.packages[INBUNDLE_KEY] = { version: '1.0.0', inBundle: true };
+  return lock;
+};
+
+/** Jezgra npm-audit ratcheta izvedena iz (mutiranog) izvora u memoriji; izvor nema importa (T93). */
+type RatchetCore = {
+  compareAuditToRatchet: typeof compareAuditToRatchet;
+  syntheticAudit: typeof syntheticAudit;
+  validateRatchet: (r: unknown, o?: { today?: string }) => string[];
+};
+function loadRatchetCore(src: string): RatchetCore {
+  const body = src.replace(/^export /gm, '');
+  return new Function(`${body}\nreturn { compareAuditToRatchet, syntheticAudit, validateRatchet };`)() as RatchetCore;
+}
+
+// T93 stays independently exercised after the production ratchet returns to zero findings.
+const T93_MUTATION_RATCHET = {
+  fullGraphHighCritical: 1,
+  fullGraphHighCriticalPackages: ['braces'],
+  exceptions: [{ packages: ['braces'], advisories: ['GHSA-aaaa-aaaa-aaaa'] }],
+};
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -3110,18 +3144,56 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       const packages = auditRatchet.fullGraphHighCriticalPackages;
       const mutated = [...packages.slice(0, -1), '__novi-ranjivi-paket__'];
-      const audit = { vulnerabilities: Object.fromEntries(mutated.map((name) => [name, { severity: 'high' }])) };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'above';
+      return compareAuditToRatchet(syntheticAudit(auditRatchet, mutated), auditRatchet).verdict === 'above';
     },
-    cleanBefore: () => {
-      const audit = {
-        vulnerabilities: Object.fromEntries(
-          auditRatchet.fullGraphHighCriticalPackages.map((name) => [name, { severity: 'high' }]),
-        ),
-      };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'equal';
-    },
+    cleanBefore: () =>
+      compareAuditToRatchet(syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages), auditRatchet).verdict === 'equal',
   },
+  // T93 (Codex R1 na #246): iznimka pokriva par (paket, GHSA), ne samo ime paketa. Mutacije mijenjaju
+  // IZVOR jezgre (scripts/npm-audit-ratchet-core.mjs, bez importa) i izvrsavaju ga u memoriji.
+  ...([
+    ['t93/usporedba-bez-advisoryja', 'compareAuditToRatchet gleda samo ime i broj, pa novi GHSA na prihvacenom paketu prolazi',
+      'uncoveredPairs.length > 0 || unresolvedPackages.length > 0', 'false',
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(T93_MUTATION_RATCHET, ['braces'], { braces: ['GHSA-zzzz-zzzz-zzzz'] }), T93_MUTATION_RATCHET).verdict === 'above'],
+    ['t93/pokrice-po-imenu', 'iznimka pokriva paket za bilo koji advisory (pokrice po imenu, kao prije T93)',
+      'const uncoveredPairs = pairs.filter((pair) => !covered.has(pair));',
+      "const uncoveredPairs = pairs.filter((pair) => ![...covered].some((c) => c.split(' ')[0] === pair.split(' ')[0]));",
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(T93_MUTATION_RATCHET, ['braces'], { braces: ['GHSA-zzzz-zzzz-zzzz'] }), T93_MUTATION_RATCHET).verdict === 'above'],
+    ['t93/validator-bez-advisoryja', 'iznimka bez advisories prolazi validaciju, pa pokriva sve buduce advisoryje paketa',
+      "problems.push(`${label}.advisories je prazan (iznimka pokriva advisory, ne samo ime paketa)`);", '',
+      (core: RatchetCore) => core.validateRatchet({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'],
+        exceptions: [{ owner: 'o', mitigation: 'm', nextReviewOn: '2999-01-01', expiresOn: '2999-01-02', packages: ['a'] }] }).length > 0],
+    // Codex R2 na #282: bez propagacije kroz via tranzitivni paket ne nasljeduje advisory iz ciklusa.
+    ['t93/bez-propagacije-kroz-via', 'advisoryji i nerazrijesenost se ne prenose kroz via, pa par b/A iz ciklusa a<->b nestaje i ratchet kaze equal',
+      'for (const dep of through.get(name)) {', 'for (const dep of []) {',
+      (core: RatchetCore) => core.compareAuditToRatchet({ vulnerabilities: {
+        a: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-aaaa-aaaa-aaaa' }, 'b'] },
+        b: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-bbbb-bbbb-bbbb' }, 'a'] },
+      } }, { fullGraphHighCritical: 2, fullGraphHighCriticalPackages: ['a', 'b'], exceptions: [
+        { packages: ['a'], advisories: ['GHSA-aaaa-aaaa-aaaa', 'GHSA-bbbb-bbbb-bbbb'] },
+        { packages: ['b'], advisories: ['GHSA-bbbb-bbbb-bbbb'] },
+      ] }).verdict === 'above'],
+    // Codex R1 na #282: prepoznat GHSA ne smije zatvoriti neprepoznat high advisory na istom paketu.
+    ['t93/nerazrijesen-uz-prepoznat', 'paket s jednim prepoznatim GHSA-om tiho odbacuje drugi high advisory bez prepoznatog id-a',
+      'if (list.length === 0 || problem.get(name)) unresolved.push(name);', 'if (list.length === 0) unresolved.push(name);',
+      (core: RatchetCore) => core.compareAuditToRatchet({ vulnerabilities: {
+        a: { severity: 'high', via: [{ severity: 'high', url: 'https://github.com/advisories/GHSA-aaaa-aaaa-aaaa' },
+          { severity: 'high', url: 'https://example.invalid/new' }] },
+      } }, { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [
+        { packages: ['a'], advisories: ['GHSA-aaaa-aaaa-aaaa'] },
+      ] }).verdict === 'above'],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T93: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadRatchetCore(mut));
+    },
+    cleanBefore: () => holds(loadRatchetCore(readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs')))),
+  })),
   /**
    * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
    * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
@@ -4854,12 +4926,12 @@ const MUTATIONS: Mutation[] = [
     id,
     imitates: `T99: ${imitates}.`,
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       mutate(lock);
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
     },
     cleanBefore: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
     },
   })),
@@ -4873,11 +4945,11 @@ const MUTATIONS: Mutation[] = [
     ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
-      'npm-audit: gard izvora ima continue-on-error'],
+      'npm-audit: korak lockfile-sources.mjs ima continue-on-error'],
     ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
-      'npm-audit: gard izvora ima uvjet if'],
+      'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
     ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
       (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
       'npm-audit: nema mjerenja garda izvora'],
@@ -4892,6 +4964,210 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
+  // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  {
+    id: 't99/osv-novi-nalaz',
+    imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
+    caught: () => {
+      const { packages } = collectPackages();
+      const results = packages.map((_: unknown, i: number) => (i === 0 ? { vulns: [{ id: 'GHSA-mutacija' }] } : {}));
+      return compareOsvToRatchet(findingsFromBatch({ results }, packages), osvRatchet).verdict === 'above';
+    },
+    cleanBefore: () => {
+      const { packages, problems } = collectPackages();
+      return problems.length === 0 && compareOsvToRatchet(findingsFromBatch({ results: packages.map(() => ({})) }, packages), osvRatchet).verdict === 'equal';
+    },
+  },
+  {
+    id: 't99/osv-lockfile-bez-paketa',
+    imitates: 'T99: supabase/functions/deno.lock postane necitljiv ili prazan, pa OSV pita za nula paketa i lazno je zelen.',
+    caught: () => collectPackages((f: string) => (f === 'supabase/functions/deno.lock' ? '{"version":"5","remote":{}}' : readTextLf(resolve(process.cwd(), f))))
+      .problems.includes('supabase/functions/deno.lock: 0 paketa; necitljiv lockfile ne smije biti zelen'),
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-nepotpun-odgovor',
+    imitates: 'T99: OSV vrati manje rezultata od upita ili next_page_token, a skripta to cita kao nula nalaza.',
+    caught: () => {
+      const { packages } = collectPackages();
+      try { findingsFromBatch({ results: packages.slice(1).map(() => ({})) }, packages); return false; } catch { return true; }
+    },
+    cleanBefore: () => {
+      const { packages } = collectPackages();
+      return findingsFromBatch({ results: packages.map(() => ({})) }, packages).length === 0;
+    },
+  },
+  {
+    id: 't99/osv-nije-u-ci',
+    imitates: 'T99: osv-scan job ostane bez mjerenja (samo selftest), pa Edge i Python ostaju neprovjereni a CI zelen.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/osv-query.mjs\n', '');
+      return mut !== wf && osvWiringProblems(mut).includes('osv-scan: nema mjerenja OSV ratcheta');
+    },
+    cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
+  ...([
+    ['popravak-a/netlify-cli-natrag-u-devdeps', 'netlify-cli se vrati u devDependencies pa 15 high nalaza opet ulazi u graf',
+      'packageJson', '"devDependencies": {\n', '"devDependencies": {\n    "netlify-cli": "^27.10.2",\n', 'package.json: netlify-cli je u devDependencies'],
+    ['popravak-a/skripta-iz-node-modules', 'release skripta opet trazi netlify u node_modules umjesto pinanog npx',
+      'releaseScript', "args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args]", "args", 'release skripta: netlify ne ide kroz npx --yes s pinom'],
+    ['popravak-a/pin-raspon', 'pin postane raspon (^27) pa npx tiho uzme drugu verziju',
+      'releaseScript', "export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';", "export const NETLIFY_CLI_PIN = 'netlify-cli@^27';", 'release skripta: pin nije tocna verzija (netlify-cli@^27)'],
+    ['popravak-a/dokument-drift', 'dokument objave zadrzi staru verziju dok skripta dobije novu',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build', 'npx --yes netlify-cli@27.10.1 deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nema "npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build"'],
+    ['popravak-a/npx-cmd-bez-shella', 'netlify se opet pokrece kao npx.cmd kroz spawnSync bez shella, pa Windows objava pada s EINVAL (Codex F1 na #283)',
+      'releaseScript', "return { executable: process.execPath, args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      "return { executable: platform === 'win32' ? 'npx.cmd' : 'npx', args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      'release skripta: npx se pokrece s PATH-a ili kao .cmd umjesto kroz process.execPath'],
+    ['popravak-a/aktivni-poziv-uz-pin-u-komentaru', 'dokument dobije aktivni nepinani deploy, a pinani ostane u komentaru (Codex F2 na #283)',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build',
+      '<!-- npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build -->\nnpx --yes netlify-cli deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/npm-skripta-gola-naredba', 'package.json dobije skriptu s golom netlify naredbom iz globalne instalacije (Codex F2 na #283)',
+      'packageJson', '"scripts": {\n', '"scripts": {\n    "deploy:netlify": "netlify deploy --prod",\n',
+      'package.json scripts.deploy:netlify: gola netlify naredba "netlify deploy"'],
+  ] as const).map(([id, imitates, field, from, to, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const mut = { ...src, [field]: src[field].replace(from, to) };
+      return mut[field] !== src[field] && netlifyPinProblems(mut).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
+  ...([
+    ['popravak-a/dinamicni-paket-u-varijabli', 'objava ide kroz varijablu s netlify-cli@latest, pa u pozivu nema doslovnog pina (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: |\n          CLI=netlify-cli@latest\n          npx --yes "$CLI" deploy --prod\n',
+      '.github/workflows/mutacija.yml: dinamican paket u pozivu "npx --yes "$CLI"'],
+    ['popravak-a/yaml-presavijeni-blok', 'YAML presavijeni blok razlomi npx i nepinani paket u dva retka (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: >\n          npx --yes\n          netlify-cli deploy --prod\n',
+      '.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/akcija-js-nepinano', 'JS kod lokalne akcije objavljuje nepinanim CLI-jem (Codex F2b na #283)',
+      '.github/actions/publish/index.js', "execSync('npx --yes netlify-cli deploy --prod');\n",
+      '.github/actions/publish/index.js: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+  ] as const).map(([id, imitates, path, text, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      return netlifyPinProblems({ ...src, files: [...(src.files ?? []), { path, text }] }).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
+  {
+    id: 'popravak-a/workflow-drugi-pin',
+    imitates: 'Popravak A: workflow objavljuje kroz npx s drugim pinom, a gard gleda samo release skriptu i dokument (Codex F2 na #283).',
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const files = [...(src.files ?? []), { path: '.github/workflows/mutacija.yml', text: '      - run: npx --yes netlify-cli@27.10.1 deploy --prod\n' }];
+      return netlifyPinProblems({ ...src, files }).includes('.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli@27.10.1"');
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  },
+  ...([
+    ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-job-continue-on-error', 'job npm-audit dobije continue-on-error pa crveni gard ne blokira (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    continue-on-error: true\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-korak-if-u-navodnicima', 'korak garda dobije "if": false u navodnicima (Codex runda 2, F5)',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        "if": false\n', 'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/osv-deno-npm-graf-necitan',
+    imitates: 'T99: Edge lock dobije nativni npm graf (npm:lodash), a parser cita samo esm.sh, pa lodash ostaje neprovjeren a job zelen (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      const out = denoLockPackages({ ...lock, npm: { 'lodash@4.17.20': {} } }, 'e');
+      return out.packages.some((p: { name: string }) => p.name === 'lodash');
+    },
+    cleanBefore: () => !denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e')
+      .packages.some((p: { name: string }) => p.name === 'lodash'),
+  },
+  {
+    id: 't99/osv-deno-jsr-tiho',
+    imitates: 'T99: Edge lock dobije JSR graf koji OSV ovdje ne provjerava, a parser ga preskoci (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, jsr: { '@std/path@1.0.0': {} } }, 'e').problems.some((p: string) => p.includes('JSR graf nije podrzan'));
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-specifier-bez-grafa',
+    imitates: 'T99: deno.lock dobije npm: specifier bez zapisa u npm grafu (ili jsr:), a parser provjeri samo tip vrijednosti (Codex runda 2 na #274, A1).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, specifiers: { 'npm:lodash@4': '4.17.20', 'jsr:@std/path@1': '1.0.0' } }, 'e').problems.length === 2;
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-workspace-nedokazano-izuzece',
+    imitates: 'T99: korijenski deno.lock dobije workspace ovisnost koje nema u package-lock.json i nepoznat kljuc, a parser ih izuzme kao da ih pokriva npm audit (Codex runda 2 na #274, A2).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'deno.lock')));
+      lock.workspace.packageJson.dependencies = [...lock.workspace.packageJson.dependencies, 'npm:nepostojeci-paket@1.0.0'];
+      lock.workspace.packageJson.futureGraph = {};
+      return collectPackages((f: string) => (f === 'deno.lock' ? JSON.stringify(lock) : readTextLf(resolve(process.cwd(), f)))).problems.length === 2;
+    },
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-jedan-batch-preko-granice',
+    imitates: 'T99: graf preraste 1000 paketa i ide kao jedan querybatch zahtjev preko granice API-ja (Codex R4 na #274).',
+    // Gadja requestPlan, tj. tocno ona tijela koja queryAllBatches salje (veza dokazana u osv-query.test.ts, Codex R4-M).
+    caught: () => requestPlan(Array.from({ length: 1001 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0' })))
+      .every((r: { body: string }) => JSON.parse(r.body).queries.length <= 1000),
+    cleanBefore: () => requestPlan([{ ecosystem: 'npm', name: 'a', version: '1.0.0' }]).length === 1,
+  },
+  ...([
+    ['t99/lockfile-job-kljuc-iza-steps', 'npm-audit', '\n  # OSV ZA DENO I PYTHON', '\n    if: false\n  # OSV ZA DENO I PYTHON', 'npm-audit: job ima if ili continue-on-error', lockfileGuardWiringProblems],
+    ['t99/osv-job-kljuc-iza-steps', 'osv-scan', '          node scripts/osv-query.mjs\n', '          node scripts/osv-query.mjs\n    continue-on-error: true\n', 'osv-scan: job ima if ili continue-on-error', osvWiringProblems],
+  ] as const).map(([id, job, from, to, problem, check]) => ({
+    id,
+    imitates: `T99: job ${job} dobije kljuc iza steps (if/continue-on-error), a helper gleda samo kljuceve prije steps (Codex R3 na #274).`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && check(mut).includes(problem);
+    },
+    cleanBefore: () => check(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-bundle-ciklus',
+    imitates: 'T99: dva bundled paketa jedan drugoga trebaju, a nijedan nije dosegljiv od bundleDependencies vlasnika (Codex R2 na #274).',
+    caught: () => {
+      const lock = bundledLock();
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/x`] = { version: '1.0.0', inBundle: true, dependencies: { y: '1' } };
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/y`] = { version: '1.0.0', inBundle: true, dependencies: { x: '1' } };
+      return lockfileSourceProblems(lock).problems.filter((x: string) => x.includes('nije dosegljiv')).length === 2;
+    },
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
+  },
+  {
+    id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
+    imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
+    caught: () => {
+      const lock = bundledLock();
+      lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
+  },
   {
     id: 't99/lockfile-gard-nije-u-ci',
     imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
@@ -7709,6 +7985,53 @@ const MUTATIONS: Mutation[] = [
       'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
     caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
     cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
+  /**
+   * T49, Codex nalaz 7 na #273: gard #5 i #7 u verify-deploy-dist su provjeravali kanonik,
+   * sitemap i robots s `startsWith(SITE_ORIGIN)`, pa je `https://lekta.hr.evil.example/` prolazio
+   * kao unutar `https://lekta.hr`. Mutant je ta stara provjera prefiksom; isInOrigin je mora odbiti.
+   */
+  {
+    id: 'origin/prefiks-umjesto-origina',
+    imitates:
+      'kanonik ili sitemap <loc> na tudjoj domeni koja samo pocinje s SITE_ORIGIN (https://lekta.hr.evil.example/) ' +
+      'prolazi gard jer se usporedjuje prefiks niza umjesto URL.origin',
+    caught: () => {
+      const zlo = 'https://lekta.hr.evil.example/';
+      const prefiksPrihvaca = zlo.startsWith('https://lekta.hr');
+      return prefiksPrihvaca && !isInOrigin(zlo, 'https://lekta.hr');
+    },
+    cleanBefore: () => isInOrigin('https://lekta.hr/alati/', 'https://lekta.hr'),
+  },
+  /**
+   * T49, Codex runde 3 i 4 nalaz 7b na #273: gard #5 racuna probleme u `seoOriginProblems`, a
+   * verify-deploy-dist za svaki zove `fail`. Mutant zakomentira `fail`; stvarni blok garda izvrsen
+   * nad sintetickim distom s kanonikom //evil.example/ tada ne zove fail nijednom.
+   */
+  {
+    id: 'origin/gard5-bez-fail',
+    imitates:
+      'verify-deploy-dist racuna probleme SEO origina (stari host, kanonik //evil.example/) ali ih ne pretvara ' +
+      'u fail, pa build s krivim kanonikom tiho prolazi',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs'));
+      const mut = src.replace('for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);',
+        '// for (const problem of seoOriginProblems(seoFiles, SITE_ORIGIN)) fail(problem);');
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return mut !== src && runGuard5Block(mut, dist, 'https://lekta.hr').length === 0;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
+    cleanBefore: () => {
+      const dist = writeSyntheticDist({ 'x.html': '<link rel="canonical" href="//evil.example/">' });
+      try {
+        return runGuard5Block(readTextLf(resolve(process.cwd(), 'scripts', 'verify-deploy-dist.mjs')), dist, 'https://lekta.hr').length === 1;
+      } finally {
+        rmSync(dist, { recursive: true, force: true });
+      }
+    },
   },
 
 ];
@@ -11120,6 +11443,143 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
       'nevaljan glossary rels dao je no-known-limits, ne unknown',
       'referenca zaglavlja u glossaryju bez glossary rels dala je no-known-limits, ne unknown',
     ]);
+  });
+});
+
+describe('mutacije: pr-intake (najnoviji check-run po imenu, zasticene staze)', () => {
+  // Gard: sazetak sintetickog PR-a mora prijaviti crveni `orphan` (noviji pad preko starijeg
+  // zelenog) i ne smije prijaviti `check` (stariji pad, noviji zeleni rerun). PR koji dira
+  // src/docx mora dati tu zasticenu stazu i jaci model pregleda.
+  type PrIntakeInputT = import('../scripts/agents/pr-intake-core.mjs').PrIntakeInput;
+  type PrIntakeOpcije = Parameters<typeof prIntake.summarizePr>[1];
+  const ulaz = (): PrIntakeInputT =>
+    JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/pr-intake/pr-osnova.json'), 'utf8')) as PrIntakeInputT;
+
+  function prIntakeProblems(opcije: PrIntakeOpcije): string[] {
+    const problemi: string[] = [];
+    const s = prIntake.summarizePr(ulaz(), opcije);
+    if (JSON.stringify(s.ci.imenaCrvenih) !== JSON.stringify(['orphan'])) {
+      problemi.push(`crveni check-runi nisu najnoviji po imenu: ${s.ci.imenaCrvenih.join(', ')}`);
+    }
+    const zasticeni = ulaz();
+    zasticeni.files = [...zasticeni.files, { filename: 'src/docx/parser.ts', additions: 0, deletions: 0 }];
+    const z = prIntake.summarizePr(zasticeni, opcije);
+    if (JSON.stringify(z.zasticeneStaze) !== JSON.stringify(['src/docx']) || z.modelPregleda !== prIntake.MODEL_PREGLEDA_ZASTICENO) {
+      problemi.push(`zasticena staza src/docx nije prijavljena (model ${z.modelPregleda})`);
+    }
+    return problemi;
+  }
+
+  it('baseline: stvarna pravila daju cist ishod', () => {
+    expect(prIntakeProblems({})).toEqual([]);
+  });
+
+  it('mutant: uzima najstariji check-run umjesto najnovijeg (obara gard)', () => {
+    const najstariji: typeof prIntake.latestCheckRunsByName = (runs) => {
+      const m = new Map<string, (typeof runs)[number]>();
+      for (const r of runs) {
+        const p = m.get(r.name);
+        if (!p || r.id < p.id) m.set(r.name, r);
+      }
+      return [...m.values()];
+    };
+    expect(prIntakeProblems({ latestByName: najstariji })).toEqual([
+      'crveni check-runi nisu najnoviji po imenu: check',
+    ]);
+  });
+
+  it('mutant: ignorira protectedPaths (obara gard)', () => {
+    expect(prIntakeProblems({ protectedTouched: () => [] })).toEqual([
+      'zasticena staza src/docx nije prijavljena (model gpt-6-sol)',
+    ]);
+  });
+});
+
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33). Dva garda iz `tests/helpers/analysis-live-guard.ts`:
+ *  - Z31 pokret: list Z33 smije animirati samo transform, opacity i clip-path, bez backdrop-filter.
+ *    Predlozak sam animira `left` i `box-shadow` na drugim ekranima; prepisivanje inline stilova u
+ *    klase je upravo trenutak u kojem se takav literal tiho prenese.
+ *  - Granica lijenog modula: ulaz `/rad/` je tik ispod bundle-guarda (960 KB), pa bi jedan
+ *    staticki uvoz modula Z33 gurnuo njegov kod i CSS u statican graf rute.
+ */
+describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const css = citaj('src/ui/analysis-live/analysis-live.css');
+  const izvori = {
+    'src/ui/progress-scan.ts': citaj('src/ui/progress-scan.ts'),
+    'src/ui/app.ts': citaj('src/ui/app.ts'),
+  };
+
+  it('BASELINE: stvarni list i stvarni ulaz su cisti', () => {
+    expect(motionCssProblems(css)).toEqual([]);
+    expect(liveBoundaryProblems(izvori, 'src/ui/progress-scan.ts')).toEqual([]);
+  });
+
+  it('MUTACIJA: prijelaz sirine (layout u petlji) obara gard', () => {
+    const mutant = css.replace('.z33-slot { display: grid;', '.z33-slot { transition: width .3s; display: grid;');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['transition mijenja width']);
+  });
+
+  it('MUTACIJA: keyframes koji animiraju left (kao predlozak) obaraju gard', () => {
+    const mutant = css.replace('@keyframes z33-caret { 50% { opacity: 0 } }', '@keyframes z33-caret { 50% { opacity: 0; left: 4px } }');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['@keyframes z33-caret animira left']);
+  });
+
+  it('MUTACIJA: backdrop-filter na listu obara gard', () => {
+    const mutant = css.replace('.z33-verdict-wait {', '.z33-verdict-wait { backdrop-filter: blur(4px);');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toContain('backdrop-filter je zabranjen (Z31)');
+  });
+
+  it('MUTACIJA: staticki uvoz modula Z33 u app.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const mutant = { ...izvori, 'src/ui/app.ts': uvoz + '\n' + izvori['src/ui/app.ts'] };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual(['src/ui/app.ts: staticki uvoz ./analysis-live/analysis-live']);
+  });
+
+  it('MUTACIJA: dinamicki uvoz zamijenjen statickim u progress-scan.ts obara gard', () => {
+    const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
+    const dinamicki = "import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null)";
+    const src = izvori['src/ui/progress-scan.ts'];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve(mountAnalysisLive)') };
+    expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual([
+      'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
+      'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
+    ]);
+  });
+});
+
+/**
+ * Z33 COPY (F31, odluka vlasnika 2026-10-04): natpisi gumba na ekranu analize uzivo su doslovno iz
+ * predloska `Analysis.dc.html`; "Preskoči" je jedino zapisano odstupanje. Gard `copyProblems`.
+ */
+describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const modul = citaj('src/ui/analysis-live/analysis-live.ts');
+  const predlozak = citaj('design/templates/analysis/Analysis.dc.html');
+  const ODSTUPANJA = ['Preskoči'];
+
+  it('BASELINE: stvarni kostur i predlozak su cisti', () => {
+    expect(copyProblems(modul, predlozak, ODSTUPANJA)).toEqual([]);
+  });
+
+  it('MUTACIJA: preformuliran natpis plana popravka obara gard', () => {
+    // Natpis koji NIJE podniz predloska ("Napravi plan" bi to bio, pa ne bi bio mutacija copyja).
+    const mutant = modul.replace('>Napravi plan popravka</button>', '>Izradi plan popravka</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, ODSTUPANJA)).toEqual(['natpis "Izradi plan popravka" nije u predlosku']);
+  });
+
+  it('MUTACIJA: odstupanje izbrisano s popisa obara gard', () => {
+    expect(copyProblems(modul, predlozak, [])).toEqual(['natpis "Preskoči" nije u predlosku']);
+  });
+
+  it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
+    expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
   });
 });
 

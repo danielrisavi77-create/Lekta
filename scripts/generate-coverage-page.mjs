@@ -298,7 +298,7 @@ ${legendHtml}
 ${unitGroupsHtml}
 </main>
 <footer>
-<p>Ne vidiš svoju ustanovu ili studij kako očekuješ? Puni izvještaj uvijek jasno pokazuje što je od pravila stvarno provjereno. <a href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="${SITE_ORIGIN}/#top">Provjeri rad</a></p>
+<p>Ne vidiš svoju ustanovu ili studij kako očekuješ? Puni izvještaj uvijek jasno pokazuje što je od pravila stvarno provjereno. <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 </footer>
 </body>
 </html>

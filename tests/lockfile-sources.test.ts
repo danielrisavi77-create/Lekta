@@ -18,7 +18,8 @@ describe('T99: lockfileSourceProblems', () => {
     const real = JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
     const out = lockfileSourceProblems(real);
     expect(out.problems).toEqual([]);
-    expect(out.checked).toBeGreaterThan(1000);
+    // Nakon Popravka A (netlify-cli van) graf ima oko 270 paketa; prag hvata prazan ili skracen lockfile.
+    expect(out.checked).toBeGreaterThan(200);
   });
 
   it('korijen i inBundle s roditeljem koji ga navodi u bundleDependencies nisu prekrsaj', () => {
@@ -75,6 +76,29 @@ describe('T99: lockfileSourceProblems', () => {
       { 'node_modules/a': ok('a'), 'node_modules/w': { link: true } },
     ];
     for (const c of cases) expect(lockfileSourceProblems(lock(c)).problems.length, JSON.stringify(c)).toBeGreaterThan(0);
+  });
+
+  it('tranzitivni i podignuti bundle prolaze, nepotrebni bundled paket pada (Codex runda 2, F2)', () => {
+    const a = { ...ok('a'), bundleDependencies: ['b'] };
+    const b = { version: '1.0.0', inBundle: true, dependencies: { c: '^1.0.0' } };
+    // a -> a/b -> a/b/c
+    expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': b,
+      'node_modules/a/node_modules/b/node_modules/c': { version: '1.0.0', inBundle: true } })).problems).toEqual([]);
+    // c podignut pod vlasnika a, treba ga bundled b
+    expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': b,
+      'node_modules/a/node_modules/c': { version: '1.0.0', inBundle: true } })).problems).toEqual([]);
+    // c koji b ne treba, pod b i pod a
+    for (const key of ['node_modules/a/node_modules/b/node_modules/x', 'node_modules/a/node_modules/x']) {
+      expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': b,
+        [key]: { version: '1.0.0', inBundle: true } })).problems, key).toHaveLength(1);
+    }
+    // ciklus bundled paketa bez veze s deklariranim bundleom (Codex R2 na #274)
+    expect(lockfileSourceProblems(lock({ 'node_modules/a': a, 'node_modules/a/node_modules/b': { version: '1.0.0', inBundle: true },
+      'node_modules/a/node_modules/x': { version: '1.0.0', inBundle: true, dependencies: { y: '1' } },
+      'node_modules/a/node_modules/y': { version: '1.0.0', inBundle: true, dependencies: { x: '1' } } })).problems).toHaveLength(2);
+    // vlasnik bez bundleDependencies ne moze nositi bundle
+    expect(lockfileSourceProblems(lock({ 'node_modules/a': ok('a'), 'node_modules/a/node_modules/b': b,
+      'node_modules/a/node_modules/b/node_modules/c': { version: '1.0.0', inBundle: true } })).problems.length).toBeGreaterThan(0);
   });
 
   it('lockfileVersion mora biti broj 3 (Codex F4)', () => {
