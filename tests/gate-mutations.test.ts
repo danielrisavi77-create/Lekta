@@ -7646,8 +7646,16 @@ const MUTATIONS: Mutation[] = [
     id: 'z36/server-propusta-add-bez-dozvole',
     imitates: 'dozvolu umetanja zapisa provodi samo plan (stanje kruga 1), pa rucno slozen zahtjev za profil '
       + 'bez allowMissingEntryInsertion na serveru umetne predlozak ili korisnikov tekst',
-    caught: () => serverDozvolaProblemi(z36Autoritet('params: allowed ? clientParams : withoutEntryInsertion(clientParams)', 'params: clientParams'), citationEntryInsertionAllowed)
+    caught: () => serverDozvolaProblemi(z36Autoritet('const stripped = withoutEntryInsertion(clientParams);', 'const stripped = clientParams;'), citationEntryInsertionAllowed)
       .some((p) => p.startsWith('dozvola-server:')),
+    cleanBefore: z36DozvolaCista,
+  },
+  {
+    id: 'z36/server-tiho-uklanja-add',
+    imitates: 'server bez dozvole profila ukloni dodani zapis, ali to ne javi u odgovoru (stanje kruga 3), pa '
+      + 'korisnik vidi uspjesan popravak bez zapisa koji je potvrdio i ne zna zasto ga nema',
+    caught: () => serverDozvolaProblemi(z36Autoritet(", ...(stripped !== clientParams ? { skippedActions: [SKIPPED_NO_PERMISSION] } : {})", ''), citationEntryInsertionAllowed)
+      .some((p) => p.startsWith('dozvola-odgovor:')),
     cleanBefore: z36DozvolaCista,
   },
   {

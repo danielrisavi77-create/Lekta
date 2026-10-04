@@ -64,6 +64,7 @@ describe('Z36: dozvola iz profila do pecenog serverskog autoriteta', () => {
     expect(baked).toEqual({ f: FIXER_ID, p: { allowMissingEntryInsertion: true } });
     const resolved = resolveParams(PROFILE_ID, RULE_ID, FIXER_ID, request, { [PROFILE_ID]: { [RULE_ID]: baked! } });
     expect(resolved.params).toEqual(request);
+    expect(resolved.skippedActions).toBeUndefined();
   });
 
   it.each([
@@ -78,5 +79,7 @@ describe('Z36: dozvola iz profila do pecenog serverskog autoriteta', () => {
     const resolved = resolveParams(PROFILE_ID, RULE_ID, FIXER_ID, request, buildParamAuthority(buildRecipe()));
     expect(resolved.params.entries).toEqual([]);
     expect(resolved.params.mappings).toEqual([]);
+    // Krug 4: uklanjanje nije tiho; Edge funkcija ovo vraca u odgovoru kao skippedActions.
+    expect(resolved.skippedActions).toEqual(['zapis literature nije umetnut: profil fakulteta ne dopusta umetanje zapisa']);
   });
 });

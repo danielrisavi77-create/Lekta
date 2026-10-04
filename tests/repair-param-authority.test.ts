@@ -126,4 +126,11 @@ describe('Edge funkcija stvarno koristi autoritet', () => {
   it('odgovor nosi paramSources, da sucelje moze biti posteno o izvoru vrijednosti', () => {
     expect(SERVER).toContain('paramSources');
   });
+
+  it('Z36 krug 4: akcije koje server ukloni (resolveParams.skippedActions) idu u odgovor, u oba uspjesna odgovora', () => {
+    expect(SERVER).toContain('if (resolved.skippedActions?.length) paramSkippedActions[ruleId] =');
+    expect(SERVER).toContain('const skippedActions: Record<string, string[]> = { ...paramSkippedActions };');
+    // Odgovor bez izmjena (RE-32) i odgovor s izmjenama: oba nose polje.
+    expect(SERVER.split('...skippedActionsField').length - 1).toBe(2);
+  });
 });

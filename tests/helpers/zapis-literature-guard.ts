@@ -514,13 +514,19 @@ export function serverDozvolaProblemi(resolve: typeof resolveParams, allowed: ty
   const adds = (params: Record<string, unknown>) => (params.entries as Array<{ action: string }>).filter((entry) => entry.action === 'add').length;
   const kept = resolve('z36-dozvoljen', rule, fixer, syncRequest(), authority);
   if (adds(kept.params) !== 2 || (kept.params.mappings as unknown[]).length !== 2) problems.push('dozvola-server: uz peceni zapis server uklanja dodavanje');
+  if (kept.skippedActions) problems.push('dozvola-odgovor: uz dozvolu odgovor javlja uklonjenu akciju');
   for (const profile of ['z36-bez-dozvole', 'z36-drugi-fixer', 'nepostojeci-profil', null]) {
     const out = resolve(profile, rule, fixer, syncRequest(), authority);
     const mappings = out.params.mappings as Array<{ bibliographyEntryId: string }>;
     if (adds(out.params) !== 0) problems.push(`dozvola-server: ${String(profile)} propusta 'add'`);
     if (mappings.some((mapping) => mapping.bibliographyEntryId === 'e1') || mappings.length !== 1 || (out.params.entries as unknown[]).length !== 1) problems.push(`dozvola-server: ${String(profile)} ne cuva ostatak zahtjeva`);
     if (out.source !== 'client') problems.push(`dozvola-server: ${String(profile)} mijenja izvor parametara`);
+    // Krug 4: uklanjanje nije tiho, odgovor ga javlja (Edge funkcija ga vraca kao skippedActions).
+    if (!out.skippedActions?.some((note) => note.includes('nije umetnut'))) problems.push(`dozvola-odgovor: ${String(profile)} tiho uklanja 'add' (${JSON.stringify(out.skippedActions)})`);
   }
+  // Zahtjev bez 'add' nema sto javiti.
+  const withoutAdd = resolve('z36-bez-dozvole', rule, fixer, { ...syncRequest(), entries: syncRequest().entries.filter((entry) => entry.action !== 'add') }, authority);
+  if (withoutAdd.skippedActions) problems.push('dozvola-odgovor: zahtjev bez dodavanja javlja uklonjenu akciju');
   // Peceni zapis drugog pravila istog profila ne otvara dozvolu.
   if (adds(resolve('z36-dozvoljen', 'drugo-pravilo', fixer, syncRequest(), authority).params) !== 0) problems.push('dozvola-server: dozvola vrijedi i za drugo pravilo');
 
