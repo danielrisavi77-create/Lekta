@@ -45,6 +45,41 @@ Ovo su kvarovi koje git povijest ne pokazuje jer su se dogodili u procesu rada, 
 26. **Lockfile i tooling lanac u punom audit grafu.** Alat koji sluzi samo rucnoj objavi (netlify-cli) ne treba biti devDependency: svaki njegov tranzitivni advisory crveni sve PR-ove. Pinani `npx <paket>@<verzija>` pri objavi.
 27. **Tokeni koordinatora idu na citanje, ne na izvrsavanje.** Prije otvaranja PR-a `npm run pr-intake -- <broj>` (20 redaka) umjesto 3 do 4 gh poziva; Codex izlaz citaj iz tablice nalaza, ne cijeli; brief ide u datoteku, ne u naredbeni redak (hook cpu-discipline reagira na rijeci vitest/playwright u tekstu naredbe).
 
+## Samoprovjera prije prve Codex runde (4. 10. 2026: 8 od 10 PR-ova palo je u rundi 1 na ovim klasama)
+
+Implementator prije otvaranja PR-a prodje ovaj popis i u opisu PR-a navede sto je provjerio. Svaka stavka je
+stvarni nalaz iz jednog dana (#282, #284, #285, #287, #289, #291, #294):
+
+1. **Nepoznato je fail-closed.** `x === true` nije isto sto i `x !== false`: `undefined` ili `null` iz vanjskog
+   servisa (Auth `is_anonymous`, `count` iz upita, greska RPC-a) ne smije postati "dopusteno". Fallback na
+   stariji put samo na potvrdjen uzrok (npr. funkcija ne postoji, `42883`/`PGRST202`), nikad na svaku gresku.
+2. **Mutacija mijenja IZVOR, ne ulaz ni omotac.** Mutant koji prepisuje rezultat nakon stvarnog poziva, podmece
+   testni predikat ili mijenja fixture ne dokazuje nista. Mutiraj produkcijski modul u memoriji (esbuild ili
+   `stripTypeScriptTypes` s fallbackom za Node 20) i izvrsi mutiranu funkciju; baseline cist prije i poslije.
+3. **Gard trazi tocnu vrijednost, ne "bilo koji broj".** `CORPUS_TITLE_MAX = \d+` prolazi i za 5000; gard mora
+   tvrditi `=== 400` i neovisno mjeriti izlaz (kljucevi `<= 400`). Isto za `includes()` nad izvorom: zakomentiran
+   redak i dalje "postoji"; izvrsi stvarni blok i mjeri `fail`.
+4. **Svojstvo nije vakuumsko.** Generator proizvodi VALJAN ulaz (OPC kostur, relacije), svaki fixer iz recepta
+   dokazano se primijenio (kvota po fixeru, ne "dokument se promijenio"), usporedba obuhvaca SVE dijelove paketa, a
+   svako svojstvo ima vlastitu negativnu kontrolu koja obara bas njega.
+5. **Popravak parsera dolazi s negativnim kontrolama za susjedne oblike.** Svaka runda na #285 nasla je novu
+   regresiju: kratki autor nestaje, dva nepotpuna zapisa spojena u "potpun", broj u naslovu kao godina. Prije
+   PR-a napisi tri do pet oblika koje popravak NE smije dirati i dodaj ih u test.
+6. **Rezanje ili normalizacija za dohvat ne smije dirati vrijednost za bodovanje.** Kljuc za RPC i naslov za
+   presudu su dvije varijable; reze se po code pointima nakon normalizacije.
+7. **Lokator citata imenuje stvarni redak.** Citat u zajednickom odjeljku ne smije nositi lokator odjeljka
+   programa; "strucni studij" ne odredjuje vrstu rada. Sto nije dokazano, ostaje `identity-evidence-needed`.
+8. **Baza:** `ALTER FUNCTION ... OWNER TO` uz SECURITY DEFINER, CHECK se zamjenjuje samo po poznatoj definiciji iz
+   kataloga (vec nova definicija = no-op), rezultat svakog upisa dnevnika se provjerava, novi statusi ne trose cap
+   drugog potrosaca iste tablice, `NULL` identitet se odbija.
+
+## Pregled drugog providera: koliko rundi
+
+Odluka vlasnika 4. 10. 2026: zasticene staze (`src/repair`, `src/citations`, `src/docx`, `supabase`, sigurnost,
+`data/profiles` i pravila) najvise 2 Codex runde; rundu 3 koordinator cita sam i prihvaca samo stvarne regresije.
+UI, docs, testni pomagaci i CI skripte: najvise 1 runda, docs bez Codexa. Nalaz izvan modela prijetnje (nas
+vlastiti generirani artefakt, ne korisnicki ulaz) je info, ne major; recenzent to dobiva u promptu.
+
 ## Git i izolacija
 - Pisanje samo u vlastitom worktreeu ili klonu, jedan pisac po stablu.
 - Prije commita: `git diff --stat -- <putanje>`, `git diff --cached --stat -- <putanje>`, `npm run orphan-scan`.
