@@ -64,10 +64,24 @@ function fokusNaPresudu(): void {
   h.focus({ preventScroll: true });
 }
 
+const ULAZ_U_POPRAVAK = '#resultCockpit [data-cockpit-primary][data-cockpit-action="repair-safe"]';
+
 /** Ulaz u plan popravka: primarni gumb kokpita kad nosi `repair-safe`, inace samo presuda. */
 function otvoriPlan(): void {
-  const gumb = document.querySelector<HTMLButtonElement>('#resultCockpit [data-cockpit-primary][data-cockpit-action="repair-safe"]');
+  const gumb = document.querySelector<HTMLButtonElement>(ULAZ_U_POPRAVAK);
   if (gumb && !gumb.disabled) gumb.click();
+  else fokusNaPresudu();
+}
+
+/**
+ * Fokus (ne klik) na isti ulaz u popravak: fokus je bio na "Napravi plan popravka" kad je
+ * otkrivanje zavrsilo samo od sebe, pa ga dobiva gumb s istom radnjom na ekranu rezultata.
+ */
+function fokusNaPlan(): void {
+  const a = document.activeElement;
+  if (a && a !== document.body && !a.closest('#progressView')) return;
+  const gumb = document.querySelector<HTMLButtonElement>(ULAZ_U_POPRAVAK);
+  if (gumb && !gumb.disabled) gumb.focus({ preventScroll: true });
   else fokusNaPresudu();
 }
 
@@ -93,6 +107,8 @@ function skeleton(): HTMLElement {
   const root = el('div', 'z33');
   root.innerHTML = [
     '<section class="z33-desk">',
+    // JEDINA ziva regija ekrana (Z33-06): jedna cjelovita recenica kad rezultat stigne, nikad slovo po slovo.
+    '<p class="sr-only" data-z33="najava" aria-live="polite"></p>',
     '<div class="z33-col" aria-hidden="true">',
     '<div class="z33-status"><span data-z33="status"></span><span data-z33="pages"></span></div>',
     '<div class="z33-sheetrow">',
@@ -134,13 +150,14 @@ function skeleton(): HTMLElement {
 export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   const root = skeleton();
   const q = (name: string): HTMLElement => root.querySelector(`[data-z33="${name}"]`) as HTMLElement;
-  const sidro = view.querySelector('.pv-local');
-  if (sidro) sidro.before(root); else view.append(root);
   // Ekran provjere je `role=status` s `aria-live`; tipkanje presude i ispis nalaza u njemu bi se
-  // citali slovo po slovo. Recenicu za citac i dalje nosi samo `#progressMessage`.
+  // citali slovo po slovo. Recenicu faze nosi `#progressMessage`, a rezultat jedna najava u kosturu.
+  // Live se gasi PRIJE umetanja kostura, da ni sam kostur ne bude procitan kao promjena (Z33-06).
   view.setAttribute('aria-live', 'off');
   const poruka = view.querySelector('#progressMessage');
   poruka?.setAttribute('aria-live', 'polite');
+  const sidro = view.querySelector('.pv-local');
+  if (sidro) sidro.before(root); else view.append(root);
   view.dataset.z33 = '';
 
   const notifyBtn = q('notify') as HTMLButtonElement;
@@ -369,6 +386,17 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
 
   // Sva tri izlaza zavrsavaju otkrivanje odmah (zavrsno stanje, rezultat preuzima ekran); razlikuju
   // se samo po tome sto se dogodi kad je ekran rezultata gotov.
+  /**
+   * Fokus `a` je bio u odlaznom ekranu provjere (bilo koji gumb: "Preskoči", obavijest, "Pregledaj
+   * nalaze", plan, "Prekini") kad je otkrivanje zavrsilo samo od sebe. Ekran se sakrije i fokus bi
+   * pao na `body`; zato ide na odgovarajucu kontrolu rezultata kad je rezultat spreman (Z33-07).
+   */
+  const cuvajFokus = (a: Element | null): void => {
+    if (!a || a === document.body || !view.contains(a)) return;
+    cekaRezultat();
+    cekaRezultat = poSpremnostiRezultata(a === planBtn ? fokusNaPlan : fokusNaPresudu);
+  };
+
   const izadji = (kamo: Izlaz): void => {
     if (!finish) return;
     cekaRezultat();
@@ -390,6 +418,7 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       const p = profileText(profile);
       setText(q('profile'), p.name);
       setText(q('source'), p.source);
+      setText(q('najava'), '');
       apply(readingFrame(0), null);
     },
     progress(pct) {
@@ -412,9 +441,14 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       ring.style.setProperty('--z33-ring', String(plan.score ?? 0));
       setText(q('ringnum'), plan.score == null ? '' : String(plan.score));
       const nalazi = revealFrame(plan, Infinity, wide).scoreNote;
+      // Jedna cjelovita najava za citac zaslona, upisana jednom (Z33-06).
+      const ocjena = plan.score == null ? '' : `, ocjena forme ${plan.score}`;
+      setText(q('najava'), `Provjera je gotova. ${plan.verdict}${ocjena}. ${plan.summary}`);
       // Zavrsno stanje odmah: prigusen pokret ili kartica koju nitko ne gleda.
       if (pokretPrigusen(document) || document.hidden) {
+        const fokus = document.activeElement;
         apply(revealFrame(plan, Infinity, wide), plan);
+        cuvajFokus(fokus);
         ping(plan.score, nalazi);
         return Promise.resolve();
       }
@@ -431,14 +465,11 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
         finish = (prirodno) => {
           document.removeEventListener('visibilitychange', onHidden);
           for (const d of SKROL_DOGADAJI) window.removeEventListener(d, onUserScroll);
-          // Fokus je bio na gumbu koji sad nestaje (otkrivanje je zavrsilo samo od sebe): bez ovoga
-          // pada na `body`. Klik vec ceka spremnost rezultata u `izadji`.
-          const fokusNestaje = prirodno && !rucniIzlaz && (document.activeElement === skipBtn || document.activeElement === notifyBtn);
+          // Otkrivanje je zavrsilo samo od sebe: fokus se cita PRIJE crtanja zavrsnog stanja, jer
+          // skriveni gumb gubi fokus. Klik vec ceka spremnost rezultata u `izadji`.
+          const fokus = prirodno && !rucniIzlaz ? document.activeElement : null;
           apply(revealFrame(plan, Infinity, wide), plan);
-          if (fokusNestaje) {
-            cekaRezultat();
-            cekaRezultat = poSpremnostiRezultata(fokusNaPresudu);
-          }
+          cuvajFokus(fokus);
           if (prirodno) ping(plan.score, nalazi);
           resolve();
         };

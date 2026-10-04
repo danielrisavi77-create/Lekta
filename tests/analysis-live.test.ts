@@ -807,3 +807,126 @@ describe('Z33-01, Z33-05 i Z33-12: osigurac otkrivanja i skrol', () => {
     expect(skrol).not.toHaveBeenCalled();
   });
 });
+
+describe('Z33-06 i Z33-07: najava za citac i fokus na kraju', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+
+  it('Z33-06: jedna sazeta polite najava (presuda, ocjena, nalazi), upisana jednom; tipkanje nije u live regiji', async () => {
+    const { v } = ekran();
+    const result = sampleResult();
+    const plan = buildLivePlan(result);
+    const h = mountAnalysisLive(v);
+    const root = v.querySelector<HTMLElement>('.z33')!;
+    vi.useFakeTimers();
+    h.start(null);
+    const zivi = (): HTMLElement[] => [...root.querySelectorAll<HTMLElement>('[aria-live], [role="status"], [role="alert"]')]
+      .filter((e) => e.getAttribute('aria-live') !== 'off');
+    expect(zivi(), 'tocno jedna live regija u Z33').toHaveLength(1);
+    const najava = zivi()[0];
+    expect(najava.closest('[aria-hidden="true"]'), 'najava ne smije biti skrivena od citaca').toBeNull();
+    const upisi: string[] = [];
+    const obs = new MutationObserver(() => { if (najava.textContent) upisi.push(najava.textContent); });
+    obs.observe(najava, { childList: true, characterData: true, subtree: true });
+    const p = h.reveal(result);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    await Promise.resolve();
+    obs.disconnect();
+    expect(upisi, 'najava se upisuje jednom, ne po slovu ni po nalazu').toHaveLength(1);
+    expect(upisi[0]).toContain(plan.verdict);
+    expect(upisi[0]).toContain(`ocjena forme ${result.score}`);
+    expect(upisi[0]).toContain(plan.summary);
+    // Ono sto se tipka (presuda, naslovi nalaza) nije ni u jednoj zivoj regiji.
+    const uzivoPredak = (el: Element): string | null => {
+      for (let n: Element | null = el; n; n = n.parentElement) if (n.hasAttribute('aria-live')) return n.getAttribute('aria-live');
+      return null;
+    };
+    expect(uzivoPredak(root.querySelector('[data-z33="verdicttext"]')!)).toBe('off');
+    expect(uzivoPredak(root.querySelector('[data-z33="slots"]')!)).toBe('off');
+  });
+
+  it('Z33-06: veliki kostur ulazi tek kad je ekran provjere vec ugasio aria-live', () => {
+    const { v } = ekran();
+    const obs = new MutationObserver(() => {});
+    obs.observe(v, { childList: true, attributes: true, attributeFilter: ['aria-live'], attributeOldValue: true });
+    mountAnalysisLive(v);
+    const zapisi = obs.takeRecords();
+    obs.disconnect();
+    const umetanje = zapisi.findIndex((z) => z.type === 'childList' && [...z.addedNodes].some((n) => (n as Element).classList?.contains('z33')));
+    const gasenje = zapisi.findIndex((z) => z.type === 'attributes' && z.oldValue === 'polite');
+    expect(umetanje).toBeGreaterThanOrEqual(0);
+    expect(gasenje).toBeGreaterThanOrEqual(0);
+    expect(gasenje, 'kostur je umetnut dok je roditelj jos bio polite regija').toBeLessThan(umetanje);
+  });
+
+  for (const [ime, sel] of [['Pregledaj nalaze', '[data-z33="open"]'], ['Prekini', '#cancelAnalysisBtn']] as const) {
+    it(`Z33-07: fokus na "${ime}" kad otkrivanje zavrsi samo od sebe ide na presudu rezultata`, async () => {
+      const { v, rv, primarni } = ekran();
+      const h = mountAnalysisLive(v);
+      vi.useFakeTimers();
+      h.start(null);
+      const p = h.reveal(sampleResult());
+      await vi.advanceTimersByTimeAsync(50);
+      v.querySelector<HTMLButtonElement>(sel)!.focus();
+      expect(document.activeElement).toBe(v.querySelector(sel));
+      await vi.advanceTimersByTimeAsync(10_000);
+      await p;
+      await spremnost(rv);
+      expect(document.activeElement?.id).toBe('cockpitVerdictTitle');
+      expect(primarni).not.toHaveBeenCalled();
+    });
+  }
+
+  it('Z33-07: fokus na "Napravi plan popravka" na prirodnom kraju ide na ulaz u popravak, bez klika', async () => {
+    const { v, rv, primarni } = ekran();
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const p = h.reveal(sampleResult());
+    await vi.advanceTimersByTimeAsync(50);
+    const plan = v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!;
+    plan.focus();
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    await spremnost(rv);
+    expect(document.activeElement).toBe(rv.querySelector('[data-cockpit-primary]'));
+    expect(primarni, 'fokus nije klik: plan se ne pokrece sam').not.toHaveBeenCalled();
+  });
+
+  it('Z33-07: pod prigusenim pokretom fokus s ponude obavijesti ne pada na body', async () => {
+    class FakeNotification { static permission: NotificationPermission = 'default'; static requestPermission = async () => 'granted' as NotificationPermission; }
+    vi.stubGlobal('Notification', FakeNotification);
+    document.documentElement.dataset.motion = 'reduce';
+    const { v, rv } = ekran();
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const notify = v.querySelector<HTMLButtonElement>('[data-z33="notify"]')!;
+    notify.focus();
+    expect(document.activeElement).toBe(notify);
+    await h.reveal(sampleResult());
+    await spremnost(rv);
+    expect(document.activeElement?.id).toBe('cockpitVerdictTitle');
+  });
+
+  it('Z33-07 KONTROLA: fokus izvan ekrana provjere ostaje gdje jest', async () => {
+    const { v, rv } = ekran();
+    const drugi = document.createElement('input');
+    document.body.append(drugi);
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const p = h.reveal(sampleResult());
+    drugi.focus();
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    await spremnost(rv);
+    expect(document.activeElement).toBe(drugi);
+  });
+});
