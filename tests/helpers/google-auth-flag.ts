@@ -14,24 +14,44 @@ function lines(text: string): string[] {
   return text.replace(/\r/g, '').split('\n');
 }
 
+/** TOML redak bez komentara: `#` izvan navodnika (jednostrukih ili dvostrukih) zapocinje komentar. */
+function tomlBezKomentara(line: string): string {
+  let quote: string | null = null;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (quote) {
+      if (c === '\\' && quote === '"') i++;
+      else if (c === quote) quote = null;
+    } else if (c === '"' || c === "'") quote = c;
+    else if (c === '#') return line.slice(0, i);
+  }
+  return line;
+}
+
 export function googleFlagProblems(netlifyToml: string, envExample: string): string[] {
   const problems: string[] = [];
 
+  // Bilo koje pojavljivanje imena izvan komentara: gol, "dvostruko" ili 'jednostruko' citiran
+  // kljuc, tockasti kljuc (environment.X) i inline tablica ({ X = "true" }). Fail-closed: i
+  // spominjanje u vrijednosti je nalaz, jer zastavica u netlify.toml nema legitimnu upotrebu.
   for (const [i, raw] of lines(netlifyToml).entries()) {
-    const line = raw.trim();
-    if (line.startsWith('#')) continue;
-    if (new RegExp(`^"?${FLAG}"?\\s*=`).test(line)) {
+    if (tomlBezKomentara(raw).includes(FLAG)) {
       problems.push(`netlify.toml:${i + 1} dodjeljuje ${FLAG}; ukljucivanje je vlasnikova odluka izvan repozitorija`);
     }
   }
 
   const env = lines(envExample);
-  const idx = env.findIndex((l) => new RegExp(`^${FLAG}=`).test(l.trim()));
-  if (idx < 0) {
+  const dodjela = new RegExp(`^\\s*(?:export\\s+)?${FLAG}\\s*=(.*)$`);
+  const pogodci = env.map((l, i) => ({ i, m: dodjela.exec(l) })).filter((x) => x.m);
+  if (pogodci.length === 0) {
     problems.push(`.env.example ne dokumentira ${FLAG}`);
   } else {
-    const value = env[idx].trim().slice(FLAG.length + 1).trim();
-    if (value !== '') problems.push(`.env.example postavlja ${FLAG}=${value}; primjer mora biti iskljucen (prazno)`);
+    if (pogodci.length > 1) problems.push(`.env.example dodjeljuje ${FLAG} ${pogodci.length} puta; dopusten je tocno jedan unos`);
+    for (const { m } of pogodci) {
+      const value = m![1].replace(/\s+#.*$/, '').trim().replace(/^(['"])(.*)\1$/, '$2');
+      if (value !== '') problems.push(`.env.example postavlja ${FLAG}=${value}; primjer mora biti iskljucen (prazno)`);
+    }
+    const idx = pogodci[0].i;
     const comment = env.slice(Math.max(0, idx - 6), idx).filter((l) => l.trim().startsWith('#')).join('\n');
     if (!comment.includes('[klijent]')) problems.push(`.env.example: ${FLAG} nema oznaku [klijent] u komentaru iznad`);
   }
@@ -90,5 +110,15 @@ export async function pkceContractProblems(complete: Complete, maxAgeMs: number)
   const prvi = await complete(cfg, '?code=x', { store: jednom, fetchImpl: f, now: 1_500 });
   if (!prvi?.ok || calls !== 1) problems.push('valjan povratak nije zamijenjen tocno jednim pozivom');
   if (jednom.value() !== null) problems.push('verifier nije potrosen');
+
+  // Identitet (Codex R3 na #307): odgovor bez `user` i anonimni korisnik nisu uspjeh.
+  for (const [ime, tijelo] of [
+    ['bez user', { access_token: 'a', refresh_token: 'r', expires_in: 3600 }],
+    ['anonimni korisnik', { ...body, user: { id: 'u', email: '', is_anonymous: true } }],
+  ] as const) {
+    const g = (async () => ({ ok: true, status: 200, json: async () => tijelo })) as unknown as typeof fetch;
+    const r = await complete(cfg, '?code=x', { store: mk(p), fetchImpl: g, now: 1_500 });
+    if (!r || r.ok) problems.push(`odgovor ${ime} prihvacen kao prijava`);
+  }
   return problems;
 }

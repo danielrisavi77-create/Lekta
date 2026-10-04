@@ -16,20 +16,7 @@
  * je dijeljen s Katedrom (uri_allow_list).
  */
 import { parseTokenResponse, type AuthConfig, type SessionResult } from './session';
-
-/** Verifier stariji od ovoga ne vrijedi: povratak s Googlea traje sekunde, ne sate. */
-export const PKCE_MAX_AGE_MS = 10 * 60_000;
-
-export interface PendingPkce {
-  verifier: string;
-  createdAt: number;
-}
-
-/** Jednokratna pohrana verifiera (app.ts: safeStorageGet/Set; testovi: memorija). */
-export interface PkceStore {
-  load(): PendingPkce | null;
-  save(value: PendingPkce | null): void;
-}
+import { callbackFrom, MAX_RETURN_HASH, readPending, PKCE_MAX_AGE_MS, type PkceStore } from './google-callback';
 
 function trimUrl(url: string): string {
   return url.replace(/\/+$/, '');
@@ -68,14 +55,37 @@ export function googleRedirectTo(loc: { origin: string; pathname: string }): str
   return loc.origin + loc.pathname;
 }
 
-/** Pokreni prijavu: spremi verifier pa preusmjeri preglednik na GoTrue `/authorize`. */
+/**
+ * Pokreni prijavu: spremi verifier (i fragment za povratak) pa preusmjeri preglednik na GoTrue
+ * `/authorize`. Vraca `false` bez navigacije ako pohrana nije prihvatila zapis (Codex R6 na #307).
+ */
 export async function startGoogleSignIn(
   cfg: AuthConfig,
-  opts: { redirectTo: string; store: PkceStore; assign: (url: string) => void; now?: number; cryptoImpl?: Crypto },
-): Promise<void> {
+  opts: { redirectTo: string; store: PkceStore; assign: (url: string) => void; now?: number; cryptoImpl?: Crypto; returnHash?: string },
+): Promise<boolean> {
   const { verifier, challenge } = await createPkcePair(opts.cryptoImpl);
-  opts.store.save({ verifier, createdAt: opts.now ?? Date.now() });
+  const hash = typeof opts.returnHash === 'string' && opts.returnHash.startsWith('#') && opts.returnHash.length <= MAX_RETURN_HASH
+    ? opts.returnHash
+    : undefined;
+  const saved = opts.store.save({ verifier, createdAt: opts.now ?? Date.now(), ...(hash ? { returnHash: hash } : {}) });
+  if (saved === false || readPending(opts.store)?.verifier !== verifier) return false;
   opts.assign(googleAuthorizeUrl(cfg, opts.redirectTo, challenge));
+  return true;
+}
+
+/**
+ * Identitet iz GoTrue odgovora mora biti stvaran Google korisnik: id, e-mail, oba tokena i
+ * `is_anonymous` koji nije `true`. Odgovor bez `user` ili anonimni korisnik je neuspjeh (Codex R3).
+ */
+function verifiedIdentity(raw: unknown): boolean {
+  const data = (raw ?? {}) as Record<string, unknown>;
+  const user = data.user as Record<string, unknown> | undefined;
+  return !!user
+    && typeof user.id === 'string' && user.id.length > 0
+    && typeof user.email === 'string' && user.email.length > 0
+    && user.is_anonymous !== true
+    && typeof data.access_token === 'string' && data.access_token.length > 0
+    && typeof data.refresh_token === 'string' && data.refresh_token.length > 0;
 }
 
 /**
@@ -86,15 +96,14 @@ export async function startGoogleSignIn(
 export async function completeGoogleSignIn(
   cfg: AuthConfig,
   search: string,
-  opts: { store: PkceStore; fetchImpl?: typeof fetch; now?: number },
+  opts: { store: PkceStore; fetchImpl?: typeof fetch; now?: number; hash?: string },
 ): Promise<SessionResult | null> {
-  const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
-  const code = params.get('code');
-  const error = params.get('error');
-  if (!code && !error) return null;
+  const cb = callbackFrom(search, opts.hash ?? '');
+  if (!cb) return null;
+  const { code, error } = cb;
 
   const now = opts.now ?? Date.now();
-  const pending = opts.store.load();
+  const pending = readPending(opts.store);
   if (!pending || typeof pending.verifier !== 'string' || !pending.verifier) return null;
   opts.store.save(null);
   if (!(now - pending.createdAt >= 0 && now - pending.createdAt <= PKCE_MAX_AGE_MS)) {
@@ -110,18 +119,13 @@ export async function completeGoogleSignIn(
       body: JSON.stringify({ auth_code: code, code_verifier: pending.verifier }),
     });
     if (!res.ok) return { ok: false, message: 'prijava Googleom nije uspjela' };
-    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
+    const raw = await res.json().catch(() => ({}));
+    if (!verifiedIdentity(raw)) return { ok: false, message: 'nevaljan identitet u odgovoru poslužitelja' };
+    const session = parseTokenResponse(raw, now);
     return session ? { ok: true, session } : { ok: false, message: 'nevaljan odgovor poslužitelja' };
   } catch {
     return { ok: false, message: 'mrežna pogreška pri prijavi' };
   }
-}
-
-/** Ukloni `code`, `error`, `error_description` i `state` iz URL-a da se povratak ne obradi dvaput. */
-export function cleanedCallbackUrl(href: string): string {
-  const url = new URL(href);
-  for (const k of ['code', 'error', 'error_code', 'error_description', 'state']) url.searchParams.delete(k);
-  return url.pathname + url.search + url.hash;
 }
 
 export const GOOGLE_BUTTON_ID = 'authGoogle';

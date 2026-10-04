@@ -299,7 +299,8 @@ import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 import { flagContractProblems, googleFlagProblems, pkceContractProblems } from './helpers/google-auth-flag';
 import * as sessionModul from '../src/auth/session';
-import { PKCE_MAX_AGE_MS } from '../src/auth/google-oauth';
+import * as googleCallbackModul from '../src/auth/google-callback';
+import { PKCE_MAX_AGE_MS } from '../src/auth/google-callback';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -9979,6 +9980,33 @@ describe('mutacije: T102 zastavica prijave Googleom ostaje izvan repozitorija', 
     const bezOznake = env.replace('# [klijent] Prijava Googleom', '# Prijava Googleom');
     expect(googleFlagProblems(toml, bezOznake)).toEqual(['.env.example: VITE_AUTH_GOOGLE_ENABLED nema oznaku [klijent] u komentaru iznad']);
   });
+
+  it('mutant: svaki TOML oblik kljuca se hvata (jednostruko citiran, tockasti, inline tablica, iza komentara u istom retku)', () => {
+    const oblici = [
+      `[context.production.environment]\n  'VITE_AUTH_GOOGLE_ENABLED' = "true"`,
+      `[context.production]\n  environment.VITE_AUTH_GOOGLE_ENABLED = "true"`,
+      `[context.production]\n  environment = { VITE_AUTH_GOOGLE_ENABLED = "true" }`,
+      `[build.environment]\n  "VITE_AUTH_GOOGLE_ENABLED"="1" # tiho ukljuceno`,
+    ];
+    for (const o of oblici) {
+      expect(googleFlagProblems(`${toml}\n${o}\n`, env).filter((p) => p.startsWith('netlify.toml:')), o).toHaveLength(1);
+    }
+    // Negativna kontrola: ime u komentaru iza vrijednosti nije dodjela, a # unutar navodnika nije komentar.
+    expect(googleFlagProblems(`${toml}\nX = "a#b" # VITE_AUTH_GOOGLE_ENABLED nije ovdje\n`, env)).toEqual([]);
+  });
+
+  it('mutant: .env.example s drugim unosom, export oblikom ili citiranom vrijednoscu se hvata', () => {
+    const drugi = `${env}\nVITE_AUTH_GOOGLE_ENABLED=true\n`;
+    expect(googleFlagProblems(toml, drugi)).toEqual([
+      '.env.example dodjeljuje VITE_AUTH_GOOGLE_ENABLED 2 puta; dopusten je tocno jedan unos',
+      '.env.example postavlja VITE_AUTH_GOOGLE_ENABLED=true; primjer mora biti iskljucen (prazno)',
+    ]);
+    expect(googleFlagProblems(toml, env.replace('VITE_AUTH_GOOGLE_ENABLED=', 'export VITE_AUTH_GOOGLE_ENABLED = "1"'))).toEqual([
+      '.env.example postavlja VITE_AUTH_GOOGLE_ENABLED=1; primjer mora biti iskljucen (prazno)',
+    ]);
+    // Negativna kontrola: prazna citirana vrijednost je i dalje iskljucena.
+    expect(googleFlagProblems(toml, env.replace('VITE_AUTH_GOOGLE_ENABLED=', 'VITE_AUTH_GOOGLE_ENABLED=""'))).toEqual([]);
+  });
 });
 
 describe('mutacije: T102 izvor prijave Googleom (zastavica fail-closed, PKCE povratak)', () => {
@@ -9990,7 +10018,7 @@ describe('mutacije: T102 izvor prijave Googleom (zastavica fail-closed, PKCE pov
     if (od !== u) expect(mutiran, `zamjena nije pogodila izvor: ${od}`).not.toBe(izvor);
     const { code } = esbuild.transformSync(mutiran, { loader: 'ts', format: 'cjs' });
     const modul: { exports: Record<string, unknown> } = { exports: {} };
-    const uvozi: Record<string, unknown> = { './session': sessionModul };
+    const uvozi: Record<string, unknown> = { './session': sessionModul, './google-callback': googleCallbackModul };
     const zahtjev = (ime: string): unknown => {
       if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
       return uvozi[ime];
@@ -10021,6 +10049,11 @@ describe('mutacije: T102 izvor prijave Googleom (zastavica fail-closed, PKCE pov
   it('mutant: verifier koji se ne trosi (visekratni povratak) se hvata', async () => {
     const m = povratak('  if (!pending || typeof pending.verifier !== \'string\' || !pending.verifier) return null;\n  opts.store.save(null);', '  if (!pending || typeof pending.verifier !== \'string\' || !pending.verifier) return null;');
     expect(await pkceContractProblems(m, PKCE_MAX_AGE_MS)).toEqual(['verifier nije potrosen']);
+  });
+
+  it('mutant: povratak bez provjere identiteta (Codex R3 na #307) se hvata', async () => {
+    const m = povratak("    if (!verifiedIdentity(raw)) return { ok: false, message: 'nevaljan identitet u odgovoru poslužitelja' };\n", '');
+    expect(await pkceContractProblems(m, PKCE_MAX_AGE_MS)).toEqual(['odgovor bez user prihvacen kao prijava', 'odgovor anonimni korisnik prihvacen kao prijava']);
   });
 });
 

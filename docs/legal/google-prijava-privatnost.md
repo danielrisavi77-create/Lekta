@@ -28,8 +28,10 @@ primatelja").
 
 - Tok je OAuth 2.0 s PKCE (`src/auth/google-oauth.ts`): preglednik ide na Supabase
   `/auth/v1/authorize?provider=google`, a Supabase dalje na Google.
-- Lekta u pregledniku sprema samo jednokratni PKCE verifier (`lekta.oauth.pkce`, najvise 10 minuta)
-  i istu sesiju `lekta.session` kao kod prijave e-mailom.
+- Lekta u pregledniku sprema samo jednokratni PKCE verifier i fragment stranice s koje je prijava
+  pokrenuta (`lekta.oauth.pkce`), te istu sesiju `lekta.session` kao kod prijave e-mailom. Verifier
+  vrijedi 10 minuta. Brise se pri povratku s Googlea, a ako se korisnik ne vrati, pri sljedecem
+  otvaranju `/rad/` nakon isteka. Do tada ostaje u pregledniku (nije osobni podatak, nego slucajan niz).
 - Google Identity Services ni ikakva Googleova skripta ne ucitavaju se na Lektinim stranicama. Zato
   CSP ne treba nove domene.
 - Supabase Auth je dijeljen s Katedrom (`uri_allow_list`), pa ukljucivanje providera ide uskladjeno.

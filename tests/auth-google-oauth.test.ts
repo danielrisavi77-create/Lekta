@@ -7,17 +7,21 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { googleAuthEnabled } from '../src/auth/google-flag';
 import {
-  cleanedCallbackUrl,
   completeGoogleSignIn,
   createPkcePair,
   GOOGLE_BUTTON_ID,
   googleRedirectTo,
   mountGoogleButton,
-  PKCE_MAX_AGE_MS,
   startGoogleSignIn,
+} from '../src/auth/google-oauth';
+import {
+  callbackFrom,
+  cleanedCallbackUrl,
+  clearExpiredPkce,
+  PKCE_MAX_AGE_MS,
   type PendingPkce,
   type PkceStore,
-} from '../src/auth/google-oauth';
+} from '../src/auth/google-callback';
 import { verifyEmailOtp } from '../src/auth/session';
 import { flagContractProblems, pkceContractProblems } from './helpers/google-auth-flag';
 
@@ -195,5 +199,68 @@ describe('PKCE povratak', () => {
   it('cleanedCallbackUrl uklanja samo parametre povratka', () => {
     expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a&ref=r&error_description=x#odjeljak')).toBe('/rad/?ref=r#odjeljak');
     expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a')).toBe('/rad/');
+  });
+});
+
+describe('Codex runda 1 na #307: pohrana, fragment i istek', () => {
+  it('R6: kad pohrana odbije zapis, prijava se ne pokrece i nema navigacije', async () => {
+    let target = '';
+    const odbija: PkceStore = { load: () => null, save: () => false };
+    const ok = await startGoogleSignIn(CFG, { redirectTo: 'https://lekta.hr/rad/', store: odbija, assign: (u) => { target = u; } });
+    expect(ok).toBe(false);
+    expect(target).toBe('');
+  });
+
+  it('R2: fragment iz trenutka pokretanja sprema se uz verifier, a redirect_to ga ne nosi', async () => {
+    const store = memPkce();
+    let target = '';
+    const ok = await startGoogleSignIn(CFG, { redirectTo: 'https://lekta.hr/rad/', store, returnHash: '#session=abc', assign: (u) => { target = u; } });
+    expect(ok).toBe(true);
+    expect(store.value()!.returnHash).toBe('#session=abc');
+    expect(new URL(target).searchParams.get('redirect_to')).toBe('https://lekta.hr/rad/');
+    const nevaljan = memPkce();
+    await startGoogleSignIn(CFG, { redirectTo: 'x', store: nevaljan, returnHash: 'session=bez-ljestvi', assign: () => {} });
+    expect(nevaljan.value()!.returnHash).toBeUndefined();
+  });
+
+  it('R2/R5: cleanedCallbackUrl vraca spremljeni fragment i brise gresku iz fragmenta', () => {
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a', '#session=abc')).toBe('/rad/#session=abc');
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/#error=access_denied&error_description=x', '#session=abc')).toBe('/rad/#session=abc');
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/#error=access_denied')).toBe('/rad/');
+    // Postojeci koristan fragment ima prednost pred spremljenim.
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a#session=novi', '#session=stari')).toBe('/rad/#session=novi');
+  });
+
+  it('R5: greska providera u fragmentu je povratak (neuspjeh bez mreze), a obican fragment nije', async () => {
+    expect(callbackFrom('', '#error=access_denied&error_description=x')).toMatchObject({ code: null, error: 'access_denied' });
+    expect(callbackFrom('', '#session=abc')).toBeNull();
+    const store = memPkce({ verifier: 'v'.repeat(43), createdAt: 1_000_000 });
+    const { f, calls } = recordingFetch(res(200, tokenBody));
+    const out = await completeGoogleSignIn(CFG, '', { store, fetchImpl: f, now: 1_000_500, hash: '#error=access_denied' });
+    expect(out).toMatchObject({ ok: false });
+    expect(calls).toHaveLength(0);
+    expect(store.value()).toBeNull();
+  });
+
+  it('R7: istekli verifier se cisti, svjezi ostaje', () => {
+    const star = memPkce({ verifier: 'v'.repeat(43), createdAt: 0 });
+    clearExpiredPkce(star, PKCE_MAX_AGE_MS + 1);
+    expect(star.value()).toBeNull();
+    const svjez = memPkce({ verifier: 'v'.repeat(43), createdAt: 0 });
+    clearExpiredPkce(svjez, PKCE_MAX_AGE_MS - 1);
+    expect(svjez.value()).not.toBeNull();
+  });
+
+  it('R3: odgovor bez user ili s anonimnim korisnikom nije prijava', async () => {
+    const p: PendingPkce = { verifier: 'v'.repeat(43), createdAt: 1_000_000 };
+    for (const tijelo of [
+      { access_token: 'a', refresh_token: 'r', expires_in: 3600 },
+      { ...tokenBody, user: { id: 'anon', email: '', is_anonymous: true } },
+      { ...tokenBody, user: { id: 'u', email: 'x@y.hr', is_anonymous: true } },
+      { ...tokenBody, refresh_token: '' },
+    ]) {
+      const out = await completeGoogleSignIn(CFG, '?code=x', { store: memPkce(p), fetchImpl: recordingFetch(res(200, tijelo)).f, now: 1_000_500 });
+      expect(out, JSON.stringify(tijelo)).toMatchObject({ ok: false });
+    }
   });
 });
