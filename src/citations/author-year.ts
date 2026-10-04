@@ -65,14 +65,16 @@ function referenceAuthor(before: any){
 const NO_DATE_MARK=/\((?:b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)/i;
 const REF_YEAR=/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i;
 const URL_START=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i;
+// Godina u POLOZAJU DATUMA: u zagradi ("(2011)", "(2011b)") ili iza zareza na kraju zapisa (", 2011.").
+const DATE_POSITION_YEAR=/\((?:18|19|20)\d{2}[a-z]?\)|,\s*(?:18|19|20)\d{2}[a-z]?\.?\s*$/;
 /**
- * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi samo kad u zapisu
- * nema nijedne godine; "Horvat, A. (2011). Mediji (u tisku)." i "Horvat, A. Mediji (u tisku). Zagreb, 2011."
- * zadrzavaju 2011. Poznato ogranicenje: "Kovac, B. (b.g.). Povijest 1990-ih." dobiva godinu 1990.
+ * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi osim kad zapis ima
+ * godinu u polozaju datuma; goli broj u naslovu nije datum. "Horvat, A. (2011). Mediji (u tisku)." i
+ * "Horvat, A. Mediji (u tisku). Zagreb, 2011." zadrzavaju 2011; "Horvat, A. (u tisku). Mediji 2011." zadrzava oznaku.
  */
 function referenceMeta(t: string){
  const nd=t.match(NO_DATE_MARK),y=t.match(REF_YEAR);
- const noDate=nd&&!y?nd:null;
+ const noDate=nd&&!DATE_POSITION_YEAR.test(t)?nd:null;
  const ym=noDate||y,urlOnly=URL_START.test(t);
  const author=ym?referenceAuthor(t.slice(0,ym.index)):'';
  const year=ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'';
@@ -95,15 +97,19 @@ function isIncompleteReference(r: { text: string; author?: string; year?: string
  return !r.author||(!r.year&&!r.noDate)||r.text.length<25;
 }
 /**
- * T91 (pregled R2): POZITIVAN dokaz da je odlomak samo autorov dio zapisa, bez godine i bez vise recenica:
- * "Prezime, I." (i vise autora), kratica velikim slovima ("HZZ."), ili naziv ustanove bez tocke i dvotocke.
+ * T91 (pregled R2, R2b): POZITIVAN dokaz da je odlomak samo autorov dio zapisa, bez godine i bez vise
+ * recenica: "Prezime, I." s inicijalom (i vise autora), kratica velikim slovima ("HZZ."), ili naziv ustanove s
+ * kljucnom rijeci (zavod, ministarstvo, institut...). Naslov bez interpunkcije ("Socijalna politika") NIJE autor.
  * Vrijedi samo uz odlomak iza njega koji pocinje datumom (vidi `datumNaPocetku`).
  */
 function authorOnlyParagraph(t: string){
  if(t.length>120||REF_YEAR.test(t)||NO_DATE_MARK.test(t)||URL_START.test(t))return false;
  if(/^\p{Lu}{2,}\.?$/u.test(t))return true;
  const bezInicijala=t.replace(/(^|[\s,;&(-])\p{Lu}\./gu,'$1');
- return /^\p{Lu}/u.test(t)&&!/[.:;!?]/.test(bezInicijala);
+ if(/[.:;!?]/.test(bezInicijala))return false;
+ const osoba=/^\p{Lu}[\p{L}'’-]+(?:\s+\p{Lu}[\p{L}'’-]+)?,\s*\p{Lu}\./u.test(t);
+ const ustanova=/^\p{Lu}/u.test(t)&&/(?:^|\s)(?:zavod|ministarstv|institut|sveu[cč]ili[sš]t|fakultet|agencij|ured|komor|udrug|akademij)/iu.test(t);
+ return osoba||ustanova;
 }
 const datumNaPocetku=(t: string)=>/^\s*\((?:(?:18|19|20)\d{2}[a-z]?|b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)\./i.test(t);
 function extractReferences(paragraphs: any,lang: any){

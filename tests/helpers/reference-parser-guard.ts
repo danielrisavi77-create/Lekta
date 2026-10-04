@@ -67,6 +67,10 @@ const BEZ_GODINE = [
 ];
 const OZNAKA_U_NASLOVU = 'Peric, T. (2013). Mediji (u tisku) i javnost. Zadar: Primjer naklada.';
 const OZNAKA_GODINA_NA_KRAJU = 'Peric, T. Mediji (u tisku) i javnost. Zadar: Primjer naklada, 2013.';
+// R1 negativna kontrola: goli broj u naslovu nije datum, oznaka ostaje.
+const OZNAKA_BROJ_U_NASLOVU = 'Peric, T. (u tisku). Mediji 2013. Zadar: Primjer naklada.';
+// R2b negativna kontrola: naslov bez interpunkcije nije autor; "(2011)." ostaje nepotpun nalaz.
+const NASLOV_PA_GODINA = ['Socijalna politika', '(2011). Prirucnik za socijalne radnike. Zagreb: Ogledni izdavac.'];
 // R2b: prethodni zapis bez godine (vise recenica) nije autorov red; iduci "(2011)." je zaseban zapis.
 const BEZ_GODINE_PA_GODINA = ['Hrvatski zavod. Godisnje izvjesce. Zagreb: Naklada', '(2011). Prirucnik za poslodavce. Zagreb: Ogledni izdavac.'];
 const VISEREDNI = [
@@ -99,14 +103,18 @@ export function referenceParserProblems(p: ReferenceParser): string[] {
     const r1 = refs(p, [linija]);
     if (r1.length !== 1 || r1[0].year !== '2013' || r1[0].noDate) problems.push(`(r1) oznaka u naslovu uz godinu: godina "${r1[0]?.year ?? ''}", oznaka "${r1[0]?.noDate ?? ''}"`);
   }
+  const r1n = refs(p, [OZNAKA_BROJ_U_NASLOVU]);
+  if (r1n.length !== 1 || r1n[0].year || r1n[0].noDate !== '(u tisku)') problems.push(`(r1) goli broj u naslovu uzet kao godina: godina "${r1n[0]?.year ?? ''}", oznaka "${r1n[0]?.noDate ?? ''}"`);
   const r2b = refs(p, BEZ_GODINE_PA_GODINA);
   if (r2b.length !== 2 || !r2b.every(inc)) problems.push(`(r2b) zapis bez godine progutao iduci "(2011).": ${r2b.length} zapisa, nepotpunih ${r2b.filter(inc).length}`);
+  const r2n = refs(p, NASLOV_PA_GODINA);
+  if (r2n.length === 0 || r2n.some((x) => !inc(x))) problems.push(`(r2b) naslov "Socijalna politika" uzet kao autor: potpunih ${r2n.filter((x) => !inc(x)).length}`);
   for (const lines of VISEREDNI) {
     const r = refs(p, lines);
     if (r.length !== 1) problems.push(`(r2) viseredni zapis "${lines[0]}" razdvojen u ${r.length} zapisa`);
     else if (!r[0].author || inc(r[0])) problems.push(`(r2) viseredni zapis "${lines[0]}" bez autora ili nepotpun (autor "${r[0].author ?? ''}")`);
   }
-  for (const lines of [POTPUNI.flatMap((x, i) => [x, BEZ_AUTORA[i]]), BEZ_GODINE, [OZNAKA_U_NASLOVU], [OZNAKA_GODINA_NA_KRAJU], BEZ_GODINE_PA_GODINA, ...VISEREDNI]) {
+  for (const lines of [POTPUNI.flatMap((x, i) => [x, BEZ_AUTORA[i]]), BEZ_GODINE, [OZNAKA_U_NASLOVU], [OZNAKA_GODINA_NA_KRAJU], [OZNAKA_BROJ_U_NASLOVU], BEZ_GODINE_PA_GODINA, NASLOV_PA_GODINA, ...VISEREDNI]) {
     const prvi = refs(p, lines);
     const drugi = refs(p, prvi.map((x) => x.text));
     if (JSON.stringify(pogled(p, drugi)) !== JSON.stringify(pogled(p, prvi))) problems.push(`(r4) drugi prolaz nije no-op za "${lines[0]}"`);

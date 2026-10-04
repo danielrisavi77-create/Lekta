@@ -111,6 +111,17 @@ describe('T91 golden: parser literature nakon popravka', () => {
     expect(r.map((x) => nepotpun(x))).toEqual([true, true]);
   });
 
+  it('pregled R2b (runda 4): naslov bez interpunkcije nije autor, "(2011)." ostaje nepotpun nalaz', () => {
+    const r = refs(['Socijalna politika', '(2011). Prirucnik za socijalne radnike. Zagreb: Ogledni izdavac.']);
+    expect(r.length).toBeGreaterThan(0);
+    expect(r.every((x) => nepotpun(x))).toBe(true);
+  });
+
+  it('pregled R1 (runda 4): goli broj u naslovu nije datum, oznaka bez godine ostaje', () => {
+    const [r] = refs(['Horvat, A. (u tisku). Mediji 2011. Zagreb: Ogledni izdavac.']);
+    expect({ author: r.author, year: r.year, noDate: r.noDate, nepotpun: nepotpun(r) }).toEqual({ author: 'Horvat', year: '', noDate: '(u tisku)', nepotpun: false });
+  });
+
   it('pregled R1: oznaka u naslovu i godina na kraju zapisa: godina vrijedi', () => {
     const [r] = refs(['Horvat, A. Mediji (u tisku). Zagreb: Ogledni izdavac, 2011.']);
     expect({ year: r.year, noDate: r.noDate }).toEqual({ year: '2011', noDate: undefined });
