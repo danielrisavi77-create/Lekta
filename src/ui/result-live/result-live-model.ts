@@ -349,7 +349,7 @@ export interface TrakaStranica {
   readonly poStranici: ReadonlyMap<number, readonly number[]>;
   /** Indeksi nalaza koji vrijede za cijeli rad (crvena crta). */
   readonly cijeliRad: readonly number[];
-  /** Je li `poStranici` izveden iz Wordovih prijeloma koji se slazu s brojem stranica. */
+  /** Je li `poStranici` izveden iz Wordovih prijeloma koji se slazu s brojem stranica (i tada je pripis PRIBLIZAN). */
   readonly pouzdano: boolean;
 }
 
@@ -367,9 +367,14 @@ function odlomciPregleda(preview: LivePreview | null): Array<{ index: number; te
 }
 
 /**
- * Stranica odlomka iz Wordovih prijeloma (`pageBreakAfter` nosi i eksplicitni prijelom i
- * `lastRenderedPageBreak`). Karta vrijedi SAMO kad pregled nije skracen i kad broj prijeloma + 1
- * daje TOCNO stvarni broj stranica; inace bi traka tvrdila stranicu koju ne zna.
+ * PRIBLIZNA stranica odlomka iz Wordovih tragova prijeloma. `pageBreakAfter` iz analize nosi dva
+ * traga koje ovdje nije moguce razlikovati: `w:lastRenderedPageBreak`, koji Word pri zadnjem
+ * crtanju upisuje na POCETAK prvog odlomka nove stranice (po jedan na svakoj stranici, pa je u radu
+ * spremljenom iz Worda daleko cesci), i eksplicitni `w:br w:type="page"`, iza kojeg nova stranica
+ * tek pocinje. Zato odlomak s tragom POCINJE novu stranicu. Uz eksplicitni prijelom, i za odlomak
+ * koji se prelama preko dviju stranica, pripis moze biti pomaknut za jednu stranicu, pa natpis
+ * kaze "Oko str." (F35). Karta vrijedi SAMO kad pregled nije skracen i kad tako dobiven broj
+ * stranica TOCNO odgovara stvarnom; inace traka ne tvrdi stranicu koju ne zna.
  */
 function kartaStranica(preview: LivePreview | null, ukupno: number): Map<number, number> | null {
   if (preview?.truncated === true) return null;
@@ -377,14 +382,12 @@ function kartaStranica(preview: LivePreview | null, ukupno: number): Map<number,
   if (!odlomci.length) return null;
   const karta = new Map<number, number>();
   let stranica = 1;
-  for (const p of odlomci) {
+  odlomci.forEach((p, k) => {
+    // Trag na prvom odlomku ne otvara drugu stranicu: ispred njega nema teksta.
+    if (p.prijelom && k > 0) stranica += 1;
     karta.set(p.index, stranica);
-    if (p.prijelom) stranica += 1;
-  }
-  // Prijelom iza zadnjeg odlomka ne otvara novu stranicu s tekstom.
-  const zadnji = odlomci[odlomci.length - 1];
-  const stranicaKraja = zadnji.prijelom ? stranica - 1 : stranica;
-  return stranicaKraja === ukupno ? karta : null;
+  });
+  return stranica === ukupno ? karta : null;
 }
 
 function sidroOdlomka(scope: FindingScope): number | null {

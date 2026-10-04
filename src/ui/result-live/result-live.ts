@@ -246,7 +246,8 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     if (!s.odlomci.length) return '';
     const tekstSloja = (sloj: 'now' | 'after'): string => s.odlomci.map((pp) =>
       `<p${pp.heading ? ' class="rl-h"' : ''}${sloj === 'now' ? ` data-rl-p="${pp.index}"` : ''}>${esc(pp.text)}</p>`).join('');
-    const natpis = s.broj !== null && traka ? `Str. ${s.broj} od ${traka.ukupno}` : s.sidro !== null ? `Odlomak ${s.sidro}` : 'Cijeli rad';
+    // Stranica iz Wordovih tragova je priblizna (`kartaStranica`, F35), pa natpis to i kaze.
+    const natpis = s.broj !== null && traka ? `Oko str. ${s.broj} od ${traka.ukupno}` : s.sidro !== null ? `Odlomak ${s.sidro}` : 'Cijeli rad';
     const prekidac = vidljivi.length
       ? '<div class="rl-mode" role="group" aria-label="Prikaz stranice">'
         + `<button type="button" data-rl-mode="now" aria-pressed="${mode === 'now'}">SADA</button>`
@@ -286,7 +287,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
       : '';
     const jantar = traka.poStranici.size ? 'Jantarna stranica ima nalaze na točno jednom mjestu.' : '';
     const legenda = [crvena, jantar].filter(Boolean).join(' ');
-    const desno = sel !== null ? `Str. ${sel}` : nalazi[i].scope.kind === 'document' ? 'Cijeli rad' : '';
+    const desno = sel !== null ? `Oko str. ${sel}` : nalazi[i].scope.kind === 'document' ? 'Cijeli rad' : '';
     return '<div class="rl-strip" data-rl-strip>'
       + `<div class="rl-strip__head"><span>Gdje su nalazi · ${traka.ukupno} ${pluralHr(traka.ukupno, ['stranica', 'stranice', 'stranica'])}</span>`
       + `<span data-rl-pagenote>${esc(desno)}</span></div>`

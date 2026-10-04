@@ -24,6 +24,10 @@ import {
 } from '../src/ui/result-live/result-live-model';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { cijenaProblems, plusBodProblems } from './helpers/result-live-guard';
+import { buildDocxFile } from './helpers/docx-builder';
+import { analyzeDocx } from '../src/analysis/analyze-docx';
+import { resolveProfile } from '../src/analysis/golden-entry';
+import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 
 const read = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').replace(/\r/g, '');
 
@@ -61,8 +65,11 @@ function result(overrides: Record<string, unknown> = {}) {
   } as never;
 }
 
-/** 80 odlomaka, Wordov prijelom iza svakog dvadesetog: 4 stranice, isto kao `storedPages`. */
-function preview(prijelomi = [20, 40, 60]) {
+/**
+ * 80 odlomaka po 20 na stranici: 4 stranice, isto kao `storedPages`. Trag prijeloma nosi PRVI
+ * odlomak nove stranice (21, 41, 61), kao Wordov `w:lastRenderedPageBreak`.
+ */
+function preview(prijelomi = [21, 41, 61]) {
   return {
     truncated: false,
     baseFont: 'Calibri',
@@ -262,6 +269,38 @@ describe('Z34 model: traka stranica i stranica nalaza', () => {
     expect(bezKarte.odlomci.map((p) => p.index)).toEqual([40, 41, 42, 43, 44, 45, 46, 47]);
   });
 
+  it('odlomak koji nosi lastRenderedPageBreak je PRVI na novoj stranici, ne zadnji na prethodnoj', () => {
+    // Trag na 41: stranica 3 su odlomci 41 do 60. Stari pripis (prijelom IZA odlomka) dao bi 42 do 61.
+    const t = trakaStranica(preview([21, 41, 61]) as never, 4, items)!;
+    expect(t.pouzdano).toBe(true);
+    const novak = stranicaZaNalaz(preview([21, 41, 61]) as never, items[indeks('(Novak')].finding.scope, t);
+    expect(novak.broj).toBe(3);
+    expect(novak.odlomci[0].index).toBe(41);
+    expect(novak.odlomci.at(-1)?.index).toBe(60);
+    // Trag na prvom odlomku rada ne otvara drugu stranicu.
+    expect(trakaStranica(preview([1, 21, 41, 61]) as never, 4, items)!.pouzdano).toBe(true);
+  });
+
+  it('stvarni .docx: odlomak s w:lastRenderedPageBreak kroz analizu pocinje drugu stranicu', async () => {
+    const r = (tekst: string, lrpb = false): { text: string; raw: string } => ({
+      text: tekst,
+      raw: `<w:p><w:r>${lrpb ? '<w:lastRenderedPageBreak/>' : ''}<w:t>${tekst}</w:t></w:r></w:p>`,
+    });
+    const datoteka = buildDocxFile({ paragraphs: [r('Prva stranica, prvi odlomak.'), r('Prva stranica, drugi odlomak.'), r('Druga stranica pocinje ovdje.', true), r('Druga stranica, drugi odlomak.')] });
+    const profile = resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id);
+    const settings = { profileId: VERIFIED_PROFILE_REGISTRY[0].id, workType: profile.selection.workType, citationStyle: 'fpzg',
+      language: 'hr', strictness: 'standard', methodology: 'auto', selectionIds: {} };
+    const rez = await analyzeDocx(datoteka, profile, settings as never, () => {}) as { preview?: unknown };
+    const pv = rez.preview as { paragraphs: Array<{ index: number; text: string; pageBreakAfter: boolean }> };
+    const nosi = pv.paragraphs.find((x) => x.text.startsWith('Druga stranica pocinje'))!;
+    expect(nosi.pageBreakAfter, 'analiza mora oznaciti odlomak s tragom').toBe(true);
+    const t = trakaStranica(pv as never, 2, [])!;
+    expect(t.pouzdano).toBe(true);
+    const s = stranicaZaNalaz(pv as never, { kind: 'anchor', paragraphIndex: nosi.index }, t);
+    expect(s.broj).toBe(2);
+    expect(s.odlomci.map((x) => x.text)).toEqual(['Druga stranica pocinje ovdje.', 'Druga stranica, drugi odlomak.']);
+  });
+
   it('rok iz Z32: oblik iz ALIGNMENT-a, rubni oblici doslovno', () => {
     const danas = new Date(2026, 9, 4);
     expect(rokTekst({ datum: '2026-10-25', neznam: false }, danas)).toBe('Rok 25. 10. · još 21 dan');
@@ -339,7 +378,7 @@ describe('Z34 prikaz: rezultat sve u jednom', () => {
   it('stranica: sidro je oznaceno, natpis je stvarna stranica; Nakon plana nosi stvarnu marginu', async () => {
     const { mount } = await montiraj();
     klikni(mount.querySelector('[data-rl-tab="Citati"]'));
-    expect(mount.querySelector('[data-rl-pagelabel]')?.textContent).toBe('Str. 3 od 4');
+    expect(mount.querySelector('[data-rl-pagelabel]')?.textContent).toBe('Oko str. 3 od 4');
     expect(mount.querySelector('[data-rl-p="42"]')?.hasAttribute('data-rl-hit')).toBe(true);
     klikni(mount.querySelector('[data-rl-mode="after"]'));
     expect(mount.querySelector<HTMLElement>('[data-rl-page]')?.dataset.mode).toBe('after');
