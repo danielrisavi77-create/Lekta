@@ -108,6 +108,13 @@ describe('agent handoff', () => {
     q.tasks[0].dependsOn = ['MISSING'];
     expect(() => validateQueue(q)).toThrow(/MISSING/);
   });
+  it('prima T00 do T999, a odbija vodecu nulu, jednu i cetiri znamenke', () => {
+    const jedan = (id: string) => ({ tasks: [{ id, title: 'x', status: 'ready', dependsOn: [] }] });
+    for (const id of ['T00', 'T99', 'T100', 'T999']) expect(() => validateQueue(jedan(id)), id).not.toThrow();
+    for (const id of ['T7', 'T017', 'T1000', 't10', 'T1a']) {
+      expect(() => validateQueue(jedan(id)), id).toThrow('Invalid or duplicate task id');
+    }
+  });
 });
 
 describe('provider results do not replace verification', () => {
