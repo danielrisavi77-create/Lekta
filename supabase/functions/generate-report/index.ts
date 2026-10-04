@@ -18,7 +18,7 @@ import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
-import { tryGrantFriendReferralReward } from '../_shared/grant-friend-referral-reward.ts';
+import { friendRewardCaller, tryGrantFriendReferralReward } from '../_shared/grant-friend-referral-reward.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
@@ -135,7 +135,7 @@ Deno.serve(async (req: Request) => {
   // besplatno (interni entitlement), pa se odluka PONOVI (sad postoji slot). Bez signupa ostaje
   // payment_required. Nagrada NIJE coupon_grant nego entitlement (generate-report gleda samo te).
   if (decision.decision === 'payment_required') {
-    const friend = await tryGrantFriendReferralReward(admin, user.id, workType, { isAnonymous: user.is_anonymous === true });
+    const friend = await tryGrantFriendReferralReward(admin, user.id, workType, friendRewardCaller(user));
     if (friend.granted) decision = await decide();
   }
 

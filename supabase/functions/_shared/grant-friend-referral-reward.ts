@@ -4,7 +4,7 @@
 //
 //   let decision = await decide();
 //   if (decision.decision === 'payment_required') {
-//     const friend = await tryGrantFriendReferralReward(admin, user.id, workType, { isAnonymous: user.is_anonymous === true });
+//     const friend = await tryGrantFriendReferralReward(admin, user.id, workType, friendRewardCaller(user));
 //     if (friend.granted) decision = await decide();   // sad postoji entitlement -> new_slot
 //   }
 //   if (decision.decision === 'payment_required') { ... return 402 }
@@ -21,6 +21,15 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
 /** Server-side identitet pozivatelja (iz `auth.getUser`), ne iz tijela zahtjeva. */
 export interface FriendRewardCaller {
   isAnonymous: boolean;
+}
+
+/**
+ * Pozivatelj iz Auth korisnika. Samo izricit `is_anonymous === false` znaci pravi racun; nepoznato
+ * (undefined ili null, npr. drukciji oblik odgovora Auth usluge) se tretira kao anonimno, pa se
+ * slot u sumnji NE dodjeljuje (T84 RF-1A).
+ */
+export function friendRewardCaller(user: { is_anonymous?: boolean | null }): FriendRewardCaller {
+  return { isAnonymous: user.is_anonymous !== false };
 }
 
 export async function tryGrantFriendReferralReward(
