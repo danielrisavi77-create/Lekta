@@ -164,6 +164,7 @@ import {
   localRepairPublicEndpointProblems,
 } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
+import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
@@ -10734,6 +10735,51 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
   });
 });
 
+describe('mobilna traka lista ne prekriva korake (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/page-app.css'), 'utf8').replace(/\r/g, '');
+  const PRAVILO = '@media(max-width:720px){.analyzer-wrap::before{left:auto;right:14px;top:-11px;width:84px;height:22px;transform:rotate(2deg)}}';
+
+  it('BASELINE: na uskom ekranu traka je uz desni rub i uska', () => {
+    expect(css()).toContain(PRAVILO);
+    expect(mobileTapeProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez pravila za uski ekran traka ostaje na sredini', () => {
+    expect(mobileTapeProblems(css().replace(PRAVILO, ''))).toEqual(['traka nema pravilo za uski ekran']);
+  });
+
+  it('mutant: traka na sredini i siroka kao na racunalu', () => {
+    const m = css().replace(PRAVILO, '@media(max-width:720px){.analyzer-wrap::before{top:-11px;width:150px;height:22px}}');
+    expect(mobileTapeProblems(m)).toEqual(['traka nije uz desni rub', 'traka je sira od 100 px']);
+  });
+});
+
+describe('zbijeni dokumentov red na mobitelu (mobilni audit 2026-09-28, PR 2)', () => {
+  const css = () => readFileSync(resolve(process.cwd(), 'src/shared/site-chrome.css'), 'utf8').replace(/\r/g, '');
+
+  it('BASELINE: gumb nove verzije je meta od 44 px, ispod reda je razmak', () => {
+    expect(mobileDocMetaProblems(css())).toEqual([]);
+  });
+
+  it('mutant: bez prosirenja dodira meta je 28 px', () => {
+    const m = css().replace('  .rad-doc-meta .rad-doc-new-version::after { content: ""; position: absolute; inset: -8px 0; }\n', '');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['dodirna meta nove verzije 28 px, ispod 44']);
+  });
+
+  it('mutant: bez razmaka ispod reda list prekriva donji dio mete', () => {
+    const m = css().replace('margin-top: 6px; padding-bottom: 6px; }', 'margin-top: 6px; }');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['ispod reda nema razmaka za prosirenu metu']);
+  });
+
+  it('mutant: bez razmaka redaka prelomljen gumb otima dodir znacki (Codex R1 na #286)', () => {
+    const m = css().replace('gap: 8px 10px;', 'gap: 0 10px;');
+    expect(m).not.toBe(css());
+    expect(mobileDocMetaProblems(m)).toEqual(['razmak redaka manji od prosirenja: prelomljen gumb otima dodir retku iznad']);
+  });
+});
+
 describe('mutacije: Upisnik dokaz u snimci', () => {
   const baselineRatchet = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as import('../src/programs/upisnik-evidence-snapshots').SnapshotRatchet;
   const sourcePath = resolve(process.cwd(), 'src/programs/upisnik-evidence-snapshots.ts');
@@ -11240,6 +11286,30 @@ describe('mobilni rezultat prvi (mobilni audit 2026-09-28, PR 1)', () => {
     const bez = css().replace('@media(max-width:720px){.analyzer-wrap{transform:none}}', '');
     expect(bez).not.toBe(css());
     expect(mobileTiltProblems(bez)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('mutant: kasnije pravilo s !important ponovno nagne list (Codex F5, runda 2)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{transform:rotate(.3deg)!important}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('mutant: kasnije mobilno pravilo ponovno nagne list', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{transform:rotate(.3deg)}}`)).toEqual(['list je nagnut i na uskom ekranu']);
+  });
+
+  it('kontrola: nagib samo za siroki ekran ne vrijedi na 360 px', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(min-width:900px){.analyzer-wrap{transform:rotate(.3deg)!important}}`)).toEqual([]);
+  });
+
+  it('mutant: samostalni rotate nagne list iako je transform none (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:.3deg}`)).toEqual(['list je nagnut samostalnim rotate na uskom ekranu']);
+  });
+
+  it('mutant: samostalni translate pomakne list (Codex R2 na #286)', () => {
+    expect(mobileTiltProblems(`${css()}\n@media(max-width:720px){.analyzer-wrap{translate:18px 0}}`)).toEqual(['list je pomaknut samostalnim translate na uskom ekranu']);
+  });
+
+  it('kontrola: rotate:none i translate:0 ne dizu gard', () => {
+    expect(mobileTiltProblems(`${css()}\n.analyzer-wrap{rotate:none;translate:0}`)).toEqual([]);
   });
 
   it('BASELINE: blok komentara je sklopljen na uskom i otvoren na sirokom ekranu', async () => {
