@@ -7,7 +7,7 @@ export const EXPECTED_CORPUS_TITLE_MAX = 400;
 
 export function corpusTitleBoundProblems(src: string): string[] {
   const out: string[] = [];
-  const m = /export const CORPUS_TITLE_MAX = (\d+);/.exec(src);
+  const m = /^const CORPUS_TITLE_MAX = (\d+);/m.exec(src);
   if (!m) out.push('corpus-check: nema CORPUS_TITLE_MAX');
   else if (Number(m[1]) !== EXPECTED_CORPUS_TITLE_MAX) out.push(`corpus-check: CORPUS_TITLE_MAX je ${m[1]}, ocekivano ${EXPECTED_CORPUS_TITLE_MAX}`);
   if (!/qs: keys\.map\(corpusQueryKey\),/.test(src)) out.push('corpus-check: kljuc ide bazi bez gornje granice duljine');

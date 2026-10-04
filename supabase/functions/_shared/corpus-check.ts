@@ -37,7 +37,7 @@ export interface CorpusCheckConfig {
  * seriji. Pravi akademski naslov s podnaslovom stane u 400 znakova. Granica vrijedi samo za kljuc
  * dohvata; presuda (found/weak) uvijek se racuna nad punim naslovom (Codex R1 na #291).
  */
-export const CORPUS_TITLE_MAX = 400;
+const CORPUS_TITLE_MAX = 400;
 
 /** Kljuc za `corpus_search_many`: normalizirani kljuc (corpusKey) kracen na CORPUS_TITLE_MAX code pointa. */
 function corpusQueryKey(key: string): string {
