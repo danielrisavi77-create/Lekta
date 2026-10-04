@@ -102,10 +102,10 @@ class NormalizeTest(unittest.TestCase):
                        observed_at=NOW, scope={"area": "ci"} if value is None else {"area": "ci", "planTask": value})
             return normalize_signal(raw)["scope"]
 
-        for good in ("T01", "t17 ", " T17", "T99"):
+        for good in ("T01", "t17 ", " T17", "T99", "T100", "t999"):
             self.assertEqual(scope_of(good), {"paths": [], "area": "ci", "planTask": good.strip().upper(),
                                               "planTaskRejected": ""}, good)
-        for bad in ("T7", "T017", "zadatak", "T1a"):
+        for bad in ("T7", "T017", "T1000", "zadatak", "T1a"):
             scope = scope_of(bad)
             self.assertIsNone(scope["planTask"], bad)
             self.assertEqual(scope["planTaskRejected"], bad, "odbijena vrijednost se pamti da razlog moze reci koja")
