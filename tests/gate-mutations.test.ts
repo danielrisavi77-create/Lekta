@@ -213,7 +213,7 @@ import {
   auditClaudeContext,
 } from '../scripts/verify-claude-context-core.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
-import { sidecarAdmitted } from './real-corpus/corpus-track';
+import { corpusSetOf, sidecarAdmitted, witnessIsolationProblems, type CorpusSidecar } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
@@ -2836,6 +2836,41 @@ const MUTATIONS: Mutation[] = [
     // Baseline: `undefined` NIJE nepoznata vrijednost nego izostanak polja, i mora proci, jer su
     // svi postojeci sidecari nastali prije uvodjenja trake.
     cleanBefore: () => sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: undefined }),
+  },
+  // --- svjedoci (T68): traka `witness` ide u zaseban skup, nikad u `results` -------------------
+  {
+    id: 'korpus/witness-traka-ulazi-u-results',
+    imitates:
+      'svjedok s NAMJERNIM prekrsajima (traka `witness`) udje u `results`: napravljen je da padne i da ' +
+      'ga popravak rijesi, pa bi napuhao stopu rjesavanja (sinteticki 84,6 posto naspram stvarnih 39,8 ' +
+      'posto) i usao u matricu kao dokaz profila koji nije studentski rad',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) => (m.track === 'witness' ? 'results' : corpusSetOf(m))).length > 0,
+    // Baseline: pravi razvrstavac nema nijedan problem, ukljucujuci kontrolne trake.
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-pada-u-synthetic',
+    imitates:
+      'zateceno ponasanje prije T68: `discoverExcludedCorpus` uzima sve sto `sidecarAdmitted` odbije, pa ' +
+      'svjedok zavrsi u `syntheticResults` i izgubi izravni signal (koji je namjerni prekrsaj ciljan, ' +
+      'razrijesen ili ostavljen korisniku)',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        typeof m.profileId === 'string' && m.profileId.length > 0 ? (sidecarAdmitted(m) ? 'results' : 'synthetic') : null,
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-bez-zastavice-synthetic',
+    imitates:
+      'prva verzija T68 razvrstavaca: `track: witness` sam je bio dovoljan, pa bi stvaran rad s greskom ' +
+      'pridruzenim witness sidecarom (bez `synthetic: true` ili sa `synthetic: false`) usao u mjerenje svjedoka',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        m.track === 'witness' && typeof m.profileId === 'string' && m.profileId.length > 0 ? 'witness' : corpusSetOf(m),
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
   },
   {
     // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne

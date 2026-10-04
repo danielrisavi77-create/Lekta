@@ -466,3 +466,51 @@ npm run verify:word:worst   # dokument najgoreg slučaja (naslovnica, tablica, s
 `check.ps1` mjeri **drugi odlomak** kao tijelo teksta, pa vrijedi samo za dokumente oblika
 naslov + tijelo. Dokument najgoreg slučaja počinje naslovnicom čiji je drugi odlomak namjerno
 centriran, pa ga `check.ps1` izričito preskače; njega provjerava `check-worst-case.ps1`.
+
+## Witness skup
+
+Svjedok je Word-autorski `.docx` s izmisljenim akademskim tekstom koji NAMJERNO krsi svako
+verificirano bodovano pravilo jednog profila (font, velicina, prored, margine, format papira,
+obostrano poravnanje; samo `status: verified` iz `data/profiles/repair-map.json`). Sidecar nosi
+`track: "witness"`, `synthetic: true` i popis namjernih prekrsaja (`checkId`, ocekivano, postavljeno).
+
+**Zasto odvojen skup.** Svjedok je napravljen da padne i da ga popravak rijesi. Sinteticke fixture
+rjesavaju 84,6 % ciljanih provjera, a stvarni radovi 39,8 % (izmjereno 2026-09-05), pa bi svjedok
+u `results` proizvod prikazao boljim nego jest i usao u matricu kao dokaz profila koji nije
+studentski rad. Zato `corpusSetOf` (`tests/real-corpus/corpus-track.ts`) traku `witness`
+razvrstava u treci skup: `witnessResults` i `witnessSummary` u
+`docs/generated/repair-real-corpus.json`, kljucevi na kraju izvjestaja. Nijedan potrosac tvrdnji
+ih ne cita, a postojeca polja ostaju bajt-identicna dok svjedoka nema.
+
+`witnessSummary` broji `documents`, `targetedCheckCount`, `resolved`, `needsAssistance`,
+`regressions`, `secondPassNoOp` (broj dokumenata ciji je drugi prolaz no-op), `unexplainedUnresolved`
+i `intendedUntargeted`. Svaki ciljani check svjedoka mora zavrsiti `pass` ili izricito
+`needsAssistance` s razlogom; automatski ciljan check koji i dalje pada je jaz motora i obara test.
+Namjerni prekrsaj koji popravak uopce ne cilja imenuje se u `intendedUntargeted`; prekrsaj ciju
+stavku harness ne primjenjuje jer ceka korisnikov odabir nije neciljan, nego stoji u
+`needsAssistance` s razlogom `ceka-odabir-korisnika`.
+Prvi Word-free svjedok odmah je nasao jedan takav: format papira. `paper-size-fixer` Letter
+ispravlja u A4, ali stavka nema `matchKeys` (naslov provjere je dinamican), pa ga ishod popravka ne
+broji kao ciljanog. Jaz je imenovan u `POZNATI_NECILJANI_PREKRSAJI` i ispravlja se zasebno.
+
+**Generiranje (samo radna stanica s Wordom).**
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/corpus-gen/word/make-violation-witnesses.ps1 `
+  -Profiles apuri-zavrsni,hks-diplomski,effectus-diplomski,efri-diplomski,grf-zavrsni -OutDir tests/fixtures/docx
+npm run repair-real-corpus
+```
+
+Bez Worda skripta ispisuje `NEPOKRIVEN: Word nije dostupan` i izlazi s kodom 2. `-PlanOnly` ispisuje
+plan prekrsaja bez Worda i nista ne generira. Preporuceni profili i razlog izbora stoje u zaglavlju
+skripte (izracunato 2026-10-04 iz `data/profiles/repair-map.json`; najvise je 6 verified bodovanih
+pravila, a toliko ih ima 72 profila): `apuri-zavrsni` 6, `hks-diplomski` 6, `effectus-diplomski` 6,
+`efri-diplomski` 6, `grf-zavrsni` 6. Test ponovno izracunava taj popis iz repair-mapa i za svaki
+preporuceni profil provjerava `-PlanOnly` plan. Margine se krse za 1 cm, ne postavljanjem na 2,54 cm: analiza dopusta 0,36 cm odstupanja,
+pa 2,54 cm prema propisanih 2,5 cm nije prekrsaj.
+
+**Ratchet.** `WITNESS_CILJANIH_RATCHET` u `tests/real-corpus-vacuity.test.ts` je zbroj ciljanih
+provjera nad svjedocima i smije samo rasti. Dok svjedoka nema, iznosi 0; radna stanica ga dize u
+ISTOM commitu u kojem svjedoci i regenerirani artefakt ulaze u stablo. Gard izolacije
+(`witnessIsolationProblems`) ima mutacije u `tests/gate-mutations.test.ts`
+(`korpus/witness-traka-ulazi-u-results`, `korpus/witness-traka-pada-u-synthetic`).

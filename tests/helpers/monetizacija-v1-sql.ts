@@ -49,7 +49,8 @@ const PG_CRON_GUARD = "if not exists (select 1 from pg_extension where extname =
 export function readMigration(name: string): string {
   const files = readdirSync(MIGRATIONS_DIR);
   if (!files.includes(name)) throw new Error(`migracija ${name} ne postoji`);
-  return readFileSync(join(MIGRATIONS_DIR, name), 'utf8');
+  // Normalizira CR (CLAUDE.md, T92): na Windows checkoutu je migracija CRLF, a pozivatelji traze `\n`.
+  return readFileSync(join(MIGRATIONS_DIR, name), 'utf8').replace(/\r\n?/g, '\n');
 }
 
 const SUPABASE_ENV = `
