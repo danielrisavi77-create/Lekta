@@ -9,6 +9,9 @@ rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi po
 Kad vlasnik zalijepi vanjsku analizu ili audit bez daljnjih uputa, vrijedi fiksni protokol iz
 `docs/agents/INTAKE.md` i skilla `.claude/skills/intake-analiza/SKILL.md`.
 
+Svaka implementatorska sesija prije rada ucita skill `.claude/skills/lekta-protokol/SKILL.md`:
+katalog ponavljanih kvarova (iz gita i iz sesija) i lista provjere prije commita.
+
 ## Uloge
 
 | Uloga | Model | CLI oznaka | Odgovornost |
