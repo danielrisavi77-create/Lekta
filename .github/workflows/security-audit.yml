@@ -35,6 +35,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
+      # IZVOR PAKETA (T99, issue #220). `npm audit` gleda poznate CVE-ove, ne odakle se paket preuzima:
+      # PR moze u lockfile podmetnuti `resolved` na drugi host, `http://` ili git izvor (lockfile
+      # injection). Svaki paket mora biti s https://registry.npmjs.org/ i nositi jedan sha512 integrity.
+      # Tvrdi gate, ne ratchet: lockfile je na dan uvodjenja bio cist. Selftest prije mjerenja.
+      #
+      # PRIJE `setup-deps` (Codex runda 1 na #258, F1): na promasaj kesa `setup-deps` pokrece `npm ci`,
+      # a npm zadano izvrsava instalacijske skripte. Gard nakon instalacije bi odbio podmetnuti paket tek
+      # nakon sto je njegova skripta vec izvrsena. Skripta treba samo Node bez ovisnosti, pa se vrti
+      # Nodeom koji je vec na runneru.
+      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)
+        run: |
+          node scripts/lockfile-sources.mjs --selftest
+          node scripts/lockfile-sources.mjs
+
       - name: Ovisnosti (kesirano)
         uses: ./.github/actions/setup-deps
         with:
