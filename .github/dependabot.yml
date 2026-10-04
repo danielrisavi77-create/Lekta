@@ -1,5 +1,6 @@
 # Dependabot (BL-P3-14): automatski PR-ovi za sigurnosne i verzijske zakrpe.
-# Dva ekosustava: npm (ovisnosti aplikacije) i github-actions (verzije akcija u workflowima).
+# Tri ekosustava: npm (ovisnosti aplikacije), github-actions (verzije akcija u workflowima) i pip za
+# training-pipeline (T99, issue #220, korak 3). Deno Dependabot ne podrzava; tamo je osv-scan job.
 # Teski dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom i nisu u produkcijskom bundleu
 # (BL-P2-09), pa im se NE prate major i minor nadogradnje: to je bio cist sum.
 #
@@ -31,3 +32,9 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+
+  - package-ecosystem: "pip"
+    directory: "/training-pipeline"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 2

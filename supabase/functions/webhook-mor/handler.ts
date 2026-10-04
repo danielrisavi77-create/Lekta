@@ -14,6 +14,7 @@ import {
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
+  entitlementSnapshotOf,
   acceptEvent,
   classifyStripeEvent,
   isNotableIgnore,
@@ -32,7 +33,14 @@ import {
   semesterStart,
   REFERRAL_WELCOME_DISCOUNT,
 } from '../../../src/report/referral.ts';
-import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
+import { referrerRewardSettlement, tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
+import {
+  mapUpgradeSourceRow,
+  quoteUpgrade,
+  readBoundSlotIntact,
+  readSourcePartiallyRefunded,
+  UPGRADE_SOURCE_COLUMNS,
+} from '../../../src/report/upgrade.ts';
 
 const PROVIDER = 'stripe';
 
@@ -44,7 +52,7 @@ const PROVIDER = 'stripe';
  * `refund_consequences_failed` znaci da je pravo vec ugaseno, a sporedne posljedice (rucna narudzba,
  * pass kupon) jos nisu zatvorene i Stripe povrat ponavlja; i to je zabiljezen puni povrat.
  */
-const REFUND_MARKERS = ['refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded'];
+export const REFUND_MARKERS = ['refund_pending', 'refund_consequences_failed', 'refund_without_entitlement', 'refunded'];
 
 /**
  * Sve sto handler dobiva izvana. Okolina (`Deno.env`) i Supabase klijent se citaju SAMO u
@@ -213,7 +221,8 @@ async function pullReferralReward(admin: any, orderId: string): Promise<void> {
 // Isto za "pozovi-prijatelja" nagradu (0013): refund kupnje koja je okinula preporuciteljevu
 // nagradu povlaci tu nagradu ako je NEPOTROSENA (potrosenu pusti, false-allow, 6.7). Precizno preko
 // converted_order_id; status signupa se vraca na 'converted' pa vise ne trosi mjesecni strop.
-async function pullReferralSignupReward(admin: any, orderId: string): Promise<void> {
+// Izvezeno za process-bonus-outbox (F21): radnik koji je nagradu dodijelio nakon povrata je povlaci.
+export async function pullReferralSignupReward(admin: any, orderId: string): Promise<void> {
   const { data: signups } = await admin
     .from('referral_signups')
     .select('id, referrer_reward_entitlement_id')
@@ -234,7 +243,7 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
 }
 
 type RefundConsequences =
-  | { ok: true; manualOrderFound: boolean; manualOrdersClosed: number; couponsRevoked: number }
+  | { ok: true; manualOrderFound: boolean; manualOrdersClosed: number; couponsRevoked: number; obligationsCancelled: number }
   | { ok: false; step: string; error: string };
 
 /** Odgovor PostgREST upita, onoliko koliko ga posljedice povrata citaju. */
@@ -254,7 +263,19 @@ interface DbFilter extends PromiseLike<DbResponse> {
  * tsc i deno check vide krivo ime metode ili krivi oblik argumenta (nalaz pregleda 2026-09-27).
  */
 interface RefundConsequencesDb {
-  from(table: 'manual_orders' | 'coupon_grants'): {
+  from(table: 'manual_orders' | 'coupon_grants' | 'bonus_outbox'): {
+    select(columns: string): DbFilter;
+    update(values: Record<string, string>): DbFilter;
+  };
+}
+
+/**
+ * Klijent koji closePaymentAfterRefund treba (F21, stavka 3: bez `any`): gasenje prava u
+ * `entitlements` i sve tablice sporednih posljedica. Nagrade (referrals, referral_signups) citaju
+ * pullReferralReward i pullReferralSignupReward, koje primaju isti klijent.
+ */
+interface PaymentRefundDb {
+  from(table: 'entitlements' | 'manual_orders' | 'coupon_grants' | 'bonus_outbox' | 'referrals' | 'referral_signups'): {
     select(columns: string): DbFilter;
     update(values: Record<string, string>): DbFilter;
   };
@@ -294,6 +315,10 @@ function couponGrantRows(data: unknown): CouponGrantRow[] {
  *  - pass kupon (`coupon_grants`, `reason = 'pass_bonus'`, `source_order_id = orderId`) se povlaci
  *    tako da istekne SADA. Tablica nema stupac statusa, a redak se ne brise: unique
  *    (source_order_id, reason) iz 0024 tako i dalje sprjecava da ga ponovljena uplata izda iznova.
+ *  - obveze iz `bonus_outbox` za isti PaymentIntent koje jos cekaju (`pending`) se otkazuju
+ *    (`cancelled`, migracija 0207; F21 stavka 1). Bez toga bi radnik process-bonus-outbox kasnije
+ *    izvrsio nagradu preporucitelju za vracen novac. Radnik uz to i sam cita oznaku povrata prije i
+ *    poslije izvrsenja (process-bonus-outbox/referrer-reward.ts), pa se prozor zatvara s obje strane.
  *
  * IDEMPOTENTNO U STROGOM SMISLU: prvo se cita, a pise se samo ono sto jos nije zatvoreno. Drugi isti
  * povrat ne salje nijedan upis u ove dvije tablice. Nikad ne baca; pad citanja ili upisa vraca
@@ -343,11 +368,29 @@ async function closeRefundConsequences(
         .in('id', activeCouponIds);
       if (revokeErr) return { ok: false, step: 'coupon_grants_update', error: dbErrorMessage(revokeErr) };
     }
+
+    const { data: obveze, error: obvezeErr } = await admin
+      .from('bonus_outbox')
+      .select('id')
+      .eq('order_id', orderId)
+      .eq('status', 'pending');
+    if (obvezeErr) return { ok: false, step: 'bonus_outbox_lookup', error: dbErrorMessage(obvezeErr) };
+    const pendingIds = dbRows(obveze).map((r) => String(r.id));
+    if (pendingIds.length > 0) {
+      const { error: cancelErr } = await admin
+        .from('bonus_outbox')
+        .update({ status: 'cancelled', last_error: 'refunded' })
+        .eq('order_id', orderId)
+        .eq('status', 'pending')
+        .in('id', pendingIds);
+      if (cancelErr) return { ok: false, step: 'bonus_outbox_update', error: dbErrorMessage(cancelErr) };
+    }
     return {
       ok: true,
       manualOrderFound: orderRows.length > 0,
       manualOrdersClosed: openOrderIds.length,
       couponsRevoked: activeCouponIds.length,
+      obligationsCancelled: pendingIds.length,
     };
   } catch (e) {
     return { ok: false, step: 'threw', error: String(e) };
@@ -366,7 +409,7 @@ async function closeRefundConsequences(
  * zatvoreno se ne dira, pa ponovljena dostava uplate ne mijenja nista.
  */
 async function closePaymentAfterRefund(
-  admin: any,
+  admin: PaymentRefundDb,
   ev: StripeEvent,
   productId: string,
   nowMs: number,
@@ -434,12 +477,27 @@ async function enqueueBonuses(admin: any, ev: StripeEvent, product: Product): Pr
 }
 
 /** Oznaci obvezu izvrsenom. Tiho na gresci: radnik ce je ionako ponoviti, a dvostruko izvrsenje
- *  je bezopasno jer su svi bonusi idempotentni preko vlastitih unique indeksa. */
+ *  je bezopasno jer su svi bonusi idempotentni preko vlastitih unique indeksa.
+ *  SAMO dok redak jos ceka (krug 4): puni povrat ga je mozda u medjuvremenu otkazao (`cancelled`,
+ *  closeRefundConsequences), a `done` preko `cancelled` bi izbrisao trag otkaza. Isti uvjet kao
+ *  radnik process-bonus-outbox. */
 async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {
   try {
     await admin.from('bonus_outbox')
       .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })
-      .eq('order_id', orderId).eq('kind', kind);
+      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');
+  } catch (e) {
+    console.error('webhook-mor bonus_outbox_mark_failed', { orderId, kind, error: String(e) });
+  }
+}
+
+/** Trajna odluka bez izvrsenja (Codex PR #217, M2): `done` uz razlog, isto samo dok redak ceka.
+ *  Tiho na gresci kao markBonusDone: redak tada ostaje `pending` i radnik donese istu odluku. */
+async function markBonusDeclined(admin: any, orderId: string, kind: BonusKind, reason: string): Promise<void> {
+  try {
+    await admin.from('bonus_outbox')
+      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null, done_reason: reason })
+      .eq('order_id', orderId).eq('kind', kind).eq('status', 'pending');
   } catch (e) {
     console.error('webhook-mor bonus_outbox_mark_failed', { orderId, kind, error: String(e) });
   }
@@ -518,12 +576,20 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
    * vecini puteva je to samo trag, ali oznaka punog povrata (REFUND_MARKERS) je ulaz u odluku
    * uplate, pa ga taj put mora znati (Codex pregled kruga 3).
    */
-  const settle = async (outcome: string | null, detail?: string): Promise<boolean> => {
+  //
+  // `note` (F21, stavka 2): korak i greska sporednog pada idu u `outcome_note` (migracija 0207), a
+  // `outcome_detail` ostaje TOCNO oznaka iz REFUND_MARKERS, jer je citanje oznake doslovna usporedba.
+  const settle = async (outcome: string | null, detail?: string, note?: string): Promise<boolean> => {
     if (!eventRowId) return false;
     try {
       const { data, error } = await admin
         .from('webhook_events')
-        .update({ outcome, outcome_detail: detail ?? null, processed_at: new Date().toISOString() })
+        .update({
+          outcome,
+          outcome_detail: detail ?? null,
+          processed_at: new Date().toISOString(),
+          ...(note ? { outcome_note: note.slice(0, 500) } : {}),
+        })
         .eq('id', eventRowId)
         .select('id');
       if (error) throw error;
@@ -641,6 +707,42 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
     if (!isFullRefund(ev)) {
+      // DJELOMICAN POVRAT I NADOGRADNJA (Codex pregled PR #217, M1). Pretvorba Repair -> Final Pass
+      // odbija puni placeni iznos Repaira, pa djelomicno vracena uplata ne smije ni pustiti kasniju
+      // pretvorbu ni tiho ostaviti vec pretvoreni Final Pass uz manji neto iznos. Isti dogovor pisi
+      // pa citaj kao puni povrat: PRVO se trajno upise oznaka `partial_refund_noted` (inbox), pa tek
+      // onda note_entitlement_partial_refund (0207, odjeljak 10) pod zakljucavanjem vodi vraceni
+      // iznos i javlja je li pravo vec pretvoreno. apply_entitlement_upgrade oznaku i iznos cita pod
+      // istim zakljucavanjem, pa barem jedna strana vidi drugu. Bez upisane oznake ili uz pad
+      // funkcije je 500 (Stripe ponovi); pristup se ni tada ne oduzima (PAY-09).
+      if (!(await settle(null, 'partial_refund_noted'))) {
+        console.error('webhook-mor refund_marker_failed', { orderId: ev.orderId, partial: true });
+        return json({ error: 'refund_marker_failed' }, 500);
+      }
+      const { data: djelomicno, error: djelomicnoErr } = await admin.rpc('note_entitlement_partial_refund', {
+        p_order_id: ev.orderId,
+        p_refunded_cents: ev.refundedCents,
+      });
+      if (djelomicnoErr) {
+        console.error('webhook-mor partial_refund_note_failed', { orderId: ev.orderId, error: dbErrorMessage(djelomicnoErr) });
+        await settle('failed', 'partial_refund_noted', `partial_refund_note: ${dbErrorMessage(djelomicnoErr)}`);
+        return json({ error: 'refund_failed' }, 500);
+      }
+      const ishodDjelomicnog = String(djelomicno ?? '');
+      if (ishodDjelomicnog !== 'noted' && ishodDjelomicnog !== 'not_found') {
+        // `upgraded_needs_review`: pravo je vec Final Pass placen uz odbitak punog iznosa. Pravo se
+        // ne dira automatski; operater bira (docs/GO_LIVE_NAPLATA.md, 5.2). Nepoznat ishod ide istim
+        // putem (fail-closed). `outcome_detail` ostaje oznaka, pa je checkout i webhook i dalje citaju.
+        const biljeska = `partial_refund_after_upgrade: uplata=${ev.orderId} vraceno=${ev.refundedCents ?? 'nepoznato'} naplaceno=${ev.totalCents ?? 'nepoznato'} ishod=${ishodDjelomicnog}`;
+        console.error('webhook-mor partial_refund_after_upgrade', {
+          orderId: ev.orderId,
+          totalCents: ev.totalCents,
+          refundedCents: ev.refundedCents,
+          ishod: ishodDjelomicnog,
+        });
+        await settle('needs_manual_review', 'partial_refund_noted', biljeska);
+        return json({ ok: true, action: 'partial_refund_noted', review: 'partial_refund_after_upgrade' }, 200);
+      }
       console.error('webhook-mor partial_refund_kept', {
         orderId: ev.orderId,
         totalCents: ev.totalCents,
@@ -671,7 +773,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // proglasila tudjim ili nepostojecim i nikad ga ne bi ponovila (Codex pregled kruga 3).
     const { data: refundTargets, error: lookupErr } = await admin
       .from('entitlements')
-      .select('id, product_id')
+      .select('id, product_id, upgrade_order_id, upgrade_paid_cents, upgrade_reverted_at')
       .eq('provider', PROVIDER)
       .eq('order_id', ev.orderId);
     if (lookupErr) {
@@ -679,7 +781,31 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       await settle('failed', 'refund_pending');
       return json({ error: 'refund_failed' }, 500);
     }
-    const targets = dbRows(refundTargets).map((r) => ({ id: String(r.id), productId: String(r.product_id ?? '') }));
+    const targets = dbRows(refundTargets).map((r) => ({
+      id: String(r.id),
+      productId: String(r.product_id ?? ''),
+      upgradeOrderId: typeof r.upgrade_order_id === 'string' ? r.upgrade_order_id : '',
+      upgradePaidCents: typeof r.upgrade_paid_cents === 'number' ? r.upgrade_paid_cents : null,
+      upgradeReverted: typeof r.upgrade_reverted_at === 'string' && r.upgrade_reverted_at !== '',
+    }));
+    // Povrat IZVORNE (Repair) uplate prava koje je vec nadogradjeno u Final Pass gasi i nadogradnju,
+    // a uplata nadogradnje ostaje naplacena. Pravo se svejedno gasi (sigurnije), ali to netko mora
+    // vidjeti i odluciti o povratu nadogradnje. Trag je TRAJAN (nalaz pregleda kruga 3): ishod
+    // `needs_manual_review` uz `outcome_note` s PaymentIntentom i iznosom nadogradnje, ne samo redak
+    // u logu koji istekne. `outcome_detail` ostaje `refunded` (REFUND_MARKERS). Pravo cija je
+    // nadogradnja vec vracena (upgrade_reverted_at) opet je obican Repair, a uplata nadogradnje je
+    // vec vracena, pa tu nema druge uplate bez prava ni rucnog pregleda.
+    const nadogradjeni = targets.filter((r) => r.upgradeOrderId !== '' && !r.upgradeReverted);
+    let rucniPregled: string | null = null;
+    if (nadogradjeni.length > 0) {
+      console.error('webhook-mor refund_of_upgraded_entitlement', {
+        orderId: ev.orderId,
+        upgradeOrderIds: nadogradjeni.map((r) => r.upgradeOrderId),
+      });
+      rucniPregled = `refund_of_upgraded_entitlement: ${nadogradjeni
+        .map((r) => `pravo=${r.id} nadogradnja=${r.upgradeOrderId} naplaceno_nadogradnje=${r.upgradePaidCents ?? 'nepoznato'}`)
+        .join('; ')}`;
+    }
     const foreignTarget = targets.find((r) => !isSoldByLektaCheckout(r.productId));
     if (foreignTarget) {
       console.warn('webhook-mor foreign_event_ignored', {
@@ -693,6 +819,28 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // Update ide SAMO po id-ovima Lektinih redaka procitanih gore. Redak koji bi se izmedju
     // citanja i upisa pojavio pod istim PaymentIntentom (npr. Katedrin) tako ostaje netaknut.
     const ownIds: string[] = targets.map((r) => r.id);
+
+    // POVRAT UPLATE NADOGRADNJE (Monetizacija V1, odjeljak 14). Nadogradnja ne stvara vlastiti redak
+    // nego pretvara postojeci, pa njezin PaymentIntent stoji u `upgrade_order_id`, ne u `order_id`.
+    // Bez ovog citanja bi povrat nadogradnje zavrsio kao `refund_without_entitlement`, a Final Pass
+    // bi ostao za vracen novac. Pad citanja je 500 (Stripe ponovi), isto kao gore.
+    let upgradeIds: string[] = [];
+    let upgradeSources: string[] = [];
+    if (ownIds.length === 0) {
+      const { data: upgradeRows, error: upgradeLookupErr } = await admin
+        .from('entitlements')
+        .select('id, order_id, paid_amount_cents')
+        .eq('upgrade_order_id', ev.orderId);
+      if (upgradeLookupErr) {
+        console.error('webhook-mor refund_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(upgradeLookupErr) });
+        await settle('failed', 'refund_pending');
+        return json({ error: 'refund_failed' }, 500);
+      }
+      upgradeIds = dbRows(upgradeRows).map((r) => String(r.id));
+      upgradeSources = dbRows(upgradeRows).map(
+        (r) => `pravo=${String(r.id)} izvorna_uplata=${String(r.order_id ?? '')} naplaceno_repair=${typeof r.paid_amount_cents === 'number' ? r.paid_amount_cents : 'nepoznato'}`,
+      );
+    }
 
     // PRAVO SE GASI PRIJE SPOREDNIH POSLJEDICA (nalaz pregleda 2026-09-27). Dotad je
     // closeRefundConsequences isla prva, pa je pad upisa u manual_orders ili coupon_grants vracao
@@ -720,6 +868,54 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
         await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
       }
     }
+    // POVRAT NADOGRADNJE VRACA REPAIR (krug 4, odjeljak 14: korisnik koji je prvo kupio Repair ne
+    // smije biti kaznjen). Vracena je SAMO uplata nadogradnje; Repair uplata je i dalje naplacena.
+    // revert_entitlement_upgrade (0207) zato pravo ne gasi nego ga atomski vraca na stanje
+    // zapamceno pri pretvorbi: Repair proizvod, ponudu, prava, prozor, rok potrosnje i istek
+    // vezanog slota. Final Pass (i besplatan re-check u produljenom prozoru) nestaje, placeni Repair
+    // ostaje. Nista ne ceka operatera: ishod je `processed`/`refunded`, a `outcome_note` nosi trag.
+    // `inactive`: pravo je vec ugaseno (npr. prvo je vracena izvorna Repair uplata), nista se ne
+    // ozivljava. Samo pravo bez zapamcenog stanja (`no_snapshot`) se gasi cijelo i ide na rucni
+    // pregled: sigurnije je oduzeti previse nego ostaviti Final Pass za vracen novac.
+    let nadogradnjaVracena = false;
+    let biljeska: string | null = null;
+    if (upgradeIds.length > 0) {
+      const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {
+        p_upgrade_order_id: ev.orderId,
+      });
+      if (vracanjeErr) {
+        console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: dbErrorMessage(vracanjeErr) });
+        await settle('failed', 'refund_pending');
+        return json({ error: 'refund_failed' }, 500);
+      }
+      const ishodVracanja = String(vracanje ?? '');
+      if (ishodVracanja === 'reverted' || ishodVracanja === 'duplicate' || ishodVracanja === 'inactive') {
+        nadogradnjaVracena = true;
+        console.warn('webhook-mor upgrade_reverted', { orderId: ev.orderId, entitlementIds: upgradeIds, ishod: ishodVracanja });
+        biljeska = `upgrade_reverted: ${upgradeSources.join('; ')} ishod=${ishodVracanja}`;
+      }
+    }
+    // Pravo bez zapamcenog stanja prije nadogradnje: gasi se cijelo, placeni Repair ostaje bez
+    // prava, pa ERROR i trajan rucni pregled (povrat Repaira ili rucno vezivanje novog Repair prava).
+    if (upgradeIds.length > 0 && !nadogradnjaVracena) {
+      const { data: upgradeRefunded, error: upgradeRefundErr } = await admin
+        .from('entitlements')
+        .update({ status: 'refunded' })
+        .eq('upgrade_order_id', ev.orderId)
+        .in('id', upgradeIds)
+        .select('id');
+      if (upgradeRefundErr) {
+        console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: dbErrorMessage(upgradeRefundErr) });
+        await settle('failed', 'refund_pending');
+        return json({ error: 'refund_failed' }, 500);
+      }
+      if (dbRows(upgradeRefunded).length > 0) {
+        pravoUgaseno = true;
+        console.error('webhook-mor upgrade_refunded', { orderId: ev.orderId, entitlementIds: upgradeIds });
+        // Placeni Repair dio ostaje bez prava: trajan trag uz inbox, isto kao gore.
+        rucniPregled = `upgrade_refunded: ${upgradeSources.join('; ')}`;
+      }
+    }
 
     // SPOREDNE POSLJEDICE (odluka vlasnika 2026-09-27): rucna narudzba istog PaymentIntenta se
     // otkazuje, pass kupon iz iste kupnje se povlaci. Ide i kad entitlementa nema, jer rucna
@@ -737,13 +933,25 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
         error: posljedice.error,
         entitlementRefunded: pravoUgaseno,
       });
-      await settle('failed', 'refund_consequences_failed');
+      await settle('failed', 'refund_consequences_failed', `${posljedice.step}: ${posljedice.error}`);
       return json({ error: 'refund_failed' }, 500);
     }
 
     // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio (ili je vec bila zatvorena),
     // pa je ishod `refunded`, isti kao za entitlement.
-    if (pravoUgaseno || posljedice.manualOrderFound) {
+    if (pravoUgaseno || nadogradnjaVracena || posljedice.manualOrderFound) {
+      // Povrat koji dira nadogradnju ostavlja jednu uplatu bez prava: ishod `needs_manual_review`
+      // ulazi u dnevni upit rucnog pregleda (docs/GO_LIVE_NAPLATA.md 5.1 i 5.2), a oznaka punog
+      // povrata ostaje `refunded` pa je uplata i radnik bonusa i dalje vide.
+      if (rucniPregled !== null) {
+        await settle('needs_manual_review', 'refunded', rucniPregled);
+        return json({ ok: true, action: 'refunded', review: rucniPregled.slice(0, rucniPregled.indexOf(':')) });
+      }
+      // Nadogradnja vracena na Repair: nista ne ceka operatera, ali trag ostaje u inboxu.
+      if (biljeska !== null) {
+        await settle('processed', 'refunded', biljeska);
+        return json({ ok: true, action: 'refunded', upgrade: 'reverted' });
+      }
       await settle('processed', 'refunded');
       return json({ ok: true, action: 'refunded' });
     }
@@ -762,7 +970,13 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // proizvod iz kataloga po KATALOSKOM id-u iz metadata (sekcija 6.2). Prije 2026-09-23 se
   // trazio po `mor_product_id`; taj put je uklonjen zajedno s MoR providerom, jer bi inace
   // svaka Stripe uplata tiho zavrsila kao `unknown_product`.
-  const { data: prow, error: productErr } = await admin.from('products').select('*').eq('id', ev.productId).maybeSingle();
+  // `offer_codes(capabilities)`: prava ponude se citaju U ISTOM upitu kao cijena, pa snapshot na
+  // entitlementu odgovara katalogu u trenutku kupnje (Monetizacija V1, odjeljak 13).
+  const { data: prow, error: productErr } = await admin
+    .from('products')
+    .select('*, offer_codes(capabilities)')
+    .eq('id', ev.productId)
+    .maybeSingle();
   // Prolazna greska baze NIJE nepoznat proizvod (Codex pregled kruga 3). Da se tretira kao
   // nepoznat, placena kupnja bi dobila 200 i Stripe je nikad ne bi ponovio. 500 = retry.
   if (productErr) {
@@ -794,6 +1008,13 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     });
     await settle('ignored', `foreign_product: ${product.id}`);
     return json({ ok: true, action: 'ignored', reason: 'foreign_product' }, 200);
+  }
+
+  // NADOGRADNJA Repair -> Final Pass (Monetizacija V1, odjeljak 14). Iznos nadogradnje NIJE puna
+  // kataloska cijena nego razlika (ciljna cijena minus vec placeno za isto pravo), pa ova uplata ne
+  // smije proci kroz usporedbu s punom cijenom nize. Pretvara se postojece pravo, bez novog retka.
+  if (ev.upgradeFromEntitlementId) {
+    return await bookUpgradePayment(admin, ev, product, settle, deps.now?.() ?? Date.now());
   }
 
   // NAPLACENI IZNOS NASPRAM KATALOGA (nalaz adversarijalnog pregleda 2026-09-23; odluka vlasnika
@@ -954,9 +1175,19 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // proknjizene uplate (vecProknjizeno, gore) ne pokusava upis: redak istog korisnika vec postoji.
   let vecPostoji = vecProknjizeno;
   if (!vecPostoji) {
+    // SNAPSHOT PRAVA PRI KUPNJI (Monetizacija V1, odjeljak 13). Proizvod bez offer_code ili bez
+    // ugradjenih prava se ne knjizi s praznim snapshotom: 500 (Stripe ponovi dok se katalog ne
+    // ispravi), isto kao proizvod bez work_type. Ponovljena dostava vec proknjizene uplate ovamo ne
+    // ulazi, pa ispravak kataloga ne treba za vec upisano pravo.
+    const snapshot = entitlementSnapshotOf(product);
+    if (!snapshot) {
+      console.error('webhook-mor product_without_offer', { productId: product.id, orderId: ev.orderId });
+      await settle('failed', `product_without_offer: ${product.id}`);
+      return json({ error: 'product_misconfigured' }, 500);
+    }
     const { error } = await admin
       .from('entitlements')
-      .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
+      .insert(buildEntitlementInsert({ ...product, ...snapshot }, ev, PROVIDER, Date.now()));
     if (error && dbErrorCode(error) !== UNIQUE_VIOLATION) {
       // Tekst greske baze ide SAMO u log i inbox, nikad u odgovor (odluka vlasnika 2026-09-27).
       console.error('webhook-mor entitlement_insert_failed', {
@@ -1061,8 +1292,37 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // prazninu (audit P1-07).
   await enqueueBonuses(admin, ev, product);
 
-  await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);
-  await markBonusDone(admin, ev.orderId, 'referrer_reward');
+  // NAGRADA PREPORUCITELJU TEK NAKON PONOVNOG CITANJA OZNAKE POVRATA (krug 4). Prvo citanje je bilo
+  // prije upisa obveza; puni povrat koji stigne u tom razmaku bi inace ostavio nagradu izdanu inline,
+  // a otkazanu obvezu preko koje bi je markBonusDone oznacio izvrsenom. Radnik
+  // (process-bonus-outbox) oznaku cita isto prije isplate. Oznaka ili pad citanja: nagrada se ovdje
+  // NE izdaje, obveza ostaje kakva jest (povrat je otkazuje, inace je radnik izvrsi uz vlastitu
+  // provjeru), a kasnije citanje nize zatvara sve sto je uplata izdala.
+  const { data: povratPrijeNagrade, error: povratPrijeNagradeErr } = await admin
+    .from('webhook_events')
+    .select('id')
+    .eq('provider', PROVIDER)
+    .eq('order_id', ev.orderId)
+    .in('outcome_detail', REFUND_MARKERS)
+    .limit(1);
+  if (povratPrijeNagradeErr || dbRows(povratPrijeNagrade).length > 0) {
+    console.error('webhook-mor referrer_reward_deferred', {
+      orderId: ev.orderId,
+      reason: povratPrijeNagradeErr ? 'refund_marker_lookup_failed' : 'refund_marker_present',
+    });
+  } else {
+    // Ishod se CITA (Codex pregled PR #217, M2): prolazan pad (`grant_failed`, `error`) ostavlja
+    // obvezu `pending` pa je radnik ponovi; trajna odluka je zatvara s razlogom.
+    const nagrada = await (deps.grantReferrerReward ?? tryGrantReferrerReward)(admin, ev.userId, product.workType, ev.orderId);
+    const zatvaranje = referrerRewardSettlement(nagrada);
+    if (!zatvaranje.settled) {
+      console.error('webhook-mor referrer_reward_retry', { orderId: ev.orderId, reason: zatvaranje.reason });
+    } else if (zatvaranje.reason === 'granted') {
+      await markBonusDone(admin, ev.orderId, 'referrer_reward');
+    } else {
+      await markBonusDeclined(admin, ev.orderId, 'referrer_reward', zatvaranje.reason);
+    }
+  }
 
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
   if (isPassProduct(product.kind)) {
@@ -1142,4 +1402,234 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   return json({ error: 'internal' }, 500);
  }
 };
+}
+
+// ---------------------------------------------------------------------------
+// NADOGRADNJA Repair -> Final Pass (Monetizacija V1, odjeljak 14). Stoji na kraju datoteke da
+// staticki gardovi nad redoslijedom glavnog toka (tests/webhook.test.ts) i dalje vide glavni tok prvi.
+/** Upit supabase-js graditelja kakvog nadogradnja koristi (thenable koji se dalje suzava). */
+interface UpgradeQuery extends PromiseLike<DbResponse> {
+  eq(column: string, value: string): UpgradeQuery;
+  gt(column: string, value: string): UpgradeQuery;
+  in(column: string, values: readonly string[]): UpgradeQuery;
+  limit(count: number): UpgradeQuery;
+  select(columns: string): UpgradeQuery;
+  maybeSingle(): PromiseLike<DbResponse>;
+}
+
+/** Najuzi oblik Supabase klijenta koji nadogradnja treba; bez `any`. */
+interface UpgradeDb {
+  from(table: 'entitlements' | 'webhook_events' | 'document_slots'): {
+    select(columns: string): UpgradeQuery;
+    update(values: Record<string, string>): UpgradeQuery;
+  };
+  rpc(fn: 'apply_entitlement_upgrade' | 'revert_entitlement_upgrade', args: Record<string, string | number | null>): PromiseLike<DbResponse>;
+}
+
+/** Zapis ishoda u inbox (settle iz handlera). */
+type Settle = (outcome: string | null, detail?: string, note?: string) => Promise<boolean>;
+
+/**
+ * UPLATA NADOGRADNJE Repair -> Final Pass (Monetizacija V1, odjeljak 14). Pretvara POSTOJECE pravo
+ * (isti entitlement, isti vezani slot i otisak dokumenta), ne stvara drugo.
+ *
+ *  1. Izvorno pravo se cita po id-u iz metadate. Ako ga je vec pretvorila OVA uplata, to je
+ *     ponovljena dostava: nista se ne pise.
+ *  2. Iznos se provjerava ISTOM odlukom kao u create-checkoutu (quoteUpgrade: ciljna cijena iz
+ *     products.price_eur minus paid_amount_cents istog prava) i chargedAmountVerdict. Pravo koje
+ *     nije kandidat (tudje, vec nadogradjeno, isteklo, druga vrsta rada) ili uplata ispod razlike
+ *     ide na rucni pregled: novac je naplacen, a pretvorba nije dopustena.
+ *  3. apply_entitlement_upgrade (0207) pretvara pravo atomski i jednom; `unavailable` znaci da ga
+ *     je u medjuvremenu promijenilo nesto drugo (npr. druga uplata nadogradnje), pa rucni pregled.
+ *  4. Pisi pa citaj, kao i obicna uplata: tek nakon pretvorbe se cita oznaka punog povrata ISTE
+ *     uplate; ako je tu, pretvorba se vraca na zapamceni Repair (revert_entitlement_upgrade), isto
+ *     kao u grani povrata. Placeni Repair ostaje, Final Pass za vracen novac nestaje.
+ * Nadogradnja ne izdaje bonuse (pass kupon, nagrada preporucitelju): to su posljedice prve kupnje.
+ */
+async function bookUpgradePayment(
+  admin: UpgradeDb,
+  ev: StripeEvent,
+  product: Product,
+  settle: Settle,
+  nowMs: number,
+): Promise<Response> {
+  const { data: srow, error: sourceErr } = await admin
+    .from('entitlements')
+    .select(UPGRADE_SOURCE_COLUMNS)
+    .eq('id', ev.upgradeFromEntitlementId)
+    .maybeSingle();
+  if (sourceErr) {
+    console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(sourceErr) });
+    await settle('failed', `upgrade_source_lookup: ${dbErrorMessage(sourceErr)}`);
+    return json({ error: 'internal' }, 500);
+  }
+  const source = mapUpgradeSourceRow(srow);
+  const ponovljeno = source !== null && source.userId === ev.userId && source.upgradeOrderId === ev.orderId;
+
+  let iznosIznad = '';
+  if (!ponovljeno) {
+    // POVRAT OVE UPLATE VEC ZABILJEZEN (Stripe ne jamci redoslijed): pravo se ne pretvara uopce, pa
+    // placeni Repair ostaje netaknut. Drugo citanje nakon pretvorbe (nize) pokriva samo istodobni
+    // povrat; bez ovog prvog bi povrat koji je stigao prije uplate ugasio i Repair.
+    const { data: ranijiPovrat, error: ranijiErr } = await admin
+      .from('webhook_events')
+      .select('id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId)
+      .in('outcome_detail', REFUND_MARKERS)
+      .limit(1);
+    if (ranijiErr) {
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(ranijiErr) });
+      await settle('failed', `refund_marker_lookup: ${dbErrorMessage(ranijiErr)}`);
+      return json({ error: 'refund_marker_lookup_failed' }, 500);
+    }
+    if (dbRows(ranijiPovrat).length > 0) {
+      console.error('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id, upgrade: true, converted: false });
+      await settle('processed', 'refunded_before_payment');
+      return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    }
+
+    // Djelomican povrat IZVORNE uplate (krug 4): odluka se ponavlja nad stvarnom oznakom
+    // `partial_refund_noted`, ISTIM citanjem kao create-checkout. Bez toga je `partiallyRefunded`
+    // ovdje bio nepoznat (undefined), pa bi povrat dijela Repaira zabiljezen izmedju checkouta i
+    // uplate prosao pretvorbu s odbitkom punog iznosa. Pad citanja je 500 (Stripe ponovi).
+    if (source) {
+      const partial = await readSourcePartiallyRefunded(admin, source.orderId ?? '');
+      if (!partial.ok) {
+        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: partial.error });
+        await settle('failed', `upgrade_refund_lookup: ${partial.error}`);
+        return json({ error: 'internal' }, 500);
+      }
+      source.partiallyRefunded = partial.partial;
+    }
+
+    // Vezani rad mora biti jos prepoznatljiv (isto pravilo kao create-checkout;
+    // apply_entitlement_upgrade ga ponavlja atomski): otisak slota netaknut. Cron ga je mogao
+    // anonimizirati izmedju checkouta i uplate: tada rucni pregled.
+    if (source && source.slotsUsed > 0) {
+      const slot = await readBoundSlotIntact(admin, source.id);
+      if (!slot.ok) {
+        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: slot.error });
+        await settle('failed', `upgrade_slot_lookup: ${slot.error}`);
+        return json({ error: 'internal' }, 500);
+      }
+      source.boundSlotIntact = slot.intact;
+    }
+    const quote = quoteUpgrade(product, source, ev.userId, nowMs);
+    const iznos = quote.ok ? chargedAmountVerdict(ev, quote.amountCents) : null;
+    const razlog = !quote.ok
+      ? quote.error
+      : iznos && iznos.kind === 'needs_manual_review'
+        ? iznos.reason
+        : null;
+    if (razlog !== null || !source) {
+      const reason = razlog ?? 'upgrade_source_not_found';
+      console.error('webhook-mor upgrade_needs_manual_review', {
+        reason,
+        orderId: ev.orderId,
+        productId: product.id,
+        sourceEntitlementId: ev.upgradeFromEntitlementId,
+        naplacenoCenti: ev.totalCents,
+        currency: ev.currency,
+      });
+      await settle(
+        'needs_manual_review',
+        `upgrade:${reason} izvor=${ev.upgradeFromEntitlementId} naplaceno=${ev.totalCents === null ? 'nepoznato' : ev.totalCents}`,
+      );
+      return json({ ok: true, action: 'needs_manual_review', reason }, 200);
+    }
+    if (iznos && iznos.kind === 'above_catalog') iznosIznad = iznos.detail;
+
+    const { data: ishod, error: rpcErr } = await admin.rpc('apply_entitlement_upgrade', {
+      p_entitlement_id: source.id,
+      p_user_id: ev.userId,
+      p_upgrade_order_id: ev.orderId,
+      p_target_product_id: product.id,
+      p_upgrade_paid_cents: ev.amountReceivedCents ?? ev.totalCents,
+      p_purchase_expires_at: isoAfterDays(nowMs, product.purchaseWindowDays),
+      p_slot_expires_at: isoAfterDays(nowMs, product.slotWindowDays),
+    });
+    if (rpcErr) {
+      console.error('webhook-mor upgrade_apply_failed', { orderId: ev.orderId, error: dbErrorMessage(rpcErr) });
+      await settle('failed', `upgrade_apply: ${dbErrorMessage(rpcErr)}`);
+      return json({ error: 'insert_failed' }, 500);
+    }
+    if (ishod !== 'upgraded' && ishod !== 'duplicate') {
+      console.error('webhook-mor upgrade_needs_manual_review', {
+        reason: 'upgrade_source_unavailable',
+        orderId: ev.orderId,
+        productId: product.id,
+        sourceEntitlementId: source.id,
+        ishod: String(ishod ?? ''),
+      });
+      await settle('needs_manual_review', `upgrade:upgrade_source_unavailable izvor=${source.id} ishod=${String(ishod ?? '')}`);
+      return json({ ok: true, action: 'needs_manual_review', reason: 'upgrade_source_unavailable' }, 200);
+    }
+  }
+
+  // Pisi pa citaj (isti dogovor kao obicna uplata): povrat ove uplate koji je stigao prije ili
+  // istodobno vidi pretvoreno pravo, ili ova grana vidi njegovu oznaku.
+  const { data: oznaka, error: oznakaErr } = await admin
+    .from('webhook_events')
+    .select('id')
+    .eq('provider', PROVIDER)
+    .eq('order_id', ev.orderId)
+    .in('outcome_detail', REFUND_MARKERS)
+    .limit(1);
+  if (oznakaErr) {
+    console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(oznakaErr) });
+    await settle('failed', `refund_marker_lookup: ${dbErrorMessage(oznakaErr)}`);
+    return json({ error: 'refund_marker_lookup_failed' }, 500);
+  }
+  if (dbRows(oznaka).length > 0) {
+    // POVRAT STIGAO ISTODOBNO S PRETVORBOM (krug 4). Pravo se NE gasi: vraca se na Repair zapamcen
+    // pri pretvorbi (revert_entitlement_upgrade, 0207), jer je vracena samo uplata nadogradnje, a
+    // Repair uplata ostaje naplacena (odjeljak 14). Final Pass i produljen slot tako nestaju,
+    // placeni Repair i njegov re-check ostaju. Trag ide u `outcome_note`.
+    const izvor = `pravo=${ev.upgradeFromEntitlementId} izvorna_uplata=${source?.orderId || 'nepoznato'} naplaceno_repair=${source?.paidAmountCents ?? 'nepoznato'}`;
+    const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {
+      p_upgrade_order_id: ev.orderId,
+    });
+    if (vracanjeErr) {
+      console.error('webhook-mor refund_consequences_failed', {
+        orderId: ev.orderId,
+        step: 'upgrade_revert',
+        error: dbErrorMessage(vracanjeErr),
+      });
+      await settle('failed', `refunded_before_payment: upgrade_revert: ${dbErrorMessage(vracanjeErr)}`);
+      return json({ error: 'refund_failed' }, 500);
+    }
+    const ishodVracanja = String(vracanje ?? '');
+    if (ishodVracanja === 'reverted' || ishodVracanja === 'duplicate' || ishodVracanja === 'inactive') {
+      console.warn('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id, upgrade: true, ishod: ishodVracanja });
+      await settle('processed', 'refunded_before_payment', `upgrade_reverted: ${izvor} ishod=${ishodVracanja}`);
+      return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    }
+    // Stanje prije pretvorbe nije zapamceno (ili pravo nije nadjeno): gasi se cijelo, a placeni
+    // Repair ostaje bez prava, pa trajan rucni pregled (isto kao grana povrata).
+    const { error: gasiErr } = await admin
+      .from('entitlements')
+      .update({ status: 'refunded' })
+      .eq('id', ev.upgradeFromEntitlementId)
+      .eq('upgrade_order_id', ev.orderId);
+    if (gasiErr) {
+      console.error('webhook-mor refund_consequences_failed', {
+        orderId: ev.orderId,
+        step: 'upgrade_entitlement_update',
+        error: dbErrorMessage(gasiErr),
+      });
+      await settle('failed', `refunded_before_payment: upgrade_entitlement_update: ${dbErrorMessage(gasiErr)}`);
+      return json({ error: 'refund_failed' }, 500);
+    }
+    console.error('webhook-mor upgrade_refunded', { orderId: ev.orderId, productId: product.id, ishod: ishodVracanja });
+    await settle('needs_manual_review', 'refunded_before_payment', `upgrade_refunded: ${izvor} ishod=${ishodVracanja}`);
+    return json({ ok: true, action: 'refunded_before_payment', review: 'upgrade_refunded' }, 200);
+  }
+
+  if (ponovljeno) {
+    await settle('processed', 'upgrade_duplicate');
+    return json({ ok: true, action: 'duplicate_ignored' });
+  }
+  await settle('processed', iznosIznad ? `entitlement_upgraded; ${iznosIznad}` : 'entitlement_upgraded');
+  return json({ ok: true, action: 'entitlement_upgraded' });
 }
