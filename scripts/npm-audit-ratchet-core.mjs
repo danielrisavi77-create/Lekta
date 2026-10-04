@@ -103,7 +103,10 @@ export function highCriticalAdvisoryPairs(auditJson) {
     const deps = [];
     for (const entry of Array.isArray(vulns[name]?.via) ? vulns[name].via : []) {
       if (typeof entry === 'string') {
-        if (HIGH_CRITICAL.has(vulns[entry]?.severity)) deps.push(entry);
+        // Referenca na paket kojeg u auditu nema: lanac se ne moze provjeriti, pa je paket
+        // nerazrijesen, ne tiho cist (Codex R3 na #282).
+        if (!Object.prototype.hasOwnProperty.call(vulns, entry)) bad = true;
+        else if (HIGH_CRITICAL.has(vulns[entry]?.severity)) deps.push(entry);
       } else if (entry && typeof entry === 'object' && HIGH_CRITICAL.has(entry.severity)) {
         const m = GHSA_URL.exec(String(entry.url ?? ''));
         if (m) own.add(m[1]);
@@ -115,7 +118,9 @@ export function highCriticalAdvisoryPairs(auditJson) {
     through.set(name, deps);
   }
   // Zatvaranje do fiksne tocke: svaki prolaz prenosi advisoryje i nerazrijesenost s paketa iz `via`;
-  // skupovi samo rastu i konacni su, pa petlja staje.
+  // skupovi samo rastu i konacni su, pa petlja staje. Poznato ogranicenje (Codex R4 na #282): u
+  // najgorem slucaju je kubicno (prolazi x paketi x advisoryji); za stvarni graf od nekoliko desetaka
+  // high/critical paketa to je zanemarivo, pa se svjesno ne optimizira.
   for (let changed = true; changed;) {
     changed = false;
     for (const name of names) {

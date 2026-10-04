@@ -137,6 +137,18 @@ describe('npm audit ratchet: jezgra', () => {
     } }).unresolved).toEqual(['a', 'gore']);
   });
 
+  it('T93 (Codex R3 na #282): via referenca na paket kojeg nema u auditu je nerazrijesena, ne tiho cista', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [{ packages: ['a'], advisories: [GA] }] };
+    const s = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high', via: [adv(GA), 'missing'] } } }, r);
+    expect(s.verdict).toBe('above');
+    expect(s.unresolvedPackages).toEqual(['a']);
+    // Postojeci paket niske ozbiljnosti u via i dalje se ne broji kao problem.
+    expect(compareAuditToRatchet({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), 'niski'] },
+      niski: { severity: 'moderate', via: [] },
+    } }, r).verdict).toBe('equal');
+  });
+
   it('T93 (Codex R2 na #282): ciklus kroz via ne gubi par; skupovi su zatvoreni do fiksne tocke', () => {
     const audit = { vulnerabilities: {
       a: { severity: 'high', via: [adv(GA), 'b'] },
