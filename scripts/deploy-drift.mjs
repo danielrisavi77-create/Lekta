@@ -26,10 +26,11 @@ import { fileURLToPath } from 'node:url';
 import {
   configVerifyJwt,
   contentDrift,
-  deployedLocalSources,
+  deployedModules,
+  deployIdentityProblem,
   driftFor,
-  extractSourceMaps,
   labelForOnlyLive,
+  parseEszip,
   verifyJwtDrift,
 } from './deploy-drift-core.mjs';
 
@@ -60,8 +61,8 @@ function repoFunctions() {
 }
 
 /**
- * Deployani bundle funkcije (ESZIP) kao UTF-8 tekst, ili null kad ga API ne da. Null nije
- * "jednako": presuda za tu funkciju je tada NE ZNAM.
+ * Deployani bundle funkcije (binarni ESZIP), ili null kad ga API ne da. Null nije "jednako":
+ * presuda za tu funkciju je tada NE ZNAM.
  */
 async function deployedBundle(ref, slug) {
   try {
@@ -70,7 +71,20 @@ async function deployedBundle(ref, slug) {
       signal: AbortSignal.timeout(180_000),
     });
     if (!res.ok) return null;
-    return new TextDecoder().decode(await res.arrayBuffer());
+    return new Uint8Array(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+/** Trenutni zapis jedne funkcije (`version`, `updated_at`), ili null kad ga API ne da. */
+async function functionRecord(ref, slug) {
+  try {
+    const res = await fetch(`${API}/projects/${ref}/functions/${slug}`, {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      signal: AbortSignal.timeout(60_000),
+    });
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -82,15 +96,24 @@ function readRepo(repoPath) {
   return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
 }
 
-/** Presuda po sadrzaju za svaku funkciju koja je i u repou i deployana (T101). */
+/**
+ * Presuda po sadrzaju za svaku funkciju koja je i u repou i deployana (T101). Body se veze uz
+ * verziju deploya: zapis funkcije cita se prije i poslije dohvata bodyja, a promjena izmedju dva
+ * citanja daje NE ZNAM, jer body tada mozda pripada drugoj verziji od one koja se biljezi.
+ */
 async function contentVerdicts(ref, both) {
   const verdicts = [];
   for (const slug of [...both].sort()) {
+    const before = await functionRecord(ref, slug);
     const bundle = await deployedBundle(ref, slug);
-    const verdict = bundle === null
-      ? { status: 'ne-znam', entry: `supabase/functions/${slug}/index.ts`, differ: [], missingInRepo: [], equal: [], why: 'API nije vratio bundle' }
-      : contentDrift(slug, deployedLocalSources(extractSourceMaps(bundle), slug), readRepo);
-    verdicts.push({ slug, ...verdict });
+    const after = await functionRecord(ref, slug);
+    const identity = deployIdentityProblem(before, after);
+    const deployed = identity !== null
+      ? { status: 'ne-znam', reason: identity }
+      : bundle === null
+        ? { status: 'ne-znam', reason: 'API nije vratio bundle' }
+        : deployedModules(parseEszip(bundle), slug);
+    verdicts.push({ slug, version: before?.version ?? null, updatedAt: before?.updated_at ?? null, ...contentDrift(slug, deployed, readRepo) });
   }
   return verdicts;
 }
@@ -105,24 +128,26 @@ async function deployedFunctions(ref) {
 
 const OZNAKA_SADRZAJA = { jednako: 'JEDNAKO', drift: 'DRIFT', 'ne-znam': 'NE ZNAM' };
 
-/** Tablica po sadrzaju: jednako / drift / ne znam, uz datoteke koje se razlikuju. */
+const OZNAKA_MODULA = { jednako: 'jednako', drift: 'razlicit', 'nema-u-repou': 'nema u repou' };
+
+/** Tablica po sadrzaju (jednako / drift / ne znam) i popis SVIH usporedjenih modula po funkciji. */
 function contentSection(verdicts) {
   const lines = ['### Sadrzaj deployanih funkcija nasuprot repou (T101)', ''];
   lines.push(
-    'Izvor se cita iz source mapa deployanog bundlea (`GET /functions/{slug}/body`) i usporedjuje s',
-    'repoom bajt po bajt (CR normaliziran). NE ZNAM znaci da bundle nije dostupan ili nema citljivih',
-    'source mapa; to nije prolaz.',
+    'Deployani bundle (`GET /functions/{slug}/body`) cita se kao binarni ESZIP; izvorni TS svakog',
+    'lokalnog modula dolazi iz njegove source mape i usporedjuje se s repoom bajt po bajt (CR',
+    'normaliziran). NE ZNAM znaci da se deploy nije mogao procitati ili vezati uz verziju; to nije prolaz.',
     '',
   );
-  lines.push('| Funkcija | Sadrzaj | Razlike |', '| --- | --- | --- |');
+  lines.push('| Funkcija | Verzija | Azurirano | Sadrzaj | Razlog |', '| --- | --- | --- | --- | --- |');
   for (const v of verdicts) {
-    const razlike = [
-      ...v.differ.map((f) => `\`${f}\` razlicit`),
-      ...v.missingInRepo.map((f) => `\`${f}\` nema u repou`),
-      ...(v.why ? [v.why] : []),
-      ...(v.status === 'ne-znam' && !v.why ? ['bundle bez source mape ulaza'] : []),
-    ].join('; ');
-    lines.push(`| \`${v.slug}\` | ${OZNAKA_SADRZAJA[v.status]} | ${razlike} |`);
+    const azurirano = typeof v.updatedAt === 'number' ? new Date(v.updatedAt).toISOString() : (v.updatedAt ?? '');
+    lines.push(`| \`${v.slug}\` | ${v.version ?? ''} | ${azurirano} | ${OZNAKA_SADRZAJA[v.status]} | ${v.reason ?? ''} |`);
+  }
+  lines.push('', '#### Usporedjeni moduli', '');
+  for (const v of verdicts) {
+    const moduli = v.modules.map((m) => `\`${m.file}\` ${OZNAKA_MODULA[m.ishod]}`).join('; ');
+    lines.push(`- \`${v.slug}\`: ${moduli || 'nijedan (NE ZNAM)'}`);
   }
   lines.push('');
   return lines;

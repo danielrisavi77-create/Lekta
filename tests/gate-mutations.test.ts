@@ -62,6 +62,7 @@ import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
+import { bundleFunkcije, mapaModula } from './helpers/eszip-fixture';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -8028,19 +8029,35 @@ const MUTATIONS: Mutation[] = [
     },
   },
   /**
-   * T101: deploy-drift po SADRZAJU. Mutanti iz izvora scripts/deploy-drift-core.mjs (bez importa),
-   * izvrseni u memoriji: (1) usporedba sadrzaja koja nikad ne prijavi razliku, pa deployani
-   * faculty-request s `Access-Control-Allow-Origin: *` prolazi kao jednak; (2) bundle bez source
-   * mape ulaza proglasen jednakim umjesto NE ZNAM.
+   * T101: deploy-drift po SADRZAJU je dokaz deploya, pa mora biti fail-closed. Mutanti iz izvora
+   * scripts/deploy-drift-core.mjs (bez importa), izvrseni u memoriji. Svaki gasi jedan gard i trazi da
+   * ulaz koji je gard morao odbiti tada prode kao JEDNAKO ili ostane neuhvacen.
    */
   ...([
     ['deploy-drift/sadrzaj-uvijek-jednak', 'usporedba sadrzaja nikad ne prijavi razliku, pa deployana funkcija koja salje ACAO * a repo odabire origin izgleda jednako',
-      'else if (norm(repo) !== norm(content)) differ.push(file);', 'else if (false) differ.push(file);',
-      (core: DriftCore) => core.contentDrift('faculty-request', new Map([['supabase/functions/faculty-request/index.ts', "'Access-Control-Allow-Origin': '*'"]]),
+      "norm(repo) !== norm(content) ? 'drift' : 'jednako'", "false ? 'drift' : 'jednako'",
+      (core: DriftCore) => core.contentDrift('faculty-request', { status: 'ok', files: new Map([['supabase/functions/faculty-request/index.ts', "'Access-Control-Allow-Origin': '*'"]]) },
         (p: string) => (p === 'supabase/functions/faculty-request/index.ts' ? 'const ALLOWED_ORIGINS = []' : null)).status === 'drift'],
-    ['deploy-drift/bez-mape-jednako', 'bundle bez citljive source mape ulaza proglasen jednakim, iako se sadrzaj nije mogao usporediti (lazno zeleno umjesto NE ZNAM)',
-      "return { status: 'ne-znam', entry, differ: [], missingInRepo: [], equal: [] };", "return { status: 'jednako', entry, differ: [], missingInRepo: [], equal: [] };",
-      (core: DriftCore) => core.contentDrift('f', new Map(), () => null).status === 'ne-znam'],
+    ['deploy-drift/visak-bajtova-prihvacen', 'body s bajtovima iza zadnje sekcije (dva spojena ili pokvarena bundlea) procitan kao valjan ESZIP (Codex R1)',
+      'if (p !== bytes.length) return { ok: false', 'if (false) return { ok: false',
+      (core: DriftCore) => !core.parseEszip(new Uint8Array([...bundleFunkcije('source/index.ts', [['source/index.ts', 'x']]), 0])).ok],
+    ['deploy-drift/necitljiv-modul-preskocen', 'lokalni modul bez citljive source mape preskocen umjesto NE ZNAM, pa razlika u njemu nestaje iz usporedbe (Codex R2)',
+      'return neZnam(`modul ${m.specifier} nema citljivu mapu s izvornim tekstom`);', 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../_shared/a.ts', kind: 'module', moduleKind: 0, source: 'js', sourceMap: mapaModula('source/../_shared/a.ts', null) }])), 'f'),
+      (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/json-modul-preskocen', 'JSON modul bez mape preskocen, pa deployani skup pravila razlicit od repoa izgleda JEDNAKO (profile-rules, izmjereno 4. 10. 2026.)',
+      "content = new TextDecoder('utf-8', { fatal: true }).decode(m.sourceBytes);", 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../../../data/x.json', kind: 'module', moduleKind: 1, source: '{"a":2}', sourceMap: null }])), 'f'),
+      (p: string) => ({ 'supabase/functions/f/index.ts': 'x', 'data/x.json': '{"a":1}' } as Record<string, string>)[p] ?? null).status === 'drift'],
+    ['deploy-drift/korijen-pretpostavljen', 'neprepoznat korijen ulaza (sufiks koji presijeca segment putanje) daje prividno valjan ulaz i JEDNAKO (Codex R3)',
+      'if (!prepoznat) return neZnam(', 'if (false) return neZnam(',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('ions/f/index.ts', [['ions/f/index.ts', 'x']])), 'f'),
+        (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/verzija-nevezana', 'body dohvacen dok se deploy mijenjao biljezi se uz staru verziju (Codex R7)',
+      'if (before.version !== after.version || before.updated_at !== after.updated_at) {', 'if (false) {',
+      (core: DriftCore) => core.deployIdentityProblem({ version: 10, updated_at: 1 }, { version: 11, updated_at: 2 }) !== null],
   ] as const).map(([id, imitates, from, to, holds]) => ({
     id,
     imitates: `T101: ${imitates}.`,
@@ -8056,10 +8073,13 @@ const MUTATIONS: Mutation[] = [
 
 /** Jezgra deploy-drifta iz (mutiranog) izvora u memoriji; izvor nema importa (T101). */
 type DriftCore = {
-  contentDrift: (slug: string, deployed: Map<string, string>, readRepo: (p: string) => string | null) => { status: string };
+  parseEszip: (bytes: Uint8Array) => { ok: boolean };
+  deployedModules: (parsed: unknown, slug: string) => unknown;
+  contentDrift: (slug: string, deployed: unknown, readRepo: (p: string) => string | null) => { status: string };
+  deployIdentityProblem: (before: unknown, after: unknown) => string | null;
 };
 function loadDriftCore(src: string): DriftCore {
-  return new Function(`${src.replace(/^export /gm, '')}\nreturn { contentDrift };`)() as DriftCore;
+  return new Function(`${src.replace(/^export /gm, '')}\nreturn { parseEszip, deployedModules, contentDrift, deployIdentityProblem };`)() as DriftCore;
 }
 
 /**
