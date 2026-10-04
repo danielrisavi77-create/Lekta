@@ -17,6 +17,7 @@ export const NEVALJANE_ADRESE = [
   'ftp://x.hr/upute.pdf', // ne-web shema: provjera protokola
   '/lokalno.pdf', // relativna putanja nije javna adresa
   'https://u:p@x.hr/upute.pdf', // vjerodajnice u adresi
+  'https://x.hr/', // gola domena: naslovnica, ne dokument
 ] as const;
 
 /** Nevaljane adrese koje validator ipak propusti; ispravan validator vraca []. */
@@ -26,8 +27,10 @@ export function acceptedInvalidUrls(validate: UrlValidator = publicSourceUrl): s
 
 /**
  * Gole domene koje su vec bile u podacima prije ovog garda (master 2026-10-04). Stvarna adresa
- * dokumenta za njih nije poznata, a pogadjati se ne smije, pa ostaju imenovana iznimka dok ih netko
- * ne zamijeni provjerenom adresom. Popis smije samo padati: nova gola domena obara gard.
+ * dokumenta za njih nije poznata, a pogadjati se ne smije. Validator ih odbija, pa se na stranici
+ * fakulteta i u aplikaciji prikazuju kao NEDOSTUPAN izvor i ne broje se kao cista dokumentna adresa
+ * (#238, Codex N1). Ovdje su samo zato da gard ne pada na poznatoj, prikazanoj praznini; popis smije
+ * samo padati, a nova gola domena obara gard.
  */
 export const POZNATE_GOLE_DOMENE: ReadonlySet<string> = new Set([
   'https://fdmri.uniri.hr/', // fdmri-naputak-zavrsni-2024, fdmri-naputak-diplomski-2025
@@ -36,24 +39,27 @@ export const POZNATE_GOLE_DOMENE: ReadonlySet<string> = new Set([
 
 export interface SourceAddress { label: string; url?: string }
 
+/** Gola domena: putanja `/` bez upita. Samo za poruku; odluku donosi validator. */
+function isBareDomain(url: string): boolean {
+  try { const u = new URL(url); return u.pathname === '/' && !u.search; } catch { return false; }
+}
+
 /**
- * Imenovani problemi: adresa koja nije javna adresa dokumenta, ili gola domena (putanja `/` bez
- * upita) koja ne vodi na dokument. Izvor bez `url` je dopusten (naslov bez javne adrese).
+ * Imenovani problemi: adresa koju validator ne priznaje kao javnu adresu dokumenta. Izvor bez `url`
+ * je dopusten (naslov bez javne adrese), a poznata gola domena je prikazana praznina, ne problem.
  */
 export function findSourceUrlProblems(sources: readonly SourceAddress[], validate: UrlValidator = publicSourceUrl): string[] {
   const problems: string[] = [];
   for (const { label, url } of sources) {
-    if (url === undefined) continue;
-    if (validate(url) === null) {
-      problems.push(`${label}: nije javna adresa dokumenta (${url})`);
-      continue;
-    }
-    const parsed = new URL(url);
-    if ((parsed.pathname === '/' || parsed.pathname === '') && !parsed.search && !POZNATE_GOLE_DOMENE.has(url)) {
-      problems.push(`${label}: gola domena bez dokumenta (${url})`);
-    }
+    if (url === undefined || validate(url) !== null || POZNATE_GOLE_DOMENE.has(url)) continue;
+    problems.push(isBareDomain(url) ? `${label}: gola domena bez dokumenta (${url})` : `${label}: nije javna adresa dokumenta (${url})`);
   }
   return problems;
+}
+
+/** Broj adresa koje validator priznaje kao cistu dokumentnu adresu (poznate gole domene nisu medju njima). */
+export function countDocumentUrls(sources: readonly SourceAddress[], validate: UrlValidator = publicSourceUrl): number {
+  return sources.filter((s) => s.url !== undefined && validate(s.url) !== null).length;
 }
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');

@@ -294,7 +294,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
-import { acceptedInvalidUrls, committedSourceAddresses, findSourceUrlProblems } from './helpers/source-url-checks';
+import { acceptedInvalidUrls, committedSourceAddresses, countDocumentUrls, findSourceUrlProblems } from './helpers/source-url-checks';
 import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -11567,18 +11567,29 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 });
 
 describe('mutacije: javne adrese izvora (sourceLinkHtml, profile-source-links)', () => {
-  it('validator bez provjere razmaka ili protokola obara gard', () => {
+  it('validator bez provjere razmaka, protokola ili gole domene obara gard', () => {
     // BASELINE: stvarni validator odbija svaku klasu nevaljane adrese, a sourceLinkHtml je ne linka.
     expect(acceptedInvalidUrls(publicSourceUrl)).toEqual([]);
     expect(sourceLinkHtml({ title: 'Upute', url: 'https://x.hr/upute.pdf (opis dokumenta)' })).not.toContain('href=');
 
-    // MUTANT 1: izgubljena provjera razmaka (stari oblik "adresa (opis)" opet postaje poveznica).
-    const bezRazmaka = (raw: unknown) => { try { const u = new URL(String(raw)); return ['https:', 'http:'].includes(u.protocol) && !u.username && !u.password ? String(raw) : null; } catch { return null; } };
-    expect(acceptedInvalidUrls(bezRazmaka)).toEqual(['https://x.hr/upute.pdf (opis dokumenta)']);
+    // Mutanti su stvarni validator bez TOCNO jedne provjere, pa svaki obara samo svoju klasu.
+    const validator = (bez: 'razmak' | 'protokol' | 'gola') => (raw: unknown): string | null => {
+      if (typeof raw !== 'string' || raw === '' || (bez !== 'razmak' && /\s/.test(raw))) return null;
+      try {
+        const u = new URL(raw);
+        if (bez !== 'protokol' && u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+        if (u.username || u.password) return null;
+        if (bez !== 'gola' && u.pathname === '/' && !u.search) return null;
+        return raw;
+      } catch { return null; }
+    };
+    expect(acceptedInvalidUrls(validator('razmak'))).toEqual(['https://x.hr/upute.pdf (opis dokumenta)']);
+    expect(acceptedInvalidUrls(validator('protokol'))).toEqual(['javascript:alert(1)', 'ftp://x.hr/upute.pdf']);
+    expect(acceptedInvalidUrls(validator('gola'))).toEqual(['https://x.hr/']);
 
-    // MUTANT 2: izgubljena provjera protokola.
-    const bezProtokola = (raw: unknown) => { if (typeof raw !== 'string' || /\s/.test(raw)) return null; try { const u = new URL(raw); return u.username || u.password ? null : raw; } catch { return null; } };
-    expect(acceptedInvalidUrls(bezProtokola)).toEqual(['javascript:alert(1)', 'ftp://x.hr/upute.pdf']);
+    // MUTANT gola domena nad stvarnim registrom: poznate gole domene bi se brojale kao ciste adrese.
+    const registar = committedSourceAddresses()['source-registry.json'];
+    expect(countDocumentUrls(registar, validator('gola'))).toBeGreaterThan(countDocumentUrls(registar));
   });
 
   it('stari URL s razmakom ili gola domena u podacima obara profile-source-links', () => {
