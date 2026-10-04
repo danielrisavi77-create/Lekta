@@ -113,11 +113,56 @@ describe('npm audit ratchet: commitani zapis', () => {
     expect(ratchet.measuredAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(ratchet.changeNote.length).toBeGreaterThan(40);
     expect(ratchet.fullGraphHighCriticalPackages).toHaveLength(ratchet.fullGraphHighCritical);
-    expect(validateRatchet(ratchet, { today: '2026-09-21' })).toEqual([]);
+    expect(validateRatchet(ratchet, { today: '2026-10-03' })).toEqual([]);
   });
 
   it('prethodno mjerenje je zapisano da se promjena ne moze procitati kao tiha', () => {
-    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(7);
-    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-21');
+    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(6);
+    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-10-02');
+  });
+
+  it('tooling iznimke su vremenski ogranicene i pokrivaju tocno aktivne identitete', () => {
+    expect(ratchet.fullGraphHighCriticalPackages).toEqual([
+      '@netlify/build',
+      '@netlify/dev',
+      '@netlify/functions-dev',
+      '@netlify/functions-utils',
+      '@netlify/git-utils',
+      '@netlify/images',
+      '@netlify/zip-it-and-ship-it',
+      'braces',
+      'fast-glob',
+      'http-proxy-middleware',
+      'ipx',
+      'listhen',
+      'micromatch',
+      'netlify-cli',
+      'node-forge',
+    ]);
+    expect(ratchet.exceptions).toHaveLength(2);
+    expect(ratchet.exceptions[0]).toMatchObject({
+      id: 'netlify-node-forge-cve-2026-85393',
+      advisories: ['GHSA-86w9-cpqp-85rv'],
+      nextReviewOn: '2026-10-05',
+      expiresOn: '2026-10-09',
+    });
+    expect(ratchet.exceptions[1]).toMatchObject({
+      id: 'netlify-braces-ghsa-vfj7-8cjw-p6xm',
+      advisories: ['GHSA-vfj7-8cjw-p6xm'],
+      packages: [
+        '@netlify/build',
+        '@netlify/functions-dev',
+        '@netlify/functions-utils',
+        '@netlify/git-utils',
+        '@netlify/zip-it-and-ship-it',
+        'braces',
+        'fast-glob',
+        'http-proxy-middleware',
+        'micromatch',
+      ],
+      owner: 'Daniel Risavi',
+      nextReviewOn: '2026-10-10',
+      expiresOn: '2026-10-17',
+    });
   });
 });

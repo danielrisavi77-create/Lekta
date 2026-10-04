@@ -28,6 +28,15 @@
             "command": "node scripts/hooks/cpu-discipline.mjs"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/task-scope-guard.mjs"
+          }
+        ]
       }
     ],
     "Stop": [

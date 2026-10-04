@@ -129,6 +129,7 @@
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
     "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
+    "audit:lockfile": "node scripts/lockfile-sources.mjs",
     "audit:ratchet": "node scripts/npm-audit-ratchet.mjs",
     "status": "node scripts/generate-status.mjs",
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
@@ -137,6 +138,10 @@
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
     "branch-ci": "node scripts/master-ci-status.mjs --current",
     "agents": "node scripts/agents/cli.mjs",
+    "agents:scope-audit": "node scripts/agents/scope-audit.mjs",
+    "agents:lease": "node scripts/agents/control-plane-cli.mjs",
+    "agents:lease-edge-check": "deno check --no-lock --config ops/agent-control-plane/function/deno.json ops/agent-control-plane/function/index.ts",
+    "agents:lease-smoke": "node ops/agent-control-plane/smoke.mjs",
     "agents:usage-report": "node scripts/agents/usage-report.mjs",
     "agents:usage-daily": "node scripts/agents/usage-daily.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
@@ -182,5 +187,16 @@
     "lucide": "^1.48.0",
     "motion": "^12.42.2",
     "open-props": "^1.7.23"
+  },
+  "knip": {
+    "entry": [
+      "{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+      "ops/agent-control-plane/function/index.ts"
+    ],
+    "ignoreDependencies": [
+      "jsr",
+      "postgres"
+    ]
   }
 }
