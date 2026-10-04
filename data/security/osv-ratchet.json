@@ -1,7 +1,7 @@
 {
   "note": "Ratchet nad OSV nalazima za ovisnosti koje npm audit ne vidi (T99, issue #220): npm paketi iz oba deno.lock (esm.sh) i tocni pinovi iz training-pipeline/requirements.txt. Identitet je `ekosustav:ime@verzija ID`. Strop je broj zapisa u `findings` i smije samo padati; svaki nalaz mora imati iznimku s vlasnikom, mitigacijom i rokom.",
-  "measuredAt": null,
-  "measurementNote": "Pocetni strop 0 nije izmjeren: api.osv.dev je blokiran u izvrsnom containeru. Prvi CI run osv-scan joba je mjerenje; ako nadje nalaze, upisuju se ovdje po imenu.",
+  "measuredAt": "2026-10-04",
+  "measurementNote": "Prvi CI run osv-scan joba (check run 111410356747, head a3fb6600, 2026-10-04) zavrsio je uspjesno: OSV dostupan, sve tri skenirane datoteke dale su pakete (lokalno istim kodom: 1, 9 i 3, ukupno 13), 0 nalaza. Strop 0 je time izmjeren, ne pretpostavljen. Sirovi log CI-ja nije citan iz izvrsnog containera (preuzimanje logova je blokirano).",
   "findings": [],
   "exceptions": [],
   "knownGaps": [
