@@ -18,7 +18,8 @@ describe('T99: lockfileSourceProblems', () => {
     const real = JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
     const out = lockfileSourceProblems(real);
     expect(out.problems).toEqual([]);
-    expect(out.checked).toBeGreaterThan(1000);
+    // Nakon Popravka A (netlify-cli van) graf ima oko 270 paketa; prag hvata prazan ili skracen lockfile.
+    expect(out.checked).toBeGreaterThan(200);
   });
 
   it('korijen i inBundle s roditeljem koji ga navodi u bundleDependencies nisu prekrsaj', () => {
