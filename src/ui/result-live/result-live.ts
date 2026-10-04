@@ -199,7 +199,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     if (uloga.kind !== 'zahvat') return '';
     const u = uPlanu(uloga, odabir);
     const siguran = zahvati.some((z) => z.vrsta === 'siguran' && uloga.ruleIds.includes(z.ruleId));
-    // Natpisi su doslovno iz predloska, BEZ "· +N": bodovi po zahvatu ne postoje (F35). Atribut nosi
+    // Natpisi su doslovno iz predloska, BEZ "· +N": bodovi po zahvatu ne postoje (F37). Atribut nosi
     // `ruleId`-eve zahvata, da se odabir moze usporediti s panelom popravka.
     const ids = esc(uloga.ruleIds.join(' '));
     return '<div class="rl-plan">'
@@ -246,7 +246,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     if (!s.odlomci.length) return '';
     const tekstSloja = (sloj: 'now' | 'after'): string => s.odlomci.map((pp) =>
       `<p${pp.heading ? ' class="rl-h"' : ''}${sloj === 'now' ? ` data-rl-p="${pp.index}"` : ''}>${esc(pp.text)}</p>`).join('');
-    // Stranica iz Wordovih tragova je priblizna (`kartaStranica`, F35), pa natpis to i kaze.
+    // Stranica iz Wordovih tragova je priblizna (`kartaStranica`, F37), pa natpis to i kaze.
     const natpis = s.broj !== null && traka ? `Oko str. ${s.broj} od ${traka.ukupno}` : s.sidro !== null ? `Odlomak ${s.sidro}` : 'Cijeli rad';
     const prekidac = vidljivi.length
       ? '<div class="rl-mode" role="group" aria-label="Prikaz stranice">'
@@ -385,7 +385,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     ladicaEl.setAttribute('role', 'region');
     ladicaEl.setAttribute('aria-label', 'Plan popravka');
     // Cijena: klijent nema mjerodavan izvor (naplata je na serverskom katalogu), pa ladica nosi
-    // POSTOJECU recenicu toka popravka (`repair-price-slider.ts`), ne iznos iz predloska (F35).
+    // POSTOJECU recenicu toka popravka (`repair-price-slider.ts`), ne iznos iz predloska (F37).
     ladicaEl.innerHTML = '<span class="rl-tray__k">Plan popravka</span>'
       + '<span class="rl-tray__n" data-rl-tray-n></span>'
       + '<span class="rl-tray__r" data-rl-tray-r></span>'
