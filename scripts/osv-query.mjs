@@ -46,12 +46,14 @@ const isPlainObject = (v) => Boolean(v) && typeof v === 'object' && !Array.isArr
 
 /**
  * npm paketi s tocnom verzijom iz parsiranog deno.lock (v5). Cita `remote` (esm.sh URL-ovi), ciljeve
- * `redirects` i nativni `npm` graf. `specifiers` samo preslikava na `npm`/`jsr` pa nema vlastitih verzija.
- * `workspace.packageJson` smije nositi samo `npm:` ovisnosti, koje vec pokrivaju package.json i npm audit.
+ * `redirects` i nativni `npm` graf. Svaki `specifiers` zapis mora biti `npm:` i imati odgovarajuci zapis
+ * u `npm` grafu (Codex runda 2 na #274, A1). `workspace.packageJson` smije imati samo `dependencies` i `overrides`, a
+ * svaka `npm:` ovisnost i svaki `overrides` paket moraju postojati u package-lock.json (`npmAuditNames`),
+ * koji pokriva npm audit (A2); `overrides` je preslika package.json.
  * JSR graf, nepoznata sekcija, nepoznat URL ili krivi oblik su imenovani problemi: necitani dio grafa
  * ne smije ostati zelen.
  */
-export function denoLockPackages(lock, file) {
+export function denoLockPackages(lock, file, { npmAuditNames = null } = {}) {
   if (!isPlainObject(lock)) return { packages: [], problems: [`${file}: nije JSON objekt`] };
   const problems = [];
   if (lock.version !== '5') problems.push(`${file}: deno.lock verzija mora biti "5", a je ${JSON.stringify(lock.version)}`);
@@ -93,16 +95,55 @@ export function denoLockPackages(lock, file) {
   if (lock.jsr !== undefined && !(isPlainObject(lock.jsr) && Object.keys(lock.jsr).length === 0)) {
     problems.push(`${file}: JSR graf nije podrzan (OSV ga ovdje ne provjerava); dodaj podrsku ili ukloni JSR ovisnosti`);
   }
-  if (lock.specifiers !== undefined && (!isPlainObject(lock.specifiers) || Object.values(lock.specifiers).some((v) => typeof v !== 'string'))) {
-    problems.push(`${file}: \`specifiers\` nije objekt tekstualnih vrijednosti`);
+  if (lock.specifiers !== undefined) {
+    if (!isPlainObject(lock.specifiers)) problems.push(`${file}: \`specifiers\` nije objekt`);
+    else {
+      const npmKeys = isPlainObject(lock.npm) ? Object.keys(lock.npm) : [];
+      for (const [spec, resolved] of Object.entries(lock.specifiers)) {
+        const m = /^npm:((?:@[^/@]+\/)?[^@]+)(?:@.*)?$/.exec(spec);
+        if (!m || typeof resolved !== 'string') {
+          problems.push(`${file}: specifier ${spec} nije npm: s tekstualnom verzijom (JSR i ostalo se ovdje ne provjerava)`);
+          continue;
+        }
+        const target = `${m[1]}@${resolved}`;
+        if (!npmKeys.some((k) => k === target || k.startsWith(`${target}_`))) {
+          problems.push(`${file}: specifier ${spec} -> ${resolved} nema zapis u npm grafu`);
+        }
+      }
+    }
   }
   if (lock.workspace !== undefined) {
     if (!isPlainObject(lock.workspace)) problems.push(`${file}: \`workspace\` nije objekt`);
     else {
       for (const key of Object.keys(lock.workspace)) if (key !== 'packageJson') problems.push(`${file}: nepoznata sekcija \`workspace.${key}\``);
-      const deps = lock.workspace.packageJson?.dependencies;
-      if (deps !== undefined && (!Array.isArray(deps) || deps.some((d) => typeof d !== 'string' || !d.startsWith('npm:')))) {
-        problems.push(`${file}: \`workspace.packageJson.dependencies\` smije nositi samo npm: ovisnosti (pokriva ih npm audit)`);
+      const pj = lock.workspace.packageJson;
+      if (pj !== undefined) {
+        if (!isPlainObject(pj)) problems.push(`${file}: \`workspace.packageJson\` nije objekt`);
+        else {
+          for (const key of Object.keys(pj)) {
+            if (key !== 'dependencies' && key !== 'overrides') problems.push(`${file}: nepoznata sekcija \`workspace.packageJson.${key}\``);
+          }
+          // `overrides` preslikava package.json; vec je razrijesen u package-lock.json koji pokriva npm audit.
+          if (pj.overrides !== undefined) {
+            if (!isPlainObject(pj.overrides)) problems.push(`${file}: \`workspace.packageJson.overrides\` nije objekt`);
+            else {
+              for (const [name, range] of Object.entries(pj.overrides)) {
+                if (typeof range !== 'string' || !npmAuditNames || !npmAuditNames.has(name)) {
+                  problems.push(`${file}: workspace override ${name} nije u package-lock.json, pa ga npm audit ne pokriva`);
+                }
+              }
+            }
+          }
+          const deps = pj.dependencies;
+          if (deps !== undefined && !Array.isArray(deps)) problems.push(`${file}: \`workspace.packageJson.dependencies\` nije polje`);
+          for (const d of Array.isArray(deps) ? deps : []) {
+            const m = typeof d === 'string' ? /^npm:((?:@[^/@]+\/)?[^@]+)(?:@.*)?$/.exec(d) : null;
+            if (!m) problems.push(`${file}: workspace ovisnost ${JSON.stringify(d)} nije npm:`);
+            else if (!npmAuditNames || !npmAuditNames.has(m[1])) {
+              problems.push(`${file}: workspace ovisnost ${d} nije u package-lock.json, pa je npm audit ne pokriva`);
+            }
+          }
+        }
       }
     }
   }
@@ -123,6 +164,25 @@ export function requirementsPins(text, file) {
   return { packages, unpinned };
 }
 
+/**
+ * Imena paketa u package-lock.json (graf koji pokrivaju npm audit i lockfile-sources). Necitljiv lock daje
+ * null, pa svaka workspace ovisnost postaje problem umjesto nedokazanog izuzeca.
+ */
+function npmAuditNames(read) {
+  try {
+    const packages = JSON.parse(read('package-lock.json'))?.packages;
+    if (!isPlainObject(packages)) return null;
+    const names = new Set();
+    for (const key of Object.keys(packages)) {
+      const i = key.lastIndexOf('node_modules/');
+      if (i !== -1) names.add(key.slice(i + 'node_modules/'.length));
+    }
+    return names;
+  } catch {
+    return null;
+  }
+}
+
 /** Paketi iz svih skeniranih datoteka; datoteka bez paketa ili s nepoznatim ulazom je problem. */
 export function collectPackages(read = (f) => readFileSync(path.join(ROOT, f), 'utf8')) {
   const problems = [];
@@ -132,7 +192,7 @@ export function collectPackages(read = (f) => readFileSync(path.join(ROOT, f), '
     let pkgs = [];
     try {
       if (kind === 'deno') {
-        const r = denoLockPackages(JSON.parse(read(file)), file);
+        const r = denoLockPackages(JSON.parse(read(file)), file, { npmAuditNames: npmAuditNames(read) });
         pkgs = r.packages;
         problems.push(...r.problems);
       } else {
@@ -227,24 +287,32 @@ export function compareOsvToRatchet(found, ratchet) {
   return { verdict, count: found.length, ceiling, unexpected, resolved };
 }
 
+/**
+ * Tocno ono sto `queryAllBatches` salje: po jedan par (paketi, tijelo zahtjeva) za svaki batch. Odvojeno je
+ * da bi mutacija (Codex R4-M na #274) gadjala stvarna tijela zahtjeva, ne samo pomocnu funkciju.
+ */
+export function requestPlan(packages) {
+  return batches(packages).map((chunk) => ({ chunk, body: JSON.stringify(batchQuery(chunk)) }));
+}
+
 /** Svi batchovi redom; prvi NE ZNAM prekida, rezultat se prihvaca tek kad su svi batchovi obradjeni. */
 export async function queryAllBatches(packages, fetchImpl = fetch) {
   const found = [];
-  for (const chunk of batches(packages)) {
-    const { unknown, response } = await queryOsv(chunk, fetchImpl);
+  for (const { chunk, body } of requestPlan(packages)) {
+    const { unknown, response } = await queryOsv(body, fetchImpl);
     if (unknown) return { unknown };
     found.push(...findingsFromBatch(response, chunk));
   }
   return { found: [...new Set(found)].sort() };
 }
 
-async function queryOsv(packages, fetchImpl = fetch) {
+async function queryOsv(body, fetchImpl = fetch) {
   let res;
   try {
     res = await fetchImpl(OSV_BATCH, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(batchQuery(packages)),
+      body,
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch (e) {
@@ -275,7 +343,9 @@ function selftest() {
     ['nepoznata sekcija deno locka', () => denoLockPackages({ version: '5', remote: {}, novo: {} }, 'd').problems.length === 1],
     ['JSR graf', () => denoLockPackages({ version: '5', jsr: { '@std/path@1.0.0': {} } }, 'd').problems.length === 1],
     ['nativni npm graf se cita', () => denoLockPackages({ version: '5', npm: { 'lodash@4.17.20': {} } }, 'd').packages.length === 1],
-    ['batch do 1000', () => batches(Array.from({ length: 1001 }, () => pkgs[0])).map((b) => b.length).join() === '1000,1'],
+    ['batch do 1000', () => requestPlan(Array.from({ length: 1001 }, () => pkgs[0])).map((r) => JSON.parse(r.body).queries.length).join() === '1000,1'],
+    ['specifier bez zapisa u grafu', () => denoLockPackages({ version: '5', specifiers: { 'npm:lodash@4': '4.17.20' } }, 'd').problems.length === 1],
+    ['workspace ovisnost izvan npm audita', () => denoLockPackages({ version: '5', workspace: { packageJson: { dependencies: ['npm:lodash@4'] } } }, 'd', { npmAuditNames: new Set() }).problems.length === 1],
     ['nalaz bez iznimke', () => validateOsvRatchet({ findings: ['npm:a@1.0.0 GHSA-x'], exceptions: [], knownGaps: [] }, { exists: () => true }).length === 1],
   ];
   for (const [label, ok] of checks) {

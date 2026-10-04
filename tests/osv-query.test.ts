@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import {
   OSV_BATCH_LIMIT, SCANNED, batchQuery, batches, collectPackages, compareOsvToRatchet, denoLockPackages,
-  findingsFromBatch, queryAllBatches, requirementsPins, validateOsvRatchet,
+  findingsFromBatch, queryAllBatches, requestPlan, requirementsPins, validateOsvRatchet,
 } from '../scripts/osv-query.mjs';
 import { osvWiringProblems } from './helpers/lockfile-sources';
 
@@ -61,6 +61,27 @@ describe('T99 OSV: citanje ulaza', () => {
     expect(denoLockPackages({ version: '5', workspace: { packageJson: { dependencies: ['jsr:@std/path@1'] } } }, 'e').problems).toHaveLength(1);
   });
 
+  it('deno.lock: specifier mora biti npm: sa zapisom u npm grafu (Codex runda 2, A1)', () => {
+    const base = { version: '5', remote: { 'https://esm.sh/tslib@2.8.1': 'h' }, npm: { 'lodash@4.17.20': {} } };
+    expect(denoLockPackages({ ...base, specifiers: { 'npm:lodash@4': '4.17.20' } }, 'd').problems).toEqual([]);
+    expect(denoLockPackages({ ...base, specifiers: { 'npm:lodash@4': '4.17.21' } }, 'd').problems).toEqual(['d: specifier npm:lodash@4 -> 4.17.21 nema zapis u npm grafu']);
+    for (const spec of ['jsr:@std/path@1', 'future:bad@1']) {
+      expect(denoLockPackages({ ...base, specifiers: { [spec]: '1.0.0' } }, 'd').problems, spec).toHaveLength(1);
+    }
+    expect(denoLockPackages({ ...base, specifiers: { 'npm:lodash@4': 4 } }, 'd').problems).toHaveLength(1);
+  });
+
+  it('deno.lock: workspace.packageJson samo s pokrivenim ovisnostima i overrides (Codex runda 2, A2)', () => {
+    const covered = { npmAuditNames: new Set(['vite', 'nanoid']) };
+    const ws = (packageJson: unknown) => ({ version: '5', remote: { 'https://esm.sh/tslib@2.8.1': 'h' }, workspace: { packageJson } });
+    expect(denoLockPackages(ws({ dependencies: ['npm:vite@^8'], overrides: { nanoid: '^3' } }), 'd', covered).problems).toEqual([]);
+    expect(denoLockPackages(ws({ dependencies: ['npm:lodash@4.17.20'] }), 'd', covered).problems).toHaveLength(1);
+    expect(denoLockPackages(ws({ dependencies: ['npm:vite@^8'], futureGraph: {} }), 'd', covered).problems).toEqual(['d: nepoznata sekcija `workspace.packageJson.futureGraph`']);
+    expect(denoLockPackages(ws(null), 'd', covered).problems).toHaveLength(1);
+    expect(denoLockPackages(ws({ overrides: { lodash: '4' } }), 'd', covered).problems).toHaveLength(1);
+    expect(denoLockPackages(ws({ dependencies: ['npm:vite@^8'] }), 'd').problems).toHaveLength(1);
+  });
+
   it('requirements.txt: samo tocni pinovi, normalizirano ime, ostalo je imenovano', () => {
     const out = requirementsPins('# x\nPyMuPDF==1.26.3\npython_docx==1.2.0  # pin\nuvicorn[standard]==0.30.*\nlxml>=5\n\n', 'r');
     expect(out.packages.map((p: { name: string; version: string }) => `${p.name}@${p.version}`)).toEqual(['pymupdf@1.26.3', 'python-docx@1.2.0']);
@@ -78,6 +99,7 @@ describe('T99 OSV: odgovor i ratchet', () => {
   it('batchovi do 1000 upita; NE ZNAM u bilo kojem batchu prekida (Codex R4)', async () => {
     const many = Array.from({ length: OSV_BATCH_LIMIT + 1 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0', file: 'x' }));
     expect(batches(many).map((b: unknown[]) => b.length)).toEqual([1000, 1]);
+    expect(requestPlan(many).map((r: { body: string }) => JSON.parse(r.body).queries.length)).toEqual([1000, 1]);
     const sizes: number[] = [];
     const ok = (async (_u: string, init: { body: string }) => {
       const n = JSON.parse(init.body).queries.length;
@@ -86,6 +108,8 @@ describe('T99 OSV: odgovor i ratchet', () => {
     }) as unknown as typeof fetch;
     expect(await queryAllBatches(many, ok)).toEqual({ found: ['npm:p0@1.0.0 G-1000', 'npm:p1000@1.0.0 G-1'] });
     expect(sizes).toEqual([1000, 1]);
+    // queryAllBatches salje tocno tijela iz requestPlan (veza za mutaciju R4-M)
+    expect(sizes).toEqual(requestPlan(many).map((r: { body: string }) => JSON.parse(r.body).queries.length));
     let calls = 0;
     const second503 = (async (_u: string, init: { body: string }) => {
       calls += 1;

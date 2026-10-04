@@ -284,7 +284,7 @@ import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
 import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
-import { batches, collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch } from '../scripts/osv-query.mjs';
+import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch, requestPlan } from '../scripts/osv-query.mjs';
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
@@ -4888,10 +4888,32 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
   },
   {
+    id: 't99/osv-specifier-bez-grafa',
+    imitates: 'T99: deno.lock dobije npm: specifier bez zapisa u npm grafu (ili jsr:), a parser provjeri samo tip vrijednosti (Codex runda 2 na #274, A1).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, specifiers: { 'npm:lodash@4': '4.17.20', 'jsr:@std/path@1': '1.0.0' } }, 'e').problems.length === 2;
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-workspace-nedokazano-izuzece',
+    imitates: 'T99: korijenski deno.lock dobije workspace ovisnost koje nema u package-lock.json i nepoznat kljuc, a parser ih izuzme kao da ih pokriva npm audit (Codex runda 2 na #274, A2).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'deno.lock')));
+      lock.workspace.packageJson.dependencies = [...lock.workspace.packageJson.dependencies, 'npm:nepostojeci-paket@1.0.0'];
+      lock.workspace.packageJson.futureGraph = {};
+      return collectPackages((f: string) => (f === 'deno.lock' ? JSON.stringify(lock) : readTextLf(resolve(process.cwd(), f)))).problems.length === 2;
+    },
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
     id: 't99/osv-jedan-batch-preko-granice',
     imitates: 'T99: graf preraste 1000 paketa i ide kao jedan querybatch zahtjev preko granice API-ja (Codex R4 na #274).',
-    caught: () => batches(Array.from({ length: 1001 }, (_, i) => ({ name: `p${i}` }))).every((b: unknown[]) => b.length <= 1000),
-    cleanBefore: () => batches([{ name: 'a' }]).length === 1,
+    // Gadja requestPlan, tj. tocno ona tijela koja queryAllBatches salje (veza dokazana u osv-query.test.ts, Codex R4-M).
+    caught: () => requestPlan(Array.from({ length: 1001 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0' })))
+      .every((r: { body: string }) => JSON.parse(r.body).queries.length <= 1000),
+    cleanBefore: () => requestPlan([{ ecosystem: 'npm', name: 'a', version: '1.0.0' }]).length === 1,
   },
   ...([
     ['t99/lockfile-job-kljuc-iza-steps', 'npm-audit', '\n  # OSV ZA DENO I PYTHON', '\n    if: false\n  # OSV ZA DENO I PYTHON', 'npm-audit: job ima if ili continue-on-error', lockfileGuardWiringProblems],
