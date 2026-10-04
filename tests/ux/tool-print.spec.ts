@@ -5,6 +5,10 @@ for (const [route, prefix] of [['/naslovnica.html', 'tp'], ['/izjava.html', 'st'
     await page.goto(route);
     await page.locator(`#${prefix}-sample`).click();
     await page.emulateMedia({ media: 'print' });
+    // Klik na primjer pokrece hover nagib ([data-premium-tilt]); CSS prijelaz u tijeku nadjacava i
+    // !important, a Firefox ga ne prekida u trenutku promjene medija. Stvarni ispis renderira
+    // staticnu kopiju, pa se mjeri ustaljeno stanje: ceka se kraj ili otkazivanje prijelaza.
+    await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))));
     const style = await page.locator('.tp-sheet-wrap').evaluate(el => ({
       transform: getComputedStyle(el).transform,
       shadow: getComputedStyle(el).boxShadow,
