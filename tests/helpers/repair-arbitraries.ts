@@ -39,6 +39,8 @@ interface RunProps {
 interface ParagraphModel {
   jc: 'left' | 'center' | 'both' | null;
   spacingAfter: number | null;
+  /** Izravni w:spacing w:line u odlomku: override koji duboki line-spacing-fixer mora skinuti. */
+  lineOverride: number | null;
   runs: RunModel[];
   /** Odlomak zatvara sekciju (w:sectPr u w:pPr), pa dokument ima vise sekcija. */
   sectionBreak: boolean;
@@ -48,6 +50,8 @@ export interface DocModel {
   paragraphs: ParagraphModel[];
   marginTwips: number;
   letter: boolean;
+  /** Dva uzastopna strukturno prazna odlomka iza prvog odlomka: meta empty-paragraph-fixera. */
+  emptyPair: boolean;
 }
 
 // Tekst: slova (i hrvatska), razmaci, NBSP i znakovi koje XML mora escapeati.
@@ -87,6 +91,7 @@ const runArb: fc.Arbitrary<RunModel> = fc.oneof(
 const paragraphArb: fc.Arbitrary<ParagraphModel> = fc.record({
   jc: fc.option(fc.constantFrom('left' as const, 'center' as const, 'both' as const), { nil: null }),
   spacingAfter: fc.option(fc.constantFrom(0, 120, 240), { nil: null }),
+  lineOverride: fc.option(fc.constantFrom(240, 276), { nil: null }),
   runs: fc.array(runArb, { minLength: 0, maxLength: 5 }),
   sectionBreak: fc.boolean(),
 });
@@ -96,6 +101,7 @@ export const docModelArb: fc.Arbitrary<DocModel> = fc.record({
   // Nijedna vrijednost nije cilj recepta (2,5 cm = 1417), pa margins-fixer uvijek radi.
   marginTwips: fc.constantFrom(1134, 1701, 2268),
   letter: fc.boolean(),
+  emptyPair: fc.boolean(),
 });
 
 function esc(s: string): string {
@@ -151,7 +157,9 @@ function buildParts(m: DocModel): { name: string; xml: string }[] {
     .map((p, pi) => {
       const isLast = pi === m.paragraphs.length - 1;
       const pPrInner =
-        (p.spacingAfter !== null ? `<w:spacing w:after="${p.spacingAfter}"/>` : '') +
+        (p.spacingAfter !== null || p.lineOverride !== null
+          ? `<w:spacing${p.spacingAfter !== null ? ` w:after="${p.spacingAfter}"` : ''}${p.lineOverride !== null ? ` w:line="${p.lineOverride}" w:lineRule="auto"` : ''}/>`
+          : '') +
         (p.jc ? `<w:jc w:val="${p.jc}"/>` : '') +
         (p.sectionBreak && !isLast ? SECT(m) : '');
       const runs = p.runs
@@ -178,7 +186,8 @@ function buildParts(m: DocModel): { name: string; xml: string }[] {
           }
         })
         .join('');
-      return `<w:p>${pPrInner ? `<w:pPr>${pPrInner}</w:pPr>` : ''}${runs}</w:p>`;
+      const p0 = `<w:p>${pPrInner ? `<w:pPr>${pPrInner}</w:pPr>` : ''}${runs}</w:p>`;
+      return pi === 0 && m.emptyPair ? `${p0}<w:p/><w:p/>` : p0;
     })
     .join('');
 
@@ -257,6 +266,8 @@ export interface ModelClasses {
   tab: boolean;
   br: boolean;
   noBreakHyphen: boolean;
+  lineOverride: boolean;
+  emptyPair: boolean;
 }
 
 export function classify(m: DocModel): ModelClasses {
@@ -275,6 +286,8 @@ export function classify(m: DocModel): ModelClasses {
     tab: pieces.includes('tab'),
     br: pieces.includes('br'),
     noBreakHyphen: pieces.includes('nbh'),
+    lineOverride: m.paragraphs.some((p) => p.lineOverride !== null),
+    emptyPair: m.emptyPair,
   };
 }
 
@@ -333,11 +346,15 @@ export async function allParts(bytes: Uint8Array): Promise<Record<string, string
   return out;
 }
 
+// Podstabla koja nisu vidljivi tekst: svojstva (w:pPr nosi i w:tabs/w:tab definicije tab-stopova)
+// i revizije koje Word ne prikazuje u konacnom tekstu (Codex R4 runda 2 na #287).
+const NEVIDLJIVA_PODSTABLA = new Set(['pPr', 'rPr', 'del', 'moveFrom']);
+
 const VISIBLE_INLINE: Record<string, string> = { tab: '\t', br: '\n', cr: '\n', noBreakHyphen: '‑', softHyphen: '­' };
 
 /**
  * Vidljivi tok znakova po odlomku, u redoslijedu cvorova: w:t, w:tab, w:br, w:cr, w:noBreakHyphen,
- * w:softHyphen (Codex R4 na #287). Parsira se DOM-om, ne regexom. Prazni odlomci se izostavljaju
+ * w:softHyphen (Codex R4 na #287), bez svojstava odlomka i runa te brisanih ili premjestenih revizija. Parsira se DOM-om, ne regexom. Prazni odlomci se izostavljaju
  * jer empty-paragraph-fixer smije ukloniti odlomak bez ijednog vidljivog znaka.
  */
 export function visibleParagraphs(xml: string): string[] {
@@ -351,7 +368,7 @@ export function visibleParagraphs(xml: string): string[] {
         if (c.nodeType !== 1) continue;
         const el = c as XmlElement;
         const ime = el.namespaceURI === W_NS ? (el.localName ?? '') : '';
-        if (ime === 'p') continue; // ugnijezdeni odlomak broji se zasebno
+        if (ime === 'p' || NEVIDLJIVA_PODSTABLA.has(ime)) continue; // ugnijezdeni odlomak broji se zasebno
         if (ime === 't') text += el.textContent ?? '';
         else if (ime in VISIBLE_INLINE) text += VISIBLE_INLINE[ime];
         else walk(el);

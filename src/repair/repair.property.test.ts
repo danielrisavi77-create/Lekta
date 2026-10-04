@@ -29,7 +29,7 @@ describe('generator: proizvodi ciljanu klasu ulaza', () => {
   it('svaka klasa ulaza cini znacajan udio uzorka, ali ne cijeli uzorak', () => {
     const sample = fc.sample(docModelArb, { numRuns: 400, seed: 7 });
     const share = (k: keyof ModelClasses) => sample.filter((m) => classify(m)[k]).length / sample.length;
-    const klase = ['field', 'emptyRun', 'multiSection', 'footnote', 'nbsp', 'tab', 'br', 'noBreakHyphen'] as const;
+    const klase = ['field', 'emptyRun', 'multiSection', 'footnote', 'nbsp', 'tab', 'br', 'noBreakHyphen', 'lineOverride', 'emptyPair'] as const;
     for (const k of klase) {
       expect(share(k), `udio klase ${k}`).toBeGreaterThanOrEqual(0.15);
       expect(share(k), `klasa ${k} ne smije biti svugdje`).toBeLessThan(1);
@@ -42,25 +42,30 @@ describe('generator: proizvodi ciljanu klasu ulaza', () => {
     }
   });
 
-  it('izvlakac vidljivog teksta razlikuje tabulator, prijelom i neprelomivu crticu od spojenog teksta', () => {
+  it('izvlakac vidljivog teksta: tocan tok znakova, bez svojstava i brisanih revizija', () => {
     const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
-    const p = (inner: string) => visibleParagraphs(`<w:document ${W}><w:body><w:p><w:r>${inner}</w:r></w:p></w:body></w:document>`);
-    const spojeno = p('<w:t>a</w:t><w:t>b</w:t>');
-    expect(spojeno).toEqual(['ab']);
-    for (const el of ['<w:tab/>', '<w:br/>', '<w:noBreakHyphen/>']) {
-      expect(p(`<w:t>a</w:t>${el}<w:t>b</w:t>`), el).not.toEqual(spojeno);
-    }
+    const odlomak = (inner: string) => visibleParagraphs(`<w:document ${W}><w:body><w:p>${inner}</w:p></w:body></w:document>`);
+    const run = (inner: string) => odlomak(`<w:r>${inner}</w:r>`);
+    expect(run('<w:t>a</w:t><w:t>b</w:t>')).toEqual(['ab']);
+    expect(run('<w:t>a</w:t><w:tab/><w:t>b</w:t>')).toEqual(['a\tb']);
+    expect(run('<w:t>a</w:t><w:br/><w:t>b</w:t>')).toEqual(['a\nb']);
+    expect(run('<w:t>a</w:t><w:noBreakHyphen/><w:t>b</w:t>')).toEqual(['a‑b']);
+    // Negativne kontrole: definicija tab-stopa u w:pPr i tab u brisanoj ili premjestenoj reviziji nisu vidljivi.
+    expect(odlomak('<w:pPr><w:tabs><w:tab w:val="left" w:pos="720"/></w:tabs></w:pPr><w:r><w:t>a</w:t></w:r>')).toEqual(['a']);
+    expect(odlomak('<w:r><w:t>a</w:t></w:r><w:del w:id="1" w:author="x"><w:r><w:tab/><w:delText>x</w:delText></w:r></w:del>')).toEqual(['a']);
+    expect(odlomak('<w:r><w:t>a</w:t></w:r><w:moveFrom w:id="2" w:author="x"><w:r><w:br/><w:t>y</w:t></w:r></w:moveFrom>')).toEqual(['a']);
   });
 });
 
 describe('svojstva popravka forme', () => {
-  it('svaki fixer recepta stvarno se primjenjuje na uzorku, u oba moda (deep i obican)', async () => {
+  it('svaki fixer recepta primijenjen je na barem KVOTA dokumenata uzorka, u oba moda (deep i obican)', async () => {
+    const KVOTA = 8;
     const sample = fc.sample(docModelArb, { numRuns: 30, seed: 11 });
     for (const deep of [false, true]) {
       const counts = new Map<string, number>();
       for (const m of sample) for (const f of await appliedFixers(m, deep)) counts.set(f, (counts.get(f) ?? 0) + 1);
       for (const { fixerId } of formRecipe(deep)) {
-        expect(counts.get(fixerId) ?? 0, `${fixerId} (deep=${deep}) nijednom primijenjen, svojstvo bi za njega bilo vakuumsko`).toBeGreaterThan(0);
+        expect(counts.get(fixerId) ?? 0, `${fixerId} (deep=${deep}) primijenjen premalo puta od ${sample.length}`).toBeGreaterThanOrEqual(KVOTA);
       }
     }
   }, 120_000);
