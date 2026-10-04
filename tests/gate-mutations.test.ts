@@ -45,6 +45,8 @@ import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
+import { cijenaProblems, plusBodProblems } from './helpers/result-live-guard';
+import { ladica, pocetniOdabir, prsten, zahvatiPlana } from '../src/ui/result-live/result-live-model';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
@@ -9317,5 +9319,68 @@ describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
 
   it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
     expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
+  });
+});
+
+/**
+ * REZULTAT: SVE U JEDNOM (ALIGNMENT Z34). Gardovi iz `tests/helpers/analysis-live-guard.ts` (pokret,
+ * lijena granica, doslovni copy) i `tests/helpers/result-live-guard.ts` (cijena, "+N"):
+ *  - Z31 pokret na listu Z34 (predlozak animira padding i line-height prijelazom "Nakon plana");
+ *  - kod Z34 ulazi u `/rad/` samo dinamickim uvozom iz kokpita (ulaz je tik ispod 960 KB);
+ *  - natpisi gumba doslovno iz `ResultLive.dc.html`;
+ *  - nema cijene u klijentskom kodu i nema bodova po zahvatu (odluka vlasnika, F32).
+ */
+describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const css = citaj('src/ui/result-live/result-live.css');
+  const modul = citaj('src/ui/result-live/result-live.ts');
+  const predlozak = citaj('design/templates/result-live/ResultLive.dc.html');
+  const SHIM = 'src/ui/results/results-cockpit.ts';
+  const MODUL = '../result-live/result-live';
+  const izvori = { [SHIM]: citaj(SHIM), 'src/ui/app.ts': citaj('src/ui/app.ts') };
+  const zahvati = zahvatiPlana([{ ruleId: 'm', label: 'Margine', violated: true, matchKeys: ['M'] }], true);
+  const racun = ladica(pocetniOdabir(zahvati), zahvati, 71, 88).racun ?? '';
+
+  it('BASELINE: stvarni list, ulaz, kostur i racun su cisti', () => {
+    expect(motionCssProblems(css)).toEqual([]);
+    expect(liveBoundaryProblems(izvori, SHIM, MODUL)).toEqual([]);
+    expect(copyProblems(modul, predlozak, [])).toEqual([]);
+    expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': modul, 'src/ui/result-live/result-live.css': css })).toEqual([]);
+    expect(racun).toBe('71 → najviše 88');
+    expect(plusBodProblems(`${racun} ${prsten(71, 88)?.opis}`)).toEqual([]);
+  });
+
+  it('MUTACIJA: prijelaz sirine na hrpi kartica obara gard pokreta', () => {
+    const mutant = css.replace('.rl-slot { position: relative;', '.rl-slot { transition: width .3s; position: relative;');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['transition mijenja width']);
+  });
+
+  it('MUTACIJA: staticki uvoz modula Z34 u kokpit (bez dinamickog) obara gard granice', () => {
+    const dinamicki = "import('../result-live/result-live')";
+    const src = izvori[SHIM];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, [SHIM]: "import { mountResultLive } from '../result-live/result-live';\n" + src.replace(dinamicki, 'Promise.resolve({ mountResultLive })') };
+    expect(liveBoundaryProblems(mutant, SHIM, MODUL)).toEqual([
+      `${SHIM}: staticki uvoz ../result-live/result-live`,
+      `${SHIM}: nema dinamickog uvoza ../result-live/result-live`,
+    ]);
+  });
+
+  it('MUTACIJA: preformuliran natpis gumba obara gard copyja', () => {
+    const mutant = modul.replace('>Uključi u plan</button>', '>Dodaj u plan</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, [])).toEqual(['natpis "Dodaj u plan" nije u predlosku']);
+  });
+
+  it('MUTACIJA: cijena iz predloska upisana u ladicu obara gard cijene', () => {
+    const mutant = modul.replace('>Cijena ne ovisi o odabiru.</span>', '>14,99 €</span>');
+    expect(mutant).not.toBe(modul);
+    expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': mutant })).toEqual(['src/ui/result-live/result-live.ts: znak eura']);
+  });
+
+  it('MUTACIJA: bodovi po zahvatu u natpisu ili racunu obaraju gard', () => {
+    expect(plusBodProblems('U planu ✓ · +7')).toEqual(['bodovi po zahvatu: "+7"']);
+    expect(plusBodProblems(`${racun} · +17`)).toEqual(['bodovi po zahvatu: "+17"']);
   });
 });
