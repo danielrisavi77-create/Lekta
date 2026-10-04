@@ -11,7 +11,8 @@
                            "expected":  [
                                             "Times New Roman"
                                         ],
-                           "set":  "Courier New"
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "grf-zavrsni--font-size",
@@ -19,7 +20,8 @@
                            "expected":  [
                                             12
                                         ],
-                           "set":  9
+                           "set":  9,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "grf-zavrsni--line-spacing",
@@ -27,7 +29,8 @@
                            "expected":  [
                                             1.5
                                         ],
-                           "set":  1
+                           "set":  1,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "grf-zavrsni--margins",
@@ -43,19 +46,22 @@
                                        "right":  1.5,
                                        "bottom":  1,
                                        "left":  2.5
-                                   }
+                                   },
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "grf-zavrsni--paper-size",
                            "checkId":  "paper-size",
                            "expected":  "A4",
-                           "set":  "Letter"
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "grf-zavrsni--justify",
                            "checkId":  "justify",
                            "expected":  "obostrano",
-                           "set":  "lijevo"
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
                        }
                    ]
 }

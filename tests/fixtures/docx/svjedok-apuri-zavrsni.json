@@ -9,7 +9,8 @@
                            "ruleId":  "apuri-zavrsni--paper-size",
                            "checkId":  "paper-size",
                            "expected":  "A4",
-                           "set":  "Letter"
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "apuri-zavrsni--font",
@@ -17,7 +18,8 @@
                            "expected":  [
                                             "Times New Roman"
                                         ],
-                           "set":  "Courier New"
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "apuri-zavrsni--font-size",
@@ -25,7 +27,8 @@
                            "expected":  [
                                             12
                                         ],
-                           "set":  9
+                           "set":  9,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "apuri-zavrsni--line-spacing",
@@ -33,7 +36,8 @@
                            "expected":  [
                                             1.5
                                         ],
-                           "set":  1
+                           "set":  1,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "apuri-zavrsni--margins",
@@ -49,13 +53,15 @@
                                        "right":  1.5,
                                        "bottom":  1.5,
                                        "left":  1.5
-                                   }
+                                   },
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "apuri-zavrsni--justify",
                            "checkId":  "justify",
                            "expected":  "obostrano",
-                           "set":  "lijevo"
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
                        }
                    ]
 }

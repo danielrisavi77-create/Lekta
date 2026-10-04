@@ -9,7 +9,8 @@
                            "ruleId":  "effectus-diplomski--paper-size",
                            "checkId":  "paper-size",
                            "expected":  "A4",
-                           "set":  "Letter"
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "effectus-diplomski--margins",
@@ -25,7 +26,8 @@
                                        "right":  1.5,
                                        "bottom":  1.5,
                                        "left":  1.5
-                                   }
+                                   },
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "effectus-diplomski--font",
@@ -33,7 +35,8 @@
                            "expected":  [
                                             "Times New Roman"
                                         ],
-                           "set":  "Courier New"
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "effectus-diplomski--font-size",
@@ -41,13 +44,15 @@
                            "expected":  [
                                             12
                                         ],
-                           "set":  9
+                           "set":  9,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "effectus-diplomski--justify",
                            "checkId":  "justify",
                            "expected":  "obostrano",
-                           "set":  "lijevo"
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "effectus-diplomski--line-spacing",
@@ -55,7 +60,8 @@
                            "expected":  [
                                             1.15
                                         ],
-                           "set":  2
+                           "set":  2,
+                           "expectedBefore":  "fail"
                        }
                    ]
 }

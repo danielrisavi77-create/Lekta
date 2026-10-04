@@ -1642,6 +1642,14 @@
       "intendedUntargeted": [
         "paper-size"
       ],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass"
+      ],
+      "transitionMismatches": [],
       "needsAssistance": [],
       "unexplainedUnresolved": []
     },
@@ -1734,6 +1742,14 @@
       "intendedUntargeted": [
         "paper-size"
       ],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass"
+      ],
+      "transitionMismatches": [],
       "needsAssistance": [],
       "unexplainedUnresolved": []
     },
@@ -1826,6 +1842,14 @@
       "intendedUntargeted": [
         "paper-size"
       ],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass"
+      ],
+      "transitionMismatches": [],
       "needsAssistance": [],
       "unexplainedUnresolved": []
     },
@@ -1918,6 +1942,14 @@
       "intendedUntargeted": [
         "paper-size"
       ],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass"
+      ],
+      "transitionMismatches": [],
       "needsAssistance": [],
       "unexplainedUnresolved": []
     },
@@ -2010,6 +2042,14 @@
       "intendedUntargeted": [
         "paper-size"
       ],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass"
+      ],
+      "transitionMismatches": [],
       "needsAssistance": [],
       "unexplainedUnresolved": []
     }
@@ -2022,6 +2062,9 @@
     "regressions": 0,
     "secondPassNoOp": 5,
     "unexplainedUnresolved": 0,
-    "intendedUntargeted": 5
+    "intendedUntargeted": 5,
+    "failToPass": 20,
+    "warnToPass": 5,
+    "transitionMismatches": 0
   }
 }

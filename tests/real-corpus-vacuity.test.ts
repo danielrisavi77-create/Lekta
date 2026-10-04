@@ -25,6 +25,7 @@ import { join, resolve } from 'node:path';
 import baked from '../docs/generated/repair-real-corpus.json';
 import repairMap from '../data/profiles/repair-map.json';
 import { buildDocx, type DocSpec, type ParaSpec } from './helpers/docx-builder';
+import { witnessRatchetProblems } from './helpers/witness-ratchet';
 import {
   REAL_CORPUS_ROOT,
   WITNESS_TRACK,
@@ -156,6 +157,7 @@ function witnessProblems(report: RealCorpusReport): string[] {
     if (r.targetedResolvedCount + r.assistedUnresolvedCount + r.autoUnresolvedCount !== r.targetedCheckCount) {
       out.push(`${r.documentId}: ciljane provjere se ne razlazu na rijesene, asistirane i nerijesene`);
     }
+    for (const m of r.transitionMismatches ?? ['izvjestaj nema transitionMismatches; regeneriraj ga']) out.push(`${r.documentId}: ugovor prijelaza: ${m}`);
     if (r.unexplainedUnresolved.length > 0) out.push(`${r.documentId}: ciljano automatski, i dalje pada bez razloga: ${r.unexplainedUnresolved.join(', ')}`);
     for (const n of r.needsAssistance) {
       if (!n.reason) out.push(`${r.documentId}: ${n.checkId} trazi korisnika bez razloga`);
@@ -171,14 +173,26 @@ describe('svjedoci (T68): commitani artefakt', () => {
     expect(witnessIsolationProblems()).toEqual([]);
   });
 
-  it('witnessSummary postoji, zbroj se slaze i tocno odgovara ratchetu', () => {
+  it('witnessSummary postoji, zbroj se slaze s po-svjedok zbrojem i nije ispod ratcheta', () => {
     expect(izvjestajSvjedoka.witnessSummary, 'artefakt nema witnessSummary; regeneriraj ga').toBeDefined();
-    const zbroj = izvjestajSvjedoka.witnessResults.reduce((n, r) => n + r.targetedCheckCount, 0);
-    expect(izvjestajSvjedoka.witnessSummary.targetedCheckCount).toBe(zbroj);
-    expect(
-      izvjestajSvjedoka.witnessSummary.targetedCheckCount,
-      'pokrivenost svjedoka razlikuje se od ratcheta: pad je gubitak svjedoka, rast trazi podizanje WITNESS_CILJANIH_RATCHET u istom commitu',
-    ).toBe(WITNESS_CILJANIH_RATCHET);
+    expect(witnessRatchetProblems(izvjestajSvjedoka, WITNESS_CILJANIH_RATCHET)).toEqual([]);
+  });
+
+  /** NEGATIVNA KONTROLA (pregled #302 R1): 24 je gubitak i pada; 26 je poboljsanje i prolazi. */
+  it('ratchet: 24 ciljanih pada, 26 prolazi, neslaganje sa zbrojem pada', () => {
+    const sa = (ukupno: number, poDokumentu: number[]) => ({
+      witnessResults: poDokumentu.map((targetedCheckCount) => ({ targetedCheckCount })),
+      witnessSummary: { targetedCheckCount: ukupno },
+    });
+    expect(witnessRatchetProblems(sa(24, [5, 5, 5, 5, 4]), 25).some((p) => p.includes('ispod ratcheta'))).toBe(true);
+    expect(witnessRatchetProblems(sa(26, [6, 5, 5, 5, 5]), 25)).toEqual([]);
+    expect(witnessRatchetProblems(sa(25, [5, 5, 5, 5, 4]), 25).some((p) => p.includes('!= zbroj'))).toBe(true);
+  });
+
+  it('ugovor prijelaza: tocno 20 fail->pass i 5 warn->pass, bez neslaganja', () => {
+    const s = izvjestajSvjedoka.witnessSummary;
+    expect({ failToPass: s.failToPass, warnToPass: s.warnToPass, transitionMismatches: s.transitionMismatches }).toEqual({ failToPass: 20, warnToPass: 5, transitionMismatches: 0 });
+    expect(s.failToPass + s.warnToPass).toBe(s.targetedCheckCount);
   });
 
   it('svaki ciljani check svjedoka zavrsi pass ili izricito needsAssistance, drugi prolaz je no-op', () => {
@@ -220,6 +234,8 @@ describe('svjedoci (T68): commitani artefakt', () => {
 
 const PROFIL_SVJEDOKA = 'apuri-zavrsni';
 const SCORED = ['font', 'font-size', 'line-spacing', 'margins', 'paper-size', 'justify'];
+/** Isti ugovor pocetnog statusa kao `$EXPECTED_BEFORE` u generatoru `.ps1` (pregled #302 R2). */
+const OCEKIVANI_POCETNI: Record<string, 'fail' | 'warn'> = { font: 'fail', 'font-size': 'fail', 'line-spacing': 'fail', margins: 'fail', justify: 'warn', 'paper-size': 'warn' };
 
 /** Verificirana bodovana pravila profila iz repair-mapa, isti filtar kao generator `.ps1`. */
 function verificiranaBodovana(profileId: string): string[] {
@@ -281,7 +297,7 @@ function napraviKorpus(svjedok: 'graditelj' | 'word'): string {
     profileId: profil,
     track: WITNESS_TRACK,
     synthetic: true,
-    violations: verificiranaBodovana(profil).map((checkId) => ({ checkId, expected: 'profil', set: 'namjerno krivo' })),
+    violations: verificiranaBodovana(profil).map((checkId) => ({ checkId, expected: 'profil', set: 'namjerno krivo', expectedBefore: OCEKIVANI_POCETNI[checkId] })),
   });
   pisi('kontrola-real', buildDocx(kontrolaSpec('stvarni')), { profileId: profil });
   pisi('kontrola-synthetic', buildDocx(kontrolaSpec('sinteticki')), { profileId: profil, synthetic: true });
@@ -440,6 +456,8 @@ describe('svjedoci (T68): generator make-violation-witnesses.ps1', () => {
       for (const side of ['top', 'right', 'bottom', 'left']) expect(exp[side] - set[side], side).toBeGreaterThan(0.36);
       expect(by['paper-size'].set).toBe('Letter');
       expect(by.justify.set).toBe('lijevo');
+      // Ugovor prijelaza (pregled #302 R2): generator zapisuje isti pocetni status kao OCEKIVANI_POCETNI.
+      for (const v of p.violations) expect((v as Prekrsaj & { expectedBefore?: string }).expectedBefore, `${p.profileId} ${v.checkId}`).toBe(OCEKIVANI_POCETNI[v.checkId]);
     }
   }, 120_000);
 });

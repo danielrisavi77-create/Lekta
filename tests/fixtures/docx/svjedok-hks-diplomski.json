@@ -9,7 +9,8 @@
                            "ruleId":  "hks-diplomski--paper-size",
                            "checkId":  "paper-size",
                            "expected":  "A4",
-                           "set":  "Letter"
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "hks-diplomski--font",
@@ -17,7 +18,8 @@
                            "expected":  [
                                             "Book Antiqua"
                                         ],
-                           "set":  "Courier New"
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "hks-diplomski--font-size",
@@ -25,7 +27,8 @@
                            "expected":  [
                                             11
                                         ],
-                           "set":  9
+                           "set":  9,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "hks-diplomski--margins",
@@ -41,7 +44,8 @@
                                        "right":  1.5,
                                        "bottom":  1.5,
                                        "left":  1.5
-                                   }
+                                   },
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "hks-diplomski--line-spacing",
@@ -49,13 +53,15 @@
                            "expected":  [
                                             1.5
                                         ],
-                           "set":  1
+                           "set":  1,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "hks-diplomski--justify",
                            "checkId":  "justify",
                            "expected":  "obostrano",
-                           "set":  "lijevo"
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
                        }
                    ]
 }

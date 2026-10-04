@@ -9,7 +9,8 @@
                            "ruleId":  "efri-diplomski--paper-size",
                            "checkId":  "paper-size",
                            "expected":  "A4",
-                           "set":  "Letter"
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "efri-diplomski--font",
@@ -17,7 +18,8 @@
                            "expected":  [
                                             "Times New Roman"
                                         ],
-                           "set":  "Courier New"
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "efri-diplomski--font-size",
@@ -25,7 +27,8 @@
                            "expected":  [
                                             12
                                         ],
-                           "set":  9
+                           "set":  9,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "efri-diplomski--line-spacing",
@@ -33,13 +36,15 @@
                            "expected":  [
                                             1.5
                                         ],
-                           "set":  1
+                           "set":  1,
+                           "expectedBefore":  "fail"
                        },
                        {
                            "ruleId":  "efri-diplomski--justify",
                            "checkId":  "justify",
                            "expected":  "obostrano",
-                           "set":  "lijevo"
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
                        },
                        {
                            "ruleId":  "efri-diplomski--margins",
@@ -55,7 +60,8 @@
                                        "right":  2,
                                        "bottom":  2,
                                        "left":  2
-                                   }
+                                   },
+                           "expectedBefore":  "fail"
                        }
                    ]
 }
