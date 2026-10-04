@@ -29,7 +29,20 @@
  * stvarni radovi 39,8 posto, pa bi ulazak u `results` proizvod prikazao dvostruko boljim nego jest.
  * Mjeri se odvojeno (`docs/generated/synthetic-corpus.json`), nikad kroz `results`.
  */
-export type CorpusTrack = 'real' | 'generated' | 'authored' | 'converted';
+export type CorpusTrack = 'real' | 'generated' | 'authored' | 'converted' | 'witness';
+
+/**
+ * - `witness`   Word-autorski SVJEDOK (T68): izmisljen akademski tekst s NAMJERNIM prekrsajem svakog
+ *               verificiranog bodovanog pravila profila (`scripts/corpus-gen/word/make-violation-witnesses.ps1`).
+ *
+ * Zasto zaseban skup, a ne `results` ni `syntheticResults`: svjedok je napravljen da padne, pa bi u
+ * `results` napuhao stopu rjesavanja (sinteticki 84,6 posto naspram stvarnih 39,8 posto, vidi `authored`)
+ * i usao u matricu kao dokaz profila koji nije studentski rad. U `syntheticResults` bi se izgubio njegov
+ * izravni signal: sidecar svjedoka IMENUJE koje je pravilo prekrseno, pa se po dokumentu moze reci je li
+ * svaki namjerni prekrsaj ciljan, razrijesen ili izricito ostavljen korisniku. Zato ide u `witnessResults`
+ * s vlastitim sazetkom i ratchetom (`tests/real-corpus-vacuity.test.ts`).
+ */
+export const WITNESS_TRACK = 'witness';
 
 /** Trake koje smiju u mjerenje. Popis je BIJEL: nepoznata traka je odbijena, ne propustena. */
 export const ADMITTED_TRACKS: readonly string[] = ['real', 'generated'];
@@ -44,6 +57,8 @@ export interface CorpusSidecar {
   /** Tko je i kada zapisao ocekivanja PRIJE popravka (T06, protokol 2.3). Bez toga je ocekivanje `derived`. */
   expectedBy?: unknown;
   expectedAt?: unknown;
+  /** Samo svjedok: popis namjernih prekrsaja `{ checkId, expected, set }` koji je zapisao generator. */
+  violations?: unknown;
 }
 
 /**
@@ -105,4 +120,53 @@ export function sidecarAdmitted(metadata: CorpusSidecar): boolean {
   if (metadata.synthetic === true) return false;
   if (metadata.track !== undefined && !ADMITTED_TRACKS.includes(metadata.track as string)) return false;
   return typeof metadata.profileId === 'string' && metadata.profileId.length > 0;
+}
+
+/**
+ * SKUP u koji dokument ulazi. Jedina odluka o razvrstavanju; sva tri otkrivanja u
+ * `tests/real-corpus/harness.ts` je citaju, pa se svjedok ne moze naci u dva skupa ni u krivom.
+ *
+ * - `results`   dopusteno mjerenje (`sidecarAdmitted`), puni matricu i ovjeru.
+ * - `synthetic` iskljuceno iz dokaza, mjeri se samo za detekciju regresije (`syntheticResults`).
+ * - `witness`   svjedok s namjernim prekrsajima (`witnessResults`); nikad `results`.
+ * - `null`      bez profila, ne mjeri se nigdje.
+ *
+ * Traka `witness` se provjerava PRIJE dopustenosti i neovisno o zastavici `synthetic`: svjedok s krivom
+ * zastavicom (`synthetic: false`) i dalje je svjedok, a ne stvaran rad.
+ */
+export type CorpusSet = 'results' | 'synthetic' | 'witness';
+
+export function corpusSetOf(metadata: CorpusSidecar): CorpusSet | null {
+  if (typeof metadata.profileId !== 'string' || metadata.profileId.length === 0) return null;
+  if (metadata.track === WITNESS_TRACK) return 'witness';
+  return sidecarAdmitted(metadata) ? 'results' : 'synthetic';
+}
+
+/**
+ * GARD IZOLACIJE SVJEDOKA: vraca imenovane probleme kad razvrstavanje pusti svjedoka izvan
+ * `witness` skupa ili pomakne kontrolne trake. Prazan popis znaci zdrav zid. Prima razvrstavac kao
+ * argument da mutacijski test (`tests/gate-mutations.test.ts`) moze dokazati da gard pada.
+ */
+export function witnessIsolationProblems(
+  classify: (metadata: CorpusSidecar) => CorpusSet | null = corpusSetOf,
+): string[] {
+  const p = 'apuri-zavrsni';
+  const cases: Array<[string, CorpusSidecar, CorpusSet | null]> = [
+    ['svjedok', { profileId: p, track: WITNESS_TRACK }, 'witness'],
+    ['svjedok sa synthetic: true', { profileId: p, track: WITNESS_TRACK, synthetic: true }, 'witness'],
+    ['svjedok sa synthetic: false', { profileId: p, track: WITNESS_TRACK, synthetic: false }, 'witness'],
+    ['svjedok bez profila', { track: WITNESS_TRACK }, null],
+    // Kontrole: zid ne smije "hvatati" tako da sve odbije ili sve proglasi svjedokom.
+    ['sidecar bez trake', { profileId: p }, 'results'],
+    ['traka real', { profileId: p, track: 'real' }, 'results'],
+    ['traka generated', { profileId: p, track: 'generated' }, 'results'],
+    ['synthetic: true', { profileId: p, synthetic: true }, 'synthetic'],
+    ['traka authored', { profileId: p, track: 'authored' }, 'synthetic'],
+  ];
+  const out: string[] = [];
+  for (const [name, metadata, want] of cases) {
+    const got = classify(metadata);
+    if (got !== want) out.push(`${name}: ocekivan skup ${String(want)}, dobiven ${String(got)}`);
+  }
+  return out;
 }
