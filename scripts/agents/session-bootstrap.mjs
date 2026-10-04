@@ -28,7 +28,7 @@ import {
   readLock,
 } from '../gate-preflight.mjs';
 import { spawn as spawnChild } from 'node:child_process';
-import { closeSync, existsSync, openSync, readFileSync as readFileSyncFs } from 'node:fs';
+import { appendFileSync, closeSync, existsSync, openSync, readFileSync as readFileSyncFs } from 'node:fs';
 import os from 'node:os';
 import { join } from 'node:path';
 
@@ -74,14 +74,25 @@ export function runWorktreeGc({ root, env = process.env, spawn = spawnChild }) {
         stdio: ['ignore', fd, fd],
         windowsHide: true,
       });
-      child.on('error', () => {});
+      // M5 runda 3: asinkrona greska pokretanja (dijete emitira `error` nakon povratka iz spawn)
+      // ne smije biti presucena: ide na stderr hooka i u log, pa je sljedeci start ispisuje.
+      child.on('error', (error) => {
+        const line = `worktree-gc: nije pokrenut (${error instanceof Error ? error.message : String(error)})`;
+        // eslint-disable-next-line no-console
+        console.error(line);
+        try {
+          appendFileSync(logPath, line + String.fromCharCode(10));
+        } catch {
+          // log nedostupan: stderr je ispisan
+        }
+      });
       child.unref();
     } finally {
       closeSync(fd);
     }
     return `worktree-gc: pokrenut u pozadini (log ${logPath}); prethodni run: ${previous ?? 'nema zapisa'}`;
   } catch (error) {
-    return `worktree-gc: nije uspjelo (${error instanceof Error ? error.message : String(error)}); start sesije se nastavlja`;
+    return `worktree-gc: nije pokrenut (${error instanceof Error ? error.message : String(error)}); start sesije se nastavlja`;
   }
 }
 

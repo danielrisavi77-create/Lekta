@@ -14,7 +14,7 @@ import {
 import { tmpdir } from 'node:os';
 import { isAbsolute, join, resolve } from 'node:path';
 import {
-  isAllowedIgnored, isAllowedUntracked, judgeWorktree, parseReflogShas, parseStatusZ, parseWorktreeList,
+  isAllowedIgnored, isAllowedUntracked, judgeWorktree, parsePruneDryRun, parseReflogShas, parseStatusZ, parseWorktreeList,
 } from '../scripts/worktree-gc.mjs';
 import { lastLogLine, runWorktreeGc } from '../scripts/agents/session-bootstrap.mjs';
 import { worktreeGcHint } from '../scripts/gate-preflight.mjs';
@@ -40,7 +40,8 @@ function age(wt: string): void {
 }
 
 const KEYS = [
-  'merged', 'unmerged', 'dirty', 'locked', 'young', 'env', 'dist', 'srclog', 'hiddenlink', 'reflog', 'nmother',
+  'merged', 'unmerged', 'dirty', 'locked', 'young', 'env', 'tmpdir', 'debuglog', 'srclog', 'hiddenlink', 'reflog', 'nmother',
+  'reflogprune',
 ] as const;
 type Key = typeof KEYS[number];
 
@@ -68,7 +69,7 @@ function makeFixture(): Fixture {
   mkdirSync(join(main, 'src'));
   writeFileSync(join(main, 'a.txt'), 'a\n');
   writeFileSync(join(main, 'src', 'x.txt'), 'x\n');
-  writeFileSync(join(main, '.gitignore'), 'node_modules/\n.env\ndist/\n.tmp-*\n');
+  writeFileSync(join(main, '.gitignore'), 'node_modules/\n.env\ndist/\n.tmp-*\ndebug.log\n');
   git(main, 'add', 'a.txt', 'src/x.txt', '.gitignore');
   git(main, 'commit', '-q', '-m', 'pocetak');
   git(main, 'remote', 'add', 'origin', origin);
@@ -82,26 +83,31 @@ function makeFixture(): Fixture {
 
   const wt = Object.fromEntries(KEYS.map((k) => [k, join(root, `wt-${k}`)])) as Record<Key, string>;
   for (const k of KEYS) {
-    if (k === 'dirty' || k === 'reflog') git(main, 'worktree', 'add', '-q', '--detach', wt[k], 'master');
+    if (k === 'dirty' || k === 'reflog' || k === 'reflogprune') git(main, 'worktree', 'add', '-q', '--detach', wt[k], 'master');
     else git(main, 'worktree', 'add', '-q', '-b', k, wt[k], 'master');
   }
-  // Uklonjiv: dopusten gate.log u korijenu i node_modules junction na glavni repo.
+  // Uklonjiv: dopusten gate.log u korijenu, node_modules junction na glavni repo i korijenski dist/
+  // (jedine ignorirane iznimke po odluci koordinatora, runda 3).
   writeFileSync(join(wt.merged, 'gate.log'), 'log\n');
   symlinkSync(mainNodeModules, join(wt.merged, 'node_modules'), LINK_TYPE);
+  mkdirSync(join(wt.merged, 'dist'));
+  writeFileSync(join(wt.merged, 'dist', 'bundle.js'), 'build\n');
 
   writeFileSync(join(wt.unmerged, 'b.txt'), 'b\n');
   git(wt.unmerged, 'add', 'b.txt');
   git(wt.unmerged, 'commit', '-q', '-m', 'nespojeno');
   writeFileSync(join(wt.dirty, 'a.txt'), 'promijenjeno\n');
   writeFileSync(join(wt.env, '.env'), 'TAJNA=1\n');
-  // B1: ignorirana mapa s dokumentom; ime mape ne dokazuje da je sadrzaj potrosan.
-  mkdirSync(join(wt.dist, 'dist'));
-  writeFileSync(join(wt.dist, 'dist', 'rad.docx'), 'dokument\n');
+  // B1 runda 3: ignorirana korijenska .tmp-* mapa s jedinim primjerkom rada zadrzava stablo.
+  mkdirSync(join(wt.tmpdir, '.tmp-word-verify'));
+  writeFileSync(join(wt.tmpdir, '.tmp-word-verify', 'rad.docx'), 'dokument\n');
+  // B2 runda 3: ignorirani korijenski debug.log moze nositi korisnicke podatke; zadrzava stablo.
+  writeFileSync(join(wt.debuglog, 'debug.log'), 'korisnicki podaci\n');
   // B2: nepracen *.log u pracenom direktoriju je biljeska, ne izlaz gatea.
   writeFileSync(join(wt.srclog, 'src', 'progress.log'), 'biljeske\n');
-  // M6: junction skriven u dopustenoj ignoriranoj mapi.
-  mkdirSync(join(wt.hiddenlink, '.tmp-cache'));
-  symlinkSync(mainNodeModules, join(wt.hiddenlink, '.tmp-cache', 'shared'), LINK_TYPE);
+  // M6: junction skriven u dopustenoj ignoriranoj mapi (dist/).
+  mkdirSync(join(wt.hiddenlink, 'dist'));
+  symlinkSync(mainNodeModules, join(wt.hiddenlink, 'dist', 'shared'), LINK_TYPE);
   // M3: lokalni commit u odvojenom stablu, pa HEAD natrag na master; commit zivi samo u reflogu.
   writeFileSync(join(wt.reflog, 'c.txt'), 'c\n');
   git(wt.reflog, 'add', 'c.txt');
@@ -112,7 +118,15 @@ function makeFixture(): Fixture {
   mkdirSync(otherTarget);
   symlinkSync(otherTarget, join(wt.nmother, 'node_modules'), LINK_TYPE);
 
+  // M3 runda 3: isto, ali mapa stabla zatim nestane (prunable); commit zivi samo u reflogu iz
+  // administrativne mape, koju bi prune obrisao.
+  writeFileSync(join(wt.reflogprune, 'd.txt'), 'd\n');
+  git(wt.reflogprune, 'add', 'd.txt');
+  git(wt.reflogprune, 'commit', '-q', '-m', 'samo u reflogu nestalog stabla');
+  git(wt.reflogprune, 'checkout', '-q', '--detach', 'master');
+
   for (const k of KEYS) if (k !== 'young') age(wt[k]);
+  rmSync(wt.reflogprune, { recursive: true, force: true });
 
   const lockPath = join(root, 'gate.lock');
   writeFileSync(lockPath, JSON.stringify({
@@ -164,9 +178,11 @@ describe('worktree-gc nad stvarnim privremenim repoom', () => {
     expect(rowFor(res.stdout, fx.wt.locked)).toMatch(/zadrzan: .*drzi ga aktivni gate lock/);
     expect(rowFor(res.stdout, fx.wt.young)).toMatch(/zadrzan: .*mladji od 60 min/);
     expect(rowFor(res.stdout, fx.wt.env)).toMatch(/zadrzan: .*ignorirane datoteke: \.env/);
-    expect(rowFor(res.stdout, fx.wt.dist)).toMatch(/zadrzan: .*ignorirane datoteke: dist\//);
+    expect(rowFor(res.stdout, fx.wt.tmpdir)).toMatch(/zadrzan: .*ignorirane datoteke: \.tmp-word-verify\//);
+    expect(rowFor(res.stdout, fx.wt.debuglog)).toMatch(/zadrzan: .*ignorirane datoteke: debug\.log/);
+    expect(rowFor(res.stdout, fx.wt.reflogprune)).toMatch(/zadrzan: mapa ne postoji \(prune\); lokalni commiti samo u reflogu \(1\)$/);
     expect(rowFor(res.stdout, fx.wt.srclog)).toMatch(/zadrzan: .*neprac\. datoteke: src\/progress\.log/);
-    expect(rowFor(res.stdout, fx.wt.hiddenlink)).toMatch(/zadrzan: .*junction ili symlink u stablu: \.tmp-cache\/shared/);
+    expect(rowFor(res.stdout, fx.wt.hiddenlink)).toMatch(/zadrzan: .*junction ili symlink u stablu: dist\/shared/);
     expect(rowFor(res.stdout, fx.wt.reflog)).toMatch(/zadrzan: .*lokalni commiti samo u reflogu \(1\)/);
     expect(rowFor(res.stdout, fx.wt.nmother)).toMatch(/zadrzan: .*((ignorirane|neprac\.) datoteke|junction ili symlink u stablu): node_modules/);
     expect(rowFor(res.stdout, fx.main)).toMatch(/zadrzan: glavno stablo/);
@@ -194,7 +210,7 @@ describe('worktree-gc nad stvarnim privremenim repoom', () => {
       expect(dry.stdout).toMatch(/ukupno uklonjivo: 0 stabala, 0 MB; origin nedostupan, nista se ne uklanja/);
       const apply = runGc(fx, ['--apply', '--quiet']);
       expect(apply.status, apply.stderr).toBe(0);
-      expect(apply.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 11; origin nedostupan, nista se ne uklanja');
+      expect(apply.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 13; origin nedostupan, nista se ne uklanja');
       expect(git(fx.main, 'worktree', 'list', '--porcelain')).toBe(before);
     } finally {
       git(fx.main, 'remote', 'set-url', 'origin', fx.origin);
@@ -207,7 +223,7 @@ describe('worktree-gc nad stvarnim privremenim repoom', () => {
     try {
       const res = runGc(fx, ['--apply', '--quiet']);
       expect(res.status, res.stderr).toBe(0);
-      expect(res.stdout.trim()).toBe(`worktree-gc: preskoceno (drugi worktree-gc radi (PID ${process.pid})), uklonjeno 0, zadrzano 11`);
+      expect(res.stdout.trim()).toBe(`worktree-gc: preskoceno (drugi worktree-gc radi (PID ${process.pid})), uklonjeno 0, zadrzano 13`);
       expect(git(fx.main, 'worktree', 'list', '--porcelain')).toBe(before);
     } finally {
       rmSync(fx.gcLockPath, { force: true });
@@ -217,7 +233,7 @@ describe('worktree-gc nad stvarnim privremenim repoom', () => {
   it('--apply uklanja samo uklonjivo, nista ne brise rucno, junction cilj ostaje; drugi --apply je no-op', () => {
     const first = runGc(fx, ['--apply', '--quiet']);
     expect(first.status, first.stderr).toBe(0);
-    expect(first.stdout.trim()).toMatch(/^worktree-gc: uklonjeno 1 \(\d+ MB\), zadrzano 10$/);
+    expect(first.stdout.trim()).toMatch(/^worktree-gc: uklonjeno 1 \(\d+ MB\), zadrzano 12$/);
     expect(existsSync(fx.wt.merged)).toBe(false);
     expect(existsSync(fx.gcLockPath)).toBe(false);
     expect(readFileSync(join(fx.mainNodeModules, 'sentinel.txt'), 'utf8')).toBe('ovisnosti\n');
@@ -225,17 +241,20 @@ describe('worktree-gc nad stvarnim privremenim repoom', () => {
     const stashed = readdirSync(fx.stash);
     expect(stashed).toHaveLength(1);
     expect(readFileSync(join(fx.stash, stashed[0]!, 'gate.log'), 'utf8')).toBe('log\n');
-    for (const key of KEYS.filter((k) => k !== 'merged')) expect(existsSync(fx.wt[key]), key).toBe(true);
+    for (const key of KEYS.filter((k) => k !== 'merged' && k !== 'reflogprune')) expect(existsSync(fx.wt[key]), key).toBe(true);
     expect(readFileSync(join(fx.wt.dirty, 'a.txt'), 'utf8')).toBe('promijenjeno\n');
-    expect(readFileSync(join(fx.wt.dist, 'dist', 'rad.docx'), 'utf8')).toBe('dokument\n');
+    expect(readFileSync(join(fx.wt.tmpdir, '.tmp-word-verify', 'rad.docx'), 'utf8')).toBe('dokument\n');
+    expect(readFileSync(join(fx.wt.debuglog, 'debug.log'), 'utf8')).toBe('korisnicki podaci\n');
     expect(readFileSync(join(fx.wt.srclog, 'src', 'progress.log'), 'utf8')).toBe('biljeske\n');
-    expect(readFileSync(join(fx.wt.hiddenlink, '.tmp-cache', 'shared', 'sentinel.txt'), 'utf8')).toBe('ovisnosti\n');
+    expect(readFileSync(join(fx.wt.hiddenlink, 'dist', 'shared', 'sentinel.txt'), 'utf8')).toBe('ovisnosti\n');
     const listAfterFirst = git(fx.main, 'worktree', 'list', '--porcelain');
     expect(listAfterFirst).not.toContain(fwd(fx.wt.merged));
+    // M3/M4: nestalo stablo s commitom samo u reflogu ostaje u popisu (prune preskocen).
+    expect(listAfterFirst).toContain(fwd(fx.wt.reflogprune));
 
     const second = runGc(fx, ['--apply', '--quiet']);
     expect(second.status, second.stderr).toBe(0);
-    expect(second.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 10');
+    expect(second.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 12');
     expect(git(fx.main, 'worktree', 'list', '--porcelain')).toBe(listAfterFirst);
   }, 240_000);
 
@@ -291,10 +310,16 @@ describe('worktree-gc: ciste funkcije', () => {
     expect(kept({ status: { ...clean, untracked: ['node_modules'] } })).toBe(false);
     expect(kept({ status: { ...clean, untracked: ['node_modules'] }, mainNodeModulesLink: true })).toBe(true);
     expect(kept({ status: { ...clean, ignored: ['.env'] } })).toBe(false);
-    expect(kept({ status: { ...clean, ignored: ['dist/'] } })).toBe(false);
     expect(kept({ status: { ...clean, ignored: ['node_modules/'] } })).toBe(false);
     expect(kept({ status: { ...clean, ignored: ['node_modules/'] }, mainNodeModulesLink: true })).toBe(true);
-    expect(kept({ status: { ...clean, ignored: ['.tmp-word-verify/', 'debug.log'] } })).toBe(true);
+    expect(kept({ status: { ...clean, ignored: ['dist/'] } })).toBe(true);
+    expect(kept({ status: { ...clean, ignored: ['.tmp-word-verify/'] } })).toBe(false);
+    expect(kept({ status: { ...clean, ignored: ['debug.log'] } })).toBe(false);
+    expect(kept({ status: { ...clean, ignored: ['src/dist/'] } })).toBe(false);
+    expect(kept({ prunable: true })).toBe(true);
+    expect(kept({ prunable: true, unreachableCommits: 1 })).toBe(false);
+    expect(kept({ prunable: true, unreachableCommits: null })).toBe(false);
+    expect(kept({ prunable: true, originFresh: false })).toBe(false);
     expect(kept({ status: { ...clean, ignored: ['src/debug.log'] } })).toBe(false);
     expect(kept({ foreignLinks: ['.tmp-cache/shared'] })).toBe(false);
     expect(kept({ foreignLinks: null })).toBe(false);
@@ -315,9 +340,24 @@ describe('worktree-gc: ciste funkcije', () => {
     expect(isAllowedUntracked('gate.log')).toBe(true);
     expect(isAllowedUntracked('sub/gate.log')).toBe(false);
     expect(isAllowedUntracked('notes.log')).toBe(false);
-    expect(isAllowedIgnored('debug.log')).toBe(true);
+    expect(isAllowedIgnored('debug.log')).toBe(false);
+    expect(isAllowedIgnored('.tmp-word-verify/')).toBe(false);
+    expect(isAllowedIgnored('dist/')).toBe(true);
+    expect(isAllowedIgnored('dist')).toBe(false);
     expect(isAllowedIgnored('logs/')).toBe(false);
     expect(isAllowedIgnored('a/.tmp-x/')).toBe(false);
+  });
+
+  it('ispis razloga navodi do 3 stavke', () => {
+    expect(judgeWorktree({ ...base, status: { ...clean, ignored: ['a.log', 'b.log', '.tmp-x/', 'c.log'] } }, now).reasons)
+      .toEqual(['ignorirane datoteke: a.log, b.log, .tmp-x/ (+1)']);
+  });
+
+  it('parsira prune --dry-run; neprepoznat redak daje null', () => {
+    expect(parsePruneDryRun('Removing worktrees/w1: gitdir file points to non-existent location\r\nRemoving worktrees/w2: x\n'))
+      .toEqual(['w1', 'w2']);
+    expect(parsePruneDryRun('')).toEqual([]);
+    expect(parsePruneDryRun('nesto drugo\n')).toBeNull();
   });
 
   it('parsira porcelain popis, status s preimenovanjem i reflog', () => {
@@ -361,7 +401,7 @@ describe('integracija je fail-open i ne blokira start sesije', () => {
       const deadline2 = Date.now() + 30_000;
       while (lastLogLine(logPath) === null && Date.now() < deadline2) await new Promise((r) => setTimeout(r, 200));
     } finally {
-      rmSync(root, { recursive: true, force: true });
+      rmSync(root, { recursive: true, force: true, maxRetries: 20, retryDelay: 250 });
     }
     const boom = (() => { throw new Error('nema node'); }) as unknown as typeof import('node:child_process').spawn;
     const root2 = mkdtempSync(join(tmpdir(), 'lekta-wtgc-boot-'));
@@ -369,7 +409,7 @@ describe('integracija je fail-open i ne blokira start sesije', () => {
       mkdirSync(join(root2, 'scripts'));
       writeFileSync(join(root2, 'scripts', 'worktree-gc.mjs'), '\n');
       const env = { ...process.env, LEKTA_WORKTREE_GC_LOG: join(root2, 'gc.log') };
-      expect(runWorktreeGc({ root: root2, env, spawn: boom })).toBe('worktree-gc: nije uspjelo (nema node); start sesije se nastavlja');
+      expect(runWorktreeGc({ root: root2, env, spawn: boom })).toBe('worktree-gc: nije pokrenut (nema node); start sesije se nastavlja');
     } finally {
       rmSync(root2, { recursive: true, force: true });
     }
@@ -396,5 +436,121 @@ describe('integracija je fail-open i ne blokira start sesije', () => {
     const counted = ((...args: Parameters<typeof spawnSync>) => { calls += 1; return (ok as (...a: unknown[]) => unknown)(...args); }) as unknown as typeof spawnSync;
     expect(worktreeGcHint({ root, injected: true, spawn: counted })).toMatch(/nisu izmjereni/);
     expect(calls).toBe(0);
+  });
+});
+
+/** Mali privremeni repo: glavno stablo, lokalni bare `origin` i zadana stara spojena stabla. */
+function miniRepo(names: string[]): { root: string; main: string; origin: string; wts: string[] } {
+  const root = realpathSync(mkdtempSync(join(tmpdir(), 'lekta-wtgc-mini-')));
+  const main = join(root, 'main');
+  const origin = join(root, 'origin.git');
+  mkdirSync(main);
+  git(root, 'init', '-q', '--bare', origin);
+  git(main, 'init', '-q', '-b', 'master');
+  git(main, 'config', 'user.email', 'test@example.invalid');
+  git(main, 'config', 'user.name', 'test');
+  writeFileSync(join(main, 'a.txt'), 'a\n');
+  git(main, 'add', 'a.txt');
+  git(main, 'commit', '-q', '-m', 'pocetak');
+  git(main, 'remote', 'add', 'origin', origin);
+  git(main, 'push', '-q', 'origin', 'master');
+  const wts = names.map((n) => join(root, n));
+  for (const wt of wts) {
+    git(main, 'worktree', 'add', '-q', '--detach', wt, 'master');
+    age(wt);
+  }
+  return { root, main, origin, wts };
+}
+
+function runMini(m: { root: string; main: string }, args: string[]): SpawnSyncReturns<string> {
+  return spawnSync(process.execPath, [SCRIPT, '--repo', m.main, ...args], {
+    cwd: m.root,
+    encoding: 'utf8',
+    windowsHide: true,
+    timeout: 120_000,
+    env: {
+      ...process.env,
+      LEKTA_GATE_LOCK_PATH: join(m.root, 'gate.lock'),
+      LEKTA_WORKTREE_GC_LOCK_PATH: join(m.root, 'gc.lock'),
+      LEKTA_WORKTREE_GC_STASH: join(m.root, 'odlozeno'),
+    },
+  });
+}
+
+describe('worktree-gc runda 3: prune samo uz svjez origin i provjeren reflog', () => {
+  it('M4: nestalo cisto stablo uz nedostupan origin ostaje u popisu; uz svjez origin se prunea, drugi run je no-op', () => {
+    const m = miniRepo(['nestalo']);
+    try {
+      rmSync(m.wts[0]!, { recursive: true, force: true });
+      expect(git(m.main, 'worktree', 'list', '--porcelain')).toContain('prunable');
+      git(m.main, 'remote', 'set-url', 'origin', join(m.root, 'nema-origina.git'));
+      const before = git(m.main, 'worktree', 'list', '--porcelain');
+      const offline = runMini(m, ['--apply', '--quiet']);
+      expect(offline.status, offline.stderr).toBe(0);
+      expect(offline.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 1; origin nedostupan, nista se ne uklanja');
+      expect(git(m.main, 'worktree', 'list', '--porcelain')).toBe(before);
+
+      git(m.main, 'remote', 'set-url', 'origin', m.origin);
+      const online = runMini(m, ['--apply', '--quiet']);
+      expect(online.status, online.stderr).toBe(0);
+      expect(online.stdout.trim()).toBe('worktree-gc: uklonjeno 1 (0 MB), zadrzano 0');
+      expect(git(m.main, 'worktree', 'list', '--porcelain')).not.toContain('nestalo');
+      const again = runMini(m, ['--apply', '--quiet']);
+      expect(again.stdout.trim()).toBe('worktree-gc: uklonjeno 0 (0 MB), zadrzano 0');
+    } finally {
+      rmSync(m.root, { recursive: true, force: true });
+    }
+  }, 180_000);
+
+  it('M3: nestalo stablo s commitom samo u reflogu blokira prune i za susjedno cisto nestalo stablo', () => {
+    const m = miniRepo(['cisto', 'reflog']);
+    try {
+      writeFileSync(join(m.wts[1]!, 'c.txt'), 'c\n');
+      git(m.wts[1]!, 'add', 'c.txt');
+      git(m.wts[1]!, 'commit', '-q', '-m', 'samo u reflogu');
+      git(m.wts[1]!, 'checkout', '-q', '--detach', 'master');
+      for (const wt of m.wts) rmSync(wt, { recursive: true, force: true });
+      const before = git(m.main, 'worktree', 'list', '--porcelain');
+      const dry = runMini(m, []);
+      expect(dry.status, dry.stderr).toBe(0);
+      expect(rowFor(dry.stdout, m.wts[0]!)).toMatch(/\| UKLONJIV$/);
+      expect(rowFor(dry.stdout, m.wts[1]!)).toMatch(/zadrzan: mapa ne postoji \(prune\); lokalni commiti samo u reflogu \(1\)$/);
+      const apply = runMini(m, ['--apply']);
+      expect(apply.status, apply.stderr).toBe(0);
+      expect(apply.stdout).toMatch(/^prune preskocen: neprovjerena stabla \(reflog\)$/m);
+      expect(git(m.main, 'worktree', 'list', '--porcelain')).toBe(before);
+    } finally {
+      rmSync(m.root, { recursive: true, force: true });
+    }
+  }, 180_000);
+
+  it('M5: asinkrona greska pokretanja ide u log i na stderr, sljedeci start je ispisuje', async () => {
+    const { EventEmitter } = await import('node:events');
+    const root = mkdtempSync(join(tmpdir(), 'lekta-wtgc-boot-'));
+    try {
+      mkdirSync(join(root, 'scripts'));
+      writeFileSync(join(root, 'scripts', 'worktree-gc.mjs'), '\n');
+      const logPath = join(root, 'gc.log');
+      const env = { ...process.env, LEKTA_WORKTREE_GC_LOG: logPath };
+      const lateFail = (() => {
+        const child = new EventEmitter() as InstanceType<typeof EventEmitter> & { unref: () => void };
+        child.unref = () => {};
+        setImmediate(() => child.emit('error', new Error('spawn node ENOENT')));
+        return child;
+      }) as unknown as typeof import('node:child_process').spawn;
+      const errors: string[] = [];
+      const origError = console.error;
+      console.error = (...a: unknown[]) => { errors.push(a.join(' ')); };
+      try {
+        expect(runWorktreeGc({ root, env, spawn: lateFail })).toMatch(/^worktree-gc: pokrenut u pozadini/);
+        await new Promise((r) => setTimeout(r, 100));
+      } finally {
+        console.error = origError;
+      }
+      expect(errors).toEqual(['worktree-gc: nije pokrenut (spawn node ENOENT)']);
+      expect(lastLogLine(logPath)).toBe('worktree-gc: nije pokrenut (spawn node ENOENT)');
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });

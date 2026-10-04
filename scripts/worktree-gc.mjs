@@ -19,25 +19,32 @@
  *  - nema promjena pracenih datoteka;
  *  - neprac. datoteke su samo tocno `gate.log` i `.gate-lock` u korijenu (i Linux symlink
  *    `node_modules`, vidi nize); sve ostalo, ukljucivo `src/biljeske.log`, zadrzava stablo;
- *  - ignorirane stavke su samo s uskog popisa: `node_modules` u korijenu kao junction ili symlink
- *    na `node_modules` glavnog repoa, `.tmp-*` i `*.log` u korijenu. Ignorirana mapa izvan popisa
- *    (npr. `dist/`, stvarni `node_modules/`, `.env`) zadrzava stablo: sadrzaj se ne moze dokazati;
+ *  - ignorirane stavke su samo s uskog popisa (odluka koordinatora, runda 3): `node_modules` u
+ *    korijenu kao junction ili symlink na `node_modules` glavnog repoa, i korijenska mapa `dist/`.
+ *    Svaka druga ignorirana stavka (privremene mape, dnevnici, `.env`, stvarni `node_modules/`)
+ *    zadrzava stablo, jer je `git worktree remove` brise bez pitanja;
  *  - u stablu nema drugog reparse pointa (junction ili symlink) osim tog jednog `node_modules`;
  *  - ne drzi ga zivi gate lock; aktivan lock BEZ citljive putanje stabla zadrzava SVA stabla
  *    (presuda `lockStatus` iz `scripts/gate-preflight.mjs`, ista funkcija, ne kopija);
  *  - nijedan tudji proces nema stazu stabla u naredbenom retku (nemjerljiv snimak procesa zadrzava);
  *  - stariji je od 60 min (najnoviji mtime od `.git` datoteke, gitdir HEAD i gitdir index).
  *
+ * Stablo cija mapa vise ne postoji (`prunable`) prolazi istu provjeru origina i HEAD refloga iz
+ * svoje administrativne mape; prune brise taj reflog.
+ *
  * Zadano je SUHI RAD: tablica kandidata i ukupno MB koji se mogu osloboditi. `--apply` uzima
- * vlastiti medjuprocesni lock (`lekta-worktree-gc.lock` u %TEMP%; drugi GC tada odustaje) i za svako
- * stablo NEPOSREDNO prije uklanjanja ponovno mjeri sve uvjete. Zatim: odvoji SAMO link `node_modules`
- * (cilj ostaje), premjesti `gate.log`/`.gate-lock` u %TEMP%/lekta-worktree-gc-odlozeno (nista se ne
- * brise rucno), pa `git worktree remove` BEZ `--force` (git jos jednom provjerava cistocu i sam
- * brise dopustene ignorirane stavke). Nakon toga mapa mora nestati i iz popisa i s diska.
+ * vlastiti medjuprocesni lock (`lekta-worktree-gc.lock` u %TEMP%; drugi GC tada odustaje; mrtav lock
+ * se preuzima atomarno kroz `wx` cuvar) i za svako stablo NEPOSREDNO prije uklanjanja ponovno mjeri
+ * sve uvjete sa svjezim snimkom procesa. Zatim: odvoji SAMO link `node_modules` (cilj ostaje),
+ * premjesti `gate.log`/`.gate-lock` u %TEMP%/lekta-worktree-gc-odlozeno (nista se ne brise rucno),
+ * jos jednom procita HEAD i status s ignoriranim stavkama (svaka razlika: stablo se vraca i zadrzava),
+ * pa `git worktree remove` BEZ `--force`. Nakon toga mapa mora nestati i iz popisa i s diska.
+ * `git worktree prune` se zove samo uz svjez origin i samo kad su sva stabla koja bi uklonio
+ * (`--dry-run`) upravo presudjena uklonjivima.
  *
  * Izlazni kod: 0 kad je mjerenje potpuno. Djelomican pad bilo kojeg git poziva (ili neuspjelo
  * uklanjanje) daje 1: nepotpuno mjerenje nikad nije tiha nula. Nedostupan origin nije pad nego
- * izricito stanje: sva stabla su zadrzana s razlogom "origin nedostupan".
+ * izricito stanje: sva stabla su zadrzana s razlogom "origin nedostupan" i nema nikakve mutacije.
  *
  * Uporaba:
  *   node scripts/worktree-gc.mjs                  # suhi rad, tablica
@@ -45,12 +52,13 @@
  *   node scripts/worktree-gc.mjs --apply --quiet  # jedan redak (SessionStart, u pozadini)
  *   node scripts/worktree-gc.mjs --json           # sazetak za gate preflight
  *   opcije: --repo <staza> (zadano korijen ovog repoa), --base <ref> (zadano origin/master)
- *   okolina: LEKTA_WORKTREE_GC_LOCK_PATH, LEKTA_WORKTREE_GC_STASH (samo za testove)
+ *   okolina: LEKTA_WORKTREE_GC_LOCK_PATH, LEKTA_WORKTREE_GC_STASH, LEKTA_WORKTREE_GC_TEST_BARRIER
+ *   (samo za testove)
  */
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import {
-  existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, readlinkSync, renameSync, rmdirSync, statSync, symlinkSync, unlinkSync,
+  existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, readlinkSync, renameSync, rmdirSync, statSync, symlinkSync, unlinkSync, writeFileSync,
 } from 'node:fs';
 import os from 'node:os';
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
@@ -84,7 +92,7 @@ class GitError extends Error {
 /**
  * Jedan git poziv. Vraca stdout ili baca GitError; `okCodes` dopusta izlazne kodove koji nose
  * odgovor (npr. 1 za `merge-base --is-ancestor`).
- * @returns {{ code: number, stdout: string }}
+ * @returns {{ code: number, stdout: string, stderr: string }}
  */
 function runGit(args, cwd, okCodes = [0], timeoutMs = undefined) {
   const res = spawnSync('git', args, {
@@ -93,14 +101,14 @@ function runGit(args, cwd, okCodes = [0], timeoutMs = undefined) {
     windowsHide: true,
     maxBuffer: 64 * 1024 * 1024,
     timeout: timeoutMs,
-    env: { ...process.env, GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0' },
+    env: { ...process.env, GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0', LC_ALL: 'C' },
   });
   if (res.error) throw new GitError(args, cwd, res.error.message);
   const code = typeof res.status === 'number' ? res.status : -1;
   if (!okCodes.includes(code)) {
     throw new GitError(args, cwd, `izlaz ${code}: ${(res.stderr || '').trim().split('\n')[0] ?? ''}`);
   }
-  return { code, stdout: res.stdout ?? '' };
+  return { code, stdout: res.stdout ?? '', stderr: res.stderr ?? '' };
 }
 
 /** Staza za usporedbu: apsolutna, kose crte, bez zavrsne, mala slova na Windowsu. */
@@ -179,19 +187,17 @@ export function isAllowedUntracked(path, { mainNodeModulesLink = false } = {}) {
 }
 
 /**
- * Ignorirana stavka s uskog popisa: `node_modules` u korijenu SAMO kao link na glavni repo, te
- * `.tmp-*` i `*.log` u korijenu. Sve drugo (i `dist/`) zadrzava stablo jer se sadrzaj ne moze
- * dokazati potrosnim.
+ * Ignorirana stavka s uskog popisa (odluka koordinatora, runda 3 PR #253): SAMO `node_modules` u
+ * korijenu kao link na `node_modules` glavnog repoa, i korijenska mapa `dist/` (izlaz builda).
+ * Sve ostalo ignorirano, ukljucivo privremene mape, dnevnike i `.env`, zadrzava stablo: `git
+ * worktree remove` ignorirane stavke brise bez pitanja, a sadrzaj se ne moze dokazati potrosnim.
  */
 export function isAllowedIgnored(path, { mainNodeModulesLink = false } = {}) {
   if (isRootNodeModules(path)) return mainNodeModulesLink;
-  const bare = path.endsWith('/') ? path.slice(0, -1) : path;
-  if (bare.includes('/')) return false;
-  if (bare.startsWith('.tmp-')) return true;
-  return !path.endsWith('/') && /\.log$/i.test(bare);
+  return path === 'dist/';
 }
 
-const listed = (label, items) => `${label}: ${items.slice(0, 2).join(', ')}${items.length > 2 ? ` (+${items.length - 2})` : ''}`;
+const listed = (label, items) => `${label}: ${items.slice(0, 3).join(', ')}${items.length > 3 ? ` (+${items.length - 3})` : ''}`;
 
 /**
  * CISTA presuda nad vec izmjerenim cinjenicama. Ne dira OS ni git.
@@ -206,7 +212,15 @@ const listed = (label, items) => `${label}: ${items.slice(0, 2).join(', ')}${ite
 export function judgeWorktree(facts, { nowMs, minAgeMs = MIN_AGE_MS }) {
   if (facts.main) return { removable: false, reasons: ['glavno stablo'] };
   if (facts.bare) return { removable: false, reasons: ['bare repo'] };
-  if (facts.prunable) return { removable: true, reasons: [] };
+  if (facts.prunable) {
+    // Mapa je nestala, ali metapodaci (i HEAD reflog) postoje: prune ih brise, pa vrijede origin
+    // i reflog kao i za postojece stablo (M3, M4 runda 3).
+    const pr = [];
+    if (facts.originFresh !== true) pr.push('origin nedostupan (fetch nije uspio)');
+    if (facts.unreachableCommits === null || facts.unreachableCommits === undefined) pr.push('reflog nije izmjeren');
+    else if (facts.unreachableCommits > 0) pr.push(`lokalni commiti samo u reflogu (${facts.unreachableCommits})`);
+    return { removable: pr.length === 0, reasons: pr };
+  }
   const reasons = [];
   if (facts.originFresh !== true) reasons.push('origin nedostupan (fetch nije uspio)');
   if (facts.locked) reasons.push('zakljucan (git worktree lock)');
@@ -271,16 +285,16 @@ function newestActivityMs(wtPath) {
  * reflog ne moze procitati (a postoji). Bez refloga: 0 (nema sto izgubiti osim HEAD-a, koji
  * provjerava `ancestor`).
  */
-function countReflogOnlyCommits(wtPath, mainPath) {
-  const gitdir = readGitdir(wtPath);
+function countReflogOnlyCommits(gitdir, mainPath, extraShas = []) {
   if (!gitdir) return null;
   let raw;
   try {
     raw = readFileSync(join(gitdir, 'logs', 'HEAD'), 'utf8');
   } catch (error) {
-    return error && error.code === 'ENOENT' ? 0 : null;
+    if (!error || error.code !== 'ENOENT') return null;
+    raw = '';
   }
-  const shas = parseReflogShas(raw);
+  const shas = [...new Set([...parseReflogShas(raw), ...extraShas.filter((s) => /^[0-9a-f]{40,64}$/.test(s ?? ''))])];
   let count = 0;
   for (let i = 0; i < shas.length; i += 200) {
     const chunk = shas.slice(i, i + 200);
@@ -289,6 +303,58 @@ function countReflogOnlyCommits(wtPath, mainPath) {
     count += out.split('\n').filter(Boolean).length;
   }
   return count;
+}
+
+/**
+ * Administrativna mapa (`<common>/worktrees/<id>`) stabla cija mapa vise ne postoji: trazi se po
+ * `gitdir` datoteci koja pokazuje na `<stablo>/.git`. @returns {{ id: string, dir: string }|null}
+ */
+function findAdminDir(mainPath, wtPath) {
+  const common = runGit(['rev-parse', '--git-common-dir'], mainPath).stdout.trim();
+  const root = join(isAbsolute(common) ? common : resolve(mainPath, common), 'worktrees');
+  const want = normPath(join(wtPath, '.git'));
+  for (const id of readdirSync(root)) {
+    try {
+      if (normPath(readFileSync(join(root, id, 'gitdir'), 'utf8').trim()) === want) return { id, dir: join(root, id) };
+    } catch {
+      // nije administrativna mapa stabla
+    }
+  }
+  return null;
+}
+
+/**
+ * Parsira `git worktree prune --dry-run --verbose`: id-evi koje bi prune uklonio. null kad neki
+ * redak nije prepoznat (tada se ne prunea nista).
+ */
+export function parsePruneDryRun(text) {
+  const ids = [];
+  for (const line of text.replace(/\r\n/g, '\n').split('\n')) {
+    if (!line.trim()) continue;
+    const m = line.match(/^Removing worktrees\/([^:/]+):/);
+    if (!m) return null;
+    ids.push(m[1]);
+  }
+  return ids;
+}
+
+/**
+ * Testna sinkronizacija (samo za testove, `LEKTA_WORKTREE_GC_TEST_BARRIER`): u tocki `point` proces
+ * upise `<mapa>/<point>-<pid>.ready` i ceka `<mapa>/<point>-<pid>.go` ili `<mapa>/<point>.go`
+ * (najvise 60 s). Bez varijable ne radi nista.
+ */
+function testBarrier(env, point) {
+  const dir = env.LEKTA_WORKTREE_GC_TEST_BARRIER;
+  if (!dir) return;
+  try {
+    writeFileSync(join(dir, `${point}-${process.pid}.ready`), '');
+  } catch {
+    return;
+  }
+  const sleeper = new Int32Array(new SharedArrayBuffer(4));
+  const deadline = Date.now() + 60_000;
+  const released = () => existsSync(join(dir, `${point}.go`)) || existsSync(join(dir, `${point}-${process.pid}.go`));
+  while (!released() && Date.now() < deadline) Atomics.wait(sleeper, 0, 0, 50);
 }
 
 /**
@@ -390,10 +456,18 @@ function prepareContext({ repo, base, env, nowMs, cwd }) {
     }
   }
   const baseSha = runGit(['rev-parse', '--verify', `${base}^{commit}`], mainPath).stdout.trim();
+  return {
+    list, mainPath, baseSha, originFresh, fetchError, env, nowMs, cwdNorm: normPath(cwd), foreignProcesses: lazyForeignProcesses(),
+  };
+}
 
-  // Snimak procesa se radi lijeno, najvise jednom, i samo kad neko stablo dodje do te provjere.
+/**
+ * Lijeni snimak tudjih procesa: radi se najvise jednom po getteru, i samo kad neko stablo dodje do
+ * te provjere. Ponovna provjera prije uklanjanja uzima NOVI getter (svjez snimak, M2b runda 3).
+ */
+function lazyForeignProcesses() {
   let foreign;
-  const foreignProcesses = () => {
+  return () => {
     if (foreign !== undefined) return foreign;
     let processes;
     try {
@@ -407,7 +481,6 @@ function prepareContext({ repo, base, env, nowMs, cwd }) {
       : null;
     return foreign;
   };
-  return { list, mainPath, baseSha, originFresh, fetchError, env, nowMs, cwdNorm: normPath(cwd), foreignProcesses };
 }
 
 /**
@@ -415,13 +488,26 @@ function prepareContext({ repo, base, env, nowMs, cwd }) {
  * i snimak procesa rade se samo za stablo koje je proslo jeftine provjere. Zadrzanom stablu
  * tablica zato navodi razloge iz prve faze, ne nuzno sve.
  */
-function measureOne(ctx, wt, index, { sizes = 'all', nowMs = ctx.nowMs } = {}) {
+function measureOne(ctx, wt, index, { sizes = 'all', nowMs = ctx.nowMs, foreignProcesses = ctx.foreignProcesses } = {}) {
   const main = index === 0;
   const branch = wt.branch ?? (wt.head ? `(detached ${wt.head.slice(0, 8)})` : '(nepoznato)');
   const row = { path: wt.path, branch, head: wt.head, sizeBytes: null, removable: false, reasons: [], prunable: wt.prunable };
-  if (main || wt.bare || wt.prunable) {
-    const verdict = judgeWorktree({ main, bare: wt.bare, prunable: wt.prunable }, { nowMs });
-    return { ...row, removable: verdict.removable, reasons: wt.prunable ? ['mapa ne postoji (prune)'] : verdict.reasons, sizeBytes: 0 };
+  if (main || wt.bare) {
+    const verdict = judgeWorktree({ main, bare: wt.bare }, { nowMs });
+    return { ...row, removable: verdict.removable, reasons: verdict.reasons, sizeBytes: 0 };
+  }
+  if (wt.prunable) {
+    // M3: prune brise i HEAD reflog stabla, pa se reflog (i HEAD) provjerava i ovdje.
+    const admin = findAdminDir(ctx.mainPath, wt.path);
+    const unreachableCommits = admin ? countReflogOnlyCommits(admin.dir, ctx.mainPath, [wt.head]) : null;
+    const verdict = judgeWorktree({ main, bare: false, prunable: true, originFresh: ctx.originFresh, unreachableCommits }, { nowMs });
+    return {
+      ...row,
+      adminId: admin ? admin.id : null,
+      removable: verdict.removable,
+      reasons: ['mapa ne postoji (prune)', ...verdict.reasons],
+      sizeBytes: 0,
+    };
   }
   // Mapa nestala, a git je ne nudi za prune (npr. zakljucan): nema sto mjeriti ni ukloniti.
   if (!existsSync(wt.path)) return { ...row, reasons: ['mapa ne postoji, a git je ne nudi za prune'], sizeBytes: 0 };
@@ -445,7 +531,7 @@ function measureOne(ctx, wt, index, { sizes = 'all', nowMs = ctx.nowMs } = {}) {
   }
   const facts = {
     main, bare: false, locked: wt.locked, prunable: false, current, originFresh: ctx.originFresh, ancestor,
-    unreachableCommits: countReflogOnlyCommits(wt.path, ctx.mainPath),
+    unreachableCommits: countReflogOnlyCommits(readGitdir(wt.path), ctx.mainPath),
     status, mainNodeModulesLink, foreignLinks: [], lockHeld, lockAmbiguous: gateLock.ambiguous,
     processPids: [], newestMtimeMs: newestActivityMs(wt.path),
   };
@@ -464,7 +550,7 @@ function measureOne(ctx, wt, index, { sizes = 'all', nowMs = ctx.nowMs } = {}) {
       links = { mainNodeModulesLink: false, foreignLinks: null };
     }
     const variants = [wt.path, wt.path.replace(/\//g, '\\')].map((v) => (process.platform === 'win32' ? v.toLowerCase() : v));
-    const fp = ctx.foreignProcesses();
+    const fp = foreignProcesses();
     const processPids = fp === null ? null : fp
       .filter((p) => {
         const cl = process.platform === 'win32' ? p.commandLine.toLowerCase() : p.commandLine;
@@ -494,27 +580,72 @@ function gcLockPath(env = process.env) {
   return join(os.tmpdir(), 'lekta-worktree-gc.lock');
 }
 
+const STALE_GUARD_MS = 60_000;
+
+/** Presuda nad procitanim GC lockom: null kad je slobodan za preuzimanje, inace razlog zauzetosti. */
+function gcLockBusy(lock, nowMs) {
+  if (lock.unmeasurable) return 'GC lock se ne moze procitati';
+  if (lockStatus({ lock, lockAlive: isPidAlive(lock.pid), nowMs }) === 'alive') return `drugi worktree-gc radi (PID ${lock.pid ?? 'nepoznat'})`;
+  return null;
+}
+
+/**
+ * Atomarno preuzimanje mrtvog GC locka (M2a runda 3). Brisanje mrtvog locka i upis novog nisu jedna
+ * operacija, pa ih stiti zaseban `wx` cuvar (`<lock>.preuzimanje`): samo njegov vlasnik smije
+ * obrisati GC lock, i to tek nakon sto ga POD cuvarom ponovno procita i ponovno proglasi mrtvim.
+ * Drugi proces koji je vidio isti mrtav lock tada ili ne dobije cuvar, ili pod cuvarom vidi novi
+ * zivi lock; u oba slucaja odustaje. Cuvar mrtvog vlasnika stariji od 60 s se uklanja, a taj run
+ * svejedno odustaje (sljedeci run ga uzima ispocetka).
+ * @returns {{ token: string }|{ busy: string }}
+ */
+function takeOverDeadGcLock(path, record, nowMs) {
+  const guard = `${path}.preuzimanje`;
+  const guardRecord = { pid: process.pid, startedAt: new Date(nowMs).toISOString(), label: 'worktree-gc preuzimanje', token: record.token };
+  if (!writeLock(guard, guardRecord)) {
+    const g = readLock(guard);
+    const stale = g && !g.unmeasurable && isPidAlive(g.pid) === false
+      && g.startedAt && nowMs - Date.parse(g.startedAt) > STALE_GUARD_MS;
+    if (stale) {
+      try {
+        unlinkSync(guard);
+      } catch {
+        // netko ga je vec maknuo
+      }
+    }
+    return { busy: 'drugi worktree-gc preuzima GC lock' };
+  }
+  try {
+    const again = readLock(path);
+    if (again) {
+      const busy = gcLockBusy(again, nowMs);
+      if (busy) return { busy };
+      try {
+        unlinkSync(path);
+      } catch (error) {
+        if (!error || error.code !== 'ENOENT') throw error;
+      }
+    }
+    return writeLock(path, record) ? { token: record.token } : { busy: 'GC lock nije uzet' };
+  } finally {
+    releaseLock(guard, { token: record.token });
+  }
+}
+
 /**
  * Uzima GC lock (`wx`, isti zapis kao gate lock). Mrtav ili zastario lock (presuda `lockStatus`)
- * se preuzima jednom. @returns {{ token: string }|{ busy: string }}
+ * preuzima se SAMO kroz `takeOverDeadGcLock`. @returns {{ token: string }|{ busy: string }}
  */
-function acquireGcLock(path, mainPath, nowMs) {
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const token = randomUUID();
-    const record = { pid: process.pid, startedAt: new Date(nowMs).toISOString(), worktree: mainPath, label: 'worktree-gc', token };
-    if (writeLock(path, record)) return { token };
-    const existing = readLock(path);
-    if (!existing) continue;
-    if (existing.unmeasurable) return { busy: 'GC lock se ne moze procitati' };
-    const status = lockStatus({ lock: existing, lockAlive: isPidAlive(existing.pid), nowMs });
-    if (status === 'alive') return { busy: `drugi worktree-gc radi (PID ${existing.pid ?? 'nepoznat'})` };
-    try {
-      unlinkSync(path);
-    } catch {
-      // netko ga je vec maknuo
-    }
+function acquireGcLock(path, mainPath, nowMs, env = process.env) {
+  const token = randomUUID();
+  const record = { pid: process.pid, startedAt: new Date(nowMs).toISOString(), worktree: mainPath, label: 'worktree-gc', token };
+  if (writeLock(path, record)) return { token };
+  const existing = readLock(path);
+  if (existing) {
+    const busy = gcLockBusy(existing, nowMs);
+    if (busy) return { busy };
   }
-  return { busy: 'GC lock nije uzet' };
+  testBarrier(env, 'preuzimanje');
+  return takeOverDeadGcLock(path, record, nowMs);
 }
 
 /** Uklanja SAMO link (junction ili symlink); cilj ostaje. Baca ako cilj nakon toga nestane. */
@@ -539,9 +670,29 @@ function stashDir(env) {
  * Uklanja jedan stablo koje je upravo ponovno izmjereno kao uklonjivo. Baca na bilo kojem
  * neuspjehu, nakon pokusaja da vrati odvojeni link i odlozene datoteke.
  */
+/**
+ * Zadnja provjera NEPOSREDNO prije `git worktree remove` (M2b runda 3), nakon odvajanja linka i
+ * odlaganja: svjez HEAD i svjez status s ignoriranim stavkama moraju biti tocno ono sto je ponovno
+ * mjerenje vidjelo, bez linka i odlozenih datoteka. @returns {string|null} razlog promjene ili null
+ */
+function finalChangeReason(row) {
+  const head = runGit(['rev-parse', 'HEAD'], row.path).stdout.trim();
+  if (row.head && head !== row.head) return `HEAD se promijenio (${head.slice(0, 8)})`;
+  const now = parseStatusZ(
+    runGit(['status', '--porcelain=v1', '-z', '--ignored=traditional', '--untracked-files=normal'], row.path).stdout,
+  );
+  if (now.tracked.length > 0) return listed('necommitane promjene', now.tracked);
+  if (now.untracked.length > 0) return listed('neprac. datoteke', now.untracked);
+  const expected = new Set((row.status?.ignored ?? []).filter((p) => !isRootNodeModules(p)));
+  const extra = now.ignored.filter((p) => !expected.has(p) || !isAllowedIgnored(p));
+  if (extra.length > 0) return listed('ignorirane datoteke', extra);
+  return null;
+}
+
 function removeWorktree(mainPath, row, env) {
   if (!existsSync(row.path)) return 'nestao';
   const undo = [];
+  let changed = null;
   try {
     if (row.mainNodeModulesLink) {
       const linkPath = join(row.path, 'node_modules');
@@ -557,6 +708,8 @@ function removeWorktree(mainPath, row, env) {
       renameSync(from, to);
       undo.push(() => renameSync(to, from));
     }
+    changed = finalChangeReason(row);
+    if (changed) throw new Error(changed);
     runGit(['worktree', 'remove', row.path], mainPath);
   } catch (error) {
     for (const step of undo.reverse()) {
@@ -566,6 +719,7 @@ function removeWorktree(mainPath, row, env) {
         // vracanje je najbolji pokusaj; izvorna greska ide dalje
       }
     }
+    if (changed) return `promijenjen: ${changed}`;
     throw error;
   }
   const still = parseWorktreeList(runGit(['worktree', 'list', '--porcelain'], mainPath).stdout)
@@ -629,26 +783,34 @@ function main(argv, { env = process.env, log = console.log, err = console.error 
     log(`ukupno uklonjivo: ${removable.length} stabala, ${toMb(removableBytes)} MB${originNote}`);
   }
   if (!args.apply) return 0;
+  // M4: bez svjezeg origina nema NIKAKVE mutacije (ni uklanjanja ni prunea).
+  if (!ctx.originFresh) {
+    log(`worktree-gc: uklonjeno 0 (0 MB), zadrzano ${others.length}${originNote}`);
+    return 0;
+  }
 
   const lockPath = gcLockPath(env);
-  const gcLock = acquireGcLock(lockPath, mainPath, Date.now());
+  const gcLock = acquireGcLock(lockPath, mainPath, Date.now(), env);
   if ('busy' in gcLock) {
     log(`worktree-gc: preskoceno (${gcLock.busy}), uklonjeno 0, zadrzano ${others.length}`);
     return 0;
   }
+  testBarrier(env, 'uzet');
   let removedCount = 0;
   let removedBytes = 0;
   let failed = 0;
   try {
     for (const row of removable) {
       if (row.prunable) continue;
-      // Neposredno prije uklanjanja: svjeze stanje popisa i SVE provjere ponovno, pod GC lockom.
+      testBarrier(env, 'izmjereno');
+      // Neposredno prije uklanjanja: svjeze stanje popisa i SVE provjere ponovno, pod GC lockom,
+      // sa svjezim snimkom procesa (novi getter) i svjezim git statusom (M2b runda 3).
       let fresh;
       try {
         const list = parseWorktreeList(runGit(['worktree', 'list', '--porcelain'], mainPath).stdout);
         const index = list.findIndex((w) => normPath(w.path) === normPath(row.path));
         if (index < 0) continue;
-        fresh = measureOne(ctx, list[index], index, { sizes: 'none', nowMs: Date.now() });
+        fresh = measureOne(ctx, list[index], index, { sizes: 'none', nowMs: Date.now(), foreignProcesses: lazyForeignProcesses() });
       } catch (error) {
         failed += 1;
         err(`worktree-gc: ponovno mjerenje ${row.path} nije uspjelo: ${error instanceof Error ? error.message : String(error)}`);
@@ -658,22 +820,36 @@ function main(argv, { env = process.env, log = console.log, err = console.error 
         if (!args.quiet) log(`zadrzan pri ponovnoj provjeri: ${row.path}: ${fresh.reasons.join('; ')}`);
         continue;
       }
+      testBarrier(env, 'provjereno');
       try {
         const result = removeWorktree(mainPath, fresh, env);
         if (result === 'uklonjen') {
           removedCount += 1;
           removedBytes += row.sizeBytes ?? 0;
           if (!args.quiet) log(`uklonjen: ${row.path}`);
+        } else if (result.startsWith('promijenjen: ') && !args.quiet) {
+          log(`zadrzan neposredno prije uklanjanja: ${row.path}: ${result.slice('promijenjen: '.length)}`);
         }
       } catch (error) {
         failed += 1;
         err(`worktree-gc: uklanjanje ${row.path} nije uspjelo: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
-    const prunable = removable.filter((r) => r.prunable).length;
+    // M4: nikad globalni prune naslijepo. Prune se zove samo kad su SVA stabla koja bi uklonio
+    // upravo presudjena uklonjivima (reflog provjeren, M3); inace se preskace.
+    const verified = new Set(removable.filter((r) => r.prunable && r.adminId).map((r) => r.adminId));
     try {
-      runGit(['worktree', 'prune'], mainPath);
-      removedCount += prunable;
+      // Git ispisuje dry-run na stderr.
+      const dry = runGit(['worktree', 'prune', '--dry-run', '--verbose'], mainPath);
+      const wouldPrune = parsePruneDryRun(`${dry.stdout}${dry.stderr}`);
+      if (wouldPrune === null) throw new Error('git worktree prune --dry-run: neprepoznat izlaz');
+      const unverified = wouldPrune.filter((id) => !verified.has(id));
+      if (unverified.length > 0) {
+        if (!args.quiet) log(`prune preskocen: neprovjerena stabla (${unverified.slice(0, 3).join(', ')})`);
+      } else if (wouldPrune.length > 0) {
+        runGit(['worktree', 'prune'], mainPath);
+        removedCount += wouldPrune.length;
+      }
     } catch (error) {
       failed += 1;
       err(`worktree-gc: ${error instanceof Error ? error.message : String(error)}`);
