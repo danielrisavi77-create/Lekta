@@ -125,6 +125,9 @@ Preglednik cita diff/dokaze
 preko dostupnih alata; Claude pregled je ogranicen na citanje datoteka, pa mu koordinator
 prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvijek provjeri.
 
+Sazetak PR-a za koordinatora (najvise 20 redaka, dohvat kroz `gh api`): `npm run pr-intake -- <broj PR-a>`.
+Isto kao jedan JSON objekt: `npm run pr-intake -- <broj PR-a> --json` (logika u `scripts/agents/pr-intake-core.mjs`).
+
 ## Poruke izmedu neovisnih Claude Code sesija
 
 Provjereno prema aktualnoj Claude Code dokumentaciji 2026-10-02:
