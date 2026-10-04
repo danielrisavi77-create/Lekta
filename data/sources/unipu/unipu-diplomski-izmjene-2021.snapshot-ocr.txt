@@ -1,4 +1,5 @@
 # snapshotHash: 9c9e27a6467d0d5f08684bab6e19a93e3a108a9232752054babfdfe8545d873c
+# ocrTextHash: 5bcb5856beb785fb1fb83a08554dc39dfa50a5e8b7e429778802d4dffd1da508
 ===== PAGE 1/4 =====
 Sveučilište Jurja Dobrile u Puli
 Zagrebačka 30, 52100 Pula

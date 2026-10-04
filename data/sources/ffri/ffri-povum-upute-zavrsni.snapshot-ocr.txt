@@ -1,4 +1,5 @@
 # snapshotHash: c42c0df84deb6843eb201f5996eef7b79ddcc88182cf7113c64006217690ecf4
+# ocrTextHash: f11bccf55add08f538d73c7d06eba10bc991b56621ed26fe0af7c183a389e699
 ===== PAGE 1/2 =====
 Opće definiran Pravilnikom o završnom radu i/ili završnom ispitu na preddiplomskim
 sveučilišnim studijima Filozofskog fakulteta Sveučilišta u Rijeci (u daljnjem tekstu

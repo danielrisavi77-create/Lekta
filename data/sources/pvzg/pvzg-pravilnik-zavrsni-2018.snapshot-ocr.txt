@@ -1,4 +1,5 @@
 # snapshotHash: c91b7f2873513a6bbdc1c53433fc72d1cb48ceedae154fd9409d10ac970b54e8
+# ocrTextHash: 19c78a1fec391956ebdd55d93888e79b1ccbfd8db62665e115aee327c3e390e0
 ===== PAGE 1/11 =====
 POSLOVNO
 VELEUČILIŠTE

@@ -1,4 +1,5 @@
 # snapshotHash: 50c1ac2c1e8211bc91f6e7a29db4860031eb07c7bcab5775104d78294fbd0a3d
+# ocrTextHash: 7bae49a446e70eb29eb79acc8e0434f8d5585eafb2ba9f186fdc32c4adec5c66
 ===== PAGE 1/3 =====
 Sukladno ČI. 3 Pravilnika o diplomskom radu FF diplomski rad definiran je kao
 samostalna stručna obrada utvrđene teme. Diplomskim radom student treba dokazati

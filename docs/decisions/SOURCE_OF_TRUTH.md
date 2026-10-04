@@ -49,12 +49,17 @@ spajanja preko odlomaka te ocito skrivenog ili obrisanog teksta. Ne stiti od nam
 konstruiranog sadrzaja koji vara parser. Poznata ogranicenja su CSS escapei i komentari
 u inline `style`, klase i vanjski CSS, `opacity:0`, DOCX teme i uvjetno oblikovanje.
 
-Skenirani PDF zahtijeva lokalno proizveden pratitelj `.snapshot-ocr.txt` s
-prvim retkom `# snapshotHash: <sha256 snimke>`. Lokalni preduvjeti su tesseract
-5.4, hrv/eng tessdata i PyMuPDF; `scripts/ocr-snapshot.mjs` poziva
-`scripts/ocr_pdf.py`. OCR se ne pokrece u CI-ju. Stari `-ocr.txt` i
-`.ocr.txt` nisu vezani uz snimku i ne racunaju se kao dokaz. Hash prati
-zaglavlje, ali ne stiti tijelo OCR pratitelja od rucne izmjene.
+Skenirani PDF ima lokalno proizveden pratitelj `.snapshot-ocr.txt`. Prvi redak je
+`# snapshotHash: <sha256 snimke>`, drugi `# ocrTextHash: <sha256 tijela>` (tijelo s
+LF zavrsecima). Lokalni preduvjeti su tesseract 5.4, hrv/eng tessdata i PyMuPDF;
+`scripts/ocr-snapshot.mjs` poziva `scripts/ocr_pdf.py`. OCR se ne pokrece u CI-ju.
+
+Strojni OCR je pomocni tekst, ne dokaz: zaglavlje veze pratitelja uz PDF, ali ne
+dokazuje da je tijelo tocan prijepis. Citat iz skena vrijedi samo kad je covjek
+prijepis usporedio sa snimkom i u zapis registra upisao
+`ocrTranscript: { textHash, verifiedBy, verifiedAt }` s istim hashem tijela. Bez
+toga je ishod nepoznat i odluka ne prolazi. Stari `-ocr.txt` i `.ocr.txt` nisu
+vezani uz snimku i nikad nisu dokaz.
 
 Neregistrirani URL-ovi ostaju u
 `data/programs/upisnik-evidence-snapshot-ratchet.json`; strop je 380 zapisa

@@ -1,4 +1,5 @@
 # snapshotHash: dfefd549af2e812c56deccf2b4c3f9140384f7e8f3e69296f76e1a1ce4d4f213
+# ocrTextHash: 9b19e41a05af96534acd5d57562b26dd6524a575fdc2c491422eefb0993d62f1
 ===== PAGE 1/5 =====
 Na temelju članka 11. Statuta Akademije primijenjenih umjetnosti u Rijeci, Akademijsko
 vijeće na 234. sjednici održanoj od 27. do 28. ožujka 2025. godine u elektroničkom obliku donijelo je

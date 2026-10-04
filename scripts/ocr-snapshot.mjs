@@ -36,7 +36,11 @@ for (const path of paths) {
     const result = spawnSync('python', [join(root, 'scripts/ocr_pdf.py'), input, temp], { cwd: root, env, stdio: 'inherit' });
     if (result.error || result.status !== 0) throw result.error ?? new Error(`OCR nije uspio: ${path}`);
     const output = input.replace(/\.pdf$/i, '.snapshot-ocr.txt');
-    writeFileSync(output, `# snapshotHash: ${hash}\n${readFileSync(temp, 'utf8')}`, 'utf8');
+    // Drugi redak veze tijelo uz vlastiti hash (LF), koji se nakon rucne provjere upisuje u registar kao
+    // ocrTranscript.textHash. Bez toga je OCR samo pomocni tekst i ne vrijedi kao dokaz citata.
+    const body = readFileSync(temp, 'utf8').replace(/\r\n/g, '\n');
+    const bodyHash = createHash('sha256').update(body, 'utf8').digest('hex');
+    writeFileSync(output, `# snapshotHash: ${hash}\n# ocrTextHash: ${bodyHash}\n${body}`, 'utf8');
     console.log(output);
   } finally { rmSync(tempDir, { recursive: true, force: true }); }
 }

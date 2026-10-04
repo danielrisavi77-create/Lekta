@@ -1,4 +1,5 @@
 # snapshotHash: e0c27537c7257f2bc818b3cf144f7874f029404ddae3c078f4ba81b7c221f4c5
+# ocrTextHash: 665f0351e0bcf31778341857591b944b490d1f90f38e24bab0a6723ae2ec633f
 ===== PAGE 1/14 =====
 Sveučilište u Rijeci
 Fakultet informatike

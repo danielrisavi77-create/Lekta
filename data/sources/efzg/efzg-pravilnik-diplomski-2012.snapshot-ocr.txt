@@ -1,4 +1,5 @@
 # snapshotHash: 36fc3fbd25ce0f3c8a7abac5460eebeb47f7ed848cf07773459ef47c7b618509
+# ocrTextHash: c4d7c46967a34a7b5857ecc4a2787a25306a88e09a4b21d5aae6c9da65badc1a
 ===== PAGE 1/17 =====
 SVEUČILIŠTE U ZAGREBU o
 EKONOMSKI FAKULTET — ZAGREB o ae

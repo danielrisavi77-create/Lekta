@@ -10274,17 +10274,46 @@ describe('mutacije: Upisnik dokaz u snimci', () => {
     const mutant = await copyWith((s) => s.replace("if (/&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/u.test(xml)) throw new Error('DOCX XML nije ispravan');", ''), readZip);
     expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
   });
-  it('uklanjanje OCR zaglavlja propusta pratitelj s krivim hashom', async () => {
-    const pdfPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  // Skenirani PDF: pratitelj = "# snapshotHash: <PDF>", "# ocrTextHash: <tijelo>", tijelo; dokaz samo uz rucno
+  // potvrdjen prijepis u registru (ocrTranscript.textHash). Mutant stubira unpdf na prazan tekst, pa ide istim putem.
+  const pdfPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  const companionPath = pdfPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+  const sha = (s: string) => createHash('sha256').update(s, 'utf8').digest('hex');
+  const scanned = () => {
     const scan = new Uint8Array(readFileSync(resolve(process.cwd(), pdfPath)));
-    const pdfSource = { url, snapshotPath: pdfPath, snapshotHash: hash(scan) };
-    const wrongHeader = encoder.encode('# snapshotHash: ' + '0'.repeat(64) + '\n' + fixture);
-    const scannedFile = file;
-    const read = (p: string) => p === pdfPath ? scan : p === pdfPath.replace(/\.pdf$/u, '.snapshot-ocr.txt') ? wrongHeader : null;
-    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
-    expect((await verifyUpisnikEvidenceSnapshots(scannedFile, [pdfSource], read, ratchet, baselineRatchet)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
-    const mutant = await copyWith((s) => s.replace("if (header !== `# snapshotHash: ${source.snapshotHash}`)", "if (false && header !== `# snapshotHash: ${source.snapshotHash}`)"));
-    expect(await mutant.verifyUpisnikEvidenceSnapshots(scannedFile, [pdfSource], read, ratchet, baselineRatchet)).toEqual([]);
+    const transcript = { textHash: sha(fixture), verifiedBy: 'test', verifiedAt: '2026-10-04' };
+    return { scan, pdfSource: { url, snapshotPath: pdfPath, snapshotHash: hash(scan), ocrTranscript: transcript } };
+  };
+  const companionWith = (pdfHash: string, bodyHash: string, body = fixture) => encoder.encode(`# snapshotHash: ${pdfHash}\n# ocrTextHash: ${bodyHash}\n${body}`);
+  async function scannedRun(companion: Uint8Array, src: Record<string, unknown>, mutantSource?: (s: string) => string) {
+    const { scan } = scanned();
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companion : null;
+    const mod = mutantSource ? await copyWith(mutantSource) : await import('../src/programs/upisnik-evidence-snapshots');
+    return mod.verifyUpisnikEvidenceSnapshots(file, [src as never], read, ratchet, baselineRatchet);
+  }
+  it('BASELINE: nemutirani gard prihvaca valjan HTML i valjan potvrdjen prijepis skena (Codex R4)', async () => {
+    expect(await baseline(goodBytes)).toEqual([]);
+    const { scan, pdfSource } = scanned();
+    expect(await scannedRun(companionWith(hash(scan), sha(fixture)), pdfSource)).toEqual([]);
+  });
+  it('uklanjanje provjere prvog retka zaglavlja propusta pratitelj tudjeg PDF-a', async () => {
+    const { pdfSource } = scanned();
+    const wrongPdf = companionWith('0'.repeat(64), sha(fixture));
+    expect((await scannedRun(wrongPdf, pdfSource)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
+    expect(await scannedRun(wrongPdf, pdfSource, (s) => s.replace("if (lines[0] !== `# snapshotHash: ${source.snapshotHash}`)", "if (false && lines[0] !== `# snapshotHash: ${source.snapshotHash}`)"))).toEqual([]);
+  });
+  it('uklanjanje provjere hasha tijela propusta pratitelj kojem drugi redak ne odgovara tijelu', async () => {
+    const { scan, pdfSource } = scanned();
+    const staleHeader = companionWith(hash(scan), '1'.repeat(64));
+    expect((await scannedRun(staleHeader, pdfSource)).join(' ')).toMatch(/hashu vlastitog tijela/);
+    expect(await scannedRun(staleHeader, pdfSource, (s) => s.replace('if (lines[1] !== `# ocrTextHash: ${bodyHash}`)', 'if (false && lines[1] !== `# ocrTextHash: ${bodyHash}`)'))).toEqual([]);
+  });
+  it('uklanjanje zahtjeva za rucno potvrdjenim prijepisom propusta strojni OCR kao dokaz (Codex R1)', async () => {
+    const { scan, pdfSource } = scanned();
+    const unverified = { ...pdfSource, ocrTranscript: undefined };
+    const companion = companionWith(hash(scan), sha(fixture));
+    expect((await scannedRun(companion, unverified)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+    expect(await scannedRun(companion, unverified, (s) => s.replace('if (!transcript || transcript.textHash !== bodyHash || !transcript.verifiedBy?.trim() || !transcript.verifiedAt?.trim()) {', 'if (false) {'))).toEqual([]);
   });
 });
 

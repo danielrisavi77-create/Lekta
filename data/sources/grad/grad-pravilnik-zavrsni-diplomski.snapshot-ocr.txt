@@ -1,4 +1,5 @@
 # snapshotHash: 5ac5d6cf964493df59d4942cd9e6860b8cae76ee56ddf09b32f138a28db5e8f6
+# ocrTextHash: 81539b71a092cd6d956eae21f00a4db240b80c233b2ba2f4e828d6c0e244a6b1
 ===== PAGE 1/6 =====
 Pravilnik o završnom ispitu i diplomskom radu donesen je na temelju članka 56. Statuta
 Građevinskog fakulteta Sveučilišta u Zagrebu na 195. redovitoj sjednici Fakultetskog vijeća
