@@ -62,6 +62,14 @@ function referenceAuthor(before: any){
  if(a.includes(','))return a.split(',')[0].trim();const joined=a.split(/\s+(?:i|and|&)\s+/i);if(joined.length>1&&joined[0].trim().split(/\s+/).length<=3)return joined[0].trim();
  return a.replace(/[.(\[]+$/,'').trim()
 }
+const NO_DATE_MARK=/\((?:b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)/i;
+/**
+ * Predikat `reference.completeness` za autor-godina profil. Zapis s izricitom oznakom bez godine
+ * ("b.g.", "s. a.", "u tisku") nije nepotpun zbog godine; bez autora ili prekratak i dalje jest.
+ */
+function isIncompleteReference(r: { text: string; author?: string; year?: string; noDate?: string }){
+ return !r.author||(!r.year&&!r.noDate)||r.text.length<25;
+}
 function extractReferences(paragraphs: any,lang: any){
  const heads=lang==='en'?['references','bibliography']:['literatura','bibliografija','izvoriiliteratura','popisliterature'];let start=-1;
  for(let i=0;i<paragraphs.length;i++)if(heads.includes(sectionName(paragraphs[i].text))){start=i+1;break}if(start<0)return{start,entries:[]};
@@ -73,7 +81,11 @@ function extractReferences(paragraphs: any,lang: any){
   if(bibliographySubheading(n)){current=null;continue}
   if(paragraphs[i].headingLevel&&entries.length)break;
   // "(b.d.)" i "(s.a.)" su jednako cesti kao "(b.g.)"; bez njih zapis bez godine nije prepoznat kao NOV.
-  const noDate=t.match(/\((?:b\.g\.|b\.d\.|n\.d\.|s\.a\.|bez\s+godine|bez\s+datuma)\)/i),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);
+  // T91: i razmaknuti oblici ("s. a.", "n. d.", "b. g.") te "u tisku"/"in press"; bez njih je potpun zapis bez
+  // godine izgledao nepotpun (D1: 128 od 144 laznih nalaza). Godina ostaje prazna, oznaka ide u `noDate`.
+  const noDate=t.match(NO_DATE_MARK),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);
+  // T91: zapis bez autora koji pocinje s "(2012)." je NOV zapis, ne nastavak prethodnoga (D1: 4 od 72 prijavljeno).
+  const leadYear=/^\s*\((?:18|19|20)\d{2}[a-z]?\)\./.test(t);
   // Numeracija u uglatim zagradama ("[3] Steel Alliance...") je standardni IEEE zapis; bez nje se svaki takav zapis lijepio na prethodni.
   const numbered=/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t);
   const urlOnly=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i.test(t);
@@ -96,7 +108,7 @@ function extractReferences(paragraphs: any,lang: any){
   const podnaslov=zavrsen&&!ym&&/^\p{Lu}/u.test(t)&&!/\d/.test(t)&&t.length<=60&&!urlOnly;
   if(podnaslov){current=null;continue}
   const nastavak=!!current&&!(zavrsen&&/^\p{Lu}/u.test(t)&&!urlOnly);
-  if(startsNew||numbered){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1,ps:[i+1]};entries.push(current)}
+  if(startsNew||numbered||(leadYear&&!urlOnly)){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1,ps:[i+1]};if(noDate)current.noDate=noDate[0];entries.push(current)}
   else if(nastavak){current.text+=' '+t;current.ps.push(i+1)}
   else if(t.length>20){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};entries.push(current)}
  }
@@ -257,4 +269,4 @@ export function croatianSurnameStems(word: string): string[] {
   return [...new Set(out)].filter((k) => k !== w);
 }
 
-export { extractCitations, extractReferences };
+export { extractCitations, extractReferences, isIncompleteReference };

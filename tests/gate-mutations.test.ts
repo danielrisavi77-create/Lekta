@@ -46,6 +46,8 @@ import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { extractReferences, isIncompleteReference } from '../src/citations/author-year';
+import { referenceParserProblems } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -1051,6 +1053,27 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
+  {
+    id: 'citations/godina-bez-autora-lijepi-se',
+    imitates: 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)',
+    caught: () => {
+      const lijepi = (paragraphs: { text: string; headingLevel?: number }[], lang: string) => {
+        const { entries } = extractReferences(paragraphs, lang) as { entries: { text: string; author: string }[] };
+        const out: typeof entries = [];
+        for (const e of entries) { if (!e.author && /^\(\d{4}\)\./.test(e.text) && out.length) out[out.length - 1] = { ...out[out.length - 1], text: `${out[out.length - 1].text} ${e.text}` }; else out.push(e); }
+        return { entries: out };
+      };
+      return referenceParserProblems(lijepi, isIncompleteReference).some((p) => p.startsWith('(a)'));
+    },
+    cleanBefore: () => referenceParserProblems(extractReferences, isIncompleteReference).length === 0,
+  },
+  {
+    id: 'citations/oznaka-bez-godine-nepotpuna',
+    imitates: 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)',
+    caught: () => referenceParserProblems(extractReferences, (r) => !r.year || !r.author || r.text.length < 25).some((p) => p.startsWith('(b)')),
+    cleanBefore: () => referenceParserProblems(extractReferences, isIncompleteReference).length === 0,
+  },
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
   {
     id: 'agents/model-probe-prima-api-kljuc',

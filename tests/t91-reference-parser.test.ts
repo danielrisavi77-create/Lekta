@@ -9,14 +9,16 @@
  *   (b) potpuni zapisi s oznakom bez godine ("b.g.", "s. a.", "n. d.", "u tisku") prijavljivali su
  *       se kao nepotpuni (D1: 128 od 144 laznih nalaza).
  *
- * Ovaj test BILJEZI ponasanje. `nepotpun` je predikat `reference.completeness` za autor-godina
- * profil (`src/analysis/analyze-docx.ts`).
+ * Prvi commit je BILJEZIO zateceno ponasanje (ZATECENO nize); popravak ga mijenja u POSLIJE.
+ * `nepotpun` je predikat `reference.completeness` za autor-godina profil, isti koji koristi
+ * `src/analysis/analyze-docx.ts`.
  */
 import { describe, expect, it } from 'vitest';
-import { extractReferences } from '../src/citations/author-year';
+import { extractReferences, isIncompleteReference } from '../src/citations/author-year';
+import { referenceParserProblems } from './helpers/reference-parser-guard';
 
 type Ref = { text: string; author: string; year: string; noDate?: string };
-const nepotpun = (r: Ref) => !r.year || !r.author || r.text.length < 25;
+const nepotpun = (r: Ref) => isIncompleteReference(r);
 
 const POTPUNI = [
   'Horvat, A. (2011). Lokalna samouprava u praksi. Zagreb: Primjer naklada.',
@@ -56,29 +58,70 @@ function refs(lines: string[]): Ref[] {
   return extractReferences(paragraphs, 'hr').entries as Ref[];
 }
 
-describe('T91 golden: zateceno ponasanje parsera literature', () => {
-  it('(a) zapis koji pocinje s "(godina)." spaja se s prethodnim', () => {
-    const lines = POTPUNI.flatMap((p, i) => [p, BEZ_AUTORA[i]]);
-    const r = refs(lines);
-    const samostalniBezAutora = r.filter((x) => /^\(\d{4}\)/.test(x.text)).length;
-    const spojeni = r.filter((x) => /\.\s+\(\d{4}\)\./.test(x.text)).length;
-    expect({ zapisa: r.length, samostalniBezAutora, spojeni, nepotpunih: r.filter(nepotpun).length })
-      .toEqual({ zapisa: ZATECENO.a.zapisa, samostalniBezAutora: ZATECENO.a.samostalniBezAutora, spojeni: ZATECENO.a.spojeni, nepotpunih: ZATECENO.a.nepotpunih });
+function mjeriA(r: Ref[]) {
+  return {
+    zapisa: r.length,
+    samostalniBezAutora: r.filter((x) => /^\(\d{4}\)/.test(x.text)).length,
+    // Zapis koji SADRZI redak bez autora, a ne pocinje njime. Prvi commit je ovdje imao regex
+    // /\.\s+\(\d{4}\)\./ koji pogada i "Horvat, A. (2011)." pa bi dao 8 i bez spajanja; zatecenih
+    // 8 je ipak tocno jer je svaki od 8 redaka bez autora bio zalijepljen (zapisa 8 umjesto 16).
+    spojeni: r.filter((x) => BEZ_AUTORA.some((b) => x.text.includes(b) && !x.text.startsWith(b))).length,
+    nepotpunih: r.filter(nepotpun).length,
+  };
+}
+
+describe('T91 golden: parser literature nakon popravka', () => {
+  it('(a) zapis koji pocinje s "(godina)." je zaseban zapis i prijavljuje se kao nepotpun', () => {
+    const r = refs(POTPUNI.flatMap((p, i) => [p, BEZ_AUTORA[i]]));
+    expect(mjeriA(r)).toEqual(POSLIJE.a);
+    expect(r.filter((x) => !x.author).map((x) => x.year)).toEqual(['2012', '2013', '2015', '2017', '2018', '2019', '2021', '2023']);
   });
 
-  it('(b) potpuni zapisi s oznakom bez godine prijavljuju se kao nepotpuni', () => {
+  it('(b) potpuni zapisi s oznakom bez godine nisu nepotpuni i nose oznaku', () => {
     const r = refs(BEZ_GODINE);
     expect({ zapisa: r.length, nepotpunih: r.filter(nepotpun).length, bezAutora: r.filter((x) => !x.author).length })
-      .toEqual(ZATECENO.b);
+      .toEqual(POSLIJE.b);
+    expect(r.every((x) => x.year === '' && !!x.noDate)).toBe(true);
   });
 
   it('kontrola: obicni potpuni zapisi nisu nepotpuni', () => {
     const r = refs(POTPUNI);
     expect({ zapisa: r.length, nepotpunih: r.filter(nepotpun).length }).toEqual({ zapisa: 8, nepotpunih: 0 });
   });
+
+  it('gard (tests/helpers/reference-parser-guard.ts) je cist nad stvarnim parserom', () => {
+    expect(referenceParserProblems(extractReferences, isIncompleteReference)).toEqual([]);
+  });
+
+  it('pomak prema zatecenom: tocno 8 zapisa bez autora odvojeno, 7 laznih nalaza (b) nestaje', () => {
+    expect(POSLIJE.a.zapisa - ZATECENO.a.zapisa).toBe(BEZ_AUTORA.length);
+    expect(ZATECENO.a.spojeni - POSLIJE.a.spojeni).toBe(BEZ_AUTORA.length);
+    expect(ZATECENO.b.nepotpunih - POSLIJE.b.nepotpunih).toBe(7);
+  });
+
+  it('metrika spojeni hvata lijepljenje: simulirano staro spajanje daje zatecene brojke (a)', () => {
+    const glued = POTPUNI.map((p, i) => `${p} ${BEZ_AUTORA[i]}`);
+    const r = refs(glued);
+    expect({ zapisa: r.length, spojeni: mjeriA(r).spojeni }).toEqual({ zapisa: ZATECENO.a.zapisa, spojeni: ZATECENO.a.spojeni });
+  });
+
+  it('idempotencija: drugi prolaz nad tekstovima zapisa iz prvog prolaza je no-op', () => {
+    for (const lines of [POTPUNI.flatMap((p, i) => [p, BEZ_AUTORA[i]]), BEZ_GODINE, POTPUNI]) {
+      const prvi = refs(lines);
+      const drugi = refs(prvi.map((x) => x.text));
+      expect(drugi.map(({ text, author, year, noDate }) => ({ text, author, year, noDate })))
+        .toEqual(prvi.map(({ text, author, year, noDate }) => ({ text, author, year, noDate })));
+    }
+  });
 });
 
-// Izmjereno na origin/master 7abdffeb prije popravka.
+// Nakon popravka (isti ulazi).
+const POSLIJE = {
+  a: { zapisa: 16, samostalniBezAutora: 8, spojeni: 0, nepotpunih: 8 },
+  b: { zapisa: 8, nepotpunih: 0, bezAutora: 0 },
+};
+
+// Izmjereno na origin/master 7abdffeb prije popravka (prvi commit ovog testa).
 // (a) 8 potpunih + 8 bez autora daje 8 zapisa: svaki zapis bez autora zalijepljen je na prethodni.
 // (b) 8 potpunih zapisa bez godine daje 7 zapisa, svih 7 nepotpunih, 5 bez prepoznatog autora.
 const ZATECENO = {
