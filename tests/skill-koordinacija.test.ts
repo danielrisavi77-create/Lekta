@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { messagingRuleProblems } from './helpers/session-messaging';
 
 const ROOT = join(__dirname, '..');
 
@@ -35,5 +36,16 @@ describe.each(Object.entries(SKILLS))('skill %s', (name, needles) => {
 
   it('nema em ni en crtica', () => {
     expect(raw).not.toMatch(/[–—]/);
+  });
+});
+
+describe('komunikacija koordinatora i cloud sesija (baseline; mutacije u gate-mutations)', () => {
+  it('README, brief i pr-merge nose sva pravila', () => {
+    const read = (...p: string[]) => readFileSync(join(ROOT, ...p), 'utf8');
+    expect(messagingRuleProblems({
+      readme: read('docs', 'agents', 'README.md'),
+      brief: read('.claude', 'skills', 'brief', 'SKILL.md'),
+      prMerge: read('.claude', 'skills', 'pr-merge', 'SKILL.md'),
+    })).toEqual([]);
   });
 });
