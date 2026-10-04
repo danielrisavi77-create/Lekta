@@ -9,7 +9,7 @@ import { expect, type Page } from '@playwright/test';
  */
 export async function otvoriLadicu(page: Page): Promise<void> {
   await expect(page.locator('#resultCockpit')).toHaveAttribute('data-rl-ready', 'true', { timeout: 30_000 });
-  // Traka privole je takodjer fiksna uz dno i lezi IZNAD ladice dok korisnik ne odgovori (F32).
+  // Traka privole je takodjer fiksna uz dno i lezi IZNAD ladice dok korisnik ne odgovori (F35).
   const odbij = page.locator('#analyticsDecline');
   if (await odbij.isVisible().catch(() => false)) await odbij.click();
   await page.locator('[data-rl-desk]').evaluate((el) => el.scrollIntoView({ block: 'start' }));

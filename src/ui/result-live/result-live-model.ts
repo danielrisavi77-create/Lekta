@@ -9,7 +9,7 @@
  *     recenica "automatika može doseći najviše M" u sazetku);
  *   - strop se NE mijenja kad se zahvat ukljuci ili iskljuci; mijenja se samo BROJ zahvata u ladici;
  *   - oznaka glasi "najviše X ako svi zahvati uspiju", a ladica i racun "ocjena → najviše X".
- * Odstupanje je zapisano u F32 (`docs/agents/orchestrator-backlog.md`).
+ * Odstupanje je zapisano u F35 (`docs/agents/orchestrator-backlog.md`).
  *
  * CIJENA NIJE OVDJE. Klijent nema mjerodavan izvor cijene popravka (naplata zivi na serverskom
  * katalogu, postojeci tok popravka iznos ne prikazuje), pa ladica nosi postojecu recenicu toka
@@ -460,7 +460,7 @@ export function stranicaZaNalaz(
  * Desni dio trake presude: "Rok 14. 10. · još 21 dan" (oblik iz ALIGNMENT Z34). Rok je onaj koji
  * je ulaz (Z32) vezao za OVU sesiju (`rokZaSesiju`). Rubni oblici "danas", "prošao" i "Rok nije
  * zadan" su doslovno iz Z32. "· popravak oko 2 min" iz predloska se NE pise: trajanje popravka
- * nema izvor (F32). `null` kad o roku nije nista receno.
+ * nema izvor (F35). `null` kad o roku nije nista receno.
  */
 export function rokTekst(rok: RokStanje | null, danas: Date): string | null {
   if (!rok) return null;

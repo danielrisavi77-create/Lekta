@@ -9328,7 +9328,7 @@ describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
  *  - Z31 pokret na listu Z34 (predlozak animira padding i line-height prijelazom "Nakon plana");
  *  - kod Z34 ulazi u `/rad/` samo dinamickim uvozom iz kokpita (ulaz je tik ispod 960 KB);
  *  - natpisi gumba doslovno iz `ResultLive.dc.html`;
- *  - nema cijene u klijentskom kodu i nema bodova po zahvatu (odluka vlasnika, F32).
+ *  - nema cijene u klijentskom kodu i nema bodova po zahvatu (odluka vlasnika, F35).
  */
 describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
   const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');

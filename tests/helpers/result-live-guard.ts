@@ -3,7 +3,7 @@
  * `tests/gate-mutations.test.ts` moze hraniti podmetnutim kvarom bez pisanja po disku.
  *
  *   cijenaProblems   cijena NIKAD u klijentskom kodu Z34: izvor je serverski katalog, a postojeci
- *                    tok popravka iznos ne prikazuje. Predlozak ima "14,99 €" (F32).
+ *                    tok popravka iznos ne prikazuje. Predlozak ima "14,99 €" (F35).
  *   plusBodProblems  bodovi po zahvatu ne postoje (`repair-outlook.ts` r. 8-20, odluka vlasnika):
  *                    vidljivi tekst stola i ladice ne smije nositi "+N" ni uz zahvat ni uz ocjenu.
  *

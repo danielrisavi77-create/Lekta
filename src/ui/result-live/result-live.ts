@@ -199,7 +199,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     if (uloga.kind !== 'zahvat') return '';
     const u = uPlanu(uloga, odabir);
     const siguran = zahvati.some((z) => z.vrsta === 'siguran' && uloga.ruleIds.includes(z.ruleId));
-    // Natpisi su doslovno iz predloska, BEZ "· +N": bodovi po zahvatu ne postoje (F32). Atribut nosi
+    // Natpisi su doslovno iz predloska, BEZ "· +N": bodovi po zahvatu ne postoje (F35). Atribut nosi
     // `ruleId`-eve zahvata, da se odabir moze usporediti s panelom popravka.
     const ids = esc(uloga.ruleIds.join(' '));
     return '<div class="rl-plan">'
@@ -384,7 +384,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     ladicaEl.setAttribute('role', 'region');
     ladicaEl.setAttribute('aria-label', 'Plan popravka');
     // Cijena: klijent nema mjerodavan izvor (naplata je na serverskom katalogu), pa ladica nosi
-    // POSTOJECU recenicu toka popravka (`repair-price-slider.ts`), ne iznos iz predloska (F32).
+    // POSTOJECU recenicu toka popravka (`repair-price-slider.ts`), ne iznos iz predloska (F35).
     ladicaEl.innerHTML = '<span class="rl-tray__k">Plan popravka</span>'
       + '<span class="rl-tray__n" data-rl-tray-n></span>'
       + '<span class="rl-tray__r" data-rl-tray-r></span>'
