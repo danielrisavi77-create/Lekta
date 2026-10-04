@@ -290,6 +290,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { netlifyPinProblems, type NetlifyPinSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -378,9 +379,18 @@ type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link
 /** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
 type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
 const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
-/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
-const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+/**
+ * `inBundle` lanac za T99 mutacije (Codex F2). Stvarni lockfile ga je imao samo u netlify-cli stablu;
+ * nakon Popravka A (netlify-cli van) nema nijednog, pa se valjan lanac cijepi na stvarni paket.
+ */
+const INBUNDLE_PARENT = 'node_modules/vite';
 const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
+const bundledLock = (): RealLock => {
+  const lock = realLock();
+  lock.packages[INBUNDLE_PARENT] = { ...lock.packages[INBUNDLE_PARENT], bundleDependencies: ['napi-wasm'] };
+  lock.packages[INBUNDLE_KEY] = { version: '1.0.0', inBundle: true };
+  return lock;
+};
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -849,6 +859,16 @@ function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): 
 }
 
 /** Izvor preflighta naplate s diska (LF). Mutacije ga mijenjaju samo u memoriji. */
+function netlifyPinRealSources(): NetlifyPinSources {
+  const r = (...p: string[]) => readTextLf(resolve(process.cwd(), ...p));
+  return {
+    packageJson: r('package.json'),
+    packageLock: r('package-lock.json'),
+    releaseScript: r('scripts', 'run-local-repair-release.mts'),
+    releaseDoc: r('docs', 'deploy', 'RELEASE_PROOF_WORKFLOW.md'),
+  };
+}
+
 function preflightIzvor(): string {
   return readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
 }
@@ -4802,12 +4822,12 @@ const MUTATIONS: Mutation[] = [
     id,
     imitates: `T99: ${imitates}.`,
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       mutate(lock);
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
     },
     cleanBefore: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
     },
   })),
@@ -4883,6 +4903,26 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   },
+  ...([
+    ['popravak-a/netlify-cli-natrag-u-devdeps', 'netlify-cli se vrati u devDependencies pa 15 high nalaza opet ulazi u graf',
+      'packageJson', '"devDependencies": {\n', '"devDependencies": {\n    "netlify-cli": "^27.10.2",\n', 'package.json: netlify-cli je u devDependencies'],
+    ['popravak-a/skripta-iz-node-modules', 'release skripta opet trazi netlify u node_modules umjesto pinanog npx',
+      'releaseScript', "args: ['--yes', NETLIFY_CLI_PIN, ...args]", "args", 'release skripta: netlify ne ide kroz npx --yes s pinom'],
+    ['popravak-a/pin-raspon', 'pin postane raspon (^27) pa npx tiho uzme drugu verziju',
+      'releaseScript', "export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';", "export const NETLIFY_CLI_PIN = 'netlify-cli@^27';", 'release skripta: pin nije tocna verzija (netlify-cli@^27)'],
+    ['popravak-a/dokument-drift', 'dokument objave zadrzi staru verziju dok skripta dobije novu',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build', 'npx --yes netlify-cli@27.10.1 deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nema "npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build"'],
+  ] as const).map(([id, imitates, field, from, to, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const mut = { ...src, [field]: src[field].replace(from, to) };
+      return mut[field] !== src[field] && netlifyPinProblems(mut).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
   ...([
     ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
       '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
@@ -4967,22 +5007,22 @@ const MUTATIONS: Mutation[] = [
     id: 't99/lockfile-bundle-ciklus',
     imitates: 'T99: dva bundled paketa jedan drugoga trebaju, a nijedan nije dosegljiv od bundleDependencies vlasnika (Codex R2 na #274).',
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       lock.packages[`${INBUNDLE_PARENT}/node_modules/x`] = { version: '1.0.0', inBundle: true, dependencies: { y: '1' } };
       lock.packages[`${INBUNDLE_PARENT}/node_modules/y`] = { version: '1.0.0', inBundle: true, dependencies: { x: '1' } };
       return lockfileSourceProblems(lock).problems.filter((x: string) => x.includes('nije dosegljiv')).length === 2;
     },
-    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
   },
   {
     id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
     imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
     },
-    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
   },
   {
     id: 't99/lockfile-gard-nije-u-ci',

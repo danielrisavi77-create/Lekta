@@ -217,12 +217,35 @@ export function readAuthenticodeEvidence(artifactPath: string): AuthenticodeEvid
   }
 }
 
-function executableFor(command: string, root: string): string {
-  if (command === 'supabase') return join(root, 'node_modules', '.bin', 'supabase.cmd');
-  if (command === 'netlify') return join(root, 'node_modules', '.bin', 'netlify.cmd');
-  if (command === 'npm') return process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  if (command === 'node') return process.execPath;
+/**
+ * Pinani Netlify CLI za rucnu objavu (Popravak A, odluka vlasnika 2026-10-03). `netlify-cli` vise nije
+ * devDependency: sluzi samo rucnoj objavi, a vukao je node-forge/braces/sharp lanac u puni audit graf.
+ * Verzija je ona iz posljednjeg lockfilea koji ga je sadrzavao; mijenja se svjesno, zajedno s
+ * docs/deploy/RELEASE_PROOF_WORKFLOW.md (gard u tests/netlify-cli-pin.test.ts).
+ */
+export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';
+
+/**
+ * Izvrsna datoteka i argumenti za logicku release naredbu. `netlify` ide kroz `npx --yes` s pinanom
+ * verzijom, nikad kroz node_modules ni globalnu instalaciju.
+ */
+export function releaseInvocation(
+  command: string,
+  args: string[],
+  root: string,
+  platform: NodeJS.Platform = process.platform,
+): { executable: string; args: string[] } {
+  if (command === 'supabase') return { executable: join(root, 'node_modules', '.bin', 'supabase.cmd'), args };
+  if (command === 'netlify') {
+    return { executable: platform === 'win32' ? 'npx.cmd' : 'npx', args: ['--yes', NETLIFY_CLI_PIN, ...args] };
+  }
+  if (command === 'npm') return { executable: platform === 'win32' ? 'npm.cmd' : 'npm', args };
+  if (command === 'node') return { executable: process.execPath, args };
   throw new Error(`Nepodrzana release naredba: ${command}`);
+}
+
+function executableFor(command: string, root: string): string {
+  return releaseInvocation(command, [], root).executable;
 }
 
 function readAndVerifyRemoteRepairDocxBaseline(root: string, childEnv: NodeJS.ProcessEnv): RemoteRepairDocxEvidence {
@@ -243,8 +266,8 @@ function readAndVerifyRemoteRepairDocxBaseline(root: string, childEnv: NodeJS.Pr
 }
 
 function runReleaseCommand(parts: string[], root: string, env: NodeJS.ProcessEnv): void {
-  const [command, ...args] = parts;
-  const executable = executableFor(command, root);
+  const [command, ...rest] = parts;
+  const { executable, args } = releaseInvocation(command, rest, root);
   const completed = spawnSync(executable, args, {
     cwd: root,
     env: buildLocalRepairChildEnvironment(env),
@@ -252,7 +275,7 @@ function runReleaseCommand(parts: string[], root: string, env: NodeJS.ProcessEnv
     windowsHide: true,
   });
   if (completed.status !== 0) {
-    throw new Error(`Release naredba nije uspjela: ${command} ${args.join(' ')}`);
+    throw new Error(`Release naredba nije uspjela: ${command} ${rest.join(' ')}`);
   }
 }
 
@@ -261,8 +284,9 @@ function runReleaseCommandCaptured(
   root: string,
   env: NodeJS.ProcessEnv,
 ): string {
-  const [command, ...args] = parts;
-  const completed = spawnSync(executableFor(command, root), args, {
+  const [command, ...rest] = parts;
+  const { executable, args } = releaseInvocation(command, rest, root);
+  const completed = spawnSync(executable, args, {
     cwd: root,
     env: buildLocalRepairChildEnvironment({ ...env, NO_COLOR: '1' }),
     encoding: 'utf8',
@@ -271,7 +295,7 @@ function runReleaseCommandCaptured(
   if (completed.stdout) process.stdout.write(completed.stdout);
   if (completed.stderr) process.stderr.write(completed.stderr);
   if (completed.status !== 0) {
-    throw new Error(`Release naredba nije uspjela: ${command} ${args.join(' ')}`);
+    throw new Error(`Release naredba nije uspjela: ${command} ${rest.join(' ')}`);
   }
   return completed.stdout || '';
 }
@@ -286,7 +310,8 @@ function assertLinkedProject(root: string): void {
 }
 
 function readNetlifyLinkedStatus(root: string, childEnv: NodeJS.ProcessEnv): unknown {
-  const completed = spawnSync(executableFor('netlify', root), ['status', '--json'], {
+  const status = releaseInvocation('netlify', ['status', '--json'], root);
+  const completed = spawnSync(status.executable, status.args, {
     cwd: root,
     encoding: 'utf8',
     env: buildLocalRepairChildEnvironment(childEnv),
