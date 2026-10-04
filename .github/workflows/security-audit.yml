@@ -92,6 +92,25 @@ jobs:
           path: sbom-runtime.json
           if-no-files-found: warn
 
+  # OSV ZA DENO I PYTHON (T99, issue #220, korak 2). `npm audit` vidi samo npm graf iz package-lock.json.
+  # Edge funkcije (oba deno.lock, esm.sh) i training-pipeline nisu bile pokrivene nicim. Umjesto
+  # osv-scanner binarija (ne cita deno.lock ni pyproject.toml) skripta pita OSV API izravno.
+  # Datoteke sa samo rasponima su imenovana poznata rupa u data/security/osv-ratchet.json.
+  # OSV nedostupan daje izlaz 2 (NE ZNAM) i crveni job: nepoznato nije zeleno. Bez ovisnosti, pa bez
+  # instalacije; Node je vec na runneru.
+  osv-scan:
+    name: OSV (Deno i Python)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: OSV ratchet (selftest pa mjerenje)
+        run: |
+          node scripts/osv-query.mjs --selftest
+          node scripts/osv-query.mjs
+
   gitleaks:
     name: Skeniranje tajni (gitleaks)
     runs-on: ubuntu-latest

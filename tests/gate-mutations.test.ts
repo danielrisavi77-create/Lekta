@@ -288,7 +288,9 @@ import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
 import { messagingRuleProblems, type MessagingSources } from './helpers/session-messaging';
-import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
+import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch, requestPlan } from '../scripts/osv-query.mjs';
+import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
@@ -4822,11 +4824,11 @@ const MUTATIONS: Mutation[] = [
     ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
-      'npm-audit: gard izvora ima continue-on-error'],
+      'npm-audit: korak lockfile-sources.mjs ima continue-on-error'],
     ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
-      'npm-audit: gard izvora ima uvjet if'],
+      'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
     ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
       (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
       'npm-audit: nema mjerenja garda izvora'],
@@ -4841,6 +4843,150 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
+  // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  {
+    id: 't99/osv-novi-nalaz',
+    imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
+    caught: () => {
+      const { packages } = collectPackages();
+      const results = packages.map((_: unknown, i: number) => (i === 0 ? { vulns: [{ id: 'GHSA-mutacija' }] } : {}));
+      return compareOsvToRatchet(findingsFromBatch({ results }, packages), osvRatchet).verdict === 'above';
+    },
+    cleanBefore: () => {
+      const { packages, problems } = collectPackages();
+      return problems.length === 0 && compareOsvToRatchet(findingsFromBatch({ results: packages.map(() => ({})) }, packages), osvRatchet).verdict === 'equal';
+    },
+  },
+  {
+    id: 't99/osv-lockfile-bez-paketa',
+    imitates: 'T99: supabase/functions/deno.lock postane necitljiv ili prazan, pa OSV pita za nula paketa i lazno je zelen.',
+    caught: () => collectPackages((f: string) => (f === 'supabase/functions/deno.lock' ? '{"version":"5","remote":{}}' : readTextLf(resolve(process.cwd(), f))))
+      .problems.includes('supabase/functions/deno.lock: 0 paketa; necitljiv lockfile ne smije biti zelen'),
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-nepotpun-odgovor',
+    imitates: 'T99: OSV vrati manje rezultata od upita ili next_page_token, a skripta to cita kao nula nalaza.',
+    caught: () => {
+      const { packages } = collectPackages();
+      try { findingsFromBatch({ results: packages.slice(1).map(() => ({})) }, packages); return false; } catch { return true; }
+    },
+    cleanBefore: () => {
+      const { packages } = collectPackages();
+      return findingsFromBatch({ results: packages.map(() => ({})) }, packages).length === 0;
+    },
+  },
+  {
+    id: 't99/osv-nije-u-ci',
+    imitates: 'T99: osv-scan job ostane bez mjerenja (samo selftest), pa Edge i Python ostaju neprovjereni a CI zelen.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/osv-query.mjs\n', '');
+      return mut !== wf && osvWiringProblems(mut).includes('osv-scan: nema mjerenja OSV ratcheta');
+    },
+    cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
+  ...([
+    ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-job-continue-on-error', 'job npm-audit dobije continue-on-error pa crveni gard ne blokira (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    continue-on-error: true\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-korak-if-u-navodnicima', 'korak garda dobije "if": false u navodnicima (Codex runda 2, F5)',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        "if": false\n', 'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/osv-deno-npm-graf-necitan',
+    imitates: 'T99: Edge lock dobije nativni npm graf (npm:lodash), a parser cita samo esm.sh, pa lodash ostaje neprovjeren a job zelen (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      const out = denoLockPackages({ ...lock, npm: { 'lodash@4.17.20': {} } }, 'e');
+      return out.packages.some((p: { name: string }) => p.name === 'lodash');
+    },
+    cleanBefore: () => !denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e')
+      .packages.some((p: { name: string }) => p.name === 'lodash'),
+  },
+  {
+    id: 't99/osv-deno-jsr-tiho',
+    imitates: 'T99: Edge lock dobije JSR graf koji OSV ovdje ne provjerava, a parser ga preskoci (Codex R1 na #274).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, jsr: { '@std/path@1.0.0': {} } }, 'e').problems.some((p: string) => p.includes('JSR graf nije podrzan'));
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-specifier-bez-grafa',
+    imitates: 'T99: deno.lock dobije npm: specifier bez zapisa u npm grafu (ili jsr:), a parser provjeri samo tip vrijednosti (Codex runda 2 na #274, A1).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock')));
+      return denoLockPackages({ ...lock, specifiers: { 'npm:lodash@4': '4.17.20', 'jsr:@std/path@1': '1.0.0' } }, 'e').problems.length === 2;
+    },
+    cleanBefore: () => denoLockPackages(JSON.parse(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'deno.lock'))), 'e').problems.length === 0,
+  },
+  {
+    id: 't99/osv-workspace-nedokazano-izuzece',
+    imitates: 'T99: korijenski deno.lock dobije workspace ovisnost koje nema u package-lock.json i nepoznat kljuc, a parser ih izuzme kao da ih pokriva npm audit (Codex runda 2 na #274, A2).',
+    caught: () => {
+      const lock = JSON.parse(readTextLf(resolve(process.cwd(), 'deno.lock')));
+      lock.workspace.packageJson.dependencies = [...lock.workspace.packageJson.dependencies, 'npm:nepostojeci-paket@1.0.0'];
+      lock.workspace.packageJson.futureGraph = {};
+      return collectPackages((f: string) => (f === 'deno.lock' ? JSON.stringify(lock) : readTextLf(resolve(process.cwd(), f)))).problems.length === 2;
+    },
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-jedan-batch-preko-granice',
+    imitates: 'T99: graf preraste 1000 paketa i ide kao jedan querybatch zahtjev preko granice API-ja (Codex R4 na #274).',
+    // Gadja requestPlan, tj. tocno ona tijela koja queryAllBatches salje (veza dokazana u osv-query.test.ts, Codex R4-M).
+    caught: () => requestPlan(Array.from({ length: 1001 }, (_, i) => ({ ecosystem: 'npm', name: `p${i}`, version: '1.0.0' })))
+      .every((r: { body: string }) => JSON.parse(r.body).queries.length <= 1000),
+    cleanBefore: () => requestPlan([{ ecosystem: 'npm', name: 'a', version: '1.0.0' }]).length === 1,
+  },
+  ...([
+    ['t99/lockfile-job-kljuc-iza-steps', 'npm-audit', '\n  # OSV ZA DENO I PYTHON', '\n    if: false\n  # OSV ZA DENO I PYTHON', 'npm-audit: job ima if ili continue-on-error', lockfileGuardWiringProblems],
+    ['t99/osv-job-kljuc-iza-steps', 'osv-scan', '          node scripts/osv-query.mjs\n', '          node scripts/osv-query.mjs\n    continue-on-error: true\n', 'osv-scan: job ima if ili continue-on-error', osvWiringProblems],
+  ] as const).map(([id, job, from, to, problem, check]) => ({
+    id,
+    imitates: `T99: job ${job} dobije kljuc iza steps (if/continue-on-error), a helper gleda samo kljuceve prije steps (Codex R3 na #274).`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && check(mut).includes(problem);
+    },
+    cleanBefore: () => check(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-bundle-ciklus',
+    imitates: 'T99: dva bundled paketa jedan drugoga trebaju, a nijedan nije dosegljiv od bundleDependencies vlasnika (Codex R2 na #274).',
+    caught: () => {
+      const lock = realLock();
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/x`] = { version: '1.0.0', inBundle: true, dependencies: { y: '1' } };
+      lock.packages[`${INBUNDLE_PARENT}/node_modules/y`] = { version: '1.0.0', inBundle: true, dependencies: { x: '1' } };
+      return lockfileSourceProblems(lock).problems.filter((x: string) => x.includes('nije dosegljiv')).length === 2;
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  },
+  {
+    id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
+    imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
+    caught: () => {
+      const lock = realLock();
+      lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  },
   {
     id: 't99/lockfile-gard-nije-u-ci',
     imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
