@@ -297,6 +297,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { repairCostGuardProblems } from './helpers/repair-cost-guard';
 import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
@@ -4935,6 +4936,59 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RD-2 i RD-3: limit po korisniku i fail-closed strop ishoda bez potrosnje u repair-docx.
+  ...([
+    ['t84/repair-slot-bez-korisnika', 'slot se trazi bez limita po korisniku, pa jedan racun s cetiri paralelna popravka drzi sve ostale na 503',
+      'maxPerUser: REPAIR_MAX_PER_USER,', 'maxPerUser: 0,', 'repair-docx: slot se ne trazi s korisnikom i limitom po korisniku'],
+    ['t84/repair-user-busy-prolazi', 'user_busy se ne odbija, pa limit po korisniku postoji u bazi ali ne djeluje',
+      "if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);",
+      "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
+    ['t84/repair-greska-slota-prolazi', 'greska novog RPC-a se ne odbija pa popravak tece bez ikakvog slota (Codex R1 na #294)',
+      "    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);\n", '', 'repair-docx: greska slota ne vraca 503'],
+    ['t84/repair-strop-bez-429', 'grana 429 za strop pokusaja uklonjena, pa korisnik preko stropa i dalje salje pune popravke (Codex R7 na #294)',
+      "    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela'],
+    ['t84/repair-dnevnik-fail-open', 'necitljiv dnevnik pokusaja se tumaci kao nula, pa strop nestane bas kad dnevnik ne radi (Codex R2 na #294)',
+      "    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela'],
+    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'no_change');\n", '',
+      'repair-docx: ishod bez izmjena se ne dopisuje na rezervaciju'],
+    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'integrity_failed');\n", '',
+      'repair-docx: odbijena isporuka se ne dopisuje na rezervaciju'],
+    ['t84/repair-bez-rezervacije', 'pokusaj se ne rezervira prije tijela, pa neuspjeli upis na kraju ostavlja skupi rad nezabiljezen (Codex R3 runda 2 na #294)',
+      '    const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);\n', "    const attempt = { kind: 'off' } as const;\n",
+      'repair-docx: pokusaj se ne rezervira prije citanja tijela'],
+    ['t84/repair-rezervacija-fail-open', 'neuspjela rezervacija se ne odbija, pa skupi rad tece bez zapisa (Codex R3 runda 2 na #294)',
+      "    if (!attempt) return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: neuspjela rezervacija ne vraca 503 prije citanja tijela'],
+    ['t84/repair-dvostruko-brojanje', 'zapis u report_generations ne brise rezervaciju, pa uspjesan ili odbijen pokusaj puni i strop pokusaja',
+      '      if (!written.error) await dropAttempt(admin, attempt);\n', '',
+      'repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && repairCostGuardProblems(mut).includes(problem);
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  })),
+  {
+    id: 't84/repair-strop-nakon-tijela',
+    imitates: 'T84: strop pokusaja premjesten iza citanja tijela, pa se 20 MB i dalje cita prije odbijanja (Codex R7 na #294).',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const block = src.slice(src.indexOf('    const attemptCap = await attemptCapStatus('), src.indexOf("    if (attemptCap === 'over')"));
+      const without = src.replace(block, '');
+      const bodyLineEnd = without.indexOf('\n', without.indexOf('    const bounded = await readFormDataBounded(')) + 1;
+      const mut = without.slice(0, bodyLineEnd) + block + without.slice(bodyLineEnd);
+      return mut !== src && repairCostGuardProblems(mut).includes('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  },
   // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
   {
     id: 't84/xff-prvi-unos',
