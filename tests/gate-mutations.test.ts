@@ -291,6 +291,8 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { idempotenceProperty, realRepair, type RepairFn } from './helpers/repair-arbitraries';
+import { readZip as readRepairZip, writeZip as writeRepairZip } from '../src/repair/zip-codec';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -11336,4 +11338,35 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
   });
+});
+
+describe('mutacije: T96 svojstvo idempotencije popravka (fast-check)', () => {
+  // Mutant imitira stvaran kvar fixera koji ne provjerava je li cilj vec postignut: svaki prolaz
+  // doda razmak na kraj prvog w:t u document.xml. Svojstvo mora pasti na generiranom ulazu i
+  // smanjiti protuprimjer na jedan run koji nosi tekst.
+  const dodajRazmak: RepairFn = async (bytes, deep) => {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    const entries = await readRepairZip(await realRepair(bytes, deep));
+    return writeRepairZip(entries.map((e) => (e.name === 'word/document.xml'
+      ? { ...e, data: enc.encode(dec.decode(e.data).replace('</w:t>', ' </w:t>')) }
+      : e)));
+  };
+
+  it('BASELINE: stvarni recept forme prolazi svojstvo idempotencije', async () => {
+    const out = await idempotenceProperty(realRepair);
+    expect(out.error).toBeNull();
+  }, 60_000);
+
+  it('mutant: fixer koji svakim prolazom doda razmak obara svojstvo uz smanjen protuprimjer', async () => {
+    const out = await idempotenceProperty(dodajRazmak);
+    expect(out.failed).toBe(true);
+    expect(out.error).toContain('word/document.xml: drugi prolaz nije no-op');
+    expect(out.numShrinks).toBeGreaterThan(0);
+    const ce = out.counterexample!;
+    // Smanjen na jedan nositelj teksta: shrinker uklanja sve runove osim jednog, a moze ostaviti
+    // prazan odlomak bez runova (seed 20261004 daje fldSimple PAGE i prazan odlomak iza njega).
+    expect(ce.paragraphs.flatMap((p) => p.runs)).toHaveLength(1);
+    expect(ce.paragraphs.length).toBeLessThanOrEqual(2);
+  }, 60_000);
 });

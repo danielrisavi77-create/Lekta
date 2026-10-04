@@ -166,6 +166,7 @@
     "@types/node": "^26.6.3",
     "dictionary-hr": "^2.0.0",
     "esbuild": "^0.28.2",
+    "fast-check": "4.10.2",
     "happy-dom": "^20.14.5",
     "jscpd": "5.4.0",
     "knip": "6.39.0",
