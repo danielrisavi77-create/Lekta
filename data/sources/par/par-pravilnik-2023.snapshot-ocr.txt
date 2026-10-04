@@ -1,4 +1,5 @@
 # snapshotHash: 4cdcd0c16988092d2247bbcb2b108f74e2aca6f32fbf182a486866aaed28fc39
+# ocrTextHash: a955ac953244d5ee8a74941643f460259f7d7f408132901c5faf315a02c3fbcc
 ===== PAGE 1/6 =====
 ZI
 

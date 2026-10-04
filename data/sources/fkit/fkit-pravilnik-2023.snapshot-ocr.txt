@@ -1,4 +1,5 @@
 # snapshotHash: 9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b
+# ocrTextHash: be7f8f4a811bf00ec805de185aeb6d275ebbf496e13e711e11e9f66a04c5c544
 ===== PAGE 1/8 =====
 Na temelju članka 18. i članka 41. stavka 3. Statuta Sveučilišta u Zagrebu Fakulteta kemijskog inženjerstva i
 tehnologije (svibanj 2023.) Fakultetsko vijeće na 9. redovitoj sjednici u 354. ak. god. 2022./2023. održanoj

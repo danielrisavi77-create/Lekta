@@ -6,12 +6,14 @@ import { Window, type Node as HtmlNode, type Element as HtmlElement } from 'happ
 import { DOMParser, type Node as XmlNode, type Element as XmlElement } from '@xmldom/xmldom';
 import { readZip } from '../repair/zip-codec';
 const WordExtractor = createRequire(import.meta.url)('word-extractor') as new () => { extract(bytes: Buffer): Promise<{ getBody(): string }> };
-// unpdf 1.8.1 deklarira Node >=22; tekst stvarnih snimki izmjeren je i na Node 20.
+// unpdf 1.7.0 nema engines ogranicenje (1.8.x trazi Node >=22); isti tekst izmjeren na Node 20 i 24.
 const decode = (b: Uint8Array) => new TextDecoder().decode(b);
 export const UPISNIK_SNAPSHOT_RATCHET_CEILING = 380;
 interface EvidenceRow { programCode: string; evidence: { sourceUrl: string; sourceLocator: string; quote: string } }
 export interface UpisnikEvidenceFile { decisions: EvidenceRow[]; exclusions: EvidenceRow[]; integratedGraduateCoverage?: EvidenceRow[] }
-export interface SnapshotSource { url: string; snapshotPath?: string; snapshotHash?: string }
+/** Rucno potvrdjen prijepis skenirane snimke: sha256 tijela OCR pratitelja koje je covjek usporedio sa snimkom. */
+export interface OcrTranscript { textHash: string; verifiedBy: string; verifiedAt: string }
+export interface SnapshotSource { url: string; snapshotPath?: string; snapshotHash?: string; ocrTranscript?: OcrTranscript }
 export interface SnapshotRatchet { schemaVersion: number; entries: Array<{ programCode: string; kind: 'decision' | 'exclusion'; sourceUrl: string }> }
 const ratchetKey = (e: { programCode: string; kind: string; sourceUrl: string }) => JSON.stringify([e.programCode, e.kind, e.sourceUrl]);
 function normalizeSnapshotQuote(s: string): string {
@@ -192,13 +194,19 @@ async function snapshotText(source: SnapshotSource, bytes: Uint8Array, readBytes
       const text = await pdfSnapshotText(bytes);
       if (text.replace(/\s/gu, '').length > 200) return text;
       const companion = readBytes(path.replace(/\.pdf$/iu, '.snapshot-ocr.txt'));
-      const ocr = companion ? decode(companion).replace(/^\uFEFF/u, '') : '';
-      const newline = ocr.indexOf('\n');
-      const header = (newline < 0 ? ocr : ocr.slice(0, newline)).replace(/\r$/u, '');
-      if (header !== `# snapshotHash: ${source.snapshotHash}`) throw new Error('skenirana snimka bez OCR pratitelja');
-      // Samo je zaglavlje vezano uz snapshotHash; rucna izmjena tijela OCR-a nije otkrivena.
-      // Stari *-ocr.txt i *.ocr.txt nisu vezani uz snimku i nikad nisu dokaz.
-      return newline < 0 ? '' : ocr.slice(newline + 1);
+      const lines = (companion ? decode(companion).replace(/^\uFEFF/u, '') : '').replace(/\r\n/gu, '\n').split('\n');
+      if (lines[0] !== `# snapshotHash: ${source.snapshotHash}`) throw new Error('skenirana snimka bez OCR pratitelja');
+      const body = lines.slice(2).join('\n');
+      const bodyHash = createHash('sha256').update(body, 'utf8').digest('hex');
+      if (lines[1] !== `# ocrTextHash: ${bodyHash}`) throw new Error('OCR pratitelj ne odgovara hashu vlastitog tijela');
+      // Strojni OCR je pomocni tekst: zaglavlje veze pratitelja uz PDF, ali ne dokazuje da je tekst tocan prijepis.
+      // Dokaz je samo prijepis koji je covjek potvrdio uz snimku i koji registar veze uz isti hash tijela (Codex R1).
+      // Bez toga je ishod nepoznat i odluka ne prolazi. Stari *-ocr.txt i *.ocr.txt nikad nisu dokaz.
+      const transcript = source.ocrTranscript;
+      if (!transcript || transcript.textHash !== bodyHash || !transcript.verifiedBy?.trim() || !transcript.verifiedAt?.trim()) {
+        throw new Error('skenirana snimka bez rucno potvrdjenog prijepisa (OCR je pomocni tekst)');
+      }
+      return body;
     }
     case '.docx': {
       const parts = await readZip(bytes);
@@ -244,7 +252,11 @@ export async function verifyUpisnikEvidenceSnapshots(
     if (!source.snapshotPath || !source.snapshotHash || !/^[a-f0-9]{64}$/u.test(source.snapshotHash)) {
       problems.push(`${label}: snimka ili hash nisu registrirani`); continue;
     }
-    const cacheKey = JSON.stringify([source.snapshotPath, source.snapshotHash]);
+    // Kljuc nosi i potvrdu prijepisa: dva zapisa iste snimke (npr. http i https URL) s razlicitom potvrdom
+    // ne smiju dijeliti rezultat, jer provjera ocrTranscript ide unutar citanja (Codex runda 2).
+    const transcript = source.ocrTranscript;
+    const cacheKey = JSON.stringify([source.snapshotPath, source.snapshotHash,
+      transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);
     if (!cache.has(cacheKey)) cache.set(cacheKey, (async () => {
       const bytes = readBytes(source.snapshotPath!);
       if (!bytes) throw new Error('snimka nedostaje');

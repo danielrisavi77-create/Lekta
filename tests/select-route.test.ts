@@ -111,9 +111,17 @@ describe('selectRoute nad stvarnim configom: svaka kombinacija S/M/L x zasticeno
     expect(review.fallback!.model).not.toBe(impl.model);
   });
 
-  it('zasticeno implement ima effort xhigh (politika iz ROUTING.md)', () => {
+  it('zasticeno implement je claude-opus-5-5 high (B1, ROUTING.md)', () => {
     for (const size of SIZES) {
-      expect(route({ config: cfg, size, files: [PROTECTED_FILE], phase: 'implement' }).effort).toBe('xhigh');
+      const r = route({ config: cfg, size, files: [PROTECTED_FILE], phase: 'implement' });
+      expect([r.model, r.effort]).toEqual(['claude-opus-5-5', 'high']);
+    }
+  });
+
+  it('nezasticeno implement: M i L su claude-opus-5-5 medium, S light ostaje claude-sonnet-5 high (B1)', () => {
+    expect(route({ config: cfg, size: 'S', files: [PLAIN_FILE], phase: 'implement' })).toMatchObject({ model: 'claude-sonnet-5', effort: 'high' });
+    for (const size of ['M', 'L'] as const) {
+      expect(route({ config: cfg, size, files: [PLAIN_FILE], phase: 'implement' })).toMatchObject({ model: 'claude-opus-5-5', effort: 'medium' });
     }
   });
 
@@ -129,14 +137,14 @@ describe('selectRoute nad stvarnim configom: svaka kombinacija S/M/L x zasticeno
 describe('selectRoute: pravilo drugog providera', () => {
   it('isti provider i isti model bez fallbacka baca gresku', () => {
     const cfg = config();
-    cfg.routing.M.false.roles.review = { provider: 'claude', model: 'claude-opus-5', effort: 'high' };
+    cfg.routing.M.false.roles.review = { provider: 'claude', model: 'claude-opus-5-5', effort: 'high' };
     expect(() => route({ config: cfg, size: 'M', files: [], phase: 'review' })).toThrow(/istog providera i model/);
   });
 
   it('isti provider s valjanim reviewFallbackom vraca fallback', () => {
     const cfg = config();
     cfg.routing.M.false.roles.review = {
-      provider: 'claude', model: 'claude-opus-5', effort: 'high',
+      provider: 'claude', model: 'claude-opus-5-5', effort: 'high',
       reviewFallback: { provider: 'claude', model: 'claude-sonnet-5', effort: 'medium' },
     };
     const r = route({ config: cfg, size: 'M', files: [], phase: 'review' });
@@ -152,7 +160,7 @@ describe('selectRoute: pravilo drugog providera', () => {
 
   it('reviewFallback isti kao implementator baca gresku', () => {
     const cfg = config();
-    cfg.routing.M.false.roles.review.reviewFallback = { provider: 'claude', model: 'claude-opus-5', effort: 'medium' };
+    cfg.routing.M.false.roles.review.reviewFallback = { provider: 'claude', model: 'claude-opus-5-5', effort: 'medium' };
     expect(() => route({ config: cfg, size: 'M', files: [], phase: 'review' })).toThrow(/isti model kao implementator/);
   });
 });

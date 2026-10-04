@@ -1,4 +1,5 @@
 # snapshotHash: dfaf18d4b7c19a21f8eb1008c325631fcfd93d31634be64f524a27f43518a3c0
+# ocrTextHash: 8d629cef278d11742fea4e4cf694ca3d78e38f30c0f554d31484719151bea13d
 ===== PAGE 1/23 =====
 Na temelju članka 61. stavka 5. Zakona o visokom obrazovanju i znanstvenoj
 

@@ -68,12 +68,57 @@ describe('Upisnik citati u registriranim snimkama', () => {
     const extra = { [companion]: new TextEncoder().encode('# snapshotHash: ' + '0'.repeat(64) + '\n' + good) };
     expect((await synthetic(good, data, source(path, data), extra)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
   });
-  it('skenirani PDF s ispravnim OCR pratiteljem prolazi', async () => {
-    const path = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
-    const data = bytes(path);
-    const companion = path.replace(/\.pdf$/u, '.snapshot-ocr.txt');
-    const extra = { [companion]: new TextEncoder().encode('# snapshotHash: ' + hash(data) + '\n' + good) };
-    expect(await synthetic(good, data, source(path, data), extra)).toEqual([]);
+  // Codex R1: zaglavlje veze pratitelja uz PDF, ali strojni OCR nije dokaz; vrijedi samo rucno potvrdjen prijepis.
+  const scanPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  const companionOf = (body: string, pdf: Uint8Array) => new TextEncoder().encode(
+    '# snapshotHash: ' + hash(pdf) + '\n# ocrTextHash: ' + createHash('sha256').update(body, 'utf8').digest('hex') + '\n' + body);
+  const verified = (body: string) => ({ textHash: createHash('sha256').update(body, 'utf8').digest('hex'), verifiedBy: 'test', verifiedAt: '2026-10-04' });
+  it('skenirani PDF s ispravnim pratiteljem bez rucno potvrdjenog prijepisa pada (OCR je pomocni tekst)', async () => {
+    const data = bytes(scanPath);
+    const extra = { [scanPath.replace(/\.pdf$/u, '.snapshot-ocr.txt')]: companionOf(good, data) };
+    expect((await synthetic(good, data, source(scanPath, data), extra)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+  });
+  it('skenirani PDF s rucno potvrdjenim prijepisom prolazi, i s CRLF tijelom', async () => {
+    const data = bytes(scanPath);
+    const companion = companionOf(good, data);
+    const crlf = new TextEncoder().encode(new TextDecoder().decode(companion).replace(/\n/gu, '\r\n'));
+    for (const c of [companion, crlf]) {
+      const extra = { [scanPath.replace(/\.pdf$/u, '.snapshot-ocr.txt')]: c };
+      expect(await synthetic(good, data, { ...source(scanPath, data), ocrTranscript: verified(good) }, extra)).toEqual([]);
+    }
+  });
+  it('Codex R1: sken "Rok 30 dana", pratitelj "Rok 60 dana" s ispravnim zaglavljem PDF-a pada', async () => {
+    const data = bytes(scanPath);
+    const confirmed = 'Rok za predaju rada iznosi 30 dana od prijave teme.';
+    const forged = 'Rok za predaju rada iznosi 60 dana od prijave teme.';
+    const path = scanPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+    // Tijelo krivotvoreno uz preracunat hash tijela: registar i dalje drzi hash potvrdjenog prijepisa.
+    const recomputed = { [path]: companionOf(forged, data) };
+    expect((await synthetic(forged, data, { ...source(scanPath, data), ocrTranscript: verified(confirmed) }, recomputed)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+    // Tijelo krivotvoreno, a drugi redak zaglavlja ostao od potvrdjenog tijela.
+    const stale = new TextDecoder().decode(companionOf(confirmed, data)).replace(confirmed, forged);
+    expect((await synthetic(forged, data, { ...source(scanPath, data), ocrTranscript: verified(confirmed) }, { [path]: new TextEncoder().encode(stale) })).join(' ')).toMatch(/hashu vlastitog tijela/);
+  });
+  it('Codex runda 2: potvrdjen i nepotvrdjen zapis iste snimke ne dijele predmemoriju', async () => {
+    const data = bytes(scanPath);
+    const companionPath = scanPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+    const verifiedUrl = 'https://example.test/potvrdjen';
+    const plainUrl = 'http://example.test/potvrdjen';
+    const file: UpisnikEvidenceFile = {
+      decisions: [
+        { programCode: '1', evidence: { sourceUrl: verifiedUrl, sourceLocator: 'test', quote: good } },
+        { programCode: '2', evidence: { sourceUrl: plainUrl, sourceLocator: 'test', quote: good } },
+      ],
+      exclusions: [],
+    };
+    const registry: SnapshotSource[] = [
+      { url: verifiedUrl, snapshotPath: scanPath, snapshotHash: hash(data), ocrTranscript: verified(good) },
+      { url: plainUrl, snapshotPath: scanPath, snapshotHash: hash(data) },
+    ];
+    const read = (p: string) => p === scanPath ? data : p === companionPath ? companionOf(good, data) : null;
+    const problems = await verifyUpisnikEvidenceSnapshots(file, registry, read, empty, baseline);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toMatch(/^decision 2: .*rucno potvrdjenog prijepisa/);
   });
   it('DOC citat se nalazi', async () => {
     const registry = JSON.parse(readFileSync(resolve(root, 'data/sources/source-registry.json'), 'utf8')) as SnapshotSource[];

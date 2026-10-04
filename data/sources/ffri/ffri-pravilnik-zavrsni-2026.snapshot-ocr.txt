@@ -1,4 +1,5 @@
 # snapshotHash: 2d34e70f1497f6bd1e5b14a5291cf427a0b0f9bab1aed20e50b922bc7a3bcc80
+# ocrTextHash: 07ef33438f2877452b3d787522ff4bd0671618efdba2643b40459ad9954b6f1c
 ===== PAGE 1/7 =====
 Pročišćeni tekst Pravilnika o završnom radu i završnom ispitu na sveučilišnim prijediplomskim studijima
 Filozofskoga fakulteta u Rijeci obuhvaća Pravilnik o završnom radu i završnom ispitu na preddiplomskim

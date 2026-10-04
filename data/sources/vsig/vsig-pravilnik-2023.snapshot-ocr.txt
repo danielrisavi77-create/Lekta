@@ -1,4 +1,5 @@
 # snapshotHash: 153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b
+# ocrTextHash: 1d5da5dc873b68ba368b5b1b56d44358f9d1e98171629a8fbca9e493349a50eb
 ===== PAGE 1/42 =====
 VELEUČILIŠTE
 

@@ -75,19 +75,13 @@ const errors = validateProgramComponentDecisions(result, {
 });
 if (errors.length) throw new Error(`neispravne odluke sastavnica:\n${errors.join('\n')}`);
 
-const output = join(root, 'docs', 'generated', 'upisnik-program-components.json');
-mkdirSync(dirname(output), { recursive: true });
-writeFileSync(output, `${JSON.stringify(withProvenance(result, 'npm run match-upisnik-program-components'), null, 2)}\n`);
-
+// Sva tri izvjestaja se racunaju i provjeravaju PRIJE prvog zapisa (Codex R2): nevaljan citat ili blokada
+// ne smiju ostaviti dva svjeza i jedan stari izvjestaj.
 const blockerReport = buildProgramComponentBlockerReport(
   upisnik.rows,
   matchReport.proposals,
   unitMatchDecisions,
   result,
-);
-writeFileSync(
-  join(root, 'docs', 'generated', 'upisnik-program-component-backlog.json'),
-  `${JSON.stringify(withProvenance(blockerReport, 'npm run match-upisnik-program-components'), null, 2)}\n`,
 );
 
 const profiles = JSON.parse(
@@ -127,6 +121,13 @@ const profileHoldProblems = validateUpisnikProfileCoverageHolds(profileCandidate
 if (profileHoldProblems.length > 0) {
   throw new Error(`nepotpuno objašnjene Upisnik profilne blokade:\n${profileHoldProblems.join('\n')}`);
 }
+const output = join(root, 'docs', 'generated', 'upisnik-program-components.json');
+mkdirSync(dirname(output), { recursive: true });
+writeFileSync(output, `${JSON.stringify(withProvenance(result, 'npm run match-upisnik-program-components'), null, 2)}\n`);
+writeFileSync(
+  join(root, 'docs', 'generated', 'upisnik-program-component-backlog.json'),
+  `${JSON.stringify(withProvenance(blockerReport, 'npm run match-upisnik-program-components'), null, 2)}\n`,
+);
 writeFileSync(
   join(root, 'docs', 'generated', 'upisnik-profile-candidates.json'),
   `${JSON.stringify(withProvenance(profileCandidates, 'npm run match-upisnik-program-components'), null, 2)}\n`,

@@ -41,20 +41,32 @@ Obvezujuca odluka mora imati doslovan citat iz registrirane snimke izvora, uz
 provjeren sha256 snimke. HTML se cita samo iz vidljivog teksta po odlomcima, PDF kroz unpdf,
 DOCX kroz readZip i XML parser, a DOC/DOT kroz word-extractor. Vanjski CSS i klase
 se ne racunaju: element skriven samo klasom iz stylesheeta smatra se vidljivim. Nepodrzana vrsta
-snimke i citat koji nije podniz jednog odlomka su problem. `unpdf` 1.8.1
-deklarira Node >=22, ali su stvarni podaci izmjereni i na Node 20 u CI matrici.
+snimke i citat koji nije podniz jednog odlomka su problem. Koristi se `unpdf` 1.7.0, koji
+nema `engines` ogranicenje (1.8.x trazi Node >=22); isti tekst stvarnih snimki izmjeren je na
+Node 20 i 24, kao u CI matrici.
 
 Gard citata stiti od gresaka agenata: izmisljenog citata, citata iz krivog dokumenta,
 spajanja preko odlomaka te ocito skrivenog ili obrisanog teksta. Ne stiti od namjerno
 konstruiranog sadrzaja koji vara parser. Poznata ogranicenja su CSS escapei i komentari
 u inline `style`, klase i vanjski CSS, `opacity:0`, DOCX teme i uvjetno oblikovanje.
 
-Skenirani PDF zahtijeva lokalno proizveden pratitelj `.snapshot-ocr.txt` s
-prvim retkom `# snapshotHash: <sha256 snimke>`. Lokalni preduvjeti su tesseract
-5.4, hrv/eng tessdata i PyMuPDF; `scripts/ocr-snapshot.mjs` poziva
-`scripts/ocr_pdf.py`. OCR se ne pokrece u CI-ju. Stari `-ocr.txt` i
-`.ocr.txt` nisu vezani uz snimku i ne racunaju se kao dokaz. Hash prati
-zaglavlje, ali ne stiti tijelo OCR pratitelja od rucne izmjene.
+Skenirani PDF ima lokalno proizveden pratitelj `.snapshot-ocr.txt`. Prvi redak je
+`# snapshotHash: <sha256 snimke>`, drugi `# ocrTextHash: <sha256 tijela>` (tijelo s
+LF zavrsecima). Lokalni preduvjeti su tesseract 5.4, hrv/eng tessdata i PyMuPDF;
+`scripts/ocr-snapshot.mjs` poziva `scripts/ocr_pdf.py`. OCR se ne pokrece u CI-ju.
+
+Strojni OCR je pomocni tekst, ne dokaz: zaglavlje veze pratitelja uz PDF, ali ne
+dokazuje da je tijelo tocan prijepis. Citat iz skena vrijedi samo kad je covjek
+prijepis usporedio sa snimkom i u zapis registra upisao
+`ocrTranscript: { textHash, verifiedBy, verifiedAt }` s istim hashem tijela. Bez
+toga je ishod nepoznat i odluka ne prolazi. Stari `-ocr.txt` i `.ocr.txt` nisu
+vezani uz snimku i nikad nisu dokaz.
+
+Granica povjerenja registra (odluka 2026-10-04): `ocrTranscript` upisuje samo vlasnik ili
+covjek kojeg vlasnik imenuje, nakon sto je prijepis usporedio sa snimkom. `verifiedBy` je ime
+te osobe, nikad ime modela ili sesije. Agenti `ocrTranscript` ne upisuju i ne mijenjaju; zapis
+ulazi samo kroz PR u kojem je vidljiv u diffu registra i prolazi pregled drugog providera. Gard
+provjerava samo da potvrda postoji i da hash tijela odgovara; tko ju je dao, provjerava pregled.
 
 Neregistrirani URL-ovi ostaju u
 `data/programs/upisnik-evidence-snapshot-ratchet.json`; strop je 380 zapisa

@@ -1,4 +1,5 @@
 # snapshotHash: f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d
+# ocrTextHash: ea1caacd1370fe4d058c52ea88d5193599e4772b24e243683e98386cc9b9844d
 ===== PAGE 1/3 =====
 + KORICA
 
