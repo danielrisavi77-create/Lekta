@@ -1048,7 +1048,8 @@ export function renderCitationBibliographySyncControls(li: HTMLElement, item: Re
   }
   if (definition.missingEntries.length) {
     const title = document.createElement('p');
-    title.textContent = 'Nedostajući zapisi, unesi potvrđeni puni bibliografski tekst:';
+    // Z36 krug 4: tekst opisuje oba ishoda istinito (fixer: upisani zapis doslovno, prazno polje predlozak).
+    title.textContent = 'Nedostajući zapisi. Upisani zapis Lekta umeće doslovno. Prazno polje, gdje je to moguće, daje predložak s prezimenom i godinom iz citata i poljima u zagradama za popunu:';
     section.appendChild(title);
     for (const missing of definition.missingEntries) {
       const row = document.createElement('label');
@@ -1059,7 +1060,9 @@ export function renderCitationBibliographySyncControls(li: HTMLElement, item: Re
       const input = document.createElement('input');
       input.type = 'text';
       input.value = missing.text;
-      input.placeholder = 'Potvrđeni bibliografski zapis';
+      input.placeholder = missing.templateAvailable
+        ? 'Prazno: predložak s prezimenom, godinom i poljima u zagradama'
+        : 'Upiši puni zapis (predložak ovdje nije moguć)';
       input.setAttribute('aria-label', `Nedostajući zapis ${missing.id}`);
       input.addEventListener('input', () => { missing.text = input.value; sync(); });
       row.append(check, input);

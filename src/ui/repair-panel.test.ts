@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
+import { renderCitationBibliographySyncControls, renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
 import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
 import type { Check } from '../scoring/checks';
 
@@ -785,5 +785,31 @@ describe('renderRepairPanel: pristupacnost ledger modala (axe T8)', () => {
     for (const dijete of Array.from(lista.children)) {
       expect(dijete.tagName, 'svako dijete <ol> mora biti <li>').toBe('LI');
     }
+  });
+});
+
+describe('Z36 krug 4: tekst nedostajucih zapisa', () => {
+  it('natpis i placeholder istinito opisuju prazno polje (predlozak) i upisani tekst (doslovno), bez em i en crtica', () => {
+    const li = document.createElement('li');
+    const form = {
+      citations: [],
+      missingEntries: [
+        { id: 'sync-entry-c1', citationId: 'c1', text: '', selected: false, templateAvailable: true },
+        { id: 'sync-entry-c2', citationId: 'c2', text: '', selected: false, templateAvailable: false },
+      ],
+      duplicates: [],
+      summary: '2 citata',
+      buildParams: () => ({}),
+    };
+    renderCitationBibliographySyncControls(li, item({ fixerId: 'citation-bibliography-sync-fixer', citationBibliographySyncForm: form }));
+    const title = [...li.querySelectorAll('p')].map((p) => p.textContent ?? '').find((text) => text.startsWith('Nedostajući zapisi'));
+    expect(title).toContain('Upisani zapis Lekta umeće doslovno');
+    expect(title).toContain('predložak s prezimenom i godinom iz citata i poljima u zagradama');
+    const inputs = [...li.querySelectorAll<HTMLInputElement>('input[type="text"]')];
+    expect(inputs.map((input) => input.placeholder)).toEqual([
+      'Prazno: predložak s prezimenom, godinom i poljima u zagradama',
+      'Upiši puni zapis (predložak ovdje nije moguć)',
+    ]);
+    for (const text of [title ?? '', ...inputs.map((input) => input.placeholder)]) expect(text).not.toMatch(/[\u2013\u2014]/);
   });
 });
