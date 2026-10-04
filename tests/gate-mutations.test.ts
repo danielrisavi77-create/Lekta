@@ -174,6 +174,8 @@ import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerd
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
+import { watchdogVerdict } from '../scripts/with-gate-lock.mjs';
+import { DEFAULT_CHECKS as ENV_DOCTOR_CHECKS, runDoctor as runEnvDoctor } from '../scripts/env-doctor.mjs';
 import { buildCompletionLedger, pdfSeparationProblems, proofSourceProblems, type LedgerInputs } from '../src/verification/completion-ledger';
 import { buildUpisnikProfileCandidates as buildRawUpisnikProfileCandidates, validateUpisnikProfileCoverageHolds } from '../src/programs/upisnik-profile-candidates';
 import sourceRegistry from '../data/sources/source-registry.json';
@@ -11434,5 +11436,71 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mutacije: straza with-gate-lock i env-doctor (odluka vlasnika 2026-10-03)', () => {
+  type Sample = { cpuSec: number; descendants: number; opaque?: boolean } | null;
+  type Verdict = (samples: Sample[], options: { windowSamples: number }) => { kill: boolean };
+
+  /** Gard: straza ne ubija dijete ciji glavni proces ima potomke, ni kad CPU stoji. */
+  function sparesChildWithDescendants(verdict: Verdict): boolean {
+    const withWorker = [1, 2, 3, 4].map(() => ({ cpuSec: 4, descendants: 1 }));
+    return verdict(withWorker, { windowSamples: 3 }).kill === false;
+  }
+
+  /** Gard je ziv samo ako istu situaciju BEZ potomaka ipak ubija (inace bi stedio sve). */
+  function killsStuckChild(verdict: Verdict): boolean {
+    const stuck = [1, 2, 3, 4].map(() => ({ cpuSec: 4, descendants: 0 }));
+    return verdict(stuck, { windowSamples: 3 }).kill === true;
+  }
+
+  it('BASELINE: prava straza stedi dijete s potomkom i ubija zapelo dijete', () => {
+    expect(sparesChildWithDescendants(watchdogVerdict)).toBe(true);
+    expect(killsStuckChild(watchdogVerdict)).toBe(true);
+  });
+
+  it('mutant: straza bez provjere potomaka ubija dijete s potomkom (vitest s radnikom) se hvata', () => {
+    const blind: Verdict = (samples, options) => watchdogVerdict(samples.map((s) => s && { ...s, descendants: 0 }), options);
+    expect(sparesChildWithDescendants(blind)).toBe(false);
+  });
+
+  /** Gard: neproziran list (Git Bash pokidao stablo, bash bez vidljivih potomaka) se ne ubija. */
+  function sparesOpaqueShell(verdict: Verdict): boolean {
+    const opaque = [1, 2, 3, 4].map(() => ({ cpuSec: 0.06, descendants: 0, opaque: true }));
+    return verdict(opaque, { windowSamples: 3 }).kill === false;
+  }
+
+  it('BASELINE: prava straza stedi neproziran list', () => {
+    expect(sparesOpaqueShell(watchdogVerdict)).toBe(true);
+  });
+
+  it('mutant: straza koja vjeruje pokidanom stablu ubija bash dok vitest radi kao siroce, se hvata', () => {
+    const trusting: Verdict = (samples, options) => watchdogVerdict(samples.map((s) => s && { ...s, opaque: false }), options);
+    expect(sparesOpaqueShell(trusting)).toBe(false);
+  });
+
+  /** Gard: env-doctor prijavljuje vitest 2.1.9 naspram ^4.1.11 (stanje 3. 10. 2026.). */
+  function catchesVitestMismatch(checks: typeof ENV_DOCTOR_CHECKS): boolean {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-env-doctor-mut-'));
+    try {
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ devDependencies: { vitest: '^4.1.11' } }));
+      mkdirSync(join(root, 'node_modules', 'vitest'), { recursive: true });
+      writeFileSync(join(root, 'node_modules', 'vitest', 'package.json'), JSON.stringify({ version: '2.1.9' }));
+      const report = runEnvDoctor({ root, nodeVersion: '24.0.0', codex: () => ({ installed: false, version: null }), git: () => null, checks });
+      return report.mismatches >= 1 && report.results.some((r) => r.id === 'vitest' && r.status === 'raskorak');
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+
+  it('BASELINE: env-doctor sa svim provjerama hvata vitest 2.1.9 naspram ^4.1.11', () => {
+    expect(catchesVitestMismatch(ENV_DOCTOR_CHECKS)).toBe(true);
+  });
+
+  it('mutant: env-doctor bez provjere vitest verzije propusta raskorak, se hvata', () => {
+    const withoutVitest = ENV_DOCTOR_CHECKS.filter((_check, index) => index !== 1);
+    expect(withoutVitest).toHaveLength(ENV_DOCTOR_CHECKS.length - 1);
+    expect(catchesVitestMismatch(withoutVitest)).toBe(false);
   });
 });

@@ -341,6 +341,9 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
 - **Provodi ga `scripts/worktree-gc.mjs`.** Zove ga SessionStart bootstrap (`--apply --quiet`,
   fail-open) i koordinator nakon spajanja (`pr-merge`); preflight ga imenuje kad je disk ispod
   praga. Uklanja samo stablo spojeno u `origin/master`, cisto, bez gate locka i starije od 60 min.
+- **Env-doctor.** `node scripts/env-doctor.mjs` (`--strict` za exit 1) usporeduje Node, vitest, lockfile, Codex CLI, dijeljeno stablo i CRLF; zavrsni redak `env-doctor: OK` ili `N raskoraka` ispisuju i session bootstrap i preflight, samo kao informaciju.
+- **Straza.** `with-gate-lock` svakih 60 s mjeri stablo djeteta; glavni proces bez potomaka i CPU bez pomaka 5 min znaci: ubija stablo, otpusta lock, exit 124. Ljusku bez vidljivih potomaka (`-- bash skripta.sh`, Git Bash kida stablo) ne dira.
+- **Iskljucivanje straze.** `LEKTA_GATE_WATCHDOG_MIN=0` je iskljucuje, drugi broj mijenja prag u minutama (zadano 5).
 - **Lokalno samo Chromium.** `playwright.config.ts` lokalno ima samo `chromium` i
   `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
   `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).

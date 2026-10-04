@@ -74,6 +74,7 @@
     "verify:word:corpus": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-corpus.ps1",
     "deploy-drift": "node scripts/deploy-drift.mjs",
     "orphan-scan": "node scripts/orphan-scan.mjs",
+    "env-doctor": "node scripts/env-doctor.mjs",
     "lean:report": "node scripts/lean-report.mjs",
     "migration-identity": "node scripts/migration-identity.mjs",
     "gen-site-stats": "vite-node scripts/gen-site-stats.mts",

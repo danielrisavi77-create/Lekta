@@ -769,7 +769,17 @@ function parseArgs(argv) {
   return args;
 }
 
-function main(argv) {
+/** Zavrsni redak env-doctora, samo informacija: ne mijenja presudu i nikad ne rusi preflight. */
+async function envDoctorLine() {
+  try {
+    const { runDoctor, summaryLine } = await import('./env-doctor.mjs');
+    return summaryLine(runDoctor({ root: REPO_ROOT }));
+  } catch {
+    return 'env-doctor: nije izmjereno';
+  }
+}
+
+async function main(argv) {
   const args = parseArgs(argv);
   const env = process.env;
   const path = lockFilePath(env);
@@ -788,6 +798,7 @@ function main(argv) {
     const verdict = judgeGate(state, { ci: isCiEnv(env), heldToken: env.LEKTA_GATE_LOCK_TOKEN || null });
     console.log(`[gate-preflight] stanje stroja ${new Date(state.nowMs).toISOString()} (${state.lockPath})`);
     for (const line of formatStateLines(state)) console.log(`  ${line}`);
+    console.log(`  ${await envDoctorLine()}`);
     for (const w of verdict.warnings) console.log(`  UPOZORENJE: ${w}`);
     if (verdict.allow) {
       console.log('  presuda: SLOBODNO (exit 0)');
@@ -800,6 +811,7 @@ function main(argv) {
   }
 
   const result = acquireGate({ label: args.label, ownerPid: process.ppid, env });
+  console.error(`[gate-preflight] ${args.label}: ${await envDoctorLine()}`);
   return result.allow ? 0 : 2;
 }
 
@@ -811,5 +823,13 @@ function isDirectRun() {
 }
 
 if (isDirectRun()) {
-  process.exitCode = main(process.argv.slice(2));
+  main(process.argv.slice(2)).then(
+    (code) => {
+      process.exitCode = code;
+    },
+    (error) => {
+      console.error(error);
+      process.exitCode = 1;
+    },
+  );
 }
