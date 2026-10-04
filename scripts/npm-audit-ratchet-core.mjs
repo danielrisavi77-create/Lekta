@@ -71,9 +71,80 @@ export function compareToRatchet(count, ratchet) {
   return { verdict: delta > 0 ? 'above' : delta < 0 ? 'below' : 'equal', delta, ceiling, count };
 }
 
+const HIGH_CRITICAL = new Set(['high', 'critical']);
+const GHSA_URL = /\/(GHSA(?:-[0-9a-z]{4}){3})$/i;
+const GHSA_ID = /^GHSA(?:-[0-9a-z]{4}){3}$/;
+
 /**
- * Usporedi i broj i IDENTITET. Sam broj ne vidi zamjenu jednog prihvacenog nalaza novim nalazom,
- * sto je vec izmjeren kvar iste klase u citatnim dosjeima.
+ * Parovi (paket, GHSA advisory) za high/critical pakete (T93, Codex R1 na #246). `npm audit --json`
+ * paketu s izravnim advisoryjem daje u `via` objekt s URL-om advisoryja, a tranzitivnom paketu samo ime
+ * drugog paketa; tranzitivni paket nasljeduje advisoryje high/critical paketa kroz koje je ranjiv.
+ * Paket bez ijednog prepoznatog GHSA id-a ide u `unresolved`, jer mu se pokrice ne moze provjeriti.
+ */
+export function highCriticalAdvisoryPairs(auditJson) {
+  const v = auditJson && typeof auditJson === 'object' ? auditJson.vulnerabilities : null;
+  const vulns = v && typeof v === 'object' ? v : {};
+  const memo = new Map();
+  const advisoriesOf = (name, stack) => {
+    if (memo.has(name)) return memo.get(name);
+    const out = new Set();
+    if (stack.has(name)) return out;
+    stack.add(name);
+    for (const entry of Array.isArray(vulns[name]?.via) ? vulns[name].via : []) {
+      if (typeof entry === 'string') {
+        if (HIGH_CRITICAL.has(vulns[entry]?.severity)) for (const a of advisoriesOf(entry, stack)) out.add(a);
+      } else if (entry && typeof entry === 'object' && HIGH_CRITICAL.has(entry.severity)) {
+        const m = GHSA_URL.exec(String(entry.url ?? ''));
+        if (m) out.add(m[1]);
+      }
+    }
+    stack.delete(name);
+    memo.set(name, out);
+    return out;
+  };
+  const pairs = [];
+  const unresolved = [];
+  for (const name of highCriticalPackageNames(auditJson)) {
+    const advisories = [...advisoriesOf(name, new Set())].sort();
+    if (advisories.length === 0) unresolved.push(name);
+    for (const advisory of advisories) pairs.push(`${name} ${advisory}`);
+  }
+  return { pairs, unresolved };
+}
+
+/** Parovi `paket GHSA` koje pokrivaju iznimke: paket iz `packages` uz svaki advisory iz `advisories`. */
+function coveredPairs(ratchet) {
+  const out = new Set();
+  for (const exception of Array.isArray(ratchet?.exceptions) ? ratchet.exceptions : []) {
+    const packages = Array.isArray(exception?.packages) ? exception.packages : [];
+    const advisories = Array.isArray(exception?.advisories) ? exception.advisories : [];
+    for (const name of packages) for (const advisory of advisories) out.add(`${name} ${advisory}`);
+  }
+  return out;
+}
+
+/**
+ * Sinteticki `npm audit --json` za zadana imena: svaki paket dobiva izravne advisoryje iz iznimaka koje
+ * ga pokrivaju (ili `extra` po imenu). Sluzi selftestu i mutacijama da ne ovise o mrezi.
+ */
+export function syntheticAudit(ratchet, names, extra = {}) {
+  const byPackage = new Map();
+  for (const exception of Array.isArray(ratchet?.exceptions) ? ratchet.exceptions : []) {
+    for (const name of Array.isArray(exception?.packages) ? exception.packages : []) {
+      const list = byPackage.get(name) ?? [];
+      list.push(...(Array.isArray(exception?.advisories) ? exception.advisories : []));
+      byPackage.set(name, list);
+    }
+  }
+  const via = (name) => [...(byPackage.get(name) ?? []), ...(extra[name] ?? [])]
+    .map((id) => ({ severity: 'high', url: `https://github.com/advisories/${id}` }));
+  return { vulnerabilities: Object.fromEntries(names.map((name) => [name, { severity: 'high', via: via(name) }])) };
+}
+
+/**
+ * Usporedi broj, IDENTITET paketa i ADVISORY (T93). Sam broj ne vidi zamjenu jednog prihvacenog nalaza
+ * novim nalazom; samo ime paketa ne vidi NOVI advisory na vec prihvacenom paketu. Par (paket, GHSA)
+ * bez iznimke koja navodi upravo taj advisory je `above`, kao i paket bez prepoznatog GHSA id-a.
  */
 export function compareAuditToRatchet(auditJson, ratchet) {
   const parsed = parseAuditResponse(auditJson);
@@ -84,11 +155,17 @@ export function compareAuditToRatchet(auditJson, ratchet) {
   const base = compareToRatchet(packages.length, ratchet);
   const unexpectedPackages = packages.filter((name) => !expected.includes(name));
   const resolvedPackages = expected.filter((name) => !packages.includes(name));
+  const { pairs, unresolved } = highCriticalAdvisoryPairs(parsed);
+  const covered = coveredPairs(ratchet);
+  const uncoveredPairs = pairs.filter((pair) => !covered.has(pair));
+  const unresolvedPackages = unresolved;
+  const result = { ...base, packages, unexpectedPackages, resolvedPackages, uncoveredPairs, unresolvedPackages };
 
-  if (expected.length !== Number(ratchet?.fullGraphHighCritical) || unexpectedPackages.length > 0) {
-    return { ...base, verdict: 'above', packages, unexpectedPackages, resolvedPackages };
+  if (expected.length !== Number(ratchet?.fullGraphHighCritical) || unexpectedPackages.length > 0 ||
+      uncoveredPairs.length > 0 || unresolvedPackages.length > 0) {
+    return { ...result, verdict: 'above' };
   }
-  return { ...base, packages, unexpectedPackages, resolvedPackages };
+  return result;
 }
 
 function isoDate(value) {
@@ -111,6 +188,7 @@ export function validateRatchet(ratchet, { today = new Date().toISOString().slic
   }
 
   const covered = new Map();
+  const pairOwner = new Map();
   const exceptions = Array.isArray(ratchet?.exceptions) ? ratchet.exceptions : [];
   for (const [index, exception] of exceptions.entries()) {
     const label = `exceptions[${index}]`;
@@ -125,15 +203,29 @@ export function validateRatchet(ratchet, { today = new Date().toISOString().slic
         problems.push(`${label} ima pregled nakon isteka`);
       }
     }
+    if (!Array.isArray(exception?.advisories) || exception.advisories.length === 0) {
+      problems.push(`${label}.advisories je prazan (iznimka pokriva advisory, ne samo ime paketa)`);
+    } else {
+      for (const advisory of exception.advisories) {
+        if (typeof advisory !== 'string' || !GHSA_ID.test(advisory)) problems.push(`${label}.advisories ima nevaljan GHSA id ${JSON.stringify(advisory)}`);
+      }
+    }
     if (!Array.isArray(exception?.packages) || exception.packages.length === 0) {
       problems.push(`${label}.packages je prazan`);
       continue;
     }
-    for (const name of exception.packages) covered.set(name, (covered.get(name) ?? 0) + 1);
+    for (const name of exception.packages) {
+      covered.set(name, (covered.get(name) ?? 0) + 1);
+      for (const advisory of Array.isArray(exception?.advisories) ? exception.advisories : []) {
+        const pair = `${name} ${advisory}`;
+        if (pairOwner.has(pair)) problems.push(`${pair} je pokriven u ${pairOwner.get(pair)} i ${label}`);
+        else pairOwner.set(pair, label);
+      }
+    }
   }
+  // Paket smije biti u vise iznimki (po jedna po advisoryju), ali par (paket, advisory) samo u jednoj.
   for (const name of expected) {
     if (!covered.has(name)) problems.push(`${name} nema iznimku`);
-    else if (covered.get(name) !== 1) problems.push(`${name} je pokriven s ${covered.get(name)} iznimki`);
   }
   for (const name of covered.keys()) {
     if (!expected.includes(name)) problems.push(`${name} je iznimka bez aktivnog nalaza`);
@@ -146,7 +238,9 @@ export function formatVerdict(status) {
   const { verdict, count, ceiling, unexpectedPackages = [] } = status;
   if (verdict === 'above') {
     const identities = unexpectedPackages.length ? ` Novi identiteti: ${unexpectedPackages.join(', ')}.` : '';
-    return `FAIL: pun graf ima ${count} high/critical, strop je ${ceiling}.${identities} Rast nije dopusten; ili popravi, ili svjesno digni strop uz changeNote.`;
+    const pairs = status.uncoveredPairs?.length ? ` Advisory bez iznimke (paket GHSA): ${status.uncoveredPairs.join('; ')}.` : '';
+    const unresolved = status.unresolvedPackages?.length ? ` Bez prepoznatog GHSA id-a: ${status.unresolvedPackages.join(', ')}.` : '';
+    return `FAIL: pun graf ima ${count} high/critical, strop je ${ceiling}.${identities}${pairs}${unresolved} Rast nije dopusten; ili popravi, ili svjesno digni strop uz changeNote.`;
   }
   if (verdict === 'below') return `OK, ali strop je previsok: izmjereno ${count}, strop ${ceiling}. Spusti fullGraphHighCritical u data/security/npm-audit-ratchet.json.`;
   return `OK: pun graf ima ${count} high/critical, jednako stropu.`;

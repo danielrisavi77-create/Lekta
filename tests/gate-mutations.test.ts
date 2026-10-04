@@ -165,7 +165,7 @@ import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, m
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
-import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, syntheticAudit } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
@@ -381,6 +381,17 @@ const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 
 /** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
 const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
 const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
+
+/** Jezgra npm-audit ratcheta izvedena iz (mutiranog) izvora u memoriji; izvor nema importa (T93). */
+type RatchetCore = {
+  compareAuditToRatchet: typeof compareAuditToRatchet;
+  syntheticAudit: typeof syntheticAudit;
+  validateRatchet: (r: unknown, o?: { today?: string }) => string[];
+};
+function loadRatchetCore(src: string): RatchetCore {
+  const body = src.replace(/^export /gm, '');
+  return new Function(`${body}\nreturn { compareAuditToRatchet, syntheticAudit, validateRatchet };`)() as RatchetCore;
+}
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -3058,18 +3069,37 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       const packages = auditRatchet.fullGraphHighCriticalPackages;
       const mutated = [...packages.slice(0, -1), '__novi-ranjivi-paket__'];
-      const audit = { vulnerabilities: Object.fromEntries(mutated.map((name) => [name, { severity: 'high' }])) };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'above';
+      return compareAuditToRatchet(syntheticAudit(auditRatchet, mutated), auditRatchet).verdict === 'above';
     },
-    cleanBefore: () => {
-      const audit = {
-        vulnerabilities: Object.fromEntries(
-          auditRatchet.fullGraphHighCriticalPackages.map((name) => [name, { severity: 'high' }]),
-        ),
-      };
-      return compareAuditToRatchet(audit, auditRatchet).verdict === 'equal';
-    },
+    cleanBefore: () =>
+      compareAuditToRatchet(syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages), auditRatchet).verdict === 'equal',
   },
+  // T93 (Codex R1 na #246): iznimka pokriva par (paket, GHSA), ne samo ime paketa. Mutacije mijenjaju
+  // IZVOR jezgre (scripts/npm-audit-ratchet-core.mjs, bez importa) i izvrsavaju ga u memoriji.
+  ...([
+    ['t93/usporedba-bez-advisoryja', 'compareAuditToRatchet gleda samo ime i broj, pa novi GHSA na prihvacenom paketu prolazi',
+      'uncoveredPairs.length > 0 || unresolvedPackages.length > 0', 'false',
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+    ['t93/pokrice-po-imenu', 'iznimka pokriva paket za bilo koji advisory (pokrice po imenu, kao prije T93)',
+      'const uncoveredPairs = pairs.filter((pair) => !covered.has(pair));',
+      "const uncoveredPairs = pairs.filter((pair) => ![...covered].some((c) => c.split(' ')[0] === pair.split(' ')[0]));",
+      (core: RatchetCore) => core.compareAuditToRatchet(
+        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+    ['t93/validator-bez-advisoryja', 'iznimka bez advisories prolazi validaciju, pa pokriva sve buduce advisoryje paketa',
+      "problems.push(`${label}.advisories je prazan (iznimka pokriva advisory, ne samo ime paketa)`);", '',
+      (core: RatchetCore) => core.validateRatchet({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'],
+        exceptions: [{ owner: 'o', mitigation: 'm', nextReviewOn: '2999-01-01', expiresOn: '2999-01-02', packages: ['a'] }] }).length > 0],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T93: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadRatchetCore(mut));
+    },
+    cleanBefore: () => holds(loadRatchetCore(readTextLf(resolve(process.cwd(), 'scripts', 'npm-audit-ratchet-core.mjs')))),
+  })),
   /**
    * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
    * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
