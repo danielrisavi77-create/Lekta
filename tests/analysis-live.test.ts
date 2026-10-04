@@ -700,3 +700,110 @@ describe('Z33 gardovi (baseline; mutacije u gate-mutations.test.ts)', () => {
     expect(liveBoundaryProblems(izvori, 'src/ui/progress-scan.ts')).toEqual([]);
   });
 });
+
+
+/* ------------------------------------------------------------------------------------------ */
+/*
+ * CODEX KRUG NA #268 (Z33-01 do Z33-09). Svaki test ispod je prvo pokrenut nad 58cb5091 i ondje
+ * pao (dokaz nalaza), tek zatim je popravljen kod. KONTROLE (bez kvara) pokazuju da test mjeri
+ * ono sto tvrdi, a ne da je crven iz drugog razloga.
+ */
+
+/** Ekran provjere (s gumbom za prekid, kao u ruti) i ekran rezultata s kokpitom. */
+function ekran(): { v: HTMLElement; rv: HTMLElement; primarni: ReturnType<typeof vi.fn> } {
+  document.body.innerHTML = '<div id="progressView" role="status" aria-live="polite"><p class="pv-file">rad.docx</p>'
+    + '<h3>Provjeravam rad</h3><p class="sr-only" id="progressMessage">Gotovo</p><p class="pv-local">x</p>'
+    + '<div class="progress-actions"><button type="button" id="cancelAnalysisBtn">Prekini</button></div></div>'
+    + '<div id="resultView"><div id="resultCockpit"><h2 id="cockpitVerdictTitle">Nije spremno za predaju</h2>'
+    + '<button type="button" data-cockpit-primary data-cockpit-action="repair-safe">Napravi plan popravka</button></div></div>';
+  const primarni = vi.fn();
+  const rv = document.getElementById('resultView')!;
+  rv.querySelector('[data-cockpit-primary]')!.addEventListener('click', primarni);
+  return { v: document.getElementById('progressView')!, rv, primarni };
+}
+const spremnost = async (rv: HTMLElement): Promise<void> => {
+  rv.setAttribute('data-result-ready', '0');
+  await Promise.resolve();
+  rv.setAttribute('data-result-ready', '1');
+  await vi.advanceTimersByTimeAsync(0);
+};
+const siroko = (): boolean => window.matchMedia?.('(min-width: 980px)')?.matches ?? true;
+const faza = (v: HTMLElement): string | null => v.querySelector('.z33')!.getAttribute('data-phase');
+
+describe('Z33-01, Z33-05 i Z33-12: osigurac otkrivanja i skrol', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    document.body.innerHTML = '';
+    delete document.documentElement.dataset.motion;
+  });
+
+  it('Z33-01: osigurac otkrivanja A ne zavrsava otkrivanje B koje je pocelo prije njegova isteka', async () => {
+    const { v } = ekran();
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const dA = revealDuration(buildLivePlan(sampleResult()), siroko());
+    const a = h.reveal(sampleResult());
+    await vi.advanceTimersByTimeAsync(100);
+    v.querySelector<HTMLButtonElement>('[data-z33="skip"]')!.click();
+    await a;
+    // Osigurac A bi opalio u dA + 500; B pocinje 100 ms prije toga.
+    await vi.advanceTimersByTimeAsync(dA + 400 - 100);
+    h.start(null);
+    let gotovB = false;
+    const b = h.reveal(sampleResult()).then(() => { gotovB = true; });
+    await vi.advanceTimersByTimeAsync(250);
+    expect(gotovB, 'osigurac prethodnog otkrivanja je zavrsio novo').toBe(false);
+    expect(faza(v)).toBe('revealing');
+    await vi.advanceTimersByTimeAsync(dA + 1000);
+    await b;
+    expect(gotovB).toBe(true);
+    expect(faza(v)).toBe('final');
+  });
+
+  it('Z33-05 KONTROLA: bez prigusenja i bez korisnikova skrola skrol do presude je gladak, tocno jednom', async () => {
+    const { v } = ekran();
+    const skrol = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const p = h.reveal(sampleResult());
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    expect(skrol.mock.calls.map(([o]) => (o as ScrollIntoViewOptions | undefined)?.behavior)).toEqual(['smooth']);
+  });
+
+  it('Z33-05/12: prigusen pokret ukljucen usred otkrivanja: otkrivanje zavrsava odmah, glatkog skrola nema', async () => {
+    const { v } = ekran();
+    const skrol = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    let gotovo = false;
+    const p = h.reveal(sampleResult()).then(() => { gotovo = true; });
+    await vi.advanceTimersByTimeAsync(300);
+    document.documentElement.dataset.motion = 'reduce';
+    await vi.advanceTimersByTimeAsync(100);
+    expect(gotovo, 'tipkanje i let se nastavljaju pod prigusenim pokretom').toBe(true);
+    expect(faza(v)).toBe('final');
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    expect(skrol.mock.calls.filter(([o]) => (o as ScrollIntoViewOptions | undefined)?.behavior === 'smooth')).toEqual([]);
+  });
+
+  it('Z33-05: korisnik je sam skrolao tijekom otkrivanja: stranica mu ne otima prikaz', async () => {
+    const { v } = ekran();
+    const skrol = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+    const h = mountAnalysisLive(v);
+    vi.useFakeTimers();
+    h.start(null);
+    const p = h.reveal(sampleResult());
+    await vi.advanceTimersByTimeAsync(300);
+    window.dispatchEvent(new Event('wheel'));
+    await vi.advanceTimersByTimeAsync(10_000);
+    await p;
+    expect(skrol).not.toHaveBeenCalled();
+  });
+});

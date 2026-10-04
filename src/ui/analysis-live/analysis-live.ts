@@ -161,6 +161,9 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   });
 
   let loop = 0;
+  // Osigurac otkrivanja (Z33-01): svako otkrivanje ima svoj, a `stop` ga gasi, pa osigurac
+  // preskocenog ili zamijenjenog otkrivanja ne moze zavrsiti sljedece.
+  let ograda = 0;
   let finish: ((prirodno: boolean) => void) | null = null;
   let clones: HTMLElement[] = [];
   let flown = new Set<number>();
@@ -179,6 +182,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   const stop = (prirodno = false): void => {
     if (loop) cancelAnimationFrame(loop);
     loop = 0;
+    window.clearTimeout(ograda);
+    ograda = 0;
     clones.forEach((c) => c.remove());
     clones = [];
     const f = finish;
@@ -356,9 +361,10 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     } catch { /* obavijest je usluga, ne uvjet */ }
   }
 
-  function toVerdict(smooth: boolean): void {
+  // Glatko samo kad korisnik ne trazi prigusen pokret (Z33-05); postavka se cita u trenutku skrola.
+  function toVerdict(): void {
     const target = q('verdictslot');
-    try { target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' }); } catch { /* stari preglednik */ }
+    try { target.scrollIntoView({ behavior: pokretPrigusen(document) ? 'auto' : 'smooth', block: 'start' }); } catch { /* stari preglednik */ }
   }
 
   // Sva tri izlaza zavrsavaju otkrivanje odmah (zavrsno stanje, rezultat preuzima ekran); razlikuju
@@ -415,8 +421,16 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       return new Promise<void>((resolve) => {
         const t0 = performance.now();
         const onHidden = (): void => { if (document.hidden) stop(true); };
+        // Korisnik koji sam pomakne prikaz (kotacic, prst, tipke za skrol) cita ili dodiruje nesto
+        // drugo: otkrivanje mu tada ne odvlaci stranicu do presude (Z33-05).
+        const SKROL_TIPKE = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
+        const onUserScroll = (e: Event): void => {
+          if (e.type !== 'keydown' || SKROL_TIPKE.has((e as KeyboardEvent).key)) scrolled = true;
+        };
+        const SKROL_DOGADAJI = ['wheel', 'touchmove', 'keydown'] as const;
         finish = (prirodno) => {
           document.removeEventListener('visibilitychange', onHidden);
+          for (const d of SKROL_DOGADAJI) window.removeEventListener(d, onUserScroll);
           // Fokus je bio na gumbu koji sad nestaje (otkrivanje je zavrsilo samo od sebe): bez ovoga
           // pada na `body`. Klik vec ceka spremnost rezultata u `izadji`.
           const fokusNestaje = prirodno && !rucniIzlaz && (document.activeElement === skipBtn || document.activeElement === notifyBtn);
@@ -429,19 +443,24 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
           resolve();
         };
         document.addEventListener('visibilitychange', onHidden);
+        for (const d of SKROL_DOGADAJI) window.addEventListener(d, onUserScroll, { passive: true });
         // Prvi okvir otkrivanja odmah, ne tek u sljedecem kadru: "Preskoči" postoji od pocetka.
         apply(revealFrame(plan, 0, wide), plan);
         const tick = (): void => {
+          // Prigusen pokret ukljucen usred otkrivanja (Z33-12): CSS gasi animacije, ali tipkanje,
+          // let cedulja i skrol idu iz JS-a, pa se otkrivanje odmah zavrsava.
+          if (pokretPrigusen(document)) { loop = 0; stop(true); return; }
           const frame = revealFrame(plan, performance.now() - t0, wide);
           apply(frame, plan);
-          if (frame.scrollToVerdict && !scrolled) { scrolled = true; toVerdict(true); }
+          if (frame.scrollToVerdict && !scrolled) { scrolled = true; toVerdict(); }
           if (frame.done) { loop = 0; stop(true); return; }
           loop = requestAnimationFrame(tick);
         };
         loop = requestAnimationFrame(tick);
         // Ograda: rAF stoji u nekim okruzenjima (pozadinska kartica, testni preglednik bez slika);
         // rezultat ne smije cekati dulje od otkrivanja ni tada.
-        window.setTimeout(() => { if (finish) stop(true); }, revealDuration(plan, wide) + 500);
+        const ovaj = finish;
+        ograda = window.setTimeout(() => { if (finish === ovaj) stop(true); }, revealDuration(plan, wide) + 500);
       });
     },
   };
