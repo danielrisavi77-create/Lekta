@@ -186,7 +186,7 @@ function pageShell({ title, description, canonical, bodyHtml, jsonLd }) {
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
-<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
+<div class="lekta-brand"><a href="/">Lekta</a><span>Besplatan alat, bez registracije</span></div>
 ${bodyHtml}
 </body>
 </html>
@@ -247,7 +247,7 @@ export function buildUnitPage(template, meta, disambiguate, engine) {
 
   const ctaParams = new URLSearchParams({ fakultet: unitId, utm_source: 'alat_naslovnica_seo', utm_medium: 'organic' });
   if (level) ctaParams.set('razina', engine.LEVEL_SLUGS[level]);
-  const ctaHref = `${SITE_ORIGIN}/naslovnica.html?${ctaParams.toString()}`;
+  const ctaHref = `/naslovnica.html?${ctaParams.toString()}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
