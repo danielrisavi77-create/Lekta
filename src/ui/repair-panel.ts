@@ -81,7 +81,11 @@ export interface CitationBibliographySyncFormDefinition {
     reason: string;
     selected: boolean;
   }>;
-  missingEntries: Array<{ id: string; citationId: string; text: string; selected: boolean }>;
+  /**
+   * Z36: `templateAvailable` kaze smije li prazan `text` dati predlozak (zagradni citat s pouzdanim
+   * prezimenom); bez toga redak trazi upisani zapis, a plan ga bez teksta ne salje.
+   */
+  missingEntries: Array<{ id: string; citationId: string; text: string; selected: boolean; templateAvailable: boolean }>;
   duplicates: Array<{ entryId: string; rawText: string; selected: boolean }>;
   summary: string;
   buildParams: (form: CitationBibliographySyncFormDefinition) => Record<string, unknown>;

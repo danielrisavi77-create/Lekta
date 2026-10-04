@@ -17,11 +17,12 @@ import { citationBibliographySyncFixer } from '../src/repair/citation-bibliograp
 import { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
 import { parseContractRequests } from '../src/repair/contract';
 import { applyFixers } from '../src/repair/apply-fixers';
-import { citationBibliographySyncRepairableItem } from '../src/ui/repair-items';
+import { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../src/ui/repair-items';
+import { PARAM_AUTHORITY, resolveParams } from '../src/repair/param-authority';
 import { packageDoc, paragraph, documentXml } from './helpers/repair-templates';
 import { runClosedLoopCase, documentText } from './helpers/closed-loop-runner';
 import { readZip } from '../src/repair/zip-codec';
-import { entryText, paragraphTexts, planZapisaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { entryText, paragraphTexts, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
@@ -190,5 +191,60 @@ describe('Z36 kroz cijeli lanac: analiza, plan, ugovor, popravak, ponovna analiz
     // Izmjereno, ne pretpostavljeno: parser literature [Naslov djela] cita kao naslov.
     expect(inserted?.flags ?? []).not.toContain('missing-title');
     expect(analyzeBibliographyStructure(afterTexts.map((text, i) => ({ index: i + 1, text })), 'hr').alphabetical.expected).toBe(true);
+  }, 60_000);
+
+  it('citat u odlomku s Wordovom oznakom (_GoBack): predlozak i korisnikov zapis prolaze cijeli lanac', async () => {
+    const marked = 'Tekst koji navodi izvor (Novak, 2022) i drugi (Horvat, 2020) te (Zorić, 2021).';
+    const bytes = await packageDoc({
+      documentXml: documentXml(`<w:p><w:bookmarkStart w:id="0" w:name="_GoBack"/><w:r><w:t>${marked}</w:t></w:r><w:bookmarkEnd w:id="0"/></w:p>${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(entryText('Zorić', '2021'))}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-oznaka.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    expect(before.details.citationBibliographySync.missingEntries.map((citation: any) => citation.author)).toEqual(['Novak']);
+    for (const text of ['', 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.']) {
+      const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true }, text);
+      const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }]);
+      expect(applied.integrityFailure ?? null, text || 'predlozak').toBeNull();
+      expect(applied.changelog.length, text || 'predlozak').toBe(1);
+      expect(await bodyParagraphs(applied.docxBytes)).toContain(text || template('Novak', '2022'));
+    }
+  }, 60_000);
+
+  it('narativni citat: plan nudi redak, ali bez upisanog teksta ne salje predlozak', async () => {
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${paragraph('Prema Novaku (2022) tekst rada, uz (Horvat, 2020) i (Zorić, 2021).')}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(entryText('Zorić', '2021'))}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-narativ.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    const missing = before.details.citationBibliographySync.missingEntries;
+    // Generator: analiza stvarno javlja narativni citat bez zapisa.
+    expect(missing.map((citation: any) => citation.form)).toEqual(['narrative']);
+    const [empty] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true });
+    expect(empty.citationBibliographySyncForm?.missingEntries.map((row) => row.templateAvailable)).toEqual([false]);
+    expect((empty.params as { entries: Array<{ action: string }> }).entries.filter((entry) => entry.action === 'add')).toEqual([]);
+    const [typed] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true }, 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.');
+    const applied = await applyFixers(bytes, [{ fixerId: typed.fixerId, ruleId: typed.ruleId, params: typed.params }]);
+    expect(await bodyParagraphs(applied.docxBytes)).toContain('Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.');
+  }, 60_000);
+});
+
+describe('Z36 serverska dozvola (param-authority)', () => {
+  it('gard: dozvolu daje samo peceni profil; tri uvjeta profila', () => {
+    expect(serverDozvolaProblemi(resolveParams, citationEntryInsertionAllowed)).toEqual([]);
+  });
+
+  it('danas nijedan peceni profil nema dozvolu, pa server iz stvarnog plana uklanja svaki dodani zapis', async () => {
+    const baked = Object.entries(PARAM_AUTHORITY).filter(([, rules]) => Object.values(rules).some((rule) => rule.f === 'citation-bibliography-sync-fixer'));
+    expect(baked).toEqual([]);
+    const bytes = await brokenDoc();
+    const before = await analyzeFixture(new File([bytes], 'z36-server.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true });
+    const sent = item.params as { entries: Array<{ action: string }>; mappings: unknown[] };
+    expect(sent.entries.filter((entry) => entry.action === 'add')).toHaveLength(1);
+    const resolved = resolveParams(PROFILE_ID, item.ruleId, item.fixerId, item.params as Record<string, unknown>);
+    expect((resolved.params.entries as Array<{ action: string }>).filter((entry) => entry.action === 'add')).toEqual([]);
+    expect(resolved.params.mappings).toEqual([]);
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: resolved.params }]);
+    expect(await bodyParagraphs(applied.docxBytes)).not.toContain(template('Novak', '2022'));
   }, 60_000);
 });

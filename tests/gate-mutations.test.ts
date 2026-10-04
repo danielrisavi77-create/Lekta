@@ -215,13 +215,15 @@ import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/han
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
 import { buildRepairPanelHandle, classifyRepairReport, renderTableFigureRescueControls } from '../src/ui/repair-panel';
-import { citationBibliographySyncRepairableItem, tableFigureRescueRepairableItem } from '../src/ui/repair-items';
+import { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed, tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import * as citationSyncModul from '../src/analysis/citation-bibliography-sync';
 import * as bibliographyStructureModul from '../src/analysis/bibliography-structure';
 import * as authorYearModul from '../src/citations/author-year';
+import * as helpersModul from '../src/utils/helpers';
+import { PARAM_AUTHORITY, type resolveParams } from '../src/repair/param-authority';
 import type { citationBibliographySyncFixer } from '../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
-import { planZapisaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
@@ -1118,16 +1120,27 @@ function z36Izvrsi(putanja: string, uvozi: Record<string, unknown>, od?: string,
   return modul.exports;
 }
 
-const z36Fixer = (od?: string, u?: string) => z36Izvrsi('src/repair/citation-bibliography-sync-fixer.ts', {
-  '../analysis/citation-bibliography-sync.ts': citationSyncModul,
+const z36Fixer = (od?: string, u?: string, analiza: Record<string, unknown> = citationSyncModul) => z36Izvrsi('src/repair/citation-bibliography-sync-fixer.ts', {
+  '../analysis/citation-bibliography-sync.ts': analiza,
   '../analysis/bibliography-structure.ts': bibliographyStructureModul,
   '../citations/author-year.ts': authorYearModul,
 }, od, u).citationBibliographySyncFixer as typeof citationBibliographySyncFixer;
 
+/** Fixer s mutiranim uvjetom izvora predloska (`entryTemplateSource` u analizi sinkronizacije). */
+const z36FixerSAnalizom = (od: string, u = '') => z36Fixer(undefined, undefined, z36Izvrsi('src/analysis/citation-bibliography-sync.ts', {
+  '../citations/author-year.ts': authorYearModul,
+  '../utils/helpers.ts': helpersModul,
+}, od, u));
+
 const z36Server = (od?: string, u?: string) => z36Izvrsi('src/repair/contract/assisted-request-policy.ts', {}, od, u)
   .validateAssistedParams as typeof validateAssistedParams;
 
+const z36Autoritet = (od?: string, u?: string) => z36Izvrsi('src/repair/param-authority.ts', {
+  '../../data/generated/repair-params-by-profile.json': PARAM_AUTHORITY,
+}, od, u).resolveParams as typeof resolveParams;
+
 const z36FixerCist = () => zapisLiteratureProblemi(z36Fixer()).length === 0;
+const z36DozvolaCista = () => serverDozvolaProblemi(z36Autoritet(), citationEntryInsertionAllowed).length === 0;
 
 const MUTATIONS: Mutation[] = [
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
@@ -7492,18 +7505,26 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'z36/kolacija-po-kodnim-tockama',
-    imitates: 'mjesto predloska trazi se usporedbom po kodnim tockama umjesto hr kolacije kojom sudi provjera '
-      + 'abecede, pa "Ćaćić" stane ispred "Čuljak" i popravak sam obori "Abecedni poredak literature"',
-    caught: () => zapisLiteratureProblemi(z36Fixer('entry.sortKey.localeCompare(key, language) > 0', 'entry.sortKey > key'))
-      .some((p) => p.startsWith('dijakritika:')),
+    imitates: 'poredak se sudi usporedbom po kodnim tockama umjesto kolacije kojom sude provjere abecede, pa '
+      + '"Čapek" (č je iza svih ASCII slova) zavrsi iza "Dorn" i popravak sam obori "Abecedni poredak literature"',
+    caught: () => zapisLiteratureProblemi(z36Fixer('const sorted = [...keys].sort((a, b) => a.localeCompare(b, collation));', 'const sorted = [...keys].sort();'))
+      .some((p) => p.startsWith('kolacija:') || p.startsWith('dijakritika:') || p.startsWith('abeceda:')),
     cleanBefore: z36FixerCist,
   },
   {
     id: 'z36/kolacija-bez-jezika-profila',
-    imitates: 'predlozak se razvrstava korijenskom (en) kolacijom u kojoj je c isto sto i č, pa "Čavić" '
-      + 'stane ispred "Cvitan", iako hr provjera abecede trazi č iza svih c',
-    caught: () => zapisLiteratureProblemi(z36Fixer('entry.sortKey.localeCompare(key, language) > 0', "entry.sortKey.localeCompare(key, 'en') > 0"))
-      .some((p) => p.startsWith('dijakritika:č')),
+    imitates: 'bodovana provjera se oponasa kolacijom jezika popisa (en) umjesto hr kojom stvarno sudi '
+      + 'analyze-docx, pa u en popisu "Čapek" stane ispred "Cook" i bodovana provjera abecede padne',
+    caught: () => zapisLiteratureProblemi(z36Fixer("const SCORED_COLLATION = 'hr';", "const SCORED_COLLATION = 'en';"))
+      .some((p) => p.startsWith('kolacija:en-popis')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/strukturna-provjera-pobjedjuje-bodovanu',
+    imitates: 'kad nijedno mjesto ne cuva obje provjere poretka (en popis s dijakritikom), prednost dobiva '
+      + 'strukturna provjera po jeziku popisa, pa padne bodovana "Abecedni poredak literature"',
+    caught: () => zapisLiteratureProblemi(z36Fixer('(keepsBoth.length ? keepsBoth : keepsScored)', '(keepsBoth.length ? keepsBoth : positions.filter((position) => structureSorted(withProbe(position), language)))'))
+      .some((p) => p.startsWith('kolacija:en-popis')),
     cleanBefore: z36FixerCist,
   },
   {
@@ -7511,16 +7532,56 @@ const MUTATIONS: Mutation[] = [
     imitates: 'predlozak ide iza zadnjeg zapisa kao korisnikov tekst (zateceno ponasanje prije Z36), a ne '
       + 'na abecedno mjesto koje je vlasnik trazio',
     caught: () => {
-      const problemi = zapisLiteratureProblemi(z36Fixer('entry.sortKey.localeCompare(key, language) > 0', 'false'));
+      const problemi = zapisLiteratureProblemi(z36Fixer('chosen = (keepsBoth.length ? keepsBoth : keepsScored).at(-1);', 'chosen = entries.length;'));
       return problemi.some((p) => p.startsWith('abeceda:pocetak')) && problemi.some((p) => p.startsWith('abeceda:sredina'));
     },
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/zapis-bez-autora-izvan-poretka',
+    imitates: 'mjesto se bira samo po zapisima s autorom (stanje kruga 1), pa zakon "Zakon o ..." bez autora '
+      + 'ostane ispred predloska "Novak" i popravak obori strukturnu provjeru abecede',
+    caught: () => zapisLiteratureProblemi(z36Fixer('entries.map((entry) => entry.sortKey || entry.exactKey)', 'entries.filter((entry) => !!entry.sortKey).map((entry) => entry.sortKey)'))
+      .some((p) => p.startsWith('bez-autora')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/popis-lijepi-sekciju-iza-literature',
+    imitates: 'fixer cita popis bez razina naslova i bez reza na sidru, pa zapis s DOI-jem na kraju povuce '
+      + 'naslov "Popis priloga" i tekst iza njega, a predlozak "na kraj popisa" zavrsi u drugoj sekciji rada',
+    caught: () => zapisLiteratureProblemi(z36Fixer('const upToAnchor = paragraphs.filter((paragraph) => paragraph.index <= anchorIndex);', 'const upToAnchor = paragraphs;'))
+      .some((p) => p.startsWith('naslov-iza-popisa')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/nepromijenjen-citat-trazi-cist-odlomak',
+    imitates: 'citat koji se samo cita (izvor predloska ili veza uz korisnikov zapis) prolazi istu provjeru '
+      + 'kao citat koji se pise, pa Wordova oznaka _GoBack u odlomku srusi cijelu stavku',
+    caught: () => zapisLiteratureProblemi(z36Fixer("if (!range || !block) return noOp(parts, 'unsupported-structure');", "if (!range || !block || unsupported(block)) return noOp(parts, 'unsupported-structure');"))
+      .some((p) => p.startsWith('oznaka:')),
     cleanBefore: z36FixerCist,
   },
   {
     id: 'z36/narativni-padez-u-zapisu',
     imitates: 'prezime se cita i iz narativnog citata ("Prema Novaku (2022)"), pa zapis literature nosi '
       + 'sklonjeni oblik "Novaku" koji nijedan izvor ne potvrdjuje',
-    caught: () => zapisLiteratureProblemi(z36Fixer("detail.form === 'parenthetical' && ", '')).some((p) => p.startsWith('padez')),
+    caught: () => zapisLiteratureProblemi(z36FixerSAnalizom("if (citation.form !== 'parenthetical') return null;")).some((p) => p.startsWith('padez')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/uvod-citata-kao-prezime',
+    imitates: 'izvor predloska prihvaca svaki autor koji pocinje slovom (stanje kruga 1), pa "(e.g., Novak, 2022)" '
+      + 'ili "(npr. Novak, 2022)" daju zapis "e.g., [ime]." ili "npr. Novak, [ime]."',
+    caught: () => zapisLiteratureProblemi(z36FixerSAnalizom("!words.every((word) => /^\\p{Lu}[\\p{L}'’-]+$/u.test(word))", '!/^\\p{L}/u.test(author)'))
+      .some((p) => p.startsWith('uvod:e.g.') || p.startsWith('uvod:npr.')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/uvod-velikim-slovom-kao-prezime',
+    imitates: 'uvod u citat napisan velikim slovom ("See Novak", "Usporedi Novak") izgleda kao dvorijecno '
+      + 'prezime i ulazi u zapis literature',
+    caught: () => zapisLiteratureProblemi(z36FixerSAnalizom("if (NOT_SURNAME.has(words[0].toLocaleLowerCase('hr'))) return null;"))
+      .some((p) => p.startsWith('uvod:See') || p.startsWith('uvod:Usporedi')),
     cleanBefore: z36FixerCist,
   },
   {
@@ -7540,6 +7601,35 @@ const MUTATIONS: Mutation[] = [
     caught: () => serverZapisaProblemi(z36Server('(literal || item.citationId !== undefined)', 'true'))
       .some((p) => p.includes('bez teksta i bez citata')),
     cleanBefore: () => serverZapisaProblemi(z36Server()).length === 0,
+  },
+  {
+    id: 'z36/plan-nudi-predlozak-za-narativ',
+    imitates: 'plan ne gleda oblik citata, pa narativni redak bez upisanog teksta posalje kao predlozak koji '
+      + 'fixer uvijek preskoci; placeni zahvat zavrsi bez ijedne izmjene',
+    caught: () => planZapisaProblemi((result, profile) => {
+      const sync = result.details.citationBibliographySync;
+      const svi = sync.missingEntries.map((citation: Record<string, unknown>) => ({ ...citation, form: 'parenthetical' }));
+      return citationBibliographySyncRepairableItem({ ...result, details: { ...result.details, citationBibliographySync: { ...sync, citations: svi, missingEntries: svi } } }, profile);
+    }).some((p) => p.startsWith('narativ:')),
+    cleanBefore: () => planZapisaProblemi(citationBibliographySyncRepairableItem).length === 0,
+  },
+  {
+    id: 'z36/server-propusta-add-bez-dozvole',
+    imitates: 'dozvolu umetanja zapisa provodi samo plan (stanje kruga 1), pa rucno slozen zahtjev za profil '
+      + 'bez allowMissingEntryInsertion na serveru umetne predlozak ili korisnikov tekst',
+    caught: () => serverDozvolaProblemi(z36Autoritet('params: allowed ? clientParams : withoutEntryInsertion(clientParams)', 'params: clientParams'), citationEntryInsertionAllowed)
+      .some((p) => p.startsWith('dozvola-server:')),
+    cleanBefore: z36DozvolaCista,
+  },
+  {
+    id: 'z36/dozvola-bez-verificiranog-pravila',
+    imitates: 'uvjet dozvole cita samo vrijednost pravila, ne i njegovu verifikaciju, pa nacrt pravila bez '
+      + 'stranice izvora otvori umetanje zapisa u peceni serverski autoritet',
+    caught: () => serverDozvolaProblemi(z36Autoritet(), (profile) => citationEntryInsertionAllowed({
+      ...profile,
+      ruleEntries: (profile.ruleEntries as Array<Record<string, unknown>>).map((entry) => ({ ...entry, status: 'verified', sourcePage: entry.sourcePage ?? '1' })),
+    })).some((p) => p.startsWith('dozvola-profil:')),
+    cleanBefore: z36DozvolaCista,
   },
 
 ];

@@ -22,6 +22,7 @@ import { formatCitation, type CitationStyle } from '../tools/citation';
 import type { BibliographyEnrichmentCandidate } from '../citations/bibliography-enrichment';
 import { canonicalizeLinkForRepair } from '../analysis/link-doi-structure';
 import { submissionMetadataFingerprint } from '../analysis/cross-file-submission-consistency';
+import { entryTemplateSource } from '../analysis/citation-bibliography-sync';
 
 /** Minimalni oblik provjere iz analyzeDocx rezultata (result.checks[]). */
 export interface AnalyzedCheck {
@@ -878,9 +879,25 @@ export function elementCaptionRepairableItem(result: any, profile: any): Repaira
   }];
 }
 
-export function citationBibliographySyncRepairableItem(result: any, profile: any): RepairableItem[] {
+/** Vrijednost verificiranog pravila sinkronizacije citata i literature, ili undefined. */
+function citationSyncRules(profile: any): any {
   const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'citation-sync-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
-  const rules = ruleEntry?.value;
+  return ruleEntry?.value;
+}
+
+/**
+ * Z36: smije li profil umetati zapise literature (verificirano citation-sync-rules, nacin author-year,
+ * allowMissingEntryInsertion). Isti uvjet cita plan (nudi li retke "Nedostajući zapisi") i recept
+ * (src/repair/recipe.ts), iz kojeg se pece serverski autoritet: server bez pecene dozvole profila
+ * uklanja svaki 'add' iz zahtjeva (src/repair/param-authority.ts).
+ */
+export function citationEntryInsertionAllowed(profile: any): boolean {
+  const rules = citationSyncRules(profile);
+  return rules?.mode === 'author-year' && rules.allowMissingEntryInsertion === true;
+}
+
+export function citationBibliographySyncRepairableItem(result: any, profile: any): RepairableItem[] {
+  const rules = citationSyncRules(profile);
   const structure = result?.details?.bibliographyStructure;
   const sync = result?.details?.citationBibliographySync;
   if (!rules || rules.mode !== 'author-year' || !sync?.citations?.length) return [];
@@ -900,10 +917,12 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
   const lastEntry = bibliographyEntries.at(-1);
   // Z36 (1): plan nudi dodavanje zapisa SAMO kad ga profil dopusta i postoji zapis uz koji se umece;
   // inace bi ponudjeni redak na serveru pao kao nepoznat zapis i srusio cijelu stavku.
-  const insertionAllowed = rules.allowMissingEntryInsertion === true && !!lastEntry;
-  const missingEntries = insertionAllowed
-    ? (Array.isArray(sync.missingEntries) ? sync.missingEntries : []).map((citation: any) => ({ id: `sync-entry-${citation.id}`, citationId: String(citation.id), text: '', selected: false }))
-    : [];
+  const insertionAllowed = citationEntryInsertionAllowed(profile) && !!lastEntry;
+  const missingCitations: any[] = insertionAllowed && Array.isArray(sync.missingEntries) ? sync.missingEntries : [];
+  // Z36: predlozak bez upisanog teksta samo za citat iz kojeg fixer sigurno cita prezime i godinu (isti
+  // uvjet, entryTemplateSource). Narativni citat ili autor s uvodom ("see", "npr.") trazi upisani zapis.
+  const templateCitationIds = new Set(missingCitations.filter((citation) => entryTemplateSource(citation)).map((citation) => String(citation.id)));
+  const missingEntries = missingCitations.map((citation: any) => ({ id: `sync-entry-${citation.id}`, citationId: String(citation.id), text: '', selected: false, templateAvailable: templateCitationIds.has(String(citation.id)) }));
   const duplicates = (Array.isArray(sync.duplicateCandidates) ? sync.duplicateCandidates : []).flatMap((group: any) => (group.entryIds || []).slice(1).map((entryId: string) => {
     const entry = bibliographyEntries.find((candidate: any) => String(candidate.id) === String(entryId));
     return { entryId: String(entryId), rawText: String(entry?.rawText || ''), selected: false };
@@ -923,7 +942,9 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
       if (!original) return [];
       return [{ id: citation.id, paragraphIndex: Number(original.paragraphIndex), start: Number(original.start), end: Number(original.end), anchorFingerprint: String(original.anchorFingerprint), replacementText: citation.replacementText.slice(0, 1000), reason: citation.reason }];
     });
-    const addedMissing = insertionAllowed ? current.missingEntries.filter((missing) => missing.selected) : [];
+    // Bez upisanog teksta redak ide samo kad fixer iz citata moze sloziti predlozak; inace bi placeni
+    // zahvat zavrsio kao preskocen.
+    const addedMissing = insertionAllowed ? current.missingEntries.filter((missing) => missing.selected && (missing.text.trim() || templateCitationIds.has(missing.citationId))) : [];
     // Z36: citat uz koji se dodaje zapis ide u zahtjev nepromijenjen (otisak ga provjerava, a fixer iz
     // njega cita prezime i godinu predloska); bez njega bi potvrdjena veza pala kao nepoznat citat.
     for (const missing of addedMissing) {

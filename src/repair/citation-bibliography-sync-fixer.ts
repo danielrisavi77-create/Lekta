@@ -1,4 +1,4 @@
-import { citationAnchorFingerprint } from '../analysis/citation-bibliography-sync.ts';
+import { citationAnchorFingerprint, entryTemplateSource } from '../analysis/citation-bibliography-sync.ts';
 import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../analysis/bibliography-structure.ts';
 import { extractCitationOccurrences } from '../citations/author-year.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
@@ -188,44 +188,77 @@ function validateParams(params: CitationBibliographySyncParams): boolean {
 /**
  * Z36: prezime i godina citata, procitani ISTIM parserom kojim ih je nasla analiza
  * (`extractCitationOccurrences`), nad tekstom odlomka u dokumentu, nikad iz klijentova teksta.
- * Samo zagradni oblik "(Novak, 2022)": u narativnom ("prema Novaku (2022)") prezime moze biti
- * sklonjeno, pa bi zapis nosio krivi oblik. Bez sigurnog izvora vraca null i nista se ne umece.
+ * Sigurnost izvora (zagradni oblik, prezime bez uvoda poput "see" ili "npr.") presuđuje
+ * `entryTemplateSource`, isti uvjet po kojem plan nudi predlozak. Bez sigurnog izvora vraca null.
  */
 function citationSource(text: string, start: number, end: number | null): { author: string; year: string } | null {
   const found = extractCitationOccurrences([{ index: 1, text }])
-    .find((detail) => detail.form === 'parenthetical' && detail.start === start && (end === null || detail.end === end));
-  // Parser ostavlja trag skracenice ("Kovač et al." daje "Kovač ."); zapis nosi samo prezime.
-  const author = found?.author.replace(/[\s.,;:]+$/u, '') ?? '';
-  if (!author || !found?.year || /\d/.test(author) || !/^\p{L}/u.test(author)) return null;
-  return { author, year: found.year };
+    .find((detail) => detail.start === start && (end === null || detail.end === end));
+  return found ? entryTemplateSource(found) : null;
 }
 
-interface ListPosition { offset: number; key: string; language: 'hr' | 'en'; }
+/** Kolacija bodovane provjere "Abecedni poredak literature" (analyze-docx): uvijek hr. */
+const SCORED_COLLATION = 'hr';
+
+type ListEntry = ReturnType<typeof analyzeBibliographyStructure>['entries'][number];
+interface ListPosition { offset: number; key: string; }
+
+function sortedBy(keys: string[], collation: string): boolean {
+  const sorted = [...keys].sort((a, b) => a.localeCompare(b, collation));
+  return keys.every((key, index) => key === sorted[index]);
+}
+
+/** Bodovana provjera: samo zapisi s autorom, kljuc `sortKey`, hr kolacija. */
+const scoredSorted = (entries: ListEntry[]) => sortedBy(entries.flatMap((entry) => (entry.sortKey ? [entry.sortKey] : [])), SCORED_COLLATION);
+/** Strukturna provjera (`alphabetical.expected`): svi zapisi, `sortKey` ili kanonski tekst, jezik popisa. */
+const structureSorted = (entries: ListEntry[], language: 'hr' | 'en') => sortedBy(entries.map((entry) => entry.sortKey || entry.exactKey), language);
 
 /**
- * Z36: abecedno mjesto predloska. Zapise i kljuc racuna ISTA analiza koja sudi "Abecedni poredak
- * literature" (`analyzeBibliographyStructure`, `sortKey`, hr ili en kolacija), pa umetnuti zapis ne
- * moze srusiti provjeru koju bi trebao postovati. Jezik je onaj u kojem analiza prepoznaje popis sa
- * sidrom. Gledaju se samo zapisi do sidra (zadnjeg zapisa analize); popis se ne preslaguje, nego
- * zapis ide ispred prvog zapisa s vecim kljucem, inace iza zadnjeg.
+ * Z36: abecedno mjesto predloska. Zapise racuna ISTA analiza koja sudi poredak
+ * (`analyzeBibliographyStructure`), i to samo nad odlomcima do sidra (zadnjeg zapisa koji je plan
+ * vidio): analiza se zaustavlja na sljedecem naslovu, a fixer razinu naslova ne zna, pa bi bez tog reza
+ * zalijepio sekciju iza literature na zadnji zapis i umetnuo zapis izvan popisa.
+ *
+ * Mjesto cuva obje provjere poretka koje su prije umetanja bile zelene: bodovanu (zapisi s autorom,
+ * hr kolacija, analyze-docx) i strukturnu (svi zapisi, ukljucujuci zakone i URL-ove bez autora, kolacija
+ * jezika popisa). Kad ih nijedno mjesto ne cuva obje (en popis i dijakritika), prednost ima bodovana.
+ * Medju dopustenim mjestima bira se zadnje, pa isti autor ide iza postojecih zapisa tog autora. Ako
+ * nijedna provjera nije bila zelena, popis se ne preslaguje: zapis ide ispred prvog zapisa s vecim
+ * kljucem po bodovanoj kolaciji, inace iza sidra.
  */
 function alphabeticalPosition(
   xml: string,
   ranges: ParagraphRange[],
-  structures: (language: 'hr' | 'en') => ReturnType<typeof analyzeBibliographyStructure>,
+  paragraphs: Array<{ index: number; text: string }>,
   anchorIndex: number,
   template: string,
 ): ListPosition | null {
+  const upToAnchor = paragraphs.filter((paragraph) => paragraph.index <= anchorIndex);
   for (const language of ['hr', 'en'] as const) {
-    const entries = structures(language).entries.filter((entry) => entry.paragraphIndices[0] <= anchorIndex);
-    if (!entries.some((entry) => entry.paragraphIndices.includes(anchorIndex))) continue;
+    const entries = analyzeBibliographyStructure(upToAnchor, language).entries;
+    if (!entries.at(-1)?.paragraphIndices.includes(anchorIndex)) continue;
     const heading = language === 'en' ? 'References' : 'Literatura';
-    const key = analyzeBibliographyStructure([{ index: 1, text: heading }, { index: 2, text: template }], language).entries[0]?.sortKey;
-    if (!key) return null;
-    const next = entries.find((entry) => !!entry.sortKey && entry.sortKey.localeCompare(key, language) > 0);
-    const target = next ? ranges[next.paragraphIndices[0] - 1] : ranges[(entries.at(-1)?.paragraphIndices.at(-1) ?? 0) - 1];
+    const probe = analyzeBibliographyStructure([{ index: 1, text: heading }, { index: 2, text: template }], language).entries[0];
+    const probeKey = probe?.sortKey;
+    if (!probe || !probeKey) return null;
+    const withProbe = (position: number) => [...entries.slice(0, position), probe, ...entries.slice(position)];
+    const scoredBefore = scoredSorted(entries);
+    const structureBefore = structureSorted(entries, language);
+    const positions = entries.map((_entry, position) => position).concat(entries.length);
+    let chosen: number | undefined;
+    if (scoredBefore || structureBefore) {
+      const keepsScored = positions.filter((position) => !scoredBefore || scoredSorted(withProbe(position)));
+      const keepsBoth = keepsScored.filter((position) => !structureBefore || structureSorted(withProbe(position), language));
+      chosen = (keepsBoth.length ? keepsBoth : keepsScored).at(-1);
+    } else {
+      const next = entries.findIndex((entry) => !!entry.sortKey && entry.sortKey.localeCompare(probeKey, SCORED_COLLATION) > 0);
+      chosen = next < 0 ? entries.length : next;
+    }
+    if (chosen === undefined) return null;
+    // Iza zadnjeg zapisa do sidra; zbog reza na sidru to je sam odlomak sidra.
+    const target = chosen < entries.length ? ranges[entries[chosen].paragraphIndices[0] - 1] : ranges[(entries.at(-1)?.paragraphIndices.at(-1) ?? 0) - 1];
     if (!target || excludedContainer(xml, target)) return null;
-    return { offset: next ? target.start : target.end, key, language };
+    return { offset: chosen < entries.length ? target.start : target.end, key: probeKey };
   }
   return null;
 }
@@ -248,21 +281,37 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
   const skippedActions: string[] = [];
   let changed = false;
   let alreadyApplied = 0;
+  // Nepromijenjeni citati provjereni otiskom: bez ikakve izmjene ishod je 'already-ok', kao prije.
+  let readOnlyCitations = 0;
 
+  // Rasponi svih citata po odlomku (i nepromijenjenih), da se preklapanje odbije kao i prije.
+  const claimed = new Map<number, Array<{ start: number; end: number }>>();
   for (const citation of params.citations) {
     const range = ranges[citation.paragraphIndex - 1];
     const block = range && blocks.get(citation.paragraphIndex);
-    if (!range || !block || excludedContainer(parts.documentXml, range) || unsupported(block)) return noOp(parts, 'unsupported-structure');
-    if (citationAnchorFingerprint(citation.paragraphIndex, paragraphText(block)) !== citation.anchorFingerprint) {
-      const current = paragraphText(block);
-      const leading = current.length - current.trimStart().length;
+    if (!range || !block) return noOp(parts, 'unsupported-structure');
+    const current = paragraphText(block);
+    const leading = current.length - current.trimStart().length;
+    const adjusted = { ...citation, start: citation.start + leading, end: citation.end + leading };
+    const fingerprintMatches = citationAnchorFingerprint(citation.paragraphIndex, current) === citation.anchorFingerprint;
+    if (fingerprintMatches) {
+      if (claimed.get(citation.paragraphIndex)?.some((other) => other.start < adjusted.end && adjusted.start < other.end)) return noOp(parts, 'invalid-params');
+      claimed.set(citation.paragraphIndex, [...(claimed.get(citation.paragraphIndex) || []), adjusted]);
+      // Z36: nepromijenjen citat (izvor zapisa ili potvrdjena veza) se samo cita, nikad ne pise. Zato
+      // ga ne rusi oznaka, poveznica, polje ni tablica u odlomku (Word cesto zapise _GoBack oznaku).
+      if (current.slice(adjusted.start, adjusted.end) === citation.replacementText) {
+        verifiedCitations.add(citation.id);
+        citationParagraphs.add(citation.paragraphIndex);
+        readOnlyCitations += 1;
+        continue;
+      }
+    }
+    if (excludedContainer(parts.documentXml, range) || unsupported(block)) return noOp(parts, 'unsupported-structure');
+    if (!fingerprintMatches) {
       if (current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length) === citation.replacementText) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
       return noOp(parts, 'invalid-params');
     }
     verifiedCitations.add(citation.id);
-    const leading = paragraphText(block).length - paragraphText(block).trimStart().length;
-    const adjusted = { ...citation, start: citation.start + leading, end: citation.end + leading };
-    if (citationGroups.get(citation.paragraphIndex)?.citations.some((other) => other.start < adjusted.end && adjusted.start < other.end)) return noOp(parts, 'invalid-params');
     citationParagraphs.add(citation.paragraphIndex);
     const group = citationGroups.get(citation.paragraphIndex) || { range, block, citations: [] };
     group.citations.push(adjusted);
@@ -271,8 +320,6 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
   for (const group of citationGroups.values()) {
     let next = group.block;
     for (const citation of [...group.citations].sort((a, b) => b.start - a.start)) {
-      // Nepromijenjen citat (npr. izvor predloska zapisa) se ne prepisuje: zamjena bi spojila runove.
-      if (paragraphText(next).slice(citation.start, citation.end) === citation.replacementText) continue;
       const replacement = replaceTextRange(next, citation.start, citation.end, citation.replacementText);
       if (replacement === null) return noOp(parts, 'unsupported-structure');
       next = replacement;
@@ -281,16 +328,9 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     operations.push({ start: group.range.start, end: group.range.end, replacement: next, priority: 1 });
   }
 
-  const structureCache = new Map<'hr' | 'en', ReturnType<typeof analyzeBibliographyStructure>>();
-  const structures = (language: 'hr' | 'en') => {
-    if (!structureCache.has(language)) {
-      const paragraphs = ranges.map((range) => ({ index: range.index, text: paragraphText(blocks.get(range.index) || '').trim() }));
-      structureCache.set(language, analyzeBibliographyStructure(paragraphs, language));
-    }
-    return structureCache.get(language)!;
-  };
+  const paragraphs = ranges.map((range) => ({ index: range.index, text: paragraphText(blocks.get(range.index) || '').trim() }));
   const plannedTexts: string[] = [];
-  const templateInsertions = new Map<number, Array<{ key: string; text: string; xml: string; language: 'hr' | 'en' }>>();
+  const templateInsertions = new Map<number, Array<{ key: string; text: string; xml: string }>>();
   for (const entry of params.entries) {
     if (entry.action === 'add') {
       const literal = entry.replacementText?.trim() ? entry.replacementText : null;
@@ -327,10 +367,10 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
         // Korisnikov potvrdjeni zapis: zateceno ponasanje, doslovno i iza sidra.
         operations.push({ start: range.end, end: range.end, replacement: insertion, priority: 2 });
       } else {
-        const position = alphabeticalPosition(parts.documentXml, ranges, structures, anchor.paragraphIndex, text);
+        const position = alphabeticalPosition(parts.documentXml, ranges, paragraphs, anchor.paragraphIndex, text);
         if (!position) { skippedActions.push(SKIPPED_NO_LIST); continue; }
         const group = templateInsertions.get(position.offset) || [];
-        group.push({ key: position.key, text, xml: insertion, language: position.language });
+        group.push({ key: position.key, text, xml: insertion });
         templateInsertions.set(position.offset, group);
       }
       plannedTexts.push(text);
@@ -358,10 +398,10 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
   // Predlosci na istom mjestu idu jednim umetanjem, medusobno abecedno. Prioritet 0: na istom
   // pomaku se umecu POSLIJE zamjene odlomka koji tamo pocinje, pa ga ne mogu prepoloviti.
   for (const [offset, group] of templateInsertions) {
-    const ordered = [...group].sort((a, b) => a.key.localeCompare(b.key, a.language) || a.text.localeCompare(b.text, a.language));
+    const ordered = [...group].sort((a, b) => a.key.localeCompare(b.key, SCORED_COLLATION) || a.text.localeCompare(b.text, SCORED_COLLATION));
     operations.push({ start: offset, end: offset, replacement: ordered.map((item) => item.xml).join(''), priority: 0 });
   }
-  if (!operations.length) return noOp(parts, alreadyApplied ? 'already-ok' : skippedActions.length ? 'unsupported-structure' : 'no-target', skippedActions);
+  if (!operations.length) return noOp(parts, alreadyApplied ? 'already-ok' : skippedActions.length ? 'unsupported-structure' : readOnlyCitations ? 'already-ok' : 'no-target', skippedActions);
   let xml = parts.documentXml;
   for (const operation of operations.sort((a, b) => b.start - a.start || b.priority - a.priority)) {
     xml = xml.slice(0, operation.start) + operation.replacement + xml.slice(operation.end);

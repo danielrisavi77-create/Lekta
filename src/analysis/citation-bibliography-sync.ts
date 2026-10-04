@@ -16,6 +16,8 @@ export interface CitationOccurrence {
   suffix?: string;
   locator?: { label: string; value: string };
   directQuote: boolean;
+  /** Z36: zagradni ili narativni oblik; plan po njemu zna smije li ponuditi predlozak zapisa. */
+  form: CitationOccurrenceDetail['form'];
   anchorFingerprint: string;
   confidence: SyncConfidence;
   evidence: string[];
@@ -73,6 +75,33 @@ export function citationAnchorFingerprint(paragraphIndex: number, text: string):
   return `citation-${hash(`${paragraphIndex}|${normalize(text)}`)}`;
 }
 
+/**
+ * Z36: prve rijeci koje uvode citat, a nisu prezime ("See Novak", "Usporedi Novak", "Also Novak").
+ * Parser (`citationAuthor`) skida samo "vidi", "usp.", "prema" i "navedeno u"; ostalo ostaje u autoru.
+ */
+const NOT_SURNAME = new Set(['vidi', 'usp', 'usporedi', 'prema', 'navedeno', 'npr', 'primjerice', 'see', 'cf', 'compare', 'also', 'eg', 'ie', 'according']);
+
+/**
+ * Z36: prezime i godina za predlozak zapisa literature, ili null kad ih citat ne nosi sigurno.
+ *
+ * Isti uvjet cita i plan (smije li ponuditi zapis bez upisanog teksta) i fixer (sto umece), pa plan
+ * ne nudi predlozak koji bi fixer preskocio. Samo zagradni oblik: u narativnom ("prema Novaku (2022)")
+ * prezime moze biti sklonjeno. Autor mora biti jedna do tri rijeci s velikim pocetnim slovom i bez
+ * tocke, pa uvodi poput "e.g.", "see", "npr." ili "Usporedi" daju null. Nista se ne pogadja ni ne
+ * dopunjava.
+ */
+export function entryTemplateSource(citation: { author?: unknown; year?: unknown; form?: unknown }): { author: string; year: string } | null {
+  if (citation.form !== 'parenthetical') return null;
+  // Parser ostavlja trag skracenice ("Kovač et al." daje "Kovač ."); zapis nosi samo prezime.
+  const author = String(citation.author || '').replace(/[\s.,;:]+$/u, '');
+  const year = String(citation.year || '');
+  if (!/^(?:18|19|20)\d{2}[a-z]?$/.test(year)) return null;
+  const words = author.split(/\s+/);
+  if (!author || words.length > 3 || !words.every((word) => /^\p{Lu}[\p{L}'’-]+$/u.test(word))) return null;
+  if (NOT_SURNAME.has(words[0].toLocaleLowerCase('hr'))) return null;
+  return { author, year };
+}
+
 function authorKey(value: unknown): string {
   const raw = String(value || '').replace(/\bet\s+al\.?\b|\bi\s+dr\.?\b/gi, '').trim();
   const first = raw.split(/[;,]/)[0].split(/\s+(?:i|and|&)\s+/i)[0].trim();
@@ -111,6 +140,7 @@ function detailToOccurrence(detail: CitationOccurrenceDetail, paragraphText: str
     ...(detail.suffix ? { suffix: detail.suffix } : {}),
     ...(detail.locator ? { locator: detail.locator } : {}),
     directQuote: detail.directQuote,
+    form: detail.form,
     anchorFingerprint: citationAnchorFingerprint(detail.paragraphIndex, paragraphText),
     confidence: detail.author && detail.year ? 'high' : 'medium',
     evidence,

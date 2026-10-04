@@ -12,7 +12,8 @@ import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../
 import { citationAnchorFingerprint } from '../../src/analysis/citation-bibliography-sync';
 import type { citationBibliographySyncFixer } from '../../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../../src/repair/contract/assisted-request-policy';
-import type { citationBibliographySyncRepairableItem } from '../../src/ui/repair-items';
+import type { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../../src/ui/repair-items';
+import type { ParamAuthorityMap, resolveParams } from '../../src/repair/param-authority';
 
 type SyncFixer = typeof citationBibliographySyncFixer;
 
@@ -26,10 +27,22 @@ export function paragraphTexts(xml: string): string[] {
 
 export const entryText = (surname: string, year: string) => `${surname}, A. (${year}). Naslov djela ${surname}.`;
 
-/** Dokument: odlomak s citatom, naslov "Literatura" i zadani (abecedni) zapisi. */
-export function syncCase(citationText: string, citationRaw: string, surnames: Array<[string, string]>) {
-  const entries = surnames.map(([surname, year]) => entryText(surname, year));
-  const documentXml = `<w:document><w:body>${paragraph(citationText)}${paragraph('Literatura')}${entries.map(paragraph).join('')}<w:sectPr/></w:body></w:document>`;
+interface CaseOptions {
+  /** Naslov popisa; "References" analiza prepoznaje samo kao en popis. */
+  heading?: string;
+  /** Doslovni zapisi umjesto `entryText` (zakon bez autora, zapis s DOI-jem). */
+  rawEntries?: string[];
+  /** Odlomci iza popisa: tekst ili gotov `<w:p>` (npr. naslov sa stilom). */
+  after?: string[];
+  /** Gotov `<w:p>` s citatom (npr. s Wordovom oznakom); tekst mu mora biti `citationText`. */
+  citationXml?: string;
+}
+
+/** Dokument: odlomak s citatom, naslov popisa i zadani (abecedni) zapisi, po izboru i odlomci iza. */
+export function syncCase(citationText: string, citationRaw: string, surnames: Array<[string, string]>, options: CaseOptions = {}) {
+  const entries = options.rawEntries ?? surnames.map(([surname, year]) => entryText(surname, year));
+  const after = (options.after ?? []).map((item) => (item.startsWith('<w:p') ? item : paragraph(item))).join('');
+  const documentXml = `<w:document><w:body>${options.citationXml ?? paragraph(citationText)}${paragraph(options.heading ?? 'Literatura')}${entries.map(paragraph).join('')}${after}<w:sectPr/></w:body></w:document>`;
   const start = citationText.indexOf(citationRaw);
   const lastIndex = 2 + entries.length;
   const params: Parameters<SyncFixer>[1] = {
@@ -60,6 +73,84 @@ const PLACEMENT_CASES: Array<{ tag: string; surname: string; year: string; after
 ];
 
 export const template = (surname: string, year: string) => `${surname}, [ime]. (${year}). [Naslov djela]. [Mjesto: Izdavač].`;
+
+type Paragraphs = Array<{ index: number; text: string; headingLevel?: number | null }>;
+const numbered = (texts: string[], headings: number[] = []): Paragraphs => texts.map((text, i) => ({ index: i + 1, text, headingLevel: headings.includes(i + 1) ? 1 : null }));
+
+/**
+ * Bodovana provjera "Abecedni poredak literature" (analyze-docx): zapisi s autorom, `sortKey`, uvijek
+ * hr kolacija, bez obzira na jezik popisa. Popis cita ista analiza kao i ona (s razinama naslova).
+ */
+function scoredAlphabetical(paragraphs: Paragraphs, language: 'hr' | 'en'): boolean {
+  const authored = analyzeBibliographyStructure(paragraphs, language).entries.filter((entry) => entry.sortKey).map((entry) => entry.sortKey);
+  const sorted = [...authored].sort((a, b) => a.localeCompare(b, 'hr'));
+  return authored.length > 0 && authored.every((key, index) => key === sorted[index]);
+}
+
+/** Uvodi u citat koji nisu prezime, s tockom ili bez nje, malim ili velikim slovom. */
+const INTRO_CASES: Array<[string, string]> = [
+  ['uvod:e.g.', 'e.g., Novak, 2022'],
+  ['uvod:see', 'see Novak, 2022'],
+  ['uvod:npr.', 'npr. Novak, 2022'],
+  ['uvod:See', 'See Novak, 2022'],
+  ['uvod:Usporedi', 'Usporedi Novak, 2022'],
+];
+
+/**
+ * Gard granica popisa: zapis bez autora, en popis s dijakritikom, naslov iza popisa, uvodi u citat
+ * i citat u odlomku s oznakom. Svaki generator najprije dokazuje da proizvodi ciljanu klasu ulaza.
+ */
+function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
+  // Zakon bez autora: strukturna provjera ga razvrstava po kanonskom tekstu ("zakon..."), bodovana ga
+  // preskace. Zapis "Novak" mora stati ispred njega, inace popravak sam obori strukturnu provjeru.
+  const law = syncCase('Tekst rada (Novak, 2022).', 'Novak, 2022', [], { rawEntries: ['Horvat, A. (2020). Naslov.', 'Kovač, B. (2018). Naslov.', 'Zakon o znanstvenoj djelatnosti, NN 123/03'] });
+  const lawBefore = analyzeBibliographyStructure(numbered(law.before), 'hr');
+  if (!lawBefore.alphabetical.expected || lawBefore.entries.at(-1)?.sortKey !== '') problems.push('bez-autora: ulaz nema abecedan popis sa zapisom bez autora na kraju');
+  const lawAfter = paragraphTexts(fixer(law.parts, law.params).parts.documentXml);
+  if (lawAfter.indexOf(template('Novak', '2022')) !== lawAfter.indexOf(law.before.at(-1)!) - 1) problems.push(`bez-autora: predlozak nije ispred zakona (${JSON.stringify(lawAfter)})`);
+  if (!analyzeBibliographyStructure(numbered(lawAfter), 'hr').alphabetical.expected) problems.push('bez-autora: strukturna provjera abecede pada nakon umetanja');
+
+  // en popis: analiza ga prepoznaje samo po naslovu "References", a bodovana provjera i dalje sudi hr
+  // kolacijom, u kojoj je č iza svih c. Korijenska (en) kolacija bi "Čapek" stavila na vrh.
+  const english = syncCase('Text (Čapek, 2021).', 'Čapek, 2021', [], { heading: 'References', rawEntries: ['Cook, A. (2019). Title.', 'Cvitan, B. (2020). Title.', 'Dorn, C. (2018). Title.'] });
+  if (analyzeBibliographyStructure(numbered(english.before), 'hr').entries.length || !scoredAlphabetical(numbered(english.before), 'en')) problems.push('kolacija:en-popis: ulaz nije abecedan en popis');
+  const englishAfter = paragraphTexts(fixer(english.parts, english.params).parts.documentXml);
+  if (!englishAfter.includes(template('Čapek', '2021'))) problems.push('kolacija:en-popis: predlozak nije umetnut');
+  else if (!scoredAlphabetical(numbered(englishAfter), 'en')) problems.push(`kolacija:en-popis: bodovana provjera abecede pada (${JSON.stringify(englishAfter)})`);
+
+  // Naslov iza popisa: zadnji zapis zavrsava DOI-jem (bez tocke), pa bi ga analiza bez razina naslova
+  // spojila s naslovom i tekstom iza. Predlozak "Zupan" (iza "Zubak") mora ostati u popisu.
+  const headingXml = '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Popis priloga</w:t></w:r></w:p>';
+  const tail = syncCase('Tekst rada (Zupan, 2022).', 'Zupan, 2022', [], {
+    rawEntries: ['Horvat, A. (2019). Naslov. https://doi.org/10.1/a', 'Zubak, B. (2020). Naslov. https://doi.org/10.1/b'],
+    after: [headingXml, 'Anketni upitnik korišten u istraživanju', 'Prilog 1. Upitnik'],
+  });
+  const headingIndex = tail.before.indexOf('Popis priloga') + 1;
+  if (analyzeBibliographyStructure(numbered(tail.before), 'hr').entries.at(-1)?.paragraphIndices.length === 1) problems.push('naslov-iza-popisa: ulaz ne lijepi sekciju na zadnji zapis bez razina naslova');
+  if (analyzeBibliographyStructure(numbered(tail.before, [headingIndex]), 'hr').entries.at(-1)?.paragraphIndices.join() !== String(headingIndex - 1)) problems.push('naslov-iza-popisa: analiza s razinama ne zavrsava popis na zadnjem zapisu');
+  const tailAfter = paragraphTexts(fixer(tail.parts, tail.params).parts.documentXml);
+  if (tailAfter.indexOf(template('Zupan', '2022')) !== tailAfter.indexOf(tail.before[headingIndex - 2]) + 1) problems.push(`naslov-iza-popisa: predlozak nije odmah iza zadnjeg zapisa (${JSON.stringify(tailAfter)})`);
+
+  // Uvodi u citat nisu prezime: nista se ne umece.
+  for (const [tag, raw] of INTRO_CASES) {
+    const intro = syncCase(`Tekst rada (${raw}).`, raw, BASE);
+    const result = fixer(intro.parts, intro.params);
+    if (result.applied || paragraphTexts(result.parts.documentXml).some((text) => text.includes('[ime]'))) problems.push(`${tag}: uvod u citat usao je u zapis kao prezime`);
+  }
+
+  // Citat u odlomku s Wordovom oznakom (_GoBack): odlomak se samo cita, pa i predlozak i korisnikov
+  // zapis moraju proci, a odlomak citata ostaje bajt-isti.
+  const marked = 'Tekst rada (Novak, 2022).';
+  const markedXml = `<w:p><w:bookmarkStart w:id="0" w:name="_GoBack"/><w:r><w:t xml:space="preserve">${marked}</w:t></w:r><w:bookmarkEnd w:id="0"/></w:p>`;
+  const bookmark = syncCase(marked, 'Novak, 2022', BASE, { citationXml: markedXml });
+  if (!bookmark.parts.documentXml.includes('w:bookmarkStart')) problems.push('oznaka: ulaz nema oznaku u odlomku citata');
+  const viaTemplate = fixer(bookmark.parts, bookmark.params);
+  if (!viaTemplate.applied || !paragraphTexts(viaTemplate.parts.documentXml).includes(template('Novak', '2022'))) problems.push(`oznaka: predlozak nije umetnut (${viaTemplate.reason})`);
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const viaLiteral = fixer(bookmark.parts, { ...bookmark.params, entries: [{ ...bookmark.params.entries[0], citationId: undefined, replacementText: literalText }] });
+  if (!viaLiteral.applied || !paragraphTexts(viaLiteral.parts.documentXml).includes(literalText)) problems.push(`oznaka: korisnikov zapis nije umetnut (${viaLiteral.reason})`);
+  if (!viaTemplate.parts.documentXml.includes(markedXml)) problems.push('oznaka: odlomak citata je prepisan');
+}
 
 /** Gard fixera: predlozak, abecedno mjesto, dijakritika, idempotencija, vidljivi tekst, padez. */
 export function zapisLiteratureProblemi(fixer: SyncFixer): string[] {
@@ -100,19 +191,26 @@ export function zapisLiteratureProblemi(fixer: SyncFixer): string[] {
   const narrative = syncCase('Prema Novaku (2022) tekst rada.', 'Novaku (2022)', BASE);
   const narrativeResult = fixer(narrative.parts, narrative.params);
   if (narrativeResult.applied || paragraphTexts(narrativeResult.parts.documentXml).some((text) => text.includes('[ime]'))) problems.push('padez: narativni citat dao je zapis');
+
+  granicePopisaProblemi(fixer, problems);
   return problems;
 }
 
 type PlanBuilder = typeof citationBibliographySyncRepairableItem;
 
+const PLAN_CITATIONS = [
+  { id: 'c1', paragraphIndex: 1, start: 11, end: 22, rawText: 'Novak, 2022', author: 'Novak', year: '2022', form: 'parenthetical', anchorFingerprint: 'citation-1', confidence: 'high' },
+  // Narativni citat ("Prema Novaku (2022)"): prezime moze biti sklonjeno, pa predlozak nije moguc.
+  { id: 'c2', paragraphIndex: 2, start: 6, end: 19, rawText: 'Novaku (2022)', author: 'Novaku', year: '2022', form: 'narrative', anchorFingerprint: 'citation-2', confidence: 'high' },
+];
 const planResult = () => ({
   details: {
     citationBibliographySync: {
-      citations: [{ id: 'c1', paragraphIndex: 1, start: 11, end: 22, rawText: 'Novak, 2022', author: 'Novak', year: '2022', anchorFingerprint: 'citation-1', confidence: 'high' }],
-      links: [{ citationId: 'c1', status: 'missing', candidates: [], reason: 'nedostaje' }],
-      missingEntries: [{ id: 'c1' }],
+      citations: PLAN_CITATIONS,
+      links: PLAN_CITATIONS.map((citation) => ({ citationId: citation.id, status: 'missing', candidates: [], reason: 'nedostaje' })),
+      missingEntries: PLAN_CITATIONS,
       duplicateCandidates: [],
-      summary: { citations: 1, matched: 0, missing: 1, ambiguous: 0, pageIssues: 0 },
+      summary: { citations: 2, matched: 0, missing: 2, ambiguous: 0, pageIssues: 0 },
     },
     bibliographyStructure: { entries: [{ id: 'bibliography-3', paragraphIndices: [3], anchorFingerprint: 'biblio-3', rawText: entryText('Horvat', '2020') }] },
   },
@@ -137,12 +235,72 @@ export function planZapisaProblemi(build: PlanBuilder): string[] {
 
   const item = build(planResult(), planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0];
   const form = item?.citationBibliographySyncForm;
-  if (!form?.missingEntries.length) return [...problems, 'dozvola: uz dozvolu plan ne nudi zapis'];
-  form.missingEntries[0].selected = true;
-  const params = form.buildParams(form) as { citations: Array<{ id: string; replacementText: string }>; entries: Array<Record<string, unknown>> };
-  const add = params.entries.find((entry) => entry.action === 'add');
+  if (form?.missingEntries.length !== 2) return [...problems, 'dozvola: uz dozvolu plan ne nudi oba zapisa'];
+  const [parenthetical, narrative] = form.missingEntries;
+  parenthetical.selected = true;
+  narrative.selected = true;
+  type Built = { citations: Array<{ id: string; replacementText: string }>; entries: Array<Record<string, unknown>> };
+  const params = form.buildParams(form) as Built;
+  const adds = params.entries.filter((entry) => entry.action === 'add');
+  const add = adds.find((entry) => entry.id === parenthetical.id);
   if (!add || add.citationId !== 'c1' || 'replacementText' in add) problems.push('predlozak: prazan tekst ne salje samo id citata');
   if (!params.citations.some((citation) => citation.id === 'c1' && citation.replacementText === 'Novak, 2022')) problems.push('predlozak: izvorni citat nije u zahtjevu nepromijenjen');
+  // Narativni redak: predlozak nije moguc, pa ga plan bez upisanog teksta ne salje (fixer bi ga preskocio).
+  if (!parenthetical.templateAvailable || narrative.templateAvailable) problems.push('narativ: oznaka predloska ne odgovara obliku citata');
+  if (adds.some((entry) => entry.id === narrative.id)) problems.push('narativ: plan bez teksta salje zapis koji fixer ne moze sloziti');
+  narrative.text = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const typed = (form.buildParams(form) as Built).entries.find((entry) => entry.id === narrative.id);
+  if (typed?.replacementText !== narrative.text) problems.push('narativ: upisani zapis uz narativni citat se ne salje');
+  return problems;
+}
+
+const syncRequest = () => ({
+  version: 1,
+  citations: [{ id: 'c1', paragraphIndex: 1, start: 0, end: 11, anchorFingerprint: 'citation-1', replacementText: 'Novak, 2022', reason: 'r' }],
+  entries: [
+    { id: 'bibliography-4', paragraphIndices: [4], anchorFingerprint: 'biblio-4', action: 'remove' },
+    { id: 'e1', paragraphIndices: [], anchorFingerprint: 'biblio-3', action: 'add', citationId: 'c1', insertionAnchor: { paragraphIndex: 3, anchorFingerprint: 'biblio-3' } },
+    { id: 'e2', paragraphIndices: [], anchorFingerprint: 'biblio-3', action: 'add', replacementText: 'Novak, N. (2022). Naslov.', insertionAnchor: { paragraphIndex: 3, anchorFingerprint: 'biblio-3' } },
+  ],
+  mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }, { citationId: 'c1', bibliographyEntryId: 'bibliography-3', confirmed: true }],
+  // Klijent ne moze sam sebi dati dozvolu: server ovu zastavicu ne cita.
+  allowMissingEntryInsertion: true,
+});
+
+/**
+ * Gard serverske dozvole (param-authority): bez pecene dozvole profila iz zahtjeva sinkronizacije
+ * nestaje svaki 'add' (predlozak i korisnikov tekst) i njegova veza; ostatak zahtjeva ostaje. Peceni
+ * zapis nastaje samo kad `citationEntryInsertionAllowed` profila vrati true (sva tri uvjeta).
+ */
+export function serverDozvolaProblemi(resolve: typeof resolveParams, allowed: typeof citationEntryInsertionAllowed): string[] {
+  const problems: string[] = [];
+  const fixer = 'citation-bibliography-sync-fixer';
+  const rule = 'citation-bibliography-sync-assisted';
+  const authority: ParamAuthorityMap = {
+    'z36-dozvoljen': { [rule]: { f: fixer, p: { allowMissingEntryInsertion: true } } },
+    'z36-drugi-fixer': { [rule]: { f: 'font-fixer', p: { allowMissingEntryInsertion: true } } },
+    'z36-bez-dozvole': { 'z36-bez-dozvole--font': { f: 'font-fixer', p: { fontName: 'Times New Roman' } } },
+  };
+  const adds = (params: Record<string, unknown>) => (params.entries as Array<{ action: string }>).filter((entry) => entry.action === 'add').length;
+  const kept = resolve('z36-dozvoljen', rule, fixer, syncRequest(), authority);
+  if (adds(kept.params) !== 2 || (kept.params.mappings as unknown[]).length !== 2) problems.push('dozvola-server: uz peceni zapis server uklanja dodavanje');
+  for (const profile of ['z36-bez-dozvole', 'z36-drugi-fixer', 'nepostojeci-profil', null]) {
+    const out = resolve(profile, rule, fixer, syncRequest(), authority);
+    const mappings = out.params.mappings as Array<{ bibliographyEntryId: string }>;
+    if (adds(out.params) !== 0) problems.push(`dozvola-server: ${String(profile)} propusta 'add'`);
+    if (mappings.some((mapping) => mapping.bibliographyEntryId === 'e1') || mappings.length !== 1 || (out.params.entries as unknown[]).length !== 1) problems.push(`dozvola-server: ${String(profile)} ne cuva ostatak zahtjeva`);
+    if (out.source !== 'client') problems.push(`dozvola-server: ${String(profile)} mijenja izvor parametara`);
+  }
+  // Peceni zapis drugog pravila istog profila ne otvara dozvolu.
+  if (adds(resolve('z36-dozvoljen', 'drugo-pravilo', fixer, syncRequest(), authority).params) !== 0) problems.push('dozvola-server: dozvola vrijedi i za drugo pravilo');
+
+  const ruleEntry = (value: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({ ruleEntries: [{ checkId: 'citation-sync-rules', status: 'verified', sourceId: 's', sourcePage: '1', quote: 'pravilo', value, ...extra }] });
+  if (!allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }))) problems.push('dozvola-profil: puni uvjet ne daje dozvolu');
+  if (allowed(ruleEntry({ mode: 'author-year' }))) problems.push('dozvola-profil: dozvola bez allowMissingEntryInsertion');
+  if (allowed(ruleEntry({ mode: 'numeric', allowMissingEntryInsertion: true }))) problems.push('dozvola-profil: dozvola izvan author-year');
+  if (allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }, { status: 'draft' }))) problems.push('dozvola-profil: dozvola bez verificiranog pravila');
+  if (allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }, { sourcePage: null }))) problems.push('dozvola-profil: dozvola bez stranice izvora');
+  if (allowed({ ruleEntries: [] })) problems.push('dozvola-profil: dozvola bez pravila');
   return problems;
 }
 
