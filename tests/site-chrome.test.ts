@@ -1191,7 +1191,9 @@ describe('Z15 drugi krug: puno podnozje', () => {
     expect(PREDLOZAK).not.toBeNull();
     expect(PREDLOZAK!.stupci.map((c) => c.naziv)).toEqual(['Proizvod', 'Pribor', 'Pravno']);
     expect(PREDLOZAK!.stupci.flatMap((c) => c.stavke)).toHaveLength(19);
-    expect(PREDLOZAK!.granice).toHaveLength(4);
+    // T86: peta granica je recenica besplatne bete (predlozak i obje stranice).
+    expect(PREDLOZAK!.granice).toHaveLength(5);
+    expect(PREDLOZAK!.granice).toContain(BETA_FOOTER_NOTE);
     expect(PREDLOZAK!.moto).toContain('Mjeri, ne piše.');
   });
 

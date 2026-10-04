@@ -254,9 +254,10 @@ describe('legal-content', () => {
    * mehanizam prijenosa za Resend se provjerava u DPA. Nova oznaka mora se ovdje imenovati;
    * deploy ih sve odbija (`scripts/verify-deploy-dist.mjs`, gard 3a).
    */
-  it('T86: pravni tekst nosi samo poznate neobjavljive oznake (Z36 i Resend)', () => {
-    const sve = KINDS.flatMap((kind) => findLegalPlaceholders(docs[kind].html).map((o) => `${kind}: ${o.split(/[,.]/)[0]}`));
-    expect(sve).toEqual(['privacy: [PROVJERITI: mehanizam prijenosa u SAD (DPF certifikat ili standardne ugovorne klauzule) i regija slanja prema Resendovu ugovoru o obradi podataka', 'terms: [ODLUKA VLASNIKA: Z36']);
+  it('T86: pravni tekst nema neobjavljivih oznaka (ni uz ukljucen Google)', () => {
+    for (const d of [docs, legalDocuments({ googleSignIn: true })]) {
+      expect(KINDS.flatMap((kind) => findLegalPlaceholders(d[kind].html))).toEqual([]);
+    }
   });
 
   it('T86: uvjeti imaju odjeljak besplatne bete (bez naknade, nije ocjena sadrzaja, prekid, brisanje)', () => {
@@ -268,8 +269,12 @@ describe('legal-content', () => {
     expect(html).toContain('nije procjena kvalitete rada ni predviđanje ocjene');
     expect(html).toContain('betu završiti u bilo kojem trenutku');
     expect(html).toContain('<strong>Brisanje podataka.</strong>');
-    // Z36 se ne izmislja: na mjestu klauzule jamstva stoji oznaka, ne tekst.
-    expect(html).toContain('<strong>Rezultati.</strong> [ODLUKA VLASNIKA: Z36');
+    // Z36: bez jamstva rezultata, ali bez iskljucenja namjere i krajnje nepaznje (ZOO cl. 345)
+    // ni prisilnih prava potrosaca; garancije placenih usluga ne vrijede za betu.
+    expect(html).toContain('<strong>Bez jamstva rezultata.</strong>');
+    expect(html).toContain('osim za štetu prouzročenu namjerno ili krajnjom nepažnjom');
+    expect(html).toContain('propise o zaštiti potrošača');
+    expect(html).toContain('ne vrijede za besplatnu betu');
   });
 
   it('T86: privacy objavljuje anonimni racun i Resend, bez slanja dokumenta', () => {
@@ -278,7 +283,8 @@ describe('legal-content', () => {
     expect(html).toContain('bez e-maila, imena i lozinke');
     expect(html).toContain('<h4>1f. E-pošta (Resend)</h4>');
     expect(html).toContain('nikad dokument, tekst rada ni rezultati analize');
-    expect(html).toContain('<strong>Resend, Inc.</strong>');
+    expect(html).toContain('<strong>Resend</strong> (Plus Five Five, Inc.');
+    expect(html).toContain('standardnim ugovornim klauzulama');
     expect(html).toContain('poveznicu za odjavu');
     // Supabase ostaje imenovan izvrsitelj.
     expect(html).toContain('<li><strong>Supabase</strong>');
@@ -291,8 +297,7 @@ describe('legal-content', () => {
     expect(sGooglom).toContain('<h4>1g. Prijava Google računom</h4>');
     expect(sGooglom).toContain('samostalni voditelj obrade');
     expect(sGooglom).toContain('nikad se ne šalju Googleu');
-    // Opseg podataka iz Googlea potvrdjuje se uz T102, pa ukljucen provider bez toga ne smije u objavu.
-    expect(findLegalPlaceholders(sGooglom).some((o) => o.startsWith('[PROVJERITI: konačni opseg'))).toBe(true);
+    expect(sGooglom).toContain('e-mail adresu, ime i identifikator Google računa');
   });
 
   it('T86: recenica bete za podnozja nosi trazenu formulaciju', () => {
