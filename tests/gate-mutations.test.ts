@@ -10539,3 +10539,37 @@ describe('mutacije: T64 census inspectionCoverage (Codex M4 na #165)', () => {
     ]);
   });
 });
+
+describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog vlasnika 2026-10-04)', () => {
+  type Validator = (queue: unknown) => unknown;
+  const IZVORNI_UZORAK = '/^T(?:\\d{2}|[1-9]\\d{2})$/';
+  /** validateQueue iz STVARNOG izvora, s jednim zamijenjenim regexom; mutacija mijenja sam gard. */
+  const validatorIzIzvora = (uzorak: string): Validator => {
+    const src = readFileSync(resolve(process.cwd(), 'scripts/agents/core.mjs'), 'utf8').replace(/\r/g, '');
+    const a = src.indexOf('export function validateQueue(');
+    const b = src.indexOf('\n}\n', a);
+    if (a < 0 || b < a) throw new Error('validateQueue nije pronadjen u scripts/agents/core.mjs');
+    const blok = src.slice(a, b + 2).replace('export function', 'function');
+    if (!blok.includes(IZVORNI_UZORAK)) throw new Error(`mutacija ne pogadja izvor: ${IZVORNI_UZORAK}`);
+    return new Function(`${blok.replace(IZVORNI_UZORAK, uzorak)}\nreturn validateQueue;`)() as Validator;
+  };
+  const stvarniRed = () => JSON.parse(readFileSync(resolve(process.cwd(), 'docs/agents/tasks.json'), 'utf8'));
+  const jedan = (id: string) => ({ tasks: [{ id, title: 'x', status: 'ready', dependsOn: [] }] });
+  const prolazi = (v: Validator, q: unknown) => { try { v(q); return true; } catch { return false; } };
+  /** Tvrdnja garda: stvarni red (s T100) prolazi, a vodeca nula i cetiri znamenke padaju. */
+  const gardDrzi = (v: Validator): boolean =>
+    prolazi(v, stvarniRed()) && !prolazi(v, jedan('T017')) && !prolazi(v, jedan('T1000')) && !prolazi(v, jedan('T7'));
+
+  it('baseline: stvarni red sadrzi troznamenkasti ID i gard drzi', () => {
+    expect(stvarniRed().tasks.some((t: { id: string }) => /^T\d{3}$/.test(t.id))).toBe(true);
+    expect(gardDrzi(validatorIzIzvora(IZVORNI_UZORAK))).toBe(true);
+  });
+
+  it('mutant: stari oblik samo s dvije znamenke obara stvarni red', () => {
+    expect(gardDrzi(validatorIzIzvora('/^T\\d{2}$/'))).toBe(false);
+  });
+
+  it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
+    expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
