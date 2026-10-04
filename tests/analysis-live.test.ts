@@ -12,7 +12,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildLivePlan, readingFrame, revealFrame, revealDuration } from '../src/ui/analysis-live/analysis-live-model';
 import { mountAnalysisLive } from '../src/ui/analysis-live/analysis-live';
 import { SCAN_PHASES } from '../src/ui/progress-scan';
-import { liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
+import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 
 const read = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').replace(/\r/g, '');
 
@@ -96,7 +96,11 @@ describe('Z33 model: stvarni nalazi u redoslijed animacije', () => {
     expect(kraj.stamp).toBe(`7 nalaza · ${result.score}`);
     expect(kraj.foundLine).toBe('7 od 7 pronađeno');
     expect(kraj.verdict.text).toBe('Nije spremno za predaju');
-    expect(kraj.stats).toEqual({ pages: '41', words: (11240).toLocaleString('hr-HR'), sources: '38' });
+    expect(kraj.stats).toEqual({
+      pages: { text: '41', title: '' },
+      words: { text: (11240).toLocaleString('hr-HR'), title: '' },
+      sources: { text: '38', title: '' },
+    });
     expect(plan.summary).toBe('7 stvari traži tvoju pažnju. Od toga 3 mogu popraviti automatski.');
   });
 
@@ -133,7 +137,9 @@ describe('Z33 model: ne izmislja podatke', () => {
   it('dok analiza traje nema nalaza, brojki ni presude; ✓ i ✗ cekaju rezultat', () => {
     for (const pct of [0, 8, 35, 52, 68, 96, 100]) {
       const f = readingFrame(pct);
-      expect(f.stats).toBeNull();
+      // Brojki nema: svaka celija je "-" uz razlog, nikad prazna oznaka.
+      expect(Object.values(f.stats).map((c) => c.text)).toEqual(['-', '-', '-']);
+      expect(Object.values(f.stats).every((c) => c.title === 'Broj je poznat kad provjera završi.')).toBe(true);
       expect(f.notes).toEqual([]);
       expect(f.slots.every((s) => s.state === 'placeholder')).toBe(true);
       expect(f.verdict.shown).toBe(false);
@@ -157,7 +163,13 @@ describe('Z33 model: ne izmislja podatke', () => {
     expect(kraj.slots).toEqual([]);
     expect(kraj.foundLine).toBe('Nema otvorenih nalaza');
     expect(kraj.score).toBe('Nije bodovano');
-    expect(kraj.stats).toEqual({ pages: '', words: '', sources: '' });
+    // Brojac bez broja nikad nije prazna oznaka: "-" uz razlog u `title`.
+    expect(kraj.stats).toEqual({
+      pages: { text: '-', title: 'Word nije zapisao broj stranica u datoteku.' },
+      words: { text: '-', title: 'Broj riječi nije izmjeren.' },
+      sources: { text: '-', title: 'Broj izvora nije izmjeren.' },
+    });
+    expect(kraj.verdict.plan, 'bez automatskog popravka nema gumba plana').toBe(false);
     expect(kraj.rows.every((r) => r.icon === '○' && r.state === 'unchecked')).toBe(true);
     expect(plan.summary).toBe('Nema otvorenih nalaza.');
   });
@@ -184,13 +196,175 @@ describe('Z33 model: uzak ekran i prigusen pokret', () => {
     expect(f.done).toBe(true);
     expect(f.slots.map((s) => s.title)).toEqual(plan.findings.map((x) => x.title));
     expect(f.slots.every((s) => s.metaVisible)).toBe(true);
-    expect(f.verdict).toEqual({ shown: true, text: plan.verdict, caret: false, metaVisible: true });
+    expect(f.verdict).toEqual({ shown: true, text: plan.verdict, caret: false, metaVisible: true, plan: true });
     expect(f.flying).toEqual([]);
   });
 
   it('otkrivanje traje ograniceno (rezultat kasni najvise toliko)', () => {
     const plan = buildLivePlan(sampleResult());
-    expect(revealDuration(plan, true)).toBeLessThanOrEqual(9000);
+    expect(revealDuration(plan, true)).toBeLessThanOrEqual(4000);
+  });
+});
+
+/** Generator NAJGOREG slucaja: sest nalaza u zadnjem retku (cedulje lete zadnje), dugi naslovi. */
+function longResult() {
+  const r = sampleResult();
+  const dugi = (n: number) => `Citat ${n} u poglavlju o metodologiji istrazivanja nema odgovarajuci zapis u popisu literature`;
+  const issues = Array.from({ length: 6 }, (_, n) => issue('error', 'citations', dugi(n)));
+  return {
+    ...r,
+    checks: issues.map((i) => check('citations', i.title, 'fail', 0, 5, '1 citatnica bez podudaranja', i)),
+    issues,
+  };
+}
+
+describe('Z33 trajanje (F31 a: najvise oko 4 s)', () => {
+  it('generator: sest nalaza u zadnjem citatnom retku, naslovi preko 80 znakova', () => {
+    const plan = buildLivePlan(longResult());
+    expect(plan.findings).toHaveLength(6);
+    expect(plan.findings.every((f) => f.row === 'citati' && f.title.length > 80)).toBe(true);
+  });
+
+  it('i najgori slucaj traje najvise 4 s, siroko i usko, a na kraju je sve otipkano', () => {
+    for (const result of [sampleResult(), longResult()]) {
+      const plan = buildLivePlan(result);
+      for (const wide of [true, false]) {
+        const d = revealDuration(plan, wide);
+        expect(d).toBeLessThanOrEqual(4000);
+        const kraj = revealFrame(plan, d, wide);
+        expect(kraj.phase).toBe('final');
+        expect(kraj.slots.map((s) => s.title)).toEqual(plan.findings.map((f) => f.title));
+        expect(kraj.verdict.text).toBe(plan.verdict);
+        expect(kraj.flying).toEqual([]);
+      }
+    }
+  });
+
+  it('list presude stoji gotov i miran barem 1,2 s prije kraja, da se gumbi stignu kliknuti', () => {
+    for (const result of [sampleResult(), longResult()]) {
+      const plan = buildLivePlan(result);
+      for (const wide of [true, false]) {
+        const f = revealFrame(plan, revealDuration(plan, wide) - 1200, wide);
+        expect(f.verdict.metaVisible).toBe(true);
+        expect(f.verdict.plan).toBe(true);
+        // Skrol do presude je vec bio (na pocetku tipkanja presude), pa se gumb vise ne mice.
+        expect(f.scrollToVerdict).toBe(true);
+      }
+    }
+  });
+});
+
+describe('Z33 Preskoči, obavijest i plan popravka u modelu', () => {
+  it('"Preskoči" postoji samo dok otkrivanje traje', () => {
+    const plan = buildLivePlan(sampleResult());
+    expect(readingFrame(52).skip).toBe(false);
+    expect(revealFrame(plan, 0, true).skip).toBe(true);
+    expect(revealFrame(plan, revealDuration(plan, true) - 1, true).skip).toBe(true);
+    expect(revealFrame(plan, Infinity, true).skip).toBe(false);
+  });
+
+  it('ponuda obavijesti postoji samo dok provjera traje; gotova provjera ne obecaje obavijest', () => {
+    expect(readingFrame(0).notify).toBe(true);
+    expect(readingFrame(100).notify).toBe(true);
+    const plan = buildLivePlan(sampleResult());
+    for (const t of [0, 1000, revealDuration(plan, true), Infinity]) expect(revealFrame(plan, t, true).notify).toBe(false);
+  });
+
+  it('"Napravi plan popravka" samo kad je popravak dostupan (ne demo, barem jedan automatski)', () => {
+    expect(buildLivePlan(sampleResult()).repair).toBe(true);
+    expect(revealFrame(buildLivePlan(sampleResult()), Infinity, true).verdict.plan).toBe(true);
+    const bez = sampleResult();
+    bez.details.triage.counts.auto = 0;
+    expect(buildLivePlan(bez).repair).toBe(false);
+    expect(revealFrame(buildLivePlan(bez), Infinity, true).verdict.plan).toBe(false);
+    expect(buildLivePlan({ ...sampleResult(), demo: true }).repair).toBe(false);
+    expect(readingFrame(96).verdict.plan).toBe(false);
+  });
+});
+
+describe('Z33 brojac stranica bez storedPages', () => {
+  it('Word bez zapisanog broja stranica: "-" s razlogom, ostali brojaci stvarni', () => {
+    const r = sampleResult();
+    const plan = buildLivePlan({ ...r, stats: { words: 11240, references: 38 } });
+    const s = revealFrame(plan, Infinity, true).stats;
+    expect(s.pages).toEqual({ text: '-', title: 'Word nije zapisao broj stranica u datoteku.' });
+    expect(s.words.text).toBe((11240).toLocaleString('hr-HR'));
+    expect(s.sources.text).toBe('38');
+    for (const t of [0, 500, 2000]) {
+      const f = revealFrame(plan, t, true);
+      expect(Object.values(f.stats).every((c) => c.text !== '')).toBe(true);
+    }
+  });
+});
+
+/**
+ * Generator za POLOZAJ TRAGOVA: 100 izmjerenih odlomaka, naslov u odlomku 10, citat u odlomku 90,
+ * brojevi stranica vezani uz fusnotu (zaseban prostor, dakle bez polozaja), ostali bez sidra.
+ */
+function locatedResult(paragraphs: number | null = 100, novakAt = 90) {
+  const r = sampleResult();
+  const findings = [
+    { category: 'structure', title: 'Naslov 2.3 nije u sadržaju', locations: [{ paragraphIndex: 10, anchorId: 'p10' }] },
+    { category: 'citations', title: '(Novak, 2022) nema zapis u literaturi', locations: [{ paragraphIndex: novakAt, anchorId: 'p' + novakAt }] },
+    { category: 'structure', title: 'Stranice nisu numerirane', locations: [{ paragraphIndex: 0, footnoteId: 3, anchorId: 'f3' }] },
+  ];
+  return {
+    ...r,
+    details: {
+      ...r.details,
+      triage: { ...r.details.triage, findings },
+      ...(paragraphs == null ? {} : { measurements: { counts: { paragraphs } } }),
+    },
+  };
+}
+
+describe('Z33 tragovi i cedulje po stvarnom mjestu nalaza (F31 d)', () => {
+  const EVEN = [8, 22.4, 36.8, 51.2, 65.6, 80];
+  const close = (a: number[], b: number[]) => a.forEach((x, i) => expect(x).toBeCloseTo(b[i], 6));
+
+  it('generator: dva nalaza sa sidrom u tijelu, jedan u fusnoti, tri bez sidra', () => {
+    const plan = buildLivePlan(locatedResult());
+    const at = Object.fromEntries(plan.findings.map((f) => [f.title, f.at]));
+    expect(at['Naslov 2.3 nije u sadržaju']).toBeCloseTo(9 / 99, 9);
+    expect(at['(Novak, 2022) nema zapis u literaturi']).toBeCloseTo(89 / 99, 9);
+    expect(at['Stranice nisu numerirane']).toBeNull();
+    expect(plan.findings.filter((f) => f.at == null)).toHaveLength(4);
+  });
+
+  it('nalaz sa sidrom stoji proporcionalno mjestu u radu; bez sidra ide na preostala ravnomjerna mjesta', () => {
+    const plan = buildLivePlan(locatedResult());
+    const top = (t: string) => plan.findings.find((f) => f.title === t)!.top;
+    expect(top('Naslov 2.3 nije u sadržaju')).toBeCloseTo(8 + 72 * (9 / 99), 9);
+    expect(top('(Novak, 2022) nema zapis u literaturi')).toBeCloseTo(8 + 72 * (89 / 99), 9);
+    expect(top('Naslov 2.3 nije u sadržaju')).toBeLessThan(top('(Novak, 2022) nema zapis u literaturi'));
+    // Sidro zauzima najblize ravnomjerno mjesto (8 i 65,6); ostali redom dobivaju preostala.
+    close(plan.findings.filter((f) => f.at == null).map((f) => f.top), [22.4, 36.8, 51.2, 80]);
+    // Polozaj prati sidro: citat pomaknut u odlomak 30 pomice se gore.
+    const pomaknut = buildLivePlan(locatedResult(100, 30));
+    expect(pomaknut.findings.find((f) => f.title.startsWith('(Novak'))!.top).toBeCloseTo(8 + 72 * (29 / 99), 9);
+  });
+
+  it('KONTROLA bez lokacije: isti nalazi bez sidra su ravnomjerno rasporedjeni (kao prije)', () => {
+    const plan = buildLivePlan(sampleResult());
+    expect(plan.findings.every((f) => f.at == null)).toBe(true);
+    close(plan.findings.map((f) => f.top), EVEN);
+  });
+
+  it('bez izmjerenog broja odlomaka ili sa sidrom izvan raspona nema izmisljenog polozaja', () => {
+    expect(buildLivePlan(locatedResult(null)).findings.every((f) => f.at == null)).toBe(true);
+    const izvan = buildLivePlan(locatedResult(100, 150));
+    expect(izvan.findings.find((f) => f.title.startsWith('(Novak'))!.at).toBeNull();
+  });
+
+  it('cedulje prate tragove, razmaknute najmanje 12 % i unutar lista', () => {
+    for (const plan of [buildLivePlan(locatedResult()), buildLivePlan(locatedResult(100, 11)), buildLivePlan(sampleResult())]) {
+      const n = plan.findings.map((f) => f.noteTop).sort((a, b) => a - b);
+      n.forEach((v, i) => {
+        expect(v).toBeGreaterThanOrEqual(8);
+        expect(v).toBeLessThanOrEqual(80);
+        if (i) expect(v - n[i - 1]).toBeGreaterThanOrEqual(12 - 1e-9);
+      });
+    }
   });
 });
 
@@ -236,6 +410,132 @@ describe('Z33 prikaz', () => {
     btn.click();
     await vi.waitFor(() => expect(btn.textContent).toBe('Javit ću ti kad bude gotovo ✓'));
     expect(request).toHaveBeenCalledTimes(1);
+  });
+
+  describe('Preskoči, plan popravka, brojac i obavijest u DOM-u', () => {
+    afterEach(() => { vi.useRealTimers(); });
+
+    /** Ekran provjere uz ekran rezultata s kokpitom (presuda i primarni gumb popravka). */
+    function viewSRezultatom(): { v: HTMLElement; rv: HTMLElement; primarni: ReturnType<typeof vi.fn> } {
+      const v = view();
+      const rv = document.createElement('div');
+      rv.id = 'resultView';
+      rv.innerHTML = '<div id="resultCockpit"><h2 id="cockpitVerdictTitle">Nije spremno za predaju</h2>'
+        + '<button type="button" data-cockpit-primary data-cockpit-action="repair-safe">Napravi plan popravka</button></div>';
+      document.body.append(rv);
+      const primarni = vi.fn();
+      rv.querySelector('[data-cockpit-primary]')!.addEventListener('click', primarni);
+      return { v, rv, primarni };
+    }
+    const objaviSpremnost = async (rv: HTMLElement): Promise<void> => {
+      rv.setAttribute('data-result-ready', '0');
+      await Promise.resolve();
+      rv.setAttribute('data-result-ready', '1');
+      await new Promise((r) => { setTimeout(r, 0); });
+    };
+
+    it('"Preskoči" je gumb dostupan tipkovnicom, odmah daje zavrsno stanje, a fokus ide na presudu', async () => {
+      const { v, rv } = viewSRezultatom();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      const skip = v.querySelector<HTMLButtonElement>('[data-z33="skip"]')!;
+      expect(skip.tagName).toBe('BUTTON');
+      expect(skip.textContent).toBe('Preskoči');
+      expect(skip.hidden, 'nema sto preskociti dok analiza traje').toBe(true);
+      vi.useFakeTimers();
+      let gotovo = false;
+      const p = h.reveal(sampleResult()).then(() => { gotovo = true; });
+      expect(skip.hidden).toBe(false);
+      expect(skip.closest('[aria-hidden="true"]'), 'gumb ne smije biti skriven od citaca').toBeNull();
+      await vi.advanceTimersByTimeAsync(200);
+      expect(gotovo).toBe(false);
+      skip.click();
+      await p;
+      vi.useRealTimers();
+      expect(v.querySelector('.z33')?.getAttribute('data-phase')).toBe('final');
+      expect(skip.hidden).toBe(true);
+      await objaviSpremnost(rv);
+      expect(document.activeElement?.id).toBe('cockpitVerdictTitle');
+    });
+
+    it('"Napravi plan popravka" otvara rezultat i, kad je gotov, pokrece ulaz u popravak kokpita', async () => {
+      const { v, rv, primarni } = viewSRezultatom();
+      rv.setAttribute('data-result-ready', '1'); // prethodni rezultat
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      vi.useFakeTimers();
+      const p = h.reveal(sampleResult());
+      const plan = v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!;
+      expect(plan.textContent).toBe('Napravi plan popravka');
+      expect(plan.hidden).toBe(false);
+      plan.click();
+      await p;
+      vi.useRealTimers();
+      // Stari "1" i ponovni "1" bez novog crtanja nisu spremnost OVOG rezultata.
+      rv.setAttribute('data-result-ready', '1');
+      await new Promise((r) => { setTimeout(r, 0); });
+      expect(primarni).not.toHaveBeenCalled();
+      await objaviSpremnost(rv);
+      expect(primarni).toHaveBeenCalledTimes(1);
+    });
+
+    it('nova analiza prije spremnosti rezultata gasi cekanje plana', async () => {
+      const { v, rv, primarni } = viewSRezultatom();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      vi.useFakeTimers();
+      const p = h.reveal(sampleResult());
+      v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!.click();
+      await p;
+      vi.useRealTimers();
+      h.start(null);
+      await objaviSpremnost(rv);
+      expect(primarni).not.toHaveBeenCalled();
+    });
+
+    it('bez dostupnog popravka gumba plana nema', async () => {
+      document.documentElement.dataset.motion = 'reduce';
+      const v = view();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      const bez = sampleResult();
+      bez.details.triage.counts.auto = 0;
+      await h.reveal(bez);
+      expect(v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!.hidden).toBe(true);
+      await h.reveal(sampleResult());
+      expect(v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!.hidden).toBe(false);
+    });
+
+    it('brojac stranica bez storedPages: "-" i razlog u title, ne prazna oznaka', async () => {
+      document.documentElement.dataset.motion = 'reduce';
+      const v = view();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      await h.reveal({ ...sampleResult(), stats: { words: 11240, references: 38 } });
+      const b = v.querySelector<HTMLElement>('[data-z33="s-pages"]')!;
+      expect(b.textContent).toBe('-');
+      expect(b.parentElement?.getAttribute('title')).toBe('Word nije zapisao broj stranica u datoteku.');
+      expect(v.querySelector('[data-z33="s-words"]')?.parentElement?.hasAttribute('title')).toBe(false);
+    });
+
+    it('kad rezultat stigne, ponuda obavijesti nestaje i ne obecaje buducu obavijest', async () => {
+      class FakeNotification { static permission: NotificationPermission = 'granted'; static requestPermission = async () => 'granted' as NotificationPermission; }
+      vi.stubGlobal('Notification', FakeNotification);
+      const v = view();
+      const h = mountAnalysisLive(v);
+      h.start(null);
+      const btn = v.querySelector<HTMLButtonElement>('[data-z33="notify"]')!;
+      btn.click();
+      await vi.waitFor(() => expect(btn.textContent).toBe('Javit ću ti kad bude gotovo ✓'));
+      vi.useFakeTimers();
+      const p = h.reveal(sampleResult());
+      expect(btn.hidden, 'provjera je gotova; "Javit ću ti" vise ne smije stajati').toBe(true);
+      await vi.advanceTimersByTimeAsync(5000);
+      await p;
+      expect(btn.hidden).toBe(true);
+      const vidljivo = [...v.querySelectorAll<HTMLElement>('.z33-notify > *')].filter((n) => !n.hidden).map((n) => n.textContent).join(' ');
+      expect(vidljivo).not.toContain('Javit ću ti');
+    });
   });
 
   describe('obavijest "Provjera je gotova"', () => {
@@ -299,6 +599,12 @@ describe('Z33 prikaz', () => {
 describe('Z33 gardovi (baseline; mutacije u gate-mutations.test.ts)', () => {
   it('CSS Z33 animira samo transform, opacity i clip-path, bez backdrop-filter', () => {
     expect(motionCssProblems(read('src/ui/analysis-live/analysis-live.css'))).toEqual([]);
+  });
+
+  it('natpisi gumba su doslovno iz predloska; "Preskoči" je zapisano odstupanje u F31', () => {
+    expect(copyProblems(read('src/ui/analysis-live/analysis-live.ts'), read('design/templates/analysis/Analysis.dc.html'), ['Preskoči'])).toEqual([]);
+    const f31 = read('docs/agents/orchestrator-backlog.md').split('\n').find((l) => l.startsWith('| F31 |')) ?? '';
+    expect(f31).toContain('Preskoči');
   });
 
   it('kod Z33 ulazi samo dinamickim uvozom', () => {

@@ -5,6 +5,9 @@
  *   motionCssProblems     Z31: animira se samo transform, opacity i clip-path; nema backdrop-filter.
  *   liveBoundaryProblems  kod Z33 ulazi u preglednik SAMO dinamickim uvozom, nikad statickim, jer
  *                         je ulaz `/rad/` tik ispod bundle-guarda (960 KB u vite.config.ts).
+ *   copyProblems          natpis svakog gumba u kosturu Z33 je DOSLOVNO iz predloska
+ *                         (`design/templates/analysis/Analysis.dc.html`), osim odstupanja zapisanih
+ *                         u F31 (`docs/agents/orchestrator-backlog.md`).
  */
 
 const DOPUSTENO = new Set(['transform', 'opacity', 'clip-path']);
@@ -78,6 +81,28 @@ export function liveBoundaryProblems(izvori: Readonly<Record<string, string>>, s
   const shimKod = izvori[shim] ?? '';
   if (!/import\(\s*['"]\.\/analysis-live\/analysis-live['"]\s*\)/.test(shimKod)) {
     problemi.push(`${shim}: nema dinamickog uvoza ./analysis-live/analysis-live`);
+  }
+  return problemi;
+}
+
+/**
+ * `modul` je izvor kostura (`analysis-live.ts`), `predlozak` HTML predloska. Natpis gumba koji nije
+ * u predlosku smije postojati samo kao zapisano odstupanje; odstupanje koje JE u predlosku nije
+ * odstupanje i obara gard, da popis ne postane tiha iznimka za bilo sto.
+ */
+export function copyProblems(modul: string, predlozak: string, odstupanja: readonly string[]): string[] {
+  const kod = modul.replace(/\r/g, '');
+  const html = predlozak.replace(/\r/g, '');
+  const problemi: string[] = [];
+  const natpisi = [...kod.matchAll(/<button\b[^>]*>([^<]+)<\/button>/g)].map((m) => m[1].trim());
+  if (!natpisi.length) problemi.push('kostur nema nijedan gumb');
+  for (const natpis of natpisi) {
+    if (odstupanja.includes(natpis)) continue;
+    if (!html.includes(natpis)) problemi.push(`natpis "${natpis}" nije u predlosku`);
+  }
+  for (const o of odstupanja) {
+    if (html.includes(o)) problemi.push(`"${o}" je u predlosku, nije odstupanje`);
+    if (!natpisi.includes(o)) problemi.push(`odstupanje "${o}" nema gumba u kosturu`);
   }
   return problemi;
 }

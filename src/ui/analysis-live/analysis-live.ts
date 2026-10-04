@@ -8,12 +8,16 @@
  * iskljucivo `transform`, `opacity` i `clip-path` (Z31); let cedulje je Web Animations API na
  * KLONU, pa original nikad ne mijenja raspored.
  *
- * Rezultat ne kasni vise od trajanja otkrivanja (`revealDuration`), a pod
- * `prefers-reduced-motion`, u skrivenoj kartici i na "Pregledaj nalaze" ne kasni uopce.
+ * Rezultat ne kasni vise od trajanja otkrivanja (`revealDuration`, najvise oko 4 s), a pod
+ * `prefers-reduced-motion`, u skrivenoj kartici, na "Preskoči" i na "Pregledaj nalaze" ne kasni
+ * uopce. "Napravi plan popravka" otvara rezultat i, kad je ekran rezultata gotov (ukljucivo panel
+ * popravka), pokrece ISTI ulaz u popravak kao primarni gumb kokpita, pa nema drugog puta do plana.
+ *
+ * "Preskoči" nije u predlosku; odstupanje je zapisano u F31 (`docs/agents/orchestrator-backlog.md`).
  */
 import './analysis-live.css';
 import { pokretPrigusen } from '../../shared/display-prefs';
-import { buildLivePlan, readingFrame, revealFrame, revealDuration, type LiveFrame, type LivePlan } from './analysis-live-model';
+import { buildLivePlan, readingFrame, revealFrame, revealDuration, FLIGHT, type LiveFrame, type LivePlan } from './analysis-live-model';
 
 export interface LiveHandle {
   start(profile: unknown): void;
@@ -22,6 +26,50 @@ export interface LiveHandle {
 }
 
 const MARK_ROWS = ['font', 'margine', 'prored', 'uvlaka', 'brojevi'] as const;
+
+/** Kako je korisnik napustio otkrivanje: sto ekran rezultata treba uciniti kad bude gotov. */
+type Izlaz = 'presuda' | 'plan';
+
+/**
+ * Ceka da ekran rezultata objavi spremnost: `#resultView[data-result-ready]` prvo `0` (crtanje
+ * pocinje), pa `1` (gotov je i panel popravka; vidi `src/ui/result-ready-signal.ts`). Kokpit se
+ * do tada jos jednom precrta, pa fokus ili klik prije toga zavrse na cvoru koji nestane.
+ * Vraca funkciju za odustajanje; bez spremnosti u 20 s ne cini nista.
+ */
+function poSpremnostiRezultata(cin: () => void): () => void {
+  const rv = document.getElementById('resultView');
+  if (!rv || typeof MutationObserver !== 'function') return () => {};
+  let poceo = false;
+  let rok = 0;
+  const obs = new MutationObserver((zapisi) => {
+    const sad = rv.getAttribute('data-result-ready');
+    if (sad === '0' || zapisi.some((z) => z.oldValue === '0')) poceo = true;
+    if (!poceo || sad !== '1') return;
+    odustani();
+    cin();
+  });
+  const odustani = (): void => { obs.disconnect(); window.clearTimeout(rok); };
+  obs.observe(rv, { attributes: true, attributeFilter: ['data-result-ready'], attributeOldValue: true });
+  rok = window.setTimeout(odustani, 20_000);
+  return odustani;
+}
+
+/** Fokus na presudu rezultata, ali samo ako ga korisnik vec nije odnio drugamo. */
+function fokusNaPresudu(): void {
+  const a = document.activeElement;
+  if (a && a !== document.body && !a.closest('#progressView')) return;
+  const h = document.getElementById('cockpitVerdictTitle');
+  if (!h) return;
+  if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
+  h.focus({ preventScroll: true });
+}
+
+/** Ulaz u plan popravka: primarni gumb kokpita kad nosi `repair-safe`, inace samo presuda. */
+function otvoriPlan(): void {
+  const gumb = document.querySelector<HTMLButtonElement>('#resultCockpit [data-cockpit-primary][data-cockpit-action="repair-safe"]');
+  if (gumb && !gumb.disabled) gumb.click();
+  else fokusNaPresudu();
+}
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls: string, text = ''): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
@@ -61,7 +109,7 @@ function skeleton(): HTMLElement {
     '<div class="z33-score" aria-hidden="true"><span class="z33-score-num" data-z33="score">100</span><span class="z33-score-note"><span>ocjena forme</span><span data-z33="scorenote"></span></span></div>',
     '<ol class="z33-rows" data-z33="rows" aria-hidden="true"></ol>',
     '<div class="z33-stats" aria-hidden="true"><span><b data-z33="s-pages"></b>stranica</span><span><b data-z33="s-words"></b>riječi</span><span><b data-z33="s-sources"></b>izvora</span></div>',
-    '<div class="z33-notify"><span data-z33="remaining" aria-hidden="true"></span><button type="button" class="z33-link" data-z33="notify" hidden>Javi mi kad bude gotovo</button></div>',
+    '<div class="z33-notify"><span data-z33="remaining" aria-hidden="true"></span><button type="button" class="z33-link" data-z33="notify" hidden>Javi mi kad bude gotovo</button><button type="button" class="z33-link" data-z33="skip" hidden>Preskoči</button></div>',
     '</div>',
     '</section>',
     '<section class="z33-result">',
@@ -72,7 +120,7 @@ function skeleton(): HTMLElement {
     '<span class="z33-eyebrow" data-z33="eyebrow"></span>',
     '<h3 class="z33-verdict-title"><span data-z33="verdicttext"></span><span class="z33-caret" aria-hidden="true">|</span></h3>',
     '<p class="z33-verdict-meta" data-z33="summary"></p>',
-    '<div class="z33-verdict-meta z33-verdict-actions"><button type="button" class="z33-link z33-link--paper" data-z33="open">Pregledaj nalaze</button></div>',
+    '<div class="z33-verdict-meta z33-verdict-actions"><button type="button" class="z33-cta" data-z33="plan" hidden>Napravi plan popravka</button><button type="button" class="z33-link z33-link--paper" data-z33="open">Pregledaj nalaze</button></div>',
     '</div><div class="z33-ring" data-z33="ring" aria-hidden="true"><span data-z33="ringnum"></span></div></div>',
     '</div>',
     '<div class="z33-cats" aria-hidden="true"><span class="z33-label z33-label--paper">KATEGORIJE</span><div data-z33="cats"></div></div>',
@@ -98,6 +146,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   const notifyBtn = q('notify') as HTMLButtonElement;
   const canNotify = typeof window.Notification === 'function';
   notifyBtn.hidden = !canNotify;
+  const skipBtn = q('skip') as HTMLButtonElement;
+  const planBtn = q('plan') as HTMLButtonElement;
   let notify = false;
   notifyBtn.addEventListener('click', async () => {
     // Dopustenje se trazi TEK na klik, nikad pri ucitavanju.
@@ -116,6 +166,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   let flown = new Set<number>();
   let scrolled = false;
   let renderedPlan: LivePlan | null = null;
+  // Ceka spremnost ekrana rezultata nakon "Preskoči", "Pregledaj nalaze" ili plana; nova analiza je gasi.
+  let cekaRezultat: () => void = () => {};
   // Dok je true, pomaci motora crtaju fazu citanja; nakon dolaska rezultata kasni pomak ne smije
   // prebrisati otkriveno (ni zavrsno) stanje.
   let reading = false;
@@ -139,17 +191,18 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     text.replaceChildren(...(plan && plan.sheet.length
       ? plan.sheet.map((p) => el('p', p.heading ? 'z33-h' : '', p.text))
       : Array.from({ length: 9 }, (_, i) => el('i', i % 4 === 0 ? 'z33-line z33-line--short' : 'z33-line'))));
-    const n = plan ? plan.findings.length : 0;
-    const top = (j: number): string => `${8 + j * (n > 1 ? 72 / (n - 1) : 0)}%`;
-    q('edge').replaceChildren(...Array.from({ length: n }, (_, j) => {
+    // Polozaje tragova i cedulja racuna model iz sidra nalaza u radu (F31 d); ovdje se samo crtaju.
+    const findings = plan ? plan.findings : [];
+    q('edge').replaceChildren(...findings.map((f) => {
       const m = el('i', 'z33-edge');
-      m.style.top = top(j);
-      m.style.setProperty('--z33-dy', `${(120 - (8 + j * (n > 1 ? 72 / (n - 1) : 0)) * 1.414).toFixed(1)}cqw`);
+      m.style.top = `${f.top.toFixed(2)}%`;
+      m.dataset.located = f.at == null ? 'false' : 'true';
+      m.style.setProperty('--z33-dy', `${(120 - f.top * 1.414).toFixed(1)}cqw`);
       return m;
     }));
-    q('notes').replaceChildren(...Array.from({ length: n }, (_, j) => {
+    q('notes').replaceChildren(...findings.map((f, j) => {
       const note = el('div', 'z33-note');
-      note.style.top = top(j);
+      note.style.top = `${f.noteTop.toFixed(2)}%`;
       note.style.setProperty('--z33-rot', j % 2 ? '-2deg' : '2deg');
       note.append(el('span', 'z33-note-title'), el('span', 'z33-note-meta'));
       return note;
@@ -209,10 +262,17 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     setText(q('score'), frame.score);
     q('score').dataset.long = frame.score.length > 3 ? 'true' : 'false';
     setText(q('scorenote'), frame.scoreNote);
-    setText(q('s-pages'), frame.stats?.pages ?? '');
-    setText(q('s-words'), frame.stats?.words ?? '');
-    setText(q('s-sources'), frame.stats?.sources ?? '');
+    for (const [name, c] of [['s-pages', frame.stats.pages], ['s-words', frame.stats.words], ['s-sources', frame.stats.sources]] as const) {
+      const b = q(name);
+      setText(b, c.text);
+      b.dataset.unknown = c.title ? 'true' : 'false';
+      // Brojac bez broja nosi razlog u `title` cijele celije, ne praznu oznaku.
+      if (c.title) b.parentElement?.setAttribute('title', c.title); else b.parentElement?.removeAttribute('title');
+    }
     setText(q('remaining'), view.querySelector('#progressMessage')?.textContent ?? '');
+    notifyBtn.hidden = !canNotify || !frame.notify;
+    skipBtn.hidden = !frame.skip;
+    planBtn.hidden = !frame.verdict.plan;
     rowsDom(frame);
     for (const row of MARK_ROWS) {
       const mark = root.querySelector(`[data-z33-mark="${row}"]`) as HTMLElement;
@@ -281,7 +341,7 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       { transform: 'rotate(2deg)', opacity: 1 },
       { transform: `translate(${dx * 0.5}px, ${dy * 0.5 - 60}px) rotate(-6deg)`, opacity: 1, offset: 0.5 },
       { transform: `translate(${dx}px, ${dy}px) scale(.9)`, opacity: 0 },
-    ], { duration: 1000, easing: 'cubic-bezier(.5, 0, .2, 1)' });
+    ], { duration: FLIGHT, easing: 'cubic-bezier(.5, 0, .2, 1)' });
     anim.onfinish = () => { clone.remove(); clones = clones.filter((c) => c !== clone); };
   }
 
@@ -297,11 +357,22 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     try { target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' }); } catch { /* stari preglednik */ }
   }
 
-  q('open').addEventListener('click', () => stop(true));
+  // Sva tri izlaza zavrsavaju otkrivanje odmah (zavrsno stanje, rezultat preuzima ekran); razlikuju
+  // se samo po tome sto se dogodi kad je ekran rezultata gotov.
+  const izadji = (kamo: Izlaz): void => {
+    if (!finish) return;
+    cekaRezultat();
+    cekaRezultat = poSpremnostiRezultata(kamo === 'plan' ? otvoriPlan : fokusNaPresudu);
+    stop(true);
+  };
+  q('open').addEventListener('click', () => izadji('presuda'));
+  skipBtn.addEventListener('click', () => izadji('presuda'));
+  planBtn.addEventListener('click', () => izadji('plan'));
 
   return {
     start(profile) {
       stop();
+      cekaRezultat();
       reading = true;
       flown = new Set();
       scrolled = false;
@@ -346,6 +417,8 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
           resolve();
         };
         document.addEventListener('visibilitychange', onHidden);
+        // Prvi okvir otkrivanja odmah, ne tek u sljedecem kadru: "Preskoči" postoji od pocetka.
+        apply(revealFrame(plan, 0, wide), plan);
         const tick = (): void => {
           const frame = revealFrame(plan, performance.now() - t0, wide);
           apply(frame, plan);

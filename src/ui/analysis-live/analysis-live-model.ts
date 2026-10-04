@@ -17,7 +17,13 @@
  *     tocno `result.score`. Vrijeme je ovdje samo redoslijed prikaza vec poznatog rezultata.
  *
  * Pod `prefers-reduced-motion` i u skrivenoj kartici crta se `revealFrame(plan, Infinity)`:
- * zavrsno stanje odmah.
+ * zavrsno stanje odmah. Otkrivanje inace traje najvise `REVEAL_MAX` (oko 4 s, odluka vlasnika
+ * 2026-10-04, F31 a), a "Preskoči" ga zavrsava odmah.
+ *
+ * TRAGOVI NA RUBU LISTA stoje gdje je nalaz u radu (F31 d): sidro odlomka iz `finding.scope`
+ * (1..broj odlomaka iz `details.measurements`), proporcionalno polozaju u dokumentu. Nalaz bez
+ * sidra (ili sa sidrom u fusnoti, koja je zaseban koordinatni prostor) dobiva preostalo mjesto u
+ * ravnomjernom rasporedu; mjesto mu se ne izmislja.
  *
  * NEMA PROCJENE PREOSTALOG VREMENA. Motor je ne daje (pragovi faza nisu mjera vremena, vidi
  * `progress-scan.ts`), pa se umjesto "još oko N s" ispisuje motorova recenica faze. Odstupanje je
@@ -26,7 +32,7 @@
 import type { Check } from '../../scoring/checks';
 import { stableCheckId } from '../../scoring/check-id-registry';
 import { buildVisualResultModel, type VisualResultInput } from '../results/visual-result-model';
-import { topFindings } from '../finding-view-model';
+import { topFindings, type FindingScope } from '../finding-view-model';
 import { summaryNaslov } from '../results/finding-summary';
 import { pluralHr } from '../results/plural-hr';
 
@@ -82,7 +88,18 @@ type RowStatus = 'finding' | 'pass' | 'unchecked';
 type Severity = 'error' | 'warning' | 'info';
 
 interface PlanRow { id: RowId; label: string; pct: number; status: RowStatus; count: number; detail: string | null; lost: number }
-interface PlanFinding { row: RowId; title: string; measured: string | null; expected: string | null; severity: Severity }
+interface PlanFinding {
+  row: RowId;
+  title: string;
+  measured: string | null;
+  expected: string | null;
+  severity: Severity;
+  /** Polozaj u radu (0 pocetak, 1 kraj) iz sidra odlomka; `null` kad nalaz nema sidro u tijelu rada. */
+  at: number | null;
+  /** Vrh traga na rubu lista i vrh cedulje, u postocima visine lista. */
+  top: number;
+  noteTop: number;
+}
 
 export interface LivePlan {
   rows: PlanRow[];
@@ -99,6 +116,12 @@ export interface LivePlan {
   source: string | null;
   stats: { pages: number | null; words: number | null; sources: number | null };
   sheet: Array<{ text: string; heading: boolean }>;
+  /**
+   * Nudi li list presude "Napravi plan popravka". Isti uvjet pod kojim kokpit rezultata na svom
+   * primarnom gumbu nosi taj natpis (`primaryAction` u `results-cockpit.ts`: popravak dostupan,
+   * dakle nije demo, i postoji barem jedan automatski popravak).
+   */
+  repair: boolean;
 }
 
 function num(value: unknown): number | null {
@@ -116,9 +139,55 @@ function shortDetail(detail: unknown): string | null {
 }
 
 interface LiveResultInput extends VisualResultInput {
+  details?: VisualResultInput['details'] & { measurements?: { counts?: { paragraphs?: unknown } } };
   stats?: { words?: unknown; storedPages?: unknown; references?: unknown };
   preview?: { paragraphs?: Array<{ text?: unknown; headingLevel?: unknown }> };
   demo?: boolean;
+}
+
+/** Gornji rub i raspon tragova na listu, u postocima visine lista (kao u predlosku). */
+const EDGE_TOP = 8;
+const EDGE_SPAN = 72;
+/** Najmanji razmak dviju cedulja, da se ne poklope kad su nalazi blizu u radu. */
+const NOTE_GAP = 12;
+
+/** Polozaj nalaza u radu iz sidra odlomka; fusnota i sidro izvan raspona nemaju polozaj u tijelu. */
+function positionOf(scope: FindingScope, paragraphs: number | null): number | null {
+  if (scope.kind !== 'anchor' || scope.footnoteId != null || !paragraphs || paragraphs < 1) return null;
+  const p = Math.floor(scope.paragraphIndex);
+  if (!Number.isFinite(p) || p < 1 || p > paragraphs) return null;
+  return paragraphs === 1 ? 0 : (p - 1) / (paragraphs - 1);
+}
+
+/**
+ * Vrhovi tragova: nalaz sa sidrom stoji proporcionalno svom mjestu u radu i zauzima najblize
+ * ravnomjerno mjesto; nalazi bez sidra redom dobivaju preostala ravnomjerna mjesta.
+ */
+function edgeTops(at: ReadonlyArray<number | null>): number[] {
+  const n = at.length;
+  const even = Array.from({ length: n }, (_, k) => EDGE_TOP + (n > 1 ? (k * EDGE_SPAN) / (n - 1) : 0));
+  const free = new Set(even.keys());
+  const tops = at.map((a) => (a == null ? null : EDGE_TOP + a * EDGE_SPAN));
+  tops.forEach((top) => {
+    if (top == null) return;
+    let best = -1;
+    for (const k of free) if (best < 0 || Math.abs(even[k] - top) < Math.abs(even[best] - top)) best = k;
+    free.delete(best);
+  });
+  const rest = [...free].sort((a, b) => a - b);
+  return tops.map((top) => (top == null ? even[rest.shift() ?? 0] : top));
+}
+
+/** Cedulje prate svoje tragove, ali se razmicu na najmanje `NOTE_GAP` unutar raspona lista. */
+function noteTops(tops: readonly number[]): number[] {
+  const order = tops.map((_, j) => j).sort((a, b) => tops[a] - tops[b] || a - b);
+  const out = [...tops];
+  order.forEach((j, i) => { if (i > 0) out[j] = Math.max(out[j], out[order[i - 1]] + NOTE_GAP); });
+  for (let i = order.length - 1; i >= 0; i -= 1) {
+    const max = i === order.length - 1 ? EDGE_TOP + EDGE_SPAN : out[order[i + 1]] - NOTE_GAP;
+    out[order[i]] = Math.max(EDGE_TOP, Math.min(out[order[i]], max));
+  }
+  return out;
 }
 
 /** Rezultat analize -> plan otkrivanja. Sve sto plan nosi dolazi iz `result`; nista se ne izmislja. */
@@ -146,20 +215,27 @@ export function buildLivePlan(input: unknown): LivePlan {
   });
 
   const order = (id: RowId): number => ROWS.findIndex((r) => r.id === id);
-  const findings = topFindings(open, SLOTS)
+  const paragraphs = num(result.details?.measurements?.counts?.paragraphs);
+  const ordered = topFindings(open, SLOTS)
     .map((f) => ({ f, row: rowOf(f.matchKeys, f.category) }))
-    .sort((a, b) => order(a.row) - order(b.row) || a.f.priorityRank - b.f.priorityRank || a.f.originalIndex - b.f.originalIndex)
-    .map(({ f, row }) => ({
-      row,
-      title: f.title,
-      measured: shortDetail(f.measured),
-      expected: str(f.expected),
-      severity: f.severity,
-    }));
+    .sort((a, b) => order(a.row) - order(b.row) || a.f.priorityRank - b.f.priorityRank || a.f.originalIndex - b.f.originalIndex);
+  const at = ordered.map(({ f }) => positionOf(f.scope, paragraphs));
+  const tops = edgeTops(at);
+  const notes = noteTops(tops);
+  const findings = ordered.map(({ f, row }, j) => ({
+    row,
+    title: f.title,
+    measured: shortDetail(f.measured),
+    expected: str(f.expected),
+    severity: f.severity,
+    at: at[j],
+    top: tops[j],
+    noteTop: notes[j],
+  }));
 
   const score = model.score.kind === 'scored' ? Math.round(model.score.value) : null;
   const automatic = result.demo ? 0 : model.signals.automaticFixes;
-  const paragraphs = Array.isArray(result.preview?.paragraphs) ? result.preview.paragraphs : [];
+  const previewParagraphs = Array.isArray(result.preview?.paragraphs) ? result.preview.paragraphs : [];
   return {
     rows,
     findings,
@@ -172,32 +248,50 @@ export function buildLivePlan(input: unknown): LivePlan {
     profile: model.header.profile,
     source: str(result.details?.sources?.find((s) => str(s?.title))?.title),
     stats: { pages: num(result.stats?.storedPages), words: num(result.stats?.words), sources: num(result.stats?.references) },
-    sheet: paragraphs
+    sheet: previewParagraphs
       .map((p) => ({ text: str(p?.text) ?? '', heading: typeof p?.headingLevel === 'number' }))
       .filter((p) => p.text)
       .slice(0, 7),
+    repair: !result.demo && model.signals.automaticFixes > 0,
   };
 }
 
 /* ------------------------------------------------------------------------------------------ */
 /* Vremenska crta otkrivanja (ms od dolaska rezultata). Jedno mjesto, da test i prikaz citaju isto. */
 
-const ROW_START = 300;
-const ROW_STEP = 450;
-const NOTE_HOLD = 900;
-const FLIGHT = 1000;
+const ROW_START = 120;
+const ROW_STEP = 200;
+const NOTE_HOLD = 400;
+/** Trajanje leta cedulje; prikaz ga cita za Web Animations, da let i model traju isto. */
+export const FLIGHT = 500;
 const TYPE_MS = 25;
-const SCORE_TICK = 30;
-const HOLD_AFTER_SCROLL = 1500;
+/** Najdulje tipkanje naslova nalaza i presude; dulji tekst se tipka brze, ne dulje. */
+const TITLE_TYPE_MAX = 350;
+const VERDICT_TYPE_MAX = 450;
+const SCORE_TICK = 12;
+/**
+ * Koliko list presude stoji gotov (presuda otipkana, gumbi vidljivi i mirni) prije nego ekran
+ * rezultata preuzme. Skrol do presude ide na POCETKU tipkanja presude, pa je u ovom prozoru
+ * stranica mirna i "Napravi plan popravka" se moze stvarno kliknuti.
+ */
+const HOLD_SETTLED = 1500;
+/** Gornja granica otkrivanja (F31 a): rezultat nikad ne ceka dulje od ovoga. */
+const REVEAL_MAX = 4000;
 
 const rowAt = (i: number): number => ROW_START + i * ROW_STEP;
 const ROWS_END = rowAt(ROWS.length - 1);
-const STAMP_AT = ROWS_END + 600;
-const VERDICT_AT = STAMP_AT + 300;
+const STAMP_AT = ROWS_END + 200;
+const VERDICT_AT = STAMP_AT + 150;
+
+/** Milisekundi po znaku: najvise `slowest`, a cijeli tekst najvise `max`. */
+const perChar = (length: number, slowest: number, max: number): number => (length > 0 ? Math.min(slowest, max / length) : slowest);
 
 type Icon = '○' | '●' | '✓' | '✗';
 type RowState = 'pending' | 'active' | 'pass' | 'finding' | 'unchecked';
 type SlotState = 'placeholder' | 'empty' | 'filled';
+
+/** Celija brojaca: broj, ili "-" uz `title` koji kaze zasto broja nema. Nikad prazna oznaka. */
+interface StatCell { text: string; title: string }
 
 export interface LiveFrame {
   phase: 'reading' | 'revealing' | 'final';
@@ -205,7 +299,11 @@ export interface LiveFrame {
   rows: Array<{ label: string; icon: Icon; state: RowState; count: string }>;
   score: string;
   scoreNote: string;
-  stats: { pages: string; words: string; sources: string } | null;
+  stats: { pages: StatCell; words: StatCell; sources: StatCell };
+  /** "Javi mi kad bude gotovo" ima smisla samo dok provjera traje; poslije ne obecaje nista. */
+  notify: boolean;
+  /** "Preskoči" postoji samo dok otkrivanje traje. */
+  skip: boolean;
   /** Olovka na listu: retci s mjerom. `label` je kratka stvarna mjera ili prazno. */
   marks: Array<{ row: RowId; tone: 'finding' | 'pass'; label: string }>;
   /** Ceduljice uz list (samo siroki ekran) i tragovi na rubu, po jedan po nalazu. */
@@ -217,8 +315,9 @@ export interface LiveFrame {
   slots: Array<{ state: SlotState; label: string; title: string; measured: string; expected: string; metaVisible: boolean; severity: Severity }>;
   foundLine: string;
   cats: Array<{ label: string; status: string; tone: 'wait' | 'busy' | 'ok' | 'bad' }>;
-  verdict: { shown: boolean; text: string; caret: boolean; metaVisible: boolean };
-  /** Treba li stranica sama skrolati do presude (jednom). */
+  /** `plan`: list presude nudi "Napravi plan popravka" (vidi `LivePlan.repair`). */
+  verdict: { shown: boolean; text: string; caret: boolean; metaVisible: boolean; plan: boolean };
+  /** Treba li stranica sama skrolati do presude (jednom, kad se presuda pocne tipkati). */
   scrollToVerdict: boolean;
   /** Je li otkrivanje gotovo, pa ekran rezultata smije preuzeti. */
   done: boolean;
@@ -226,7 +325,7 @@ export interface LiveFrame {
 
 /** Ukupno trajanje otkrivanja za plan: do kad rezultat ceka na animaciju. */
 export function revealDuration(plan: LivePlan, wide: boolean): number {
-  return scrollAt(plan, wide) + HOLD_AFTER_SCROLL;
+  return Math.min(REVEAL_MAX, settledAt(plan, wide) + HOLD_SETTLED);
 }
 
 function foundAt(plan: LivePlan, j: number): number {
@@ -237,13 +336,17 @@ function placedAt(plan: LivePlan, j: number, wide: boolean): number {
   return foundAt(plan, j) + (wide ? NOTE_HOLD + FLIGHT : 0);
 }
 
+const verdictMs = (plan: LivePlan): number => perChar(plan.verdict.length, TYPE_MS * 2, VERDICT_TYPE_MAX);
+const titleMs = (f: PlanFinding): number => perChar(f.title.length, TYPE_MS, TITLE_TYPE_MAX);
+
 function verdictEnd(plan: LivePlan): number {
-  return VERDICT_AT + plan.verdict.length * TYPE_MS * 2;
+  return VERDICT_AT + plan.verdict.length * verdictMs(plan);
 }
 
-function scrollAt(plan: LivePlan, wide: boolean): number {
-  const typed = plan.findings.map((f, j) => placedAt(plan, j, wide) + f.title.length * TYPE_MS);
-  return Math.max(verdictEnd(plan), ROWS_END + 1700, ...typed);
+/** Trenutak kad je sve otipkano: presuda i svi naslovi nalaza. */
+function settledAt(plan: LivePlan, wide: boolean): number {
+  const typed = plan.findings.map((f, j) => placedAt(plan, j, wide) + f.title.length * titleMs(f));
+  return Math.max(verdictEnd(plan), ROWS_END + 800, ...typed);
 }
 
 const plural = (n: number): string => pluralHr(n, ['nalaz', 'nalaza', 'nalaza']);
@@ -261,6 +364,9 @@ const placeholderSlots = (n: number): LiveFrame['slots'] => Array.from({ length:
   state: 'placeholder' as const, label: `NALAZ ${i + 1} · ČEKA PROVJERU`, title: '', measured: '', expected: '', metaVisible: false, severity: 'info' as const,
 }));
 
+/** Dok analiza traje brojaca jos nema; celija to kaze umjesto da stoji prazna. */
+const WAITING: StatCell = { text: '-', title: 'Broj je poznat kad provjera završi.' };
+
 /** Stanje dok analiza traje: samo prag faze motora. */
 export function readingFrame(pct: number): LiveFrame {
   const value = Number.isFinite(pct) ? pct : 0;
@@ -271,7 +377,9 @@ export function readingFrame(pct: number): LiveFrame {
     rows: ROWS.map((r) => (busy(r.id) ? { label: r.label, icon: '●', state: 'active', count: '' } : { label: r.label, icon: '○', state: 'pending', count: '' })),
     score: '100',
     scoreNote: 'mijenja se dok mjerim',
-    stats: null,
+    stats: { pages: WAITING, words: WAITING, sources: WAITING },
+    notify: true,
+    skip: false,
     marks: [],
     notes: [],
     edge: [],
@@ -280,7 +388,7 @@ export function readingFrame(pct: number): LiveFrame {
     slots: placeholderSlots(SLOTS),
     foundLine: 'još ništa',
     cats: catsFor(() => false, busy, null),
-    verdict: { shown: false, text: '', caret: false, metaVisible: false },
+    verdict: { shown: false, text: '', caret: false, metaVisible: false, plan: false },
     scrollToVerdict: false,
     done: false,
   };
@@ -313,13 +421,13 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
   const found = plan.findings.map((_, j) => t >= foundAt(plan, j));
   const placed = plan.findings.map((_, j) => t >= placedAt(plan, j, wide));
   const flying = wide ? plan.findings.map((_, j) => j).filter((j) => found[j] && !placed[j] && t >= foundAt(plan, j) + NOTE_HOLD) : [];
-  const typedChars = (j: number): number => (placed[j] ? Math.floor((t - placedAt(plan, j, wide)) / TYPE_MS) : 0);
-  const verdictChars = Math.max(0, Math.floor((t - VERDICT_AT) / (TYPE_MS * 2)));
+  const typedChars = (j: number): number => (placed[j] ? Math.floor((t - placedAt(plan, j, wide)) / titleMs(plan.findings[j])) : 0);
+  const verdictChars = Math.max(0, Math.floor((t - VERDICT_AT) / verdictMs(plan)));
   const verdictDone = verdictChars >= plan.verdict.length;
   const score = scoreAt(plan, t);
   const revealed = plan.findings.filter((_, j) => found[j]).length;
   const final = t >= revealDuration(plan, wide);
-  const fmt = (n: number | null): string => (n == null ? '' : n.toLocaleString('hr-HR'));
+  const cell = (n: number | null, why: string): StatCell => (n == null ? { text: '-', title: why } : { text: n.toLocaleString('hr-HR'), title: '' });
 
   return {
     phase: final ? 'final' : 'revealing',
@@ -332,7 +440,13 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
     }),
     score: score == null ? 'Nije bodovano' : String(score),
     scoreNote: doneCount < ROWS.length ? 'mijenja se dok mjerim' : `${plan.total} ${plural(plan.total)}`,
-    stats: { pages: fmt(plan.stats.pages), words: fmt(plan.stats.words), sources: fmt(plan.stats.sources) },
+    stats: {
+      pages: cell(plan.stats.pages, 'Word nije zapisao broj stranica u datoteku.'),
+      words: cell(plan.stats.words, 'Broj riječi nije izmjeren.'),
+      sources: cell(plan.stats.sources, 'Broj izvora nije izmjeren.'),
+    },
+    notify: false,
+    skip: !final,
     marks: plan.rows
       .filter((r) => done(r.id) && r.status !== 'unchecked' && ['font', 'margine', 'prored', 'uvlaka', 'brojevi'].includes(r.id))
       .map((r) => ({ row: r.id, tone: r.status === 'finding' ? 'finding' as const : 'pass' as const, label: r.status === 'finding' ? (r.detail ?? '') : '' })),
@@ -367,8 +481,9 @@ export function revealFrame(plan: LivePlan, t: number, wide: boolean): LiveFrame
       text: plan.verdict.slice(0, verdictChars),
       caret: t >= VERDICT_AT && !verdictDone,
       metaVisible: verdictDone,
+      plan: plan.repair,
     },
-    scrollToVerdict: t >= scrollAt(plan, wide),
+    scrollToVerdict: t >= VERDICT_AT,
     done: final,
   };
 }

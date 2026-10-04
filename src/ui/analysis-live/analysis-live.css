@@ -207,6 +207,8 @@
 .z33-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; font-size: 11px; color: var(--desk-faint) }
 .z33-stats span { display: grid; gap: 2px }
 .z33-stats b { min-height: 1.2em; font-weight: 400; font-size: 18px; color: var(--desk-ink) }
+/* Broj koji Word nije zapisao: "-" prigusenim tonom, razlog je u `title` celije. */
+.z33-stats b[data-unknown='true'] { color: var(--desk-faint) }
 .z33-notify { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--desk-muted) }
 .z33-link {
   display: inline-flex;
@@ -276,6 +278,24 @@
 .z33-verdict[data-meta='true'] .z33-verdict-meta { opacity: 1 }
 p.z33-verdict-meta { margin: 0; font-size: 13px; line-height: 1.55; color: var(--paper-muted) }
 .z33-verdict-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap }
+/* Gumbi lista presude nisu dohvatljivi dok su nevidljivi (prije kraja tipkanja presude). */
+.z33-verdict:not([data-meta='true']) .z33-verdict-actions { visibility: hidden }
+.z33-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--red-deep);
+  color: var(--paper);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+.z33-cta[hidden] { display: none }
+.z33-cta:focus-visible { outline: 2px solid var(--paper-ink); outline-offset: 2px }
 .z33-link--paper { font-size: 13px; color: var(--paper-ink) }
 .z33-ring {
   display: grid;

@@ -44,7 +44,7 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
-import { liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
+import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
@@ -9287,5 +9287,35 @@ describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
       'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
       'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
     ]);
+  });
+});
+
+/**
+ * Z33 COPY (F31, odluka vlasnika 2026-10-04): natpisi gumba na ekranu analize uzivo su doslovno iz
+ * predloska `Analysis.dc.html`; "Preskoči" je jedino zapisano odstupanje. Gard `copyProblems`.
+ */
+describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const modul = citaj('src/ui/analysis-live/analysis-live.ts');
+  const predlozak = citaj('design/templates/analysis/Analysis.dc.html');
+  const ODSTUPANJA = ['Preskoči'];
+
+  it('BASELINE: stvarni kostur i predlozak su cisti', () => {
+    expect(copyProblems(modul, predlozak, ODSTUPANJA)).toEqual([]);
+  });
+
+  it('MUTACIJA: preformuliran natpis plana popravka obara gard', () => {
+    // Natpis koji NIJE podniz predloska ("Napravi plan" bi to bio, pa ne bi bio mutacija copyja).
+    const mutant = modul.replace('>Napravi plan popravka</button>', '>Izradi plan popravka</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, ODSTUPANJA)).toEqual(['natpis "Izradi plan popravka" nije u predlosku']);
+  });
+
+  it('MUTACIJA: odstupanje izbrisano s popisa obara gard', () => {
+    expect(copyProblems(modul, predlozak, [])).toEqual(['natpis "Preskoči" nije u predlosku']);
+  });
+
+  it('MUTACIJA: natpis iz predloska proglasen odstupanjem obara gard', () => {
+    expect(copyProblems(modul, predlozak, [...ODSTUPANJA, 'Pregledaj nalaze'])).toEqual(['"Pregledaj nalaze" je u predlosku, nije odstupanje']);
   });
 });
