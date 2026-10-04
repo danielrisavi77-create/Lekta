@@ -4,7 +4,8 @@
  */
 
 export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; command: string }> = [
-  { event: 'SessionStart', command: 'node scripts/agents/session-bootstrap.mjs' },
+  // `--worktree-gc` samo u hooku: rucni i testni poziv bootstrapa ne smije uklanjati stabla stroja.
+  { event: 'SessionStart', command: 'node scripts/agents/session-bootstrap.mjs --worktree-gc' },
   { event: 'PreToolUse', matcher: 'Bash', command: 'node scripts/hooks/cpu-discipline.mjs' },
   { event: 'PreToolUse', matcher: 'Edit', command: 'node scripts/hooks/task-scope-guard.mjs' },
   { event: 'PreToolUse', matcher: 'Write', command: 'node scripts/hooks/task-scope-guard.mjs' },

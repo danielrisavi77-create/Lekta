@@ -27,6 +27,74 @@ import {
   listProcesses,
   readLock,
 } from '../gate-preflight.mjs';
+import { spawn as spawnChild } from 'node:child_process';
+import { appendFileSync, closeSync, existsSync, openSync, readFileSync as readFileSyncFs } from 'node:fs';
+import os from 'node:os';
+import { join } from 'node:path';
+
+/** Log pozadinskog GC-a: zadnji redak prethodnog runa ispisuje sljedeci SessionStart. */
+function worktreeGcLogPath(env = process.env) {
+  if (env.LEKTA_WORKTREE_GC_LOG) return env.LEKTA_WORKTREE_GC_LOG;
+  if (process.platform === 'win32' && env.LOCALAPPDATA) return join(env.LOCALAPPDATA, 'Temp', 'lekta-worktree-gc.log');
+  return join(os.tmpdir(), 'lekta-worktree-gc.log');
+}
+
+/** Zadnji neprazan redak loga, ili null kad loga nema ili je prazan. */
+export function lastLogLine(path) {
+  try {
+    const lines = readFileSyncFs(path, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter(Boolean);
+    return lines.length ? lines.at(-1).slice(0, 300) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Pokrece `scripts/worktree-gc.mjs --apply --quiet` ODVOJENO u pozadini (odluka vlasnika
+ * 2026-10-03: worktree se nakon spajanja uklanja, a start sesije je jedino mjesto koje sigurno
+ * dolazi nakon spajanja). Start sesije NE CEKA GC: dijete je `detached`, `unref`, a izlaz mu ide u
+ * log (`worktreeGcLogPath`), ne u cijev hooka. Ispisuje se zadnji redak PRETHODNOG runa. FAIL-OPEN:
+ * nedostajuca skripta ili pad pokretanja daju jedan citljiv redak i nikad ne ruse start sesije.
+ * Istodobne sesije serijalizira GC lock u samoj skripti. Vraca uvijek tocno jedan redak.
+ * @param {{ root: string, env?: NodeJS.ProcessEnv, spawn?: typeof spawnChild }} options
+ * @returns {string}
+ */
+export function runWorktreeGc({ root, env = process.env, spawn = spawnChild }) {
+  try {
+    const script = join(root, 'scripts', 'worktree-gc.mjs');
+    if (!existsSync(script)) return 'worktree-gc: preskoceno (skripta ne postoji)';
+    const logPath = worktreeGcLogPath(env);
+    const previous = lastLogLine(logPath);
+    const fd = openSync(logPath, 'w');
+    try {
+      const child = spawn(process.execPath, [script, '--apply', '--quiet'], {
+        cwd: root,
+        env,
+        detached: true,
+        stdio: ['ignore', fd, fd],
+        windowsHide: true,
+      });
+      // M5 runda 3: asinkrona greska pokretanja (dijete emitira `error` nakon povratka iz spawn)
+      // ne smije biti presucena: ide na stderr hooka i u log, pa je sljedeci start ispisuje.
+      child.on('error', (error) => {
+        const line = `worktree-gc: nije pokrenut (${error instanceof Error ? error.message : String(error)})`;
+        // eslint-disable-next-line no-console
+        console.error(line);
+        try {
+          appendFileSync(logPath, line + String.fromCharCode(10));
+        } catch {
+          // log nedostupan: stderr je ispisan
+        }
+      });
+      child.unref();
+    } finally {
+      closeSync(fd);
+    }
+    return `worktree-gc: pokrenut u pozadini (log ${logPath}); prethodni run: ${previous ?? 'nema zapisa'}`;
+  } catch (error) {
+    return `worktree-gc: nije pokrenut (${error instanceof Error ? error.message : String(error)}); start sesije se nastavlja`;
+  }
+}
 
 /**
  * @typedef {Object} BootstrapInputs
@@ -292,6 +360,12 @@ async function collectInputsAndPrint() {
   for (const line of [...lines, ...formatSessionRules()]) {
     // eslint-disable-next-line no-console
     console.log(line);
+  }
+  // Samo SessionStart hook (`--worktree-gc` u .claude/settings.json) uklanja stabla. Rucni poziv
+  // (intake-analiza) i test (hooks-discipline) bez zastavice ne smiju dirati worktreeove stroja.
+  if (process.argv.includes('--worktree-gc')) {
+    // eslint-disable-next-line no-console
+    console.log(runWorktreeGc({ root }));
   }
 }
 

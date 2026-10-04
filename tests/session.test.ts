@@ -65,11 +65,13 @@ describe('requestEmailOtp', () => {
     await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (_u, i) => { body = JSON.parse(i.body as string); }), 'http://localhost:5199/admin.html');
     expect(body).toEqual({ email: 'a@b.hr', create_user: true, redirect_to: 'http://localhost:5199/admin.html' });
   });
-  it('s redirectTo salje redirect_to i kao QUERY parametar, jer ga GoTrue tamo cita (T49, Codex nalaz 4)', async () => {
+  it.each([
+    ['novi origin', 'https://lekta.hr/rad/'],
+    ['stari origin za oporavak lokalnog stanja', 'https://lektahr.netlify.app/rad/'],
+  ])('s redirectTo na %s salje redirect_to u QUERY parametru (T49, Codex nalaz 4)', async (_name, redirectTo) => {
     let url = '';
-    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (u) => { url = u; }), 'https://lekta.hr/rad/');
-    expect(url).toBe('https://proj.supabase.co/auth/v1/otp?redirect_to=https%3A%2F%2Flekta.hr%2Frad%2F');
-    expect(new URL(url).searchParams.get('redirect_to')).toBe('https://lekta.hr/rad/');
+    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (u) => { url = u; }), redirectTo);
+    expect(new URL(url).searchParams.get('redirect_to')).toBe(redirectTo);
   });
   it('bez redirectTo URL ostaje bez query parametra', async () => {
     let url = '';
