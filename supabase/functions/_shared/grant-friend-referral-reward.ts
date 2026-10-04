@@ -4,7 +4,7 @@
 //
 //   let decision = await decide();
 //   if (decision.decision === 'payment_required') {
-//     const friend = await tryGrantFriendReferralReward(admin, user.id, workType);
+//     const friend = await tryGrantFriendReferralReward(admin, user.id, workType, friendRewardCaller(user));
 //     if (friend.granted) decision = await decide();   // sad postoji entitlement -> new_slot
 //   }
 //   if (decision.decision === 'payment_required') { ... return 402 }
@@ -18,11 +18,32 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.110.
 const REWARD_WINDOW_DAYS = 90;
 const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString();
 
+/** Server-side identitet pozivatelja (iz `auth.getUser`), ne iz tijela zahtjeva. */
+export interface FriendRewardCaller {
+  isAnonymous: boolean;
+}
+
+/**
+ * Pozivatelj iz Auth korisnika. Samo izricit `is_anonymous === false` znaci pravi racun; nepoznato
+ * (undefined ili null, npr. drukciji oblik odgovora Auth usluge) se tretira kao anonimno, pa se
+ * slot u sumnji NE dodjeljuje (T84 RF-1A).
+ */
+export function friendRewardCaller(user: { is_anonymous?: boolean | null }): FriendRewardCaller {
+  return { isAnonymous: user.is_anonymous !== false };
+}
+
 export async function tryGrantFriendReferralReward(
   supabase: SupabaseClient,
   userId: string,
   workType: string,
-): Promise<{ granted: boolean }> {
+  caller: FriendRewardCaller,
+): Promise<{ granted: boolean; reason?: string }> {
+  // T84 RF-1: anonimni Auth racun (uloga authenticated, is_anonymous=true) nastaje bez e-maila i
+  // captche, pa bi svaki novi anonimni racun s istim kodom dobio placeni slot. Isto pravilo vec
+  // vrijedi za nagradu preporucitelju (grant-referrer-reward.ts, ineligible_buyer). Signup ostaje
+  // u stanju signed_up, pa racun nakon nadogradnje na pravi (e-mail) dobiva nagradu.
+  if (caller.isAnonymous !== false) return { granted: false, reason: 'ineligible_anonymous' };
+
   // Prijatelj ima aktivan signup koji jos nije nagraden?
   const { data: signup } = await supabase
     .from('referral_signups')
