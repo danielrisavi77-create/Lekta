@@ -1,0 +1,366 @@
+{
+  "capture": {
+    "url": "https://api.crossref.org/works/10.1088%2F1361-6595%2Faaebdb",
+    "capturedAt": "2026-10-04T16:05:24.890Z",
+    "status": 200,
+    "contentType": "application/json",
+    "removedFields": [
+      "author",
+      "reference"
+    ],
+    "note": "rad s ispravkom: updated-by type correction (sum, ne povlacenje)"
+  },
+  "response": {
+    "status": "ok",
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "message": {
+      "indexed": {
+        "date-parts": [
+          [
+            2026,
+            9,
+            23
+          ]
+        ],
+        "date-time": "2026-09-23T17:43:20Z",
+        "timestamp": 1790185400865,
+        "version": "4.1.0"
+      },
+      "reference-count": 28,
+      "publisher": "IOP Publishing",
+      "issue": "11",
+      "license": [
+        {
+          "start": {
+            "date-parts": [
+              [
+                2018,
+                11,
+                19
+              ]
+            ],
+            "date-time": "2018-11-19T00:00:00Z",
+            "timestamp": 1542585600000
+          },
+          "content-version": "vor",
+          "delay-in-days": 18,
+          "URL": "https://publishingsupport.iopscience.iop.org/iop-standard/v1"
+        },
+        {
+          "start": {
+            "date-parts": [
+              [
+                2018,
+                11,
+                19
+              ]
+            ],
+            "date-time": "2018-11-19T00:00:00Z",
+            "timestamp": 1542585600000
+          },
+          "content-version": "tdm",
+          "delay-in-days": 18,
+          "URL": "https://iopscience.iop.org/info/page/text-and-data-mining"
+        }
+      ],
+      "funder": [
+        {
+          "DOI": "10.13039/501100006769",
+          "name": "Russian Science Foundation",
+          "doi-asserted-by": "crossref",
+          "award": [
+            "14-22-00273"
+          ],
+          "award-info": [
+            {
+              "award-number": [
+                "14-22-00273"
+              ]
+            }
+          ],
+          "id": [
+            {
+              "id": "10.13039/501100006769",
+              "id-type": "DOI",
+              "asserted-by": "crossref"
+            }
+          ]
+        }
+      ],
+      "content-domain": {
+        "domain": [
+          "iopscience.iop.org"
+        ],
+        "crossmark-restriction": false
+      },
+      "short-container-title": [
+        "Plasma Sources Sci. Technol."
+      ],
+      "published-print": {
+        "date-parts": [
+          [
+            2018,
+            11,
+            1
+          ]
+        ]
+      },
+      "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>\n                    The initial stage of the fast electrical breakdown of an air gap with a pin-to-plane electrode geometry is studied on a nanosecond time scale using multi-frame laser probing with an exposure time of 70 ps and spatial resolution as high as 3–4 \n                    <jats:italic>μ</jats:italic>\n                    m. We find that the gap breakdown is associated with the fast (≲1 ns) formation of a micron-sized (∼10\n                    <jats:italic>μ</jats:italic>\n                    m) cathode spot that appears as a plasma with an electron density of\n                    <jats:inline-formula>\n                      <jats:tex-math>\n                        \n                      </jats:tex-math>\n                      <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" overflow=\"scroll\">\n                        <mml:msub>\n                          <mml:mrow>\n                            <mml:mi>n</mml:mi>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mi>e</mml:mi>\n                          </mml:mrow>\n                        </mml:msub>\n                        <mml:mo>≈</mml:mo>\n                        <mml:msup>\n                          <mml:mrow>\n                            <mml:mn>10</mml:mn>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mn>19</mml:mn>\n                          </mml:mrow>\n                        </mml:msup>\n                        <mml:mspace width=\"0.25em\"/>\n                        <mml:msup>\n                          <mml:mrow>\n                            <mml:mi>cm</mml:mi>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mo>−</mml:mo>\n                            <mml:mn>3</mml:mn>\n                          </mml:mrow>\n                        </mml:msup>\n                      </mml:math>\n                    </jats:inline-formula>\n                    . The spot is then transformed into a spark channel having an electron density of\n                    <jats:inline-formula>\n                      <jats:tex-math>\n                        \n                      </jats:tex-math>\n                      <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" overflow=\"scroll\">\n                        <mml:msub>\n                          <mml:mrow>\n                            <mml:mi>n</mml:mi>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mi>e</mml:mi>\n                          </mml:mrow>\n                        </mml:msub>\n                        <mml:mo>∼</mml:mo>\n                        <mml:msup>\n                          <mml:mrow>\n                            <mml:mn>10</mml:mn>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mn>19</mml:mn>\n                          </mml:mrow>\n                        </mml:msup>\n                        <mml:mo>–</mml:mo>\n                        <mml:msup>\n                          <mml:mrow>\n                            <mml:mn>10</mml:mn>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mn>20</mml:mn>\n                          </mml:mrow>\n                        </mml:msup>\n                        <mml:mspace width=\"0.25em\"/>\n                        <mml:msup>\n                          <mml:mrow>\n                            <mml:mi>cm</mml:mi>\n                          </mml:mrow>\n                          <mml:mrow>\n                            <mml:mo>−</mml:mo>\n                            <mml:mn>3</mml:mn>\n                          </mml:mrow>\n                        </mml:msup>\n                      </mml:math>\n                    </jats:inline-formula>\n                    . Within ∼1 ns after the breakdown the dynamics of the highly ionized near-cathode plasma governs the current capacity of the discharge gap as well as the current rise rate.\n                  </jats:p>",
+      "DOI": "10.1088/1361-6595/aaebdb",
+      "type": "journal-article",
+      "created": {
+        "date-parts": [
+          [
+            2018,
+            10,
+            26
+          ]
+        ],
+        "date-time": "2018-10-26T18:45:16Z",
+        "timestamp": 1540579516000
+      },
+      "page": "11LT01",
+      "update-policy": "https://doi.org/10.1088/crossmark-policy",
+      "source": "Crossref",
+      "is-referenced-by-count": 43,
+      "title": [
+        "Mechanisms responsible for the initiation of a fast breakdown in an atmospheric discharge"
+      ],
+      "prefix": "10.1088",
+      "volume": "27",
+      "member": "266",
+      "published-online": {
+        "date-parts": [
+          [
+            2018,
+            11,
+            19
+          ]
+        ]
+      },
+      "updated-by": [
+        {
+          "DOI": "10.1088/1361-6595/ab245f",
+          "type": "correction",
+          "label": "Correction",
+          "source": "publisher",
+          "updated": {
+            "date-parts": [
+              [
+                2019,
+                7,
+                11
+              ]
+            ],
+            "date-time": "2019-07-11T00:00:00Z",
+            "timestamp": 1562803200000
+          }
+        }
+      ],
+      "container-title": [
+        "Plasma Sources Science and Technology"
+      ],
+      "original-title": [],
+      "link": [
+        {
+          "URL": "http://stacks.iop.org/0963-0252/27/i=11/a=11LT01?key=crossref.5f634157369c9a73184a39400ac03b94",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "http://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "am",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "http://stacks.iop.org/0963-0252/27/i=11/a=11LT01/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "http://iopscience.iop.org/article/10.1088/1361-6595/aaebdb",
+          "content-type": "text/html",
+          "content-version": "am",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/aaebdb",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "http://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "am",
+          "intended-application": "syndication"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "syndication"
+        },
+        {
+          "URL": "http://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "am",
+          "intended-application": "similarity-checking"
+        },
+        {
+          "URL": "http://stacks.iop.org/0963-0252/27/i=11/a=11LT01/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        },
+        {
+          "URL": "http://stacks.iop.org/0963-0252/27/i=11/a=11LT01?key=crossref.5f634157369c9a73184a39400ac03b94",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/aaebdb/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ],
+      "deposited": {
+        "date-parts": [
+          [
+            2026,
+            5,
+            9
+          ]
+        ],
+        "date-time": "2026-05-09T12:53:55Z",
+        "timestamp": 1778331235000
+      },
+      "score": 1,
+      "resource": {
+        "primary": {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/aaebdb"
+        }
+      },
+      "subtitle": [],
+      "short-title": [],
+      "issued": {
+        "date-parts": [
+          [
+            2018,
+            11,
+            1
+          ]
+        ]
+      },
+      "references-count": 28,
+      "journal-issue": {
+        "issue": "11",
+        "published-online": {
+          "date-parts": [
+            [
+              2018,
+              11,
+              19
+            ]
+          ]
+        },
+        "published-print": {
+          "date-parts": [
+            [
+              2018,
+              11,
+              1
+            ]
+          ]
+        }
+      },
+      "URL": "https://doi.org/10.1088/1361-6595/aaebdb",
+      "relation": {},
+      "ISSN": [
+        "0963-0252",
+        "1361-6595"
+      ],
+      "issn-type": [
+        {
+          "value": "0963-0252",
+          "type": "print"
+        },
+        {
+          "value": "1361-6595",
+          "type": "electronic"
+        }
+      ],
+      "subject": [],
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            11,
+            1
+          ]
+        ]
+      },
+      "assertion": [
+        {
+          "value": "Mechanisms responsible for the initiation of a fast breakdown in an atmospheric discharge",
+          "name": "article_title",
+          "label": "Article Title"
+        },
+        {
+          "value": "Plasma Sources Science and Technology",
+          "name": "journal_title",
+          "label": "Journal Title"
+        },
+        {
+          "value": "paper",
+          "name": "article_type",
+          "label": "Article Type"
+        },
+        {
+          "value": "© 2018 IOP Publishing Ltd. All rights, including for text and data mining, AI training, and similar technologies, are reserved.",
+          "name": "copyright_information",
+          "label": "Copyright Information"
+        },
+        {
+          "value": "2018-08-10",
+          "name": "date_received",
+          "label": "Date Received",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        },
+        {
+          "value": "2018-10-26",
+          "name": "date_accepted",
+          "label": "Date Accepted",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        },
+        {
+          "value": "2018-11-19",
+          "name": "date_epub",
+          "label": "Online publication date",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        }
+      ]
+    }
+  }
+}

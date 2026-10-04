@@ -1,0 +1,316 @@
+{
+  "capture": {
+    "url": "https://api.crossref.org/works/10.1088%2F1361-6595%2Fab245f",
+    "capturedAt": "2026-10-04T16:05:24.890Z",
+    "status": 200,
+    "contentType": "application/json",
+    "removedFields": [
+      "author",
+      "reference"
+    ],
+    "note": "obavijest o ispravku: update-to type correction"
+  },
+  "response": {
+    "status": "ok",
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "message": {
+      "indexed": {
+        "date-parts": [
+          [
+            2026,
+            2,
+            28
+          ]
+        ],
+        "date-time": "2026-02-28T13:49:36Z",
+        "timestamp": 1772286576646,
+        "version": "3.50.1"
+      },
+      "update-to": [
+        {
+          "DOI": "10.1088/1361-6595/aaebdb",
+          "type": "correction",
+          "label": "Correction",
+          "source": "publisher",
+          "updated": {
+            "date-parts": [
+              [
+                2019,
+                7,
+                11
+              ]
+            ],
+            "date-time": "2019-07-11T00:00:00Z",
+            "timestamp": 1562803200000
+          }
+        }
+      ],
+      "reference-count": 28,
+      "publisher": "IOP Publishing",
+      "issue": "7",
+      "license": [
+        {
+          "start": {
+            "date-parts": [
+              [
+                2019,
+                7,
+                11
+              ]
+            ],
+            "date-time": "2019-07-11T00:00:00Z",
+            "timestamp": 1562803200000
+          },
+          "content-version": "vor",
+          "delay-in-days": 10,
+          "URL": "https://publishingsupport.iopscience.iop.org/iop-standard/v1"
+        },
+        {
+          "start": {
+            "date-parts": [
+              [
+                2019,
+                7,
+                11
+              ]
+            ],
+            "date-time": "2019-07-11T00:00:00Z",
+            "timestamp": 1562803200000
+          },
+          "content-version": "tdm",
+          "delay-in-days": 10,
+          "URL": "https://iopscience.iop.org/info/page/text-and-data-mining"
+        }
+      ],
+      "content-domain": {
+        "domain": [
+          "iopscience.iop.org"
+        ],
+        "crossmark-restriction": false
+      },
+      "short-container-title": [
+        "Plasma Sources Sci. Technol."
+      ],
+      "published-print": {
+        "date-parts": [
+          [
+            2019,
+            7,
+            1
+          ]
+        ]
+      },
+      "DOI": "10.1088/1361-6595/ab245f",
+      "type": "journal-article",
+      "created": {
+        "date-parts": [
+          [
+            2019,
+            7,
+            11
+          ]
+        ],
+        "date-time": "2019-07-11T11:13:10Z",
+        "timestamp": 1562843590000
+      },
+      "page": "079601",
+      "update-policy": "https://doi.org/10.1088/crossmark-policy",
+      "source": "Crossref",
+      "is-referenced-by-count": 0,
+      "title": [
+        "Erratum: mechanisms responsible for the initiation of a fast breakdown in an atmospheric discharge (2018\n                    <i>Plasma Sources Sci. Technol.</i>\n                    <b>27</b>\n                    11LT01)"
+      ],
+      "prefix": "10.1088",
+      "volume": "28",
+      "member": "266",
+      "published-online": {
+        "date-parts": [
+          [
+            2019,
+            7,
+            11
+          ]
+        ]
+      },
+      "container-title": [
+        "Plasma Sources Science and Technology"
+      ],
+      "original-title": [],
+      "link": [
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "syndication"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        },
+        {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f/pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ],
+      "deposited": {
+        "date-parts": [
+          [
+            2026,
+            2,
+            28
+          ]
+        ],
+        "date-time": "2026-02-28T12:53:32Z",
+        "timestamp": 1772283212000
+      },
+      "score": 1,
+      "resource": {
+        "primary": {
+          "URL": "https://iopscience.iop.org/article/10.1088/1361-6595/ab245f"
+        }
+      },
+      "subtitle": [],
+      "short-title": [],
+      "issued": {
+        "date-parts": [
+          [
+            2019,
+            7,
+            1
+          ]
+        ]
+      },
+      "references-count": 28,
+      "journal-issue": {
+        "issue": "7",
+        "published-online": {
+          "date-parts": [
+            [
+              2019,
+              7,
+              11
+            ]
+          ]
+        },
+        "published-print": {
+          "date-parts": [
+            [
+              2019,
+              7,
+              1
+            ]
+          ]
+        }
+      },
+      "URL": "https://doi.org/10.1088/1361-6595/ab245f",
+      "relation": {},
+      "ISSN": [
+        "0963-0252",
+        "1361-6595"
+      ],
+      "issn-type": [
+        {
+          "value": "0963-0252",
+          "type": "print"
+        },
+        {
+          "value": "1361-6595",
+          "type": "electronic"
+        }
+      ],
+      "subject": [],
+      "published": {
+        "date-parts": [
+          [
+            2019,
+            7,
+            1
+          ]
+        ]
+      },
+      "assertion": [
+        {
+          "value": "Erratum: mechanisms responsible for the initiation of a fast breakdown in an atmospheric discharge (2018\n                      Plasma Sources Sci. Technol.\n                      27\n                      11LT01)",
+          "name": "article_title",
+          "label": "Article Title"
+        },
+        {
+          "value": "Plasma Sources Science and Technology",
+          "name": "journal_title",
+          "label": "Journal Title"
+        },
+        {
+          "value": "paper",
+          "name": "article_type",
+          "label": "Article Type"
+        },
+        {
+          "value": "© 2019 IOP Publishing Ltd. All rights, including for text and data mining, AI training, and similar technologies, are reserved.",
+          "name": "copyright_information",
+          "label": "Copyright Information"
+        },
+        {
+          "name": "date_received",
+          "label": "Date Received",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        },
+        {
+          "value": "2019-05-24",
+          "name": "date_accepted",
+          "label": "Date Accepted",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        },
+        {
+          "value": "2019-07-11",
+          "name": "date_epub",
+          "label": "Online publication date",
+          "group": {
+            "name": "publication_dates",
+            "label": "Publication dates"
+          }
+        }
+      ]
+    }
+  }
+}
