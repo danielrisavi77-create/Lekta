@@ -185,11 +185,18 @@ describe('npm audit ratchet: jezgra', () => {
     expect(validateRatchet(r, { today: '2026-10-04' })).toEqual(expect.arrayContaining([expect.stringMatching(/istekla 2026-10-02/)]));
   });
 
-  it('T93: sinteticki audit iz commitanog ratcheta je equal, a dodani advisory above', () => {
-    const accepted = ratchet.fullGraphHighCriticalPackages;
-    expect(compareAuditToRatchet(syntheticAudit(ratchet, accepted), ratchet).verdict).toBe('equal');
-    expect(compareAuditToRatchet(syntheticAudit(ratchet, accepted, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), ratchet).uncoveredPairs)
-      .toEqual(['braces GHSA-zzzz-zzzz-zzzz']);
+  it('T93: sintetički audit na fixture paketu hvata novi GHSA uz isti broj i identitet', () => {
+    expect(ratchet.fullGraphHighCritical).toBe(0);
+    expect(ratchet.fullGraphHighCriticalPackages).toEqual([]);
+    expect(ratchet.exceptions).toEqual([]);
+    const accepted = {
+      fullGraphHighCritical: 1,
+      fullGraphHighCriticalPackages: ['braces'],
+      exceptions: [{ packages: ['braces'], advisories: [GA] }],
+    };
+    expect(compareAuditToRatchet(syntheticAudit(accepted, ['braces']), accepted).verdict).toBe('equal');
+    const novel = compareAuditToRatchet(syntheticAudit(accepted, ['braces'], { braces: [GB] }), accepted);
+    expect(novel.uncoveredPairs).toEqual([`braces ${GB}`]);
   });
 
   it('strop koji nije broj ne moze biti prolaz', () => {
@@ -231,54 +238,13 @@ describe('npm audit ratchet: commitani zapis', () => {
   });
 
   it('prethodno mjerenje je zapisano da se promjena ne moze procitati kao tiha', () => {
-    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(6);
-    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-10-02');
+    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(15);
+    expect(ratchet.priorMeasurement.measuredAt).toBe('2026-10-03');
   });
 
-  it('tooling iznimke su vremenski ogranicene i pokrivaju tocno aktivne identitete', () => {
-    expect(ratchet.fullGraphHighCriticalPackages).toEqual([
-      '@netlify/build',
-      '@netlify/dev',
-      '@netlify/functions-dev',
-      '@netlify/functions-utils',
-      '@netlify/git-utils',
-      '@netlify/images',
-      '@netlify/zip-it-and-ship-it',
-      'braces',
-      'fast-glob',
-      'http-proxy-middleware',
-      'ipx',
-      'listhen',
-      'micromatch',
-      'netlify-cli',
-      'node-forge',
-    ]);
-    expect(ratchet.exceptions).toHaveLength(2);
-    expect(ratchet.exceptions[0]).toMatchObject({
-      id: 'netlify-node-forge-cve-2026-85393',
-      advisories: ['GHSA-86w9-cpqp-85rv'],
-      nextReviewOn: '2026-10-05',
-      expiresOn: '2026-10-09',
-    });
-    expect(ratchet.exceptions[1]).toMatchObject({
-      id: 'netlify-braces-ghsa-vfj7-8cjw-p6xm',
-      advisories: ['GHSA-vfj7-8cjw-p6xm'],
-      packages: [
-        '@netlify/build',
-        '@netlify/dev',
-        '@netlify/functions-dev',
-        '@netlify/functions-utils',
-        '@netlify/git-utils',
-        '@netlify/zip-it-and-ship-it',
-        'braces',
-        'fast-glob',
-        'http-proxy-middleware',
-        'micromatch',
-        'netlify-cli',
-      ],
-      owner: 'Daniel Risavi',
-      nextReviewOn: '2026-10-10',
-      expiresOn: '2026-10-17',
-    });
+  it('Popravak A: bez netlify-cli pun graf nema high/critical, pa nema ni iznimaka', () => {
+    expect(ratchet.fullGraphHighCritical).toBe(0);
+    expect(ratchet.fullGraphHighCriticalPackages).toEqual([]);
+    expect(ratchet.exceptions).toEqual([]);
   });
 });

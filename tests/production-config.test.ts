@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_PRODUCTION_CONFIG, productionStatus, paidOffersLive,
-  reportEndpointConfigured, checkoutConfigured,
+  reportEndpointConfigured, checkoutConfigured, loadProductionConfig, migrateContactEmail,
 } from '../src/config/production-config';
+import { STORAGE_KEYS } from '../src/shared/browser-storage';
 
 /**
  * PRODUKCIJSKA KONFIGURACIJA odgovara na jedno pitanje: je li placena ponuda ZIVA.
@@ -49,5 +50,29 @@ describe('je li placena ponuda ziva', () => {
 
   it('broji se koliko je platnih poveznica ISPUNJENO, ne koliko ih ima', () => {
     expect(productionStatus({ ...prazna, paymentLinks: { format: 'https://a', panic: '', premium: '' } }).links).toBe(1);
+  });
+});
+
+describe('kontakt adresa iz spremljene konfiguracije (T49, Codex nalaz 5 na #273)', () => {
+  it('tocno stara zadana adresa prelazi na novu zadanu', () => {
+    expect(migrateContactEmail('lekta.kontakt@gmail.com')).toBe(DEFAULT_PRODUCTION_CONFIG.contactEmail);
+    expect(migrateContactEmail(' lekta.kontakt@gmail.com ')).toBe(DEFAULT_PRODUCTION_CONFIG.contactEmail);
+    expect(migrateContactEmail(undefined)).toBe(DEFAULT_PRODUCTION_CONFIG.contactEmail);
+    expect(migrateContactEmail('')).toBe(DEFAULT_PRODUCTION_CONFIG.contactEmail);
+  });
+
+  it('svjesno spremljena druga adresa ostaje', () => {
+    expect(migrateContactEmail('ured@primjer.hr')).toBe('ured@primjer.hr');
+  });
+
+  it('loadProductionConfig nad spremljenom starom konfiguracijom vraca novu adresu', () => {
+    localStorage.setItem(STORAGE_KEYS.production, JSON.stringify({ contactEmail: 'lekta.kontakt@gmail.com', businessName: 'Lekta' }));
+    try {
+      expect(loadProductionConfig().contactEmail).toBe('support@lekta.hr');
+      localStorage.setItem(STORAGE_KEYS.production, JSON.stringify({ contactEmail: 'ured@primjer.hr' }));
+      expect(loadProductionConfig().contactEmail).toBe('ured@primjer.hr');
+    } finally {
+      localStorage.removeItem(STORAGE_KEYS.production);
+    }
   });
 });
