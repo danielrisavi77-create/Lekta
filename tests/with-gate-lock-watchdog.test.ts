@@ -330,7 +330,7 @@ describe('straza: pravi omotac', { timeout: 30_000 }, () => {
     const scriptPath = join(dir, 'all.sh');
     const pidPath = join(dir, 'worker.pid');
     const script = [
-      'node -e "require(\'fs\').writeFileSync(process.env.WATCHDOG_WORKER_PID, String(process.pid)); setTimeout(function(){}, 600000)" &',
+      `node -e "require('fs').writeFileSync(process.env.WATCHDOG_WORKER_PID, String(process.pid)); function n(){try{return require('fs').readFileSync(process.env.LEKTA_GATE_WATCHDOG_TRACE,'utf8').split(String.fromCharCode(10)).filter(Boolean).length}catch(e){return 0}} function tick(){if(n()>=${SAFE_SAMPLES})process.exit(0);var e=Date.now()+100;while(Date.now()<e){};setTimeout(tick,10)}tick()" &`,
       'worker=$!',
       'trace=$(cygpath -u "$LEKTA_GATE_WATCHDOG_TRACE")',
       `while [ ! -f "$trace" ] || [ "$(wc -l < "$trace")" -lt ${SAFE_SAMPLES} ]; do sleep 0.05; done`,
