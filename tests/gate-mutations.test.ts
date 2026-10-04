@@ -23,6 +23,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
@@ -283,6 +284,7 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
+import { messagingRuleProblems, type MessagingSources } from './helpers/session-messaging';
 import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
 import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBatch, requestPlan } from '../scripts/osv-query.mjs';
 import osvRatchet from '../data/security/osv-ratchet.json';
@@ -4684,6 +4686,39 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  // Komunikacija koordinatora i cloud sesija (vlasnik 2026-10-04). Mutacije mijenjaju tekst pravila;
+  // baseline je nad stvarnim datotekama.
+  ...([
+    ['poruke/kanal-nije-pr', 'readme', '**Kanal istine je PR.**', '**Kanal je bilo koji.**', 'README: nema pravila "kanal istine je PR"'],
+    ['poruke/bez-pretplate', 'readme', 'pretplacuje na svaki PR izvrsitelja** (`subscribe_pr_activity`)', 'pretplacuje po potrebi**', 'README: nema pravila "koordinator se pretplacuje na PR"'],
+    ['poruke/bez-povlacenja', 'readme', '**Koordinator sam povlaci stanje.**', '**Koordinator ceka poruke.**', 'README: nema pravila "koordinator sam povlaci stanje"'],
+    ['poruke/routine-10-minuta', 'readme', '`run_once_at` tocno 1 minutu unaprijed', '`run_once_at` 10 minuta unaprijed', 'README: nema pravila "Routine 1 minutu unaprijed"'],
+    ['poruke/bez-provjere-isporuke', 'readme', '`last_run` mora biti `SUCCEEDED`', '`last_run` se ne gleda', 'README: nema pravila "provjera isporuke Routinea"'],
+    ['poruke/routine-kao-zakazani-zadatak', 'readme', '**Koordinator Routine s tim zaglavljem cita kao izvjestaj izvrsitelja**', '**Koordinator Routine cita kao zakazani zadatak**', 'README: nema pravila "Routine kao izvjestaj izvrsitelja"'],
+    ['poruke/relay-kao-odobrenje', 'readme', '**Vlasnikove odluke izvrsitelj trazi izravno od vlasnika**', '**Vlasnikove odluke prenosi koordinator**', 'README: nema pravila "vlasnikove odluke izravno"'],
+    ['poruke/brief-bez-zaglavlja', 'brief', '"[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '"[status] PR #<n>', 'brief: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/negiran-status-na-pr', 'readme', 'koordinatoru) pise kao komentar na svoj PR', 'koordinatoru) ne pise kao komentar na svoj PR', 'README: nema pravila "status kao komentar na PR"'],
+    ['poruke/zaglavlje-bez-zadatka', 'readme', '`[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n>', '`[<sesija> -> koordinator] PR #<n>', 'README: nema fiksnog zaglavlja Routine poruke'],
+    ['poruke/brief-bez-issuea', 'brief', 'dok PR ne postoji, na GitHub issue zadatka', 'dok PR ne postoji, cekaj', 'brief: nema izvjestaja na issueu prije PR-a'],
+    ['poruke/isporuceno-kao-procitano', 'readme', '`SUCCEEDED` potvrdjuje samo isporuku u sesiju, ne i da ju je koordinator procitao', '`SUCCEEDED` potvrdjuje da je koordinator procitao', 'README: nema pravila "isporuceno nije procitano"'],
+    ['poruke/pr-merge-bez-pretplate', 'prMerge', 'Budi pretplacen na PR (`subscribe_pr_activity`)', 'Gledaj PR kad stignes', 'pr-merge: nema pretplate na PR'],
+  ] as const).map(([id, key, from, to, problem]) => {
+    const real = (): MessagingSources => ({
+      readme: readTextLf(resolve(process.cwd(), 'docs', 'agents', 'README.md')),
+      brief: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'brief', 'SKILL.md')),
+      prMerge: readTextLf(resolve(process.cwd(), '.claude', 'skills', 'pr-merge', 'SKILL.md')),
+    });
+    return {
+      id,
+      imitates: `Komunikacija sesija: ${problem}; poruka iz clouda tada opet tiho ne stigne do koordinatora ili vrijedi kao nalog.`,
+      caught: () => {
+        const src = real();
+        const mut = src[key].replace(from, to);
+        return mut !== src[key] && messagingRuleProblems({ ...src, [key]: mut }).includes(problem);
+      },
+      cleanBefore: () => messagingRuleProblems(real()).length === 0,
+    };
+  }),
   // T87 (kriterij 9 T81): iskljucen ili zauzet endpoint ne vodi u slijepu ulicu. Mutacije mijenjaju
   // IZVOR modula; baseline je nad stvarnim datotekama.
   ...([
@@ -10519,6 +10554,153 @@ describe('T84 R-01: otisak dokumenta je linearan na napadackom XML-u', () => {
       'styles: vise styleId u tagu, jedan > na kraju',
       'styles: > u navodnicima bez zatvaranja',
     ]);
+  });
+});
+
+describe('mutacije: Upisnik dokaz u snimci', () => {
+  const baselineRatchet = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/upisnik-snapshot-ratchet-baseline.json'), 'utf8')) as import('../src/programs/upisnik-evidence-snapshots').SnapshotRatchet;
+  const sourcePath = resolve(process.cwd(), 'src/programs/upisnik-evidence-snapshots.ts');
+  const fixture = 'Doslovni citat iz registrirane snimke izvora.';
+  const url = 'https://example.test/source';
+  const path = 'data/sources/test.html';
+  const encoder = new TextEncoder();
+  const goodBytes = encoder.encode(fixture);
+  const hash = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
+  const file = { decisions: [{ programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+  const ratchet = { schemaVersion: 1, entries: [] };
+  const source = { url, snapshotPath: path, snapshotHash: hash(goodBytes) };
+
+  async function copyWith(replace: (s: string) => string, readZipMock: (bytes: Uint8Array) => Promise<any[]> = async () => []) {
+    const { createRequire } = await import('node:module');
+    const { transform } = await import('esbuild');
+    const original = readFileSync(sourcePath, 'utf8');
+    let edited = replace(original);
+    expect(edited).not.toBe(original);
+    edited = edited
+      .replace("import { extractText, getDocumentProxy } from 'unpdf';", "const extractText = async () => ({ text: '' }); const getDocumentProxy = async () => ({});")
+      .replace("import { readZip } from '../repair/zip-codec';", "const readZip = readZipMock;")
+      .replace('createRequire(import.meta.url)', 'createRequire(' + JSON.stringify(sourcePath) + ')');
+    // Mutant se ne pise na disk (vitestov loader ne ucitava modul izvan korijena projekta): CJS kod se
+    // izvodi s pravim require modula, pa radi jednako na Node 20 i 24.
+    const js = (await transform(edited, { loader: 'ts', format: 'cjs' })).code;
+    const mod = { exports: {} as Record<string, unknown> };
+    new Function('require', 'module', 'exports', 'readZipMock', js)(createRequire(sourcePath), mod, mod.exports, readZipMock);
+    return mod.exports as typeof import('../src/programs/upisnik-evidence-snapshots');
+  }
+  async function baseline(data: Uint8Array, src = source, companion?: Uint8Array, registry = [src]) {
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    return verifyUpisnikEvidenceSnapshots(file, registry, (p) => p === path ? data : p.endsWith('.snapshot-ocr.txt') ? companion ?? null : null, ratchet, baselineRatchet);
+  }
+  it('uklanjanje provjere hasha snimke propusta zamijenjene bajtove', async () => {
+    const wrong = encoder.encode(fixture + ' promjena');
+    expect((await baseline(wrong)).join(' ')).toMatch(/hash snimke/);
+    const mutant = await copyWith((s) => s.replace("if (createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)", "if (false && createHash('sha256').update(bytes).digest('hex') !== source.snapshotHash)"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [source], () => wrong, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje ratchet provjere propusta novu neregistriranu odluku', async () => {
+    expect((await baseline(goodBytes, source, undefined, [])).join(' ')).toMatch(/nova obvezujuca odluka/);
+    const mutant = await copyWith((s) => s.replace('if (!ratchetKeys.has(key))', 'if (false && !ratchetKeys.has(key))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [], () => null, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('provjera svake rijeci propusta citat koji nije podniz', async () => {
+    const rearranged = encoder.encode('snimke izvora. Doslovni citat iz registrirane');
+    expect((await baseline(rearranged, { ...source, snapshotHash: hash(rearranged) })).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace(
+      String.raw`if (!(await cache.get(cacheKey)!).split(/\n\s*\n/u).some((paragraph) => normalizeSnapshotQuote(paragraph).includes(quote)))`,
+      "const text = normalizeSnapshotQuote(await cache.get(cacheKey)!); if (!quote.split(' ').every((word) => text.includes(word)))",
+    ));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [{ ...source, snapshotHash: hash(rearranged) }], () => rearranged, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zamrznute osnovice propusta zamjenu ratchet zapisa', async () => {
+    const entry = { ...baselineRatchet.entries[0], sourceUrl: 'https://replacement.example.test' };
+    const changed = { schemaVersion: 1, entries: [entry] };
+    const changedFile = { decisions: [{ programCode: entry.programCode, evidence: { sourceUrl: entry.sourceUrl, sourceLocator: 'test', quote: fixture } }], exclusions: [] };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).join(' ')).toMatch(/ratchet zapis izvan zamrznute osnovice/);
+    const mutant = await copyWith((s) => s.replace('if (!baselineKeys.has(ratchetKey(entry)))', 'if (false && !baselineKeys.has(ratchetKey(entry)))'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(changedFile, [], () => null, changed, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje hidden provjere propusta skriveni HTML citat', async () => {
+    const hidden = encoder.encode('<p hidden>' + fixture + '</p>');
+    const hiddenSource = { ...source, snapshotHash: hash(hidden) };
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).join(' ')).toMatch(/nije doslovan podniz/);
+    const mutant = await copyWith((s) => s.replace("element.hasAttribute('hidden') ||", "false ||"));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [hiddenSource], () => hidden, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('iskljucen DOCX onError propusta atribut bez navodnika', async () => {
+    // xmldom 0.9.12: atribut bez navodnika prijavljuje SAMO kroz onError (nije fatalError i nije goli ampersand).
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii=Arial/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("onError: () => { throw new Error('DOCX XML nije ispravan'); }", 'onError: () => {}'), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje provjere golog ampersanda propusta neispravan DOCX XML', async () => {
+    const broken = buildDocx({ paragraphs: [{ text: '', raw: '<w:p><w:r><w:rPr><w:rFonts w:ascii="A & B"/></w:rPr><w:t>' + fixture + '</w:t></w:r></w:p>' }] });
+    const docxSource = { ...source, snapshotPath: 'data/sources/test.docx', snapshotHash: hash(broken) };
+    const { readZip } = await import('../src/repair/zip-codec');
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).join(' ')).toMatch(/DOCX XML nije ispravan/);
+    const mutant = await copyWith((s) => s.replace("if (/&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/u.test(xml)) throw new Error('DOCX XML nije ispravan');", ''), readZip);
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(file, [docxSource], () => broken, ratchet, baselineRatchet)).toEqual([]);
+  });
+  // Skenirani PDF: pratitelj = "# snapshotHash: <PDF>", "# ocrTextHash: <tijelo>", tijelo; dokaz samo uz rucno
+  // potvrdjen prijepis u registru (ocrTranscript.textHash). Mutant stubira unpdf na prazan tekst, pa ide istim putem.
+  const pdfPath = 'data/sources/efri/efri-pravilnik-specijalisticki-2024.pdf';
+  const companionPath = pdfPath.replace(/\.pdf$/u, '.snapshot-ocr.txt');
+  const sha = (s: string) => createHash('sha256').update(s, 'utf8').digest('hex');
+  const scanned = () => {
+    const scan = new Uint8Array(readFileSync(resolve(process.cwd(), pdfPath)));
+    const transcript = { textHash: sha(fixture), verifiedBy: 'test', verifiedAt: '2026-10-04' };
+    return { scan, pdfSource: { url, snapshotPath: pdfPath, snapshotHash: hash(scan), ocrTranscript: transcript } };
+  };
+  const companionWith = (pdfHash: string, bodyHash: string, body = fixture) => encoder.encode(`# snapshotHash: ${pdfHash}\n# ocrTextHash: ${bodyHash}\n${body}`);
+  async function scannedRun(companion: Uint8Array, src: Record<string, unknown>, mutantSource?: (s: string) => string) {
+    const { scan } = scanned();
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companion : null;
+    const mod = mutantSource ? await copyWith(mutantSource) : await import('../src/programs/upisnik-evidence-snapshots');
+    return mod.verifyUpisnikEvidenceSnapshots(file, [src as never], read, ratchet, baselineRatchet);
+  }
+  it('BASELINE: nemutirani gard prihvaca valjan HTML i valjan potvrdjen prijepis skena (Codex R4)', async () => {
+    expect(await baseline(goodBytes)).toEqual([]);
+    const { scan, pdfSource } = scanned();
+    expect(await scannedRun(companionWith(hash(scan), sha(fixture)), pdfSource)).toEqual([]);
+  });
+  it('uklanjanje provjere prvog retka zaglavlja propusta pratitelj tudjeg PDF-a', async () => {
+    const { pdfSource } = scanned();
+    const wrongPdf = companionWith('0'.repeat(64), sha(fixture));
+    expect((await scannedRun(wrongPdf, pdfSource)).join(' ')).toMatch(/skenirana snimka bez OCR pratitelja/);
+    expect(await scannedRun(wrongPdf, pdfSource, (s) => s.replace("if (lines[0] !== `# snapshotHash: ${source.snapshotHash}`)", "if (false && lines[0] !== `# snapshotHash: ${source.snapshotHash}`)"))).toEqual([]);
+  });
+  it('uklanjanje provjere hasha tijela propusta pratitelj kojem drugi redak ne odgovara tijelu', async () => {
+    const { scan, pdfSource } = scanned();
+    const staleHeader = companionWith(hash(scan), '1'.repeat(64));
+    expect((await scannedRun(staleHeader, pdfSource)).join(' ')).toMatch(/hashu vlastitog tijela/);
+    expect(await scannedRun(staleHeader, pdfSource, (s) => s.replace('if (lines[1] !== `# ocrTextHash: ${bodyHash}`)', 'if (false && lines[1] !== `# ocrTextHash: ${bodyHash}`)'))).toEqual([]);
+  });
+  it('kljuc predmemorije bez potvrde prijepisa propusta nepotvrdjen zapis iste snimke (Codex runda 2)', async () => {
+    const { scan, pdfSource } = scanned();
+    const plain = { url: 'http://example.test/isti-pdf', snapshotPath: pdfPath, snapshotHash: hash(scan) };
+    const twoFile = { decisions: [
+      { programCode: '1', evidence: { sourceUrl: url, sourceLocator: 'test', quote: fixture } },
+      { programCode: '2', evidence: { sourceUrl: plain.url, sourceLocator: 'test', quote: fixture } },
+    ], exclusions: [] };
+    const read = (p: string) => p === pdfPath ? scan : p === companionPath ? companionWith(hash(scan), sha(fixture)) : null;
+    const { verifyUpisnikEvidenceSnapshots } = await import('../src/programs/upisnik-evidence-snapshots');
+    expect((await verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).join(' ')).toMatch(/decision 2: .*rucno potvrdjenog prijepisa/);
+    const mutant = await copyWith((s) => s.replace(
+      'transcript ? [transcript.textHash, transcript.verifiedBy, transcript.verifiedAt] : null]);', ']);'));
+    expect(await mutant.verifyUpisnikEvidenceSnapshots(twoFile, [pdfSource, plain], read, ratchet, baselineRatchet)).toEqual([]);
+  });
+  it('uklanjanje zahtjeva za rucno potvrdjenim prijepisom propusta strojni OCR kao dokaz (Codex R1)', async () => {
+    const { scan, pdfSource } = scanned();
+    const unverified = { ...pdfSource, ocrTranscript: undefined };
+    const companion = companionWith(hash(scan), sha(fixture));
+    expect((await scannedRun(companion, unverified)).join(' ')).toMatch(/rucno potvrdjenog prijepisa/);
+    expect(await scannedRun(companion, unverified, (s) => s.replace('if (!transcript || transcript.textHash !== bodyHash || !transcript.verifiedBy?.trim() || !transcript.verifiedAt?.trim()) {', 'if (false) {'))).toEqual([]);
   });
 });
 

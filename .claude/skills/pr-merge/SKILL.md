@@ -48,6 +48,11 @@ sve zeleno.
 
 ## Petlja
 
+0. Budi pretplacen na PR (`subscribe_pr_activity`) od trenutka kad doznas broj do spajanja;
+   lokalni koordinator bez tog alata na svakom krugu pokrece svoj `pr-intake` (nije u repozitoriju).
+   Na svakom krugu procitaj i nove komentare izvrsitelja na PR-u te zadnje dogadjaje njegove
+   sesije (`get_session`, `list_events`); Routine sa zaglavljem `[<sesija> -> koordinator]` je
+   izvjestaj izvrsitelja koji provjeravas prema PR-u (docs/agents/README.md).
 1. Pokreni skriptu za PR svakih 5 minuta.
 2. Izlaz 1: cekaj sljedeci krug.
 3. Izlaz 2: javi implementatoru ili vlasniku tocno sto blokira; ne popravljaj sam tudju granu.
