@@ -336,6 +336,11 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
   (`until node scripts/gate-preflight.mjs --check-only; do sleep 60; done`, najvise 60 min).
   `LEKTA_GATE_FORCE=1` nadjacava sve (ispisuje NADJACANO i svejedno upisuje lock) i koristi se
   samo uz vlasnikovu odluku. Na CI-ju (`CI` postavljen) preflight samo mjeri i propusta.
+- **Worktree se nakon spajanja uklanja.** Pravilo vlasnika 2026-10-03; prije je zivjelo samo u
+  biljeskama koordinatora i nije se provodilo, pa je disk pao na 1,7 GB uz 11 worktreeova.
+- **Provodi ga `scripts/worktree-gc.mjs`.** Zove ga SessionStart bootstrap (`--apply --quiet`,
+  fail-open) i koordinator nakon spajanja (`pr-merge`); preflight ga imenuje kad je disk ispod
+  praga. Uklanja samo stablo spojeno u `origin/master`, cisto, bez gate locka i starije od 60 min.
 - **Lokalno samo Chromium.** `playwright.config.ts` lokalno ima samo `chromium` i
   `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
   `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).
@@ -376,7 +381,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 
 | Dogadjaj | Skripta | Sto radi |
 | --- | --- | --- |
-| SessionStart | `scripts/agents/session-bootstrap.mjs` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". |
+| SessionStart | `scripts/agents/session-bootstrap.mjs --worktree-gc` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". Zatim jedan redak `worktree-gc` (samo uz zastavicu, fail-open). |
 | PreToolUse (Bash, PowerShell) | `scripts/agents/tool-guard.mjs` | Postojeci gard opasnih git i brisanja naredbi. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
 | PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
