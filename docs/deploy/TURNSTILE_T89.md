@@ -53,6 +53,18 @@ curl -s https://<site>/build-info.json
 ```
 mora vratiti commit ocekivanog deploya i `"captchaSiteKey": true`. `false` ili bez polja: STANI.
 
+**Produkcija je drukcija.** Produkcijska objava je zakljucana i ide rucno iz lokalne gradnje
+([`RELEASE_PROOF_WORKFLOW.md`](RELEASE_PROOF_WORKFLOW.md), korak 6), pa Netlify varijabla na nju ne
+djeluje. `VITE_TURNSTILE_SITE_KEY` mora biti postavljen u okolini lokalne gradnje (ista ljuska kao
+`DEPLOY=1` i ostale varijable koraka 6) prije `node scripts/build-production.mjs`. Prvi dokaz je nad
+lokalnim artefaktom, prije objave:
+```bash
+node -e "console.log(JSON.parse(require('fs').readFileSync('dist/build-info.json','utf8')).captchaSiteKey)"
+```
+mora ispisati `true`. Nakon objave isti `curl` na `https://lektahr.netlify.app/build-info.json` mora
+vratiti commit objavljenog izdanja i `"captchaSiteKey": true`. `false`: STANI, ne ukljucuj korak 4
+na produkciji.
+
 ### 3. Frontend salje token (vlasnik, preglednik)
 
 Novi privatni prozor, `https://<site>`, ucitaj `.docx` i pokreni automatski popravak (on trazi
@@ -115,7 +127,8 @@ se korak 4 radi tek nakon dokaza 2 i 3 na produkciji.
 | 5 `/signup` bez tokena = 400 `captcha_failed` | staging | | | |
 | 5 `/otp` bez tokena = 400 `captcha_failed` | staging | | | |
 | 6 popravak i e-mail prijava prolaze | staging | | | |
-| 2 do 6 | produkcija | | | |
+| 2 `captchaSiteKey: true` u lokalnom `dist` i na objavi | produkcija | | | |
+| 3 do 6 | produkcija | | | |
 
 ## Ako nesto podje krivo
 
