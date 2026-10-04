@@ -51,6 +51,7 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -1148,6 +1149,24 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
+  // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
+  ...([
+    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!iza)', '', '(a)'],
+    ['citations/oznaka-bez-godine-nepotpuna', 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)', '(!r.year&&!r.noDate)', '!r.year', '(b)'],
+    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1 (runda 3): svaka godina u zapisu, i goli broj u naslovu, brise oznaku bez godine, pa "Horvat, A. (u tisku). Mediji 2011." dobije 2011 iz naslova', 'nd&&!DATE_POSITION_YEAR.test(t)?nd:null', 'nd&&!y?nd:null', '(r1)'],
+    ['citations/godina-razdvaja-viseredni', 'pregled R2: autorov red ("Horvat, A.", "HZZ.", ustanova) ispred "(2011)." se ne prepozna, pa kratak nestane ili se zapis razdvoji u dva nepotpuna', 'authorOnlyParagraph(t)&&datumNaPocetku(iduci)', 'false', '(r2)'],
+    ['citations/zapis-bez-godine-guta-iduci', 'pregled R2b: autorov red bez pozitivnog dokaza (svaki odlomak velikim slovom bez interpunkcije), pa naslov "Socijalna politika" proguta iduci "(2011). Prirucnik." i nalaz nepotpunosti nestane', 'return osoba||ustanova;', 'return /^\\p{Lu}/u.test(t);', '(r2b)'],
+    ['citations/metapodaci-prije-spajanja', 'pregled R4: metapodaci viserednog zapisa iz prvog odlomka umjesto iz spojenog teksta, pa drugi prolaz daje drugog autora', 'for(const e of entries){if(e.ps.length<2)continue;', 'for(const e of entries){if(e.ps.length>=0)continue;', '(r4)'],
+  ] as const).map(([id, imitates, staro, novo, oznaka]): Mutation => ({
+    id,
+    imitates,
+    caught: () => {
+      if (!referenceParserSource().includes(staro)) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return referenceParserProblems(loadReferenceParser((x) => x.split(staro).join(novo))).some((p) => p.startsWith(oznaka));
+    },
+    cleanBefore: () => referenceParserProblems(loadReferenceParser()).length === 0,
+  })),
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
   {
     id: 'agents/model-probe-prima-api-kljuc',

@@ -78,12 +78,14 @@ function citationMatches(author: string, year: string, citation: any): boolean {
   return !!left && (left === right || left.includes(right) || right.includes(left));
 }
 
-function confidence(fields: Partial<CitationInput>, rawText: string): { value: BibliographyConfidence; evidence: string[]; flags: string[] } {
+function confidence(fields: Partial<CitationInput>, rawText: string, noDate = ''): { value: BibliographyConfidence; evidence: string[]; flags: string[] } {
   const evidence: string[] = [];
   const flags: string[] = [];
   let score = 0;
   if (fields.authors) { score += 2; evidence.push('prepoznat autor'); } else flags.push('missing-author');
-  if (fields.year) { score += 2; evidence.push('prepoznata godina'); } else flags.push('missing-year');
+  // T91 (pregled R6): izricita oznaka bez godine ("(b.g.)", "(s. a.)", "(u tisku)") nije nedostajuca godina,
+  // isti kriterij kao `isIncompleteReference` u autor-godina analizi.
+  if (fields.year) { score += 2; evidence.push('prepoznata godina'); } else if (noDate) { score += 2; evidence.push(`oznaka bez godine ${noDate}`); } else flags.push('missing-year');
   if (fields.title) { score += 2; evidence.push('prepoznat naslov'); } else flags.push('missing-title');
   if (fields.doi || fields.url) { score += 1; evidence.push('prepoznat DOI ili URL'); }
   if (rawText.length > 25) score += 1;
@@ -118,7 +120,7 @@ export function analyzeBibliographyStructure(
     const fields = parsed.fields || {};
     const author = firstAuthor(fields, reference.author || '');
     const year = String(fields.year || reference.year || '').toLowerCase();
-    const quality = confidence(fields, rawText);
+    const quality = confidence(fields, rawText, String((reference as { noDate?: unknown }).noDate || ''));
     const key = canonical(rawText);
     entries.push({
       id: `bibliography-${paragraphIndices[0]}`,
