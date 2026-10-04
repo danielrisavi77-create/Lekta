@@ -28,6 +28,13 @@ Opis PR-a: redci "Neto redaka: +x/-y" i "Nove ovisnosti: nema"
 (node scripts/agents/pr-lines.mjs --izracunaj).
 
 PR kao draft, pa ready; javi broj PR-a komentarom. Spaja koordinator.
+
+Izvjestavanje (docs/agents/README.md, "Poruke izmedu neovisnih Claude Code sesija"): svaki status
+pises kao komentar na PR; dok PR ne postoji, na GitHub issue zadatka: issue #<n ili "nema, otvori ga
+koordinator">. Iz clouda dodatno posalji Routine 1 minutu unaprijed, prvi redak
+"[<sesija> -> koordinator] T<xx> <VRSTA> PR #<n> head <sha> | stanje: <...> | treba: <...>"
+(VRSTA: BLOKER, PREGLED ili INFO), i provjeri da je last_run SUCCEEDED. Vlasnikove odluke (nova
+grana, opseg) trazi izravno od vlasnika.
 ```
 
 ## Pravila
@@ -40,3 +47,4 @@ PR kao draft, pa ready; javi broj PR-a komentarom. Spaja koordinator.
   na laptopu"): koordinator ne otvara sesiju preko granice, a tezak posao ide samo kroz
   `with-gate-lock`.
 - Jedan zadatak, jedan pisac. Sesija bez zadatka miruje.
+- Cim izvrsitelj javi broj PR-a, koordinator se pretplati na taj PR (`subscribe_pr_activity`).
