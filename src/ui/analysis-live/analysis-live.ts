@@ -111,7 +111,7 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   });
 
   let loop = 0;
-  let finish: (() => void) | null = null;
+  let finish: ((prirodno: boolean) => void) | null = null;
   let clones: HTMLElement[] = [];
   let flown = new Set<number>();
   let scrolled = false;
@@ -120,14 +120,16 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
   // prebrisati otkriveno (ni zavrsno) stanje.
   let reading = false;
 
-  const stop = (): void => {
+  // prirodno=true samo kad otkrivanje zavrsi samo od sebe ili rezultat preuzima ekran;
+  // otkazivanje i zamjena analize zavrsavaju bez obavijesti.
+  const stop = (prirodno = false): void => {
     if (loop) cancelAnimationFrame(loop);
     loop = 0;
     clones.forEach((c) => c.remove());
     clones = [];
     const f = finish;
     finish = null;
-    f?.();
+    f?.(prirodno);
   };
 
   function buildPlanDom(plan: LivePlan | null): void {
@@ -295,7 +297,7 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
     try { target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' }); } catch { /* stari preglednik */ }
   }
 
-  q('open').addEventListener('click', () => stop());
+  q('open').addEventListener('click', () => stop(true));
 
   return {
     start(profile) {
@@ -336,11 +338,11 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
       }
       return new Promise<void>((resolve) => {
         const t0 = performance.now();
-        const onHidden = (): void => { if (document.hidden) stop(); };
-        finish = () => {
+        const onHidden = (): void => { if (document.hidden) stop(true); };
+        finish = (prirodno) => {
           document.removeEventListener('visibilitychange', onHidden);
           apply(revealFrame(plan, Infinity, wide), plan);
-          ping(plan.score, nalazi);
+          if (prirodno) ping(plan.score, nalazi);
           resolve();
         };
         document.addEventListener('visibilitychange', onHidden);
@@ -348,13 +350,13 @@ export function mountAnalysisLive(view: HTMLElement): LiveHandle {
           const frame = revealFrame(plan, performance.now() - t0, wide);
           apply(frame, plan);
           if (frame.scrollToVerdict && !scrolled) { scrolled = true; toVerdict(true); }
-          if (frame.done) { loop = 0; stop(); return; }
+          if (frame.done) { loop = 0; stop(true); return; }
           loop = requestAnimationFrame(tick);
         };
         loop = requestAnimationFrame(tick);
         // Ograda: rAF stoji u nekim okruzenjima (pozadinska kartica, testni preglednik bez slika);
         // rezultat ne smije cekati dulje od otkrivanja ni tada.
-        window.setTimeout(() => { if (finish) stop(); }, revealDuration(plan, wide) + 500);
+        window.setTimeout(() => { if (finish) stop(true); }, revealDuration(plan, wide) + 500);
       });
     },
   };

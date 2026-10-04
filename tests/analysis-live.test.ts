@@ -237,6 +237,63 @@ describe('Z33 prikaz', () => {
     await vi.waitFor(() => expect(btn.textContent).toBe('Javit ću ti kad bude gotovo ✓'));
     expect(request).toHaveBeenCalledTimes(1);
   });
+
+  describe('obavijest "Provjera je gotova"', () => {
+    const poslano: string[] = [];
+    async function ukljuci(): Promise<HTMLElement> {
+      poslano.length = 0;
+      class FakeNotification {
+        static permission: NotificationPermission = 'granted';
+        static requestPermission = async (): Promise<NotificationPermission> => 'granted';
+        constructor(_naslov: string, opcije?: NotificationOptions) { poslano.push(opcije?.body ?? ''); }
+      }
+      vi.stubGlobal('Notification', FakeNotification);
+      const v = view();
+      const h = mountAnalysisLive(v);
+      (v as HTMLElement & { h?: ReturnType<typeof mountAnalysisLive> }).h = h;
+      h.start(null);
+      const btn = v.querySelector<HTMLButtonElement>('[data-z33="notify"]')!;
+      btn.click();
+      await vi.waitFor(() => expect(btn.dataset.on).toBe('true'));
+      return v;
+    }
+    const handle = (v: HTMLElement) => (v as HTMLElement & { h: ReturnType<typeof mountAnalysisLive> }).h;
+    afterEach(() => { vi.useRealTimers(); });
+
+    it('prirodni zavrsetak otkrivanja salje tocno jednu obavijest', async () => {
+      const v = await ukljuci();
+      vi.useFakeTimers();
+      const p = handle(v).reveal(sampleResult());
+      await vi.advanceTimersByTimeAsync(revealDuration(buildLivePlan(sampleResult()), true) + 2000);
+      await p;
+      expect(poslano).toHaveLength(1);
+      expect(poslano[0]).toContain('Provjera je gotova');
+    });
+
+    it('otkazivanje usred otkrivanja (progress(0)) ne salje obavijest', async () => {
+      const v = await ukljuci();
+      vi.useFakeTimers();
+      const h = handle(v);
+      const p = h.reveal(sampleResult());
+      await vi.advanceTimersByTimeAsync(300);
+      h.progress(0);
+      await p;
+      await vi.advanceTimersByTimeAsync(20000);
+      expect(poslano).toEqual([]);
+    });
+
+    it('nova analiza usred otkrivanja ne salje obavijest za staru', async () => {
+      const v = await ukljuci();
+      vi.useFakeTimers();
+      const h = handle(v);
+      const p = h.reveal(sampleResult());
+      await vi.advanceTimersByTimeAsync(300);
+      h.start(null);
+      await p;
+      await vi.advanceTimersByTimeAsync(20000);
+      expect(poslano).toEqual([]);
+    });
+  });
 });
 
 describe('Z33 gardovi (baseline; mutacije u gate-mutations.test.ts)', () => {
