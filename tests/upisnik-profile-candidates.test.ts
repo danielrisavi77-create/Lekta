@@ -2488,7 +2488,7 @@ describe('Upisnik heuristic guard redesign', () => {
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
-  it('preserves all 376 evidence links and every coverage status in the committed inventory', () => {
+  it('preserves all 373 evidence links and every coverage status in the committed inventory', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
       profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
@@ -2498,14 +2498,15 @@ describe('Upisnik heuristic guard redesign', () => {
       row.profileDecisionEvidence.map((evidence) => [row.programCode, evidence.profileId]));
     // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27)
     // plus 10 EFOS programa kroz izricitu izjavu o opsegu iz izvora profila (#206, 2026-09-28)
-    // plus 12 iz pilota kategorije A (2026-10-03): 9 EFST (izjava o opsegu, https izvor) i 3 FER diplomska (stranica
-    // studija kao dokaz identiteta po vlasnikovu pravilu za jedini profil sastavnice). FER 52 ostaje na autorskom holdu.
-    expect(links(report.programs)).toHaveLength(376);
+    // plus 9 iz pilota kategorije A (2026-10-03): 6 EFST sveucilisnih (izjava o opsegu, https izvor) i 3 FER diplomska
+    // (stranica studija kao dokaz identiteta po vlasnikovu pravilu za jedini profil sastavnice). FER 52 ostaje na
+    // autorskom holdu; EFST 938, 939 i 1770 ostaju na holdu (Codex #284: izjava o opsegu ne imenuje te programe).
+    expect(links(report.programs)).toHaveLength(373);
     const pilot = new Map(report.programs.filter((row) => row.profileDecisionEvidence.some((e) => /^(efst|fer)-/u.test(e.profileId)))
       .map((row) => [row.programCode, row.profileDecisionEvidence.map((e) => e.profileId)]));
     for (const [code, profileId] of [['375', 'fer-diplomski'], ['392', 'fer-diplomski'], ['393', 'fer-diplomski'],
-      ['261', 'efst-zavrsni'], ['262', 'efst-zavrsni'], ['263', 'efst-zavrsni'], ['938', 'efst-zavrsni'], ['939', 'efst-zavrsni'],
-      ['591', 'efst-diplomski'], ['592', 'efst-diplomski'], ['1770', 'efst-diplomski'], ['1807', 'efst-diplomski']] as const) {
+      ['261', 'efst-zavrsni'], ['262', 'efst-zavrsni'], ['263', 'efst-zavrsni'],
+      ['591', 'efst-diplomski'], ['592', 'efst-diplomski'], ['1807', 'efst-diplomski']] as const) {
       expect(pilot.get(code)).toEqual([profileId]);
     }
     const efos = new Map(report.programs.filter((row) => row.profileDecisionEvidence.some((e) => e.profileId.startsWith('efos-')))

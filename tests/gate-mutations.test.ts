@@ -1011,6 +1011,20 @@ function upisnikScopeFromSource(source: string): UpisnikScopePredicate | null {
   );
 }
 
+type UpisnikStudyKind = (quote: string) => 'university' | 'vocational' | 'both' | null;
+
+/** studyKindForEvidenceQuote iz (mutiranog) izvora, uz pravi normalized iz istog izvora. */
+function upisnikStudyKindFromSource(source: string): UpisnikStudyKind | null {
+  const normalized = funkcijaIzIzvora<(value: string) => string>(
+    source.replace('function normalized(', 'export function normalized('), 'normalized');
+  if (!normalized) return null;
+  return funkcijaIzIzvora<UpisnikStudyKind>(
+    source.replace('function studyKindForEvidenceQuote(', 'export function studyKindForEvidenceQuote('),
+    'studyKindForEvidenceQuote',
+    { normalized },
+  );
+}
+
 function upisnikSourceNormalizerFromSource(source: string): UpisnikSourceNormalizer | null {
   return funkcijaIzIzvora<UpisnikSourceNormalizer>(
     source.replace('function comparableProfileSourceUrl(', 'export function comparableProfileSourceUrl('),
@@ -1377,13 +1391,39 @@ const MUTATIONS: Mutation[] = [
     imitates: 'Pricuvno citanje vrste broji "strucni rad" kao strucni studij i odbija sveucilisni program 3',
     cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; upute vrijede za zavrsni i strucni rad').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      // Iznimka vrijedi samo za imenicu rad: "strucni radi" (glagol) i dalje tvrdi strucnu vrstu (Astra 2026-10-03).
+      // Prava vrsta uz naziv studija ili akademski naziv i dalje obara sveucilisni program 3.
       const rejects = (quote: string) => {
         try { upisnikGuardFixture('3', quote); return false; }
         catch (error) { return /study type/u.test(String(error)); }
       };
       return rejects('Elektrotehnika; strucni rad na strucnom prijediplomskom studiju')
-        && rejects('Studij elektrotehnike je strucni radi usmjerenosti na praksu');
+        && rejects('Studij elektrotehnike je strucni')
+        && rejects('Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike');
+    },
+  },
+  {
+    id: 'upisnik/vrsta-uz-studij-preskace-rad',
+    imitates: 'Vraca bilo koju rijec izmedju vrste i rijeci studij: "strucni rad na studiju" postaje strucni studij (Codex #284)',
+    cleanBefore: () => upisnikStudyKindFromSource(upisnikCandidateSource())?.('strucni rad na studiju elektrotehnike') === null,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('(?:(?!rad)\\w+\\s+){0,3}studij', '(?:\\w+\\s+){0,3}studij');
+      return mutant !== source && upisnikStudyKindFromSource(mutant)?.('strucni rad na studiju elektrotehnike') === 'vocational';
+    },
+  },
+  {
+    id: 'upisnik/pricuvna-vrsta-samo-uz-akademski-naziv',
+    imitates: 'Vraca pricuvno citanje bilo koje rijeci strucn: "strucna radionica" i "strucna pomoc pri izradi rada" postaju strucni studij (Codex #284)',
+    cleanBefore: () => {
+      const kindOf = upisnikStudyKindFromSource(upisnikCandidateSource());
+      return ['strucna radionica', 'strucno radno mjesto', 'strucna pomoc pri izradi rada'].every((q) => kindOf?.(q) === null)
+        && kindOf?.('strucni prvostupnik inzenjer') === 'vocational';
+    },
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('/\\b(sveucilisn|strucn)\\w*\\s+(?:prvostupni|specijalist|magist|bacc)\\w*/gu', '/\\b(sveucilisn|strucn)\\w*\\b/gu');
+      const kindOf = upisnikStudyKindFromSource(mutant);
+      return mutant !== source && kindOf?.('strucna radionica') === 'vocational' && kindOf?.('strucna pomoc pri izradi rada') === 'vocational';
     },
   },
   {

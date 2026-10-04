@@ -816,7 +816,7 @@
       "profileId": "fer-diplomski",
       "evidence": {
         "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
-        "sourceLocator": "Opis diplomskog studija, odjeljak Elektrotehnika i informacijska tehnologija; odlomak o završetku studija",
+        "sourceLocator": "Naziv programa: Elektrotehnika i informacijska tehnologija (popis diplomskih programa, redak 1376 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
         "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
       }
     },
@@ -852,7 +852,7 @@
       "profileId": "fer-diplomski",
       "evidence": {
         "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
-        "sourceLocator": "Opis diplomskog studija, odjeljak Računarstvo; odlomak o završetku studija",
+        "sourceLocator": "Naziv programa: Računarstvo (popis diplomskih programa, redak 1407 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
         "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
       }
     },
@@ -861,7 +861,7 @@
       "profileId": "fer-diplomski",
       "evidence": {
         "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
-        "sourceLocator": "Opis diplomskog studija, odjeljak Informacijska i komunikacijska tehnologija; odlomak o završetku studija",
+        "sourceLocator": "Naziv programa: Informacijska i komunikacijska tehnologija (popis diplomskih programa, redak 1393 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
         "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
       }
     },
@@ -1901,24 +1901,6 @@
       }
     },
     {
-      "programCode": "938",
-      "profileId": "efst-zavrsni",
-      "evidence": {
-        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
-        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
-        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
-      }
-    },
-    {
-      "programCode": "939",
-      "profileId": "efst-zavrsni",
-      "evidence": {
-        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
-        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
-        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
-      }
-    },
-    {
       "programCode": "943",
       "profileId": "efzg-zavrsni",
       "evidence": {
@@ -2222,15 +2204,6 @@
         "sourceUrl": "https://www.unidu.hr/oglasna-ploca-diplomski-studij-ekonomija/",
         "sourceLocator": "Izvedbeni nastavni program 2026./2027. i završetak studija",
         "quote": "Sveučilišni diplomski studij EKONOMIJA"
-      }
-    },
-    {
-      "programCode": "1770",
-      "profileId": "efst-diplomski",
-      "evidence": {
-        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
-        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
-        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
