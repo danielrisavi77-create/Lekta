@@ -851,9 +851,9 @@
     {
       "id": "T87",
       "title": "Nijedan *_DISABLED ili prazan endpoint ne vodi u slijepu ulicu",
-      "status": "in_review",
+      "status": "done",
       "dependsOn": [],
-      "note": "Kriterij 9 T81. Audit svih *_DISABLED i praznih endpointa u src/ i supabase/functions: popis s ekranom i porukom; iskljucena funkcija je skrivena ili oznacena \"uskoro\". 2026-10-03: PR #250 (lekta-00)."
+      "note": "Kriterij 9 T81. Audit svih *_DISABLED i praznih endpointa u src/ i supabase/functions: popis s ekranom i porukom; iskljucena funkcija je skrivena ili oznacena \"uskoro\". 2026-10-03: PR #250 (lekta-00). PR #250 spojen u master 2026-10-03."
     },
     {
       "id": "T88",
@@ -897,15 +897,15 @@
       "title": "npm audit ratchet veze iznimku na advisory ID, ne samo na ime paketa (Codex R1 na #246); negativni slucaj za novu iznimku",
       "status": "in_progress",
       "dependsOn": [],
-      "note": "Nalaz Codex R1 na #246: iznimka u scripts/npm-audit-ratchet.mjs vezana samo na ime paketa propusta i svaki NOVI advisory istog paketa. Iznimka se veze na advisory ID; test s negativnim slucajem (novi advisory istog paketa mora pasti) i mutacija u tests/gate-mutations.test.ts.",
-      "owner": "lekta-bb"
+      "note": "Nalaz Codex R1 na #246: iznimka u scripts/npm-audit-ratchet.mjs vezana samo na ime paketa propusta i svaki NOVI advisory istog paketa. Iznimka se veze na advisory ID; test s negativnim slucajem (novi advisory istog paketa mora pasti) i mutacija u tests/gate-mutations.test.ts. 2026-10-04: lekta-bb vratio zadatak, preuzeo lekta-00.",
+      "owner": "lekta-00"
     },
     {
       "id": "T94",
       "title": "worktree-gc: automatsko uklanjanje spojenih cistih worktreeova na startu sesije (vlasnik 3. 10.)",
-      "status": "in_progress",
+      "status": "done",
       "dependsOn": [],
-      "note": "Odluka vlasnika 2026-10-03. Na startu sesije uklanjaju se samo worktreeovi cija je grana spojena u master i koji su cisti (bez necommitanih i nepushanih izmjena); sve ostalo ostaje netaknuto i samo se prijavljuje.",
+      "note": "Odluka vlasnika 2026-10-03. Na startu sesije uklanjaju se samo worktreeovi cija je grana spojena u master i koji su cisti (bez necommitanih i nepushanih izmjena); sve ostalo ostaje netaknuto i samo se prijavljuje. 2026-10-04: PR #253 (worktree-gc) spojen u master.",
       "owner": "lekta-37"
     },
     {
@@ -913,7 +913,7 @@
       "title": "Pravilo kad koordinator ne odgovara (PR #254)",
       "status": "done",
       "dependsOn": [],
-      "note": "PR #254 spojen u master 2026-10-03 (8ef558a1).",
+      "note": "PR #254 spojen u master 2026-10-03 (8ef558a1). 2026-10-04: dopune #272 i #277 spojene u master.",
       "owner": "lekta-37"
     },
     {
@@ -940,9 +940,9 @@
     {
       "id": "T99",
       "title": "#220 gard izvora paketa u package-lock.json (vlastita skripta, tvrdi gate) + osv-scanner za deno.lock, training-pipeline, field-renderer, katedra-pkg (prvi run mjeri) + Dependabot za pip",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
-      "note": "Brief: issue #220."
+      "note": "Brief: issue #220. 2026-10-04: PR #258 i #274 spojeni u master, issue #220 zatvoren."
     },
     {
       "id": "T100",
