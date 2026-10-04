@@ -12,16 +12,23 @@ import {
   compareAuditToRatchet,
   countHighCritical,
   formatVerdict,
+  highCriticalAdvisoryPairs,
   highCriticalPackageNames,
   parseAuditResponse,
+  syntheticAudit,
   validateRatchet,
 } from '../scripts/npm-audit-ratchet-core.mjs';
 import ratchet from '../data/security/npm-audit-ratchet.json';
 
+const adv = (id: string, severity = 'high') => ({ severity, url: `https://github.com/advisories/${id}` });
+const GA = 'GHSA-aaaa-aaaa-aaaa';
+const GB = 'GHSA-bbbb-bbbb-bbbb';
+/** Iznimka koja pokriva a i b za njihove advisoryje (T93: pokrice je par paket+advisory). */
+const exceptionsAB = [{ packages: ['a'], advisories: [GA] }, { packages: ['b'], advisories: [GB] }];
 const fixture = {
   vulnerabilities: {
-    a: { severity: 'critical' },
-    b: { severity: 'high' },
+    a: { severity: 'critical', via: [adv(GA, 'critical')] },
+    b: { severity: 'high', via: [adv(GB)] },
     c: { severity: 'moderate' },
     d: { severity: 'low' },
     e: { severity: 'info' },
@@ -50,18 +57,20 @@ describe('npm audit ratchet: jezgra', () => {
     expect(compareAuditToRatchet(fixture, {
       fullGraphHighCritical: 2,
       fullGraphHighCriticalPackages: ['a', 'b'],
+      exceptions: exceptionsAB,
     }).verdict).toBe('equal');
   });
 
   it('novi identitet pada i kad ukupan broj ostane isti', () => {
     const s = compareAuditToRatchet({
       vulnerabilities: {
-        a: { severity: 'critical' },
-        novi: { severity: 'high' },
+        a: { severity: 'critical', via: [adv(GA, 'critical')] },
+        novi: { severity: 'high', via: [adv(GB)] },
       },
     }, {
       fullGraphHighCritical: 2,
       fullGraphHighCriticalPackages: ['a', 'b'],
+      exceptions: exceptionsAB,
     });
     expect(s.verdict).toBe('above');
     expect(s.unexpectedPackages).toEqual(['novi']);
@@ -71,12 +80,123 @@ describe('npm audit ratchet: jezgra', () => {
   });
 
   it('ispod stropa je below i poziva na spustanje stropa, ne tihi prolaz', () => {
-    const s = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high' } } }, {
+    const s = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high', via: [adv(GA)] } } }, {
       fullGraphHighCritical: 2,
       fullGraphHighCriticalPackages: ['a', 'b'],
+      exceptions: exceptionsAB,
     });
     expect(s.verdict).toBe('below');
     expect(formatVerdict(s)).toMatch(/Spusti fullGraphHighCritical/);
+  });
+
+  it('T93: tranzitivni paket nasljeduje advisoryje high/critical paketa kroz via', () => {
+    const audit = { vulnerabilities: {
+      leaf1: { severity: 'high', via: [adv(GA)] },
+      leaf2: { severity: 'high', via: [adv(GB), adv('GHSA-cccc-cccc-cccc', 'moderate')] },
+      mid: { severity: 'high', via: ['leaf1'] },
+      top: { severity: 'high', via: ['mid', 'leaf2', 'niski'] },
+      niski: { severity: 'moderate', via: [adv('GHSA-dddd-dddd-dddd', 'moderate')] },
+      ciklus: { severity: 'high', via: ['ciklus'] },
+    } };
+    expect(highCriticalAdvisoryPairs(audit)).toEqual({
+      pairs: [`leaf1 ${GA}`, `leaf2 ${GB}`, `mid ${GA}`, `top ${GA}`, `top ${GB}`],
+      unresolved: ['ciklus'],
+    });
+  });
+
+  it('T93: novi GHSA na prihvacenom paketu pada i kad su ime i broj isti', () => {
+    const r = { fullGraphHighCritical: 2, fullGraphHighCriticalPackages: ['a', 'b'], exceptions: exceptionsAB };
+    const s = compareAuditToRatchet({ vulnerabilities: {
+      a: { severity: 'critical', via: [adv(GA, 'critical'), adv('GHSA-nova-nova-nova')] },
+      b: { severity: 'high', via: [adv(GB)] },
+    } }, r);
+    expect(s.verdict).toBe('above');
+    expect(s.unexpectedPackages).toEqual([]);
+    expect(s.uncoveredPairs).toEqual(['a GHSA-nova-nova-nova']);
+    expect(formatVerdict(s)).toContain('a GHSA-nova-nova-nova');
+  });
+
+  it('T93: iznimka za drugi advisory ne pokriva paket; paket bez GHSA id-a pada', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [{ packages: ['a'], advisories: [GB] }] };
+    expect(compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high', via: [adv(GA)] } } }, r).uncoveredPairs).toEqual([`a ${GA}`]);
+    const bezId = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high', via: [{ severity: 'high', url: 'https://example.invalid/x' }] } } }, r);
+    expect(bezId).toMatchObject({ verdict: 'above', unresolvedPackages: ['a'] });
+  });
+
+  it('T93 (Codex R1 na #282): neprepoznat high advisory uz prepoznat GHSA na istom paketu nije tiho zatvoren', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [{ packages: ['a'], advisories: [GA] }] };
+    const s = compareAuditToRatchet({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), { severity: 'high', url: 'https://example.invalid/new' }] },
+    } }, r);
+    expect(s.verdict).toBe('above');
+    expect(s.unresolvedPackages).toEqual(['a']);
+    // Nerazrijesenost se prenosi i na paket koji je ranjiv KROZ a.
+    expect(highCriticalAdvisoryPairs({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), { severity: 'high', url: 'https://example.invalid/new' }] },
+      gore: { severity: 'high', via: ['a'] },
+    } }).unresolved).toEqual(['a', 'gore']);
+  });
+
+  it('T93 (Codex R3 na #282): via referenca na paket kojeg nema u auditu je nerazrijesena, ne tiho cista', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions: [{ packages: ['a'], advisories: [GA] }] };
+    const s = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high', via: [adv(GA), 'missing'] } } }, r);
+    expect(s.verdict).toBe('above');
+    expect(s.unresolvedPackages).toEqual(['a']);
+    // Postojeci paket niske ozbiljnosti u via i dalje se ne broji kao problem.
+    expect(compareAuditToRatchet({ vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), 'niski'] },
+      niski: { severity: 'moderate', via: [] },
+    } }, r).verdict).toBe('equal');
+  });
+
+  it('T93 (Codex R2 na #282): ciklus kroz via ne gubi par; skupovi su zatvoreni do fiksne tocke', () => {
+    const audit = { vulnerabilities: {
+      a: { severity: 'high', via: [adv(GA), 'b'] },
+      b: { severity: 'high', via: [adv(GB), 'a'] },
+    } };
+    expect(highCriticalAdvisoryPairs(audit)).toEqual({
+      pairs: [`a ${GA}`, `a ${GB}`, `b ${GA}`, `b ${GB}`],
+      unresolved: [],
+    });
+    const r = {
+      fullGraphHighCritical: 2,
+      fullGraphHighCriticalPackages: ['a', 'b'],
+      exceptions: [{ packages: ['a'], advisories: [GA, GB] }, { packages: ['b'], advisories: [GB] }],
+    };
+    const s = compareAuditToRatchet(audit, r);
+    expect(s.verdict).toBe('above');
+    expect(s.uncoveredPairs).toEqual([`b ${GA}`]);
+  });
+
+  it('T93: iznimka bez advisoryja, s nevaljanim GHSA id-om ili duplim parom ne prolazi validaciju', () => {
+    const base = { owner: 'o', mitigation: 'm', nextReviewOn: '2026-10-05', expiresOn: '2026-10-09' };
+    const r = (exceptions: unknown[]) => ({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'], exceptions });
+    expect(validateRatchet(r([{ ...base, packages: ['a'] }]), { today: '2026-10-04' })).toEqual([expect.stringMatching(/advisories je prazan/)]);
+    expect(validateRatchet(r([{ ...base, packages: ['a'], advisories: ['CVE-2026-1'] }]), { today: '2026-10-04' })).toEqual([expect.stringMatching(/nevaljan GHSA/)]);
+    expect(validateRatchet(r([{ ...base, packages: ['a'], advisories: [GA] }, { ...base, packages: ['a'], advisories: [GA] }]), { today: '2026-10-04' }))
+      .toEqual([expect.stringMatching(/pokriven u exceptions\[0\] i exceptions\[1\]/)]);
+    // isti paket u dvije iznimke za RAZLICITE advisoryje je ispravno
+    expect(validateRatchet(r([{ ...base, packages: ['a'], advisories: [GA] }, { ...base, packages: ['a'], advisories: [GB] }]), { today: '2026-10-04' })).toEqual([]);
+  });
+
+  it('T93: istekla iznimka pada validaciju', () => {
+    const r = { fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'],
+      exceptions: [{ owner: 'o', mitigation: 'm', nextReviewOn: '2026-10-01', expiresOn: '2026-10-02', packages: ['a'], advisories: [GA] }] };
+    expect(validateRatchet(r, { today: '2026-10-04' })).toEqual(expect.arrayContaining([expect.stringMatching(/istekla 2026-10-02/)]));
+  });
+
+  it('T93: sintetički audit na fixture paketu hvata novi GHSA uz isti broj i identitet', () => {
+    expect(ratchet.fullGraphHighCritical).toBe(0);
+    expect(ratchet.fullGraphHighCriticalPackages).toEqual([]);
+    expect(ratchet.exceptions).toEqual([]);
+    const accepted = {
+      fullGraphHighCritical: 1,
+      fullGraphHighCriticalPackages: ['braces'],
+      exceptions: [{ packages: ['braces'], advisories: [GA] }],
+    };
+    expect(compareAuditToRatchet(syntheticAudit(accepted, ['braces']), accepted).verdict).toBe('equal');
+    const novel = compareAuditToRatchet(syntheticAudit(accepted, ['braces'], { braces: [GB] }), accepted);
+    expect(novel.uncoveredPairs).toEqual([`braces ${GB}`]);
   });
 
   it('strop koji nije broj ne moze biti prolaz', () => {
@@ -91,6 +211,7 @@ describe('npm audit ratchet: jezgra', () => {
       fullGraphHighCriticalPackages: ['sharp'],
       exceptions: [{
         packages: ['sharp'],
+        advisories: ['GHSA-aaaa-aaaa-aaaa'],
         owner: '',
         mitigation: '',
         expiresOn: '2026-09-20',
