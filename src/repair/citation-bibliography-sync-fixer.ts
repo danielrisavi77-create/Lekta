@@ -1,5 +1,5 @@
 import { citationAnchorFingerprint, entryTemplateSource } from '../analysis/citation-bibliography-sync.ts';
-import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../analysis/bibliography-structure.ts';
+import { ENTRY_TEMPLATE_FIELDS, analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../analysis/bibliography-structure.ts';
 import { extractCitationOccurrences } from '../citations/author-year.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
@@ -37,12 +37,12 @@ interface Operation { start: number; end: number; replacement: string; priority:
 
 const noOp = (parts: DocxXmlParts, reason: FixerOutput['reason'], skippedActions: string[] = []): FixerOutput => ({ parts, applied: false, beforeLabel: '', afterLabel: '', reason, ...(skippedActions.length ? { skippedActions } : {}) });
 
-/**
+/*
  * Z36, odluka vlasnika 2026-10-03: kad korisnik ne upise zapis, umece se predlozak. Iz citata dolaze
- * SAMO prezime i godina; sve ostalo su ova konstantna polja u uglatim zagradama, koja korisnik
- * popunjava u Wordu. Lekta ne izmislja ime, naslov ni izdavaca.
+ * SAMO prezime i godina; sve ostalo su konstantna polja u uglatim zagradama (`ENTRY_TEMPLATE_FIELDS`,
+ * ista konstanta po kojoj analiza zapis oznacava kao nepopunjen), koja korisnik popunjava u Wordu.
+ * Lekta ne izmislja ime, naslov ni izdavaca.
  */
-const ENTRY_TEMPLATE_FIELDS = { name: '[ime]', title: '[Naslov djela]', publisher: '[Mjesto: Izdavač]' } as const;
 const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mogu se sigurno procitati iz citata';
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
 
@@ -53,6 +53,14 @@ function entryTemplate(author: string, year: string): string {
 /** Usporedba "isti zapis": razmaci sazeti, rubovi odrezani. */
 function sameEntryText(left: string, right: string): boolean {
   return left.replace(/\s+/g, ' ').trim() === right.replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Tekst kakav vidi analiza: parser (src/docx/parser.ts) tvrdi razmak U+00A0 cita kao obican, pa
+ * `rawText` citata iz plana nema tvrdih razmaka koje dokument ima ("str." pa U+00A0 pa "5").
+ */
+function asAnalysisText(value: string): string {
+  return value.replace(/\u00a0/g, ' ');
 }
 
 function decodeXml(value: string): string {
@@ -138,11 +146,33 @@ function replaceParagraphText(block: string, replacement: string): string | null
   return replaceTextRange(block, 0, text.length, replacement);
 }
 
-function paragraphTemplate(block: string, replacement: string): string | null {
-  if (unsupported(block)) return null;
-  const pPr = block.match(/<w:pPr\b[\s\S]*?<\/w:pPr>/i)?.[0] || '';
+const PARAGRAPH_PROPERTIES = /<w:pPr\b[\s\S]*?<\/w:pPr>/i;
+const SECTION_PROPERTIES = /<w:sectPr\b(?:[^>]*\/>|[\s\S]*?<\/w:sectPr>)/i;
+/** Revizije (Track Changes) u svojstvima: novi odlomak ne smije nositi tudju reviziju. */
+const PROPERTY_REVISION = /<w:(?:pPrChange|rPrChange|sectPrChange|ins|del|moveFrom|moveTo)\b/i;
+
+/**
+ * Novi odlomak s oblikovanjem odlomka `block` (pPr i rPr prvog runa). Cita samo svojstva, pa ga
+ * poveznica ili polje u tekstu izvora ne rusi. Prijelom sekcije (`w:sectPr`) se nikad ne kopira:
+ * odlomak usred popisa bi ga razlomio. `sectPr` dobiva samo odlomak koji preuzima prijelom sidra.
+ */
+function paragraphTemplate(block: string, replacement: string, sectPr = ''): string | null {
+  const pPr = block.match(PARAGRAPH_PROPERTIES)?.[0] || '';
   const rPr = block.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1] || '';
-  return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${encodeXml(replacement)}</w:t></w:r></w:p>`;
+  if (PROPERTY_REVISION.test(pPr) || PROPERTY_REVISION.test(rPr)) return null;
+  const own = pPr.replace(SECTION_PROPERTIES, '');
+  const properties = !sectPr ? own : own ? own.replace(/<\/w:pPr>$/i, `${sectPr}</w:pPr>`) : `<w:pPr>${sectPr}</w:pPr>`;
+  return `<w:p>${properties}<w:r>${rPr}<w:t xml:space="preserve">${encodeXml(replacement)}</w:t></w:r></w:p>`;
+}
+
+/** Prijelom sekcije u svojstvima odlomka `range` (apsolutni raspon u dokumentu), ili null. */
+function sectionBreak(xml: string, range: ParagraphRange): { xml: string; start: number; end: number } | null {
+  const block = xml.slice(range.start, range.end);
+  const pPr = block.match(PARAGRAPH_PROPERTIES);
+  const sectPr = pPr?.[0].match(SECTION_PROPERTIES);
+  if (!pPr || !sectPr) return null;
+  const start = range.start + (pPr.index ?? 0) + (sectPr.index ?? 0);
+  return { xml: sectPr[0], start, end: start + sectPr[0].length };
 }
 
 function bibliographyFingerprintMatches(
@@ -152,6 +182,22 @@ function bibliographyFingerprintMatches(
 ): boolean {
   const text = indices.map((index) => paragraphText(blocks.get(index) || '')).join(' ').trim();
   return bibliographyAnchorFingerprint(indices, text) === expected;
+}
+
+/** Najvise odlomaka jednog zapisa literature koje sidro umetanja potvrdjuje unatrag. */
+const MAX_ENTRY_PARAGRAPHS = 20;
+
+/**
+ * Z36: odlomci zapisa koji ZAVRSAVA sidrom umetanja, potvrdjeni otiskom cijelog zapisa. Zapis s URL-om
+ * ili DOI-jem u vlastitom retku analiza spaja u jedan zapis s vise odlomaka; plan salje njegov zadnji
+ * odlomak i otisak cijelog zapisa. Jednoodlomacni zapis (i sidro na citatu) ostaje kao prije.
+ */
+function anchoredEntry(anchorIndex: number, blocks: Map<number, string>, expected: string): number[] | null {
+  for (let first = anchorIndex; first >= 1 && anchorIndex - first < MAX_ENTRY_PARAGRAPHS; first--) {
+    const indices = Array.from({ length: anchorIndex - first + 1 }, (_value, offset) => first + offset);
+    if (bibliographyFingerprintMatches(indices, blocks, expected)) return indices;
+  }
+  return citationAnchorFingerprint(anchorIndex, paragraphText(blocks.get(anchorIndex) || '')) === expected ? [anchorIndex] : null;
 }
 
 function validateParams(params: CitationBibliographySyncParams): boolean {
@@ -299,7 +345,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       claimed.set(citation.paragraphIndex, [...(claimed.get(citation.paragraphIndex) || []), adjusted]);
       // Z36: nepromijenjen citat (izvor zapisa ili potvrdjena veza) se samo cita, nikad ne pise. Zato
       // ga ne rusi oznaka, poveznica, polje ni tablica u odlomku (Word cesto zapise _GoBack oznaku).
-      if (current.slice(adjusted.start, adjusted.end) === citation.replacementText) {
+      if (asAnalysisText(current.slice(adjusted.start, adjusted.end)) === asAnalysisText(citation.replacementText)) {
         verifiedCitations.add(citation.id);
         citationParagraphs.add(citation.paragraphIndex);
         readOnlyCitations += 1;
@@ -308,7 +354,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     }
     if (excludedContainer(parts.documentXml, range) || unsupported(block)) return noOp(parts, 'unsupported-structure');
     if (!fingerprintMatches) {
-      if (current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length) === citation.replacementText) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
+      if (asAnalysisText(current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length)) === asAnalysisText(citation.replacementText)) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
       return noOp(parts, 'invalid-params');
     }
     verifiedCitations.add(citation.id);
@@ -330,7 +376,11 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
 
   const paragraphs = ranges.map((range) => ({ index: range.index, text: paragraphText(blocks.get(range.index) || '').trim() }));
   const plannedTexts: string[] = [];
-  const templateInsertions = new Map<number, Array<{ key: string; text: string; xml: string }>>();
+  const templateInsertions = new Map<number, Array<{ key: string; text: string; source: string }>>();
+  const literalInsertions: Array<{ offset: number; text: string; source: string }> = [];
+  // Z36: sidro s prijelomom sekcije, po pomaku iza sidra: umetnuti zapis iza njega preuzima prijelom.
+  const anchorSections = new Map<number, { xml: string; start: number; end: number; anchorIndex: number }>();
+  const replacedParagraphs = new Set<number>();
   for (const entry of params.entries) {
     if (entry.action === 'add') {
       const literal = entry.replacementText?.trim() ? entry.replacementText : null;
@@ -359,20 +409,27 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       const range = ranges[anchor.paragraphIndex - 1];
       const block = range && blocks.get(anchor.paragraphIndex);
       if (!range || !block || excludedContainer(parts.documentXml, range) || citationParagraphs.has(anchor.paragraphIndex)) return noOp(parts, 'unsupported-structure');
-      if (!bibliographyFingerprintMatches([anchor.paragraphIndex], blocks, anchor.anchorFingerprint)
-        && citationAnchorFingerprint(anchor.paragraphIndex, paragraphText(block)) !== anchor.anchorFingerprint) return noOp(parts, 'invalid-params');
-      const insertion = paragraphTemplate(block, text);
-      if (!insertion) return noOp(parts, 'unsupported-structure');
+      const anchored = anchoredEntry(anchor.paragraphIndex, blocks, anchor.anchorFingerprint);
+      if (!anchored) return noOp(parts, 'invalid-params');
+      if (anchored.some((index) => citationParagraphs.has(index) || excludedContainer(parts.documentXml, ranges[index - 1]))) return noOp(parts, 'unsupported-structure');
+      // Oblikovanje novog zapisa dolazi s PRVOG odlomka zapisa-sidra (redak s URL-om ga nema).
+      const source = blocks.get(anchored[0])!;
+      if (!paragraphTemplate(source, text)) return noOp(parts, 'unsupported-structure');
+      let offset: number;
       if (literal !== null) {
         // Korisnikov potvrdjeni zapis: zateceno ponasanje, doslovno i iza sidra.
-        operations.push({ start: range.end, end: range.end, replacement: insertion, priority: 2 });
+        offset = range.end;
+        literalInsertions.push({ offset, text, source });
       } else {
         const position = alphabeticalPosition(parts.documentXml, ranges, paragraphs, anchor.paragraphIndex, text);
         if (!position) { skippedActions.push(SKIPPED_NO_LIST); continue; }
-        const group = templateInsertions.get(position.offset) || [];
-        group.push({ key: position.key, text, xml: insertion });
-        templateInsertions.set(position.offset, group);
+        offset = position.offset;
+        const group = templateInsertions.get(offset) || [];
+        group.push({ key: position.key, text, source });
+        templateInsertions.set(offset, group);
       }
+      const section = offset === range.end ? sectionBreak(parts.documentXml, range) : null;
+      if (section) anchorSections.set(offset, { ...section, anchorIndex: anchor.paragraphIndex });
       plannedTexts.push(text);
       changed = true;
       continue;
@@ -387,6 +444,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     if (!bibliographyFingerprintMatches(entry.paragraphIndices, blocks, entry.anchorFingerprint)
       && !(entry.paragraphIndices.length === 1 && citationAnchorFingerprint(entry.paragraphIndices[0], paragraphText(firstBlock)) === entry.anchorFingerprint)) return noOp(parts, 'invalid-params');
     for (const index of entry.paragraphIndices) entryParagraphs.add(index);
+    if (entry.action === 'replace') for (const index of entry.paragraphIndices) replacedParagraphs.add(index);
     const replacement = entry.action === 'replace' ? replaceParagraphText(firstBlock, entry.replacementText!) : '';
     if (entry.action === 'replace' && replacement === null) return noOp(parts, 'unsupported-structure');
     operations.push({ start: firstRange.start, end: firstRange.end, replacement: replacement || '', priority: 1 });
@@ -395,11 +453,25 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
   }
 
   if (params.entries.some((entry) => entryParagraphs.has(entry.paragraphIndices[0])) && params.citations.some((citation) => entryParagraphs.has(citation.paragraphIndex))) return noOp(parts, 'invalid-params');
+  const orderedTemplates = new Map([...templateInsertions].map(([offset, group]) => [offset, [...group].sort((a, b) => a.key.localeCompare(b.key, SCORED_COLLATION) || a.text.localeCompare(b.text, SCORED_COLLATION))]));
+  // Z36: prijelom sekcije sidra ide sa zadnjim odlomkom koji se umece iza sidra, kao kad u Wordu na kraju
+  // sekcije dodas odlomak; inace bi novi zapis zavrsio u sljedecoj sekciji (npr. u Prilozima). Zadnji
+  // iza sidra je prvi korisnikov zapis (umetanja na istom pomaku idu obrnutim redom), inace zadnji predlozak.
+  const sectionCarrier = new Map<object, string>();
+  for (const [offset, section] of anchorSections) {
+    if (replacedParagraphs.has(section.anchorIndex)) return noOp(parts, 'unsupported-structure');
+    const carrier = literalInsertions.find((item) => item.offset === offset) ?? orderedTemplates.get(offset)?.at(-1);
+    if (!carrier) continue;
+    sectionCarrier.set(carrier, section.xml);
+    // Uklonjeno sidro odnosi i svoj prijelom; inace ga sidro predaje novom zapisu.
+    if (!entryParagraphs.has(section.anchorIndex)) operations.push({ start: section.start, end: section.end, replacement: '', priority: 1 });
+  }
+  const insertionXml = (item: { text: string; source: string }) => paragraphTemplate(item.source, item.text, sectionCarrier.get(item) ?? '')!;
+  for (const item of literalInsertions) operations.push({ start: item.offset, end: item.offset, replacement: insertionXml(item), priority: 2 });
   // Predlosci na istom mjestu idu jednim umetanjem, medusobno abecedno. Prioritet 0: na istom
   // pomaku se umecu POSLIJE zamjene odlomka koji tamo pocinje, pa ga ne mogu prepoloviti.
-  for (const [offset, group] of templateInsertions) {
-    const ordered = [...group].sort((a, b) => a.key.localeCompare(b.key, SCORED_COLLATION) || a.text.localeCompare(b.text, SCORED_COLLATION));
-    operations.push({ start: offset, end: offset, replacement: ordered.map((item) => item.xml).join(''), priority: 0 });
+  for (const [offset, ordered] of orderedTemplates) {
+    operations.push({ start: offset, end: offset, replacement: ordered.map(insertionXml).join(''), priority: 0 });
   }
   if (!operations.length) return noOp(parts, alreadyApplied ? 'already-ok' : skippedActions.length ? 'unsupported-structure' : readOnlyCitations ? 'already-ok' : 'no-target', skippedActions);
   let xml = parts.documentXml;

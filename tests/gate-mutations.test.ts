@@ -219,11 +219,12 @@ import { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed, 
 import * as citationSyncModul from '../src/analysis/citation-bibliography-sync';
 import * as bibliographyStructureModul from '../src/analysis/bibliography-structure';
 import * as authorYearModul from '../src/citations/author-year';
+import * as parseReferenceModul from '../src/citations/parse-reference';
 import * as helpersModul from '../src/utils/helpers';
 import { PARAM_AUTHORITY, type resolveParams } from '../src/repair/param-authority';
 import type { citationBibliographySyncFixer } from '../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../src/repair/contract/assisted-request-policy';
-import { planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { nepopunjenPredlozakProblemi, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
@@ -1138,6 +1139,13 @@ const z36Server = (od?: string, u?: string) => z36Izvrsi('src/repair/contract/as
 const z36Autoritet = (od?: string, u?: string) => z36Izvrsi('src/repair/param-authority.ts', {
   '../../data/generated/repair-params-by-profile.json': PARAM_AUTHORITY,
 }, od, u).resolveParams as typeof resolveParams;
+
+/** Analiza literature (bibliography-structure) s mutiranim izvorom; vraca `analyzeBibliographyStructure`. */
+const z36Literatura = (od?: string, u?: string) => z36Izvrsi('src/analysis/bibliography-structure.ts', {
+  '../citations/author-year.ts': authorYearModul,
+  '../citations/parse-reference.ts': parseReferenceModul,
+  '../utils/helpers.ts': helpersModul,
+}, od, u).analyzeBibliographyStructure as typeof bibliographyStructureModul.analyzeBibliographyStructure;
 
 const z36FixerCist = () => zapisLiteratureProblemi(z36Fixer()).length === 0;
 const z36DozvolaCista = () => serverDozvolaProblemi(z36Autoritet(), citationEntryInsertionAllowed).length === 0;
@@ -7630,6 +7638,82 @@ const MUTATIONS: Mutation[] = [
       ruleEntries: (profile.ruleEntries as Array<Record<string, unknown>>).map((entry) => ({ ...entry, status: 'verified', sourcePage: entry.sourcePage ?? '1' })),
     })).some((p) => p.startsWith('dozvola-profil:')),
     cleanBefore: z36DozvolaCista,
+  },
+  // --- Z36 krug 3: nalazi pregleda (padez iz uvoda, tvrdi razmak, sekcija, zapis u dva odlomka, preporuka, predlozak) ---
+  {
+    id: 'z36/sklonjeno-prezime-iz-skinutog-uvoda',
+    imitates: 'parser iz "(prema Novaku, 2022)" ili "(usp. Horvata, 2020)" skine uvod, a izvor predloska '
+      + 'vjeruje autoru bez provjere da citat njime pocinje, pa u literaturu ude "Novaku, [ime]."',
+    caught: () => zapisLiteratureProblemi(z36FixerSAnalizom("if (!author || !String(citation.rawText ?? '').trimStart().startsWith(author)) return null;"))
+      .some((p) => p.startsWith('padez-uvod:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/tvrdi-razmak-prepisuje-citat',
+    imitates: 'nepromijenjen citat se usporeduje s rawText analize bajt po bajt; analiza tvrdi razmak '
+      + '(U+00A0, "str. 5") cita kao obican, pa citat ode u zamjenu i odlomak dobije obican razmak',
+    caught: () => zapisLiteratureProblemi(z36Fixer('if (asAnalysisText(current.slice(adjusted.start, adjusted.end)) === asAnalysisText(citation.replacementText)) {', 'if (current.slice(adjusted.start, adjusted.end) === citation.replacementText) {'))
+      .some((p) => p.startsWith('nbsp:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/predlozak-kopira-prijelom-sekcije',
+    imitates: 'novi zapis kopira cijeli w:pPr sidra zajedno s w:sectPr, pa predlozak na vrhu ili usred '
+      + 'popisa unese prijelom sekcije (nova stranica) i razlomi literaturu',
+    caught: () => zapisLiteratureProblemi(z36Fixer("const own = pPr.replace(SECTION_PROPERTIES, '');", 'const own = pPr;'))
+      .some((p) => p.startsWith('sekcija:pocetak') || p.startsWith('sekcija:sredina')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/zapis-iza-prijeloma-sekcije',
+    imitates: 'zapis se umece iza sidra koje zavrsava sekciju, a prijelom ostaje na sidru, pa novi zapis '
+      + 'zavrsi u sljedecoj sekciji (Prilozi) umjesto na kraju literature',
+    caught: () => zapisLiteratureProblemi(z36Fixer('if (section) anchorSections.set(offset, { ...section, anchorIndex: anchor.paragraphIndex });', ''))
+      .some((p) => p.startsWith('sekcija:kraj') || p.startsWith('sekcija:korisnikov-zapis')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/sidro-samo-jedan-odlomak',
+    imitates: 'fixer otisak sidra provjerava samo nad jednim odlomkom, pa zadnji zapis s DOI-jem u vlastitom '
+      + 'retku (otisak dva odlomka) obori cijelu stavku kao invalid-params',
+    caught: () => zapisLiteratureProblemi(z36Fixer('const MAX_ENTRY_PARAGRAPHS = 20;', 'const MAX_ENTRY_PARAGRAPHS = 1;'))
+      .some((p) => p.startsWith('vise-odlomaka:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/plan-sidri-na-prvi-odlomak',
+    imitates: 'plan sidri umetanje na PRVI odlomak zadnjeg zapisa (stanje kruga 2) uz otisak cijelog zapisa, '
+      + 'pa fixer ne moze potvrditi sidro, a placena stavka zavrsi bez ijedne izmjene',
+    caught: () => planZapisaProblemi((result, profile) => citationBibliographySyncRepairableItem(result, profile).map((item) => {
+      const form = item.citationBibliographySyncForm;
+      if (!form) return item;
+      const original = form.buildParams;
+      const first = Number(result.details.bibliographyStructure.entries.at(-1).paragraphIndices[0]);
+      form.buildParams = (current) => {
+        const params = original(current) as { entries: Array<Record<string, unknown>> };
+        for (const entry of params.entries) if (entry.action === 'add') entry.insertionAnchor = { ...(entry.insertionAnchor as object), paragraphIndex: first };
+        return params;
+      };
+      return item;
+    })).some((p) => p.startsWith('vise-odlomaka:')),
+    cleanBefore: () => planZapisaProblemi(citationBibliographySyncRepairableItem).length === 0,
+  },
+  {
+    id: 'z36/dozvola-iz-preporuke',
+    imitates: 'dozvola umetanja koristi ASSISTED_STATUSES (verified ili advisory), pa preporuka fakulteta '
+      + 'otvori umetanje novog teksta u dokument i ude u peceni serverski autoritet',
+    caught: () => serverDozvolaProblemi(z36Autoritet(), (profile) => citationEntryInsertionAllowed({
+      ...profile,
+      ruleEntries: (profile.ruleEntries as Array<Record<string, unknown>>).map((entry) => (entry.status === 'advisory' ? { ...entry, status: 'verified' } : entry)),
+    })).some((p) => p === 'dozvola-profil: dozvola iz preporuke (advisory)'),
+    cleanBefore: z36DozvolaCista,
+  },
+  {
+    id: 'z36/nepopunjen-predlozak-kao-potpun',
+    imitates: 'analiza ne prepoznaje polja predloska u uglatim zagradama, pa zapis "Novak, [ime]. (2022). '
+      + '[Naslov djela]." prolazi provjeru potpunosti kao pravi izvor (vakuumsko zeleno)',
+    caught: () => nepopunjenPredlozakProblemi(z36Literatura("...(hasUnfilledTemplateField(rawText) ? ['unfilled-template'] : [])", '')).some((p) => p.startsWith('nepopunjen:')),
+    cleanBefore: () => nepopunjenPredlozakProblemi(z36Literatura()).length === 0,
   },
 
 ];

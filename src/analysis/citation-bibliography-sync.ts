@@ -78,6 +78,7 @@ export function citationAnchorFingerprint(paragraphIndex: number, text: string):
 /**
  * Z36: prve rijeci koje uvode citat, a nisu prezime ("See Novak", "Usporedi Novak", "Also Novak").
  * Parser (`citationAuthor`) skida samo "vidi", "usp.", "prema" i "navedeno u"; ostalo ostaje u autoru.
+ * Uvode koje parser skine hvata provjera da citat pocinje prezimenom (`entryTemplateSource`).
  */
 const NOT_SURNAME = new Set(['vidi', 'usp', 'usporedi', 'prema', 'navedeno', 'npr', 'primjerice', 'see', 'cf', 'compare', 'also', 'eg', 'ie', 'according']);
 
@@ -87,15 +88,18 @@ const NOT_SURNAME = new Set(['vidi', 'usp', 'usporedi', 'prema', 'navedeno', 'np
  * Isti uvjet cita i plan (smije li ponuditi zapis bez upisanog teksta) i fixer (sto umece), pa plan
  * ne nudi predlozak koji bi fixer preskocio. Samo zagradni oblik: u narativnom ("prema Novaku (2022)")
  * prezime moze biti sklonjeno. Autor mora biti jedna do tri rijeci s velikim pocetnim slovom i bez
- * tocke, pa uvodi poput "e.g.", "see", "npr." ili "Usporedi" daju null. Nista se ne pogadja ni ne
- * dopunjava.
+ * tocke, pa uvodi poput "e.g.", "see", "npr." ili "Usporedi" daju null. Citat mora POCINJATI tim
+ * prezimenom: parser iz "(prema Novaku, 2022)", "(usp. Horvata, 2020)" ili "(navedeno u Kovaču, 2019)"
+ * skida uvod i kao autora ostavlja oblik koji je uz uvod u padezu. Nista se ne pogadja ni ne dopunjava.
  */
-export function entryTemplateSource(citation: { author?: unknown; year?: unknown; form?: unknown }): { author: string; year: string } | null {
+export function entryTemplateSource(citation: { author?: unknown; year?: unknown; form?: unknown; rawText?: unknown }): { author: string; year: string } | null {
   if (citation.form !== 'parenthetical') return null;
   // Parser ostavlja trag skracenice ("Kovač et al." daje "Kovač ."); zapis nosi samo prezime.
   const author = String(citation.author || '').replace(/[\s.,;:]+$/u, '');
   const year = String(citation.year || '');
   if (!/^(?:18|19|20)\d{2}[a-z]?$/.test(year)) return null;
+  // Uvod koji je parser skinuo ostaje u izvornom tekstu citata; bez njega citat pocinje prezimenom.
+  if (!author || !String(citation.rawText ?? '').trimStart().startsWith(author)) return null;
   const words = author.split(/\s+/);
   if (!author || words.length > 3 || !words.every((word) => /^\p{Lu}[\p{L}'’-]+$/u.test(word))) return null;
   if (NOT_SURNAME.has(words[0].toLocaleLowerCase('hr'))) return null;

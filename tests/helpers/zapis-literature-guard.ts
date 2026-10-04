@@ -10,6 +10,7 @@
  */
 import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../../src/analysis/bibliography-structure';
 import { citationAnchorFingerprint } from '../../src/analysis/citation-bibliography-sync';
+import { extractCitationOccurrences } from '../../src/citations/author-year';
 import type { citationBibliographySyncFixer } from '../../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../../src/repair/contract/assisted-request-policy';
 import type { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../../src/ui/repair-items';
@@ -36,13 +37,25 @@ interface CaseOptions {
   after?: string[];
   /** Gotov `<w:p>` s citatom (npr. s Wordovom oznakom); tekst mu mora biti `citationText`. */
   citationXml?: string;
+  /** Zadnji zapis zavrsava sekciju (`w:sectPr` u svojstvima odlomka), npr. kad Prilozi idu u novu sekciju. */
+  sectionBreakOnLast?: boolean;
+}
+
+/** Prijelom sekcije u svojstvima odlomka, kakav Word pise na zadnji odlomak sekcije. */
+const SECTION_BREAK = '<w:sectPr><w:type w:val="nextPage"/><w:pgSz w:w="11906" w:h="16838"/></w:sectPr>';
+const sectionEndParagraph = (text: string) => `<w:p><w:pPr><w:ind w:left="720" w:hanging="720"/>${SECTION_BREAK}</w:pPr><w:r><w:t xml:space="preserve">${text}</w:t></w:r></w:p>`;
+
+/** Tekstovi odlomaka koji nose prijelom sekcije u svojstvima (tijelo dokumenta, ne zavrsni `w:sectPr`). */
+export function sectionEndTexts(xml: string): string[] {
+  return [...xml.matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].filter((match) => /<w:sectPr\b/.test(match[1])).map((match) => paragraphTexts(match[0])[0]);
 }
 
 /** Dokument: odlomak s citatom, naslov popisa i zadani (abecedni) zapisi, po izboru i odlomci iza. */
 export function syncCase(citationText: string, citationRaw: string, surnames: Array<[string, string]>, options: CaseOptions = {}) {
   const entries = options.rawEntries ?? surnames.map(([surname, year]) => entryText(surname, year));
   const after = (options.after ?? []).map((item) => (item.startsWith('<w:p') ? item : paragraph(item))).join('');
-  const documentXml = `<w:document><w:body>${options.citationXml ?? paragraph(citationText)}${paragraph(options.heading ?? 'Literatura')}${entries.map(paragraph).join('')}${after}<w:sectPr/></w:body></w:document>`;
+  const entryXml = entries.map((text, index) => (options.sectionBreakOnLast && index === entries.length - 1 ? sectionEndParagraph(text) : paragraph(text))).join('');
+  const documentXml = `<w:document><w:body>${options.citationXml ?? paragraph(citationText)}${paragraph(options.heading ?? 'Literatura')}${entryXml}${after}<w:sectPr/></w:body></w:document>`;
   const start = citationText.indexOf(citationRaw);
   const lastIndex = 2 + entries.length;
   const params: Parameters<SyncFixer>[1] = {
@@ -150,6 +163,87 @@ function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
   const viaLiteral = fixer(bookmark.parts, { ...bookmark.params, entries: [{ ...bookmark.params.entries[0], citationId: undefined, replacementText: literalText }] });
   if (!viaLiteral.applied || !paragraphTexts(viaLiteral.parts.documentXml).includes(literalText)) problems.push(`oznaka: korisnikov zapis nije umetnut (${viaLiteral.reason})`);
   if (!viaTemplate.parts.documentXml.includes(markedXml)) problems.push('oznaka: odlomak citata je prepisan');
+
+  uvodiIRazmaciProblemi(fixer, problems);
+  sekcijeIVisodlomacniProblemi(fixer, problems);
+}
+
+/**
+ * Uvodi koje parser SKIDA ("prema", "usp.", "vidi", "navedeno u") ostavljaju sklonjeno prezime kao
+ * autora zagradnog citata. Generator najprije dokazuje da parser bas to vraca.
+ */
+const STRIPPED_INTRO_CASES: Array<[string, string, string]> = [
+  ['padez-uvod:prema', 'prema Novaku, 2022', 'Novaku'],
+  ['padez-uvod:usp.', 'usp. Horvata, 2020', 'Horvata'],
+  ['padez-uvod:vidi', 'vidi Babića, 2021', 'Babića'],
+  ['padez-uvod:navedeno u', 'navedeno u Kovaču, 2019', 'Kovaču'],
+];
+
+function uvodiIRazmaciProblemi(fixer: SyncFixer, problems: string[]): void {
+  for (const [tag, raw, declined] of STRIPPED_INTRO_CASES) {
+    const text = `Tekst rada (${raw}).`;
+    const parsed = extractCitationOccurrences([{ index: 1, text }]);
+    if (parsed.length !== 1 || parsed[0].author !== declined || parsed[0].form !== 'parenthetical') problems.push(`${tag}: ulaz nije zagradni citat sa skinutim uvodom (${JSON.stringify(parsed.map((c) => c.author))})`);
+    const stripped = syncCase(text, raw, BASE);
+    const result = fixer(stripped.parts, stripped.params);
+    if (result.applied || paragraphTexts(result.parts.documentXml).some((value) => value.includes('[ime]'))) problems.push(`${tag}: sklonjeno prezime iz citata s uvodom uslo je u zapis`);
+  }
+
+  // Tvrdi razmak (U+00A0) u citatu: analiza ga cita kao obican razmak, pa zahtjev plana nosi rawText s
+  // obicnim razmakom. Citat se samo cita: odlomak mora ostati bajt-isti, a predlozak umetnut.
+  const nbspText = 'Tekst rada (Novak, 2022, str.\u00a05).';
+  const nbsp = syncCase(nbspText, 'Novak, 2022, str.\u00a05', BASE);
+  const analysisRaw = 'Novak, 2022, str. 5';
+  const planShaped = { ...nbsp.params, citations: [{ ...nbsp.params.citations[0], replacementText: analysisRaw, anchorFingerprint: citationAnchorFingerprint(1, nbspText.replace(/\u00a0/g, ' ')) }] };
+  if (!nbsp.parts.documentXml.includes('\u00a0') || planShaped.citations[0].replacementText === nbsp.params.citations[0].replacementText) problems.push('nbsp: ulaz nema tvrdi razmak koji analiza cita kao obican');
+  const nbspResult = fixer(nbsp.parts, planShaped);
+  const nbspTexts = paragraphTexts(nbspResult.parts.documentXml);
+  if (!nbspResult.applied || !nbspTexts.includes(template('Novak', '2022'))) problems.push(`nbsp: predlozak nije umetnut (${nbspResult.reason})`);
+  if (nbspTexts[0] !== nbspText) problems.push(`nbsp: odlomak citata je prepisan (${JSON.stringify(nbspTexts[0])})`);
+}
+
+/**
+ * Prijelom sekcije na zadnjem zapisu (Prilozi u novoj sekciji) i zadnji zapis u dva odlomka (URL ili
+ * DOI u vlastitom retku, koje analiza spaja u jedan zapis).
+ */
+function sekcijeIVisodlomacniProblemi(fixer: SyncFixer, problems: string[]): void {
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const lastBase = entryText(BASE.at(-1)![0], BASE.at(-1)![1]);
+  const sectionCases: Array<{ tag: string; surname: string; year: string; literal?: boolean; carrier: string }> = [
+    { tag: 'sekcija:pocetak', surname: 'Babić', year: '2021', carrier: lastBase },
+    { tag: 'sekcija:sredina', surname: 'Novak', year: '2022', carrier: lastBase },
+    { tag: 'sekcija:kraj', surname: 'Zupan', year: '2014', carrier: template('Zupan', '2014') },
+    { tag: 'sekcija:korisnikov-zapis', surname: 'Novak', year: '2022', literal: true, carrier: literalText },
+  ];
+  for (const item of sectionCases) {
+    const raw = `${item.surname}, ${item.year}`;
+    const sectioned = syncCase(`Tekst rada (${raw}).`, raw, BASE, { sectionBreakOnLast: true });
+    if (JSON.stringify(sectionEndTexts(sectioned.parts.documentXml)) !== JSON.stringify([lastBase])) problems.push(`${item.tag}: ulaz nema prijelom sekcije na zadnjem zapisu`);
+    const params = item.literal ? { ...sectioned.params, entries: [{ ...sectioned.params.entries[0], citationId: undefined, replacementText: literalText }] } : sectioned.params;
+    const result = fixer(sectioned.parts, params);
+    const ends = sectionEndTexts(result.parts.documentXml);
+    if (!result.applied) problems.push(`${item.tag}: zapis nije umetnut (${result.reason})`);
+    // Jedan prijelom, na zadnjem odlomku popisa: popis ostaje u istoj sekciji, novi zapis ne bjezi iza nje.
+    else if (JSON.stringify(ends) !== JSON.stringify([item.carrier])) problems.push(`${item.tag}: prijelom sekcije je na ${JSON.stringify(ends)}, ocekivan samo na ${JSON.stringify(item.carrier)}`);
+    if (result.applied && paragraphTexts(result.parts.documentXml).at(-1) !== item.carrier) problems.push(`${item.tag}: popis vise ne zavrsava odlomkom s prijelomom`);
+  }
+
+  // Zadnji zapis u dva odlomka: sidro je ZADNJI odlomak zapisa, otisak je otisak cijelog zapisa.
+  const multiEntries = ['Horvat, A. (2019). Naslov.', 'Zubak, B. (2020). Naslov djela Zubak. Dostupno na:', 'https://doi.org/10.1000/xyz'];
+  for (const { tag, raw, literal, expected } of [
+    { tag: 'vise-odlomaka:predlozak-sredina', raw: 'Novak, 2022', literal: undefined, expected: ['Literatura', multiEntries[0], template('Novak', '2022'), multiEntries[1], multiEntries[2]] },
+    { tag: 'vise-odlomaka:predlozak-kraj', raw: 'Zupan, 2022', literal: undefined, expected: ['Literatura', ...multiEntries, template('Zupan', '2022')] },
+    { tag: 'vise-odlomaka:korisnikov-zapis', raw: 'Novak, 2022', literal: literalText, expected: ['Literatura', ...multiEntries, literalText] },
+  ]) {
+    const multi = syncCase(`Tekst rada (${raw}).`, raw, [], { rawEntries: multiEntries });
+    const last = analyzeBibliographyStructure(numbered(multi.before), 'hr').entries.at(-1);
+    if (last?.paragraphIndices.join() !== '4,5') { problems.push(`${tag}: ulaz nema zadnji zapis u dva odlomka (${last?.paragraphIndices.join()})`); continue; }
+    const anchor = { paragraphIndex: last.paragraphIndices.at(-1)!, anchorFingerprint: last.anchorFingerprint };
+    const entry = { ...multi.params.entries[0], insertionAnchor: anchor, ...(literal ? { citationId: undefined, replacementText: literal } : {}) };
+    const result = fixer(multi.parts, { ...multi.params, entries: [entry] });
+    const texts = paragraphTexts(result.parts.documentXml).slice(1);
+    if (!result.applied || JSON.stringify(texts) !== JSON.stringify(expected)) problems.push(`${tag}: ${result.reason ?? 'primijenjeno'} ${JSON.stringify(texts)}`);
+  }
 }
 
 /** Gard fixera: predlozak, abecedno mjesto, dijakritika, idempotencija, vidljivi tekst, padez. */
@@ -251,6 +345,27 @@ export function planZapisaProblemi(build: PlanBuilder): string[] {
   narrative.text = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
   const typed = (form.buildParams(form) as Built).entries.find((entry) => entry.id === narrative.id);
   if (typed?.replacementText !== narrative.text) problems.push('narativ: upisani zapis uz narativni citat se ne salje');
+
+  // Preporuka (advisory) nije obvezujuce pravilo: sinkronizaciju smije nuditi, umetanje teksta ne.
+  const advisory = build(planResult(), { ruleEntries: [{ ...planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }).ruleEntries[0], status: 'advisory' }] })[0];
+  if (!advisory) problems.push('preporuka: ulaz ne daje stavku sinkronizacije');
+  else if (advisory.citationBibliographySyncForm?.missingEntries.length) problems.push('dozvola: preporuka (advisory) otvara dodavanje zapisa');
+
+  // Zagradni citat s uvodom koji parser skida ("prema Novaku, 2022"): autor je sklonjen, pa nema predloska.
+  const withIntro = planResult();
+  const intro = { ...PLAN_CITATIONS[0], id: 'c3', rawText: 'prema Novaku, 2022', author: 'Novaku' };
+  Object.assign(withIntro.details.citationBibliographySync, { citations: [intro], missingEntries: [intro], links: [{ citationId: 'c3', status: 'missing', candidates: [], reason: 'nedostaje' }] });
+  const introRow = build(withIntro, planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0]?.citationBibliographySyncForm?.missingEntries[0];
+  if (!introRow || introRow.templateAvailable) problems.push('padez-uvod: plan nudi predlozak za citat s uvodom');
+
+  // Zadnji zapis u dva odlomka (URL ili DOI u svom retku): sidro je zadnji odlomak, otisak cijelog zapisa.
+  const multi = planResult();
+  multi.details.bibliographyStructure.entries = [{ id: 'bibliography-3', paragraphIndices: [3, 4], anchorFingerprint: 'biblio-3-4', rawText: `${entryText('Horvat', '2020')} https://doi.org/10.1/a` }];
+  const multiForm = build(multi, planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0]?.citationBibliographySyncForm;
+  if (multiForm) multiForm.missingEntries[0].selected = true;
+  const multiAdd = multiForm && (multiForm.buildParams(multiForm) as Built).entries.find((entry) => entry.action === 'add');
+  const multiAnchor = multiAdd?.insertionAnchor as { paragraphIndex: number; anchorFingerprint: string } | undefined;
+  if (multiAnchor?.paragraphIndex !== 4 || multiAnchor.anchorFingerprint !== 'biblio-3-4') problems.push(`vise-odlomaka: sidro plana nije zadnji odlomak zapisa (${JSON.stringify(multiAnchor)})`);
   return problems;
 }
 
@@ -299,6 +414,7 @@ export function serverDozvolaProblemi(resolve: typeof resolveParams, allowed: ty
   if (allowed(ruleEntry({ mode: 'author-year' }))) problems.push('dozvola-profil: dozvola bez allowMissingEntryInsertion');
   if (allowed(ruleEntry({ mode: 'numeric', allowMissingEntryInsertion: true }))) problems.push('dozvola-profil: dozvola izvan author-year');
   if (allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }, { status: 'draft' }))) problems.push('dozvola-profil: dozvola bez verificiranog pravila');
+  if (allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }, { status: 'advisory' }))) problems.push('dozvola-profil: dozvola iz preporuke (advisory)');
   if (allowed(ruleEntry({ mode: 'author-year', allowMissingEntryInsertion: true }, { sourcePage: null }))) problems.push('dozvola-profil: dozvola bez stranice izvora');
   if (allowed({ ruleEntries: [] })) problems.push('dozvola-profil: dozvola bez pravila');
   return problems;
@@ -316,5 +432,29 @@ export function serverZapisaProblemi(validate: typeof validateAssistedParams): s
   if (ok(add({ replacementText: '   ' }))) problems.push('server: prima prazan tekst bez citata');
   if (ok(add({ citationId: 'c9' }))) problems.push('server: prima nepoznat citat');
   if (ok(add({ citationId: 'c1', template: 'Kovač, I. (2022).' }))) problems.push('server: prima klijentski predlozak');
+  return problems;
+}
+
+/**
+ * Gard analize: zapis koji jos nosi ijedno konstantno polje predloska ("[ime]", "[Naslov djela]",
+ * "[Mjesto: Izdavač]") je nepopunjen, ne potpun izvor. Bez toga popravak pretvara nedostajuci zapis u
+ * "potpun" zapis s rezerviranim mjestima i provjera potpunosti lazno prolazi.
+ */
+export function nepopunjenPredlozakProblemi(analyze: typeof analyzeBibliographyStructure): string[] {
+  const problems: string[] = [];
+  const partial = [
+    ['predlozak', template('Novak', '2022')],
+    ['bez-imena', 'Novak, [ime]. (2022). Pravi naslov djela. Zagreb: Izdavač.'],
+    ['bez-naslova', 'Novak, N. (2022). [Naslov djela]. Zagreb: Izdavač.'],
+    ['bez-izdavaca', 'Novak, N. (2022). Pravi naslov djela. [Mjesto: Izdavač].'],
+  ] as const;
+  for (const [tag, text] of partial) {
+    const structure = analyze(numbered(['Literatura', entryText('Horvat', '2020'), text, entryText('Zubak', '2019')]), 'hr');
+    const entry = structure.entries.find((candidate) => candidate.rawText === text);
+    if (!entry) { problems.push(`nepopunjen:${tag}: analiza ne vidi zapis`); continue; }
+    if (!entry.flags.includes('unfilled-template') || !structure.incompleteEntryIds.includes(entry.id)) problems.push(`nepopunjen:${tag}: zapis nije oznacen kao nepopunjen`);
+  }
+  const complete = analyze(numbered(['Literatura', entryText('Horvat', '2020'), 'Novak, N. (2022). Pravi naslov djela. Zagreb: Izdavač.', entryText('Zubak', '2019')]), 'hr');
+  if (complete.entries.length !== 3 || complete.entries.some((entry) => entry.flags.includes('unfilled-template'))) problems.push('nepopunjen:popunjen: popunjen zapis je oznacen kao predlozak');
   return problems;
 }

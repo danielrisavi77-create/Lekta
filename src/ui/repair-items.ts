@@ -879,20 +879,23 @@ export function elementCaptionRepairableItem(result: any, profile: any): Repaira
   }];
 }
 
-/** Vrijednost verificiranog pravila sinkronizacije citata i literature, ili undefined. */
-function citationSyncRules(profile: any): any {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'citation-sync-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
+/** Vrijednost pravila sinkronizacije citata i literature sa statusom iz `statuses` i izvorom, ili undefined. */
+function citationSyncRules(profile: any, statuses: ReadonlySet<string | undefined> = ASSISTED_STATUSES): any {
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'citation-sync-rules' && statuses.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   return ruleEntry?.value;
 }
 
+/** Z36: umetanje novog teksta trazi obvezujuce pravilo; preporuka (advisory) ga ne otvara. */
+const INSERTION_STATUSES: ReadonlySet<string | undefined> = new Set(['verified']);
+
 /**
- * Z36: smije li profil umetati zapise literature (verificirano citation-sync-rules, nacin author-year,
- * allowMissingEntryInsertion). Isti uvjet cita plan (nudi li retke "Nedostajući zapisi") i recept
- * (src/repair/recipe.ts), iz kojeg se pece serverski autoritet: server bez pecene dozvole profila
- * uklanja svaki 'add' iz zahtjeva (src/repair/param-authority.ts).
+ * Z36: smije li profil umetati zapise literature (citation-sync-rules sa statusom `verified`, nacin
+ * author-year, allowMissingEntryInsertion). Isti uvjet cita plan (nudi li retke "Nedostajući zapisi") i
+ * recept (src/repair/recipe.ts), iz kojeg se pece serverski autoritet: server bez pecene dozvole
+ * profila uklanja svaki 'add' iz zahtjeva (src/repair/param-authority.ts).
  */
 export function citationEntryInsertionAllowed(profile: any): boolean {
-  const rules = citationSyncRules(profile);
+  const rules = citationSyncRules(profile, INSERTION_STATUSES);
   return rules?.mode === 'author-year' && rules.allowMissingEntryInsertion === true;
 }
 
@@ -917,7 +920,7 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
   const lastEntry = bibliographyEntries.at(-1);
   // Z36 (1): plan nudi dodavanje zapisa SAMO kad ga profil dopusta i postoji zapis uz koji se umece;
   // inace bi ponudjeni redak na serveru pao kao nepoznat zapis i srusio cijelu stavku.
-  const insertionAllowed = citationEntryInsertionAllowed(profile) && !!lastEntry;
+  const insertionAllowed = citationEntryInsertionAllowed(profile) && Array.isArray(lastEntry?.paragraphIndices) && lastEntry.paragraphIndices.length > 0;
   const missingCitations: any[] = insertionAllowed && Array.isArray(sync.missingEntries) ? sync.missingEntries : [];
   // Z36: predlozak bez upisanog teksta samo za citat iz kojeg fixer sigurno cita prezime i godinu (isti
   // uvjet, entryTemplateSource). Narativni citat ili autor s uvodom ("see", "npr.") trazi upisani zapis.
@@ -965,7 +968,9 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
       const text = missing.text.trim();
       // anchorFingerprint nosi otisak sidra: ugovor zahtjeva (assisted-request-policy) odbija prazan
       // otisak, pa je 'add' s praznim nizom padao prije fixera. Fixer za 'add' cita insertionAnchor.
-      return { id: missing.id, paragraphIndices: [], anchorFingerprint: String(lastEntry.anchorFingerprint), action: 'add' as const, ...(text ? { replacementText: text.slice(0, 20_000) } : { citationId: missing.citationId }), insertionAnchor: { paragraphIndex: Number(lastEntry.paragraphIndices[0]), anchorFingerprint: String(lastEntry.anchorFingerprint) } };
+      // Sidro je ZADNJI odlomak zadnjeg zapisa uz otisak cijelog zapisa: zapis s URL-om ili DOI-jem u
+      // vlastitom retku ima vise odlomaka, a fixer otisak potvrdjuje unatrag od sidra i umece iza njega.
+      return { id: missing.id, paragraphIndices: [], anchorFingerprint: String(lastEntry.anchorFingerprint), action: 'add' as const, ...(text ? { replacementText: text.slice(0, 20_000) } : { citationId: missing.citationId }), insertionAnchor: { paragraphIndex: Number(lastEntry.paragraphIndices.at(-1)), anchorFingerprint: String(lastEntry.anchorFingerprint) } };
     });
     const mappings = current.citations.filter((citation) => citation.selected && citation.selectedCandidate).map((citation) => ({ citationId: citation.id, bibliographyEntryId: citation.selectedCandidate as string, confirmed: true as const }));
     const missingMappings = addedMissing.map((missing) => ({ citationId: missing.citationId, bibliographyEntryId: missing.id, confirmed: true as const }));

@@ -22,12 +22,13 @@ import { PARAM_AUTHORITY, resolveParams } from '../src/repair/param-authority';
 import { packageDoc, paragraph, documentXml } from './helpers/repair-templates';
 import { runClosedLoopCase, documentText } from './helpers/closed-loop-runner';
 import { readZip } from '../src/repair/zip-codec';
-import { entryText, paragraphTexts, planZapisaProblemi, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
+import { entryText, nepopunjenPredlozakProblemi, paragraphTexts, planZapisaProblemi, sectionEndTexts, serverDozvolaProblemi, serverZapisaProblemi, syncCase, template, zapisLiteratureProblemi } from './helpers/zapis-literature-guard';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
 const STYLES = `<w:styles ${WORD_NS}><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/></w:style></w:styles>`;
 const PROFILE_ID = 'fer-diplomski';
+const COMPLETENESS = 'Potpunost bibliografskih zapisa';
 
 function syncProfile(value: Record<string, unknown>) {
   const profile = resolveProfile(PROFILE_ID) as any;
@@ -65,6 +66,10 @@ describe('Z36 gardovi nad stvarnom implementacijom', () => {
 
   it('server: add bez teksta trazi poznat citat iz istog zahtjeva', () => {
     expect(serverZapisaProblemi(validateAssistedParams)).toEqual([]);
+  });
+
+  it('analiza: zapis s ijednim poljem predloska u uglatim zagradama je nepopunjen', () => {
+    expect(nepopunjenPredlozakProblemi(analyzeBibliographyStructure)).toEqual([]);
   });
 });
 
@@ -166,15 +171,21 @@ describe('Z36 kroz cijeli lanac: analiza, plan, ugovor, popravak, ponovna analiz
         const sync = after?.details?.citationBibliographySync;
         const structure = after?.details?.bibliographyStructure;
         const raw = (structure?.entries ?? []).map((entry: any) => entry.rawText);
+        const completeness = (after?.checks ?? []).find((check: any) => check.title === COMPLETENESS);
         return sync?.summary?.missing === 0
           && structure?.alphabetical?.expected === true
-          && JSON.stringify(raw) === JSON.stringify([entryText('Horvat', '2020'), template('Novak', '2022'), entryText('Zorić', '2021')]);
+          && JSON.stringify(raw) === JSON.stringify([entryText('Horvat', '2020'), template('Novak', '2022'), entryText('Zorić', '2021')])
+          // Nepopunjen predlozak nije potpun izvor: provjera potpunosti ga imenuje (vidi test nize).
+          && completeness?.status === 'warn';
       },
       allowTextChange: true, // dodaje se zapis literature, druge izmjene vidljivog teksta nema (vidi test nize)
+      // Namjerno: prije popravka citat nije imao zapis, poslije ima nepopunjen predlozak koji student
+      // mora popuniti; provjera potpunosti zato iz 'pass' ide u 'warn' (isResolved to tvrdi izricito).
+      exemptFromRegression: [COMPLETENESS],
     });
   }, 60_000);
 
-  it('vidljivi tekst: osim umetnutog zapisa nista se ne mijenja; zagrade predloska ne daju lazni nalaz potpunosti', async () => {
+  it('vidljivi tekst: osim umetnutog zapisa nista se ne mijenja; nepopunjen predlozak je nalaz potpunosti', async () => {
     const bytes = await brokenDoc();
     const file = new File([bytes], 'z36-tekst.docx', { type: DOCX_MIME });
     const before = await analyzeFixture(file, { profileId: PROFILE_ID });
@@ -186,11 +197,79 @@ describe('Z36 kroz cijeli lanac: analiza, plan, ugovor, popravak, ponovna analiz
     expect((await documentText(applied.docxBytes)).replace(template('Novak', '2022'), '')).toBe(await documentText(bytes));
     const after = await analyzeFixture(new File([applied.docxBytes], 'z36-tekst-poslije.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
     const inserted = after.details.bibliographyStructure.entries.find((entry: any) => entry.rawText === template('Novak', '2022'));
+    // Prezime i godina su stvarni (iz citata), pa nema lazne oznake autora ili godine; polja u
+    // zagradama zapis cine nepopunjenim, i to analiza kaze izricito.
     expect(inserted?.flags ?? []).not.toContain('missing-author');
     expect(inserted?.flags ?? []).not.toContain('missing-year');
-    // Izmjereno, ne pretpostavljeno: parser literature [Naslov djela] cita kao naslov.
-    expect(inserted?.flags ?? []).not.toContain('missing-title');
+    expect(inserted?.flags ?? []).toContain('unfilled-template');
+    expect(after.details.bibliographyStructure.incompleteEntryIds).toContain(inserted.id);
+    // Bodovana provjera potpunosti: prije popravka prolazi, poslije imenuje nepopunjen zapis.
+    const completenessBefore = before.checks.find((check: any) => check.title === COMPLETENESS);
+    const completenessAfter = after.checks.find((check: any) => check.title === COMPLETENESS);
+    expect(completenessBefore?.status).toBe('pass');
+    expect(completenessAfter?.status).toBe('warn');
+    expect(JSON.stringify(after.issues)).toContain('[Naslov djela]');
     expect(analyzeBibliographyStructure(afterTexts.map((text, i) => ({ index: i + 1, text })), 'hr').alphabetical.expected).toBe(true);
+  }, 60_000);
+
+  it('tvrdi razmak u citatu (U+00A0): odlomak citata ostaje bajt-isti, umece se samo zapis', async () => {
+    const cited = 'Tekst koji navodi izvor (Novak, 2022, str.\u00a05) i drugi (Horvat, 2020) te (Zorić, 2021).';
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${paragraph(cited)}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(entryText('Zorić', '2021'))}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-nbsp.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    // Generator: analiza vidi citat s obicnim razmakom, dokument ima tvrdi.
+    expect(before.details.citationBibliographySync.missingEntries.map((citation: any) => citation.rawText)).toEqual(['Novak, 2022, str. 5']);
+    const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true });
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }]);
+    expect(applied.integrityFailure ?? null).toBeNull();
+    const texts = await bodyParagraphs(applied.docxBytes);
+    expect(texts[0]).toBe(cited);
+    expect(texts.filter((text) => text !== template('Novak', '2022'))).toEqual(await bodyParagraphs(bytes));
+  }, 60_000);
+
+  it('zadnji zapis u dva odlomka (DOI u svom retku): plan sidri na zadnji odlomak, popravak prolazi', async () => {
+    const zoric = 'Zorić, A. (2021). Naslov djela Zorić. Dostupno na:';
+    const doi = 'https://doi.org/10.1000/xyz';
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${paragraph('Tekst koji navodi izvor (Novak, 2022) i drugi (Horvat, 2020) te (Zorić, 2021).')}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${paragraph(zoric)}${paragraph(doi)}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-doi.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    // Generator: analiza spaja zadnji zapis i redak s DOI-jem u jedan zapis s dva odlomka.
+    expect(before.details.bibliographyStructure.entries.at(-1).paragraphIndices).toEqual([4, 5]);
+    for (const text of ['', 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.']) {
+      const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true }, text);
+      expect((item.params as any).entries[0].insertionAnchor.paragraphIndex, text || 'predlozak').toBe(5);
+      const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }]);
+      expect(applied.integrityFailure ?? null, text || 'predlozak').toBeNull();
+      expect(applied.changelog.length, text || 'predlozak').toBe(1);
+      const texts = await bodyParagraphs(applied.docxBytes);
+      expect(texts.slice(2), text || 'predlozak').toEqual(text
+        ? [entryText('Horvat', '2020'), zoric, doi, text]
+        : [entryText('Horvat', '2020'), template('Novak', '2022'), zoric, doi]);
+      const after = await analyzeFixture(new File([applied.docxBytes], 'z36-doi-poslije.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+      expect(after.details.citationBibliographySync.summary.missing, text || 'predlozak').toBe(0);
+    }
+  }, 60_000);
+
+  it('prijelom sekcije na zadnjem zapisu: paket ostaje cijel, popis ostaje u jednoj sekciji', async () => {
+    const sectionEnd = `<w:p><w:pPr><w:pStyle w:val="Normal"/><w:sectPr><w:type w:val="nextPage"/><w:pgSz w:w="11906" w:h="16838"/></w:sectPr></w:pPr><w:r><w:t>${entryText('Zorić', '2021')}</w:t></w:r></w:p>`;
+    const bytes = await packageDoc({
+      documentXml: documentXml(`${paragraph('Tekst koji navodi izvor (Babić, 2018) i drugi (Horvat, 2020) te (Zorić, 2021).')}${paragraph('Literatura', 'Heading1')}${paragraph(entryText('Horvat', '2020'))}${sectionEnd}${paragraph('Prilozi', 'Heading1')}`),
+      stylesXml: STYLES,
+    });
+    const before = await analyzeFixture(new File([bytes], 'z36-sekcija.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID });
+    // Generator: citat bez zapisa postoji, a prijelom sekcije je samo na zadnjem zapisu.
+    expect(before.details.citationBibliographySync.missingEntries.map((citation: any) => citation.author)).toEqual(['Babić']);
+    expect(sectionEndTexts(new TextDecoder().decode((await readZip(bytes)).find((entry) => entry.name === 'word/document.xml')!.data))).toEqual([entryText('Zorić', '2021')]);
+    const [item] = planFor(before, { mode: 'author-year', allowMissingEntryInsertion: true });
+    const applied = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }]);
+    expect(applied.integrityFailure ?? null).toBeNull();
+    const xml = new TextDecoder().decode((await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/document.xml')!.data);
+    expect(sectionEndTexts(xml)).toEqual([entryText('Zorić', '2021')]);
+    expect((await bodyParagraphs(applied.docxBytes)).slice(2, 5)).toEqual([template('Babić', '2018'), entryText('Horvat', '2020'), entryText('Zorić', '2021')]);
   }, 60_000);
 
   it('citat u odlomku s Wordovom oznakom (_GoBack): predlozak i korisnikov zapis prolaze cijeli lanac', async () => {

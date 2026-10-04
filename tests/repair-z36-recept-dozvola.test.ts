@@ -69,6 +69,7 @@ describe('Z36: dozvola iz profila do pecenog serverskog autoriteta', () => {
   it.each([
     ['bez allowMissingEntryInsertion', syncRule({ mode: 'author-year' })],
     ['pravilo nije verificirano', syncRule({ mode: 'author-year', allowMissingEntryInsertion: true }, { status: 'draft' })],
+    ['pravilo je preporuka (advisory)', syncRule({ mode: 'author-year', allowMissingEntryInsertion: true }, { status: 'advisory' })],
     ['nacin nije author-year', syncRule({ mode: 'numeric', allowMissingEntryInsertion: true })],
     ['bez pravila', null],
   ])('%s: nema pecene dozvole, a server uklanja dodani zapis', (_label, rule) => {

@@ -58,6 +58,18 @@ export function bibliographyAnchorFingerprint(paragraphIndices: number[], text: 
   return `biblio-${hash(`${paragraphIndices.join(',')}|${normalize(text)}`)}`;
 }
 
+/**
+ * Z36: konstantna polja predloska zapisa literature koji popravak umece kad korisnik ne upise zapis
+ * (`citation-bibliography-sync-fixer`). Jedno mjesto za fixer i analizu: zapis koji jos nosi ijedno
+ * od ovih polja je nepopunjen predlozak, a ne potpun izvor, pa ga provjera potpunosti oznacava.
+ */
+export const ENTRY_TEMPLATE_FIELDS = { name: '[ime]', title: '[Naslov djela]', publisher: '[Mjesto: Izdavač]' } as const;
+
+/** Z36: nosi li tekst zapisa ijedno nepopunjeno polje predloska. */
+export function hasUnfilledTemplateField(text: string): boolean {
+  return Object.values(ENTRY_TEMPLATE_FIELDS).some((field) => text.includes(field));
+}
+
 function firstAuthor(fields: Partial<CitationInput>, fallback: string): string {
   const parsed = String(fields.authors || fallback).split(/[;\n]/)[0] || '';
   return normalize(parsed.split(',')[0] || parsed).trim();
@@ -133,7 +145,7 @@ export function analyzeBibliographyStructure(
       ...(author && year ? { authorYearKey: `${author}|${year}` } : {}),
       cited: citations.some((citation) => citationMatches(author, year, citation)),
       evidence: [...quality.evidence, ...(parsed.lowConfidence ? ['parser označio zapis kao nesiguran'] : [])],
-      flags: [...quality.flags, ...(parsed.type === 'propis' ? ['legal-source'] : []), ...(fields.url ? ['online-source'] : [])],
+      flags: [...quality.flags, ...(parsed.type === 'propis' ? ['legal-source'] : []), ...(fields.url ? ['online-source'] : []), ...(hasUnfilledTemplateField(rawText) ? ['unfilled-template'] : [])],
     });
   }
 
@@ -157,7 +169,7 @@ export function analyzeBibliographyStructure(
     .filter((citation) => !entries.some((entry) => citationMatches(firstAuthor(entry.fields, ''), String(entry.fields.year || ''), citation)))
     .map((citation) => ({ author: String(citation.author || ''), year: String(citation.year || ''), paragraphIndex: Number(citation.p || 0) }));
   const uncitedEntryIds = entries.filter((entry) => !entry.cited && !!entry.authorYearKey).map((entry) => entry.id);
-  const incompleteEntryIds = entries.filter((entry) => entry.flags.some((flag) => ['missing-author', 'missing-year', 'missing-title'].includes(flag))).map((entry) => entry.id);
+  const incompleteEntryIds = entries.filter((entry) => entry.flags.some((flag) => ['missing-author', 'missing-year', 'missing-title', 'unfilled-template'].includes(flag))).map((entry) => entry.id);
   const warnings: string[] = [];
   if (!alphabetical.expected && entries.length > 1) warnings.push('Bibliografija nije abecedno poredana.');
   if (duplicateGroups.length) warnings.push(`Pronađeno je ${duplicateGroups.length} grupa potpuno identičnih duplikata.`);
