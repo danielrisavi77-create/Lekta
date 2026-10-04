@@ -52,4 +52,10 @@ console.log(`dokumen: ${report.summary.documentCount}, promijenjeno: ${report.su
 console.log(`no-op: ${report.summary.noOpCount}, za pregled: ${report.summary.reviewCount}, pad: ${report.summary.failCount}`);
 console.log(`zapisano: docs/generated/${reportPath}`);
 if (outputDir) console.log(`paket za ručni pregled: ${outputDir}`);
-if (report.summary.failCount > 0) process.exitCode = 1;
+// Svjedoci (T68) su ZASEBAN skup (`witnessResults`, `witnessSummary`): JSON ih upisuje kao nova polja na
+// kraju izvjestaja, a ovdje se samo ispisuju. Pad svjedoka obara izlazni kod kao i pad stvarnog rada, a
+// isto i ciljana automatska provjera koja nakon popravka i dalje pada bez razloga (ishod `review`).
+const w = report.witnessSummary;
+console.log(`svjedoci: ${w.documents}, ciljano: ${w.targetedCheckCount}, rijeseno: ${w.resolved}, trazi korisnika: ${w.needsAssistance}, bez razloga: ${w.unexplainedUnresolved}, regresija: ${w.regressions}`);
+const witnessFailed = report.witnessResults.some((r) => r.outcome === 'fail' || r.unexplainedUnresolved.length > 0);
+if (report.summary.failCount > 0 || witnessFailed) process.exitCode = 1;

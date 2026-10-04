@@ -15,7 +15,9 @@
  *    bez ijednog `ruleEntry`: prolazi vakuumski.
  *
  * PRAVILA OVOG TESTA:
- *  1. Mutira se SAMO u memoriji. Nijedna datoteka na disku se ne dira.
+ *  1. Mutira se SAMO u memoriji. Nijedna datoteka repozitorija se ne dira. Jedina iznimka su
+ *     privremene datoteke izvan repozitorija (`mkdtemp` pod `tmpdir()`, obrisane u `finally`) kad gard
+ *     po ugovoru cita stablo s diska, npr. `crlf/citanje-bez-normalizacije` (T92).
  *  2. Svaka mutacija ima i BASELINE tvrdnju: nemutiran ulaz mora biti cist. Bez toga mutacija koja
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
@@ -34,7 +36,7 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -54,6 +56,7 @@ import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -209,7 +212,7 @@ import {
   auditClaudeContext,
 } from '../scripts/verify-claude-context-core.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
-import { sidecarAdmitted } from './real-corpus/corpus-track';
+import { corpusSetOf, sidecarAdmitted, witnessIsolationProblems, type CorpusSidecar } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
@@ -281,6 +284,8 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
+import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -364,6 +369,15 @@ const DOKAZ_BAZA = {
   missingRequired: [] as string[],
   results: requiredTierIds().map((id: string) => ({ id, label: id, status: 'pass' })),
 };
+
+/** Paket iz `package-lock.json` (T99); polja koja gard izvora cita. */
+type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link?: boolean; bundleDependencies?: string[]; [k: string]: unknown };
+/** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
+type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
+const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
+/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
+const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -2457,6 +2471,41 @@ const MUTATIONS: Mutation[] = [
     // Baseline: `undefined` NIJE nepoznata vrijednost nego izostanak polja, i mora proci, jer su
     // svi postojeci sidecari nastali prije uvodjenja trake.
     cleanBefore: () => sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: undefined }),
+  },
+  // --- svjedoci (T68): traka `witness` ide u zaseban skup, nikad u `results` -------------------
+  {
+    id: 'korpus/witness-traka-ulazi-u-results',
+    imitates:
+      'svjedok s NAMJERNIM prekrsajima (traka `witness`) udje u `results`: napravljen je da padne i da ' +
+      'ga popravak rijesi, pa bi napuhao stopu rjesavanja (sinteticki 84,6 posto naspram stvarnih 39,8 ' +
+      'posto) i usao u matricu kao dokaz profila koji nije studentski rad',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) => (m.track === 'witness' ? 'results' : corpusSetOf(m))).length > 0,
+    // Baseline: pravi razvrstavac nema nijedan problem, ukljucujuci kontrolne trake.
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-pada-u-synthetic',
+    imitates:
+      'zateceno ponasanje prije T68: `discoverExcludedCorpus` uzima sve sto `sidecarAdmitted` odbije, pa ' +
+      'svjedok zavrsi u `syntheticResults` i izgubi izravni signal (koji je namjerni prekrsaj ciljan, ' +
+      'razrijesen ili ostavljen korisniku)',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        typeof m.profileId === 'string' && m.profileId.length > 0 ? (sidecarAdmitted(m) ? 'results' : 'synthetic') : null,
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
+  },
+  {
+    id: 'korpus/witness-traka-bez-zastavice-synthetic',
+    imitates:
+      'prva verzija T68 razvrstavaca: `track: witness` sam je bio dovoljan, pa bi stvaran rad s greskom ' +
+      'pridruzenim witness sidecarom (bez `synthetic: true` ili sa `synthetic: false`) usao u mjerenje svjedoka',
+    caught: () =>
+      witnessIsolationProblems((m: CorpusSidecar) =>
+        m.track === 'witness' && typeof m.profileId === 'string' && m.profileId.length > 0 ? 'witness' : corpusSetOf(m),
+      ).length > 0,
+    cleanBefore: () => witnessIsolationProblems(corpusSetOf).length === 0,
   },
   {
     // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne
@@ -4666,6 +4715,106 @@ const MUTATIONS: Mutation[] = [
       cleanBefore: () => deadEndWiringProblems(real()).length === 0,
     };
   }),
+  // T99 (issue #220): gard izvora u lockfileu. Baseline je stvarni package-lock.json (0 prekrsaja);
+  // svaka mutacija podmece jedan los izvor u kopiju tog lockfilea, u memoriji. Baseline sadrzi i
+  // `inBundle` paket bez `resolved`, pa cist baseline dokazuje i da izuzetak nije lazni pozitiv.
+  ...([
+    ['t99/lockfile-drugi-host', 'resolved na tudji host (lockfile injection)',
+      (p: LockPkg) => ({ ...p, resolved: 'https://evil.example/x/-/x-1.0.0.tgz' })],
+    ['t99/lockfile-http', 'resolved preko http:// bez TLS-a',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('https://', 'http://') })],
+    ['t99/lockfile-git-izvor', 'resolved na git izvor mimo registryja',
+      (p: LockPkg) => ({ ...p, resolved: 'git+https://github.com/x/x.git#0000000' })],
+    ['t99/lockfile-bez-integrity', 'paket bez integrity, pa se sadrzaj ne provjerava',
+      (p: LockPkg) => { const { integrity: _i, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha1', 'integrity sa slabim sha1 umjesto sha512',
+      (p: LockPkg) => ({ ...p, integrity: 'sha1-AAAAAAAAAAAAAAAAAAAAAAAAAAA=' })],
+    ['t99/lockfile-git-ssh', 'resolved na git+ssh izvor',
+      (p: LockPkg) => ({ ...p, resolved: 'git+ssh://git@github.com/x/x.git#0000000' })],
+    ['t99/lockfile-drugi-registry', 'resolved na drugi javni registry (yarn)',
+      (p: LockPkg) => ({ ...p, resolved: String(p.resolved).replace('registry.npmjs.org', 'registry.yarnpkg.com') })],
+    ['t99/lockfile-bez-resolved', 'paket bez resolved, pa npm sam bira izvor',
+      (p: LockPkg) => { const { resolved: _r, ...rest } = p; return rest; }],
+    ['t99/lockfile-sha512-sha1-rezerva', 'integrity "sha512- sha1-..." koji ssri cita kao sha1 (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512- sha1-EfatjsUqKYSrqv18O1FlA3hcIHI=' })],
+    ['t99/lockfile-prazan-sha512', 'integrity "sha512-" bez digesta (Codex F3)',
+      (p: LockPkg) => ({ ...p, integrity: 'sha512-' })],
+    ['t99/lockfile-link', 'obican paket pretvoren u link na lokalnu putanju (Codex F2)',
+      (p: LockPkg) => ({ ...p, link: true, resolved: '../izvan' })],
+  ] as const).map(([id, imitates, mutate]) => ({
+    id,
+    imitates: `T99: ${imitates}; npm audit to ne vidi jer gleda samo poznate CVE-ove.`,
+    caught: () => {
+      const lock = realLock();
+      const name = Object.keys(lock.packages).find((k) => k !== '' && !lock.packages[k].inBundle && !lock.packages[k].link);
+      if (!name) return false;
+      lock.packages[name] = mutate(lock.packages[name]);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${name}:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  })),
+  ...([
+    ['t99/lockfile-verzija-4', 'lockfileVersion 4 uz valjan packages; gard ga ne bi citao (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = 4; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-verzija-tekst', 'lockfileVersion kao tekst "3" (Codex F4)',
+      (l: RealLock) => { l.lockfileVersion = '3'; }, 'lockfileVersion mora biti broj 3'],
+    ['t99/lockfile-inbundle-strani-resolved', 'inBundle zapis sa stranim resolved, dosad bezuvjetno izuzet (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_KEY] = { ...l.packages[INBUNDLE_KEY], resolved: 'https://evil.example/c.tgz' }; }, `${INBUNDLE_KEY}:`],
+    ['t99/lockfile-inbundle-bez-roditelja', 'roditelj vise ne navodi paket u bundleDependencies, a inBundle ostaje (Codex F2)',
+      (l: RealLock) => { l.packages[INBUNDLE_PARENT] = { ...l.packages[INBUNDLE_PARENT], bundleDependencies: [] }; }, `${INBUNDLE_KEY}:`],
+  ] as const).map(([id, imitates, mutate, expected]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const lock = realLock();
+      mutate(lock);
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
+    },
+    cleanBefore: () => {
+      const lock = realLock();
+      return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
+    },
+  })),
+  ...([
+    ['t99/lockfile-gard-nakon-instalacije', 'gard vraćen iza setup-deps: npm ci izvrsi instalacijsku skriptu prije odbijanja (Codex F1)',
+      (wf: string) => {
+        const step = wf.slice(wf.indexOf('      - name: Izvori paketa u lockfileu'), wf.indexOf('      - name: Ovisnosti (kesirano)'));
+        const setup = '      - name: Ovisnosti (kesirano)\n        uses: ./.github/actions/setup-deps\n        with:\n          node-version: 24\n\n';
+        return wf.replace(step, '').replace(setup, setup + step);
+      }, 'npm-audit: gard izvora tek nakon instalacije (setup-deps)'],
+    ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
+      'npm-audit: gard izvora ima continue-on-error'],
+    ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
+      (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+        '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
+      'npm-audit: gard izvora ima uvjet if'],
+    ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
+      (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
+      'npm-audit: nema mjerenja garda izvora'],
+  ] as const).map(([id, imitates, mutate, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = mutate(wf);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-gard-nije-u-ci',
+    imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/lockfile-sources.mjs\n', '');
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes('npm-audit: nema mjerenja garda izvora');
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
   {
     id: 'csp/stripe-host-u-form-action',
     imitates:
@@ -7447,8 +7596,52 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
   },
+  /**
+   * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;
+   * na Linux CI-ju zelen, na Windows checkoutu CRLF pa nema pogotka.
+   *
+   * Svjesna iznimka od pravila 1 iz zaglavlja: prva mutacija PISE jednu sinteticku test datoteku, ali
+   * u privremenu mapu izvan repozitorija (`mkdtemp` pod `tmpdir()`), koju gard skenira preko parametra
+   * `root` isto kao pravo stablo, i brise je u `finally`. Datoteke repozitorija se ne diraju. Druga
+   * mutacija ne mijenja izvor garda na disku: ubrizgava detektor `readNormalized` koji uvijek kaze
+   * "nije normalizirano" i trazi da presuda nad pravim stablom tada ne bude prazna.
+   */
+  {
+    id: 'crlf/citanje-bez-normalizacije',
+    imitates:
+      'test koji readFileSync(..., utf8) cita datoteku iz repozitorija i trazi `\\nas \\$\\$\\n` bez normalizacije CR-a; ' +
+      'Linux CI zelen, Windows checkout (CRLF) crven (#243, popravak #245)',
+    caught: () => crlfSintetickoStablo(false).length === 1,
+    cleanBefore: () => crlfSintetickoStablo(true).length === 0,
+  },
+  {
+    id: 'crlf/gard-bez-provjere-normalizacije',
+    imitates:
+      'gard kojem netko ukloni provjeru normalizacije (c): svako citanje koje ispravno normalizira CR postane ' +
+      'nalaz, ili obratno gard prestane razlikovati ispravan od neispravnog testa',
+    caught: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()), { ...CRLF_DETECTORS, readNormalized: () => false })).length > 0,
+    cleanBefore: () => crlfGuardVerdict(crlfReadProblems(collectScannedSources(process.cwd()))).length === 0,
+  },
 
 ];
+
+/**
+ * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
+ * (cita schema.sql i trazi `\nas \$\$\n`), sa ili bez normalizacije CR-a.
+ */
+function crlfSintetickoStablo(normalizira: boolean): string[] {
+  const root = mkdtempSync(join(tmpdir(), 'lekta-t92-'));
+  try {
+    mkdirSync(join(root, 'tests'));
+    const citanje = normalizira
+      ? "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8').replace(/\\r\\n/g, '\\n');"
+      : "const sql = readFileSync(resolve('ops/agent-control-plane/schema.sql'), 'utf8');";
+    writeFileSync(join(root, 'tests', 'sinteticki.test.ts'), `${citanje}\nexpect((sql.match(/\\nas \\$\\$\\n/g) ?? []).length).toBe(1);\n`);
+    return crlfReadProblems(collectScannedSources(root));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
 type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
