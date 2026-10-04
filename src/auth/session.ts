@@ -136,6 +136,18 @@ export function isExpired(session: Session | null, now: number, skewMs = 60_000)
  * s access_token/refresh_token u URL fragmentu (implicit flow, GET /verify - vidi GoTrue izvor).
  * Nuzno kad predlozak e-maila ne prikazuje odvojeni kod za rucni upis, samo klikabilnu poveznicu.
  */
+/**
+ * GoTrue odredište nakon klika na link cita iz QUERY parametra `redirect_to` (tako ga salje i
+ * supabase-js), a ne iz JSON tijela. Polje u tijelu ostaje radi kompatibilnosti, ali bez query
+ * parametra link vodi na Site URL, pa prijava zatrazena na drugom originu (lekta.hr naspram
+ * lektahr.netlify.app) zavrsi na krivom originu (T49, Codex nalaz 4 na #273). `app.ts` zato za
+ * prijavu e-mailom i povezivanje e-maila salje `location.origin + location.pathname`: link vraca
+ * korisnika na isti origin, dakle na isto lokalno stanje (localStorage, IndexedDB).
+ */
+export function withRedirectQuery(url: string, redirectTo?: string): string {
+  return redirectTo ? `${url}?redirect_to=${encodeURIComponent(redirectTo)}` : url;
+}
+
 export async function requestEmailOtp(
   cfg: AuthConfig,
   email: string,
@@ -148,7 +160,7 @@ export async function requestEmailOtp(
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) return { ok: false, message: 'neispravan e-mail' };
   const captchaToken = await captchaTokenFrom(captcha);
   try {
-    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/otp`, {
+    const res = await fetchImpl(withRedirectQuery(`${trimUrl(cfg.supabaseUrl)}/auth/v1/otp`, redirectTo), {
       method: 'POST',
       headers: authHeaders(cfg),
       body: withCaptcha({ email: clean, create_user: true, ...(redirectTo ? { redirect_to: redirectTo } : {}) }, captchaToken),
@@ -340,7 +352,7 @@ export async function linkEmailToAnonymous(
     return { ok: false, reason: 'invalid_email', message: 'neispravan e-mail' };
   }
   try {
-    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/user`, {
+    const res = await fetchImpl(withRedirectQuery(`${trimUrl(cfg.supabaseUrl)}/auth/v1/user`, redirectTo), {
       method: 'PUT',
       headers: { ...authHeaders(cfg), Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({ email: clean, ...(redirectTo ? { redirect_to: redirectTo } : {}) }),
