@@ -10276,6 +10276,56 @@ describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => 
   });
 });
 
+describe('mutacije: petlja ucenja, skupljac broji kvar jednom i samo is_error', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const blok = (pocetak: string) => {
+    const i = src.indexOf(pocetak);
+    return src.slice(i, src.indexOf('\n}\n', i) + 3);
+  };
+  const textBlok = blok('function resultText(');
+  const fnBlok = blok('export function failuresFromLines(');
+  type Fn = (lines: string[], ctx: { seen: Set<string>; stats: { malformedLines: number } }) => unknown[];
+  const izvedi = (fn: string): Fn =>
+    new Function('localDay', 'sessionLabel', 'classify', 'IS_ERROR_RE', `${textBlok}\n${fn.replace('export ', '')}\nreturn failuresFromLines;`)(
+      () => '2026-10-04', () => 's', () => ({ klasa: 'k', potpis: 'k' }), /"is_error"\s*:\s*true/,
+    ) as Fn;
+  // Jedna poruka s tri rezultata (paralelni pozivi): t1 i t3 su greske, t2 uspjeh. Redak prolazi brzi filtar.
+  const redak = JSON.stringify({
+    uuid: 'u1',
+    timestamp: '2026-10-04T08:00:00Z',
+    message: { content: [
+      { type: 'tool_result', tool_use_id: 't1', is_error: true, content: 'x' },
+      { type: 'tool_result', tool_use_id: 't2', content: 'ok' },
+      { type: 'tool_result', tool_use_id: 't3', is_error: true, content: 'y' },
+    ] },
+  });
+  // Tvrdnja: isti redak dvaput (roditelj i podagent) daje dva kvara (t1, t3), ne cetiri, ne jedan;
+  // uspjesan tool_result nije kvar.
+  const cisto = (f: Fn) => f([redak, redak], { seen: new Set(), stats: { malformedLines: 0 } }).length === 2;
+
+  it('baseline: stvarni failuresFromLines broji jednom i samo is_error', () => {
+    expect(cisto(izvedi(fnBlok))).toBe(true);
+  });
+
+  it('mutant bez deduplikacije po uuid+tool_use_id obara tvrdnju', () => {
+    const mutant = fnBlok.replace('if (ctx.seen.has(key)) continue;', '');
+    expect(mutant).not.toBe(fnBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+
+  it('mutant koji deduplicira samo po uuid retka (spaja paralelne kvarove) obara tvrdnju', () => {
+    const mutant = fnBlok.replace("const key = `${j.uuid ?? ''}|${b.tool_use_id ?? ''}`;", "const key = `${j.uuid ?? ''}`;");
+    expect(mutant).not.toBe(fnBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+
+  it('mutant koji broji svaki tool_result obara tvrdnju', () => {
+    const mutant = fnBlok.replace("if (b?.type !== 'tool_result' || b.is_error !== true) continue;", "if (b?.type !== 'tool_result') continue;");
+    expect(mutant).not.toBe(fnBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+});
+
 describe('mutacije: lean ratchet (T56)', () => {
   const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
   const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
