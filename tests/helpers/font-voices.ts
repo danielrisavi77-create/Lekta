@@ -1043,6 +1043,7 @@ export const DOPUSTENA_GEORGIA: ReadonlyArray<DopustenaGeorgia> = [
   ['src/shared/page-app.css', '.ks-doc-paper p', 'odlomci istog faksimila'],
   ['src/shared/pricing-receipt.css', '.pl-letter', 'pismo instituciji: dokument koji student salje, ne sucelje'],
   ['src/ui/results/result-visuals.css', '.cockpit-finding__evidence p', 'isjecak pravilnika uz nalaz'],
+  ['src/ui/analysis-live/analysis-live.css', '.z33-text', 'stranica studentskog rada na stolu analize uzivo (Z33)'],
   ['citat.html', '.out', 'oblikovan zapis koji ide u rad'],
   ['citat.html', '.out-intext code', 'citatnica u tekstu rada'],
   ['citat.html', '#bulk-input', 'korisnikov zalijepljeni popis literature'],
