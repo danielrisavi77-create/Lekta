@@ -353,7 +353,7 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
  * Dokument se uzima iz `runtimeDocument()`, ne globalni: cvor stvoren u tudjem dokumentu ne bi se
  * dao umetnuti u ovaj.
  */
-function toast(msg: any){const doc=runtimeDocument(),wrap=$('#toastWrap');if(!wrap)return;const n=doc.createElement('div');n.className='toast';n.textContent=msg;wrap.append(n);setTimeout(()=>n.remove(),3500)}
+export function toast(msg: any){const doc=runtimeDocument(),wrap=$('#toastWrap');if(!wrap)return;const n=doc.createElement('div');n.className='toast';n.textContent=msg;wrap.append(n);setTimeout(()=>n.remove(),3500)}
 /**
  * NASLIJEDJENO OZICENJE cijele landing stranice. Tijelo je namjerno ostalo isto; jedina dva
  * mjesta koja su se promijenila su ona koja su se OSLANJALA na globalni doseg: tema se pise u
@@ -1618,12 +1618,12 @@ async function ensureAccessToken(){if(!authConfigured())return null;const existi
 const REFERRAL_CODE_KEY='lekta.referral-code';
 function referralConfig(){const rf=String(productionConfig?.referralEndpoint||'').trim(),url=String(productionConfig?.supabaseUrl||'').trim();return{endpoint:rf||(url?url.replace(/\/+$/,'')+'/functions/v1/redeem-referral-signup':'')}}
 function captureReferralCode(){try{const ref=new URLSearchParams(location.search).get('ref');if(ref)safeStorageSet(REFERRAL_CODE_KEY,ref.trim().toUpperCase())}catch(e: any){}}
-async function maybeRedeemReferral(){const code=String(safeStorageGet(REFERRAL_CODE_KEY,'')||'').trim(),ep=referralConfig().endpoint;if(!code||!ep)return;const token: any=await resolveAccessToken();if(!token)return;try{await postReferralRedeem(ep,token,code)}finally{safeStorageSet(REFERRAL_CODE_KEY,'')}}
+export async function maybeRedeemReferral(){const code=String(safeStorageGet(REFERRAL_CODE_KEY,'')||'').trim(),ep=referralConfig().endpoint;if(!code||!ep)return;const token: any=await resolveAccessToken();if(!token)return;try{await postReferralRedeem(ep,token,code)}finally{safeStorageSet(REFERRAL_CODE_KEY,'')}}
 async function renderReferralShareBar(r?: any){const el=$('#referralShareBar');if(!el)return;el.innerHTML='';const c=authConfig();if(!c.supabaseUrl||!c.anonKey)return;const token: any=await resolveAccessToken();if(!token)return;const facultyId=r?.settings?.selectionIds?.unit||null;const workType=facultyId?toReportWorkType(r.settings?.workType||r.selection?.workType||'final'):null;try{await renderReferralShareSection({supabaseUrl:c.supabaseUrl,anonKey:c.anonKey,accessToken:token,appBaseUrl:location.origin||'',mountEl:el,facultyId,workType,deadlineRegistry:ACADEMIC_DEADLINES,onShare:()=>{void trackEvent('referral_shared')}})}catch(e: any){}}
 let _authEmail='',_authStep='email',_pendingAuthAction: any=null;
 // Kad nije prazno, potvrda ide kroz email_change nad TIM uuid-om (P0-07), ne kroz obican OTP.
 let _authLinkUserId='';
-function setAuthStatus(type: any,msg?: any){const st=$('#authStatus');if(!st)return;if(!msg){st.className='order-status hidden';st.textContent='';return}st.className=`order-status ${type}`;st.textContent=msg}
+export function setAuthStatus(type: any,msg?: any){const st=$('#authStatus');if(!st)return;if(!msg){st.className='order-status hidden';st.textContent='';return}st.className=`order-status ${type}`;st.textContent=msg}
 function resetAuthModal(){_authEmail='';_authStep='email';_authLinkUserId='';const em=$('#authEmail'),cc=$('#authCode');if(em){em.value='';em.disabled=false}if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub){sub.textContent='Pošalji kod';sub.disabled=false}setAuthStatus('','')}
 function openAuth(afterSignIn: any){_pendingAuthAction=afterSignIn||null;resetAuthModal();$('#authModal')?.classList.remove('hidden');trapModal($('#authModal'));setTimeout(()=>$('#authEmail')?.focus(),40)}
 function closeAuth(){$('#authModal')?.classList.add('hidden');releaseModal($('#authModal'))}
@@ -1672,7 +1672,7 @@ function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#aut
 // konfiguriran (supabaseUrl+anon). Bez toga je skriven. Prijava daje sesiju koju cita i
 // toggle podsjetnika na rok. NE ovisi o naplati (reportEndpoint ostaje prazan).
 function authSessionActive(){const s=authStore.load();return authConfigured()&&s&&s.email?s:null}
-function afterAuthChange(){renderAuthEntry();if(currentResult)renderSubmissionChecklist(currentResult)}
+export function afterAuthChange(){renderAuthEntry();if(currentResult)renderSubmissionChecklist(currentResult)}
 function authLogout(){authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
 function renderAuthEntry(){const s=authSessionActive();$$('[data-auth-entry]').forEach((b: any)=>{if(!authConfigured()){b.classList.add('hidden');return}b.classList.remove('hidden');if(s){b.textContent='Odjava';b.title=`Prijavljen/a: ${s.email}`;b.onclick=authLogout}else{b.textContent='Prijava';b.title='Prijava e-mailom (kod)';b.onclick=()=>openAuth(afterAuthChange)}})}
 // Garancijski zahtjev (file-guarantee-claim Edge Function). Pokriva TOCNOST verificiranih
