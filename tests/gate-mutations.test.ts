@@ -283,7 +283,9 @@ import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { deadEndWiringProblems, type DeadEndSources } from './helpers/dead-ends';
-import { lockfileGuardWiringProblems } from './helpers/lockfile-sources';
+import { lockfileGuardWiringProblems, osvWiringProblems } from './helpers/lockfile-sources';
+import { collectPackages, compareOsvToRatchet, findingsFromBatch } from '../scripts/osv-query.mjs';
+import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
 
@@ -4784,11 +4786,11 @@ const MUTATIONS: Mutation[] = [
     ['t99/lockfile-gard-continue-on-error', 'korak garda dobije continue-on-error pa crveno ne blokira (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        continue-on-error: true\n'),
-      'npm-audit: gard izvora ima continue-on-error'],
+      'npm-audit: korak lockfile-sources.mjs ima continue-on-error'],
     ['t99/lockfile-gard-if-false', 'korak garda dobije if: false pa se nikad ne izvrsi (Codex F5)',
       (wf: string) => wf.replace('      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
         '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        if: false\n'),
-      'npm-audit: gard izvora ima uvjet if'],
+      'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
     ['t99/lockfile-mjerenje-zakomentirano', 'naredba mjerenja zakomentirana, tekst ostaje u datoteci (Codex F5)',
       (wf: string) => wf.replace('          node scripts/lockfile-sources.mjs\n', '          # node scripts/lockfile-sources.mjs\n'),
       'npm-audit: nema mjerenja garda izvora'],
@@ -4803,6 +4805,78 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
+  // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  {
+    id: 't99/osv-novi-nalaz',
+    imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
+    caught: () => {
+      const { packages } = collectPackages();
+      const results = packages.map((_: unknown, i: number) => (i === 0 ? { vulns: [{ id: 'GHSA-mutacija' }] } : {}));
+      return compareOsvToRatchet(findingsFromBatch({ results }, packages), osvRatchet).verdict === 'above';
+    },
+    cleanBefore: () => {
+      const { packages, problems } = collectPackages();
+      return problems.length === 0 && compareOsvToRatchet(findingsFromBatch({ results: packages.map(() => ({})) }, packages), osvRatchet).verdict === 'equal';
+    },
+  },
+  {
+    id: 't99/osv-lockfile-bez-paketa',
+    imitates: 'T99: supabase/functions/deno.lock postane necitljiv ili prazan, pa OSV pita za nula paketa i lazno je zelen.',
+    caught: () => collectPackages((f: string) => (f === 'supabase/functions/deno.lock' ? '{"version":"5","remote":{}}' : readTextLf(resolve(process.cwd(), f))))
+      .problems.includes('supabase/functions/deno.lock: 0 paketa; necitljiv lockfile ne smije biti zelen'),
+    cleanBefore: () => collectPackages().problems.length === 0,
+  },
+  {
+    id: 't99/osv-nepotpun-odgovor',
+    imitates: 'T99: OSV vrati manje rezultata od upita ili next_page_token, a skripta to cita kao nula nalaza.',
+    caught: () => {
+      const { packages } = collectPackages();
+      try { findingsFromBatch({ results: packages.slice(1).map(() => ({})) }, packages); return false; } catch { return true; }
+    },
+    cleanBefore: () => {
+      const { packages } = collectPackages();
+      return findingsFromBatch({ results: packages.map(() => ({})) }, packages).length === 0;
+    },
+  },
+  {
+    id: 't99/osv-nije-u-ci',
+    imitates: 'T99: osv-scan job ostane bez mjerenja (samo selftest), pa Edge i Python ostaju neprovjereni a CI zelen.',
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace('          node scripts/osv-query.mjs\n', '');
+      return mut !== wf && osvWiringProblems(mut).includes('osv-scan: nema mjerenja OSV ratcheta');
+    },
+    cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
+  ...([
+    ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    if: false\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-job-continue-on-error', 'job npm-audit dobije continue-on-error pa crveni gard ne blokira (Codex runda 2, F5)',
+      '  npm-audit:\n    runs-on: ubuntu-latest\n', '  npm-audit:\n    continue-on-error: true\n    runs-on: ubuntu-latest\n', 'npm-audit: job ima if ili continue-on-error'],
+    ['t99/lockfile-korak-if-u-navodnicima', 'korak garda dobije "if": false u navodnicima (Codex runda 2, F5)',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n',
+      '      - name: Izvori paketa u lockfileu (selftest pa mjerenje, prije instalacije)\n        "if": false\n', 'npm-audit: korak lockfile-sources.mjs ima uvjet if'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T99: ${imitates}.`,
+    caught: () => {
+      const wf = readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'));
+      const mut = wf.replace(from, to);
+      return mut !== wf && lockfileGuardWiringProblems(mut).includes(problem);
+    },
+    cleanBefore: () =>
+      lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  })),
+  {
+    id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
+    imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
+    caught: () => {
+      const lock = realLock();
+      lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
+      return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
+    },
+    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+  },
   {
     id: 't99/lockfile-gard-nije-u-ci',
     imitates: 'T99: skripta postoji, ali je security-audit.yml ne pokrece (ili tek nakon npm audit), pa lockfile injection prolazi CI.',

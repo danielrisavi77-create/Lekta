@@ -14,9 +14,10 @@
 //  - `integrity` mora biti JEDAN SRI zapis `sha512-<base64>` s digestom od tocno 64 bajta. npm-ov
 //    `ssri` iz niza s vise zapisa bira algoritam po svom redu, pa `sha512- sha1-...` ili prazan
 //    `sha512-` nisu dokaz SHA512.
-//  - `inBundle: true` je izuzet od `resolved`/`integrity` SAMO kad mu je neposredni roditelj stvaran
-//    provjeren paket koji ga navodi u `bundleDependencies` (stize u roditeljevom tarballu); ako ipak
-//    nosi `resolved` ili `integrity`, oni se provjeravaju kao kod obicnog paketa.
+//  - `inBundle: true` je izuzet od `resolved`/`integrity` SAMO kao dio dokazanog lanca do vlasnika
+//    tarballa, stvarnog provjerenog paketa s `bundleDependencies` (vidi `inBundleProblem`). Tranzitivni
+//    bundle `a` -> `a/b` -> `a/b/c` prolazi (Codex runda 2 na #258, F2). Ako ipak nosi `resolved` ili
+//    `integrity`, oni se provjeravaju kao kod obicnog paketa.
 //  - `link: true` (workspace) nije dopusten: repo nema workspaceove, pa je svaki link podmetanje
 //    izvora mimo registryja. Uvodjenje workspaceova trazi svjesnu izmjenu ovog garda.
 //
@@ -56,6 +57,48 @@ function packageName(key) {
   return i === -1 ? key : key.slice(i + 'node_modules/'.length);
 }
 
+/** Kljuc roditelja: `a/node_modules/b` -> `a`; prazno za paket na vrhu. */
+function parentKeyOf(key) {
+  const cut = key.lastIndexOf('/node_modules/');
+  return cut === -1 ? '' : key.slice(0, cut);
+}
+
+/** Imena ovisnosti zapisa (dependencies, optionalDependencies, peerDependencies). */
+function depNames(meta) {
+  const out = new Set();
+  for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    const v = meta?.[field];
+    if (v && typeof v === 'object' && !Array.isArray(v)) for (const k of Object.keys(v)) out.add(k);
+  }
+  return out;
+}
+
+/**
+ * Je li `inBundle` zapis dio dokazanog lanca (Codex F2 na #258). Bundled paket stize u tarballu svog
+ * vlasnika, a to je prvi predak koji NIJE `inBundle`. Zapis je valjan kad ga treba njegov `inBundle`
+ * roditelj (tranzitivni bundle `a` -> `a/b` -> `a/b/c`) ili, kad je neposredno pod vlasnikom, kad ga
+ * vlasnik navodi u `bundleDependencies` ili ga treba neki drugi bundled paket istog vlasnika (podignut
+ * tranzitivni bundle). Vlasnik mora biti obican paket (ne korijen, ne link) s nepraznim
+ * `bundleDependencies`; njegov izvor provjerava glavna petlja.
+ */
+function inBundleProblem(key, entries) {
+  const parentKey = parentKeyOf(key);
+  const parent = parentKey ? entries[parentKey] : undefined;
+  const name = packageName(key);
+  if (!parent) return `${key}: \`inBundle\` bez roditelja (${parentKey || 'nema roditelja'})`;
+  if (parent.inBundle === true) {
+    return depNames(parent).has(name) ? null : `${key}: \`inBundle\` koji bundled roditelj ${parentKey} ne treba`;
+  }
+  const bundled = Array.isArray(parent.bundleDependencies) ? parent.bundleDependencies : [];
+  if (parent.link === true || bundled.length === 0) {
+    return `${key}: \`inBundle\` bez vlasnika tarballa s bundleDependencies (${parentKey})`;
+  }
+  if (bundled.includes(name)) return null;
+  const prefix = `${parentKey}/node_modules/`;
+  const neededByBundle = Object.entries(entries).some(([k, m]) => k !== key && k.startsWith(prefix) && m?.inBundle === true && depNames(m).has(name));
+  return neededByBundle ? null : `${key}: \`inBundle\` koji vlasnik ${parentKey} ne navodi u bundleDependencies ni ga treba bundled paket`;
+}
+
 /**
  * Prekrsaji izvora u parsiranom lockfileu, po imenu paketa. Nevaljan oblik (verzija razlicita od 3,
  * nema `packages`, nijedan provjeren paket) je takodjer prekrsaj: necitljiv lockfile ne smije biti zelen.
@@ -87,12 +130,9 @@ export function lockfileSourceProblems(lock) {
       continue;
     }
     if (meta.inBundle === true) {
-      const cut = name.lastIndexOf('/node_modules/');
-      const parentKey = cut === -1 ? '' : name.slice(0, cut);
-      const parent = parentKey ? entries[parentKey] : undefined;
-      const bundled = parent && Array.isArray(parent.bundleDependencies) ? parent.bundleDependencies : [];
-      if (!parent || parent.inBundle === true || parent.link === true || !bundled.includes(packageName(name))) {
-        problems.push(`${name}: \`inBundle\` bez roditelja koji ga navodi u bundleDependencies (${parentKey || 'nema roditelja'})`);
+      const bundleProblem = inBundleProblem(name, entries);
+      if (bundleProblem) {
+        problems.push(bundleProblem);
         continue;
       }
       if (meta.resolved !== undefined || meta.integrity !== undefined) problems.push(...sourceProblems(name, meta));
@@ -140,12 +180,15 @@ function selftest() {
       return 1;
     }
   }
-  const bundled = lockfileSourceProblems(lock({ 'node_modules/a/node_modules/c': { version: '1.0.0', inBundle: true } }));
+  const bundled = lockfileSourceProblems(lock({
+    'node_modules/a/node_modules/c': { version: '1.0.0', inBundle: true, dependencies: { d: '^1.0.0' } },
+    'node_modules/a/node_modules/c/node_modules/d': { version: '1.0.0', inBundle: true },
+  }));
   if (bundled.problems.length !== 0) {
     console.error(`[lockfile-sources] FAIL selftest: \`inBundle\` s pravim roditeljem je lazno prijavljen: ${bundled.problems.join('; ')}`);
     return 1;
   }
-  console.log(`[lockfile-sources] SELF-TEST OK: ${Object.keys(mustFail).length} losih ulaza se hvata, inBundle s roditeljem prolazi.`);
+  console.log(`[lockfile-sources] SELF-TEST OK: ${Object.keys(mustFail).length} losih ulaza se hvata, inBundle lanac (i tranzitivni) prolazi.`);
   return 0;
 }
 

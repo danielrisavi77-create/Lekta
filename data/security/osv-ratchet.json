@@ -1,0 +1,24 @@
+{
+  "note": "Ratchet nad OSV nalazima za ovisnosti koje npm audit ne vidi (T99, issue #220): npm paketi iz oba deno.lock (esm.sh) i tocni pinovi iz training-pipeline/requirements.txt. Identitet je `ekosustav:ime@verzija ID`. Strop je broj zapisa u `findings` i smije samo padati; svaki nalaz mora imati iznimku s vlasnikom, mitigacijom i rokom.",
+  "measuredAt": null,
+  "measurementNote": "Pocetni strop 0 nije izmjeren: api.osv.dev je blokiran u izvrsnom containeru. Prvi CI run osv-scan joba je mjerenje; ako nadje nalaze, upisuju se ovdje po imenu.",
+  "findings": [],
+  "exceptions": [],
+  "knownGaps": [
+    {
+      "file": "workers/field-renderer/pyproject.toml",
+      "reason": "samo rasponi verzija (fastapi>=0.115,<1; uvicorn[standard]>=0.34,<1); OSV trazi tocnu verziju, a lockfilea nema",
+      "since": "2026-10-04"
+    },
+    {
+      "file": ".claude/katedra-pkg/katedra-lite/pyproject.toml",
+      "reason": "samo rasponi verzija (python-docx>=1.1, pypdf>=5.0); bez lockfilea",
+      "since": "2026-10-04"
+    },
+    {
+      "file": ".claude/katedra-pkg/service/requirements.txt",
+      "reason": "samo rasponi i zamjenski znakovi (fastapi==0.115.*, lxml>=5); bez tocnih pinova",
+      "since": "2026-10-04"
+    }
+  ]
+}
