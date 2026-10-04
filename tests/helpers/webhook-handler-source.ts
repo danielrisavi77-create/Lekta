@@ -116,7 +116,10 @@ function ownerDecisionProblems(raw: string): string[] {
   if (verdict < 0 || review < 0) {
     problems.push('handler ne odlucuje o iznosu kroz chargedAmountVerdict (uplata ispod kataloga bi dobila pravo)');
   } else {
-    if (!/settle\(\s*'needs_manual_review',[^;]*\);\s*return json\(\{ ok: true, action: 'needs_manual_review'/.test(src)) {
+    // Trazi se SAMO u grani obicne uplate (od odluke o iznosu do rucne narudzbe): grana nadogradnje
+    // (bookUpgradePayment, Monetizacija V1) ima vlastiti izlaz istog oblika i ne smije maskirati ovaj.
+    const reviewRegion = manual > review ? src.slice(review, manual) : src.slice(review);
+    if (!/settle\(\s*'needs_manual_review',[^;]*\);\s*return json\(\{ ok: true, action: 'needs_manual_review'/.test(reviewRegion)) {
       problems.push('grana needs_manual_review ne izlazi odmah nakon zapisa (uplata ispod kataloga bi nastavila do prava)');
     }
     const branch = src.slice(review, at("settle('needs_manual_review'", review));
@@ -214,7 +217,7 @@ export function refundWindowProblems(raw: string): string[] {
   if (!/\bproduct\.active\b/.test(usable) || !/ocekivanoCenti > 0\b/.test(usable)) {
     problems.push('neupotrebljiva kataloska cijena (null, 0 ili neaktivan proizvod) ne ide na rucni pregled (catalog_price_unusable)');
   } else if (!/cijenaUpotrebljiva\s*\?\s*chargedAmountVerdict\(ev, ocekivanoCenti\)/.test(src)
-    || !src.includes("reason: 'catalog_price_unusable'")) {
+    || !src.includes("reason: 'catalog_price_unusable',")) {
     problems.push('odluka o iznosu ne ovisi o upotrebljivoj cijeni (catalog_price_unusable)');
   }
 
@@ -254,9 +257,29 @@ export function refundWindowProblems(raw: string): string[] {
     problems.push('refund grana zatvara sporedne posljedice prije gasenja prava (pad manual_orders ili coupon_grants ostavlja aktivno pravo)');
   }
   const markers = /const REFUND_MARKERS\s*=\s*\[([^\]]*)\]/.exec(src)?.[1] ?? '';
-  const padPosljedica = posljedice >= 0 ? /settle\('failed', '([a-z_]+)'\)/.exec(branch.slice(posljedice))?.[1] ?? '' : '';
+  // Treci argument (`outcome_note`, F21 stavka 2) je dopusten: oznaka ostaje drugi argument.
+  const padPosljedica = posljedice >= 0 ? /settle\('failed', '([a-z_]+)'[,)]/.exec(branch.slice(posljedice))?.[1] ?? '' : '';
   if (!padPosljedica || !markers.includes(`'${padPosljedica}'`)) {
     problems.push('pad sporednih posljedica povrata ne ostavlja oznaku punog povrata iz REFUND_MARKERS (uplata u medjuvremenu ne bi vidjela povrat)');
+  }
+  // F21 stavka 2: korak i greska sporednog pada moraju u inbox (outcome_note), ne samo u log.
+  if (posljedice >= 0 && !/settle\('failed', 'refund_consequences_failed', `\$\{posljedice\.step\}: \$\{posljedice\.error\}`\)/.test(branch.slice(posljedice))) {
+    problems.push('pad sporednih posljedica povrata ne zapisuje korak i gresku u inbox (outcome_note), samo u log');
+  }
+
+  // F21 stavka 1: puni povrat otkazuje obvezu iz bonus_outbox koja jos ceka.
+  const posljediceFn = (() => {
+    const start = at('async function closeRefundConsequences(');
+    const end = start >= 0 ? at('\n}\n', start) : -1;
+    return start >= 0 && end > start ? src.slice(start, end) : '';
+  })();
+  if (!/from\('bonus_outbox'\)\s*\.update\(\{ status: 'cancelled'/.test(posljediceFn) || !/\.eq\('status', 'pending'\)/.test(posljediceFn)) {
+    problems.push('puni povrat ne otkazuje obvezu iz bonus_outbox koja jos ceka (radnik bi isplatio nagradu za vracen novac)');
+  }
+
+  // F21 stavka 3: closePaymentAfterRefund bez any.
+  if (/async function closePaymentAfterRefund\(\s*admin: any\b/.test(src)) {
+    problems.push('closePaymentAfterRefund prima admin: any');
   }
 
   // h. bez any
