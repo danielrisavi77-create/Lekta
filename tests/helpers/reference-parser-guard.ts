@@ -11,8 +11,9 @@
  * mutiran u memoriji, pa mutacije u gate-mutations mijenjaju parser, a ne njegov rezultat.
  */
 import { readFileSync } from 'node:fs';
-import { stripTypeScriptTypes } from 'node:module';
+import * as nodeModule from 'node:module';
 import { resolve } from 'node:path';
+import { transformSync } from 'esbuild';
 import { normalize, sectionName } from '../../src/utils/helpers';
 
 type Ref = { text: string; author?: string; year?: string; noDate?: string; p?: number };
@@ -28,9 +29,22 @@ export function referenceParserSource(): string {
   return readFileSync(resolve(process.cwd(), SOURCE), 'utf8').replace(/\r\n/g, '\n');
 }
 
-export function loadReferenceParser(mutate: (src: string) => string = (s) => s): ReferenceParser {
+/**
+ * Uklanja TypeScript tipove. `node:module` `stripTypeScriptTypes` postoji tek od Node 22.13 / 23.2, a CI
+ * matrica vrti i Node 20; tada se koristi esbuild (devDependency) koji radi isto bez promjene redaka.
+ */
+type Strip = ((code: string) => string) | null | undefined;
+const nodeStrip: Strip = (nodeModule as { stripTypeScriptTypes?: (code: string) => string }).stripTypeScriptTypes;
+
+/** `strip` null znaci: prisilno esbuild (dokaz Node 20 grane i na novijem Nodeu). */
+export function stripTypes(src: string, strip: Strip = nodeStrip): string {
+  if (typeof strip === 'function') return strip(src);
+  return transformSync(src, { loader: 'ts', format: 'esm', target: 'es2022' }).code;
+}
+
+export function loadReferenceParser(mutate: (src: string) => string = (s) => s, strip: Strip = nodeStrip): ReferenceParser {
   const src = mutate(referenceParserSource());
-  const js = stripTypeScriptTypes(src)
+  const js = stripTypes(src, strip)
     .replace(/^import .*$/m, '')
     .replace(/^export \{([^}]*)\};?\s*$/m, 'return {$1};')
     .replace(/^export /gm, '');
@@ -52,7 +66,12 @@ const BEZ_GODINE = [
   'Knez, V. (u tisku). Novi modeli participacije. Politicka misao.',
 ];
 const OZNAKA_U_NASLOVU = 'Peric, T. (2013). Mediji (u tisku) i javnost. Zadar: Primjer naklada.';
+const OZNAKA_GODINA_NA_KRAJU = 'Peric, T. Mediji (u tisku) i javnost. Zadar: Primjer naklada, 2013.';
+// R2b: prethodni zapis bez godine (vise recenica) nije autorov red; iduci "(2011)." je zaseban zapis.
+const BEZ_GODINE_PA_GODINA = ['Hrvatski zavod. Godisnje izvjesce. Zagreb: Naklada', '(2011). Prirucnik za poslodavce. Zagreb: Ogledni izdavac.'];
 const VISEREDNI = [
+  ['Horvat, A.', '(2011). Lokalna samouprava u praksi. Zagreb: Primjer naklada.'],
+  ['HZZ.', '(2011). Godisnje izvjesce o zaposljavanju. Zagreb: Ogledni izdavac.'],
   ['Hrvatski zavod za zaposljavanje', '(2011). Godisnje izvjesce o zaposljavanju. Zagreb: Ogledni izdavac.'],
   ['Juric, I. (2016). Javne politike u lokalnoj samoupravi', 'Rijeka: Primjer naklada.'],
   ['Ministarstvo uprave Republike Hrvatske', '(b.g.). Smjernice za savjetovanje. Zagreb: Primjer naklada.'],
@@ -76,13 +95,18 @@ export function referenceParserProblems(p: ReferenceParser): string[] {
   const lazni = b.filter(inc).length;
   if (lazni) problems.push(`(b) ${lazni} potpunih zapisa s oznakom bez godine prijavljeno kao nepotpuno`);
   const r1 = refs(p, [OZNAKA_U_NASLOVU]);
-  if (r1.length !== 1 || r1[0].year !== '2013' || r1[0].noDate) problems.push(`(r1) oznaka u naslovu iza godine: godina "${r1[0]?.year ?? ''}", oznaka "${r1[0]?.noDate ?? ''}"`);
+  for (const linija of [OZNAKA_U_NASLOVU, OZNAKA_GODINA_NA_KRAJU]) {
+    const r1 = refs(p, [linija]);
+    if (r1.length !== 1 || r1[0].year !== '2013' || r1[0].noDate) problems.push(`(r1) oznaka u naslovu uz godinu: godina "${r1[0]?.year ?? ''}", oznaka "${r1[0]?.noDate ?? ''}"`);
+  }
+  const r2b = refs(p, BEZ_GODINE_PA_GODINA);
+  if (r2b.length !== 2 || !r2b.every(inc)) problems.push(`(r2b) zapis bez godine progutao iduci "(2011).": ${r2b.length} zapisa, nepotpunih ${r2b.filter(inc).length}`);
   for (const lines of VISEREDNI) {
     const r = refs(p, lines);
     if (r.length !== 1) problems.push(`(r2) viseredni zapis "${lines[0]}" razdvojen u ${r.length} zapisa`);
     else if (!r[0].author || inc(r[0])) problems.push(`(r2) viseredni zapis "${lines[0]}" bez autora ili nepotpun (autor "${r[0].author ?? ''}")`);
   }
-  for (const lines of [POTPUNI.flatMap((x, i) => [x, BEZ_AUTORA[i]]), BEZ_GODINE, [OZNAKA_U_NASLOVU], ...VISEREDNI]) {
+  for (const lines of [POTPUNI.flatMap((x, i) => [x, BEZ_AUTORA[i]]), BEZ_GODINE, [OZNAKA_U_NASLOVU], [OZNAKA_GODINA_NA_KRAJU], BEZ_GODINE_PA_GODINA, ...VISEREDNI]) {
     const prvi = refs(p, lines);
     const drugi = refs(p, prvi.map((x) => x.text));
     if (JSON.stringify(pogled(p, drugi)) !== JSON.stringify(pogled(p, prvi))) problems.push(`(r4) drugi prolaz nije no-op za "${lines[0]}"`);

@@ -95,6 +95,27 @@ describe('T91 golden: parser literature nakon popravka', () => {
     expect(referenceParserProblems(loadReferenceParser())).toEqual([]);
   });
 
+  it('pregled R5: izvrsavanje izvora radi i bez node:module stripTypeScriptTypes (Node 20, esbuild)', () => {
+    expect(referenceParserProblems(loadReferenceParser((s) => s, null))).toEqual([]);
+  });
+
+  it('pregled R2: kratak autorov red i kratica s tockom ostaju jedan zapis s autorom', () => {
+    for (const [autor, ocekivano] of [['Horvat, A.', 'Horvat'], ['HZZ.', 'HZZ']] as const) {
+      const r = refs([autor, '(2011). Godisnje izvjesce o zaposljavanju. Zagreb: Ogledni izdavac.']);
+      expect(r.map((x) => ({ author: x.author, year: x.year, nepotpun: nepotpun(x) }))).toEqual([{ author: ocekivano, year: '2011', nepotpun: false }]);
+    }
+  });
+
+  it('pregled R2b: prethodni zapis bez godine ne guta iduci "(2011).", oba ostaju nepotpuna', () => {
+    const r = refs(['Hrvatski zavod. Godisnje izvjesce. Zagreb: Naklada', '(2011). Prirucnik za poslodavce. Zagreb: Ogledni izdavac.']);
+    expect(r.map((x) => nepotpun(x))).toEqual([true, true]);
+  });
+
+  it('pregled R1: oznaka u naslovu i godina na kraju zapisa: godina vrijedi', () => {
+    const [r] = refs(['Horvat, A. Mediji (u tisku). Zagreb: Ogledni izdavac, 2011.']);
+    expect({ year: r.year, noDate: r.noDate }).toEqual({ year: '2011', noDate: undefined });
+  });
+
   it('pregled R1: oznaka bez godine u naslovu iza godine ne brise godinu', () => {
     const [r] = refs(['Horvat, A. (2011). Mediji (u tisku). Zagreb: Primjer naklada.']);
     expect({ author: r.author, year: r.year, noDate: r.noDate }).toEqual({ author: 'Horvat', year: '2011', noDate: undefined });

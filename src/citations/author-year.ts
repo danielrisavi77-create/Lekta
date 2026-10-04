@@ -66,12 +66,13 @@ const NO_DATE_MARK=/\((?:b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|be
 const REF_YEAR=/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i;
 const URL_START=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i;
 /**
- * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi samo u
- * polozaju datuma, tj. ispred prve godine u zapisu; "Horvat, A. (2011). Mediji (u tisku)." zadrzava 2011.
+ * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi samo kad u zapisu
+ * nema nijedne godine; "Horvat, A. (2011). Mediji (u tisku)." i "Horvat, A. Mediji (u tisku). Zagreb, 2011."
+ * zadrzavaju 2011. Poznato ogranicenje: "Kovac, B. (b.g.). Povijest 1990-ih." dobiva godinu 1990.
  */
 function referenceMeta(t: string){
  const nd=t.match(NO_DATE_MARK),y=t.match(REF_YEAR);
- const noDate=nd&&(!y||(nd.index as number)<(y.index as number))?nd:null;
+ const noDate=nd&&!y?nd:null;
  const ym=noDate||y,urlOnly=URL_START.test(t);
  const author=ym?referenceAuthor(t.slice(0,ym.index)):'';
  const year=ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'';
@@ -93,13 +94,25 @@ function referenceFields(t: string){
 function isIncompleteReference(r: { text: string; author?: string; year?: string; noDate?: string }){
  return !r.author||(!r.year&&!r.noDate)||r.text.length<25;
 }
+/**
+ * T91 (pregled R2): POZITIVAN dokaz da je odlomak samo autorov dio zapisa, bez godine i bez vise recenica:
+ * "Prezime, I." (i vise autora), kratica velikim slovima ("HZZ."), ili naziv ustanove bez tocke i dvotocke.
+ * Vrijedi samo uz odlomak iza njega koji pocinje datumom (vidi `datumNaPocetku`).
+ */
+function authorOnlyParagraph(t: string){
+ if(t.length>120||REF_YEAR.test(t)||NO_DATE_MARK.test(t)||URL_START.test(t))return false;
+ if(/^\p{Lu}{2,}\.?$/u.test(t))return true;
+ const bezInicijala=t.replace(/(^|[\s,;&(-])\p{Lu}\./gu,'$1');
+ return /^\p{Lu}/u.test(t)&&!/[.:;!?]/.test(bezInicijala);
+}
+const datumNaPocetku=(t: string)=>/^\s*\((?:(?:18|19|20)\d{2}[a-z]?|b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)\./i.test(t);
 function extractReferences(paragraphs: any,lang: any){
  const heads=lang==='en'?['references','bibliography']:['literatura','bibliografija','izvoriiliteratura','popisliterature'];let start=-1;
  for(let i=0;i<paragraphs.length;i++)if(heads.includes(sectionName(paragraphs[i].text))){start=i+1;break}if(start<0)return{start,entries:[]};
  // Zavrsni dijelovi iza literature (popisi tablica i slika, izjava o akademskoj cestitosti, zivotopis)
  // NISU zapisi. Do 2026-09-05 ih nije bilo ovdje, pa su se ti odlomci LIJEPILI na zadnji zapis (vidi nize).
  const stopTerms=lang==='en'?['appendix','appendices','abstract','summary','listoftables','listoffigures','declaration','curriculumvitae']:['prilozi','prilog','sazetak','summary','abstract','kljucnerijeci','keywords','popistablica','popisslika','popisgrafikona','popisilustracija','popiskratica','popisoznaka','izjava','zivotopis','biografija'];
- const entries: any[]=[];let current: any=null;
+ const entries: any[]=[];let current: any=null;const autorskiRedovi=new WeakSet<object>();
  for(let i=start;i<paragraphs.length;i++){const t=paragraphs[i].text.trim();if(!t)continue;const n=sectionName(t);if(stopTerms.some((x: any)=>n===x||n.startsWith(x)))break;
   if(bibliographySubheading(n)){current=null;continue}
   if(paragraphs[i].headingLevel&&entries.length)break;
@@ -122,14 +135,17 @@ function extractReferences(paragraphs: any,lang: any){
    * novi odlomak pocinje malim slovom ili URL-om. Kratak odlomak bez znamenki iza zavrsenog zapisa je
    * podnaslov popisa; dulji je nov (neprepoznat) zapis, isto kao i danas kad `current` ne postoji.
    */
+  // T91 (pregled R2): autorov red ("Horvat, A.", "HZZ.", "Hrvatski zavod za zaposljavanje") iza kojeg dolazi
+  // "(2011)." ili "(b.g.)." je pocetak zapisa bez obzira na duljinu i zavrsnu tocku inicijala ili kratice.
+  let iduci='';for(let j=i+1;j<paragraphs.length;j++){const s=String(paragraphs[j].text||'').trim();if(s){iduci=s;break}}
+  if(authorOnlyParagraph(t)&&datumNaPocetku(iduci)){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};autorskiRedovi.add(current);entries.push(current);continue}
   const zavrsen=!!current&&/[.)\]]\s*$/.test(current.text);
   const podnaslov=zavrsen&&!ym&&/^\p{Lu}/u.test(t)&&!/\d/.test(t)&&t.length<=60&&!urlOnly;
   if(podnaslov){current=null;continue}
   const nastavak=!!current&&!(zavrsen&&/^\p{Lu}/u.test(t)&&!urlOnly);
-  // T91 (pregled R2): "(2011)." iza odlomka koji izgleda kao autorov dio (bez godine, bez zavrsne tocke) je
-  // drugi red istog zapisa ("Hrvatski zavod za zaposljavanje" / "(2011). Godisnje izvjesce.").
-  const autorskiDio=!!current&&!zavrsen&&!/\b(?:18|19|20)\d{2}/.test(current.text)&&!NO_DATE_MARK.test(current.text);
-  if(startsNew||numbered||(leadYear&&!urlOnly&&!autorskiDio)){current={text:t,...referenceFields(t),p:i+1,ps:[i+1]};entries.push(current)}
+  const iza=!!current&&autorskiRedovi.has(current)&&current.ps.length===1;
+  if(startsNew||numbered||(leadYear&&!urlOnly&&!iza)){current={text:t,...referenceFields(t),p:i+1,ps:[i+1]};entries.push(current)}
+  else if(iza){current.text+=' '+t;current.ps.push(i+1)}
   else if(nastavak){current.text+=' '+t;current.ps.push(i+1)}
   else if(t.length>20){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};entries.push(current)}
  }

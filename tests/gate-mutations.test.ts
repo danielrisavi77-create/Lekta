@@ -1055,10 +1055,11 @@ const MUTATIONS: Mutation[] = [
   // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
   // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
   ...([
-    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!autorskiDio)', '', '(a)'],
+    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!iza)', '', '(a)'],
     ['citations/oznaka-bez-godine-nepotpuna', 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)', '(!r.year&&!r.noDate)', '!r.year', '(b)'],
-    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1: oznaka "(u tisku)" u naslovu iza stvarne godine pobijedi godinu, pa "Horvat, A. (2011). Mediji (u tisku)." izgubi 2011', '(!y||(nd.index as number)<(y.index as number))', 'true', '(r1)'],
-    ['citations/godina-razdvaja-viseredni', 'pregled R2: bezuvjetni leadYear razdvoji viseredni zapis "Hrvatski zavod za zaposljavanje" / "(2011). Godisnje izvjesce."', '&&!autorskiDio)', ')', '(r2)'],
+    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1: oznaka "(u tisku)" u naslovu pobijedi stvarnu godinu, pa "Horvat, A. (2011). Mediji (u tisku)." ili "... (u tisku). Zagreb, 2011." izgubi 2011', 'nd&&!y?nd:null', 'nd?nd:null', '(r1)'],
+    ['citations/godina-razdvaja-viseredni', 'pregled R2: autorov red ("Horvat, A.", "HZZ.", ustanova) ispred "(2011)." se ne prepozna, pa kratak nestane ili se zapis razdvoji u dva nepotpuna', 'authorOnlyParagraph(t)&&datumNaPocetku(iduci)', 'false', '(r2)'],
+    ['citations/zapis-bez-godine-guta-iduci', 'pregled R2b: svaki odlomak bez godine smatra se autorovim dijelom, pa "Hrvatski zavod. Godisnje izvjesce. Zagreb: Naklada" proguta iduci "(2011). Prirucnik..." i dva nepotpuna postanu jedan potpun', '&&!/[.:;!?]/.test(bezInicijala)', '', '(r2b)'],
     ['citations/metapodaci-prije-spajanja', 'pregled R4: metapodaci viserednog zapisa iz prvog odlomka umjesto iz spojenog teksta, pa drugi prolaz daje drugog autora', 'for(const e of entries){if(e.ps.length<2)continue;', 'for(const e of entries){if(e.ps.length>=0)continue;', '(r4)'],
   ] as const).map(([id, imitates, staro, novo, oznaka]): Mutation => ({
     id,
