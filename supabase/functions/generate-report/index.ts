@@ -135,7 +135,7 @@ Deno.serve(async (req: Request) => {
   // besplatno (interni entitlement), pa se odluka PONOVI (sad postoji slot). Bez signupa ostaje
   // payment_required. Nagrada NIJE coupon_grant nego entitlement (generate-report gleda samo te).
   if (decision.decision === 'payment_required') {
-    const friend = await tryGrantFriendReferralReward(admin, user.id, workType);
+    const friend = await tryGrantFriendReferralReward(admin, user.id, workType, { isAnonymous: user.is_anonymous === true });
     if (friend.granted) decision = await decide();
   }
 

@@ -292,6 +292,7 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -4909,6 +4910,29 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RF-1: nagrada prijatelju (placeni slot) ne smije pripasti anonimnom Auth racunu.
+  ...([
+    ['t84/friend-nagrada-anonimnom', 'helper izgubi rani izlaz za anonimni racun, pa svaki novi anonimni racun s istim kodom dobije placeni slot',
+      'helper', "  if (caller.isAnonymous !== false) return { granted: false, reason: 'ineligible_anonymous' };\n", '',
+      'grant-friend-referral-reward: nema ranog izlaza za anonimni racun'],
+    ['t84/friend-isanonymous-konstanta', 'generate-report prosljedi konstantu umjesto user.is_anonymous, pa gard nikad ne okine',
+      'report', '{ isAnonymous: user.is_anonymous === true }', '{ isAnonymous: false }',
+      'generate-report: isAnonymous ne dolazi iz user.is_anonymous (admin, user.id, workType, { isAnonymous: false })'],
+  ] as const).map(([id, imitates, which, from, to, problem]) => ({
+    id,
+    imitates: `T84 RF-1: ${imitates}.`,
+    caught: () => {
+      const helper = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts'));
+      const report = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+      const mutHelper = which === 'helper' ? helper.replace(from, to) : helper;
+      const mutReport = which === 'report' ? report.replace(from, to) : report;
+      return (mutHelper !== helper || mutReport !== report) && friendRewardAnonGuardProblems(mutHelper, mutReport).includes(problem);
+    },
+    cleanBefore: () => friendRewardAnonGuardProblems(
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts')),
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts')),
+    ).length === 0,
+  })),
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
