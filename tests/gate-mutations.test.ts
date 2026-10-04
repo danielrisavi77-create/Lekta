@@ -295,6 +295,7 @@ import { captchaWiringProblems } from './helpers/auth-captcha';
 import { acceptedInvalidUrls, committedSourceAddresses, findSourceUrlProblems } from './helpers/source-url-checks';
 import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
+import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -383,9 +384,18 @@ type LockPkg = { resolved?: string; integrity?: string; inBundle?: boolean; link
 /** Svjeza kopija stvarnog lockfilea za svaku mutaciju (T99). */
 type RealLock = { lockfileVersion: unknown; packages: Record<string, LockPkg> };
 const realLock = (): RealLock => JSON.parse(readFileSync(resolve(process.cwd(), 'package-lock.json'), 'utf8'));
-/** Jedini `inBundle` zapis u stvarnom lockfileu i njegov roditelj (T99, Codex F2). */
-const INBUNDLE_PARENT = 'node_modules/@parcel/watcher-wasm';
+/**
+ * `inBundle` lanac za T99 mutacije (Codex F2). Stvarni lockfile ga je imao samo u netlify-cli stablu;
+ * nakon Popravka A (netlify-cli van) nema nijednog, pa se valjan lanac cijepi na stvarni paket.
+ */
+const INBUNDLE_PARENT = 'node_modules/vite';
 const INBUNDLE_KEY = `${INBUNDLE_PARENT}/node_modules/napi-wasm`;
+const bundledLock = (): RealLock => {
+  const lock = realLock();
+  lock.packages[INBUNDLE_PARENT] = { ...lock.packages[INBUNDLE_PARENT], bundleDependencies: ['napi-wasm'] };
+  lock.packages[INBUNDLE_KEY] = { version: '1.0.0', inBundle: true };
+  return lock;
+};
 
 /** Jezgra npm-audit ratcheta izvedena iz (mutiranog) izvora u memoriji; izvor nema importa (T93). */
 type RatchetCore = {
@@ -397,6 +407,13 @@ function loadRatchetCore(src: string): RatchetCore {
   const body = src.replace(/^export /gm, '');
   return new Function(`${body}\nreturn { compareAuditToRatchet, syntheticAudit, validateRatchet };`)() as RatchetCore;
 }
+
+// T93 stays independently exercised after the production ratchet returns to zero findings.
+const T93_MUTATION_RATCHET = {
+  fullGraphHighCritical: 1,
+  fullGraphHighCriticalPackages: ['braces'],
+  exceptions: [{ packages: ['braces'], advisories: ['GHSA-aaaa-aaaa-aaaa'] }],
+};
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -3085,12 +3102,12 @@ const MUTATIONS: Mutation[] = [
     ['t93/usporedba-bez-advisoryja', 'compareAuditToRatchet gleda samo ime i broj, pa novi GHSA na prihvacenom paketu prolazi',
       'uncoveredPairs.length > 0 || unresolvedPackages.length > 0', 'false',
       (core: RatchetCore) => core.compareAuditToRatchet(
-        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+        core.syntheticAudit(T93_MUTATION_RATCHET, ['braces'], { braces: ['GHSA-zzzz-zzzz-zzzz'] }), T93_MUTATION_RATCHET).verdict === 'above'],
     ['t93/pokrice-po-imenu', 'iznimka pokriva paket za bilo koji advisory (pokrice po imenu, kao prije T93)',
       'const uncoveredPairs = pairs.filter((pair) => !covered.has(pair));',
       "const uncoveredPairs = pairs.filter((pair) => ![...covered].some((c) => c.split(' ')[0] === pair.split(' ')[0]));",
       (core: RatchetCore) => core.compareAuditToRatchet(
-        core.syntheticAudit(auditRatchet, auditRatchet.fullGraphHighCriticalPackages, { braces: ['GHSA-zzzz-zzzz-zzzz'] }), auditRatchet).verdict === 'above'],
+        core.syntheticAudit(T93_MUTATION_RATCHET, ['braces'], { braces: ['GHSA-zzzz-zzzz-zzzz'] }), T93_MUTATION_RATCHET).verdict === 'above'],
     ['t93/validator-bez-advisoryja', 'iznimka bez advisories prolazi validaciju, pa pokriva sve buduce advisoryje paketa',
       "problems.push(`${label}.advisories je prazan (iznimka pokriva advisory, ne samo ime paketa)`);", '',
       (core: RatchetCore) => core.validateRatchet({ fullGraphHighCritical: 1, fullGraphHighCriticalPackages: ['a'],
@@ -4856,12 +4873,12 @@ const MUTATIONS: Mutation[] = [
     id,
     imitates: `T99: ${imitates}.`,
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       mutate(lock);
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(expected));
     },
     cleanBefore: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       return lockfileSourceProblems(lock).problems.length === 0 && lock.packages[INBUNDLE_KEY]?.inBundle === true;
     },
   })),
@@ -4936,6 +4953,66 @@ const MUTATIONS: Mutation[] = [
       return mut !== wf && osvWiringProblems(mut).includes('osv-scan: nema mjerenja OSV ratcheta');
     },
     cleanBefore: () => osvWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
+  },
+  ...([
+    ['popravak-a/netlify-cli-natrag-u-devdeps', 'netlify-cli se vrati u devDependencies pa 15 high nalaza opet ulazi u graf',
+      'packageJson', '"devDependencies": {\n', '"devDependencies": {\n    "netlify-cli": "^27.10.2",\n', 'package.json: netlify-cli je u devDependencies'],
+    ['popravak-a/skripta-iz-node-modules', 'release skripta opet trazi netlify u node_modules umjesto pinanog npx',
+      'releaseScript', "args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args]", "args", 'release skripta: netlify ne ide kroz npx --yes s pinom'],
+    ['popravak-a/pin-raspon', 'pin postane raspon (^27) pa npx tiho uzme drugu verziju',
+      'releaseScript', "export const NETLIFY_CLI_PIN = 'netlify-cli@27.10.2';", "export const NETLIFY_CLI_PIN = 'netlify-cli@^27';", 'release skripta: pin nije tocna verzija (netlify-cli@^27)'],
+    ['popravak-a/dokument-drift', 'dokument objave zadrzi staru verziju dok skripta dobije novu',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build', 'npx --yes netlify-cli@27.10.1 deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nema "npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build"'],
+    ['popravak-a/npx-cmd-bez-shella', 'netlify se opet pokrece kao npx.cmd kroz spawnSync bez shella, pa Windows objava pada s EINVAL (Codex F1 na #283)',
+      'releaseScript', "return { executable: process.execPath, args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      "return { executable: platform === 'win32' ? 'npx.cmd' : 'npx', args: [npxCli(), '--yes', NETLIFY_CLI_PIN, ...args] };",
+      'release skripta: npx se pokrece s PATH-a ili kao .cmd umjesto kroz process.execPath'],
+    ['popravak-a/aktivni-poziv-uz-pin-u-komentaru', 'dokument dobije aktivni nepinani deploy, a pinani ostane u komentaru (Codex F2 na #283)',
+      'releaseDoc', 'npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build',
+      '<!-- npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build -->\nnpx --yes netlify-cli deploy --prod --dir dist --no-build',
+      'RELEASE_PROOF_WORKFLOW.md: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/npm-skripta-gola-naredba', 'package.json dobije skriptu s golom netlify naredbom iz globalne instalacije (Codex F2 na #283)',
+      'packageJson', '"scripts": {\n', '"scripts": {\n    "deploy:netlify": "netlify deploy --prod",\n',
+      'package.json scripts.deploy:netlify: gola netlify naredba "netlify deploy"'],
+  ] as const).map(([id, imitates, field, from, to, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const mut = { ...src, [field]: src[field].replace(from, to) };
+      return mut[field] !== src[field] && netlifyPinProblems(mut).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
+  ...([
+    ['popravak-a/dinamicni-paket-u-varijabli', 'objava ide kroz varijablu s netlify-cli@latest, pa u pozivu nema doslovnog pina (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: |\n          CLI=netlify-cli@latest\n          npx --yes "$CLI" deploy --prod\n',
+      '.github/workflows/mutacija.yml: dinamican paket u pozivu "npx --yes "$CLI"'],
+    ['popravak-a/yaml-presavijeni-blok', 'YAML presavijeni blok razlomi npx i nepinani paket u dva retka (Codex F2a na #283)',
+      '.github/workflows/mutacija.yml', '      - run: >\n          npx --yes\n          netlify-cli deploy --prod\n',
+      '.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+    ['popravak-a/akcija-js-nepinano', 'JS kod lokalne akcije objavljuje nepinanim CLI-jem (Codex F2b na #283)',
+      '.github/actions/publish/index.js', "execSync('npx --yes netlify-cli deploy --prod');\n",
+      '.github/actions/publish/index.js: nepinani Netlify CLI poziv "npx --yes netlify-cli"'],
+  ] as const).map(([id, imitates, path, text, problem]) => ({
+    id,
+    imitates: `Popravak A: ${imitates}.`,
+    caught: () => {
+      const src = netlifyPinRealSources();
+      return netlifyPinProblems({ ...src, files: [...(src.files ?? []), { path, text }] }).includes(problem);
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
+  })),
+  {
+    id: 'popravak-a/workflow-drugi-pin',
+    imitates: 'Popravak A: workflow objavljuje kroz npx s drugim pinom, a gard gleda samo release skriptu i dokument (Codex F2 na #283).',
+    caught: () => {
+      const src = netlifyPinRealSources();
+      const files = [...(src.files ?? []), { path: '.github/workflows/mutacija.yml', text: '      - run: npx --yes netlify-cli@27.10.1 deploy --prod\n' }];
+      return netlifyPinProblems({ ...src, files }).includes('.github/workflows/mutacija.yml: nepinani Netlify CLI poziv "npx --yes netlify-cli@27.10.1"');
+    },
+    cleanBefore: () => netlifyPinProblems(netlifyPinRealSources()).length === 0,
   },
   ...([
     ['t99/lockfile-job-if-false', 'job npm-audit dobije if: false pa se gard nikad ne izvrsi (Codex runda 2, F5)',
@@ -5021,22 +5098,22 @@ const MUTATIONS: Mutation[] = [
     id: 't99/lockfile-bundle-ciklus',
     imitates: 'T99: dva bundled paketa jedan drugoga trebaju, a nijedan nije dosegljiv od bundleDependencies vlasnika (Codex R2 na #274).',
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       lock.packages[`${INBUNDLE_PARENT}/node_modules/x`] = { version: '1.0.0', inBundle: true, dependencies: { y: '1' } };
       lock.packages[`${INBUNDLE_PARENT}/node_modules/y`] = { version: '1.0.0', inBundle: true, dependencies: { x: '1' } };
       return lockfileSourceProblems(lock).problems.filter((x: string) => x.includes('nije dosegljiv')).length === 2;
     },
-    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
   },
   {
     id: 't99/lockfile-tranzitivni-bundle-bez-potrebe',
     imitates: 'T99: bundled paket koji nijedan bundled roditelj ne treba prolazi samo zato sto je unutar tudjeg tarballa (Codex runda 2, F2).',
     caught: () => {
-      const lock = realLock();
+      const lock = bundledLock();
       lock.packages[`${INBUNDLE_KEY}/node_modules/podmetnut`] = { version: '1.0.0', inBundle: true };
       return lockfileSourceProblems(lock).problems.some((x: string) => x.startsWith(`${INBUNDLE_KEY}/node_modules/podmetnut:`));
     },
-    cleanBefore: () => lockfileSourceProblems(realLock()).problems.length === 0,
+    cleanBefore: () => lockfileSourceProblems(bundledLock()).problems.length === 0,
   },
   {
     id: 't99/lockfile-gard-nije-u-ci',

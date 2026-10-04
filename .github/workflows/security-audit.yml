@@ -1,6 +1,6 @@
 # Supply-chain provjera (BL-P3-14): revizija PRODUKCIJSKIH ovisnosti + skeniranje tajni.
-# Dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom pa ih namjerno izostavljamo
-# (--omit=dev); ono sto zavrsi u browser bundleu mora biti bez high/critical ranjivosti.
+# Dev CLI (supabase) i build alati namjerno su izostavljeni ovdje (--omit=dev); netlify-cli od
+# 2026-10-04 nije ovisnost (rucna objava kroz pinani npx). Ono sto zavrsi u browser bundleu mora biti bez high/critical ranjivosti.
 # Tjedni cron hvata novoobjavljene ranjivosti i bez novog commita.
 # gitleaks job (AUD-47 / LEKTA-SEC-07): dosad je jedini security korak bio npm audit (samo CVE
 # ovisnosti); commitirana tajna ne bi bila uhvacena. gitleaks skenira kod i git povijest.
@@ -68,10 +68,10 @@ jobs:
       # 2026-09-09 ovaj je korak imao `continue-on-error` i broj samo ISPISIVAO, pa je rast bio
       # nevidljiv: komentar ovdje tvrdio je 21 (mjereno 2026-08-24), a stvarno je bilo 23. Strop
       # zivi u `data/security/npm-audit-ratchet.json` i smije samo PADATI: iznad stropa korak pada,
-      # ispod stropa javlja `::notice` da se strop spusti, jednako je tiho OK. Tvrdi gate na nuli
-      # bi i dalje bio greska: svih 23 su tranzitivni pod `netlify-cli` i `vitest`/`vite` i ne
-      # daju se popraviti bez odluke o nadogradnji tih alata, pa bi trajno crven CI naucio sve da
-      # ga ignoriraju. Selftest prije mjerenja dokazuje da gard grize (podmetnut porast mora pasti).
+      # ispod stropa javlja `::notice` da se strop spusti, jednako je tiho OK. Ratchet je ostao i kad
+      # je strop pao na 0 (Popravak A, 2026-10-04: netlify-cli izbacen, a s njim svih 15 nalaza):
+      # novi vanjski advisory u alatu bez dostupnog patcha i dalje treba imenovanu, vremenski
+      # ogranicenu iznimku, a ne trajno crven CI. Selftest prije mjerenja dokazuje da gard grize.
       - name: Audit punog grafa (ratchet, selftest pa mjerenje)
         run: |
           echo "::group::Pun dependency graf (runtime + build)"
