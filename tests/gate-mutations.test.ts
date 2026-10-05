@@ -11964,9 +11964,39 @@ describe('mobilna polja i mete alata (mobilni audit 2026-09-28, PR 4)', () => {
   });
 
   it('mutant: pravne poveznice opet 24 px se hvata', () => {
-    const m = lf(CHROME).replace('.site-footer__pravno a { min-height: 44px; }', '.site-footer__pravno a { min-height: 24px; }');
+    const m = lf(CHROME).replace('.site-footer__pravno a { min-height: 44px;', '.site-footer__pravno a { min-height: 24px;');
     expect(m).not.toBe(lf(CHROME));
     expect(mobileFieldsProblems(lf(TOOL), m)).toEqual(['pravne poveznice u podnozju nisu mete od 44 px na uskom ekranu']);
+  });
+
+  it('mutant: pravne poveznice bez najmanje sirine se hvata (Codex 310-2)', () => {
+    const m = lf(CHROME).replace(' min-width: 44px;', '');
+    expect(m).not.toBe(lf(CHROME));
+    expect(mobileFieldsProblems(lf(TOOL), m)).toEqual(['pravne poveznice u podnozju su uze od 44 px na uskom ekranu']);
+  });
+
+  for (const [tip, novo] of [['select', 'textarea){font-size:16px}'], ['textarea', 'select){font-size:16px}']] as const) {
+    it(`mutant: pravilo od 16 px bez ${tip} se hvata (Codex 310-3)`, () => {
+      const m = lf(TOOL).replace('select,textarea){font-size:16px}', novo);
+      expect(m).not.toBe(lf(TOOL));
+      expect(mobileFieldsProblems(m, lf(CHROME))).toEqual([`pravilo od 16 px ne obuhvaca ${tip}`]);
+    });
+  }
+
+  it('mutant: pravilo samo za radni prostor ne obuhvaca ostatak stranice ni karticu Cijela literatura (Codex 310-1)', () => {
+    const m = lf(TOOL).replace(':is(main:has(.tool-workspace),#panel-bulk) :is(input', '.tool-workspace :is(input');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['pravilo od 16 px ne obuhvaca cijeli sadrzaj stranice alata', 'pravilo od 16 px ne obuhvaca karticu Cijela literatura']);
+  });
+
+  it('mutant: bez #panel-bulk pravilo gubi specificnost iznad #bulk-input i karticu Cijela literatura', () => {
+    const m = lf(TOOL).replace(':is(main:has(.tool-workspace),#panel-bulk) :is(input', ':is(main:has(.tool-workspace)) :is(input');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['pravilo od 16 px ne obuhvaca karticu Cijela literatura']);
+  });
+
+  it('mutant: kasnije pravilo koje poljima vraca 14 px se hvata (Codex 310-3)', () => {
+    expect(mobileFieldsProblems(`${lf(TOOL)}\n#panel-bulk textarea{font-size:14px}`, lf(CHROME))).toEqual(['kasnije pravilo vraca poljima slova manja od 16 px']);
   });
 });
 
