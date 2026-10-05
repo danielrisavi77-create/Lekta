@@ -285,7 +285,7 @@
         "T16",
         "T26"
       ],
-      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka. STANJE 27.9.: Upisnik radi (#182 i #188 spojeni); status ostaje blocked jer ovisnost T26 nije done (gard statusa ne dopusta in_progress). STANJE 28.9.: T26 done, pa T28 prelazi iz blocked u in_progress (Upisnik radi, #182 i #188); gard statusa ne dopusta blocked bez nedovrsene ovisnosti."
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka. STANJE 27.9.: Upisnik radi (#182 i #188 spojeni); status ostaje blocked jer ovisnost T26 nije done (gard statusa ne dopusta in_progress). STANJE 28.9.: T26 done, pa T28 prelazi iz blocked u in_progress (Upisnik radi, #182 i #188); gard statusa ne dopusta blocked bez nedovrsene ovisnosti. AUDIT 2026-10-05: provedbeni plan i puni 49-nalazni registar u docs/audit/NATIONAL_COVERAGE_EXECUTION_2026-10-05.md; početni presjek master 19bb0b1d9c59bd6f2373ecbaad6aab4dae361f79: 49 za obradu, 0 uz dokaz (12 P0, 32 P1, 5 P2). Ne mijenjati status T28 bez dokaza po kriterijima svakog nalaza."
     },
     {
       "id": "T29",
