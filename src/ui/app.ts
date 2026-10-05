@@ -186,6 +186,7 @@ import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
 import { repairDoneHtml, repairDoneModel } from './results/repair-done';
 import { enterRepairPhase, wireRepairPhase } from './repair-phase';
+import { repairRateLimitMessage } from '../report/repair-rate-limit-message';
 
 
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
@@ -551,7 +552,7 @@ function syncConsentBannerInset(){const b=$('#consentBanner');if(!b)return;const
   // 169px (mjereno), ali to ovisi o duljini teksta i sirini, pa svaka konstanta brzo postane kriva.
   document.body.style.setProperty('--consent-h',`${h}px`);
   document.body.classList.toggle('has-consent-banner',!skriven);
-  document.body.style.paddingBottom=skriven?'':`${h+34}px`}catch(e: any){}}
+  document.body.style.paddingBottom=!skriven&&getComputedStyle(b).position==='fixed'?`${h+34}px`:''}catch(e: any){}}
 /* REZERVA SE MJERI ZIVO, ne jednom. Izmjereno 2026-09-05 na `/rad/` (1440x900): traka je pri prvom
    racunu bila visoka 55 px, pa je rezerva ispala 89; do trenutka kad je korisnik vidi narasla je na
    75 px uz vlastiti odmak od 18, dakle treba 93. Razliku od 20 px platila je zadnja poveznica u
@@ -2196,7 +2197,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch))}
    // RE-33: razlog razlikuje placeni dnevni strop (uopce ne spominje "besplatno") od besplatne
    // kvote (po korisniku ili po dijeljenom IP-u, gdje korisnik OSOBNO nije nuzno nista potrosio).
-   else if(out.kind==='rate_limited'){setSummary(out.reason==='paid_daily'?'<strong>Dnevni limit zahtjeva je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra.':out.reason==='free_ip'?'<strong>Dnevni limit besplatnih popravaka za ovu mrežu/uređaj je iskorišten.</strong> Prozor je 24 sata; pokušaj ponovno sutra ili s drugog uređaja.':'<strong>Dnevni limit besplatnih popravaka je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra. Ručne upute iznad i dalje vrijede.')}
+   else if(out.kind==='rate_limited'){setSummary(repairRateLimitMessage(out.reason))}
    else if(out.kind==='too_large'){setSummary(`<strong>Dokument je prevelik za automatski popravak na serveru.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu pa pokušaj ponovno.`)}
    // Ova dva ishoda su RAZLICITA: invalid_docx govori o dokumentu, no_live_fixers o serverskoj
    // konfiguraciji. Spojeni su krivo optuzivali korisnikov rad za nase gasenje fixera.

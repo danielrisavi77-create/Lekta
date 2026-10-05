@@ -36174,7 +36174,7 @@
       "note": "Izvedeno iz eksplicitnih odluka za sve izvođače; slabiji prijedlog ostaje neriješen."
     }
   ],
-  "generatedAt": "2026-10-04T07:17:39.361Z",
-  "generatedFromCommit": "53fce9e51085a2352c78dc97b9be339aecbcc771",
+  "generatedAt": "2026-10-04T19:55:48.295Z",
+  "generatedFromCommit": "1c1a61fa12335666d59ed2a6c9ec0e783eacf3b4",
   "generator": "npm run match-upisnik-program-components"
 }
