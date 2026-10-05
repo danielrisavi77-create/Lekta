@@ -221,9 +221,9 @@ describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zap
         entries: [{ id: 'e1', paragraphIndices: [], anchorFingerprint: '', action: 'add', citationId: 'c1', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: bibliographyAnchorFingerprint([4], anchor) } }],
         mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }, { citationId: 'c2', bibliographyEntryId: 'bibliography-4', confirmed: true }],
       };
+      // Odlomak citata ostaje bajt-isti, potvrda Horvat i predlozak Novak su upisani.
       const result = citationBibliographySyncFixer(parts, params);
-      expect(result.applied).toBe(true);
-      expect(result.parts.documentXml).toContain(citationXml);
+      expect({ applied: result.applied, citationKept: result.parts.documentXml.includes(citationXml) }).toEqual({ applied: true, citationKept: true });
       expect(paragraphTexts(result.parts.documentXml).slice(1)).toEqual(['Drugi odlomak (Horvat, 2020, str. 5).', 'Literatura', anchor, 'Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač].']);
       const second = citationBibliographySyncFixer(result.parts, params);
       expect(second.applied).toBe(false);

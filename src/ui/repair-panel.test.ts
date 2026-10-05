@@ -378,50 +378,40 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
   });
 
-  it('Z36 krug 4: predlozak istog popravka nije regresija; ploca trazi popunu, a glavna ponuda ostaje popravljeni', async () => {
+  /**
+   * Z36 krug 4: popravak koji umetne predlozak (potpunost ide u warn s oznakom predloska), uz po izboru jos
+   * jednu provjeru prije i poslije. Vraca panel kad je isporuka spremna.
+   */
+  const deliveredWithTemplate = async (score: number, before: Check[], after: Check[]) => {
     const mountEl = mount();
     renderRepairPanel({
       items: [marginItem()],
       getDocxBytes: async () => singleSectionDocx(),
       originalFileName: 'rad.docx',
       mountEl,
-      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Potpunost bibliografskih zapisa', 'pass', 5, 5)] },
-      reanalyze: async () => ({
-        score: 73,
-        categories: {},
-        checks: [chk('Margine dokumenta', 'pass', 6, 6), { ...chk('Potpunost bibliografskih zapisa', 'warn', 4, 5), unfilledTemplates: ['Novak (2022)'] }],
-      }),
+      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Potpunost bibliografskih zapisa', 'pass', 5, 5), ...before] },
+      reanalyze: async () => ({ score, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6), { ...chk('Potpunost bibliografskih zapisa', 'warn', 4, 5), unfilledTemplates: ['Novak (2022)'] }, ...after] }),
     });
     mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
     await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery'));
-    expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
-    expect(mountEl.querySelector('.lekta-repair-panel__fill')?.textContent).toBe('Popuni polja u zagradama: Novak (2022)');
     const buttons = [...mountEl.querySelector('.lekta-repair-panel__delivery')!.querySelectorAll('button')];
-    expect(buttons[0].textContent).toBe('Preuzmi popravljeni dokument');
+    return { mountEl, firstOffer: buttons[0].textContent, fill: mountEl.querySelector('.lekta-repair-panel__fill')?.textContent };
+  };
+
+  it('Z36 krug 4: predlozak istog popravka nije regresija; ploca trazi popunu, a glavna ponuda ostaje popravljeni', async () => {
+    const { mountEl, firstOffer, fill } = await deliveredWithTemplate(73, [], []);
+    expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
+    expect(fill).toBe('Popuni polja u zagradama: Novak (2022)');
+    expect(firstOffer).toBe('Preuzmi popravljeni dokument');
   });
 
   it('Z36 krug 4: stvarna regresija uz predlozak i dalje vraca izvornik kao glavnu ponudu', async () => {
-    const mountEl = mount();
-    renderRepairPanel({
-      items: [marginItem()],
-      getDocxBytes: async () => singleSectionDocx(),
-      originalFileName: 'rad.docx',
-      mountEl,
-      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Potpunost bibliografskih zapisa', 'pass', 5, 5), chk('Oblikovanje fusnota', 'pass', 4, 4)] },
-      reanalyze: async () => ({
-        score: 69,
-        categories: {},
-        checks: [chk('Margine dokumenta', 'pass', 6, 6), { ...chk('Potpunost bibliografskih zapisa', 'warn', 4, 5), unfilledTemplates: ['Novak (2022)'] }, chk('Oblikovanje fusnota', 'fail', 0, 4)],
-      }),
-    });
-    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
-    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery'));
+    const { mountEl, firstOffer, fill } = await deliveredWithTemplate(69, [chk('Oblikovanje fusnota', 'pass', 4, 4)], [chk('Oblikovanje fusnota', 'fail', 0, 4)]);
     const box = mountEl.querySelector('.lekta-repair-panel__regression')!;
     expect(box.textContent).toContain('Oblikovanje fusnota');
     expect(box.textContent).not.toContain('Potpunost bibliografskih zapisa');
-    expect(mountEl.querySelector('.lekta-repair-panel__fill')?.textContent).toBe('Popuni polja u zagradama: Novak (2022)');
-    const buttons = [...mountEl.querySelector('.lekta-repair-panel__delivery')!.querySelectorAll('button')];
-    expect(buttons[0].textContent).toBe('Preuzmi izvorni dokument');
+    expect(fill).toBe('Popuni polja u zagradama: Novak (2022)');
+    expect(firstOffer).toBe('Preuzmi izvorni dokument');
   });
 
   it('pad reanalyze ne rusi panel i NE zarobljava dokument (isporuka uz napomenu)', async () => {
