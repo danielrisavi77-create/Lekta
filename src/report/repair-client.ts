@@ -155,7 +155,9 @@ export type RepairOutcome =
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
   // da poruka ne tvrdi "besplatnih" i kad je posrijedi placeni mod ili dijeljeni IP koji korisnik
   // osobno nije potrosio. Odsutan (stari server bez K-oznake) -> generic fallback tekst.
-  | { kind: 'rate_limited'; reason?: 'free_user' | 'free_ip' | 'paid_daily' }
+  // T84 RD-2: 'attempts_daily' je strop pokusaja BEZ izmjena (dokument vec uskladjen ili isporuka
+  // odbijena); besplatna kvota tada NIJE potrosena, pa poruka to mora reci.
+  | { kind: 'rate_limited'; reason?: 'free_user' | 'free_ip' | 'paid_daily' | 'attempts_daily' }
   | { kind: 'unauthorized' }
   | { kind: 'too_large' }
   | { kind: 'no_live_fixers' }
@@ -369,7 +371,7 @@ export async function uploadRepair(
   }
   if (res.status === 429) {
     const data = (await res.json().catch(() => ({}))) as { reason?: string };
-    const reason = data.reason === 'free_user' || data.reason === 'free_ip' || data.reason === 'paid_daily' ? data.reason : undefined;
+    const reason = data.reason === 'free_user' || data.reason === 'free_ip' || data.reason === 'paid_daily' || data.reason === 'attempts_daily' ? data.reason : undefined;
     return { kind: 'rate_limited', reason };
   }
   if (res.status === 401) return { kind: 'unauthorized' };

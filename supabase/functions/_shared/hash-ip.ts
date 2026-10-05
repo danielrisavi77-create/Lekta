@@ -10,11 +10,22 @@
 // 2^32 prostora). PRIJE: kad IP_HASH_SALT nije postavljen, funkcije su padale na '' pa je
 // ip_hash bio NESOLJEN i prakticki obrnjiv (security-02). SADA: deriveIpSalt izvodi stabilan
 // salt iz service-role kljuca (hashiran, ne sirovi) kad dedicirani secret fali, pa ip_hash
-// NIKAD nije nesoljen. Derivacija je identicna onoj u faculty-request pa su hashevi usporedivi.
+// NIKAD nije nesoljen. faculty-request od T84 koristi ovaj isti pomocnik (prije vlastitu derivaciju).
 
-/** Prvi (klijentski) IP iz x-forwarded-for liste; 'unknown' ako header nedostaje. */
+/**
+ * IP kljuc iz x-forwarded-for: ZADNJI unos liste, tj. adresa koju je dodao najblizi proxy (gateway).
+ * 'unknown' ako header nedostaje ili je prazan.
+ *
+ * T84 XFF (2026-10-04): mjerenje na stagingu pokazalo je da Supabase gateway CUVA klijentski
+ * x-forwarded-for i svoju adresu dodaje iza njega. Prvi unos zato bira klijent: svaki izmisljen prvi
+ * unos davao je nov brojac za IP limite (besplatni popravak, source-check, waitlist) i za IP usporedbu
+ * u nagradi preporucitelju. Zadnji unos klijent ne moze postaviti. Prije deploya mjerenje na stagingu
+ * mora potvrditi i drugu stranu: zadnji unos nije zajednicka unutarnja adresa (inace bi svi korisnici
+ * dijelili jedan brojac).
+ */
 export function clientIpFromForwarded(forwardedFor: string | null): string {
-  return (forwardedFor ?? '').split(',')[0].trim() || 'unknown';
+  const hops = (forwardedFor ?? '').split(',').map((h) => h.trim()).filter(Boolean);
+  return hops.at(-1) ?? 'unknown';
 }
 
 /** sha256(input) kao hex. */
