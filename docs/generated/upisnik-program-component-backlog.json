@@ -91,7 +91,7 @@
       "executor": "Univerza v Ljubljani (Ljubljana, Slovenija)"
     }
   ],
-  "generatedAt": "2026-10-05T02:33:30.634Z",
-  "generatedFromCommit": "71a2ca67e4e3cb0f5245c9b47dd7d8a3f691ed03",
+  "generatedAt": "2026-10-05T11:57:13.259Z",
+  "generatedFromCommit": "513bbbb17abd8cadee09a377ce69b9949833efc4",
   "generator": "npm run match-upisnik-program-components"
 }
