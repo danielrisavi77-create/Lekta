@@ -201,7 +201,7 @@
         "T18",
         "T19"
       ],
-      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak. AUDIT 22.9.: #24 katedra-agent-worker verify_jwt=false."
+      "note": "Opseg B/C (placeno i puno lansiranje), gate T44; nije uvjet za betu opsega A (T81). Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak. AUDIT 22.9.: #24 katedra-agent-worker verify_jwt=false. T101 (4. 10., binarni ESZIP): produkcija 5 JEDNAKO, 14 DRIFT, 0 NE ZNAM; DRIFT ukljucuje profile-rules (kod jednak, deployani data/generated/profile-rules-server.json razlicit od repoa, prije lazno JEDNAKO jer su JSON moduli bili preskoceni). Popis: docs/generated/DEPLOY_DRIFT.md."
     },
     {
       "id": "T21",
