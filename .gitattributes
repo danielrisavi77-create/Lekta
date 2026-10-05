@@ -38,3 +38,7 @@ data/verification/** text eol=lf
 # Izmjereno 2026-09-12: blob je 104606 bajtova, CR=0, LF=991, pa pravilo NISTA ne prekonvertira;
 # mijenja se iskljucivo ono sto checkout upisuje na disk.
 docs/agents/plan-do-live-2026-09-12.md text eol=lf
+
+# Snimke izvora Upisnika: gard citata u snimci provjerava sha256 TOCNIH bajtova prema registru, pa git ne smije
+# normalizirati zavrsetke redaka (CRLF/mixed u HTML-u bi promijenio hash). -text = binarno.
+data/sources/**/upisnik-*.html -text
