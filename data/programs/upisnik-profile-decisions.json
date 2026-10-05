@@ -182,6 +182,15 @@
       }
     },
     {
+      "programCode": "52",
+      "profileId": "fer-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
+        "sourceLocator": "Naziv programa: Elektrotehnika i informacijska tehnologija (popis programa FER3, redak 1412 snimke); citat: odjeljak o zavrsetku prijediplomskog studija (redak 1422 snimke). Izvor profila fer-zavrsni (ZEMRIS 2013) prihvatio vlasnik 2026-10-04.",
+        "quote": "Prijediplomski studij traje tri godine i završava polaganjem ispita iz svih upisanih kolegija, zadovoljavanjem propisane strukture studija, stjecanjem barem 180 bodova prema ECTS-u i ispunjenjem drugih studijskih obveza te izradom i uspješnom obranom završnog rada ili završnog projekta."
+      }
+    },
+    {
       "programCode": "54",
       "profileId": "unidu-elektro-zavrsni",
       "evidence": {
@@ -3669,20 +3678,6 @@
           "sourceUrl": "https://www.ffzg.unizg.hr/roman/spanjolski/programi/",
           "sourceLocator": "službeni programi Španjolskog jezika i književnosti, završetak studija",
           "quote": "Završni ispit"
-        }
-      ]
-    },
-    {
-      "programCode": "52",
-      "reason": "Izvor za FER profil iz 2013. nalazi se na osobnoj stranici nastavnika; važeće upute nisu potvrđene.",
-      "missingEvidence": [
-        "Službeni aktualni izvor sastavnice koji imenuje program Elektrotehnika i informacijska tehnologija, potvrđuje vrstu studija i primjenu uputa profila fer-zavrsni."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
-          "sourceLocator": "službena stranica FER-a, popis studijskih programa FER3",
-          "quote": "prijediplomski studij organizira se putem dva trogodišnja studijska programa: Elektrotehnika i informacijska tehnologija i Računarstvo"
         }
       ]
     },

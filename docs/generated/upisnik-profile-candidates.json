@@ -6,17 +6,17 @@
     "unmappedPrograms": 0,
     "exactCandidatePrograms": 161,
     "noExactCandidatePrograms": 1151,
-    "candidatePrograms": 395,
-    "noCandidatePrograms": 917,
-    "evidenceBackedCandidatePrograms": 373,
+    "candidatePrograms": 396,
+    "noCandidatePrograms": 916,
+    "evidenceBackedCandidatePrograms": 374,
     "notApplicablePrograms": 28,
     "evidenceConflictPrograms": 2,
     "coverageByStatus": {
-      "verified": 373,
+      "verified": 374,
       "component-unresolved": 0,
       "profile-missing-for-component-level": 329,
       "exact-name-candidate-needs-evidence": 22,
-      "identity-evidence-needed": 558,
+      "identity-evidence-needed": 557,
       "not-applicable": 28,
       "evidence-conflict": 2
     }
@@ -751,29 +751,25 @@
       "componentIds": [
         "fer"
       ],
-      "candidateProfileIds": [],
-      "profileDecisionEvidence": [],
+      "candidateProfileIds": [
+        "fer-zavrsni"
+      ],
+      "profileDecisionEvidence": [
+        {
+          "profileId": "fer-zavrsni",
+          "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
+          "sourceLocator": "Naziv programa: Elektrotehnika i informacijska tehnologija (popis programa FER3, redak 1412 snimke); citat: odjeljak o zavrsetku prijediplomskog studija (redak 1422 snimke). Izvor profila fer-zavrsni (ZEMRIS 2013) prihvatio vlasnik 2026-10-04.",
+          "quote": "Prijediplomski studij traje tri godine i završava polaganjem ispita iz svih upisanih kolegija, zadovoljavanjem propisane strukture studija, stjecanjem barem 180 bodova prema ECTS-u i ispunjenjem drugih studijskih obveza te izradom i uspješnom obranom završnog rada ili završnog projekta."
+        }
+      ],
       "applicabilityDecisionEvidence": null,
       "profileBlockerEvidence": null,
       "exactCandidateProfileIds": [],
       "componentWorkTypeProfileIds": [
         "fer-zavrsni"
       ],
-      "coverageStatus": "identity-evidence-needed",
-      "remainingHold": {
-        "code": "program-profile-identity-needed",
-        "reason": "Izvor za FER profil iz 2013. nalazi se na osobnoj stranici nastavnika; važeće upute nisu potvrđene.",
-        "missingEvidence": [
-          "Službeni aktualni izvor sastavnice koji imenuje program Elektrotehnika i informacijska tehnologija, potvrđuje vrstu studija i primjenu uputa profila fer-zavrsni."
-        ],
-        "sources": [
-          {
-            "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
-            "sourceLocator": "službena stranica FER-a, popis studijskih programa FER3",
-            "quote": "prijediplomski studij organizira se putem dva trogodišnja studijska programa: Elektrotehnika i informacijska tehnologija i Računarstvo"
-          }
-        ]
-      }
+      "coverageStatus": "verified",
+      "remainingHold": null
     },
     {
       "programCode": "54",
@@ -36184,7 +36180,7 @@
       }
     }
   ],
-  "generatedAt": "2026-10-04T19:55:48.513Z",
-  "generatedFromCommit": "1c1a61fa12335666d59ed2a6c9ec0e783eacf3b4",
+  "generatedAt": "2026-10-05T02:18:25.224Z",
+  "generatedFromCommit": "e8e33ee6b6926145b8fb85bec862c9181e4da2a9",
   "generator": "npm run match-upisnik-program-components"
 }
