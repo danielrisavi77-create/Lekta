@@ -9987,6 +9987,9 @@ describe('mutacije: T102 zastavica prijave Googleom ostaje izvan repozitorija', 
       `[context.production]\n  environment.VITE_AUTH_GOOGLE_ENABLED = "true"`,
       `[context.production]\n  environment = { VITE_AUTH_GOOGLE_ENABLED = "true" }`,
       `[build.environment]\n  "VITE_AUTH_GOOGLE_ENABLED"="1" # tiho ukljuceno`,
+      // TOML escape sekvence u citiranom kljucu (Codex R4 runda 2 na #307).
+      `[context.production.environment]\n  "\\u0056ITE_AUTH_GOOGLE_ENABLED" = "true"`,
+      `[context.production.environment]\n  "VITE_AUTH_\\U00000047OOGLE_ENABLED" = "true"`,
     ];
     for (const o of oblici) {
       expect(googleFlagProblems(`${toml}\n${o}\n`, env).filter((p) => p.startsWith('netlify.toml:')), o).toHaveLength(1);

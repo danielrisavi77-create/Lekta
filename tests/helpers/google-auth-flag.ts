@@ -14,18 +14,41 @@ function lines(text: string): string[] {
   return text.replace(/\r/g, '').split('\n');
 }
 
-/** TOML redak bez komentara: `#` izvan navodnika (jednostrukih ili dvostrukih) zapocinje komentar. */
-function tomlBezKomentara(line: string): string {
+const TOML_ESCAPE: Record<string, string> = { b: '\b', t: '\t', n: '\n', f: '\f', r: '\r', '"': '"', '\\': '\\', e: '\x1b' };
+
+/**
+ * TOML redak bez komentara i s DEKODIRANIM osnovnim nizovima: `#` izvan navodnika zapocinje
+ * komentar, a u "..." se razrjesuju escape sekvence (\uXXXX, \UXXXXXXXX, \", \\ ...), pa
+ * `"VITE_AUTH_GOOGLE_ENABLED"` postaje ime zastavice (Codex R4 runda 2 na #307). Doslovni
+ * '...' nizovi nemaju escapea. Nepoznata sekvenca ostaje doslovno (fail-closed: ne skriva ime).
+ */
+function tomlDekodiranRedak(line: string): string {
+  let out = '';
   let quote: string | null = null;
   for (let i = 0; i < line.length; i++) {
     const c = line[i];
-    if (quote) {
-      if (c === '\\' && quote === '"') i++;
-      else if (c === quote) quote = null;
+    if (quote === '"') {
+      if (c === '\\') {
+        const n = line[i + 1] ?? '';
+        const duljina = n === 'u' ? 4 : n === 'U' ? 8 : 0;
+        const hex = duljina ? line.slice(i + 2, i + 2 + duljina) : '';
+        if (duljina && hex.length === duljina && /^[0-9a-fA-F]+$/.test(hex)) {
+          out += String.fromCodePoint(parseInt(hex, 16));
+          i += 1 + duljina;
+        } else if (n in TOML_ESCAPE) {
+          out += TOML_ESCAPE[n];
+          i += 1;
+        } else out += c;
+      } else if (c === '"') quote = null;
+      else out += c;
+    } else if (quote === "'") {
+      if (c === "'") quote = null;
+      else out += c;
     } else if (c === '"' || c === "'") quote = c;
-    else if (c === '#') return line.slice(0, i);
+    else if (c === '#') break;
+    else out += c;
   }
-  return line;
+  return out;
 }
 
 export function googleFlagProblems(netlifyToml: string, envExample: string): string[] {
@@ -35,7 +58,7 @@ export function googleFlagProblems(netlifyToml: string, envExample: string): str
   // kljuc, tockasti kljuc (environment.X) i inline tablica ({ X = "true" }). Fail-closed: i
   // spominjanje u vrijednosti je nalaz, jer zastavica u netlify.toml nema legitimnu upotrebu.
   for (const [i, raw] of lines(netlifyToml).entries()) {
-    if (tomlBezKomentara(raw).includes(FLAG)) {
+    if (tomlDekodiranRedak(raw).includes(FLAG)) {
       problems.push(`netlify.toml:${i + 1} dodjeljuje ${FLAG}; ukljucivanje je vlasnikova odluka izvan repozitorija`);
     }
   }

@@ -54,11 +54,13 @@ export function googleSignInActive(deps: Pick<GoogleSignInDeps, 'enabled' | 'con
  * Vraca obecanje obrade povratka (testovi ga cekaju); bez zastavice ne radi nista.
  */
 export async function mountGoogleSignIn(deps: GoogleSignInDeps): Promise<void> {
-  if (!googleSignInActive(deps)) return;
-  const loadOAuth = deps.loadOAuth ?? (() => import('../../auth/google-oauth'));
-  const modal = deps.doc.getElementById('authModal');
   const store = deps.pkce as PkceStore;
   const now = deps.now ?? Date.now;
+  // Istekli verifier se cisti i kad je zastavica iskljucena (vlasnik ju je mogao ugasiti nakon
+  // pokrenute prijave), prije provjere zastavice (Codex R7 runda 2 na #307).
+  if (!googleSignInActive(deps)) { clearExpiredPkce(store, now()); return; }
+  const loadOAuth = deps.loadOAuth ?? (() => import('../../auth/google-oauth'));
+  const modal = deps.doc.getElementById('authModal');
 
   // SINKRONI DIO, prije prvog `await`: ruta ga izvrsi prije `openWorkspace`, koji cita fragment.
   // Povratak prijave pokrenute u ovom pregledniku cisti se iz URL-a i vraca fragment radne povrsine
@@ -98,9 +100,14 @@ export async function mountGoogleSignIn(deps: GoogleSignInDeps): Promise<void> {
   // Anonimna sesija (popravci) se ne zamjenjuje Google sesijom bez povezivanja identiteta (Codex R1):
   // provjera prije razmjene koda i ponovno neposredno prije spremanja, jer je druga kartica mogla
   // u medjuvremenu otvoriti anonimnu sesiju. Verifier se svejedno trosi.
+  // Poruka obecava cuvanje popravaka SAMO kad ih prijava e-mailom stvarno povezuje: app.ts nudi
+  // povezivanje (anonymousSessionForLink) samo sesiji oznacenoj `isAnonymous`. Starija sesija bez
+  // oznake ovdje je odbijena (fail-closed), ali joj se ne obecava cuvanje (Codex runda 2 na #307).
   const odbijAnonimnu = () => {
     store.save(null);
-    deps.toast('Prijava Googleom nije moguća dok traje anonimna sesija s popravcima. Prijavi se e-mailom da se popravci sačuvaju.');
+    deps.toast(deps.loadSession()?.isAnonymous === true
+      ? 'Prijava Googleom nije moguća dok traje anonimna sesija s popravcima. Prijavi se e-mailom da se popravci sačuvaju.'
+      : 'Prijava Googleom nije moguća uz trenutnu sesiju bez e-maila. Prijavi se e-mailom.');
   };
   if (anonymousToLink(deps.loadSession())) { odbijAnonimnu(); return; }
 

@@ -19,11 +19,17 @@ import {
   cleanedCallbackUrl,
   clearExpiredPkce,
   PKCE_MAX_AGE_MS,
+  sanitizeReturnHash,
   type PendingPkce,
   type PkceStore,
 } from '../src/auth/google-callback';
 import { verifyEmailOtp } from '../src/auth/session';
+import { parseSessionFragment } from '../src/session/local-document-session';
 import { flagContractProblems, pkceContractProblems } from './helpers/google-auth-flag';
+
+/** Stvaran fragment radne povrsine (nasumicni UUID v4), kakav prihvaca parseSessionFragment. */
+const SESIJA = '#session=3f2504e0-4f89-41d3-9a0c-0305e82c3301';
+const SESIJA_NOVA = '#session=9b2c7d1e-5a6f-4c3b-8d2e-1f0a9b8c7d6e';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co/', anonKey: 'anon-key' };
 const tokenBody = {
@@ -214,9 +220,9 @@ describe('Codex runda 1 na #307: pohrana, fragment i istek', () => {
   it('R2: fragment iz trenutka pokretanja sprema se uz verifier, a redirect_to ga ne nosi', async () => {
     const store = memPkce();
     let target = '';
-    const ok = await startGoogleSignIn(CFG, { redirectTo: 'https://lekta.hr/rad/', store, returnHash: '#session=abc', assign: (u) => { target = u; } });
+    const ok = await startGoogleSignIn(CFG, { redirectTo: 'https://lekta.hr/rad/', store, returnHash: SESIJA, assign: (u) => { target = u; } });
     expect(ok).toBe(true);
-    expect(store.value()!.returnHash).toBe('#session=abc');
+    expect(store.value()!.returnHash).toBe(SESIJA);
     expect(new URL(target).searchParams.get('redirect_to')).toBe('https://lekta.hr/rad/');
     const nevaljan = memPkce();
     await startGoogleSignIn(CFG, { redirectTo: 'x', store: nevaljan, returnHash: 'session=bez-ljestvi', assign: () => {} });
@@ -224,16 +230,16 @@ describe('Codex runda 1 na #307: pohrana, fragment i istek', () => {
   });
 
   it('R2/R5: cleanedCallbackUrl vraca spremljeni fragment i brise gresku iz fragmenta', () => {
-    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a', '#session=abc')).toBe('/rad/#session=abc');
-    expect(cleanedCallbackUrl('https://lekta.hr/rad/#error=access_denied&error_description=x', '#session=abc')).toBe('/rad/#session=abc');
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a', SESIJA)).toBe('/rad/' + SESIJA);
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/#error=access_denied&error_description=x', SESIJA)).toBe('/rad/' + SESIJA);
     expect(cleanedCallbackUrl('https://lekta.hr/rad/#error=access_denied')).toBe('/rad/');
     // Postojeci koristan fragment ima prednost pred spremljenim.
-    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a#session=novi', '#session=stari')).toBe('/rad/#session=novi');
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a' + SESIJA_NOVA, SESIJA)).toBe('/rad/' + SESIJA_NOVA);
   });
 
   it('R5: greska providera u fragmentu je povratak (neuspjeh bez mreze), a obican fragment nije', async () => {
     expect(callbackFrom('', '#error=access_denied&error_description=x')).toMatchObject({ code: null, error: 'access_denied' });
-    expect(callbackFrom('', '#session=abc')).toBeNull();
+    expect(callbackFrom('', SESIJA)).toBeNull();
     const store = memPkce({ verifier: 'v'.repeat(43), createdAt: 1_000_000 });
     const { f, calls } = recordingFetch(res(200, tokenBody));
     const out = await completeGoogleSignIn(CFG, '', { store, fetchImpl: f, now: 1_000_500, hash: '#error=access_denied' });
@@ -262,5 +268,28 @@ describe('Codex runda 1 na #307: pohrana, fragment i istek', () => {
       const out = await completeGoogleSignIn(CFG, '?code=x', { store: memPkce(p), fetchImpl: recordingFetch(res(200, tijelo)).f, now: 1_000_500 });
       expect(out, JSON.stringify(tijelo)).toMatchObject({ ok: false });
     }
+  });
+});
+
+describe('Codex runda 2 na #307: fragment za povratak', () => {
+  it('R2: sanitizeReturnHash prihvaca samo #session=<uuid> po parseru radne povrsine', () => {
+    const id = crypto.randomUUID();
+    const fragment = `#session=${id}`;
+    expect(sanitizeReturnHash(fragment)).toBe(fragment);
+    expect(parseSessionFragment(sanitizeReturnHash(fragment)!)).toBe(id);
+    for (const los of ['#odjeljak', '#session=abc', `#session=${id}&session=${id}`, `session=${id}`, '', 42, null, undefined]) {
+      expect(sanitizeReturnHash(los), String(los)).toBeUndefined();
+    }
+  });
+
+  it('R2: startGoogleSignIn ne sprema nevaljan fragment', async () => {
+    const store = memPkce();
+    await startGoogleSignIn(CFG, { redirectTo: 'x', store, returnHash: '#odjeljak', assign: () => {} });
+    expect(store.value()!.returnHash).toBeUndefined();
+  });
+
+  it('R2: nevaljan trenutni fragment ne potiskuje spremljenu sesiju; valjan trenutni ima prednost', () => {
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a#odjeljak', SESIJA)).toBe('/rad/' + SESIJA);
+    expect(cleanedCallbackUrl('https://lekta.hr/rad/?code=a#odjeljak', '#nevaljano')).toBe('/rad/#odjeljak');
   });
 });

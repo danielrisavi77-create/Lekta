@@ -8,6 +8,9 @@ import { GOOGLE_BUTTON_ID } from '../src/auth/google-oauth';
 import { parseTokenResponse, type Session } from '../src/auth/session';
 import { googleSignInActive, mountGoogleSignIn, type GoogleSignInDeps } from '../src/routes/workspace/google-sign-in';
 
+/** Stvaran fragment radne povrsine (nasumicni UUID v4), kakav prihvaca parseSessionFragment. */
+const SESIJA = '#session=3f2504e0-4f89-41d3-9a0c-0305e82c3301';
+
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon-key' };
 const tokenBody = { access_token: 'jwt-g', refresh_token: 'r-g', expires_in: 3600, user: { id: 'user-g', email: 's@gmail.com' } };
 
@@ -147,28 +150,28 @@ describe('ruta /rad/: Codex runda 1 na #307', () => {
 
   it('R2: klik sprema fragment radne povrsine, a povratak ga vraca SINKRONO, prije prvog await', async () => {
     const h = harness();
-    h.deps.location = { ...h.deps.location, hash: '#session=abc', href: 'https://lekta.hr/rad/#session=abc' };
+    h.deps.location = { ...h.deps.location, hash: SESIJA, href: 'https://lekta.hr/rad/' + SESIJA };
     await mountGoogleSignIn(h.deps);
     await otvoriModal();
     (document.getElementById(GOOGLE_BUTTON_ID) as HTMLButtonElement).click();
     await new Promise((r) => setTimeout(r, 20));
-    expect((h.pkce() as { returnHash: string }).returnHash).toBe('#session=abc');
+    expect((h.pkce() as { returnHash: string }).returnHash).toBe(SESIJA);
 
     const povratak = harness();
     povratak.setPkce(h.pkce());
     povratak.deps.location = { ...povratak.deps.location, search: '?code=k&ref=r', hash: '', href: 'https://lekta.hr/rad/?code=k&ref=r' };
     const tok = mountGoogleSignIn(povratak.deps);
-    expect(povratak.log.replaced).toBe('/rad/?ref=r#session=abc');
+    expect(povratak.log.replaced).toBe('/rad/?ref=r' + SESIJA);
     await tok;
     expect(povratak.log.saved).not.toBeNull();
   });
 
   it('R5: greska providera u fragmentu se obradi (poruka, bez mreze) i ocisti iz URL-a', async () => {
     const h = harness();
-    h.setPkce({ verifier: 'v'.repeat(43), createdAt: Date.now(), returnHash: '#session=abc' });
+    h.setPkce({ verifier: 'v'.repeat(43), createdAt: Date.now(), returnHash: SESIJA });
     h.deps.location = { ...h.deps.location, hash: '#error=access_denied&error_description=x', href: 'https://lekta.hr/rad/#error=access_denied&error_description=x' };
     await mountGoogleSignIn(h.deps);
-    expect(h.log.replaced).toBe('/rad/#session=abc');
+    expect(h.log.replaced).toBe('/rad/' + SESIJA);
     expect(h.log.fetches).toBe(0);
     expect(h.log.saved).toBeNull();
     expect(h.log.toasts.join(' ')).toContain('nije uspjela');
@@ -191,5 +194,35 @@ describe('ruta /rad/: Codex runda 1 na #307', () => {
     h.setPkce({ verifier: 'v'.repeat(43), createdAt: 0 });
     await mountGoogleSignIn(h.deps);
     expect(h.pkce()).toBeNull();
+  });
+});
+
+describe('ruta /rad/: Codex runda 2 na #307', () => {
+  beforeEach(setupDom);
+
+  it('R7: istekli verifier se cisti i kad je zastavica iskljucena (prije provjere zastavice)', async () => {
+    const h = harness({ enabled: false, now: () => 10 * 60_000 + 5 });
+    h.setPkce({ verifier: 'v'.repeat(43), createdAt: 0 });
+    await mountGoogleSignIn(h.deps);
+    expect(h.pkce()).toBeNull();
+  });
+
+  it('R2: nevaljan trenutni fragment (#odjeljak) ne potiskuje spremljenu sesiju', async () => {
+    const h = harness();
+    h.setPkce({ verifier: 'v'.repeat(43), createdAt: Date.now(), returnHash: SESIJA });
+    h.deps.location = { ...h.deps.location, search: '?code=k', hash: '#odjeljak', href: 'https://lekta.hr/rad/?code=k#odjeljak' };
+    const tok = mountGoogleSignIn(h.deps);
+    expect(h.log.replaced).toBe('/rad/' + SESIJA);
+    await tok;
+  });
+
+  it('starija anonimna sesija bez oznake: odbijena, ali bez obecanja da prijava e-mailom cuva popravke', async () => {
+    const bezOznake: Session = { accessToken: 'a', refreshToken: 'r', expiresAt: 9e15, email: '', userId: 'u-1' };
+    const h = harness({ loadSession: () => bezOznake });
+    h.setPkce({ verifier: 'v'.repeat(43), createdAt: Date.now() });
+    h.deps.location = { ...h.deps.location, search: '?code=abc', href: 'https://lekta.hr/rad/?code=abc' };
+    await mountGoogleSignIn(h.deps);
+    expect(h.log.saved).toBeNull();
+    expect(h.log.toasts.join(' ')).not.toContain('sačuvaju');
   });
 });

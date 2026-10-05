@@ -16,7 +16,7 @@
  * je dijeljen s Katedrom (uri_allow_list).
  */
 import { parseTokenResponse, type AuthConfig, type SessionResult } from './session';
-import { callbackFrom, MAX_RETURN_HASH, readPending, PKCE_MAX_AGE_MS, type PkceStore } from './google-callback';
+import { callbackFrom, readPending, sanitizeReturnHash, PKCE_MAX_AGE_MS, type PkceStore } from './google-callback';
 
 function trimUrl(url: string): string {
   return url.replace(/\/+$/, '');
@@ -64,9 +64,7 @@ export async function startGoogleSignIn(
   opts: { redirectTo: string; store: PkceStore; assign: (url: string) => void; now?: number; cryptoImpl?: Crypto; returnHash?: string },
 ): Promise<boolean> {
   const { verifier, challenge } = await createPkcePair(opts.cryptoImpl);
-  const hash = typeof opts.returnHash === 'string' && opts.returnHash.startsWith('#') && opts.returnHash.length <= MAX_RETURN_HASH
-    ? opts.returnHash
-    : undefined;
+  const hash = sanitizeReturnHash(opts.returnHash);
   const saved = opts.store.save({ verifier, createdAt: opts.now ?? Date.now(), ...(hash ? { returnHash: hash } : {}) });
   if (saved === false || readPending(opts.store)?.verifier !== verifier) return false;
   opts.assign(googleAuthorizeUrl(cfg, opts.redirectTo, challenge));

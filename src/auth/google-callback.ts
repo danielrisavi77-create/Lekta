@@ -5,6 +5,7 @@
  * se cisti i fragment radne povrsine (`#session=...`) vraca prije nego ga ruta procita (Codex R2
  * na #307). Staticki uvoz ovog modula ne povlaci session.ts ni OAuth tok u glavni bundle.
  */
+import { parseSessionFragment, sessionFragment } from '../session/local-document-session';
 
 /** Verifier stariji od ovoga ne vrijedi: povratak s Googlea traje sekunde, ne sate. */
 export const PKCE_MAX_AGE_MS = 10 * 60_000;
@@ -25,8 +26,16 @@ export interface PkceStore {
   save(value: PendingPkce | null): boolean | void;
 }
 
-/** Najveci fragment koji se pamti za povratak; dulji se odbacuje umjesto da napuni pohranu. */
-export const MAX_RETURN_HASH = 4096;
+/**
+ * Fragment za povratak smije biti SAMO fragment radne povrsine `#session=<uuid>`, provjeren istim
+ * parserom kojim ruta otvara sesiju (`parseSessionFragment`), i zapisuje se kanonski. Sve drugo se
+ * odbacuje (Codex R2 runda 2 na #307).
+ */
+export function sanitizeReturnHash(hash: unknown): string | undefined {
+  if (typeof hash !== 'string') return undefined;
+  const id = parseSessionFragment(hash);
+  return id ? sessionFragment(id) : undefined;
+}
 
 /** Valjan zapis verifiera ili null; nepoznat oblik je kao da zapisa nema (fail-closed). */
 export function readPending(store: PkceStore): PendingPkce | null {
@@ -68,8 +77,11 @@ export function callbackFrom(search: string, hash: string): { code: string | nul
 export function cleanedCallbackUrl(href: string, restoreHash?: string): string {
   const url = new URL(href);
   for (const k of ['code', 'error', 'error_code', 'error_description', 'state']) url.searchParams.delete(k);
+  // Redoslijed: valjana trenutna sesija, pa spremljena sesija, pa ostali trenutni fragment koji
+  // nije greska. Nevaljan trenutni fragment (npr. `#odjeljak`) ne potiskuje spremljenu sesiju.
+  const current = sanitizeReturnHash(url.hash);
+  const restore = sanitizeReturnHash(restoreHash);
   const hashIsError = new URLSearchParams(url.hash.slice(1)).has('error');
-  const keep = url.hash && !hashIsError ? url.hash : '';
-  const restore = typeof restoreHash === 'string' && restoreHash.startsWith('#') ? restoreHash : '';
-  return url.pathname + url.search + (keep || restore);
+  const other = url.hash && !hashIsError ? url.hash : '';
+  return url.pathname + url.search + (current ?? restore ?? other);
 }

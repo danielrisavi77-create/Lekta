@@ -32,6 +32,10 @@ primatelja").
   pokrenuta (`lekta.oauth.pkce`), te istu sesiju `lekta.session` kao kod prijave e-mailom. Verifier
   vrijedi 10 minuta. Brise se pri povratku s Googlea, a ako se korisnik ne vrati, pri sljedecem
   otvaranju `/rad/` nakon isteka. Do tada ostaje u pregledniku (nije osobni podatak, nego slucajan niz).
+- Verifier i fragment se brisu cak i kad je zastavica iskljucena, cim istekne rok.
+- Korisniku s anonimnom sesijom (popravci bez e-maila) prijava Googleom se ne nudi i ne zamjenjuje mu
+  sesiju. Ogranicenje: starija anonimna sesija bez oznake `isAnonymous` ne dobiva u `app.ts` ponudu
+  povezivanja kroz prijavu e-mailom, pa joj ni poruka ne obecava cuvanje popravaka.
 - Google Identity Services ni ikakva Googleova skripta ne ucitavaju se na Lektinim stranicama. Zato
   CSP ne treba nove domene.
 - Supabase Auth je dijeljen s Katedrom (`uri_allow_list`), pa ukljucivanje providera ide uskladjeno.
