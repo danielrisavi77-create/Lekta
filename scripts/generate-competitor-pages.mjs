@@ -23,7 +23,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
 const FACTS_PATH = path.join(ROOT, 'data/competitors/competitor-facts.json');
-const OUT_DIR = path.join(ROOT, 'dist');
+// LEKTA_GENERATED_DIST: izlazna mapa za golden generiranih stranica (mobilni audit PR 5); zadano dist/ kao i prije.
+const OUT_DIR = process.env.LEKTA_GENERATED_DIST || path.join(ROOT, 'dist');
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 function loadJson(p) {

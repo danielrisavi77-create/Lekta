@@ -304,6 +304,7 @@ import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRea
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
+import { contentDigest } from '../scripts/lib/generated-page-content.mjs';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -12026,5 +12027,55 @@ describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, P
   it('mutant: bez fokusa na prvu radnju se hvata', async () => {
     const mod = consentRevealFromSource([['?.focus({ preventScroll: true })', '']]);
     expect(await consentRevealProblems(mod)).toEqual(['prva radnja trake nema fokus']);
+  });
+});
+
+describe('golden generiranih stranica: sadrzaj bez omotaca (mobilni audit PR 5)', () => {
+  const STRANICA = [
+    '<!doctype html><html lang="hr"><head><title>Generator citata za FPZG</title>',
+    '<meta name="description" content="Opis stranice"><link rel="canonical" href="https://lekta.hr/alati/citati/fpzg.html">',
+    '<meta property="og:title" content="Generator citata"><style>body{background:#F7F3E8}</style></head><body>',
+    '<header class="lekta-brand"><a href="/">Lekta</a><span>Besplatan alat</span></header>',
+    '<main><h1>Generator citata za FPZG</h1><p>Stil: APA 7.</p><a href="/rad/">Provjeri rad</a>',
+    '<select id="faculty-select"><option value="fpzg">FPZG</option></select></main>',
+    '<footer><a href="/privatnost.html">Privatnost</a></footer></body></html>',
+  ].join('');
+  const mutiraj = (a: string, b: string) => {
+    expect(STRANICA).toContain(a);
+    return STRANICA.replace(a, b);
+  };
+
+  it('BASELINE: ista stranica daje isti zapis sadrzaja', () => {
+    expect(contentDigest(STRANICA)).toBe(contentDigest(STRANICA));
+  });
+
+  it('omotac se smije mijenjati: stil, marka, zaglavlje i podnozje ne mijenjaju zapis', () => {
+    const osnova = contentDigest(STRANICA);
+    expect(contentDigest(mutiraj('body{background:#F7F3E8}', 'body{background:#191512}'))).toBe(osnova);
+    expect(contentDigest(mutiraj('<span>Besplatan alat</span>', '<span>Lekta za studente</span>'))).toBe(osnova);
+    expect(contentDigest(mutiraj('<footer><a href="/privatnost.html">Privatnost</a></footer>', '<footer><a href="/uvjeti.html">Uvjeti</a></footer>'))).toBe(osnova);
+  });
+
+  it('mutant: promijenjen tekst sadrzaja se hvata', () => {
+    expect(contentDigest(mutiraj('Stil: APA 7.', 'Stil: Harvard.'))).not.toBe(contentDigest(STRANICA));
+  });
+
+  it('mutant: promijenjena poveznica u sadrzaju se hvata', () => {
+    expect(contentDigest(mutiraj('href="/rad/"', 'href="/alati/"'))).not.toBe(contentDigest(STRANICA));
+  });
+
+  it('mutant: promijenjena vrijednost izbornika se hvata', () => {
+    expect(contentDigest(mutiraj('value="fpzg"', 'value="efzg"'))).not.toBe(contentDigest(STRANICA));
+  });
+
+  it('mutant: promijenjeni metapodaci za trazilice i dijeljenje se hvataju', () => {
+    const osnova = contentDigest(STRANICA);
+    expect(contentDigest(mutiraj('content="Opis stranice"', 'content="Drugi opis"'))).not.toBe(osnova);
+    expect(contentDigest(mutiraj('href="https://lekta.hr/alati/citati/fpzg.html"', 'href="https://lekta.hr/x.html"'))).not.toBe(osnova);
+    expect(contentDigest(mutiraj('content="Generator citata"', 'content="Generator"'))).not.toBe(osnova);
+  });
+
+  it('mutant: naslov h1 spusten u h2 se hvata (razina naslova je sadrzaj)', () => {
+    expect(contentDigest(mutiraj('<h1>Generator citata za FPZG</h1>', '<h2>Generator citata za FPZG</h2>'))).not.toBe(contentDigest(STRANICA));
   });
 });

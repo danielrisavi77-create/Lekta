@@ -32,7 +32,8 @@ const ROOT = path.resolve(__dirname, '..');
 const TEMPLATES_PATH = path.join(ROOT, 'data/title-pages/templates.json');
 const CATALOG_PATH = path.join(ROOT, 'data/catalog/zagreb-catalog.json');
 const ENGINE_ENTRY = path.join(ROOT, 'src/title-pages/title-page-web.ts');
-const OUT_DIR = path.join(ROOT, 'dist/alati/naslovnica');
+// LEKTA_GENERATED_DIST: izlazna mapa za golden generiranih stranica (mobilni audit PR 5); zadano dist/ kao i prije.
+const OUT_DIR = path.join(process.env.LEKTA_GENERATED_DIST || path.join(ROOT, 'dist'), 'alati/naslovnica');
 
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 

@@ -38,7 +38,8 @@ const STATUS_META_PATH = path.join(ROOT, 'data/profiles/profile-status.json');
 const DEADLINES_PATH = path.join(ROOT, 'data/submission/academic-deadlines.json');
 const CITATION_SPECS_INDEX_PATH = path.join(ROOT, 'data/tools/citation-specs/verified-index.json');
 const TEMPLATES_INDEX_PATH = path.join(ROOT, 'data/title-pages/templates-index.json');
-const OUT_DIR = path.join(ROOT, 'dist');
+// LEKTA_GENERATED_DIST: izlazna mapa za golden generiranih stranica (mobilni audit PR 5); zadano dist/ kao i prije.
+const OUT_DIR = process.env.LEKTA_GENERATED_DIST || path.join(ROOT, 'dist');
 
 const TARGET_WORK_TYPES = ['final', 'graduate', 'seminar'];
 
@@ -1024,6 +1025,21 @@ function buildMasterIndexPage(catalog, existence) {
   };
 }
 
+/**
+ * Datum builda za napomenu o roku i broj dana do roka. Zadano je danasnji datum (UTC), kao i prije. `LEKTA_BUILD_DATE`
+ * (ISO, npr. 2026-10-05) ga fiksira, da golden izlaza i dvoprolazna provjera determinizma ne zastare preko noci
+ * (mobilni audit PR 5). Neispravna vrijednost rusi build umjesto da tiho padne na danasnji datum.
+ */
+export function buildDateIso(env = process.env, now = new Date()) {
+  const zadan = env.LEKTA_BUILD_DATE;
+  if (zadan === undefined || zadan === '') return now.toISOString().slice(0, 10);
+  const t = Date.parse(`${zadan}T00:00:00Z`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(zadan) || Number.isNaN(t) || new Date(t).toISOString().slice(0, 10) !== zadan) {
+    throw new Error(`LEKTA_BUILD_DATE nije ISO datum (YYYY-MM-DD): ${zadan}`);
+  }
+  return zadan;
+}
+
 function main() {
   const catalog = loadJson(CATALOG_PATH);
   const heavy = loadJson(PROFILES_HEAVY_PATH);
@@ -1034,7 +1050,7 @@ function main() {
   // citationCoverage/titlePageCoverage drzi kod dosljednim postojecem stilu ovog generatora.
   const citationIndex = fs.existsSync(CITATION_SPECS_INDEX_PATH) ? loadJson(CITATION_SPECS_INDEX_PATH) : [];
   const templatesIndex = fs.existsSync(TEMPLATES_INDEX_PATH) ? loadJson(TEMPLATES_INDEX_PATH) : [];
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = buildDateIso();
 
   const unitMeta = {};
   for (const inst of catalog) {

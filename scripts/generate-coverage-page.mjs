@@ -26,7 +26,8 @@ import { SITE_ORIGIN } from './site-origin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const DIST = path.join(ROOT, 'dist');
+// LEKTA_GENERATED_DIST: izlazna mapa za golden generiranih stranica (mobilni audit PR 5); zadano dist/ kao i prije.
+const DIST = process.env.LEKTA_GENERATED_DIST || path.join(ROOT, 'dist');
 
 if (!fs.existsSync(DIST)) {
   console.error('[generate-coverage-page] dist/ ne postoji; pokreni poslije `vite build`.');

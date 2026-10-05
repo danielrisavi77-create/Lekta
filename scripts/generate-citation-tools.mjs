@@ -34,7 +34,8 @@ const REGISTRY_PATH = path.join(ROOT, 'data/sources/source-registry.json');
 // Verificirani per-fakultet citatni specovi (data/tools/citation-specs/README tok):
 // build cita ISKLJUCIVO verified/; drafts/ nikad ne izlazi u dist.
 const SPECS_VERIFIED_DIR = path.join(ROOT, 'data/tools/citation-specs/verified');
-const OUT_DIR = path.join(ROOT, 'dist/alati');
+// LEKTA_GENERATED_DIST: izlazna mapa za golden generiranih stranica (mobilni audit PR 5); zadano dist/ kao i prije.
+const OUT_DIR = path.join(process.env.LEKTA_GENERATED_DIST || path.join(ROOT, 'dist'), 'alati');
 const CITATI_OUT_DIR = path.join(OUT_DIR, 'citati');
 
 // SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lekta.hr od T49).

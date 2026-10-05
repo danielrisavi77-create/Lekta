@@ -19,6 +19,7 @@ import {
   formattingCoverage,
   citationCoverage,
   titlePageCoverage,
+  buildDateIso,
 } from '../scripts/generate-faculty-pages.mjs';
 
 describe('normalizeSearch', () => {
@@ -110,5 +111,24 @@ describe('titlePageCoverage (Coverage Card: Naslovnica)', () => {
 
   it('predlozak postoji ali SAMO za drugu vrstu rada -> partial (levelReused slucaj)', () => {
     expect(titlePageCoverage('fpzg', 'seminar', [{ unitId: 'fpzg', level: 'graduate' }])).toBe('partial');
+  });
+});
+
+describe('buildDateIso (mobilni audit PR 5: golden uz fiksni datum)', () => {
+  const sad = new Date('2026-10-05T21:30:00Z');
+
+  it('bez LEKTA_BUILD_DATE vraca danasnji datum (UTC), kao prije', () => {
+    expect(buildDateIso({}, sad)).toBe('2026-10-05');
+    expect(buildDateIso({ LEKTA_BUILD_DATE: '' }, sad)).toBe('2026-10-05');
+  });
+
+  it('LEKTA_BUILD_DATE fiksira datum', () => {
+    expect(buildDateIso({ LEKTA_BUILD_DATE: '2026-01-15' }, sad)).toBe('2026-01-15');
+  });
+
+  it('neispravan datum rusi build umjesto da tiho padne na danas', () => {
+    for (const los of ['15.01.2026.', '2026-1-15', '2026-02-30', 'sutra']) {
+      expect(() => buildDateIso({ LEKTA_BUILD_DATE: los }, sad)).toThrow(/LEKTA_BUILD_DATE/);
+    }
   });
 });
