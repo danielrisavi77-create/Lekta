@@ -282,9 +282,10 @@ const activeFramed = (paragraphXml: string) => /<w:framePr\b/.test((paragraphXml
 
 /**
  * Z36 (pregled drugog providera, dvije runde): popis u okviru (w:framePr, stari Wordov plutajuci blok).
- * Zapis se ne umece kad okvir nosi izvor oblikovanja (zapis sidra) ili susjedni odlomak mjesta umetanja,
+ * PREDLOZAK se ne umece kad okvir nosi izvor oblikovanja (zapis sidra) ili susjedni odlomak mjesta umetanja,
  * i kad ih od mjesta dijeli razmak ili komentar: novi odlomak bi kopirao okvir ili razdvojio okvir
- * susjeda. Komentar u svojstvima ne skriva okvir, a okvir samo u povijesti (w:pPrChange) ili u
+ * susjeda. Korisnikov doslovni zapis (krug 5) radi kao na masteru: umece se iza sidra s njegovim
+ * svojstvima, ukljucujuci okvir, bajt za bajt kao fixer s origin/master. Komentar u svojstvima ne skriva okvir, a okvir samo u povijesti (w:pPrChange) ili u
  * ugnijezdenom odlomku susjeda ne odbija umetanje. Svojstva se kopiraju bez komentara: ni presjecena
  * ni lazna (pPr iz komentara) ne ulaze u novi zapis. Razlog preskoka ide u
  * skippedActions, dokument ostaje bajt-isti, drugi prolaz isti. Generator dokazuje gdje je okvir.
@@ -297,11 +298,17 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
     literal?: boolean; cite?: [string, string]; surnames?: Array<[string, string]>; separator?: string; after?: string[];
     /** Dodatni sadrzaj odlomka zapisa iza teksta; ocekivana svojstva umetnutog zapisa (zadano: svojstva popisa). */
     extra?: Record<number, string>; props?: string;
+    /** Krug 5: ocekivani izlaz je bajt za bajt izlaz fixera s origin/master (zapis iza sidra sa svojstvima sidra). */
+    master?: boolean;
   }> = [
     { tag: 'okvir:predlozak', pPr: { 0: FRAME_PPR, 1: FRAME_PPR, 2: FRAME_PPR }, active: [0, 1, 2], expect: 'preskok' },
     // Samo izvor oblikovanja (zapis sidra, Zubak) je u okviru; predlozak ide na pocetak, uz susjede bez okvira.
     { tag: 'okvir:izvor', pPr: { 2: FRAME_PPR }, active: [2], expect: 'preskok', cite: ['Babić', '2021'] },
-    { tag: 'okvir:korisnikov-zapis', pPr: { 0: FRAME_PPR, 1: FRAME_PPR, 2: FRAME_PPR }, active: [0, 1, 2], expect: 'preskok', literal: true },
+    // Krug 5: korisnikov doslovni zapis uz okvir radi kao na masteru (umece se iza sidra, sa svojstvima sidra).
+    { tag: 'okvir:korisnikov-zapis', pPr: { 0: FRAME_PPR, 1: FRAME_PPR, 2: FRAME_PPR }, active: [0, 1, 2], expect: 'umetnut', literal: true, master: true },
+    { tag: 'okvir:korisnikov-zapis-sidro', pPr: { 2: FRAME_PPR }, active: [2], expect: 'umetnut', literal: true, master: true },
+    // Isti popis s okvirom samo na sidru: predlozak ide na abecedno mjesto (iza Horvata), ali izvor oblikovanja je u okviru.
+    { tag: 'okvir:predlozak-sidro', pPr: { 2: FRAME_PPR }, active: [2], expect: 'preskok' },
     // Samo susjed ispred mjesta predloska (Horvat) je u okviru; izvor oblikovanja (Zubak) nije.
     { tag: 'okvir:susjed', pPr: { 1: FRAME_PPR }, active: [1], expect: 'preskok' },
     // Isto, ali Horvata od mjesta umetanja dijele prijelom retka i komentar u XML-u.
@@ -348,6 +355,7 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
       else if (item.tag.startsWith('svojstva:') && !first.parts.documentXml.includes(`<w:p>${item.props ?? LIST_PPR}<w:r><w:t xml:space="preserve">${encodeText(expected)}</w:t></w:r></w:p>`)) problems.push(`${item.tag}: umetnuti zapis nema cista svojstva popisa`);
       if (!wellFormed(first.parts.documentXml)) problems.push(`${item.tag}: rezultat nije ispravan XML`);
       if (item.tag === 'sekcija:komentar' && JSON.stringify(sectionEndTexts(first.parts.documentXml)) !== JSON.stringify([expected])) problems.push(`${item.tag}: prijelom sekcije nije presao na umetnuti zapis`);
+      if (item.master && first.parts.documentXml !== masterLiteralInsertion(xml, texts.at(-1)!, item.pPr[texts.length - 1] ?? LIST_PPR, expected)) problems.push(`${item.tag}: korisnikov zapis nije umetnut kao na masteru`);
     } else {
       if (first.applied || first.parts.documentXml !== xml) problems.push(`${item.tag}: zapis je umetnut (${first.reason})`);
       if (!first.skippedActions?.some((note) => note.includes('u okviru'))) problems.push(`${item.tag}: preskok nema razlog (${JSON.stringify(first.skippedActions)})`);
@@ -355,6 +363,15 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
     const second = fixer(first.parts, params);
     if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${item.tag}: drugi prolaz nije no-op (${second.reason})`);
   }
+}
+
+/**
+ * Krug 5: izlaz fixera s origin/master (d135a179) za korisnikov zapis, izmjeren nad istim ulazom: novi
+ * odlomak odmah iza odlomka sidra, sa svojstvima sidra (i okvirom) i bez svojstava runa (sidro ih nema).
+ */
+function masterLiteralInsertion(xml: string, anchorText: string, anchorPPr: string, literal: string): string {
+  const anchorEnd = xml.indexOf('</w:p>', xml.indexOf(anchorText)) + '</w:p>'.length;
+  return `${xml.slice(0, anchorEnd)}<w:p>${anchorPPr}<w:r><w:t xml:space="preserve">${encodeText(literal)}</w:t></w:r></w:p>${xml.slice(anchorEnd)}`;
 }
 
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"';

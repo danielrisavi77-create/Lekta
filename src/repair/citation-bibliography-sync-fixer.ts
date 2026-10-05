@@ -47,6 +47,7 @@ const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mo
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
 const SKIPPED_IN_FIELD = 'zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
 
+/** Samo za predlozak (krug 5): korisnikov doslovni zapis uz okvir umece se kao na masteru. */
 const SKIPPED_IN_FRAME = 'zapis literature nije umetnut: popis literature je u okviru (w:framePr), a novi odlomak bi promijenio okvir';
 
 const FIELD_OR_CONTROL_TOKEN = /<w:fldChar\b[^>]*\bw:fldCharType=["'](begin|end)["'][^>]*>|<w:sdtContent\b[^>]*>|<\/w:sdtContent\s*>/gi;
@@ -202,9 +203,10 @@ const framed = (block: string) => /<w:framePr\b/i.test(ownProperties(block.repla
 
 /**
  * Z36 (pregled drugog providera): okvir (w:framePr) je stari Wordov plutajuci blok, kao tekstni okvir.
- * Novi odlomak bi kopirao okvir izvora ili razdvojio okvir susjeda, pa se zapis ne umece kad okvir
+ * Novi odlomak bi kopirao okvir izvora ili razdvojio okvir susjeda, pa se PREDLOZAK ne umece kad okvir
  * nosi izvor oblikovanja ili susjedni odlomak mjesta umetanja. Susjedi su strukturni (zadnji odlomak
  * koji zavrsava prije mjesta i prvi koji pocinje iza njega), pa ih razmak ili komentar ne skriva.
+ * Krug 5: korisnikov doslovni zapis se ovdje ne provjerava; ide iza sidra kao na masteru.
  */
 function framedAt(xml: string, ranges: ParagraphRange[], offset: number, source: string): boolean {
   let before: ParagraphRange | undefined;
@@ -550,7 +552,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
         // Korisnikov potvrdjeni zapis: zateceno ponasanje, doslovno i iza sidra.
         offset = range.end;
         if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }
-        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }
+        // Krug 5: okvir ne odbija korisnikov zapis; on se umece kao na masteru, sa svojstvima sidra.
         literalInsertions.push({ offset, text, source });
       } else {
         const position = alphabeticalPosition(parts.documentXml, ranges, paragraphs, anchor.paragraphIndex, text);

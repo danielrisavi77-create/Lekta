@@ -8430,7 +8430,7 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'z36/okvir-izvora',
     imitates: 'novi zapis kopira w:pPr zapisa sidra zajedno s w:framePr (pregled drugog providera), pa predlozak '
-      + 'ili korisnikov zapis postane dio plutajuceg okvira',
+      + 'postane dio plutajuceg okvira (korisnikov zapis od kruga 5 ide kao na masteru)',
     caught: () => {
       const problemi = zapisLiteratureProblemi(z36Fixer('return framed(source) || ', 'return '));
       return problemi.some((p) => p.startsWith('okvir:izvor:'));
@@ -8560,6 +8560,24 @@ const MUTATIONS: Mutation[] = [
       + '[Naslov djela]." prolazi provjeru potpunosti kao pravi izvor (vakuumsko zeleno)',
     caught: () => nepopunjenPredlozakProblemi(z36Literatura("...(hasUnfilledTemplateField(rawText) ? ['unfilled-template'] : [])", '')).some((p) => p.startsWith('nepopunjen:')),
     cleanBefore: () => nepopunjenPredlozakProblemi(z36Literatura()).length === 0,
+  },
+  // --- Z36 krug 5: okvir odbija samo predlozak; korisnikov doslovni zapis radi kao na masteru ---
+  {
+    id: 'z36/okvir-odbija-korisnikov-zapis',
+    imitates: 'provjera okvira (w:framePr) vrijedi i za korisnikov doslovni zapis (sirenje opsega kruga 4): zapis '
+      + 'koji master umece iza sidra u okviru odbije se s razlogom "u okviru", pa se zateceno ponasanje promijeni',
+    caught: () => zapisLiteratureProblemi(z36Fixer('offset = range.end;\n        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }',
+      'offset = range.end;\n        if (insideFieldOrControl(parts.documentXml, offset)) { skippedActions.push(SKIPPED_IN_FIELD); continue; }\n        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }'))
+      .some((p) => p.startsWith('okvir:korisnikov-zapis')),
+    cleanBefore: z36FixerCist,
+  },
+  {
+    id: 'z36/predlozak-bez-provjere-okvira',
+    imitates: 'provjera okvira ispadne i iz grane predloska (uz uklanjanje iz grane korisnikova zapisa): predlozak '
+      + 'na abecednom mjestu kopira okvir sidra ili razdvoji okvir susjeda',
+    caught: () => zapisLiteratureProblemi(z36Fixer('        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }\n', ''))
+      .some((p) => p.startsWith('okvir:predlozak:') || p.startsWith('okvir:predlozak-sidro:')),
+    cleanBefore: z36FixerCist,
   },
   /**
    * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;

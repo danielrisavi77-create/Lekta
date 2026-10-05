@@ -101,6 +101,39 @@ describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zap
     expect(paragraphTexts(result.parts.documentXml)).toEqual(['Literatura', horvat, zoric, 'Novak, N. (2021). Drugi naslov.']);
   });
 
+  it('krug 5: korisnikov zapis uz okvir (w:framePr) umece se kao na masteru; predlozak uz isti okvir se odbija s razlogom', () => {
+    const framed = '<w:pPr><w:framePr w:w="9000" w:wrap="around" w:vAnchor="text" w:hAnchor="page" w:x="1500" w:y="1"/></w:pPr>';
+    const cite = 'Tekst (Novak, 2021).';
+    const horvat = 'Horvat, I. (2020). Naslov.';
+    const zoric = 'Zorić, P. (2019). Naslov Z.';
+    const documentXml = `<w:document><w:body>${paragraph(cite)}${paragraph('Literatura')}${paragraph(horvat)}<w:p>${framed}<w:r><w:t>${zoric}</w:t></w:r></w:p><w:sectPr/></w:body></w:document>`;
+    const parts = { documentXml, stylesXml: '' };
+    const start = cite.indexOf('Novak, 2021');
+    const params = (entry: Partial<CitationBibliographySyncParams['entries'][number]>): CitationBibliographySyncParams => ({
+      version: 1,
+      citations: [{ id: 'c1', paragraphIndex: 1, start, end: start + 'Novak, 2021'.length, anchorFingerprint: citationAnchorFingerprint(1, cite), replacementText: 'Novak, 2021', reason: 'citat uz dodani zapis literature' }],
+      entries: [{ id: 'e1', paragraphIndices: [], anchorFingerprint: '', action: 'add', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: bibliographyAnchorFingerprint([4], zoric) }, ...entry }],
+      mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }],
+    });
+    // Generator: okvir je bas na odlomku sidra (zadnji zapis), iza kojeg ide korisnikov zapis.
+    const anchorEnd = documentXml.indexOf('</w:p>', documentXml.indexOf(zoric)) + '</w:p>'.length;
+    expect(documentXml.slice(documentXml.lastIndexOf('<w:p>', anchorEnd), anchorEnd)).toContain('<w:framePr ');
+    const literal = params({ replacementText: 'Novak, N. (2021). Drugi naslov.' });
+    const result = citationBibliographySyncFixer(parts, literal);
+    // Izlaz fixera s origin/master (d135a179) nad istim ulazom, bajt za bajt: zapis iza sidra sa svojstvima sidra.
+    expect(result.applied).toBe(true);
+    expect(result.skippedActions).toBeUndefined();
+    expect(result.parts.documentXml).toBe(`${documentXml.slice(0, anchorEnd)}<w:p>${framed}<w:r><w:t xml:space="preserve">Novak, N. (2021). Drugi naslov.</w:t></w:r></w:p>${documentXml.slice(anchorEnd)}`);
+    const second = citationBibliographySyncFixer(result.parts, literal);
+    expect(second.applied).toBe(false);
+    expect(second.parts.documentXml).toBe(result.parts.documentXml);
+    // Predlozak (Z36 tocka 3) uz isti okvir: nista se ne umece, razlog ide u skippedActions.
+    const viaTemplate = citationBibliographySyncFixer(parts, params({ citationId: 'c1' }));
+    expect(viaTemplate.applied).toBe(false);
+    expect(viaTemplate.parts.documentXml).toBe(documentXml);
+    expect(viaTemplate.skippedActions).toEqual(['zapis literature nije umetnut: popis literature je u okviru (w:framePr), a novi odlomak bi promijenio okvir']);
+  });
+
   it('krug 4: w:ptab ispred nepromijenjenog citata ne pomice upis; vidljivi tekst odlomka ostaje isti', () => {
     // Ulaz iz pregleda: analiza cita w:ptab kao tabulator, w:t ga nema, pa odmaci plana ne vrijede u w:t.
     const citationXml = '<w:p><w:r><w:t>Tekst</w:t><w:ptab w:relativeTo="margin" w:alignment="right" w:leader="none"/><w:t>više (Novak, 2022) i (Horvat, 2020).</w:t></w:r></w:p>';
