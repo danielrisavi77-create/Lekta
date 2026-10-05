@@ -87,8 +87,8 @@ describe('T98: znacke i sazetak', () => {
   it('celija analizatora: bez oznake isti HTML kao prije; s oznakom znacka i poveznica, samo uz found', () => {
     const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const r = { kind: 'retracted' as const, source: 'publisher', noticeDoi: '10.1/r"x', date: '' };
-    // Prije T98 (app.ts): escapeHtml(meta.text) + " — podudara se s: „naslov”".
-    expect(existenceCellHtml({ verdict: 'found', matchedTitle: 'Naslov <i>' }, esc)).toBe(`${esc(VERDICT_BADGE.found.text)} — podudara se s: „Naslov &lt;i&gt;”`);
+    // Prije T98 (app.ts): escapeHtml(meta.text), razmak, duga crtica, "podudara se s:" i naslov u hrvatskim navodnicima.
+    expect(existenceCellHtml({ verdict: 'found', matchedTitle: 'Naslov <i>' }, esc)).toBe(`${esc(VERDICT_BADGE.found.text)} \u2014 podudara se s: \u201ENaslov &lt;i&gt;\u201D`);
     expect(existenceCellHtml({ verdict: 'not-found' }, esc)).toBe(esc(VERDICT_BADGE['not-found'].text));
     const s = existenceCellHtml({ verdict: 'found', retraction: r }, esc);
     expect(s).toContain(esc(RETRACTION_BADGE.retracted.text));

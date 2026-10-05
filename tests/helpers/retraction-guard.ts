@@ -42,9 +42,17 @@ type Snimka = { capture: { url: string; status: number }; response: unknown };
 export const snimka = (ime: string): Snimka =>
   JSON.parse(readFileSync(resolve(process.cwd(), 'tests/fixtures/crossref', ime), 'utf8').replace(/\r\n/g, '\n')) as Snimka;
 
+/**
+ * fetch koji vraca snimku za njezin URL. Uz upit (bibliografski put) provjerava i `select`: zahtjev
+ * mora traziti ista polja kao snimljeni upit, inace bi snimka s `updated-by` lazno potvrdila upit bez njega.
+ */
 export function fetchIz(s: Snimka): Fetch {
   return async (url: string) => {
     if (url.split('?')[0] !== s.capture.url.split('?')[0]) throw new Error(`neocekivan URL ${url}`);
+    const trazeno = new URL(s.capture.url).searchParams.get('select');
+    if (trazeno !== null && new URL(url).searchParams.get('select') !== trazeno) {
+      throw new Error(`select ${new URL(url).searchParams.get('select')} umjesto ${trazeno}`);
+    }
     return {
       ok: s.capture.status >= 200 && s.capture.status < 300,
       status: s.capture.status,
@@ -78,6 +86,18 @@ export async function retractionProblems(m: VerifyExistenceModule): Promise<stri
   m._clearExistenceCache();
   const doi = await m.verifyReference({ doi: '10.1538/expanim.54.1' }, { fetchImpl: fetchIz(snimka('retracted-rw-only.json')) });
   if (doi.verdict !== 'found' || doi.retraction?.kind !== 'retracted') out.push('(d) DOI put: povuceni DOI bez oznake');
+  // (s) bibliografski put: upit trazi updated-by (provjera `select` u fetchIz) i pogodak found nosi oznaku.
+  const naslov = 'Downregulation of long noncoding RNA LINC01419 inhibits cell migration, invasion, and tumor growth and promotes autophagy via inactivation of the PI3K/Akt1/mTOR pathway in gastric cancer';
+  m._clearExistenceCache();
+  const bib = await m.verifyReference({ title: naslov, year: '2019' }, { fetchImpl: fetchIz(snimka('select-updated-by.json')) });
+  if (bib.verdict !== 'found' || bib.retraction?.kind !== 'retracted') out.push(`(s) bibliografski put: verdikt ${bib.verdict}, oznaka ${bib.retraction?.kind ?? 'nema'}`);
+  // (n) negativna kontrola: ista snimka bez `updated-by` daje found BEZ oznake.
+  const bez = snimka('select-updated-by.json');
+  const tijelo = JSON.parse(JSON.stringify(bez.response)) as { message: { items: Array<Record<string, unknown>> } };
+  for (const it of tijelo.message.items) delete it['updated-by'];
+  m._clearExistenceCache();
+  const bibBez = await m.verifyReference({ title: naslov, year: '2019' }, { fetchImpl: fetchIz({ ...bez, response: tijelo }) });
+  if (bibBez.verdict !== 'found' || bibBez.retraction) out.push(`(n) bez updated-by: verdikt ${bibBez.verdict}, oznaka ${bibBez.retraction?.kind ?? 'nema'}`);
   // (x) nevaljan oblik: null, bez iznimke.
   for (const los of [{ 'updated-by': 'retraction' }, { 'updated-by': [] }, { 'updated-by': [null, 5, 'x'] }, null, 7]) {
     try { if (m.retractionFromWork(los)) out.push(`(x) nevaljan oblik dao oznaku: ${JSON.stringify(los)}`); } catch { out.push(`(x) iznimka na ${JSON.stringify(los)}`); }

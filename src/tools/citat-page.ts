@@ -10,7 +10,7 @@ import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type F
 import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
 import { parseReferenceFile } from '../citations/import-references';
 import { verifyReferences } from '../citations/verify-existence';
-import { RETRACTION_BADGE, VERDICT_BADGE, retractionNoticeUrl, summarizeVerification } from '../citations/verify-badges';
+import { RETRACTION_BADGE, VERDICT_BADGE, clearVerifyBadges, retractionNoticeUrl, summarizeVerification } from '../citations/verify-badges';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
@@ -387,7 +387,8 @@ async function verifyBulk(): Promise<void> {
   const inputs = cards.map((c) => readBulkCard(c.querySelector('.bulk-card-fields')));
   const btn = $('#bulk-verify');
   const orig = btn ? btn.textContent : '';
-  cards.forEach((c) => c.querySelector('.verify-badge')?.remove());
+  // SVE znacke kartice (verdikt i oznaka povlacenja): ponovljena provjera ne smije ostaviti staru oznaku.
+  cards.forEach((c) => clearVerifyBadges(c));
   if (btn) { btn.disabled = true; btn.textContent = 'Provjeravam…'; }
   announceBulk('Provjera postojanja izvora u tijeku…');
   try {

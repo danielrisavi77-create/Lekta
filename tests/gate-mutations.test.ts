@@ -10358,6 +10358,7 @@ describe('mutacije: T98 oznaka povucenog rada (stvarni src/citations/verify-exis
     ['citations/povlacenje-iz-update-to', "(message as { 'updated-by'?: unknown } | null)?.['updated-by']", "(message as { 'update-to'?: unknown } | null)?.['update-to']", '(u)'],
     ['citations/povlacenje-uz-weak', "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle };", "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle, ...(retractionFromWork(best) ? { retraction: retractionFromWork(best) } : {}) };", '(w)'],
     ['citations/povlacenje-doi-bez-tijela', 'retraction = retractionFromWork((await res.json())?.message);', 'retraction = null;', '(d)'],
+    ['citations/povlacenje-select-bez-updated-by', "params.set('select', 'title,author,issued,DOI,updated-by');", "params.set('select', 'title,author,issued,DOI');", '(s)'],
   ] as const;
 
   it('baseline: gard je cist nad nemutiranim izvorom', async () => {

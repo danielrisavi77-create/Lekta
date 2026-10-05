@@ -49,6 +49,16 @@ export const RETRACTION_BADGE: Record<RetractionInfo['kind'], VerdictBadge> = {
   concern: { text: '⚠ Izdavač je objavio izraz zabrinutosti', cls: 'verify-warn', color: 'var(--warn,#c9821f)' },
 };
 
+/**
+ * Ukloni SVE `.verify-badge` elemente kartice (verdikt i oznaku povlacenja) prije nove provjere; vraca
+ * koliko ih je uklonjeno. Uklanjanje samo prve ostavljalo bi staru oznaku povlacenja uz novi verdikt.
+ */
+export function clearVerifyBadges(card: ParentNode): number {
+  const stare = Array.from(card.querySelectorAll('.verify-badge'));
+  stare.forEach((b) => b.remove());
+  return stare.length;
+}
+
 /** Poveznica na obavijest o povlacenju (doi.org), ili prazan niz kad DOI obavijesti nema. */
 export function retractionNoticeUrl(info: RetractionInfo | undefined): string {
   const doi = String(info?.noticeDoi || '').trim();
@@ -63,7 +73,8 @@ type ExistenceRow = { verdict: ExistenceVerdict; matchedTitle?: string; retracti
  */
 export function existenceCellHtml(res: ExistenceRow, esc: (s: string) => string): string {
   const meta = VERDICT_BADGE[res.verdict] || VERDICT_BADGE.unchecked;
-  const match = (res.verdict === 'found' || res.verdict === 'weak') && res.matchedTitle ? ` — podudara se s: „${esc(String(res.matchedTitle))}”` : '';
+  // Isti razmak, duga crtica i navodnici kao dosadasnji tekst u app.ts (zapisano escapeom, bez literala).
+  const match = (res.verdict === 'found' || res.verdict === 'weak') && res.matchedTitle ? ` \u2014 podudara se s: \u201E${esc(String(res.matchedTitle))}\u201D` : '';
   const rb = res.verdict === 'found' && res.retraction ? RETRACTION_BADGE[res.retraction.kind] : null;
   if (!rb) return esc(meta.text) + match;
   const url = retractionNoticeUrl(res.retraction);
