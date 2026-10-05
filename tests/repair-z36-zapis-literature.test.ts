@@ -70,7 +70,7 @@ describe('Z36 gardovi nad stvarnom implementacijom', () => {
     expect(serverZapisaProblemi(validateAssistedParams)).toEqual([]);
   });
 
-  it('plan i fixer: w:br i w:tab ispred citata ne obaraju ostale potvrde iste stavke (krug 4)', () => {
+  it('plan i fixer: w:br, w:tab, formula sa slovom (m:t) i tekstni okvir uz citat ne obaraju ostale potvrde iste stavke (krug 4 i 5)', () => {
     expect(brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, citationBibliographySyncFixer)).toEqual([]);
   });
 

@@ -45,7 +45,8 @@ const noOp = (parts: DocxXmlParts, reason: FixerOutput['reason'], skippedActions
  */
 const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mogu se sigurno procitati iz citata';
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
-const SKIPPED_IN_FIELD = 'zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
+const SKIPPED_BLOCKED_SOURCE = 'zapis literature nije umetnut ni citat izmijenjen: citat iz kojeg se cita zapis ne moze ostati nepromijenjen, a odlomak s formulom, okvirom ili poljem se ne pise';
+const SKIPPED_IN_FIELD ='zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
 
 /** Samo za predlozak (krug 5): korisnikov doslovni zapis uz okvir umece se kao na masteru. */
 const SKIPPED_IN_FRAME = 'zapis literature nije umetnut: popis literature je u okviru (w:framePr), a novi odlomak bi promijenio okvir';
@@ -452,6 +453,10 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
   let alreadyApplied = 0;
   // Nepromijenjeni citati provjereni otiskom: bez ikakve izmjene ishod je 'already-ok', kao prije.
   let readOnlyCitations = 0;
+  // Krug 5: citati iz kojih predlozak cita prezime i godinu, i oni od njih koji se ne mogu ni procitati
+  // nepromijenjeni ni upisati (preskace se samo njihov predlozak, s razlogom).
+  const templateSources = new Set(params.entries.flatMap((entry) => (entry.action === 'add' && !entry.replacementText?.trim() && entry.citationId !== undefined ? [entry.citationId] : [])));
+  const blockedCitations = new Set<string>();
 
   // Rasponi svih citata po odlomku (i nepromijenjenih), da se preklapanje odbije kao i prije.
   const claimed = new Map<number, Array<{ start: number; end: number }>>();
@@ -462,14 +467,16 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     const current = paragraphText(block);
     const leading = current.length - current.trimStart().length;
     const adjusted = { ...citation, start: citation.start + leading, end: citation.end + leading };
-    const fingerprintMatches = citationAnchorFingerprint(citation.paragraphIndex, current) === citation.anchorFingerprint;
+    // Tekst odlomka kakav vidi analiza. Krug 5 (F32): iz njega se racuna i otisak, kao u planu; otisak iz
+    // w:t mijenjala je formula (m:t) sa slovom ili znamenkom ili tekst okvira, pa je pala cijela stavka.
+    const readable = analysisText(block);
+    const fingerprintMatches = citationAnchorFingerprint(citation.paragraphIndex, readable) === citation.anchorFingerprint;
     if (fingerprintMatches) {
       if (claimed.get(citation.paragraphIndex)?.some((other) => other.start < adjusted.end && adjusted.start < other.end)) return noOp(parts, 'invalid-params');
       claimed.set(citation.paragraphIndex, [...(claimed.get(citation.paragraphIndex) || []), adjusted]);
       // Z36: nepromijenjen citat (izvor zapisa ili potvrdjena veza) se samo cita, nikad ne pise. Zato
       // ga ne rusi oznaka, poveznica, polje ni tablica u odlomku (Word cesto zapise _GoBack oznaku).
       // Cita se u tekstu analize, u kojem vrijede odmaci plana (krug 4: w:ptab, w:tab ili w:br ispred).
-      const readable = analysisText(block);
       const lead = readable.length - readable.trimStart().length;
       if (asAnalysisText(readable.slice(citation.start + lead, citation.end + lead)) === asAnalysisText(citation.replacementText)) {
         verifiedCitations.add(citation.id);
@@ -480,7 +487,18 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     }
     // Upis smije samo kad su odmaci plana i odmaci u w:t isti. w:ptab `unsupported` ne vidi, a pomice
     // ih kao i w:tab ili formula (m:t); upis rawText na pomaknut raspon prepolovio bi citat (krug 4).
-    if (excludedContainer(parts.documentXml, range) || unsupported(block) || analysisText(block) !== current) return noOp(parts, 'unsupported-structure');
+    if (excludedContainer(parts.documentXml, range) || unsupported(block) || analysisText(block) !== current) {
+      // Krug 5 (F32): citat iz kojeg predlozak cita prezime i godinu ne moze ostati nepromijenjen (plan
+      // ga mijenja), a odlomak se ne smije pisati. Preskace se samo taj citat i njegov predlozak, s
+      // razlogom; ostale potvrde stavke vrijede. Plan mora pokazivati citat koji parser nalazi (inace
+      // je plan kriv) i otisak mora vrijediti (inace je dokument drugi), pa tada pada cijeli recept.
+      if (fingerprintMatches && templateSources.has(citation.id) && citationAt(readable, citation.start, citation.end)) {
+        blockedCitations.add(citation.id);
+        citationParagraphs.add(citation.paragraphIndex);
+        continue;
+      }
+      return noOp(parts, 'unsupported-structure');
+    }
     if (!fingerprintMatches) {
       if (asAnalysisText(current.slice(citation.start + leading, citation.start + leading + citation.replacementText.length)) === asAnalysisText(citation.replacementText)) { alreadyApplied += 1; appliedCitations.add(citation.id); continue; }
       return noOp(parts, 'invalid-params');
@@ -518,6 +536,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
       let insertionText = literal;
       if (literal === null) {
         const citation = params.citations.find((candidate) => candidate.id === entry.citationId)!;
+        if (blockedCitations.has(citation.id)) { skippedActions.push(SKIPPED_BLOCKED_SOURCE); continue; }
         // Isti tekst u kojem je analiza nasla citat (odmaci plana vrijede u njemu).
         const current = asAnalysisText(analysisText(blocks.get(citation.paragraphIndex) || '')).trim();
         let source: { author: string; year: string } | null = null;

@@ -195,7 +195,54 @@ describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zap
     }
   });
 
-  it('krug 4: formula sa slovom mijenja otisak, pa se odlomak ne dira', () => {
+  it('krug 5: formula sa slovom ili znamenkom (m:t) ispred i iza citata ne obara stavku; potvrda Horvat se primjenjuje', () => {
+    const ns = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"';
+    const seenBy = (xml: string) => parserParagraphText(parseXml(`<w:document ${ns}><w:body>${xml}</w:body></w:document>`, 'test').getElementsByTagName('w:p')[0]).trim();
+    const horvatText = 'Drugi odlomak (Horvat, 2020).';
+    const anchor = 'Horvat, I. (2020). Naslov.';
+    for (const [before, after] of [['x2', ''], ['', 'y3'], ['a1', 'b2']]) {
+      const math = (value: string) => (value ? `<m:oMath><m:r><m:t>${value}</m:t></m:r></m:oMath>` : '');
+      const citationXml = `<w:p><w:r><w:t xml:space="preserve">Tekst </w:t></w:r>${math(before)}<w:r><w:t xml:space="preserve"> navodi (Novak, 2022) i </w:t></w:r>${math(after)}<w:r><w:t>.</w:t></w:r></w:p>`;
+      const seen = seenBy(citationXml);
+      const visible = paragraphTexts(citationXml)[0];
+      // Generator: slovo ili znamenka formule mijenja otisak w:t teksta, a analiza je vidi s trazene strane citata.
+      expect(citationAnchorFingerprint(1, visible)).not.toBe(citationAnchorFingerprint(1, seen));
+      if (before) expect(seen.indexOf(before)).toBeLessThan(seen.indexOf('Novak'));
+      if (after) expect(seen.indexOf(after)).toBeGreaterThan(seen.indexOf('Novak'));
+      const parts = { documentXml: `<w:document><w:body>${citationXml}${paragraph(horvatText)}${paragraph('Literatura')}${paragraph(anchor)}<w:sectPr/></w:body></w:document>`, stylesXml: '' };
+      const novak = seen.indexOf('Novak, 2022');
+      const horvat = horvatText.indexOf('Horvat, 2020');
+      const params: CitationBibliographySyncParams = {
+        version: 1,
+        citations: [
+          { id: 'c1', paragraphIndex: 1, start: novak, end: novak + 'Novak, 2022'.length, anchorFingerprint: citationAnchorFingerprint(1, seen), replacementText: 'Novak, 2022', reason: 'citat uz dodani zapis literature' },
+          { id: 'c2', paragraphIndex: 2, start: horvat, end: horvat + 'Horvat, 2020'.length, anchorFingerprint: citationAnchorFingerprint(2, horvatText), replacementText: 'Horvat, 2020, str. 5', reason: 'lokator' },
+        ],
+        entries: [{ id: 'e1', paragraphIndices: [], anchorFingerprint: '', action: 'add', citationId: 'c1', insertionAnchor: { paragraphIndex: 4, anchorFingerprint: bibliographyAnchorFingerprint([4], anchor) } }],
+        mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }, { citationId: 'c2', bibliographyEntryId: 'bibliography-4', confirmed: true }],
+      };
+      const result = citationBibliographySyncFixer(parts, params);
+      expect(result.applied).toBe(true);
+      expect(result.parts.documentXml).toContain(citationXml);
+      expect(paragraphTexts(result.parts.documentXml).slice(1)).toEqual(['Drugi odlomak (Horvat, 2020, str. 5).', 'Literatura', anchor, 'Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač].']);
+      const second = citationBibliographySyncFixer(result.parts, params);
+      expect(second.applied).toBe(false);
+      expect(second.parts.documentXml).toBe(result.parts.documentXml);
+      // Citat iz kojeg se cita zapis ne moze ostati nepromijenjen (plan mu dodaje lokator): preskace se samo
+      // on i njegov predlozak, s razlogom; potvrda Horvat se i dalje primjenjuje.
+      const blocked = { ...params, citations: [{ ...params.citations[0], replacementText: 'Novak, 2022, str. 7' }, params.citations[1]] };
+      const skipped = citationBibliographySyncFixer(parts, blocked);
+      expect(skipped.applied).toBe(true);
+      expect(skipped.parts.documentXml).toContain(citationXml);
+      expect(paragraphTexts(skipped.parts.documentXml).slice(1)).toEqual(['Drugi odlomak (Horvat, 2020, str. 5).', 'Literatura', anchor]);
+      expect(skipped.skippedActions).toEqual(['zapis literature nije umetnut ni citat izmijenjen: citat iz kojeg se cita zapis ne moze ostati nepromijenjen, a odlomak s formulom, okvirom ili poljem se ne pise']);
+      const skippedSecond = citationBibliographySyncFixer(skipped.parts, blocked);
+      expect(skippedSecond.applied).toBe(false);
+      expect(skippedSecond.parts.documentXml).toBe(skipped.parts.documentXml);
+    }
+  });
+
+  it('krug 4: formula sa slovom uz izmijenjen citat bez dodanog zapisa: odlomak se ne pise', () => {
     const citationXml = '<w:p><w:r><w:t xml:space="preserve">Tekst </w:t></w:r><m:oMath><m:r><m:t>x</m:t></m:r></m:oMath><w:r><w:t xml:space="preserve"> više (Novak, 2022).</w:t></w:r></w:p>';
     const seen = 'Tekst x više (Novak, 2022).';
     const anchor = 'Horvat, I. (2020). Naslov.';

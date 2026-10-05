@@ -8321,7 +8321,7 @@ const MUTATIONS: Mutation[] = [
     imitates: 'upis izmijenjenog citata ne provjerava da odmaci plana vrijede u w:t; w:ptab (koji unsupported ne vidi) '
       + 'pomakne raspon i upis prepolovi citat ("Tekstviše (NNovak, 2022 i ..."); nakon pregleda kruga 4 upis zaustavi i provjera raspona, '
       + 'pa se gard vidi po razlogu (struktura odlomka, ne kriv plan)',
-    caught: () => zapisLiteratureProblemi(z36Fixer(' || analysisText(block) !== current) return', ') return'))
+    caught: () => zapisLiteratureProblemi(z36Fixer(' || analysisText(block) !== current) {', ') {'))
       .some((p) => p.startsWith('ptab-izmjena:')),
     cleanBefore: z36FixerCist,
   },
@@ -8578,6 +8578,39 @@ const MUTATIONS: Mutation[] = [
     caught: () => zapisLiteratureProblemi(z36Fixer('        if (framedAt(parts.documentXml, ranges, offset, source)) { skippedActions.push(SKIPPED_IN_FRAME); continue; }\n', ''))
       .some((p) => p.startsWith('okvir:predlozak:') || p.startsWith('okvir:predlozak-sidro:')),
     cleanBefore: z36FixerCist,
+  },
+  // --- Z36 krug 5 (F32): otisak citatnog odlomka iz teksta analize; preskok samo ovisnog predloska ---
+  {
+    id: 'z36/otisak-citata-iz-w-t',
+    imitates: 'otisak citatnog odlomka racuna se iz w:t (stanje kruga 4): formula (m:t) sa slovom ili znamenkom '
+      + 'ispred ili iza citata, ili tekst tekstnog okvira, promijeni otisak, pa padne cijela stavka sinkronizacije',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('citationAnchorFingerprint(citation.paragraphIndex, readable) === citation.anchorFingerprint', 'citationAnchorFingerprint(citation.paragraphIndex, current) === citation.anchorFingerprint'))
+      .some((p) => p.startsWith('formula-slova:') || p.startsWith('okvir-tekst:')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
+    id: 'z36/neprocitljiv-izvor-obara-recept',
+    imitates: 'citat iz kojeg predlozak cita zapis, a koji ne moze ostati nepromijenjen u odlomku s formulom ili okvirom, '
+      + 'obara cijeli recept (stanje kruga 4) umjesto da se preskoci samo ovisni predlozak s razlogom',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('      if (fingerprintMatches && templateSources.has(citation.id) && citationAt(readable, citation.start, citation.end)) {\n        blockedCitations.add(citation.id);\n        citationParagraphs.add(citation.paragraphIndex);\n        continue;\n      }\n', ''))
+      .some((p) => p.startsWith('neprocitljiv:')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
+    id: 'z36/preskok-uz-pomaknut-raspon',
+    imitates: 'preskok ovisnog predloska ne provjerava da raspon plana pokazuje citat: kriv plan nad odlomkom s formulom '
+      + 'primijeni ostale potvrde umjesto da padne cijeli recept',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('templateSources.has(citation.id) && citationAt(readable, citation.start, citation.end)', 'templateSources.has(citation.id)'))
+      .some((p) => p.startsWith('neprocitljiv-plan:') && p.includes(':pomak:')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
+    id: 'z36/preskok-uz-zastarjeli-otisak',
+    imitates: 'preskok ovisnog predloska ne trazi vazeci otisak: plan nad drugim (izmijenjenim) dokumentom primijeni '
+      + 'ostale potvrde umjesto da padne cijeli recept',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('if (fingerprintMatches && templateSources.has(citation.id)', 'if (templateSources.has(citation.id)'))
+      .some((p) => p.startsWith('neprocitljiv-plan:') && p.includes(':otisak:')),
+    cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
   },
   /**
    * T92: treci put ista klasa (zadnji #243, popravak #245). Test cita schema.sql i trazi `\nas \$\$\n`;

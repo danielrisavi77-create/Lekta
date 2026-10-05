@@ -11,7 +11,7 @@
 import { analyzeBibliographyStructure, bibliographyAnchorFingerprint } from '../../src/analysis/bibliography-structure';
 import { citationAnchorFingerprint } from '../../src/analysis/citation-bibliography-sync';
 import { extractCitationOccurrences } from '../../src/citations/author-year';
-import { parseXml, paragraphText as parserParagraphText } from '../../src/docx/parser';
+import { bodyParagraphs, parseXml, paragraphText as parserParagraphText } from '../../src/docx/parser';
 import type { citationBibliographySyncFixer } from '../../src/repair/citation-bibliography-sync-fixer';
 import type { validateAssistedParams } from '../../src/repair/contract/assisted-request-policy';
 import type { citationBibliographySyncRepairableItem, citationEntryInsertionAllowed } from '../../src/ui/repair-items';
@@ -837,7 +837,106 @@ export function brTabPotvrdeProblemi(build: PlanBuilder, fixer: SyncFixer): stri
   for (const xml of paragraphsXml.slice(0, 2)) if (!first.parts.documentXml.includes(xml)) problems.push('br-tab: odlomak citata s w:br ili w:tab je prepisan');
   const second = fixer(first.parts, params);
   if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`br-tab: drugi prolaz nije no-op (${second.reason})`);
+  formulaSlovaProblemi(build, fixer, problems);
   return problems;
+}
+
+const TEXTBOX_RUN = '<w:r><w:pict><v:shape><v:textbox><w:txbxContent><w:p><w:r><w:t>Okvir A1</w:t></w:r></w:p></w:txbxContent></v:textbox></v:shape></w:pict></w:r>';
+const omml = (value: string) => `<m:oMath><m:r><m:t>${value}</m:t></m:r></m:oMath>`;
+
+/**
+ * Z36 krug 5 (F32): odlomak citata u kojem formula (OMML m:t) sa slovom ili znamenkom, ili tekst
+ * tekstnog okvira, stoji ispred ili iza citata. Tekst w:t tada ima drugi otisak od teksta analize, pa je
+ * otisak racunat iz w:t obarao cijelu stavku. Otisak se racuna iz teksta analize: zapis se dodaje, a
+ * ostala potvrda iste stavke (izmijenjen citat Horvat u drugom odlomku) se primjenjuje.
+ */
+const LETTER_CASES: Array<{ tag: string; xml: string; marker: string; side: 'ispred' | 'iza'; hidden?: string }> = [
+  { tag: 'formula-slova:ispred', xml: `<w:p><w:r><w:t xml:space="preserve">Tekst </w:t></w:r>${omml('x2')}<w:r><w:t xml:space="preserve"> navodi izvor (Novak, 2022).</w:t></w:r></w:p>`, marker: 'x2', side: 'ispred' },
+  { tag: 'formula-slova:iza', xml: `<w:p><w:r><w:t xml:space="preserve">Tekst navodi izvor (Novak, 2022) i </w:t></w:r>${omml('y3')}<w:r><w:t xml:space="preserve"> kraj.</w:t></w:r></w:p>`, marker: 'y3', side: 'iza' },
+  { tag: 'formula-slova:br', xml: `<w:p><w:r><w:t>Tekst</w:t><w:br/><w:t xml:space="preserve">navodi izvor (Novak, 2022) uz </w:t></w:r>${omml('n1')}<w:r><w:t>.</w:t></w:r></w:p>`, marker: 'n1', side: 'iza' },
+  { tag: 'okvir-tekst:ispred', xml: `<w:p><w:r><w:t xml:space="preserve">Tekst </w:t></w:r>${TEXTBOX_RUN}<w:r><w:t xml:space="preserve">navodi izvor (Novak, 2022).</w:t></w:r></w:p>`, marker: 'Okvir A1', side: 'ispred', hidden: 'Okvir A1' },
+];
+
+function formulaSlovaProblemi(build: PlanBuilder, fixer: SyncFixer, problems: string[]): void {
+  for (const item of LETTER_CASES) {
+    const paragraphsXml = [item.xml, paragraph('Treći odlomak (Horvat, 2020) i (Zorić, 2021).'), paragraph('Literatura'), paragraph(entryText('Horvat', '2020')), paragraph(entryText('Zorić', '2021'))];
+    const documentXml = `<w:document><w:body>${paragraphsXml.join('')}<w:sectPr/></w:body></w:document>`;
+    // Odlomci i njihov tekst kako ih broji i cita analiza (analyze-docx: bodyParagraphs, paragraphText,
+    // trim): odlomak tekstnog okvira je zaseban odlomak iza onoga koji ga nosi.
+    const doc = parseXml(documentXml.replace('<w:document>', `<w:document ${WORD_NS} xmlns:v="urn:schemas-microsoft-com:vml">`), 'test');
+    const seen = bodyParagraphs(doc).map((p) => parserParagraphText(p).trim());
+    const at = (text: string) => seen.indexOf(text) + 1;
+    const [horvatAt, literaturaAt] = [seen.findIndex((text) => text.startsWith('Treći odlomak')) + 1, at('Literatura')];
+    const entryAt = [at(entryText('Horvat', '2020')), at(entryText('Zorić', '2021'))];
+    if (horvatAt < 2 || literaturaAt <= horvatAt || entryAt.some((index) => index <= literaturaAt) || (!!item.hidden !== (seen.length === 6))) problems.push(`${item.tag}: ulaz nema ocekivane odlomke analize (${JSON.stringify(seen)})`);
+    // Tekst svih w:t odlomka (i ugnijezdenog odlomka okvira), kao paragraphText fixera.
+    const visible = [...item.xml.matchAll(/<w:t(?: [^>]*)?>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+    // Generator: tekst analize i w:t imaju razlicit otisak (slovo ili znamenka koju vidi samo jedan od njih).
+    const classOk = (item.hidden ? visible.includes(item.hidden) && !seen[0].includes(item.hidden) : seen[0].includes(item.marker) && !visible.includes(item.marker))
+      && citationAnchorFingerprint(1, visible) !== citationAnchorFingerprint(1, seen[0]) && (item.tag !== 'formula-slova:br' || seen[0].includes('\n'));
+    if (!classOk) problems.push(`${item.tag}: ulaz nema razlicit otisak teksta analize i w:t (${JSON.stringify([seen[0], visible])})`);
+    // Strana citata: u tekstu koji nosi znak (analiza za formulu, w:t za tekstni okvir).
+    const carrier = item.hidden ? visible : seen[0];
+    const novak = carrier.indexOf('Novak, 2022');
+    if (novak < 0 || carrier.indexOf(item.marker) < 0 || (item.side === 'iza') !== (carrier.indexOf(item.marker) > novak)) problems.push(`${item.tag}: znak nije s trazene strane citata`);
+    const occurrences = seen.slice(0, literaturaAt - 1).flatMap((text, i) => extractCitationOccurrences([{ index: i + 1, text }]));
+    const citations = occurrences.map((occurrence) => ({ id: `citation-${occurrence.paragraphIndex}-${occurrence.start}`, paragraphIndex: occurrence.paragraphIndex, start: occurrence.start, end: occurrence.end, rawText: occurrence.rawText, author: occurrence.author, year: occurrence.year, form: occurrence.form, anchorFingerprint: citationAnchorFingerprint(occurrence.paragraphIndex, seen[occurrence.paragraphIndex - 1]), confidence: 'high' }));
+    const entries = entryAt.map((index) => ({ id: `bibliography-${index}`, paragraphIndices: [index], anchorFingerprint: bibliographyAnchorFingerprint([index], seen[index - 1]), rawText: seen[index - 1] }));
+    const result = {
+      details: {
+        citationBibliographySync: {
+          citations,
+          links: citations.map((citation) => (citation.paragraphIndex === 1
+            ? { citationId: citation.id, status: 'missing', candidates: [], reason: 'nedostaje' }
+            : { citationId: citation.id, status: 'matched', bibliographyEntryId: `bibliography-${citation.author === 'Horvat' ? entryAt[0] : entryAt[1]}`, candidates: [], reason: 'podudaranje' })),
+          missingEntries: citations.filter((citation) => citation.paragraphIndex === 1),
+          duplicateCandidates: [],
+          summary: { citations: citations.length, matched: citations.length - 1, missing: 1, ambiguous: 0, pageIssues: 0 },
+        },
+        bibliographyStructure: { entries },
+      },
+    };
+    const form = build(result, planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0]?.citationBibliographySyncForm;
+    const horvat = form?.citations.find((row) => row.rawText === 'Horvat, 2020');
+    if (!form || form.missingEntries.length !== 1 || !horvat) { problems.push(`${item.tag}: plan ne nudi zapis i citat Horvat`); continue; }
+    form.missingEntries[0].selected = true;
+    horvat.selected = true;
+    horvat.replacementText = 'Horvat, 2020, str. 5';
+    const params = form.buildParams(form) as unknown as Parameters<SyncFixer>[1];
+    const parts = { documentXml, stylesXml: '' };
+    const first = fixer(parts, params);
+    const texts = paragraphTexts(first.parts.documentXml);
+    if (!first.applied) problems.push(`${item.tag}: recept je pao (${first.reason}, ${JSON.stringify(first.skippedActions)})`);
+    if (!texts.includes('Treći odlomak (Horvat, 2020, str. 5) i (Zorić, 2021).')) problems.push(`${item.tag}: potvrda Horvat nije primijenjena`);
+    if (!texts.includes(template('Novak', '2022'))) problems.push(`${item.tag}: zapis Novak nije umetnut (${JSON.stringify(first.skippedActions)})`);
+    if (!first.parts.documentXml.includes(item.xml)) problems.push(`${item.tag}: odlomak citata je prepisan`);
+    const second = fixer(first.parts, params);
+    if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${item.tag}: drugi prolaz nije no-op (${second.reason})`);
+
+    // Citat iz kojeg se cita zapis ne moze ostati nepromijenjen (plan ga mijenja, a odlomak s formulom
+    // ili okvirom se ne smije pisati): preskace se samo taj citat i ovisni zapis, s razlogom; potvrda
+    // Horvat iz iste stavke se primjenjuje, a odlomak citata ostaje bajt-isti.
+    const source = params.citations.find((citation) => citation.paragraphIndex === 1)!;
+    const blocked = { ...params, citations: params.citations.map((citation) => (citation === source ? { ...citation, replacementText: 'Novak, 2022, str. 5' } : citation)) };
+    if (!blocked.entries.some((entry) => entry.action === 'add' && entry.citationId === source.id && !entry.replacementText)) problems.push(`neprocitljiv:${item.tag}: ulaz nema ovisni predlozak uz citat`);
+    const skipped = fixer(parts, blocked);
+    const skippedTexts = paragraphTexts(skipped.parts.documentXml);
+    if (!skipped.applied || !skippedTexts.includes('Treći odlomak (Horvat, 2020, str. 5) i (Zorić, 2021).')) problems.push(`neprocitljiv:${item.tag}: ostala potvrda nije primijenjena (${skipped.reason})`);
+    if (skippedTexts.includes(template('Novak', '2022')) || !skipped.parts.documentXml.includes(item.xml)) problems.push(`neprocitljiv:${item.tag}: citat ili ovisni zapis je upisan`);
+    if (!skipped.skippedActions?.some((note) => note.includes('ne moze ostati nepromijenjen'))) problems.push(`neprocitljiv:${item.tag}: preskok nema razlog (${JSON.stringify(skipped.skippedActions)})`);
+    const skippedSecond = fixer(skipped.parts, blocked);
+    if (skippedSecond.applied || skippedSecond.parts.documentXml !== skipped.parts.documentXml) problems.push(`neprocitljiv:${item.tag}: drugi prolaz nije no-op (${skippedSecond.reason})`);
+
+    // Preskok vrijedi samo za citat koji plan stvarno pokazuje u dokumentu analize: pomaknut raspon
+    // (kriv plan) i zastarjeli otisak (drugi dokument) i dalje obaraju cijeli recept, bez ikakvog upisa.
+    const shifted = { ...params, citations: params.citations.map((citation) => (citation === source ? { ...citation, start: citation.start + 1, end: citation.end + 1 } : citation)) };
+    const stale = { ...params, citations: params.citations.map((citation) => (citation === source ? { ...citation, anchorFingerprint: citationAnchorFingerprint(1, `${seen[0]} izmijenjeno`) } : citation)) };
+    if (extractCitationOccurrences([{ index: 1, text: seen[0] }]).some((found) => found.start === source.start + 1)) problems.push(`neprocitljiv-plan:${item.tag}: ulaz nema pomaknut raspon`);
+    for (const [variant, wrong] of [['pomak', shifted], ['otisak', stale]] as const) {
+      const out = fixer(parts, wrong);
+      if (out.applied || out.parts.documentXml !== documentXml) problems.push(`neprocitljiv-plan:${item.tag}:${variant}: kriv plan djelomicno primijenjen (${out.reason})`);
+    }
+  }
 }
 
 const COMPLETENESS_ID = 'reference.completeness';
