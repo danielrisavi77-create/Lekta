@@ -359,10 +359,14 @@ type StudyCycle = 'integrated' | 'undergraduate' | 'graduate' | 'specialist' | '
 function studyKindForEvidenceQuote(quote: string): StudyKind | 'both' | null {
   const text = normalized(quote);
   const kind = (root: string): StudyKind => root === 'sveucilisn' ? 'university' : 'vocational';
-  const nextToStudy = new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\s+(?:\w+\s+){0,3}studij\w*\b/gu)]
-    .map((match) => kind(match[1])));
+  // Vrsta se cita samo uz naziv studija ili akademski naziv (Codex #284): "strucni rad na studiju",
+  // "strucna radionica", "strucno radno mjesto" i "strucna pomoc pri izradi rada" ne tvrde vrstu studija.
+  const nextToStudy = new Set([
+    ...[...text.matchAll(/\b(sveucilisn|strucn)\w*\s+(?:(?!rad)\w+\s+){0,3}studij\w*\b/gu)].map((match) => match[1]),
+    ...[...text.matchAll(/\bstudij\w*\s+(?:(?!rad)\w+\s+){0,3}(sveucilisn|strucn)\w*\b(?!\s+rad)/gu)].map((match) => match[1]),
+  ].map(kind));
   const found = nextToStudy.size > 0 ? nextToStudy
-    : new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\b/gu)].map((match) => kind(match[1])));
+    : new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\s+(?:prvostupni|specijalist|magist|bacc)\w*/gu)].map((match) => kind(match[1])));
   if (found.size === 2) return 'both';
   return found.values().next().value ?? null;
 }

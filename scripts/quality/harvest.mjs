@@ -18,10 +18,10 @@
  * samo uz izricit `--samples`, za lokalnu dijagnozu na istom stroju. Izlaz ide u
  * %USERPROFILE%\Lekta-quality; `--out-dir` unutar repozitorija se odbija.
  */
-import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { createHash, randomBytes } from 'node:crypto';
+import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { localDay, sessionLabel } from '../agents/usage-daily.mjs';
 
@@ -116,18 +116,23 @@ function resultText(block) {
   return '';
 }
 
+// Samo poznata imena alata smiju u izvjestaj; naziv prilagodjenog alata moze nositi privatni tekst.
+const REPORT_TOOLS = new Set(['Bash', 'Read', 'Write', 'Edit', 'MultiEdit', 'Glob', 'Grep', 'Agent', 'Task', 'TaskOutput', 'TaskStop', 'WebFetch', 'WebSearch', 'NotebookEdit', 'TodoWrite', 'Skill', 'ToolSearch', 'AskUserQuestion', 'ListAgents', 'SendMessage', 'Workflow']);
+const reportTool = (name) => REPORT_TOOLS.has(name) ? name : '?';
+
 const IS_ERROR_RE = /"is_error"\s*:\s*true/;
 
-// Datoteka zadnji put mijenjana prije pocetka prozora ne moze imati zapis iz njega: transkripti se
-// samo dopisuju. Rucno vracena stara kopija s novim zapisima je izvan opsega; `--all` cita sve.
-function* walkJsonl(dir, minMtimeMs) {
+// Timestamp zapisa je mjerodavan i za arhive: mtime se moze sacuvati pri kopiranju.
+function* walkJsonl(dir, stats) {
   if (!existsSync(dir)) return;
-  for (const name of readdirSync(dir)) {
+  let entries;
+  try { entries = readdirSync(dir); } catch { stats.unreadableFiles += 1; return; }
+  for (const name of entries) {
     const p = join(dir, name);
     let st;
-    try { st = statSync(p); } catch { continue; }
-    if (st.isDirectory()) yield* walkJsonl(p, minMtimeMs);
-    else if (name.endsWith('.jsonl') && st.mtimeMs >= minMtimeMs) yield p;
+    try { st = statSync(p); } catch { stats.unreadableFiles += 1; continue; }
+    if (st.isDirectory()) yield* walkJsonl(p, stats);
+    else if (name.endsWith('.jsonl')) yield p;
   }
 }
 
@@ -164,7 +169,7 @@ export function failuresFromLines(lines, ctx) {
         day,
         sessionId: j.sessionId ?? '?',
         session: sessionLabel(j.sessionId, j.cwd),
-        alat: toolNames.get(b.tool_use_id) ?? '?',
+        alat: reportTool(toolNames.get(b.tool_use_id)),
         klasa,
         potpis,
       });
@@ -175,11 +180,11 @@ export function failuresFromLines(lines, ctx) {
 
 /** @returns {{ failures: object[], stats: { files: number, malformedLines: number, unreadableFiles: number } }} */
 export function collectFailures({ home = homedir(), sinceDay = null } = {}) {
+  // unreadableFiles je zadrzani JSON kljuc; broji neprovjerljive datoteke i mape.
   const stats = { files: 0, malformedLines: 0, unreadableFiles: 0 };
   const ctx = { seen: new Set(), stats };
-  const minMtimeMs = sinceDay ? new Date(`${sinceDay}T00:00:00`).getTime() : 0;
   const failures = [];
-  for (const file of walkJsonl(join(home, '.claude', 'projects'), minMtimeMs)) {
+  for (const file of walkJsonl(join(home, '.claude', 'projects'), stats)) {
     let text;
     try { text = readFileSync(file, 'utf8'); } catch { stats.unreadableFiles += 1; continue; }
     stats.files += 1;
@@ -259,15 +264,33 @@ export function renderMarkdown(sum, stats, { samples = false } = {}) {
   }
   const skriveno = sum.clusters.length - prikaz.length;
   L.push('', `Neprikazano neklasificiranih klastera iz samo jedne sesije: ${skriveno}.`);
-  L.push(`Preskoceno ostecenih JSON redaka: ${stats.malformedLines}; necitljivih datoteka: ${stats.unreadableFiles}.`, '');
+  L.push(`Preskoceno ostecenih JSON redaka: ${stats.malformedLines}; necitljivih putanja: ${stats.unreadableFiles}.`, '');
   return L.join('\n');
+}
+
+/** Odbija sve checkoutove, i kada izlaz kroz junction vodi do njih. */
+function repositoryOutput(p) {
+  let ancestor = resolve(p);
+  while (!existsSync(ancestor)) {
+    const parent = dirname(ancestor);
+    if (parent === ancestor) return true;
+    ancestor = parent;
+  }
+  // Neprovjerljiva putanja mora pasti prije zapisivanja izvjestaja.
+  try { ancestor = realpathSync(ancestor); } catch { return true; }
+  for (;;) {
+    if (isInside(ancestor, ROOT) || existsSync(join(ancestor, '.git'))) return true;
+    const parent = dirname(ancestor);
+    if (parent === ancestor) return false;
+    ancestor = parent;
+  }
 }
 
 function parseArgs(argv) {
   const opt = (n) => { const i = argv.indexOf(n); return i >= 0 ? argv[i + 1] : undefined; };
   return {
     json: argv.includes('--json'),
-    samples: argv.includes('--samples'),
+    samples: argv.includes('--samples') && !argv.includes('--no-samples'),
     all: argv.includes('--all'),
     since: opt('--since'),
     day: opt('--day'),
@@ -276,8 +299,20 @@ function parseArgs(argv) {
   };
 }
 
+/** Kalendarski datum, ne putanja niti proizvoljan tekst argumenta. */
+function validDay(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const day = new Date(`${value}T12:00:00Z`);
+  return Number.isFinite(day.getTime()) && day.toISOString().slice(0, 10) === value;
+}
+
 function main(argv) {
   const a = parseArgs(argv);
+  if ((argv.includes('--day') && !validDay(a.day)) || (argv.includes('--since') && !validDay(a.since))) {
+    process.stderr.write('--day i --since zahtijevaju valjan datum YYYY-MM-DD.\n');
+    process.exitCode = 2;
+    return;
+  }
   const day = a.day ?? localDay(new Date());
   const sinceDay = a.all ? null : (a.since ?? addDays(day, -29));
   const { failures, stats } = collectFailures({ home: a.home ?? homedir(), sinceDay });
@@ -290,14 +325,24 @@ function main(argv) {
   }
   const text = renderMarkdown(sum, stats, { samples: a.samples });
   const outDir = resolve(a.outDir ?? join(homedir(), 'Lekta-quality'));
-  if (isInside(outDir, ROOT)) {
+  if (repositoryOutput(outDir)) {
     process.stderr.write(`--out-dir ${outDir} je unutar repozitorija; izvjestaj nikad ne ide u repo.\n`);
     process.exitCode = 2;
     return;
   }
-  mkdirSync(outDir, { recursive: true });
   const out = join(outDir, `${day}.md`);
-  writeFileSync(out, text, 'utf8');
+  // I postojeca izlazna datoteka moze biti poveznica u checkout, iako mapa nije.
+  if (repositoryOutput(out)) {
+    process.stderr.write('Izlazna datoteka je unutar repozitorija; izvjestaj nikad ne ide u repo.\n');
+    process.exitCode = 2;
+    return;
+  }
+  mkdirSync(outDir, { recursive: true });
+  // Zamijeni unos, ne otvaraj postojeci inode: izvjestaj moze imati hardlink ili dangling symlink.
+  const temporary = join(outDir, `.${day}.${randomBytes(8).toString('hex')}.tmp`);
+  writeFileSync(temporary, text, { encoding: 'utf8', flag: 'wx' });
+  try { renameSync(temporary, out); }
+  finally { if (existsSync(temporary)) unlinkSync(temporary); }
   process.stdout.write(`${text}\nZapisano: ${out}\n`);
 }
 

@@ -4,10 +4,11 @@
  * SINTETICKI transkripti u privremenom direktoriju, nikad stvarni ~/.claude. Oblici redaka prate
  * ono sto je izmjereno na disku 2026-10-04 (imena polja i tekstovi gresaka alata, bez sadrzaja).
  */
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   CLASSES,
   classify,
@@ -18,6 +19,18 @@ import {
   renderMarkdown,
   summarize,
 } from '../scripts/quality/harvest.mjs';
+
+// Kontrolirani kvarovi sintetickih putanja; bez promjene ACL-a ili stvarnih transkripata.
+const fsErrors = vi.hoisted(() => ({ readdir: new Set<string>(), stat: new Set<string>(), read: new Set<string>() }));
+vi.mock('node:fs', async (importOriginal) => {
+  const fs = await importOriginal<typeof import('node:fs')>();
+  const guarded = (kind: keyof typeof fsErrors, fn: typeof fs.readdirSync | typeof fs.statSync | typeof fs.readFileSync) =>
+    (path: unknown, ...args: unknown[]) => {
+      if (fsErrors[kind].has(String(path))) throw new Error('synthetic unreadable path');
+      return Reflect.apply(fn, fs, [path, ...args]);
+    };
+  return { ...fs, readdirSync: guarded('readdir', fs.readdirSync), statSync: guarded('stat', fs.statSync), readFileSync: guarded('read', fs.readFileSync) };
+});
 
 const TAJNA = 'TAJNI-SADRZAJ-RADA-NE-SMIJE-U-IZVJESTAJ';
 const DAN = '2026-10-04';
@@ -216,5 +229,120 @@ describe('quality harvest: failuresFromLines je cista funkcija', () => {
     const redak = JSON.stringify(err(S1, '2026-10-03T10:00:00Z', 'w1', PRIMJERI['disk-pun'], 'u-w')).replace('"is_error":true', '"is_error" : true');
     expect(redak).toContain('"is_error" : true');
     expect(failuresFromLines([redak], ctx)).toHaveLength(1);
+  });
+});
+
+
+describe('quality harvest: tocnost prozora i privatnost CLI izlaza', () => {
+  it('sinceDay mjeri timestamp zapisa i kada je mtime arhive stariji', () => {
+    const file = join(home, '.claude', 'projects', 'arhiva.jsonl');
+    writeFileSync(file, jl([err(S1, '2026-10-03T10:00:00Z', 'archive', PRIMJERI['disk-pun'], 'archive-u')]));
+    const old = new Date('2020-01-01T00:00:00Z');
+    utimesSync(file, old, old);
+    try {
+      const result = collectFailures({ home, sinceDay: '2026-10-01' });
+      expect(result.failures.some((f) => f.klasa === 'disk-pun')).toBe(true);
+    } finally { rmSync(file); }
+  });
+
+  it('naziv nepoznatog alata ne curi u Markdown ili zadani JSON', () => {
+    const file = join(home, '.claude', 'projects', 'private-tool.jsonl');
+    writeFileSync(file, jl([
+      use(S1, '2026-10-03T10:00:00Z', 'private-tool', TAJNA),
+      err(S1, '2026-10-03T10:00:00Z', 'private-tool', PRIMJERI['disk-pun'], 'private-tool-u'),
+    ]));
+    try {
+      const result = collectFailures({ home });
+      expect(renderMarkdown(summarize(result.failures, DAN), result.stats)).not.toContain(TAJNA);
+      for (const options of [[], ['--no-samples'], ['--samples', '--no-samples']]) {
+        const cli = spawnSync(process.execPath, ['scripts/quality/harvest.mjs', '--home', home, '--day', DAN, '--json', ...options], { encoding: 'utf8' });
+        expect(cli.status).toBe(0);
+        expect(cli.stdout).not.toContain(TAJNA);
+        expect(JSON.parse(cli.stdout).clusters.every((c: { potpis: unknown }) => c.potpis === null)).toBe(true);
+      }
+    } finally { rmSync(file); }
+  });
+
+  it('CLI odbija izlaz u drugom checkoutu i kroz junction do njega', () => {
+    const temp = mkdtempSync(join(tmpdir(), 'quality-output-boundary-'));
+    const repo = join(temp, 'repo');
+    mkdirSync(join(repo, '.git'), { recursive: true });
+    const alias = join(temp, 'alias');
+    symlinkSync(repo, alias, process.platform === 'win32' ? 'junction' : 'dir');
+    try {
+      for (const out of [repo, join(alias, 'reports')]) {
+        const cli = spawnSync(process.execPath, ['scripts/quality/harvest.mjs', '--home', home, '--day', DAN, '--out-dir', out], { encoding: 'utf8' });
+        expect(cli.status).toBe(2);
+        expect(cli.stderr).toContain('repo');
+      }
+    } finally { rmSync(temp, { recursive: true, force: true }); }
+  });
+});
+
+
+describe('quality harvest: necitljivi ulazi', () => {
+  it('broji kvar citanja mape, stat i citanja datoteke, a preostali zapisi ostaju dostupni', () => {
+    const dir = join(home, '.claude', 'projects', 'unreadable-dir');
+    const statFile = join(home, '.claude', 'projects', 'unstatable.jsonl');
+    const readFile = join(home, '.claude', 'projects', 'unreadable.jsonl');
+    mkdirSync(dir);
+    writeFileSync(statFile, '');
+    writeFileSync(readFile, '');
+    fsErrors.readdir.add(dir);
+    fsErrors.stat.add(statFile);
+    fsErrors.read.add(readFile);
+    try {
+      const result = collectFailures({ home });
+      expect(result.stats.unreadableFiles).toBe(3);
+      expect(result.failures).toHaveLength(8);
+      expect(renderMarkdown(summarize(result.failures, DAN), result.stats)).toContain('necitljivih putanja: 3');
+    } finally {
+      Object.values(fsErrors).forEach((paths) => paths.clear());
+      rmSync(dir, { recursive: true });
+      rmSync(statFile);
+      rmSync(readFile);
+    }
+  });
+});
+
+
+describe('quality harvest: datumski argumenti ne mijenjaju izlaznu putanju', () => {
+  it('CLI odbija izlaz iz datuma, nepostojeci datum i nepotpun since prije pisanja', () => {
+    const temp = mkdtempSync(join(tmpdir(), 'quality-day-boundary-'));
+    const out = join(temp, 'reports');
+    const repo = join(temp, 'repo');
+    mkdirSync(out);
+    mkdirSync(join(repo, '.git'), { recursive: true });
+    const target = join(repo, 'leak.md');
+    writeFileSync(target, 'SYNTHETIC_KEEP');
+    try {
+      for (const options of [['--day', '../repo/leak'], ['--day', '2026-02-30'], ['--since']]) {
+        const cli = spawnSync(process.execPath, ['scripts/quality/harvest.mjs', '--home', home, '--out-dir', out, ...options], { encoding: 'utf8' });
+        expect(cli.status).toBe(2);
+        expect(cli.stderr).toContain('datum');
+      }
+      expect(readFileSync(target, 'utf8')).toBe('SYNTHETIC_KEEP');
+    } finally { rmSync(temp, { recursive: true, force: true }); }
+  });
+});
+
+
+describe('quality harvest: vanjska datoteka ne pise kroz hardlink u checkout', () => {
+  it('izvjestaj zamjenjuje vanjski unos, a repo datoteka ostaje nepromijenjena', () => {
+    const temp = mkdtempSync(join(tmpdir(), 'quality-hardlink-boundary-'));
+    const out = join(temp, 'reports');
+    const repo = join(temp, 'repo');
+    mkdirSync(out);
+    mkdirSync(join(repo, '.git'), { recursive: true });
+    const target = join(repo, 'retained.md');
+    const report = join(out, `${DAN}.md`);
+    writeFileSync(target, 'SYNTHETIC_KEEP');
+    linkSync(target, report);
+    try {
+      const cli = spawnSync(process.execPath, ['scripts/quality/harvest.mjs', '--home', home, '--day', DAN, '--out-dir', out], { encoding: 'utf8' });
+      expect(cli.status).toBe(0);
+      expect(readFileSync(target, 'utf8')).toBe('SYNTHETIC_KEEP');
+      expect(readFileSync(report, 'utf8')).toContain('Ponavljani kvarovi agenata');
+    } finally { rmSync(temp, { recursive: true, force: true }); }
   });
 });

@@ -39,6 +39,9 @@ jobs:
       - name: Provjeri obvezne retke opisa PR-a
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+          # Dependabot (login dependabot[bot], tip Bot) ne mora imati retke u opisu: izracunaju se iz diffa.
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: node scripts/agents/pr-lines.mjs --provjeri "$BASE_SHA" "$HEAD_SHA"
