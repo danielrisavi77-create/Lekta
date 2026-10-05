@@ -1,3 +1,4 @@
+import { retractionUiProblems, citatSource, analyzerSource, verificationFocusProblems } from './helpers/retraction-ui-guard';
 /**
  * MUTACIJSKO TESTIRANJE VERIFIKACIJSKIH VRATA.
  *
@@ -51,6 +52,7 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { loadVerifyExistence, retractionProblems, retractionIdentityProblems, loadVerificationSummary, retractionSummaryProblems, verifyBadgesSource, verifyExistenceSource } from './helpers/retraction-guard';
 import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -10580,6 +10582,27 @@ describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', ()
   });
 });
 
+describe('mutacije: T98 oznaka povucenog rada (stvarni src/citations/verify-existence.ts u memoriji)', () => {
+  const MUT = [
+    ['citations/povlacenje-iz-update-to', "(message as { 'updated-by'?: unknown } | null)?.['updated-by']", "(message as { 'update-to'?: unknown } | null)?.['update-to']", '(u)'],
+    ['citations/povlacenje-uz-weak', "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle };", "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle, ...(retractionFromWork(best) ? { retraction: retractionFromWork(best) } : {}) };", '(w)'],
+    ['citations/povlacenje-doi-bez-tijela', 'retraction = retractionFromWork(message);', 'retraction = null;', '(d)'],
+    ['citations/povlacenje-select-bez-updated-by', "params.set('select', 'title,author,issued,DOI,updated-by');", "params.set('select', 'title,author,issued,DOI');", '(s)'],
+  ] as const;
+
+  it('baseline: gard je cist nad nemutiranim izvorom', async () => {
+    expect(await retractionProblems(loadVerifyExistence())).toEqual([]);
+  });
+
+  for (const [id, staro, novo, oznaka] of MUT) {
+    it(`${id}: mutacija postoji u izvoru i gard je hvata`, async () => {
+      expect(verifyExistenceSource().includes(staro), 'nema sto mutirati: gard bi prolazio vakuumski').toBe(true);
+      const problemi = await retractionProblems(loadVerifyExistence((x) => x.split(staro).join(novo)));
+      expect(problemi.some((p) => p.startsWith(oznaka)), problemi.join('; ')).toBe(true);
+    });
+  }
+});
+
 describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => {
   const src = readFileSync(resolve(process.cwd(), 'scripts/agents/usage-daily.mjs'), 'utf8').replace(/\r/g, '');
   const blok = (pocetak: string) => {
@@ -12304,5 +12327,98 @@ describe('mutacije: quality datum i konacni izlaz cuvaju checkout', () => {
     const changed = src.replace('renameSync(temporary, out);', "writeFileSync(out, text, 'utf8');");
     expect(changed).not.toBe(src);
     expect(run(changed, false).writes).toContain(out);
+  });
+});
+
+
+describe('mutacije: T98 pouzdan identitet, cache i djelomicno povlacenje', () => {
+  it('baseline: svaki mehanizam stvarno izvrsen i nema problema', async () => {
+    const result = await retractionIdentityProblems(loadVerifyExistence());
+    expect(result.problems).toEqual([]);
+    for (const n of Object.values(result.mechanisms)) expect(n).toBeGreaterThan(0);
+  });
+  const mutations = [
+    ['naslov', 'title(inp.title) !== title(item.title?.[0])', 'false', '(i)'],
+    ['godina', 'Number(year) !== itemYear(item)', 'false', '(i)'],
+    ['autor', 'identityText(a.last) === identityText(b.family)', 'true', '(i)'],
+    ['dvosmislenost', 'workDois.size === 1', 'workDois.size >= 1', '(b)'],
+    ['cache-autora', "(inp.authors || '').trim()", "''", '(k)'],
+    ['doi-identitet', 'normalizeDoi(message.DOI).toLowerCase() === doi.toLowerCase()', 'true', '(o)'],
+    ['unicode-identitet', "s.normalize('NFC').toLowerCase().replace(/\\s+/gu, ' ').trim()", 'normalize(s)', '(g)'],
+    ['unicode-cache', 'JSON.stringify([identityText(inp.title),', 'JSON.stringify([normalize(inp.title),', '(q)'],
+    ['djelomicno', "type === 'partial_retraction'", 'false', '(p)'],
+  ] as const;
+  for (const [id, before, after, label] of mutations) it(`citations/povlacenje-${id}: stvarni izvor pada`, async () => {
+    expect(verifyExistenceSource()).toContain(before);
+    const result = await retractionIdentityProblems(loadVerifyExistence((s) => s.replace(before, after)));
+    expect(result.problems.some((p) => p.startsWith(label)), result.problems.join('; ')).toBe(true);
+  });
+});
+
+
+describe('mutacije: T98 stvarno ozicenje UI funkcija', () => {
+  it('baseline: stvarni Citat i analizator izvode sve mehanizme', async () => {
+    const result = await retractionUiProblems();
+    expect(result.problems).toEqual([]);
+    for (const n of Object.values(result.mechanisms)) expect(n).toBeGreaterThan(0);
+  });
+  it('uklonjeno stvarno ciscenje kartice ostavlja stale oznake', async () => {
+    const before = 'cards.forEach((c) => clearVerifyBadges(c));';
+    expect(citatSource()).toContain(before);
+    const result = await retractionUiProblems((s) => s.replace(before, ''));
+    expect(result.problems.some((p) => p.startsWith('(c)'))).toBe(true);
+  });
+  it('uklonjen stvarni prikaz analizatora gubi oznaku', async () => {
+    const before = 'cell.innerHTML=existenceCellHtml(res,escapeHtml)';
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, "cell.innerHTML=''"));
+    expect(result.problems.some((p) => p.startsWith('(a)'))).toBe(true);
+  });
+  it('uklonjen stvarni event payload gubi brojac', async () => {
+    const before = "trackEvent('references_existence_checked',existenceEventProps(results))";
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, "trackEvent('references_existence_checked',{})"));
+    expect(result.problems.some((p) => p.startsWith('(e)'))).toBe(true);
+  });
+});
+
+
+describe('mutacije: T98 aria-live najavljuje sva upozorenja', () => {
+  it('baseline stvarnog izvora najavljuje djelomicno povlacenje i zabrinutost', () => {
+    expect(retractionSummaryProblems(loadVerificationSummary())).toEqual([]);
+  });
+  for (const before of ['if (djelomicnih)', 'if (zabrinutosti)']) it(`uklanjanje ${before} pada`, () => {
+    expect(verifyBadgesSource()).toContain(before);
+    expect(retractionSummaryProblems(loadVerificationSummary((s) => s.replace(before, 'if (false)'))).length).toBeGreaterThan(0);
+  });
+});
+
+
+describe('mutacije: T98 stvarni click binding', () => {
+  it('uklonjen stvarni Citat listener ne pokrece provjeru', async () => {
+    const before = "$('#bulk-verify')?.addEventListener('click', () => { void verifyBulk(); });";
+    expect(citatSource()).toContain(before);
+    const result = await retractionUiProblems((s) => s.replace(before, ''));
+    expect(result.problems.some((p) => p.startsWith('(c)'))).toBe(true);
+  });
+  it('uklonjen stvarni onclick analizatora ne pokrece provjeru', async () => {
+    const before = 'btn.onclick=()=>{void runExistenceCheck(refs,r)}';
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, 'btn.onclick=()=>{}'));
+    expect(result.problems.some((p) => p.startsWith('(a)'))).toBe(true);
+  });
+});
+
+describe('mutations: actual verification focus restoration', () => {
+  it('baseline restores only lost initial focus', async () => {
+    expect(await verificationFocusProblems()).toEqual([]);
+  });
+  for (const [before, after] of [
+    ['!wasFocused || ', ''],
+    ['doc.activeElement === doc.body || doc.activeElement === doc.documentElement', 'true'],
+    ['button.focus({ preventScroll: true })', 'void 0'],
+  ]) it(`actual focus guard removal fails: ${before}`, async () => {
+    expect(verifyBadgesSource()).toContain(before);
+    expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
   });
 });
