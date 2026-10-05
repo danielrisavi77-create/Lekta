@@ -46,6 +46,7 @@ export const CORPUS_BADGE: Record<'found' | 'weak', VerdictBadge> = {
  */
 export const RETRACTION_BADGE: Record<RetractionInfo['kind'], VerdictBadge> = {
   retracted: { text: '⚠ Rad je povučen (Crossref/Retraction Watch), provjeri prije citiranja', cls: 'verify-bad', color: 'var(--bad,#c0392b)' },
+  partial: { text: '⚠ Dio rada je povučen (Crossref), provjeri obavijest prije citiranja', cls: 'verify-warn', color: 'var(--warn,#c9821f)' },
   concern: { text: '⚠ Izdavač je objavio izraz zabrinutosti', cls: 'verify-warn', color: 'var(--warn,#c9821f)' },
 };
 
@@ -101,9 +102,13 @@ export function summarizeVerification(results: Array<{ verdict: ExistenceVerdict
   const c: Record<ExistenceVerdict, number> = { found: 0, weak: 0, 'not-found': 0, 'not-indexed': 0, unchecked: 0 };
   for (const r of results) c[r.verdict] = (c[r.verdict] || 0) + 1;
   const povucenih = results.filter((r) => r.verdict === 'found' && r.retraction?.kind === 'retracted').length;
+  const djelomicnih = results.filter((r) => r.verdict === 'found' && r.retraction?.kind === 'partial').length;
+  const zabrinutosti = results.filter((r) => r.verdict === 'found' && r.retraction?.kind === 'concern').length;
   const parts: string[] = [];
   if (c.found) parts.push(`${c.found} pronađeno`);
   if (povucenih) parts.push(`${povucenih} ${povucenih === 1 ? 'povučen rad' : 'povučenih radova'}`);
+  if (djelomicnih) parts.push(`${djelomicnih} ${djelomicnih === 1 ? 'djelomično povučen rad' : 'djelomično povučenih radova'}`);
+  if (zabrinutosti) parts.push(`${zabrinutosti} ${zabrinutosti === 1 ? 'izraz zabrinutosti' : 'izraza zabrinutosti'}`);
   if (c.weak) parts.push(`${c.weak} slab pogodak`);
   if (c['not-found']) parts.push(`${c['not-found']} nije pronađeno`);
   if (c['not-indexed']) parts.push(`${c['not-indexed']} domaći izvor za ručnu provjeru`);
@@ -111,4 +116,11 @@ export function summarizeVerification(results: Array<{ verdict: ExistenceVerdict
   const n = results.length;
   return `Provjera gotova (${n} ${n === 1 ? 'referenca' : 'referenci'}): ${parts.join(', ') || 'nema rezultata'}. `
     + 'Ishod je okvirni; provjeri sporne unose ručno.';
+}
+
+/** Restore a disabled verification control only when focus was lost, never over another control. */
+export function restoreVerificationFocus(button: HTMLButtonElement | null, wasFocused: boolean): void {
+  if (!wasFocused || !button?.isConnected) return;
+  const doc = button.ownerDocument;
+  if (doc.activeElement === doc.body || doc.activeElement === doc.documentElement) button.focus({ preventScroll: true });
 }

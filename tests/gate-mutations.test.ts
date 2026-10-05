@@ -1,3 +1,4 @@
+import { retractionUiProblems, citatSource, analyzerSource, verificationFocusProblems } from './helpers/retraction-ui-guard';
 /**
  * MUTACIJSKO TESTIRANJE VERIFIKACIJSKIH VRATA.
  *
@@ -51,7 +52,7 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
-import { loadVerifyExistence, retractionProblems, verifyExistenceSource } from './helpers/retraction-guard';
+import { loadVerifyExistence, retractionProblems, retractionIdentityProblems, loadVerificationSummary, retractionSummaryProblems, verifyBadgesSource, verifyExistenceSource } from './helpers/retraction-guard';
 import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -10585,7 +10586,7 @@ describe('mutacije: T98 oznaka povucenog rada (stvarni src/citations/verify-exis
   const MUT = [
     ['citations/povlacenje-iz-update-to', "(message as { 'updated-by'?: unknown } | null)?.['updated-by']", "(message as { 'update-to'?: unknown } | null)?.['update-to']", '(u)'],
     ['citations/povlacenje-uz-weak', "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle };", "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle, ...(retractionFromWork(best) ? { retraction: retractionFromWork(best) } : {}) };", '(w)'],
-    ['citations/povlacenje-doi-bez-tijela', 'retraction = retractionFromWork((await res.json())?.message);', 'retraction = null;', '(d)'],
+    ['citations/povlacenje-doi-bez-tijela', 'retraction = retractionFromWork(message);', 'retraction = null;', '(d)'],
     ['citations/povlacenje-select-bez-updated-by', "params.set('select', 'title,author,issued,DOI,updated-by');", "params.set('select', 'title,author,issued,DOI');", '(s)'],
   ] as const;
 
@@ -10625,6 +10626,69 @@ describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => 
   it('mutant koji zbraja cache_read u ulaz se hvata', () => {
     const mutant = tokensBlok.replace('input: num(usage?.input_tokens),', 'input: num(usage?.input_tokens) + num(usage?.cache_read_input_tokens),');
     expect(mutant).not.toBe(tokensBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: petlja ucenja, skupljac broji kvar jednom i samo is_error', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const blok = (pocetak: string) => {
+    const i = src.indexOf(pocetak);
+    return src.slice(i, src.indexOf('\n}\n', i) + 3);
+  };
+  const textBlok = blok('function resultText(');
+  const fnBlok = blok('export function failuresFromLines(');
+  const toolsBlok = src.slice(src.indexOf('const REPORT_TOOLS'), src.indexOf('const IS_ERROR_RE'));
+  type Fn = (lines: string[], ctx: { seen: Set<string>; stats: { malformedLines: number } }) => unknown[];
+  const izvedi = (fn: string): Fn =>
+    new Function('localDay', 'sessionLabel', 'classify', 'IS_ERROR_RE', `${toolsBlok}\n${textBlok}\n${fn.replace('export ', '')}\nreturn failuresFromLines;`)(
+      () => '2026-10-04', () => 's', () => ({ klasa: 'k', potpis: 'k' }), /"is_error"\s*:\s*true/,
+    ) as Fn;
+  // Jedna poruka s tri rezultata (paralelni pozivi): t1 i t3 su greske, t2 uspjeh. Redak prolazi brzi filtar.
+  const redak = JSON.stringify({
+    uuid: 'u1',
+    timestamp: '2026-10-04T08:00:00Z',
+    message: { content: [
+      { type: 'tool_result', tool_use_id: 't1', is_error: true, content: 'x' },
+      { type: 'tool_result', tool_use_id: 't2', content: 'ok' },
+      { type: 'tool_result', tool_use_id: 't3', is_error: true, content: 'y' },
+    ] },
+  });
+  // Tvrdnja: isti redak dvaput (roditelj i podagent) daje dva kvara (t1, t3), ne cetiri, ne jedan;
+  // uspjesan tool_result nije kvar.
+  const cisto = (f: Fn) => f([redak, redak], { seen: new Set(), stats: { malformedLines: 0 } }).length === 2;
+
+  it('baseline: stvarni failuresFromLines broji jednom i samo is_error', () => {
+    expect(cisto(izvedi(fnBlok))).toBe(true);
+  });
+
+  it('naziv alata: baseline ne prenosi privatni naziv, mutant ga otkriva', () => {
+    const lines = [JSON.stringify({ uuid: 'private-name', timestamp: '2026-10-04T08:00:00Z', message: { content: [
+      { type: 'tool_use', id: 'private', name: 'TAJNI-SADRZAJ' },
+      { type: 'tool_result', tool_use_id: 'private', is_error: true, content: 'x' },
+    ] } })];
+    const safe = (f: Fn) => !JSON.stringify(f(lines, { seen: new Set(), stats: { malformedLines: 0 } })).includes('TAJNI-SADRZAJ');
+    expect(safe(izvedi(fnBlok))).toBe(true);
+    const mutant = fnBlok.replace('reportTool(toolNames.get(b.tool_use_id))', "toolNames.get(b.tool_use_id) ?? '?'");
+    expect(mutant).not.toBe(fnBlok);
+    expect(safe(izvedi(mutant))).toBe(false);
+  });
+
+  it('mutant bez deduplikacije po uuid+tool_use_id obara tvrdnju', () => {
+    const mutant = fnBlok.replace('if (ctx.seen.has(key)) continue;', '');
+    expect(mutant).not.toBe(fnBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+
+  it('mutant koji deduplicira samo po uuid retka (spaja paralelne kvarove) obara tvrdnju', () => {
+    const mutant = fnBlok.replace("const key = `${j.uuid ?? ''}|${b.tool_use_id ?? ''}`;", "const key = `${j.uuid ?? ''}`;");
+    expect(mutant).not.toBe(fnBlok);
+    expect(cisto(izvedi(mutant))).toBe(false);
+  });
+
+  it('mutant koji broji svaki tool_result obara tvrdnju', () => {
+    const mutant = fnBlok.replace("if (b?.type !== 'tool_result' || b.is_error !== true) continue;", "if (b?.type !== 'tool_result') continue;");
+    expect(mutant).not.toBe(fnBlok);
     expect(cisto(izvedi(mutant))).toBe(false);
   });
 });
@@ -12139,5 +12203,222 @@ describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, P
   it('mutant: bez fokusa na prvu radnju se hvata', async () => {
     const mod = consentRevealFromSource([['?.focus({ preventScroll: true })', '']]);
     expect(await consentRevealProblems(mod)).toEqual(['prva radnja trake nema fokus']);
+  });
+});
+
+
+describe('mutacije: quality izlaz ne prati junction u checkout', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const start = src.indexOf('function repositoryOutput(');
+  const fn = src.slice(start, src.indexOf('\n}\n', start) + 3);
+  const external = resolve('quality-external-probe');
+  const repo = resolve('quality-repository-probe');
+  const alias = resolve('quality-junction-probe');
+  const run = (source: string) => new Function('resolve', 'dirname', 'join', 'existsSync', 'realpathSync', 'isInside', 'ROOT', `${source}\nreturn repositoryOutput;`)(
+    resolve, dirname, join,
+    (p: string) => [external, alias, repo, join(repo, '.git')].includes(p),
+    (p: string) => p === alias ? repo : p,
+    () => false,
+    resolve('quality-current-checkout-probe'),
+  ) as (path: string) => boolean;
+  it('baseline i mutacija kanonikalizacije imaju isti izlazni ulaz', () => {
+    expect(run(fn)(external)).toBe(false);
+    expect(run(fn)(join(alias, 'new-reports'))).toBe(true);
+    const mutant = fn.replace('ancestor = realpathSync(ancestor);', 'ancestor = resolve(ancestor);');
+    expect(mutant).not.toBe(fn);
+    expect(run(mutant)(join(alias, 'new-reports'))).toBe(false);
+  });
+});
+
+
+describe('mutacije: quality --no-samples ima prednost', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const start = src.indexOf('function parseArgs(');
+  const fn = src.slice(start, src.indexOf('\n}\n', start) + 3);
+  const run = (source: string) => new Function(`${source}\nreturn parseArgs;`)() as (argv: string[]) => { samples: boolean };
+  it('isti argumenti ostaju privatni samo dok stvarni kod postuje --no-samples', () => {
+    const argv = ['--samples', '--no-samples'];
+    expect(run(fn)(argv).samples).toBe(false);
+    expect(run(fn)(['--samples']).samples).toBe(true);
+    const mutant = fn.replace(" && !argv.includes('--no-samples')", '');
+    expect(mutant).not.toBe(fn);
+    expect(run(mutant)(argv).samples).toBe(true);
+  });
+});
+
+
+describe('mutacije: quality necitljive putanje daju djelomicni izvjestaj s brojacem', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const block = (source: string, start: string): string => {
+    const i = source.indexOf(start);
+    return source.slice(i, source.indexOf('\n}\n', i) + 3).replace('export ', '');
+  };
+  const root = join('fixture', '.claude', 'projects');
+  const badDir = join(root, 'bad-dir'), badStat = join(root, 'bad-stat.jsonl'), badRead = join(root, 'bad-read.jsonl');
+  const clean = (source: string): boolean => {
+    const run = new Function('homedir', 'join', 'existsSync', 'readdirSync', 'statSync', 'readFileSync', 'failuresFromLines',
+      `${block(source, 'function* walkJsonl(')}\n${block(source, 'export function collectFailures(')}\nreturn collectFailures;`)(
+      () => 'fixture', join, () => true,
+      (p: string) => { if (p === badDir) throw new Error('synthetic readdir'); return ['good.jsonl', 'bad-dir', 'bad-stat.jsonl', 'bad-read.jsonl']; },
+      (p: string) => { if (p === badStat) throw new Error('synthetic stat'); return { isDirectory: () => p === badDir }; },
+      (p: string) => { if (p === badRead) throw new Error('synthetic read'); return ''; },
+      () => [{ day: '2026-10-04' }],
+    ) as (opts: { home: string }) => { stats: { unreadableFiles: number }; failures: unknown[] };
+    try { const r = run({ home: 'fixture' }); return r.stats.unreadableFiles === 3 && r.failures.length === 1; }
+    catch { return false; }
+  };
+  it('baseline zadrzava citljiv zapis i broji sva tri tipa kvara', () => { expect(clean(src)).toBe(true); });
+  for (const [id, old, mutant] of [
+    ['readdir bez oporavka', 'try { entries = readdirSync(dir); } catch { stats.unreadableFiles += 1; return; }', 'entries = readdirSync(dir);'],
+    ['stat bez brojenja', 'try { st = statSync(p); } catch { stats.unreadableFiles += 1; continue; }', 'try { st = statSync(p); } catch { continue; }'],
+    ['read bez brojenja', "try { text = readFileSync(file, 'utf8'); } catch { stats.unreadableFiles += 1; continue; }", "try { text = readFileSync(file, 'utf8'); } catch { continue; }"],
+  ]) {
+    it(`quality ${id}: stvarni mutant pada nad istim ulazom`, () => {
+      const changed = src.replace(old, mutant);
+      expect(changed).not.toBe(src);
+      expect(clean(changed)).toBe(false);
+    });
+  }
+});
+
+
+describe('mutacije: quality datum i konacni izlaz cuvaju checkout', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/harvest.mjs'), 'utf8').replace(/\r/g, '');
+  const block = (source: string, start: string): string => {
+    const i = source.indexOf(start);
+    return source.slice(i, source.indexOf('\n}\n', i) + 3);
+  };
+  it('stvarni kalendarski validator hvata nepostojeci datum, a mutant ga prihvaca', () => {
+    const fn = block(src, 'function validDay(');
+    const run = (code: string) => new Function(`${code}\nreturn validDay;`)() as (value: unknown) => boolean;
+    expect(run(fn)('2024-02-29')).toBe(true);
+    for (const value of ['2026-02-30', '../repo/leak', undefined]) expect(run(fn)(value)).toBe(false);
+    const changed = fn.replace('day.toISOString().slice(0, 10) === value', 'true');
+    expect(changed).not.toBe(fn);
+    expect(run(changed)('2026-02-30')).toBe(true);
+  });
+
+  const dir = resolve('quality-final-output-probe'), out = join(dir, '2026-10-04.md');
+  const run = (source: string, rejectFile: boolean) => {
+    const writes: string[] = [], renames: string[] = [];
+    const proc: { exitCode?: number; stdout: { write: () => void }; stderr: { write: () => void } } = {
+      stdout: { write: () => undefined }, stderr: { write: () => undefined },
+    };
+    const main = new Function('localDay', 'addDays', 'collectFailures', 'summarize', 'renderMarkdown', 'resolve', 'join', 'homedir', 'repositoryOutput', 'mkdirSync', 'writeFileSync', 'renameSync', 'existsSync', 'unlinkSync', 'randomBytes', 'process',
+      `${block(source, 'function parseArgs(')}\n${block(source, 'function validDay(')}\n${block(source, 'function main(')}\nreturn main;`)(
+      () => '2026-10-04', (day: string) => day, () => ({ failures: [], stats: {} }), () => ({ clusters: [], dug: [] }), () => 'synthetic',
+      resolve, join, () => dir, (p: string) => rejectFile && p === out,
+      () => undefined, (p: string) => writes.push(p), (_from: string, to: string) => renames.push(to), () => false, () => undefined,
+      () => ({ toString: () => 'synthetic-random' }), proc,
+    ) as (argv: string[]) => void;
+    main(['--day', '2026-10-04', '--out-dir', dir]);
+    return { exit: proc.exitCode, writes, renames };
+  };
+  it('provjera konacne datoteke odbija poznatu poveznicu u checkout prije pisanja; stvarni mutant pise', () => {
+    expect(run(src, true)).toEqual({ exit: 2, writes: [], renames: [] });
+    const changed = src.replace('if (repositoryOutput(out)) {', 'if (false) {');
+    expect(changed).not.toBe(src);
+    expect(run(changed, true).renames).toContain(out);
+  });
+  it('izlaz se zamjenjuje bez direktnog otvaranja postojeceg unosa; stvarni mutant ga otvara', () => {
+    const clean = run(src, false);
+    expect(clean.writes).not.toContain(out);
+    expect(clean.renames).toEqual([out]);
+    const changed = src.replace('renameSync(temporary, out);', "writeFileSync(out, text, 'utf8');");
+    expect(changed).not.toBe(src);
+    expect(run(changed, false).writes).toContain(out);
+  });
+});
+
+
+describe('mutacije: T98 pouzdan identitet, cache i djelomicno povlacenje', () => {
+  it('baseline: svaki mehanizam stvarno izvrsen i nema problema', async () => {
+    const result = await retractionIdentityProblems(loadVerifyExistence());
+    expect(result.problems).toEqual([]);
+    for (const n of Object.values(result.mechanisms)) expect(n).toBeGreaterThan(0);
+  });
+  const mutations = [
+    ['naslov', 'title(inp.title) !== title(item.title?.[0])', 'false', '(i)'],
+    ['godina', 'Number(year) !== itemYear(item)', 'false', '(i)'],
+    ['autor', 'identityText(a.last) === identityText(b.family)', 'true', '(i)'],
+    ['dvosmislenost', 'workDois.size === 1', 'workDois.size >= 1', '(b)'],
+    ['cache-autora', "(inp.authors || '').trim()", "''", '(k)'],
+    ['doi-identitet', 'normalizeDoi(message.DOI).toLowerCase() === doi.toLowerCase()', 'true', '(o)'],
+    ['unicode-identitet', "s.normalize('NFC').toLowerCase().replace(/\\s+/gu, ' ').trim()", 'normalize(s)', '(g)'],
+    ['unicode-cache', 'JSON.stringify([identityText(inp.title),', 'JSON.stringify([normalize(inp.title),', '(q)'],
+    ['djelomicno', "type === 'partial_retraction'", 'false', '(p)'],
+  ] as const;
+  for (const [id, before, after, label] of mutations) it(`citations/povlacenje-${id}: stvarni izvor pada`, async () => {
+    expect(verifyExistenceSource()).toContain(before);
+    const result = await retractionIdentityProblems(loadVerifyExistence((s) => s.replace(before, after)));
+    expect(result.problems.some((p) => p.startsWith(label)), result.problems.join('; ')).toBe(true);
+  });
+});
+
+
+describe('mutacije: T98 stvarno ozicenje UI funkcija', () => {
+  it('baseline: stvarni Citat i analizator izvode sve mehanizme', async () => {
+    const result = await retractionUiProblems();
+    expect(result.problems).toEqual([]);
+    for (const n of Object.values(result.mechanisms)) expect(n).toBeGreaterThan(0);
+  });
+  it('uklonjeno stvarno ciscenje kartice ostavlja stale oznake', async () => {
+    const before = 'cards.forEach((c) => clearVerifyBadges(c));';
+    expect(citatSource()).toContain(before);
+    const result = await retractionUiProblems((s) => s.replace(before, ''));
+    expect(result.problems.some((p) => p.startsWith('(c)'))).toBe(true);
+  });
+  it('uklonjen stvarni prikaz analizatora gubi oznaku', async () => {
+    const before = 'cell.innerHTML=existenceCellHtml(res,escapeHtml)';
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, "cell.innerHTML=''"));
+    expect(result.problems.some((p) => p.startsWith('(a)'))).toBe(true);
+  });
+  it('uklonjen stvarni event payload gubi brojac', async () => {
+    const before = "trackEvent('references_existence_checked',existenceEventProps(results))";
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, "trackEvent('references_existence_checked',{})"));
+    expect(result.problems.some((p) => p.startsWith('(e)'))).toBe(true);
+  });
+});
+
+
+describe('mutacije: T98 aria-live najavljuje sva upozorenja', () => {
+  it('baseline stvarnog izvora najavljuje djelomicno povlacenje i zabrinutost', () => {
+    expect(retractionSummaryProblems(loadVerificationSummary())).toEqual([]);
+  });
+  for (const before of ['if (djelomicnih)', 'if (zabrinutosti)']) it(`uklanjanje ${before} pada`, () => {
+    expect(verifyBadgesSource()).toContain(before);
+    expect(retractionSummaryProblems(loadVerificationSummary((s) => s.replace(before, 'if (false)'))).length).toBeGreaterThan(0);
+  });
+});
+
+
+describe('mutacije: T98 stvarni click binding', () => {
+  it('uklonjen stvarni Citat listener ne pokrece provjeru', async () => {
+    const before = "$('#bulk-verify')?.addEventListener('click', () => { void verifyBulk(); });";
+    expect(citatSource()).toContain(before);
+    const result = await retractionUiProblems((s) => s.replace(before, ''));
+    expect(result.problems.some((p) => p.startsWith('(c)'))).toBe(true);
+  });
+  it('uklonjen stvarni onclick analizatora ne pokrece provjeru', async () => {
+    const before = 'btn.onclick=()=>{void runExistenceCheck(refs,r)}';
+    expect(analyzerSource()).toContain(before);
+    const result = await retractionUiProblems(undefined, (s) => s.replace(before, 'btn.onclick=()=>{}'));
+    expect(result.problems.some((p) => p.startsWith('(a)'))).toBe(true);
+  });
+});
+
+describe('mutations: actual verification focus restoration', () => {
+  it('baseline restores only lost initial focus', async () => {
+    expect(await verificationFocusProblems()).toEqual([]);
+  });
+  for (const [before, after] of [
+    ['!wasFocused || ', ''],
+    ['doc.activeElement === doc.body || doc.activeElement === doc.documentElement', 'true'],
+    ['button.focus({ preventScroll: true })', 'void 0'],
+  ]) it(`actual focus guard removal fails: ${before}`, async () => {
+    expect(verifyBadgesSource()).toContain(before);
+    expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
   });
 });

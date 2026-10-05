@@ -59,8 +59,8 @@ describe('T98: oznaka u provjeri postojanja', () => {
   it('bibliografski put: pogodak found na povucenom radu nosi oznaku', async () => {
     _clearExistenceCache();
     const r = await verifyReference(
-      { title: 'Downregulation of long noncoding RNA LINC01419 inhibits cell migration, invasion, and tumor growth and promotes autophagy via inactivation of the PI3K/Akt1/mTOR pathway in gastric cancer', year: '2019' },
-      { fetchImpl: fetchIz(snimka('select-updated-by.json')) },
+      { title: 'Downregulation of long noncoding RNA LINC01419 inhibits cell migration, invasion, and tumor growth and promotes autophagy via inactivation of the PI3K/Akt1/mTOR pathway in gastric cancer', year: '2019', authors: 'Wang, Lin-Lin; Zhang, Lei; Cui, Xiao-Feng' },
+      { fetchImpl: fetchIz(snimka('select-with-authors.json')) },
     );
     expect({ verdict: r.verdict, kind: r.retraction?.kind, notice: r.retraction?.noticeDoi }).toEqual({ verdict: 'found', kind: 'retracted', notice: '10.1177/17588359211061903' });
   });
