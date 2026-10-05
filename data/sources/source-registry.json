@@ -3921,5 +3921,18 @@
     "validityClass": "volatile",
     "lastChecked": "2026-10-03",
     "note": "Snimka identitetskog dokaza Upisnika (workflow lekta-upisnik-identitet). Point-in-time; citat provjerava gard citata u snimci."
+  },
+  {
+    "id": "upisnik-fer-a1040779",
+    "kind": "program-page",
+    "title": "Prijediplomski studiji - Fakultet elektrotehnike i računarstva",
+    "url": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
+    "publisher": "fer",
+    "fetchedAt": "2026-10-05",
+    "snapshotPath": "data/sources/fer/upisnik-a1040779.html",
+    "snapshotHash": "e8bc7554e1703874ddea22c4d769dadea52e9a9bb5cac6db9a568a296b0ac01a",
+    "validityClass": "volatile",
+    "lastChecked": "2026-10-05",
+    "note": "Snimka identitetskog dokaza Upisnika (workflow lekta-upisnik-identitet). Point-in-time; citat provjerava gard citata u snimci."
   }
 ]
