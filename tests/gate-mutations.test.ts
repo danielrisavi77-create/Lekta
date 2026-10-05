@@ -22,7 +22,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { afterAll, beforeAll, describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -51,6 +51,7 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -61,6 +62,7 @@ import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { legalSyntheticDist, runLegalPlaceholderBlock } from './helpers/legal-placeholder-wiring';
 import { findLegalPlaceholders } from '../scripts/lib/legal-placeholders.mjs';
+import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
 import {
   stripeSecretNameProblems,
@@ -297,6 +299,10 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { repairCostGuardProblems } from './helpers/repair-cost-guard';
+import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
+import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
+import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -1148,6 +1154,24 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
+  // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
+  ...([
+    ['citations/godina-bez-autora-lijepi-se', 'stanje prije T91: zapis koji pocinje s "(2012)." bez autora lijepi se na prethodni zapis, pa ga reference.completeness ne moze prijaviti (D1: 4 od 72)', '||(leadYear&&!urlOnly&&!iza)', '', '(a)'],
+    ['citations/oznaka-bez-godine-nepotpuna', 'stari predikat reference.completeness (!year || !author || kratko) koji potpun zapis s "(b.g.)", "(s. a.)" ili "(u tisku)" proglasi nepotpunim (D1: 128 od 144 laznih nalaza)', '(!r.year&&!r.noDate)', '!r.year', '(b)'],
+    ['citations/oznaka-bez-godine-bilo-gdje', 'pregled R1 (runda 3): svaka godina u zapisu, i goli broj u naslovu, brise oznaku bez godine, pa "Horvat, A. (u tisku). Mediji 2011." dobije 2011 iz naslova', 'nd&&!DATE_POSITION_YEAR.test(t)?nd:null', 'nd&&!y?nd:null', '(r1)'],
+    ['citations/godina-razdvaja-viseredni', 'pregled R2: autorov red ("Horvat, A.", "HZZ.", ustanova) ispred "(2011)." se ne prepozna, pa kratak nestane ili se zapis razdvoji u dva nepotpuna', 'authorOnlyParagraph(t)&&datumNaPocetku(iduci)', 'false', '(r2)'],
+    ['citations/zapis-bez-godine-guta-iduci', 'pregled R2b: autorov red bez pozitivnog dokaza (svaki odlomak velikim slovom bez interpunkcije), pa naslov "Socijalna politika" proguta iduci "(2011). Prirucnik." i nalaz nepotpunosti nestane', 'return osoba||ustanova;', 'return /^\\p{Lu}/u.test(t);', '(r2b)'],
+    ['citations/metapodaci-prije-spajanja', 'pregled R4: metapodaci viserednog zapisa iz prvog odlomka umjesto iz spojenog teksta, pa drugi prolaz daje drugog autora', 'for(const e of entries){if(e.ps.length<2)continue;', 'for(const e of entries){if(e.ps.length>=0)continue;', '(r4)'],
+  ] as const).map(([id, imitates, staro, novo, oznaka]): Mutation => ({
+    id,
+    imitates,
+    caught: () => {
+      if (!referenceParserSource().includes(staro)) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return referenceParserProblems(loadReferenceParser((x) => x.split(staro).join(novo))).some((p) => p.startsWith(oznaka));
+    },
+    cleanBefore: () => referenceParserProblems(loadReferenceParser()).length === 0,
+  })),
   // --- Doctor i fixture po modelu (ROUTING.md, "Kako dodati novi model"; odluka vlasnika 28. 9.) ---
   {
     id: 'agents/model-probe-prima-api-kljuc',
@@ -4914,6 +4938,147 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RD-2 i RD-3: limit po korisniku i fail-closed strop ishoda bez potrosnje u repair-docx.
+  ...([
+    ['t84/repair-slot-bez-korisnika', 'slot se trazi bez limita po korisniku, pa jedan racun s cetiri paralelna popravka drzi sve ostale na 503',
+      'maxPerUser: REPAIR_MAX_PER_USER,', 'maxPerUser: 0,', 'repair-docx: slot se ne trazi s korisnikom i limitom po korisniku'],
+    ['t84/repair-user-busy-prolazi', 'user_busy se ne odbija, pa limit po korisniku postoji u bazi ali ne djeluje',
+      "if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);",
+      "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
+    ['t84/repair-greska-slota-prolazi', 'greska novog RPC-a se ne odbija pa popravak tece bez ikakvog slota (Codex R1 na #294)',
+      "    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);\n", '', 'repair-docx: greska slota ne vraca 503'],
+    ['t84/repair-strop-bez-429', 'grana 429 za strop pokusaja uklonjena, pa korisnik preko stropa i dalje salje pune popravke (Codex R7 na #294)',
+      "    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela'],
+    ['t84/repair-dnevnik-fail-open', 'necitljiv dnevnik pokusaja se tumaci kao nula, pa strop nestane bas kad dnevnik ne radi (Codex R2 na #294)',
+      "    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela'],
+    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'no_change');\n", '',
+      'repair-docx: ishod bez izmjena se ne dopisuje na rezervaciju'],
+    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'integrity_failed');\n", '',
+      'repair-docx: odbijena isporuka se ne dopisuje na rezervaciju'],
+    ['t84/repair-bez-rezervacije', 'pokusaj se ne rezervira prije tijela, pa neuspjeli upis na kraju ostavlja skupi rad nezabiljezen (Codex R3 runda 2 na #294)',
+      '    const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);\n', "    const attempt = { kind: 'off' } as const;\n",
+      'repair-docx: pokusaj se ne rezervira prije citanja tijela'],
+    ['t84/repair-rezervacija-fail-open', 'neuspjela rezervacija se ne odbija, pa skupi rad tece bez zapisa (Codex R3 runda 2 na #294)',
+      "    if (!attempt) return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: neuspjela rezervacija ne vraca 503 prije citanja tijela'],
+    ['t84/repair-dvostruko-brojanje', 'zapis u report_generations ne brise rezervaciju, pa uspjesan ili odbijen pokusaj puni i strop pokusaja',
+      '      if (!written.error) await dropAttempt(admin, attempt);\n', '',
+      'repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && repairCostGuardProblems(mut).includes(problem);
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  })),
+  {
+    id: 't84/repair-strop-nakon-tijela',
+    imitates: 'T84: strop pokusaja premjesten iza citanja tijela, pa se 20 MB i dalje cita prije odbijanja (Codex R7 na #294).',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const block = src.slice(src.indexOf('    const attemptCap = await attemptCapStatus('), src.indexOf("    if (attemptCap === 'over')"));
+      const without = src.replace(block, '');
+      const bodyLineEnd = without.indexOf('\n', without.indexOf('    const bounded = await readFormDataBounded(')) + 1;
+      const mut = without.slice(0, bodyLineEnd) + block + without.slice(bodyLineEnd);
+      return mut !== src && repairCostGuardProblems(mut).includes('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  },
+  // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
+  {
+    id: 't84/xff-prvi-unos',
+    imitates: 'T84 XFF: kljuc se opet uzima iz PRVOG unosa x-forwarded-for, koji bira klijent, pa svaki izmisljen unos daje nov brojac IP limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops[0] ?? 'unknown';");
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije zadnji unos x-forwarded-for');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-obrnuti-hopovi',
+    imitates: 'T84 XFF: hopovi se obrnu prije at(-1), pa tekst jos sadrzi zadnji unos, a kljuc je opet PRVI (klijentov) unos (Codex XFF-4 na #295).',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops.reverse().at(-1) ?? 'unknown';");
+      return mut !== hashIp && xffBehaviourProblems(loadClientIpFromForwarded(mut)).length > 0;
+    },
+    cleanBefore: () => xffBehaviourProblems(loadClientIpFromForwarded(xffRealSources().hashIp)).length === 0,
+  },
+  {
+    id: 't84/xff-header-velikim-slovima-u-shared',
+    imitates: 'T84 XFF: _shared modul cita X-Forwarded-For velikim slovima mimo pomocnika, a skener je gledao samo index.ts i samo mala slova (Codex XFF-2 i XFF-3 na #295).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: 'export const ip = (req: Request) => req.headers.get("X-Forwarded-For");\n' };
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-cijeli-header-u-faculty-request',
+    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen prvi unos otvara nov prozor limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = "hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE)";
+      const to = "sha256(IP_HASH_SALT + '|' + (req.headers.get('x-forwarded-for') ?? ''))";
+      const mutated = functions.map((f) => (f.path.endsWith('faculty-request/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  ...([
+    ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',
+      'qs: keys.map(corpusQueryKey),', 'qs: keys,', 'corpus-check: kljuc ide bazi bez gornje granice duljine'],
+    ['t84/korpus-granica-povecana', 'granica podignuta na 5000 pa gard koji prihvaca bilo koji broj prolazi, a zastita vise ne djeluje (Codex R2 na #291)',
+      'const CORPUS_TITLE_MAX = 400;', 'const CORPUS_TITLE_MAX = 5000;', 'corpus-check: CORPUS_TITLE_MAX je 5000, ocekivano 400'],
+    ['t84/korpus-bodovanje-nad-rezanim', 'naslov za bodovanje se reze, pa dug jednak naslov pada s found, a razliciti podnaslovi mogu podici presudu (Codex R1 na #291)',
+      "title: typeof r?.title === 'string' ? r.title : null,", "title: typeof r?.title === 'string' ? r.title.slice(0, CORPUS_TITLE_MAX) : null,",
+      'corpus-check: naslov za bodovanje je skracen'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84 SC-1: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && corpusTitleBoundProblems(mut).includes(problem);
+    },
+    cleanBefore: () => corpusTitleBoundProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'))).length === 0,
+  })),
+  // T84 RF-1: nagrada prijatelju (placeni slot) ne smije pripasti anonimnom Auth racunu.
+  ...([
+    ['t84/friend-nagrada-anonimnom', 'helper izgubi rani izlaz za anonimni racun, pa svaki novi anonimni racun s istim kodom dobije placeni slot',
+      'helper', "  if (caller.isAnonymous !== false) return { granted: false, reason: 'ineligible_anonymous' };\n", '',
+      'grant-friend-referral-reward: nema ranog izlaza za anonimni racun'],
+    ['t84/friend-isanonymous-konstanta', 'generate-report prosljedi konstantu umjesto pozivatelja iz auth.getUser, pa gard nikad ne okine',
+      'report', 'friendRewardCaller(user));', '{ isAnonymous: false });',
+      'generate-report: pozivatelj ne dolazi iz friendRewardCaller(user) (admin, user.id, workType, { isAnonymous: false })'],
+    ['t84/friend-nepoznato-je-pravi-racun', 'nepoznat is_anonymous (undefined ili null) postane pravi racun, pa promijenjen oblik Auth odgovora dodijeli slot (Codex RF-1A)',
+      'helper', 'return { isAnonymous: user.is_anonymous !== false };', 'return { isAnonymous: user.is_anonymous === true };',
+      'grant-friend-referral-reward: nepoznat is_anonymous se ne tretira kao anonimno'],
+  ] as const).map(([id, imitates, which, from, to, problem]) => ({
+    id,
+    imitates: `T84 RF-1: ${imitates}.`,
+    caught: () => {
+      const helper = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts'));
+      const report = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts'));
+      const mutHelper = which === 'helper' ? helper.replace(from, to) : helper;
+      const mutReport = which === 'report' ? report.replace(from, to) : report;
+      return (mutHelper !== helper || mutReport !== report) && friendRewardAnonGuardProblems(mutHelper, mutReport).includes(problem);
+    },
+    cleanBefore: () => friendRewardAnonGuardProblems(
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-friend-referral-reward.ts')),
+      readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'generate-report', 'index.ts')),
+    ).length === 0,
+  })),
   {
     id: 't99/osv-novi-nalaz',
     imitates: 'T99: nova ranjivost u Edge ovisnosti (esm.sh) prolazi jer je nitko ne pita; ratchet je mora oboriti i kad broj ne raste.',
@@ -9944,6 +10109,42 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
     };
     expect(netoGrize(tiho)).toBe(false);
   });
+});
+
+/**
+ * Dependabot iznimka u pr-opis (koordinator lekta-37, Codex #290 nalaz 2). Mutacije mijenjaju STVARNI
+ * izvor scripts/agents/pr-lines.mjs u izoliranoj kopiji i pokrecu CLI nad privremenim git repozitorijem
+ * (tests/helpers/pr-lines-cli.ts): Dependabot bez redaka prolazi, isti opis s covjekom pada, nepodrzan
+ * manifest pada, a bump nije nova ovisnost.
+ */
+describe('mutacije: pr-opis iznimka samo za Dependabot (stvarni CLI)', () => {
+  let repo = '';
+  beforeAll(() => { repo = napraviPrLinesRepo(); });
+  afterAll(() => { if (repo) rmSync(repo, { recursive: true, force: true }); });
+
+  const mutant = (staro: string, novo: string): string => {
+    if (PR_LINES_IZVOR.split(staro).length !== 2) throw new Error(`mutacija ne pogadja izvor tocno jednom: ${staro}`);
+    return PR_LINES_IZVOR.replace(staro, novo);
+  };
+  const MUTACIJE: Array<[string, string, string]> = [
+    ['(a) CLI uvijek postavi autora na Dependabot', "login: process.env.PR_AUTHOR ?? ''", "login: 'dependabot[bot]'"],
+    ['(b) iznimka izgubljena (Dependabot opet trazi rucne retke)', 'if (!jeDependabot(autor)) return provjeriOpisPr(body, stvarneNove);', 'return provjeriOpisPr(body, stvarneNove);'],
+    ['(c) prepoznavanje samo po loginu, bez tipa racuna', "autor.login === DEPENDABOT_LOGIN && autor.type === 'Bot'", 'autor.login === DEPENDABOT_LOGIN'],
+    ['(d) nepodrzan manifest (requirements.txt) prolazi', 'if (izvan.length) {', 'if (false) {'],
+    ['(e) bump se ispisuje kao nova ovisnost', '...retciOpisa({ diffShortstat, basePkg, headPkg }),', '`Neto redaka: ${netoRedaka(diffShortstat)}`, `Nove ovisnosti: ${verzije.join(\', \') || \'nema\'}`,'],
+  ];
+
+  it('baseline: stvarni izvor zadovoljava tvrdnju', () => {
+    expect(dependabotIznimkaDrzi(PR_LINES_IZVOR, repo)).toBe(true);
+  }, 60_000);
+
+  it.each(MUTACIJE)('%s obara tvrdnju', (_opis, staro, novo) => {
+    const m = staro.includes('PR_AUTHOR ??')
+      ? mutant(staro, novo).replace("type: process.env.PR_AUTHOR_TYPE ?? ''", "type: 'Bot'")
+      : mutant(staro, novo);
+    expect(m).not.toBe(PR_LINES_IZVOR);
+    expect(dependabotIznimkaDrzi(m, repo)).toBe(false);
+  }, 60_000);
 });
 
 describe('mutacije: setup-node npm kes ugasen samo u word-proof.yml', () => {
