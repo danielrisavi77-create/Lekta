@@ -83,3 +83,9 @@ jobs:
 
       - name: Sabirnica klijentskih gresaka (P1-28)
         run: psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql
+
+      - name: Mutacije 0209 moraju srusiti smoke (T84 RD-3, prava, retencija)
+        run: bash scripts/repair-slot-per-user-mutation-check.sh
+
+      - name: Slot popravka po korisniku i statusi bez potrosnje (T84 RD-3, RD-2)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/repair-slot-per-user-smoke.sql

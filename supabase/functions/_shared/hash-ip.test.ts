@@ -15,11 +15,28 @@ const HEX64 = /^[0-9a-f]{64}$/;
 const KEY = 'service-role-kljuc-ABC';
 const FWD = '203.0.113.7, 10.0.0.1';
 
-describe('clientIpFromForwarded', () => {
-  it('uzima prvi IP iz liste, inace unknown', () => {
-    expect(clientIpFromForwarded(FWD)).toBe('203.0.113.7');
+describe('clientIpFromForwarded (T84 XFF: zadnji unos, hop gatewaya)', () => {
+  it('uzima ZADNJI unos liste, inace unknown', () => {
+    expect(clientIpFromForwarded(FWD)).toBe('10.0.0.1');
+    expect(clientIpFromForwarded('198.51.100.9')).toBe('198.51.100.9');
     expect(clientIpFromForwarded(null)).toBe('unknown');
     expect(clientIpFromForwarded('')).toBe('unknown');
+    expect(clientIpFromForwarded(' , ')).toBe('unknown');
+  });
+
+  it('vise unosa, razmaci i prazni unosi: odlucuje zadnji neprazni', () => {
+    expect(clientIpFromForwarded('1.1.1.1,2.2.2.2 , 3.3.3.3')).toBe('3.3.3.3');
+    expect(clientIpFromForwarded('1.1.1.1, 3.3.3.3, ')).toBe('3.3.3.3');
+  });
+
+  it('izmisljeni klijentski unosi ispred hopa gatewaya ne mijenjaju kljuc ni hash', async () => {
+    const gateway = '203.0.113.50';
+    const spoofs = ['198.51.100.1', '198.51.100.2, 10.9.9.9', 'neki-tekst'];
+    const keys = spoofs.map((s) => clientIpFromForwarded(`${s}, ${gateway}`));
+    expect(new Set(keys)).toEqual(new Set([gateway]));
+    const hashes = await Promise.all(spoofs.map((s) => hashClientIpSalted(`${s}, ${gateway}`, '', KEY)));
+    expect(new Set(hashes).size).toBe(1);
+    expect(await hashClientIpSalted(gateway, '', KEY)).toBe(hashes[0]);
   });
 });
 
