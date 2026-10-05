@@ -442,12 +442,17 @@ const PAGE_STYLE = `
   .lekta-kicker a { color: var(--paper-muted); text-decoration: none; }
   .lekta-kicker a:hover { color: var(--paper-ink); text-decoration: underline; }
   .lekta-kicker .sep { margin: 0 0.35em; color: var(--paper-line-strong); }
-  .fk-search { margin: 1rem 0 1.4rem; padding: 0.9rem 1rem; background: var(--paper-2); border: 1px solid var(--paper-line); border-radius: 2px; }
+  .fk-search { position: sticky; top: 0.5rem; z-index: 20; margin: 1rem 0 1.4rem; padding: 0.9rem 1rem; background: var(--paper-2); border: 1px solid var(--paper-line); border-radius: 2px; box-shadow: var(--paper-sh-sm); }
   .fk-search label { display: block; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--paper-muted); margin-bottom: 0.4rem; }
-  .fk-search input[type="search"] { width: 100%; padding: 0.55rem 0.7rem; font-size: 0.95rem; border: 1px solid var(--paper-line-strong); border-radius: 2px; background: var(--sheet); color: var(--paper-ink); }
-  .fk-search input[type="search"]:focus { outline: 2px solid var(--red-deep); outline-offset: 1px; }
-  .fk-search-count { margin: 0.4rem 0 0; font-size: 0.78rem; color: var(--paper-muted); }
+  .fk-search input[type="search"], .fk-search select { width: 100%; min-height: 42px; padding: 0.55rem 0.7rem; font-size: 0.92rem; border: 1px solid var(--paper-line-strong); border-radius: 2px; background: var(--sheet); color: var(--paper-ink); }
+  .fk-search input[type="search"]:focus, .fk-search select:focus { outline: 2px solid var(--red-deep); outline-offset: 1px; }
+  .fk-filters { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0.65rem; margin-top: 0.75rem; }
+  .fk-filter { min-width: 0; }
+  .fk-search-count { margin: 0.55rem 0 0; min-height: 1.1em; font-size: 0.78rem; color: var(--paper-muted); }
   .fk-search-empty { font-size: 0.9rem; color: var(--paper-muted); }
+  .fk-status { display: inline-flex; margin-left: 0.45rem; padding: 0.12rem 0.42rem; border: 1px solid var(--paper-line-strong); border-radius: 999px; font-family: var(--font-mono); font-size: 0.64rem; line-height: 1.35; letter-spacing: 0.02em; vertical-align: 0.08em; white-space: nowrap; }
+  .fk-status--verified { color: #176243; border-color: color-mix(in srgb, #176243 42%, var(--paper-line)); }
+  .fk-status--generic { color: var(--paper-muted); }
   .coverage-pending-label { font-size: 0.82rem; color: var(--paper-muted); margin: 0.7rem 0 0.2rem; }
   ul.coverage-pending { opacity: 0.85; }
   ul.coverage-pending li { font-size: 0.92rem; }
@@ -476,7 +481,11 @@ const PAGE_STYLE = `
   .lekta-consent-actions button[data-consent="deny"] { background: transparent; border: 1px solid var(--paper-line); color: var(--paper-ink); }
   @media (max-width: 700px) { .lekta-consent-banner { align-items: stretch; flex-direction: column; } .lekta-consent-actions { width: 100%; } .lekta-consent-actions button { flex: 1; } }
   a { color: var(--red-deep); }
-  @media (max-width: 700px) { body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; } }
+  @media (max-width: 700px) {
+    body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
+    .fk-search { position: static; }
+    .fk-filters { grid-template-columns: 1fr; }
+  }
 `;
 
 function pageShell({ title, description, canonical, bodyHtml, robots, jsonLd, extraScripts }) {
@@ -786,6 +795,9 @@ function normalizeSearch(s){return String(s||'').toLowerCase().normalize('NFD').
 function matchesQuery(q,hay){return normalizeSearch(q).split(/\\s+/).filter(Boolean).every(function(t){return hay.indexOf(t)!==-1;});}
 (function(){
   var input=document.getElementById('fk-q');
+  var inst=document.getElementById('fk-inst');
+  var work=document.getElementById('fk-work');
+  var status=document.getElementById('fk-status');
   var groups=document.getElementById('fk-groups');
   var count=document.getElementById('fk-q-count');
   var empty=document.getElementById('fk-empty');
@@ -794,21 +806,30 @@ function matchesQuery(q,hay){return normalizeSearch(q).split(/\\s+/).filter(Bool
   var total=groups.querySelectorAll('[data-search]').length;
   function apply(){
     var q=input.value.trim();
+    var iv=inst?inst.value:'';
+    var wv=work?work.value:'';
+    var sv=status?status.value:'';
+    var active=Boolean(q||iv||wv||sv);
     var visible=0;
     sections.forEach(function(sec){
       var items=Array.prototype.slice.call(sec.querySelectorAll('[data-search]'));
       var any=false;
       items.forEach(function(li){
-        var show=!q||matchesQuery(q,li.getAttribute('data-search')||'');
+        var works=(li.getAttribute('data-work')||'').split(/\\s+/);
+        var show=(!q||matchesQuery(q,li.getAttribute('data-search')||''))
+          &&(!iv||li.getAttribute('data-inst')===iv)
+          &&(!wv||works.indexOf(wv)!==-1)
+          &&(!sv||li.getAttribute('data-status')===sv);
         li.hidden=!show;
         if(show){any=true;visible++;}
       });
       sec.hidden=!any;
     });
-    if(count)count.textContent=q?(visible+' od '+total+' fakulteta prikazano'):'';
-    if(empty)empty.hidden=!(q&&visible===0);
+    if(count)count.textContent=active?(visible+' od '+total+' fakulteta prikazano'):'';
+    if(empty)empty.hidden=!(active&&visible===0);
   }
   input.addEventListener('input',apply);
+  [inst,work,status].forEach(function(el){if(el)el.addEventListener('change',apply);});
 })();
 `;
 
@@ -976,7 +997,8 @@ function buildMasterIndexPage(catalog, existence) {
                 .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).path)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
                 .join(' · ');
               const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
-              return `<li data-search="${searchKey}">${escapeHtml(u.name)}: ${links}</li>`;
+              const workTypes = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt)).join(' ');
+              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="verified" data-work="${escapeHtml(workTypes)}">${escapeHtml(u.name)} <span class="fk-status fk-status--verified">Provjerena pravila</span>: ${links}</li>`;
             })
             .join('')}</ul>`
         : '';
@@ -990,7 +1012,7 @@ function buildMasterIndexPage(catalog, existence) {
         ? `<p class="coverage-pending-label">Još prikupljamo posebna pravila za:</p><ul class="check-list coverage-pending">${uncovered
             .map((u) => {
               const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
-              return `<li data-search="${searchKey}"><a data-analyzer-cta href="/?unit=${encodeURIComponent(u.id)}#top">${escapeHtml(u.name)}</a>: opća tehnička provjera već radi, posebna pravila još čekamo</li>`;
+              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="generic" data-work="seminar final graduate"><a data-analyzer-cta href="/?unit=${encodeURIComponent(u.id)}#top">${escapeHtml(u.name)}</a> <span class="fk-status fk-status--generic">Opći profil</span>: opća tehnička provjera već radi, posebna pravila još čekamo</li>`;
             })
             .join('')}</ul>`
         : '';
@@ -999,13 +1021,22 @@ function buildMasterIndexPage(catalog, existence) {
     })
     .filter(Boolean)
     .join('');
+  const institutionOptions = catalog
+    .filter((inst) => (inst.units || []).length > 0)
+    .map((inst) => `<option value="${escapeHtml(inst.id)}">${escapeHtml(inst.name)}</option>`)
+    .join('');
   const body = `
 <div class="lekta-kicker">Lekta</div>
 <h1>Provjera rada po fakultetu</h1>
 <p class="lekta-lead">Tehnička pravila prije predaje (diplomski, završni i seminarski rad) po ustanovi: oblikovanje, opseg, citiranje i izvori, iz službenih izvora fakulteta. Pronađi svoju ustanovu.</p>
-<div class="fk-search">
+<div class="fk-search" role="search">
   <label for="fk-q">Pronađi svoj fakultet</label>
   <input type="search" id="fk-q" autocomplete="off" placeholder="Upiši naziv fakulteta ili sveučilišta...">
+  <div class="fk-filters" aria-label="Filtri popisa fakulteta">
+    <div class="fk-filter"><label for="fk-inst">Ustanova</label><select id="fk-inst"><option value="">Sve ustanove</option>${institutionOptions}</select></div>
+    <div class="fk-filter"><label for="fk-work">Vrsta rada</label><select id="fk-work"><option value="">Sve vrste rada</option><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate">Diplomski rad</option></select></div>
+    <div class="fk-filter"><label for="fk-status">Status pravila</label><select id="fk-status"><option value="">Svi profili</option><option value="verified">Provjerena pravila</option><option value="generic">Opći profil</option></select></div>
+  </div>
   <p id="fk-q-count" class="fk-search-count" aria-live="polite"></p>
 </div>
 <div id="fk-groups">${groupsHtml}</div>
