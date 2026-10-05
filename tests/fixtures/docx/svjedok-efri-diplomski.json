@@ -1,0 +1,67 @@
+{
+    "profileId":  "efri-diplomski",
+    "track":  "witness",
+    "synthetic":  true,
+    "generator":  "scripts/corpus-gen/word/make-violation-witnesses.ps1",
+    "wordVersion":  "14.0",
+    "violations":  [
+                       {
+                           "ruleId":  "efri-diplomski--paper-size",
+                           "checkId":  "paper-size",
+                           "expected":  "A4",
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
+                       },
+                       {
+                           "ruleId":  "efri-diplomski--font",
+                           "checkId":  "font",
+                           "expected":  [
+                                            "Times New Roman"
+                                        ],
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "efri-diplomski--font-size",
+                           "checkId":  "font-size",
+                           "expected":  [
+                                            12
+                                        ],
+                           "set":  9,
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "efri-diplomski--line-spacing",
+                           "checkId":  "line-spacing",
+                           "expected":  [
+                                            1.5
+                                        ],
+                           "set":  1,
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "efri-diplomski--justify",
+                           "checkId":  "justify",
+                           "expected":  "obostrano",
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
+                       },
+                       {
+                           "ruleId":  "efri-diplomski--margins",
+                           "checkId":  "margins",
+                           "expected":  {
+                                            "top":  3,
+                                            "right":  3,
+                                            "bottom":  3,
+                                            "left":  3
+                                        },
+                           "set":  {
+                                       "top":  2,
+                                       "right":  2,
+                                       "bottom":  2,
+                                       "left":  2
+                                   },
+                           "expectedBefore":  "fail"
+                       }
+                   ]
+}

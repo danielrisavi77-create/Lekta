@@ -200,7 +200,8 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
-import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { dedupeManifest, witnessTransitions, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { witnessRatchetProblems } from './helpers/witness-ratchet';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 import {
   measuredCodeProblem,
@@ -1169,6 +1170,26 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T68 dio 2: ratchet i ugovor prijelaza svjedoka (pregled #302 R1, R2) ---
+  {
+    id: 'corpus/svjedok-izgubljen-ratchet',
+    imitates: 'svjedok ili jedna njegova ciljana provjera nestane iz commitanog artefakta (25 -> 24), a ratchet pokrivenosti to ne primijeti',
+    caught: () => {
+      const r = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/repair-real-corpus.json'), 'utf8')) as Parameters<typeof witnessRatchetProblems>[0];
+      const izgubljen = { witnessResults: r.witnessResults.slice(0, -1), witnessSummary: { targetedCheckCount: r.witnessResults.slice(0, -1).reduce((n, x) => n + x.targetedCheckCount, 0) } };
+      return witnessRatchetProblems(izgubljen, 25).some((p) => p.includes('ispod ratcheta'));
+    },
+    cleanBefore: () => {
+      const r = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/repair-real-corpus.json'), 'utf8')) as Parameters<typeof witnessRatchetProblems>[0];
+      return r.witnessResults.length > 0 && witnessRatchetProblems(r, 25).length === 0;
+    },
+  },
+  {
+    id: 'corpus/svjedok-krivi-pocetni-status',
+    imitates: 'poravnanje svjedoka zapisano kao fail->pass, a analiza ga ocjenjuje upozorenjem (warn->pass): ugovor prijelaza laze o tome sto je svjedok dokazao',
+    caught: () => witnessTransitions(['font', 'justify'], [], { font: 'fail', justify: 'fail' }, ['format.font.dominant:fail->pass', 'format.justify.body:warn->pass']).mismatches.some((m) => m.startsWith('justify:')),
+    cleanBefore: () => witnessTransitions(['font', 'justify'], [], { font: 'fail', justify: 'warn' }, ['format.font.dominant:fail->pass', 'format.justify.body:warn->pass']).mismatches.length === 0,
+  },
   // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
   // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
   ...([

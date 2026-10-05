@@ -266,6 +266,14 @@ export interface WitnessResult extends RealCorpusResult {
   needsAssistance: Array<{ checkId: string; reason: WitnessAssistanceReason }>;
   /** Ciljano AUTOMATSKIM fixerom i dalje pada, bez ikakvog razloga: jaz motora (mora biti prazno). */
   unexplainedUnresolved: string[];
+  /**
+   * UGOVOR PRIJELAZA (pregled #302 R2): za svaki namjerni prekrsaj koji popravak cilja, ocekivani pocetni
+   * status iz sidecara (`violations[].expectedBefore`, `fail` ili `warn`) i zavrsni `pass`, kao
+   * `checkId:fail->pass`. Poravnanje (justify) analiza ocjenjuje upozorenjem, ne padom; to je zapisano.
+   */
+  expectedTransitions: string[];
+  /** Ocekivani prijelaz koji `statusChanges` ne potvrdjuje, ili prekrsaj bez `expectedBefore` (mora biti prazno). */
+  transitionMismatches: string[];
 }
 
 export interface WitnessSummary {
@@ -278,10 +286,59 @@ export interface WitnessSummary {
   secondPassNoOp: number;
   unexplainedUnresolved: number;
   intendedUntargeted: number;
+  /** Ugovorni prijelazi po pocetnom statusu (pregled #302 R2); potvrdjeni su kad je `transitionMismatches` 0. */
+  failToPass: number;
+  warnToPass: number;
+  transitionMismatches: number;
 }
+
+export type WitnessBeforeStatus = 'fail' | 'warn';
 
 export interface WitnessManifestEntry extends RealCorpusManifestEntry {
   intendedChecks: string[];
+  /** `violations[].expectedBefore` iz sidecara; prekrsaj bez valjane vrijednosti ovdje ne postoji. */
+  expectedBefore: Record<string, WitnessBeforeStatus>;
+}
+
+/** `violations[].expectedBefore` iz sidecara svjedoka; samo `fail` ili `warn`, ostalo se ignorira. */
+export function witnessExpectedBefore(metadata: CorpusSidecar): Record<string, WitnessBeforeStatus> {
+  const out: Record<string, WitnessBeforeStatus> = {};
+  if (!Array.isArray(metadata.violations)) return out;
+  for (const v of metadata.violations as unknown[]) {
+    if (!v || typeof v !== 'object') continue;
+    const { checkId, expectedBefore } = v as { checkId?: unknown; expectedBefore?: unknown };
+    if (typeof checkId === 'string' && (expectedBefore === 'fail' || expectedBefore === 'warn')) out[checkId] = expectedBefore;
+  }
+  return out;
+}
+
+/**
+ * Ugovorni prijelazi i neslaganja. Za svaki namjerni prekrsaj koji NIJE u `untargeted`: ocekivano je
+ * `expectedBefore -> pass`; stvarni prijelaz je onaj zapis iz `statusChanges` (`stabilniId:prije->poslije`)
+ * ciji id pogadja `checkId`. Nedostaje li `expectedBefore`, prijelaz ili se razlikuje, to je neslaganje.
+ */
+export function witnessTransitions(
+  intended: readonly string[],
+  untargeted: readonly string[],
+  expectedBefore: Readonly<Record<string, WitnessBeforeStatus>>,
+  statusChanges: readonly string[],
+): { expected: string[]; mismatches: string[] } {
+  const expected: string[] = [];
+  const mismatches: string[] = [];
+  const changes = statusChanges.map((c) => {
+    const i = c.lastIndexOf(':');
+    return { id: c.slice(0, i), change: c.slice(i + 1) };
+  });
+  for (const checkId of intended) {
+    if (untargeted.includes(checkId)) continue;
+    const before = expectedBefore[checkId];
+    if (!before) { mismatches.push(`${checkId}: sidecar nema expectedBefore`); continue; }
+    const want = `${before}->pass`;
+    expected.push(`${checkId}:${want}`);
+    const got = changes.filter((c) => witnessCheckMatches(checkId, c.id)).map((c) => c.change);
+    if (!got.includes(want)) mismatches.push(`${checkId}: ocekivano ${want}, statusChanges ${got.length ? got.join(', ') : 'nema prijelaza'}`);
+  }
+  return { expected, mismatches };
 }
 
 /** `violations[].checkId` iz sidecara svjedoka, jedinstveni i sortirani; nevaljani zapisi se ignoriraju. */
@@ -393,7 +450,7 @@ export function discoverWitnessCorpus(root = REAL_CORPUS_ROOT): WitnessManifestE
         return [];
       }
       if (corpusSetOf(metadata) !== 'witness') return [];
-      return [{ ...manifestEntry(fileName, metadata, root), intendedChecks: witnessIntendedChecks(metadata) }];
+      return [{ ...manifestEntry(fileName, metadata, root), intendedChecks: witnessIntendedChecks(metadata), expectedBefore: witnessExpectedBefore(metadata) }];
     });
 }
 
@@ -695,10 +752,14 @@ async function runOneDetailed(entry: RealCorpusManifestEntry, root: string, outp
  */
 async function runWitness(entry: WitnessManifestEntry, root: string): Promise<WitnessResult> {
   const { result, targeted, awaitingConfirmation } = await runOneDetailed(entry, root);
+  const intendedUntargeted = witnessUntargeted(entry.intendedChecks, targeted, awaitingConfirmation);
+  const prijelazi = witnessTransitions(entry.intendedChecks, intendedUntargeted, entry.expectedBefore ?? {}, result.statusChanges);
   return {
     ...result,
     intendedChecks: entry.intendedChecks,
-    intendedUntargeted: witnessUntargeted(entry.intendedChecks, targeted, awaitingConfirmation),
+    intendedUntargeted,
+    expectedTransitions: prijelazi.expected,
+    transitionMismatches: prijelazi.mismatches,
     needsAssistance: [
       ...result.assistedUnresolvedChecks.map((checkId) => ({ checkId, reason: 'asistirana-stavka-trazi-rucnu-potvrdu' as const })),
       ...awaitingConfirmation.map((checkId) => ({ checkId, reason: 'ceka-odabir-korisnika' as const })),
@@ -718,6 +779,9 @@ export function summarizeWitnesses(results: readonly WitnessResult[]): WitnessSu
     secondPassNoOp: results.filter((r) => r.secondPassNoOp).length,
     unexplainedUnresolved: results.reduce((n, r) => n + r.unexplainedUnresolved.length, 0),
     intendedUntargeted: results.reduce((n, r) => n + r.intendedUntargeted.length, 0),
+    failToPass: results.reduce((n, r) => n + r.expectedTransitions.filter((t) => t.endsWith(':fail->pass')).length, 0),
+    warnToPass: results.reduce((n, r) => n + r.expectedTransitions.filter((t) => t.endsWith(':warn->pass')).length, 0),
+    transitionMismatches: results.reduce((n, r) => n + r.transitionMismatches.length, 0),
   };
 }
 
