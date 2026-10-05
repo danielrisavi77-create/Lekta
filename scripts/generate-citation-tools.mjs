@@ -577,7 +577,11 @@ function loadVerifiedSpecs(engine) {
   const specs = new Map(); // "facultyId:styleToken" -> spec
   if (!fs.existsSync(SPECS_VERIFIED_DIR)) return specs;
   const registry = loadJson(REGISTRY_PATH);
-  for (const file of fs.readdirSync(SPECS_VERIFIED_DIR).filter((f) => f.endsWith('.json'))) {
+  // REDOSLIJED JE IZLAZ: specsByFac nize vlastite stilove fakulteta redom ucitavanja, pa redoslijed datoteka mijenja
+  // index citata, stranicu fakulteta i sitemap (obrnut redoslijed mijenja 3 datoteke, izmjereno 2026-10-05).
+  // readdirSync ne jamci redoslijed (NTFS vraca abecedno, ext4 u CI-ju ne), pa se sortira. Na Windowsu je izlaz
+  // prije i poslije sortiranja bajt-identican (mobilni audit PR 5, preduvjet goldena generiranih stranica).
+  for (const file of fs.readdirSync(SPECS_VERIFIED_DIR).filter((f) => f.endsWith('.json')).sort()) {
     const spec = loadJson(path.join(SPECS_VERIFIED_DIR, file));
     const fail = (msg) => {
       console.error(`[generate-citation-tools] FAIL spec ${file}: ${msg}`);
