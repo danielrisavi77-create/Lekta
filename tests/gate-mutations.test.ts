@@ -51,6 +51,7 @@ import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
+import { loadVerifyExistence, retractionProblems, verifyExistenceSource } from './helpers/retraction-guard';
 import { loadReferenceParser, referenceParserProblems, referenceParserSource } from './helpers/reference-parser-guard';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -10350,6 +10351,26 @@ describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', ()
     ];
     expect(findJobsRunningOnEdited(sIf)).toEqual([]);
   });
+});
+
+describe('mutacije: T98 oznaka povucenog rada (stvarni src/citations/verify-existence.ts u memoriji)', () => {
+  const MUT = [
+    ['citations/povlacenje-iz-update-to', "(message as { 'updated-by'?: unknown } | null)?.['updated-by']", "(message as { 'update-to'?: unknown } | null)?.['update-to']", '(u)'],
+    ['citations/povlacenje-uz-weak', "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle };", "if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle, ...(retractionFromWork(best) ? { retraction: retractionFromWork(best) } : {}) };", '(w)'],
+    ['citations/povlacenje-doi-bez-tijela', 'retraction = retractionFromWork((await res.json())?.message);', 'retraction = null;', '(d)'],
+  ] as const;
+
+  it('baseline: gard je cist nad nemutiranim izvorom', async () => {
+    expect(await retractionProblems(loadVerifyExistence())).toEqual([]);
+  });
+
+  for (const [id, staro, novo, oznaka] of MUT) {
+    it(`${id}: mutacija postoji u izvoru i gard je hvata`, async () => {
+      expect(verifyExistenceSource().includes(staro), 'nema sto mutirati: gard bi prolazio vakuumski').toBe(true);
+      const problemi = await retractionProblems(loadVerifyExistence((x) => x.split(staro).join(novo)));
+      expect(problemi.some((p) => p.startsWith(oznaka)), problemi.join('; ')).toBe(true);
+    });
+  }
 });
 
 describe('mutacije: T82 dnevni izvjestaj ne broji citanje kesa kao ulaz', () => {
