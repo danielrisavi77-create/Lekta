@@ -46,7 +46,7 @@ const noOp = (parts: DocxXmlParts, reason: FixerOutput['reason'], skippedActions
 const SKIPPED_NO_SOURCE = 'zapis literature nije umetnut: prezime i godina ne mogu se sigurno procitati iz citata';
 const SKIPPED_NO_LIST = 'zapis literature nije umetnut: popis literature nije prepoznat oko zadnjeg zapisa';
 const SKIPPED_BLOCKED_SOURCE = 'zapis literature nije umetnut ni citat izmijenjen: citat iz kojeg se cita zapis ne moze ostati nepromijenjen, a odlomak s formulom, okvirom ili poljem se ne pise';
-const SKIPPED_IN_FIELD ='zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
+const SKIPPED_IN_FIELD = 'zapis literature nije umetnut: mjesto umetanja je unutar Wordova polja (npr. BIBLIOGRAPHY) ili kontrole sadrzaja';
 
 /** Samo za predlozak (krug 5): korisnikov doslovni zapis uz okvir umece se kao na masteru. */
 const SKIPPED_IN_FRAME = 'zapis literature nije umetnut: popis literature je u okviru (w:framePr), a novi odlomak bi promijenio okvir';
