@@ -62,6 +62,7 @@ import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
+import { bundleFunkcije, mapaModula } from './helpers/eszip-fixture';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -168,6 +169,7 @@ import {
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { consentRevealFromSource, consentRevealProblems, consentThresholdProblems, mobileConsentProblems } from './helpers/mobile-consent-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -8199,8 +8201,59 @@ const MUTATIONS: Mutation[] = [
       }
     },
   },
+  /**
+   * T101: deploy-drift po SADRZAJU je dokaz deploya, pa mora biti fail-closed. Mutanti iz izvora
+   * scripts/deploy-drift-core.mjs (bez importa), izvrseni u memoriji. Svaki gasi jedan gard i trazi da
+   * ulaz koji je gard morao odbiti tada prode kao JEDNAKO ili ostane neuhvacen.
+   */
+  ...([
+    ['deploy-drift/sadrzaj-uvijek-jednak', 'usporedba sadrzaja nikad ne prijavi razliku, pa deployana funkcija koja salje ACAO * a repo odabire origin izgleda jednako',
+      "norm(repo) !== norm(content) ? 'drift' : 'jednako'", "false ? 'drift' : 'jednako'",
+      (core: DriftCore) => core.contentDrift('faculty-request', { status: 'ok', files: new Map([['supabase/functions/faculty-request/index.ts', "'Access-Control-Allow-Origin': '*'"]]) },
+        (p: string) => (p === 'supabase/functions/faculty-request/index.ts' ? 'const ALLOWED_ORIGINS = []' : null)).status === 'drift'],
+    ['deploy-drift/visak-bajtova-prihvacen', 'body s bajtovima iza zadnje sekcije (dva spojena ili pokvarena bundlea) procitan kao valjan ESZIP (Codex R1)',
+      'if (p !== bytes.length) return { ok: false', 'if (false) return { ok: false',
+      (core: DriftCore) => !core.parseEszip(new Uint8Array([...bundleFunkcije('source/index.ts', [['source/index.ts', 'x']]), 0])).ok],
+    ['deploy-drift/necitljiv-modul-preskocen', 'lokalni modul bez citljive source mape preskocen umjesto NE ZNAM, pa razlika u njemu nestaje iz usporedbe (Codex R2)',
+      'return neZnam(`modul ${m.specifier} nema citljivu mapu s izvornim tekstom`);', 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../_shared/a.ts', kind: 'module', moduleKind: 0, source: 'js', sourceMap: mapaModula('source/../_shared/a.ts', null) }])), 'f'),
+      (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/json-modul-preskocen', 'JSON modul bez mape preskocen, pa deployani skup pravila razlicit od repoa izgleda JEDNAKO (profile-rules, izmjereno 4. 10. 2026.)',
+      "content = new TextDecoder('utf-8', { fatal: true }).decode(m.sourceBytes);", 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../../../data/x.json', kind: 'module', moduleKind: 1, source: '{"a":2}', sourceMap: null }])), 'f'),
+      (p: string) => ({ 'supabase/functions/f/index.ts': 'x', 'data/x.json': '{"a":1}' } as Record<string, string>)[p] ?? null).status === 'drift'],
+    ['deploy-drift/korijen-pretpostavljen', 'neprepoznat korijen ulaza (sufiks koji presijeca segment putanje) daje prividno valjan ulaz i JEDNAKO (Codex R3)',
+      'if (!prepoznat) return neZnam(', 'if (false) return neZnam(',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('ions/f/index.ts', [['ions/f/index.ts', 'x']])), 'f'),
+        (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/verzija-nevezana', 'body dohvacen dok se deploy mijenjao biljezi se uz staru verziju (Codex R7)',
+      'if (before.version !== after.version || before.updated_at !== after.updated_at) {', 'if (false) {',
+      (core: DriftCore) => core.deployIdentityProblem({ version: 10, updated_at: 1 }, { version: 11, updated_at: 2 }) !== null],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T101: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadDriftCore(mut));
+    },
+    cleanBefore: () => holds(loadDriftCore(readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs')))),
+  })),
 
 ];
+
+/** Jezgra deploy-drifta iz (mutiranog) izvora u memoriji; izvor nema importa (T101). */
+type DriftCore = {
+  parseEszip: (bytes: Uint8Array) => { ok: boolean };
+  deployedModules: (parsed: unknown, slug: string) => unknown;
+  contentDrift: (slug: string, deployed: unknown, readRepo: (p: string) => string | null) => { status: string };
+  deployIdentityProblem: (before: unknown, after: unknown) => string | null;
+};
+function loadDriftCore(src: string): DriftCore {
+  return new Function(`${src.replace(/^export /gm, '')}\nreturn { parseEszip, deployedModules, contentDrift, deployIdentityProblem };`)() as DriftCore;
+}
 
 /**
  * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
@@ -11885,5 +11938,93 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, PR 3)', () => {
+  const lf = (p: string) => readFileSync(resolve(process.cwd(), p), 'utf8').replace(/\r/g, '');
+  const izvor = () => ({
+    pageApp: lf('src/shared/page-app.css'),
+    pageChrome: lf('src/shared/page-chrome.css'),
+    toolPage: lf('src/shared/tool-page.css'),
+    appTs: lf('src/ui/app.ts'),
+  });
+
+  it('BASELINE: obje trake u toku na uskom ekranu, rezerva samo za fiksnu traku', () => {
+    expect(mobileConsentProblems(izvor())).toEqual([]);
+  });
+
+  it('mutant: /rad/ traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.pageApp.replace('.consent-banner{position:static;', '.consent-banner{');
+    expect(m).not.toBe(s.pageApp);
+    expect(mobileConsentProblems({ ...s, pageApp: m })).toEqual(['/rad/: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: alatna traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('.lekta-consent-banner{position:static;', '.lekta-consent-banner{');
+    expect(m).not.toBe(s.toolPage);
+    expect(mobileConsentProblems({ ...s, toolPage: m })).toEqual(['alati: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: rezerva bez praga sirine se hvata', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media screen{body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(mobileConsentProblems({ ...s, pageChrome: m })).toEqual(['rezerva za traku bez praga sirine']);
+  });
+
+  it('mutant: inline rezerva i za traku u toku se hvata', () => {
+    const s = izvor();
+    const m = s.appTs.replace("!skriven&&getComputedStyle(b).position==='fixed'?`${h+34}px`:''", "skriven?'':`${h+34}px`");
+    expect(m).not.toBe(s.appTs);
+    expect(mobileConsentProblems({ ...s, appTs: m })).toEqual(['inline rezerva ne ovisi o fiksnoj traci']);
+  });
+
+  it('mutant: prag min-width:721px ostavlja rupu za frakcijske sirine (Codex R2 na #305)', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('@media screen and (width > 720px){', '@media screen and (min-width:721px){');
+    expect(m).not.toBe(s.toolPage);
+    expect(mobileConsentProblems({ ...s, toolPage: m })).toEqual(['rezerva ostavlja rupu izmedju 720 i 721 px']);
+  });
+
+  it('mutant: rezerva i na uskom ekranu se hvata', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media(max-width:720px){body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(mobileConsentProblems({ ...s, pageChrome: m })).toEqual(['rezerva za traku i na uskom ekranu']);
+  });
+
+  it('BASELINE: na 720 / 720,5 / 721 px vrijedi tocno jedno, traka u toku ili rezerva (Codex R2 na #305)', () => {
+    expect(consentThresholdProblems(izvor())).toEqual([]);
+  });
+
+  it('mutant: min-width:721px ostavlja 720,5 px bez trake u toku i bez rezerve', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('@media screen and (width > 720px){', '@media screen and (min-width:721px){');
+    expect(m).not.toBe(s.toolPage);
+    expect(consentThresholdProblems({ ...s, toolPage: m })).toEqual(['alati 720.5 px: ni traka u toku ni rezerva']);
+  });
+
+  it('mutant: rezerva od 720 px ukljucivo preklapa traku u toku', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media screen and (width >= 720px){body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(consentThresholdProblems({ ...s, pageChrome: m })).toEqual(['/rad/ 720 px: traka u toku i rezerva']);
+  });
+
+  it('BASELINE: Postavke privatnosti dovode traku u vidokrug i fokusiraju prvu radnju (Codex R1 na #305)', async () => {
+    expect(await consentRevealProblems(consentRevealFromSource())).toEqual([]);
+  });
+
+  it('mutant: bez pomaka u vidokrug se hvata', async () => {
+    const mod = consentRevealFromSource([["traka.scrollIntoView({ block: 'nearest' });", '']]);
+    expect(await consentRevealProblems(mod)).toEqual(['traka nije dovedena u vidokrug']);
+  });
+
+  it('mutant: bez fokusa na prvu radnju se hvata', async () => {
+    const mod = consentRevealFromSource([['?.focus({ preventScroll: true })', '']]);
+    expect(await consentRevealProblems(mod)).toEqual(['prva radnja trake nema fokus']);
   });
 });
