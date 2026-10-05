@@ -322,6 +322,8 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
     { tag: 'svojstva:komentar-ispred', pPr: { 2: COMMENTED_FAKE_PPR }, active: [], expect: 'umetnut', literal: true },
     // Odlomak iza popisa (susjed korisnikova zapisa) nema vlastiti okvir; okvir je samo u njegovom tekstnom okviru.
     { tag: 'okvir:ugnijezdeni-susjed', pPr: {}, active: [], expect: 'umetnut', literal: true, after: [NESTED_FRAMED_PARAGRAPH] },
+    // Krug 5: isto za predlozak na kraju popisa (Zupan iza Zubka), jer okvir od kruga 5 provjerava samo predlozak.
+    { tag: 'okvir:ugnijezdeni-susjed-predlozak', pPr: {}, active: [], expect: 'umetnut', cite: ['Zupan', '2014'], after: [NESTED_FRAMED_PARAGRAPH] },
     // Samozatvoreni <w:pPr/> sidra uz tekstni okvir s praznim odlomkom: novi zapis je bez svojstava, ispravan XML.
     { tag: 'svojstva:prazna', pPr: { 2: '<w:pPr/>' }, active: [], expect: 'umetnut', literal: true, extra: { 2: NESTED_EMPTY_PARAGRAPH_RUN }, props: '' },
     // Prijelom sekcije sidra s komentiranim </w:sectPr> prelazi na korisnikov zapis cijel (ispravan XML).
@@ -345,7 +347,7 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
     if (item.tag === 'svojstva:komentar-ispred' && !xml.includes(`<!-- <w:pPr>${FRAME}</w:pPr> -->`)) problems.push(`${item.tag}: ulaz nema lazna svojstva u komentaru`);
     if (item.tag === 'svojstva:prazna' && !xml.includes(`<w:p><w:pPr/>${run(texts[2])}${NESTED_EMPTY_PARAGRAPH_RUN}</w:p>`)) problems.push(`${item.tag}: ulaz nema sidro s <w:pPr/> i ugnijezdenim odlomkom`);
     if (item.tag === 'sekcija:komentar' && !(xml.includes('<w:sectPr><!-- </w:sectPr> -->') && JSON.stringify(sectionEndTexts(xml)) === JSON.stringify([texts[2]]))) problems.push(`${item.tag}: ulaz nema prijelom s komentarom na zadnjem zapisu`);
-    if (item.tag === 'okvir:ugnijezdeni-susjed' && !(xml.includes(NESTED_FRAMED_PARAGRAPH) && xml.indexOf(NESTED_FRAMED_PARAGRAPH) > xml.indexOf(texts[texts.length - 1]))) problems.push(`${item.tag}: ulaz nema odlomak s ugnijezdenim okvirom iza popisa`);
+    if (item.tag.startsWith('okvir:ugnijezdeni-susjed') && !(xml.includes(NESTED_FRAMED_PARAGRAPH) && xml.indexOf(NESTED_FRAMED_PARAGRAPH) > xml.indexOf(texts[texts.length - 1]))) problems.push(`${item.tag}: ulaz nema odlomak s ugnijezdenim okvirom iza popisa`);
     const params = item.literal ? { ...built.params, entries: [{ ...built.params.entries[0], citationId: undefined, replacementText: literalText }] } : built.params;
     const first = fixer(built.parts, params);
     const expected = item.literal ? literalText : template(surname, year);

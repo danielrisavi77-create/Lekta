@@ -8481,9 +8481,9 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'z36/okvir-ugnijezdenog-odlomka',
     imitates: 'svojstva susjeda traze se bilo gdje u odlomku (pregled drugog providera, runda 3): framePr odlomka u '
-      + 'tekstnom okviru susjeda cita se kao susjedov, pa se valjan korisnikov zapis odbije',
+      + 'tekstnom okviru susjeda cita se kao susjedov, pa se valjan predlozak odbije (od kruga 5 okvir provjerava samo predlozak)',
     caught: () => zapisLiteratureProblemi(z36Fixer('const match = plain.match(OWN_PARAGRAPH_PROPERTIES);', 'const match = plain.match(/(<w:pPr\\b[\\s\\S]*?<\\/w:pPr>)/i);'))
-      .some((p) => p.startsWith('okvir:ugnijezdeni-susjed:')),
+      .some((p) => p.startsWith('okvir:ugnijezdeni-susjed:') || p.startsWith('okvir:ugnijezdeni-susjed-predlozak:')),
     cleanBefore: z36FixerCist,
   },
   {
