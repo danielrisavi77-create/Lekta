@@ -186,11 +186,10 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overfl
    stranicu cim list naraste (pri +800 px sadrzaja: 1 stranica bez trake, 2 s njom). Danas ne
    okine jer stvarna naslovnica ima ~432 px zalihe, ali granica je bila tiha.
    Sama traka se u ispisu i ne treba pojaviti, pa se ondje gasi. */
-@media screen{
+/* Prag (width > 720px) je tocan komplement od max-width:720px ispod; min-width:721px ostavlja rupu za frakcijske
+   sirine pri zumu (Codex R2 na #305). */
+@media screen and (width > 720px){
   body:has(.lekta-consent-banner.is-visible){padding-bottom:96px}
-}
-@media screen and (max-width:720px){
-  body:has(.lekta-consent-banner.is-visible){padding-bottom:164px}
 }
 /* KS: print na bijelom (tamni stol se ne printa) */
 @media print{body{background:#fff;color:#111}}
@@ -211,6 +210,12 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overfl
 .lekta-consent-actions button{border:0;border-radius:2px;padding:9px 13px;font:600 12.5px var(--sans);cursor:pointer;white-space:nowrap}
 .lekta-consent-actions button[data-consent="grant"]{background:var(--red-deep);color:#fff}
 .lekta-consent-actions button[data-consent="deny"]{background:transparent;border:1px solid var(--paper-line);color:var(--paper-ink)}
+/* TRAKA PRIVOLE NA MOBITELU STOJI U TOKU STRANICE (mobilni audit 2026-09-28, PR 3; odluka vlasnika 2026-10-03).
+   Fiksna traka visoka ~170 px na 360 px sjedala je preko primarne radnje alata na prvom ekranu, a nizu
+   traku ne bi pomogla jer gumb stoji uz dno ekrana. Na uskom ekranu traka je zato na dnu sadrzaja, ispod podnozja (tool-analytics.ts je dodaje na kraj body-ja):
+   nikad ne prekriva radnju, pa ne treba ni rezervu ispod sadrzaja. Analitika ostaje iskljucena dok korisnik ne
+   pristane. Iznad 720 px traka ostaje fiksna uz dno. */
+@media(max-width:720px){.lekta-consent-banner{position:static;margin:16px 12px calc(16px + env(safe-area-inset-bottom));box-shadow:none}.lekta-consent-actions button{min-height:44px}}
 @media(max-width:720px){.lekta-consent-banner{align-items:stretch;flex-direction:column}.lekta-consent-actions{width:100%}.lekta-consent-actions button{flex:1}}
 /* Success CTA: uvijek unutar rezultat-kartice (.card), pa --ok/--ok-soft/--text NASLJEDJUJU
    page-specific "papir scope" remap (svaka stranica ima svoj .card,.cta{--ok:...} redak) -

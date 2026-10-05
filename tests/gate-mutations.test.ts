@@ -22,7 +22,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { afterAll, beforeAll, describe, it, expect } from 'vitest';
+import { afterAll, beforeAll, describe, it, expect, vi } from 'vitest';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -62,6 +62,7 @@ import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
+import { bundleFunkcije, mapaModula } from './helpers/eszip-fixture';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
@@ -168,6 +169,7 @@ import {
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { consentRevealFromSource, consentRevealProblems, consentThresholdProblems, mobileConsentProblems } from './helpers/mobile-consent-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -198,7 +200,8 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
-import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { dedupeManifest, witnessTransitions, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { witnessRatchetProblems } from './helpers/witness-ratchet';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 import {
   measuredCodeProblem,
@@ -297,6 +300,10 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
+import { repairCostGuardProblems } from './helpers/repair-cost-guard';
+import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
+import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
 
@@ -1049,6 +1056,20 @@ function upisnikScopeFromSource(source: string): UpisnikScopePredicate | null {
   );
 }
 
+type UpisnikStudyKind = (quote: string) => 'university' | 'vocational' | 'both' | null;
+
+/** studyKindForEvidenceQuote iz (mutiranog) izvora, uz pravi normalized iz istog izvora. */
+function upisnikStudyKindFromSource(source: string): UpisnikStudyKind | null {
+  const normalized = funkcijaIzIzvora<(value: string) => string>(
+    source.replace('function normalized(', 'export function normalized('), 'normalized');
+  if (!normalized) return null;
+  return funkcijaIzIzvora<UpisnikStudyKind>(
+    source.replace('function studyKindForEvidenceQuote(', 'export function studyKindForEvidenceQuote('),
+    'studyKindForEvidenceQuote',
+    { normalized },
+  );
+}
+
 function upisnikSourceNormalizerFromSource(source: string): UpisnikSourceNormalizer | null {
   return funkcijaIzIzvora<UpisnikSourceNormalizer>(
     source.replace('function comparableProfileSourceUrl(', 'export function comparableProfileSourceUrl('),
@@ -1149,6 +1170,26 @@ function removeBetweenMarkers(src: string, startMarker: string, endMarker: strin
 }
 
 const MUTATIONS: Mutation[] = [
+  // --- T68 dio 2: ratchet i ugovor prijelaza svjedoka (pregled #302 R1, R2) ---
+  {
+    id: 'corpus/svjedok-izgubljen-ratchet',
+    imitates: 'svjedok ili jedna njegova ciljana provjera nestane iz commitanog artefakta (25 -> 24), a ratchet pokrivenosti to ne primijeti',
+    caught: () => {
+      const r = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/repair-real-corpus.json'), 'utf8')) as Parameters<typeof witnessRatchetProblems>[0];
+      const izgubljen = { witnessResults: r.witnessResults.slice(0, -1), witnessSummary: { targetedCheckCount: r.witnessResults.slice(0, -1).reduce((n, x) => n + x.targetedCheckCount, 0) } };
+      return witnessRatchetProblems(izgubljen, 25).some((p) => p.includes('ispod ratcheta'));
+    },
+    cleanBefore: () => {
+      const r = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/repair-real-corpus.json'), 'utf8')) as Parameters<typeof witnessRatchetProblems>[0];
+      return r.witnessResults.length > 0 && witnessRatchetProblems(r, 25).length === 0;
+    },
+  },
+  {
+    id: 'corpus/svjedok-krivi-pocetni-status',
+    imitates: 'poravnanje svjedoka zapisano kao fail->pass, a analiza ga ocjenjuje upozorenjem (warn->pass): ugovor prijelaza laze o tome sto je svjedok dokazao',
+    caught: () => witnessTransitions(['font', 'justify'], [], { font: 'fail', justify: 'fail' }, ['format.font.dominant:fail->pass', 'format.justify.body:warn->pass']).mismatches.some((m) => m.startsWith('justify:')),
+    cleanBefore: () => witnessTransitions(['font', 'justify'], [], { font: 'fail', justify: 'warn' }, ['format.font.dominant:fail->pass', 'format.justify.body:warn->pass']).mismatches.length === 0,
+  },
   // --- T91: parser literature (zapis "(godina)." bez autora, oznaka bez godine) ---
   // Mutacije mijenjaju STVARNI izvor src/citations/author-year.ts u memoriji i izvrsavaju ga (pregled R5).
   ...([
@@ -1426,6 +1467,46 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       try { upisnikGuardFixture('203', 'Fizioterapija'); return false; }
       catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/strucni-rad-nije-vrsta-studija',
+    imitates: 'Pricuvno citanje vrste broji "strucni rad" kao strucni studij i odbija sveucilisni program 3',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; upute vrijede za zavrsni i strucni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      // Prava vrsta uz naziv studija ili akademski naziv i dalje obara sveucilisni program 3.
+      const rejects = (quote: string) => {
+        try { upisnikGuardFixture('3', quote); return false; }
+        catch (error) { return /study type/u.test(String(error)); }
+      };
+      return rejects('Elektrotehnika; strucni rad na strucnom prijediplomskom studiju')
+        && rejects('Studij elektrotehnike je strucni')
+        && rejects('Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike');
+    },
+  },
+  {
+    id: 'upisnik/vrsta-uz-studij-preskace-rad',
+    imitates: 'Vraca bilo koju rijec izmedju vrste i rijeci studij: "strucni rad na studiju" postaje strucni studij (Codex #284)',
+    cleanBefore: () => upisnikStudyKindFromSource(upisnikCandidateSource())?.('strucni rad na studiju elektrotehnike') === null,
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('(?:(?!rad)\\w+\\s+){0,3}studij', '(?:\\w+\\s+){0,3}studij');
+      return mutant !== source && upisnikStudyKindFromSource(mutant)?.('strucni rad na studiju elektrotehnike') === 'vocational';
+    },
+  },
+  {
+    id: 'upisnik/pricuvna-vrsta-samo-uz-akademski-naziv',
+    imitates: 'Vraca pricuvno citanje bilo koje rijeci strucn: "strucna radionica" i "strucna pomoc pri izradi rada" postaju strucni studij (Codex #284)',
+    cleanBefore: () => {
+      const kindOf = upisnikStudyKindFromSource(upisnikCandidateSource());
+      return ['strucna radionica', 'strucno radno mjesto', 'strucna pomoc pri izradi rada'].every((q) => kindOf?.(q) === null)
+        && kindOf?.('strucni prvostupnik inzenjer') === 'vocational';
+    },
+    caught: () => {
+      const source = upisnikCandidateSource();
+      const mutant = source.replace('/\\b(sveucilisn|strucn)\\w*\\s+(?:prvostupni|specijalist|magist|bacc)\\w*/gu', '/\\b(sveucilisn|strucn)\\w*\\b/gu');
+      const kindOf = upisnikStudyKindFromSource(mutant);
+      return mutant !== source && kindOf?.('strucna radionica') === 'vocational' && kindOf?.('strucna pomoc pri izradi rada') === 'vocational';
     },
   },
   {
@@ -4933,6 +5014,121 @@ const MUTATIONS: Mutation[] = [
       lockfileGuardWiringProblems(readTextLf(resolve(process.cwd(), '.github', 'workflows', 'security-audit.yml'))).length === 0,
   })),
   // T99 korak 2: OSV ratchet za Deno i Python, F2 i F5 iz runde 2 na #258. Baseline su stvarne datoteke.
+  // T84 RD-2 i RD-3: limit po korisniku i fail-closed strop ishoda bez potrosnje u repair-docx.
+  ...([
+    ['t84/repair-slot-bez-korisnika', 'slot se trazi bez limita po korisniku, pa jedan racun s cetiri paralelna popravka drzi sve ostale na 503',
+      'maxPerUser: REPAIR_MAX_PER_USER,', 'maxPerUser: 0,', 'repair-docx: slot se ne trazi s korisnikom i limitom po korisniku'],
+    ['t84/repair-user-busy-prolazi', 'user_busy se ne odbija, pa limit po korisniku postoji u bazi ali ne djeluje',
+      "if (globalSlot.kind === 'full' || globalSlot.kind === 'user_busy') return json({ error: 'busy' }, 503);",
+      "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
+    ['t84/repair-greska-slota-prolazi', 'greska novog RPC-a se ne odbija pa popravak tece bez ikakvog slota (Codex R1 na #294)',
+      "    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);\n", '', 'repair-docx: greska slota ne vraca 503'],
+    ['t84/repair-strop-bez-429', 'grana 429 za strop pokusaja uklonjena, pa korisnik preko stropa i dalje salje pune popravke (Codex R7 na #294)',
+      "    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela'],
+    ['t84/repair-dnevnik-fail-open', 'necitljiv dnevnik pokusaja se tumaci kao nula, pa strop nestane bas kad dnevnik ne radi (Codex R2 na #294)',
+      "    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela'],
+    ['t84/repair-nula-izmjena-nebiljezena', 'ishod bez izmjena se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'no_change');\n", '',
+      'repair-docx: ishod bez izmjena se ne dopisuje na rezervaciju'],
+    ['t84/repair-integritet-nebiljezen', 'odbijena isporuka se ne dopisuje na rezervaciju (Codex R3 na #294)',
+      "      await finishAttempt(admin, attempt, 'integrity_failed');\n", '',
+      'repair-docx: odbijena isporuka se ne dopisuje na rezervaciju'],
+    ['t84/repair-bez-rezervacije', 'pokusaj se ne rezervira prije tijela, pa neuspjeli upis na kraju ostavlja skupi rad nezabiljezen (Codex R3 runda 2 na #294)',
+      '    const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);\n', "    const attempt = { kind: 'off' } as const;\n",
+      'repair-docx: pokusaj se ne rezervira prije citanja tijela'],
+    ['t84/repair-rezervacija-fail-open', 'neuspjela rezervacija se ne odbija, pa skupi rad tece bez zapisa (Codex R3 runda 2 na #294)',
+      "    if (!attempt) return json({ error: 'unavailable' }, 503);\n", '',
+      'repair-docx: neuspjela rezervacija ne vraca 503 prije citanja tijela'],
+    ['t84/repair-dvostruko-brojanje', 'zapis u report_generations ne brise rezervaciju, pa uspjesan ili odbijen pokusaj puni i strop pokusaja',
+      '      if (!written.error) await dropAttempt(admin, attempt);\n', '',
+      'repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && repairCostGuardProblems(mut).includes(problem);
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  })),
+  {
+    id: 't84/repair-strop-nakon-tijela',
+    imitates: 'T84: strop pokusaja premjesten iza citanja tijela, pa se 20 MB i dalje cita prije odbijanja (Codex R7 na #294).',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'));
+      const block = src.slice(src.indexOf('    const attemptCap = await attemptCapStatus('), src.indexOf("    if (attemptCap === 'over')"));
+      const without = src.replace(block, '');
+      const bodyLineEnd = without.indexOf('\n', without.indexOf('    const bounded = await readFormDataBounded(')) + 1;
+      const mut = without.slice(0, bodyLineEnd) + block + without.slice(bodyLineEnd);
+      return mut !== src && repairCostGuardProblems(mut).includes('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
+    },
+    cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
+  },
+  // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
+  {
+    id: 't84/xff-prvi-unos',
+    imitates: 'T84 XFF: kljuc se opet uzima iz PRVOG unosa x-forwarded-for, koji bira klijent, pa svaki izmisljen unos daje nov brojac IP limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops[0] ?? 'unknown';");
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije zadnji unos x-forwarded-for');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-obrnuti-hopovi',
+    imitates: 'T84 XFF: hopovi se obrnu prije at(-1), pa tekst jos sadrzi zadnji unos, a kljuc je opet PRVI (klijentov) unos (Codex XFF-4 na #295).',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops.reverse().at(-1) ?? 'unknown';");
+      return mut !== hashIp && xffBehaviourProblems(loadClientIpFromForwarded(mut)).length > 0;
+    },
+    cleanBefore: () => xffBehaviourProblems(loadClientIpFromForwarded(xffRealSources().hashIp)).length === 0,
+  },
+  {
+    id: 't84/xff-header-velikim-slovima-u-shared',
+    imitates: 'T84 XFF: _shared modul cita X-Forwarded-For velikim slovima mimo pomocnika, a skener je gledao samo index.ts i samo mala slova (Codex XFF-2 i XFF-3 na #295).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: 'export const ip = (req: Request) => req.headers.get("X-Forwarded-For");\n' };
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-cijeli-header-u-faculty-request',
+    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen prvi unos otvara nov prozor limita.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = "hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE)";
+      const to = "sha256(IP_HASH_SALT + '|' + (req.headers.get('x-forwarded-for') ?? ''))";
+      const mutated = functions.map((f) => (f.path.endsWith('faculty-request/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  ...([
+    ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',
+      'qs: keys.map(corpusQueryKey),', 'qs: keys,', 'corpus-check: kljuc ide bazi bez gornje granice duljine'],
+    ['t84/korpus-granica-povecana', 'granica podignuta na 5000 pa gard koji prihvaca bilo koji broj prolazi, a zastita vise ne djeluje (Codex R2 na #291)',
+      'const CORPUS_TITLE_MAX = 400;', 'const CORPUS_TITLE_MAX = 5000;', 'corpus-check: CORPUS_TITLE_MAX je 5000, ocekivano 400'],
+    ['t84/korpus-bodovanje-nad-rezanim', 'naslov za bodovanje se reze, pa dug jednak naslov pada s found, a razliciti podnaslovi mogu podici presudu (Codex R1 na #291)',
+      "title: typeof r?.title === 'string' ? r.title : null,", "title: typeof r?.title === 'string' ? r.title.slice(0, CORPUS_TITLE_MAX) : null,",
+      'corpus-check: naslov za bodovanje je skracen'],
+  ] as const).map(([id, imitates, from, to, problem]) => ({
+    id,
+    imitates: `T84 SC-1: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'));
+      const mut = src.replace(from, to);
+      return mut !== src && corpusTitleBoundProblems(mut).includes(problem);
+    },
+    cleanBefore: () => corpusTitleBoundProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', '_shared', 'corpus-check.ts'))).length === 0,
+  })),
   // T84 RF-1: nagrada prijatelju (placeni slot) ne smije pripasti anonimnom Auth racunu.
   ...([
     ['t84/friend-nagrada-anonimnom', 'helper izgubi rani izlaz za anonimni racun, pa svaki novi anonimni racun s istim kodom dobije placeni slot',
@@ -8027,8 +8223,59 @@ const MUTATIONS: Mutation[] = [
       }
     },
   },
+  /**
+   * T101: deploy-drift po SADRZAJU je dokaz deploya, pa mora biti fail-closed. Mutanti iz izvora
+   * scripts/deploy-drift-core.mjs (bez importa), izvrseni u memoriji. Svaki gasi jedan gard i trazi da
+   * ulaz koji je gard morao odbiti tada prode kao JEDNAKO ili ostane neuhvacen.
+   */
+  ...([
+    ['deploy-drift/sadrzaj-uvijek-jednak', 'usporedba sadrzaja nikad ne prijavi razliku, pa deployana funkcija koja salje ACAO * a repo odabire origin izgleda jednako',
+      "norm(repo) !== norm(content) ? 'drift' : 'jednako'", "false ? 'drift' : 'jednako'",
+      (core: DriftCore) => core.contentDrift('faculty-request', { status: 'ok', files: new Map([['supabase/functions/faculty-request/index.ts', "'Access-Control-Allow-Origin': '*'"]]) },
+        (p: string) => (p === 'supabase/functions/faculty-request/index.ts' ? 'const ALLOWED_ORIGINS = []' : null)).status === 'drift'],
+    ['deploy-drift/visak-bajtova-prihvacen', 'body s bajtovima iza zadnje sekcije (dva spojena ili pokvarena bundlea) procitan kao valjan ESZIP (Codex R1)',
+      'if (p !== bytes.length) return { ok: false', 'if (false) return { ok: false',
+      (core: DriftCore) => !core.parseEszip(new Uint8Array([...bundleFunkcije('source/index.ts', [['source/index.ts', 'x']]), 0])).ok],
+    ['deploy-drift/necitljiv-modul-preskocen', 'lokalni modul bez citljive source mape preskocen umjesto NE ZNAM, pa razlika u njemu nestaje iz usporedbe (Codex R2)',
+      'return neZnam(`modul ${m.specifier} nema citljivu mapu s izvornim tekstom`);', 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../_shared/a.ts', kind: 'module', moduleKind: 0, source: 'js', sourceMap: mapaModula('source/../_shared/a.ts', null) }])), 'f'),
+      (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/json-modul-preskocen', 'JSON modul bez mape preskocen, pa deployani skup pravila razlicit od repoa izgleda JEDNAKO (profile-rules, izmjereno 4. 10. 2026.)',
+      "content = new TextDecoder('utf-8', { fatal: true }).decode(m.sourceBytes);", 'continue;',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('source/index.ts', [['source/index.ts', 'x']],
+        [{ specifier: 'source/../../../data/x.json', kind: 'module', moduleKind: 1, source: '{"a":2}', sourceMap: null }])), 'f'),
+      (p: string) => ({ 'supabase/functions/f/index.ts': 'x', 'data/x.json': '{"a":1}' } as Record<string, string>)[p] ?? null).status === 'drift'],
+    ['deploy-drift/korijen-pretpostavljen', 'neprepoznat korijen ulaza (sufiks koji presijeca segment putanje) daje prividno valjan ulaz i JEDNAKO (Codex R3)',
+      'if (!prepoznat) return neZnam(', 'if (false) return neZnam(',
+      (core: DriftCore) => core.contentDrift('f', core.deployedModules(core.parseEszip(bundleFunkcije('ions/f/index.ts', [['ions/f/index.ts', 'x']])), 'f'),
+        (p: string) => (p === 'supabase/functions/f/index.ts' ? 'x' : null)).status === 'ne-znam'],
+    ['deploy-drift/verzija-nevezana', 'body dohvacen dok se deploy mijenjao biljezi se uz staru verziju (Codex R7)',
+      'if (before.version !== after.version || before.updated_at !== after.updated_at) {', 'if (false) {',
+      (core: DriftCore) => core.deployIdentityProblem({ version: 10, updated_at: 1 }, { version: 11, updated_at: 2 }) !== null],
+  ] as const).map(([id, imitates, from, to, holds]) => ({
+    id,
+    imitates: `T101: ${imitates}.`,
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs'));
+      const mut = src.replace(from, to);
+      return mut !== src && !holds(loadDriftCore(mut));
+    },
+    cleanBefore: () => holds(loadDriftCore(readTextLf(resolve(process.cwd(), 'scripts', 'deploy-drift-core.mjs')))),
+  })),
 
 ];
+
+/** Jezgra deploy-drifta iz (mutiranog) izvora u memoriji; izvor nema importa (T101). */
+type DriftCore = {
+  parseEszip: (bytes: Uint8Array) => { ok: boolean };
+  deployedModules: (parsed: unknown, slug: string) => unknown;
+  contentDrift: (slug: string, deployed: unknown, readRepo: (p: string) => string | null) => { status: string };
+  deployIdentityProblem: (before: unknown, after: unknown) => string | null;
+};
+function loadDriftCore(src: string): DriftCore {
+  return new Function(`${src.replace(/^export /gm, '')}\nreturn { parseEszip, deployedModules, contentDrift, deployIdentityProblem };`)() as DriftCore;
+}
 
 /**
  * Nalazi T92 garda nad privremenim stablom s jednom sintetickom test datotekom u obliku iz #243
@@ -11713,5 +11960,162 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mutacije: T96 svojstva popravka (fast-check), mutant unutar stvarnog applyFixers', () => {
+  // Mutant se podmece kao JEDAN fixer u stvarnom lancu: vi.doMock zamijeni alignmentFixer u
+  // src/repair/fixers samo za svjeze ucitan apply-fixers (redoslijed, changelog i vrata integriteta
+  // ostaju stvarni), a produkcijski fixer se trajno ne mijenja (Codex R6 na #287).
+  type XmlParts = { documentXml: string };
+  async function repairSMutantom(mutiraj: (documentXml: string) => string): Promise<RepairFn> {
+    vi.resetModules();
+    vi.doMock('../src/repair/fixers', async (importOriginal) => {
+      const orig = await importOriginal<typeof import('../src/repair/fixers')>();
+      return {
+        ...orig,
+        alignmentFixer: (...args: Parameters<typeof orig.alignmentFixer>) => {
+          const out = orig.alignmentFixer(...args);
+          const parts = out.parts as typeof out.parts & XmlParts;
+          const documentXml = mutiraj(parts.documentXml);
+          return documentXml === parts.documentXml
+            ? out
+            : { ...out, applied: true, beforeLabel: out.beforeLabel || 'mutant', afterLabel: out.afterLabel || 'mutant', parts: { ...parts, documentXml } };
+        },
+      };
+    });
+    try {
+      const { applyFixers: mutiraniApply } = await import('../src/repair/apply-fixers');
+      return repairWith(mutiraniApply);
+    } finally {
+      vi.doUnmock('../src/repair/fixers');
+      vi.resetModules();
+    }
+  }
+
+  // Stvaran kvar koji imitira: fixer koji ne provjerava je li cilj vec postignut, pa svakim
+  // prolazom doda razmak na kraj prvog w:t.
+  const dodajRazmak = (xml: string) => xml.replace('</w:t>', ' </w:t>');
+  // Stvaran kvar koji imitira: idempotentna zamjena znaka u autorskom tekstu (svako 'č' u 'c'; slovo a bi pokvarilo entitet &amp; pa bi ga odbila vrata integriteta).
+  // Idempotencija je prolazi, pa je hvata samo svojstvo vidljivog teksta.
+  const cUc = (xml: string) => xml.replace(/(<w:t\b[^>]*>)([^<]*)/g, (_m, o: string, t: string) => o + t.replace(/č/g, 'c'));
+
+  it('BASELINE: stvarni recept forme prolazi oba svojstva', async () => {
+    expect((await idempotenceProperty(realRepair)).error).toBeNull();
+    expect((await visibleTextProperty(realRepair)).error).toBeNull();
+  }, 120_000);
+
+  it('BASELINE: identitetski mutant kroz isti mock prolazi oba svojstva (mock sam po sebi ne obara)', async () => {
+    const repair = await repairSMutantom((xml) => xml);
+    expect((await idempotenceProperty(repair)).error).toBeNull();
+    expect((await visibleTextProperty(repair)).error).toBeNull();
+  }, 120_000);
+
+  it('mutant: fixer koji svakim prolazom doda razmak obara idempotenciju uz smanjen protuprimjer', async () => {
+    const out = await idempotenceProperty(await repairSMutantom(dodajRazmak));
+    expect(out.failed).toBe(true);
+    expect(out.error).toContain('word/document.xml: drugi prolaz nije no-op');
+    expect(out.numShrinks).toBeGreaterThan(0);
+    // Smanjen na jedan nositelj teksta: shrinker ostavlja jedan run, a moze ostaviti i prazan odlomak.
+    const ce = out.counterexample!;
+    expect(ce.paragraphs.flatMap((p) => p.runs)).toHaveLength(1);
+    expect(ce.paragraphs.length).toBeLessThanOrEqual(2);
+  }, 120_000);
+
+  it('mutant: idempotentna zamjena č u c prolazi idempotenciju, a obara svojstvo vidljivog teksta', async () => {
+    const repair = await repairSMutantom(cUc);
+    expect((await idempotenceProperty(repair)).error).toBeNull();
+    const out = await visibleTextProperty(repair);
+    expect(out.failed).toBe(true);
+    expect(out.error).toContain('vidljivi tekst promijenjen');
+    expect(out.numShrinks).toBeGreaterThan(0);
+  }, 120_000);
+});
+
+describe('traka privole u toku stranice na mobitelu (mobilni audit 2026-09-28, PR 3)', () => {
+  const lf = (p: string) => readFileSync(resolve(process.cwd(), p), 'utf8').replace(/\r/g, '');
+  const izvor = () => ({
+    pageApp: lf('src/shared/page-app.css'),
+    pageChrome: lf('src/shared/page-chrome.css'),
+    toolPage: lf('src/shared/tool-page.css'),
+    appTs: lf('src/ui/app.ts'),
+  });
+
+  it('BASELINE: obje trake u toku na uskom ekranu, rezerva samo za fiksnu traku', () => {
+    expect(mobileConsentProblems(izvor())).toEqual([]);
+  });
+
+  it('mutant: /rad/ traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.pageApp.replace('.consent-banner{position:static;', '.consent-banner{');
+    expect(m).not.toBe(s.pageApp);
+    expect(mobileConsentProblems({ ...s, pageApp: m })).toEqual(['/rad/: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: alatna traka opet fiksna na mobitelu se hvata', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('.lekta-consent-banner{position:static;', '.lekta-consent-banner{');
+    expect(m).not.toBe(s.toolPage);
+    expect(mobileConsentProblems({ ...s, toolPage: m })).toEqual(['alati: traka nije u toku na uskom ekranu']);
+  });
+
+  it('mutant: rezerva bez praga sirine se hvata', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media screen{body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(mobileConsentProblems({ ...s, pageChrome: m })).toEqual(['rezerva za traku bez praga sirine']);
+  });
+
+  it('mutant: inline rezerva i za traku u toku se hvata', () => {
+    const s = izvor();
+    const m = s.appTs.replace("!skriven&&getComputedStyle(b).position==='fixed'?`${h+34}px`:''", "skriven?'':`${h+34}px`");
+    expect(m).not.toBe(s.appTs);
+    expect(mobileConsentProblems({ ...s, appTs: m })).toEqual(['inline rezerva ne ovisi o fiksnoj traci']);
+  });
+
+  it('mutant: prag min-width:721px ostavlja rupu za frakcijske sirine (Codex R2 na #305)', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('@media screen and (width > 720px){', '@media screen and (min-width:721px){');
+    expect(m).not.toBe(s.toolPage);
+    expect(mobileConsentProblems({ ...s, toolPage: m })).toEqual(['rezerva ostavlja rupu izmedju 720 i 721 px']);
+  });
+
+  it('mutant: rezerva i na uskom ekranu se hvata', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media(max-width:720px){body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(mobileConsentProblems({ ...s, pageChrome: m })).toEqual(['rezerva za traku i na uskom ekranu']);
+  });
+
+  it('BASELINE: na 720 / 720,5 / 721 px vrijedi tocno jedno, traka u toku ili rezerva (Codex R2 na #305)', () => {
+    expect(consentThresholdProblems(izvor())).toEqual([]);
+  });
+
+  it('mutant: min-width:721px ostavlja 720,5 px bez trake u toku i bez rezerve', () => {
+    const s = izvor();
+    const m = s.toolPage.replace('@media screen and (width > 720px){', '@media screen and (min-width:721px){');
+    expect(m).not.toBe(s.toolPage);
+    expect(consentThresholdProblems({ ...s, toolPage: m })).toEqual(['alati 720.5 px: ni traka u toku ni rezerva']);
+  });
+
+  it('mutant: rezerva od 720 px ukljucivo preklapa traku u toku', () => {
+    const s = izvor();
+    const m = s.pageChrome.replace('@media screen and (width > 720px){body:has(.consent-banner', '@media screen and (width >= 720px){body:has(.consent-banner');
+    expect(m).not.toBe(s.pageChrome);
+    expect(consentThresholdProblems({ ...s, pageChrome: m })).toEqual(['/rad/ 720 px: traka u toku i rezerva']);
+  });
+
+  it('BASELINE: Postavke privatnosti dovode traku u vidokrug i fokusiraju prvu radnju (Codex R1 na #305)', async () => {
+    expect(await consentRevealProblems(consentRevealFromSource())).toEqual([]);
+  });
+
+  it('mutant: bez pomaka u vidokrug se hvata', async () => {
+    const mod = consentRevealFromSource([["traka.scrollIntoView({ block: 'nearest' });", '']]);
+    expect(await consentRevealProblems(mod)).toEqual(['traka nije dovedena u vidokrug']);
+  });
+
+  it('mutant: bez fokusa na prvu radnju se hvata', async () => {
+    const mod = consentRevealFromSource([['?.focus({ preventScroll: true })', '']]);
+    expect(await consentRevealProblems(mod)).toEqual(['prva radnja trake nema fokus']);
   });
 });
