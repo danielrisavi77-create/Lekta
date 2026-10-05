@@ -467,7 +467,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     const current = paragraphText(block);
     const leading = current.length - current.trimStart().length;
     const adjusted = { ...citation, start: citation.start + leading, end: citation.end + leading };
-    // Tekst odlomka kakav vidi analiza. Krug 5 (F32): iz njega se racuna i otisak, kao u planu; otisak iz
+    // Tekst odlomka kakav vidi analiza. Krug 5 (F39): iz njega se racuna i otisak, kao u planu; otisak iz
     // w:t mijenjala je formula (m:t) sa slovom ili znamenkom ili tekst okvira, pa je pala cijela stavka.
     const readable = analysisText(block);
     const fingerprintMatches = citationAnchorFingerprint(citation.paragraphIndex, readable) === citation.anchorFingerprint;
@@ -488,7 +488,7 @@ export function citationBibliographySyncFixer(parts: DocxXmlParts, params: Citat
     // Upis smije samo kad su odmaci plana i odmaci u w:t isti. w:ptab `unsupported` ne vidi, a pomice
     // ih kao i w:tab ili formula (m:t); upis rawText na pomaknut raspon prepolovio bi citat (krug 4).
     if (excludedContainer(parts.documentXml, range) || unsupported(block) || analysisText(block) !== current) {
-      // Krug 5 (F32): citat iz kojeg predlozak cita prezime i godinu ne moze ostati nepromijenjen (plan
+      // Krug 5 (F39): citat iz kojeg predlozak cita prezime i godinu ne moze ostati nepromijenjen (plan
       // ga mijenja), a odlomak se ne smije pisati. Preskace se samo taj citat i njegov predlozak, s
       // razlogom; ostale potvrde stavke vrijede. Plan mora pokazivati citat koji parser nalazi (inace
       // je plan kriv) i otisak mora vrijediti (inace je dokument drugi), pa tada pada cijeli recept.

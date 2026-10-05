@@ -845,7 +845,7 @@ const TEXTBOX_RUN = '<w:r><w:pict><v:shape><v:textbox><w:txbxContent><w:p><w:r><
 const omml = (value: string) => `<m:oMath><m:r><m:t>${value}</m:t></m:r></m:oMath>`;
 
 /**
- * Z36 krug 5 (F32): odlomak citata u kojem formula (OMML m:t) sa slovom ili znamenkom, ili tekst
+ * Z36 krug 5 (F39): odlomak citata u kojem formula (OMML m:t) sa slovom ili znamenkom, ili tekst
  * tekstnog okvira, stoji ispred ili iza citata. Tekst w:t tada ima drugi otisak od teksta analize, pa je
  * otisak racunat iz w:t obarao cijelu stavku. Otisak se racuna iz teksta analize: zapis se dodaje, a
  * ostala potvrda iste stavke (izmijenjen citat Horvat u drugom odlomku) se primjenjuje.

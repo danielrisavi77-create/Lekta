@@ -8579,7 +8579,7 @@ const MUTATIONS: Mutation[] = [
       .some((p) => p.startsWith('okvir:predlozak:') || p.startsWith('okvir:predlozak-sidro:')),
     cleanBefore: z36FixerCist,
   },
-  // --- Z36 krug 5 (F32): otisak citatnog odlomka iz teksta analize; preskok samo ovisnog predloska ---
+  // --- Z36 krug 5 (F39): otisak citatnog odlomka iz teksta analize; preskok samo ovisnog predloska ---
   {
     id: 'z36/otisak-citata-iz-w-t',
     imitates: 'otisak citatnog odlomka racuna se iz w:t (stanje kruga 4): formula (m:t) sa slovom ili znamenkom '
