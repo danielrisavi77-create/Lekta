@@ -1,0 +1,13 @@
+{
+  "capture": {
+    "url": "https://api.crossref.org/works/10.9999%2Flekta-t98-ne-postoji",
+    "capturedAt": "2026-10-04T16:05:24.890Z",
+    "status": 404,
+    "contentType": "text/plain",
+    "removedFields": [],
+    "note": "nepostojeci DOI (404)"
+  },
+  "response": {
+    "nonJsonBody": "Resource not found."
+  }
+}

@@ -92,7 +92,7 @@ def fingerprint(kind: str, location: str, symptom: str) -> str:
     return digest[:32]
 
 
-_PLAN_TASK_RE = re.compile(r"T[0-9][0-9]")
+_PLAN_TASK_RE = re.compile(r"T(?:[0-9]{2}|[1-9][0-9]{2})")
 
 
 def normalize_signal(raw: dict) -> dict | None:
@@ -115,8 +115,8 @@ def normalize_signal(raw: dict) -> dict | None:
     scope = raw.get("scope") if isinstance(raw.get("scope"), dict) else {}
     paths = [p for p in (scope.get("paths") or []) if isinstance(p, str)]
     # Ciljni zadatak iz koordinatorova reda. Do 2026-09-13 se ovaj kljuc TIHO gubio ovdje, pa nijedan signal
-    # nije mogao imati `planTask` i kontroler je svakoj fazi slao `T00`. Oblik je uzak (`T` + dvije znamenke,
-    # isto sto trazi validateQueue), jer vrijednost putuje u argv `scripts/agents/cli.mjs prepare`.
+    # nije mogao imati `planTask` i kontroler je svakoj fazi slao `T00`. Oblik je uzak (`T` + dvije znamenke ili
+    # tri bez vodece nule, isto sto trazi validateQueue), jer vrijednost putuje u argv `scripts/agents/cli.mjs prepare`.
     # Sitnice oblika (razmaci, mala slova) se ISPRAVLJAJU, jer nisu pogadjanje; sve ostalo se ODBIJA IMENOM,
     # da razlog nizvodno razlikuje "nisi napisao planTask" od "napisao si ga u obliku koji red ne poznaje".
     # `T7` ili `T017` se namjerno ne popravljaju: to bi bilo nagadjanje koje bi model pokrenulo nad krivim

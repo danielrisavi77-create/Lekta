@@ -25,13 +25,13 @@
 // je odvojena: bez toga bi se mutacija mogla izvesti samo tako da se pokvari produkcija.
 //
 // Pokretanje:
-//   node scripts/post-deploy-smoke.mjs --site https://lektahr.netlify.app \
+//   node scripts/post-deploy-smoke.mjs --site https://lekta.hr \
 //        --functions https://<ref>.supabase.co/functions/v1
 //   node scripts/post-deploy-smoke.mjs --self-test    (bez mreze)
 //   node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit <sha> --strict-commit
 //        (provjera KONKRETNE objave: nepoznat ili drukciji sha je PAD; vidi commitIdentityVerdict)
 
-const DEFAULT_SITE = process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app';
+const DEFAULT_SITE = process.env.LEKTA_SITE_ORIGIN || 'https://lekta.hr';
 const DEFAULT_FUNCTIONS = process.env.LEKTA_FUNCTIONS_ORIGIN
   || 'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1';
 

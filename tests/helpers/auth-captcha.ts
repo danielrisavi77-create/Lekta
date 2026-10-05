@@ -36,8 +36,9 @@ export function captchaWiringProblems(files: SourceFile[]): string[] {
       for (let at = src.indexOf(endpoint); at !== -1; at = src.indexOf(endpoint, at + endpoint.length)) {
         // Samo stvarni pozivi (template URL u fetchu), ne spominjanja u komentarima.
         const lineStart = src.lastIndexOf('\n', at) + 1;
-        const line = src.slice(lineStart, src.indexOf('\n', at));
-        if (!/\bfetch\w*\(`/.test(line)) continue;
+        const prefix = src.slice(lineStart, at);
+        // T49 omata OTP URL u withRedirectQuery(...); endpoint mora biti unutar fetch templatea.
+        if (!/\bfetch\w*\(\s*(?:withRedirectQuery\s*\(\s*)?`[^`]*$/.test(prefix)) continue;
         calls++;
         const call = src.slice(at, src.indexOf('\n    });', at));
         const body = /\bbody:\s*([^\n]*)/.exec(call)?.[1] ?? '';

@@ -270,8 +270,8 @@ describe('uploadRepair', () => {
 
   // RE-33: 429 nosi razlog da poruka ne tvrdi "besplatnih" i kad je posrijedi placeni strop ili
   // dijeljeni IP-cap (korisnik osobno nije nista potrosio).
-  it('429 nosi reason kad ga server posalje (free_user/free_ip/paid_daily)', async () => {
-    for (const reason of ['free_user', 'free_ip', 'paid_daily'] as const) {
+  it('429 nosi reason kad ga server posalje (free_user/free_ip/paid_daily/attempts_daily)', async () => {
+    for (const reason of ['free_user', 'free_ip', 'paid_daily', 'attempts_daily'] as const) {
       const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(429, { reason }));
       expect(out).toEqual({ kind: 'rate_limited', reason });
     }

@@ -357,7 +357,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
   }
 });
 
-test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', async ({ page }) => {
+test('/rad/?resultRenderer=legacy ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', async ({ page }) => {
   /**
    * Brif vlasnika: manje osjecaja loading screena, vise osjecaja stvarnog pregleda rada. Do
    * 2026-09-07 su ovdje bili spinner, "Analiziram dokument...", traka napretka, "0%" i snop od
@@ -388,7 +388,10 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
     await route.continue();
   });
 
-  await page.goto('/rad/');
+  // Z33 (analiza uzivo) je ZAMIJENILA ovaj popis faza na zadanom prikazu; njegov tok mjeri
+  // `analysis-live.spec.ts`. Stari zaslon ostaje dostupan iza `?resultRenderer=legacy`, kao i stari
+  // ekran rezultata, pa ovaj test i dalje cuva njegova obecanja (faze, proslo vrijeme, bez postotka).
+  await page.goto('/rad/?resultRenderer=legacy');
   await cekajApp(page);
   await odbijAnalitiku(page); // vidi NALAZ C: potvrda profila zna zavrsiti iza trake privole
   await page.locator('#fileInput').setInputFiles(FIXTURE);
@@ -396,6 +399,7 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
   await potvrdiProfil(page);
 
   const pv = page.locator('#progressView');
+  await expect(pv.locator('.z33')).toHaveCount(0);
   await expect(pv).toBeVisible({ timeout: 15_000 });
 
   await expect(pv.locator('.pv-file')).toHaveText(path.basename(FIXTURE));

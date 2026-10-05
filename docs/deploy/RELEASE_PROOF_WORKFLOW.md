@@ -148,6 +148,31 @@ Mekoca je odluka o strogosti, ne potvrda dokaza; uz nalaz zavrsni redak glasi `N
 | `node scripts/build-production.mjs` | Stvarni produkcijski lanac (korak 6). |
 | `npm run post-deploy-smoke -- ...` | Provjera zive instalacije (korak 7). |
 
+## Netlify CLI za rucnu objavu
+
+`netlify-cli` nije ovisnost projekta (Popravak A, odluka vlasnika 2026-10-03): sluzi samo rucnoj objavi,
+a u `devDependencies` je vukao node-forge, braces i sharp lanac u puni `npm audit` graf. Objava i
+provjera povezanog sitea idu kroz pinanu verziju, nikad kroz globalnu instalaciju ni `@latest`:
+
+```bash
+npx --yes netlify-cli@27.10.2 status --json
+npx --yes netlify-cli@27.10.2 build
+npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build
+```
+
+Isti pin koristi `scripts/run-local-repair-release.mts` (`NETLIFY_CLI_PIN`). Verzija se mijenja svjesno,
+na oba mjesta u istom commitu; gard je `tests/netlify-cli-pin.test.ts`.
+
+Release skripta pokrece CLI kao `process.execPath` + `npx-cli.js` iz npm instalacije uz Node, bez
+`npx.cmd` i shella. Kad je npm instaliran odvojeno od Nodea (npr. Volta), skriptu pokreni kroz
+kanonski `npm run` ulaz, jer se tada `npx-cli.js` trazi uz `npm_execpath`; inace skripta pada i navodi
+provjerene putanje.
+
+Svaka release naredba ima gornju granicu od 20 minuta (`RELEASE_COMMAND_TIMEOUT_MS`). Timeout zaustavlja
+daljnje korake plana, ali ne dokazuje da je zapoceta objava prekinuta: ako istekne tijekom `deploy`,
+ishod objave je **NEPOZNAT** dok se ne provjeri u Netlify sucelju (Deploys) ili kroz
+`npx --yes netlify-cli@27.10.2 status --json`.
+
 ## Sto ovaj dokument NE pokriva
 
 - **`ux-dist` kao obavezna razina.** Danas je `required: false` (Playwright nad `dist/` kroz

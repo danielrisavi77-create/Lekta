@@ -439,11 +439,11 @@ describe('soft launch i pismo za instituciju', () => {
 
   it('pismo nosi tekst predloska, kontakt iz konfiguracije i NEMA datum', () => {
     const host = mount();
-    renderPricingLetter(host, { contactEmail: 'lekta.kontakt@gmail.com' });
+    renderPricingLetter(host, { contactEmail: 'support@lekta.hr' });
 
     expect(host.textContent).toContain('Poštovana dekanice, poštovani dekane,');
     expect(host.textContent).toContain('Institucija nije kartica. Institucija je pismo.');
-    expect(host.querySelector<HTMLAnchorElement>('.pl-btn')?.href).toContain('lekta.kontakt@gmail.com');
+    expect(host.querySelector<HTMLAnchorElement>('.pl-btn')?.href).toContain('support@lekta.hr');
 
     // BEZ DATUMA: ni u zaglavlju ni bilo gdje u pismu. Staticna stranica s datumom zastarijeva
     // svakim danom u kojem je nitko ne osvjezi.

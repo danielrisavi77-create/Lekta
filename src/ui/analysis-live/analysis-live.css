@@ -1,0 +1,409 @@
+/* ANALIZA UZIVO (ALIGNMENT Z33, varijanta A). Lijeni list: dolazi s modulom analysis-live.ts tek
+ * kad analiza pocne. Inline stilovi predloska Analysis.dc.html prepisani su u klase, boje na
+ * tokene sustava (desk/paper rade u obje teme).
+ *
+ * POKRET (Z31): animira se SAMO transform, opacity i clip-path. Nema backdrop-filter.
+ * Gard: tests/analysis-live.test.ts (motionCssProblems), mutacija u tests/gate-mutations.test.ts. */
+
+[data-premium-surface] #progressView[data-z33],
+#progressView[data-z33] {
+  display: block;
+  padding: 24px clamp(16px, 3vw, 32px) 40px;
+  text-align: left;
+  background: var(--desk);
+  color: var(--desk-ink);
+}
+#progressView[data-z33]::before { display: none }
+#progressView[data-z33] > h3,
+#progressView[data-z33] .pscan { display: none }
+#progressView[data-z33] .pv-file,
+#progressView[data-z33] .pv-local,
+#progressView[data-z33] .progress-actions { text-align: center }
+
+.z33 {
+  --z33-lamp: rgba(255, 206, 130, .34);
+  display: grid;
+  gap: 56px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 8px auto 32px;
+  font-family: var(--mono);
+  color: var(--desk-ink);
+  text-align: left;
+}
+
+/* ---------------- stol ---------------- */
+.z33-desk { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: start }
+.z33-col { display: grid; gap: 12px; min-width: 0 }
+.z33-status { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; letter-spacing: .08em; color: var(--desk-faint) }
+.z33-sheetrow { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 18px }
+.z33-stack { position: relative; min-width: 0 }
+.z33-under { position: absolute; inset: 0; background: var(--paper-line) }
+.z33-under--2 { transform: translate(10px, 10px) rotate(1.2deg); box-shadow: var(--paper-sh-sm) }
+.z33-under--1 { transform: translate(5px, 5px) rotate(.5deg); background: var(--paper-2) }
+.z33-flip { position: absolute; inset: 0; background: var(--paper-2); opacity: 0 }
+.z33[data-phase='reading'] .z33-flip { animation: z33-flip 1.4s var(--ease-spring) infinite }
+
+.z33-sheet {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 210 / 297;
+  background: var(--paper);
+  color: var(--paper-ink);
+  overflow: hidden;
+  box-shadow: var(--paper-sh);
+}
+.z33-text {
+  position: absolute;
+  inset: 0;
+  padding: 8cqw 9cqw 8cqw 7cqw;
+  font-family: var(--font-doc);
+  font-size: 2.85cqw;
+  line-height: 1.3;
+  overflow: hidden;
+}
+.z33-text p { margin: 0 0 2.4cqw }
+.z33-text .z33-h { margin-bottom: 3cqw; font-size: 1.3em }
+.z33-line { display: block; height: 1.6cqw; margin: 0 0 2.6cqw; background: var(--paper-line) }
+.z33-line--short { width: 42% }
+
+/* Olovka: mjerne linije i natpisi. Natpis je STVARNA kratka mjera provjere ili ništa. */
+.z33-mark { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--dur-2) var(--ease-spring) }
+.z33-mark[data-tone='finding'],
+.z33-mark[data-tone='pass'] { opacity: 1 }
+.z33-shape { position: absolute; display: block; transform: scaleY(0); transform-origin: top; transition: transform .9s var(--ease) }
+.z33-mark[data-tone='finding'] .z33-shape { transform: none }
+.z33-mark[data-tone='pass'] .z33-shape { display: none }
+.z33-pencil {
+  --emph-weight: 400;
+  --emph-style: italic;
+  position: absolute;
+  max-width: 40cqw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: 2.6cqw;
+  color: var(--red-on-soft);
+}
+.z33-mark[data-tone='pass'] .z33-pencil { font-style: normal; font-size: 3.2cqw; color: var(--ok-on-soft) }
+.z33-mark--margine .z33-shape { left: 7cqw; top: 3cqw; bottom: 3cqw; border-left: 1.5px dashed var(--red-on-soft) }
+.z33-mark--margine .z33-pencil { left: 1.2cqw; top: 2.2cqw }
+.z33-mark--font .z33-pencil { right: 9cqw; top: 2.2cqw }
+.z33-mark--prored .z33-shape { left: 3.6cqw; top: 21cqw; width: 1.6cqw; height: 3.1cqw; border: 1.5px solid var(--red-on-soft); border-right: 0 }
+.z33-mark--prored .z33-pencil { left: .8cqw; top: 25.5cqw }
+.z33-mark--uvlaka .z33-pencil { left: 2cqw; top: 78cqw }
+.z33-mark--brojevi .z33-shape { left: 50%; bottom: 2.4cqw; width: 9cqw; height: 4.4cqw; margin-left: -4.5cqw; border: 1.5px dashed var(--red-on-soft); border-radius: 50%; transform: scale(0); transform-origin: center }
+.z33-mark--brojevi .z33-pencil { left: 57%; bottom: 3.4cqw }
+
+.z33-lamp {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 18%;
+  background: linear-gradient(180deg, transparent, var(--z33-lamp) 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.z33[data-phase='reading'] .z33-lamp,
+.z33[data-phase='revealing'] .z33-lamp { opacity: 1; animation: z33-scan 2.6s ease-in-out infinite alternate }
+
+.z33-edge {
+  position: absolute;
+  right: 1.4cqw;
+  width: 1.1cqw;
+  height: 4cqw;
+  background: var(--red-deep);
+  opacity: 0;
+  transition: transform .7s var(--ease), opacity .5s .3s;
+}
+.z33-edge[data-visible='true'] { opacity: 1 }
+.z33-edge[data-gathered='true'] { opacity: 0; transform: translate(-9cqw, var(--z33-dy, 0)) scale(.4) }
+
+.z33-stamp {
+  position: absolute;
+  right: 7cqw;
+  bottom: 14cqw;
+  padding: 1.6cqw 2.6cqw;
+  border: 2.5px solid var(--red-deep);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--red-deep);
+  font-size: 3cqw;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transform: rotate(-9deg);
+  opacity: 0;
+}
+.z33-stamp[data-on='true'] { opacity: 1; animation: z33-stamp .34s var(--ease-pop) both }
+
+/* Cedulje uz list. Klon koji leti zivi u <body>, pa boje nose same cedulje, ne korijen. */
+.z33-notes { position: relative; min-height: 100% }
+.z33-note {
+  /* Zuta cedulja nema sistemskog tokena (ALIGNMENT je za ceduljicu propisuje kao literal); tinta je
+     tinta papira, ista u obje teme. */
+  --z33-note: #F1E6B8;
+  --z33-note-ink: var(--paper-ink);
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  background: var(--z33-note);
+  color: var(--z33-note-ink);
+  box-shadow: var(--paper-sh-sm);
+  font-family: var(--mono);
+  transform: rotate(var(--z33-rot, 2deg));
+  opacity: 0;
+  transition: opacity var(--dur-2);
+}
+.z33-note[data-visible='true'] { opacity: 1; animation: z33-note .45s var(--ease-spring) both }
+.z33-note-title {
+  --emph-weight: 400;
+  --emph-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.15;
+}
+.z33-note-meta { font-size: 10px; letter-spacing: .04em; color: var(--paper-muted); overflow-wrap: anywhere }
+.z33-note--flying { position: fixed; right: auto; z-index: 60; margin: 0; pointer-events: none; opacity: 1; animation: none }
+
+/* ---------------- desni stupac ---------------- */
+.z33-aside { display: grid; gap: 28px; min-width: 0 }
+.z33-label { font-size: 11px; letter-spacing: .08em; color: var(--desk-faint) }
+.z33-profile { display: grid; gap: 6px }
+.z33-profile-name { --emph-weight: 400; --emph-style: italic; font-family: var(--display-serif); font-size: 22px; line-height: 1.2; overflow-wrap: anywhere }
+.z33-faint { font-size: 12px; color: var(--desk-faint) }
+.z33-score { display: flex; align-items: baseline; gap: 14px; padding: 18px 0; border-top: 1px solid var(--desk-line); border-bottom: 1px solid var(--desk-line) }
+.z33-score-num { --emph-weight: 400; --emph-style: italic; font-family: var(--display-serif); font-size: 72px; line-height: .85; letter-spacing: -.02em }
+.z33-score-num[data-long='true'] { font-size: 28px; line-height: 1.1 }
+.z33-score-note { display: grid; gap: 4px; font-size: 12px; color: var(--desk-muted) }
+.z33-rows { display: grid; margin: 0; padding: 0; list-style: none }
+.z33-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--desk-line);
+  font-size: 13px;
+  color: var(--desk-faint);
+}
+.z33-row[data-state='active'],
+.z33-row[data-state='pass'],
+.z33-row[data-state='finding'] { color: var(--desk-ink) }
+.z33-row[data-state='unchecked'] { opacity: .55 }
+.z33-row[data-state='active'] .z33-icon { animation: z33-pulse 1s ease-in-out infinite }
+.z33-row[data-state='pass'] .z33-icon { color: var(--ok) }
+.z33-row[data-state='finding'] .z33-icon { color: var(--red) }
+.z33-count { font-size: 11px; color: var(--red) }
+.z33-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; font-size: 11px; color: var(--desk-faint) }
+.z33-stats span { display: grid; gap: 2px }
+.z33-stats b { min-height: 1.2em; font-weight: 400; font-size: 18px; color: var(--desk-ink) }
+/* Broj koji Word nije zapisao: "-" prigusenim tonom, razlog je u `title` celije. */
+.z33-stats b[data-unknown='true'] { color: var(--desk-faint) }
+/* Kratka oznaka ispod "-": vidljiva i citacu zaslona, ne samo u `title`. */
+.z33-stats small { font-size: 10px; line-height: 1.25; overflow-wrap: anywhere }
+.z33-stats small:empty { display: none }
+.z33-notify { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--desk-muted) }
+.z33-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--desk-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.z33-link[hidden] { display: none }
+.z33-link[data-on='true'] { color: var(--ok) }
+.z33-link:focus-visible { outline: 2px solid var(--red); outline-offset: 2px }
+
+/* ---------------- rezultat se gradi ---------------- */
+.z33-result { display: grid; gap: 24px }
+.z33-res-top { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; align-items: stretch }
+.z33-verdict-slot { position: relative; min-width: 0; scroll-margin-top: 84px }
+.z33-verdict-wait {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 220px;
+  box-sizing: border-box;
+  padding: 32px;
+  border: 1.5px dashed var(--desk-line);
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--desk-faint);
+  text-align: center;
+}
+.z33-verdict-slot[data-shown='true'] .z33-verdict-wait { display: none }
+.z33-verdict {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 36px 40px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh);
+  animation: z33-in .5s var(--ease-spring) both;
+}
+.z33-verdict[hidden],
+.z33-ring[hidden] { display: none }
+.z33-verdict-lead { display: grid; gap: 14px; min-width: 0 }
+.z33-eyebrow { font-size: 11px; letter-spacing: .08em; color: var(--paper-muted); text-transform: uppercase; overflow-wrap: anywhere }
+.z33-verdict-title {
+  --emph-weight: 400;
+  --emph-style: italic;
+  margin: 0;
+  font-family: var(--display-serif);
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: .98;
+  letter-spacing: -.015em;
+  text-wrap: balance;
+  color: var(--paper-ink);
+}
+.z33-caret { color: var(--red-deep); opacity: 0 }
+.z33-verdict[data-caret='true'] .z33-caret { opacity: 1; animation: z33-caret .8s steps(1) infinite }
+.z33-verdict-meta { opacity: 0; transition: opacity var(--dur-2) }
+.z33-verdict[data-meta='true'] .z33-verdict-meta { opacity: 1 }
+p.z33-verdict-meta { margin: 0; font-size: 13px; line-height: 1.55; color: var(--paper-muted) }
+.z33-verdict-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap }
+/* Gumbi lista presude nisu dohvatljivi dok su nevidljivi (prije kraja tipkanja presude). */
+.z33-verdict:not([data-meta='true']) .z33-verdict-actions { visibility: hidden }
+.z33-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: var(--radius-btn-lg);
+  background: var(--red-deep);
+  color: var(--paper);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+.z33-cta[hidden] { display: none }
+.z33-cta:focus-visible { outline: 2px solid var(--paper-ink); outline-offset: 2px }
+.z33-link--paper { font-size: 13px; color: var(--paper-ink) }
+.z33-ring {
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: conic-gradient(var(--red-deep) 0 calc(var(--z33-ring, 0) * 1%), var(--paper-line) 0);
+}
+.z33-ring span {
+  --emph-weight: 400;
+  --emph-style: italic;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: var(--paper);
+  font-family: var(--display-serif);
+  font-size: 48px;
+}
+.z33-cats { display: grid; align-content: start; padding: 24px 26px; background: var(--paper-2); color: var(--paper-ink); min-width: 0 }
+.z33-label--paper { padding-bottom: 10px; border-bottom: 1px solid var(--paper-line); color: var(--paper-muted) }
+.z33-cat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--paper-line);
+  font-size: 13px;
+  opacity: .55;
+  transition: opacity var(--dur-2);
+}
+.z33-cat:not([data-tone='wait']) { opacity: 1 }
+.z33-cat-label { --emph-weight: 400; --emph-style: italic; font-family: var(--display-serif); font-size: 19px }
+.z33-cat-status { font-size: 11px; color: var(--paper-muted) }
+.z33-cat[data-tone='bad'] .z33-cat-status { color: var(--red-on-soft) }
+.z33-cat[data-tone='ok'] .z33-cat-status { color: var(--ok-on-soft) }
+.z33-findings { display: grid; padding: 8px 28px 18px; background: var(--paper); color: var(--paper-ink); min-width: 0 }
+.z33-findings-head { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0 12px; border-bottom: 1px solid var(--paper-line); font-size: 11px; letter-spacing: .08em; color: var(--paper-muted) }
+.z33-slot { display: grid; align-items: center; min-height: 64px; border-bottom: 1px solid var(--paper-line) }
+.z33-slot-wait {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 10px 0;
+  padding: 0 14px;
+  border: 1.5px dashed var(--paper-line);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--paper-muted);
+}
+.z33-slot[data-state='filled'] .z33-slot-wait,
+.z33-slot[data-state='placeholder'] .z33-slot-on { display: none }
+/* Mjesto bez nalaza zadrzava visinu retka (Z33-04), samo bez sadrzaja. */
+.z33-slot[data-state='empty'] .z33-slot-on { display: none }
+.z33-slot[data-state='empty'] .z33-slot-wait { visibility: hidden }
+.z33-slot-on { display: grid; grid-template-columns: 28px 10px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 14px 0 }
+.z33-slot-n { font-size: 11px; color: var(--paper-muted) }
+.z33-dot { align-self: center; width: 8px; height: 8px; border-radius: 50%; background: var(--paper-muted) }
+.z33-slot[data-severity='error'] .z33-dot { background: var(--red-deep) }
+.z33-slot[data-severity='warning'] .z33-dot { background: var(--warn) }
+.z33-slot-title { --emph-weight: 400; --emph-style: italic; min-width: 0; font-family: var(--display-serif); font-size: 20px; line-height: 1.2; overflow-wrap: anywhere }
+.z33-slot-meta { max-width: 32ch; font-size: 11px; color: var(--paper-muted); text-align: right; overflow-wrap: anywhere; opacity: 0; transition: opacity var(--dur-2) }
+.z33-slot-meta[data-visible='true'] { opacity: 1 }
+.z33-slot-meta s { color: var(--red-on-soft) }
+
+/* < 980 px: nema stupca cedulja; nalazi se samo ispisuju na mjestu. */
+@media (max-width: 979.98px) {
+  .z33-desk,
+  .z33-sheetrow,
+  .z33-res-top { grid-template-columns: minmax(0, 1fr) }
+  .z33-notes { display: none }
+  .z33-sheet { max-width: 520px }
+}
+@media (max-width: 640px) {
+  #progressView[data-z33] { padding: 16px 12px 32px }
+  .z33 { gap: 36px }
+  .z33-score-num { font-size: 56px }
+  .z33-verdict { grid-template-columns: minmax(0, 1fr); padding: 24px 20px }
+  .z33-ring { justify-self: start }
+  .z33-findings { padding: 8px 16px 14px }
+  .z33-cats { padding: 18px 16px }
+  .z33-slot-on { grid-template-columns: 24px 10px minmax(0, 1fr) }
+  .z33-slot-meta { grid-column: 3; max-width: none; text-align: left }
+}
+
+@keyframes z33-scan { from { transform: translateY(-100%) } to { transform: translateY(600%) } }
+@keyframes z33-flip { 0% { transform: none; opacity: .9 } 100% { transform: translate(-46px, -8px) rotate(-7deg); opacity: 0 } }
+@keyframes z33-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
+@keyframes z33-stamp { from { transform: rotate(-9deg) scale(1.6); opacity: 0 } to { transform: rotate(-9deg) scale(1); opacity: 1 } }
+@keyframes z33-note { from { transform: translateX(-14px) rotate(0); opacity: 0 } to { opacity: 1 } }
+@keyframes z33-in { from { transform: translateY(8px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes z33-caret { 50% { opacity: 0 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .z33 *,
+  .z33-note--flying { animation: none !important; transition: none !important }
+  .z33-lamp,
+  .z33-flip { display: none }
+}
+:root[data-motion='reduce'] .z33 *,
+:root[data-motion='reduce'] .z33-note--flying { animation: none !important; transition: none !important }
+:root[data-motion='reduce'] .z33-lamp,
+:root[data-motion='reduce'] .z33-flip { display: none }

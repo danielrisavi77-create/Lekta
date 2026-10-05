@@ -46,7 +46,9 @@ export function validateQueue(queue) {
   const tasks = new Map();
   const states = ['blocked', 'ready', 'in_progress', 'in_review', 'done'];
   for (const task of queue.tasks) {
-    if (!/^T\d{2}$/.test(task.id) || tasks.has(task.id)) throw new Error('Invalid or duplicate task id');
+    // T00 do T99 i T100 do T999. Vodeca nula u troznamenkastom obliku (T017) se odbija jer bi bila
+    // nagadjanje o kojem je zadatku rijec; isti oblik trazi `_PLAN_TASK_RE` u scripts/autonomy/signals.py.
+    if (!/^T(?:\d{2}|[1-9]\d{2})$/.test(task.id) || tasks.has(task.id)) throw new Error('Invalid or duplicate task id');
     if (!task.title || !states.includes(task.status) || !Array.isArray(task.dependsOn)) {
       throw new Error(`Invalid task: ${task.id}`);
     }

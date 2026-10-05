@@ -14,7 +14,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, appendFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { compareAuditToRatchet, formatVerdict, parseAuditResponse, validateRatchet } from './npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, formatVerdict, parseAuditResponse, syntheticAudit, validateRatchet } from './npm-audit-ratchet-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RATCHET_PATH = path.join(ROOT, 'data', 'security', 'npm-audit-ratchet.json');
@@ -50,14 +50,27 @@ function selftest() {
     console.error('[audit-ratchet] FAIL selftest: strop nije broj, mutacija nema sto prekoraciti.');
     return 1;
   }
-  const fake = (names) => ({ vulnerabilities: Object.fromEntries(names.map((name, i) => [name, { severity: i % 2 ? 'high' : 'critical' }])) });
   const accepted = ratchet.fullGraphHighCriticalPackages;
-  const above = compareAuditToRatchet(fake([...accepted.slice(0, -1), '__novi-ranjivi-paket__']), ratchet);
+  const above = compareAuditToRatchet(syntheticAudit(ratchet, [...accepted.slice(0, -1), '__novi-ranjivi-paket__']), ratchet);
   if (above.verdict !== 'above') {
     console.error('[audit-ratchet] FAIL selftest: podmetnut novi identitet NIJE prijavljen. Gard ne grize.');
     return 1;
   }
-  const equal = compareAuditToRatchet(fake(accepted), ratchet);
+  // T93 se provjerava na zasebnom fixtureu jer produkcijski ratchet sada namjerno nema iznimke.
+  const advisoryProbeRatchet = {
+    fullGraphHighCritical: 1,
+    fullGraphHighCriticalPackages: ['__accepted__'],
+    exceptions: [{ packages: ['__accepted__'], advisories: ['GHSA-aaaa-aaaa-aaaa'] }],
+  };
+  const newAdvisory = compareAuditToRatchet(
+    syntheticAudit(advisoryProbeRatchet, ['__accepted__'], { __accepted__: ['GHSA-zzzz-zzzz-zzzz'] }),
+    advisoryProbeRatchet,
+  );
+  if (newAdvisory.verdict !== 'above' || !newAdvisory.uncoveredPairs.includes('__accepted__ GHSA-zzzz-zzzz-zzzz')) {
+    console.error('[audit-ratchet] FAIL selftest: novi advisory na prihvacenom paketu NIJE prijavljen. Gard ne grize.');
+    return 1;
+  }
+  const equal = compareAuditToRatchet(syntheticAudit(ratchet, accepted), ratchet);
   if (equal.verdict !== 'equal') {
     console.error('[audit-ratchet] FAIL selftest: jednak broj nije prosao kao jednak.');
     return 1;
@@ -72,7 +85,7 @@ function selftest() {
     console.error('[audit-ratchet] FAIL selftest: nevaljan audit odgovor NIJE odbijen.');
     return 1;
   }
-  console.log(`[audit-ratchet] SELF-TEST OK: strop ${ceiling}, novi identitet se hvata, jednakost prolazi, nevaljan odgovor pada.`);
+  console.log(`[audit-ratchet] SELF-TEST OK: strop ${ceiling}, novi identitet i novi advisory na prihvacenom paketu se hvataju, jednakost prolazi, nevaljan odgovor pada.`);
   return 0;
 }
 

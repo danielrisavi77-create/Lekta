@@ -1,0 +1,61 @@
+{
+  "_napomena": "Sinteticki odgovori gh api za tests/pr-intake.test.ts. Bez tajni; jedini korisnik je danielrisavi77-create.",
+  "pr": {
+    "number": 901,
+    "title": "fix(alat): sinteticki PR za pr-intake",
+    "draft": false,
+    "body": "Sazetak promjene.\n\nNeto redaka: +40/-6\nNove ovisnosti: nema\n",
+    "user": { "login": "danielrisavi77-create" },
+    "mergeable_state": "clean",
+    "additions": 40,
+    "deletions": 6,
+    "changed_files": 4,
+    "head": { "sha": "aaaaaaaa11111111222222223333333344444444" },
+    "base": { "sha": "bbbbbbbb11111111222222223333333344444444", "ref": "master" }
+  },
+  "compare": {
+    "behind_by": 2,
+    "ahead_by": 1,
+    "base_commit": { "sha": "cccccccc11111111222222223333333344444444" }
+  },
+  "files": [
+    { "filename": "scripts/agents/alat.mjs", "additions": 20, "deletions": 2 },
+    { "filename": "tests/alat.test.ts", "additions": 15, "deletions": 0 },
+    { "filename": "docs/agents/README.md", "additions": 2, "deletions": 0 },
+    { "filename": "package.json", "additions": 3, "deletions": 4 }
+  ],
+  "checkRuns": [
+    { "id": 100, "name": "check", "status": "completed", "conclusion": "failure" },
+    { "id": 140, "name": "check", "status": "completed", "conclusion": "success" },
+    { "id": 110, "name": "pr-opis", "status": "completed", "conclusion": "success" },
+    { "id": 120, "name": "gitleaks", "status": "completed", "conclusion": "skipped" },
+    { "id": 130, "name": "e2e", "status": "in_progress", "conclusion": null },
+    { "id": 125, "name": "orphan", "status": "completed", "conclusion": "success" },
+    { "id": 150, "name": "orphan", "status": "completed", "conclusion": "failure" }
+  ],
+  "comments": [
+    {
+      "user": { "login": "danielrisavi77-create" },
+      "created_at": "2026-10-01T09:00:00Z",
+      "body": "## Pregled drugog providera (gpt-6-sol), Runda 1\n\n| ID | Ozbiljnost | Tvrdnja |\n| --- | --- | --- |\n| R1 | blocker | prvi |\n| R2 | major | drugi |\n| R3 | major | treci |\n"
+    },
+    {
+      "user": { "login": "danielrisavi77-create" },
+      "created_at": "2026-10-02T09:00:00Z",
+      "body": "Popravljeno u novom commitu."
+    }
+  ],
+  "reviews": [
+    {
+      "user": { "login": "danielrisavi77-create" },
+      "submitted_at": "2026-10-02T12:00:00Z",
+      "body": "## Pregled drugog providera, Codex gpt-6.1-sol (zasticena staza src/docx), Runda 2\n\n| ID | Ozbiljnost | Tvrdnja |\n| --- | --- | --- |\n| R1 | major | ostalo |\n| R2 | minor | sitno |\n"
+    },
+    {
+      "user": { "login": "danielrisavi77-create" },
+      "submitted_at": "2026-10-03T08:30:00Z",
+      "body": "Odgovor na nalaze: R1 potvrden i popravljen, R2 opovrgnut s dokazom u testu."
+    }
+  ],
+  "protectedPaths": ["src/repair", "src/citations", "src/docx", "supabase", "security"]
+}

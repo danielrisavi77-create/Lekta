@@ -48,7 +48,14 @@ sve zeleno.
 
 ## Petlja
 
+0. Budi pretplacen na PR (`subscribe_pr_activity`) od trenutka kad doznas broj do spajanja;
+   lokalni koordinator bez tog alata na svakom krugu pokrece svoj `pr-intake` (nije u repozitoriju).
+   Na svakom krugu procitaj i nove komentare izvrsitelja na PR-u te zadnje dogadjaje njegove
+   sesije (`get_session`, `list_events`); Routine sa zaglavljem `[<sesija> -> koordinator]` je
+   izvjestaj izvrsitelja koji provjeravas prema PR-u (docs/agents/README.md).
 1. Pokreni skriptu za PR svakih 5 minuta.
 2. Izlaz 1: cekaj sljedeci krug.
 3. Izlaz 2: javi implementatoru ili vlasniku tocno sto blokira; ne popravljaj sam tudju granu.
 4. Izlaz 0 ili zatvoren PR: zaustavi petlju za taj PR.
+5. Nakon spajanja (izlaz 0) pokreni `node scripts/worktree-gc.mjs --apply`: uklanja worktreeove
+   koji su spojeni u master, cisti i bez gate locka; ostale ispisuje s razlogom i ne dira.

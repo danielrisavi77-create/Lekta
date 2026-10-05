@@ -9,12 +9,23 @@ import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
 import { detectPassRegressions, dropStaleFieldRegressions } from '../../src/analysis/repair-regression';
 import { buildDefaultRepairRequests, defaultSelectedItems } from '../../src/repair/default-selection';
 import { summarizeRepairOutcome } from '../../src/repair/repair-outcome';
+import { CHECK_TITLES } from '../../src/analysis/check-fixer-map';
+import { isPaperSizeCheckId, stableCheckId } from '../../src/scoring/check-id-registry';
 import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
-import { expectationProvenance, isHoldout, sidecarAdmitted, type CorpusSidecar, type ExpectationProvenance } from './corpus-track';
+import { corpusSetOf, expectationProvenance, isHoldout, type CorpusSidecar, type ExpectationProvenance } from './corpus-track';
 
-export { sidecarAdmitted, ADMITTED_TRACKS, type CorpusTrack, type CorpusSidecar } from './corpus-track';
+export {
+  sidecarAdmitted,
+  corpusSetOf,
+  witnessIsolationProblems,
+  ADMITTED_TRACKS,
+  WITNESS_TRACK,
+  type CorpusTrack,
+  type CorpusSidecar,
+  type CorpusSet,
+} from './corpus-track';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const REAL_CORPUS_ROOT = join(HERE, '..', 'fixtures', 'docx');
@@ -198,6 +209,14 @@ export interface RealCorpusReport {
    */
   syntheticResults: RealCorpusResult[];
   syntheticSummary: RealCorpusReport['summary'];
+  /**
+   * SVJEDOCI (T68): Word-autorski dokumenti s namjernim prekrsajima, traka `witness`. Zaseban skup s
+   * vlastitim sazetkom i ratchetom; NIJEDAN potrosac tvrdnji ga ne cita, a `results` ga nikad ne sadrzi
+   * (gard: `witnessIsolationProblems`, `tests/real-corpus-vacuity.test.ts`). Kljucevi stoje NA KRAJU
+   * izvjestaja, pa su postojeca polja artefakta bajt-identicna dok nema nijednog svjedoka.
+   */
+  witnessResults: WitnessResult[];
+  witnessSummary: WitnessSummary;
   summary: {
     documentCount: number;
     passCount: number;
@@ -224,6 +243,78 @@ export interface RealCorpusReport {
     /** Koliko dokumenata ima ocekivanja koja je zapisala neovisna osoba prije popravka (T06, 2.3). */
     independentlyConfirmedCount: number;
   };
+}
+
+/** Razlog zbog kojeg ciljana provjera svjedoka smije ostati crvena; bez razloga je jaz motora. */
+export type WitnessAssistanceReason =
+  /** Stavka trazi potvrdu, harness ju je primijenio, a provjera i dalje pada: korisnik mora pregledati. */
+  | 'asistirana-stavka-trazi-rucnu-potvrdu'
+  /** Stavka trazi korisnikov odabir, a zadani odabir je prazan, pa fixer nije imao sto primijeniti. */
+  | 'ceka-odabir-korisnika';
+
+export interface WitnessResult extends RealCorpusResult {
+  /** `checkId`-evi (repair-map) koje je generator NAMJERNO prekrsio, iz sidecara svjedoka. */
+  intendedChecks: string[];
+  /**
+   * Namjerni prekrsaji koje popravak NIJE ciljao: analiza ih nije vidjela kao pad ili ih nijedna stavka
+   * ne gadja. Izravan signal da svjedok stvarno vjezba pravilo; prazno je zdravo. Prekrsaj koji gadja
+   * stavka u cekanju korisnikova odabira NIJE neciljan: imenovan je u `needsAssistance` s razlogom
+   * `ceka-odabir-korisnika` (`witnessUntargeted`).
+   */
+  intendedUntargeted: string[];
+  /** Provjere koje ostaju korisniku, svaka s imenovanim razlogom. */
+  needsAssistance: Array<{ checkId: string; reason: WitnessAssistanceReason }>;
+  /** Ciljano AUTOMATSKIM fixerom i dalje pada, bez ikakvog razloga: jaz motora (mora biti prazno). */
+  unexplainedUnresolved: string[];
+}
+
+export interface WitnessSummary {
+  documents: number;
+  targetedCheckCount: number;
+  resolved: number;
+  needsAssistance: number;
+  regressions: number;
+  /** BROJ dokumenata ciji je drugi prolaz popravka no-op, ne zastavica: prazan skup ne smije dati `true`. */
+  secondPassNoOp: number;
+  unexplainedUnresolved: number;
+  intendedUntargeted: number;
+}
+
+export interface WitnessManifestEntry extends RealCorpusManifestEntry {
+  intendedChecks: string[];
+}
+
+/** `violations[].checkId` iz sidecara svjedoka, jedinstveni i sortirani; nevaljani zapisi se ignoriraju. */
+export function witnessIntendedChecks(metadata: CorpusSidecar): string[] {
+  if (!Array.isArray(metadata.violations)) return [];
+  const ids = (metadata.violations as unknown[])
+    .map((v) => (v && typeof v === 'object' ? (v as { checkId?: unknown }).checkId : undefined))
+    .filter((id): id is string => typeof id === 'string' && id.length > 0);
+  return [...new Set(ids)].sort();
+}
+
+/**
+ * Pogadja li stabilni id provjere namjerni prekrsaj `checkId` iz repair-mapa. Format papira ima
+ * dinamican naslov (`Format stranice A4`, `Format stranice (A4/A3)`), pa se prepoznaje po prefiksu id-a.
+ */
+export function witnessCheckMatches(checkId: string, stableId: string): boolean {
+  if (checkId === 'paper-size') return isPaperSizeCheckId(stableId);
+  const title = CHECK_TITLES[checkId];
+  return title !== undefined && stableCheckId(title) === stableId;
+}
+
+/**
+ * Namjerni prekrsaji koje nista ne gadja. `targeted` su ciljane provjere ishoda popravka (automatske i
+ * asistirane), `awaiting` provjere ciju stavku harness nije primijenio jer ceka korisnikov odabir; obje
+ * su "ciljane s imenovanim ishodom", pa prekrsaj iz bilo koje od njih ne ulazi ovamo.
+ */
+export function witnessUntargeted(
+  intended: readonly string[],
+  targeted: readonly string[],
+  awaiting: readonly string[],
+): string[] {
+  const aimed = [...targeted, ...awaiting];
+  return intended.filter((checkId) => !aimed.some((id) => witnessCheckMatches(checkId, id)));
 }
 
 function sidecarPath(root: string, fileName: string): string {
@@ -274,8 +365,35 @@ export function discoverExcludedCorpus(root = REAL_CORPUS_ROOT): RealCorpusManif
       } catch {
         return [];
       }
-      if (sidecarAdmitted(metadata) || !metadata.profileId) return [];
+      // Odluka je `corpusSetOf`, ista za sva tri otkrivanja: svjedok (T68) vise ne pada ovamo.
+      if (corpusSetOf(metadata) !== 'synthetic') return [];
       return [manifestEntry(fileName, metadata, root)];
+    });
+}
+
+/**
+ * SVJEDOCI (T68): dokumenti s trakom `witness`. Isti korijeni kao ostala dva otkrivanja, ista odluka
+ * (`corpusSetOf`), pa svjedok ne moze zavrsiti ni u `results` ni u `syntheticResults`.
+ */
+export function discoverWitnessCorpus(root = REAL_CORPUS_ROOT): WitnessManifestEntry[] {
+  let files: string[];
+  try {
+    files = readdirSync(root);
+  } catch {
+    return [];
+  }
+  return files
+    .filter((f) => f.toLowerCase().endsWith('.docx'))
+    .sort()
+    .flatMap((fileName) => {
+      let metadata: CorpusSidecar = {};
+      try {
+        metadata = JSON.parse(readFileSync(sidecarPath(root, fileName), 'utf8')) as CorpusSidecar;
+      } catch {
+        return [];
+      }
+      if (corpusSetOf(metadata) !== 'witness') return [];
+      return [{ ...manifestEntry(fileName, metadata, root), intendedChecks: witnessIntendedChecks(metadata) }];
     });
 }
 
@@ -297,7 +415,7 @@ export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestE
       } catch {
         return [];
       }
-      if (!sidecarAdmitted(metadata)) return [];
+      if (corpusSetOf(metadata) !== 'results') return [];
       return [manifestEntry(fileName, metadata, root)];
     });
 }
@@ -358,7 +476,18 @@ export function classifyMissingEntries(
   };
 }
 
+/** Ishod jednog dokumenta plus imena koja `RealCorpusResult` ne serijalizira (treba ih samo skup svjedoka). */
+interface RunDetail {
+  result: RealCorpusResult;
+  targeted: string[];
+  awaitingConfirmation: string[];
+}
+
 async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: string): Promise<RealCorpusResult> {
+  return (await runOneDetailed(entry, root, outputDir)).result;
+}
+
+async function runOneDetailed(entry: RealCorpusManifestEntry, root: string, outputDir?: string): Promise<RunDetail> {
   const base = {
     documentId: entry.documentId,
     fileName: entry.fileName,
@@ -550,10 +679,46 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     if (outputDir && finalResult.manualReviewRequired && changed) {
       writeFileSync(join(outputDir, `${entry.documentId}__repaired.docx`), applied.docxBytes);
     }
-    return finalResult;
+    return { result: finalResult, targeted: outcome.targeted, awaitingConfirmation: outcome.awaitingConfirmation };
   } catch (error) {
-    return { ...base, error: error instanceof Error ? error.message : String(error) };
+    return {
+      result: { ...base, error: error instanceof Error ? error.message : String(error) },
+      targeted: [],
+      awaitingConfirmation: [],
+    };
   }
+}
+
+/**
+ * Svjedok se mjeri ISTIM `runOneDetailed` kao stvarni rad; dodaje se samo ono sto zna sidecar
+ * svjedoka, a obican rad ne: koja su pravila namjerno prekrsena.
+ */
+async function runWitness(entry: WitnessManifestEntry, root: string): Promise<WitnessResult> {
+  const { result, targeted, awaitingConfirmation } = await runOneDetailed(entry, root);
+  return {
+    ...result,
+    intendedChecks: entry.intendedChecks,
+    intendedUntargeted: witnessUntargeted(entry.intendedChecks, targeted, awaitingConfirmation),
+    needsAssistance: [
+      ...result.assistedUnresolvedChecks.map((checkId) => ({ checkId, reason: 'asistirana-stavka-trazi-rucnu-potvrdu' as const })),
+      ...awaitingConfirmation.map((checkId) => ({ checkId, reason: 'ceka-odabir-korisnika' as const })),
+    ],
+    unexplainedUnresolved: [...result.autoUnresolvedChecks],
+  };
+}
+
+/** Sazetak skupa svjedoka: isti zbrojevi istih polja koje `summarizeResults` racuna za realni skup. */
+export function summarizeWitnesses(results: readonly WitnessResult[]): WitnessSummary {
+  return {
+    documents: results.length,
+    targetedCheckCount: results.reduce((n, r) => n + r.targetedCheckCount, 0),
+    resolved: results.reduce((n, r) => n + r.targetedResolvedCount, 0),
+    needsAssistance: results.reduce((n, r) => n + r.needsAssistance.length, 0),
+    regressions: results.reduce((n, r) => n + r.passRegressionCount, 0),
+    secondPassNoOp: results.filter((r) => r.secondPassNoOp).length,
+    unexplainedUnresolved: results.reduce((n, r) => n + r.unexplainedUnresolved.length, 0),
+    intendedUntargeted: results.reduce((n, r) => n + r.intendedUntargeted.length, 0),
+  };
 }
 
 /**
@@ -715,6 +880,17 @@ export async function runRealCorpus(
     ...(options.includeLocal ? discoverExcludedCorpus(localRoot) : []),
   ]);
   const syntheticResults = await mapLimited(excluded, (entry) => runOne(entry, entry.root ?? root));
+  // Svjedoci (T68) idu u TRECI skup, takodjer bez `outputDir`: nikad u `results`, nikad u matricu.
+  const witnessManifest = [
+    ...discoverWitnessCorpus(root),
+    ...(options.includeLocal ? discoverWitnessCorpus(localRoot) : []),
+  ];
+  const { entries: witnessEntries } = dedupeManifest(witnessManifest);
+  // Prva pojava vrijedi, kao u `dedupeManifest` (otuda obrnuti redoslijed pri gradnji mape).
+  const intendedById = new Map([...witnessManifest].reverse().map((entry) => [entry.documentId, entry.intendedChecks]));
+  const witnessResults = await mapLimited(witnessEntries, (entry) =>
+    runWitness({ ...entry, intendedChecks: intendedById.get(entry.documentId) ?? [] }, entry.root ?? root),
+  );
   const localCount = options.includeLocal
     ? manifest.filter((entry) => entry.root !== undefined && resolve(entry.root) !== resolve(root)).length
     : 0;
@@ -747,5 +923,7 @@ export async function runRealCorpus(
     summary: summarizeResults(results),
     syntheticResults,
     syntheticSummary: summarizeResults(syntheticResults),
+    witnessResults,
+    witnessSummary: summarizeWitnesses(witnessResults),
   };
 }

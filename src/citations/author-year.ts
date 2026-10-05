@@ -62,22 +62,71 @@ function referenceAuthor(before: any){
  if(a.includes(','))return a.split(',')[0].trim();const joined=a.split(/\s+(?:i|and|&)\s+/i);if(joined.length>1&&joined[0].trim().split(/\s+/).length<=3)return joined[0].trim();
  return a.replace(/[.(\[]+$/,'').trim()
 }
+const NO_DATE_MARK=/\((?:b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)/i;
+const REF_YEAR=/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i;
+const URL_START=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i;
+// Godina u POLOZAJU DATUMA: u zagradi ("(2011)", "(2011b)") ili iza zareza na kraju zapisa (", 2011.").
+const DATE_POSITION_YEAR=/\((?:18|19|20)\d{2}[a-z]?\)|,\s*(?:18|19|20)\d{2}[a-z]?\.?\s*$/;
+/**
+ * Metapodaci jednog zapisa iz njegova teksta. T91 (pregled R1): oznaka bez godine vrijedi osim kad zapis ima
+ * godinu u polozaju datuma; goli broj u naslovu nije datum. "Horvat, A. (2011). Mediji (u tisku)." i
+ * "Horvat, A. Mediji (u tisku). Zagreb, 2011." zadrzavaju 2011; "Horvat, A. (u tisku). Mediji 2011." zadrzava oznaku.
+ */
+function referenceMeta(t: string){
+ const nd=t.match(NO_DATE_MARK),y=t.match(REF_YEAR);
+ const noDate=nd&&!DATE_POSITION_YEAR.test(t)?nd:null;
+ const ym=noDate||y,urlOnly=URL_START.test(t);
+ const author=ym?referenceAuthor(t.slice(0,ym.index)):'';
+ const year=ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'';
+ return{ym,noDate:noDate?noDate[0]:'',author,year,urlOnly,
+  numbered:/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t),
+  // T91: zapis bez autora koji pocinje s "(2012)." je NOV zapis, ne nastavak prethodnoga (D1: 4 od 72 prijavljeno).
+  leadYear:/^\s*\((?:18|19|20)\d{2}[a-z]?\)\./.test(t)};
+}
+/** Zapis kakav bi nastao od ovog teksta kao JEDNOG odlomka bez prethodnika (ista grananja kao petlja nize). */
+function referenceFields(t: string){
+ const m=referenceMeta(t);
+ if((m.ym&&m.author&&!m.urlOnly)||m.numbered||(m.leadYear&&!m.urlOnly))return{author:m.author,year:m.year,...(m.noDate?{noDate:m.noDate}:{})};
+ return{author:'',year:''};
+}
+/**
+ * Predikat `reference.completeness` za autor-godina profil. Zapis s izricitom oznakom bez godine
+ * ("b.g.", "s. a.", "u tisku") nije nepotpun zbog godine; bez autora ili prekratak i dalje jest.
+ */
+function isIncompleteReference(r: { text: string; author?: string; year?: string; noDate?: string }){
+ return !r.author||(!r.year&&!r.noDate)||r.text.length<25;
+}
+/**
+ * T91 (pregled R2, R2b): POZITIVAN dokaz da je odlomak samo autorov dio zapisa, bez godine i bez vise
+ * recenica: "Prezime, I." s inicijalom (i vise autora), kratica velikim slovima ("HZZ."), ili naziv ustanove s
+ * kljucnom rijeci (zavod, ministarstvo, institut...). Naslov bez interpunkcije ("Socijalna politika") NIJE autor.
+ * Vrijedi samo uz odlomak iza njega koji pocinje datumom (vidi `datumNaPocetku`).
+ */
+function authorOnlyParagraph(t: string){
+ if(t.length>120||REF_YEAR.test(t)||NO_DATE_MARK.test(t)||URL_START.test(t))return false;
+ if(/^\p{Lu}{2,}\.?$/u.test(t))return true;
+ const bezInicijala=t.replace(/(^|[\s,;&(-])\p{Lu}\./gu,'$1');
+ if(/[.:;!?]/.test(bezInicijala))return false;
+ const osoba=/^\p{Lu}[\p{L}'’-]+(?:\s+\p{Lu}[\p{L}'’-]+)?,\s*\p{Lu}\./u.test(t);
+ const ustanova=/^\p{Lu}/u.test(t)&&/(?:^|\s)(?:zavod|ministarstv|institut|sveu[cč]ili[sš]t|fakultet|agencij|ured|komor|udrug|akademij)/iu.test(t);
+ return osoba||ustanova;
+}
+const datumNaPocetku=(t: string)=>/^\s*\((?:(?:18|19|20)\d{2}[a-z]?|b\.\s?g\.|b\.\s?d\.|n\.\s?d\.|s\.\s?a\.|bez\s+godine|bez\s+datuma|u\s+tisku|in\s+press)\)\./i.test(t);
 function extractReferences(paragraphs: any,lang: any){
  const heads=lang==='en'?['references','bibliography']:['literatura','bibliografija','izvoriiliteratura','popisliterature'];let start=-1;
  for(let i=0;i<paragraphs.length;i++)if(heads.includes(sectionName(paragraphs[i].text))){start=i+1;break}if(start<0)return{start,entries:[]};
  // Zavrsni dijelovi iza literature (popisi tablica i slika, izjava o akademskoj cestitosti, zivotopis)
  // NISU zapisi. Do 2026-09-05 ih nije bilo ovdje, pa su se ti odlomci LIJEPILI na zadnji zapis (vidi nize).
  const stopTerms=lang==='en'?['appendix','appendices','abstract','summary','listoftables','listoffigures','declaration','curriculumvitae']:['prilozi','prilog','sazetak','summary','abstract','kljucnerijeci','keywords','popistablica','popisslika','popisgrafikona','popisilustracija','popiskratica','popisoznaka','izjava','zivotopis','biografija'];
- const entries: any[]=[];let current: any=null;
+ const entries: any[]=[];let current: any=null;const autorskiRedovi=new WeakSet<object>();
  for(let i=start;i<paragraphs.length;i++){const t=paragraphs[i].text.trim();if(!t)continue;const n=sectionName(t);if(stopTerms.some((x: any)=>n===x||n.startsWith(x)))break;
   if(bibliographySubheading(n)){current=null;continue}
   if(paragraphs[i].headingLevel&&entries.length)break;
   // "(b.d.)" i "(s.a.)" su jednako cesti kao "(b.g.)"; bez njih zapis bez godine nije prepoznat kao NOV.
-  const noDate=t.match(/\((?:b\.g\.|b\.d\.|n\.d\.|s\.a\.|bez\s+godine|bez\s+datuma)\)/i),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);
+  // T91: i razmaknuti oblici ("s. a.", "n. d.", "b. g.") te "u tisku"/"in press"; bez njih je potpun zapis bez
+  // godine izgledao nepotpun (D1: 128 od 144 laznih nalaza). Godina ostaje prazna, oznaka ide u `noDate`.
   // Numeracija u uglatim zagradama ("[3] Steel Alliance...") je standardni IEEE zapis; bez nje se svaki takav zapis lijepio na prethodni.
-  const numbered=/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t);
-  const urlOnly=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i.test(t);
-  const before=ym?t.slice(0,ym.index):t.slice(0,100);const author=ym?referenceAuthor(before):'';const startsNew=!!ym&&!!author&&!urlOnly;
+  const{ym,author,urlOnly,numbered,leadYear}=referenceMeta(t);const startsNew=!!ym&&!!author&&!urlOnly;
   /**
    * NASTAVAK ILI NOV ODLOMAK. Do 2026-09-05 se SVAKI odlomak koji nije izgledao kao nov zapis lijepio na
    * prethodni, ukljucujuci rucno oblikovane podnaslove popisa ("Propisi i norme", "ZNANSTVENI I STRUCNI
@@ -92,14 +141,23 @@ function extractReferences(paragraphs: any,lang: any){
    * novi odlomak pocinje malim slovom ili URL-om. Kratak odlomak bez znamenki iza zavrsenog zapisa je
    * podnaslov popisa; dulji je nov (neprepoznat) zapis, isto kao i danas kad `current` ne postoji.
    */
+  // T91 (pregled R2): autorov red ("Horvat, A.", "HZZ.", "Hrvatski zavod za zaposljavanje") iza kojeg dolazi
+  // "(2011)." ili "(b.g.)." je pocetak zapisa bez obzira na duljinu i zavrsnu tocku inicijala ili kratice.
+  let iduci='';for(let j=i+1;j<paragraphs.length;j++){const s=String(paragraphs[j].text||'').trim();if(s){iduci=s;break}}
+  if(authorOnlyParagraph(t)&&datumNaPocetku(iduci)){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};autorskiRedovi.add(current);entries.push(current);continue}
   const zavrsen=!!current&&/[.)\]]\s*$/.test(current.text);
   const podnaslov=zavrsen&&!ym&&/^\p{Lu}/u.test(t)&&!/\d/.test(t)&&t.length<=60&&!urlOnly;
   if(podnaslov){current=null;continue}
   const nastavak=!!current&&!(zavrsen&&/^\p{Lu}/u.test(t)&&!urlOnly);
-  if(startsNew||numbered){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1,ps:[i+1]};entries.push(current)}
+  const iza=!!current&&autorskiRedovi.has(current)&&current.ps.length===1;
+  if(startsNew||numbered||(leadYear&&!urlOnly&&!iza)){current={text:t,...referenceFields(t),p:i+1,ps:[i+1]};entries.push(current)}
+  else if(iza){current.text+=' '+t;current.ps.push(i+1)}
   else if(nastavak){current.text+=' '+t;current.ps.push(i+1)}
   else if(t.length>20){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};entries.push(current)}
  }
+ // T91 (pregled R4): metapodaci viserednog zapisa izvode se tek nakon zavrsenog spajanja, iz cijelog teksta,
+ // istim pravilom kao za jedan odlomak; inace drugi prolaz nad spojenim tekstom daje drugog autora ili godinu.
+ for(const e of entries){if(e.ps.length<2)continue;const f: { author: string; year: string; noDate?: string }=referenceFields(e.text);e.author=f.author;e.year=f.year;if(f.noDate)e.noDate=f.noDate;else delete e.noDate}
  return{start,entries}
 }
 
@@ -257,4 +315,4 @@ export function croatianSurnameStems(word: string): string[] {
   return [...new Set(out)].filter((k) => k !== w);
 }
 
-export { extractCitations, extractReferences };
+export { extractCitations, extractReferences, isIncompleteReference };

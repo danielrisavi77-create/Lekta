@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lektahr.netlify.app/sitemap.xml
-Sitemap: https://lektahr.netlify.app/alati/sitemap-alati.xml
-Sitemap: https://lektahr.netlify.app/alati/sitemap-naslovnica.xml
-Sitemap: https://lektahr.netlify.app/sitemap-fakulteti.xml
+Sitemap: https://lekta.hr/sitemap.xml
+Sitemap: https://lekta.hr/alati/sitemap-alati.xml
+Sitemap: https://lekta.hr/alati/sitemap-naslovnica.xml
+Sitemap: https://lekta.hr/sitemap-fakulteti.xml

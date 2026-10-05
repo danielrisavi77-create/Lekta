@@ -17,6 +17,8 @@
 //      popis je aria-hidden ukras.
 
 import './progress-scan.css';
+import { resultRendererFor } from './results/results-cockpit';
+import type { LiveHandle } from './analysis-live/analysis-live';
 
 /** Pragovi su DOSLOVNI postoci iz onProgress poziva u src/analysis/analyze-docx.ts.
  *  Ako se ondje promijene, ovdje se mora promijeniti isto (gard: tests/progress-scan.test.ts). */
@@ -89,10 +91,85 @@ function mount(view: HTMLElement): { root: HTMLElement; items: HTMLElement[] } |
   return { root, items };
 }
 
+/**
+ * ANALIZA UZIVO (ALIGNMENT Z33) zamjenjuje ovaj popis faza. Njezin kod i CSS zive u LIJENOM
+ * modulu `./analysis-live/analysis-live`, koji se ucitava tek kad analiza pocne, pa statican graf
+ * rute `/rad/` raste samo za ovih nekoliko redaka. Iza `?resultRenderer=legacy` ostaje stari
+ * popis faza, kao i stari ekran rezultata. Gard granice: tests/analysis-live.test.ts.
+ *
+ * REZULTAT NIKAD NE CEKA MODUL (Codex Z33-02/03). Dok modul ne stigne, ekran provjere je ovaj
+ * kompaktni popis faza. Modul koji stigne dok analiza jos traje i prije nego je korisnik sam
+ * pomaknuo prikaz preuzima ekran; inace ceka SLJEDECU analizu, da se veliki prikaz ne umetne pod
+ * prstom ili usred rezultata. Analiza bez montiranog prikaza otkriva rezultat odmah, kao prije
+ * Z33, a modul koji nikad ne stigne ili baci pri montazi ostavlja upravo taj put.
+ */
+type Montaza = (view: HTMLElement) => LiveHandle;
+const SKROL_TIPKE = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
+const SKROL_DOGADAJI = ['wheel', 'touchmove', 'keydown'] as const;
+/** Otkrivanje traje najvise oko 4 s i ima vlastiti osigurac; ovo je ograda i za njegov kvar. */
+const OGRADA_OTKRIVANJA = 6_000;
+let modul: Promise<Montaza | null> | null = null;
+let montaza: Montaza | null = null;
+let handle: LiveHandle | null = null;
+/** Prikaz uzivo OVE analize; `null` znaci kompaktni popis faza i rezultat bez otkrivanja. */
+let aktivan: LiveHandle | null = null;
+let generacija = 0;
+/** Rezultat ove analize je stigao: kasni modul vise ne preuzima ekran. */
+let rezultatStigao = false;
+let zadnjiPct = 0;
+
+/** Poziva se iz runAnalysis u app.ts kad analiza krene; `profile` je profil po kojem se mjeri. */
+export function startLiveAnalysis(profile: unknown): void {
+  generacija += 1;
+  aktivan = null;
+  rezultatStigao = false;
+  zadnjiPct = 0;
+  const view = document.getElementById('progressView');
+  if (!view || resultRendererFor(document) === 'legacy') return;
+  const moja = generacija;
+  const pokreni = (m: Montaza | null): void => {
+    if (!m || moja !== generacija) return;
+    try {
+      handle ??= m(view);
+      handle.start(profile);
+      handle.progress(zadnjiPct);
+      aktivan = handle;
+    } catch {
+      // Prikaz ne smije srusiti analizu: ostaje popis faza, a rezultat se prikazuje odmah.
+      aktivan = null;
+    }
+  };
+  if (montaza) { pokreni(montaza); return; }
+  let skrolao = false;
+  const naSkrol = (e: Event): void => {
+    if (e.type !== 'keydown' || SKROL_TIPKE.has((e as KeyboardEvent).key)) skrolao = true;
+  };
+  for (const d of SKROL_DOGADAJI) window.addEventListener(d, naSkrol, { passive: true });
+  modul ??= import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null);
+  void modul.then((m) => {
+    for (const d of SKROL_DOGADAJI) window.removeEventListener(d, naSkrol);
+    if (!skrolao && !rezultatStigao) pokreni(m);
+  });
+}
+
+/** Rezultat stigao: otkrij ga uzivo. Rjesava se kad ekran rezultata smije preuzeti. */
+export async function revealLiveAnalysis(result: unknown): Promise<void> {
+  rezultatStigao = true;
+  const h = aktivan;
+  if (!h) return;
+  try {
+    await Promise.race([h.reveal(result), new Promise<void>((r) => { window.setTimeout(r, OGRADA_OTKRIVANJA); })]);
+  } catch {
+    // Prikaz ne smije srusiti analizu: bez otkrivanja rezultat se prikazuje odmah, kao prije Z33.
+  }
+}
+
 /** Poziva se iz progress() u app.ts uz svaki stvarni pomak analize. */
 export function renderProgressScan(pct: number): void {
   const view = document.getElementById('progressView');
   if (!view) return;
+  zadnjiPct = Number.isFinite(pct) ? pct : 0;
+  try { aktivan?.progress(zadnjiPct); } catch { aktivan = null; }
   if (!mounted) mounted = mount(view);
   if (!mounted) return;
   const states = phaseStates(Number.isFinite(pct) ? pct : 0);

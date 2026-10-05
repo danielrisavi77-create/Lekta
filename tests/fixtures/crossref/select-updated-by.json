@@ -1,0 +1,93 @@
+{
+  "capture": {
+    "url": "https://api.crossref.org/works?query.bibliographic=Downregulation%20of%20long%20noncoding%20RNA%20LINC01419%20gastric%20cancer&rows=2&select=title%2Cauthor%2Cissued%2CDOI%2Cupdated-by",
+    "capturedAt": "2026-10-04T16:05:24.890Z",
+    "status": 200,
+    "contentType": "application/json",
+    "removedFields": [
+      "author (po stavci)"
+    ],
+    "note": "bibliografski put: podrzava li select vrijednost updated-by"
+  },
+  "response": {
+    "status": "ok",
+    "message-type": "work-list",
+    "message-version": "1.0.0",
+    "message": {
+      "facets": {},
+      "total-results": 4717404,
+      "items": [
+        {
+          "title": [
+            "Retraction notice: Downregulation of long noncoding RNA LINC01419 inhibits cell migration, invasion, and tumor growth and promotes autophagy via inactivation of the PI3K/Akt1/mTOR pathway in gastric cancer."
+          ],
+          "issued": {
+            "date-parts": [
+              [
+                2021,
+                1
+              ]
+            ]
+          },
+          "DOI": "10.1177/17588359211061903"
+        },
+        {
+          "title": [
+            "RETRACTED: Downregulation of long noncoding RNA LINC01419 inhibits cell migration, invasion, and tumor growth and promotes autophagy\n                    <i>via</i>\n                    inactivation of the PI3K/Akt1/mTOR pathway in gastric cancer"
+          ],
+          "issued": {
+            "date-parts": [
+              [
+                2019,
+                1
+              ]
+            ]
+          },
+          "DOI": "10.1177/1758835919874651",
+          "updated-by": [
+            {
+              "DOI": "10.1177/17588359211061903",
+              "type": "retraction",
+              "label": "Retraction",
+              "source": "retraction-watch",
+              "updated": {
+                "date-parts": [
+                  [
+                    2021,
+                    12,
+                    15
+                  ]
+                ],
+                "date-time": "2021-12-15T00:00:00Z",
+                "timestamp": 1639526400000
+              },
+              "record-id": "34999"
+            },
+            {
+              "DOI": "10.1177/17588359211061903",
+              "type": "retraction",
+              "label": "Retraction",
+              "source": "publisher",
+              "updated": {
+                "date-parts": [
+                  [
+                    2021,
+                    12,
+                    15
+                  ]
+                ],
+                "date-time": "2021-12-15T00:00:00Z",
+                "timestamp": 1639526400000
+              }
+            }
+          ]
+        }
+      ],
+      "items-per-page": 2,
+      "query": {
+        "start-index": 0,
+        "search-terms": null
+      }
+    }
+  }
+}

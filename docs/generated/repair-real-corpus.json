@@ -1551,5 +1551,16 @@
     "manualOnlyCount": 69,
     "holdoutCount": 3,
     "independentlyConfirmedCount": 0
+  },
+  "witnessResults": [],
+  "witnessSummary": {
+    "documents": 0,
+    "targetedCheckCount": 0,
+    "resolved": 0,
+    "needsAssistance": 0,
+    "regressions": 0,
+    "secondPassNoOp": 0,
+    "unexplainedUnresolved": 0,
+    "intendedUntargeted": 0
   }
 }

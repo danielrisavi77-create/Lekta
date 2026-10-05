@@ -1,0 +1,1905 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "programCode": "3",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/sveucilisni-prijediplomski-studij/elektrotehnika/"
+    },
+    {
+      "programCode": "4",
+      "kind": "decision",
+      "sourceUrl": "https://www.fesb.unist.hr/upisi/prijediplomski/"
+    },
+    {
+      "programCode": "5",
+      "kind": "decision",
+      "sourceUrl": "https://www.fesb.unist.hr/upisi/prijediplomski/"
+    },
+    {
+      "programCode": "6",
+      "kind": "decision",
+      "sourceUrl": "https://pfri.uniri.hr/web/hr/promet_i_mobilnost.php"
+    },
+    {
+      "programCode": "16",
+      "kind": "decision",
+      "sourceUrl": "https://pfri.uniri.hr/web/hr/studij_pre_EL.php"
+    },
+    {
+      "programCode": "23",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/wp-content/uploads/2026/02/Web_Madarski-jezik-i-knjizevnost_prijediplomski-studij_2025-2026.pdf"
+    },
+    {
+      "programCode": "28",
+      "kind": "decision",
+      "sourceUrl": "https://www.kemija.unios.hr/sveucilisni-prijediplomski-studij-kemija/"
+    },
+    {
+      "programCode": "31",
+      "kind": "decision",
+      "sourceUrl": "https://www.mathos.unios.hr/upisi/"
+    },
+    {
+      "programCode": "32",
+      "kind": "decision",
+      "sourceUrl": "https://www.fesb.unist.hr/upisi/prijediplomski/"
+    },
+    {
+      "programCode": "33",
+      "kind": "decision",
+      "sourceUrl": "https://www.foi.unizg.hr/hr/studiji/pds"
+    },
+    {
+      "programCode": "36",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/upisi"
+    },
+    {
+      "programCode": "37",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/upisi"
+    },
+    {
+      "programCode": "38",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/upisi"
+    },
+    {
+      "programCode": "39",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/upisi"
+    },
+    {
+      "programCode": "40",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/upisi"
+    },
+    {
+      "programCode": "41",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/preddiplomski"
+    },
+    {
+      "programCode": "47",
+      "kind": "decision",
+      "sourceUrl": "https://gradst.unist.hr/Portals/9/docs/Referada/Izvedbeni/PSSA/SP_PRIJEDIPLOMSKI_AiU_2024.pdf?ver=Rf_KtXrnJM140-9KTwMN7w%3D%3D"
+    },
+    {
+      "programCode": "48",
+      "kind": "decision",
+      "sourceUrl": "https://fsb.unizg.hr/?fsbonline=&lang=hr&studiranje_i_nastava=&upisi="
+    },
+    {
+      "programCode": "50",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/sveucilisni-prijediplomski-studij/sveucilisni-prijediplomski-studij-brodogradnje/"
+    },
+    {
+      "programCode": "51",
+      "kind": "decision",
+      "sourceUrl": "https://www.ferit.unios.hr/upisi-i-studijski-programi/sveucilisni-prijediplomski-studij"
+    },
+    {
+      "programCode": "54",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/elektrotehnicke-i-komunikacijske-tehnologije-u-pomorstvu/"
+    },
+    {
+      "programCode": "57",
+      "kind": "decision",
+      "sourceUrl": "https://www.grad.unizg.hr/studiji/sveucilisni_prijediplomski_studij_gradevinarstvo"
+    },
+    {
+      "programCode": "58",
+      "kind": "decision",
+      "sourceUrl": "https://gradst.unist.hr/studiji/gra%C4%91evinarstvo"
+    },
+    {
+      "programCode": "61",
+      "kind": "decision",
+      "sourceUrl": "https://www.grf.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "63",
+      "kind": "decision",
+      "sourceUrl": "https://www.ktf.unist.hr/index.php/upisi_/obavijesti-prijediplomski-studij/9849-prijave-za-upis-na-prijediplomske-studije"
+    },
+    {
+      "programCode": "64",
+      "kind": "decision",
+      "sourceUrl": "https://www.ktf.unist.hr/index.php/upisi_/obavijesti-prijediplomski-studij/9849-prijave-za-upis-na-prijediplomske-studije"
+    },
+    {
+      "programCode": "67",
+      "kind": "decision",
+      "sourceUrl": "https://www.ferit.unios.hr/upisi-i-studijski-programi/sveucilisni-prijediplomski-studij"
+    },
+    {
+      "programCode": "69",
+      "kind": "decision",
+      "sourceUrl": "https://www.fesb.unist.hr/upisi/prijediplomski/"
+    },
+    {
+      "programCode": "70",
+      "kind": "decision",
+      "sourceUrl": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/preddiplomski-studij"
+    },
+    {
+      "programCode": "73",
+      "kind": "decision",
+      "sourceUrl": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/pds-rudarstvo"
+    },
+    {
+      "programCode": "74",
+      "kind": "decision",
+      "sourceUrl": "https://fsb.unizg.hr/?fsbonline=&lang=hr&studiranje_i_nastava=&upisi="
+    },
+    {
+      "programCode": "77",
+      "kind": "decision",
+      "sourceUrl": "https://pfri.uniri.hr/web/hr/studij_pre_BS.php"
+    },
+    {
+      "programCode": "78",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/sveucilisni-prijediplomski-studij/strojarstvo/"
+    },
+    {
+      "programCode": "83",
+      "kind": "decision",
+      "sourceUrl": "https://www.pfst.unist.hr/dokumenti/elaborati/Elaborat%20PN-pd.pdf"
+    },
+    {
+      "programCode": "84",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpz.unizg.hr/hr/studiji-i-upisi/prijediplomski-studij/"
+    },
+    {
+      "programCode": "86",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpz.unizg.hr/hr/studiji-i-upisi/prijediplomski-studij/"
+    },
+    {
+      "programCode": "87",
+      "kind": "decision",
+      "sourceUrl": "https://pfri.uniri.hr/web/hr/studij_pre_N.php"
+    },
+    {
+      "programCode": "88",
+      "kind": "decision",
+      "sourceUrl": "https://www.pfst.unist.hr/novosti/prijem-studenata-1-godine-ag-2627"
+    },
+    {
+      "programCode": "91",
+      "kind": "decision",
+      "sourceUrl": "https://pfri.uniri.hr/web/hr/studij_pre_L.php"
+    },
+    {
+      "programCode": "92",
+      "kind": "decision",
+      "sourceUrl": "https://www.pfst.unist.hr/novosti/prijem-studenata-1-godine-ag-2627"
+    },
+    {
+      "programCode": "93",
+      "kind": "decision",
+      "sourceUrl": "https://www.ttf.unizg.hr/studijski-programi-i-kvote/212"
+    },
+    {
+      "programCode": "95",
+      "kind": "decision",
+      "sourceUrl": "https://www.ttf.unizg.hr/studijski-programi-i-kvote/212"
+    },
+    {
+      "programCode": "96",
+      "kind": "decision",
+      "sourceUrl": "https://www.fsb.unizg.hr/atlantis/web/sites/fsbonline/content/362/733/Sveucilisni_prijediplomski_studij_Zrakoplovno_inzenjerstvo_i_svemirska_tehnika.pdf"
+    },
+    {
+      "programCode": "97",
+      "kind": "decision",
+      "sourceUrl": "https://www.fesb.unist.hr/upisi/prijediplomski/"
+    },
+    {
+      "programCode": "98",
+      "kind": "decision",
+      "sourceUrl": "https://www.fkit.unizg.hr/preddiplomski/kemijsko_inzenjerstvo"
+    },
+    {
+      "programCode": "99",
+      "kind": "decision",
+      "sourceUrl": "https://www.fkit.unizg.hr/upisi/preddiplomski/prelazak_na_revidirani_program"
+    },
+    {
+      "programCode": "101",
+      "kind": "decision",
+      "sourceUrl": "https://www.fkit.unizg.hr/preddiplomski/ekoinzenjerstvo"
+    },
+    {
+      "programCode": "106",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "108",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-povijest/studijski-programi/"
+    },
+    {
+      "programCode": "114",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/latinski_jezik_i_rimska_knjizevnost?ak=2026"
+    },
+    {
+      "programCode": "116",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "117",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "131",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-engleski-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "158",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "160",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-filozofiju/izvedbeni-planovi-nastave/"
+    },
+    {
+      "programCode": "162",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffrz.unizg.hr/info-o-studijima/"
+    },
+    {
+      "programCode": "163",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffrz.unizg.hr/info-o-studijima/"
+    },
+    {
+      "programCode": "176",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "177",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffst.unist.hr/odsjeci/povijest_umjetnosti"
+    },
+    {
+      "programCode": "191",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/prijediplomski-sveucilisni-studij-biologija-i-kemija/"
+    },
+    {
+      "programCode": "192",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/biol/studiji"
+    },
+    {
+      "programCode": "194",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/biol/studiji"
+    },
+    {
+      "programCode": "196",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/prijediplomski-sveucilisni-studij-biologija/"
+    },
+    {
+      "programCode": "203",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/studiji/integrirani_studiji"
+    },
+    {
+      "programCode": "221",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/prijediplomski-sveucilisni-studij-informatika/"
+    },
+    {
+      "programCode": "222",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/preddiplomski-sveucilisni-studij-informatika-i-tehnika/"
+    },
+    {
+      "programCode": "236",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studij-sumarstva/"
+    },
+    {
+      "programCode": "237",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studiji-urbanog-sumarstva-zastite-prirode-i-okolisa/"
+    },
+    {
+      "programCode": "238",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studij-drvne-tehnologije/"
+    },
+    {
+      "programCode": "243",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/studij"
+    },
+    {
+      "programCode": "256",
+      "kind": "decision",
+      "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/sveucilisni-prijediplomski-studiji/sveucilisni-prijediplomski-studij-poslovna-ekonomija/"
+    },
+    {
+      "programCode": "259",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/preddiplomski"
+    },
+    {
+      "programCode": "275",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "293",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-psihologiju/studijski-programi/"
+    },
+    {
+      "programCode": "298",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-pedagogiju/studijski-programi/"
+    },
+    {
+      "programCode": "309",
+      "kind": "decision",
+      "sourceUrl": "https://www.erf.unizg.hr/studiji/diplomski_studiji"
+    },
+    {
+      "programCode": "310",
+      "kind": "decision",
+      "sourceUrl": "https://www.erf.unizg.hr/studiji/diplomski_studiji"
+    },
+    {
+      "programCode": "311",
+      "kind": "decision",
+      "sourceUrl": "https://www.erf.unizg.hr/studiji/diplomski_studiji"
+    },
+    {
+      "programCode": "313",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "314",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "318",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studij-sumarstva/"
+    },
+    {
+      "programCode": "340",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/katedra-za-madarski-jezik-i-knjizevnost/studijski-programi-mad/"
+    },
+    {
+      "programCode": "351",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/diplomski-studij-marikultura/"
+    },
+    {
+      "programCode": "359",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/elektrotehnicke-i-komunikacijske-tehnologije-u-pomorstvu-2/"
+    },
+    {
+      "programCode": "365",
+      "kind": "decision",
+      "sourceUrl": "https://www.ttf.unizg.hr/studijski-programi-i-kvote/212"
+    },
+    {
+      "programCode": "367",
+      "kind": "decision",
+      "sourceUrl": "https://www.ttf.unizg.hr/studijski-programi-i-kvote/212"
+    },
+    {
+      "programCode": "368",
+      "kind": "decision",
+      "sourceUrl": "https://www.arhitekt.unizg.hr/hr/"
+    },
+    {
+      "programCode": "383",
+      "kind": "decision",
+      "sourceUrl": "https://www.grf.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "384",
+      "kind": "decision",
+      "sourceUrl": "https://www.fkit.unizg.hr/diplomski/kemijsko_inzenjerstvo"
+    },
+    {
+      "programCode": "387",
+      "kind": "decision",
+      "sourceUrl": "https://www.fkit.unizg.hr/diplomski/ekoinzenjerstvo"
+    },
+    {
+      "programCode": "398",
+      "kind": "decision",
+      "sourceUrl": "https://www.rgn.unizg.hr/hr/studiji/diplomski-studij/ds-rudarstvo/o-studiju-ds-rudarstvo"
+    },
+    {
+      "programCode": "416",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-povijest/studijski-programi/"
+    },
+    {
+      "programCode": "422",
+      "kind": "decision",
+      "sourceUrl": "https://www.fhs.unizg.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+    },
+    {
+      "programCode": "426",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "428",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffzg.unizg.hr/programi/diplomski/Arheologija.pdf"
+    },
+    {
+      "programCode": "433",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "434",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "473",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "475",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-filozofiju/izvedbeni-planovi-nastave/"
+    },
+    {
+      "programCode": "476",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffrz.unizg.hr/naslovnica/studiji/"
+    },
+    {
+      "programCode": "486",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/pu-opci/"
+    },
+    {
+      "programCode": "492",
+      "kind": "decision",
+      "sourceUrl": "https://etno.ffzg.unizg.hr/diplomski-2/"
+    },
+    {
+      "programCode": "494",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffrz.unizg.hr/naslovnica/studiji/"
+    },
+    {
+      "programCode": "500",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/biol/studiji/preddiplomski_studij/diplomski_sveucilisni_studij_molekularna_biologija?ak=2024"
+    },
+    {
+      "programCode": "501",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/biol/studiji/preddiplomski_studij/diplomski_sveucilisni_studij_ekologija_i_zastita_prirode?ak=2026"
+    },
+    {
+      "programCode": "503",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/biol/studiji/preddiplomski_studij/diplomski_sveucilisni_studij_eksperimentalna_biologija?ak=2026"
+    },
+    {
+      "programCode": "507",
+      "kind": "decision",
+      "sourceUrl": "https://physics.pmfst.unist.hr/studiji/sveucilisni-diplomski-studij/sveuilisni-diplomski-studij-fizika/biofizika/"
+    },
+    {
+      "programCode": "510",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/geof/studiji"
+    },
+    {
+      "programCode": "516",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/studiji/diplomski_studiji"
+    },
+    {
+      "programCode": "523",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/math/studiji"
+    },
+    {
+      "programCode": "524",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/math/studiji"
+    },
+    {
+      "programCode": "525",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/math/studiji"
+    },
+    {
+      "programCode": "527",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/math/studiji"
+    },
+    {
+      "programCode": "528",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/studiji/diplomski_studiji"
+    },
+    {
+      "programCode": "529",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/math/studiji"
+    },
+    {
+      "programCode": "531",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/diplomski-sveucilisni-studij-matematika-smjer-teorijski/"
+    },
+    {
+      "programCode": "532",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/matematika-i-informatika-diplomski-smjer/"
+    },
+    {
+      "programCode": "535",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/diplomski-sveucilisni-studij-informatika-i-tehnika/"
+    },
+    {
+      "programCode": "537",
+      "kind": "decision",
+      "sourceUrl": "https://math.uniri.hr/studiranje/studiji/"
+    },
+    {
+      "programCode": "538",
+      "kind": "decision",
+      "sourceUrl": "https://math.uniri.hr/studiranje/studiji/"
+    },
+    {
+      "programCode": "549",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studij-sumarstva/"
+    },
+    {
+      "programCode": "560",
+      "kind": "decision",
+      "sourceUrl": "https://www.pbf.unizg.hr/studiji/Diplomski-studiji/Nutricionizam?ak=2026"
+    },
+    {
+      "programCode": "562",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "563",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "564",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "565",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "566",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "567",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "568",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "569",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "570",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "571",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "572",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "573",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "574",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "575",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "576",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "577",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar"
+    },
+    {
+      "programCode": "581",
+      "kind": "decision",
+      "sourceUrl": "https://www.fhs.unizg.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+    },
+    {
+      "programCode": "583",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-pedagogiju/studijski-programi/"
+    },
+    {
+      "programCode": "589",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/diplomski"
+    },
+    {
+      "programCode": "601",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "618",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "620",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-psihologiju/studijski-programi/"
+    },
+    {
+      "programCode": "658",
+      "kind": "decision",
+      "sourceUrl": "https://mefst.unist.hr/studiji/doktorska-skola/52"
+    },
+    {
+      "programCode": "674",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/studiranje/doktorski-studij-iz-veterinarskih-znanosti/o-programu/"
+    },
+    {
+      "programCode": "685",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/"
+    },
+    {
+      "programCode": "726",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/studiji-29719/doktorski-studij-ekonomija-i-poslovna-ekonomija/natjecaj-za-upis-na-doktorski-studij-u-akademskoj-godini-2025-2026/29690"
+    },
+    {
+      "programCode": "728",
+      "kind": "decision",
+      "sourceUrl": "https://mefst.unist.hr/studiji/doktorska-skola/52"
+    },
+    {
+      "programCode": "736",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "737",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "738",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "740",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "741",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "742",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "743",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "744",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "745",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "793",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "794",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "795",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "796",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "797",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "801",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "802",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "803",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "842",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "843",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "844",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "845",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "851",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "852",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "853",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "854",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "855",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "856",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "858",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "860",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "863",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "864",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "867",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "873",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "882",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "883",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "885",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "886",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "887",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "888",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "896",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "901",
+      "kind": "decision",
+      "sourceUrl": "https://neuron.mefst.hr/docs/dokumenti/pravilnici/2025/Pravilnik%20o%20diplomskom%20radu_2025.pdf?vel=450201"
+    },
+    {
+      "programCode": "907",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmf.unizg.hr/studiji/integrirani_studiji"
+    },
+    {
+      "programCode": "912",
+      "kind": "decision",
+      "sourceUrl": "https://neuron.mefst.hr/docs/dokumenti/pravilnici/2025/Pravilnik%20o%20diplomskom%20radu_2025.pdf?vel=450201"
+    },
+    {
+      "programCode": "913",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/integrirani-preddiplomski-i-diplomski-sveucilisni-studij/medicina/"
+    },
+    {
+      "programCode": "926",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "933",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "943",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/za-studente-29717/opce-informacije-29800/6969"
+    },
+    {
+      "programCode": "945",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/ishodi_ucenja/index.php?action=print-syllabus&id=420"
+    },
+    {
+      "programCode": "970",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/strucni-prijediplomski-studij/brodogradnja/"
+    },
+    {
+      "programCode": "974",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/strucni-prijediplomski-studij/elektrotehnika/"
+    },
+    {
+      "programCode": "991",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/obrazovanje/strucni-prijediplomski-studij/strucni-prijediplomski-studij-strojarstva/"
+    },
+    {
+      "programCode": "1008",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/ishodi_ucenja/index.php?action=print-syllabus&id=663"
+    },
+    {
+      "programCode": "1011",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/wp-content/uploads/IZVEDBENI_PLAN_NASTAVE_PS_2025-2026_revizija21.pdf"
+    },
+    {
+      "programCode": "1017",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "1024",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "1025",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "1029",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/storage/Dokumenti/opci%20akti/godisnja%20izvjesca/Godisnje%20izvjesce%20i%20Strategija%20razvoja_24-25.pdf"
+    },
+    {
+      "programCode": "1034",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1035",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1036",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1059",
+      "kind": "decision",
+      "sourceUrl": "https://pravri.uniri.hr/studiji/strucni-prijediplomski-studij-upravni-studij/"
+    },
+    {
+      "programCode": "1060",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "1077",
+      "kind": "decision",
+      "sourceUrl": "https://www.kif.unizg.hr/scit/upisi_na_studij/izvanredni_specijalisticki_diplomski_strucni_studij"
+    },
+    {
+      "programCode": "1097",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/specijalisticki-diplomski-strucni-studij-fizioterapije/?lang=HR"
+    },
+    {
+      "programCode": "1520",
+      "kind": "decision",
+      "sourceUrl": "https://www.vsite.hr/hr/studiraj-it/strucni-prijediplomski-studij"
+    },
+    {
+      "programCode": "1524",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpz.unizg.hr/hr/studiji-i-upisi/diplomski-studij/"
+    },
+    {
+      "programCode": "1525",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpz.unizg.hr/hr/studiji-i-upisi/diplomski-studij/"
+    },
+    {
+      "programCode": "1528",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpz.unizg.hr/hr/studiji-i-upisi/diplomski-studij/"
+    },
+    {
+      "programCode": "1533",
+      "kind": "decision",
+      "sourceUrl": "https://rvs.hr/hr/studij/prijediplomski-studij/o-studiju/"
+    },
+    {
+      "programCode": "1541",
+      "kind": "decision",
+      "sourceUrl": "https://pvzg.hr/"
+    },
+    {
+      "programCode": "1615",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1616",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1618",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1619",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/media/Dokumenti/opci%20akti/studenti/Pravilnik%20o%20zavrsnim%20i%20diplomskim%20radovima.pdf"
+    },
+    {
+      "programCode": "1629",
+      "kind": "decision",
+      "sourceUrl": "https://www.sumfak.unizg.hr/hr/studiji/studij-drvne-tehnologije/"
+    },
+    {
+      "programCode": "1644",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/"
+    },
+    {
+      "programCode": "1705",
+      "kind": "decision",
+      "sourceUrl": "https://riteh.uniri.hr/media/filer_public/96/5f/965f3d8a-0e76-4f05-a4c8-543824257fbf/2024_23_09_sps_ra_studijski_program_2024.pdf"
+    },
+    {
+      "programCode": "1719",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/ishodi_ucenja/index.php?action=print-syllabus&id=717"
+    },
+    {
+      "programCode": "1729",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/oglasna-ploca-diplomski-studij-ekonomija/"
+    },
+    {
+      "programCode": "1775",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/wp-content/uploads/Poslovna-ekonomija-Izvedbeni-plan-2025-2026-signed.pdf"
+    },
+    {
+      "programCode": "1777",
+      "kind": "decision",
+      "sourceUrl": "https://www.unicath.hr/sites/default/files/2025-04/za%20web_%20Natje%C4%8Daj%202025._2026.%20diplomski.pdf"
+    },
+    {
+      "programCode": "1778",
+      "kind": "decision",
+      "sourceUrl": "https://www.unicath.hr/sites/default/files/2025-04/za%20web_%20Natje%C4%8Daj%202025._2026.%20diplomski.pdf"
+    },
+    {
+      "programCode": "1779",
+      "kind": "decision",
+      "sourceUrl": "https://www.unicath.hr/sites/default/files/2025-04/za%20web_%20Natje%C4%8Daj%202025._2026.%20diplomski.pdf"
+    },
+    {
+      "programCode": "1783",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "1789",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "1842",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "1847",
+      "kind": "decision",
+      "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji"
+    },
+    {
+      "programCode": "1869",
+      "kind": "decision",
+      "sourceUrl": "https://pravri.uniri.hr/studiji/sveucilisni-specijalisticki-studiji/kriminalisticko-istrazivanje/"
+    },
+    {
+      "programCode": "1882",
+      "kind": "decision",
+      "sourceUrl": "https://mefst.unist.hr/studiji/doktorska-skola/52"
+    },
+    {
+      "programCode": "1895",
+      "kind": "decision",
+      "sourceUrl": "https://mvi.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "1896",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpzg.unizg.hr/studiji"
+    },
+    {
+      "programCode": "1897",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpzg.unizg.hr/studiji"
+    },
+    {
+      "programCode": "1921",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "1930",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/diplomski"
+    },
+    {
+      "programCode": "1936",
+      "kind": "decision",
+      "sourceUrl": "https://mef.unizg.hr/upisi/diplomski/diplomski-studij-sestrinstva/"
+    },
+    {
+      "programCode": "1942",
+      "kind": "decision",
+      "sourceUrl": "https://math.uniri.hr/studiranje/studiji/"
+    },
+    {
+      "programCode": "1947",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/za-studente-29717/opce-informacije-29800/6969"
+    },
+    {
+      "programCode": "1952",
+      "kind": "decision",
+      "sourceUrl": "https://www.gfv.unizg.hr/static/preddiplomski-studij"
+    },
+    {
+      "programCode": "1956",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/financijski-menadzment/"
+    },
+    {
+      "programCode": "1957",
+      "kind": "decision",
+      "sourceUrl": "https://pravri.uniri.hr/studiji/sveucilisni-specijalisticki-studiji/financijsko-pravo-trgovackih-drustava/"
+    },
+    {
+      "programCode": "1973",
+      "kind": "decision",
+      "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/sveucilisni-prijediplomski-studiji/sveucilisni-prijediplomski-studij-poslovna-ekonomija/"
+    },
+    {
+      "programCode": "1978",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/static/np/npip/npip2022/6361/nasprog.html"
+    },
+    {
+      "programCode": "1979",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "2005",
+      "kind": "decision",
+      "sourceUrl": "https://www.libertas.hr/studiji/diplomski-sveucilisni-studiji/medunarodni-odnosi-i-diplomacija/"
+    },
+    {
+      "programCode": "2045",
+      "kind": "decision",
+      "sourceUrl": "https://mvi.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "2061",
+      "kind": "decision",
+      "sourceUrl": "https://www.vsite.hr/hr/studiraj-it/specijalisticki-diplomski-strucni-studij"
+    },
+    {
+      "programCode": "2062",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "2083",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/jednopredmetni/povijest"
+    },
+    {
+      "programCode": "2084",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/povijest?ak=2026"
+    },
+    {
+      "programCode": "2091",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/talijanski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2092",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/hrvatski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2093",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/jednopredmetni/hrvatski_jezik_i_knjizevnost?ak=2026"
+    },
+    {
+      "programCode": "2094",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "2095",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "2096",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-hrvatski-jezik-i-knjizevnost/studijski-programi/preddiplomski-studiji/"
+    },
+    {
+      "programCode": "2097",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-hrvatski-jezik-i-knjizevnost/studijski-programi/preddiplomski-studiji/"
+    },
+    {
+      "programCode": "2098",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-njemacki-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "2099",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-njemacki-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "2116",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "2117",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/"
+    },
+    {
+      "programCode": "2128",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/dvopredmetni/povijest"
+    },
+    {
+      "programCode": "2129",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/jednopredmetni/povijest"
+    },
+    {
+      "programCode": "2130",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/jednopredmetni/talijanski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2131",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/dvopredmetni/hrvatski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2132",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/jednopredmetni/hrvatski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2133",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2134",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2137",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-hrvatski-jezik-i-knjizevnost/studijski-programi/diplomski-studiji/"
+    },
+    {
+      "programCode": "2138",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-hrvatski-jezik-i-knjizevnost/studijski-programi/diplomski-studiji/"
+    },
+    {
+      "programCode": "2139",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-njemacki-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "2140",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-njemacki-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "2141",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-engleski-jezik-i-knjizevnost/studijski-programi/"
+    },
+    {
+      "programCode": "2146",
+      "kind": "decision",
+      "sourceUrl": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/2912-upute-za-prijavu-diplomskoga-rada-ak-god-2023-24"
+    },
+    {
+      "programCode": "2157",
+      "kind": "decision",
+      "sourceUrl": "https://povum.ffzg.unizg.hr/?page_id=32"
+    },
+    {
+      "programCode": "2158",
+      "kind": "decision",
+      "sourceUrl": "https://povum.ffzg.unizg.hr/?page_id=32"
+    },
+    {
+      "programCode": "2159",
+      "kind": "decision",
+      "sourceUrl": "https://www.fhs.unizg.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+    },
+    {
+      "programCode": "2163",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2164",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2165",
+      "kind": "decision",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/odsjeci/pedagogija"
+    },
+    {
+      "programCode": "2166",
+      "kind": "decision",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/odsjeci/pedagogija"
+    },
+    {
+      "programCode": "2171",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/jednopredmetni/talijanski_jezik_i_knjizevnost"
+    },
+    {
+      "programCode": "2172",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/dvopredmetni/talijanski_jezik_i_knjizevnost?ak=2026"
+    },
+    {
+      "programCode": "2189",
+      "kind": "decision",
+      "sourceUrl": "https://www.fhs.unizg.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+    },
+    {
+      "programCode": "2199",
+      "kind": "decision",
+      "sourceUrl": "https://www.fpzg.unizg.hr/studiji"
+    },
+    {
+      "programCode": "2200",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2243",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/ante.matan"
+    },
+    {
+      "programCode": "2257",
+      "kind": "decision",
+      "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/209/Sustav%2Bznanstveno-istra%C5%BEiva%C4%8Dkog%2Brada"
+    },
+    {
+      "programCode": "2260",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/jednopredmetni/japanski_jezik_i_kultura?ak=2026"
+    },
+    {
+      "programCode": "2261",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/japanski_jezik_i_kultura?ak=2026"
+    },
+    {
+      "programCode": "2266",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/hotelijerstvo-restoraterstvo-i-gastronomija/"
+    },
+    {
+      "programCode": "2271",
+      "kind": "decision",
+      "sourceUrl": "https://www.unicath.hr/sites/default/files/2025-04/za%20web_%20Natje%C4%8Daj%202025._2026.%20diplomski.pdf"
+    },
+    {
+      "programCode": "2272",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "2273",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "2274",
+      "kind": "decision",
+      "sourceUrl": "https://www.vef.unizg.hr/referada/natjecaj-za-upis-na-sveucilisni-specijalisticki-studij-po-smjerovima-akademska-godina-2026-2027/"
+    },
+    {
+      "programCode": "2277",
+      "kind": "decision",
+      "sourceUrl": "https://www.gfv.unizg.hr/static/diplomski-studij-o-studiju"
+    },
+    {
+      "programCode": "2308",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/financijski-menadzment-2/"
+    },
+    {
+      "programCode": "2324",
+      "kind": "decision",
+      "sourceUrl": "https://www.kifos.hr/studiji/preddiplomski-sveucilisni-studij-kineziologije/"
+    },
+    {
+      "programCode": "2333",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-sociologiju/studijski-programi/"
+    },
+    {
+      "programCode": "2334",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "2335",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "2407",
+      "kind": "decision",
+      "sourceUrl": "https://www.mathos.unios.hr/prijediplomski-studij-matematika-i-racunarstvo/"
+    },
+    {
+      "programCode": "2416",
+      "kind": "decision",
+      "sourceUrl": "https://strojarstvo.unin.hr/studij/diplomski-sveucilisni-studij/"
+    },
+    {
+      "programCode": "2430",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/ishodi_ucenja/index.php?action=print-syllabus&id=1517"
+    },
+    {
+      "programCode": "2432",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/ishodi_ucenja/index.php?action=print-syllabus&id=2146"
+    },
+    {
+      "programCode": "2457",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/engleski_jezik_i_knjizevnost?ak=2026"
+    },
+    {
+      "programCode": "2458",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/prijediplomski/dvopredmetni/arheologija"
+    },
+    {
+      "programCode": "2461",
+      "kind": "decision",
+      "sourceUrl": "https://www.gfv.unizg.hr/static/doktorski-studij"
+    },
+    {
+      "programCode": "2487",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "2488",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "2518",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/"
+    },
+    {
+      "programCode": "2519",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/"
+    },
+    {
+      "programCode": "2520",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-sveucilisni-doktorski-studiji-doktorska-skola/"
+    },
+    {
+      "programCode": "2522",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/povijest-umjetnosti/o-studiju/"
+    },
+    {
+      "programCode": "2523",
+      "kind": "decision",
+      "sourceUrl": "https://hig.unist.hr/prijediplomski-studij/41"
+    },
+    {
+      "programCode": "2524",
+      "kind": "decision",
+      "sourceUrl": "https://mp.unist.hr/prijediplomski-studij-mediteranska-poljoprivreda/41"
+    },
+    {
+      "programCode": "2528",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2534",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/pds-web"
+    },
+    {
+      "programCode": "2538",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/jednopredmetni/japanologija/opci?ak=2026"
+    },
+    {
+      "programCode": "2539",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/ffpu/studijski_programi/diplomski/dvopredmetni/japanologija?ak=2026"
+    },
+    {
+      "programCode": "2546",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/odsjek-za-sociologiju/studijski-programi/"
+    },
+    {
+      "programCode": "2575",
+      "kind": "decision",
+      "sourceUrl": "https://www.fhs.unizg.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+    },
+    {
+      "programCode": "2591",
+      "kind": "decision",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/diplomski/"
+    },
+    {
+      "programCode": "2592",
+      "kind": "decision",
+      "sourceUrl": "https://www.unidu.hr/oglasna-ploca-diplomski-studij-hotelijerstvo/"
+    },
+    {
+      "programCode": "2638",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/wp-content/uploads/GiG_Izvedbeni-plan-nastave_Ak.-god.-2025_2026.pdf"
+    },
+    {
+      "programCode": "2639",
+      "kind": "decision",
+      "sourceUrl": "https://www.unin.hr/kolegiji-racunarstvo-i-informatika/"
+    },
+    {
+      "programCode": "2640",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/diplomski-sveucilisni-studij-molekularna-biologija/"
+    },
+    {
+      "programCode": "2644",
+      "kind": "decision",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/integrirani-preddiplomski-i-diplomski-sveucilisni-studij/farmacija/"
+    },
+    {
+      "programCode": "2646",
+      "kind": "decision",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/podatkovna-znanost-i-inzenjerstvo-2/"
+    },
+    {
+      "programCode": "2649",
+      "kind": "decision",
+      "sourceUrl": "https://arheo.ffzg.unizg.hr/diplomski/prapovijesna.html"
+    },
+    {
+      "programCode": "2675",
+      "kind": "decision",
+      "sourceUrl": "https://www.pravo.unizg.hr/studiji/"
+    },
+    {
+      "programCode": "2710",
+      "kind": "decision",
+      "sourceUrl": "https://www.kifos.hr/studiji/diplomski-sveucilisni-studij-kinezioloske-edukacije/"
+    },
+    {
+      "programCode": "2711",
+      "kind": "decision",
+      "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/sveucilisni-diplomski-studiji/sveucilisni-diplomski-studij-poslovna-ekonomija/"
+    },
+    {
+      "programCode": "2730",
+      "kind": "decision",
+      "sourceUrl": "https://www.unicath.hr/sites/default/files/2025-04/za%20web_%20Natje%C4%8Daj%202025._2026.%20diplomski.pdf"
+    },
+    {
+      "programCode": "2819",
+      "kind": "decision",
+      "sourceUrl": "https://ffpu.unipu.hr/_download/repository/Dvopredmetni%20diplomski%20studij%20engleskoga%20jezika%20i%20knji%C5%BEevnosti.pdf"
+    },
+    {
+      "programCode": "4732",
+      "kind": "decision",
+      "sourceUrl": "https://www.efzg.unizg.hr/specijalisticki-diplomski-strucni-studij-racunovodstvo-financijsko-izvjestavanje-i-revizija/48503"
+    },
+    {
+      "programCode": "4734",
+      "kind": "decision",
+      "sourceUrl": "https://www.ffos.unios.hr/wp-content/uploads/2026/02/Web_Povijest-umjetnosti_diplomski-studij_2025-2026.pdf"
+    },
+    {
+      "programCode": "4782",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "4790",
+      "kind": "decision",
+      "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/sveucilisni-prijediplomski-studiji/sveucilisni-prijediplomski-studij-poslovna-ekonomija/"
+    },
+    {
+      "programCode": "4793",
+      "kind": "decision",
+      "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/sveucilisni-diplomski-studiji/sveucilisni-diplomski-studij-poslovna-ekonomija/"
+    },
+    {
+      "programCode": "4855",
+      "kind": "decision",
+      "sourceUrl": "https://neuron.mefst.hr/docs/dokumenti/pravilnici/2025/Pravilnik%20o%20diplomskom%20radu_2025.pdf?vel=450201"
+    },
+    {
+      "programCode": "4856",
+      "kind": "decision",
+      "sourceUrl": "https://www.zvu.hr/studijski-programi-s-ishodima-ucenja/?lang=HR"
+    },
+    {
+      "programCode": "4859",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/preddiplomski"
+    },
+    {
+      "programCode": "4860",
+      "kind": "decision",
+      "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/diplomski"
+    },
+    {
+      "programCode": "132",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/odsjeci/lingvistika"
+    },
+    {
+      "programCode": "144",
+      "kind": "exclusion",
+      "sourceUrl": "https://www.ffzg.unizg.hr/roman/spanjolski/programi/"
+    },
+    {
+      "programCode": "145",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/portugalski-jezik-i-knjizevnost-127"
+    },
+    {
+      "programCode": "147",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/germanistika-111"
+    },
+    {
+      "programCode": "178",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/povijest-umjetnosti-130"
+    },
+    {
+      "programCode": "180",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/antropologija-103"
+    },
+    {
+      "programCode": "181",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/etnologija-i-kulturna-antropologija-106"
+    },
+    {
+      "programCode": "200",
+      "kind": "exclusion",
+      "sourceUrl": "https://physics.pmfst.unist.hr/studiji/sveuilisni-prijediplomski-studiji/fizika/"
+    },
+    {
+      "programCode": "204",
+      "kind": "exclusion",
+      "sourceUrl": "https://www.pmf.unizg.hr/geof/preddiplomski_studij?ak=2026"
+    },
+    {
+      "programCode": "214",
+      "kind": "exclusion",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/preddiplomski-sveucilisni-studij-matematika-smjer-matematicki/"
+    },
+    {
+      "programCode": "215",
+      "kind": "exclusion",
+      "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/prijediplomski-sveucilisni-studij-matematika-i-informatika-smjer-nastavnicki-2/"
+    },
+    {
+      "programCode": "291",
+      "kind": "exclusion",
+      "sourceUrl": "https://ffri.uniri.hr/studiranje/programi/prijediplomski/psih/"
+    },
+    {
+      "programCode": "294",
+      "kind": "exclusion",
+      "sourceUrl": "https://dev.ffzg.unizg.hr/hr/studiji/psihologija-131"
+    },
+    {
+      "programCode": "295",
+      "kind": "exclusion",
+      "sourceUrl": "https://fhs.unizg.hr/psihologija/nastavni_plan/pred"
+    },
+    {
+      "programCode": "878",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/biomedicina-razvojne-dobi/"
+    },
+    {
+      "programCode": "884",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/interna-medicina/"
+    },
+    {
+      "programCode": "2230",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/interna-medicina/"
+    },
+    {
+      "programCode": "2231",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/endokrinologija-i-dijabetologija/"
+    },
+    {
+      "programCode": "2232",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/internisticka-onkologija/"
+    },
+    {
+      "programCode": "2233",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/gastroenterologija/"
+    },
+    {
+      "programCode": "2234",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/kardiologija/"
+    },
+    {
+      "programCode": "2258",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/klinicka-farmakologija-s-toksikologijom-ispitivanje-i-primjena-lijekova/"
+    },
+    {
+      "programCode": "2315",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/opca-kirurgija/"
+    },
+    {
+      "programCode": "2316",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/pulmologija/"
+    },
+    {
+      "programCode": "2317",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/anesteziologija-reanimatologija-i-intenzivna-medicina/"
+    },
+    {
+      "programCode": "2323",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/hitna-medicina/"
+    },
+    {
+      "programCode": "2541",
+      "kind": "exclusion",
+      "sourceUrl": "https://medri.uniri.hr/obrazovanje/studiji/poslijediplomski-specijalisticki-studiji/abdominalna-kirurgija/"
+    },
+    {
+      "programCode": "2706",
+      "kind": "exclusion",
+      "sourceUrl": "https://www.vef.unizg.hr/en/studying/postgraduate-master-studies/small-animal-emergency-and-critical-care-medicine/"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "note": "Ratchet nad OSV nalazima za ovisnosti koje npm audit ne vidi (T99, issue #220): npm paketi iz oba deno.lock (esm.sh) i tocni pinovi iz training-pipeline/requirements.txt. Identitet je `ekosustav:ime@verzija ID`. Strop je broj zapisa u `findings` i smije samo padati; svaki nalaz mora imati iznimku s vlasnikom, mitigacijom i rokom.",
+  "measuredAt": "2026-10-04",
+  "measurementNote": "Prvi CI run osv-scan joba (check run 111410356747, head a3fb6600, 2026-10-04) zavrsio je izlazom 0: OSV dostupan (inace izlaz 2), nijedna skenirana datoteka bez paketa (inace pad), 0 nalaza (inace above). Ulaz istog koda nad istim datotekama: 13 pojavljivanja po datotekama (1, 9, 3) i 12 jedinstvenih upita, jer se @supabase/supabase-js@2.110.2 pojavljuje u oba deno.lock. Sirovi log CI-ja nije citan iz izvrsnog containera (preuzimanje logova je blokirano), pa brojevi dolaze iz koda, ne iz CI ispisa.",
+  "findings": [],
+  "exceptions": [],
+  "knownGaps": [
+    {
+      "file": "workers/field-renderer/pyproject.toml",
+      "reason": "samo rasponi verzija (fastapi>=0.115,<1; uvicorn[standard]>=0.34,<1); OSV trazi tocnu verziju, a lockfilea nema",
+      "since": "2026-10-04"
+    },
+    {
+      "file": ".claude/katedra-pkg/katedra-lite/pyproject.toml",
+      "reason": "samo rasponi verzija (python-docx>=1.1, pypdf>=5.0); bez lockfilea",
+      "since": "2026-10-04"
+    },
+    {
+      "file": ".claude/katedra-pkg/service/requirements.txt",
+      "reason": "samo rasponi i zamjenski znakovi (fastapi==0.115.*, lxml>=5); bez tocnih pinova",
+      "since": "2026-10-04"
+    }
+  ]
+}

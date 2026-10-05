@@ -6,13 +6,14 @@
 // Dvije akcije, razlucene poljem `requestId`:
 //   bez requestId  -> novi upis (submit_faculty_request), vraca { requestId }.
 //   s requestId    -> naknadno vezanje e-maila (attach_email_to_faculty_request), vraca { attached }.
-// ip_hash se racuna SERVERSKI iz x-forwarded-for (nikad sirovi IP, isto kao generate-report),
-// uz TAJNI salt (IP_HASH_SALT ili izveden iz service-role kljuca) da sha256 ne bude reverzibilan.
+// ip_hash se racuna SERVERSKI iz zadnjeg unosa x-forwarded-for (nikad sirovi IP, isto kao
+// generate-report), uz TAJNI salt (IP_HASH_SALT ili izveden iz service-role kljuca), kroz _shared/hash-ip.ts.
 // Rate limit i upis su u SQL security-definer funkcijama (0011), ovdje je samo I/O omotac.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
+import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -22,23 +23,10 @@ const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
-async function sha256Hex(input: string): Promise<string> {
-  const data = new TextEncoder().encode(input);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-// IP hash salt (GDPR): bez salta je sha256(IPv4) reverzibilan brute-forceom 2^32 prostora.
-// Prioritet: dedicirani IP_HASH_SALT (`supabase secrets set IP_HASH_SALT=...`); ako nije
-// postavljen, izvedi salt iz service-role kljuca ali HASHIRAN (ne sirovi kljuc) pa ip_hash
-// NIKAD nije nesoljen ni prije nego korisnik postavi dedicirani secret. Salt je stabilan.
-const IP_HASH_SALT_ENV = Deno.env.get('IP_HASH_SALT') ?? '';
-let _ipSalt: Promise<string> | null = null;
-function ipSalt(): Promise<string> {
-  if (IP_HASH_SALT_ENV) return Promise.resolve(IP_HASH_SALT_ENV);
-  if (!_ipSalt) _ipSalt = sha256Hex('lekta-ip-hash-salt|' + SERVICE_ROLE);
-  return _ipSalt;
-}
+// IP kljuc i salt dolaze iz _shared/hash-ip.ts (zadnji unos x-forwarded-for, T84 XFF), isti kao u
+// ostalim funkcijama. Prije je ovdje hashiran CIJELI header, pa je svaki izmisljen prvi unos davao nov
+// prozor rate limita.
+const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
 // Naplatne vrste rada; specijalisticki od Monetizacije V1 (0207 prosiruje CHECK na faculty_requests).
 const WORK_TYPES = ['seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski'];
@@ -94,7 +82,7 @@ Deno.serve(async (req: Request) => {
   const emailIn = String(body.email ?? '').trim();
   const email = emailIn && isEmail(emailIn) ? emailIn.slice(0, 320) : null;
   const source = body.source ? String(body.source).slice(0, 40) : 'upload_flow';
-  const ipHash = await sha256Hex((await ipSalt()) + '|' + (req.headers.get('x-forwarded-for') ?? ''));
+  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
 
   const { data: requestId, error } = await admin.rpc('submit_faculty_request', {
     p_faculty_id: facultyId,
