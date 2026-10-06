@@ -221,7 +221,8 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     grok_attested = bool(attest.get("grok_included")) and bool(grok_models)
     mistral_tool = tools.get("mistral") or {}
     mistral_supported = bool(mistral_tool.get("available"))
-    mistral_attested = bool(attest.get("mistral_included"))
+    # Mistral uses CLI availability as attestation since there's no separate attestation mechanism yet
+    mistral_attested = mistral_supported
     mistral_models = list(attest.get("mistral_models") or previous.get("mistral_approved_models") or [])
 
     providers = {

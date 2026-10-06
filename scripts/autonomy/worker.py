@@ -43,7 +43,7 @@ MISTRAL_API_KEY_ENV = ("MISTRAL_API_KEY",)
 # `scripts/agents/core.mjs`); `build` je u popisu obrambeno, za slucaj da pozivatelj posalje ime aliasa.
 GROK_COMMANDS = ("grok", "build")
 GROK_API_KEY_ENV = ("XAI_API_KEY",)
-MISTRAL_COMMANDS = ("mistral",)
+MISTRAL_COMMANDS = ("mistral", "mistral-large", "mistral-small", "mixtral")
 PROMPT_FILE_PLACEHOLDER = "__LEKTA_PROMPT_FILE__"
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")

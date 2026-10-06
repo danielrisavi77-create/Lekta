@@ -5,7 +5,7 @@
     "unit": "USD po 1M tokena"
   },
   "quotaNotDollars": true,
-  "quotaNotDollarsNote": "Svi navedeni provideri (claude, codex, grok) rade na pretplati, ne po tokenu; stvarni trosak pokretanja je potrosena kvota, ne dolari. Cjenik ispod je TEZINA za usporedbu modela medusobno, ne stvarni racun.",
+  "quotaNotDollarsNote": "Svi navedeni provideri (claude, codex, grok, mistral) rade na pretplati, ne po tokenu; stvarni trosak pokretanja je potrosena kvota, ne dolari. Cjenik ispod je TEZINA za usporedbu modela medusobno, ne stvarni racun.",
   "models": {
     "claude-fable-5-1": {
       "input": 10,
@@ -45,18 +45,21 @@
     "mistral-large-latest": {
       "input": 3,
       "output": 15,
+      "roles": ["coordinator", "implementer"],
       "status": "verified",
       "verifiedAt": "2025-10-06"
     },
     "mistral-small-latest": {
       "input": 1,
       "output": 5,
+      "roles": ["implementer"],
       "status": "verified",
       "verifiedAt": "2025-10-06"
     },
     "mixtral-8x7b-latest": {
       "input": 2,
       "output": 10,
+      "roles": ["implementer"],
       "status": "verified",
       "verifiedAt": "2025-10-06"
     }
@@ -66,7 +69,10 @@
     "claude-opus-5": 2.5,
     "claude-fable-5-1": 5,
     "claude-haiku-4-5": 0.5,
-    "claude-opus-5-5": 2
+    "claude-opus-5-5": 2,
+    "mistral-large-latest": 1.2,
+    "mistral-small-latest": 0.4,
+    "mixtral-8x7b-latest": 0.8
   },
   "costWeightFormula": "(input + output) / (claude-sonnet-5 input + output); claude-sonnet-5 = 1",
   "providers": {
@@ -88,7 +94,8 @@
       "billing": "subscription",
       "model": "mistral-large-latest",
       "status": "verified",
-      "verifiedAt": "2025-10-06"
+      "verifiedAt": "2025-10-06",
+      "minVersion": "1.0.0"
     }
   },
   "effortPolicy": {
@@ -207,7 +214,7 @@
       }
     }
   },
-  "botsNote": "Grok botovi (odluka vlasnika 27. 9.). Samo pretplata (--subscription, grok login), nikad naplata po pozivu. Bot je uloga nad providerom grok iz config/agent-providers.json; runner ga bira s --bot. Nijedan bot nije jedini pregled zasticenog diffa i nijedan ne implementira nad protectedPaths.",
+  "botsNote": "Grok botovi (odluka vlasnika 27. 9.). Samo pretplata (--subscription, grok login), nikad naplata po pozivu. Bot je uloga nad providerom grok iz config/agent-providers.json; runner ga bira s --bot. Nijedan bot nije jedini pregled zasticenog diffa i nijedan ne implementira nad protectedPaths. Mistral botovi sluze kao fallback provider.",
   "bots": {
     "grok-review": {
       "provider": "grok",
@@ -281,7 +288,7 @@
       "forbiddenPaths": ["src/**", "supabase/**", "data/**", "scripts/**", "security/**"]
     }
   },
-  "protectedReviewNote": "Za protectedPaths grok-review je samo trece misljenje uz codex (ili claude reviewFallback); nikad jedini recenzent.",
+  "protectedReviewNote": "Za protectedPaths grok-review je samo trece misljenje uz codex (ili claude reviewFallback); nikad jedini recenzent. Mistral-review sluzi kao dodatni fallback.",
   "protectedPaths": [
     "src/repair",
     "src/citations",
