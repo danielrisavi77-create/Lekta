@@ -8,8 +8,12 @@ on:
       - scripts/resync-upisnik.mts
       - src/programs/upisnik-resync.ts
       - src/programs/upisnik-session.ts
+      - src/programs/upisnik-record-review.ts
+      - src/programs/upisnik-parse.ts
       - tests/upisnik-resync.test.ts
       - tests/upisnik-session.test.ts
+      - tests/upisnik-record-review.test.ts
+      - tests/upisnik-parse.test.ts
   workflow_dispatch:
 
 # No secret, registry write, Git push, auto-merge or deployment.
@@ -25,15 +29,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup-deps
         with:
           node-version: 22
           npm-version: 11.11.0
-      - name: Test fail-closed validation and conservative snapshot diff
-        run: node scripts/with-gate-lock.mjs upisnik-resync-tests -- npx vitest run tests/upisnik-resync.test.ts tests/upisnik-parse.test.ts tests/upisnik-session.test.ts
+      - name: Test source integrity, lossless quarantine and conservative diff
+        run: node scripts/with-gate-lock.mjs upisnik-resync-tests -- npx vitest run tests/upisnik-resync.test.ts tests/upisnik-parse.test.ts tests/upisnik-session.test.ts tests/upisnik-record-review.test.ts
       - name: Fetch unfiltered source into review artifacts only
         run: node scripts/with-gate-lock.mjs upisnik-resync-fetch -- npx tsx scripts/resync-upisnik.mts
       - name: Authoritative data must remain unchanged
@@ -41,10 +45,10 @@ jobs:
         run: git diff --exit-code -- data/programs/ data/coverage/ data/profiles/ docs/generated/
       - name: Preserve evidence and candidate for review
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: upisnik-resync-${{ github.sha }}
           path: .artifacts/upisnik-resync/
           include-hidden-files: true
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7
