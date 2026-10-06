@@ -11,6 +11,7 @@ import { primijeniFakultetUlaza, primijeniProfilUlaza, zakljucajObnovljeniFakult
 import { createRepairSelectionMemory } from './repair-selection';
 import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
+import { mountConsentReveal } from '../../ui/consent-reveal';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
@@ -113,6 +114,7 @@ async function start(): Promise<void> {
   // Montaza ide PRVA: radna povrsina mora biti upotrebljiva i kad pohrana zakaze. Vezanje
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);
+  mountConsentReveal(document);
 
   const storage = detectStorage();
   let sessionId: string | null = null;

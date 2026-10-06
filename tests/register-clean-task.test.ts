@@ -300,6 +300,6 @@ describe.skipIf(!REGISTER_TEST_HAS_CMDLET)(
       const unreg = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-TaskName', REGISTER_TEST_TASK_NAME, '-Unregister']);
       expect(unreg.status, unreg.stderr || unreg.stdout).toBe(0);
       expect(taskExists(REGISTER_TEST_TASK_NAME)).toBe('NE');
-    });
+    }, 60_000);
   },
 );

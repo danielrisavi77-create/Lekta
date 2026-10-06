@@ -288,7 +288,12 @@ describe('legal-content', () => {
     expect(html).toContain('poveznicu za odjavu');
     // Supabase ostaje imenovan izvrsitelj.
     expect(html).toContain('<li><strong>Supabase</strong>');
-    expect(html).toContain('Tijekom besplatne bete ništa se ne naplaćuje i podaci o plaćanju se ne obrađuju');
+    expect(html).toContain('Korištenje besplatnih funkcija tijekom bete ne zahtijeva plaćanje ni unos podataka o plaćanju');
+    expect(html).toContain('zasebnom okviru (iframe) unutar Lekta sučelja');
+    expect(html).toContain('identifikatora plaćanja i statusa');
+    expect(html).toContain('isporuka automatskog popravka');
+    expect(html).not.toContain('podaci o plaćanju se ne obrađuju');
+    expect(html).not.toContain('na hostiranoj stranici konfiguriranog payment providera');
   });
 
   it('T86/T102: Google se spominje samo kad je prijava Googleom ukljucena', () => {
@@ -297,7 +302,9 @@ describe('legal-content', () => {
     expect(sGooglom).toContain('<h4>1g. Prijava Google računom</h4>');
     expect(sGooglom).toContain('samostalni voditelj obrade');
     expect(sGooglom).toContain('nikad se ne šalju Googleu');
-    expect(sGooglom).toContain('e-mail adresu, ime i identifikator Google računa');
+    expect(sGooglom).toContain('e-mail adresu, ime, identifikator Google računa');
+    expect(sGooglom).toContain('poveznicu na profilnu sliku');
+    expect(sGooglom).toContain('je li e-mail adresa potvrđena');
   });
 
   it('T86: recenica bete za podnozja nosi trazenu formulaciju', () => {

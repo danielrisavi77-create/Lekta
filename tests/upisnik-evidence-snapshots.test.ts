@@ -39,7 +39,7 @@ describe('Upisnik citati u registriranim snimkama', () => {
     expect(ratchet.entries.length).toBe(380);
     expect(baseline.entries.length).toBe(380);
     const urls = new Set(registry.map((r) => r.url));
-    expect([...file.decisions, ...file.exclusions, ...(file.integratedGraduateCoverage ?? [])].filter((r) => urls.has(r.evidence.sourceUrl))).toHaveLength(13);
+    expect([...file.decisions, ...file.exclusions, ...(file.integratedGraduateCoverage ?? [])].filter((r) => urls.has(r.evidence.sourceUrl))).toHaveLength(23); // 13 prije pilota kategorije A + 9 iz pilota (2026-10-03) + FER 52 (2026-10-05); broji odluke s registriranim URL-om, dva EFST URL-a dijele istu snimku
     expect(await verifyUpisnikEvidenceSnapshots(file, registry, read, ratchet, baseline)).toEqual([]);
   });
   it('registrirani HTML prihvaca doslovan citat i dekodira entitete', async () => {

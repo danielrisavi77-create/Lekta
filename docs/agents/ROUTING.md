@@ -282,13 +282,25 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
 
 | Stroj | Najvise sesija | Najvise teskih poslova odjednom |
 | --- | --- | --- |
-| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2) | 1 |
+| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2), plus trajna sesija kvalitete lekta-q | 1 |
 | radna stanica (16 GB, Word runner) | 7 | 2; Word runner ima prednost |
 | cloud | 4 aktivne sesije sa zadatkom (sesije u mirovanju se ne broje) | po sesiji, u njezinom kontejneru |
 
 Granica vrijedi pri dodjeli zadataka: koordinator ne otvara novu sesiju preko nje. Postojece
 sesije se ne gase. Upozorenje "vise od 3 interaktivne sesije" iz "Pravila za stroj" je
 deterministicki signal iste granice na laptopu.
+
+Trajna sesija kvalitete lekta-q (odluka vlasnika 4. 10. 2026) je izuzetak od laptopske granice:
+stalno je otvorena, a ne broji se u 3 sesije koje koordinator dodjeljuje. Njezin rad su ponavljani
+kvarovi, gardovi i automatizacija. Sama gradi gardove u `scripts/`, `tests/`, `.claude/` i
+`docs/agents/`, a za `src/` i `supabase/` upisuje zadatak koji dodjeljuje koordinator. Prije
+pisanja zauzima zadatak s vlasnikom i `workScope.write`, bez preklapanja s drugim piscem; izuzetak
+ne mijenja ovlasti za hookove ni druge radnje rezervirane vlasniku u AGENTS.md. Uvjeti izuzetka:
+- vecinu vremena miruje (oko 300 MB RAM-a);
+- tezak posao pokrece samo kroz `with-gate-lock`;
+- ne drzi bravu za dva puna gatea zaredom, nego je izmedju njih pusta barem 20 minuta;
+- do PR-a vrti samo ciljane testove.
+Upozorenje preflighta o broju sesija s njom pokazuje 4 i to je ocekivano.
 
 Radna stanica: granica je 28. 9. 2026. dignuta s 5 na 7, jer je izmjereno da 16 GB podnosi pet
 CLI sesija uz Claude Desktop. Broj teskih poslova odjednom ostaje 2, a Word runner i dalje ima
@@ -345,7 +357,9 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
   `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
   `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).
 - **Najvise 3 interaktivne sesije.** Vise od 3 `claude.exe` procesa je upozorenje u bootstrapu i
-  preflightu ("vise od 3 interaktivne sesije: RAM"). Ne blokira, ali nova sesija se tada ne otvara.
+  preflightu ("vise od 3 interaktivne sesije: RAM"). Ne blokira, ali nova sesija se tada ne otvara,
+  osim trajne lekta-q prema uvjetima iz "Granice broja sesija"; upozorenje na 4 s njom je ocekivano.
+  Granica koordinatora i dvije dodijeljene sesije ostaje 3.
 - **Ciscenje `%TEMP%` nikad dok vitest radi.** Vitest (forks pool) pise `%TEMP%\<nanoid>\web` i
   brise ga tek na kraju runa. Mapa se smije brisati samo kad `--check-only` ne vidi nijedan
   vitest proces i kad je NAJNOVIJA datoteka u toj mapi starija od praga (npr. 2 h); starost same
