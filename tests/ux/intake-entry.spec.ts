@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Locator, type Page } from '@playwright/test';
@@ -10,6 +11,32 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
  * po testu ne moze bez parsiranja, pa bi tvrdnja o ulazu smjestena u datoteku punu analizatorskih
  * selektora pala iako s analizatorom nema veze. Ulazni specovi zato zive ovdje.
  */
+
+test('ulaz `/`: nema novih critical/serious a11y problema i fokus uploada je vidljiv', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+
+  const rezultat = await new AxeBuilder({ page }).include('main').exclude('iframe').analyze();
+  const ozbiljno = rezultat.violations
+    .filter((v) => v.impact === 'critical' || v.impact === 'serious')
+    .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length }));
+  expect(ozbiljno, 'novi critical/serious problem pristupacnosti na ulazu').toEqual([]);
+
+  const upload = page.locator('.intake-paper__gumb');
+  await upload.focus();
+  const fokus = await page.evaluate(() => {
+    const g = document.querySelector<HTMLElement>('.intake-paper__gumb');
+    const papir = document.getElementById('intakeDropzone');
+    if (!g || !papir) return { aktivan: false, prsten: false };
+    const stil = getComputedStyle(papir);
+    return {
+      aktivan: document.activeElement === g,
+      prsten: stil.boxShadow !== 'none' || (stil.outlineStyle !== 'none' && parseFloat(stil.outlineWidth) > 0),
+    };
+  });
+  expect(fokus.aktivan, 'tipkovnicki fokus nije na upload kontroli').toBe(true);
+  expect(fokus.prsten, 'fokus uploada nema vidljiv prsten na papiru').toBe(true);
+});
 
 test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
   /**
