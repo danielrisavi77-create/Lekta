@@ -1077,14 +1077,14 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(hint()).toBe('ili ispusti dokument ovdje');
   });
 
-  it('ISTEKAO rok iz pohrane ne otvara vrata sam po sebi', () => {
+  it('ISTEKAO rok iz pohrane se ne vraca, ali upload ostaje otvoren', () => {
     zapisiRok({ datum: '2026-09-01', neznam: false });
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });
     expect(rokPolje().value, 'istekao datum se ne vraca').toBe('');
     expect(rokPecat().hidden).toBe(true);
-    expect(live.canAccept()).toBe(false);
-    expect(hint()).toBe('Prvo potvrdi rok');
+    expect(live.canAccept()).toBe(true);
+    expect(hint()).toBe('ili ispusti dokument ovdje');
   });
 
   it('spremljena sesija dobiva rok tog rada, a potvrdu samo ako je fakultet potvrdjen', () => {
@@ -1170,11 +1170,11 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
 
     document.getElementById('intakeDropzone')!.dispatchEvent(ispustanje(new File(['x'], 'rad.docx')));
     await vi.waitFor(() => expect(inspectFile).toHaveBeenCalledTimes(1));
-    expect(greska().hidden).toBe(true);
+    expect(greska().hasAttribute('data-intake-vrata'), 'upload je pogresno tretiran kao blokiran').toBe(false);
 
     (document.querySelector('.site-footer') ?? document.body).dispatchEvent(ispustanje(new File(['y'], 'drugi.docx')));
     await vi.waitFor(() => expect(inspectFile).toHaveBeenCalledTimes(2));
-    expect(greska().hidden).toBe(true);
+    expect(greska().hasAttribute('data-intake-vrata'), 'drop izvan lista je pogresno tretiran kao blokiran').toBe(false);
     kontroler.destroy();
   });
 });
