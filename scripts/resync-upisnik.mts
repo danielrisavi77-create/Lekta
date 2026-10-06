@@ -1,6 +1,6 @@
 /**
  * Read-only Upisnik resync preflight. Writes only .artifacts, never the authoring registry.
- * Run: npx vite-node scripts/resync-upisnik.mts
+ * Run: npx tsx scripts/resync-upisnik.mts
  * A valid candidate is not an approved mapping, complete national coverage, or a deployment.
  */
 import { createHash } from 'node:crypto';
@@ -9,33 +9,16 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseUpisnikResults, UPISNIK_VRSTE, type UpisnikRow } from '../src/programs/upisnik-parse';
 import { allProgrammesQuery, compareHarvests, validateHarvest } from '../src/programs/upisnik-resync';
+import { createUpisnikSession } from '../src/programs/upisnik-session';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(root, '.artifacts', 'upisnik-resync');
 const BASE = 'https://hko.srce.hr/usp';
-const HEADERS: Record<string, string> = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'hr-HR,hr;q=0.9,en;q=0.7',
-  'Sec-Fetch-Dest': 'document', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'same-origin',
-  'Upgrade-Insecure-Requests': '1',
-};
-
-async function getPage(url: string, cookie?: string): Promise<{ response: Response; html: string }> {
-  const response = await fetch(url, {
-    headers: { ...HEADERS, ...(cookie ? { Cookie: cookie, Referer: `${BASE}/index` } : {}) },
-    redirect: 'follow', signal: AbortSignal.timeout(45_000),
-  });
-  if (!response.ok) throw new Error(`SOURCE_HTTP_ERROR: ${response.status}`);
-  if (new URL(response.url).origin !== new URL(BASE).origin) throw new Error('UNEXPECTED_SOURCE_ORIGIN');
-  const html = await response.text();
-  if (/Dogodila se pogre/i.test(html)) throw new Error('SOURCE_APPLICATION_ERROR: HTTP 200 is not success');
-  return { response, html };
-}
 
 async function main(): Promise<void> {
   if (process.argv.length > 2) throw new Error('This preflight takes no arguments and writes only .artifacts/upisnik-resync.');
   mkdirSync(output, { recursive: true });
+  writeFileSync(join(output, 'latest-report.json'), `${JSON.stringify({ status: 'FETCH_IN_PROGRESS', canonicalSync: 'NOT_APPLIED' })}\n`);
   const baseline = JSON.parse(readFileSync(join(root, 'data/programs/drafts/upisnik.json'), 'utf8')) as {
     source: { snapshotHash: string }; rowCount: number; rows: UpisnikRow[];
   };
@@ -43,11 +26,11 @@ async function main(): Promise<void> {
   if (baseline.rowCount !== baseline.rows.length) baselineProblems.push('BASELINE_COUNT_MISMATCH');
   if (baselineProblems.length) throw new Error(`INVALID_BASELINE: ${baselineProblems.join('; ')}`);
 
-  const { response } = await getPage(`${BASE}/index`);
-  const cookie = response.headers.getSetCookie().map((value) => value.split(';')[0]).join('; ');
-  if (!cookie) throw new Error('SOURCE_SESSION_MISSING');
+  const readPage = createUpisnikSession();
+  const index = await readPage('index');
+  console.log(JSON.stringify({ stage: 'source-index', url: index.url, contentType: index.contentType, hasSessionCookie: index.hasSessionCookie }));
   const query = allProgrammesQuery();
-  const { html } = await getPage(`${BASE}/pretrazivanje?${query}`, cookie);
+  const { html } = await readPage(`pretrazivanje?${query}`);
   const fetchedAt = new Date().toISOString();
   const snapshotHash = createHash('sha256').update(html, 'utf8').digest('hex');
   // An immutable run subdirectory prevents a failed retry from reusing an earlier candidate.
@@ -96,6 +79,9 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  const message = error instanceof Error ? error.message : String(error);
+  mkdirSync(output, { recursive: true });
+  writeFileSync(join(output, 'failure.json'), `${JSON.stringify({ status: 'SOURCE_BLOCKED', error: message, canonicalSync: 'NOT_APPLIED' }, null, 2)}\n`);
+  console.error(message);
   process.exitCode = 1;
 });
