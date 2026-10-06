@@ -34,7 +34,7 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import (API_KEY_ENV, CODEX_API_KEY_ENV, GROK_API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
+from .worker import (API_KEY_ENV, CODEX_API_KEY_ENV, GROK_API_KEY_ENV, MISTRAL_API_KEY_ENV, MISTRAL_COMMANDS, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
                      changed_line_count, changed_paths, commit_worker_tree, implementation_worktree_blocked,
                      prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, scrubbed_env,
                      start_job_branch)
@@ -204,6 +204,7 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     claude_api_env = any(os.environ.get(k) for k in API_KEY_ENV)
     codex_api_env = any(os.environ.get(k) for k in CODEX_API_KEY_ENV)
     grok_api_env = any(os.environ.get(k) for k in GROK_API_KEY_ENV)
+    mistral_api_env = any(os.environ.get(k) for k in MISTRAL_API_KEY_ENV)
     codex = doctor.get("logins", {}).get("codex", {})
     claude = doctor.get("logins", {}).get("claude", {})
     tools = doctor.get("tools", {})
@@ -218,6 +219,11 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     grok_version = tuple(int(x) for x in match.groups()) if match else None
     grok_supported = bool(grok_tool.get("available")) and grok_version is not None and grok_version >= GROK_MIN_VERSION
     grok_attested = bool(attest.get("grok_included")) and bool(grok_models)
+    mistral_tool = tools.get("mistral") or {}
+    mistral_supported = bool(mistral_tool.get("available"))
+    # Mistral uses CLI availability as attestation since there's no separate attestation mechanism yet
+    mistral_attested = mistral_supported
+    mistral_models = list(attest.get("mistral_models") or previous.get("mistral_approved_models") or [])
 
     providers = {
         "codex": {
@@ -237,10 +243,16 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
             "cli_supported": grok_supported,
             "cli_version": ".".join(map(str, grok_version)) if grok_version else None,
         },
+        "mistral": {
+            "allowed": bool(config.get("mistralEnabled")) and mistral_supported and mistral_attested and not mistral_api_env,
+            "auth": "subscription" if mistral_attested and not mistral_api_env else ("api_key" if mistral_api_env else "unknown"),
+            "approved_models": mistral_models,
+            "cli_supported": mistral_supported,
+        },
     }
     fingerprint = doctor["configFingerprint"]
     unchanged = previous.get("config_fingerprint") == fingerprint if previous else True
-    any_subscription = codex_account or claude_account or grok_attested
+    any_subscription = codex_account or claude_account or grok_attested or mistral_attested
     return {
         "effective_auth": "subscription" if any_subscription else "unknown",
         "subscription_verified": bool(any_subscription),
@@ -249,8 +261,10 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
         "configuration_unchanged": bool(unchanged),
         "trusted_observation": True,
         "fable_enabled": bool(config.get("fableEnabled")),
+        "mistralEnabled": bool(config.get("mistralEnabled")),
         "approved_models": approved_models,
         "grok_approved_models": grok_models,
+        "mistral_approved_models": mistral_models,
         "providers": providers,
         "config_fingerprint": fingerprint,
         "observed_at": doctor["observedAt"],
@@ -274,12 +288,14 @@ def _worker_repo_state(config: dict | None) -> dict:
 def doctor(*, config: dict | None, config_problems: list[str], write_profile: bool = False, attest: dict | None = None,
            home: str | None = None) -> dict:
     home = home or home_dir()
-    tools = {name: _version(name) for name in ("git", "node", "npm", "python", "deno", "codex", "claude", "gh")}
+    tools = {name: _version(name) for name in ("git", "node", "npm", "python", "deno", "codex", "claude", "gh", "mistral")}
     tools["grok"] = _version("grok", ("version",))
+    tools["mistral"] = _version("mistral", ("--version",))
     logins = {
         "codex": _login_status("codex", ("login", "status"), ("logged in",)),
         "claude": _login_status("claude", ("auth", "status"), ("logged in", "authenticated")),
         "grok": {"logged_in": None, "method": "subscription", "detail": "CLI nema pouzdan noninteractive login status; koristi vlasnicku attestaciju"},
+        "mistral": _login_status("mistral", ("auth", "status"), ("logged in", "authenticated")),
         "gh": _login_status("gh", ("auth", "status"), ("logged in",)),
     }
     report = {
@@ -292,7 +308,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
         "mode": (config or {}).get("mode"),
         "tools": tools,
         "logins": logins,
-        "apiKeyEnvPresent": [k for k in (*API_KEY_ENV, *CODEX_API_KEY_ENV, *GROK_API_KEY_ENV) if os.environ.get(k)],
+        "apiKeyEnvPresent": [k for k in (*API_KEY_ENV, *CODEX_API_KEY_ENV, *GROK_API_KEY_ENV, *MISTRAL_API_KEY_ENV) if os.environ.get(k)],
         "word": _word_available(),
         "resources": _resources(),
         "repository": _repo_visibility((config or {}).get("repository")),

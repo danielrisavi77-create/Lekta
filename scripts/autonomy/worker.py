@@ -32,16 +32,18 @@ VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blo
 # (`scripts/autonomy/tests/test_worker.py`, test_child_env_has_no_payment_secrets), koji dokazuje da
 # dijete stvarno ne vidi `LEMONSQUEEZY_*` tajne.
 SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "STRIPE_", "LEMONSQUEEZY_",
-                       "AWS_", "AZURE_", "XAI_")
+                       "AWS_", "AZURE_", "XAI_", "MISTRAL_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
 CODEX_API_KEY_ENV = ("OPENAI_API_KEY",)
+MISTRAL_API_KEY_ENV = ("MISTRAL_API_KEY",)
 # Grok radi iskljucivo na SuperGrok pretplatu (`grok login`); `XAI_API_KEY` bi CLI tiho prebacio na
 # naplatu po pozivu, pa je za Grok isto sto i ANTHROPIC_API_KEY za Claude: zabrana prije pokretanja.
 # Zivi posao uvijek nosi `command: "grok"` (oba aliasa, `grok` i `build`, dolaze iz istog polja u
 # `scripts/agents/core.mjs`); `build` je u popisu obrambeno, za slucaj da pozivatelj posalje ime aliasa.
 GROK_COMMANDS = ("grok", "build")
 GROK_API_KEY_ENV = ("XAI_API_KEY",)
+MISTRAL_COMMANDS = ("mistral", "mistral-large", "mistral-small", "mixtral")
 PROMPT_FILE_PLACEHOLDER = "__LEKTA_PROMPT_FILE__"
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
@@ -724,16 +726,19 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if job.get("command") == "claude" and any(parent_env.get(k) for k in API_KEY_ENV):
         result["reason"] = "api_key_present: Anthropic API credential bi prebacio naplatu na API"
         return result
-    # Obrana u dubinu za Grok. `prepareJob` isti kljuc odbija u pretplatnickom nacinu, ali ovaj radnik
+    # Obrana u dubinu za Grok i Mistral. `prepareJob` isti kljuc odbija u pretplatnickom nacinu, ali ovaj radnik
     # moze dobiti posao i iz druge putanje, pa se ne oslanja na tudji gard. Ishod je verdict `blocked`,
     # kao i za Claude: nijedna grana ove funkcije ne baca zbog okoline.
     if job.get("command") in GROK_COMMANDS and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
         result["reason"] = "api_key_present: XAI_API_KEY bi Grok prebacio s pretplate na naplatu po pozivu"
         return result
+    if job.get("command") in MISTRAL_COMMANDS and any(parent_env.get(k) for k in MISTRAL_API_KEY_ENV):
+        result["reason"] = "api_key_present: MISTRAL_API_KEY bi Mistral prebacio s pretplate na naplatu po pozivu"
+        return result
     if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
         result["reason"] = "fable_disabled: model nije u autonomnom profilu"
         return result
-    billing_command = "grok" if job.get("command") in GROK_COMMANDS else str(job.get("command"))
+    billing_command = "grok" if job.get("command") in GROK_COMMANDS else ("mistral" if job.get("command") in MISTRAL_COMMANDS else str(job.get("command")))
     if not provider_billing_allowed(profile, billing_command, job.get("requestedModel")):
         result["reason"] = f"billing_unknown: provider/model nije odobren ({billing_command} {job.get('requestedModel')})"
         return result

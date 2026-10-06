@@ -92,7 +92,7 @@ def provider_billing_allowed(profile: dict | None, command: str, requested_model
         return False
     providers = profile.get("providers") if isinstance(profile, dict) else None
     if not isinstance(providers, dict):
-        return command not in ("codex", "claude", "grok") and billing_allowed(profile)
+        return command not in ("codex", "claude", "grok", "mistral") and billing_allowed(profile)
     provider = providers.get(command)
     if not isinstance(provider, dict) or provider.get("allowed") is not True:
         return False
@@ -201,6 +201,8 @@ def validate_config(cfg: dict) -> list[str]:
             problems.append(f"{key} mora biti false")
     if not isinstance(cfg.get("grokEnabled", False), bool):
         problems.append("grokEnabled mora biti bool")
+    if not isinstance(cfg.get("mistralEnabled", False), bool):
+        problems.append("mistralEnabled mora biti bool")
     if cfg.get("providerFallback") not in ("wait", "authorized"):
         problems.append("providerFallback mora biti wait ili authorized")
     coordinators = {name for name, role in AGENT_ROLE.items() if role == "coordinator"}
@@ -218,6 +220,10 @@ def validate_config(cfg: dict) -> list[str]:
         AGENT_PROVIDER.get(str(cfg.get(key))) == "grok" for key in routing_agents
     ):
         problems.append("Grok routing trazi grokEnabled=true")
+    if not cfg.get("mistralEnabled", False) and any(
+        AGENT_PROVIDER.get(str(cfg.get(key))) == "mistral" for key in routing_agents
+    ):
+        problems.append("Mistral routing trazi mistralEnabled=true")
     if cfg.get("maxPaidActionsUsd") != 0 or isinstance(cfg.get("maxPaidActionsUsd"), bool):
         problems.append("maxPaidActionsUsd mora biti 0")
     if cfg.get("allowedRunnerClass") != "public_standard":

@@ -24,6 +24,7 @@
   "providerFallback": "wait",
   "fableEnabled": false,
   "grokEnabled": false,
+  "mistralEnabled": false,
   "plannerAgent": "auto",
   "implementerAgent": "auto",
   "reviewerAgent": "auto",
