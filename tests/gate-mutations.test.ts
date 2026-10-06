@@ -8660,7 +8660,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   // Zbirni prolaz ponovno izvrsava stotine mutacija. Vitest 4 provjerava i
   // sinkroni timeout; izmjereno 16 s bez opterecenja, 30 s uz diskovni rad.
   // Pojedinacne mutacije zadrzavaju zadani rok i sve negativne kontrole.
-  }, 60_000);
+  }, 120_000);
 
   /**
    * Anti-regresija na najgori nacin da ovaj test oslabi: da sve mutacije vjezbaju JEDNU os. Prva
