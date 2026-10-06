@@ -451,7 +451,7 @@ const PAGE_STYLE = `
   .fk-search-count { margin: 0.55rem 0 0; min-height: 1.1em; font-size: 0.78rem; color: var(--paper-muted); }
   .fk-search-empty { font-size: 0.9rem; color: var(--paper-muted); }
   .fk-status { display: inline-flex; margin-left: 0.45rem; padding: 0.12rem 0.42rem; border: 1px solid var(--paper-line-strong); border-radius: 999px; font-family: var(--font-mono); font-size: 0.64rem; line-height: 1.35; letter-spacing: 0.02em; vertical-align: 0.08em; white-space: nowrap; }
-  .fk-status--verified { color: #176243; border-color: color-mix(in srgb, #176243 42%, var(--paper-line)); }
+  .fk-status--specific { color: #176243; border-color: color-mix(in srgb, #176243 42%, var(--paper-line)); }
   .fk-status--generic { color: var(--paper-muted); }
   .coverage-pending-label { font-size: 0.82rem; color: var(--paper-muted); margin: 0.7rem 0 0.2rem; }
   ul.coverage-pending { opacity: 0.85; }
@@ -998,7 +998,7 @@ function buildMasterIndexPage(catalog, existence) {
                 .join(' · ');
               const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
               const workTypes = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt)).join(' ');
-              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="verified" data-work="${escapeHtml(workTypes)}">${escapeHtml(u.name)}: <span class="fk-status fk-status--verified">Provjerena pravila</span> ${links}</li>`;
+              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="specific" data-work="${escapeHtml(workTypes)}">${escapeHtml(u.name)}: <span class="fk-status fk-status--specific">Posebna pravila</span> ${links}</li>`;
             })
             .join('')}</ul>`
         : '';
@@ -1035,7 +1035,7 @@ function buildMasterIndexPage(catalog, existence) {
   <div class="fk-filters" aria-label="Filtri popisa fakulteta">
     <div class="fk-filter"><label for="fk-inst">Ustanova</label><select id="fk-inst"><option value="">Sve ustanove</option>${institutionOptions}</select></div>
     <div class="fk-filter"><label for="fk-work">Vrsta rada</label><select id="fk-work"><option value="">Sve vrste rada</option><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate">Diplomski rad</option></select></div>
-    <div class="fk-filter"><label for="fk-status">Status pravila</label><select id="fk-status"><option value="">Svi profili</option><option value="verified">Provjerena pravila</option><option value="generic">Opći profil</option></select></div>
+    <div class="fk-filter"><label for="fk-status">Status pravila</label><select id="fk-status"><option value="">Svi profili</option><option value="specific">Posebna pravila</option><option value="generic">Opći profil</option></select></div>
   </div>
   <p id="fk-q-count" class="fk-search-count" aria-live="polite"></p>
 </div>
