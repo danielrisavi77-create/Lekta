@@ -100,3 +100,17 @@ Opis dohvata pravila profila također je preciziran: zahtjev donosi izvornu IP a
 broja zahtjeva dobiva samo `p_ip_hash`. Tvrdnja o obradi isključivo hashirane adrese
 zamijenjena je tvrdnjom o računanju i pohrani otiska u Lektinu ograničenju zahtjeva.
 Time se ne daje neprovjereno jamstvo o zapisima mrežnih i hosting pružatelja.
+
+
+Naknadna provjera uklanja i naslijeđenu oznaku "Merchant of Record" iz popisa pružatelja.
+Aktualni `src/report/checkout.ts` i `create-checkout/handler.ts` stvaraju standardni
+Stripe PaymentIntent za Payment Element; to nije Stripe Managed Payments.
+[Službena usporedba](https://docs.stripe.com/payments/managed-payments) razlikuje
+Merchant of Record u Managed Payments od ostalih Stripe proizvoda. Tekst zato opisuje
+obradu plaćanja bez pripisivanja neprovedene uloge trgovca ili izdavanja računa.
+Provjereno 6. 10. 2026.; ovo ne potvrđuje ni aktivira produkcijsku naplatu.
+
+Obje općenite rečenice o hashiranim logovima ograničene su na Lektinu evidenciju izrade
+izvještaja: `generate-report/index.ts` sprema `ip_hash`, a migracija `0009_log_retention.sql`
+predviđa brisanje tih zapisa nakon 90 dana. Time se ne jamči sadržaj zapisa hosting
+pružatelja niti se potvrđuje da je raspored brisanja izveden u živom okruženju.
