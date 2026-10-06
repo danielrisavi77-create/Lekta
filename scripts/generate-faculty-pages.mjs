@@ -998,7 +998,7 @@ function buildMasterIndexPage(catalog, existence) {
                 .join(' · ');
               const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
               const workTypes = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt)).join(' ');
-              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="verified" data-work="${escapeHtml(workTypes)}">${escapeHtml(u.name)} <span class="fk-status fk-status--verified">Provjerena pravila</span>: ${links}</li>`;
+              return `<li data-search="${searchKey}" data-inst="${escapeHtml(inst.id)}" data-status="verified" data-work="${escapeHtml(workTypes)}">${escapeHtml(u.name)}: <span class="fk-status fk-status--verified">Provjerena pravila</span> ${links}</li>`;
             })
             .join('')}</ul>`
         : '';
