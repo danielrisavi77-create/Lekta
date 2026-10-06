@@ -41,6 +41,24 @@
       "input": 1,
       "output": 5,
       "status": "verified"
+    },
+    "mistral-large-latest": {
+      "input": 3,
+      "output": 15,
+      "status": "verified",
+      "verifiedAt": "2025-10-06"
+    },
+    "mistral-small-latest": {
+      "input": 1,
+      "output": 5,
+      "status": "verified",
+      "verifiedAt": "2025-10-06"
+    },
+    "mixtral-8x7b-latest": {
+      "input": 2,
+      "output": 10,
+      "status": "verified",
+      "verifiedAt": "2025-10-06"
     }
   },
   "costWeight": {
@@ -65,6 +83,12 @@
       "model": "grok-4.6-build",
       "status": "verified",
       "verifiedAt": "2026-09-21"
+    },
+    "mistral": {
+      "billing": "subscription",
+      "model": "mistral-large-latest",
+      "status": "verified",
+      "verifiedAt": "2025-10-06"
     }
   },
   "effortPolicy": {
@@ -90,7 +114,7 @@
             "model": null,
             "effort": "medium",
             "reviewFallback": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "medium" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -106,7 +130,7 @@
             "model": null,
             "effort": "high",
             "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -124,7 +148,7 @@
             "model": null,
             "effort": "medium",
             "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -140,7 +164,7 @@
             "model": null,
             "effort": "high",
             "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -159,7 +183,7 @@
             "model": null,
             "effort": "medium",
             "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" },
           "design": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
@@ -176,7 +200,7 @@
             "model": null,
             "effort": "high",
             "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
-            "reviewAlternatives": ["grok-review"]
+            "reviewAlternatives": ["grok-review", "mistral-review"]
           },
           "gate": { "provider": "none" }
         }
@@ -224,6 +248,37 @@
       "effort": "low",
       "sandbox": "read-only",
       "purpose": "Trijaza CI padova iz gh api anotacija: vraca flaky ili stvarno, s dokazom."
+    },
+    "mistral-review": {
+      "provider": "mistral",
+      "agent": "mistral-large",
+      "phases": ["review"],
+      "runnerPhase": "review",
+      "effort": "medium",
+      "sandbox": "read-only",
+      "purpose": "Drugi provider za M/L nezasticene diffove; trece misljenje na zasticenima.",
+      "soleReviewerOfProtected": false
+    },
+    "mistral-scout": {
+      "provider": "mistral",
+      "agent": "mistral-small",
+      "phases": ["scout", "critic"],
+      "runnerPhase": "review",
+      "effort": "low",
+      "sandbox": "read-only",
+      "purpose": "Intake izvidjac i kriticar briefa; samo cita."
+    },
+    "mistral-docs": {
+      "provider": "mistral",
+      "agent": "mixtral",
+      "phases": ["implement"],
+      "runnerPhase": "implement",
+      "effort": "medium",
+      "sandbox": "workspace",
+      "alwaysApprove": true,
+      "purpose": "Implementacija samo nad dokumentacijom.",
+      "allowedPaths": ["docs/**", "**/*.md", "docs/agents/tasks.json"],
+      "forbiddenPaths": ["src/**", "supabase/**", "data/**", "scripts/**", "security/**"]
     }
   },
   "protectedReviewNote": "Za protectedPaths grok-review je samo trece misljenje uz codex (ili claude reviewFallback); nikad jedini recenzent.",

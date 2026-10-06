@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "grokMinVersion": "1.0.34",
+  "mistralMinVersion": "1.0.0",
   "agents": {
     "astra": { "command": "codex", "model": "gpt-6-astra", "role": "coordinator" },
     "fable": { "command": "claude", "model": "fable", "role": "coordinator" },
@@ -8,6 +9,9 @@
     "sonnet": { "command": "claude", "model": "sonnet", "role": "implementer" },
     "sol": { "command": "codex", "model": "gpt-5.6-sol", "role": "implementer" },
     "grok": { "command": "grok", "model": "grok-4.6", "role": "coordinator" },
-    "build": { "command": "grok", "model": "grok-4.6", "role": "implementer" }
+    "build": { "command": "grok", "model": "grok-4.6", "role": "implementer" },
+    "mistral-large": { "command": "mistral", "model": "mistral-large-latest", "role": "coordinator" },
+    "mistral-small": { "command": "mistral", "model": "mistral-small-latest", "role": "implementer" },
+    "mixtral": { "command": "mistral", "model": "mixtral-8x7b-latest", "role": "implementer" }
   }
 }
