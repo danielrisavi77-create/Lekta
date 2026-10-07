@@ -304,6 +304,9 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { acceptedInvalidUrls, committedSourceAddresses, countDocumentUrls, findSourceUrlProblems, loadPublicSourceUrl, publicSourceUrlSource } from './helpers/source-url-checks';
+import { publicSourceUrl } from '../src/shared/source-url.mjs';
+import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
 import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
@@ -12119,6 +12122,54 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mutacije: javne adrese izvora (sourceLinkHtml, profile-source-links)', () => {
+  it('validator bez provjere razmaka, protokola ili gole domene obara gard', () => {
+    // BASELINE: stvarni validator odbija svaku klasu nevaljane adrese, a sourceLinkHtml je ne linka.
+    expect(acceptedInvalidUrls(publicSourceUrl)).toEqual([]);
+    expect(sourceLinkHtml({ title: 'Upute', url: 'https://x.hr/upute.pdf (opis dokumenta)' })).not.toContain('href=');
+
+    // Mutanti su stvarni validator bez TOCNO jedne provjere, pa svaki obara samo svoju klasu.
+    const mutations = {
+      razmak: ['/\\s/.test(raw)', 'false'],
+      protokol: ["if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;", ''],
+      vjerodajnice: ['if (url.username || url.password) return null;', ''],
+      gola: ["if (url.pathname === '/' && !url.search) return null;", ''],
+    } as const;
+    const validator = (bez: keyof typeof mutations) => {
+      const [before, after] = mutations[bez];
+      expect(publicSourceUrlSource().split(before)).toHaveLength(2);
+      return loadPublicSourceUrl((source) => source.replace(before, after));
+    };
+    expect(acceptedInvalidUrls(loadPublicSourceUrl())).toEqual([]);
+    for (const valid of ['https://x.hr/upute.pdf', 'http://x.hr/upute.pdf', 'https://x.hr/?page_id=17']) expect(loadPublicSourceUrl()(valid)).toBe(valid);
+    expect(acceptedInvalidUrls(validator('razmak'))).toEqual(['https://x.hr/upute.pdf (opis dokumenta)']);
+    expect(acceptedInvalidUrls(validator('protokol'))).toEqual(['javascript:alert(1)', 'ftp://x.hr/upute.pdf']);
+    expect(acceptedInvalidUrls(validator('gola'))).toEqual(['https://x.hr/']);
+    expect(acceptedInvalidUrls(validator('vjerodajnice'))).toEqual(['https://u:p@x.hr/upute.pdf']);
+
+    // MUTANT gola domena nad stvarnim registrom: poznate gole domene bi se brojale kao ciste adrese.
+    const registar = committedSourceAddresses()['source-registry.json'];
+    expect(countDocumentUrls(registar, validator('gola'))).toBeGreaterThan(countDocumentUrls(registar));
+  });
+
+  it('stari URL s razmakom ili gola domena u podacima obara profile-source-links', () => {
+    const files = committedSourceAddresses();
+    // BASELINE: commitani podaci su cisti u sve tri datoteke.
+    for (const sources of Object.values(files)) expect(findSourceUrlProblems(sources)).toEqual([]);
+
+    // MUTANT 1: vracen stari FESB zapis s imenom clana uz adresu (oblik prije #238).
+    const stari = 'https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)';
+    const registar = files['source-registry.json'].map((s) => (s.label.endsWith(' fesb-upute-diplomski-2017') ? { ...s, url: stari } : s));
+    expect(findSourceUrlProblems(registar)).toEqual([`source-registry.json fesb-upute-diplomski-2017: nije javna adresa dokumenta (${stari})`]);
+
+    // MUTANT 2: profilni izvor sveden na golu domenu bez dokumenta.
+    const profili = files['verified-profiles.json'];
+    const prvi = profili.findIndex((s) => s.url !== undefined);
+    const gola = profili.map((s, i) => (i === prvi ? { ...s, url: 'https://www.unidu.hr' } : s));
+    expect(findSourceUrlProblems(gola)).toEqual([`${profili[prvi].label}: gola domena bez dokumenta (https://www.unidu.hr)`]);
   });
 });
 

@@ -5,20 +5,31 @@ import { fileURLToPath } from 'node:url';
 import { suggestTool } from '../src/ui/tool-suggestions';
 
 describe('suggestTool: utkivanje alata u tok ispravaka', () => {
+  it.each([
+    ['Nedostaje naslovnica', '/naslovnica.html'],
+    ['Nedostaje izjava', '/izjava.html'],
+    ['Popis literature', '/literatura.html'],
+    ['Broj riječi', '/kartice.html'],
+    ['Citat u tekstu', '/citat.html'],
+  ])('otvara %s iz radnog prostora na korijenu stranice', (title, pathname) => {
+    const href = suggestTool({ title })!.href;
+    expect(new URL(href, 'https://lektahr.netlify.app/rad/').pathname).toBe(pathname);
+  });
+
   it('naslovnica se prepoznaje iz naslova', () => {
-    expect(suggestTool({ title: 'Nedostaje naslovnica' })?.href).toBe('naslovnica.html');
+    expect(suggestTool({ title: 'Nedostaje naslovnica' })?.href).toBe('/naslovnica.html');
   });
   it('izjava o izvornosti vodi na izjava alat', () => {
-    expect(suggestTool({ detail: 'Izjava o izvornosti nije priložena' })?.href).toBe('izjava.html');
+    expect(suggestTool({ detail: 'Izjava o izvornosti nije priložena' })?.href).toBe('/izjava.html');
   });
   it('literatura ima prednost pred opcim citatnim', () => {
-    expect(suggestTool({ category: 'citations', title: 'Popis literature nije uredan' })?.href).toBe('literatura.html');
+    expect(suggestTool({ category: 'citations', title: 'Popis literature nije uredan' })?.href).toBe('/literatura.html');
   });
   it('opći citatni problem vodi na citat generator', () => {
-    expect(suggestTool({ category: 'citations', title: 'Provjeri navod u tekstu' })?.href).toBe('citat.html');
+    expect(suggestTool({ category: 'citations', title: 'Provjeri navod u tekstu' })?.href).toBe('/citat.html');
   });
   it('opseg/kartice se prepoznaju', () => {
-    expect(suggestTool({ title: 'Opseg rada je premali', detail: 'broj riječi ispod minimuma' })?.href).toBe('kartice.html');
+    expect(suggestTool({ title: 'Opseg rada je premali', detail: 'broj riječi ispod minimuma' })?.href).toBe('/kartice.html');
   });
   it('nepovezan problem vraca null (bez lazne ponude)', () => {
     expect(suggestTool({ title: 'Font nije Times New Roman', category: 'formatting' })).toBeNull();
@@ -30,20 +41,20 @@ describe('suggestTool s kontekstom selekcije: naslovnica nosi ?fakultet/razina/s
 
   it('puni kontekst daje parametrizirani href (konzumira ga applyUrlParams u naslovnica-page)', () => {
     const s = suggestTool(issue, { unitId: 'fpzg', workType: 'graduate', program: 'Politologija' });
-    expect(s?.href).toBe('naslovnica.html?fakultet=fpzg&razina=diplomski&smjer=Politologija');
+    expect(s?.href).toBe('/naslovnica.html?fakultet=fpzg&razina=diplomski&smjer=Politologija');
   });
 
   it('bez unitId (generic profil) ostaje goli href; nepoznat workType ne proizvodi razina=undefined', () => {
-    expect(suggestTool(issue, {})?.href).toBe('naslovnica.html');
-    expect(suggestTool(issue)?.href).toBe('naslovnica.html');
+    expect(suggestTool(issue, {})?.href).toBe('/naslovnica.html');
+    expect(suggestTool(issue)?.href).toBe('/naslovnica.html');
     const s = suggestTool(issue, { unitId: 'fpzg', workType: 'nesto-nepoznato' });
-    expect(s?.href).toBe('naslovnica.html?fakultet=fpzg');
+    expect(s?.href).toBe('/naslovnica.html?fakultet=fpzg');
     expect(s?.href).not.toContain('undefined');
   });
 
   it('ostali alati ne dobivaju parametre (nemaju param ugovor)', () => {
     const s = suggestTool({ detail: 'Izjava o izvornosti nije priložena' }, { unitId: 'fpzg' });
-    expect(s?.href).toBe('izjava.html');
+    expect(s?.href).toBe('/izjava.html');
   });
 });
 
