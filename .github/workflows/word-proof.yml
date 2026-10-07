@@ -133,11 +133,21 @@ jobs:
             throw "Ocekivan je Deno 2.9.7; pronadjeno: $verzija"
           }
           Write-Output "Deno $verzija ($($deno.Source))"
-      - name: Python setup (samo razine=sve)
+      - name: Python preflight (samo razine=sve)
         if: inputs.razine == 'sve'
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.12'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $python = Get-Command python -ErrorAction Stop
+          $verzija = python --version
+          if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^Python 3[.]14[.]3$') {
+            throw "Ocekivan je Python 3.14.3; pronadjeno: $verzija"
+          }
+          $venv = Join-Path $env:RUNNER_TEMP 'lekta-word-proof-venv'
+          python -m venv $venv
+          if ($LASTEXITCODE -ne 0) { throw "Kreiranje Python okruzenja nije uspjelo ($LASTEXITCODE)." }
+          [IO.File]::AppendAllText($env:GITHUB_PATH, ((Join-Path $venv 'Scripts') + [Environment]::NewLine))
+          Write-Output "Python $verzija ($($python.Source)); venv $venv"
       - name: lxml i Playwright chromium (samo razine=sve)
         if: inputs.razine == 'sve'
         shell: powershell

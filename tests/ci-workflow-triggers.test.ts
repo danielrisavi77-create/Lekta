@@ -93,12 +93,17 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
     expect(runsOn).toEqual(['self-hosted', 'windows', 'word']);
   });
 
-  it('puni Word proof provjerava lokalni Deno prije release gatea', () => {
+  it('puni Word proof provjerava lokalni Deno i Python prije release gatea', () => {
     const raw = readFileSync(join(workflowsDir, 'word-proof.yml'), 'utf8');
     expect(raw).toContain('Deno preflight (samo razine=sve)');
     expect(raw).toContain('Get-Command deno -ErrorAction Stop');
     expect(raw).toContain("^deno 2[.]9[.]7 ");
     expect(raw).not.toContain('denoland/setup-deno');
+    expect(raw).toContain('Python preflight (samo razine=sve)');
+    expect(raw).toContain('Get-Command python -ErrorAction Stop');
+    expect(raw).toContain("^Python 3[.]14[.]3$");
+    expect(raw).toContain('python -m venv $venv');
+    expect(raw).not.toContain('actions/setup-python');
   });
 
   it('required job imena postoje: conformance-matrix, build-gate/ux-gate, unittest', () => {
