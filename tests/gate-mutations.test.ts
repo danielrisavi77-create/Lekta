@@ -304,6 +304,10 @@ import { collectPackages, compareOsvToRatchet, denoLockPackages, findingsFromBat
 import osvRatchet from '../data/security/osv-ratchet.json';
 import { lockfileSourceProblems } from '../scripts/lockfile-sources.mjs';
 import { captchaWiringProblems } from './helpers/auth-captcha';
+import { flagContractProblems, googleFlagProblems, pkceContractProblems } from './helpers/google-auth-flag';
+import * as sessionModul from '../src/auth/session';
+import * as googleCallbackModul from '../src/auth/google-callback';
+import { PKCE_MAX_AGE_MS } from '../src/auth/google-callback';
 import { acceptedInvalidUrls, committedSourceAddresses, countDocumentUrls, findSourceUrlProblems, loadPublicSourceUrl, publicSourceUrlSource } from './helpers/source-url-checks';
 import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
@@ -10248,6 +10252,117 @@ describe('mutacije: obvezni retci opisa PR-a (T58)', () => {
       }
     };
     expect(netoGrize(tiho)).toBe(false);
+  });
+});
+
+describe('mutacije: T102 zastavica prijave Googleom ostaje izvan repozitorija', () => {
+  // Stvaran kvar koji imitira: netko ukljuci Google prijavu commitom u netlify.toml prije nego sto
+  // je provider uskladjen s Katedrom (dijeljeni Auth), ili primjer okoline zadano ukljuci zastavicu.
+  const toml = readFileSync('netlify.toml', 'utf8').replace(/\r\n/g, '\n');
+  const env = readFileSync('.env.example', 'utf8').replace(/\r\n/g, '\n');
+
+  it('BASELINE: stvarni netlify.toml i .env.example su cisti', () => {
+    expect(googleFlagProblems(toml, env)).toEqual([]);
+  });
+
+  it('mutant: netlify.toml produkcijski kontekst ukljuci zastavicu', () => {
+    const m = `${toml}
+[context.production.environment]
+  VITE_AUTH_GOOGLE_ENABLED = "true"
+`;
+    expect(googleFlagProblems(m, env).some((p) => p.includes('netlify.toml') && p.includes('VITE_AUTH_GOOGLE_ENABLED'))).toBe(true);
+  });
+
+  it('mutant: zastavica samo u komentaru netlify.toml nije dodjela (gard ne vristi na sve)', () => {
+    expect(googleFlagProblems(`${toml}
+# VITE_AUTH_GOOGLE_ENABLED = "true"
+`, env)).toEqual([]);
+  });
+
+  it('mutant: .env.example zadano ukljuci zastavicu ili izgubi oznaku [klijent]', () => {
+    expect(googleFlagProblems(toml, env.replace('VITE_AUTH_GOOGLE_ENABLED=', 'VITE_AUTH_GOOGLE_ENABLED=true'))).toEqual([
+      '.env.example postavlja VITE_AUTH_GOOGLE_ENABLED=true; primjer mora biti iskljucen (prazno)',
+    ]);
+    const bezOznake = env.replace('# [klijent] Prijava Googleom', '# Prijava Googleom');
+    expect(googleFlagProblems(toml, bezOznake)).toEqual(['.env.example: VITE_AUTH_GOOGLE_ENABLED nema oznaku [klijent] u komentaru iznad']);
+  });
+
+  it('mutant: svaki TOML oblik kljuca se hvata (jednostruko citiran, tockasti, inline tablica, iza komentara u istom retku)', () => {
+    const oblici = [
+      `[context.production.environment]\n  'VITE_AUTH_GOOGLE_ENABLED' = "true"`,
+      `[context.production]\n  environment.VITE_AUTH_GOOGLE_ENABLED = "true"`,
+      `[context.production]\n  environment = { VITE_AUTH_GOOGLE_ENABLED = "true" }`,
+      `[build.environment]\n  "VITE_AUTH_GOOGLE_ENABLED"="1" # tiho ukljuceno`,
+      // TOML escape sekvence u citiranom kljucu (Codex R4 runda 2 na #307).
+      `[context.production.environment]\n  "\\u0056ITE_AUTH_GOOGLE_ENABLED" = "true"`,
+      `[context.production.environment]\n  "VITE_AUTH_\\U00000047OOGLE_ENABLED" = "true"`,
+    ];
+    for (const o of oblici) {
+      expect(googleFlagProblems(`${toml}\n${o}\n`, env).filter((p) => p.startsWith('netlify.toml:')), o).toHaveLength(1);
+    }
+    // Negativna kontrola: ime u komentaru iza vrijednosti nije dodjela, a # unutar navodnika nije komentar.
+    expect(googleFlagProblems(`${toml}\nX = "a#b" # VITE_AUTH_GOOGLE_ENABLED nije ovdje\n`, env)).toEqual([]);
+  });
+
+  it('mutant: .env.example s drugim unosom, export oblikom ili citiranom vrijednoscu se hvata', () => {
+    const drugi = `${env}\nVITE_AUTH_GOOGLE_ENABLED=true\n`;
+    expect(googleFlagProblems(toml, drugi)).toEqual([
+      '.env.example dodjeljuje VITE_AUTH_GOOGLE_ENABLED 2 puta; dopusten je tocno jedan unos',
+      '.env.example postavlja VITE_AUTH_GOOGLE_ENABLED=true; primjer mora biti iskljucen (prazno)',
+    ]);
+    expect(googleFlagProblems(toml, env.replace('VITE_AUTH_GOOGLE_ENABLED=', 'export VITE_AUTH_GOOGLE_ENABLED = "1"'))).toEqual([
+      '.env.example postavlja VITE_AUTH_GOOGLE_ENABLED=1; primjer mora biti iskljucen (prazno)',
+    ]);
+    // Negativna kontrola: prazna citirana vrijednost je i dalje iskljucena.
+    expect(googleFlagProblems(toml, env.replace('VITE_AUTH_GOOGLE_ENABLED=', 'VITE_AUTH_GOOGLE_ENABLED=""'))).toEqual([]);
+  });
+});
+
+describe('mutacije: T102 izvor prijave Googleom (zastavica fail-closed, PKCE povratak)', () => {
+  // Mutanti mijenjaju STVARNI izvor src/auth/google-flag.ts i src/auth/google-oauth.ts u memoriji
+  // (esbuild u CommonJS, bez upisa u repozitorij), a ugovor se izvrsava nad mutiranom funkcijom.
+  function izvrsiAuthIzvor(datoteka: string, od: string, u: string): Record<string, unknown> {
+    const izvor = readTextLf(resolve(process.cwd(), 'src', 'auth', datoteka));
+    const mutiran = izvor.replace(od, u);
+    if (od !== u) expect(mutiran, `zamjena nije pogodila izvor: ${od}`).not.toBe(izvor);
+    const { code } = esbuild.transformSync(mutiran, { loader: 'ts', format: 'cjs' });
+    const modul: { exports: Record<string, unknown> } = { exports: {} };
+    const uvozi: Record<string, unknown> = { './session': sessionModul, './google-callback': googleCallbackModul };
+    const zahtjev = (ime: string): unknown => {
+      if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
+      return uvozi[ime];
+    };
+    new Function('module', 'exports', 'require', code)(modul, modul.exports, zahtjev);
+    return modul.exports;
+  }
+  const zastavica = (od: string, u: string) =>
+    izvrsiAuthIzvor('google-flag.ts', od, u).googleAuthEnabled as (env: Record<string, unknown>) => boolean;
+  const povratak = (od: string, u: string) =>
+    izvrsiAuthIzvor('google-oauth.ts', od, u).completeGoogleSignIn as Parameters<typeof pkceContractProblems>[0];
+
+  it('BASELINE: nemutirani izvor kroz isti ucitavac je cist (zastavica i PKCE povratak)', async () => {
+    expect(flagContractProblems(zastavica('', ''))).toEqual([]);
+    expect(await pkceContractProblems(povratak('', ''), PKCE_MAX_AGE_MS)).toEqual([]);
+  });
+
+  it('mutant: zastavica fail-open (sve osim false/0 ukljucuje) se hvata', () => {
+    const m = zastavica("return raw === 'true' || raw === '1';", "return raw !== 'false' && raw !== '0';");
+    expect(flagContractProblems(m)).toEqual(expect.arrayContaining(['ukljucena za ""', 'ukljucena bez varijable', 'ukljucena za "yes"']));
+  });
+
+  it('mutant: povratak bez provjere isteka verifiera se hvata', async () => {
+    const m = povratak('if (!(now - pending.createdAt >= 0 && now - pending.createdAt <= PKCE_MAX_AGE_MS)) {', 'if (false) {');
+    expect(await pkceContractProblems(m, PKCE_MAX_AGE_MS)).toEqual(['istekao verifier nije odbijen bez mreze']);
+  });
+
+  it('mutant: verifier koji se ne trosi (visekratni povratak) se hvata', async () => {
+    const m = povratak('  if (!pending || typeof pending.verifier !== \'string\' || !pending.verifier) return null;\n  opts.store.save(null);', '  if (!pending || typeof pending.verifier !== \'string\' || !pending.verifier) return null;');
+    expect(await pkceContractProblems(m, PKCE_MAX_AGE_MS)).toEqual(['verifier nije potrosen']);
+  });
+
+  it('mutant: povratak bez provjere identiteta (Codex R3 na #307) se hvata', async () => {
+    const m = povratak("    if (!verifiedIdentity(raw)) return { ok: false, message: 'nevaljan identitet u odgovoru poslužitelja' };\n", '');
+    expect(await pkceContractProblems(m, PKCE_MAX_AGE_MS)).toEqual(['odgovor bez user prihvacen kao prijava', 'odgovor anonimni korisnik prihvacen kao prijava']);
   });
 });
 
