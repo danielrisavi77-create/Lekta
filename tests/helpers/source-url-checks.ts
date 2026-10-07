@@ -86,3 +86,12 @@ export function committedSourceAddresses(): Record<string, SourceAddress[]> {
     'source-registry.json': registry.map((entry) => ({ label: `source-registry.json ${entry.id}`, url: entry.url })),
   };
 }
+
+/** Actual production JS source, for baseline and source mutations without a second validator. */
+export function publicSourceUrlSource(): string {
+  return readFileSync(join(ROOT, 'src/shared/source-url.mjs'), 'utf8').replace(/\r/g, '');
+}
+export function loadPublicSourceUrl(mutate: (s: string) => string = (s) => s): UrlValidator {
+  const source = mutate(publicSourceUrlSource()).replace(/^export /gm, '');
+  return new Function(source + '\nreturn publicSourceUrl;')() as UrlValidator;
+}
