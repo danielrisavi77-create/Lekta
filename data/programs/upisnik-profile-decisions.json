@@ -182,6 +182,15 @@
       }
     },
     {
+      "programCode": "52",
+      "profileId": "fer-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
+        "sourceLocator": "Naziv programa: Elektrotehnika i informacijska tehnologija (popis programa FER3, redak 1412 snimke); citat: odjeljak o zavrsetku prijediplomskog studija (redak 1422 snimke). Izvor profila fer-zavrsni (ZEMRIS 2013) prihvatio vlasnik 2026-10-04.",
+        "quote": "Prijediplomski studij traje tri godine i završava polaganjem ispita iz svih upisanih kolegija, zadovoljavanjem propisane strukture studija, stjecanjem barem 180 bodova prema ECTS-u i ispunjenjem drugih studijskih obveza te izradom i uspješnom obranom završnog rada ili završnog projekta."
+      }
+    },
+    {
       "programCode": "54",
       "profileId": "unidu-elektro-zavrsni",
       "evidence": {
@@ -650,6 +659,33 @@
       }
     },
     {
+      "programCode": "261",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "262",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "263",
+      "profileId": "efst-zavrsni",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
       "programCode": "275",
       "profileId": "pravo-socijalni-rad-zavrsni",
       "evidence": {
@@ -785,6 +821,15 @@
       }
     },
     {
+      "programCode": "375",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Naziv programa: Elektrotehnika i informacijska tehnologija (popis diplomskih programa, redak 1376 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+      }
+    },
+    {
       "programCode": "383",
       "profileId": "grf-diplomski",
       "evidence": {
@@ -809,6 +854,24 @@
         "sourceUrl": "https://www.fkit.unizg.hr/diplomski/ekoinzenjerstvo",
         "sourceLocator": "službena stranica FKIT-a, diplomski program Ekoinženjerstvo",
         "quote": "Diplomski studijski program Ekoinženjerstvo"
+      }
+    },
+    {
+      "programCode": "392",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Naziv programa: Računarstvo (popis diplomskih programa, redak 1407 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
+      }
+    },
+    {
+      "programCode": "393",
+      "profileId": "fer-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+        "sourceLocator": "Naziv programa: Informacijska i komunikacijska tehnologija (popis diplomskih programa, redak 1393 snimke); citat: zajednicki odjeljak o zavrsetku diplomskog studija (redak 1450 snimke)",
+        "quote": "Diplomski studij završava se nakon što se polože svi temeljni kolegiji za struku i sakupi najmanje 120 ECTS bodova, od kojih izrada i javna obrana diplomskog rada donosi 30 ECTS bodova."
       }
     },
     {
@@ -1277,6 +1340,24 @@
         "sourceUrl": "https://fet.unipu.hr/fet/studijski_programi/diplomski",
         "sourceLocator": "diplomski studijski programi",
         "quote": "Primijenjena ekonomija"
+      }
+    },
+    {
+      "programCode": "591",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
+      }
+    },
+    {
+      "programCode": "592",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -2186,6 +2267,15 @@
         "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
         "sourceLocator": "Studij socijalnog rada, sveučilišni diplomski studij",
         "quote": "Socijalna politika"
+      }
+    },
+    {
+      "programCode": "1807",
+      "profileId": "efst-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "sourceLocator": "1. UVOD, str. 3; Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu",
+        "quote": "Uputa se odnose na sve kategorije studentskih radova, a posebice na:"
       }
     },
     {
@@ -3588,20 +3678,6 @@
           "sourceUrl": "https://www.ffzg.unizg.hr/roman/spanjolski/programi/",
           "sourceLocator": "službeni programi Španjolskog jezika i književnosti, završetak studija",
           "quote": "Završni ispit"
-        }
-      ]
-    },
-    {
-      "programCode": "52",
-      "reason": "Izvor za FER profil iz 2013. nalazi se na osobnoj stranici nastavnika; važeće upute nisu potvrđene.",
-      "missingEvidence": [
-        "Službeni aktualni izvor sastavnice koji imenuje program Elektrotehnika i informacijska tehnologija, potvrđuje vrstu studija i primjenu uputa profila fer-zavrsni."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
-          "sourceLocator": "službena stranica FER-a, popis studijskih programa FER3",
-          "quote": "prijediplomski studij organizira se putem dva trogodišnja studijska programa: Elektrotehnika i informacijska tehnologija i Računarstvo"
         }
       ]
     },
