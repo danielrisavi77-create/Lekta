@@ -122,11 +122,17 @@ jobs:
           npm-cache: 'false'
 
       # Samo za puni release:check: Edge typecheck (Deno), Tier 1 (lxml) i Playwright.
-      - name: Deno setup (samo razine=sve)
+      - name: Deno preflight (samo razine=sve)
         if: inputs.razine == 'sve'
-        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
-        with:
-          deno-version: v2.x
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $deno = Get-Command deno -ErrorAction Stop
+          $verzija = deno --version | Select-Object -First 1
+          if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^deno 2[.]9[.]7 ') {
+            throw "Ocekivan je Deno 2.9.7; pronadjeno: $verzija"
+          }
+          Write-Output "Deno $verzija ($($deno.Source))"
       - name: Python setup (samo razine=sve)
         if: inputs.razine == 'sve'
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
