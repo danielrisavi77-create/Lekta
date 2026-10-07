@@ -12,11 +12,11 @@
  */
 import { googleAuthEnabled } from '../../auth/google-flag';
 import type { AuthConfig, Session, SessionResult } from '../../auth/session';
-import { callbackFrom, cleanedCallbackUrl, clearExpiredPkce, readPending, type PkceStore } from '../../auth/google-callback';
+import { callbackFrom, cleanedCallbackUrl, clearExpiredPkce, GOOGLE_PKCE_STORAGE_KEY, readPending, type PkceStore } from '../../auth/google-callback';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../../shared/browser-storage';
 
 /** PKCE verifier pod sigurnim omotacem pohrane (ne sirovi localStorage). */
-const PKCE_STORAGE_KEY = 'lekta.oauth.pkce';
+
 
 export interface GoogleSignInDeps {
   enabled: boolean;
@@ -126,7 +126,7 @@ export async function mountGoogleSignIn(deps: GoogleSignInDeps): Promise<void> {
     deps.track('auth_signed_in', { method: 'google' });
     deps.afterSignIn();
   } else {
-    deps.toast('Prijava Googleom nije uspjela. Pokušaj ponovno ili se prijavi e-mailom.');
+    deps.toast(out.message);
   }
 }
 
@@ -143,7 +143,7 @@ export function browserGoogleSignInDeps(
     history,
     loadSession: () => safeStorageGet(STORAGE_KEYS.session, null),
     saveSession: (s) => safeStorageSet(STORAGE_KEYS.session, s),
-    pkce: { load: () => safeStorageGet(PKCE_STORAGE_KEY, null), save: (v) => safeStorageSet(PKCE_STORAGE_KEY, v) },
+    pkce: { load: () => safeStorageGet(GOOGLE_PKCE_STORAGE_KEY, null), save: (v) => safeStorageSet(GOOGLE_PKCE_STORAGE_KEY, v) },
     ...app,
   };
 }

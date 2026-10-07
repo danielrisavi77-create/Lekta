@@ -5,7 +5,8 @@
  * placeholder stringova, te determinizam (modal === stranica po konstrukciji).
  */
 import { describe, it, expect } from 'vitest';
-import { legalDocuments, TERMS_VERSION, type LegalDocKind } from '../src/legal/legal-content';
+import { BETA_FOOTER_NOTE, legalDocuments, TERMS_VERSION, type LegalDocKind } from '../src/legal/legal-content';
+import { findLegalPlaceholders } from '../scripts/lib/legal-placeholders.mjs';
 
 const KINDS: LegalDocKind[] = ['privacy', 'terms', 'disclaimer', 'purchase', 'processing', 'cookies', 'guarantee'];
 
@@ -246,6 +247,69 @@ describe('legal-content', () => {
     const html = legalDocuments().privacy.html;
     expect(html).toContain('a ne registrirani pravni subjekt');
     expect(html).toContain('ne naplaćuje');
+  });
+
+  /**
+   * T86: otvorene oznake su TOCNO ove dvije. Popis smije samo padati: vlasnik upisuje Z36, a
+   * mehanizam prijenosa za Resend se provjerava u DPA. Nova oznaka mora se ovdje imenovati;
+   * deploy ih sve odbija (`scripts/verify-deploy-dist.mjs`, gard 3a).
+   */
+  it('T86: pravni tekst nema neobjavljivih oznaka (ni uz ukljucen Google)', () => {
+    for (const d of [docs, legalDocuments({ googleSignIn: true })]) {
+      expect(KINDS.flatMap((kind) => findLegalPlaceholders(d[kind].html))).toEqual([]);
+    }
+  });
+
+  it('T86: uvjeti imaju odjeljak besplatne bete (bez naknade, nije ocjena sadrzaja, prekid, brisanje)', () => {
+    const html = docs.terms.html;
+    expect(html).toContain('<h4>8. Besplatna beta</h4>');
+    expect(html).toContain('Tijekom besplatne bete ništa se ne naplaćuje, a odjeljci');
+    expect(html).toContain('ništa se ne naplaćuje unatrag');
+    expect(html).toContain('Formalna provjera nije ocjena sadržaja');
+    expect(html).toContain('nije procjena kvalitete rada ni predviđanje ocjene');
+    expect(html).toContain('betu završiti u bilo kojem trenutku');
+    expect(html).toContain('<strong>Brisanje podataka.</strong>');
+    // Z36: bez jamstva rezultata, ali bez iskljucenja namjere i krajnje nepaznje (ZOO cl. 345)
+    // ni prisilnih prava potrosaca; garancije placenih usluga ne vrijede za betu.
+    expect(html).toContain('<strong>Bez jamstva rezultata.</strong>');
+    expect(html).toContain('osim za štetu prouzročenu namjerno ili krajnjom nepažnjom');
+    expect(html).toContain('propise o zaštiti potrošača');
+    expect(html).toContain('ne vrijede za besplatnu betu');
+  });
+
+  it('T86: privacy objavljuje anonimni racun i Resend, bez slanja dokumenta', () => {
+    const html = docs.privacy.html;
+    expect(html).toContain('<h4>1e. Anonimni račun</h4>');
+    expect(html).toContain('bez e-maila, imena i lozinke');
+    expect(html).toContain('<h4>1f. E-pošta (Resend)</h4>');
+    expect(html).toContain('nikad dokument, tekst rada ni rezultati analize');
+    expect(html).toContain('<strong>Resend</strong> (Plus Five Five, Inc.');
+    expect(html).toContain('standardnim ugovornim klauzulama');
+    expect(html).toContain('poveznicu za odjavu');
+    // Supabase ostaje imenovan izvrsitelj.
+    expect(html).toContain('<li><strong>Supabase</strong>');
+    expect(html).toContain('Korištenje besplatnih funkcija tijekom bete ne zahtijeva plaćanje ni unos podataka o plaćanju');
+    expect(html).toContain('zasebnom okviru (iframe) unutar Lekta sučelja');
+    expect(html).toContain('identifikatora plaćanja i statusa');
+    expect(html).toContain('isporuka automatskog popravka');
+    expect(html).not.toContain('podaci o plaćanju se ne obrađuju');
+    expect(html).not.toContain('na hostiranoj stranici konfiguriranog payment providera');
+  });
+
+  it('T86/T102: Google se spominje samo kad je prijava Googleom ukljucena', () => {
+    expect(docs.privacy.html.includes('Google')).toBe(false);
+    const sGooglom = legalDocuments({ googleSignIn: true }).privacy.html;
+    expect(sGooglom).toContain('<h4>1g. Prijava Google računom</h4>');
+    expect(sGooglom).toContain('samostalni voditelj obrade');
+    expect(sGooglom).toContain('nikad se ne šalju Googleu');
+    expect(sGooglom).toContain('e-mail adresu, ime, identifikator Google računa');
+    expect(sGooglom).toContain('poveznicu na profilnu sliku');
+    expect(sGooglom).toContain('je li e-mail adresa potvrđena');
+  });
+
+  it('T86: recenica bete za podnozja nosi trazenu formulaciju', () => {
+    expect(BETA_FOOTER_NOTE).toContain('ijekom besplatne bete');
+    expect(findLegalPlaceholders(BETA_FOOTER_NOTE)).toEqual([]);
   });
 
   it('deterministicki: dva poziva daju identican sadrzaj (modal === stranica)', () => {

@@ -92,3 +92,15 @@ ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-gate.test.ts
 271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/registry.test.ts:generic-api-key:8
 271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/runner.test.ts:generic-api-key:7
 271c381704992a72e3dbac64772a52def9ef76d3:tests/laya/eval-cli.test.ts:generic-api-key:44
+
+# 2026-10-05: SHA-256 sadrzajni digesti generiranih javnih stranica, ne vjerodajnice.
+# Commit 2bd1d33a na grani design/mobilni-javne-stranice-stol: contentDigest u
+# scripts/lib/generated-page-content.mjs racuna sha256(JSON.stringify(pageContent(html)));
+# scripts/generated-pages-golden.mjs zapisuje rezultate u ovaj golden. Nazivi stranica
+# sadrze "author", sto aktivira generic-api-key heuristiku. Potvrdjeno prema izvornom
+# commitu i cetiri nalaza u security-audit runu 37273327046.
+# Samo tocni povijesni fingerprinti; nove tajne u istoj datoteci ostaju obuhvacene skenom.
+2bd1d33a0c033b6a910d6b2e5ed279bfed3d165e:tests/fixtures/generated-pages-golden.json:generic-api-key:56
+2bd1d33a0c033b6a910d6b2e5ed279bfed3d165e:tests/fixtures/generated-pages-golden.json:generic-api-key:62
+2bd1d33a0c033b6a910d6b2e5ed279bfed3d165e:tests/fixtures/generated-pages-golden.json:generic-api-key:108
+2bd1d33a0c033b6a910d6b2e5ed279bfed3d165e:tests/fixtures/generated-pages-golden.json:generic-api-key:133

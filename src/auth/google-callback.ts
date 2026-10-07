@@ -9,6 +9,7 @@ import { parseSessionFragment, sessionFragment } from '../session/local-document
 
 /** Verifier stariji od ovoga ne vrijedi: povratak s Googlea traje sekunde, ne sate. */
 export const PKCE_MAX_AGE_MS = 10 * 60_000;
+export const GOOGLE_PKCE_STORAGE_KEY = 'lekta.oauth.pkce';
 
 export interface PendingPkce {
   verifier: string;
@@ -47,6 +48,12 @@ export function readPending(store: PkceStore): PendingPkce | null {
 /** Je li zapis istekao (ili ima nemoguce vrijeme iz buducnosti). */
 function pendingExpired(p: PendingPkce, now: number): boolean {
   return !(now - p.createdAt >= 0 && now - p.createdAt <= PKCE_MAX_AGE_MS);
+}
+
+/** True only for a fresh, well-formed verifier that can authorize a callback return. */
+export function hasFreshPendingPkce(store: PkceStore, now: number): boolean {
+  const pending = readPending(store);
+  return !!pending && /^[A-Za-z0-9_-]{43}$/.test(pending.verifier) && !pendingExpired(pending, now);
 }
 
 /** Pocisti istekli verifier kad korisnik nije dovrsio prijavu (Codex R7 na #307). */

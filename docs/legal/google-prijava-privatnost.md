@@ -32,7 +32,7 @@ primatelja").
   pokrenuta (`lekta.oauth.pkce`), te istu sesiju `lekta.session` kao kod prijave e-mailom. Verifier
   vrijedi 10 minuta. Brise se pri povratku s Googlea, a ako se korisnik ne vrati, pri sljedecem
   otvaranju `/rad/` nakon isteka. Do tada ostaje u pregledniku (nije osobni podatak, nego slucajan niz).
-- Verifier i fragment se brisu cak i kad je zastavica iskljucena, cim istekne rok.
+- Verifier i spremljeni fragment uklanjaju se pri sljedecem otvaranju `/rad/` nakon isteka roka od 10 minuta, ukljucujuci i kada je zastavica u medjuvremenu iskljucena.
 - Korisniku s anonimnom sesijom (popravci bez e-maila) prijava Googleom se ne nudi i ne zamjenjuje mu
   sesiju. Ogranicenje: starija anonimna sesija bez oznake `isAnonymous` ne dobiva u `app.ts` ponudu
   povezivanja kroz prijavu e-mailom, pa joj ni poruka ne obecava cuvanje popravaka.

@@ -5,6 +5,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 import { GOOGLE_BUTTON_ID } from '../src/auth/google-oauth';
+import { PKCE_MAX_AGE_MS } from '../src/auth/google-callback';
 import { parseTokenResponse, type Session } from '../src/auth/session';
 import { googleSignInActive, mountGoogleSignIn, type GoogleSignInDeps } from '../src/routes/workspace/google-sign-in';
 
@@ -174,8 +175,18 @@ describe('ruta /rad/: Codex runda 1 na #307', () => {
     expect(h.log.replaced).toBe('/rad/' + SESIJA);
     expect(h.log.fetches).toBe(0);
     expect(h.log.saved).toBeNull();
-    expect(h.log.toasts.join(' ')).toContain('nije uspjela');
+    expect(h.log.toasts.join(' ')).toContain('otkazana ili odbijena');
     expect(h.pkce()).toBeNull();
+  });
+
+  it('shows the expiry reason when the PKCE verifier has expired', async () => {
+    const h = harness();
+    h.setPkce({ verifier: 'v'.repeat(43), createdAt: Date.now() - PKCE_MAX_AGE_MS - 1, returnHash: SESIJA });
+    h.deps.location = { ...h.deps.location, search: '?code=expired', href: 'https://lekta.hr/rad/?code=expired' };
+    await mountGoogleSignIn(h.deps);
+    expect(h.log.fetches).toBe(0);
+    expect(h.pkce()).toBeNull();
+    expect(h.log.toasts.join(' ')).toContain('prijava je istekla');
   });
 
   it('R6: kad pohrana odbije verifier, nema navigacije i korisnik dobiva poruku', async () => {
