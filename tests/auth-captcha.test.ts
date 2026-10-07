@@ -140,6 +140,84 @@ describe('T89: Turnstile widget', () => {
     expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: never, scriptTimeoutMs: 5 })).toBeUndefined();
     expect(document.querySelector('[data-lekta-captcha]')).toBeNull();
   });
+  it('sinkroni callback uklanja widget nakon rendera i samo jednom', async () => {
+    const remove = vi.fn();
+    const api: TurnstileApi = {
+      render: (_el, opts) => {
+        opts.callback('fresh-token');
+        opts['expired-callback']();
+        expect(remove).not.toHaveBeenCalled();
+        return 'sync-widget';
+      },
+      remove,
+    };
+    expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: async () => api })).toBe('fresh-token');
+    expect(remove).toHaveBeenCalledExactlyOnceWith('sync-widget');
+    expect(document.querySelector('[data-lekta-captcha]')).toBeNull();
+  });
+
+  it('greska je obradjena bez automatskog reseta uklonjenog spremnika', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const resetRemovedContainer = vi.fn();
+    const remove = vi.fn();
+    const api: TurnstileApi = {
+      render: (el, opts) => {
+        queueMicrotask(() => {
+          const handled = opts['error-callback']('600010');
+          // Model Turnstile zadane politike: nakon callbacka moze zakazati retry.
+          if (opts.retry !== 'never' || handled !== true) {
+            queueMicrotask(() => { if (!el.isConnected) resetRemovedContainer(); });
+          }
+        });
+        return 'failed-widget';
+      },
+      remove,
+    };
+    try {
+      expect(await getCaptchaToken({ siteKey: 's', doc: document, loadApi: async () => api })).toBeUndefined();
+      await Promise.resolve();
+      expect(resetRemovedContainer).not.toHaveBeenCalled();
+      expect(remove).toHaveBeenCalledExactlyOnceWith('failed-widget');
+      expect(warn).toHaveBeenCalledExactlyOnceWith('[Lekta CAPTCHA] Turnstile error', '600010');
+    } finally { warn.mockRestore(); }
+  });
+
+  it('proizvoljna vrijednost greske ne zavrsava u dijagnostici', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const api: TurnstileApi = {
+      render: (_el, opts) => {
+        queueMicrotask(() => opts['error-callback']('private-token-or-message'));
+        return 'invalid-code';
+      },
+      remove: () => {},
+    };
+    try {
+      await getCaptchaToken({ siteKey: 's', doc: document, loadApi: async () => api });
+      expect(warn).toHaveBeenCalledExactlyOnceWith('[Lekta CAPTCHA] Turnstile error', 'unknown');
+    } finally { warn.mockRestore(); }
+  });
+
+  it.each(['expired-callback', 'timeout-callback'] as const)('%s: ponovni pokusaj dobiva novi widget i token', async (event) => {
+    let attempt = 0;
+    const remove = vi.fn();
+    const api: TurnstileApi = {
+      render: (_el, opts) => {
+        const current = ++attempt;
+        expect(opts['refresh-expired']).toBe('never');
+        expect(opts['refresh-timeout']).toBe('never');
+        queueMicrotask(() => current === 1 ? opts[event]() : opts.callback('new-token'));
+        return `attempt-${current}`;
+      },
+      remove,
+    };
+    const deps = { siteKey: 's', doc: document, loadApi: async () => api };
+    expect(await getCaptchaToken(deps)).toBeUndefined();
+    expect(document.querySelector('[data-lekta-captcha]')).toBeNull();
+    expect(await getCaptchaToken(deps)).toBe('new-token');
+    expect(remove.mock.calls).toEqual([['attempt-1'], ['attempt-2']]);
+    expect(document.querySelector('[data-lekta-captcha]')).toBeNull();
+  });
+
 });
 
 function sources(dir: string): SourceFile[] {

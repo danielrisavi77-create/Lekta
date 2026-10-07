@@ -17,7 +17,8 @@ mogao otvarati racune bez ogranicenja. Supabase Auth ima ugradjenu podrsku za Tu
   lozinkom ili recover mimo `withCaptcha`.
 - `src/auth/captcha.ts` ucitava Turnstile tek na prvom Auth pozivu. Widget je `interaction-only`:
   vidi se samo kad Cloudflare trazi klik. Token je jednokratan, pa se widget nakon svakog poziva
-  uklanja.
+  uklanja. Automatski retry i osvjezavanje nakon isteka su iskljuceni; novi pokusaj prijave
+  stvara novi widget. Uklanjanje ide nakon povratka iz callbacka.
 - Ucitavanje `api.js` ceka najvise 20 s, a token najvise 120 s. Skripta koja visi ne zadrzava Auth
   poziv; poziv tada ide bez tokena.
 - Kad Auth odbije poziv zbog captche (400, `error_code: captcha_failed`), sva tri toka vracaju uputu
@@ -87,3 +88,9 @@ trazi deploy. Frontend s kljucem smije ostati, jer token koji server ne trazi se
   na produkciji (Codex T89-03), ne za merge koda; ide vlasniku i T86.
 - Ponasanje u stvarnom pregledniku sa stvarnim kljucem nije provjereno u T89 PR-u (nema kljuca ni
   ukljucenog staginga); provjerava se koracima 3 do 7.
+
+## Dijagnostika widgeta
+
+Kod pogreske Turnstilea biljezi se kao [Lekta CAPTCHA] Turnstile error i samo sesteroznamenkasti
+kod (ili unknown). Tokeni i tajne se ne biljeze. Poruka korisniku ne pretpostavlja blokator.
+Ovo ne potvrduje ishod stvarnog izazova: staging mora zasebno proci tokove iz koraka 3 do 7.

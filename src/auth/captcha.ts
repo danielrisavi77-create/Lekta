@@ -32,8 +32,11 @@ interface TurnstileRenderOptions {
   sitekey: string;
   appearance: 'interaction-only';
   language: string;
+  retry: 'never';
+  'refresh-expired': 'never';
+  'refresh-timeout': 'never';
   callback: (token: string) => void;
-  'error-callback': () => void;
+  'error-callback': (code?: string) => boolean;
   'expired-callback': () => void;
   'timeout-callback': () => void;
 }
@@ -90,7 +93,7 @@ function withinTimeout<T>(promise: Promise<T | undefined>, ms: number): Promise<
 
 /** Poruka kad Auth odbije poziv zbog captche (Codex T89-02). */
 export const CAPTCHA_REJECTED_MESSAGE =
-  'Provjera da nisi robot nije prošla. Osvježi stranicu i pokušaj ponovno; ako koristiš blokator sadržaja, dopusti challenges.cloudflare.com.';
+  'Sigurnosna provjera nije dovršena. Pokušaj ponovno.';
 
 /**
  * Vidljiva obavijest za tok koji nema vlastiti obrazac (anonimna prijava iza popravka): bez nje bi
@@ -136,13 +139,17 @@ export async function getCaptchaToken(deps: CaptchaDeps = {}): Promise<string | 
       if (done) return;
       done = true;
       clearTimeout(timer);
-      try {
-        if (widgetId !== undefined) api.remove(widgetId);
-      } catch {
-        /* widget je vec uklonjen */
-      }
-      container.remove();
-      resolve(token || undefined);
+      // Callback moze stici tijekom rendera. Cekaj njegov zavrsetak i dodjelu widgetId.
+      // Uklanjanje izvan callbacka izbjegava promjenu DOM-a usred Turnstile obrade.
+      queueMicrotask(() => {
+        try {
+          if (widgetId !== undefined) api.remove(widgetId);
+        } catch {
+          /* widget je vec uklonjen */
+        }
+        container.remove();
+        resolve(token || undefined);
+      });
     };
     const timer = setTimeout(() => finish(undefined), deps.timeoutMs ?? TOKEN_TIMEOUT_MS);
     try {
@@ -150,8 +157,19 @@ export async function getCaptchaToken(deps: CaptchaDeps = {}): Promise<string | 
         sitekey: siteKey,
         appearance: 'interaction-only',
         language: 'hr',
+        // Svaki Auth pokusaj ima svoj widget; nakon zavrsetka nema automatskog reseta.
+        retry: 'never',
+        'refresh-expired': 'never',
+        'refresh-timeout': 'never',
         callback: (token) => finish(token),
-        'error-callback': () => finish(undefined),
+        'error-callback': (code) => {
+          if (!done) {
+            // Samo javni numericki kod; nikad token, poruka providera ni tajni kljuc.
+            console.warn('[Lekta CAPTCHA] Turnstile error', /^\d{6}$/.test(code ?? '') ? code : 'unknown');
+            finish(undefined);
+          }
+          return true;
+        },
         'expired-callback': () => finish(undefined),
         'timeout-callback': () => finish(undefined),
       });
