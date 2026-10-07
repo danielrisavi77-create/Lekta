@@ -27,6 +27,9 @@ describe('javne adrese izvora fakulteta', () => {
   });
 
   it('poznate gole domene prikazuju se kao nedostupan izvor i ne broje se kao cista adresa (#238 N1)', () => {
+    expect([...POZNATE_GOLE_DOMENE].filter((url) =>
+      !['https://fdmri.uniri.hr/', 'https://logri.uniri.hr/'].includes(url),
+    )).toEqual([]);
     expect(POZNATE_GOLE_DOMENE.size).toBeGreaterThan(0);
     for (const url of POZNATE_GOLE_DOMENE) {
       expect(publicSourceUrl(url), url).toBeNull();
