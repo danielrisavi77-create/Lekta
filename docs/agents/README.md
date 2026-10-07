@@ -226,6 +226,26 @@ Zamrzavanje novih zadataka uvedeno je i ukinuto istog dana. Kao smjernica ostaje
 Vlasnik je 4. 10. zatvorio bez spajanja PR-ove #242, #244, #255, #203, #229, #192, #183, #170, #262,
 #264, #211, #276 i #265; grane ostaju. Statusi zadataka su u `tasks.json`.
 
+### Fokus na betu 2026-10-04
+
+Odluka vlasnika 4. 10.: rad ide na kriterije bete (T81, go/no-go 19. 10.); T57 i T88 su odgodjeni.
+Kriteriji T81 i stanje 4. 10.:
+
+| # | Kriterij | Zadatak | Stanje |
+|---|---|---|---|
+| 1 | Tocnost lokalne analize, conformance | T26 | done |
+| 2 | Svjez RELEASE_PROOF nad kandidatom | T72 | otvoren |
+| 3 | Word oracle zelen na Windowsu za popravljene dokumente | bez zasebnog zadatka | otvoren |
+| 4 | Sigurnost zivih endpointa, nema otvorenog P0; captcha na Authu | T84, T89 | otvoreni |
+| 5 | Prekidaci provjereni na produkciji | T85 | done |
+| 6 | Pravni tekstovi bete objavljeni | T86 | otvoren |
+| 7 | Domena, support sanducic, SPF/DKIM/DMARC | T49 | otvoren |
+| 8 | Vlasnik prodje glavni tok s 2 do 3 vlastita rada, provjera opterecenja | vlasnik | otvoren |
+| 9 | Nijedan iskljuceni endpoint ne vodi u slijepu ulicu | T87 | done |
+
+Nepoznato stanje kriterija je NO-GO. Mjerodavan tekst kriterija je u noti T81 i u
+`docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md`.
+
 ## Ogranicenja prve verzije
 
 - Prijava, dostupnost modela i stvarni poziv svakog od tri providera moraju se provjeriti na racunalu

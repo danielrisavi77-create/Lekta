@@ -15,6 +15,7 @@ import { expect, type Page } from '@playwright/test';
  *
  * `data-lekta-ready` postavlja `initAnalyzerApp` TEK nakon uspjesne montaze i BRISE ga
  * `disposeAnalyzerApp`, pa marker prati stvarno stanje, a ne samo cinjenicu da je skripta ucitana.
+ * Citat-alat isti marker postavlja na kraju init(), nakon vezanja uvoza i ostalih dogadjaja.
  * Bez njega bi svaki spec morao pogadjati, sto je upravo ono sto je padalo.
  */
 export async function cekajApp(page: Page, timeout = 30_000): Promise<void> {

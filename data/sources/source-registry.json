@@ -1567,6 +1567,19 @@
     "note": "Tekstualni PDF; pogl. 4-5. A4 nije naveden -> izostavljen. Citiranje slobodan izbor stila -> advisory."
   },
   {
+    "id": "efst-upute-studentski-radovi-2013-https",
+    "kind": "guidelines",
+    "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+    "url": "https://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+    "publisher": "Ekonomski fakultet u Splitu, Sveuciliste u Splitu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/efst/efst-upute-studentski-radovi-2013.pdf",
+    "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+    "validityClass": "stable",
+    "lastChecked": "2026-10-03",
+    "note": "Isti dokument preko https (sha256 bajt-identican snimci zapisa efst-upute-studentski-radovi-2013, izmjereno 2026-10-03). Builder trazi https dokaz Upisnika."
+  },
+  {
     "id": "ktf-prilog3-zavrsni",
     "kind": "template",
     "title": "Prilog 3 - Izgled obveznih stranica zavrsnog rada (KTF Split)",
@@ -3897,5 +3910,31 @@
     "validityClass": "volatile",
     "lastChecked": "2026-09-25",
     "note": "Službena godišnja uputa za prijediplomski završni rad u 2025./26. Na str. 1 propisuje rad na švedskom i sažetke HR/EN, navodi opseg u znakovima; oblikovanje upućuje načelno na opća pravila seminara i citiranje prepušta području/mentoru. Ne prenositi automatski kao upute za 2026./27."
+  },
+  {
+    "id": "upisnik-fer-b8648013",
+    "kind": "program-page",
+    "title": "Diplomski studiji - Fakultet elektrotehnike i računarstva",
+    "url": "https://www.fer.unizg.hr/studiji/diplomski_studiji",
+    "publisher": "fer",
+    "fetchedAt": "2026-10-03",
+    "snapshotPath": "data/sources/fer/upisnik-b8648013.html",
+    "snapshotHash": "63407dcdeaece99f37c56b65d500280a86a52d6e2d2adcff0c0ac1ded77146e3",
+    "validityClass": "volatile",
+    "lastChecked": "2026-10-03",
+    "note": "Snimka identitetskog dokaza Upisnika (workflow lekta-upisnik-identitet). Point-in-time; citat provjerava gard citata u snimci."
+  },
+  {
+    "id": "upisnik-fer-a1040779",
+    "kind": "program-page",
+    "title": "Prijediplomski studiji - Fakultet elektrotehnike i računarstva",
+    "url": "https://www.fer.unizg.hr/studiji/prijediplomski_studij",
+    "publisher": "fer",
+    "fetchedAt": "2026-10-05",
+    "snapshotPath": "data/sources/fer/upisnik-a1040779.html",
+    "snapshotHash": "e8bc7554e1703874ddea22c4d769dadea52e9a9bb5cac6db9a568a296b0ac01a",
+    "validityClass": "volatile",
+    "lastChecked": "2026-10-05",
+    "note": "Snimka identitetskog dokaza Upisnika (workflow lekta-upisnik-identitet). Point-in-time; citat provjerava gard citata u snimci."
   }
 ]
