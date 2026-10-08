@@ -6,6 +6,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { progressWiringProblems } from './helpers/progress-reporter-wiring';
+
 // @ts-expect-error mjs bez tipova
 import ProgressReporter, { formatProgressLine } from '../scripts/vitest-progress-reporter.mjs';
 
@@ -35,15 +37,31 @@ describe('vitest-progress-reporter', () => {
     expect(lines.join('')).toContain('[1/2] ok tests/a.test.ts 0,5 s');
   });
 
-  it('omotac gatea ukljucuje reporter, a vitest.config.ts ga veze na LEKTA_GATE_PROGRESS', () => {
-    expect(read('scripts/with-gate-lock.mjs')).toContain("childEnv.LEKTA_GATE_PROGRESS = '1'");
-    const cfg = read('vitest.config.ts');
-    expect(cfg).toContain("process.env.LEKTA_GATE_PROGRESS === '1'");
-    expect(cfg).toContain('reporters: progressReporters');
+  it('baseline: omotac i konfiguracija zadovoljavaju predikat ozicenja', () => {
+    expect(progressWiringProblems(read('vitest.config.ts'), read('scripts/with-gate-lock.mjs'))).toEqual([]);
   });
 
-  it('MUTACIJA: konfiguracija bez veze na reporter obara provjeru', () => {
-    const mutirano = read('vitest.config.ts').replace('reporters: progressReporters,', '');
-    expect(mutirano).not.toContain('reporters: progressReporters');
+  it('MUTACIJA: konfiguracija bez reportera daje tocan popis problema', () => {
+    const cfg = read('vitest.config.ts');
+    const mutirano = cfg.replace("reporters: ['default', './scripts/vitest-progress-reporter.mjs']", 'reporters: []');
+    expect(mutirano).not.toBe(cfg);
+    expect(progressWiringProblems(mutirano, read('scripts/with-gate-lock.mjs')))
+      .toEqual(['config ne ucitava reporter napretka uz default']);
+  });
+
+  it('MUTACIJA: uvjetni reporters zamijenjeni bezuvjetnima obaraju gard', () => {
+    const cfg = read('vitest.config.ts');
+    const mutirano = cfg.replace('progressEnabled ? { reporters:', 'true ? { reporters:');
+    expect(mutirano).not.toBe(cfg);
+    expect(progressWiringProblems(mutirano, read('scripts/with-gate-lock.mjs')))
+      .toEqual(['reporters se ne postavljaju samo kad je napredak ukljucen']);
+  });
+
+  it('MUTACIJA: omotac bez LEKTA_GATE_PROGRESS daje tocan popis problema', () => {
+    const wrap = read('scripts/with-gate-lock.mjs');
+    const mutirano = wrap.replace("childEnv.LEKTA_GATE_PROGRESS = '1'", "childEnv.LEKTA_GATE_X = '1'");
+    expect(mutirano).not.toBe(wrap);
+    expect(progressWiringProblems(read('vitest.config.ts'), mutirano))
+      .toEqual(['omotac ne postavlja LEKTA_GATE_PROGRESS']);
   });
 });

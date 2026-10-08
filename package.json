@@ -51,7 +51,7 @@
     "build-info": "node scripts/write-build-info.mjs",
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
-    "gate:status": "node scripts/gate-preflight.mjs --check-only",
+    "lock:status": "node scripts/gate-preflight.mjs --check-only",
     "check": "node scripts/with-gate-lock.mjs check -- npm run check:inner",
     "check:inner": "node scripts/clean-vitest-tmp.mjs && npm run check:claude-context && oxlint && tsc --noEmit && npm run check:laya && npm run check:edge && vitest run && vite build",
     "check:claude-context": "node scripts/verify-claude-context.mjs",
