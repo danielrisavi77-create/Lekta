@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { facultyContextSelection, urlSelection, type UnitLike } from '../src/ui/selection-entry';
 

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Closed-loop provjera title-page-fixer-a (profilno-ovisan preko 198 institucijskih predlozaka -
  * vidi plan prosirenja, Batch 4). buildTitlePageRepairPlan (src/analysis/title-page-repair.ts)

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T84 RD-2 i RD-3 (Codex R7 i R1 na #294): HANDLER repair-docx, ne samo pomocni moduli.
  *

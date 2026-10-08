@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD SHEMOM PROZE (`src/corpus/prose-schema.ts`).
  *

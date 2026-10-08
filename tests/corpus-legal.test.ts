@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 prosirenje (Lekta Error Corpus): LEGAL-CITATION klaster. Najveca slijepa tocka faze 1
  * (9 pravnih provjera imalo je nula slucajeva) sada ima atomske fail-ove i valid controls nad

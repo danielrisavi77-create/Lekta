@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Invarijante Laya v2 koje vrijede prije ikakvog modela:
  *  - src/** ne uvozi Layu do shadow GO odluke;

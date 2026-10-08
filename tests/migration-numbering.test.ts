@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Guard protiv AUD-17: dvije migracije s istim numerickim prefiksom.
  *

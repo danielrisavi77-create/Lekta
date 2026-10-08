@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-06 (prvi mjerljivi nalaz): tekst u tekstualnom okviru brojao se DVAPUT.
  *

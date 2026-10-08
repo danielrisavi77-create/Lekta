@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { judgeCommand } from '../scripts/agents/tool-guard.mjs';
 

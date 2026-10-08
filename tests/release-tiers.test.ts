@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad razinama dokaza u `npm run release:check`.
  *

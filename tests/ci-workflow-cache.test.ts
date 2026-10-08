@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * CI KESIRANJE OVISNOSTI (BL-P3-XX): svaki job koji zove `npm ci` mora ici kroz
  * `./.github/actions/setup-deps`, a ta composite akcija mora stvarno kesirati `node_modules`

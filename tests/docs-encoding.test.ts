@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard protiv mojibakea u dokumentaciji (T17).
  *

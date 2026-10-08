@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { buildSourceCheckHtml, summarizeSourceCheck } from '../src/ui/source-check-view';
 import type { RepairSourceCheck } from '../src/report/repair-client';
