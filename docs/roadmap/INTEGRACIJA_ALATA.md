@@ -26,10 +26,10 @@ samo pomaze provjeriti formu. Teski alati zive samo na radnoj stanici
 
 | Alat | Licenca | Odluka | Razlog |
 |---|---|---|---|
-| [xarsh/ooxml-validator](https://github.com/xarsh/ooxml-validator) (Open XML SDK) | MIT | CI razina u `docx-strict-open.yml` kroz pinani `npx`; lokalno samo radna stanica (T106) | jedina rupa izmedju Tier 1 i Worda je shema; izmjereno 2026-10-08, vidi nize |
-| [JSv4/Python-Redlines](https://github.com/JSv4/Python-Redlines) (Docxodus) | MIT | samo CI, pip pin (T107) | neovisni svjedok vidljivog teksta uz vlastitu usporedbu |
-| [veraPDF](https://github.com/veraPDF) | GPL-3.0 ili MPL-2.0 | samo radna stanica, etalon (T109) | `src/pdf/pdf-preflight.ts` PDF/A provjerava heuristicki |
-| basejump supabase_test_helpers | nije potvrdjeno | ne uvoditi | 0.0.6, oko 2 godine bez izdanja; globalni RLS gard je jedan upit (T108) |
+| [xarsh/ooxml-validator](https://github.com/xarsh/ooxml-validator) (Open XML SDK) | MIT | CI razina u `docx-strict-open.yml` kroz pinani `npx`; lokalno samo radna stanica (T111) | jedina rupa izmedju Tier 1 i Worda je shema; izmjereno 2026-10-08, vidi nize |
+| [JSv4/Python-Redlines](https://github.com/JSv4/Python-Redlines) (Docxodus) | MIT | samo CI, pip pin (T112) | neovisni svjedok vidljivog teksta uz vlastitu usporedbu |
+| [veraPDF](https://github.com/veraPDF) | GPL-3.0 ili MPL-2.0 | samo radna stanica, etalon (T114) | `src/pdf/pdf-preflight.ts` PDF/A provjerava heuristicki |
+| basejump supabase_test_helpers | nije potvrdjeno | ne uvoditi | 0.0.6, oko 2 godine bez izdanja; globalni RLS gard je jedan upit (T113) |
 | pa11y-ci | LGPL-3.0 | ne uvoditi | isto pokriva vec uvedeni axe |
 | Unlighthouse | MIT | povremeno rucno, ne gate | Lighthouse nad svim javnim stranicama; sitemap vec postoji |
 | [dubzzz/fast-check](https://github.com/dubzzz/fast-check) | MIT | devDependency | kljucne invarijante danas nemaju nasumicne ulaze |
@@ -49,7 +49,7 @@ Jedna faza je jedan PR. Svaki prolazi `npm run check` i `npm run orphan-scan`, s
 `Neto redaka` i `Nove ovisnosti`. Faze 2 i 3 diraju repair i docx testove, pa traze
 adversarijalni pregled drugog alata prije commita.
 
-### Faza 1: OOXML shema kao CI i release razina (T106)
+### Faza 1: OOXML shema kao CI i release razina (T111)
 
 - Nova razina `ooxml-schema` u `scripts/release-tiers.mjs`, izmedju `strict-open` i Word razina.
 - Pokrece validator nad popravljenim stvarnim korpusom. Validator ne ide u `package.json`, jer
@@ -93,7 +93,7 @@ adversarijalni pregled drugog alata prije commita.
 - Usporedba vremena i rezultata na istom skupu dokumenata; ishod mora biti bajtno ili
   semanticki jednak, inace se ne mijenja.
 
-### Faza 6: neovisni svjedok vidljivog teksta (T107)
+### Faza 6: neovisni svjedok vidljivog teksta (T112)
 
 - Python-Redlines s Docxodus enginom u `docx-strict-open.yml`, nakon Faze 1 jer dira isti workflow.
 - Za svaki par original i popravak tvrdnja je 0 umetanja i 0 brisanja teksta; promjene
@@ -102,14 +102,14 @@ adversarijalni pregled drugog alata prije commita.
 - Samo CI uz pip pin, nikad `package.json` ni `src/`. Isporuka redline dokumenta kupcu bila bi
   nova funkcija i zasebna odluka vlasnika.
 
-### Faza 7: globalni RLS gard (T108)
+### Faza 7: globalni RLS gard (T113)
 
 - Nakon svih migracija svaka tablica u shemi `public` mora imati ukljucen RLS, a tablica bez
   ijedne politike mora biti na izricitom popisu namjerno zatvorenih tablica.
 - Jedan upit nad `pg_class` u `db-smoke.yml` ili PGlite testu; basejump helperi nisu potrebni.
 - Mutacija: migracija s tablicom bez RLS-a mora oboriti test. Nema `supabase db push`.
 
-### Faza 8: veraPDF etalon (T109)
+### Faza 8: veraPDF etalon (T114)
 
 - Na radnoj stanici mjeri slaganje heuristike iz `src/pdf/pdf-preflight.ts` s veraPDF-om nad
   korpusom PDF-ova; nesuglasja postaju fixture.
@@ -131,7 +131,7 @@ strukturnih fixera iz `scripts/emit-repair-samples.mjs` (K5, K6, K7).
 | Python-Redlines: podmetnuta promijenjena rijec, neprelomivi razmak, dodana crtica | sve tri uhvacene, kontrola prolazi; 0,3 do 2 s po dokumentu |
 
 Zatecene greske fixtura su nalaz za ratchet Faze 1, ne razlog za slabljenje razine.
-Mjerenje nad stvarnim korpusom iz CI-ja je prvi korak T106.
+Mjerenje nad stvarnim korpusom iz CI-ja je prvi korak T111.
 
 ## Redoslijed
 
