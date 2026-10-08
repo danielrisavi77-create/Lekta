@@ -94,7 +94,8 @@ ne tumaci kao zeleno.
 
 ## Verifikacijska disciplina
 
-- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`.
+- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`
+  ili domenskoj datoteci `tests/gate-mutations-<domena>.test.ts`.
 - Novi mehanizam ima vlastiti izravni signal; nizvodno poboljsanje nije dokaz uzroka.
 - Generator testa mora dokazati da proizvodi ciljanu klasu ulaza.
 - Idempotencija se dokazuje dvama prolazima; drugi mora biti no-op.
