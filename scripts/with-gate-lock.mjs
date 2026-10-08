@@ -90,15 +90,16 @@ export function signalTree(childPid, signal, { list = listProcesses, kill = proc
 
 /**
  * Ceka da svi zadani PID-ovi nestanu, najvise `graceMs`; preostale gasi s SIGKILL. Tek nakon toga
- * omotac smije otpustiti lock, inace bi drugi gate krenuo uz zivi tudji vitest.
+ * omotac smije otpustiti lock, inace bi drugi gate krenuo uz zivi tudji vitest. Nepoznato stanje
+ * (`isPidAlive` = null) vrijedi kao zivo: lock se ne otpusta na pretpostavci da je proces nestao.
  * @returns {Promise<number[]>} PID-ovi koje je trebalo ubiti s SIGKILL
  */
 export async function reapTree(pids, { graceMs = 10_000, stepMs = 100, alive = isPidAlive, kill = process.kill.bind(process), sleep = (ms) => new Promise((r) => setTimeout(r, ms)) } = {}) {
   const deadline = Date.now() + graceMs;
-  let living = pids.filter((pid) => alive(pid) === true);
+  let living = pids.filter((pid) => alive(pid) !== false);
   while (living.length && Date.now() < deadline) {
     await sleep(stepMs);
-    living = living.filter((pid) => alive(pid) === true);
+    living = living.filter((pid) => alive(pid) !== false);
   }
   for (const pid of living) {
     try {

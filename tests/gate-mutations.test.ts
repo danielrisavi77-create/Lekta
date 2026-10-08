@@ -10825,6 +10825,44 @@ describe('mutacije: scripts/with-gate-lock.mjs stablo procesa (T110)', () => {
     expect(mutant).not.toBe(izvor);
     expect(await signaliziraniPidovi(mutant)).toEqual([100, 101]);
   });
+
+  // Grok pregled #329: reapTree mora preostale gasiti SIGKILL-om i nepoznato stanje (null) drzati zivim.
+  async function zetva(source: string): Promise<Array<[number, string]>> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const sent = [];'
+        + 'await m.reapTree([7, 8], { graceMs: 5, stepMs: 1, sleep: async () => {}, alive: (p) => (p === 7 ? true : null), kill: (p, s) => { sent.push([p, s]); return true; } });'
+        + 'process.stdout.write(JSON.stringify(sent));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as Array<[number, string]>;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: zivi i nepoznati proces nakon roka dobivaju SIGKILL', async () => {
+    expect(await zetva(izvor)).toEqual([[7, 'SIGKILL'], [8, 'SIGKILL']]);
+  });
+
+  it('mutant: reapTree salje SIGTERM umjesto SIGKILL', async () => {
+    const mutant = izvor.replace("kill(pid, 'SIGKILL');", "kill(pid, 'SIGTERM');");
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGTERM'], [8, 'SIGTERM']]);
+  });
+
+  it('mutant: nepoznato stanje (null) se tretira kao mrtav proces', async () => {
+    const mutant = izvor.replaceAll('alive(pid) !== false', 'alive(pid) === true');
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGKILL']]);
+  });
 });
 
 describe('mutacije: scripts/hooks/dash-guard.mjs', () => {

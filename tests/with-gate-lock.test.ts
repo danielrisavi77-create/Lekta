@@ -248,27 +248,45 @@ describe('with-gate-lock: prekid gasi cijelo stablo djeteta (T110)', () => {
 
   it('reapTree: ceka nestanak, a preostale nakon roka gasi s SIGKILL', async () => {
     const living = new Set([1, 2]);
-    const killed: number[] = [];
+    const killed: Array<[number, string]> = [];
     let ticks = 0;
     const sleep = async () => { ticks += 1; if (ticks === 2) living.delete(1); };
     const res = await reapTree([1, 2, 3], {
       graceMs: 50, stepMs: 1, sleep,
       alive: (pid: number) => living.has(pid),
-      kill: (pid: number) => { killed.push(pid); return true; },
+      kill: (pid: number, sig: string) => { killed.push([pid, sig]); return true; },
     });
     expect(res).toEqual([2]);
-    expect(killed).toEqual([2]);
+    expect(killed).toEqual([[2, 'SIGKILL']]);
   });
 
-  it.skipIf(process.platform === 'win32')('stvarni proces: SIGTERM omotacu ne ostavlja unuka zivog, lock je otpusten', async () => {
+  it('reapTree: nepoznato stanje procesa (null) vrijedi kao zivo i dobiva SIGKILL', async () => {
+    const killed: Array<[number, string]> = [];
+    const res = await reapTree([4], {
+      graceMs: 5, stepMs: 1, sleep: async () => {},
+      alive: () => null,
+      kill: (pid: number, sig: string) => { killed.push([pid, sig]); return true; },
+    });
+    expect(res).toEqual([4]);
+    expect(killed).toEqual([[4, 'SIGKILL']]);
+  });
+
+  // Unuk ignorira SIGTERM, pa ga ugasi tek SIGKILL iz reapTree: bez reapTree u `finally` omotaca
+  // unuk prezivi i test pada. Unuk zapisuje PID tek nakon postavljanja handlera.
+  it.skipIf(process.platform === 'win32')('stvarni proces: SIGTERM omotacu ne ostavlja unuka zivog ni kad ignorira SIGTERM, lock je otpusten', async () => {
     const grandPidFile = join(dir, 'unuk.pid');
+    const grandScript = join(dir, 'unuk.cjs');
+    writeFileSync(grandScript, [
+      "process.on('SIGTERM', () => {});",
+      "require('fs').writeFileSync(process.argv[2], String(process.pid));",
+      'setInterval(() => {}, 1000);',
+    ].join('\n'));
     const script = [
       "const {spawn}=require('child_process');",
-      "const g=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'});",
-      "require('fs').writeFileSync(process.argv[1],String(g.pid));",
+      "spawn(process.execPath,[process.argv[1],process.argv[2]],{stdio:'ignore'});",
       'setInterval(()=>{},1000);',
     ].join('');
-    const wrapper = spawn(process.execPath, [WRAPPER, 'test-t110', '--', 'node', '-e', script, grandPidFile], {
+    const wrapper = spawn(process.execPath, [WRAPPER, 'test-t110', '--', 'node', '-e', script, grandScript, grandPidFile], {
       cwd: ROOT, env: cleanEnv(), stdio: 'ignore',
     });
     let grandPid = 0;
@@ -281,13 +299,18 @@ describe('with-gate-lock: prekid gasi cijelo stablo djeteta (T110)', () => {
       const exited = new Promise((r) => wrapper.on('exit', r));
       wrapper.kill('SIGTERM');
       await exited;
-      const alive = (() => { try { process.kill(grandPid, 0); return true; } catch { return false; } })();
-      expect(alive).toBe(false);
+      // Ubijeni unuk moze kratko ostati zombi dok ga init ne pokupi; zombi se ne vrti, pa vrijedi kao nestao.
+      const gone = (() => {
+        try { process.kill(grandPid, 0); } catch { return true; }
+        try { return /^\d+ \(.*\) Z/.test(readFileSync(`/proc/${grandPid}/stat`, 'utf8')); } catch { return true; }
+      })();
+      expect(gone).toBe(true);
       expect(existsSync(lockPath)).toBe(false);
     } finally {
       if (grandPid) { try { process.kill(grandPid, 'SIGKILL'); } catch { /* vec mrtav */ } }
+      if (wrapper.exitCode === null) wrapper.kill('SIGKILL');
     }
-  });
+  }, 60_000);
 });
 
 describe('package.json: gate skripte idu kroz omotac', () => {
