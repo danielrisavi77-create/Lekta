@@ -13,13 +13,14 @@ import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import {
   buildCommand, buildPrompt, codexModel, DELTA_FILE, extractGrokText, forbiddenEnv, formatComment, GROK_MODEL,
-  grokNeedsCodex, implementersOf, labelForProvider, MAX_FAILURES, pickDeltaBase, reviewKey, reviewStamp,
-  sameProviderReview, scrubEnv, selectNext, touchesProtected, truncateDiff,
+  gateRefused, grokNeedsCodex, implementersOf, independenceProblem, labelForProvider, MAX_FAILURES, pickDeltaBase, reviewKey, reviewStamp,
+  scrubEnv, selectNext, touchesProtected, truncateDiff,
 } from './review-queue-core.mjs';
 
 const REPO = process.env.LEKTA_REVIEW_REPO ?? 'danielrisavi77-create/Lekta';
-const PROTECTED = ['src/repair', 'src/citations', 'src/docx', 'supabase', 'security'];
 const ROOT = resolve(process.cwd());
+// Zasticene staze dolaze iz kanonske konfiguracije, ne iz privatne kopije.
+const PROTECTED = JSON.parse(readFileSync(join(ROOT, 'config', 'agent-routing.json'), 'utf8')).protectedPaths;
 const WT_DIR = resolve(ROOT, '..', 'lekta-wt');
 const STATE_DIR = join(ROOT, '.artifacts', 'review-queue');
 const STATE_FILE = join(STATE_DIR, 'state.json');
@@ -67,6 +68,14 @@ function listLabelled() {
 
 const removeLabel = (number, provider) => gh(['pr', 'edit', String(number), '--repo', REPO, '--remove-label', labelForProvider(provider)]);
 
+/** Prva podudarnost iz PATH-a, trazena iz pouzdanog korijena (ne iz radnog stabla PR-a). */
+function resolveExecutable(name) {
+  const r = run(process.platform === 'win32' ? 'where' : 'which', [name], { cwd: ROOT });
+  const first = r.status === 0 ? r.stdout.split(/\r?\n/).find(Boolean) : null;
+  if (!first) throw new Error(`${name} nije pronadjen u PATH-u`);
+  return first.trim();
+}
+
 function postFile(name, text) {
   const f = join(STATE_DIR, name);
   writeFileSync(f, text);
@@ -81,12 +90,13 @@ function review(pr, provider, deferred) {
 
   const commitText = (pr.commits ?? []).map((c) => `${c.messageHeadline ?? ''}\n${c.messageBody ?? ''}`).join('\n');
   const implementers = implementersOf(`${pr.title}\n${pr.body ?? ''}\n${commitText}`);
-  if (sameProviderReview(implementers, provider)) {
+  const problem = independenceProblem(implementers, provider);
+  if (problem) {
     const f = postFile(`reject-pr${pr.number}-${provider}.md`,
-      `Pregled (${provider}) odbijen: implementator je isti provider, pa pregled nije neovisan. Oznaka je skinuta; stavi onu drugog providera.\n\n_Savjetodavni pregled drugog providera._`);
+      `Pregled (${provider}) odbijen: ${problem}, pa pregled ne bi bio dokazano neovisan. Oznaka je skinuta; dodaj potpis implementatora ili stavi oznaku drugog providera.\n\n_Savjetodavni pregled drugog providera._`);
     gh(['pr', 'comment', String(pr.number), '--repo', REPO, '--body-file', f]);
     removeLabel(pr.number, provider);
-    log(`PR #${pr.number} ${provider}: isti provider kao implementator, oznaka skinuta`);
+    log(`PR #${pr.number} ${provider}: ${problem}, oznaka skinuta`);
     return;
   }
 
@@ -122,10 +132,12 @@ function review(pr, provider, deferred) {
     const cmd = buildCommand({ provider, model, worktree: wt, promptFile, outFile });
     log(`PR #${pr.number} ${provider} ${model} delta ${base.slice(0, 7)}..${head.slice(0, 7)} (${fullDiff.length} B, ${files.length} datoteka)`);
     // Dijeljeni gate lock (teski posao jedan po jedan); ljuska u omotacu rjesava npm shimove na Windowsu.
-    const r = run('node', [GATE_WRAPPER, `review-pr${pr.number}`, '--', cmd.command, ...cmd.args], {
+    // Apsolutna putanja providera iz pouzdanog korijena: ljuska u radnom stablu PR-a ne smije naci vlastiti `grok.cmd`.
+    const exe = resolveExecutable(cmd.command);
+    const r = run('node', [GATE_WRAPPER, `review-pr${pr.number}`, '--', exe, ...cmd.args], {
       cwd: wt, env: scrubEnv(process.env), input: cmd.stdin ? prompt : undefined, timeout: 30 * 60 * 1000, killSignal: 'SIGKILL',
     });
-    if (r.status === 2) {
+    if (gateRefused(r.status, r.stderr)) {
       deferred.add(key);
       throw new Deferred('stroj zauzet (gate lock), pregled se odgada');
     }
@@ -156,6 +168,10 @@ function review(pr, provider, deferred) {
 function recordFailure(pr, provider, err) {
   const key = reviewKey(pr.number, provider);
   const state = loadState();
+  state.failureStamps ??= {};
+  const stamp = reviewStamp(pr);
+  if (state.failureStamps[key] !== stamp) state.failures[key] = 0;
+  state.failureStamps[key] = stamp;
   state.failures[key] = (state.failures[key] ?? 0) + 1;
   saveState(state);
   log(`PR #${pr.number} ${provider} nije uspio (${state.failures[key]}/${MAX_FAILURES}): ${err.message}`);

@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  buildCommand, buildPrompt, codexModel, extractGrokText, stripNarration, forbiddenEnv, grokNeedsCodex, implementersOf, reviewStamp, sameProviderReview, scrubEnv, formatComment, pickDeltaBase,
+  buildCommand, buildPrompt, codexModel, extractGrokText, stripNarration, forbiddenEnv, grokNeedsCodex, implementersOf, reviewStamp, independenceProblem, gateRefused, scrubEnv, formatComment, pickDeltaBase,
   providersForLabels, sanitizeOutput, selectNext, touchesProtected, truncateDiff, MAX_FAILURES,
 } from '../scripts/agents/review-queue-core.mjs';
 
@@ -54,7 +54,13 @@ describe('selectNext', () => {
   });
   it('iscrpljene pokusaje vraca kao cleanup, ne preskace ih', () => {
     const failures = { '7:codex': MAX_FAILURES };
-    expect(selectNext(prs, { failures })).toEqual({ number: 7, provider: 'codex', noDelta: false, cleanup: true });
+    const failureStamps = { '7:codex': 'h7@master' };
+    expect(selectNext(prs, { failures, failureStamps })).toEqual({ number: 7, provider: 'codex', noDelta: false, cleanup: true });
+  });
+  it('kvarovi stare glave ne vrijede za novu glavu ni bez otiska', () => {
+    const failures = { '7:codex': MAX_FAILURES };
+    expect(selectNext(prs, { failures, failureStamps: { '7:codex': 'staro@master' } })?.cleanup).toBe(false);
+    expect(selectNext(prs, { failures })?.cleanup).toBe(false);
   });
   it('odgodjene kljuceve preskace', () => {
     expect(selectNext(prs, {}, new Set(['7:codex', '7:grok']))).toEqual({ number: 12, provider: 'codex', noDelta: false, cleanup: false });
@@ -66,14 +72,19 @@ describe('selectNext', () => {
 });
 
 describe('neovisnost providera', () => {
-  it('prepoznaje implementatora iz potpisa i odbija isti provider', () => {
+  it('prepoznaje implementatora iz potpisa; nepoznat i isti provider nisu neovisni', () => {
     const claude = implementersOf('Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>');
     expect(claude.has('claude')).toBe(true);
-    expect(sameProviderReview(claude, 'grok')).toBe(false);
-    const codex = implementersOf('Co-Authored-By: Codex <x@openai.com>');
-    expect(sameProviderReview(codex, 'codex')).toBe(true);
-    expect(sameProviderReview(implementersOf('Grok Build patch'), 'grok')).toBe(true);
-    expect(implementersOf('rucni commit').size).toBe(0);
+    expect(independenceProblem(claude, 'grok')).toBeNull();
+    expect(independenceProblem(claude, 'codex')).toBeNull();
+    expect(independenceProblem(implementersOf('Co-Authored-By: Codex <x@openai.com>'), 'codex')).toMatch(/isti provider/);
+    expect(independenceProblem(implementersOf('Grok Build patch'), 'grok')).toMatch(/isti provider/);
+    expect(independenceProblem(implementersOf('rucni commit'), 'grok')).toMatch(/nije prepoznat/);
+  });
+  it('odbijanje gate locka se prepoznaje po poruci, ne samo po izlazu 2', () => {
+    expect(gateRefused(2, '[gate-preflight] x: ODBIJENO (exit 2). Stroj nije slobodan')).toBe(true);
+    expect(gateRefused(2, 'usage: codex exec ...')).toBe(false);
+    expect(gateRefused(1, '[gate-preflight] x: ODBIJENO (exit 2).')).toBe(false);
   });
   it('grok na zasticenoj delti ceka codex iste glave', () => {
     const base = { provider: 'grok', isProtected: true, number: 7, stamp: 'h@m' };
@@ -127,19 +138,25 @@ describe('prompt, diff, komentar', () => {
     expect(truncateDiff('abcdef', 3)).toEqual({ diff: 'abc', truncated: true });
   });
   it('komentar je ociscen i oznacen savjetodavnim', () => {
-    const c = formatComment({ provider: 'grok', model: 'grok-4.6', base: 'a'.repeat(40), head: 'b'.repeat(40), text: 'v C:\\Users\\PC\\x', isProtected: true });
+    const c = formatComment({ provider: 'grok', model: 'grok-4.6', base: 'a'.repeat(40), head: 'b'.repeat(40), text: 'v C:\\Users\\PC\\x', isProtected: true, implementers: new Set(['claude']) });
     expect(c).not.toContain('Users');
     expect(c).toContain('trece misljenje');
     expect(c).toContain('Savjetodavni');
   });
-  it('extractGrokText cita text, odsijeca naraciju, a gresku i prazan odgovor baca', () => {
-    expect(extractGrokText('{"text":"Pogledat cu diff.## Nalazi\\n1. a.ts:3"}')).toBe('## Nalazi\n1. a.ts:3');
-    expect(extractGrokText('{"result":"nalaz"}')).toBe('nalaz');
-    expect(() => extractGrokText('{"is_error":true,"text":"x"}')).toThrow();
-    expect(() => extractGrokText('{"ok":false}')).toThrow();
-    expect(() => extractGrokText('{"text":"  "}')).toThrow();
+  it('extractGrokText trazi cijelu strukturiranu omotnicu, odsijeca naraciju', () => {
+    const ok = (extra: object = {}) => JSON.stringify({
+      text: 'Pogledat cu diff.## Nalazi\n1. a.ts:3', stopReason: 'end_turn', num_turns: 2, modelUsage: { 'grok-4.6': {} }, ...extra,
+    });
+    expect(extractGrokText(ok())).toBe('## Nalazi\n1. a.ts:3');
+    expect(() => extractGrokText(ok({ stopReason: 'max_turns' }))).toThrow();
+    expect(() => extractGrokText(ok({ subtype: 'error_max_turns' }))).toThrow();
+    expect(() => extractGrokText(ok({ is_error: true }))).toThrow();
+    expect(() => extractGrokText(ok({ modelUsage: {} }))).toThrow();
+    expect(() => extractGrokText(ok({ modelUsage: { 'grok-3': {} } }))).toThrow();
+    expect(() => extractGrokText(ok({ text: '  ' }))).toThrow();
     expect(() => extractGrokText('goli tekst')).toThrow();
   });
+
 
 });
 

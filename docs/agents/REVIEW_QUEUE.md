@@ -59,10 +59,18 @@ Nova runda trazi novu oznaku nakon novog pusha.
 
 ## Pravila odluka
 
-- Implementator se prepoznaje iz opisa PR-a i poruka commitova (potpisi Claude/Codex/Grok). Isti provider kao implementator: oznaka se skida uz komentar. Nepoznat implementator ne blokira, ali komentar navodi da neovisnost nije provjerena.
+- Implementator se prepoznaje iz opisa PR-a i poruka commitova (potpisi Claude/Codex/Grok). Isti provider ili nepoznat implementator: oznaka se skida uz komentar (neovisnost mora biti dokaziva). Rucni PR bez potpisa zato treba potpis ili rucni pregled.
 - Zasticena delta (`protectedPaths`): Grok ceka uspjesan Codex pregled iste glave i ciljne grane; inace se odgada.
+- Zasticene staze citaju se iz `config/agent-routing.json`, izvrsna datoteka providera rjesava se apsolutnom putanjom iz korijena repozitorija (ne iz radnog stabla PR-a), a Grok rezultat mora proci `parseResult` (stopReason, num_turns, modelUsage, model).
+- Brojac kvarova vrijedi samo za otisak (glava + grana) na kojem je nastao.
 - Zasticenost se racuna iz stvarne delte (`git diff --name-only`), ne iz kumulativnog popisa datoteka PR-a.
 - Prije objave se ponovno cita glava i ciljna grana; ako su se promijenile, nista se ne objavljuje i oznaka ostaje za novu rundu.
 - Nalazi su redovi Markdown tablice s tezinom `blocker|major|minor|nit`, kako ih broji `pr-intake`.
 - Cijela delta je u `REVIEW_DELTA.diff` u korijenu radnog stabla (prompt nosi najvise 200 kB).
 - Dva kvara zaredom: komentar o kvaru i skidanje oznake; ako objava padne, ponavlja se u sljedecem krugu.
+
+## Poznata ogranicenja (zasebni zadaci)
+
+- Istek od 30 min ubija omotac, ne cijelo stablo procesa; na Windowsu moze ostati visiti provider.
+- Potrosnja pregleda se ne zapisuje u `.artifacts/agents/usage.jsonl`.
+- Otisak nema OID ciljne grane; ponovno primijenjena oznaka nakon force-pusha na istoimenu granu moze se prepoznati kao bez delte.

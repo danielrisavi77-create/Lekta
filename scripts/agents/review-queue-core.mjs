@@ -1,3 +1,5 @@
+import { modelMatches, parseResult } from './core.mjs';
+
 // Red pregleda drugog providera preko GitHub oznaka. Cisti modul bez I/O-a: `review-queue.mjs`
 // radi git, gh i pokretanje CLI-ja, ovdje su odluke (koja oznaka znaci koji provider, koja je
 // delta, koji model, sto smije u objavu). Testira ga tests/review-queue.test.ts.
@@ -70,6 +72,7 @@ export function reviewStamp(pr) {
 export function selectNext(prs, state = {}, skip = new Set()) {
   const reviewed = state.reviewed ?? {};
   const failures = state.failures ?? {};
+  const failureStamps = state.failureStamps ?? {};
   const jobs = [];
   for (const pr of prs ?? []) {
     for (const provider of providersForLabels(pr.labels)) {
@@ -79,7 +82,7 @@ export function selectNext(prs, state = {}, skip = new Set()) {
         number: pr.number,
         provider,
         noDelta: reviewed[key] === reviewStamp(pr),
-        cleanup: (failures[key] ?? 0) >= MAX_FAILURES,
+        cleanup: failureStamps[key] === reviewStamp(pr) && (failures[key] ?? 0) >= MAX_FAILURES,
       });
     }
   }
@@ -97,9 +100,16 @@ export function implementersOf(text) {
   return out;
 }
 
-/** Pregled istim providerom kao implementator nije neovisan. */
-export function sameProviderReview(implementers, provider) {
-  return implementers.has(provider);
+/** Razlog zbog kojeg pregled nije neovisan (nepoznat ili isti implementator), inace null. */
+export function independenceProblem(implementers, provider) {
+  if (implementers.size === 0) return 'implementator nije prepoznat iz opisa i commitova (nedostaje potpis alata)';
+  if (implementers.has(provider)) return 'implementator je isti provider';
+  return null;
+}
+
+/** Izlaz 2 omotaca gate locka s njegovom porukom o odbijanju (izlaz 2 providera nije odbijanje). */
+export function gateRefused(status, stderr) {
+  return status === 2 && /ODBIJENO \(exit 2\)/.test(String(stderr ?? ''));
 }
 
 /** Grok na zasticenoj delti je samo trece misljenje: trazi uspjesan Codex pregled iste glave. */
@@ -187,25 +197,20 @@ export function stripNarration(text) {
  * pregled se ne smije objaviti ni zabiljeziti kao gotov.
  */
 export function extractGrokText(stdout) {
-  let parsed;
-  try { parsed = JSON.parse(String(stdout ?? '').trim()); } catch { throw new Error('Grok nije vratio JSON'); }
-  if (!parsed || typeof parsed !== 'object') throw new Error('Grok je vratio neocekivan JSON');
-  if (parsed.is_error === true || parsed.ok === false || parsed.error) {
-    throw new Error(`Grok je javio gresku: ${String(parsed.error?.message ?? parsed.error ?? parsed.subtype ?? 'nepoznata').slice(0, 200)}`);
+  const result = parseResult('grok', String(stdout ?? ''), 0);
+  if (!result.ok) throw new Error('Grok nije vratio uspjesan strukturirani rezultat (stopReason, num_turns, modelUsage)');
+  if (!modelMatches(GROK_MODEL, result.reportedModels)) {
+    throw new Error(`Grok je prijavio drugi model: ${result.reportedModels.join(', ')}`);
   }
-  for (const k of ['text', 'result', 'output', 'message', 'response']) {
-    if (typeof parsed[k] === 'string' && parsed[k].trim()) return stripNarration(parsed[k]);
-  }
-  throw new Error('Grok nije vratio tekst odgovora');
+  const parsed = JSON.parse(String(stdout).trim().split('\n').filter(Boolean).at(-1));
+  return stripNarration(parsed.text);
 }
 
-export function formatComment({ provider, model, base, head, text, isProtected, implementers = new Set() }) {
+export function formatComment({ provider, model, base, head, text, isProtected, implementers }) {
   const note = isProtected && provider === 'grok'
     ? '\n\nZasticena delta: Grok je ovdje samo trece misljenje uz Codex.'
     : '';
-  const impl = implementers.size
-    ? `\n\nPrepoznat implementator: ${[...implementers].join(', ')}.`
-    : '\n\nImplementator nije prepoznat iz opisa i commitova; neovisnost providera nije provjerena.';
+  const impl = `\n\nPrepoznat implementator: ${[...implementers].join(', ')}.`;
   return [
     `**Pregled drugog providera: ${provider} (${model})**, delta \`${base.slice(0, 7)}..${head.slice(0, 7)}\`${note}${impl}`,
     '',
