@@ -59,15 +59,12 @@ const saveState = (s) => writeFileSync(STATE_FILE, JSON.stringify(s, null, 2));
 
 function listLabelled() {
   // Popis bez commits: ugnijezdeni commits po PR-u prelazi GitHubov limit cvorova GraphQL upita.
+  // Commitovi se dohvacaju tek za PR koji se stvarno pregledava (review()), ne u svakom prolazu.
   const fields = 'number,title,body,headRefOid,baseRefName,labels';
   const byNumber = new Map();
   for (const label of ['grok-review', 'codex-review']) {
     const out = gh(['pr', 'list', '--repo', REPO, '--state', 'open', '--label', label, '--json', fields, '--limit', '50']);
     for (const pr of JSON.parse(out)) byNumber.set(pr.number, pr);
-  }
-  // Potpisi implementatora citaju se iz commitova, pa se dohvacaju po PR-u.
-  for (const pr of byNumber.values()) {
-    pr.commits = JSON.parse(gh(['pr', 'view', String(pr.number), '--repo', REPO, '--json', 'commits'])).commits ?? [];
   }
   return [...byNumber.values()];
 }
@@ -94,7 +91,8 @@ async function review(pr, provider, deferred) {
   const bad = forbiddenEnv(process.env, provider);
   if (bad.length) throw new Error(`Odbijeno: ${bad.join(', ')} u okolini (samo pretplata: grok login, codex login)`);
 
-  const commitText = (pr.commits ?? []).map((c) => `${c.messageHeadline ?? ''}\n${c.messageBody ?? ''}`).join('\n');
+  const commits = JSON.parse(gh(['pr', 'view', String(pr.number), '--repo', REPO, '--json', 'commits'])).commits ?? [];
+  const commitText = commits.map((c) => `${c.messageHeadline ?? ''}\n${c.messageBody ?? ''}`).join('\n');
   const implementers = implementersOf(`${pr.title}\n${pr.body ?? ''}\n${commitText}`);
   const problem = independenceProblem(implementers, provider);
   if (problem) {
