@@ -9272,6 +9272,87 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
 });
 
 /**
+ * Commit cijelog indeksa i dovrsenje spajanja (preneseno iz `~/.claude/hooks/lekta-git-guard.mjs`,
+ * 2026-10-08). Mutira se KOPIJA izvora u privremenom direktoriju i presuduje cisti node, jer
+ * vitestov loader ne ucitava module izvan korijena projekta, a mutant ne smije u repozitorij.
+ */
+describe('mutacije: tool-guard commit cijelog indeksa', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const GOLI_COMMIT = '      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);\n';
+  const NASTAVAK = "    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {\n";
+
+  async function presude(source: string): Promise<boolean[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-mut-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const o = (s) => ({ cwd: "/x", ispitaj: () => s });'
+        + 'process.stdout.write(JSON.stringify(['
+        + 'm.judgeCommand("Bash", "git commit -m x", undefined, o({ izoliran: false, spajanje: false })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: false, spajanje: true })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: true, spajanje: true })).allow,'
+        + ']));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: goli commit i merge --continue u dijeljenom stablu su odbijeni, u worktreeju merge prolazi', async () => {
+    expect(izvor).toContain(GOLI_COMMIT);
+    expect(izvor).toContain(NASTAVAK);
+    expect(await presude(izvor)).toEqual([false, false, true]);
+  });
+
+  it('mutant: gard bez provjere golog commita propusta commit cijelog indeksa', async () => {
+    expect(await presude(izvor.replace(GOLI_COMMIT, ''))).toEqual([true, false, true]);
+  });
+
+  /** `stanjeStabla` nad STVARNIM samostalnim klonom; `repo` glumi dijeljeno stablo. */
+  async function klonIzoliran(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync, execFileSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-klon-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const repo = join(dir, 'repo');
+      const g = (args: string[], cwd: string) => execFileSync('git', args, { cwd, windowsHide: true });
+      g(['init', '-q', repo], dir);
+      g(['-c', 'user.email=x@y.z', '-c', 'user.name=T', '-c', 'commit.gpgsign=false', 'commit', '-q', '--allow-empty', '-m', 'prvi'], repo);
+      const klon = join(dir, 'klon');
+      g(['clone', '-q', repo, klon], dir);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.stanjeStabla(${JSON.stringify(klon)}, ${JSON.stringify(repo)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { izoliran: boolean }).izoliran;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline i mutant: samostalni klon izvan dijeljenog korijena je izoliran samo uz provjeru korijena', async () => {
+    const KORIJEN = ' || !dijeljeno, spajanje };';
+    expect(izvor).toContain(KORIJEN);
+    expect(await klonIzoliran(izvor)).toBe(true);
+    expect(await klonIzoliran(izvor.replace(KORIJEN, ', spajanje };'))).toBe(false);
+  });
+
+  it('mutant: gard koji ne gada --continue propusta dovrsenje spajanja u dijeljenom stablu', async () => {
+    const mutant = izvor.replace(NASTAVAK, "    if (false && hasFlag(args, '--continue')) {\n");
+    expect(await presude(mutant)).toEqual([false, true, true]);
+  });
+});
+
+/**
  * GATE PREFLIGHT I OMOTAC (T62, pravila za stroj). Dva kvara koja bi lock ucinila ukrasom:
  *  (a) preflight koji propusta iako radi tudji vitest (dvije sesije opet mlate isti stroj);
  *  (b) omotac koji otpusta lock samo na uspjeh (lanac `a && b && release`), pa pad gatea ostavi
