@@ -35,32 +35,10 @@ const RUNNERS = new Set(['npx', 'pnpx', 'bunx']);
 const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 
 /**
- * Naredbene supstitucije (`$(...)` i backtick) iz tijela heredoca bez navodnika: jedino se one u
- * takvom tijelu izvrsavaju, ostatak je tekst koji ide na stdin.
- * @param {string} body
- * @returns {string[]}
+ * Programi koji tijelo heredoca citaju kao naredbe (`bash <<'EOF'`, `cat <<'EOF' | sh`): njihovo
+ * tijelo se ocjenjuje i kad je delimiter pod navodnicima.
  */
-function heredocSubstitutions(body) {
-  const subs = [];
-  for (let i = 0; i < body.length; i += 1) {
-    if (body[i] === '$' && body[i + 1] === '(') {
-      let depth = 1;
-      let j = i + 2;
-      while (j < body.length && depth > 0) {
-        if (body[j] === '(') depth += 1;
-        else if (body[j] === ')') depth -= 1;
-        j += 1;
-      }
-      subs.push(body.slice(i + 2, depth === 0 ? j - 1 : j));
-      i = j - 1;
-    } else if (body[i] === '`') {
-      const end = body.indexOf('`', i + 1);
-      subs.push(body.slice(i + 1, end < 0 ? body.length : end));
-      i = end < 0 ? body.length : end;
-    }
-  }
-  return subs;
-}
+const SHELL_FED = new Set(['bash', 'sh', 'dash', 'ash', 'zsh', 'ksh', 'fish', 'source', '.', 'eval', 'xargs']);
 
 /**
  * Cita heredoc operator koji pocinje na `start` (prvi `<` od `<<`). Vraca delimiter, je li bio pod
@@ -80,6 +58,9 @@ function readHeredocOperator(command, start) {
   let quoted = false;
   while (i < command.length && !/[\s;|&()<>]/.test(command[i])) {
     const ch = command[i];
+    // `$'EOF'`, `$EOF`, backtick i `\` + novi red ljuska prosiruje ili spaja drukcije nego sto
+    // ovdje citamo; krivo procitan delimiter progutao bi naredbe iza tijela (Grok pregled #328).
+    if (ch === '$' || ch === '`' || (ch === '\\' && (command[i + 1] === '\n' || command[i + 1] === '\r' || i + 1 >= command.length))) return null;
     if (ch === '"' || ch === "'") {
       const close = command.indexOf(ch, i + 1);
       if (close < 0) return null;
@@ -102,7 +83,9 @@ function readHeredocOperator(command, start) {
  * Rastavlja naredbu na podnaredbe po `&&`, `||`, `;`, `|`, `&`, novom retku, zagradama i `$(`,
  * postujuci jednostruke i dvostruke navodnike: sadrzaj pod navodnicima je argument, ne naredba.
  * Tijelo heredoca (`<<EOF` ... `EOF`) je stdin, ne naredba (T109): uz delimiter pod navodnicima
- * preskace se cijelo, a bez navodnika se rastavljaju samo naredbene supstitucije u njemu.
+ * preskace se cijelo; bez navodnika je tekst dok u njemu nema `$(` ni backticka, a s njima se cijelo
+ * tijelo rastavlja kao naredba. Tijelo koje hrani ljusku (`bash <<'EOF'`, `| sh`) uvijek je naredba.
+ * `<<` iza `#` komentara nije heredoc.
  * @param {string} command
  * @returns {string[][]} podnaredbe kao nizovi tokena
  */
@@ -114,6 +97,9 @@ export function splitCommand(command) {
   let hasToken = false;
   /** @type {Array<{ delim: string, quoted: boolean, stripTabs: boolean }>} */
   let pending = [];
+  let inComment = false;
+  /** Indeks u `parts` gdje pocinje trenutni redak naredbe. */
+  let lineStart = 0;
   const endToken = () => {
     if (hasToken) tokens.push(current);
     current = '';
@@ -127,6 +113,7 @@ export function splitCommand(command) {
   /** Preskace tijela heredoca koja pocinju iza novog retka na `nl`; vraca indeks zadnjeg procitanog znaka. */
   const skipHeredocBodies = (nl) => {
     let pos = nl + 1;
+    const shellFed = parts.slice(lineStart).some((p) => p.some((t) => SHELL_FED.has(programName(t))));
     for (const h of pending) {
       const bodyStart = pos;
       let bodyEnd = command.length;
@@ -143,12 +130,12 @@ export function splitCommand(command) {
         }
         pos = eol < 0 ? command.length : eol + 1;
       }
-      if (!h.quoted) {
-        for (const sub of heredocSubstitutions(command.slice(bodyStart, bodyEnd))) parts.push(...splitCommand(sub));
-      }
+      const body = command.slice(bodyStart, bodyEnd);
+      if (shellFed || (!h.quoted && /\$\(|`/.test(body))) parts.push(...splitCommand(body));
       pos = next;
     }
     pending = [];
+    lineStart = parts.length;
     return pos - 1;
   };
   for (let i = 0; i < command.length; i += 1) {
@@ -163,7 +150,9 @@ export function splitCommand(command) {
       hasToken = true;
       continue;
     }
-    if (ch === '<' && command[i + 1] === '<') {
+    if (ch === '\n') inComment = false;
+    if (ch === '#' && !hasToken) inComment = true;
+    if (!inComment && ch === '<' && command[i + 1] === '<') {
       const op = readHeredocOperator(command, i);
       if (op) {
         endToken();
@@ -184,6 +173,7 @@ export function splitCommand(command) {
     }
     if (';|&()\n\r`'.includes(ch)) {
       endPart();
+      if (ch === '\n') lineStart = parts.length;
       continue;
     }
     if (/\s/.test(ch)) {

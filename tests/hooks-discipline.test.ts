@@ -99,6 +99,20 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     expect(judge('cat <<-EOF\n\tvitest\n\tEOF\ntsc --noEmit')).toMatchObject({ allow: false });
   });
 
+  it('T109 (Grok pregled #328): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
+    const izvrsivo = [
+      "cat <<EOF\n$(echo ')'; npx vitest run)\nEOF",
+      'cat <<EOF\n$(echo hi # )\nnpx vitest run\n)\nEOF',
+      'echo ok # <<EOF\nnpx vitest run',
+      "cat <<$'EOF'\nhello\nEOF\nnpx vitest run",
+      'cat <<EOF\\\nxxx\nbody\nEOFxxx\nnpx vitest run',
+      'EOF=EOF\ncat <<$EOF\nbody\nEOF\nnpx vitest run',
+      "bash <<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' | sh\nnpx vitest run\nEOF",
+    ];
+    for (const command of izvrsivo) expect(judge(command), command).toMatchObject({ allow: false });
+  });
+
   it('proces: 7 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
     const cases: Array<[unknown, NodeJS.ProcessEnv, number]> = [
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv(), 2],

@@ -11314,15 +11314,44 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
-    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", "if (false) {");
+    const mutant = izvor.replace("if (!inComment && ch === '<' && command[i + 1] === '<') {", "if (false) {");
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, citirani)).toBe(false);
   });
 
   it('mutant: tijelo bez navodnika preskoceno u cijelosti pusta supstituciju izvan locka', async () => {
-    const mutant = izvor.replace('if (!h.quoted) {', 'if (false) {');
+    const mutant = izvor.replace('shellFed || (!h.quoted && ', 'shellFed || (false && ');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, supstitucija)).toBe(true);
+  });
+
+  // Grok pregled #328: ulazi kroz koje je prvi oblik T109 pustao tesku naredbu, a master ih je odbijao.
+  const komentar = 'echo ok # <<EOF\nnpx vitest run';
+  const dolarDelim = "cat <<$'EOF'\nhello\nEOF\nnpx vitest run";
+  const ljuska = "bash <<'EOF'\nnpx vitest run\nEOF";
+
+  it('baseline: komentar, prosireni delimiter i tijelo koje hrani ljusku se odbijaju', async () => {
+    expect(await dopusta(izvor, komentar)).toBe(false);
+    expect(await dopusta(izvor, dolarDelim)).toBe(false);
+    expect(await dopusta(izvor, ljuska)).toBe(false);
+  });
+
+  it('mutant: << iza # opet otvara heredoc i guta naredbu', async () => {
+    const mutant = izvor.replace("if (ch === '#' && !hasToken) inComment = true;", '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, komentar)).toBe(true);
+  });
+
+  it('mutant: delimiter s $ se cita doslovno i guta naredbu iza tijela', async () => {
+    const mutant = izvor.replace("if (ch === '$' || ch === '`' ||", 'if (false ||');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, dolarDelim)).toBe(true);
+  });
+
+  it('mutant: tijelo koje hrani ljusku se preskace kao stdin', async () => {
+    const mutant = izvor.replace('SHELL_FED.has(programName(t))', 'false');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, ljuska)).toBe(true);
   });
 });
 
