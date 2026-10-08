@@ -6,7 +6,8 @@ na koje pada test ili gard (4. 10. 2026: 8 od 10 PR-ova palo je u prvoj rundi pr
 
 ## Gard i njegova mutacija
 
-- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`. Obrazac je helper u
+- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts` ili domenskoj
+  datoteci `tests/gate-mutations-<domena>.test.ts`. Obrazac je helper u
   `tests/helpers/<ime>.ts` koji vraca popis problema (prazan je cisto) nad tablicom scenarija; test
   tvrdi `toEqual([])`, a mutacija tvrdi tocan popis problema koji mutant izaziva (primjeri:
   `weak-machine.ts`, `supabase-mcp-guard.ts`).
