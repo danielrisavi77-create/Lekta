@@ -16,7 +16,7 @@
  * Izlazni kodovi: kod naredbe; 2 kad preflight odbije (naredba se tada ne pokrece).
  */
 import { spawn } from 'node:child_process';
-import { acquireGate, lockFilePath, measureMachine, releaseLock, weakMachineWorkerEnv } from './gate-preflight.mjs';
+import { acquireGate, isPidAlive, listProcesses, lockFilePath, measureMachine, releaseLock, weakMachineWorkerEnv } from './gate-preflight.mjs';
 
 export function parseWrapperArgs(argv) {
   const sep = argv.indexOf('--');
@@ -42,6 +42,72 @@ export function joinCommand(parts) {
   return parts
     .map((p) => (/^[\w@%+=:,./\\-]+$/.test(p) ? p : `"${p.replace(/"/g, '\\"')}"`))
     .join(' ');
+}
+
+/**
+ * Potomci zadanog PID-a (djeca, unuci, ...), bez njega samog. Na prekid se signal salje cijelom
+ * stablu: `child.kill` pogada samo `sh -c` ljusku, a `npm`, `vitest` i njegovi radnici bi ostali
+ * zivi dok omotac otpusti lock (T110, izmjereno 2026-10-08).
+ * @param {{pid:number, ppid:number}[]} processes
+ * @param {number} rootPid
+ * @returns {number[]}
+ */
+export function descendantPids(processes, rootPid) {
+  const out = [];
+  const seen = new Set([rootPid]);
+  const queue = [rootPid];
+  while (queue.length) {
+    const parent = queue.shift();
+    for (const p of processes) {
+      if (p.ppid === parent && !seen.has(p.pid)) {
+        seen.add(p.pid);
+        out.push(p.pid);
+        queue.push(p.pid);
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Salje signal djetetu i svim njegovim potomcima. Stablo se snima PRIJE slanja: kad ljuska umre,
+ * njezina se djeca presele pod init i veza s omotacem se gubi. Bez snimka (fail-open) signal ide
+ * samo djetetu, kao prije.
+ * @returns {number[]} PID-ovi kojima je signal poslan
+ */
+export function signalTree(childPid, signal, { list = listProcesses, kill = process.kill.bind(process) } = {}) {
+  const snapshot = list();
+  const pids = [childPid, ...(snapshot ? descendantPids(snapshot, childPid) : [])];
+  for (const pid of pids) {
+    try {
+      kill(pid, signal);
+    } catch {
+      // proces je vec nestao
+    }
+  }
+  return pids;
+}
+
+/**
+ * Ceka da svi zadani PID-ovi nestanu, najvise `graceMs`; preostale gasi s SIGKILL. Tek nakon toga
+ * omotac smije otpustiti lock, inace bi drugi gate krenuo uz zivi tudji vitest.
+ * @returns {Promise<number[]>} PID-ovi koje je trebalo ubiti s SIGKILL
+ */
+export async function reapTree(pids, { graceMs = 10_000, stepMs = 100, alive = isPidAlive, kill = process.kill.bind(process), sleep = (ms) => new Promise((r) => setTimeout(r, ms)) } = {}) {
+  const deadline = Date.now() + graceMs;
+  let living = pids.filter((pid) => alive(pid) === true);
+  while (living.length && Date.now() < deadline) {
+    await sleep(stepMs);
+    living = living.filter((pid) => alive(pid) === true);
+  }
+  for (const pid of living) {
+    try {
+      kill(pid, 'SIGKILL');
+    } catch {
+      // proces je nestao izmedju provjere i signala
+    }
+  }
+  return living;
 }
 
 async function main(argv) {
@@ -80,13 +146,16 @@ async function main(argv) {
     console.error('preflight: slab stroj, VITEST_MAX_THREADS=1');
   }
 
+  /** PID-ovi kojima je proslijedjen signal; prije otpustanja locka moraju nestati. */
+  let signalled = [];
   try {
     const code = await new Promise((resolvePromise) => {
       const child = spawn(joinCommand(command), { stdio: 'inherit', shell: true, env: childEnv });
       const forward = (signal) => {
         // Ctrl+C na Windowsu ionako dobije cijela konzola; ovdje se samo ceka da dijete zavrsi,
-        // da bi `finally` otpustio lock.
-        if (process.platform !== 'win32') child.kill(signal);
+        // da bi `finally` otpustio lock. Drugdje signal ide cijelom stablu djeteta (T110).
+        if (process.platform === 'win32' || !child.pid) return;
+        signalled = [...new Set([...signalled, ...signalTree(child.pid, signal)])];
       };
       for (const signal of ['SIGINT', 'SIGTERM', 'SIGBREAK', 'SIGHUP']) process.on(signal, forward);
       child.on('error', (error) => {
@@ -99,6 +168,10 @@ async function main(argv) {
     });
     return code;
   } finally {
+    if (signalled.length) {
+      const killed = await reapTree(signalled);
+      if (killed.length) console.error(`[gate-preflight] ${label}: SIGKILL za ${killed.length} proces(a) koji nisu stali na signal.`);
+    }
     release();
   }
 }

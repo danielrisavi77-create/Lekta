@@ -10,11 +10,11 @@
  * vrti li netko drugi vitest na stroju. Zivost PID-a u locku se mjeri stvarno.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { joinCommand, parseWrapperArgs } from '../scripts/with-gate-lock.mjs';
+import { descendantPids, joinCommand, parseWrapperArgs, reapTree, signalTree } from '../scripts/with-gate-lock.mjs';
 
 const ROOT = resolve(__dirname, '..');
 const WRAPPER = join(ROOT, 'scripts', 'with-gate-lock.mjs');
@@ -226,6 +226,69 @@ function checkInnerStepsValid(script: string): boolean {
   }
   return expectedIndex === expected.length;
 }
+
+describe('with-gate-lock: prekid gasi cijelo stablo djeteta (T110)', () => {
+  it('descendantPids: djeca i unuci, bez korijena i bez tudjih grana', () => {
+    const procs = [
+      { pid: 10, ppid: 1 }, { pid: 11, ppid: 10 }, { pid: 12, ppid: 11 }, { pid: 13, ppid: 12 },
+      { pid: 20, ppid: 1 }, { pid: 21, ppid: 20 },
+    ];
+    expect(descendantPids(procs, 10)).toEqual([11, 12, 13]);
+    expect(descendantPids(procs, 13)).toEqual([]);
+  });
+
+  it('signalTree: signal ide djetetu i svim potomcima; bez snimka samo djetetu', () => {
+    const sent: Array<[number, string]> = [];
+    const kill = (pid: number, sig: string) => { sent.push([pid, sig]); return true; };
+    const list = () => [{ pid: 11, ppid: 10 }, { pid: 12, ppid: 11 }, { pid: 30, ppid: 1 }];
+    expect(signalTree(10, 'SIGTERM', { list, kill })).toEqual([10, 11, 12]);
+    expect(sent).toEqual([[10, 'SIGTERM'], [11, 'SIGTERM'], [12, 'SIGTERM']]);
+    expect(signalTree(10, 'SIGINT', { list: () => null, kill })).toEqual([10]);
+  });
+
+  it('reapTree: ceka nestanak, a preostale nakon roka gasi s SIGKILL', async () => {
+    const living = new Set([1, 2]);
+    const killed: number[] = [];
+    let ticks = 0;
+    const sleep = async () => { ticks += 1; if (ticks === 2) living.delete(1); };
+    const res = await reapTree([1, 2, 3], {
+      graceMs: 50, stepMs: 1, sleep,
+      alive: (pid: number) => living.has(pid),
+      kill: (pid: number) => { killed.push(pid); return true; },
+    });
+    expect(res).toEqual([2]);
+    expect(killed).toEqual([2]);
+  });
+
+  it.skipIf(process.platform === 'win32')('stvarni proces: SIGTERM omotacu ne ostavlja unuka zivog, lock je otpusten', async () => {
+    const grandPidFile = join(dir, 'unuk.pid');
+    const script = [
+      "const {spawn}=require('child_process');",
+      "const g=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'});",
+      "require('fs').writeFileSync(process.argv[1],String(g.pid));",
+      'setInterval(()=>{},1000);',
+    ].join('');
+    const wrapper = spawn(process.execPath, [WRAPPER, 'test-t110', '--', 'node', '-e', script, grandPidFile], {
+      cwd: ROOT, env: cleanEnv(), stdio: 'ignore',
+    });
+    let grandPid = 0;
+    try {
+      const start = Date.now();
+      while (!existsSync(grandPidFile) && Date.now() - start < 20_000) await new Promise((r) => setTimeout(r, 50));
+      grandPid = Number(readFileSync(grandPidFile, 'utf8'));
+      expect(grandPid).toBeGreaterThan(0);
+      expect(existsSync(lockPath)).toBe(true);
+      const exited = new Promise((r) => wrapper.on('exit', r));
+      wrapper.kill('SIGTERM');
+      await exited;
+      const alive = (() => { try { process.kill(grandPid, 0); return true; } catch { return false; } })();
+      expect(alive).toBe(false);
+      expect(existsSync(lockPath)).toBe(false);
+    } finally {
+      if (grandPid) { try { process.kill(grandPid, 'SIGKILL'); } catch { /* vec mrtav */ } }
+    }
+  });
+});
 
 describe('package.json: gate skripte idu kroz omotac', () => {
   const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { scripts: Record<string, string> };
