@@ -845,11 +845,9 @@
     {
       "id": "T86",
       "title": "Pravni tekstovi bete objavljeni (privatnost, uvjeti, tijekom besplatne bete)",
-      "status": "blocked",
-      "dependsOn": [
-        "T77"
-      ],
-      "note": "Kriterij 6 T81. Ceka Z36 (klauzula jamstva od vlasnika; Z36 nije zadatak u ovom redu pa nije u dependsOn). Izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile. 2026-10-04: nacrt u radu (Laya cloud)."
+      "status": "in_review",
+      "dependsOn": [],
+      "note": "Kriterij 6 T81. Odvojeno od T77 odlukom vlasnika 2026-10-08: beta je besplatna, pa tekstovi bete ne cekaju naplatnu infrastrukturu; naplatne klauzule idu uz placeno izdanje. Tekstovi spojeni kroz PR #299 (2026-10-06); ziva lekta.hr/privatnost 2026-10-08 nosi recenicu bete u odlomku 1b. Z36 rijesen konzervativno (bez jamstva rezultata tijekom bete, docs/decisions/T86_PRAVNI_TEKSTOVI_BETE_NACRT.md). Preostaje vlasnikova potvrda zivih uvjeta i privatnosti za kriterij 6. Ranije: izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile. 2026-10-04: nacrt u radu (Laya cloud)."
     },
     {
       "id": "T87",
