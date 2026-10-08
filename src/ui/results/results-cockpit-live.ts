@@ -56,6 +56,7 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
     const a = mount.ownerDocument.activeElement;
     if (!a || !mount.contains(a)) return null;
     return [
+      '[data-cockpit-verdict-title]',
       '[data-cockpit-primary]',
       '[data-cockpit-action="open-findings"]',
       '[data-cockpit-advanced]',
@@ -76,7 +77,11 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
     }
     const focus = preferredFocus ?? fokusKokpita();
     args.rerender();
-    if (focus) mount.querySelector<HTMLElement>(focus)?.focus();
+    if (focus) {
+      const target = mount.querySelector<HTMLElement>(focus);
+      if (target?.matches('[data-cockpit-verdict-title]') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+      target?.focus({ preventScroll: true });
+    }
   };
   const stanjeZaZ34 = (): LiveStanje => {
     if (drzac._rlStanje?.kljuc === key) return drzac._rlStanje;
@@ -135,8 +140,13 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
     if (odustao || !args.isCurrent()) return;
     mount.ownerDocument.defaultView?.clearTimeout(rok);
     const direction = smjerFokusa();
+    const focus = fokusKokpita();
     args.rerender();
-    if (direction) {
+    if (focus) {
+      const target = mount.querySelector<HTMLElement>(focus);
+      if (target?.matches('[data-cockpit-verdict-title]') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+      target?.focus({ preventScroll: true });
+    } else if (direction) {
       const other = direction === 'next' ? 'prev' : 'next';
       (mount.querySelector<HTMLElement>('.desk-nav__btn--' + direction + ':not([disabled])')
         ?? mount.querySelector<HTMLElement>('.desk-nav__btn--' + other + ':not([disabled])'))?.focus();
