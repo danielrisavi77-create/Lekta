@@ -9,7 +9,8 @@
  *      ugovor o privoli, a pad uploada ne ostavlja nove funkcije uz stari klijent. Pokrece samo vlasnik;
  *   4. produkcijski build trazi tvrdi dokaz izdanja; migracije (`supabase db push`) workflow primjenjuje
  *      SAMO na staging (odluka vlasnika 2026-10-08), poslije builda i prije provjere migracija i Edgea.
- *      Produkcijske migracije ostaju vlasnikov rucni korak.
+ *      Prije db push Katedrine verzije samo u bazi dobivaju privremeni placeholder
+ *      (scripts/release-staging-history.mjs). Produkcijske migracije ostaju vlasnikov rucni korak.
  *
  * Baseline je u tests/release-workflow.test.ts, mutacije u tests/gate-mutations-release.test.ts.
  */
@@ -38,6 +39,7 @@ const PHASES: { id: string; test: (run: string) => boolean }[] = [
 const OWNER_ONLY = "github.actor == 'danielrisavi77-create' && github.triggering_actor == 'danielrisavi77-create'";
 const FORBIDDEN_RUN = /\bnetlify-cli@[\d.]+ deploy\b[^\n]*--prod\b|\bsupabase\s+(?:db\s+reset|migration\s+(?:up|repair))\b|\bsecrets\s+set\b/;
 const DB_PUSH = /\bsupabase\s+db\s+push\b/;
+const HISTORY = /\bnode scripts\/release-staging-history\.mjs\b/;
 
 function envName(job: Job): string | undefined {
   return typeof job.environment === 'string' ? job.environment : job.environment?.name;
@@ -74,6 +76,9 @@ function jobProblems(name: string, job: Job | undefined, expectedEnv: string): s
     if (pushes.length === 0) out.push('job staging ne primjenjuje migracije (db push)');
     for (const i of pushes) {
       if (i < at('build') || (at('migracije') >= 0 && i > at('migracije'))) out.push('job staging: db push nije izmedju builda i provjere migracija');
+      // Bez uskladjivanja Katedrine povijesti db push pada, a CLI predlaze `migration repair` koji brise tudje retke.
+      const hist = runs[i].search(HISTORY);
+      if (hist < 0 || hist > runs[i].search(DB_PUSH)) out.push('job staging: db push bez prethodnog release-staging-history');
     }
   }
   return out;

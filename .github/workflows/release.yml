@@ -111,10 +111,14 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        # Katedrine verzije 0104 do 0199 postoje samo u bazi; release-staging-history.mjs za njih pise
+        # privremene placeholdere u checkout runnera (docs/deploy/KANAL_A_UKLJUCIVANJE.md), a sve
+        # drugo neuskladeno obara job. `--include-all` jer neprimijenjena migracija smije biti starija od zadnje primijenjene.
         run: |
+          node scripts/release-staging-history.mjs --ref "$PROJECT_REF"
           npx supabase link --project-ref "$PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
-          npx supabase db push --linked --dry-run --password "$SUPABASE_DB_PASSWORD"
-          npx supabase db push --linked --password "$SUPABASE_DB_PASSWORD"
+          npx supabase db push --linked --include-all --dry-run --password "$SUPABASE_DB_PASSWORD"
+          npx supabase db push --linked --include-all --password "$SUPABASE_DB_PASSWORD"
 
       - name: Migracije primijenjene na cilju
         env:

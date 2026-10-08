@@ -113,11 +113,22 @@ describe('mutacije: objava jednim gumbom', () => {
     expect(releaseWorkflowProblems(m)).toEqual(['job staging: db push nije izmedju builda i provjere migracija']);
   });
 
+  it('staging db push bez uskladjivanja Katedrine povijesti obara gard', () => {
+    const m = mutiraj('          node scripts/release-staging-history.mjs --ref "$PROJECT_REF"\n', '');
+    expect(releaseWorkflowProblems(m)).toEqual(['job staging: db push bez prethodnog release-staging-history']);
+  });
+
+  it('uskladjivanje povijesti poslije db push obara gard', () => {
+    const line = '          node scripts/release-staging-history.mjs --ref "$PROJECT_REF"\n';
+    const m = mutiraj(line, '').replace('--include-all --password "$SUPABASE_DB_PASSWORD"\n', `--include-all --password "$SUPABASE_DB_PASSWORD"\n${line}`);
+    expect(releaseWorkflowProblems(m)).toEqual(['job staging: db push bez prethodnog release-staging-history']);
+  });
+
   it('migration repair u stagingu obara gard', () => {
-    const m = mutiraj('npx supabase db push --linked --dry-run', 'npx supabase migration repair --status applied 0209\n          npx supabase db push --linked --dry-run');
+    const m = mutiraj('npx supabase db push --linked --include-all --dry-run', 'npx supabase migration repair --status applied 0209\n          npx supabase db push --linked --include-all --dry-run');
     const p = releaseWorkflowProblems(m);
     expect(p).toHaveLength(1);
-    expect(p[0]).toMatch(/^job staging mijenja bazu ili tajne: "npx supabase link/);
+    expect(p[0]).toMatch(/^job staging mijenja bazu ili tajne: "node scripts\/release-staging-history\.mjs[\s\S]*migration repair/);
   });
 
   it('push okidac obara gard', () => {

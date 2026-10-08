@@ -27,6 +27,30 @@ export const REQUIRED_MIGRATIONS = {
   'create-checkout': ['0207_monetizacija_v1'],
 };
 
+/**
+ * Funkcije koje s klijentom dijele ugovor o privoli (`termsVersion`): svaka objava ih nosi obje,
+ * inace novi klijent ode van uz stare funkcije i smoke prolazi na njihovom 401 (Codex na #339).
+ */
+export const CONTRACT_FUNCTIONS = ['repair-docx', 'create-checkout'];
+
+/**
+ * Kanonski ciljevi objave. Environment varijable moraju se poklopiti s njima, pa kopiran ili
+ * pogresno uredjen environment ne moze objaviti na krivi projekt ili site (Codex na #339).
+ * Produkcijski ref se uz to cita iz src/config/deployment.ts, jer ga klijent odande uzima.
+ */
+export const TARGETS = {
+  staging: {
+    projectRef: 'bnyemcnsphlitjradrst',
+    netlifySiteId: 'f432ae00-c4f6-4ded-8c22-d4b71c7b8687',
+    siteOrigin: 'https://lekta-staging.netlify.app',
+  },
+  production: {
+    projectRef: 'zrrjttizjyfcxmcpgzml',
+    netlifySiteId: '1e7526f5-7f0a-480e-8589-d79ee91ff7b0',
+    siteOrigin: 'https://lekta.hr',
+  },
+};
+
 /** Kanonski produkcijski Supabase ref iz izvora klijenta (src/config/deployment.ts). */
 export function canonicalProductionRef(deploymentTs) {
   const m = /PRODUCTION_SUPABASE_URL = 'https:\/\/([a-z0-9]{20})\.supabase\.co'/.exec(deploymentTs);
@@ -58,21 +82,23 @@ export function releaseInputProblems(f) {
       if (!migs.includes(m)) out.push(`funkcija "${fn}" trazi migraciju "${m}", a nije u popisu migracija`);
     }
   }
-  if (!/^[a-z0-9]{20}$/.test(f.projectRef)) out.push('vars.SUPABASE_PROJECT_REF nije postavljen ili nije project ref');
+  for (const fn of CONTRACT_FUNCTIONS) {
+    if (!fns.includes(fn)) out.push(`objava mora nositi funkciju "${fn}" (dijeli ugovor o privoli s klijentom)`);
+  }
+  const t = TARGETS[f.target];
+  if (!t) {
+    out.push(`nepoznat cilj objave "${f.target}"`);
+    return out;
+  }
   // Produkcijski klijent NE cita SUPABASE_PROJECT_REF nego kanonski ref iz src/config/deployment.ts.
   // Krivi ref bi zato objavio funkcije na drugi projekt, a klijent na produkciju (Codex na #339).
   if (f.target === 'production') {
     if (!f.canonicalProdRef) out.push('kanonski produkcijski ref nije procitan iz src/config/deployment.ts');
-    else if (f.projectRef !== f.canonicalProdRef) out.push(`produkcijski SUPABASE_PROJECT_REF ${f.projectRef} nije kanonski ${f.canonicalProdRef}`);
-  } else if (f.target !== 'staging') {
-    out.push(`nepoznat cilj objave "${f.target}"`);
-  } else if (f.canonicalProdRef && f.projectRef === f.canonicalProdRef) {
-    out.push('staging SUPABASE_PROJECT_REF je produkcijski ref');
+    else if (f.canonicalProdRef !== t.projectRef) out.push(`src/config/deployment.ts cilja ${f.canonicalProdRef}, a TARGETS.production ${t.projectRef}`);
   }
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(f.netlifySiteId)) {
-    out.push('vars.NETLIFY_SITE_ID nije Netlify site ID (UUID)');
-  }
-  if (!/^https:\/\/[a-z0-9.-]+[a-z0-9]$/.test(f.siteOrigin)) out.push('vars.SITE_ORIGIN nije https origin bez zavrsne kose crte');
+  if (f.projectRef !== t.projectRef) out.push(`vars.SUPABASE_PROJECT_REF "${f.projectRef}" nije kanonski ${f.target} ref ${t.projectRef}`);
+  if (f.netlifySiteId !== t.netlifySiteId) out.push(`vars.NETLIFY_SITE_ID "${f.netlifySiteId}" nije kanonski ${f.target} site ${t.netlifySiteId}`);
+  if (f.siteOrigin !== t.siteOrigin) out.push(`vars.SITE_ORIGIN "${f.siteOrigin}" nije kanonski ${f.target} origin ${t.siteOrigin}`);
   return out;
 }
 

@@ -54,6 +54,17 @@ export function missingMigrations(applied, required) {
   return missing;
 }
 
+/** Dnevnik migracija ciljnog projekta (`[{ version, name }]`) kroz Management API; samo citanje. */
+export async function fetchAppliedMigrations(ref, token) {
+  const res = await fetch(`${API}/projects/${ref}/database/migrations`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const rows = await res.json();
+  if (!Array.isArray(rows)) throw new Error('odgovor nije popis');
+  return rows;
+}
+
 /** `--ref x --migrations a,b` u objekt; razmak ili zarez razdvajaju imena. */
 export function parseArgs(argv) {
   const value = (flag) => {
@@ -83,12 +94,7 @@ async function main() {
   }
   let rows;
   try {
-    const res = await fetch(`${API}/projects/${opts.ref}/database/migrations`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    rows = await res.json();
-    if (!Array.isArray(rows)) throw new Error('odgovor nije popis');
+    rows = await fetchAppliedMigrations(opts.ref, token);
   } catch (e) {
     console.error(`[release-migration-check] NE ZNAM: dnevnik migracija nije procitan (${e.message}).`);
     process.exit(2);

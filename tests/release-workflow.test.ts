@@ -3,7 +3,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { releaseWorkflowProblems } from './helpers/release-workflow';
-import { canonicalProductionRef, releaseInputProblems } from '../scripts/release-inputs.mjs';
+import { canonicalProductionRef, releaseInputProblems, TARGETS } from '../scripts/release-inputs.mjs';
+import { isKatedraVersion, stagingHistoryPlan } from '../scripts/release-staging-history.mjs';
 import { migrationKey, missingMigrations, parseArgs } from '../scripts/release-migration-check.mjs';
 
 const root = join(import.meta.dirname, '..');
@@ -18,9 +19,9 @@ function facts(over: Partial<Parameters<typeof releaseInputProblems>[0]> = {}) {
     migrations: '0207_monetizacija_v1 0209_repair_limit_po_korisniku',
     functionDirs: readdirSync(join(root, 'supabase', 'functions')).filter((d) => d !== '_shared' && !d.includes('.')),
     migrationFiles: readdirSync(join(root, 'supabase', 'migrations')),
-    projectRef: 'abcdefghijklmnopqrst',
-    siteOrigin: 'https://lekta.hr',
-    netlifySiteId: '1e7526f5-7f0a-480e-8589-d79ee91ff7b0',
+    projectRef: 'bnyemcnsphlitjradrst',
+    siteOrigin: 'https://lekta-staging.netlify.app',
+    netlifySiteId: 'f432ae00-c4f6-4ded-8c22-d4b71c7b8687',
     target: 'staging',
     canonicalProdRef: 'zrrjttizjyfcxmcpgzml',
     ...over,
@@ -42,34 +43,52 @@ describe('objava jednim gumbom: ulazi (scripts/release-inputs.mjs)', () => {
     expect(releaseInputProblems(facts({ sha: 'master' }))).toEqual(['sha "master" nije 40-znamenkasti commit']);
     expect(releaseInputProblems(facts({ head: 'b'.repeat(40) }))).toEqual([`checkoutan je ${'b'.repeat(40)}, a trazen ${SHA}`]);
     expect(releaseInputProblems(facts({ onMaster: false }))).toEqual([`commit ${SHA} nije na origin/master`]);
-    expect(releaseInputProblems(facts({ functions: 'repair-docx; rm -rf /' })))
-      .toEqual(['funkcija "repair-docx;" ne postoji u supabase/functions', 'funkcija "rm" ne postoji u supabase/functions', 'funkcija "-rf" ne postoji u supabase/functions', 'funkcija "/" ne postoji u supabase/functions']);
-    expect(releaseInputProblems(facts({ functions: '_shared' }))).toEqual(['funkcija "_shared" ne postoji u supabase/functions']);
-    expect(releaseInputProblems(facts({ functions: ' ' }))).toEqual(['popis funkcija je prazan']);
-    expect(releaseInputProblems(facts({ functions: 'health', migrations: '0299_ne_postoji' }))).toEqual(['migracija "0299_ne_postoji" ne postoji u supabase/migrations']);
-    expect(releaseInputProblems(facts({ projectRef: '' }))).toEqual(['vars.SUPABASE_PROJECT_REF nije postavljen ili nije project ref']);
-    expect(releaseInputProblems(facts({ siteOrigin: 'https://lekta.hr/' }))).toEqual(['vars.SITE_ORIGIN nije https origin bez zavrsne kose crte']);
-    expect(releaseInputProblems(facts({ netlifySiteId: 'lekta-staging' }))).toEqual(['vars.NETLIFY_SITE_ID nije Netlify site ID (UUID)']);
+    const bezUgovora = (fn: string) => `objava mora nositi funkciju "${fn}" (dijeli ugovor o privoli s klijentom)`;
+    expect(releaseInputProblems(facts({ functions: 'repair-docx create-checkout ; rm -rf /' })))
+      .toEqual(['funkcija ";" ne postoji u supabase/functions', 'funkcija "rm" ne postoji u supabase/functions', 'funkcija "-rf" ne postoji u supabase/functions', 'funkcija "/" ne postoji u supabase/functions']);
+    expect(releaseInputProblems(facts({ functions: 'repair-docx create-checkout _shared' }))).toEqual(['funkcija "_shared" ne postoji u supabase/functions']);
+    expect(releaseInputProblems(facts({ functions: ' ' }))).toEqual(['popis funkcija je prazan', bezUgovora('repair-docx'), bezUgovora('create-checkout')]);
+    expect(releaseInputProblems(facts({ migrations: '0207_monetizacija_v1 0209_repair_limit_po_korisniku 0299_ne_postoji' })))
+      .toEqual(['migracija "0299_ne_postoji" ne postoji u supabase/migrations']);
+    expect(releaseInputProblems(facts({ projectRef: '' }))).toEqual(['vars.SUPABASE_PROJECT_REF "" nije kanonski staging ref bnyemcnsphlitjradrst']);
+    expect(releaseInputProblems(facts({ siteOrigin: 'https://lekta-staging.netlify.app/' })))
+      .toEqual(['vars.SITE_ORIGIN "https://lekta-staging.netlify.app/" nije kanonski staging origin https://lekta-staging.netlify.app']);
+    expect(releaseInputProblems(facts({ netlifySiteId: 'lekta-staging' })))
+      .toEqual(['vars.NETLIFY_SITE_ID "lekta-staging" nije kanonski staging site f432ae00-c4f6-4ded-8c22-d4b71c7b8687']);
   });
 
   it('migracija koju funkcija trazi ne smije ispasti iz popisa (Codex na #339)', () => {
     expect(releaseInputProblems(facts({ migrations: '0207_monetizacija_v1' })))
       .toEqual(['funkcija "repair-docx" trazi migraciju "0209_repair_limit_po_korisniku", a nije u popisu migracija']);
-    expect(releaseInputProblems(facts({ functions: 'health', migrations: '0207_monetizacija_v1' }))).toEqual([]);
   });
 
-  it('produkcijski ref mora biti kanonski ref klijenta, staging ne smije biti produkcijski (Codex na #339)', () => {
-    expect(releaseInputProblems(facts({ target: 'production', projectRef: 'zrrjttizjyfcxmcpgzml' }))).toEqual([]);
-    expect(releaseInputProblems(facts({ target: 'production', projectRef: 'bnyemcnsphlitjradrst' })))
-      .toEqual(['produkcijski SUPABASE_PROJECT_REF bnyemcnsphlitjradrst nije kanonski zrrjttizjyfcxmcpgzml']);
-    expect(releaseInputProblems(facts({ target: 'production', canonicalProdRef: null })))
+  it('objava nosi obje funkcije ugovora o privoli (Codex na #339)', () => {
+    expect(releaseInputProblems(facts({ functions: 'health' })))
+      .toEqual(['objava mora nositi funkciju "repair-docx" (dijeli ugovor o privoli s klijentom)', 'objava mora nositi funkciju "create-checkout" (dijeli ugovor o privoli s klijentom)']);
+    expect(releaseInputProblems(facts({ functions: 'repair-docx create-checkout health' }))).toEqual([]);
+  });
+
+  it('svaki cilj je vezan za kanonski projekt, site i origin (Codex na #339)', () => {
+    const prod = { target: 'production', ...TARGETS.production };
+    expect(releaseInputProblems(facts(prod))).toEqual([]);
+    // Produkcijski environment kopiran sa staginga: sve tri vrijednosti padaju.
+    expect(releaseInputProblems(facts({ target: 'production' }))).toEqual([
+      'vars.SUPABASE_PROJECT_REF "bnyemcnsphlitjradrst" nije kanonski production ref zrrjttizjyfcxmcpgzml',
+      'vars.NETLIFY_SITE_ID "f432ae00-c4f6-4ded-8c22-d4b71c7b8687" nije kanonski production site 1e7526f5-7f0a-480e-8589-d79ee91ff7b0',
+      'vars.SITE_ORIGIN "https://lekta-staging.netlify.app" nije kanonski production origin https://lekta.hr',
+    ]);
+    // Staging s tudjim, ali valjanim refom ne smije doci do db push.
+    expect(releaseInputProblems(facts({ projectRef: 'abcdefghijklmnopqrst' })))
+      .toEqual(['vars.SUPABASE_PROJECT_REF "abcdefghijklmnopqrst" nije kanonski staging ref bnyemcnsphlitjradrst']);
+    expect(releaseInputProblems(facts({ ...prod, canonicalProdRef: null })))
       .toEqual(['kanonski produkcijski ref nije procitan iz src/config/deployment.ts']);
-    expect(releaseInputProblems(facts({ projectRef: 'zrrjttizjyfcxmcpgzml' }))).toEqual(['staging SUPABASE_PROJECT_REF je produkcijski ref']);
+    expect(releaseInputProblems(facts({ ...prod, canonicalProdRef: 'abcdefghijklmnopqrst' })))
+      .toEqual(['src/config/deployment.ts cilja abcdefghijklmnopqrst, a TARGETS.production zrrjttizjyfcxmcpgzml']);
     expect(releaseInputProblems(facts({ target: '' }))).toEqual(['nepoznat cilj objave ""']);
   });
 
   it('kanonski produkcijski ref se cita iz stvarnog src/config/deployment.ts', () => {
-    expect(canonicalProductionRef(readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8'))).toBe('zrrjttizjyfcxmcpgzml');
+    expect(canonicalProductionRef(readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8'))).toBe(TARGETS.production.projectRef);
     expect(canonicalProductionRef("const X = 'y';")).toBeNull();
   });
 });
@@ -96,5 +115,34 @@ describe('objava jednim gumbom: migracije na cilju (scripts/release-migration-ch
     expect(parseArgs(['--ref', 'abcdefghijklmnopqrst', '--migrations', '0207_a 0209_b'])).toEqual({ ref: 'abcdefghijklmnopqrst', required: ['0207_a', '0209_b'] });
     expect(() => parseArgs(['--ref', 'x', '--migrations', 'a'])).toThrow(/--ref/);
     expect(() => parseArgs(['--ref', 'abcdefghijklmnopqrst', '--migrations', ''])).toThrow(/--migrations/);
+  });
+});
+
+describe('objava jednim gumbom: povijest staginga (scripts/release-staging-history.mjs)', () => {
+  const local = ['0103_health_ping.sql', '0200_a.sql', '0207_monetizacija_v1.sql', 'README.md'];
+
+  it('Katedrine verzije samo u bazi dobivaju placeholder, poklopljene se ne diraju', () => {
+    const applied = [
+      { version: '0103', name: 'health_ping' },
+      { version: '0104', name: 'katedra_projects' },
+      { version: '0114', name: 'katedra_x' },
+      { version: '0200', name: 'a' },
+    ];
+    expect(stagingHistoryPlan(applied, local)).toEqual({ placeholders: ['0104', '0114'], problems: [] });
+  });
+
+  it('nepoznata verzija samo u bazi, preimenovana i ista pod drugom verzijom su pad, ne placeholder', () => {
+    expect(stagingHistoryPlan([{ version: '0230', name: 'tudje' }], local).problems)
+      .toEqual(['verzija 0230 ("tudje") postoji samo u bazi i nije u Katedrinom rasponu 0104 do 0199']);
+    expect(stagingHistoryPlan([{ version: '20261008120000', name: 'Lekta: monetizacija v1' }], local).problems)
+      .toEqual(['migracija monetizacija_v1 je u bazi pod verzijom 20261008120000, a lokalno 0207; db push bi je ponovio']);
+    expect(stagingHistoryPlan([{ version: '0200', name: 'b' }], local).problems)
+      .toEqual(['verzija 0200 je u bazi "b", a lokalno a']);
+    // Katedrina verzija ciji naziv odgovara lokalnoj migraciji nije Katedrina.
+    expect(stagingHistoryPlan([{ version: '0150', name: 'monetizacija_v1' }], local).placeholders).toEqual([]);
+  });
+
+  it('Katedrin raspon je tocno 0104 do 0199', () => {
+    expect(['0103', '0104', '0199', '0200', '104', '20261008120000'].map(isKatedraVersion)).toEqual([false, true, true, false, false, false]);
   });
 });
