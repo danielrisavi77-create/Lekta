@@ -40,7 +40,8 @@ trazi adversarijalni pregled drugog alata prije commita.
 
 - Svaki novi mehanizam mora imati vlastiti brojac u artefaktu i dokaz da je veci od nule.
 - Generator ulaza mora dokazati da zaista proizvodi oblik koji test tvrdi pokrivati.
-- Gard mora imati baseline i mutaciju u `tests/gate-mutations.test.ts`.
+- Gard mora imati baseline i mutaciju u `tests/gate-mutations.test.ts` ili
+  `tests/gate-mutations-<domena>.test.ts`.
 - Usporeduj imenovane nalaze, ne samo ukupan broj; isti zbroj moze skrivati zamjenu identiteta.
 - Prije regeneracije drift artefakta usporedi broj provjerenih jedinica. Manja
   pokrivenost uz manje nalaza upucuje na kvar citaca, ne na poboljsanje.
