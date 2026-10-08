@@ -159,6 +159,8 @@ obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
 - `src/docx/CLAUDE.md`: OOXML parser, golden fixture i integritet paketa.
 - `supabase/CLAUDE.md`: migracije, Edge Functions, sigurnost i deploy dokaz.
 - `scripts/autonomy/CLAUDE.md`: projekcije, mjerenja, mutacije i resursni gateovi.
+- `data/profiles/CLAUDE.md`: profili, ruleEntries, bodovane vrijednosti i generirane projekcije.
+- `tests/CLAUDE.md`: gardovi, mutacije, svojstva, fixture i pokretanje testova.
 
 Inventar migriranih pravila je u `docs/decisions/CLAUDE_V2_RULE_INVENTORY.md`.
 Povijesni v1 vodič ostaje u `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md`.
