@@ -71,6 +71,8 @@ Nova runda trazi novu oznaku nakon novog pusha.
 
 ## Poznata ogranicenja (zasebni zadaci)
 
-- Istek od 30 min ubija omotac, ne cijelo stablo procesa; na Windowsu moze ostati visiti provider.
+Istek od 30 min ubija cijelo stablo procesa (`review-queue-proc.mjs`: `taskkill /T /F` na Windowsu, grupa procesa drugdje).
+
+
 - Potrosnja pregleda se ne zapisuje u `.artifacts/agents/usage.jsonl`.
 - Otisak nema OID ciljne grane; ponovno primijenjena oznaka nakon force-pusha na istoimenu granu moze se prepoznati kao bez delte.

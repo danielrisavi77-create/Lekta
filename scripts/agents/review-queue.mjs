@@ -11,6 +11,7 @@ import { spawnSync } from 'node:child_process';
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { runWithTreeKill } from './review-queue-proc.mjs';
 import {
   buildCommand, buildPrompt, codexModel, DELTA_FILE, extractGrokText, forbiddenEnv, formatComment, GROK_MODEL,
   gateRefused, grokNeedsCodex, implementersOf, independenceProblem, labelForProvider, MAX_FAILURES, pickDeltaBase, reviewKey, reviewStamp,
@@ -82,7 +83,7 @@ function postFile(name, text) {
   return f;
 }
 
-function review(pr, provider, deferred) {
+async function review(pr, provider, deferred) {
   const key = reviewKey(pr.number, provider);
   const stamp = reviewStamp(pr);
   const bad = forbiddenEnv(process.env, provider);
@@ -134,9 +135,10 @@ function review(pr, provider, deferred) {
     // Dijeljeni gate lock (teski posao jedan po jedan); ljuska u omotacu rjesava npm shimove na Windowsu.
     // Apsolutna putanja providera iz pouzdanog korijena: ljuska u radnom stablu PR-a ne smije naci vlastiti `grok.cmd`.
     const exe = resolveExecutable(cmd.command);
-    const r = run('node', [GATE_WRAPPER, `review-pr${pr.number}`, '--', exe, ...cmd.args], {
-      cwd: wt, env: scrubEnv(process.env), input: cmd.stdin ? prompt : undefined, timeout: 30 * 60 * 1000, killSignal: 'SIGKILL',
+    const r = await runWithTreeKill('node', [GATE_WRAPPER, `review-pr${pr.number}`, '--', exe, ...cmd.args], {
+      cwd: wt, env: scrubEnv(process.env), input: cmd.stdin ? prompt : undefined, timeoutMs: 30 * 60 * 1000,
     });
+    if (r.timedOut) throw new Error(`${provider} je prekoracio 30 min; cijelo stablo procesa je ubijeno`);
     if (gateRefused(r.status, r.stderr)) {
       deferred.add(key);
       throw new Deferred('stroj zauzet (gate lock), pregled se odgada');
@@ -191,7 +193,7 @@ function cleanupExhausted(pr, provider) {
 }
 
 /** Jedan posao; vraca true ako je nesto napredovalo (ima smisla odmah traziti sljedeci). */
-function pass(deferred) {
+async function pass(deferred) {
   const prs = listLabelled();
   const next = selectNext(prs, loadState(), deferred);
   if (!next) return false;
@@ -208,7 +210,7 @@ function pass(deferred) {
       log(`PR #${next.number} ${next.provider}: nema nove delte od zadnjeg pregleda, oznaka skinuta`);
       return true;
     }
-    review(pr, next.provider, deferred);
+    await review(pr, next.provider, deferred);
     return true;
   } catch (e) {
     if (e instanceof Deferred) {
@@ -241,7 +243,7 @@ async function main() {
       const deferred = new Set();
       let worked = true;
       while (worked) {
-        try { worked = pass(deferred); } catch (e) { log(`prolaz pao: ${e.message}`); worked = false; }
+        try { worked = await pass(deferred); } catch (e) { log(`prolaz pao: ${e.message}`); worked = false; }
       }
       if (single) break;
       await sleep(intervalSec * 1000);

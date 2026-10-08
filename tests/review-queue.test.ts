@@ -3,7 +3,9 @@
  * Red pregleda drugog providera preko oznaka. `review-queue-core.mjs` je cist modul; ovaj test ne
  * pokrece git, gh ni CLI. Svaki slucaj ima i cisti baseline i pokvaren ulaz koji mora pasti.
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { runWithTreeKill } from '../scripts/agents/review-queue-proc.mjs';
 import {
   buildCommand, buildPrompt, codexModel, extractGrokText, stripNarration, forbiddenEnv, grokNeedsCodex, implementersOf, reviewStamp, independenceProblem, gateRefused, scrubEnv, formatComment, pickDeltaBase,
   providersForLabels, sanitizeOutput, selectNext, touchesProtected, truncateDiff, MAX_FAILURES,
@@ -175,4 +177,32 @@ describe('stripNarration', () => {
     expect(stripNarration('## Nalazi a\n## Nalazi b')).toBe('## Nalazi b');
     expect(stripNarration('bez markera')).toBe('bez markera');
   });
+});
+
+describe('runWithTreeKill', () => {
+  const grandchildScript = "const {spawn}=require('node:child_process');"
+    + "const c=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'});"
+    + "console.log(c.pid);setInterval(()=>{},1000);";
+  // Ubijen unuk moze ostati zombi dok ga init ne pokupi; zombi se ne racuna kao ziv.
+  const alive = (pid: number) => {
+    try { process.kill(pid, 0); } catch { return false; }
+    try { return !/^\d+ \(.*\) Z/.test(readFileSync(`/proc/${pid}/stat`, 'utf8')); } catch { return true; }
+  };
+
+  it.skipIf(process.platform === 'win32')('istek ubija i unuka, ne samo izravno dijete', async () => {
+    const r = await runWithTreeKill(process.execPath, ['-e', grandchildScript], { cwd: process.cwd(), env: process.env, timeoutMs: 700 });
+    expect(r.timedOut).toBe(true);
+    expect(r.status).toBeNull();
+    const pid = Number(r.stdout.trim().split('\n')[0]);
+    expect(Number.isInteger(pid) && pid > 0).toBe(true);
+    await new Promise((res) => setTimeout(res, 300));
+    expect(alive(pid)).toBe(false);
+  }, 15_000);
+
+  it('bez isteka vraca izlaz i kod, ulaz stize do procesa', async () => {
+    const r = await runWithTreeKill(process.execPath, ['-e', "process.stdin.on('data',d=>process.stdout.write(String(d).toUpperCase()));process.stdin.on('end',()=>process.exit(3))"], {
+      cwd: process.cwd(), env: process.env, input: 'abc', timeoutMs: 10_000,
+    });
+    expect(r).toMatchObject({ status: 3, stdout: 'ABC', timedOut: false });
+  }, 15_000);
 });
