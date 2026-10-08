@@ -9360,12 +9360,11 @@ describe('mutacije: gate preflight i omotac locka', () => {
     // linije obrane na izlazu procesa.
     const mutated = wrapper
       .replace("  process.on('exit', release);\n", '')
-      .replace(
-        '    return code;\n  } finally {\n    release();\n  }',
-        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
-      );
+      .replace('    return code;\n  } finally {\n', '    if (code === 0) release();\n    return code;\n  } finally {\n')
+      .replace('    }\n    release();\n  }', '    }\n    // otpustanje premjesteno na uspjeh\n  }');
     expect(mutated).not.toBe(wrapper);
     expect(mutated).not.toContain("process.on('exit', release)");
+    expect(mutated).toContain('// otpustanje premjesteno na uspjeh');
     expect(releasesOnFailure(mutated)).toBe(false);
   }, 120_000);
 
