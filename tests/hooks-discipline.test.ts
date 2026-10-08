@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { BLOCK_MESSAGE, judgeCpuDiscipline, packageScriptReader, splitCommand } from '../scripts/hooks/cpu-discipline.mjs';
 import { MAX_BLOCKS, counterPath, decideStop, openItems } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
-import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { matcherCovers, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 
 // Stvarne definicije skripti iz package.json: `npm run check` vec ide kroz with-gate-lock, `build` ne.
 const readScript = packageScriptReader(resolve('.'));
@@ -160,9 +160,36 @@ describe('A3 implementer-stop', () => {
 });
 
 describe('registracija u repo .claude/settings.json', () => {
-  it('sva tri hooka su registrirana, uz postojeci tool-guard', () => {
+  it('svi ocekivani hookovi su registrirani, tool-guard i za Supabase MCP apply_migration', () => {
     const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
     expect(missingHookRegistrations(settings)).toEqual([]);
-    expect(JSON.stringify(settings)).toContain('scripts/agents/tool-guard.mjs');
+  });
+
+  it('tool-guard za MCP apply_migration blokira i kad je sesija u poddirektoriju (izravni signal)', () => {
+    const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8')) as {
+      hooks: { PreToolUse: Array<{ matcher?: string; hooks?: Array<{ command?: string }> }> };
+    };
+    const entry = settings.hooks.PreToolUse.find((e) => matcherCovers(String(e.matcher ?? ''), 'mcp__supabase__apply_migration'));
+    const command = entry?.hooks?.[0]?.command ?? '';
+    expect(command).toContain('tool-guard.mjs');
+    const ulaz = JSON.stringify({ tool_name: 'mcp__supabase__apply_migration', tool_input: { name: 'x', query: 'select 1' } });
+    const env = { ...process.env, CLAUDE_PROJECT_DIR: process.cwd() };
+    const poddir = resolve('supabase');
+    const sidreno = spawnSync('sh', ['-c', command], { cwd: poddir, input: ulaz, env, encoding: 'utf8', timeout: 30_000 });
+    expect(sidreno.status).toBe(2);
+    expect(sidreno.stderr).toContain('apply_migration');
+    // Kontrola: stara relativna naredba iz istog poddirektorija ne nalazi skriptu i ne blokira (exit 1, ne 2).
+    const relativno = spawnSync('sh', ['-c', 'node scripts/agents/tool-guard.mjs'], { cwd: poddir, input: ulaz, env, encoding: 'utf8', timeout: 30_000 });
+    expect(relativno.status).not.toBe(2);
+  });
+
+  it('matcher po semantici Claude Code: popis tocnih imena ili regex', () => {
+    expect(matcherCovers('Bash|PowerShell', 'Bash')).toBe(true);
+    expect(matcherCovers('Bash|PowerShell', 'mcp__Supabase__apply_migration')).toBe(false);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__claude_ai_Supabase__apply_migration')).toBe(true);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__supabase__apply_migration')).toBe(true);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__Supabase__list_tables')).toBe(false);
+    // Stari matcher iz prve verzije PR-a #326 nije vidio lokalno ime servera malim slovima.
+    expect(matcherCovers('mcp__.*Supabase.*__apply_migration', 'mcp__supabase__apply_migration')).toBe(false);
   });
 });
