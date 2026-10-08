@@ -50,7 +50,7 @@ HEAD, pa u dijeljenom stablu mjeri i tudje necommitane izmjene i laze u oba smje
 - Ishod se cita iz retka `Test Files`, NIKAD iz izlaznog koda (pozadinski zadatak zavrsi s
   "exited with code 0" i kad je vitest crven).
 - Log u vlastitu datoteku (`> gate.log 2>&1`); omotac cuva samo rep pa se izgubi KOJE su pale.
-- Stroj: 8 GB, 4 jezgre, suite 420 datoteka. Ispod ~1 GB slobodnog RAM-a ne pokrecu se testovi.
+- Stroj: 16 GB, 4 niti (izmjereno 2026-10-08), suite 714 datoteka. Ispod ~1 GB slobodnog RAM-a ne pokrecu se testovi.
   Nula FAIL redaka + nema sazetka + npm 1 = iscrpljen resurs, ne regresija. Kad stroj nije miran,
   dokaz se seli na CI.
 

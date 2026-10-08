@@ -254,17 +254,209 @@ function judgeSingleCommand(tokens) {
 }
 
 /**
+ * Supabase MCP alati koji samo citaju. Sve ostalo se odbija (fail-closed): nepoznat ili nov alat
+ * (npr. `create_edge_function_secret`) ne smije proci samo zato sto ga popis zabrana ne zna.
+ * Usporedba je po zadnjem dijelu imena, jer isti alat dolazi kao `mcp__Supabase__list_tables`
+ * (claude.ai konektor) i `mcp__claude_ai_Supabase__list_tables` (lokalni CLI). `execute_sql` ima
+ * zasebnu presudu nize.
+ */
+const SUPABASE_MCP_READ_TOOLS = Object.freeze(new Set([
+  'list_tables',
+  'list_extensions',
+  'list_migrations',
+  'list_edge_functions',
+  'get_edge_function',
+  'list_branches',
+  'list_projects',
+  'get_project',
+  'list_organizations',
+  'get_organization',
+  'get_logs',
+  'query_logs',
+  'get_advisors',
+  'get_project_url',
+  'get_anon_key',
+  'get_publishable_keys',
+  'generate_typescript_types',
+  'search_docs',
+  'list_storage_buckets',
+  'get_storage_config',
+]));
+
+/**
+ * Rijeci koje znace pisanje, zakljucavanje ili izvrsavanje. Trazi se cijela rijec u kodu nakon
+ * `stripSqlNonCode`, pa `created_at` ili 'delete' u literalu ne okidaju. Lazno pozitivan ishod (npr.
+ * stupac imena `comment`) samo odbija citanje.
+ */
+const SQL_WRITE_RE = /\b(insert|update|delete|merge|upsert|truncate|drop|alter|create|grant|revoke|comment|vacuum|reindex|cluster|copy|call|do|refresh|lock|share|into|analyze|analyse|reassign|import|security|set|reset|discard|notify|listen|prepare|execute|begin|commit|rollback|savepoint|checkpoint|load)\b/i;
+
+/**
+ * Pozivi oblika `ime(` dopusteni u upitu koji samo cita: SQL kljucne rijeci koje stoje ispred
+ * zagrade i mali skup cistih funkcija. Svaki drugi poziv se odbija, jer funkcija moze imati
+ * nuspojavu (`pg_notify`, `pg_advisory_lock`, `set_config`, vlastiti RPC). Ime u navodnicima
+ * postaje `qid` i nije na popisu.
+ */
+const SQL_SAFE_CALLS = Object.freeze(new Set([
+  'select', 'from', 'join', 'in', 'exists', 'any', 'all', 'some', 'as', 'on', 'where', 'and', 'or',
+  'not', 'when', 'then', 'else', 'case', 'by', 'over', 'filter', 'within', 'values', 'array', 'row',
+  'using', 'lateral', 'between', 'is', 'distinct', 'union', 'intersect', 'except', 'with', 'having',
+  'limit', 'offset', 'cast', 'extract', 'coalesce', 'nullif', 'greatest', 'least',
+  'count', 'sum', 'avg', 'min', 'max', 'bool_and', 'bool_or', 'array_agg', 'string_agg', 'json_agg',
+  'jsonb_agg', 'lower', 'upper', 'length', 'char_length', 'trim', 'substring', 'replace', 'round',
+  'abs', 'floor', 'ceil', 'now', 'date_trunc', 'date_part', 'to_char', 'to_date', 'age',
+  'jsonb_array_length', 'jsonb_typeof', 'jsonb_build_object', 'json_build_object', 'row_number',
+  'rank', 'dense_rank', 'lag', 'lead', 'pg_size_pretty', 'pg_total_relation_size', 'pg_relation_size',
+]));
+
+/** Prva rijec naredbe koja samo cita. `EXPLAIN ANALYZE` izvrsava upit pa ga odbija SQL_WRITE_RE. */
+const SQL_READ_START_RE = /^(select|with|show|explain)\b/;
+
+/**
+ * Jedan prolaz slijeva nadesno, kao PostgreSQL leksik: komentari (`--`, ugnijezdeni slash-zvjezdica),
+ * `$tag$...$tag$`, `E'...'` s backslash escapeom, `'...'` s `''` i `"..."` identifikatori. Literali i
+ * komentari postaju razmak, identifikator u navodnicima `qid`. Redoslijed je bitan: odvojeni
+ * regexi (prvo komentari, pa literali) sakriju naredbu iza `'--'` ili `E'\''`.
+ * @param {string} sql
+ * @returns {{code: string, unterminated: boolean}}
+ */
+export function stripSqlNonCode(sql) {
+  let out = '';
+  let i = 0;
+  const n = sql.length;
+  while (i < n) {
+    const c = sql[i];
+    const next = sql[i + 1];
+    if (c === '-' && next === '-') {
+      const end = sql.indexOf('\n', i);
+      if (end === -1) return { code: out, unterminated: false };
+      out += ' ';
+      i = end + 1;
+      continue;
+    }
+    if (c === '/' && next === '*') {
+      let depth = 1;
+      i += 2;
+      while (i < n && depth > 0) {
+        if (sql[i] === '/' && sql[i + 1] === '*') { depth += 1; i += 2; continue; }
+        if (sql[i] === '*' && sql[i + 1] === '/') { depth -= 1; i += 2; continue; }
+        i += 1;
+      }
+      if (depth > 0) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '$') {
+      const tag = /^\$([A-Za-z_][A-Za-z_0-9]*)?\$/.exec(sql.slice(i));
+      if (tag) {
+        const close = sql.indexOf(tag[0], i + tag[0].length);
+        if (close === -1) return { code: out, unterminated: true };
+        out += ' ';
+        i = close + tag[0].length;
+        continue;
+      }
+    }
+    const prev = i > 0 ? sql[i - 1] : '';
+    const eString = (c === 'e' || c === 'E') && next === "'" && !/[A-Za-z0-9_$]/.test(prev);
+    if (eString || c === "'") {
+      i += eString ? 2 : 1;
+      let closed = false;
+      while (i < n) {
+        if (eString && sql[i] === '\\') { i += 2; continue; }
+        if (sql[i] === "'") {
+          if (sql[i + 1] === "'") { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '"') {
+      i += 1;
+      let closed = false;
+      while (i < n) {
+        if (sql[i] === '"') {
+          if (sql[i + 1] === '"') { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' qid ';
+      continue;
+    }
+    out += c;
+    i += 1;
+  }
+  return { code: out, unterminated: false };
+}
+
+/**
+ * Razlog zbog kojeg `execute_sql` upit nije siguran za citanje, ili `null` kad jest. Ovo je druga
+ * razina; jamstvo daje tek konektor s `read_only=true` (izvrsavanje pod korisnikom baze koji samo cita).
+ * @param {string} query
+ * @returns {string | null}
+ */
+export function sqlReadOnlyProblem(query) {
+  const { code, unterminated } = stripSqlNonCode(query);
+  if (unterminated) return 'nezatvoren literal, komentar ili identifikator';
+  const body = code.trim().replace(/;\s*$/, '').toLowerCase();
+  if (body.length === 0) return 'prazan upit';
+  if (body.includes(';')) return 'vise naredbi';
+  if (!SQL_READ_START_RE.test(body)) return 'naredba ne pocinje sa SELECT, WITH, SHOW ili EXPLAIN';
+  const write = body.match(SQL_WRITE_RE);
+  if (write) return `sadrzi "${write[1]}"`;
+  for (const call of body.matchAll(/([a-z_][a-z0-9_$]*)\s*\(/g)) {
+    if (!SQL_SAFE_CALLS.has(call[1])) return `poziva funkciju "${call[1]}"`;
+  }
+  return null;
+}
+
+/**
+ * Presuda za Supabase MCP alat. `null` znaci da alat nije Supabase MCP i odlucuje ostatak garda.
+ * @param {string} toolNameLower
+ * @param {Record<string, unknown> | undefined} toolInput
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+export function judgeSupabaseMcp(toolNameLower, toolInput) {
+  if (!toolNameLower.startsWith('mcp__') || !toolNameLower.includes('supabase')) return null;
+  const name = toolNameLower.split('__').pop() ?? '';
+  if (name === 'execute_sql') {
+    const query = toolInput && typeof toolInput.query === 'string' ? toolInput.query : '';
+    const problem = sqlReadOnlyProblem(query);
+    if (problem) {
+      return {
+        allow: false,
+        reason: `Supabase MCP execute_sql dopusta samo jednu naredbu koja cita (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; upit: ${problem}. Promjena sheme ide kroz migraciju i supabase db push, promjena podataka kroz vlasnika. Puno jamstvo daje konektor s read_only=true.`,
+      };
+    }
+    return { allow: true, reason: 'Supabase MCP execute_sql: upit oblikom samo cita.' };
+  }
+  if (SUPABASE_MCP_READ_TOOLS.has(name)) return { allow: true, reason: 'Supabase MCP alat samo cita.' };
+  return {
+    allow: false,
+    reason: `Supabase MCP ${name} nije na popisu alata koji samo citaju, pa se odbija. Migracije idu kroz supabase db push, deploy Edge funkcija s dokazom po supabase/CLAUDE.md, a tajne, projekt i grane mijenja samo vlasnik.`,
+  };
+}
+
+/**
  * Cista funkcija bez nuspojava: presuduje smije li se naredba izvrsiti. Ne poziva git/fs; prima
  * samo ime alata i tekst naredbe (za MCP alate poput apply_migration, `command` je izostavljen i
- * odluka se donosi po imenu alata).
+ * odluka se donosi po imenu alata, a za Supabase `execute_sql` po `toolInput.query`).
  *
  * @param {string} toolName - npr. "Bash", "PowerShell", ili ime MCP alata poput
  *   "mcp__claude_ai_Supabase__apply_migration".
  * @param {string | undefined} command - `tool_input.command` za Bash/PowerShell; nedefinirano za
  *   alate bez naredbe u ljusci.
+ * @param {Record<string, unknown>} [toolInput] - cijeli `tool_input`; MCP alati nose argumente ovdje.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command) {
+export function judgeCommand(toolName, command, toolInput) {
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -272,6 +464,8 @@ export function judgeCommand(toolName, command) {
       reason: 'MCP apply_migration nije dopusten. Migracije idu iskljucivo kroz supabase db push --linked.',
     };
   }
+  const supabaseVerdict = judgeSupabaseMcp(toolNameLower, toolInput);
+  if (supabaseVerdict) return supabaseVerdict;
 
   if (typeof command !== 'string' || command.trim().length === 0) {
     return { allow: true, reason: 'Nema naredbe za provjeru, propusteno.' };
@@ -328,7 +522,7 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command);
+    verdict = judgeCommand(toolName, command, payload?.tool_input);
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);
