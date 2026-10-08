@@ -254,17 +254,93 @@ function judgeSingleCommand(tokens) {
 }
 
 /**
+ * Supabase MCP alati koji mijenjaju bazu, Edge funkcije ili projekt mimo dokumentiranog puta
+ * (migracija kroz `supabase db push`, deploy s dokazom po supabase/CLAUDE.md, projekt i grane
+ * samo vlasnik). Usporedba je po sufiksu imena, jer isti alat dolazi kao
+ * `mcp__Supabase__deploy_edge_function` (claude.ai konektor) i
+ * `mcp__claude_ai_Supabase__deploy_edge_function` (lokalni CLI).
+ */
+const SUPABASE_MCP_BLOCKED = Object.freeze([
+  'apply_migration',
+  'deploy_edge_function',
+  'create_branch',
+  'delete_branch',
+  'merge_branch',
+  'rebase_branch',
+  'reset_branch',
+  'create_project',
+  'pause_project',
+  'restore_project',
+]);
+
+/**
+ * Kljucne rijeci i funkcije koje znace pisanje ili promjenu stanja. Trazi se cijela rijec nakon
+ * uklanjanja komentara, string literala i navodnicima omedjenih identifikatora, pa `created_at` ili
+ * 'delete' u tekstu ne okidaju. Lazno pozitivan ishod (npr. stupac imena `comment`) samo odbija
+ * citanje, sto je prihvatljivo: gard je fail-closed za `execute_sql`. Funkcija s nuspojavom koju
+ * ovaj popis ne zna (npr. vlastiti RPC) nije pokrivena; zato konektor treba i `read_only=true`.
+ */
+const SQL_WRITE_RE = /\b(insert|update|delete|merge|upsert|truncate|drop|alter|create|grant|revoke|comment|vacuum|reindex|cluster|copy|call|do|refresh|lock|reassign|import|security|set|reset|discard|notify|prepare|execute|set_config|setval|nextval|pg_terminate_backend|pg_cancel_backend|pg_reload_conf|dblink\w*|lo_\w+)\b/i;
+
+/**
+ * Uklanja iz SQL-a sve sto nije kod: komentare, '...' literale (s '' unutra), $tag$...$tag$ tijela i
+ * "..." identifikatore. Ostaje kostur nad kojim se traze kljucne rijeci.
+ * @param {string} sql
+ * @returns {string}
+ */
+export function stripSqlNonCode(sql) {
+  return sql
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/--[^\n]*/g, ' ')
+    .replace(/\$([A-Za-z_]\w*)?\$[\s\S]*?\$\1\$/g, ' ')
+    .replace(/'(?:[^']|'')*'/g, ' ')
+    .replace(/"(?:[^"]|"")*"/g, ' ');
+}
+
+/**
+ * Presuda za Supabase MCP alat. `null` znaci da alat nije Supabase MCP i odlucuje ostatak garda.
+ * @param {string} toolNameLower
+ * @param {Record<string, unknown> | undefined} toolInput
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+export function judgeSupabaseMcp(toolNameLower, toolInput) {
+  if (!toolNameLower.startsWith('mcp__') || !toolNameLower.includes('supabase')) return null;
+  const blocked = SUPABASE_MCP_BLOCKED.find((name) => toolNameLower.endsWith(`__${name}`));
+  if (blocked) {
+    return {
+      allow: false,
+      reason: `Supabase MCP ${blocked} nije dopusten agentu: migracije idu kroz supabase db push, deploy Edge funkcija s dokazom po supabase/CLAUDE.md, a projekt i grane mijenja samo vlasnik.`,
+    };
+  }
+  if (toolNameLower.endsWith('__execute_sql')) {
+    const query = toolInput && typeof toolInput.query === 'string' ? toolInput.query : '';
+    if (query.trim().length === 0) {
+      return { allow: false, reason: 'Supabase MCP execute_sql bez upita: nepoznato se odbija.' };
+    }
+    const hit = stripSqlNonCode(query).match(SQL_WRITE_RE);
+    if (hit) {
+      return {
+        allow: false,
+        reason: `Supabase MCP execute_sql smije samo citati; upit sadrzi "${hit[1]}". Promjena sheme ide kroz migraciju i supabase db push, promjena podataka kroz vlasnika.`,
+      };
+    }
+  }
+  return { allow: true, reason: 'Supabase MCP alat samo cita.' };
+}
+
+/**
  * Cista funkcija bez nuspojava: presuduje smije li se naredba izvrsiti. Ne poziva git/fs; prima
  * samo ime alata i tekst naredbe (za MCP alate poput apply_migration, `command` je izostavljen i
- * odluka se donosi po imenu alata).
+ * odluka se donosi po imenu alata, a za Supabase `execute_sql` po `toolInput.query`).
  *
  * @param {string} toolName - npr. "Bash", "PowerShell", ili ime MCP alata poput
  *   "mcp__claude_ai_Supabase__apply_migration".
  * @param {string | undefined} command - `tool_input.command` za Bash/PowerShell; nedefinirano za
  *   alate bez naredbe u ljusci.
+ * @param {Record<string, unknown>} [toolInput] - cijeli `tool_input`; MCP alati nose argumente ovdje.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command) {
+export function judgeCommand(toolName, command, toolInput) {
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -272,6 +348,8 @@ export function judgeCommand(toolName, command) {
       reason: 'MCP apply_migration nije dopusten. Migracije idu iskljucivo kroz supabase db push --linked.',
     };
   }
+  const supabaseVerdict = judgeSupabaseMcp(toolNameLower, toolInput);
+  if (supabaseVerdict) return supabaseVerdict;
 
   if (typeof command !== 'string' || command.trim().length === 0) {
     return { allow: true, reason: 'Nema naredbe za provjeru, propusteno.' };
@@ -328,7 +406,7 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command);
+    verdict = judgeCommand(toolName, command, payload?.tool_input);
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);

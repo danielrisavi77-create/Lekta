@@ -317,6 +317,7 @@ import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRea
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
+import { supabaseMcpGuardProblems, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -11243,14 +11244,29 @@ describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', ()
   it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
     const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
     expect(weakMachineProblems(samoJezgre)).toEqual([
+      'laptop (4 niti, 8 GB): postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
       '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
     ]);
   });
 
-  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
-    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+  it('mutant: stroga granica jezgri (< 2 umjesto <= 2) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 2 ? 3 : input?.cpus });
     expect(weakMachineProblems(stroga)).toEqual([
-      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+      'tocno 2 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stara granica od 4 jezgre (laptop 16 GB na jednom radniku) se hvata', () => {
+    const stara: Fn = (input) => {
+      const presuda = weakMachineWorkerEnv(input);
+      const cpus = input?.cpus;
+      const ci = input?.env?.CI;
+      const vecPostavljen = input?.env?.VITEST_MAX_THREADS;
+      return presuda ?? (typeof cpus === 'number' && cpus <= 4 && !ci && !vecPostavljen ? { VITEST_MAX_THREADS: '1' } : null);
+    };
+    expect(weakMachineProblems(stara)).toEqual([
+      'laptop (4 niti, 16 GB): ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+      '3 jezgre uz 16 GB: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
     ]);
   });
 
@@ -12659,5 +12675,65 @@ describe('mutations: actual verification focus restoration', () => {
   ]) it(`actual focus guard removal fails: ${before}`, async () => {
     expect(verifyBadgesSource()).toContain(before);
     expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * SUPABASE MCP GARD (odluka vlasnika 2026-10-08). Dva kvara koja bi gard ucinila ukrasom:
+ *  (a) matcher hooka bez MCP alata: presuda se nikad ne pozove (stanje do 2026-10-08);
+ *  (b) detektor pisanja kojem fali kljucna rijec ili koji ne uklanja literale.
+ */
+describe('mutacije: Supabase MCP gard u tool-guard.mjs', () => {
+  const settingsText = readTextLf(resolve(process.cwd(), '.claude/settings.json'));
+  const settings = JSON.parse(settingsText);
+
+  it('BASELINE: stvarna presuda i stvarna registracija su ciste', async () => {
+    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
+    expect(supabaseMcpGuardProblems(judgeCommand)).toEqual([]);
+    expect(toolGuardMatcherProblems(settings)).toEqual([]);
+  });
+
+  it('mutant: matcher samo Bash|PowerShell (stari) se hvata', () => {
+    const mutant = JSON.parse(settingsText.replace('Bash|PowerShell|mcp__.*[Ss]upabase.*', 'Bash|PowerShell'));
+    expect(toolGuardMatcherProblems(mutant)).toEqual([
+      'tool-guard matcher ne pokriva mcp__Supabase__apply_migration',
+      'tool-guard matcher ne pokriva mcp__Supabase__execute_sql',
+      'tool-guard matcher ne pokriva mcp__claude_ai_Supabase__deploy_edge_function',
+    ]);
+  });
+
+  it('mutant: presuda bez Supabase grane (samo stari apply_migration) se hvata', async () => {
+    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
+    const stari = (tool: string, command?: string) =>
+      tool.toLowerCase().includes('apply_migration')
+        ? { allow: false, reason: 'blokirano' }
+        : judgeCommand(tool.replace(/supabase/gi, 'nesto'), command);
+    const problems = supabaseMcpGuardProblems(stari);
+    expect(problems).toContain('deploy_edge_function (konektor): dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('execute_sql insert: dobiveno allow=true, ocekivano allow=false');
+  });
+
+  it('mutant: detektor koji ne uklanja literale odbija citanje', async () => {
+    const { stripSqlNonCode, judgeSupabaseMcp } = await import('../scripts/agents/tool-guard.mjs');
+    expect(stripSqlNonCode("select 'delete'")).not.toContain('delete');
+    const bezLiterala = (tool: string, _command?: string, input?: Record<string, unknown>) => {
+      const query = typeof input?.query === 'string' ? input.query : '';
+      if (tool.toLowerCase().endsWith('__execute_sql') && /\bdelete\b/i.test(query)) return { allow: false, reason: 'x' };
+      return judgeSupabaseMcp(tool.toLowerCase(), input) ?? { allow: true, reason: 'x' };
+    };
+    expect(supabaseMcpGuardProblems(bezLiterala)).toEqual([
+      'execute_sql rijec delete samo u literalu: dobiveno allow=false, ocekivano allow=true',
+    ]);
+  });
+
+  it('mutant: detektor bez kljucne rijeci delete se hvata', async () => {
+    const { judgeSupabaseMcp } = await import('../scripts/agents/tool-guard.mjs');
+    const bezDelete = (tool: string, _command?: string, input?: Record<string, unknown>) => {
+      const query = typeof input?.query === 'string' ? input.query.replace(/\bdelete\b/gi, 'select') : input?.query;
+      return judgeSupabaseMcp(tool.toLowerCase(), { ...input, query }) ?? { allow: true, reason: 'x' };
+    };
+    expect(supabaseMcpGuardProblems(bezDelete)).toEqual([
+      'execute_sql delete u CTE-u: dobiveno allow=true, ocekivano allow=false',
+    ]);
   });
 });
