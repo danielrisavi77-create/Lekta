@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { buildSourceCrossCheckHtml } from '../src/ui/source-cross-check-view';
 import type { SourceCrossCheckResult } from '../src/analysis/source-cross-check';

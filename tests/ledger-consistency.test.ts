@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Lagani guard (AUD-44): broj zapisa u data/manifest.json za VERIFICATION_LEDGER
  * mora se slagati sa stvarnim brojem zapisa u data/verification/ledger.json.

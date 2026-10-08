@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad PODRIJETLOM commitanih fixtura: sutnja se ne smije citati kao tvrdnja.
  *

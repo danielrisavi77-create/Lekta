@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { DOMAINS, NUMBER_UNIT_RE, detectDomain, genericFallbackKeywords, extractUniversalClaims } from '../src/analysis/domains';
 

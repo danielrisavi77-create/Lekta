@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Naslovnica kao vlastita sekcija UPOZORAVA, ne obara provjeru margina.
  *

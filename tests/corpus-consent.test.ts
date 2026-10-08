@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Kanal A: zasebna privola za prilog korpusu (src/legal/corpus-consent.ts).
  *

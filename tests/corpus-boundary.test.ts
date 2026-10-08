@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 5 (Lekta Error Corpus): BOUNDARY slucajevi. Za svaki brojcani prag (velicina, prored,
  * margine, opseg rijeci) dokazujemo da se below/exact/within-tol/above ponasaju tocno kako

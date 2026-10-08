@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test AGR profila (CLAUDE.md golden harness).
  *

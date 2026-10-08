@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za completion ledger (docs/generated/completion-ledger.json), P0-3 u
  * docs/PLAN_POTPUNA_POKRIVENOST.md.

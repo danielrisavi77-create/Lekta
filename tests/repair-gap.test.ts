@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za klasifikaciju "zasto profil nema profilnu repair opciju" (P2-4 u
  * docs/PLAN_POTPUNA_POKRIVENOST.md).

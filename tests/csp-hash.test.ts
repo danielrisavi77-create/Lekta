@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva sinkronizaciju CSP script-src sha256 hasha s jedinom inline skriptom (FOUC prekidac
  * teme u index.html). Ako se skripta promijeni a hash ne, CSP bi blokirao boot teme u
