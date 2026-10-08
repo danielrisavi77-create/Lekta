@@ -292,7 +292,8 @@ To je instanca pravila 2: invarijanta postoji, ali nijedan ulaz nema oblik koji 
 
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
-Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
+Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts` ili domenskoj datoteci
+`tests/gate-mutations-<domena>.test.ts`: podmetnut poznat kvar
 i tvrdnju da ga gard prijavi. Stanje 2026-08-23: 18 mutacija, 18 uhvaceno.
 
 Razlog je izmjeren, ne nacelan. `paper-size` izvod je IGNORIRAO vrijednost i uvijek trazio A4, pa bi
