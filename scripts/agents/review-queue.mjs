@@ -10,9 +10,10 @@
 import { spawnSync } from 'node:child_process';
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { resolveProviderInvocation } from './cli.mjs';
 import { setTimeout as sleep } from 'node:timers/promises';
 import {
-  buildCommand, buildPrompt, codexModel, extractGrokText, forbiddenEnv, formatComment, GROK_MODEL,
+  buildCommand, buildPrompt, shimInvocation, codexModel, extractGrokText, forbiddenEnv, formatComment, GROK_MODEL,
   labelForProvider, MAX_FAILURES, pickDeltaBase, reviewKey, selectNext, touchesProtected, truncateDiff,
 } from './review-queue-core.mjs';
 
@@ -80,7 +81,8 @@ function review(pr, provider) {
     writeFileSync(promptFile, prompt);
     const cmd = buildCommand({ provider, model, worktree: wt, promptFile, outFile });
     log(`PR #${pr.number} ${provider} ${model} delta ${base.slice(0, 7)}..${head.slice(0, 7)} (${diff.length} B)`);
-    const r = run(cmd.command, cmd.args, { cwd: wt, input: cmd.stdin ? prompt : undefined, timeout: 30 * 60 * 1000, killSignal: 'SIGKILL' });
+    const inv = shimInvocation(cmd.command, cmd.args, { platform: process.platform, resolved: resolveProviderInvocation(cmd.command) });
+    const r = run(inv.command, inv.args, { cwd: wt, input: cmd.stdin ? prompt : undefined, timeout: 30 * 60 * 1000, killSignal: 'SIGKILL' });
     if (r.status !== 0) throw new Error(`${provider} izasao sa ${r.status}: ${(r.stderr || '').trim().slice(0, 300)}`);
     const text = provider === 'grok' ? extractGrokText(r.stdout) : (existsSync(outFile) ? readFileSync(outFile, 'utf8') : r.stdout);
     const bodyFile = join(STATE_DIR, `comment-pr${pr.number}-${provider}.md`);

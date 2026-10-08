@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  buildCommand, buildPrompt, codexModel, extractGrokText, forbiddenEnv, formatComment, pickDeltaBase,
+  buildCommand, buildPrompt, codexModel, extractGrokText, shimInvocation, stripNarration, forbiddenEnv, formatComment, pickDeltaBase,
   providersForLabels, sanitizeOutput, selectNext, touchesProtected, truncateDiff, MAX_FAILURES,
 } from '../scripts/agents/review-queue-core.mjs';
 
@@ -104,6 +104,7 @@ describe('prompt, diff, komentar', () => {
   });
   it('extractGrokText cita polje result ili vraca sirovo', () => {
     expect(extractGrokText('{"result":"nalaz"}')).toBe('nalaz');
+    expect(extractGrokText('{"text":"Pogledat cu diff.## Nalazi\\n1. a.ts:3"}')).toBe('## Nalazi\n1. a.ts:3');
     expect(extractGrokText('goli tekst')).toBe('goli tekst');
   });
 });
@@ -112,5 +113,18 @@ describe('forbiddenEnv', () => {
   it('odbija API kljuceve, pusta cistu okolinu', () => {
     expect(forbiddenEnv({ XAI_API_KEY: 'x' })).toEqual(['XAI_API_KEY']);
     expect(forbiddenEnv({ OPENAI_API_KEY: '' , PATH: 'p' })).toEqual([]);
+  });
+});
+
+describe('stripNarration i shimInvocation', () => {
+  it('odsijeca naraciju po zadnjem markeru, bez markera ne dira tekst', () => {
+    expect(stripNarration('uvod## Nalazi\nx')).toBe('## Nalazi\nx');
+    expect(stripNarration('## Nalazi a\n## Nalazi b')).toBe('## Nalazi b');
+    expect(stripNarration('bez markera')).toBe('bez markera');
+  });
+  it('windows ide kroz node ulaznu tocku ili cmd.exe /c, linux nepromijenjeno', () => {
+    expect(shimInvocation('grok', ['a'], { platform: 'linux', resolved: { command: 'grok', argsPrefix: [] } })).toEqual({ command: 'grok', args: ['a'] });
+    expect(shimInvocation('grok', ['a'], { platform: 'win32', resolved: { command: 'node.exe', argsPrefix: ['b.js'] } })).toEqual({ command: 'node.exe', args: ['b.js', 'a'] });
+    expect(shimInvocation('codex', ['a'], { platform: 'win32', resolved: { command: 'codex', argsPrefix: [] } })).toEqual({ command: 'cmd.exe', args: ['/d', '/s', '/c', 'codex.cmd', 'a'] });
   });
 });

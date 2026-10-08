@@ -51,3 +51,8 @@ gh pr edit N --add-label grok-review     # ili codex-review
 ```
 
 Nova runda trazi novu oznaku nakon novog pusha.
+
+## Izmjereno na radnoj stanici
+
+- `grok --output-format json` vraca jedan JSON s kljucem `text`; uz njega dolazi uvodna naracija zalijepljena bez razmaka. Prompt zato trazi da odgovor zavrsi odjeljkom `## Nalazi`, a sve prije zadnjeg markera se odbacuje. `--output-format plain` zna vratiti samo prvi odlomak, pa se ne koristi.
+- Na Windowsu su `grok` i `codex` npm shimovi. Pokretanje bez ljuske ide kroz ulaznu tocku paketa (`resolveProviderInvocation` iz `cli.mjs`), a ako nje nema, kroz `cmd.exe /d /s /c <ime>.cmd`. `gh` se pokrece izravno (obicno je `gh.exe`).
