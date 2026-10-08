@@ -9803,6 +9803,38 @@ describe('mutacije: tool-guard commit cijelog indeksa', () => {
     expect(await presude(izvor.replace(GOLI_COMMIT, ''))).toEqual([true, false, true]);
   });
 
+  /** `stanjeStabla` nad STVARNIM samostalnim klonom; `repo` glumi dijeljeno stablo. */
+  async function klonIzoliran(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync, execFileSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-klon-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const repo = join(dir, 'repo');
+      const g = (args: string[], cwd: string) => execFileSync('git', args, { cwd, windowsHide: true });
+      g(['init', '-q', repo], dir);
+      g(['-c', 'user.email=x@y.z', '-c', 'user.name=T', '-c', 'commit.gpgsign=false', 'commit', '-q', '--allow-empty', '-m', 'prvi'], repo);
+      const klon = join(dir, 'klon');
+      g(['clone', '-q', repo, klon], dir);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.stanjeStabla(${JSON.stringify(klon)}, ${JSON.stringify(repo)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { izoliran: boolean }).izoliran;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline i mutant: samostalni klon izvan dijeljenog korijena je izoliran samo uz provjeru korijena', async () => {
+    const KORIJEN = ' || !dijeljeno, spajanje };';
+    expect(izvor).toContain(KORIJEN);
+    expect(await klonIzoliran(izvor)).toBe(true);
+    expect(await klonIzoliran(izvor.replace(KORIJEN, ', spajanje };'))).toBe(false);
+  });
+
   it('mutant: gard koji ne gada --continue propusta dovrsenje spajanja u dijeljenom stablu', async () => {
     const mutant = izvor.replace(NASTAVAK, "    if (false && hasFlag(args, '--continue')) {\n");
     expect(await presude(mutant)).toEqual([false, true, true]);

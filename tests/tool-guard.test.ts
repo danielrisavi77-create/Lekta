@@ -77,17 +77,20 @@ const WORKTREE_U_SPAJANJU = () => ({ izoliran: true, spajanje: true });
 const NEPOZNATO = () => null;
 
 describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
-  const dopusteno: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null, boolean?]> = [
+  const dopusteno: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null]> = [
     ['merge --continue u vlastitom worktreeju', 'git merge --continue', WORKTREE],
     ['rebase --continue u vlastitom worktreeju', 'git rebase --continue', WORKTREE],
     ['goli commit tijekom spajanja u worktreeju', 'git commit --no-edit', WORKTREE_U_SPAJANJU],
-    ['merge --continue u cloud klonu', 'git merge --continue', DIJELJENO, true],
-    ['goli commit tijekom spajanja u cloud klonu', 'git commit --no-edit', DIJELJENO_U_SPAJANJU, true],
     ['commit s --only i nepoznatim stanjem', 'git commit --only a.ts -m x', NEPOZNATO],
+    ['commit s kratkim -o', 'git commit -o a.ts -m x', DIJELJENO],
+    ['commit s pathspecom iza --', 'git commit -m x -- src/a.ts', DIJELJENO],
   ];
-  const blokirano: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null, boolean?]> = [
+  const blokirano: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null]> = [
     ['goli commit u worktreeju BEZ spajanja', 'git commit -m x', WORKTREE],
-    ['goli commit u cloud klonu BEZ spajanja', 'git commit -m x', DIJELJENO, true],
+    ['goli commit s praznim -- na kraju', 'git commit -m x --', DIJELJENO],
+    ['git.exe commit', 'git.exe commit -m x', DIJELJENO],
+    ['puna putanja do git.exe', '"C:\\Program Files\\Git\\cmd\\git.exe" commit -m x', DIJELJENO],
+    ['PowerShell & git', '& git merge --continue', DIJELJENO_U_SPAJANJU],
     ['merge --continue u dijeljenom stablu', 'git merge --continue', DIJELJENO_U_SPAJANJU],
     ['cherry-pick --continue u dijeljenom stablu', 'git cherry-pick --continue', DIJELJENO_U_SPAJANJU],
     ['goli commit tijekom spajanja u dijeljenom stablu', 'git commit --no-edit', DIJELJENO_U_SPAJANJU],
@@ -99,16 +102,44 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
     ['am --resolved u dijeljenom stablu', 'git am --resolved', DIJELJENO_U_SPAJANJU],
   ];
 
-  for (const [ime, naredba, ispitaj, udaljeno] of dopusteno) {
+  for (const [ime, naredba, ispitaj] of dopusteno) {
     it(`dopusteno: ${ime}`, () => {
-      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj, udaljeno }).allow).toBe(true);
+      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj }).allow).toBe(true);
     });
   }
-  for (const [ime, naredba, ispitaj, udaljeno] of blokirano) {
+  for (const [ime, naredba, ispitaj] of blokirano) {
     it(`blokirano: ${ime}`, () => {
-      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj, udaljeno }).allow).toBe(false);
+      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj }).allow).toBe(false);
     });
   }
+
+  it('--work-tree, --git-dir i PowerShell Set-Location mijenjaju ispitano stablo', () => {
+    const vidjeno: string[] = [];
+    const ispitaj = (dir: string) => {
+      vidjeno.push(dir.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''));
+      return DIJELJENO_U_SPAJANJU();
+    };
+    const o = { cwd: '/wt', ispitaj };
+    expect(judgeCommand('Bash', 'git --work-tree=/dij --git-dir=/dij/.git merge --continue', undefined, o).allow).toBe(false);
+    expect(judgeCommand('Bash', 'git --git-dir /dij/.git merge --continue', undefined, o).allow).toBe(false);
+    expect(judgeCommand('PowerShell', 'Set-Location /dij; git merge --continue', undefined, o).allow).toBe(false);
+    expect(judgeCommand('PowerShell', 'Set-Location -Path /dij2; git merge --continue', undefined, o).allow).toBe(false);
+    expect(judgeCommand('Bash', 'pushd /dij3 && git merge --continue', undefined, o).allow).toBe(false);
+    expect(vidjeno).toEqual(['/dij', '/dij', '/dij', '/dij2', '/dij3']);
+  });
+
+  it('zastavica CLAUDE_CODE_REMOTE ne otvara dijeljeno stablo', () => {
+    // Prije runde 2 pregleda `udaljeno` je cinio svako stablo izoliranim; cloud klon je sad
+    // izoliran po korijenu, pa okolina vise nema utjecaja na presudu.
+    const prije = process.env.CLAUDE_CODE_REMOTE;
+    process.env.CLAUDE_CODE_REMOTE = 'true';
+    try {
+      expect(judgeCommand('Bash', 'git merge --continue', undefined, { ispitaj: DIJELJENO_U_SPAJANJU }).allow).toBe(false);
+    } finally {
+      if (prije === undefined) delete process.env.CLAUDE_CODE_REMOTE;
+      else process.env.CLAUDE_CODE_REMOTE = prije;
+    }
+  });
 
   it('poruka tijekom spajanja NE upucuje na --only, jer ga git odbija', () => {
     const r = judgeCommand('Bash', 'git commit --no-edit', undefined, { ispitaj: DIJELJENO_U_SPAJANJU });
