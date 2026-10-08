@@ -13,6 +13,12 @@ import { resolveMaxWorkers } from './scripts/agents/resolve-max-workers.mjs';
 // config modul za istu putanju u istom procesu).
 export const resolvedMaxWorkers = resolveMaxWorkers(process.env.VITEST_MAX_THREADS);
 
+// Napredak po datoteci (scripts/vitest-progress-reporter.mjs): ukljucuje ga with-gate-lock.mjs kroz
+// LEKTA_GATE_PROGRESS=1, da `check:inner` ostane doslovno isti, a gate pod omotacem pokazuje koliko je ostalo.
+const progressReporters = process.env.LEKTA_GATE_PROGRESS === '1'
+  ? ['default', './scripts/vitest-progress-reporter.mjs']
+  : ['default'];
+
 export default defineConfig({
   // Vitest NE nasljeduje vite.config.ts pa build-flag mora i ovdje; u testovima su
   // dev alati "ukljuceni" (ponasanje kao lokalni dev build).
@@ -22,6 +28,7 @@ export default defineConfig({
     // Gate MORA pasti ako se ne kolektira nijedan test (npr. loše rješavanje globa ili
     // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
     passWithNoTests: false,
+    reporters: progressReporters,
     setupFiles: ['./tests/setup/xml-dom.ts'],
     // Ovaj paket istodobno drži stvarne DOCX ZIP-ove, happy-dom i esbuild procese. Broj radnika
     // je zadano 2 (vidi `resolvedMaxWorkers` iznad), s nadjacavanjem kroz `VITEST_MAX_THREADS`
