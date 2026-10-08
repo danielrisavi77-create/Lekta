@@ -200,9 +200,17 @@ Globalni write ownership NIJE odgovornost ovog messaging sloja. To definira
 
 ## Ugovor reda zadataka
 
-`tasks.json` je jedini statusni registar. `development-plan.md` daje opseg i kriterije T00-T47; T16-T47 su Podplan F,
-koji indeksira vendorani program `docs/agents/plan-do-live-2026-09-12.md`.
-Put je `blocked -> ready -> in_progress -> in_review -> done`. Povratak na `ready` znaci
+Status, prioritet, nositelj i biljeske zadatka zive samo u Linearu (workspace daniel77, projekt
+Lekta; odluka vlasnika 2026-10-08, DAN-79). `tasks.json` je repo-inventar: id, naslov, ovisnosti,
+`workScope` za `task-scope-guard` i kriteriji. `development-plan.md` daje opseg i kriterije T00-T47;
+T16-T47 su Podplan F, koji indeksira vendorani program `docs/agents/plan-do-live-2026-09-12.md`.
+
+PR zadatka ne dira `tasks.json`. Svaka izmjena te datoteke u PR-u zadatka sudarala se s ostalim
+otvorenim PR-ovima nakon svakog spoja i tjerala puni gate ispocetka (2026-10-08 tri puta). Nove
+zadatke, `workScope` i povremeno osvjezen `status` upisuje samo koordinator, skupno, u zasebnom
+PR-u koji ne dira nista drugo. `statusNote` je zamrznut povijesni zapis; tekuce stanje je u Linearu.
+
+Put statusa je `blocked -> ready -> in_progress -> in_review -> done`. Povratak na `ready` znaci
 novi pokusaj nakon pregledane i spremljene prethodne promjene, ne slijepi nastavak preko nje.
 Runner provjerava strukturu, ovisnosti, uloge i uvjete pokretanja; koordinator rucno potvrduje
 prijelaze statusa. Vrijednost `done` sama po sebi nije dokaz da je provjera doista izvedena.
@@ -224,7 +232,7 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 Zamrzavanje novih zadataka uvedeno je i ukinuto istog dana. Kao smjernica ostaje: dok je otvoreno
 8 ili vise PR-ova, koordinator prvo zatvara ili spaja postojece, a tek onda dodjeljuje nove zadatke.
 Vlasnik je 4. 10. zatvorio bez spajanja PR-ove #242, #244, #255, #203, #229, #192, #183, #170, #262,
-#264, #211, #276 i #265; grane ostaju. Statusi zadataka su u `tasks.json`.
+#264, #211, #276 i #265; grane ostaju. Statusi zadataka su od 2026-10-08 u Linearu.
 
 ### Fokus na betu 2026-10-04
 

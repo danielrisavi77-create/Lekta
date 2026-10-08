@@ -7,7 +7,8 @@ relevantna za zahvat.
 
 - Multi-provider routing, billing, context i usage: `docs/agents/ORCHESTRATION.md`.
 - Detaljne projektne invarijante i povijesni razlozi: `docs/agents/PROJECT_RULES.md`.
-- Red zadataka: `docs/agents/tasks.json`; kriteriji: `docs/agents/development-plan.md`.
+- Status zadataka: Linear (daniel77, projekt Lekta). Inventar: `docs/agents/tasks.json`, koji PR
+  zadatka ne dira; kriteriji: `docs/agents/development-plan.md`.
 - Repair: `src/repair/CLAUDE.md`.
 - Citati: `src/citations/CLAUDE.md`.
 - DOCX/OOXML: `src/docx/CLAUDE.md`.
