@@ -9768,7 +9768,7 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
 describe('mutacije: tool-guard commit cijelog indeksa', () => {
   const izvor = readFileSync(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
   const GOLI_COMMIT = '      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);\n';
-  const NASTAVAK = "    if (NASTAVCI_SPAJANJA.has(sub) && hasFlag(args, '--continue')) {\n";
+  const NASTAVAK = "    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {\n";
 
   async function presude(source: string): Promise<boolean[]> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');

@@ -107,28 +107,33 @@ function isPathInsideAllowedRoots(rawPath) {
  * Preneseno iz `~/.claude/hooks/lekta-git-guard.mjs` (2026-10-08), da pravilo vrijedi i u cloud
  * sesijama i na svakoj radnoj stanici, ne samo na stroju gdje je ta datoteka bila ozicena.
  */
-const NASTAVCI_SPAJANJA = new Set(['merge', 'rebase', 'cherry-pick', 'revert']);
+const NASTAVCI_SPAJANJA = new Set(['merge', 'rebase', 'cherry-pick', 'revert', 'am']);
 
 /**
  * Cinjenicno stanje stabla u kojem bi git radio: `{ izoliran, spajanje }`, ili `null` kad se ne
- * moze utvrditi. Povezani worktree ima `--git-dir` razlicit od `--git-common-dir`; u glavnom stablu
- * su isti. Spajanje se cita iz sekvencerskih tragova, istog izvora iz kojeg ga cita i sam git.
+ * moze utvrditi. Povezani worktree ima `--git-dir` razlicit od `--git-common-dir`. Samostalni klon
+ * izvan dijeljenog stabla (CLAUDE.md: "vlastiti izolirani worktree ili clone") ima ih iste, pa se
+ * prepoznaje po korijenu: dijeljeno je samo stablo ciji je korijen `dijeljeniKorijen`. Spajanje se
+ * cita iz sekvencerskih tragova, istog izvora iz kojeg ga cita i sam git.
  * @param {string} dir
+ * @param {string} [dijeljeniKorijen]
  * @returns {{izoliran: boolean, spajanje: boolean} | null}
  */
-export function stanjeStabla(dir) {
+export function stanjeStabla(dir, dijeljeniKorijen = REPO_ROOT) {
   if (!dir || !existsSync(dir)) return null;
-  const r = spawnSync('git', ['rev-parse', '--git-dir', '--git-common-dir'], {
+  const r = spawnSync('git', ['rev-parse', '--git-dir', '--git-common-dir', '--show-toplevel'], {
     cwd: dir, encoding: 'utf8', windowsHide: true, timeout: 5000,
   });
   if (r.status !== 0 || !r.stdout) return null;
-  const [gitDir, commonDir] = r.stdout.trim().split(/\r?\n/).map((x) => x.trim());
-  if (!gitDir || !commonDir) return null;
+  const [gitDir, commonDir, vrh] = r.stdout.trim().split(/\r?\n/).map((x) => x.trim());
+  if (!gitDir || !commonDir || !vrh) return null;
   const g = resolve(dir, gitDir);
   const c = resolve(dir, commonDir);
   const spajanje = ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-merge', 'rebase-apply']
     .some((trag) => existsSync(join(g, trag)));
-  return { izoliran: g !== c, spajanje };
+  const normaliziraj = (/** @type {string} */ p) => resolve(p).replace(/\\/g, '/').replace(/\/+$/, '').toLowerCase();
+  const dijeljeno = normaliziraj(vrh) === normaliziraj(dijeljeniKorijen);
+  return { izoliran: g !== c || !dijeljeno, spajanje };
 }
 
 /**
@@ -143,7 +148,7 @@ export function stanjeStabla(dir) {
  * FAIL-CLOSED samo ovdje: kad se stanje ne moze utvrditi, odbija i to kaze, jer bi bez spajanja
  * naredba ionako bila odbijena. Vlastita greska hooka i dalje propusta (vidi `main`).
  * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null), udaljeno: boolean}} okolina
- * @param {boolean} nastavak - `<merge|rebase|cherry-pick|revert> --continue`
+ * @param {boolean} nastavak - `<merge|rebase|cherry-pick|revert|am> --continue`
  * @returns {{allow: boolean, reason: string} | null}
  */
 function judgeWholeIndexCommit(okolina, nastavak) {
@@ -191,8 +196,24 @@ function judgeSingleCommand(tokens, okolina) {
   const head = tokens[0].toLowerCase();
 
   if (head === 'git') {
-    const sub = (tokens[1] ?? '').toLowerCase();
-    const args = tokens.slice(2);
+    // Globalne opcije prije podnaredbe (`git -C <put> commit`, `git -c k=v merge --continue`)
+    // inace bi zaobisle cijeli gard. `-C` mijenja direktorij u kojem git stvarno radi.
+    let i = 1;
+    let gitDir = okolina.dir;
+    while (i < tokens.length && tokens[i].startsWith('-')) {
+      const opcija = tokens[i];
+      if (opcija === '-C' && tokens[i + 1] !== undefined) {
+        gitDir = isAbsolute(tokens[i + 1]) ? tokens[i + 1] : resolve(gitDir, tokens[i + 1]);
+        i += 2;
+      } else if (['-c', '--git-dir', '--work-tree', '--namespace', '--exec-path', '--config-env'].includes(opcija)) {
+        i += 2;
+      } else {
+        i += 1;
+      }
+    }
+    okolina = { ...okolina, dir: gitDir };
+    const sub = (tokens[i] ?? '').toLowerCase();
+    const args = tokens.slice(i + 1);
 
     if (sub === 'add') {
       if (
@@ -231,7 +252,7 @@ function judgeSingleCommand(tokens, okolina) {
       return null;
     }
 
-    if (NASTAVCI_SPAJANJA.has(sub) && hasFlag(args, '--continue')) {
+    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {
       return judgeWholeIndexCommit(okolina, true);
     }
 

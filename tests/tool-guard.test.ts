@@ -93,6 +93,10 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
     ['goli commit tijekom spajanja u dijeljenom stablu', 'git commit --no-edit', DIJELJENO_U_SPAJANJU],
     ['stanje se ne moze utvrditi', 'git commit -m x', NEPOZNATO],
     ['goli commit iza drugog dijela lanca', 'git status && git commit -m x', DIJELJENO],
+    ['goli commit s globalnom opcijom -C', 'git -C /shared commit -m x', DIJELJENO],
+    ['merge --continue s globalnim -c', 'git -c core.editor=true merge --continue', DIJELJENO_U_SPAJANJU],
+    ['am --continue u dijeljenom stablu', 'git am --continue', DIJELJENO_U_SPAJANJU],
+    ['am --resolved u dijeljenom stablu', 'git am --resolved', DIJELJENO_U_SPAJANJU],
   ];
 
   for (const [ime, naredba, ispitaj, udaljeno] of dopusteno) {
@@ -125,7 +129,8 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
     };
     judgeCommand('Bash', 'cd /a/b && git commit --no-edit', undefined, { cwd: '/session', ispitaj });
     judgeCommand('Bash', 'git commit --no-edit', undefined, { cwd: '/session', ispitaj });
-    expect(vidjeno.map((d) => d.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''))).toEqual(['/a/b', '/session']);
+    judgeCommand('Bash', 'git -C /c/d commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    expect(vidjeno.map((d) => d.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''))).toEqual(['/a/b', '/session', '/c/d']);
   });
 
   it('bez podmetnutog stanja presuda ne poziva git i odbija goli commit', () => {
@@ -149,8 +154,12 @@ describe('stanjeStabla nad STVARNIM gitom', () => {
       const wt = join(baza, 'wt');
       g(['worktree', 'add', '-q', '--detach', wt], repo);
 
-      expect(stanjeStabla(repo)).toEqual({ izoliran: false, spajanje: false });
-      expect(stanjeStabla(wt)).toEqual({ izoliran: true, spajanje: false });
+      // `repo` glumi dijeljeno stablo; povezani worktree i samostalni klon su izolirani.
+      expect(stanjeStabla(repo, repo)).toEqual({ izoliran: false, spajanje: false });
+      expect(stanjeStabla(wt, repo)).toEqual({ izoliran: true, spajanje: false });
+      const klon = join(baza, 'klon');
+      execFileSync('git', ['clone', '-q', repo, klon], { cwd: baza, windowsHide: true });
+      expect(stanjeStabla(klon, repo)).toEqual({ izoliran: true, spajanje: false });
     } finally {
       rmSync(baza, { recursive: true, force: true });
     }
