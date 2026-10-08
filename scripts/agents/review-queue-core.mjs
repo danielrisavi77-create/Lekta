@@ -2,16 +2,16 @@
 // radi git, gh i pokretanje CLI-ja, ovdje su odluke (koja oznaka znaci koji provider, koja je
 // delta, koji model, sto smije u objavu). Testira ga tests/review-queue.test.ts.
 
-export const LABEL_PROVIDER = Object.freeze({ 'grok-review': 'grok', 'codex-review': 'codex' });
-export const PROVIDER_KEY_ENV = Object.freeze({ grok: 'XAI_API_KEY', codex: 'OPENAI_API_KEY' });
-export const SECRET_ENV_PATTERN = /(TOKEN|SECRET|PASSWORD|API_?KEY|CREDENTIAL|^GH_|^GITHUB_|SUPABASE|STRIPE|NPM_CONFIG_|NODE_AUTH)/i;
-export const DIFF_MAX_BYTES = 200_000;
+const LABEL_PROVIDER = Object.freeze({ 'grok-review': 'grok', 'codex-review': 'codex' });
+const PROVIDER_KEY_ENV = Object.freeze({ grok: 'XAI_API_KEY', codex: 'OPENAI_API_KEY' });
+const SECRET_ENV_PATTERN = /(TOKEN|SECRET|PASSWORD|API_?KEY|CREDENTIAL|^GH_|^GITHUB_|SUPABASE|STRIPE|NPM_CONFIG_|NODE_AUTH)/i;
+const DIFF_MAX_BYTES = 200_000;
 export const MAX_FAILURES = 2;
 export const GROK_MODEL = 'grok-4.6';
-export const CODEX_MODEL = 'gpt-6-sol';
-export const CODEX_MODEL_PROTECTED = 'gpt-6.1-sol';
+const CODEX_MODEL = 'gpt-6-sol';
+const CODEX_MODEL_PROTECTED = 'gpt-6.1-sol';
 export const DELTA_FILE = 'REVIEW_DELTA.diff';
-export const FOOTER = '_Savjetodavni pregled drugog providera. Nalaze treba potvrditi dokazom prije akcije._';
+const FOOTER = '_Savjetodavni pregled drugog providera. Nalaze treba potvrditi dokazom prije akcije._';
 
 /** Providere trazene oznakama PR-a, bez duplikata, u redoslijedu oznaka. */
 export function providersForLabels(labels) {
@@ -172,7 +172,7 @@ export function buildCommand({ provider, model, worktree, promptFile, outFile })
 }
 
 /** Zadnji marker u odgovoru: sve prije njega je uvodna naracija providera. */
-export const ANSWER_MARKER = '## Nalazi';
+const ANSWER_MARKER = '## Nalazi';
 
 /** Odsijeca uvodnu naraciju prije zadnjeg markera; bez markera vraca tekst nepromijenjen. */
 export function stripNarration(text) {
