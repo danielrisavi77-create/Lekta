@@ -82,12 +82,14 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
     ['rebase --continue u vlastitom worktreeju', 'git rebase --continue', WORKTREE],
     ['goli commit tijekom spajanja u worktreeju', 'git commit --no-edit', WORKTREE_U_SPAJANJU],
     ['commit s --only i nepoznatim stanjem', 'git commit --only a.ts -m x', NEPOZNATO],
-    ['commit s kratkim -o', 'git commit -o a.ts -m x', DIJELJENO],
     ['commit s pathspecom iza --', 'git commit -m x -- src/a.ts', DIJELJENO],
   ];
   const blokirano: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null]> = [
     ['goli commit u worktreeju BEZ spajanja', 'git commit -m x', WORKTREE],
     ['goli commit s praznim -- na kraju', 'git commit -m x --', DIJELJENO],
+    ['--include s pathspecom commita cijeli indeks', 'git commit --include -- src/a.ts', DIJELJENO],
+    ['-i s pathspecom commita cijeli indeks', 'git commit -i -- src/a.ts', DIJELJENO],
+    ['-o kao vrijednost tudje opcije', 'git commit -m -o', DIJELJENO],
     ['git.exe commit', 'git.exe commit -m x', DIJELJENO],
     ['puna putanja do git.exe', '"C:\\Program Files\\Git\\cmd\\git.exe" commit -m x', DIJELJENO],
     ['PowerShell & git', '& git merge --continue', DIJELJENO_U_SPAJANJU],
@@ -126,6 +128,17 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
     expect(judgeCommand('PowerShell', 'Set-Location -Path /dij2; git merge --continue', undefined, o).allow).toBe(false);
     expect(judgeCommand('Bash', 'pushd /dij3 && git merge --continue', undefined, o).allow).toBe(false);
     expect(vidjeno).toEqual(['/dij', '/dij', '/dij', '/dij2', '/dij3']);
+  });
+
+  it('uz --work-tree i --git-dir stablo odreduje git-dir, ne izolirani work-tree', () => {
+    const vidjeno: string[] = [];
+    const ispitaj = (dir: string) => {
+      vidjeno.push(dir.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''));
+      return DIJELJENO_U_SPAJANJU();
+    };
+    const naredba = 'git --work-tree=/izolirano --git-dir=/dij/.git merge --continue';
+    expect(judgeCommand('Bash', naredba, undefined, { cwd: '/wt', ispitaj }).allow).toBe(false);
+    expect(vidjeno).toEqual(['/dij']);
   });
 
   it('zastavica CLAUDE_CODE_REMOTE ne otvara dijeljeno stablo', () => {
@@ -192,6 +205,21 @@ describe('stanjeStabla nad STVARNIM gitom', () => {
       execFileSync('git', ['clone', '-q', repo, klon], { cwd: baza, windowsHide: true });
       expect(stanjeStabla(klon, repo)).toEqual({ izoliran: true, spajanje: false });
     } finally {
+      rmSync(baza, { recursive: true, force: true });
+    }
+  });
+
+  it('CLAUDE_CODE_REMOTE ne otvara dijeljeno stablo ni na razini stanjeStabla', () => {
+    const baza = mkdtempSync(join(tmpdir(), 'lekta-gard-env-'));
+    const prije = process.env.CLAUDE_CODE_REMOTE;
+    try {
+      const repo = join(baza, 'repo');
+      execFileSync('git', ['init', '-q', repo], { cwd: baza, windowsHide: true });
+      process.env.CLAUDE_CODE_REMOTE = 'true';
+      expect(stanjeStabla(repo, repo)?.izoliran).toBe(false);
+    } finally {
+      if (prije === undefined) delete process.env.CLAUDE_CODE_REMOTE;
+      else process.env.CLAUDE_CODE_REMOTE = prije;
       rmSync(baza, { recursive: true, force: true });
     }
   });

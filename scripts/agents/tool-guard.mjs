@@ -264,11 +264,13 @@ function judgeSingleCommand(tokens, okolina) {
         i += 1;
       }
     }
-    if (radnoStablo !== null) {
-      gitDir = razrijesiPut(radnoStablo, gitDir);
-    } else if (gitDirOpcija !== null) {
+    // Indeks i stanje spajanja zive u git-diru, pa uz oba izolirani `--work-tree` ne smije prekriti
+    // dijeljeni `--git-dir`: git-dir odreduje stablo, work-tree samo kad je sam.
+    if (gitDirOpcija !== null) {
       const gd = razrijesiPut(gitDirOpcija, gitDir);
       gitDir = /[\\/]\.git[\\/]?$/i.test(gd) ? dirname(gd) : gd;
+    } else if (radnoStablo !== null) {
+      gitDir = razrijesiPut(radnoStablo, gitDir);
     }
     okolina = { ...okolina, dir: gitDir };
     const sub = (tokens[i] ?? '').toLowerCase();
@@ -299,9 +301,12 @@ function judgeSingleCommand(tokens, okolina) {
         };
       }
       const hasAllFlag = hasFlag(args, '-a') || hasFlag(args, '--all');
-      // `-o` je kratki `--only`; pathspec iza `--` git commita kao `--only` (samo te putanje).
+      // Pathspec iza `--` git commita kao `--only` (samo te putanje), osim uz `-i`/`--include`
+      // (cijeli indeks PLUS te putanje). Kratki `-o` se namjerno ne priznaje: kao vrijednost tudje
+      // opcije (`-m -o`) ne moze se razlikovati bez punog parsera, a `--only` je propisani oblik.
       const crta = args.indexOf('--');
-      const hasOnly = hasFlag(args, '--only') || args.includes('-o') || (crta >= 0 && crta < args.length - 1);
+      const uzmiIndeks = hasFlag(args, '-i') || hasFlag(args, '--include');
+      const hasOnly = hasFlag(args, '--only') || (!uzmiIndeks && crta >= 0 && crta < args.length - 1);
       if (hasAllFlag && !hasOnly) {
         return {
           allow: false,
