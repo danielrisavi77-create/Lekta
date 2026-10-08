@@ -1,0 +1,187 @@
+# Objava jednim gumbom: klijent (Netlify) i Edge funkcije iz istog commita, zajedno.
+#
+# ZASTO. Klijent i `repair-docx` / `create-checkout` dijele ugovor o privoli (termsVersion). Kad
+# klijent ode van bez tih funkcija, server odbija upload i kupnju s `400 consent_required`
+# (docs/GO_LIVE_REPAIR.md). Do sada su se objavljivali odvojeno i rucno, pa je taj raskorak bio
+# pitanje discipline. Ovdje je redoslijed zapisan i cuva ga tests/release-workflow.test.ts.
+#
+# REDOSLIJED U SVAKOJ OKOLINI, i svaki korak pada prije sljedeceg:
+#   1. commit je na masteru (nikad grana, nikad necommitano stablo);
+#   2. build klijenta, PRIJE ikakvog deploya: pad builda ne ostavlja nista napola objavljeno;
+#   3. samo na stagingu `supabase db push`; zatim provjera da su migracije koje funkcije trebaju
+#      primijenjene na ciljnom projektu (samo citanje, i u produkciji);
+#   4. Edge funkcije, pa odmah klijent: prozor raskoraka je trajanje jednog koraka;
+#   5. smoke nad zivom instalacijom uz --strict-commit: objavljeno je bas ovo izdanje.
+#
+# STAGING PRVI, PRODUKCIJA IZA ODOBRENJA. Job `production` ovisi o zelenom `staging` jobu i trazi
+# GitHub environment `production`, ciji required reviewer (vlasnik) mora kliknuti Approve. Bez
+# tog klika nista ne ide u produkciju. Tajne i refovi su po environmentu, pa staging job ne vidi
+# produkcijski token. Popis postavki: docs/deploy/OBJAVA_JEDNIM_GUMBOM.md.
+#
+# STO OVAJ WORKFLOW NAMJERNO NE RADI: ne primjenjuje migracije na produkciju (`supabase db push`
+# na produkciji ostaje vlasnikov rucni korak, supabase/CLAUDE.md), ne mijenja tajne i ne dira
+# Supabase ni Netlify postavke.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'Tocan commit mastera koji se objavljuje (40 znakova)'
+        required: true
+      functions:
+        description: 'Edge funkcije koje idu uz klijent (razmakom odvojene)'
+        required: true
+        default: 'repair-docx create-checkout'
+      migrations:
+        description: 'Migracije koje moraju biti primijenjene na cilju prije deploya funkcija'
+        required: true
+        default: '0207_monetizacija_v1 0209_repair_limit_po_korisniku'
+
+permissions:
+  contents: read
+
+# Jedna objava odjednom, i nikad otkazana usred: napola objavljen par je upravo kvar koji
+# ovaj workflow postoji sprijeciti.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: staging
+    env:
+      RELEASE_SHA: ${{ inputs.sha }}
+      RELEASE_FUNCTIONS: ${{ inputs.functions }}
+      RELEASE_MIGRATIONS: ${{ inputs.migrations }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+      SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+    steps:
+      - name: Checkout trazenog commita
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Ulazi i commit na masteru
+        run: node scripts/release-inputs.mjs
+
+      - name: Ovisnosti
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: '24'
+          npm-version: 11.11.0
+
+      # Staging build NE trazi dokaz izdanja: dokaz (Tier 2) se pece upravo nad stagingom
+      # (LEKTA_STAGING_ORIGIN u release:check), pa bi tvrdi gate ovdje bio koka i jaje.
+      - name: Build klijenta (staging)
+        env:
+          DEPLOY: '1'
+          LEKTA_REQUIRE_RELEASE_PROOF: '0'
+          LEKTA_SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+          VITE_LEKTA_ENV: staging
+          VITE_LEKTA_SUPABASE_URL: https://${{ vars.SUPABASE_PROJECT_REF }}.supabase.co
+          VITE_LEKTA_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+        run: node scripts/build-production.mjs
+
+      # SAMO STAGING (odluka vlasnika 2026-10-08: staging bez njegovog racunala). Isti put kao
+      # rucni val 0 iz docs/deploy/EDGE_DEPLOY_T20.md: iskljucivo `supabase db push`, nikad MCP
+      # apply_migration. Prvo suhi prolaz u log, pa stvarni. Produkcijske migracije ostaju
+      # vlasnikov rucni korak; gard obara `db push` u produkcijskom jobu.
+      - name: Migracije na staging (db push)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          npx supabase link --project-ref "$PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
+          npx supabase db push --linked --dry-run --password "$SUPABASE_DB_PASSWORD"
+          npx supabase db push --linked --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Migracije primijenjene na cilju
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: node scripts/release-migration-check.mjs --ref "$PROJECT_REF" --migrations "$RELEASE_MIGRATIONS"
+
+      - name: Edge funkcije
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
+
+      - name: Klijent (Netlify)
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+        run: npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA"
+
+      - name: Smoke nad stagingom
+        run: >-
+          node scripts/post-deploy-smoke.mjs --site "$SITE_ORIGIN"
+          --functions "https://$PROJECT_REF.supabase.co/functions/v1"
+          --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    env:
+      RELEASE_SHA: ${{ inputs.sha }}
+      RELEASE_FUNCTIONS: ${{ inputs.functions }}
+      RELEASE_MIGRATIONS: ${{ inputs.migrations }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+      SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+    steps:
+      - name: Checkout trazenog commita
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Ulazi i commit na masteru
+        run: node scripts/release-inputs.mjs
+
+      - name: Ovisnosti
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: '24'
+          npm-version: 11.11.0
+
+      # Isti lanac i iste zastavice kao netlify.toml: tvrdi dokaz izdanja (audit P0-03). Bez
+      # svjezeg docs/generated/RELEASE_PROOF.json za ovo stablo build pada i nista ne ide van.
+      # VITE_LEKTA_SUPABASE_* se namjerno ne postavljaju: produkcija koristi kanonske vrijednosti
+      # iz src/config/deployment.ts, isto kao Netlify build.
+      - name: Build klijenta (produkcija)
+        env:
+          DEPLOY: '1'
+          LEKTA_REQUIRE_RELEASE_PROOF: '1'
+          LEKTA_SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+          VITE_LEKTA_ENV: production
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+        run: node scripts/build-production.mjs
+
+      - name: Migracije primijenjene na cilju
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: node scripts/release-migration-check.mjs --ref "$PROJECT_REF" --migrations "$RELEASE_MIGRATIONS"
+
+      - name: Edge funkcije
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
+
+      - name: Klijent (Netlify)
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+        run: npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA"
+
+      - name: Smoke nad produkcijom
+        run: >-
+          node scripts/post-deploy-smoke.mjs --site "$SITE_ORIGIN"
+          --functions "https://$PROJECT_REF.supabase.co/functions/v1"
+          --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
