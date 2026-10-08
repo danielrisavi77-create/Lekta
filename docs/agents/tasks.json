@@ -846,8 +846,9 @@
       "id": "T86",
       "title": "Pravni tekstovi bete objavljeni (privatnost, uvjeti, tijekom besplatne bete)",
       "status": "in_review",
+      "implementationAgent": "opus",
       "dependsOn": [],
-      "note": "Kriterij 6 T81. Odvojeno od T77 odlukom vlasnika 2026-10-08: beta je besplatna, pa tekstovi bete ne cekaju naplatnu infrastrukturu; naplatne klauzule idu uz placeno izdanje. Tekstovi spojeni kroz PR #299 (2026-10-06); objava na lekta.hr nije potvrdjena (javni build prema Space presjeku 2026-10-07 ostaje 8475228 od 4. 10., prije #299). Z36 rijesen konzervativno (bez jamstva rezultata tijekom bete, docs/decisions/T86_PRAVNI_TEKSTOVI_BETE_NACRT.md). Preostaje objava aktualnog mastera, vlasnikova potvrda zivih uvjeta i privatnosti te pravni pregled za kriterij 6. Status u Linearu (DAN-13) je mjerodavan. Ranije: izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile. 2026-10-04: nacrt u radu (Laya cloud)."
+      "note": "Kriterij 6 T81. Odvojeno od T77 odlukom vlasnika 2026-10-08: beta je besplatna, pa tekstovi bete ne cekaju naplatnu infrastrukturu; naplatne klauzule idu uz placeno izdanje. Tekstovi spojeni kroz PR #299 (2026-10-06); objava na lekta.hr nije potvrdjena (javni build prema Space presjeku 2026-10-07 ostaje 8475228 od 4. 10., prije #299). Z36 rijesen konzervativno (bez jamstva rezultata tijekom bete, docs/decisions/T86_PRAVNI_TEKSTOVI_BETE_NACRT.md). Preostaje uskladjena objava aktualnog mastera (Netlify klijent zajedno s Edge funkcijama repair-docx i create-checkout, jer stari repair-docx odbija TERMS_VERSION 2026-10-05 s consent_required) i vlasnikova potvrda zivih uvjeta i privatnosti za kriterij 6. Pravni pregled ide najkasnije prije placenog lansiranja i ne blokira betu. Linear: DAN-13. Ranije: izvrsitelj c4 nakon M2 (T77). Turnstile odlomak dodan (#226): politika privatnosti 1d, Cloudflare Turnstile. 2026-10-04: nacrt u radu (Laya cloud)."
     },
     {
       "id": "T87",
