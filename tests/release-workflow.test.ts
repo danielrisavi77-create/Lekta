@@ -1,9 +1,9 @@
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { releaseWorkflowProblems } from './helpers/release-workflow';
-import { releaseInputProblems } from '../scripts/release-inputs.mjs';
+import { canonicalProductionRef, releaseInputProblems } from '../scripts/release-inputs.mjs';
 import { migrationKey, missingMigrations, parseArgs } from '../scripts/release-migration-check.mjs';
 
 const root = join(import.meta.dirname, '..');
@@ -20,6 +20,9 @@ function facts(over: Partial<Parameters<typeof releaseInputProblems>[0]> = {}) {
     migrationFiles: readdirSync(join(root, 'supabase', 'migrations')),
     projectRef: 'abcdefghijklmnopqrst',
     siteOrigin: 'https://lekta.hr',
+    netlifySiteId: '1e7526f5-7f0a-480e-8589-d79ee91ff7b0',
+    target: 'staging',
+    canonicalProdRef: 'zrrjttizjyfcxmcpgzml',
     ...over,
   };
 }
@@ -43,9 +46,31 @@ describe('objava jednim gumbom: ulazi (scripts/release-inputs.mjs)', () => {
       .toEqual(['funkcija "repair-docx;" ne postoji u supabase/functions', 'funkcija "rm" ne postoji u supabase/functions', 'funkcija "-rf" ne postoji u supabase/functions', 'funkcija "/" ne postoji u supabase/functions']);
     expect(releaseInputProblems(facts({ functions: '_shared' }))).toEqual(['funkcija "_shared" ne postoji u supabase/functions']);
     expect(releaseInputProblems(facts({ functions: ' ' }))).toEqual(['popis funkcija je prazan']);
-    expect(releaseInputProblems(facts({ migrations: '0299_ne_postoji' }))).toEqual(['migracija "0299_ne_postoji" ne postoji u supabase/migrations']);
+    expect(releaseInputProblems(facts({ functions: 'health', migrations: '0299_ne_postoji' }))).toEqual(['migracija "0299_ne_postoji" ne postoji u supabase/migrations']);
     expect(releaseInputProblems(facts({ projectRef: '' }))).toEqual(['vars.SUPABASE_PROJECT_REF nije postavljen ili nije project ref']);
     expect(releaseInputProblems(facts({ siteOrigin: 'https://lekta.hr/' }))).toEqual(['vars.SITE_ORIGIN nije https origin bez zavrsne kose crte']);
+    expect(releaseInputProblems(facts({ netlifySiteId: 'lekta-staging' }))).toEqual(['vars.NETLIFY_SITE_ID nije Netlify site ID (UUID)']);
+  });
+
+  it('migracija koju funkcija trazi ne smije ispasti iz popisa (Codex na #339)', () => {
+    expect(releaseInputProblems(facts({ migrations: '0207_monetizacija_v1' })))
+      .toEqual(['funkcija "repair-docx" trazi migraciju "0209_repair_limit_po_korisniku", a nije u popisu migracija']);
+    expect(releaseInputProblems(facts({ functions: 'health', migrations: '0207_monetizacija_v1' }))).toEqual([]);
+  });
+
+  it('produkcijski ref mora biti kanonski ref klijenta, staging ne smije biti produkcijski (Codex na #339)', () => {
+    expect(releaseInputProblems(facts({ target: 'production', projectRef: 'zrrjttizjyfcxmcpgzml' }))).toEqual([]);
+    expect(releaseInputProblems(facts({ target: 'production', projectRef: 'bnyemcnsphlitjradrst' })))
+      .toEqual(['produkcijski SUPABASE_PROJECT_REF bnyemcnsphlitjradrst nije kanonski zrrjttizjyfcxmcpgzml']);
+    expect(releaseInputProblems(facts({ target: 'production', canonicalProdRef: null })))
+      .toEqual(['kanonski produkcijski ref nije procitan iz src/config/deployment.ts']);
+    expect(releaseInputProblems(facts({ projectRef: 'zrrjttizjyfcxmcpgzml' }))).toEqual(['staging SUPABASE_PROJECT_REF je produkcijski ref']);
+    expect(releaseInputProblems(facts({ target: '' }))).toEqual(['nepoznat cilj objave ""']);
+  });
+
+  it('kanonski produkcijski ref se cita iz stvarnog src/config/deployment.ts', () => {
+    expect(canonicalProductionRef(readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8'))).toBe('zrrjttizjyfcxmcpgzml');
+    expect(canonicalProductionRef("const X = 'y';")).toBeNull();
   });
 });
 

@@ -40,14 +40,37 @@ describe('mutacije: objava jednim gumbom', () => {
     expect(releaseWorkflowProblems(m)).toEqual(['job production ne ceka zeleni staging']);
   });
 
-  it('klijent prije Edge funkcija (consent_required prozor) obara gard', () => {
+  it('objava klijenta prije Edge funkcija (consent_required prozor) obara gard', () => {
     const edge = stepBlock(SOURCE, 'production', 'Edge funkcije');
-    const client = stepBlock(SOURCE, 'production', 'Klijent (Netlify)');
+    const objava = stepBlock(SOURCE, 'production', 'Klijent objavljen');
     // Koraci su u oba joba doslovno isti, pa se zamjenjuje ZADNJE pojavljivanje (produkcija).
-    const at = SOURCE.lastIndexOf(edge + client);
+    const at = SOURCE.lastIndexOf(edge + objava);
     expect(at).toBeGreaterThan(SOURCE.indexOf('\n  production:\n'));
-    const m = SOURCE.slice(0, at) + client + edge + SOURCE.slice(at + edge.length + client.length);
-    expect(releaseWorkflowProblems(m)).toEqual(['job production: faza klijent dolazi prije faze edge']);
+    const m = SOURCE.slice(0, at) + objava + edge + SOURCE.slice(at + edge.length + objava.length);
+    expect(releaseWorkflowProblems(m)).toEqual(['job production: faza objava dolazi prije faze edge']);
+  });
+
+  it('izravna objava klijenta (--prod) umjesto uploada obara gard', () => {
+    const m = mutiraj('deploy --dir dist --no-build', 'deploy --prod --dir dist --no-build');
+    const p = releaseWorkflowProblems(m);
+    expect(p).toHaveLength(2);
+    expect(p[0]).toBe('job staging nema korak faze upload');
+    expect(p[1]).toMatch(/^job staging mijenja bazu ili tajne: "npx --yes netlify-cli@[\d.]+ deploy --prod/);
+  });
+
+  it('produkcija bez ogranicenja pokretaca obara gard', () => {
+    const m = mutiraj(/(\n  production:\n    needs: staging\n)    if: [^\n]*\n/, '$1');
+    expect(releaseWorkflowProblems(m)).toEqual(['job production ne ogranicava pokretaca na vlasnika']);
+  });
+
+  it('staging koji smije pokrenuti svatko s pravom pisanja obara gard', () => {
+    const m = mutiraj("  staging:\n    if: github.actor == 'danielrisavi77-create' && github.triggering_actor == 'danielrisavi77-create'\n", '  staging:\n');
+    expect(releaseWorkflowProblems(m)).toEqual(['job staging ne ogranicava pokretaca na vlasnika']);
+  });
+
+  it('instalacija Netlify CLI-ja uz token obara gard', () => {
+    const m = mutiraj('      - name: Netlify CLI (instalacija bez tajni)\n', '      - name: Netlify CLI (instalacija bez tajni)\n        env:\n          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}\n');
+    expect(releaseWorkflowProblems(m)).toEqual(['job staging: instalacija Netlify CLI-ja ima env (tajne ne smiju biti uz instalaciju)']);
   });
 
   it('deploy prije builda obara gard', () => {

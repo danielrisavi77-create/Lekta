@@ -14,60 +14,62 @@ drzala samo disciplinom.
 
 1. `scripts/release-inputs.mjs`: commit je 40-znamenkasti SHA, upravo checkoutan i na
    `origin/master`; svaka funkcija postoji u `supabase/functions`; svaka migracija postoji u
-   `supabase/migrations`; `SUPABASE_PROJECT_REF` i `SITE_ORIGIN` su postavljeni.
-2. `node scripts/build-production.mjs`: isti lanac kao `netlify.toml`. Build ide PRIJE ikakvog
+   `supabase/migrations`; migracije koje funkcija trazi (`repair-docx` 0209, `create-checkout`
+   0207) ne smiju ispasti iz popisa; `NETLIFY_SITE_ID` je UUID, `SITE_ORIGIN` https origin;
+   produkcijski `SUPABASE_PROJECT_REF` mora biti kanonski ref iz `src/config/deployment.ts`, a
+   staging ne smije biti produkcijski.
+2. Netlify CLI (`netlify-cli@27.10.2`) se instalira u koraku bez ikakvih tajni.
+3. `node scripts/build-production.mjs`: isti lanac kao `netlify.toml`. Build ide PRIJE ikakvog
    deploya, pa pad builda ne ostavlja nista napola objavljeno. Produkcija trazi tvrdi dokaz izdanja
    (`LEKTA_REQUIRE_RELEASE_PROOF=1`); staging ne, jer se dokaz (Tier 2) pece upravo nad stagingom.
-3. Samo staging: `supabase link` pa `supabase db push --linked`, prvo suhi prolaz u log (odluka
+4. Samo staging: `supabase link` pa `supabase db push --linked`, prvo suhi prolaz u log (odluka
    vlasnika 2026-10-08: staging bez njegovog racunala). Produkcijske migracije i dalje primjenjuje
    vlasnik rucno, a gard obara `db push` u produkcijskom jobu. Zatim
-   `scripts/release-migration-check.mjs`: trazene migracije (zadano 0207 i 0209) su u dnevniku
-   ciljnog projekta, po imenu. Samo citanje kroz Management API. Bez 0209 `repair-docx` vraca 503
-   na svaki popravak (`docs/deploy/EDGE_DEPLOY_T20.md`, val 0). Nepoznato stanje je pad.
-4. `supabase functions deploy <funkcije> --project-ref <ref> --use-api`, pa odmah
-   `netlify-cli@27.10.2 deploy --prod --dir dist --no-build`.
-5. `post-deploy-smoke --require-build-info --expect-commit <sha> --strict-commit`: posluzeno je
-   bas ovo izdanje.
+   `scripts/release-migration-check.mjs`: trazene migracije su u dnevniku ciljnog projekta, po
+   imenu. Samo citanje kroz Management API. Bez 0209 `repair-docx` vraca 503 na svaki popravak
+   (`docs/deploy/EDGE_DEPLOY_T20.md`, val 0). Nepoznato stanje je pad.
+5. Klijent se ucita na Netlify kao neobjavljeni deploy (`deploy` bez `--prod`). Pad uploada
+   zaustavlja objavu prije nego se Edge funkcije promijene.
+6. `supabase functions deploy <funkcije> --project-ref <ref> --use-api`.
+7. Tek tada se ucitani deploy objavi (`api restoreSiteDeploy`), pa klijent i funkcije stizu
+   zajedno.
+8. `post-deploy-smoke --require-build-info --expect-commit <sha> --strict-commit`: posluzeno je
+   bas ovo izdanje, a `repair-docx` i `create-checkout` bez tokena vracaju 401 (funkcija postoji).
 
-Produkcijski job pocinje tek kad je staging job zelen i kad vlasnik klikne Approve.
+Oba joba smije pokrenuti samo vlasnik (`github.actor` i `github.triggering_actor`), jer staging
+nema odobravatelja. Produkcijski job pocinje tek kad je staging job zelen i kad vlasnik klikne
+Approve.
 
 Workflow namjerno NE primjenjuje migracije na produkciju, ne
 mijenja tajne i ne dira Supabase ni Netlify postavke. Gard: `tests/release-workflow.test.ts`,
 mutacije u `tests/gate-mutations-release.test.ts`.
 
-## Sto vlasnik treba postaviti (jednom)
+Preostali rizik: `netlify-cli` i `supabase` se izvrsavaju uz token, kao i u rucnoj objavi
+(`docs/quality/dependency-decisions.md`). Verzije su prikovane.
 
-Nista od ovoga nije postavljeno. Imena su ista u oba environmenta, vrijednosti razlicite.
+## Postavke (postavljene 2026-10-08)
 
-GitHub, Settings, Environments:
+Vlasnik je postavio environmente, varijable i tajne. Imena su ista u oba environmenta.
 
 | Environment | Postavka | Vrijednost |
 | --- | --- | --- |
-| `staging` | Deployment branches | samo `master` |
-| `production` | Required reviewers | `danielrisavi77-create` |
-| `production` | Prevent self-review | iskljuceno (vlasnik je i pokretac i odobravatelj) |
+| `staging` | Deployment branches | samo `master`, bez odobravatelja |
+| `production` | Required reviewers | `danielrisavi77-create`, self-review dopusten |
 | `production` | Deployment branches | samo `master` |
 
-Po environmentu, Secrets:
-
 | Ime | staging | production |
 | --- | --- | --- |
-| `SUPABASE_ACCESS_TOKEN` | osobni token za Management API (moze isti) | isti ili zaseban token |
-| `NETLIFY_AUTH_TOKEN` | Netlify personal access token | isti |
-| `SUPABASE_DB_PASSWORD` | lozinka staging baze (za `db push`) | NE postavljati |
+| secret `SUPABASE_ACCESS_TOKEN` | postavljen | postavljen |
+| secret `NETLIFY_AUTH_TOKEN` | postavljen | postavljen |
+| secret `SUPABASE_DB_PASSWORD` | postavljen (staging baza) | namjerno ne postoji |
+| var `SUPABASE_PROJECT_REF` | `bnyemcnsphlitjradrst` | `zrrjttizjyfcxmcpgzml` |
+| var `SUPABASE_ANON_KEY` | anon kljuc staginga | ne treba (kanonski u `src/config/deployment.ts`) |
+| var `NETLIFY_SITE_ID` | `f432ae00-c4f6-4ded-8c22-d4b71c7b8687` (lekta-staging) | `1e7526f5-7f0a-480e-8589-d79ee91ff7b0` |
+| var `SITE_ORIGIN` | `https://lekta-staging.netlify.app` | `https://lekta.hr` |
+| var `TURNSTILE_SITE_KEY` | prazno dok captcha nije ukljucena (T89) | isto |
 
-Po environmentu, Variables (javne vrijednosti, nisu tajne):
-
-| Ime | staging | production |
-| --- | --- | --- |
-| `SUPABASE_PROJECT_REF` | `bnyemcnsphlitjradrst` | `zrrjttizjyfcxmcpgzml` |
-| `SUPABASE_ANON_KEY` | anon kljuc staginga | ne treba (kanonski u `src/config/deployment.ts`) |
-| `NETLIFY_SITE_ID` | ID staging Netlify sitea | ID produkcijskog sitea |
-| `SITE_ORIGIN` | origin staging sitea, bez zavrsne `/` | `https://lekta.hr` |
-| `TURNSTILE_SITE_KEY` | prazno dok captcha nije ukljucena (T89) | isto |
-
-Otvoreno pitanje: postoji li zaseban Netlify site za staging. Ako ne, treba ga napraviti
-(rucna objava, bez Git povezivanja), inace staging job nema kamo objaviti klijent.
+Ako je staging site zakljucan lozinkom ili SSO-om, smoke nad stagingom dobiva 401 i job pada;
+to je ispravno, ne zaobilazi se.
 
 ## Pokretanje
 
@@ -77,5 +79,6 @@ vrijednosti. Staging job ide odmah; produkcijski ceka odobrenje.
 ## Povrat
 
 Klijent: Netlify, Deploys, prethodni deploy, Publish deploy. Funkcije: isti workflow s prethodnim
-SHA mastera, ili rucno prema `docs/deploy/EDGE_DEPLOY_T20.md`, odjeljak Povrat. Migracije 0207 i 0209
-su aditivne, pa povrat koda ne trazi povrat baze.
+SHA mastera radi samo ako taj SHA vec sadrzi `release.yml` i `scripts/release-*.mjs`; za starije
+SHA povrat ide rucno prema `docs/deploy/EDGE_DEPLOY_T20.md`, odjeljak Povrat. Migracije 0207 i
+0209 su aditivne, pa povrat koda ne trazi povrat baze.

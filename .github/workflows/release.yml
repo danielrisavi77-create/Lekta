@@ -10,8 +10,14 @@
 #   2. build klijenta, PRIJE ikakvog deploya: pad builda ne ostavlja nista napola objavljeno;
 #   3. samo na stagingu `supabase db push`; zatim provjera da su migracije koje funkcije trebaju
 #      primijenjene na ciljnom projektu (samo citanje, i u produkciji);
-#   4. Edge funkcije, pa odmah klijent: prozor raskoraka je trajanje jednog koraka;
+#   4. klijent se UCITA na Netlify kao neobjavljen deploy (spori dio koji moze pasti), zatim Edge
+#      funkcije, pa se vec ucitan deploy objavi jednim API pozivom (Codex na #339: pad uploada
+#      poslije Edgea ostavio bi nove funkcije uz stari klijent). Prozor raskoraka je jedan poziv;
 #   5. smoke nad zivom instalacijom uz --strict-commit: objavljeno je bas ovo izdanje.
+#
+# POKRECE SAMO VLASNIK. Staging nema required reviewera (staging bez klika, odluka vlasnika), pa
+# job-level `if` dopusta samo vlasnikov dispatch i re-run; svaki drugi pokretac preskace oba joba
+# prije nego runner vidi ijednu tajnu (Codex na #339).
 #
 # STAGING PRVI, PRODUKCIJA IZA ODOBRENJA. Job `production` ovisi o zelenom `staging` jobu i trazi
 # GitHub environment `production`, ciji required reviewer (vlasnik) mora kliknuti Approve. Bez
@@ -49,15 +55,18 @@ concurrency:
 
 jobs:
   staging:
+    if: github.actor == 'danielrisavi77-create' && github.triggering_actor == 'danielrisavi77-create'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     environment: staging
     env:
+      RELEASE_TARGET: staging
       RELEASE_SHA: ${{ inputs.sha }}
       RELEASE_FUNCTIONS: ${{ inputs.functions }}
       RELEASE_MIGRATIONS: ${{ inputs.migrations }}
       PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
       SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+      NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
     steps:
       - name: Checkout trazenog commita
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -74,6 +83,12 @@ jobs:
         with:
           node-version: '24'
           npm-version: 11.11.0
+
+      # Netlify CLI se razrjesava i instalira OVDJE, bez ijedne tajne u okolini (Codex na #339).
+      # Kasniji koraci s tokenom koriste vec instaliran paket iz npx cachea, pa se instalacijske
+      # skripte tranzitivnih ovisnosti ne vrte uz NETLIFY_AUTH_TOKEN.
+      - name: Netlify CLI (instalacija bez tajni)
+        run: npx --yes netlify-cli@27.10.2 --version
 
       # Staging build NE trazi dokaz izdanja: dokaz (Tier 2) se pece upravo nad stagingom
       # (LEKTA_STAGING_ORIGIN u release:check), pa bi tvrdi gate ovdje bio koka i jaje.
@@ -106,16 +121,27 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: node scripts/release-migration-check.mjs --ref "$PROJECT_REF" --migrations "$RELEASE_MIGRATIONS"
 
+      - name: Klijent ucitan (neobjavljen)
+        id: upload
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npx --yes netlify-cli@27.10.2 deploy --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA" --json > "$RUNNER_TEMP/netlify-deploy.json"
+          deploy_id="$(jq -er '.deploy_id' "$RUNNER_TEMP/netlify-deploy.json")"
+          echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
+
       - name: Edge funkcije
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
 
-      - name: Klijent (Netlify)
+      # Objava vec ucitanog deploya (isto sto i "Publish deploy" u Netlify sucelju); radi i kad je
+      # auto publishing zakljucan.
+      - name: Klijent objavljen
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
-        run: npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA"
+          DEPLOY_ID: ${{ steps.upload.outputs.deploy_id }}
+        run: npx --yes netlify-cli@27.10.2 api restoreSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$DEPLOY_ID\"}"
 
       - name: Smoke nad stagingom
         run: >-
@@ -125,15 +151,18 @@ jobs:
 
   production:
     needs: staging
+    if: github.actor == 'danielrisavi77-create' && github.triggering_actor == 'danielrisavi77-create'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     environment: production
     env:
+      RELEASE_TARGET: production
       RELEASE_SHA: ${{ inputs.sha }}
       RELEASE_FUNCTIONS: ${{ inputs.functions }}
       RELEASE_MIGRATIONS: ${{ inputs.migrations }}
       PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
       SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
+      NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
     steps:
       - name: Checkout trazenog commita
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -150,6 +179,12 @@ jobs:
         with:
           node-version: '24'
           npm-version: 11.11.0
+
+      # Netlify CLI se razrjesava i instalira OVDJE, bez ijedne tajne u okolini (Codex na #339).
+      # Kasniji koraci s tokenom koriste vec instaliran paket iz npx cachea, pa se instalacijske
+      # skripte tranzitivnih ovisnosti ne vrte uz NETLIFY_AUTH_TOKEN.
+      - name: Netlify CLI (instalacija bez tajni)
+        run: npx --yes netlify-cli@27.10.2 --version
 
       # Isti lanac i iste zastavice kao netlify.toml: tvrdi dokaz izdanja (audit P0-03). Bez
       # svjezeg docs/generated/RELEASE_PROOF.json za ovo stablo build pada i nista ne ide van.
@@ -169,16 +204,27 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: node scripts/release-migration-check.mjs --ref "$PROJECT_REF" --migrations "$RELEASE_MIGRATIONS"
 
+      - name: Klijent ucitan (neobjavljen)
+        id: upload
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npx --yes netlify-cli@27.10.2 deploy --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA" --json > "$RUNNER_TEMP/netlify-deploy.json"
+          deploy_id="$(jq -er '.deploy_id' "$RUNNER_TEMP/netlify-deploy.json")"
+          echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
+
       - name: Edge funkcije
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
 
-      - name: Klijent (Netlify)
+      # Objava vec ucitanog deploya (isto sto i "Publish deploy" u Netlify sucelju); radi i kad je
+      # auto publishing zakljucan.
+      - name: Klijent objavljen
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
-        run: npx --yes netlify-cli@27.10.2 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "release $RELEASE_SHA"
+          DEPLOY_ID: ${{ steps.upload.outputs.deploy_id }}
+        run: npx --yes netlify-cli@27.10.2 api restoreSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$DEPLOY_ID\"}"
 
       - name: Smoke nad produkcijom
         run: >-

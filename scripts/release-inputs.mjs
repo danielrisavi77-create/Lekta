@@ -13,9 +13,25 @@
 // Izlaz: 0 = ulazi valjani; 1 = barem jedan problem (svi se ispisuju odjednom).
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+
+/**
+ * Migracije bez kojih funkcija u objavi ne radi. Ulaz `migrations` ih smije prosiriti, ali ne i
+ * izostaviti (Codex na #339): bez 0209 `repair-docx` vraca 503 na svaki popravak, a bez 0207
+ * `create-checkout` cita stupce i proizvode koji ne postoje.
+ */
+export const REQUIRED_MIGRATIONS = {
+  'repair-docx': ['0209_repair_limit_po_korisniku'],
+  'create-checkout': ['0207_monetizacija_v1'],
+};
+
+/** Kanonski produkcijski Supabase ref iz izvora klijenta (src/config/deployment.ts). */
+export function canonicalProductionRef(deploymentTs) {
+  const m = /PRODUCTION_SUPABASE_URL = 'https:\/\/([a-z0-9]{20})\.supabase\.co'/.exec(deploymentTs);
+  return m ? m[1] : null;
+}
 
 /** Popis problema nad vec prikupljenim cinjenicama; prazan popis znaci valjano. */
 export function releaseInputProblems(f) {
@@ -37,7 +53,25 @@ export function releaseInputProblems(f) {
   for (const m of migs) {
     if (!f.migrationFiles.includes(`${m}.sql`)) out.push(`migracija "${m}" ne postoji u supabase/migrations`);
   }
+  for (const fn of fns) {
+    for (const m of REQUIRED_MIGRATIONS[fn] ?? []) {
+      if (!migs.includes(m)) out.push(`funkcija "${fn}" trazi migraciju "${m}", a nije u popisu migracija`);
+    }
+  }
   if (!/^[a-z0-9]{20}$/.test(f.projectRef)) out.push('vars.SUPABASE_PROJECT_REF nije postavljen ili nije project ref');
+  // Produkcijski klijent NE cita SUPABASE_PROJECT_REF nego kanonski ref iz src/config/deployment.ts.
+  // Krivi ref bi zato objavio funkcije na drugi projekt, a klijent na produkciju (Codex na #339).
+  if (f.target === 'production') {
+    if (!f.canonicalProdRef) out.push('kanonski produkcijski ref nije procitan iz src/config/deployment.ts');
+    else if (f.projectRef !== f.canonicalProdRef) out.push(`produkcijski SUPABASE_PROJECT_REF ${f.projectRef} nije kanonski ${f.canonicalProdRef}`);
+  } else if (f.target !== 'staging') {
+    out.push(`nepoznat cilj objave "${f.target}"`);
+  } else if (f.canonicalProdRef && f.projectRef === f.canonicalProdRef) {
+    out.push('staging SUPABASE_PROJECT_REF je produkcijski ref');
+  }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(f.netlifySiteId)) {
+    out.push('vars.NETLIFY_SITE_ID nije Netlify site ID (UUID)');
+  }
   if (!/^https:\/\/[a-z0-9.-]+[a-z0-9]$/.test(f.siteOrigin)) out.push('vars.SITE_ORIGIN nije https origin bez zavrsne kose crte');
   return out;
 }
@@ -72,6 +106,9 @@ function main() {
     migrationFiles: readdirSync(join(root, 'supabase', 'migrations')),
     projectRef: (process.env.PROJECT_REF ?? '').trim(),
     siteOrigin: (process.env.SITE_ORIGIN ?? '').trim(),
+    netlifySiteId: (process.env.NETLIFY_SITE_ID ?? '').trim(),
+    target: (process.env.RELEASE_TARGET ?? '').trim(),
+    canonicalProdRef: canonicalProductionRef(readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8')),
   };
   const problems = releaseInputProblems(facts);
   if (problems.length > 0) {

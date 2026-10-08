@@ -146,7 +146,7 @@ describe('runSmoke nad laznim opazanjima', () => {
         ? { status: 405, headers: {}, text: '' }
         : { status: 200, headers: {}, text: JSON.stringify({ status: 'ok', dependencies: { database: { ok: true } } }) };
     }
-    if (u.pathname.endsWith('/repair-docx')) return { status: 401, headers: {}, text: '' };
+    if (u.pathname.endsWith('/repair-docx') || u.pathname.endsWith('/create-checkout')) return { status: 401, headers: {}, text: '' };
     if (u.pathname.endsWith('/build-info.json')) {
       return { status: 200, headers: { 'content-type': 'application/json' }, text: JSON.stringify({ commit: 'c'.repeat(40), builtAt: '2026-09-09T10:00:00.000Z' }) };
     }
@@ -157,6 +157,14 @@ describe('runSmoke nad laznim opazanjima', () => {
       : '<html><head><script type="module" src="/assets/a.js"></script></head></html>';
     return { status: 200, headers: ZAGLAVLJA, text: tijelo };
   };
+
+  it('create-checkout koji nije deployan (404) obara smoke s tocnim nalazom', async () => {
+    const bezCheckouta = async (url: string, init: { method?: string } = {}) =>
+      (new URL(url).pathname.endsWith('/create-checkout') ? { status: 404, headers: {}, text: '' } : zdravObserve(url, init));
+    const nalazi = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: bezCheckouta });
+    const pali = nalazi.filter((n: { ok: boolean }) => !n.ok).map((n: { id: string; detail?: string }) => [n.id, n.detail]);
+    expect(pali).toEqual([['auth:create-checkout', 'create-checkout bez tokena: HTTP 404, ocekivano 401']]);
+  });
 
   it('zdrava instalacija: sve prolazi i pokriva SVE pravne stranice', async () => {
     const nalazi = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: zdravObserve });
