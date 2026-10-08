@@ -80,10 +80,11 @@ git identitet i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu
   prazninu). Drugi put je pritom ponisten tudji rad, a objasnjenje otislo krivoj adresi, pa strana
   koje se tice nije ni znala. Pisi "autor tog commita" kad ime ne mozes potkrijepiti, i javi
   ispravak i kad je pripis POHVALAN: pohvala krivoj adresi zavarava jednako kao primjedba.
-- GARD: `PreToolUse` hook nad Bashem odbija `git commit` bez `--only`, `git add -A`/`.`/`-u` i
-  `git commit --amend`. Izvrsava ga HARNESS, ne model. Skripta je IZVAN repozitorija
-  (`~/.claude/hooks/lekta-git-guard.mjs`), jer `.claude/hooks/` nije gitignoriran. Stiti od
-  GRESKE, ne od odluke; zatreba li ti oblik koji odbija, javi naredbu umjesto da ga zaobidjes.
+- GARD: `PreToolUse` hook nad Bashem odbija `git commit` bez `--only`, `git add -A`/`.`/`-u`,
+  `git commit --amend` i `<merge|rebase|cherry-pick|revert> --continue` u dijeljenom stablu.
+  Izvrsava ga HARNESS, ne model. Od 2026-10-08 zivi u `scripts/agents/tool-guard.mjs` (prije
+  `~/.claude/hooks/lekta-git-guard.mjs`), pa vrijedi i u cloud sesijama i na svakoj radnoj stanici.
+  Stiti od GRESKE, ne od odluke; zatreba li ti oblik koji odbija, javi naredbu umjesto da ga zaobidjes.
 - Zahvat nad dijeljenim stablom ide u kratkom NAJAVLJENOM prozoru, uz prethodnu provjeru da
   pogodjene putanje nemaju zive izmjene. Cekanje da "sve sesije stanu" je nedostizno: izmjereno je
   cetiri nove sesije u pet minuta.
@@ -292,7 +293,8 @@ To je instanca pravila 2: invarijanta postoji, ali nijedan ulaz nema oblik koji 
 
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
-Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
+Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts` ili domenskoj datoteci
+`tests/gate-mutations-<domena>.test.ts`: podmetnut poznat kvar
 i tvrdnju da ga gard prijavi. Stanje 2026-08-23: 18 mutacija, 18 uhvaceno.
 
 Razlog je izmjeren, ne nacelan. `paper-size` izvod je IGNORIRAO vrijednost i uvijek trazio A4, pa bi
