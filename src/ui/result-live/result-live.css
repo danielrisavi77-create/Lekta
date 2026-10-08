@@ -108,6 +108,8 @@
 .rl-tab[disabled] { cursor: default; color: var(--desk-faint) }
 .rl-tab__n { font-size: 11px; opacity: .75 }
 .rl-tab[disabled] .rl-tab__n { color: var(--pass); opacity: 1 }
+/* Nemjerena kategorija (Codex R2): bez kvacice i bez zelene boje, jer nije potvrda da je uredno. */
+.rl-tab[disabled] .rl-tab__n--nemjereno { color: var(--desk-faint); letter-spacing: .02em }
 
 .rl-desk {
   display: grid;
@@ -122,8 +124,10 @@
 .rl-pagebar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px }
 .rl-label { color: var(--desk-faint); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
 .rl-mode { display: inline-flex; padding: 3px; border: 1px solid var(--desk-line); border-radius: var(--radius-pill, 999px) }
+/* Mete dodira najmanje 44 x 44 px (Codex R8); mjeri tests/ux/result-live.spec.ts. */
 .rl-mode button {
-  min-height: 32px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0 14px;
   border: 0;
   border-radius: var(--radius-pill, 999px);
@@ -277,6 +281,7 @@
   font-size: 13px;
   overflow-wrap: anywhere;
 }
+.rl-mr--jedno { grid-template-columns: minmax(0, 1fr) }
 .rl-mr__k { display: block; color: var(--paper-muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase }
 .rl-mr s { color: var(--red-on-soft); text-decoration-thickness: 1px }
 .rl-mr__arrow { color: var(--paper-muted) }
@@ -290,6 +295,27 @@
   --emph-style: italic;
   text-wrap: pretty;
 }
+.rl-card__do { margin: 0; color: var(--paper-ink); font-size: 13px; line-height: 1.5 }
+.rl-card__where .cockpit-finding__location { margin: 0; color: var(--paper-muted); font-size: 12px }
+.rl-card__where button.cockpit-finding__location {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rl-card__where button.cockpit-finding__location:focus-visible { outline: none; box-shadow: var(--focus) }
+.rl-card .cockpit-finding__evidence { color: var(--paper-ink); font-size: 13px }
+.rl-card .cockpit-finding__evidence summary { min-height: 44px; display: flex; align-items: center; cursor: pointer }
+.rl-card .cockpit-finding__evidence p { margin: 0 0 6px; font-family: var(--display-serif); font-size: 16px; font-style: italic; line-height: 1.4 }
+.rl-card .cockpit-finding__evidence small { color: var(--paper-muted) }
+.rl-card .cockpit-finding__source { display: inline-flex; align-items: center; min-height: 44px; color: var(--paper-ink); font-size: 12px }
 .rl-plan { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding-top: 4px }
 .rl-toggle {
   min-height: 44px;
@@ -314,10 +340,31 @@
 .rl-strip__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--desk-faint); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
 .rl-strip__line { height: 3px; background: var(--red-deep); opacity: .85 }
 .rl-strip__cells { display: grid; grid-template-columns: repeat(var(--rl-n, 1), minmax(0, 1fr)); gap: 2px }
-.rl-cell { display: block; height: 40px; min-width: 0; padding: 0; border: 0; background: var(--desk-line) }
-.rl-cell--hit { background: var(--warn); cursor: pointer }
+/* Celije su karta (aria-hidden), ne mete: mete su gumbi .rl-go ispod nje (Codex R8). */
+.rl-cell { display: block; height: 28px; min-width: 0; background: var(--desk-line) }
+.rl-cell--hit { background: var(--warn) }
 .rl-cell--cur { box-shadow: inset 0 0 0 1.5px var(--desk-ink) }
-.rl-cell--hit:focus-visible { outline: 2px solid var(--desk-ink); outline-offset: 1px }
+.rl-strip__go { display: flex; flex-wrap: wrap; gap: 6px }
+.rl-go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--desk-line);
+  border-radius: var(--radius-btn, 10px);
+  background: transparent;
+  color: var(--desk-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.rl-go:not(.rl-go--skup) { border-color: var(--warn) }
+.rl-go--cur { background: var(--desk-ink); color: var(--desk) }
+.rl-go:focus-visible { outline: 2px solid var(--desk-ink); outline-offset: 2px }
 .rl-strip__legend { margin: 0; color: var(--desk-faint); font-size: 11px; line-height: 1.55 }
 
 /* ---------------- ladica plana ---------------- */

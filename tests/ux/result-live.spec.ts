@@ -67,7 +67,8 @@ for (const tema of ['dark', 'light'] as const) {
     for (const key of ['Format', 'Struktura', 'Citati', 'Predaja']) {
       const t = kokpit(page).locator(`[data-rl-tab="${key}"]`);
       const n = (await t.locator('.rl-tab__n').textContent())?.trim() ?? '';
-      if (n === '✓') { await expect(t).toBeDisabled(); continue; }
+      // Prazna kategorija: kvacica samo kad je izmjerena, inace 'nije mjereno' (Codex R2).
+      if (n === '✓' || n === 'nije mjereno') { await expect(t).toBeDisabled(); continue; }
       await t.click();
       await expect(t).toHaveAttribute('aria-selected', 'true');
       await expect(kokpit(page).locator('[data-desk-count]')).toHaveText(`1 od ${n}`);
@@ -241,4 +242,116 @@ test('Z34: ?resultRenderer=legacy zadrzava stari prikaz', async ({ page }) => {
   await expect(kokpit(page)).toHaveClass(/hidden/);
   await expect(page.locator('[data-rl]')).toHaveCount(0);
   await expect(page.locator('[data-rl-tray]')).toHaveCount(0);
+});
+
+// Codex R8: mete dodira najmanje 44 x 44 px, izmjereno u pregledniku (ne iz CSS-a). Na 360 px
+// stranica rada (i preklopnik) ne postoji, pa se ondje mjere jezicci, strelice, gumbi trake i plana.
+test('Z34 mete dodira su najmanje 44 x 44 px (Codex R8)', async ({ page }, info) => {
+  test.setTimeout(150_000);
+  await doRezultata(page);
+  await cekajZ34(page);
+  const mete = await page.evaluate(() => {
+    const sel = ['[data-rl-tab]', '[data-rl-card] .rl-nav', '[data-rl-toggle]', '[data-rl-mode]', '[data-rl-page-go]', '[data-rl-skup]', '[data-rl-card] [data-finding-jump]'];
+    return sel.flatMap((s) => [...document.querySelectorAll<HTMLElement>(`#resultCockpit ${s}`)]
+      .map((el) => ({ s, w: el.getBoundingClientRect().width, h: el.getBoundingClientRect().height }))
+      .filter((r) => r.w > 0 && r.h > 0));
+  });
+  const vrste = new Set(mete.map((m) => m.s));
+  // KONTROLA: mjeri se ono sto nalaz imenuje (gumbi trake), ne prazan skup.
+  expect(vrste.has('[data-rl-tab]')).toBe(true);
+  expect(vrste.has('[data-rl-page-go]') || vrste.has('[data-rl-skup]'), 'traka ima barem jednu metu').toBe(true);
+  if ((page.viewportSize()?.width ?? 0) >= 900) expect(vrste.has('[data-rl-mode]'), 'preklopnik Sada / Nakon plana').toBe(true);
+  const male = mete.filter((m) => m.w < 44 - 0.5 || m.h < 44 - 0.5).map((m) => `${m.s} ${m.w.toFixed(0)}x${m.h.toFixed(0)}`);
+  expect(male).toEqual([]);
+  // Celije trake su karta, ne mete: nijedna nije gumb ni fokusabilna.
+  expect(await page.locator('#resultCockpit .rl-strip__cells button, #resultCockpit .rl-cell[tabindex]').count()).toBe(0);
+  info.annotations.push({ type: 'mete', description: [...vrste].join(', ') });
+});
+
+// Codex R1: puni Z8 ostaje vidljiv dok se uvoz Z34 ne zavrsi, a ne samo nakon greske.
+test('Z34 pending i odbijen uvoz ostavljaju potpun Z8 (Codex R1)', async ({ page }) => {
+  test.setTimeout(150_000);
+  let odbijeno = 0;
+  let pustiUvoz!: () => void;
+  const uvozZadrzan = new Promise<void>((resolve) => { pustiUvoz = resolve; });
+  await page.route(/\/src\/ui\/result-live\/result-live\.ts/, async (r) => {
+    odbijeno += 1;
+    await uvozZadrzan;
+    await r.abort();
+  });
+  try {
+    await doRezultata(page);
+    await expect.poll(() => odbijeno).toBeGreaterThan(0);
+    await expect(kokpit(page)).toHaveAttribute('data-rl-pending', 'true');
+    await expect(kokpit(page).locator('[data-desk]')).toBeVisible();
+    await expect(kokpit(page).locator('[data-desk] [data-cockpit-finding]')).toBeVisible();
+    await expect(kokpit(page).locator('[data-rl]')).toHaveCount(0);
+    await expect(kokpit(page).locator('[data-rl-cekanje]')).toHaveCount(0);
+    expect(await kokpit(page).locator('[data-cockpit-category]').count(), 'sazetak kategorija tijekom pending uvoza').toBeGreaterThan(0);
+    await expect(kokpit(page).locator('[data-cockpit-dna]')).toHaveCount(1);
+    await expect(page.locator('[data-rl-tray]')).toHaveCount(0);
+  } finally {
+    pustiUvoz();
+  }
+  await expect(kokpit(page)).toHaveAttribute('data-rl-povratak', 'uvoz', { timeout: 30_000 });
+  await expect(kokpit(page).locator('[data-desk] [data-cockpit-finding]')).toBeVisible();
+  await expect(kokpit(page).locator('[data-cockpit-dna]')).toHaveCount(1);
+});
+
+test('Z34 kasni prvi import nakon roka ne preuzima aktivni Z8 (Codex R1)', async ({ page }) => {
+  test.setTimeout(150_000);
+  let zahtjev = 0;
+  let pustiImport!: () => void;
+  const importZadrzan = new Promise<void>((resolve) => { pustiImport = resolve; });
+  await page.route(/\/src\/ui\/results\/results-cockpit-live\.ts/, async (route) => {
+    zahtjev += 1;
+    await importZadrzan;
+    await route.continue();
+  });
+  try {
+    await doRezultata(page);
+    await expect.poll(() => zahtjev).toBeGreaterThan(0);
+    await expect(kokpit(page)).toHaveAttribute('data-rl-pending', 'true');
+    await expect(kokpit(page).locator('[data-desk] [data-cockpit-finding]')).toBeVisible();
+    await expect(kokpit(page).locator('[data-cockpit-category]')).not.toHaveCount(0);
+    await expect(kokpit(page).locator('[data-cockpit-dna]')).toHaveCount(1);
+    await expect(kokpit(page)).toHaveAttribute('data-rl-povratak', 'rok', { timeout: 30_000 });
+    const sljedeci = kokpit(page).locator('[data-desk] .desk-nav__btn--next');
+    await expect(sljedeci).toBeEnabled();
+    await sljedeci.click();
+    await expect(kokpit(page).locator('[data-desk-count]')).toContainText('2 od');
+    const kasniChunk = page.waitForResponse((response) => response.url().includes('/src/ui/result-live/result-live.ts'));
+    pustiImport();
+    const odgovor = await kasniChunk;
+    await odgovor.finished();
+    await page.evaluate(async () => {
+      await import('/src/ui/results/results-cockpit-live.ts');
+      await import('/src/ui/result-live/result-live.ts');
+    });
+  } finally {
+    pustiImport();
+  }
+  await expect(kokpit(page)).toHaveAttribute('data-rl-povratak', 'rok');
+  await expect(kokpit(page).locator('[data-desk-count]')).toContainText('2 od');
+  await expect(kokpit(page).locator('[data-desk] [data-cockpit-finding]')).toBeVisible();
+  await expect(kokpit(page).locator('[data-rl]')).toHaveCount(0);
+  await expect(kokpit(page).locator('[data-cockpit-dna]')).toHaveCount(1);
+});
+
+test('Z34 tipkovnicom zadrzava fokus na dostupnoj strelici nakon zamjene kartice', async ({ page }) => {
+  await doRezultata(page);
+  await cekajZ34(page);
+  const dalje = kokpit(page).locator('[data-rl-card] .desk-nav__btn--next');
+  await expect(dalje).toBeEnabled();
+  await dalje.focus();
+  await page.keyboard.press('Enter');
+  await expect(kokpit(page).locator('[data-rl-card] .desk-nav__btn--next')).toBeFocused();
+  await expect(kokpit(page).locator('[data-desk-count]')).toHaveText(/^2 od \d+$/);
+
+  const natrag = kokpit(page).locator('[data-rl-card] .desk-nav__btn--prev');
+  await natrag.focus();
+  await page.keyboard.press('Enter');
+  // Povratak na prvi nalaz onemoguci "Prethodni"; fokus ostaje na drugoj, dostupnoj strelici.
+  await expect(kokpit(page).locator('[data-rl-card] .desk-nav__btn--next')).toBeFocused();
+  await expect(kokpit(page).locator('[data-desk-count]')).toHaveText(/^1 od \d+$/);
 });

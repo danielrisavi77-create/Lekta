@@ -18,7 +18,8 @@ function scopeLabel(scope: FindingScope): string {
   if (scope.kind === 'region') return scope.label.charAt(0).toUpperCase() + scope.label.slice(1);
   return scope.reason;
 }
-function recommendation(finding: VisualFindingModel, repairAvailable: boolean): string {
+/** Što napraviti. Dijeli je i stol Z34, da obje kartice daju istu uputu za isti nalaz. */
+export function recommendation(finding: VisualFindingModel, repairAvailable: boolean): string {
   if (repairAvailable && finding.capabilities.repair) return 'Pokrenite automatski popravak, zatim ponovno provjerite dokument.';
   if (finding.capabilities.preview) return 'Otvorite ozna\u010Deno mjesto i provjerite ga prema uputama.';
   return 'Provjerite ovaj dio rada prema uputama svojeg studija ili mentora.';
@@ -28,7 +29,8 @@ function findingAction(finding: VisualFindingModel, repairAvailable: boolean): {
   if (finding.capabilities.preview) return { kind: 'preview', label: 'Otvori mjesto' };
   return { kind: 'advanced', label: 'Prika\u017Ei detalje' };
 }
-function locationHtml(finding: VisualFindingModel): string {
+/** Redak "Gdje:" iz opsega nalaza (sidro je gumb prema pregledu). Dijeli ga i stol Z34. */
+export function locationHtml(finding: VisualFindingModel): string {
   if (finding.scope.kind === 'anchor') return '<button type="button" class="cockpit-finding__location" data-finding-jump>Gdje: ' + escapeHtml(scopeLabel(finding.scope)) + ' <span aria-hidden="true">&#8594;</span></button>';
   return '<p class="cockpit-finding__location">Gdje: ' + escapeHtml(scopeLabel(finding.scope)) + '</p>';
 }
@@ -44,6 +46,15 @@ export function decisionHtml(finding: VisualFindingModel): string {
   return '<button type="button" class="button button-quiet" data-finding-reopen>Vrati u otvorene nalaze</button>';
 }
 /**
+ * Verificiran citat pravila i poveznica izvora, samo kad je dokaz prihvacen (`acceptedEvidence`).
+ * Dijeli ga i stol Z34: dvije izvedbe istog dokaza bi se s vremenom razisle.
+ */
+export function evidenceHtml(finding: VisualFindingModel): string {
+  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.pageLabel ? ', ' + finding.exactEvidence.pageLabel : finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
+  const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(finding.exactEvidence.url) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
+  return evidence + source;
+}
+/**
  * `ordinal` je REDOSLIJED U POPISU (1, 2, 3), ne `finding.priorityRank`. Rank je interna ljestvica
  * 0 do 4 pa je uz preskocene razine na ekranu ispisivao "02, 04, 04", sto se cita kao broj nalaza.
  */
@@ -51,15 +62,13 @@ export function priorityFindingHtml(finding: VisualFindingModel, repairAvailable
   const action = findingAction(finding, repairAvailable);
   const measured = finding.measured ? '<div class="cockpit-finding__answer"><strong>Izmjereno</strong><p>' + escapeHtml(finding.measured) + '</p></div>' : '';
   const expected = finding.expected ? '<div class="cockpit-finding__answer"><strong>O\u010Dekivano</strong><p>' + escapeHtml(finding.expected) + '</p></div>' : '';
-  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.pageLabel ? ', ' + finding.exactEvidence.pageLabel : finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
-  const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(finding.exactEvidence.url) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
   return [
     '<article class="cockpit-finding cockpit-finding--', escapeHtml(finding.severity), ' cockpit-finding--', escapeHtml(finding.status), '" data-cockpit-finding data-cockpit-priority-card data-finding-id="', escapeHtml(finding.id), '">',
     '<div class="cockpit-finding__index">', String(ordinal).padStart(2, '0'), '</div><div class="cockpit-finding__body">',
     '<div class="cockpit-finding__meta"><span>', severityLabel(finding.severity), '</span><span>', categoryLabel(finding.category), '</span></div><h3>', escapeHtml(finding.title), '</h3>',
     '<div class="cockpit-finding__answer"><strong>Za\u0161to</strong><p>', escapeHtml(finding.explanation), '</p></div>',
     '<div class="cockpit-finding__answer"><strong>\u0160to napraviti</strong><p>', recommendation(finding, repairAvailable), '</p></div>',
-    measured, expected, locationHtml(finding), evidence, source,
+    measured, expected, locationHtml(finding), evidenceHtml(finding),
     '<div class="cockpit-finding__actions"><button type="button" class="button button-secondary" data-finding-action="', action.kind, '" data-finding-id="', escapeHtml(finding.id), '">', action.label, '</button>',
     decisionHtml(finding), '</div></div></article>',
   ].join('');

@@ -50,7 +50,7 @@ import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
-import { cijenaProblems, plusBodProblems } from './helpers/result-live-guard';
+import { cijenaProblems, plusBodIzvorProblems, plusBodProblems } from './helpers/result-live-guard';
 import { ladica, pocetniOdabir, prsten, zahvatiPlana } from '../src/ui/result-live/result-live-model';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
@@ -12222,14 +12222,16 @@ describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
   const css = citaj('src/ui/result-live/result-live.css');
   const modul = citaj('src/ui/result-live/result-live.ts');
   const predlozak = citaj('design/templates/result-live/ResultLive.dc.html');
-  const SHIM = 'src/ui/results/results-cockpit.ts';
+  const SHIM = 'src/ui/results/results-cockpit-live.ts';
+  const KOKPIT = 'src/ui/results/results-cockpit.ts';
   const MODUL = '../result-live/result-live';
-  const izvori = { [SHIM]: citaj(SHIM), 'src/ui/app.ts': citaj('src/ui/app.ts') };
+  const izvori = { [SHIM]: citaj(SHIM), [KOKPIT]: citaj(KOKPIT), 'src/ui/app.ts': citaj('src/ui/app.ts') };
   const zahvati = zahvatiPlana([{ ruleId: 'm', label: 'Margine', violated: true, matchKeys: ['M'] }], true);
   const racun = ladica(pocetniOdabir(zahvati), zahvati, 71, 88).racun ?? '';
 
   it('BASELINE: stvarni list, ulaz, kostur i racun su cisti', () => {
     expect(motionCssProblems(css)).toEqual([]);
+    expect(izvori[KOKPIT]).toContain("import('./results-cockpit-live')");
     expect(liveBoundaryProblems(izvori, SHIM, MODUL)).toEqual([]);
     expect(copyProblems(modul, predlozak, [])).toEqual([]);
     expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': modul, 'src/ui/result-live/result-live.css': css })).toEqual([]);
@@ -12246,8 +12248,9 @@ describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
   it('MUTACIJA: staticki uvoz modula Z34 u kokpit (bez dinamickog) obara gard granice', () => {
     const dinamicki = "import('../result-live/result-live')";
     const src = izvori[SHIM];
+    expect(izvori[KOKPIT]).toContain("import('./results-cockpit-live')");
     expect(src).toContain(dinamicki);
-    const mutant = { ...izvori, [SHIM]: "import { mountResultLive } from '../result-live/result-live';\n" + src.replace(dinamicki, 'Promise.resolve({ mountResultLive })') };
+    const mutant = { ...izvori, [SHIM]: "import { mountResultLive } from '../result-live/result-live';\n" + src.replaceAll(dinamicki, 'Promise.resolve({ mountResultLive })') };
     expect(liveBoundaryProblems(mutant, SHIM, MODUL)).toEqual([
       `${SHIM}: staticki uvoz ../result-live/result-live`,
       `${SHIM}: nema dinamickog uvoza ../result-live/result-live`,
@@ -12264,6 +12267,14 @@ describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
     const mutant = modul.replace('>Cijena ne ovisi o odabiru.</span>', '>14,99 €</span>');
     expect(mutant).not.toBe(modul);
     expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': mutant })).toEqual(['src/ui/result-live/result-live.ts: znak eura']);
+  });
+
+  it('MUTACIJA: stvarni literal gumba Z34 s +N obara gard izvora', () => {
+    const mutant = modul.replace('>U planu ✓</button>', '>U planu ✓ · +7</button>');
+    expect(mutant).not.toBe(modul);
+    expect(plusBodIzvorProblems({ 'src/ui/result-live/result-live.ts': mutant })).toEqual([
+      'src/ui/result-live/result-live.ts: "+7" u tekstu',
+    ]);
   });
 
   it('MUTACIJA: bodovi po zahvatu u natpisu ili racunu obaraju gard', () => {

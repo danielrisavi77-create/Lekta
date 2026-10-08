@@ -54,7 +54,7 @@ import { resultReadiness, repairCeiling } from './result-readiness';
 import { beginResultRender, settleResultRenderAfter } from './result-ready-signal';
 import { renderProgressScan, startLiveAnalysis, revealLiveAnalysis } from './progress-scan';
 import { buildVisualResultModel } from './results/visual-result-model';
-import { isGeneralRepairEntry, renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
+import { isGeneralRepairEntry, renderResultsCockpit, resultAnalysisKey, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
 import { emitAnalysisOpportunitySignals } from '../analytics/opportunity-emit';
@@ -1240,7 +1240,7 @@ function renderResultsCockpitForResult(r: any){
   // `topFindings` VEC izbacuje zanemarene i sortira po prioritetu; drugo filtriranje ovdje bilo bi
   // drugo mjesto koje odrzava isto pravilo.
   const _deskItems=deskItems(topFindings(model.findings.document,model.findings.document.length),_deskFlags);
-  const _desk=_deskItems.length?{items:_deskItems,planItems:[...repairPanelItems,...repairPanelTextItems],live:{preview:r.preview,storedPages:r?.stats?.storedPages},mountDocument:async(host: HTMLElement,signal: AbortSignal)=>(await import('./results/desk-document')).mountFacsimileInto(host,r.preview,_deskFlags,signal)}:undefined;
+  const _desk=_deskItems.length?{items:_deskItems,planItems:[...repairPanelItems,...repairPanelTextItems],live:{preview:r.preview,storedPages:r?.stats?.storedPages,checks:r?.checks,analysisKey:resultAnalysisKey(r)},mountDocument:async(host: HTMLElement,signal: AbortSignal)=>(await import('./results/desk-document')).mountFacsimileInto(host,r.preview,_deskFlags,signal)}:undefined;
   renderResultsCockpit(mount,model,{
     desk:_desk,
     repairAvailable:!r?.demo,

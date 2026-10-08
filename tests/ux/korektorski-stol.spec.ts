@@ -65,7 +65,8 @@ test('jezicak filtrira hrpu kartica, a prazna kategorija se ne moze kliknuti', a
   for (const key of ['Format', 'Struktura', 'Citati', 'Predaja']) {
     const tab = page.locator(`[data-rl-tab="${key}"]`);
     const n = (await tab.locator('.rl-tab__n').textContent())?.trim() ?? '';
-    if (n === '✓') { await expect(tab).toBeDisabled(); continue; }
+    // Prazna kategorija: kvacica samo kad je izmjerena, inace 'nije mjereno' (Z34, Codex R2).
+    if (n === '✓' || n === 'nije mjereno') { await expect(tab).toBeDisabled(); continue; }
     await tab.click();
     await expect(page.locator('[data-desk-count]')).toHaveText(`1 od ${n}`);
     if (n === '1') await expect(page.locator('.rl-card .desk-nav__btn--next')).toBeDisabled();

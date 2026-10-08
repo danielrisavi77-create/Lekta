@@ -17,15 +17,15 @@ import { pokretPrigusen } from '../../shared/display-prefs';
 import { rokZaSesiju } from '../../shared/intake-choice';
 import { parseSessionFragment } from '../../session/local-document-session';
 import { pluralHr } from '../results/plural-hr';
-import { decisionHtml } from '../results/priority-findings';
+import { decisionHtml, evidenceHtml, locationHtml, recommendation } from '../results/priority-findings';
 import { radnjaZaKlik } from '../results/desk-mount';
 import type { DeskItem } from '../results/desk-model';
 import type { ResultsCockpitAction } from '../results/results-cockpit';
 import type { VisualFindingModel } from '../results/visual-result-model';
 import {
-  filtriraj, izgledNakon, izgledSada, jezicakNalaza, jezicci, ladica, pocetniOdabir, polozaj, prebaci, prsten,
-  rokTekst, stranicaZaNalaz, trakaStranica, ulogaNalaza, uPlanu, vidljiviZahvati, zahvatiPlana,
-  type IzgledStranice, type Jezicak, type LivePreview, type LiveStavka, type TrakaStranica, type ZahvatPlana,
+  filtriraj, izgledNakon, izgledSada, jezicakNalaza, jezicci, ladica, natpisMjesta, opsegMjerenja, oznakaTrake, pocetniOdabir,
+  polozaj, prebaci, prsten, rokTekst, stranicaNalaza, stranicaZaNalaz, trakaStranica, ulogaNalaza, uPlanu, vidljiviZahvati,
+  zahvatiPlana, type IzgledStranice, type Jezicak, type LivePreview, type LiveStavka, type TrakaStranica, type ZahvatPlana,
 } from './result-live-model';
 
 export interface LiveStanje {
@@ -48,6 +48,8 @@ interface LiveOptions {
   readonly ceiling: number | null;
   readonly preview: unknown;
   readonly storedPages: unknown;
+  /** `checks` rezultata: opseg mjerenja po jezicku (Codex R2). */
+  readonly checks: unknown;
   readonly kljuc: string;
   readonly stanje: LiveStanje | null;
   readonly esc: (v: string) => string;
@@ -88,7 +90,24 @@ function varijableSloja(el: HTMLElement, iz: IzgledStranice): void {
   el.style.setProperty('--rl-pad', `${cqw(m.top)} ${cqw(m.right)} ${cqw(m.bottom)} ${cqw(m.left)}`);
 }
 
+/**
+ * Montaza je TRANSAKCIJSKA (Codex R1): iznimka usred montaze pocisti ono sto je vec postavljeno
+ * (ladica u `body`, promatraci, slusaci na domacinu) i baci dalje, pa kokpit vraca POTPUN Z8 bez
+ * ostataka Z34 koji bi uz njega dvaput slali radnje.
+ */
 export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOptions): LiveHandle {
+  const ciscenja: Array<() => void> = [];
+  try {
+    return postavi(mount, host, o, ciscenja);
+  } catch (e) {
+    for (const c of ciscenja) { try { c(); } catch { /* ostala ciscenja i dalje idu */ } }
+    host.innerHTML = '';
+    delete mount.dataset.rlReady;
+    throw e;
+  }
+}
+
+function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja: Array<() => void>): LiveHandle {
   const doc = mount.ownerDocument;
   const win = doc.defaultView;
   const esc = o.esc;
@@ -97,7 +116,8 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
   const nalazi = items.map((it) => it.finding);
   const zahvati: ZahvatPlana[] = zahvatiPlana(o.planItems, o.repairAvailable);
   const uloge = nalazi.map((f) => ulogaNalaza(f, zahvati));
-  const traka: TrakaStranica | null = trakaStranica(preview, o.storedPages, items);
+  const traka: TrakaStranica = trakaStranica(preview, o.storedPages, items);
+  const opseg = opsegMjerenja(o.checks);
   const vidljivi = vidljiviZahvati(o.planItems, zahvati);
   const sada = izgledSada(preview);
   const p = prsten(o.score, o.ceiling);
@@ -111,7 +131,6 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
   const odigrano = prije?.odigrano === true;
   const tiho = pokretPrigusen(doc);
   const siroko = (): boolean => win?.matchMedia?.(SIROKO)?.matches ?? true;
-  const ciscenja: Array<() => void> = [];
   let odbacen = false;
 
   const indeksOdabranog = (): number => {
@@ -181,9 +200,12 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
 
   /* ---------------------------------------------------------------- jezicci */
 
-  const jezicciHtml = (): string => jezicci(nalazi).map((j) => {
+  const jezicciHtml = (): string => jezicci(nalazi, opseg).map((j) => {
     const aktivan = j.key === cat;
-    const broj = j.prazan ? '<span class="rl-tab__n" aria-label="nema nalaza">✓</span>' : `<span class="rl-tab__n">${j.n}</span>`;
+    // Kvacica SAMO za izmjerenu kategoriju bez nalaza (Codex R2); nula bez mjerenja nije "uredno".
+    const broj = j.stanje === 'cisto' ? '<span class="rl-tab__n" aria-label="izmjereno, nema nalaza">✓</span>'
+      : j.stanje === 'nemjereno' ? '<span class="rl-tab__n rl-tab__n--nemjereno">nije mjereno</span>'
+        : `<span class="rl-tab__n">${j.n}</span>`;
     return `<button type="button" role="tab" class="rl-tab" data-rl-tab="${j.key}" aria-selected="${aktivan}"`
       + ` tabindex="${aktivan ? 0 : -1}"${j.prazan ? ' disabled aria-disabled="true"' : ''}>`
       + `<span>${esc(j.label)}</span>${broj}</button>`;
@@ -216,10 +238,18 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     const pol = polozaj(lista, i);
     const oz = ozbiljnost(f, o.authoritative);
     const jez = jezicakNalaza(f.category) ?? 'Provjera';
-    const mjera = f.measured && f.expected
-      ? '<div class="rl-mr"><span><span class="rl-mr__k">Izmjereno</span><s>' + esc(f.measured) + '</s></span>'
-        + '<span aria-hidden="true" class="rl-mr__arrow">→</span>'
-        + '<span><span class="rl-mr__k">Pravilnik</span>' + esc(f.expected) + '</span></div>'
+    // MJERE NEOVISNO JEDNA O DRUGOJ (Codex R3): izmjereno bez ocekivanog se ne skriva. Precrtano je
+    // samo kad postoji ocekivano s kojim se ne slaze. "Pravilnik" samo uz verificiran citat pravila;
+    // bez njega ocekivano nije tvrdnja pravilnika nego profila, pa stoji natpis Z8 "Očekivano".
+    const izmjereno = f.measured
+      ? '<span data-rl-izmjereno><span class="rl-mr__k">Izmjereno</span>' + (f.expected ? '<s>' + esc(f.measured) + '</s>' : esc(f.measured)) + '</span>'
+      : '';
+    const ocekivano = f.expected
+      ? `<span data-rl-ocekivano><span class="rl-mr__k">${f.exactEvidence ? 'Pravilnik' : 'Očekivano'}</span>` + esc(f.expected) + '</span>'
+      : '';
+    const mjera = izmjereno || ocekivano
+      ? `<div class="rl-mr${izmjereno && ocekivano ? '' : ' rl-mr--jedno'}">` + izmjereno
+        + (izmjereno && ocekivano ? '<span aria-hidden="true" class="rl-mr__arrow">→</span>' : '') + ocekivano + '</div>'
       : '';
     const gumb = (kamo: number | null, smjer: 'prev' | 'next', znak: string, opis: string): string =>
       `<button type="button" class="rl-nav desk-nav__btn desk-nav__btn--${smjer}" data-rl-go="${kamo ?? ''}"`
@@ -231,9 +261,13 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
       + `<span class="rl-card__nav">${gumb(pol.prethodni, 'prev', '←', 'Prethodni nalaz')}${gumb(pol.sljedeci, 'next', '→', 'Sljedeći nalaz')}</span>`
       + '</div>'
       + `<p class="rl-card__eyebrow" data-ton="${oz.ton}"><span class="rl-dot" aria-hidden="true"></span>${oz.tekst} · ${esc(jez)}</p>`
-      + `<h3 class="rl-card__title">${esc(f.title)}</h3>`
+      + `<h3 class="rl-card__title" tabindex="-1">${esc(f.title)}</h3>`
       + mjera
       + (f.explanation ? `<p class="rl-card__why">${esc(f.explanation)}</p>` : '')
+      // Uputa, mjesto i dokaz iz ISTIH funkcija kao kartica Z8 (Codex R3, R5).
+      + `<p class="rl-card__do" data-rl-uputa><span class="rl-mr__k">Što napraviti</span>${recommendation(f, o.repairAvailable)}</p>`
+      + `<div class="rl-card__where">${locationHtml(f)}</div>`
+      + evidenceHtml(f)
       + kontrolaHtml(i)
       + `<div class="rl-card__decide">${decisionHtml(f)}</div>`
       + '</article>';
@@ -247,7 +281,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     const tekstSloja = (sloj: 'now' | 'after'): string => s.odlomci.map((pp) =>
       `<p${pp.heading ? ' class="rl-h"' : ''}${sloj === 'now' ? ` data-rl-p="${pp.index}"` : ''}>${esc(pp.text)}</p>`).join('');
     // Stranica iz Wordovih tragova je priblizna (`kartaStranica`, F37), pa natpis to i kaze.
-    const natpis = s.broj !== null && traka ? `Oko str. ${s.broj} od ${traka.ukupno}` : s.sidro !== null ? `Odlomak ${s.sidro}` : 'Cijeli rad';
+    const natpis = natpisMjesta(nalazi[i].scope, s, traka);
     const prekidac = vidljivi.length
       ? '<div class="rl-mode" role="group" aria-label="Prikaz stranice">'
         + `<button type="button" data-rl-mode="now" aria-pressed="${mode === 'now'}">SADA</button>`
@@ -271,28 +305,50 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
 
   /* ---------------------------------------------------------------- traka stranica */
 
+  /**
+   * Skupine nalaza bez stranice tijela (Codex R5): cijeli rad, fusnote i nalazi kojima se stranica
+   * ne moze pripisati. Svaka je gumb koji otvara svoj prvi nalaz, pa nijedan nalaz ne nestaje iz
+   * trake bez traga. Redoslijed indeksa je redoslijed stola.
+   */
+  const skupine = (): Array<readonly ['cijeli' | 'fusnote' | 'bez', string, readonly number[]]> => [
+    ['cijeli', 'Cijeli rad', traka.cijeliRad],
+    ['fusnote', 'Fusnote', traka.fusnote],
+    ['bez', 'Bez stranice', traka.bezStranice],
+  ];
+
   const trakaHtml = (i: number): string => {
-    if (!traka) return '';
-    const sel = [...traka.poStranici.entries()].find(([, ind]) => ind.includes(i))?.[0] ?? null;
-    const celije = Array.from({ length: traka.ukupno }, (_, k) => {
+    const ukupno = traka.ukupno;
+    const sel = stranicaNalaza(traka, i);
+    // CELIJE SU KARTA, NE METE (Codex R8): na 360 px s deset stranica celija je uza od 32 px. Mete su
+    // gumbi stranica s nalazima ispod karte, svaki najmanje 44 x 44 px; karta je `aria-hidden`.
+    const celije = ukupno === null ? '' : Array.from({ length: ukupno }, (_, k) => {
       const n = k + 1;
-      const ind = traka.poStranici.get(n);
-      if (!ind) return '<span class="rl-cell" aria-hidden="true"></span>';
-      return `<button type="button" class="rl-cell rl-cell--hit${sel === n ? ' rl-cell--cur' : ''}" data-rl-page-go="${n}"`
-        + ` aria-label="Oko stranice ${n}, ${ind.length} ${pluralHr(ind.length, ['nalaz', 'nalaza', 'nalaza'])}"></button>`;
+      const hit = traka.poStranici.has(n);
+      return `<span class="rl-cell${hit ? ' rl-cell--hit' : ''}${sel === n ? ' rl-cell--cur' : ''}"></span>`;
     }).join('');
+    const stranice = [...traka.poStranici.entries()].sort(([a], [b]) => a - b).map(([n, ind]) =>
+      `<button type="button" class="rl-go${sel === n ? ' rl-go--cur' : ''}" data-rl-page-go="${n}"`
+      + ` aria-label="Oko stranice ${n}, ${ind.length} ${pluralHr(ind.length, ['nalaz', 'nalaza', 'nalaza'])}"><span>str. ${n}</span></button>`).join('');
+    const skup = skupine().filter(([, , ind]) => ind.length).map(([kljuc, ime, ind]) =>
+      `<button type="button" class="rl-go rl-go--skup${ind.includes(i) ? ' rl-go--cur' : ''}" data-rl-skup="${kljuc}"`
+      + ` aria-label="${ime}, ${ind.length} ${pluralHr(ind.length, ['nalaz', 'nalaza', 'nalaza'])}"><span>${ime} · ${ind.length}</span></button>`).join('');
     const c = traka.cijeliRad.length;
-    const crvena = c
-      ? `Crvena crta: ${c} ${pluralHr(c, ['nalaz vrijedi', 'nalaza vrijede', 'nalaza vrijedi'])} za cijeli rad.`
-      : '';
-    const jantar = traka.poStranici.size ? 'Jantarna stranica ima nalaze na točno jednom mjestu.' : '';
-    const legenda = [crvena, jantar].filter(Boolean).join(' ');
-    const desno = sel !== null ? `Oko str. ${sel}` : nalazi[i].scope.kind === 'document' ? 'Cijeli rad' : '';
+    const recenice = [
+      c ? `Crvena crta: ${c} ${pluralHr(c, ['nalaz vrijedi', 'nalaza vrijede', 'nalaza vrijedi'])} za cijeli rad.` : '',
+      // Pripis je PRIBLIZAN (Codex R9): stranica moze nositi vise mjesta, a Word zna stranicu samo kroz tragove prijeloma.
+      traka.poStranici.size ? 'Jantarna stranica nosi nalaze; pripis stranici je približan.' : '',
+      traka.fusnote.length ? 'Fusnote su zaseban dio rada i nemaju stranicu na traci.' : '',
+      ukupno === null ? 'Word nije zapisao broj stranica, pa nalazi nisu pripisani stranicama.'
+        : !traka.pouzdano && traka.bezStranice.length ? 'Wordovi prijelomi ne odgovaraju broju stranica, pa nalazi nisu pripisani stranicama.' : '',
+    ];
+    const legenda = recenice.filter(Boolean).join(' ');
+    const naslov = ukupno === null ? 'Gdje su nalazi' : `Gdje su nalazi · ${ukupno} ${pluralHr(ukupno, ['stranica', 'stranice', 'stranica'])}`;
     return '<div class="rl-strip" data-rl-strip>'
-      + `<div class="rl-strip__head"><span>Gdje su nalazi · ${traka.ukupno} ${pluralHr(traka.ukupno, ['stranica', 'stranice', 'stranica'])}</span>`
-      + `<span data-rl-pagenote>${esc(desno)}</span></div>`
+      + `<div class="rl-strip__head"><span>${naslov}</span>`
+      + `<span data-rl-pagenote>${esc(oznakaTrake(nalazi[i].scope, sel))}</span></div>`
       + (c ? '<div class="rl-strip__line" aria-hidden="true"></div>' : '')
-      + `<div class="rl-strip__cells" style="--rl-n:${traka.ukupno}">${celije}</div>`
+      + (celije ? `<div class="rl-strip__cells" style="--rl-n:${ukupno}" aria-hidden="true">${celije}</div>` : '')
+      + (stranice || skup ? `<div class="rl-strip__go" role="group" aria-label="Skok na nalaze">${stranice}${skup}</div>` : '')
       + (legenda ? `<p class="rl-strip__legend">${legenda}</p>` : '')
       + '</div>';
   };
@@ -396,6 +452,9 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     // Ladica je u `body`, ne u kokpitu: list rada (`.analyzer-wrap`) je zarotiran, a `transform`
     // pretka pretvara `position: fixed` u polozaj unutar tog pretka.
     doc.body.append(ladicaEl);
+    // Uklanjanje je ciscenje od trenutka umetanja, pa ga pokrije i djelomicna montaza (Codex R1).
+    const el = ladicaEl;
+    ciscenja.push(() => { el.remove(); mount.removeAttribute('data-rl-tray-open'); });
     crtajLadicu();
   }
 
@@ -448,22 +507,69 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     ciscenja.push(() => c.remove());
   };
 
+  /**
+   * FOKUS PREZIVLJAVA ZAMJENU KARTICE (Codex R6). Kartica i traka se crtaju nanovo, pa bi fokus
+   * pao na `body` i korisnik tipkovnice izgubio mjesto. Pamti se ULOGA fokusiranog elementa
+   * (strelica, stranica, skupina), ne cvor, i vraca na isti element nove kartice; kad ga nema ili je
+   * ugasen (kraj popisa), na drugu strelicu, a bez nje na naslov kartice.
+   */
+  const ulogaFokusa = (): string | null => {
+    const a = doc.activeElement as HTMLElement | null;
+    if (!a || !host.contains(a)) return null;
+    if (a.matches('.desk-nav__btn--next')) return 'next';
+    if (a.matches('.desk-nav__btn--prev')) return 'prev';
+    if (a.dataset.rlPageGo) return `[data-rl-page-go="${a.dataset.rlPageGo}"]`;
+    if (a.dataset.rlSkup) return `[data-rl-skup="${a.dataset.rlSkup}"]`;
+    return null;
+  };
+  const vratiFokus = (uloga: string): void => {
+    const gumb = (smjer: string): HTMLButtonElement | null => q<HTMLButtonElement>(`[data-rl-card] .desk-nav__btn--${smjer}:not([disabled])`);
+    const cilj = uloga === 'next' ? gumb('next') ?? gumb('prev')
+      : uloga === 'prev' ? gumb('prev') ?? gumb('next')
+        : q<HTMLElement>(uloga);
+    (cilj ?? q<HTMLElement>('.rl-card__title'))?.focus();
+  };
+
   let listanje = 0;
-  /** Gornja kartica odleti ustranu, sljedeca udje s druge strane; pod smanjenim pokretom odmah. */
-  const listaj = (novi: number, smjer: 1 | -1): void => {
+  let generacijaListanja = 0;
+  /** Nalaz prema kojem kartica upravo leti; drugi klik na strelicu racuna od njega, ne od stare kartice. */
+  let naCekanju: number | null = null;
+  const prekiniListanje = (): void => {
+    generacijaListanja += 1;
+    if (listanje) win?.clearTimeout(listanje);
+    listanje = 0;
+    naCekanju = null;
     const slot = q<HTMLElement>('[data-rl-slot]');
-    const zamijeni = (): void => { selId = nalazi[novi]?.id ?? null; crtajKarticu(); crtajStranicu(); };
+    if (slot) slot.dataset.anim = '';
+  };
+  /** Gornja kartica odleti ustranu; promjena filtra ili rezima otkazuje zastarjelo odrediste. */
+  const listaj = (novi: number, smjer: 1 | -1): void => {
+    prekiniListanje();
+    const generacija = generacijaListanja;
+    const slot = q<HTMLElement>('[data-rl-slot]');
+    const zamijeni = (): void => {
+      if (odbacen || generacija !== generacijaListanja) return;
+      const uloga = ulogaFokusa();
+      naCekanju = null;
+      selId = nalazi[novi]?.id ?? null;
+      crtajKarticu();
+      crtajStranicu();
+      if (uloga) vratiFokus(uloga);
+    };
     if (tiho || !slot) { zamijeni(); return; }
-    win?.clearTimeout(listanje);
+    naCekanju = novi;
     slot.dataset.anim = smjer > 0 ? 'out' : 'outR';
     listanje = win?.setTimeout(() => {
-      if (odbacen) return;
+      if (odbacen || generacija !== generacijaListanja) return;
+      listanje = 0;
       zamijeni();
       slot.dataset.anim = smjer > 0 ? 'in' : 'inR';
-      win?.requestAnimationFrame(() => win.requestAnimationFrame(() => { slot.dataset.anim = ''; }));
+      win?.requestAnimationFrame(() => win.requestAnimationFrame(() => {
+        if (generacija === generacijaListanja) slot.dataset.anim = '';
+      }));
     }, 200) ?? 0;
   };
-  ciscenja.push(() => win?.clearTimeout(listanje));
+  ciscenja.push(prekiniListanje);
 
   /* ---------------------------------------------------------------- dogadaji */
 
@@ -473,6 +579,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     const tab = cilj.closest<HTMLButtonElement>('[data-rl-tab]');
     if (tab) {
       if (tab.disabled) return;
+      prekiniListanje();
       cat = tab.dataset.rlTab as Jezicak;
       selId = nalazi[filtriraj(nalazi, cat)[0] ?? 0]?.id ?? null;
       const tabs = q<HTMLElement>('[data-rl-tabs]');
@@ -482,15 +589,23 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
       crtajStranicu();
       return;
     }
-    const go = cilj.closest<HTMLElement>('[data-rl-go]');
+    const go = cilj.closest<HTMLButtonElement>('[data-rl-go]');
     if (go) {
-      const v = go.dataset.rlGo;
-      if (v) listaj(Number(v), go.classList.contains('desk-nav__btn--prev') ? -1 : 1);
+      if (go.disabled) return;
+      // Susjed se racuna od nalaza prema kojem kartica vec leti, pa dvostruki klik pomakne dvaput.
+      const pol = polozaj(filtriraj(nalazi, cat), naCekanju ?? indeksOdabranog());
+      const natrag = go.classList.contains('desk-nav__btn--prev');
+      const kamo = natrag ? pol.prethodni : pol.sljedeci;
+      if (kamo !== null) listaj(kamo, natrag ? -1 : 1);
       return;
     }
     const strana = cilj.closest<HTMLElement>('[data-rl-page-go]');
-    if (strana && traka) {
-      const prvi = traka.poStranici.get(Number(strana.dataset.rlPageGo))?.[0];
+    const skupina = cilj.closest<HTMLElement>('[data-rl-skup]');
+    if (strana || skupina) {
+      const k = skupina?.dataset.rlSkup;
+      const ind = strana ? traka.poStranici.get(Number(strana.dataset.rlPageGo))
+        : skupine().find(([kljuc]) => kljuc === k)?.[2];
+      const prvi = ind?.[0];
       if (prvi === undefined) return;
       cat = 'all';
       const tabs = q<HTMLElement>('[data-rl-tabs]');
@@ -500,6 +615,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     }
     const nacin = cilj.closest<HTMLElement>('[data-rl-mode]');
     if (nacin) {
+      prekiniListanje();
       mode = nacin.dataset.rlMode === 'after' ? 'after' : 'now';
       const page = q<HTMLElement>('[data-rl-page]');
       if (page) page.dataset.mode = mode;
@@ -509,6 +625,7 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
     }
     const preklop = cilj.closest<HTMLButtonElement>('[data-rl-toggle]');
     if (preklop) {
+      prekiniListanje();
       const i = indeksOdabranog();
       const bio = uPlanu(uloge[i], odabir);
       odabir = prebaci(uloge[i], odabir);
@@ -573,8 +690,6 @@ export function mountResultLive(mount: HTMLElement, host: HTMLElement, o: LiveOp
       odbacen = true;
       ciscenja.forEach((c) => c());
       ladicaEl?.removeEventListener('click', naLadicu);
-      ladicaEl?.remove();
-      mount.removeAttribute('data-rl-tray-open');
       delete mount.dataset.rlReady;
     },
   };

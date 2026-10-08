@@ -53,18 +53,43 @@ export function jezicakNalaza(category: string): Jezicak | null {
   return KATEGORIJA_NALAZA[category] ?? null;
 }
 
+/** Statusi provjere koji znace da je vrijednost ISTINSKI procitana iz rada (`checks.ts`). */
+const MJERENO = new Set(['pass', 'warn', 'fail', 'informational']);
+
+/**
+ * OPSEG MJERENJA PO JEZICKU (Codex R2): koliko je provjera te kategorije stvarno mjerilo rad.
+ * Izvor su `checks` rezultata, ista lista iz koje nastaju nalazi; `unmeasurable` (Word vrijednost
+ * nije zapisao) i nepoznat status se NE broje, jer kvacica tvrdi "provjereno i uredno". Ulaz koji
+ * nije lista daje praznu kartu: nepoznato nikad nije mjereno.
+ */
+export function opsegMjerenja(checks: unknown): ReadonlyMap<Jezicak, number> {
+  const opseg = new Map<Jezicak, number>();
+  if (!Array.isArray(checks)) return opseg;
+  for (const c of checks as ReadonlyArray<{ readonly category?: unknown; readonly status?: unknown } | null>) {
+    const key = typeof c?.category === 'string' ? jezicakNalaza(c.category) : null;
+    if (key && typeof c?.status === 'string' && MJERENO.has(c.status)) opseg.set(key, (opseg.get(key) ?? 0) + 1);
+  }
+  return opseg;
+}
+
 interface JezicakModel {
   readonly key: Jezicak;
   readonly label: string;
   readonly n: number;
-  /** Kategorija bez nalaza: pokazuje kvacicu i nije klikabilna. */
+  /** Kategorija bez nalaza: nije klikabilna. */
   readonly prazan: boolean;
+  /**
+   * `nalazi` kad ih ima; `cisto` kad je kategorija MJERENA i nema nalaza (kvacica); `nemjereno` kad
+   * nema nalaza ni nijedne izmjerene provjere (bez kvacice: nula nalaza nije dokaz da je uredno).
+   */
+  readonly stanje: 'nalazi' | 'cisto' | 'nemjereno';
 }
 
-export function jezicci(nalazi: readonly { readonly category: string }[]): JezicakModel[] {
+export function jezicci(nalazi: readonly { readonly category: string }[], opseg: ReadonlyMap<Jezicak, number>): JezicakModel[] {
   return JEZICCI.map(([key, label]) => {
     const n = key === 'all' ? nalazi.length : nalazi.filter((f) => jezicakNalaza(f.category) === key).length;
-    return { key, label, n, prazan: n === 0 };
+    const mjereno = key === 'all' ? [...opseg.values()].some((v) => v > 0) : (opseg.get(key) ?? 0) > 0;
+    return { key, label, n, prazan: n === 0, stanje: n > 0 ? 'nalazi' : mjereno ? 'cisto' : 'nemjereno' };
   });
 }
 
@@ -343,12 +368,16 @@ export function izgledNakon(sada: IzgledStranice, stavke: readonly LiveStavka[],
 /* ------------------------------------------------------------------ stranice */
 
 export interface TrakaStranica {
-  /** Stvarni broj stranica (Word ga zapisuje u `docProps/app.xml`). */
-  readonly ukupno: number;
+  /** Stvarni broj stranica (Word ga zapisuje u `docProps/app.xml`); `null` kad nije zapisan (tada nema celija). */
+  readonly ukupno: number | null;
   /** Stranica (1-based) -> indeksi nalaza na njoj; prazno kad se mjesto ne moze pouzdano odrediti. */
   readonly poStranici: ReadonlyMap<number, readonly number[]>;
   /** Indeksi nalaza koji vrijede za cijeli rad (crvena crta). */
   readonly cijeliRad: readonly number[];
+  /** Indeksi nalaza u fusnotama: zaseban koordinatni prostor, nikad pripisan stranici tijela (Codex R5). */
+  readonly fusnote: readonly number[];
+  /** Indeksi ostalih nalaza kojima se stranica ne moze pripisati: podrucje, nepoznato mjesto, sidro bez karte (Codex R5). */
+  readonly bezStranice: readonly number[];
   /** Je li `poStranici` izveden iz Wordovih prijeloma koji se slazu s brojem stranica (i tada je pripis PRIBLIZAN). */
   readonly pouzdano: boolean;
 }
@@ -396,25 +425,63 @@ function sidroOdlomka(scope: FindingScope): number | null {
   return Number.isFinite(p) && p >= 1 ? p : null;
 }
 
-/** Traka stranica, ili `null` kad stvaran broj stranica nije poznat (tada se traka ne crta). */
+/**
+ * Traka stranica. Svaki nalaz zavrsi u TOCNO jednoj skupini (stranica, cijeli rad, fusnote, bez
+ * stranice), pa traka nikad ne izgubi nalaz bez objasnjenja (Codex R5). Bez stvarnog broja stranica
+ * (`ukupno: null`) nema celija, ali skupine ostaju.
+ */
 export function trakaStranica(
   preview: LivePreview | null,
   storedPages: unknown,
   nalazi: readonly DeskItem[],
-): TrakaStranica | null {
-  const ukupno = broj(storedPages);
-  if (ukupno === null || ukupno < 1 || ukupno > MAX_STRANICA || Math.floor(ukupno) !== ukupno) return null;
-  const karta = kartaStranica(preview, ukupno);
+): TrakaStranica {
+  const zapisano = broj(storedPages);
+  const ukupno = zapisano === null || zapisano < 1 || zapisano > MAX_STRANICA || Math.floor(zapisano) !== zapisano ? null : zapisano;
+  const karta = ukupno === null ? null : kartaStranica(preview, ukupno);
   const poStranici = new Map<number, number[]>();
   const cijeliRad: number[] = [];
+  const fusnote: number[] = [];
+  const bezStranice: number[] = [];
   nalazi.forEach((it, i) => {
-    if (it.finding.scope.kind === 'document') { cijeliRad.push(i); return; }
-    const sidro = sidroOdlomka(it.finding.scope);
+    const scope = it.finding.scope;
+    if (scope.kind === 'document') { cijeliRad.push(i); return; }
+    if (scope.kind === 'anchor' && scope.footnoteId != null) { fusnote.push(i); return; }
+    const sidro = sidroOdlomka(scope);
     const s = sidro !== null && karta ? karta.get(sidro) : undefined;
-    if (s === undefined) return;
+    if (s === undefined) { bezStranice.push(i); return; }
     poStranici.set(s, [...(poStranici.get(s) ?? []), i]);
   });
-  return { ukupno, poStranici, cijeliRad, pouzdano: karta !== null };
+  return { ukupno, poStranici, cijeliRad, fusnote, bezStranice, pouzdano: karta !== null };
+}
+
+/** Stranica nalaza na traci, kad je pripisana; inace `null`. */
+export function stranicaNalaza(traka: TrakaStranica, i: number): number | null {
+  for (const [s, ind] of traka.poStranici) if (ind.includes(i)) return s;
+  return null;
+}
+
+const velikoSlovo = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/**
+ * NATPIS MJESTA iznad stranice rada (Codex R4, R5). Govori o NALAZU, ne o prikazanom ulomku:
+ * nalaz za cijeli rad prikazuje pocetak tijela, ali natpis kaze "Cijeli rad", ne "Oko str. 1".
+ * Stranica se pise samo kad je nalaz STVARNO pripisan (sidro na karti prijeloma), i to "Oko".
+ */
+export function natpisMjesta(scope: FindingScope, s: Pick<StranicaPrikaza, 'broj' | 'sidro'>, traka: TrakaStranica): string {
+  if (scope.kind === 'document') return 'Cijeli rad';
+  if (scope.kind === 'region') return velikoSlovo(scope.label);
+  if (scope.kind === 'unavailable') return 'Mjesto nije poznato';
+  if (scope.footnoteId != null) return `Bilješka ${scope.footnoteId}`;
+  if (s.sidro === null) return `Odlomak ${scope.paragraphIndex}, izvan pregleda`;
+  return s.broj !== null && traka.ukupno !== null ? `Oko str. ${s.broj} od ${traka.ukupno}` : `Odlomak ${scope.paragraphIndex}`;
+}
+
+/** Desna oznaka glave trake za odabrani nalaz: pripisana stranica, ili skupina u kojoj nalaz jest. */
+export function oznakaTrake(scope: FindingScope, stranica: number | null): string {
+  if (stranica !== null) return `Oko str. ${stranica}`;
+  if (scope.kind === 'document') return 'Cijeli rad';
+  if (scope.kind === 'anchor' && scope.footnoteId != null) return `Bilješka ${scope.footnoteId}`;
+  return 'Stranica nije poznata';
 }
 
 interface StranicaPrikaza {
@@ -439,7 +506,7 @@ export function stranicaZaNalaz(
   const odlomci = odlomciPregleda(preview).filter((p) => p.text.trim());
   if (!odlomci.length) return { odlomci: [], broj: null, sidro: null };
   const sidro = sidroOdlomka(scope);
-  const karta = traka?.pouzdano ? kartaStranica(preview, traka.ukupno) : null;
+  const karta = traka?.pouzdano && traka.ukupno !== null ? kartaStranica(preview, traka.ukupno) : null;
   const uTekstu = sidro !== null ? odlomci.findIndex((p) => p.index === sidro) : -1;
   const bez = ({ index, text, heading }: { index: number; text: string; heading: boolean }) => ({ index, text, heading });
   if (uTekstu >= 0 && sidro !== null) {
