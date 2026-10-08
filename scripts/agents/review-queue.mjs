@@ -58,11 +58,16 @@ function loadState() {
 const saveState = (s) => writeFileSync(STATE_FILE, JSON.stringify(s, null, 2));
 
 function listLabelled() {
-  const fields = 'number,title,body,headRefOid,baseRefName,labels,commits';
+  // Popis bez commits: ugnijezdeni commits po PR-u prelazi GitHubov limit cvorova GraphQL upita.
+  const fields = 'number,title,body,headRefOid,baseRefName,labels';
   const byNumber = new Map();
   for (const label of ['grok-review', 'codex-review']) {
     const out = gh(['pr', 'list', '--repo', REPO, '--state', 'open', '--label', label, '--json', fields, '--limit', '50']);
     for (const pr of JSON.parse(out)) byNumber.set(pr.number, pr);
+  }
+  // Potpisi implementatora citaju se iz commitova, pa se dohvacaju po PR-u.
+  for (const pr of byNumber.values()) {
+    pr.commits = JSON.parse(gh(['pr', 'view', String(pr.number), '--repo', REPO, '--json', 'commits'])).commits ?? [];
   }
   return [...byNumber.values()];
 }
