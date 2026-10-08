@@ -79,7 +79,7 @@ npm run orphan-scan
 ```
 
 plus ciljani testovi dirnutih domena (`node scripts/with-gate-lock.mjs ciljano -- npx vitest run <datoteke>`),
-a oxlint i `tsc --noEmit` kad su brzi. Puni gate je CI na zadnjem commitu PR-a: `build-gate` (Node 20 i 24:
+a oxlint i `node scripts/with-gate-lock.mjs tsc -- npx tsc --noEmit` kad su brzi. Puni gate je CI na zadnjem commitu PR-a: `build-gate` (Node 20 i 24:
 lint, TypeScript, Edge, Vite build) i `vitest-gate` (Vitest u shardovima) moraju biti zeleni, a PR se ne
 spaja prije toga. Zeleni izlazni kod bez Vitest retka `Test Files` (zbroj shardova) nije dokaz.
 
@@ -107,8 +107,8 @@ ne tumaci kao zeleno.
 - Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
 - Popravni krug nakon pregleda je razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali
   lokalni nalaz mjeri doseg, regenerira samo pogodjene artefakte u dva prolaza i ide mehanicki
-  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate i jedan pregled drugog providera
-  ostaju obvezni prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
+  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate (CI) i jedan pregled drugog providera
+  ostaju obvezni prije spajanja, a ciljani testovi i `orphan-scan` prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
   Detalji: `docs/agents/no-fable-workflow.md`.
 
 Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
