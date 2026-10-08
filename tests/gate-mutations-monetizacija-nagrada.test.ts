@@ -15,7 +15,8 @@ import type * as RadnikModul from '../supabase/functions/process-bonus-outbox/re
 import { ACTIVE_SLOT_SELECT, readAccessRows } from '../src/report/entitlement-access';
 import type { SlotRow } from '../src/report/slot-logic';
 import { catalogProblems, idempotencyProblems, runV1, snapshotProblems, upgradeSqlProblems } from './helpers/monetizacija-v1-sql';
-import { ROK_SQL, bonusOutboxModuleSource, mutirajRe } from './helpers/monetizacija-mutations';
+import { bonusOutboxModuleSource } from './helpers/bonus-outbox-source';
+import { ROK_SQL, mutirajRe } from './helpers/monetizacija-mutations';
 
 /**
  * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0207 se

@@ -1,11 +1,9 @@
 /**
  * Dijeljeni pomocnici za mutacije Monetizacije V1 (T106: izdvojeno iz tests/gate-mutations.test.ts bez
- * izmjene tijela). Koriste ih tests/gate-mutations-monetizacija-*.test.ts; bonusOutboxModuleSource i
- * MUTATIONS u tests/gate-mutations.test.ts.
+ * izmjene tijela). Koriste ih tests/gate-mutations-monetizacija-*.test.ts. Uvoze PGlite, pa ih
+ * tests/gate-mutations.test.ts ne smije uvoziti (izvor bonus outboxa je u bonus-outbox-source.ts).
  */
 import { expect } from 'vitest';
-import { resolve } from 'node:path';
-import { readTextLf } from './naplata-env';
 import { V1_MIGRATION, privilegeProblems, readMigration, runV1 } from './monetizacija-v1-sql';
 
 export const ROK_SQL = 180_000;
@@ -35,8 +33,4 @@ export async function privilegijeNad(sql: string): Promise<string[]> {
     await sZadanima.db.close();
     await bez.db.close();
   }
-}
-
-export function bonusOutboxModuleSource(): string {
-  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'referrer-reward.ts'));
 }

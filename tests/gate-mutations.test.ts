@@ -135,7 +135,7 @@ import {
   upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
-import { bonusOutboxModuleSource } from './helpers/monetizacija-mutations';
+import { bonusOutboxModuleSource } from './helpers/bonus-outbox-source';
 import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb } from '../src/report/entitlement-access';
 import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
 import { applyGuard as stripeSyncApplyGuard, parseArgs as stripeSyncParseArgs } from '../scripts/stripe-sync-products.mjs';
