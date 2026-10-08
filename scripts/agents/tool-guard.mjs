@@ -18,6 +18,10 @@
  * gore od uputa u promptu koje barem ne rusi alat.
  */
 
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { isAbsolute, join, resolve } from 'node:path';
+
 /**
  * Poznati resursi koje gard smije zasticivati. Putanje su Windows stil (repo zivi na Windowsu),
  * usporedba je case-insensitive jer je NTFS neosjetljiv na velicinu slova.
@@ -99,12 +103,90 @@ function isPathInsideAllowedRoots(rawPath) {
 }
 
 /**
+ * Dovrsenja koja, kao i goli `git commit`, commitaju CIJELI indeks.
+ * Preneseno iz `~/.claude/hooks/lekta-git-guard.mjs` (2026-10-08), da pravilo vrijedi i u cloud
+ * sesijama i na svakoj radnoj stanici, ne samo na stroju gdje je ta datoteka bila ozicena.
+ */
+const NASTAVCI_SPAJANJA = new Set(['merge', 'rebase', 'cherry-pick', 'revert']);
+
+/**
+ * Cinjenicno stanje stabla u kojem bi git radio: `{ izoliran, spajanje }`, ili `null` kad se ne
+ * moze utvrditi. Povezani worktree ima `--git-dir` razlicit od `--git-common-dir`; u glavnom stablu
+ * su isti. Spajanje se cita iz sekvencerskih tragova, istog izvora iz kojeg ga cita i sam git.
+ * @param {string} dir
+ * @returns {{izoliran: boolean, spajanje: boolean} | null}
+ */
+export function stanjeStabla(dir) {
+  if (!dir || !existsSync(dir)) return null;
+  const r = spawnSync('git', ['rev-parse', '--git-dir', '--git-common-dir'], {
+    cwd: dir, encoding: 'utf8', windowsHide: true, timeout: 5000,
+  });
+  if (r.status !== 0 || !r.stdout) return null;
+  const [gitDir, commonDir] = r.stdout.trim().split(/\r?\n/).map((x) => x.trim());
+  if (!gitDir || !commonDir) return null;
+  const g = resolve(dir, gitDir);
+  const c = resolve(dir, commonDir);
+  const spajanje = ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-merge', 'rebase-apply']
+    .some((trag) => existsSync(join(g, trag)));
+  return { izoliran: g !== c, spajanje };
+}
+
+/**
+ * Presuda za naredbu koja commita CIJELI indeks (goli `git commit` ili `<x> --continue`).
+ *
+ * Prava podjela nije commit vs merge, nego DIJELJENO vs IZOLIRANO stablo: u dijeljenom stablu
+ * cijeli indeks povuce tudje stagirane datoteke (2026-08-31: 21 tudja datoteka pod krivom porukom).
+ * Tijekom spajanja git odbija `--only` ("cannot do a partial commit during a merge"), pa je jedini
+ * valjan put dovrsiti spajanje u vlastitom worktreeju. Cloud sesija (`CLAUDE_CODE_REMOTE=true`) je
+ * vlastiti klon s jednim piscem, pa vrijedi kao izolirana.
+ *
+ * FAIL-CLOSED samo ovdje: kad se stanje ne moze utvrditi, odbija i to kaze, jer bi bez spajanja
+ * naredba ionako bila odbijena. Vlastita greska hooka i dalje propusta (vidi `main`).
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null), udaljeno: boolean}} okolina
+ * @param {boolean} nastavak - `<merge|rebase|cherry-pick|revert> --continue`
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+function judgeWholeIndexCommit(okolina, nastavak) {
+  const stanje = okolina.ispitaj(okolina.dir);
+  if (!stanje) {
+    return {
+      allow: false,
+      reason:
+        'Nije se moglo utvrditi radi li se u vlastitom worktreeju, pa gard odbija umjesto da pogadja. Pokreni naredbu iz direktorija repozitorija (ili s vodecim `cd <put> &&`).',
+    };
+  }
+  const izoliran = stanje.izoliran || okolina.udaljeno;
+  if (nastavak) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        'Dovrsenje spajanja commita CIJELI indeks, pa u DIJELJENOM stablu povuce tudje stagirane datoteke pod tvoj merge. Spajanje radi u vlastitom `git worktree`.',
+    };
+  }
+  if (stanje.spajanje) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        '`git commit` bez `--only` commita CIJELI indeks. Tijekom spajanja `--only` nije moguc (git: "cannot do a partial commit during a merge"), pa se spajanje radi u vlastitom `git worktree`, a ne u dijeljenom stablu.',
+    };
+  }
+  return {
+    allow: false,
+    reason:
+      '`git commit` bez `--only` commita CIJELI indeks, ne samo tvoje putanje. Koristi `git commit --only <putanje>`.',
+  };
+}
+
+/**
  * Ispituje jednu podnaredbu (vec rastavljenu od `&&`/`;`/...) i vraca presudu ako prepozna opasan
  * obrazac, ili `null` ako podnaredba nije predmet ovog garda.
  * @param {string[]} tokens
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null), udaljeno: boolean}} okolina
  * @returns {{allow: boolean, reason: string} | null}
  */
-function judgeSingleCommand(tokens) {
+function judgeSingleCommand(tokens, okolina) {
   if (tokens.length === 0) return null;
   const head = tokens[0].toLowerCase();
 
@@ -116,12 +198,14 @@ function judgeSingleCommand(tokens) {
       if (
         hasFlag(args, '-A') ||
         hasFlag(args, '--all') ||
+        hasFlag(args, '-u') ||
+        hasFlag(args, '--update') ||
         args.some((a) => a === '.')
       ) {
         return {
           allow: false,
           reason:
-            'git add -A / git add . / git add --all nije dopusten. Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
+            'git add -A / git add . / git add --all / git add -u nije dopusten (stagira i tudji necommitani rad). Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
         };
       }
       return null;
@@ -143,7 +227,12 @@ function judgeSingleCommand(tokens) {
             'git commit s -a/--all bez --only nije dopusten (uzima cijeli indeks). Koristi git commit --only <putanje>.',
         };
       }
+      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);
       return null;
+    }
+
+    if (NASTAVCI_SPAJANJA.has(sub) && hasFlag(args, '--continue')) {
+      return judgeWholeIndexCommit(okolina, true);
     }
 
     if (sub === 'push') {
@@ -454,9 +543,12 @@ export function judgeSupabaseMcp(toolNameLower, toolInput) {
  * @param {string | undefined} command - `tool_input.command` za Bash/PowerShell; nedefinirano za
  *   alate bez naredbe u ljusci.
  * @param {Record<string, unknown>} [toolInput] - cijeli `tool_input`; MCP alati nose argumente ovdje.
+ * @param {{cwd?: string, ispitaj?: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null), udaljeno?: boolean}} [okolina] -
+ *   stanje stabla za naredbe koje commitaju cijeli indeks. Bez `ispitaj` stanje je nepoznato, pa
+ *   presuda ostaje cista (bez gita) i za takve naredbe odbija; `main` predaje stvarni `stanjeStabla`.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command, toolInput) {
+export function judgeCommand(toolName, command, toolInput, okolina = {}) {
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -472,10 +564,20 @@ export function judgeCommand(toolName, command, toolInput) {
   }
 
   const subcommands = splitChainedCommands(command);
+  const stanje = {
+    dir: okolina.cwd || process.cwd(),
+    ispitaj: okolina.ispitaj ?? (() => null),
+    udaljeno: okolina.udaljeno === true,
+  };
   let warning = null;
   for (const sub of subcommands) {
     const tokens = tokenize(sub);
-    const verdict = judgeSingleCommand(tokens);
+    // `cd <put>` u lancu mijenja gdje sljedeci git stvarno radi.
+    if ((tokens[0] ?? '').toLowerCase() === 'cd' && tokens[1]) {
+      stanje.dir = isAbsolute(tokens[1]) ? tokens[1] : resolve(stanje.dir, tokens[1]);
+      continue;
+    }
+    const verdict = judgeSingleCommand(tokens, stanje);
     if (verdict === null) continue;
     if (!verdict.allow) return verdict;
     warning = verdict;
@@ -522,7 +624,11 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command, payload?.tool_input);
+    verdict = judgeCommand(toolName, command, payload?.tool_input, {
+      cwd: typeof payload?.cwd === 'string' ? payload.cwd : undefined,
+      ispitaj: stanjeStabla,
+      udaljeno: process.env.CLAUDE_CODE_REMOTE === 'true',
+    });
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);

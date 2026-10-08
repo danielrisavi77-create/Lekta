@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { judgeCommand } from '../scripts/agents/tool-guard.mjs';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { judgeCommand, stanjeStabla } from '../scripts/agents/tool-guard.mjs';
 import { supabaseMcpGuardProblems, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 /**
@@ -52,9 +54,110 @@ describe('judgeCommand - git commit', () => {
     expect(r.allow).toBe(true);
   });
 
-  it('dopusta obican git commit -m bez -a/--all', () => {
-    const r = judgeCommand('Bash', 'git commit -m "x"');
-    expect(r.allow).toBe(true);
+  it('blokira obican git commit -m bez --only (uzima cijeli indeks)', () => {
+    const r = judgeCommand('Bash', 'git commit -m "x"', undefined, { ispitaj: DIJELJENO });
+    expect(r.allow).toBe(false);
+    expect(r.reason).toContain('`git commit` bez `--only`');
+  });
+
+  it('blokira git add -u i --update', () => {
+    expect(judgeCommand('Bash', 'git add -u').allow).toBe(false);
+    expect(judgeCommand('Bash', 'git add --update').allow).toBe(false);
+  });
+});
+
+/**
+ * Preneseno iz `~/.claude/hooks/lekta-git-guard.mjs` (2026-10-08). Stanje stabla se podmece kroz
+ * `ispitaj`, pa presuda ne ovisi o tome gdje test radi; dvije provjere idu nad STVARNIM gitom.
+ */
+const DIJELJENO = () => ({ izoliran: false, spajanje: false });
+const DIJELJENO_U_SPAJANJU = () => ({ izoliran: false, spajanje: true });
+const WORKTREE = () => ({ izoliran: true, spajanje: false });
+const WORKTREE_U_SPAJANJU = () => ({ izoliran: true, spajanje: true });
+const NEPOZNATO = () => null;
+
+describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
+  const dopusteno: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null, boolean?]> = [
+    ['merge --continue u vlastitom worktreeju', 'git merge --continue', WORKTREE],
+    ['rebase --continue u vlastitom worktreeju', 'git rebase --continue', WORKTREE],
+    ['goli commit tijekom spajanja u worktreeju', 'git commit --no-edit', WORKTREE_U_SPAJANJU],
+    ['merge --continue u cloud klonu', 'git merge --continue', DIJELJENO, true],
+    ['goli commit tijekom spajanja u cloud klonu', 'git commit --no-edit', DIJELJENO_U_SPAJANJU, true],
+    ['commit s --only i nepoznatim stanjem', 'git commit --only a.ts -m x', NEPOZNATO],
+  ];
+  const blokirano: Array<[string, string, () => { izoliran: boolean; spajanje: boolean } | null, boolean?]> = [
+    ['goli commit u worktreeju BEZ spajanja', 'git commit -m x', WORKTREE],
+    ['goli commit u cloud klonu BEZ spajanja', 'git commit -m x', DIJELJENO, true],
+    ['merge --continue u dijeljenom stablu', 'git merge --continue', DIJELJENO_U_SPAJANJU],
+    ['cherry-pick --continue u dijeljenom stablu', 'git cherry-pick --continue', DIJELJENO_U_SPAJANJU],
+    ['goli commit tijekom spajanja u dijeljenom stablu', 'git commit --no-edit', DIJELJENO_U_SPAJANJU],
+    ['stanje se ne moze utvrditi', 'git commit -m x', NEPOZNATO],
+    ['goli commit iza drugog dijela lanca', 'git status && git commit -m x', DIJELJENO],
+  ];
+
+  for (const [ime, naredba, ispitaj, udaljeno] of dopusteno) {
+    it(`dopusteno: ${ime}`, () => {
+      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj, udaljeno }).allow).toBe(true);
+    });
+  }
+  for (const [ime, naredba, ispitaj, udaljeno] of blokirano) {
+    it(`blokirano: ${ime}`, () => {
+      expect(judgeCommand('Bash', naredba, undefined, { cwd: '/x', ispitaj, udaljeno }).allow).toBe(false);
+    });
+  }
+
+  it('poruka tijekom spajanja NE upucuje na --only, jer ga git odbija', () => {
+    const r = judgeCommand('Bash', 'git commit --no-edit', undefined, { ispitaj: DIJELJENO_U_SPAJANJU });
+    expect(r.reason).toContain('worktree');
+    expect(r.reason).not.toMatch(/Koristi `git commit --only/);
+  });
+
+  it('poruka commita koja spominje `git commit` nije naredba', () => {
+    const naredba = 'git commit --only a.ts -m "prije je git commit uzimao indeks"';
+    expect(judgeCommand('Bash', naredba, undefined, { ispitaj: DIJELJENO }).allow).toBe(true);
+  });
+
+  it('vodeci `cd` odreduje gdje git STVARNO radi', () => {
+    const vidjeno: string[] = [];
+    const ispitaj = (dir: string) => {
+      vidjeno.push(dir);
+      return WORKTREE_U_SPAJANJU();
+    };
+    judgeCommand('Bash', 'cd /a/b && git commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    judgeCommand('Bash', 'git commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    expect(vidjeno.map((d) => d.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''))).toEqual(['/a/b', '/session']);
+  });
+
+  it('bez podmetnutog stanja presuda ne poziva git i odbija goli commit', () => {
+    expect(judgeCommand('Bash', 'git commit -m x').allow).toBe(false);
+  });
+});
+
+describe('stanjeStabla nad STVARNIM gitom', () => {
+  it('povezani worktree je izoliran, glavno stablo nije', () => {
+    const baza = mkdtempSync(join(tmpdir(), 'lekta-gard-'));
+    try {
+      const repo = join(baza, 'repo');
+      const g = (args: string[], cwd: string) => execFileSync('git', args, { cwd, encoding: 'utf8', windowsHide: true });
+      execFileSync('git', ['init', '-q', repo], { cwd: baza, windowsHide: true });
+      g(['config', 'user.email', 'x@y.z'], repo);
+      g(['config', 'user.name', 'Test'], repo);
+      g(['config', 'commit.gpgsign', 'false'], repo);
+      writeFileSync(join(repo, 'a.txt'), 'a\n');
+      g(['add', 'a.txt'], repo);
+      g(['commit', '-q', '--only', 'a.txt', '-m', 'prvi'], repo);
+      const wt = join(baza, 'wt');
+      g(['worktree', 'add', '-q', '--detach', wt], repo);
+
+      expect(stanjeStabla(repo)).toEqual({ izoliran: false, spajanje: false });
+      expect(stanjeStabla(wt)).toEqual({ izoliran: true, spajanje: false });
+    } finally {
+      rmSync(baza, { recursive: true, force: true });
+    }
+  });
+
+  it('nepostojeca staza daje null, ne lazno zeleno', () => {
+    expect(stanjeStabla(join(tmpdir(), `ovo-ne-postoji-gard-${process.pid}`))).toBeNull();
   });
 });
 
