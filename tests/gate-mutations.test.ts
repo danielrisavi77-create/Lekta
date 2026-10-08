@@ -317,6 +317,7 @@ import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRea
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
+import { supabaseMcpGuardProblems, supabaseMcpGuardProblemsForSource, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -11237,6 +11238,9 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
 
   it('mutant: matcher samo za Supabase velikim slovom propusta lokalni server supabase', () => {
     const mutant = JSON.parse(JSON.stringify(settings));
+    // Registracija `mcp__.*[Ss]upabase.*` (PR #327) pokriva iste alate; makni je da mutant mjeri
+    // bas ovu registraciju, ne preklapanje dviju.
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => e.matcher !== 'mcp__.*[Ss]upabase.*');
     for (const e of mutant.hooks.PreToolUse as Array<{ matcher?: string }>) {
       if (e.matcher === 'mcp__.*__apply_migration') e.matcher = 'mcp__.*Supabase.*__apply_migration';
     }
@@ -11343,14 +11347,29 @@ describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', ()
   it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
     const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
     expect(weakMachineProblems(samoJezgre)).toEqual([
+      'laptop (4 niti, 8 GB): postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
       '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
     ]);
   });
 
-  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
-    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+  it('mutant: stroga granica jezgri (< 2 umjesto <= 2) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 2 ? 3 : input?.cpus });
     expect(weakMachineProblems(stroga)).toEqual([
-      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+      'tocno 2 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stara granica od 4 jezgre (laptop 16 GB na jednom radniku) se hvata', () => {
+    const stara: Fn = (input) => {
+      const presuda = weakMachineWorkerEnv(input);
+      const cpus = input?.cpus;
+      const ci = input?.env?.CI;
+      const vecPostavljen = input?.env?.VITEST_MAX_THREADS;
+      return presuda ?? (typeof cpus === 'number' && cpus <= 4 && !ci && !vecPostavljen ? { VITEST_MAX_THREADS: '1' } : null);
+    };
+    expect(weakMachineProblems(stara)).toEqual([
+      'laptop (4 niti, 16 GB): ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+      '3 jezgre uz 16 GB: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
     ]);
   });
 
@@ -12759,5 +12778,84 @@ describe('mutations: actual verification focus restoration', () => {
   ]) it(`actual focus guard removal fails: ${before}`, async () => {
     expect(verifyBadgesSource()).toContain(before);
     expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * SUPABASE MCP GARD (odluka vlasnika 2026-10-08, popravak po Codex pregledu #327). Mutira se KOPIJA
+ * izvora `scripts/agents/tool-guard.mjs` (tests/helpers/supabase-mcp-guard.ts), nikad omotac.
+ *  (a) matcher hooka bez MCP alata: presuda se nikad ne pozove (stanje do 2026-10-08);
+ *  (b) E-string bez backslash escapea, poziv funkcije bez provjere, nepoznat alat kao citanje i
+ *      vise naredbi u jednom upitu: svaki propusta pisanje koje je Codex ili mjerenje nasao.
+ */
+describe('mutacije: Supabase MCP gard u tool-guard.mjs', () => {
+  const settingsText = readTextLf(resolve(process.cwd(), '.claude/settings.json'));
+  const settings = JSON.parse(settingsText);
+  const izvor = readTextLf(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'));
+  const mutiraj = (from: string, to: string) => {
+    const m = izvor.replace(from, to);
+    expect(m, from).not.toBe(izvor);
+    return m;
+  };
+
+  it('BASELINE: stvarna presuda, nemutirana kopija izvora i stvarna registracija su ciste', async () => {
+    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
+    expect(supabaseMcpGuardProblems(judgeCommand)).toEqual([]);
+    expect(supabaseMcpGuardProblemsForSource(izvor)).toEqual([]);
+    expect(toolGuardMatcherProblems(settings)).toEqual([]);
+  });
+
+  it('mutant: bez registracije mcp__.*[Ss]upabase.* ostali Supabase MCP alati ne stizu do garda', () => {
+    // apply_migration i dalje pokriva zasebna registracija `mcp__.*__apply_migration` (PR #326).
+    const mutant = JSON.parse(settingsText);
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => e.matcher !== 'mcp__.*[Ss]upabase.*');
+    expect(mutant.hooks.PreToolUse.length).toBe(settings.hooks.PreToolUse.length - 1);
+    expect(toolGuardMatcherProblems(mutant)).toEqual([
+      'tool-guard matcher ne pokriva mcp__Supabase__execute_sql',
+      'tool-guard matcher ne pokriva mcp__claude_ai_Supabase__deploy_edge_function',
+    ]);
+  });
+
+  it('mutant: tool-guard samo pod Bash|PowerShell (stanje do 2026-10-08) se hvata', () => {
+    const mutant = JSON.parse(settingsText);
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => !String(e.matcher ?? '').startsWith('mcp__'));
+    expect(toolGuardMatcherProblems(mutant)).toEqual([
+      'tool-guard matcher ne pokriva mcp__Supabase__apply_migration',
+      'tool-guard matcher ne pokriva mcp__Supabase__execute_sql',
+      'tool-guard matcher ne pokriva mcp__claude_ai_Supabase__deploy_edge_function',
+    ]);
+  });
+
+  it('mutant: E-string bez backslash escapea se hvata', () => {
+    const m = mutiraj("if (eString && sql[i] === '\\\\') { i += 2; continue; }", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql E-string s parnim navodnicima skriva update: dobiveno allow=true, ocekivano allow=false',
+    ]);
+  });
+
+  it('mutant: poziv funkcije bez provjere se hvata', () => {
+    const m = mutiraj('if (!SQL_SAFE_CALLS.has(call[1])) return', 'if (false) return');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql pg_notify (Codex #327, nalaz 2): dobiveno allow=true, ocekivano allow=false',
+      'execute_sql pg_advisory_lock: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql vlastiti RPC: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql funkcija u navodnicima: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql set_config: dobiveno allow=true, ocekivano allow=false',
+    ]);
+  });
+
+  it('mutant: nepoznat Supabase alat kao citanje se hvata', () => {
+    const m = mutiraj('if (SUPABASE_MCP_READ_TOOLS.has(name))', 'if (true)');
+    const problems = supabaseMcpGuardProblemsForSource(m);
+    expect(problems).toContain('create_edge_function_secret (nije na popisu zabrana): dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('nepoznat buduci alat: dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('deploy_edge_function (konektor): dobiveno allow=true, ocekivano allow=false');
+  });
+
+  it('mutant: vise naredbi u jednom upitu se hvata', () => {
+    const m = mutiraj("if (body.includes(';')) return 'vise naredbi';", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql dvije naredbe koje citaju: dobiveno allow=true, ocekivano allow=false',
+    ]);
   });
 });

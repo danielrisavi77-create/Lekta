@@ -265,10 +265,12 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
   knip i generatori idu kroz `node scripts/with-gate-lock.mjs <oznaka> -- <naredba>`, jedan
   odjednom po stroju. Npm skripte koje vec idu kroz omotac (`npm run check` i ostale iz "Pravila
   za stroj") ne treba dodatno omotavati.
-- **Slab stroj: jedan Vitest radnik.** Na stroju s najvise 4 logicke jezgre ili manje od 12 GB
+- **Slab stroj: jedan Vitest radnik.** Na stroju s najvise 2 logicke jezgre ili manje od 12 GB
   RAM-a omotac sam postavlja `VITEST_MAX_THREADS=1` za dijete i ispisuje
   `preflight: slab stroj, VITEST_MAX_THREADS=1`; vec postavljen `VITEST_MAX_THREADS` ne dira, a na
-  CI-ju ne dodaje nista (`weakMachineWorkerEnv` u `scripts/gate-preflight.mjs`).
+  CI-ju ne dodaje nista (`weakMachineWorkerEnv` u `scripts/gate-preflight.mjs`). Granica je do
+  2026-10-08 bila 4 jezgre; izmjereno je da 2 radnika traju upola krace (672 s prema 1314 s) uz vrh
+  2,4 GB, pa laptop sa 16 GB sada dobiva zadana 2 radnika.
 - **Nikakvi testovi u dijeljenom stablu.** Testovi, build i generatori se pokrecu samo u vlastitom
   izoliranom worktreeu ili cloneu (CLAUDE.md, "Izolacija i Git").
 - **Closed-loop, korpus i Playwright lokalno samo uz dodjelu koordinatora.** Bez dodjele ti poslovi
@@ -282,7 +284,7 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
 
 | Stroj | Najvise sesija | Najvise teskih poslova odjednom |
 | --- | --- | --- |
-| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2), plus trajna sesija kvalitete lekta-q | 1 |
+| laptop (i3-4100M, 4 niti, 16 GB, SSD 128 GB) | 3 Claude sesije (koordinator + 2), plus trajna sesija kvalitete lekta-q | 1 |
 | radna stanica (16 GB, Word runner) | 7 | 2; Word runner ima prednost |
 | cloud | 4 aktivne sesije sa zadatkom (sesije u mirovanju se ne broje) | po sesiji, u njezinom kontejneru |
 
@@ -327,7 +329,7 @@ Mjerenje iza brojki: sesija u mirovanju 250 do 300 MB, Vitest s jednim radnikom 
 
 ## Pravila za stroj
 
-Razvojni stroj je i3 s 2 jezgre i 8 GB RAM-a, a na njemu istodobno radi vise sesija (Claude,
+Razvojni stroj je i3 s 2 jezgre (4 niti) i 16 GB RAM-a (izmjereno 2026-10-08), a na njemu istodobno radi vise sesija (Claude,
 Codex, Grok). Dva gatea u isto vrijeme ne padnu cisto nego mlate memoriju, pa padaju testovi
 koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego deterministicka provjera
 (`scripts/gate-preflight.mjs`, vlasnik 2026-09-26, T62).
@@ -396,7 +398,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 | Dogadjaj | Skripta | Sto radi |
 | --- | --- | --- |
 | SessionStart | `scripts/agents/session-bootstrap.mjs --worktree-gc` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". Zatim jedan redak `worktree-gc` (samo uz zastavicu, fail-open). |
-| PreToolUse (Bash, PowerShell) | `scripts/agents/tool-guard.mjs` | Postojeci gard opasnih git i brisanja naredbi. |
+| PreToolUse (Bash, PowerShell, Supabase MCP) | `scripts/agents/tool-guard.mjs` | Gard opasnih git i brisanja naredbi; od 2026-10-08 i Supabase MCP, fail-closed: prolazi samo popis alata koji citaju i `execute_sql` s jednom naredbom za citanje (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; sve ostalo se odbija (scenariji u `tests/helpers/supabase-mcp-guard.ts`). Druga razina: jamstvo daje konektor s `read_only=true`. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
 | PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
 | Stop | `scripts/hooks/implementer-stop.mjs` | Implementatorska sesija ne zavrsava dok checklist ima otvorenih stavki. |

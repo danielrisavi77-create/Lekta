@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { judgeCommand } from '../scripts/agents/tool-guard.mjs';
+import { supabaseMcpGuardProblems, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 /**
  * Tablica dopusteno/zabranjeno za deterministicki PreToolUse gard (`scripts/agents/tool-guard.mjs`).
@@ -190,5 +193,16 @@ describe('judgeCommand - opce i fail-open ponasanje', () => {
   it('blokira drugu opasnu naredbu u lancu i(&&)', () => {
     const r = judgeCommand('Bash', 'npm run build && git push origin master');
     expect(r.allow).toBe(false);
+  });
+});
+
+describe('Supabase MCP gard (odluka vlasnika 2026-10-08)', () => {
+  it('presuda: alati i upisi koji mijenjaju bazu ili projekt se odbijaju, citanje prolazi', () => {
+    expect(supabaseMcpGuardProblems(judgeCommand)).toEqual([]);
+  });
+
+  it('registracija: hook u .claude/settings.json pokriva Bash, PowerShell i Supabase MCP alate', () => {
+    const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
+    expect(toolGuardMatcherProblems(settings)).toEqual([]);
   });
 });
