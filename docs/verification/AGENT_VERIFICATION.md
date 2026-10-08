@@ -6,11 +6,13 @@ Operativni minimum ostaje u root `CLAUDE.md`.
 ## Tri odvojena pitanja
 
 1. `npm run orphan-scan`: moze li cisti checkout uopce izgraditi commitane ovisnike.
-2. `npm run check`: prolazi li trenutno izolirano radno stablo.
+2. Puni gate: prolazi li trenutno izolirano radno stablo. To je CI na zadnjem commitu PR-a
+   (`build-gate` plus `vitest-gate`); lokalni `npm run check` je isti lanac i ostaje za `release:check`
+   i kad je CI nedostupan (DAN-80).
 3. `npm run master-ci`: je li udaljeni master zelen, crven ili nepoznat.
 
 Jedan rezultat ne zamjenjuje drugi. Puni gate cita se iz stvarnog zavrsnog sazetka,
-osobito Vitest retka `Test Files`.
+osobito Vitest retka `Test Files` (na CI-ju zbroj preko shardova `vitest-shard`).
 
 ## Minimalni ugovor novog garda
 
