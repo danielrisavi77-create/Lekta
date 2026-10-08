@@ -147,6 +147,7 @@
     "agents:lease-smoke": "node ops/agent-control-plane/smoke.mjs",
     "agents:usage-report": "node scripts/agents/usage-report.mjs",
     "agents:usage-daily": "node scripts/agents/usage-daily.mjs",
+    "agents:review-queue": "node scripts/agents/review-queue.mjs",
     "pr-intake": "node scripts/agents/pr-intake.mjs",
     "quality:harvest": "node scripts/quality/harvest.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
