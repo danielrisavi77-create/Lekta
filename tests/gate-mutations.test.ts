@@ -10788,17 +10788,20 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
  * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
  */
 /**
- * T109: cpu-discipline i heredoc. Dvije tvrdnje koje mutant mora oboriti: (a) tijelo heredoca pod
- * navodnicima nije naredba (bez toga je gard lazno odbijao python3 heredoc s tekstom o gateu);
- * (b) supstitucija u tijelu bez navodnika jest naredba (preskakanje cijelog tijela bi pustilo
- * `$(npx vitest run)` izvan locka). Mutira se kopija izvora, presudu racuna cisti node.
+ * T109: cpu-discipline i heredoc (fail-closed oblik nakon dvije runde Grok pregleda #328). Tijelo se
+ * preskace samo za `program arg ... <<'IME'` bez prosirenja, nastavka retka i ljuske; sve ostalo ide
+ * starim rastavom po retku. Svaki mutant uklanja jedan uvjet i mora pustiti ulaz koji bash izvrsi.
+ * Mutira se kopija izvora, presudu racuna cisti node.
  */
 describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/cpu-discipline.mjs'), 'utf8').replace(/\r\n/g, '\n');
   const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
   // Redak tijela koji pocinje teskom naredbom: stari rastav po novom retku ga je citao kao naredbu.
   const citirani = "python3 - <<'PYEOF'\nnpx vitest run je samo tekst u biljesci\nPYEOF";
-  const supstitucija = 'cat <<EOF\n$(npx vitest run)\nEOF';
+  const bezNavodnika = 'cat <<EOF\n$(npx vitest run)\nEOF';
+  const komentar = "echo ok # <<'EOF'\nnpx vitest run";
+  const nastavak = "bash -s \\\nx <<'EOF'\nnpx vitest run\nEOF";
+  const ljuska = "rbash <<'EOF'\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
@@ -10819,48 +10822,37 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
     }
   }
 
-  it('baseline: citirani heredoc prolazi, supstitucija u tijelu bez navodnika se odbija', async () => {
+  it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    expect(await dopusta(izvor, supstitucija)).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, nastavak, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
-    const mutant = izvor.replace("if (!inComment && ch === '<' && command[i + 1] === '<') {", "if (false) {");
+    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", 'if (false) {');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, citirani)).toBe(false);
   });
 
-  it('mutant: tijelo bez navodnika preskoceno u cijelosti pusta supstituciju izvan locka', async () => {
-    const mutant = izvor.replace('shellFed || (!h.quoted && ', 'shellFed || (false && ');
+  it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
+    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
     expect(mutant).not.toBe(izvor);
-    expect(await dopusta(mutant, supstitucija)).toBe(true);
+    expect(await dopusta(mutant, bezNavodnika)).toBe(true);
   });
 
-  // Grok pregled #328: ulazi kroz koje je prvi oblik T109 pustao tesku naredbu, a master ih je odbijao.
-  const komentar = 'echo ok # <<EOF\nnpx vitest run';
-  const dolarDelim = "cat <<$'EOF'\nhello\nEOF\nnpx vitest run";
-  const ljuska = "bash <<'EOF'\nnpx vitest run\nEOF";
-
-  it('baseline: komentar, prosireni delimiter i tijelo koje hrani ljusku se odbijaju', async () => {
-    expect(await dopusta(izvor, komentar)).toBe(false);
-    expect(await dopusta(izvor, dolarDelim)).toBe(false);
-    expect(await dopusta(izvor, ljuska)).toBe(false);
-  });
-
-  it('mutant: << iza # opet otvara heredoc i guta naredbu', async () => {
-    const mutant = izvor.replace("if (ch === '#' && !hasToken) inComment = true;", '');
+  it('mutant: # u retku operatora vise ne iskljucuje heredoc', async () => {
+    const mutant = izvor.replace('#(){}<>]*)<<', '(){}<>]*)<<');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, komentar)).toBe(true);
   });
 
-  it('mutant: delimiter s $ se cita doslovno i guta naredbu iza tijela', async () => {
-    const mutant = izvor.replace("if (ch === '$' || ch === '`' ||", 'if (false ||');
+  it('mutant: nastavak retka (\\ na kraju prethodnog retka) se ne provjerava', async () => {
+    const mutant = izvor.replace("if (prev.endsWith('\\\\')) return null;", '');
     expect(mutant).not.toBe(izvor);
-    expect(await dopusta(mutant, dolarDelim)).toBe(true);
+    expect(await dopusta(mutant, nastavak)).toBe(true);
   });
 
-  it('mutant: tijelo koje hrani ljusku se preskace kao stdin', async () => {
-    const mutant = izvor.replace('SHELL_FED.has(programName(t))', 'false');
+  it('mutant: ljuska u retku operatora se ne provjerava', async () => {
+    const mutant = izvor.replace('SHELL_FED_RE.test(programName(w))', 'false');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, ljuska)).toBe(true);
   });

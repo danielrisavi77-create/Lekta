@@ -86,29 +86,44 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     // Stvarni lazni pad 2026-10-08: python3 heredoc s JSON tekstom koji spominje gate i closed-loop.
     const heredoc = "python3 - <<'PYEOF'\nnpm run build\ntests/repair-closed-loop.test.ts samo u test:slow\nPYEOF";
     expect(judge(heredoc)).toMatchObject({ allow: true });
-    expect(judge('cat <<EOF\nnpx vitest run\nEOF')).toMatchObject({ allow: true });
-    expect(judge('cat <<-EOF\n\tvitest\n\tEOF')).toMatchObject({ allow: true });
+    expect(judge("cat <<'EOF'\nnpx vitest run\nEOF")).toMatchObject({ allow: true });
+    expect(judge('git commit -F - <<"EOF"\nfix: npm run check\nEOF')).toMatchObject({ allow: true });
+    expect(judge("cat <<-'EOF'\n\tvitest\n\tEOF")).toMatchObject({ allow: true });
     expect(judge('cat <<< "npx vitest"')).toMatchObject({ allow: true });
   });
 
-  it('T109: naredba iza heredoca i supstitucija u tijelu bez navodnika i dalje se odbijaju', () => {
+  it('T109: naredba iza heredoca i heredoc bez navodnika i dalje se odbijaju', () => {
     expect(judge("cat <<'X'\nhi\nX\nnpx vitest run")).toMatchObject({ allow: false });
-    expect(judge('cat <<EOF\n$(npx vitest run)\nEOF')).toMatchObject({ allow: false });
+    expect(judge("cat <<-'EOF'\n\tvitest\n\tEOF\ntsc --noEmit")).toMatchObject({ allow: false });
+    expect(judge('cat <<EOF\nnpx vitest run\nEOF')).toMatchObject({ allow: false });
     expect(judge('cat <<EOF\n`tsc --noEmit`\nEOF')).toMatchObject({ allow: false });
     expect(judge("cat <<A <<'B'\n$(tsc)\nA\nvitest\nB")).toMatchObject({ allow: false });
-    expect(judge('cat <<-EOF\n\tvitest\n\tEOF\ntsc --noEmit')).toMatchObject({ allow: false });
   });
 
-  it('T109 (Grok pregled #328): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
+  it('T109 (Grok pregled #328, dvije runde): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
     const izvrsivo = [
+      // prva runda
       "cat <<EOF\n$(echo ')'; npx vitest run)\nEOF",
       'cat <<EOF\n$(echo hi # )\nnpx vitest run\n)\nEOF',
       'echo ok # <<EOF\nnpx vitest run',
+      "echo ok # <<'EOF'\nnpx vitest run",
       "cat <<$'EOF'\nhello\nEOF\nnpx vitest run",
       'cat <<EOF\\\nxxx\nbody\nEOFxxx\nnpx vitest run',
       'EOF=EOF\ncat <<$EOF\nbody\nEOF\nnpx vitest run',
       "bash <<'EOF'\nnpx vitest run\nEOF",
       "cat <<'EOF' | sh\nnpx vitest run\nEOF",
+      // druga runda
+      'echo $((1<<8))\nnpx vitest run',
+      'echo ${x#<<Z}\nnpx vitest run',
+      "bash \\\n<<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' \\\n| sh\nnpx vitest run\nEOF",
+      'cat <<EOF\n$\\\n(npx vitest run)\nEOF',
+      "$'bash' <<'EOF'\nnpx vitest run\nEOF",
+      "b=bash\n$b <<'EOF'\nnpx vitest run\nEOF",
+      "rbash <<'EOF'\nnpx vitest run\nEOF",
+      "bash -s \\\nx <<'EOF'\nnpx vitest run\nEOF",
+      "source /dev/stdin <<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' |\nsh\nnpx vitest run\nEOF",
     ];
     for (const command of izvrsivo) expect(judge(command), command).toMatchObject({ allow: false });
   });
