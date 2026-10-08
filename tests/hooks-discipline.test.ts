@@ -82,7 +82,24 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     ]);
   });
 
-  it('proces: 6 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
+  it('T109: tijelo heredoca pod navodnicima je stdin, ne naredba', () => {
+    // Stvarni lazni pad 2026-10-08: python3 heredoc s JSON tekstom koji spominje gate i closed-loop.
+    const heredoc = "python3 - <<'PYEOF'\nnpm run build\ntests/repair-closed-loop.test.ts samo u test:slow\nPYEOF";
+    expect(judge(heredoc)).toMatchObject({ allow: true });
+    expect(judge('cat <<EOF\nnpx vitest run\nEOF')).toMatchObject({ allow: true });
+    expect(judge('cat <<-EOF\n\tvitest\n\tEOF')).toMatchObject({ allow: true });
+    expect(judge('cat <<< "npx vitest"')).toMatchObject({ allow: true });
+  });
+
+  it('T109: naredba iza heredoca i supstitucija u tijelu bez navodnika i dalje se odbijaju', () => {
+    expect(judge("cat <<'X'\nhi\nX\nnpx vitest run")).toMatchObject({ allow: false });
+    expect(judge('cat <<EOF\n$(npx vitest run)\nEOF')).toMatchObject({ allow: false });
+    expect(judge('cat <<EOF\n`tsc --noEmit`\nEOF')).toMatchObject({ allow: false });
+    expect(judge("cat <<A <<'B'\n$(tsc)\nA\nvitest\nB")).toMatchObject({ allow: false });
+    expect(judge('cat <<-EOF\n\tvitest\n\tEOF\ntsc --noEmit')).toMatchObject({ allow: false });
+  });
+
+  it('proces: 7 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
     const cases: Array<[unknown, NodeJS.ProcessEnv, number]> = [
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv(), 2],
       [{ tool_name: 'Bash', tool_input: { command: 'npm run build' } }, cleanEnv(), 2],
@@ -90,6 +107,7 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv({ LEKTA_GATE_LOCK_TOKEN: 'ugnijezdjeno' }), 0],
       [{ tool_name: 'Bash', tool_input: { command: 'git status' } }, cleanEnv(), 0],
       ['nije json', cleanEnv(), 0],
+      [{ tool_name: 'Bash', tool_input: { command: "python3 - <<'X'\nnpx vitest run\nX" } }, cleanEnv(), 0],
     ];
     for (const [input, env, code] of cases) {
       const r = runHook('scripts/hooks/cpu-discipline.mjs', input, env);

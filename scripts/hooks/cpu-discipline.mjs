@@ -35,8 +35,74 @@ const RUNNERS = new Set(['npx', 'pnpx', 'bunx']);
 const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 
 /**
+ * Naredbene supstitucije (`$(...)` i backtick) iz tijela heredoca bez navodnika: jedino se one u
+ * takvom tijelu izvrsavaju, ostatak je tekst koji ide na stdin.
+ * @param {string} body
+ * @returns {string[]}
+ */
+function heredocSubstitutions(body) {
+  const subs = [];
+  for (let i = 0; i < body.length; i += 1) {
+    if (body[i] === '$' && body[i + 1] === '(') {
+      let depth = 1;
+      let j = i + 2;
+      while (j < body.length && depth > 0) {
+        if (body[j] === '(') depth += 1;
+        else if (body[j] === ')') depth -= 1;
+        j += 1;
+      }
+      subs.push(body.slice(i + 2, depth === 0 ? j - 1 : j));
+      i = j - 1;
+    } else if (body[i] === '`') {
+      const end = body.indexOf('`', i + 1);
+      subs.push(body.slice(i + 1, end < 0 ? body.length : end));
+      i = end < 0 ? body.length : end;
+    }
+  }
+  return subs;
+}
+
+/**
+ * Cita heredoc operator koji pocinje na `start` (prvi `<` od `<<`). Vraca delimiter, je li bio pod
+ * navodnicima (tada se tijelo ne prosiruje), smije li zavrsni redak imati vodece tabove (`<<-`) i
+ * indeks iza delimitera; null kad to nije heredoc (npr. `<<<` here-string).
+ * @param {string} command
+ * @param {number} start
+ * @returns {{ delim: string, quoted: boolean, stripTabs: boolean, end: number } | null}
+ */
+function readHeredocOperator(command, start) {
+  let i = start + 2;
+  if (command[i] === '<') return null;
+  const stripTabs = command[i] === '-';
+  if (stripTabs) i += 1;
+  while (command[i] === ' ' || command[i] === '\t') i += 1;
+  let delim = '';
+  let quoted = false;
+  while (i < command.length && !/[\s;|&()<>]/.test(command[i])) {
+    const ch = command[i];
+    if (ch === '"' || ch === "'") {
+      const close = command.indexOf(ch, i + 1);
+      if (close < 0) return null;
+      delim += command.slice(i + 1, close);
+      quoted = true;
+      i = close + 1;
+    } else if (ch === '\\') {
+      quoted = true;
+      delim += command[i + 1] ?? '';
+      i += 2;
+    } else {
+      delim += ch;
+      i += 1;
+    }
+  }
+  return delim ? { delim, quoted, stripTabs, end: i } : null;
+}
+
+/**
  * Rastavlja naredbu na podnaredbe po `&&`, `||`, `;`, `|`, `&`, novom retku, zagradama i `$(`,
  * postujuci jednostruke i dvostruke navodnike: sadrzaj pod navodnicima je argument, ne naredba.
+ * Tijelo heredoca (`<<EOF` ... `EOF`) je stdin, ne naredba (T109): uz delimiter pod navodnicima
+ * preskace se cijelo, a bez navodnika se rastavljaju samo naredbene supstitucije u njemu.
  * @param {string} command
  * @returns {string[][]} podnaredbe kao nizovi tokena
  */
@@ -46,6 +112,8 @@ export function splitCommand(command) {
   let current = '';
   let quote = null;
   let hasToken = false;
+  /** @type {Array<{ delim: string, quoted: boolean, stripTabs: boolean }>} */
+  let pending = [];
   const endToken = () => {
     if (hasToken) tokens.push(current);
     current = '';
@@ -55,6 +123,33 @@ export function splitCommand(command) {
     endToken();
     if (tokens.length) parts.push(tokens);
     tokens = [];
+  };
+  /** Preskace tijela heredoca koja pocinju iza novog retka na `nl`; vraca indeks zadnjeg procitanog znaka. */
+  const skipHeredocBodies = (nl) => {
+    let pos = nl + 1;
+    for (const h of pending) {
+      const bodyStart = pos;
+      let bodyEnd = command.length;
+      let next = command.length;
+      while (pos < command.length) {
+        const eol = command.indexOf('\n', pos);
+        const lineEnd = eol < 0 ? command.length : eol;
+        let line = command.slice(pos, lineEnd).replace(/\r$/, '');
+        if (h.stripTabs) line = line.replace(/^\t+/, '');
+        if (line === h.delim) {
+          bodyEnd = pos;
+          next = eol < 0 ? command.length : eol + 1;
+          break;
+        }
+        pos = eol < 0 ? command.length : eol + 1;
+      }
+      if (!h.quoted) {
+        for (const sub of heredocSubstitutions(command.slice(bodyStart, bodyEnd))) parts.push(...splitCommand(sub));
+      }
+      pos = next;
+    }
+    pending = [];
+    return pos - 1;
   };
   for (let i = 0; i < command.length; i += 1) {
     const ch = command[i];
@@ -66,6 +161,20 @@ export function splitCommand(command) {
     if (ch === '"' || ch === "'") {
       quote = ch;
       hasToken = true;
+      continue;
+    }
+    if (ch === '<' && command[i + 1] === '<') {
+      const op = readHeredocOperator(command, i);
+      if (op) {
+        endToken();
+        pending.push({ delim: op.delim, quoted: op.quoted, stripTabs: op.stripTabs });
+        i = op.end - 1;
+        continue;
+      }
+    }
+    if (ch === '\n' && pending.length) {
+      endPart();
+      i = skipHeredocBodies(i);
       continue;
     }
     if (ch === '$' && command[i + 1] === '(') {

@@ -11272,6 +11272,56 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
  * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
  * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
  */
+/**
+ * T109: cpu-discipline i heredoc. Dvije tvrdnje koje mutant mora oboriti: (a) tijelo heredoca pod
+ * navodnicima nije naredba (bez toga je gard lazno odbijao python3 heredoc s tekstom o gateu);
+ * (b) supstitucija u tijelu bez navodnika jest naredba (preskakanje cijelog tijela bi pustilo
+ * `$(npx vitest run)` izvan locka). Mutira se kopija izvora, presudu racuna cisti node.
+ */
+describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/cpu-discipline.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+  // Redak tijela koji pocinje teskom naredbom: stari rastav po novom retku ga je citao kao naredbu.
+  const citirani = "python3 - <<'PYEOF'\nnpx vitest run je samo tekst u biljesci\nPYEOF";
+  const supstitucija = 'cat <<EOF\n$(npx vitest run)\nEOF';
+
+  async function dopusta(source: string, command: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-cpu-mut-'));
+    try {
+      const file = join(dir, 'cpu-discipline.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeCpuDiscipline(${JSON.stringify(command)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: citirani heredoc prolazi, supstitucija u tijelu bez navodnika se odbija', async () => {
+    expect(await dopusta(izvor, citirani)).toBe(true);
+    expect(await dopusta(izvor, supstitucija)).toBe(false);
+  });
+
+  it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
+    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", "if (false) {");
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, citirani)).toBe(false);
+  });
+
+  it('mutant: tijelo bez navodnika preskoceno u cijelosti pusta supstituciju izvan locka', async () => {
+    const mutant = izvor.replace('if (!h.quoted) {', 'if (false) {');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, supstitucija)).toBe(true);
+  });
+});
+
 describe('mutacije: scripts/hooks/dash-guard.mjs', () => {
   const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/dash-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
   const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
