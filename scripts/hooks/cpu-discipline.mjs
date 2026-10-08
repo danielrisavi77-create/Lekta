@@ -34,15 +34,21 @@ const PACKAGE_MANAGERS = new Set(['npm', 'pnpm', 'yarn', 'bun']);
 const RUNNERS = new Set(['npx', 'pnpx', 'bunx']);
 const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 
-/** Programi koji tijelo heredoca izvrsavaju kao naredbe: ljuske (`bash`, `rbash`, `zsh`, `ssh`...), `source`, `.`, `eval`, `xargs`, `exec`. */
-const SHELL_FED_RE = /^(?:[a-z]*sh|fish|source|\.|eval|xargs|exec)$/;
+/**
+ * Citaci kojima se tijelo heredoca smije preskociti: `cat` ga ispisuje, `git` ga uzima kao poruku
+ * (`git commit -F -`), a `python`/`python3` kao Python kod (isti doseg kao `python3 -c "..."`, koji hook vec pusta).
+ * Allowlist, ne denylist ljuski: treca runda Grok pregleda #328 pokazala je da svaki program izvan
+ * popisa ljuski moze izvrsiti tijelo (`sed e`, `make -f -`, `read` pa `eval`, funkcija, alias, glob).
+ */
+const HEREDOC_READERS = new Set(['cat', 'git', 'python', 'python3']);
+const HEREDOC_WORD_RE = /^[A-Za-z0-9_./:+-]+$/;
 
 /**
  * T109: tijelo heredoca smije se preskociti kao stdin samo u jednom jednoznacnom obliku (fail-closed):
- * redak `program arg ... <<'IME'` (ili `<<"IME"`, `<<-'IME'`) u kojem je operator zadnji, ostatak
- * retka nema navodnike ni znakove koje ljuska prosiruje ili spaja (`$`, backtick, `\`, `|`, `;`, `&`,
- * `#`, zagrade, `<`, `>`), prethodni redak ne zavrsava s `\` i nijedna rijec nije ljuska. U svakom
- * drugom slucaju (delimiter bez navodnika, `$((1<<8))`, `${x#<<Z}`, nastavak retka, `| sh`, `$b`)
+ * PRVI redak naredbe je `citac arg ... <<'IME'` (ili `<<"IME"`, `<<-'IME'`), operator je zadnji, a
+ * svaka rijec ispred njega ima samo slova, znamenke i `_./:+-` (bez prosirenja, globa, `=`, `!`,
+ * komentara i nastavka retka), a prva rijec je citac iz `HEREDOC_READERS`. Prvi redak
+ * iskljucuje funkciju, alias ili `IFS` definiran ranije u istoj naredbi. U svakom drugom slucaju
  * vrijedi stari rastav po retku, pa se teska naredba u tijelu odbija kao prije T109.
  * @param {string} command
  * @param {number} start indeks prvog `<` od `<<`
@@ -50,17 +56,15 @@ const SHELL_FED_RE = /^(?:[a-z]*sh|fish|source|\.|eval|xargs|exec)$/;
  */
 function simpleQuotedHeredoc(command, start) {
   const lineStart = command.lastIndexOf('\n', start - 1) + 1;
+  if (lineStart > 0) return null;
   const nl = command.indexOf('\n', start);
   const lineEnd = nl < 0 ? command.length : nl;
   const line = command.slice(lineStart, lineEnd).replace(/\r$/, '');
-  const m = /^([^'"$`\\|;&#(){}<>]*)<<(-?)[ \t]*(['"])([A-Za-z_][A-Za-z0-9_]*)\3[ \t]*$/.exec(line);
+  const m = /^([^<]*)<<(-?)[ \t]*(['"])([A-Za-z_][A-Za-z0-9_]*)\3[ \t]*$/.exec(line);
   if (!m || start - lineStart !== m[1].length) return null;
-  if (lineStart > 0) {
-    const prev = command.slice(command.lastIndexOf('\n', lineStart - 2) + 1, lineStart - 1).replace(/\r$/, '');
-    if (prev.endsWith('\\')) return null;
-  }
-  const words = m[1].trim().split(/\s+/).filter(Boolean);
-  if (!words.length || words.some((w) => SHELL_FED_RE.test(programName(w)))) return null;
+  const words = m[1].trim().split(/[ \t]+/).filter(Boolean);
+  if (!words.length || !words.every((w) => HEREDOC_WORD_RE.test(w))) return null;
+  if (!HEREDOC_READERS.has(words[0])) return null;
   return { delim: m[4], stripTabs: m[2] === '-', end: lineEnd };
 }
 

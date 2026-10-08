@@ -87,7 +87,7 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     const heredoc = "python3 - <<'PYEOF'\nnpm run build\ntests/repair-closed-loop.test.ts samo u test:slow\nPYEOF";
     expect(judge(heredoc)).toMatchObject({ allow: true });
     expect(judge("cat <<'EOF'\nnpx vitest run\nEOF")).toMatchObject({ allow: true });
-    expect(judge('git commit -F - <<"EOF"\nfix: npm run check\nEOF')).toMatchObject({ allow: true });
+    expect(judge('git commit -F - <<"EOF"\nnpx vitest run je u poruci\nEOF')).toMatchObject({ allow: true });
     expect(judge("cat <<-'EOF'\n\tvitest\n\tEOF")).toMatchObject({ allow: true });
     expect(judge('cat <<< "npx vitest"')).toMatchObject({ allow: true });
   });
@@ -100,7 +100,7 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     expect(judge("cat <<A <<'B'\n$(tsc)\nA\nvitest\nB")).toMatchObject({ allow: false });
   });
 
-  it('T109 (Grok pregled #328, dvije runde): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
+  it('T109 (Grok pregled #328, tri runde): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
     const izvrsivo = [
       // prva runda
       "cat <<EOF\n$(echo ')'; npx vitest run)\nEOF",
@@ -124,6 +124,19 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
       "bash -s \\\nx <<'EOF'\nnpx vitest run\nEOF",
       "source /dev/stdin <<'EOF'\nnpx vitest run\nEOF",
       "cat <<'EOF' |\nsh\nnpx vitest run\nEOF",
+      // treca runda: program izvan popisa ljuski izvrsi tijelo, ili je citac ranije prepisan
+      "IFS=:\nsh:-s <<'EOF'\nnpx vitest run\nEOF",
+      "/usr/bin/s[h] <<'EOF'\nnpx vitest run\nEOF",
+      "read -r line <<'EOF'\nnpx vitest run\nEOF\neval \"$line\"",
+      "f() { bash; }\nf <<'EOF'\nnpx vitest run\nEOF",
+      "shopt -s expand_aliases\nalias r=bash\nr <<'EOF'\nnpx vitest run\nEOF",
+      "sed e <<'EOF'\nnpx vitest run\nEOF",
+      "make -f - <<'EOF'\n.PHONY: x\nx:\n\tnpx vitest run\nEOF",
+      "powershell -NoProfile -Command - <<'EOF'\nnpx vitest run\nEOF",
+      "ksh93 <<'EOF'\nnpx vitest run\nEOF",
+      "sudo -s <<'EOF'\nnpx vitest run\nEOF",
+      "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF",
+      "git -c alias.x=!sh x <<'EOF'\nnpx vitest run\nEOF",
     ];
     for (const command of izvrsivo) expect(judge(command), command).toMatchObject({ allow: false });
   });
