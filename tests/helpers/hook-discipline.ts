@@ -3,24 +3,31 @@
  * `.claude/settings.json` i sadrzaj pravila koja SessionStart ispisuje.
  */
 
+/** Hook naredba sidrena na korijen projekta: hook se izvodi u TRENUTNOM direktoriju sesije, pa relativna
+ * putanja nakon `cd` u poddirektorij ne postoji, a hook koji ne postoji ne blokira (Codex nalaz na PR #326). */
+export const hookCommand = (script: string): string => `node "\${CLAUDE_PROJECT_DIR}/${script}"`;
+
 /**
- * `matcher` je ime alata koje matcher u postavkama mora pokriti. Matcher od samih slova, znamenki, `_`
- * i `|` je popis tocnih imena; svaki drugi je regex (semantika Claude Code hookova). MCP alati se
+ * `matcher` je ime alata koje matcher u postavkama mora pokriti. Matcher od samih slova, znamenki, `_`,
+ * `-`, razmaka, `,` i `|` je popis tocnih imena; svaki drugi je regex bez sidrenja (semantika Claude Code hookova). MCP alati se
  * zato navode punim imenom: matcher `Bash|PowerShell` nikad ne vidi `mcp__Supabase__apply_migration`.
  */
 export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; command: string }> = [
   // `--worktree-gc` samo u hooku: rucni i testni poziv bootstrapa ne smije uklanjati stabla stroja.
+  // SessionStart se izvodi u direktoriju u kojem sesija pocinje, pa ostaje relativan.
   { event: 'SessionStart', command: 'node scripts/agents/session-bootstrap.mjs --worktree-gc' },
-  { event: 'PreToolUse', matcher: 'Bash', command: 'node scripts/hooks/cpu-discipline.mjs' },
-  { event: 'PreToolUse', matcher: 'Edit', command: 'node scripts/hooks/task-scope-guard.mjs' },
-  { event: 'PreToolUse', matcher: 'Write', command: 'node scripts/hooks/task-scope-guard.mjs' },
-  { event: 'PreToolUse', matcher: 'Bash', command: 'node scripts/agents/tool-guard.mjs' },
-  // Ime Supabase MCP alata ovisi o tome je li konektor spojen kroz claude.ai ili lokalno.
-  { event: 'PreToolUse', matcher: 'mcp__Supabase__apply_migration', command: 'node scripts/agents/tool-guard.mjs' },
-  { event: 'PreToolUse', matcher: 'mcp__claude_ai_Supabase__apply_migration', command: 'node scripts/agents/tool-guard.mjs' },
-  { event: 'PreToolUse', matcher: 'Edit', command: 'node scripts/hooks/dash-guard.mjs' },
-  { event: 'PreToolUse', matcher: 'Write', command: 'node scripts/hooks/dash-guard.mjs' },
-  { event: 'Stop', command: 'node scripts/hooks/implementer-stop.mjs' },
+  { event: 'PreToolUse', matcher: 'Bash', command: hookCommand('scripts/hooks/cpu-discipline.mjs') },
+  { event: 'PreToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/task-scope-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/task-scope-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'Bash', command: hookCommand('scripts/agents/tool-guard.mjs') },
+  // Ime Supabase MCP alata ovisi o imenu servera: lokalno (`supabase`, `Supabase`), kroz claude.ai ili plugin.
+  { event: 'PreToolUse', matcher: 'mcp__supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'mcp__Supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'mcp__claude_ai_Supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'mcp__plugin_supabase_supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/dash-guard.mjs') },
+  { event: 'PreToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/dash-guard.mjs') },
+  { event: 'Stop', command: hookCommand('scripts/hooks/implementer-stop.mjs') },
 ];
 
 interface HookEntry {
@@ -31,9 +38,10 @@ interface HookEntry {
 /** Pokriva li matcher iz postavki ime alata, po semantici Claude Code hookova. */
 export function matcherCovers(matcher: string, toolName: string): boolean {
   if (matcher === '' || matcher === '*') return true;
-  if (/^[A-Za-z0-9_|]+$/.test(matcher)) return matcher.split('|').includes(toolName);
+  if (/^[A-Za-z0-9_|, -]+$/.test(matcher)) return matcher.split(/[|,]/).map((m) => m.trim()).includes(toolName);
   try {
-    return new RegExp('^(?:' + matcher + ')$').test(toolName);
+    // Claude Code regex matcher testira s RegExp.prototype.test, bez sidrenja.
+    return new RegExp(matcher).test(toolName);
   } catch {
     return false;
   }

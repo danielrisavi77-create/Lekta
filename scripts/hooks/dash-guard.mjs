@@ -2,10 +2,13 @@
  * Claude Code PreToolUse hook (Edit|Write): pravilo "Ne koristi em ni en crtice u tekstu" iz CLAUDE.md
  * (Konvencije) do sada je bilo samo uputa. Ovaj hook ga cini deterministickim za NOVI tekst.
  *
- * Mjeri DELTU, ne stanje datoteke: odbija samo zapis koji UVODI nove crtice (U+2013, U+2014), tj. kad
- * novi tekst ima vise crtica od teksta koji zamjenjuje (Edit: `new_string` prema `old_string`;
- * Write: `content` prema postojecoj datoteci). Tako se postojece datoteke s crticama i dalje smiju
- * uredivati, a verbatim citati izvora ostaju netaknuti.
+ * Mjeri DELTU, ne stanje datoteke: odbija samo zapis koji UVODI nove crtice (U+2013, U+2014) prema tekstu
+ * koji zamjenjuje (Edit: `new_string` prema `old_string`; Write: `content` prema postojecoj datoteci).
+ * Dva uvjeta, oba moraju vrijediti za propustanje: (1) ukupan broj crtica ne raste; (2) svaka crtica u
+ * novom tekstu je USIDRENA, tj. ista crtica s barem jednom stranom konteksta (SIDRO znakova lijevo ili
+ * desno) vec postoji u starom tekstu. Bez (2) bi zamjena jedne crtice drugom na novom mjestu zadrzala
+ * zbroj i prosla (Codex nalaz na PR #326). Uz (2) i dalje prolazi izmjena kraj postojece crtice
+ * (`str. 12\u201315` u `str. 12\u201316`), pa se datoteke s verbatim citatima izvora smiju uredivati.
  *
  * Opseg: samo autorske putanje (`src/`, `scripts/`, `tests/`, `docs/`, `supabase/`, `.claude/` skillovi,
  * agenti i workflowi, `.github/` te `.md` u korijenu). Izvan opsega su `data/`, `discovery/`, `design/`,
@@ -20,6 +23,8 @@ import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { readHookInput } from './hook-input.mjs';
 
 const CRTICE = /[\u2013\u2014]/g;
+/** Broj znakova konteksta s jedne strane crtice koji mora vec postojati u starom tekstu. */
+const SIDRO = 3;
 
 const U_OPSEGU = [/^src\//, /^scripts\//, /^tests\//, /^docs\//, /^supabase\//, /^\.github\//,
   /^\.claude\/(skills|agents|workflows|commands)\//, /^[^/]+\.md$/];
@@ -35,9 +40,28 @@ export function uOpsegu(rel) {
   return U_OPSEGU.some((re) => re.test(rel)) && !IZVAN_OPSEGA.some((re) => re.test(rel));
 }
 
-/** Prvi redak novog teksta koji nosi crticu, skracen za poruku. */
-function prviRedak(tekst) {
-  const redak = tekst.split('\n').find((r) => /[\u2013\u2014]/.test(r)) ?? '';
+/**
+ * Crtice novog teksta kojima ni lijevi ni desni kontekst (SIDRO znakova uz samu crticu) ne postoji u
+ * starom tekstu. Prazan popis znaci da je svaka crtica zatecena, a ne nova.
+ * @param {string} novo
+ * @param {string} staro
+ * @returns {number[]} indeksi neusidrenih crtica u `novo`
+ */
+export function neusidreneCrtice(novo, staro) {
+  const rezultat = [];
+  for (const m of novo.matchAll(CRTICE)) {
+    const i = m.index ?? 0;
+    const lijevo = novo.slice(Math.max(0, i - SIDRO), i + 1);
+    const desno = novo.slice(i, i + 1 + SIDRO);
+    if (!staro.includes(lijevo) && !staro.includes(desno)) rezultat.push(i);
+  }
+  return rezultat;
+}
+
+/** Redak novog teksta s prvom (neusidrenom) crticom, skracen za poruku. */
+function prviRedak(tekst, odCrtice) {
+  const pocetak = tekst.length - odCrtice.length;
+  const redak = (tekst.slice(0, pocetak).split('\n').pop() ?? '') + (odCrtice.split('\n')[0] ?? '');
   const t = redak.trim();
   return t.length > 100 ? t.slice(0, 100) + '...' : t;
 }
@@ -51,20 +75,22 @@ function prviRedak(tekst) {
 export function judgeDashWrite({ toolName, rel, toolInput, postojeci }) {
   if (!rel || !uOpsegu(rel)) return { allow: true, reason: '' };
   let novo = '';
-  let staro = 0;
+  let staro = '';
   if (toolName === 'Write') {
     novo = String(toolInput?.content ?? '');
-    staro = brojCrtica(postojeci ?? '');
+    staro = String(postojeci ?? '');
   } else if (toolName === 'Edit') {
     novo = String(toolInput?.new_string ?? '');
-    staro = brojCrtica(toolInput?.old_string ?? '');
+    staro = String(toolInput?.old_string ?? '');
   } else {
     return { allow: true, reason: '' };
   }
-  if (brojCrtica(novo) <= staro) return { allow: true, reason: '' };
+  const neusidrene = neusidreneCrtice(novo, staro);
+  if (brojCrtica(novo) <= brojCrtica(staro) && neusidrene.length === 0) return { allow: true, reason: '' };
+  const primjer = novo.slice(neusidrene[0] ?? Math.max(0, novo.search(/[\u2013\u2014]/)));
   return {
     allow: false,
-    reason: rel + ' dobiva novu em ili en crticu (CLAUDE.md, Konvencije): "' + prviRedak(novo) + '". '
+    reason: rel + ' dobiva novu em ili en crticu (CLAUDE.md, Konvencije): "' + prviRedak(novo, primjer) + '". '
       + 'Zamijeni s "-", zarezom ili dvotockom; kod koji mora prepoznati znak koristi escape \\u2013 ili \\u2014.',
   };
 }

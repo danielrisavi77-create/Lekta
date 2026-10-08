@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { brojCrtica, judgeDashWrite, uOpsegu } from '../scripts/hooks/dash-guard.mjs';
+import { brojCrtica, judgeDashWrite, neusidreneCrtice, uOpsegu } from '../scripts/hooks/dash-guard.mjs';
 
 // Crtice se u ovom testu pisu kao escape, jer i tests/ je u opsegu pravila.
 const EN = '\u2013';
@@ -26,6 +26,14 @@ describe('dash-guard: opseg i brojanje', () => {
   });
 });
 
+describe('dash-guard: sidrenje crtica', () => {
+  it('crtica s kontekstom iz starog teksta je usidrena, nova nije', () => {
+    expect(neusidreneCrtice(`str. 12${EN}16`, `str. 12${EN}15`)).toEqual([]);
+    expect(neusidreneCrtice(`a ${EM} b`, `x ${EN} y`)).toEqual([2]);
+    expect(neusidreneCrtice('bez crtica', '')).toEqual([]);
+  });
+});
+
 describe('dash-guard: presuda po delti', () => {
   it('odbija Edit koji uvodi novu en crticu', () => {
     const r = judgeDashWrite({ toolName: 'Edit', rel: 'src/a.ts', toolInput: { old_string: 'x', new_string: `x ${EN} y` }, postojeci: null });
@@ -40,6 +48,23 @@ describe('dash-guard: presuda po delti', () => {
 
   it('propusta Edit koji uklanja crticu', () => {
     const r = judgeDashWrite({ toolName: 'Edit', rel: 'docs/a.md', toolInput: { old_string: `a ${EM} b`, new_string: 'a, b' }, postojeci: null });
+    expect(r.allow).toBe(true);
+  });
+
+  it('odbija premjestenu crticu iako zbroj ostaje isti (Codex nalaz na PR #326)', () => {
+    const r = judgeDashWrite({ toolName: 'Edit', rel: 'docs/a.md', toolInput: { old_string: `citat ${EN} izvora`, new_string: `novi tekst ${EM} autora` }, postojeci: null });
+    expect(r.allow).toBe(false);
+    expect(r.reason).toContain('autora');
+  });
+
+  it('odbija Write koji jednu crticu brise, a drugu dodaje na novom mjestu', () => {
+    const r = judgeDashWrite({ toolName: 'Write', rel: 'docs/a.md', toolInput: { content: `prvi, drugi ${EM} treci` }, postojeci: `prvi ${EN} drugi, treci` });
+    expect(r.allow).toBe(false);
+  });
+
+  it('propusta premjestanje cijele recenice s crticom unutar datoteke', () => {
+    const recenica = `Vidi str. 12${EN}15.`;
+    const r = judgeDashWrite({ toolName: 'Write', rel: 'docs/a.md', toolInput: { content: `Uvod.\n${recenica}` }, postojeci: `${recenica}\nUvod.` });
     expect(r.allow).toBe(true);
   });
 

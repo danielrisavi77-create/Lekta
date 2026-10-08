@@ -16,16 +16,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/agents/tool-guard.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/agents/tool-guard.mjs\""
           }
         ]
       },
       {
-        "matcher": "mcp__.*Supabase.*__apply_migration",
+        "matcher": "mcp__.*__apply_migration",
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/agents/tool-guard.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/agents/tool-guard.mjs\""
           }
         ]
       },
@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/hooks/cpu-discipline.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/cpu-discipline.mjs\""
           }
         ]
       },
@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/hooks/task-scope-guard.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/task-scope-guard.mjs\""
           }
         ]
       },
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/hooks/dash-guard.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dash-guard.mjs\""
           }
         ]
       }
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/hooks/implementer-stop.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/implementer-stop.mjs\""
           }
         ]
       }

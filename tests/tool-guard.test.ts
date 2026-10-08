@@ -167,6 +167,7 @@ describe('judgeCommand - supabase i MCP apply_migration', () => {
   it('blokira MCP apply_migration i pod imenom lokalno spojenog konektora', () => {
     const r = judgeCommand('mcp__Supabase__apply_migration', undefined);
     expect(r.allow).toBe(false);
+    expect(judgeCommand('mcp__supabase__apply_migration', undefined).allow).toBe(false);
   });
 });
 
