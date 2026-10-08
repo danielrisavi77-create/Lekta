@@ -254,47 +254,167 @@ function judgeSingleCommand(tokens) {
 }
 
 /**
- * Supabase MCP alati koji mijenjaju bazu, Edge funkcije ili projekt mimo dokumentiranog puta
- * (migracija kroz `supabase db push`, deploy s dokazom po supabase/CLAUDE.md, projekt i grane
- * samo vlasnik). Usporedba je po sufiksu imena, jer isti alat dolazi kao
- * `mcp__Supabase__deploy_edge_function` (claude.ai konektor) i
- * `mcp__claude_ai_Supabase__deploy_edge_function` (lokalni CLI).
+ * Supabase MCP alati koji samo citaju. Sve ostalo se odbija (fail-closed): nepoznat ili nov alat
+ * (npr. `create_edge_function_secret`) ne smije proci samo zato sto ga popis zabrana ne zna.
+ * Usporedba je po zadnjem dijelu imena, jer isti alat dolazi kao `mcp__Supabase__list_tables`
+ * (claude.ai konektor) i `mcp__claude_ai_Supabase__list_tables` (lokalni CLI). `execute_sql` ima
+ * zasebnu presudu nize.
  */
-const SUPABASE_MCP_BLOCKED = Object.freeze([
-  'apply_migration',
-  'deploy_edge_function',
-  'create_branch',
-  'delete_branch',
-  'merge_branch',
-  'rebase_branch',
-  'reset_branch',
-  'create_project',
-  'pause_project',
-  'restore_project',
-]);
+const SUPABASE_MCP_READ_TOOLS = Object.freeze(new Set([
+  'list_tables',
+  'list_extensions',
+  'list_migrations',
+  'list_edge_functions',
+  'get_edge_function',
+  'list_branches',
+  'list_projects',
+  'get_project',
+  'list_organizations',
+  'get_organization',
+  'get_logs',
+  'query_logs',
+  'get_advisors',
+  'get_project_url',
+  'get_anon_key',
+  'get_publishable_keys',
+  'generate_typescript_types',
+  'search_docs',
+  'list_storage_buckets',
+  'get_storage_config',
+]));
 
 /**
- * Kljucne rijeci i funkcije koje znace pisanje ili promjenu stanja. Trazi se cijela rijec nakon
- * uklanjanja komentara, string literala i navodnicima omedjenih identifikatora, pa `created_at` ili
- * 'delete' u tekstu ne okidaju. Lazno pozitivan ishod (npr. stupac imena `comment`) samo odbija
- * citanje, sto je prihvatljivo: gard je fail-closed za `execute_sql`. Funkcija s nuspojavom koju
- * ovaj popis ne zna (npr. vlastiti RPC) nije pokrivena; zato konektor treba i `read_only=true`.
+ * Rijeci koje znace pisanje, zakljucavanje ili izvrsavanje. Trazi se cijela rijec u kodu nakon
+ * `stripSqlNonCode`, pa `created_at` ili 'delete' u literalu ne okidaju. Lazno pozitivan ishod (npr.
+ * stupac imena `comment`) samo odbija citanje.
  */
-const SQL_WRITE_RE = /\b(insert|update|delete|merge|upsert|truncate|drop|alter|create|grant|revoke|comment|vacuum|reindex|cluster|copy|call|do|refresh|lock|reassign|import|security|set|reset|discard|notify|prepare|execute|set_config|setval|nextval|pg_terminate_backend|pg_cancel_backend|pg_reload_conf|dblink\w*|lo_\w+)\b/i;
+const SQL_WRITE_RE = /\b(insert|update|delete|merge|upsert|truncate|drop|alter|create|grant|revoke|comment|vacuum|reindex|cluster|copy|call|do|refresh|lock|share|into|analyze|analyse|reassign|import|security|set|reset|discard|notify|listen|prepare|execute|begin|commit|rollback|savepoint|checkpoint|load)\b/i;
 
 /**
- * Uklanja iz SQL-a sve sto nije kod: komentare, '...' literale (s '' unutra), $tag$...$tag$ tijela i
- * "..." identifikatore. Ostaje kostur nad kojim se traze kljucne rijeci.
+ * Pozivi oblika `ime(` dopusteni u upitu koji samo cita: SQL kljucne rijeci koje stoje ispred
+ * zagrade i mali skup cistih funkcija. Svaki drugi poziv se odbija, jer funkcija moze imati
+ * nuspojavu (`pg_notify`, `pg_advisory_lock`, `set_config`, vlastiti RPC). Ime u navodnicima
+ * postaje `qid` i nije na popisu.
+ */
+const SQL_SAFE_CALLS = Object.freeze(new Set([
+  'select', 'from', 'join', 'in', 'exists', 'any', 'all', 'some', 'as', 'on', 'where', 'and', 'or',
+  'not', 'when', 'then', 'else', 'case', 'by', 'over', 'filter', 'within', 'values', 'array', 'row',
+  'using', 'lateral', 'between', 'is', 'distinct', 'union', 'intersect', 'except', 'with', 'having',
+  'limit', 'offset', 'cast', 'extract', 'coalesce', 'nullif', 'greatest', 'least',
+  'count', 'sum', 'avg', 'min', 'max', 'bool_and', 'bool_or', 'array_agg', 'string_agg', 'json_agg',
+  'jsonb_agg', 'lower', 'upper', 'length', 'char_length', 'trim', 'substring', 'replace', 'round',
+  'abs', 'floor', 'ceil', 'now', 'date_trunc', 'date_part', 'to_char', 'to_date', 'age',
+  'jsonb_array_length', 'jsonb_typeof', 'jsonb_build_object', 'json_build_object', 'row_number',
+  'rank', 'dense_rank', 'lag', 'lead', 'pg_size_pretty', 'pg_total_relation_size', 'pg_relation_size',
+]));
+
+/** Prva rijec naredbe koja samo cita. `EXPLAIN ANALYZE` izvrsava upit pa ga odbija SQL_WRITE_RE. */
+const SQL_READ_START_RE = /^(select|with|show|explain)\b/;
+
+/**
+ * Jedan prolaz slijeva nadesno, kao PostgreSQL leksik: komentari (`--`, ugnijezdeni slash-zvjezdica),
+ * `$tag$...$tag$`, `E'...'` s backslash escapeom, `'...'` s `''` i `"..."` identifikatori. Literali i
+ * komentari postaju razmak, identifikator u navodnicima `qid`. Redoslijed je bitan: odvojeni
+ * regexi (prvo komentari, pa literali) sakriju naredbu iza `'--'` ili `E'\''`.
  * @param {string} sql
- * @returns {string}
+ * @returns {{code: string, unterminated: boolean}}
  */
 export function stripSqlNonCode(sql) {
-  return sql
-    .replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .replace(/--[^\n]*/g, ' ')
-    .replace(/\$([A-Za-z_]\w*)?\$[\s\S]*?\$\1\$/g, ' ')
-    .replace(/'(?:[^']|'')*'/g, ' ')
-    .replace(/"(?:[^"]|"")*"/g, ' ');
+  let out = '';
+  let i = 0;
+  const n = sql.length;
+  while (i < n) {
+    const c = sql[i];
+    const next = sql[i + 1];
+    if (c === '-' && next === '-') {
+      const end = sql.indexOf('\n', i);
+      if (end === -1) return { code: out, unterminated: false };
+      out += ' ';
+      i = end + 1;
+      continue;
+    }
+    if (c === '/' && next === '*') {
+      let depth = 1;
+      i += 2;
+      while (i < n && depth > 0) {
+        if (sql[i] === '/' && sql[i + 1] === '*') { depth += 1; i += 2; continue; }
+        if (sql[i] === '*' && sql[i + 1] === '/') { depth -= 1; i += 2; continue; }
+        i += 1;
+      }
+      if (depth > 0) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '$') {
+      const tag = /^\$([A-Za-z_][A-Za-z_0-9]*)?\$/.exec(sql.slice(i));
+      if (tag) {
+        const close = sql.indexOf(tag[0], i + tag[0].length);
+        if (close === -1) return { code: out, unterminated: true };
+        out += ' ';
+        i = close + tag[0].length;
+        continue;
+      }
+    }
+    const prev = i > 0 ? sql[i - 1] : '';
+    const eString = (c === 'e' || c === 'E') && next === "'" && !/[A-Za-z0-9_$]/.test(prev);
+    if (eString || c === "'") {
+      i += eString ? 2 : 1;
+      let closed = false;
+      while (i < n) {
+        if (eString && sql[i] === '\\') { i += 2; continue; }
+        if (sql[i] === "'") {
+          if (sql[i + 1] === "'") { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '"') {
+      i += 1;
+      let closed = false;
+      while (i < n) {
+        if (sql[i] === '"') {
+          if (sql[i + 1] === '"') { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' qid ';
+      continue;
+    }
+    out += c;
+    i += 1;
+  }
+  return { code: out, unterminated: false };
+}
+
+/**
+ * Razlog zbog kojeg `execute_sql` upit nije siguran za citanje, ili `null` kad jest. Ovo je druga
+ * razina; jamstvo daje tek konektor s `read_only=true` (izvrsavanje pod korisnikom baze koji samo cita).
+ * @param {string} query
+ * @returns {string | null}
+ */
+export function sqlReadOnlyProblem(query) {
+  const { code, unterminated } = stripSqlNonCode(query);
+  if (unterminated) return 'nezatvoren literal, komentar ili identifikator';
+  const body = code.trim().replace(/;\s*$/, '').toLowerCase();
+  if (body.length === 0) return 'prazan upit';
+  if (body.includes(';')) return 'vise naredbi';
+  if (!SQL_READ_START_RE.test(body)) return 'naredba ne pocinje sa SELECT, WITH, SHOW ili EXPLAIN';
+  const write = body.match(SQL_WRITE_RE);
+  if (write) return `sadrzi "${write[1]}"`;
+  for (const call of body.matchAll(/([a-z_][a-z0-9_$]*)\s*\(/g)) {
+    if (!SQL_SAFE_CALLS.has(call[1])) return `poziva funkciju "${call[1]}"`;
+  }
+  return null;
 }
 
 /**
@@ -305,27 +425,23 @@ export function stripSqlNonCode(sql) {
  */
 export function judgeSupabaseMcp(toolNameLower, toolInput) {
   if (!toolNameLower.startsWith('mcp__') || !toolNameLower.includes('supabase')) return null;
-  const blocked = SUPABASE_MCP_BLOCKED.find((name) => toolNameLower.endsWith(`__${name}`));
-  if (blocked) {
-    return {
-      allow: false,
-      reason: `Supabase MCP ${blocked} nije dopusten agentu: migracije idu kroz supabase db push, deploy Edge funkcija s dokazom po supabase/CLAUDE.md, a projekt i grane mijenja samo vlasnik.`,
-    };
-  }
-  if (toolNameLower.endsWith('__execute_sql')) {
+  const name = toolNameLower.split('__').pop() ?? '';
+  if (name === 'execute_sql') {
     const query = toolInput && typeof toolInput.query === 'string' ? toolInput.query : '';
-    if (query.trim().length === 0) {
-      return { allow: false, reason: 'Supabase MCP execute_sql bez upita: nepoznato se odbija.' };
-    }
-    const hit = stripSqlNonCode(query).match(SQL_WRITE_RE);
-    if (hit) {
+    const problem = sqlReadOnlyProblem(query);
+    if (problem) {
       return {
         allow: false,
-        reason: `Supabase MCP execute_sql smije samo citati; upit sadrzi "${hit[1]}". Promjena sheme ide kroz migraciju i supabase db push, promjena podataka kroz vlasnika.`,
+        reason: `Supabase MCP execute_sql dopusta samo jednu naredbu koja cita (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; upit: ${problem}. Promjena sheme ide kroz migraciju i supabase db push, promjena podataka kroz vlasnika. Puno jamstvo daje konektor s read_only=true.`,
       };
     }
+    return { allow: true, reason: 'Supabase MCP execute_sql: upit oblikom samo cita.' };
   }
-  return { allow: true, reason: 'Supabase MCP alat samo cita.' };
+  if (SUPABASE_MCP_READ_TOOLS.has(name)) return { allow: true, reason: 'Supabase MCP alat samo cita.' };
+  return {
+    allow: false,
+    reason: `Supabase MCP ${name} nije na popisu alata koji samo citaju, pa se odbija. Migracije idu kroz supabase db push, deploy Edge funkcija s dokazom po supabase/CLAUDE.md, a tajne, projekt i grane mijenja samo vlasnik.`,
+  };
 }
 
 /**

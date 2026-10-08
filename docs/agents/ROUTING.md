@@ -398,7 +398,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 | Dogadjaj | Skripta | Sto radi |
 | --- | --- | --- |
 | SessionStart | `scripts/agents/session-bootstrap.mjs --worktree-gc` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". Zatim jedan redak `worktree-gc` (samo uz zastavicu, fail-open). |
-| PreToolUse (Bash, PowerShell, Supabase MCP) | `scripts/agents/tool-guard.mjs` | Gard opasnih git i brisanja naredbi; od 2026-10-08 i Supabase MCP: odbija `apply_migration`, `deploy_edge_function`, grane i projekt te `execute_sql` koji pise (scenariji u `tests/helpers/supabase-mcp-guard.ts`). |
+| PreToolUse (Bash, PowerShell, Supabase MCP) | `scripts/agents/tool-guard.mjs` | Gard opasnih git i brisanja naredbi; od 2026-10-08 i Supabase MCP, fail-closed: prolazi samo popis alata koji citaju i `execute_sql` s jednom naredbom za citanje (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; sve ostalo se odbija (scenariji u `tests/helpers/supabase-mcp-guard.ts`). Druga razina: jamstvo daje konektor s `read_only=true`. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
 | PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
 | Stop | `scripts/hooks/implementer-stop.mjs` | Implementatorska sesija ne zavrsava dok checklist ima otvorenih stavki. |

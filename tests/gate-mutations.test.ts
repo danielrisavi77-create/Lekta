@@ -317,7 +317,7 @@ import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRea
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
-import { supabaseMcpGuardProblems, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
+import { supabaseMcpGuardProblems, supabaseMcpGuardProblemsForSource, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -12679,17 +12679,26 @@ describe('mutations: actual verification focus restoration', () => {
 });
 
 /**
- * SUPABASE MCP GARD (odluka vlasnika 2026-10-08). Dva kvara koja bi gard ucinila ukrasom:
+ * SUPABASE MCP GARD (odluka vlasnika 2026-10-08, popravak po Codex pregledu #327). Mutira se KOPIJA
+ * izvora `scripts/agents/tool-guard.mjs` (tests/helpers/supabase-mcp-guard.ts), nikad omotac.
  *  (a) matcher hooka bez MCP alata: presuda se nikad ne pozove (stanje do 2026-10-08);
- *  (b) detektor pisanja kojem fali kljucna rijec ili koji ne uklanja literale.
+ *  (b) E-string bez backslash escapea, poziv funkcije bez provjere, nepoznat alat kao citanje i
+ *      vise naredbi u jednom upitu: svaki propusta pisanje koje je Codex ili mjerenje nasao.
  */
 describe('mutacije: Supabase MCP gard u tool-guard.mjs', () => {
   const settingsText = readTextLf(resolve(process.cwd(), '.claude/settings.json'));
   const settings = JSON.parse(settingsText);
+  const izvor = readTextLf(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'));
+  const mutiraj = (from: string, to: string) => {
+    const m = izvor.replace(from, to);
+    expect(m, from).not.toBe(izvor);
+    return m;
+  };
 
-  it('BASELINE: stvarna presuda i stvarna registracija su ciste', async () => {
+  it('BASELINE: stvarna presuda, nemutirana kopija izvora i stvarna registracija su ciste', async () => {
     const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
     expect(supabaseMcpGuardProblems(judgeCommand)).toEqual([]);
+    expect(supabaseMcpGuardProblemsForSource(izvor)).toEqual([]);
     expect(toolGuardMatcherProblems(settings)).toEqual([]);
   });
 
@@ -12702,38 +12711,36 @@ describe('mutacije: Supabase MCP gard u tool-guard.mjs', () => {
     ]);
   });
 
-  it('mutant: presuda bez Supabase grane (samo stari apply_migration) se hvata', async () => {
-    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
-    const stari = (tool: string, command?: string) =>
-      tool.toLowerCase().includes('apply_migration')
-        ? { allow: false, reason: 'blokirano' }
-        : judgeCommand(tool.replace(/supabase/gi, 'nesto'), command);
-    const problems = supabaseMcpGuardProblems(stari);
-    expect(problems).toContain('deploy_edge_function (konektor): dobiveno allow=true, ocekivano allow=false');
-    expect(problems).toContain('execute_sql insert: dobiveno allow=true, ocekivano allow=false');
-  });
-
-  it('mutant: detektor koji ne uklanja literale odbija citanje', async () => {
-    const { stripSqlNonCode, judgeSupabaseMcp } = await import('../scripts/agents/tool-guard.mjs');
-    expect(stripSqlNonCode("select 'delete'")).not.toContain('delete');
-    const bezLiterala = (tool: string, _command?: string, input?: Record<string, unknown>) => {
-      const query = typeof input?.query === 'string' ? input.query : '';
-      if (tool.toLowerCase().endsWith('__execute_sql') && /\bdelete\b/i.test(query)) return { allow: false, reason: 'x' };
-      return judgeSupabaseMcp(tool.toLowerCase(), input) ?? { allow: true, reason: 'x' };
-    };
-    expect(supabaseMcpGuardProblems(bezLiterala)).toEqual([
-      'execute_sql rijec delete samo u literalu: dobiveno allow=false, ocekivano allow=true',
+  it('mutant: E-string bez backslash escapea se hvata', () => {
+    const m = mutiraj("if (eString && sql[i] === '\\\\') { i += 2; continue; }", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql E-string s parnim navodnicima skriva update: dobiveno allow=true, ocekivano allow=false',
     ]);
   });
 
-  it('mutant: detektor bez kljucne rijeci delete se hvata', async () => {
-    const { judgeSupabaseMcp } = await import('../scripts/agents/tool-guard.mjs');
-    const bezDelete = (tool: string, _command?: string, input?: Record<string, unknown>) => {
-      const query = typeof input?.query === 'string' ? input.query.replace(/\bdelete\b/gi, 'select') : input?.query;
-      return judgeSupabaseMcp(tool.toLowerCase(), { ...input, query }) ?? { allow: true, reason: 'x' };
-    };
-    expect(supabaseMcpGuardProblems(bezDelete)).toEqual([
-      'execute_sql delete u CTE-u: dobiveno allow=true, ocekivano allow=false',
+  it('mutant: poziv funkcije bez provjere se hvata', () => {
+    const m = mutiraj('if (!SQL_SAFE_CALLS.has(call[1])) return', 'if (false) return');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql pg_notify (Codex #327, nalaz 2): dobiveno allow=true, ocekivano allow=false',
+      'execute_sql pg_advisory_lock: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql vlastiti RPC: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql funkcija u navodnicima: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql set_config: dobiveno allow=true, ocekivano allow=false',
+    ]);
+  });
+
+  it('mutant: nepoznat Supabase alat kao citanje se hvata', () => {
+    const m = mutiraj('if (SUPABASE_MCP_READ_TOOLS.has(name))', 'if (true)');
+    const problems = supabaseMcpGuardProblemsForSource(m);
+    expect(problems).toContain('create_edge_function_secret (nije na popisu zabrana): dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('nepoznat buduci alat: dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('deploy_edge_function (konektor): dobiveno allow=true, ocekivano allow=false');
+  });
+
+  it('mutant: vise naredbi u jednom upitu se hvata', () => {
+    const m = mutiraj("if (body.includes(';')) return 'vise naredbi';", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql dvije naredbe koje citaju: dobiveno allow=true, ocekivano allow=false',
     ]);
   });
 });
