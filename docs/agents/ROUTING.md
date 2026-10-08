@@ -14,16 +14,17 @@ Svaka sesija na pocetku (SessionStart hook, `scripts/agents/session-bootstrap.mj
 kratak ispis (najvise 12 redaka): master SHA, je li stablo cisto, otvoreni PR-ovi (ako je `gh`
 dostupan; inace izricito "gh nedostupan"), broj aktivnih vitest/playwright procesa, slobodni
 RAM i disk, tko je trenutni koordinator i popis zadataka u `docs/agents/tasks.json` koji su
-`ready` i nemaju dodijeljenog `owner`-a. Hook namjerno ne bira model niti providera; to je
+`ready` i nemaju dodijeljenog `owner`-a (snimak; mjerodavan je Linear). Hook namjerno ne bira model niti providera; to je
 posao routing koraka koji slijedi tek kad je zadatak poznat (velicina, je li zasticen).
 Ispod toga isti hook ispisuje najvise 8 redaka pravila sesije (CPU pravilo, granice stroja,
 relayed poruke); vidi odjeljak "Hookovi".
 
 ## Zauzimanje zadatka
 
-Sesija koja preuzima zadatak upisuje svoje ime u polje `owner` tog zadatka u
-`docs/agents/tasks.json` (npr. `"owner": "lekta-32"`). Polje je neobvezno: stari zadaci bez
-njega ostaju valjani. Zauzimanje sprjecava da dvije sesije rade isti zadatak istovremeno u
+Sesija koja preuzima zadatak pise komentar PREUZETO na Linear zadatku; nositelj je u Linearu
+(DAN-79). Polje `owner` u `docs/agents/tasks.json` (npr. `"owner": "lekta-32"`) je dio snimka
+koji osvjezava samo koordinator skupnim PR-om; PR zadatka ga ne dira. Polje je neobvezno: stari
+zadaci bez njega ostaju valjani. Zauzimanje sprjecava da dvije sesije rade isti zadatak istovremeno u
 dijeljenom stablu; svaka sesija svejedno radi u vlastitom izoliranom worktreeu. `owner` sam
 po sebi nije brava nad datotekama. Za implementatorske zadatke postupno se uvodi `workScope`
 (`read` / `write` / `forbidden`) i PreToolUse gard iz `docs/agents/PATH_SCOPE_V1.md`.

@@ -77,12 +77,12 @@ npm run agents -- run T00 --phase plan --agent astra --execute
 ```
 
 Koordinator pregledava audit, sprema provjerene nalaze u `docs/quality/lekta-plan-status.md`
-i azurira `tasks.json`. T00 ne mijenja aplikaciju: utvrduje koji stari nalazi jos vrijede.
+i Linear, a snimak u `tasks.json` osvjezava skupnim PR-om. T00 ne mijenja aplikaciju: utvrduje koji stari nalazi jos vrijede.
 Plan je nastao nad ranijim snapshotom i ne treba ponavljati vec isporucene popravke.
 
 ## Implementacija i predaja
 
-Prvo dovrsi ovisnosti i oznaci zadatak `ready`. Zatim napravi worktree IZVAN repozitorija,
+Prvo dovrsi ovisnosti; koordinator oznaci zadatak `ready` u Linearu i u snimku `tasks.json`. Zatim napravi worktree IZVAN repozitorija,
 instaliraj ovisnosti ili povezi postojeci `node_modules` i udji u korijen tog worktreea.
 Primjer nakon sto je T01 stvarno spreman:
 
@@ -200,15 +200,19 @@ Globalni write ownership NIJE odgovornost ovog messaging sloja. To definira
 
 ## Ugovor reda zadataka
 
-Status, prioritet, nositelj i biljeske zadatka zive samo u Linearu (workspace daniel77, projekt
-Lekta; odluka vlasnika 2026-10-08, DAN-79). `tasks.json` je repo-inventar: id, naslov, ovisnosti,
-`workScope` za `task-scope-guard` i kriteriji. `development-plan.md` daje opseg i kriterije T00-T47;
-T16-T47 su Podplan F, koji indeksira vendorani program `docs/agents/plan-do-live-2026-09-12.md`.
+Mjerodavan status, prioritet, nositelj i biljeske zadatka su u Linearu (workspace daniel77,
+projekt Lekta; odluka vlasnika 2026-10-08, DAN-79). `tasks.json` je repo-inventar (id, naslov,
+ovisnosti, `note`, neobavezni `workScope` i `owner`) i SNIMAK statusa za alate koji ga citaju:
+`npm run agents` (`prepareJob` trazi `ready` ili `in_review`), autonomija, lease claim i
+session-bootstrap ("ready bez ownera"). Kad se snimak i Linear razilaze, vrijedi Linear.
+`development-plan.md` daje opseg i kriterije T00-T47; T16-T47 su Podplan F, koji indeksira
+vendorani program `docs/agents/plan-do-live-2026-09-12.md`.
 
-PR zadatka ne dira `tasks.json`. Svaka izmjena te datoteke u PR-u zadatka sudarala se s ostalim
-otvorenim PR-ovima nakon svakog spoja i tjerala puni gate ispocetka (2026-10-08 tri puta). Nove
-zadatke, `workScope` i povremeno osvjezen `status` upisuje samo koordinator, skupno, u zasebnom
-PR-u koji ne dira nista drugo. `statusNote` je zamrznut povijesni zapis; tekuce stanje je u Linearu.
+PR zadatka ne dira `tasks.json` (ni `status`, ni `owner`, ni `note`). Svaka izmjena te datoteke u
+PR-u zadatka sudarala se s ostalim otvorenim PR-ovima nakon svakog spoja i tjerala puni gate
+ispocetka (2026-10-08 tri puta). Nove zadatke, biljeske i snimak statusa iz Lineara upisuje samo
+koordinator, skupno, u zasebnom PR-u koji dira samo `tasks.json`. `statusNote` je zamrznut
+povijesni zapis koji nijedan alat ne cita.
 Gard: CI job `pr-opis` (`scripts/agents/tasks-json-opseg.mjs`) obara PR koji mijenja `tasks.json`
 zajedno s bilo kojom drugom putanjom.
 
@@ -239,7 +243,7 @@ Vlasnik je 4. 10. zatvorio bez spajanja PR-ove #242, #244, #255, #203, #229, #19
 ### Fokus na betu 2026-10-04
 
 Odluka vlasnika 4. 10.: rad ide na kriterije bete (T81, go/no-go 19. 10.); T57 i T88 su odgodjeni.
-Kriteriji T81 i stanje 4. 10.:
+Kriteriji T81 i stanje 4. 10. (povijesna snimka; tekuce stanje je u Linearu):
 
 | # | Kriterij | Zadatak | Stanje |
 |---|---|---|---|

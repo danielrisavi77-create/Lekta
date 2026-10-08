@@ -130,8 +130,8 @@ poziva na svaki prompt.
 
 Pregled mora doci od drugog CLI providera od implementatora. Modelski rezultat nije
 dokaz prolaza: izolacija, deterministicni gateovi, Word oracle i commit pravila ostaju
-obvezni. Operativne naredbe su u `docs/agents/README.md`. Status zadataka je samo u Linearu;
-`docs/agents/tasks.json` je inventar koji PR zadatka ne dira (mijenja ga samo koordinator, skupno).
+obvezni. Operativne naredbe su u `docs/agents/README.md`. Mjerodavan status zadataka je u Linearu;
+`docs/agents/tasks.json` je inventar i snimak koji PR zadatka ne dira (osvjezava ga koordinator, skupno).
 
 ## Implementatorske sesije
 

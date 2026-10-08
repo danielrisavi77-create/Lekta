@@ -693,8 +693,8 @@ Za svaki novi feature koristiti postojeći mehanizam kontrole dostupnosti ako po
 
 Ovaj podplan je dodan 2026-09-12 iz vlasnikova plana. Pune checkliste, obrazloženja i vanjske izvore
 NE prepisujemo ovamo: kanonski tekst je `docs/agents/plan-do-live-2026-09-12.md` (odjeljci 6 i 11), a
-ovdje je indeks po zadatku. Kanonski status i red ostaju u `docs/agents/tasks.json`; treći sustav statusa
-se ne uvodi.
+ovdje je indeks po zadatku. Mjerodavan status je od 2026-10-08 u Linearu (DAN-79);
+`docs/agents/tasks.json` je red i snimak statusa za alate. Treći sustav statusa se ne uvodi.
 
 Plan je pisan nad masterom `7e52bc66551d7d920ab83810f87f0c52a10f8c16`. Polazište unosa je
 `afccbdd78af4d09f7ff9097adc45e05e3fc41287`, koji se od njega razlikuje samo za PR #74 i #75 (workflow
