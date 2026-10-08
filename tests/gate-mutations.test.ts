@@ -10787,6 +10787,77 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
  * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
  * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
  */
+/**
+ * T109: cpu-discipline i heredoc (allowlist citaca nakon tri runde Grok pregleda #328). Tijelo se
+ * preskace samo za prvi redak `citac arg ... <<'IME'` s cistim rijecima; sve ostalo ide starim
+ * rastavom po retku. Svaki mutant uklanja jedan uvjet i mora pustiti ulaz koji bash izvrsi.
+ * Mutira se kopija izvora, presudu racuna cisti node.
+ */
+describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/cpu-discipline.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+  // Redak tijela koji pocinje teskom naredbom: stari rastav po novom retku ga je citao kao naredbu.
+  const citirani = "python3 - <<'PYEOF'\nnpx vitest run je samo tekst u biljesci\nPYEOF";
+  const bezNavodnika = 'cat <<EOF\n$(npx vitest run)\nEOF';
+  const komentar = "cat # <<'EOF'\nnpx vitest run";
+  const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
+  const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+
+  async function dopusta(source: string, command: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-cpu-mut-'));
+    try {
+      const file = join(dir, 'cpu-discipline.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeCpuDiscipline(${JSON.stringify(command)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
+    expect(await dopusta(izvor, citirani)).toBe(true);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+  });
+
+  it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
+    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", 'if (false) {');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, citirani)).toBe(false);
+  });
+
+  it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
+    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, bezNavodnika)).toBe(true);
+  });
+
+  it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
+    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, komentar)).toBe(true);
+  });
+
+  it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
+    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, funkcija)).toBe(true);
+  });
+
+  it('mutant: program izvan allowliste citaca', async () => {
+    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+});
+
 describe('mutacije: scripts/hooks/dash-guard.mjs', () => {
   const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/dash-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
   const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
