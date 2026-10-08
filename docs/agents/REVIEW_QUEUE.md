@@ -28,8 +28,8 @@ Jedan prolaz, serijski (jedna teska provjera odjednom):
 6. Oznaka se skida, worktree se uklanja. Oznaka vracena na vec pregledan commit samo se skida.
 7. Dva uzastopna kvara na istoj kombinaciji: komentar o kvaru i skidanje oznake (nema vrtnje u krug).
 
-Skripta odbija start ako okolina ima `XAI_API_KEY` ili `OPENAI_API_KEY`: samo pretplata
-(`grok login`, `codex login`). Ne mijenja kod ni PR; nalazi su savjetodavni i potvrduju se dokazom.
+Skripta odbija posao ako okolina ima API kljuc tog providera (`XAI_API_KEY` za Grok, `OPENAI_API_KEY` za Codex): samo pretplata
+(`grok login`, `codex login`). Provider dobiva okolinu bez tajni (`TOKEN`, `SECRET`, `API_KEY`, `GH_*`, Supabase, Stripe). Ne mijenja kod ni PR; nalazi su savjetodavni i potvrduju se dokazom.
 Ne dira PR-ove bez oznake, pa ni ruzni red u niti "Beta: release proof i pregledi".
 
 ## Pokretanje (jednom, na radnoj stanici)
@@ -55,4 +55,14 @@ Nova runda trazi novu oznaku nakon novog pusha.
 ## Izmjereno na radnoj stanici
 
 - `grok --output-format json` vraca jedan JSON s kljucem `text`; uz njega dolazi uvodna naracija zalijepljena bez razmaka. Prompt zato trazi da odgovor zavrsi odjeljkom `## Nalazi`, a sve prije zadnjeg markera se odbacuje. `--output-format plain` zna vratiti samo prvi odlomak, pa se ne koristi.
-- Na Windowsu su `grok` i `codex` npm shimovi. Pokretanje bez ljuske ide kroz ulaznu tocku paketa (`resolveProviderInvocation` iz `cli.mjs`), a ako nje nema, kroz `cmd.exe /d /s /c <ime>.cmd`. `gh` se pokrece izravno (obicno je `gh.exe`).
+- Na Windowsu su `grok` i `codex` npm shimovi. Provider se zato pokrece kroz `node scripts/with-gate-lock.mjs`, cija ljuska rjesava `.cmd` shimove; to je ujedno dijeljeni lock za teske poslove. Gate zauzet (izlaz 2) odgada pregled bez brojanja kvara.
+
+## Pravila odluka
+
+- Implementator se prepoznaje iz opisa PR-a i poruka commitova (potpisi Claude/Codex/Grok). Isti provider kao implementator: oznaka se skida uz komentar. Nepoznat implementator ne blokira, ali komentar navodi da neovisnost nije provjerena.
+- Zasticena delta (`protectedPaths`): Grok ceka uspjesan Codex pregled iste glave i ciljne grane; inace se odgada.
+- Zasticenost se racuna iz stvarne delte (`git diff --name-only`), ne iz kumulativnog popisa datoteka PR-a.
+- Prije objave se ponovno cita glava i ciljna grana; ako su se promijenile, nista se ne objavljuje i oznaka ostaje za novu rundu.
+- Nalazi su redovi Markdown tablice s tezinom `blocker|major|minor|nit`, kako ih broji `pr-intake`.
+- Cijela delta je u `REVIEW_DELTA.diff` u korijenu radnog stabla (prompt nosi najvise 200 kB).
+- Dva kvara zaredom: komentar o kvaru i skidanje oznake; ako objava padne, ponavlja se u sljedecem krugu.

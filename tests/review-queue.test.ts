@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  buildCommand, buildPrompt, codexModel, extractGrokText, shimInvocation, stripNarration, forbiddenEnv, formatComment, pickDeltaBase,
+  buildCommand, buildPrompt, codexModel, extractGrokText, stripNarration, forbiddenEnv, grokNeedsCodex, implementersOf, reviewStamp, sameProviderReview, scrubEnv, formatComment, pickDeltaBase,
   providersForLabels, sanitizeOutput, selectNext, touchesProtected, truncateDiff, MAX_FAILURES,
 } from '../scripts/agents/review-queue-core.mjs';
 
@@ -40,22 +40,52 @@ describe('pickDeltaBase', () => {
 
 describe('selectNext', () => {
   const prs = [
-    { number: 12, labels: [{ name: 'codex-review' }], headRefOid: 'h12' },
-    { number: 7, labels: [{ name: 'grok-review' }, { name: 'codex-review' }], headRefOid: 'h7' },
+    { number: 12, labels: [{ name: 'codex-review' }], headRefOid: 'h12', baseRefName: 'master' },
+    { number: 7, labels: [{ name: 'grok-review' }, { name: 'codex-review' }], headRefOid: 'h7', baseRefName: 'master' },
   ];
   it('uzima najnizi PR, pa provider po abecedi', () => {
-    expect(selectNext(prs, {})).toEqual({ number: 7, provider: 'codex', noDelta: false });
+    expect(selectNext(prs, {})).toEqual({ number: 7, provider: 'codex', noDelta: false, cleanup: false });
   });
-  it('oznacava vec pregledan head kao noDelta', () => {
-    expect(selectNext(prs, { reviewed: { '7:codex': 'h7' } })).toEqual({ number: 7, provider: 'codex', noDelta: true });
+  it('noDelta samo kad su i glava i ciljna grana isti', () => {
+    expect(selectNext(prs, { reviewed: { '7:codex': 'h7@master' } })?.noDelta).toBe(true);
+    expect(selectNext(prs, { reviewed: { '7:codex': 'h7@develop' } })?.noDelta).toBe(false);
+    expect(selectNext(prs, { reviewed: { '7:codex': 'h6@master' } })?.noDelta).toBe(false);
+    expect(reviewStamp(prs[1])).toBe('h7@master');
   });
-  it('preskace kombinaciju koja je iscrpila pokusaje', () => {
-    const failures = { '7:codex': MAX_FAILURES, '7:grok': MAX_FAILURES };
-    expect(selectNext(prs, { failures })).toEqual({ number: 12, provider: 'codex', noDelta: false });
+  it('iscrpljene pokusaje vraca kao cleanup, ne preskace ih', () => {
+    const failures = { '7:codex': MAX_FAILURES };
+    expect(selectNext(prs, { failures })).toEqual({ number: 7, provider: 'codex', noDelta: false, cleanup: true });
+  });
+  it('odgodjene kljuceve preskace', () => {
+    expect(selectNext(prs, {}, new Set(['7:codex', '7:grok']))).toEqual({ number: 12, provider: 'codex', noDelta: false, cleanup: false });
   });
   it('prazan red vraca null', () => {
     expect(selectNext([], {})).toBeNull();
-    expect(selectNext([{ number: 1, labels: [{ name: 'bug' }], headRefOid: 'x' }], {})).toBeNull();
+    expect(selectNext([{ number: 1, labels: [{ name: 'bug' }], headRefOid: 'x', baseRefName: 'master' }], {})).toBeNull();
+  });
+});
+
+describe('neovisnost providera', () => {
+  it('prepoznaje implementatora iz potpisa i odbija isti provider', () => {
+    const claude = implementersOf('Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>');
+    expect(claude.has('claude')).toBe(true);
+    expect(sameProviderReview(claude, 'grok')).toBe(false);
+    const codex = implementersOf('Co-Authored-By: Codex <x@openai.com>');
+    expect(sameProviderReview(codex, 'codex')).toBe(true);
+    expect(sameProviderReview(implementersOf('Grok Build patch'), 'grok')).toBe(true);
+    expect(implementersOf('rucni commit').size).toBe(0);
+  });
+  it('grok na zasticenoj delti ceka codex iste glave', () => {
+    const base = { provider: 'grok', isProtected: true, number: 7, stamp: 'h@m' };
+    expect(grokNeedsCodex({ ...base, reviewed: {} })).toBe(true);
+    expect(grokNeedsCodex({ ...base, reviewed: { '7:codex': 'h@m' } })).toBe(false);
+    expect(grokNeedsCodex({ ...base, reviewed: { '7:codex': 'old@m' } })).toBe(true);
+    expect(grokNeedsCodex({ ...base, isProtected: false, reviewed: {} })).toBe(false);
+    expect(grokNeedsCodex({ ...base, provider: 'codex', reviewed: {} })).toBe(false);
+  });
+  it('scrubEnv uklanja tajne, cuva PATH i HOME', () => {
+    const out = scrubEnv({ PATH: 'p', HOME: 'h', GH_TOKEN: 'x', SUPABASE_URL: 'u', STRIPE_KEY: 's', OPENAI_API_KEY: 'o', NPM_CONFIG_USERCONFIG: 'n' });
+    expect(out).toEqual({ PATH: 'p', HOME: 'h' });
   });
 });
 
@@ -102,29 +132,30 @@ describe('prompt, diff, komentar', () => {
     expect(c).toContain('trece misljenje');
     expect(c).toContain('Savjetodavni');
   });
-  it('extractGrokText cita polje result ili vraca sirovo', () => {
-    expect(extractGrokText('{"result":"nalaz"}')).toBe('nalaz');
+  it('extractGrokText cita text, odsijeca naraciju, a gresku i prazan odgovor baca', () => {
     expect(extractGrokText('{"text":"Pogledat cu diff.## Nalazi\\n1. a.ts:3"}')).toBe('## Nalazi\n1. a.ts:3');
-    expect(extractGrokText('goli tekst')).toBe('goli tekst');
+    expect(extractGrokText('{"result":"nalaz"}')).toBe('nalaz');
+    expect(() => extractGrokText('{"is_error":true,"text":"x"}')).toThrow();
+    expect(() => extractGrokText('{"ok":false}')).toThrow();
+    expect(() => extractGrokText('{"text":"  "}')).toThrow();
+    expect(() => extractGrokText('goli tekst')).toThrow();
   });
+
 });
 
 describe('forbiddenEnv', () => {
-  it('odbija API kljuceve, pusta cistu okolinu', () => {
-    expect(forbiddenEnv({ XAI_API_KEY: 'x' })).toEqual(['XAI_API_KEY']);
-    expect(forbiddenEnv({ OPENAI_API_KEY: '' , PATH: 'p' })).toEqual([]);
+  it('odbija samo kljuc izabranog providera', () => {
+    expect(forbiddenEnv({ XAI_API_KEY: 'x' }, 'grok')).toEqual(['XAI_API_KEY']);
+    expect(forbiddenEnv({ XAI_API_KEY: 'x' }, 'codex')).toEqual([]);
+    expect(forbiddenEnv({ OPENAI_API_KEY: 'o' }, 'codex')).toEqual(['OPENAI_API_KEY']);
+    expect(forbiddenEnv({ OPENAI_API_KEY: '', PATH: 'p' }, 'codex')).toEqual([]);
   });
 });
 
-describe('stripNarration i shimInvocation', () => {
+describe('stripNarration', () => {
   it('odsijeca naraciju po zadnjem markeru, bez markera ne dira tekst', () => {
     expect(stripNarration('uvod## Nalazi\nx')).toBe('## Nalazi\nx');
     expect(stripNarration('## Nalazi a\n## Nalazi b')).toBe('## Nalazi b');
     expect(stripNarration('bez markera')).toBe('bez markera');
-  });
-  it('windows ide kroz node ulaznu tocku ili cmd.exe /c, linux nepromijenjeno', () => {
-    expect(shimInvocation('grok', ['a'], { platform: 'linux', resolved: { command: 'grok', argsPrefix: [] } })).toEqual({ command: 'grok', args: ['a'] });
-    expect(shimInvocation('grok', ['a'], { platform: 'win32', resolved: { command: 'node.exe', argsPrefix: ['b.js'] } })).toEqual({ command: 'node.exe', args: ['b.js', 'a'] });
-    expect(shimInvocation('codex', ['a'], { platform: 'win32', resolved: { command: 'codex', argsPrefix: [] } })).toEqual({ command: 'cmd.exe', args: ['/d', '/s', '/c', 'codex.cmd', 'a'] });
   });
 });
