@@ -21,6 +21,15 @@
         ]
       },
       {
+        "matcher": "mcp__.*Supabase.*__apply_migration",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/agents/tool-guard.mjs"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -35,6 +44,15 @@
           {
             "type": "command",
             "command": "node scripts/hooks/task-scope-guard.mjs"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/dash-guard.mjs"
           }
         ]
       }

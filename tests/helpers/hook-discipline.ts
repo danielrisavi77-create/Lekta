@@ -3,18 +3,40 @@
  * `.claude/settings.json` i sadrzaj pravila koja SessionStart ispisuje.
  */
 
+/**
+ * `matcher` je ime alata koje matcher u postavkama mora pokriti. Matcher od samih slova, znamenki, `_`
+ * i `|` je popis tocnih imena; svaki drugi je regex (semantika Claude Code hookova). MCP alati se
+ * zato navode punim imenom: matcher `Bash|PowerShell` nikad ne vidi `mcp__Supabase__apply_migration`.
+ */
 export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; command: string }> = [
   // `--worktree-gc` samo u hooku: rucni i testni poziv bootstrapa ne smije uklanjati stabla stroja.
   { event: 'SessionStart', command: 'node scripts/agents/session-bootstrap.mjs --worktree-gc' },
   { event: 'PreToolUse', matcher: 'Bash', command: 'node scripts/hooks/cpu-discipline.mjs' },
   { event: 'PreToolUse', matcher: 'Edit', command: 'node scripts/hooks/task-scope-guard.mjs' },
   { event: 'PreToolUse', matcher: 'Write', command: 'node scripts/hooks/task-scope-guard.mjs' },
+  { event: 'PreToolUse', matcher: 'Bash', command: 'node scripts/agents/tool-guard.mjs' },
+  // Ime Supabase MCP alata ovisi o tome je li konektor spojen kroz claude.ai ili lokalno.
+  { event: 'PreToolUse', matcher: 'mcp__Supabase__apply_migration', command: 'node scripts/agents/tool-guard.mjs' },
+  { event: 'PreToolUse', matcher: 'mcp__claude_ai_Supabase__apply_migration', command: 'node scripts/agents/tool-guard.mjs' },
+  { event: 'PreToolUse', matcher: 'Edit', command: 'node scripts/hooks/dash-guard.mjs' },
+  { event: 'PreToolUse', matcher: 'Write', command: 'node scripts/hooks/dash-guard.mjs' },
   { event: 'Stop', command: 'node scripts/hooks/implementer-stop.mjs' },
 ];
 
 interface HookEntry {
   matcher?: string;
   hooks?: Array<{ type?: string; command?: string }>;
+}
+
+/** Pokriva li matcher iz postavki ime alata, po semantici Claude Code hookova. */
+export function matcherCovers(matcher: string, toolName: string): boolean {
+  if (matcher === '' || matcher === '*') return true;
+  if (/^[A-Za-z0-9_|]+$/.test(matcher)) return matcher.split('|').includes(toolName);
+  try {
+    return new RegExp('^(?:' + matcher + ')$').test(toolName);
+  } catch {
+    return false;
+  }
 }
 
 /** Ocekivani hookovi koji u postavkama nedostaju (ili nisu `type: command` pod pravim matcherom). */
@@ -25,8 +47,7 @@ export function missingHookRegistrations(settings: unknown): string[] {
     const entries = Array.isArray(hooks[want.event]) ? hooks[want.event] : [];
     const found = entries.some((entry) => {
       if (want.matcher !== undefined) {
-        const matchers = String(entry.matcher ?? '').split('|');
-        if (!matchers.includes(want.matcher)) return false;
+        if (!matcherCovers(String(entry.matcher ?? ''), want.matcher)) return false;
       }
       return (entry.hooks ?? []).some((h) => h.type === 'command' && h.command === want.command);
     });

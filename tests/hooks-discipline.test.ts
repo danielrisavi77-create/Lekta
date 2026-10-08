@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { BLOCK_MESSAGE, judgeCpuDiscipline, packageScriptReader, splitCommand } from '../scripts/hooks/cpu-discipline.mjs';
 import { MAX_BLOCKS, counterPath, decideStop, openItems } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
-import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { matcherCovers, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 
 // Stvarne definicije skripti iz package.json: `npm run check` vec ide kroz with-gate-lock, `build` ne.
 const readScript = packageScriptReader(resolve('.'));
@@ -160,9 +160,15 @@ describe('A3 implementer-stop', () => {
 });
 
 describe('registracija u repo .claude/settings.json', () => {
-  it('sva tri hooka su registrirana, uz postojeci tool-guard', () => {
+  it('svi ocekivani hookovi su registrirani, tool-guard i za Supabase MCP apply_migration', () => {
     const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
     expect(missingHookRegistrations(settings)).toEqual([]);
-    expect(JSON.stringify(settings)).toContain('scripts/agents/tool-guard.mjs');
+  });
+
+  it('matcher po semantici Claude Code: popis tocnih imena ili regex', () => {
+    expect(matcherCovers('Bash|PowerShell', 'Bash')).toBe(true);
+    expect(matcherCovers('Bash|PowerShell', 'mcp__Supabase__apply_migration')).toBe(false);
+    expect(matcherCovers('mcp__.*Supabase.*__apply_migration', 'mcp__claude_ai_Supabase__apply_migration')).toBe(true);
+    expect(matcherCovers('mcp__.*Supabase.*__apply_migration', 'mcp__Supabase__list_tables')).toBe(false);
   });
 });

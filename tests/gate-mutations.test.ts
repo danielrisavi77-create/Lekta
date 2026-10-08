@@ -11222,6 +11222,72 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
   it('mutant: Stop hook bez gornje granice blokiranja obara tvrdnju A3', () => {
     expect(a3Grize(Number.POSITIVE_INFINITY)).toBe(false);
   });
+
+  it('mutant: tool-guard samo pod matcherom Bash|PowerShell ne stize do Supabase MCP apply_migration', () => {
+    // Zateceno stanje prije popravka: zabrana u tool-guard.mjs je postojala, ali je hook nikad nije vidio.
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => !String(e.matcher ?? '').startsWith('mcp__'));
+    expect(missingHookRegistrations(mutant)).toEqual([
+      'PreToolUse[mcp__Supabase__apply_migration]: node scripts/agents/tool-guard.mjs',
+      'PreToolUse[mcp__claude_ai_Supabase__apply_migration]: node scripts/agents/tool-guard.mjs',
+    ]);
+  });
+
+  it('mutant: dash-guard maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
+      (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('dash-guard')));
+    expect(missingHookRegistrations(mutant)).toEqual([
+      'PreToolUse[Edit]: node scripts/hooks/dash-guard.mjs',
+      'PreToolUse[Write]: node scripts/hooks/dash-guard.mjs',
+    ]);
+  });
+});
+
+/**
+ * DASH-GUARD (pravilo "bez em i en crtica" iz CLAUDE.md, Konvencije). Mutira se KOPIJA izvora u
+ * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
+ * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
+ */
+describe('mutacije: scripts/hooks/dash-guard.mjs', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/dash-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+
+  async function odbijaEnCrticu(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-dash-mut-'));
+    try {
+      const file = join(dir, 'dash-guard.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const ulaz = { toolName: 'Edit', rel: 'src/a.ts', toolInput: { old_string: 'x', new_string: 'x \u2013 y' }, postojeci: null };
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeDashWrite(${JSON.stringify(ulaz)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow === false;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: stvarni gard odbija novu en crticu', async () => {
+    expect(await odbijaEnCrticu(izvor)).toBe(true);
+  });
+
+  it('mutant: regex koji lovi samo em crticu se hvata', async () => {
+    const mutant = izvor.replace('/[\\u2013\\u2014]/g', '/[\\u2014]/g');
+    expect(mutant).not.toBe(izvor);
+    expect(await odbijaEnCrticu(mutant)).toBe(false);
+  });
+
+  it('mutant: src/ ispao iz opsega se hvata', async () => {
+    const mutant = izvor.replace('[/^src\\//, ', '[');
+    expect(mutant).not.toBe(izvor);
+    expect(await odbijaEnCrticu(mutant)).toBe(false);
+  });
 });
 
 describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', () => {
