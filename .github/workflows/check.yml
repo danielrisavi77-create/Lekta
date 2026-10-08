@@ -9,6 +9,9 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  # DAN-80: GitHub merge queue gradi PR s najnovijim masterom na grani gh-readonly-queue/* i trazi
+  # iste provjere pod ovim okidacem; bez njega PR u redu visi bez statusa.
+  merge_group:
   workflow_dispatch:
 
 # Least-privilege token (AUD-48): gate nista ne pise, samo cita kod.
@@ -168,3 +171,39 @@ jobs:
           name: lean-report
           path: docs/generated/LEAN_REPORT.md
           if-no-files-found: ignore
+
+  # DAN-80: MJERENJE shardiranog vitesta, NE zamjena za `build-gate` (on ostaje puni
+  # `npm run check`; njegov oblik pinaju tests/check-workflow-package-manager.test.ts i
+  # tests/ci-workflow-triggers.test.ts). Job dokazuje dvije stvari prije nego se build-gate smije
+  # rezati: (1) zbroj datoteka preko shardova jednak je punom runu (broj u job summaryju svakog sharda),
+  # (2) stvarno vrijeme zida po shardu. Nije u popisu obveznih provjera.
+  vitest-shard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+          npm-version: 11.11.0
+
+      - name: Vitest shard ${{ matrix.shard }}/4
+        run: |
+          node scripts/clean-vitest-tmp.mjs
+          npx vitest run --shard=${{ matrix.shard }}/4 --reporter=default --reporter=json --outputFile.json=shard.json
+
+      # `vitest list --shard` IGNORIRA shard (izmjereno: svaki shard vrati svih 719 datoteka), pa se
+      # particija ne moze dokazati popisom. Dokaz je ovaj broj: zbroj preko 4 shardova mora biti
+      # jednak `Test Files` punog runa (719 na 2026-10-08), sto se cita iz job summaryja.
+      - name: Broj datoteka u shardu
+        if: always()
+        run: |
+          node -e "const r=JSON.parse(require('fs').readFileSync('shard.json','utf8'));console.log('shard ${{ matrix.shard }}/4 datoteka: '+r.testResults.length)" | tee -a "$GITHUB_STEP_SUMMARY"
