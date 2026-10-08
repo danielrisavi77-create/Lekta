@@ -45,3 +45,9 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: node scripts/agents/pr-lines.mjs --provjeri "$BASE_SHA" "$HEAD_SHA"
+      - name: PR zadatka ne dira docs/agents/tasks.json uz drugi kod (DAN-79)
+        if: ${{ !cancelled() }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/agents/tasks-json-opseg.mjs "$BASE_SHA" "$HEAD_SHA"

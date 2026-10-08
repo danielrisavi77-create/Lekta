@@ -209,6 +209,8 @@ PR zadatka ne dira `tasks.json`. Svaka izmjena te datoteke u PR-u zadatka sudara
 otvorenim PR-ovima nakon svakog spoja i tjerala puni gate ispocetka (2026-10-08 tri puta). Nove
 zadatke, `workScope` i povremeno osvjezen `status` upisuje samo koordinator, skupno, u zasebnom
 PR-u koji ne dira nista drugo. `statusNote` je zamrznut povijesni zapis; tekuce stanje je u Linearu.
+Gard: CI job `pr-opis` (`scripts/agents/tasks-json-opseg.mjs`) obara PR koji mijenja `tasks.json`
+zajedno s bilo kojom drugom putanjom.
 
 Put statusa je `blocked -> ready -> in_progress -> in_review -> done`. Povratak na `ready` znaci
 novi pokusaj nakon pregledane i spremljene prethodne promjene, ne slijepi nastavak preko nje.
