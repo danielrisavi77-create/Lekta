@@ -9,7 +9,7 @@ vlastiti brojac, zapisati ga u artefakt i imati test koji dokazuje da brojac nij
 
 Generator ulaza mora imati zaseban dokaz da stvarno proizvodi ciljanu klasu oblika.
 Idempotencija zahtijeva dva prolaza i tvrdnju da je drugi no-op. Svaki novi gard
-treba baseline i mutaciju u `tests/gate-mutations.test.ts`.
+treba baseline i mutaciju u `tests/gate-mutations.test.ts` ili `tests/gate-mutations-<domena>.test.ts`.
 
 Usporeduj identitete nalaza, ne samo zbrojeve. Broj moze ostati isti dok jedan
 blokator nestane, a drugi se pojavi.
