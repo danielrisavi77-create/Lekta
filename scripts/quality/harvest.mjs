@@ -34,7 +34,7 @@ import { localDay, sessionLabel } from '../agents/usage-daily.mjs';
 export const CLASSES = [
   { id: 'hook-cpu-disciplina', vrsta: 'hook', gard: 'scripts/hooks/cpu-discipline.mjs', re: /CPU disciplina:/ },
   { id: 'hook-tool-guard', vrsta: 'hook', gard: 'scripts/agents/tool-guard.mjs', re: /tool-guard:/ },
-  { id: 'hook-git-commit-only', vrsta: 'hook', gard: 'lekta-git-guard.mjs', re: /`git commit` bez `--only`|git add -A/ },
+  { id: 'hook-git-commit-only', vrsta: 'hook', gard: 'scripts/agents/tool-guard.mjs', re: /`git commit` bez `--only`|git add -A/ },
   { id: 'hook-worktree-nepoznat', vrsta: 'hook', gard: 'scripts/agents/tool-guard.mjs', re: /Nije se moglo utvrditi radi li se u vlastitom worktreeju/ },
   { id: 'auto-mode-odbijeno', vrsta: 'proces', gard: 'Claude Code auto mode', re: /denied by the Claude Code auto mode classifier/ },
   { id: 'auto-mode-nedostupan', vrsta: 'okolina', gard: null, re: /temporarily unavailable .{0,40}auto mode cannot/ },
