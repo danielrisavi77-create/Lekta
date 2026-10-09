@@ -5,6 +5,7 @@ export interface WorkflowTrigger {
   branches?: string[];
   tags?: string[];
   types?: string[];
+  inputs?: Record<string, { type?: string; required?: boolean; default?: unknown; options?: unknown[] }>;
 }
 
 export interface WorkflowStepShape {
@@ -13,6 +14,8 @@ export interface WorkflowStepShape {
   run?: string;
   if?: unknown;
   shell?: string;
+  env?: Record<string, unknown>;
+  'continue-on-error'?: unknown;
 }
 
 export interface WorkflowJobShape {
@@ -137,6 +140,18 @@ function checkWordProof(file: string, doc: WorkflowFile, raw: string | undefined
   const triggers = triggerKeys(doc.on);
   if (!sameSet(triggers, WORD_PROOF_SHAPE.triggers)) {
     problems.push(`${file}: trigeri moraju biti tocno ${WORD_PROOF_SHAPE.triggers.join(', ')} (ima: ${triggers.join(', ')})`);
+  }
+  // Full release mode MUST remain a selectable workflow_dispatch input wired into the release step.
+  // A renamed input would silently default a requested full release to word-only.
+  const dispatch = triggerValue(doc.on, 'workflow_dispatch');
+  const inputs = dispatch?.inputs;
+  const mode = inputs?.razine;
+  const refInput = inputs?.ref;
+  if (!inputs || !sameSet(Object.keys(inputs), ['ref', 'razine'])
+    || !refInput || refInput.default !== 'master' || refInput.required !== false
+    || !mode || mode.type !== 'choice' || mode.default !== 'word' || mode.required !== false
+    || !Array.isArray(mode.options) || !sameSet(mode.options.map(String), ['word', 'sve'])) {
+    problems.push('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
   }
   const push = triggerValue(doc.on, 'push') as Record<string, unknown> | null | undefined;
   const pushKeys = push ? Object.keys(push) : [];
@@ -320,6 +335,16 @@ export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
       errors.push(scriptProblems[index]);
     }
   });
+  const protectedSteps = [deno, python, install, release];
+  for (const step of protectedSteps) {
+    if (step['continue-on-error'] !== undefined) {
+      errors.push('word-proof: zasticeni koraci ne smiju imati continue-on-error');
+    }
+  }
+  const expectedModeExpression = String.fromCharCode(36) + "{{ inputs.razine || 'word' }}";
+  if (!release.env || release.env.RAZINE !== expectedModeExpression) {
+    errors.push('word-proof: release RAZINE ne cita odabir workflow_dispatch.razine');
+  }
   if (release.shell !== 'powershell' || release.if !== undefined || release.uses) {
     errors.push('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
   }
