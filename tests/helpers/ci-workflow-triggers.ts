@@ -11,6 +11,8 @@ export interface WorkflowStepShape {
   name?: string;
   uses?: string;
   run?: string;
+  if?: unknown;
+  shell?: string;
 }
 
 export interface WorkflowJobShape {
@@ -174,6 +176,7 @@ function checkWordProof(file: string, doc: WorkflowFile, raw: string | undefined
   }
   if (raw === undefined) problems.push(`${file}: nema sirovog teksta za provjeru tajni`);
   else if (/\bsecrets\b/.test(raw)) problems.push(`${file}: spominje secrets (secrets., secrets[ ili secrets: inherit)`);
+  problems.push(...findWordProofPreflightProblems(doc));
   return problems;
 }
 
@@ -216,6 +219,94 @@ export function findSelfHostedProblems(
     }
   }
   return problems;
+}
+
+/** Strukturni gate za puni Word proof. Vrijedi i kada je YAML promijenjen ili preflight skriven u komentaru. */
+export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
+  const errors: string[] = [];
+  const steps = doc.jobs?.['word-proof']?.steps ?? [];
+  const stepNames = [
+    'Deno preflight (samo razine=sve)',
+    'Python preflight (samo razine=sve)',
+    'lxml i Playwright chromium (samo razine=sve)',
+    'release:check',
+  ];
+  const indices = stepNames.map((name) => steps.findIndex((step) => step.name === name));
+  for (let i = 0; i < stepNames.length; i += 1) {
+    if (indices[i] < 0 || steps.filter((step) => step.name === stepNames[i]).length !== 1) {
+      errors.push('word-proof: nedostaje ili je dupliciran korak ' + stepNames[i]);
+    }
+  }
+  if (indices.some((index) => index < 0)) return errors;
+  if (indices.some((index, i) => i > 0 && index <= indices[i - 1])) {
+    errors.push('word-proof: preflighti, instalacija i release:check nisu u sigurnom redoslijedu');
+  }
+  // PowerShell komentari ne mogu zadovoljiti uvjete; YAML se prethodno parsira u stvarne korake.
+  const active = (run: string | undefined): string => (run ?? '')
+    .replace(/<#(?:.|\r|\n)*?#>/g, '')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !line.startsWith('#'))
+    .join('\n');
+  const deno = steps[indices[0]];
+  const python = steps[indices[1]];
+  const install = steps[indices[2]];
+  const release = steps[indices[3]];
+  for (const [name, step] of [[stepNames[0], deno], [stepNames[1], python], [stepNames[2], install]] as const) {
+    if (step.if !== "inputs.razine == 'sve'" || step.shell !== 'powershell' || step.uses) {
+      errors.push('word-proof: ' + name + ' mora biti aktivan za sve na powershell runneru');
+    }
+  }
+  const denoScript = active(deno.run);
+  const pythonScript = active(python.run);
+  if (!denoScript.includes('Get-Command deno -ErrorAction Stop')
+    || !denoScript.includes('deno --version')
+    || !denoScript.includes("$verzija -notmatch '^deno 2[.]9[.]7 '")
+    || !denoScript.includes('throw ')
+    || /if\s*\(\s*\$false\s*\)/i.test(denoScript)) {
+    errors.push('word-proof: Deno preflight ne izvodi verzijsku provjeru uz fail-closed');
+  }
+  if (!pythonScript.includes('Get-Command python -ErrorAction Stop')
+    || !pythonScript.includes('python --version')
+    || !pythonScript.includes("$verzija -notmatch '^Python 3[.]14[.]3
+
+/** Job-level `if` koji izricito iskljucuje akciju `edited` (npr. `github.event.action != 'edited'`). */
+function jobExcludesEdited(job: WorkflowJobShape | null | undefined): boolean {
+  const cond = String(job?.if ?? '');
+  return /github\.event\.action\s*!=\s*['"]edited['"]/.test(cond);
+}
+
+/**
+ * Vraca `datoteka#job` za svaki job koji se pokrece kad se UREDI opis PR-a (akcija `edited`).
+ * Zadani pull_request tipovi (bez `types:`) ne ukljucuju `edited`. Job s `if` koji iskljucuje
+ * `edited` se ne broji. Koristi ga gard da samo `pr-opis` reagira na uredjivanje opisa, a puni CI ne.
+ */
+export function findJobsRunningOnEdited(workflows: NamedWorkflow[]): string[] {
+  const hits: string[] = [];
+  for (const { file, doc } of workflows) {
+    const reactsToEdited = PR_EVENTS.some((event) => {
+      if (!hasKey(doc.on, event)) return false;
+      const types = triggerValue(doc.on, event)?.types;
+      return Array.isArray(types) && types.includes('edited');
+    });
+    if (!reactsToEdited) continue;
+    for (const [name, job] of Object.entries(doc.jobs ?? {})) {
+      if (!jobExcludesEdited(job)) hits.push(`${file}#${name}`);
+    }
+  }
+  return hits.sort();
+}
+")
+    || !pythonScript.includes('python -m venv $venv')
+    || !pythonScript.includes('GITHUB_PATH')
+    || !pythonScript.includes('throw ')
+    || /if\s*\(\s*\$false\s*\)/i.test(pythonScript)) {
+    errors.push('word-proof: Python preflight ne izvodi provjeru verzije i izoliranog okruzenja');
+  }
+  if (release.shell !== 'powershell' || release.if !== undefined || !active(release.run).includes('node @gate')) {
+    errors.push('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
+  }
+  return errors;
 }
 
 const PR_EVENTS = ['pull_request', 'pull_request_target'] as const;
