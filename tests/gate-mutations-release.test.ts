@@ -134,22 +134,43 @@ describe('mutacije: objava jednim gumbom', () => {
   it('povrat funkcija koji se vrti samo na uspjeh (bez uvjeta) obara gard', () => {
     const m = mutiraj(/(\n  production:[\s\S]*Povrat Edge funkcija \(samo nakon pada\)\n)        if: [^\n]*\n/, '$1');
     expect(releaseWorkflowProblems(m)).toEqual([
-      "job production nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+      "job production nema povrat Edge funkcija nakon pada (id edge i objava, uvjet (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
     ]);
   });
 
   it('Edge korak bez id-a (uvjet povrata nista ne vidi) obara gard', () => {
     const m = mutiraj(/(\n  staging:[\s\S]*?- name: Edge funkcije\n)        id: edge\n/, '$1');
     expect(releaseWorkflowProblems(m)).toEqual([
-      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
     ]);
   });
 
   it('staging bez povrata funkcija obara gard', () => {
     const m = mutiraj(stepBlock(SOURCE, 'staging', 'Povrat Edge funkcija (samo nakon pada)'), '');
     expect(releaseWorkflowProblems(m)).toEqual([
-      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
     ]);
+  });
+
+  it('povrat koji ne pokriva prekid (bez cancelled()) obara gard', () => {
+    const m = mutiraj(/(\n  staging:[\s\S]*?)if: \(failure\(\) \|\| cancelled\(\)\) &&/, '$1if: failure() &&');
+    expect(releaseWorkflowProblems(m)).toEqual([
+      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+    ]);
+  });
+
+  it('skripta ulaza iz checkouta prije provjere mastera obara gard', () => {
+    const master = stepBlock(SOURCE, 'staging', 'Commit na masteru (prije koda iz checkouta)');
+    const m = mutiraj(master, '').replace('      - name: Ovisnosti\n', `${master}      - name: Ovisnosti\n`);
+    expect(releaseWorkflowProblems(m)).toEqual([
+      'job staging: kod iz checkouta se izvrsava prije provjere mastera',
+      'job staging: faza ulazi dolazi prije faze master',
+    ]);
+  });
+
+  it('staging bez provjere mastera obara gard', () => {
+    const m = mutiraj(stepBlock(SOURCE, 'staging', 'Commit na masteru (prije koda iz checkouta)'), '');
+    expect(releaseWorkflowProblems(m)).toEqual(['job staging nema korak faze master']);
   });
 
   it('push okidac obara gard', () => {

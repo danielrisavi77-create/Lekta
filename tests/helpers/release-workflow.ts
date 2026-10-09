@@ -1,7 +1,8 @@
 /**
  * Gard objave jednim gumbom (.github/workflows/release.yml, odluka vlasnika 2026-10-08).
  *
- * Workflow vrijedi samo dok cuva cetiri tvrdnje, i svaka je ovdje presuda nad PARSIRANIM YAML-om:
+ * Workflow vrijedi samo dok cuva cetiri tvrdnje (uz to: commit na masteru provjeravaju git i ljuska
+ * prije ijednog koda iz checkouta), i svaka je ovdje presuda nad PARSIRANIM YAML-om:
  *   1. pokrece ga samo covjek (`workflow_dispatch`), nikad push, PR ni raspored;
  *   2. produkcija ide tek iza zelenog staginga i iza GitHub environmenta `production` (odobrenje);
  *   3. u svakoj okolini redoslijed je ulazi, build, migracije (citanje), upload klijenta (neobjavljen),
@@ -27,6 +28,7 @@ interface Workflow { on?: unknown; jobs?: Record<string, Job> }
 
 /** Faze objave redom kojim moraju doci; svaka se prepoznaje po naredbi, ne po imenu koraka. */
 const PHASES: { id: string; test: (run: string) => boolean }[] = [
+  { id: 'master', test: (r) => /\bgit merge-base --is-ancestor "\$RELEASE_SHA" origin\/master\b/.test(r) },
   { id: 'ulazi', test: (r) => /\bnode scripts\/release-inputs\.mjs\b/.test(r) },
   { id: 'cli', test: (r) => /\bnetlify-cli@[\d.]+ --version\b/.test(r) },
   { id: 'build', test: (r) => /\bnode scripts\/build-production\.mjs\b/.test(r) },
@@ -41,7 +43,7 @@ const OWNER_ONLY = "github.actor == 'danielrisavi77-create' && github.triggering
 const FORBIDDEN_RUN = /\bnetlify-cli@[\d.]+ deploy\b[^\n]*--prod\b|\bsupabase\s+(?:db\s+reset|migration\s+(?:up|repair))\b|\bsecrets\s+set\b/;
 const DB_PUSH = /\bsupabase\s+db\s+push\b/;
 const ROLLBACK = /\bnode scripts\/release-edge-rollback\.mjs\b/;
-const ROLLBACK_IF = "failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'";
+const ROLLBACK_IF = "(failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'";
 const HISTORY = /\bnode scripts\/release-staging-history\.mjs\b/;
 
 function envName(job: Job): string | undefined {
@@ -63,6 +65,11 @@ function jobProblems(name: string, job: Job | undefined, expectedEnv: string): s
   const runs = steps.map((s) => s.run ?? '');
   const positions = PHASES.map((p) => runs.findIndex((r) => p.test(r)));
   const at = (id: string) => positions[PHASES.findIndex((p) => p.id === id)];
+  // Provjera mastera prethodi svakom koraku koji izvrsava kod iz checkouta (run ili lokalna akcija).
+  const firstCode = steps.findIndex((st) => st.run !== undefined || (st.uses ?? '').startsWith('./'));
+  if (at('master') >= 0 && firstCode >= 0 && firstCode < at('master')) {
+    out.push(`job ${name}: kod iz checkouta se izvrsava prije provjere mastera`);
+  }
   const cli = steps[at('cli')];
   if (cli && cli.env !== undefined) out.push(`job ${name}: instalacija Netlify CLI-ja ima env (tajne ne smiju biti uz instalaciju)`);
   PHASES.forEach((p, i) => { if (positions[i] < 0) out.push(`job ${name} nema korak faze ${p.id}`); });

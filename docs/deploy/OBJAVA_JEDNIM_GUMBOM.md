@@ -12,6 +12,8 @@ drzala samo disciplinom.
 
 ## Redoslijed (u svakoj okolini)
 
+0. Prije ijednog koda iz checkouta, samo git i ljuska: SHA je 40 znakova malim slovima, upravo
+   checkoutan i predak `origin/master`. Commit s grane tako ne moze zamijeniti ni samu provjeru.
 1. `scripts/release-inputs.mjs`: commit je 40-znamenkasti SHA, upravo checkoutan i na
    `origin/master`; svaka funkcija postoji u `supabase/functions`; svaka migracija postoji u
    `supabase/migrations`; obje funkcije ugovora o privoli (`repair-docx`, `create-checkout`) su u
@@ -42,7 +44,7 @@ drzala samo disciplinom.
    zajedno.
 8. `post-deploy-smoke --require-build-info --expect-commit <sha> --strict-commit`: posluzeno je
    bas ovo izdanje, a `repair-docx` i `create-checkout` bez tokena vracaju 401 (funkcija postoji).
-9. Samo nakon pada izmedju Edge deploya i objave klijenta: `scripts/release-edge-rollback.mjs`
+9. Samo nakon pada ili prekida izmedju Edge deploya i objave klijenta: `scripts/release-edge-rollback.mjs`
    procita commit zivog klijenta (`build-info.json`) i vrati funkcije na taj commit, jer deploy
    vise funkcija nije transakcija. Necitljiv commit je NE ZNAM i povrat ide rucno.
 

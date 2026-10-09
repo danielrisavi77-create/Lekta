@@ -76,6 +76,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      # Prije IJEDNOG koda iz checkouta (Codex na #339): commit s grane bi mogao zamijeniti i samu
+      # skriptu provjere. Ovdje rade samo git i ljuska runnera.
+      - name: Commit na masteru (prije koda iz checkouta)
+        run: |
+          [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "sha nije 40-znamenkasti commit malim slovima"; exit 1; }
+          [ "$(git rev-parse HEAD)" = "$RELEASE_SHA" ] || { echo "checkoutan nije trazeni commit"; exit 1; }
+          git merge-base --is-ancestor "$RELEASE_SHA" origin/master || { echo "commit nije na origin/master"; exit 1; }
+
       - name: Ulazi i commit na masteru
         run: node scripts/release-inputs.mjs
 
@@ -156,11 +164,11 @@ jobs:
           --functions "https://$PROJECT_REF.supabase.co/functions/v1"
           --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
 
-      # Pad nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
+      # Pad ili prekid nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
       # klijenta (Codex na #339): deploy vise funkcija nije transakcija, a ni objava ne smije pasti
       # uz vec nove funkcije.
       - name: Povrat Edge funkcija (samo nakon pada)
-        if: failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
+        if: (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: node scripts/release-edge-rollback.mjs
@@ -186,6 +194,14 @@ jobs:
           ref: ${{ inputs.sha }}
           fetch-depth: 0
           persist-credentials: false
+
+      # Prije IJEDNOG koda iz checkouta (Codex na #339): commit s grane bi mogao zamijeniti i samu
+      # skriptu provjere. Ovdje rade samo git i ljuska runnera.
+      - name: Commit na masteru (prije koda iz checkouta)
+        run: |
+          [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "sha nije 40-znamenkasti commit malim slovima"; exit 1; }
+          [ "$(git rev-parse HEAD)" = "$RELEASE_SHA" ] || { echo "checkoutan nije trazeni commit"; exit 1; }
+          git merge-base --is-ancestor "$RELEASE_SHA" origin/master || { echo "commit nije na origin/master"; exit 1; }
 
       - name: Ulazi i commit na masteru
         run: node scripts/release-inputs.mjs
@@ -250,11 +266,11 @@ jobs:
           --functions "https://$PROJECT_REF.supabase.co/functions/v1"
           --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
 
-      # Pad nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
+      # Pad ili prekid nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
       # klijenta (Codex na #339): deploy vise funkcija nije transakcija, a ni objava ne smije pasti
       # uz vec nove funkcije.
       - name: Povrat Edge funkcija (samo nakon pada)
-        if: failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
+        if: (failure() || cancelled()) && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: node scripts/release-edge-rollback.mjs
