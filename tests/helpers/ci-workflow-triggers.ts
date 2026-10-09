@@ -268,35 +268,7 @@ export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
   }
   if (!pythonScript.includes('Get-Command python -ErrorAction Stop')
     || !pythonScript.includes('python --version')
-    || !pythonScript.includes("$verzija -notmatch '^Python 3[.]14[.]3
-
-/** Job-level `if` koji izricito iskljucuje akciju `edited` (npr. `github.event.action != 'edited'`). */
-function jobExcludesEdited(job: WorkflowJobShape | null | undefined): boolean {
-  const cond = String(job?.if ?? '');
-  return /github\.event\.action\s*!=\s*['"]edited['"]/.test(cond);
-}
-
-/**
- * Vraca `datoteka#job` za svaki job koji se pokrece kad se UREDI opis PR-a (akcija `edited`).
- * Zadani pull_request tipovi (bez `types:`) ne ukljucuju `edited`. Job s `if` koji iskljucuje
- * `edited` se ne broji. Koristi ga gard da samo `pr-opis` reagira na uredjivanje opisa, a puni CI ne.
- */
-export function findJobsRunningOnEdited(workflows: NamedWorkflow[]): string[] {
-  const hits: string[] = [];
-  for (const { file, doc } of workflows) {
-    const reactsToEdited = PR_EVENTS.some((event) => {
-      if (!hasKey(doc.on, event)) return false;
-      const types = triggerValue(doc.on, event)?.types;
-      return Array.isArray(types) && types.includes('edited');
-    });
-    if (!reactsToEdited) continue;
-    for (const [name, job] of Object.entries(doc.jobs ?? {})) {
-      if (!jobExcludesEdited(job)) hits.push(`${file}#${name}`);
-    }
-  }
-  return hits.sort();
-}
-")
+    || !pythonScript.includes("$verzija -notmatch '^Python 3[.]14[.]3$'")
     || !pythonScript.includes('python -m venv $venv')
     || !pythonScript.includes('GITHUB_PATH')
     || !pythonScript.includes('throw ')
