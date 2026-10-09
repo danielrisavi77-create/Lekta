@@ -11002,25 +11002,28 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   });
 
   it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
-    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    const mutant = izvor.replace('const skipBody = Boolean(m[3]) && simplePrefix;', 'const skipBody = simplePrefix;');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, bezNavodnika)).toBe(true);
   });
 
   it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
-    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    const mutant = izvor.replace(
+      'words.every((w) => HEREDOC_WORD_RE.test(w) || (pythonReader && ENV_ASSIGN_RE.test(w)))',
+      'true',
+    );
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, komentar)).toBe(true);
   });
 
   it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
-    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    const mutant = izvor.replace('lineStart === 0', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, funkcija)).toBe(true);
   });
 
   it('mutant: program izvan allowliste citaca', async () => {
-    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    const mutant = izvor.replace('HEREDOC_READERS.has(programName(words[0])) || pythonReader', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, ljuska)).toBe(true);
   });
