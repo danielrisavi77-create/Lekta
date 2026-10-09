@@ -245,7 +245,8 @@ vrijedi jedno pravilo za lokalni rad:
 - U svakom trenutku smije biti u tijeku NAJVISE jedan puni gate (lokalno ili na CI-ju) po
   stroju; drugi puni gate ceka da prvi zavrsi.
 - Opis svakog PR-a mora sadrzavati retke `Neto redaka: +<dodano>/-<uklonjeno>` i `Nove ovisnosti: nema | <popis paketa>`
-  (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); CI job `pr-opis` ih provjerava i nije obvezna provjera.
+  (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); job `pr-opis` ih provjerava i obvezna je provjera grane
+  prema rulesetu `master` (odluka vlasnika 2026-10-09), pa crveni rezultat blokira spajanje.
 - Word dokaz (Tier 2) vrti self-hosted runner kroz `.github/workflows/word-proof.yml` (T80,
   `docs/verification/WORD_PROOF_RUNNER.md`); puni lokalni gate s Word razinama na laptopu obvezan je
   samo kad word-proof runner nije dostupan.
