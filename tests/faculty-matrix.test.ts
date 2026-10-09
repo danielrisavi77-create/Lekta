@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import generatedReport from '../docs/generated/faculty-matrix.json';
 import { buildFacultyMatrixReport } from './helpers/faculty-matrix';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import artefakt from '../docs/generated/STATUS.json';
 import { izracunajStatus } from '../scripts/generate-status.mjs';

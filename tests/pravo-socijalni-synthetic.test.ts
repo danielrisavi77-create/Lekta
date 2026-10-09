@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test za Pravni fakultet, Studijski centar socijalnog rada:
  * pravo-socijalni-rad-diplomski i -zavrsni. Citiranje pravo-social-author (autor-godina).

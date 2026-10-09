@@ -96,7 +96,8 @@ class PathPolicyTest(unittest.TestCase):
                 classify_change([bad], 1, self.policy)
 
     def test_control_files_and_thresholds_need_a_human(self):
-        for control in ("tests/gate-mutations.test.ts", "scripts/autonomy/policy.py", ".github/workflows/check.yml",
+        for control in ("tests/gate-mutations.test.ts", "tests/gate-mutations-monetizacija-check.test.ts",
+                        "scripts/autonomy/policy.py", ".github/workflows/check.yml",
                         "package.json", "data/security/npm-audit-ratchet.json", "docs/generated/RELEASE_PROOF.json",
                         "config/autonomy.example.json", "supabase/functions/repair-docx/index.ts", "CLAUDE.md",
                         "docs/agents/ORCHESTRATION.md", "docs/agents/PROJECT_RULES.md",

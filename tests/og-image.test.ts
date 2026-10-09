@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva vezu izmedju og:image/twitter:image meta oznaka u index.html i stvarnog rastera
  * public/og-image.png. Ako netko makne sliku a ostavi meta (ili obrnuto), social preview

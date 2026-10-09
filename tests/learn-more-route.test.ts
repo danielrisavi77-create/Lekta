@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { PRICING_COPY } from '../src/report/pricing';
 import { readFileSync } from 'node:fs';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 // Data gate za citatne specove (data/tools/citation-specs/): zivi u `npm run check`,
 // pa neverificiran/driftan spec rusi CI, ne samo generator. Vidi data/tools/README.md.
 import fs from 'node:fs';

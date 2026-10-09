@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Jedinicni testovi mjere koju `bundleSizeGuard` (vite.config.ts) koristi za budzet ulaza.
  *

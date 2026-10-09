@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Otisak koda popravka (T74). Tvrdnje: otisak prati samo produkcijski .ts u src/repair, deterministican
  * je, a provjera svjezine nikad ne baca nego vraca stanje koje potrosac otvoreno degradira.

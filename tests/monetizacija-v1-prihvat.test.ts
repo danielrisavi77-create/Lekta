@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Prihvatni kriteriji Monetizacije V1 (docs/decisions/MONETIZACIJA_V1.md odjeljak 29), serverski dio
  * (M2). Svaki `describe` nosi doslovnu recenicu kriterija. Kriteriji koje mjere izvrseni handleri

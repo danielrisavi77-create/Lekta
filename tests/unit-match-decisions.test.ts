@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za ljudske odluke o uparivanju sastavnica (P1-6 u docs/PLAN_POTPUNA_POKRIVENOST.md).
  *

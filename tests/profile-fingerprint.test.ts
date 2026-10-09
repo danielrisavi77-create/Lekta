@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { hashString, profileFingerprint } from '../src/profiles/profile-fingerprint';
 import { APP_VERSION } from '../src/config/app-version';

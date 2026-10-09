@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * detectPassRegressions (src/analysis/repair-regression.ts): provjera koja je PRIJE popravka
  * prolazila, a poslije ne prolazi.

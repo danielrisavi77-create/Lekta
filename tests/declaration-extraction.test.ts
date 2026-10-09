@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad DOSLOVNIM obrascima izjave izvucenim iz snapshota (P6-3).
  *

@@ -20,7 +20,9 @@ export const WEAK_MACHINE_SCENARIOS: ReadonlyArray<{
 }> = [
   { name: 'jak stroj (8 jezgri, 16 GB): ne dira', input: { cpus: 8, totalMemBytes: 16 * GB, env: {} }, expected: null },
   { name: 'laptop (4 niti, 8 GB): postavlja 1', input: { cpus: 4, totalMemBytes: 8 * GB, env: {} }, expected: SET },
-  { name: 'tocno 4 jezgre uz 32 GB: postavlja 1', input: { cpus: 4, totalMemBytes: 32 * GB, env: {} }, expected: SET },
+  { name: 'laptop (4 niti, 16 GB): ne dira', input: { cpus: 4, totalMemBytes: 16 * GB, env: {} }, expected: null },
+  { name: 'tocno 2 jezgre uz 32 GB: postavlja 1', input: { cpus: 2, totalMemBytes: 32 * GB, env: {} }, expected: SET },
+  { name: '3 jezgre uz 16 GB: ne dira', input: { cpus: 3, totalMemBytes: 16 * GB, env: {} }, expected: null },
   { name: '8 jezgri uz 8 GB: postavlja 1', input: { cpus: 8, totalMemBytes: 8 * GB, env: {} }, expected: SET },
   { name: 'tocno 12 GB uz 8 jezgri: ne dira', input: { cpus: 8, totalMemBytes: 12 * GB, env: {} }, expected: null },
   { name: 'slab stroj, VITEST_MAX_THREADS vec 3: ne dira', input: { cpus: 4, totalMemBytes: 8 * GB, env: { VITEST_MAX_THREADS: '3' } }, expected: null },

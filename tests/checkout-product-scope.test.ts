@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Lektin checkout prodaje SAMO Lektine proizvode (F18 krug 3, nalaz pregleda kruga 2).
  *
