@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allProgrammesQuery, compareHarvests, validateHarvest } from '../src/programs/upisnik-resync';
+import { allProgrammesQuery, compareHarvests, latestReportPaths, validateHarvest } from '../src/programs/upisnik-resync';
 import { UPISNIK_VRSTE, type UpisnikRow } from '../src/programs/upisnik-parse';
 
 const row = (code = '3', patch: Partial<UpisnikRow> = {}): UpisnikRow => ({
@@ -92,5 +92,34 @@ describe('resync Upisnika: razlike po sluzbenoj sifri', () => {
     const snapshot = JSON.stringify([before, after]);
     compareHarvests(before, after);
     expect(JSON.stringify([before, after])).toBe(snapshot);
+  });
+});
+
+
+describe('latest-report: tocne relativne putanje dokaza', () => {
+  const run = 'a'.repeat(20) + '-abc123';
+  it('kopija izvjestaja iz root mape vodi do dokaza bas tog runa', () => {
+    const paths = { recordsPath: 'records-upisnik.json', reviewPath: 'identity-review.json', candidatePath: null };
+    const before = JSON.stringify(paths);
+    const latest = latestReportPaths(paths, run);
+    expect(latest).toEqual({
+      recordsPath: run + '/records-upisnik.json',
+      reviewPath: run + '/identity-review.json',
+      candidatePath: null,
+    });
+    expect(JSON.stringify(paths)).toBe(before);
+  });
+  it('candidate path se cuva samo ako kandidat smije postojati', () => {
+    const latest = latestReportPaths({
+      recordsPath: 'records-upisnik.json', reviewPath: null, candidatePath: 'candidate-upisnik.json',
+    }, run);
+    expect(latest.candidatePath).toBe(run + '/candidate-upisnik.json');
+    expect(latest.reviewPath).toBeNull();
+  });
+  it('odbija izlazak iz izoliranog run direktorija', () => {
+    expect(() => latestReportPaths({ recordsPath: 'records-upisnik.json', reviewPath: null, candidatePath: null }, '../other'))
+      .toThrow('INVALID_RUN_DIRECTORY');
+    expect(() => latestReportPaths({ recordsPath: '../secret.json', reviewPath: null, candidatePath: null }, run))
+      .toThrow('INVALID_ARTIFACT_FILENAME');
   });
 });
