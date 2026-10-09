@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/upisnik-resync-check.yml
       - scripts/resync-upisnik.mts
+      - scripts/check-upisnik-readonly.mts
+      - tests/upisnik-worktree-guard.test.ts
       - src/programs/upisnik-resync.ts
       - src/programs/upisnik-session.ts
       - src/programs/upisnik-record-review.ts
@@ -37,12 +39,12 @@ jobs:
           node-version: 22
           npm-version: 11.11.0
       - name: Test source integrity, lossless quarantine and conservative diff
-        run: node scripts/with-gate-lock.mjs upisnik-resync-tests -- npx vitest run tests/upisnik-resync.test.ts tests/upisnik-parse.test.ts tests/upisnik-session.test.ts tests/upisnik-record-review.test.ts
+        run: node scripts/with-gate-lock.mjs upisnik-resync-tests -- npx vitest run tests/upisnik-resync.test.ts tests/upisnik-parse.test.ts tests/upisnik-session.test.ts tests/upisnik-record-review.test.ts tests/upisnik-worktree-guard.test.ts
       - name: Fetch unfiltered source into review artifacts only
         run: node scripts/with-gate-lock.mjs upisnik-resync-fetch -- npx tsx scripts/resync-upisnik.mts
       - name: Authoritative data must remain unchanged
         if: always()
-        run: git diff --exit-code -- data/programs/ data/coverage/ data/profiles/ docs/generated/
+        run: npx tsx scripts/check-upisnik-readonly.mts
       - name: Preserve evidence and candidate for review
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
