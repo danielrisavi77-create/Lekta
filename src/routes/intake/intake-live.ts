@@ -108,6 +108,9 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   // tiho prenijeti na novi dokument.
   let rok: RokStanje = rokZaPovratak(procitajIzborUlaza().rok, danas());
   let odabir: ((file: File) => void) | null = null;
+  // Zadnja spremljena sesija: rok zadan NAKON spremanja (promjena u debounce prozoru ili dok se
+  // cita) mora ici i u mapu `rokSesije` te sesije, ne samo u globalni slot.
+  let spremljenaSesija: string | null = null;
 
   // --- ulaz dokumenta ---------------------------------------------------------------------
   // Dokument se prima odmah. Rok i fakultet su neobavezni kontekst; spremnostUlaza postoji kao
@@ -189,6 +192,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     const datum = rokPolje?.value ? rokPolje.value : null;
     rok = { datum, neznam: false };
     zapisiRok(rok);
+    if (spremljenaSesija) veziRokZaSesiju(spremljenaSesija, rok);
     osvjeziRok(true);
     osvjeziVrata();
   };
@@ -197,6 +201,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     const oznaceno = Boolean(neznam?.checked);
     rok = oznaceno ? { datum: null, neznam: true } : { datum: rokPolje?.value || null, neznam: false };
     zapisiRok(rok);
+    if (spremljenaSesija) veziRokZaSesiju(spremljenaSesija, rok);
     osvjeziRok(true);
     osvjeziVrata();
   };
@@ -287,6 +292,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     onSessionStored(sessionId: string): void {
       // Rok se veze za sesiju i kad je prazan: Z34/Z36 tako znaju da korisnik nije dao rok,
       // bez izmisljanja datuma. Potvrda fakulteta se veze samo ako je dana.
+      spremljenaSesija = sessionId;
       veziRokZaSesiju(sessionId, rok);
       if (potvrden) veziPotvrduZaSesiju(sessionId);
     },
