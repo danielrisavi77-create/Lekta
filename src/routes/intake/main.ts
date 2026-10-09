@@ -5,6 +5,7 @@ import { mountIntakeController } from './intake-controller';
 import { mountIntakeLive } from './intake-live';
 import { prikaziUlazniListBroj } from './list-number';
 import { playIntakeEntry } from './intake-motion';
+import { mountPromoVideo } from './promo-video';
 import '../../shared/ui-boot';
 // ULAZ NOSI TOCNO DVA GLASA, i to je odluka vlasnika, ne propust. Z7 papir ima mete koje
 // `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
@@ -123,6 +124,8 @@ function start(): void {
   live.poveziOdabir((file) => { void controller.selectFile(file); });
 
   void offerContinuation(document, store);
+  // Promo ispod ulaza je neovisan o kontroleru; montira se zadnji jer nista od ulaza ne ceka na njega.
+  mountPromoVideo(document);
 }
 
 start();

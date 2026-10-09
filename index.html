@@ -190,6 +190,21 @@
     <p class="intake-continue" id="intakeContinue" hidden></p>
   </div>
 </section>
+<!-- PROMO ISPOD ULAZA (odluka vlasnika 2026-10-09): 30 s promo, izvor u zasebnom Remotion projektu.
+     Nista se ne skida dok netko ne pritisne play (`preload="none"`, poster je jedina slika).
+     Bez JS-a radi kao obican video s kontrolama; `promo-video.ts` ih skrije iza jednog gumba. -->
+<section class="intake-promo" aria-labelledby="intakePromoNaslov" data-intake-promo>
+  <div class="intake-promo__shell">
+    <div class="intake-promo__head">
+      <span class="intake-promo__eyebrow">Lekta u 30 sekundi</span>
+      <h2 id="intakePromoNaslov">Pogledaj kako rad dođe do predaje.</h2>
+    </div>
+    <div class="intake-promo__frame">
+      <video class="intake-promo__video" controls playsinline preload="none" poster="/assets/promo-poster.jpg" aria-label="Promo od 30 sekundi uz glas: Lekta prepozna fakultet, provjeri margine, prored i citate, popravi formu do ocjene 100 od 100 i radi lokalno na tvom uređaju" data-promo-video><source src="/assets/promo-720.webm" type="video/webm" media="(max-width: 760px)"><source src="/assets/promo-720.mp4" type="video/mp4" media="(max-width: 760px)"><source src="/assets/promo-1080.webm" type="video/webm"><source src="/assets/promo-1080.mp4" type="video/mp4"></video>
+      <button class="intake-promo__play" type="button" aria-label="Pokreni promo od 30 sekundi uz glas" data-promo-play hidden><span class="intake-promo__krug" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg></span><span class="intake-promo__nota" aria-hidden="true">pritisni play · 30 s · uz glas</span></button>
+    </div>
+  </div>
+</section>
 <section class="intake-seo" aria-labelledby="intakeSeoNaslov">
   <div class="intake-seo__shell">
     <div class="intake-seo__intro">
