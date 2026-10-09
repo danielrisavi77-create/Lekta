@@ -22,6 +22,27 @@ export function latestReportPaths(paths: UpisnikReportPaths, runName: string): U
   };
 }
 
+/**
+ * If validation rejects a parsed source, latest-report must still link to that RUN's
+ * saved HTML and records; only a failure before run creation drops evidence links.
+ */
+export function latestFailureReport(prior: unknown, message: string): Record<string, unknown> {
+  const failure: Record<string, unknown> = {
+    status: 'SOURCE_BLOCKED', error: message, canonicalSync: 'NOT_APPLIED', candidatePath: null,
+  };
+  if (!prior || typeof prior !== 'object') return failure;
+  const data = prior as Record<string, unknown>;
+  const source = data.source;
+  const records = data.recordsPath;
+  if (!source || typeof source !== 'object'
+    || typeof (source as Record<string, unknown>).snapshotHash !== 'string'
+    || typeof records !== 'string'
+    || !/^[a-f0-9]{20}-[A-Za-z0-9_-]{6,}\/records-upisnik[.]json$/.test(records)) {
+    return failure;
+  }
+  return { ...data, ...failure, recordsPath: records };
+}
+
 /** Empty checkbox groups mean all; selecting every known value excludes unlisted values. */
 export function allProgrammesQuery(): string {
   const query = new URLSearchParams();
