@@ -1,6 +1,20 @@
 /** Public same-origin session; keep redirect cookies without logging or persisting them. */
 export const UPISNIK_BASE = 'https://hko.srce.hr/usp/';
 
+/**
+ * Sigurna javna referenca za audit. Izvrsni fetch zadrzava cijeli URL, ali raport i log
+ * nikad ne dobivaju URL-rewritten session id, query token ni fragment.
+ */
+export function reportableUpisnikUrl(url: URL): string {
+  const path = url.pathname.replace(/;[^/]*/g, '');
+  if (path === '/usp/index' || path === '/usp/pretrazivanje') {
+    return new URL(path, UPISNIK_BASE).href;
+  }
+  // Neocekivana putanja moze sadrzavati opaque token: ne pohranjuj je u artefakt.
+  return UPISNIK_BASE;
+}
+
+
 export function createUpisnikSession(fetcher: typeof fetch = fetch):
   (path: string) => Promise<{ url: string; html: string; contentType: string | null; hasSessionCookie: boolean }> {
   const cookies = new Map<string, string>();
@@ -42,7 +56,7 @@ export function createUpisnikSession(fetcher: typeof fetch = fetch):
       }
       const html = await response.text();
       if (/Dogodila se pogre/i.test(html)) throw new Error('SOURCE_APPLICATION_ERROR: HTTP 200 is not success');
-      return { url: url.href, html, contentType: response.headers.get('content-type'), hasSessionCookie: cookies.size > 0 };
+      return { url: reportableUpisnikUrl(url), html, contentType: response.headers.get('content-type'), hasSessionCookie: cookies.size > 0 };
     }
     throw new Error('TOO_MANY_REDIRECTS');
   };
