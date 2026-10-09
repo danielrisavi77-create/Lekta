@@ -6,7 +6,7 @@ description: Okida se kad treba procijeniti vanjski alat, biblioteku, GitHub rep
 # Evaluacija vanjskog alata
 
 Plan i dosadasnje odluke su u `docs/roadmap/INTEGRACIJA_ALATA.md`. Svaka nova procjena tamo
-zavrsava redom u tablici "Odluke po alatu", a odobren posao kao zadatak u `docs/agents/tasks.json`.
+zavrsava redom u tablici "Odluke po alatu", a odobren posao kao zadatak u Linearu i u `docs/agents/tasks.json` (koordinatorov PR koji dira samo tu datoteku).
 
 ## 1. Prije mjerenja
 

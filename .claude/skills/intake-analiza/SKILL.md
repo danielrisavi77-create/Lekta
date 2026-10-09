@@ -71,7 +71,8 @@ Izvidjac za svaki nalaz vraca redak tablice:
 ## (e) Uklapanje tek nakon odluke brojem
 
 Potvrdjeni nalazi se uklapaju u `docs/agents/tasks.json` kao biljeske uz postojece T-zadatke
-ili kao novi zadaci, jednim light runom nad `tasks.json`. Ovaj korak se pokrece TEK nakon sto
+ili kao novi zadaci, jednim light runom nad `tasks.json` (PR koji dira samo tu datoteku; gard
+`pr-opis` obara mijesani PR), uz zadatak u Linearu. Ovaj korak se pokrece TEK nakon sto
 vlasnik odgovori brojem iz numeriranog prijedloga u koraku (g). Prije tog odgovora se
 tasks.json ne dira.
 
