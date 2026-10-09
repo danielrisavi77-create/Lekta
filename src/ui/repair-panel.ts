@@ -1169,7 +1169,13 @@ export function renderFinalDocumentInspectorControls(li: HTMLElement, item: Repa
     check.type = 'checkbox';
     check.checked = finding.selected;
     check.disabled = !finding.supported;
-    check.addEventListener('change', () => { finding.selected = check.checked; sync(); });
+    check.addEventListener('change', () => {
+      finding.selected = check.checked;
+      // buildParams cita odabir PO dokazu: bez ovoga opt-in na redu (npr. privatni metapodaci,
+      // koji nisu zadano odabrani) ne bi stigao do parametara popravka.
+      for (const evidence of finding.evidence) evidence.selected = check.checked;
+      sync();
+    });
     label.append(check, document.createTextNode(' ' + finding.summary + ' (' + finding.count + ')'));
     row.appendChild(label);
     const meta = document.createElement('small');
