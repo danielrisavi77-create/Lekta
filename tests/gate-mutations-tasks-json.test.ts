@@ -10,7 +10,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { parse } from 'yaml';
@@ -145,7 +145,12 @@ describe('tasks-json-opseg: CLI nad git repozitorijem', () => {
   it('ime datoteke s razmakom uz tasks.json cita se tocno (git -z)', () => {
     git(repo, 'checkout', '-q', '-b', 'razmak', 'baza');
     writeFileSync(join(repo, TASKS_JSON), '{"tasks":[3]}\n');
-    writeFileSync(join(repo, ' '), 'x\n');
+    // Vodeci razmak u imenu direktorija: podjela po retku uz trim ga spoji s pravim tasks.json pa
+    // ostaje samo tasks.json (izlaz 0); -z ga cita tocno (izlaz 1). Ime samo od razmaka Windows ne
+    // dopusta (zavrsni razmak se odbacuje i `git add` pada), a vodeci razmak dopusta.
+    const sRazmakom = join(repo, ` ${dirname(TASKS_JSON)}`);
+    mkdirSync(sRazmakom, { recursive: true });
+    writeFileSync(join(sRazmakom, basename(TASKS_JSON)), '{"tasks":[]}\n');
     git(repo, 'add', '-A');
     git(repo, 'commit', '-q', '-m', 'razmak');
     expect(pokreni('baza', 'razmak').status).toBe(1);
