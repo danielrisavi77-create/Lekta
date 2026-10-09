@@ -148,6 +148,15 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     expect(judge(izvrsi)).toMatchObject({ allow: false });
     const unsafeMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
     expect(judge(unsafeMixedImport)).toMatchObject({ allow: false });
+    const unsafeBody = "import os\nos.system('npx vitest run')";
+    for (const command of [
+      `FOO=1 python3 - <<'EOF'\n${unsafeBody}\nEOF`,
+      `env python3 - <<'EOF'\n${unsafeBody}\nEOF`,
+      `echo ready\npython3 - <<'EOF'\n${unsafeBody}\nEOF`,
+      `python3 - <<EOF\n${unsafeBody}\nEOF`,
+    ]) expect(judge(command), command).toMatchObject({ allow: false });
+    expect(judge("env python3 - <<'EOF'\nimport json\nprint('npx vitest run is text')\nEOF"))
+      .toMatchObject({ allow: true });
     // Isto za python bez broja i za uvoz izvan popisa, __ ime i izvrsavanje koda iz stringa.
     expect(judge(izvrsi.replace('python3', 'python'))).toMatchObject({ allow: false });
     for (const tijelo of [

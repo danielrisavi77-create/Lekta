@@ -10964,6 +10964,9 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   // Cetvrta runda: Python koji sam izvrsi naredbu (bash ga izvrsi) i NFKC oblik naziva `eval`.
   const pythonOs = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
   const pythonMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonWrapped = "env FOO=1 python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonLater = "echo ready\npython3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonUnquoted = "python3 - <<EOF\nimport os\nos.system('npx vitest run')\nEOF";
   const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
@@ -10987,7 +10990,9 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport, pythonWrapped, pythonLater, pythonUnquoted]) {
+      expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    }
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
@@ -11026,7 +11031,16 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
       'if (false) return { heavy: true, what: "nesiguran Python heredoc" };',
     );
     expect(mutant).not.toBe(izvor);
-    expect(await dopusta(mutant, pythonOs)).toBe(true);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: Python reader iza omotača i assignmenta se ne prepoznaje', async () => {
+    const mutant = izvor.replace(
+      "return PYTHON_READERS.has(programName(tokens[i] ?? ''));",
+      'return false;',
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
   });
 
   it('mutant: u import listi provjerava se samo prvi modul', async () => {

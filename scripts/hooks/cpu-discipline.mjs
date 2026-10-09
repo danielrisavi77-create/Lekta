@@ -76,31 +76,44 @@ function unsafePythonBody(body) {
   return PYTHON_UNSAFE_RE.test(normalized) || !pythonImportsAreSafe(normalized);
 }
 
+/** Prvi izvrsni Python program nakon varijabli i omotaca, istim pravilima kao judgeTokens. */
+function pythonReaderInCommand(tokens) {
+  let i = 0;
+  while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
+  return PYTHON_READERS.has(programName(tokens[i] ?? ''));
+}
+
 /**
- * T109: tijelo heredoca smije se preskociti kao stdin samo u jednom jednoznacnom obliku (fail-closed):
- * PRVI redak naredbe je `citac arg ... <<'IME'` (ili `<<"IME"`, `<<-'IME'`), operator je zadnji, a
- * svaka rijec ispred njega ima samo slova, znamenke i `_./:+-` (bez prosirenja, globa, `=`, `!`,
- * komentara i nastavka retka), a prva rijec je citac iz `HEREDOC_READERS`. Prvi redak
- * iskljucuje funkciju, alias ili `IFS` definiran ranije u istoj naredbi. U svakom drugom slucaju
- * vrijedi stari rastav po retku, pa se teska naredba u tijelu odbija kao prije T109.
+ * Preskače samo jednostavan citirani heredoc. Nesiguran Python dobiva sentinel i kada je naredba
+ * složena, ima omotač, nalazi se kasnije u nizu ili koristi delimiter bez navodnika.
  * @param {string} command
- * @param {number} start indeks prvog `<` od `<<`
- * @returns {{ delim: string, stripTabs: boolean, end: number, unsafePython: boolean } | null}
+ * @param {number} start indeks prvog '<' od '<<'
+ * @param {string[]} commandTokens trenutačni tokeni naredbe prije heredoca
+ * @returns {{ delim: string, stripTabs: boolean, end: number, unsafePython: boolean, skipBody: boolean } | null}
  */
-function simpleQuotedHeredoc(command, start) {
+function simpleQuotedHeredoc(command, start, commandTokens = []) {
   const lineStart = command.lastIndexOf('\n', start - 1) + 1;
-  if (lineStart > 0) return null;
   const nl = command.indexOf('\n', start);
   const lineEnd = nl < 0 ? command.length : nl;
   const line = command.slice(lineStart, lineEnd).replace(/\r$/, '');
-  const m = /^([^<]*)<<(-?)[ \t]*(['"])([A-Za-z_][A-Za-z0-9_]*)\3[ \t]*$/.exec(line);
+  const m = /^([^<]*)<<(-?)[ \t]*(?:(['"])([A-Za-z_][A-Za-z0-9_]*)\3|([A-Za-z_][A-Za-z0-9_]*))[ \t]*$/.exec(line);
   if (!m || start - lineStart !== m[1].length) return null;
   const words = m[1].trim().split(/[ \t]+/).filter(Boolean);
-  if (!words.length || !words.every((w) => HEREDOC_WORD_RE.test(w))) return null;
-  if (!HEREDOC_READERS.has(words[0])) return null;
-  const unsafePython = PYTHON_READERS.has(words[0])
-    && unsafePythonBody(heredocBody(command, lineEnd, m[4], m[2] === '-'));
-  return { delim: m[4], stripTabs: m[2] === '-', end: lineEnd, unsafePython };
+  if (!words.length) return null;
+
+  const pythonReader = pythonReaderInCommand(commandTokens);
+  const delim = m[4] ?? m[5];
+  const stripTabs = m[2] === '-';
+  const unsafePython = pythonReader && unsafePythonBody(heredocBody(command, lineEnd, delim, stripTabs));
+  const simplePrefix = lineStart === 0
+    && words.every((w) => HEREDOC_WORD_RE.test(w) || (pythonReader && ENV_ASSIGN_RE.test(w)))
+    && (HEREDOC_READERS.has(programName(words[0])) || pythonReader);
+  const skipBody = Boolean(m[3]) && simplePrefix;
+
+  // Even a complex or unquoted Python heredoc must not hide unsafe code from the CPU guard.
+  if (unsafePython) return { delim, stripTabs, end: lineEnd, unsafePython: true, skipBody };
+  if (!skipBody) return null;
+  return { delim, stripTabs, end: lineEnd, unsafePython: false, skipBody: true };
 }
 
 /** Tijelo heredoca: retci iza `lineEnd` do retka koji je jednak delimiteru (ili do kraja naredbe). */
@@ -122,8 +135,8 @@ function heredocBody(command, lineEnd, delim, stripTabs) {
 /**
  * Rastavlja naredbu na podnaredbe po `&&`, `||`, `;`, `|`, `&`, novom retku, zagradama i `$(`,
  * postujuci jednostruke i dvostruke navodnike: sadrzaj pod navodnicima je argument, ne naredba.
- * Tijelo heredoca je stdin, ne naredba, ali samo u obliku koji prepoznaje `simpleQuotedHeredoc`
- * (T109); svaki drugi heredoc se rastavlja po retku kao i ostatak naredbe.
+ * Kao stdin preskače se samo jednostavan citirani heredoc. Nesiguran Python dobiva sentinel i kada je
+ * naredba složena, ima omotač, nalazi se kasnije ili koristi delimiter bez navodnika.
  * @param {string} command
  * @returns {string[][]} podnaredbe kao nizovi tokena
  */
@@ -179,12 +192,15 @@ export function splitCommand(command) {
       continue;
     }
     if (ch === '<' && command[i + 1] === '<') {
-      const op = simpleQuotedHeredoc(command, i);
+      const openerTokens = hasToken ? [...tokens, current] : tokens;
+      const op = simpleQuotedHeredoc(command, i, openerTokens);
       if (op) {
         endToken();
         if (op.unsafePython) tokens.push(UNSAFE_PYTHON_HEREDOC);
-        pending.push({ delim: op.delim, stripTabs: op.stripTabs });
-        i = op.end - 1;
+        if (op.skipBody) {
+          pending.push({ delim: op.delim, stripTabs: op.stripTabs });
+          i = op.end - 1;
+        }
         continue;
       }
     }
