@@ -154,7 +154,7 @@
 .intake-promo__head{display:grid;gap:10px;text-align:center}
 .intake-promo__eyebrow{
   font-family:var(--mono);font-size:var(--fs-mono-label);font-weight:650;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--brand);
+  color:var(--red-on-desk);
 }
 .intake-promo h2{
   margin:0;font-family:var(--display-serif);font-weight:400;font-size:clamp(28px,3.6vw,46px);
