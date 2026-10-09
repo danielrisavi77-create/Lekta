@@ -6,6 +6,7 @@ import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
   isGeneralRepairEntry,
   renderResultsCockpit,
+  resultAnalysisKey,
   resultRendererFor,
   type ResultsCockpitAction,
   type ResultsCockpitOptions,
@@ -13,6 +14,16 @@ import {
 import type { RepairOutlookModel } from '../src/ui/results/repair-outlook';
 
 const cssRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+describe('rezultat Z34 koristi identitet analize', () => {
+  it('zadrzi isti kljuc pri ponovnom renderu i odvoji novi objekt istog naziva i ocjene', () => {
+    const prvo = { name: 'rad.docx', score: 87 };
+    const drugo = { name: 'rad.docx', score: 87 };
+    const kljuc = resultAnalysisKey(prvo);
+    expect(resultAnalysisKey(prvo)).toBe(kljuc);
+    expect(resultAnalysisKey(drugo)).not.toBe(kljuc);
+  });
+});
 
 function result(overrides: Record<string, unknown> = {}) {
   return {
