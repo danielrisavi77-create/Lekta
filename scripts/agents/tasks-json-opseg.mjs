@@ -6,6 +6,9 @@
 // samo koordinatorov skupni PR koji ne dira nista drugo, pa gard odbija PR koji mijenja `tasks.json`
 // ZAJEDNO s bilo kojom drugom putanjom.
 //
+// Savjetodavno: CI job `pr-opis` nije obvezna provjera grane (T58, vidi pr-opis.yml), pa crveni korak
+// upozorava, a ne blokira spajanje; koordinator ne spaja PR s crvenim `pr-opis`.
+//
 // Cista funkcija `provjeriOpsegTasksJson` ne pokrece git; testira je
 // `tests/gate-mutations-tasks-json.test.ts`. CLI (`<baseRef> <headRef>`) koristi CI job `pr-opis`.
 import { execFileSync } from 'node:child_process';
@@ -15,14 +18,15 @@ export const TASKS_JSON = 'docs/agents/tasks.json';
 
 /**
  * Popis problema za putanje koje PR mijenja (prazan popis je cisto).
- * `putanje` je popis iz `git diff --name-only --no-renames`; preimenovanje se tako vidi kao
- * brisanje stare i dodavanje nove putanje, pa ni premjestanje `tasks.json` ne prolazi tiho.
+ * `putanje` je popis TOCNIH imena iz `git diff -z --name-only --no-renames`; preimenovanje se tako
+ * vidi kao brisanje stare i dodavanje nove putanje, pa ni premjestanje `tasks.json` ne prolazi tiho.
+ * Imena se ne rezu i ne normaliziraju (git dopusta razmake i CR u imenu), samo se prazna odbacuju.
  */
 export function provjeriOpsegTasksJson(putanje) {
   if (!Array.isArray(putanje) || putanje.some((p) => typeof p !== 'string')) {
     throw new TypeError('provjeriOpsegTasksJson: ocekivan niz putanja');
   }
-  const cisto = putanje.map((p) => p.replace(/\r/g, '').trim()).filter(Boolean);
+  const cisto = putanje.filter((p) => p !== '');
   if (!cisto.includes(TASKS_JSON)) return [];
   const ostale = cisto.filter((p) => p !== TASKS_JSON);
   if (ostale.length === 0) return [];
@@ -34,10 +38,9 @@ export function provjeriOpsegTasksJson(putanje) {
 }
 
 function putanjeIzGita(baseRef, headRef) {
-  return execFileSync('git', ['diff', '--name-only', '--no-renames', `${baseRef}...${headRef}`], { encoding: 'utf8' })
-    .replace(/\r/g, '')
-    .split('\n')
-    .filter(Boolean);
+  return execFileSync('git', ['diff', '-z', '--name-only', '--no-renames', `${baseRef}...${headRef}`], { encoding: 'utf8' })
+    .split('\0')
+    .filter((p) => p !== '');
 }
 
 function glavni(argv) {

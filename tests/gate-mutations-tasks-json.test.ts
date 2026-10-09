@@ -30,7 +30,9 @@ const SCENARIJI: { ime: string; putanje: string[]; pada: boolean }[] = [
   { ime: 'prazan diff', putanje: [], pada: false },
   { ime: 'tasks.json uz kod', putanje: ['src/a.ts', TASKS_JSON], pada: true },
   { ime: 'tasks.json uz drugi docs', putanje: [TASKS_JSON, 'docs/agents/README.md'], pada: true },
-  { ime: 'tasks.json s CRLF uz kod', putanje: [`${TASKS_JSON}\r`, 'src/a.ts'], pada: true },
+  { ime: 'ime s vodecim razmakom nije tasks.json', putanje: [` ${TASKS_JSON}`, 'src/a.ts'], pada: false },
+  { ime: 'ime s CR na kraju nije tasks.json', putanje: [`${TASKS_JSON}\r`, 'src/a.ts'], pada: false },
+  { ime: 'tasks.json uz ime samo od razmaka', putanje: [TASKS_JSON, ' '], pada: true },
 ];
 
 function problemiTablice(presuda: Presuda): string[] {
@@ -63,7 +65,25 @@ describe('tasks-json-opseg: presuda', () => {
       expect(problemiTablice(modul.provjeriOpsegTasksJson)).toEqual([
         'tasks.json uz kod',
         'tasks.json uz drugi docs',
-        'tasks.json s CRLF uz kod',
+        'tasks.json uz ime samo od razmaka',
+      ]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('mutacija: presuda koja rezanjem imena brise razmake obara tocno scenarije s razmacima', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-tasks-json-mut-'));
+    try {
+      const mutant = IZVOR.replace("putanje.filter((p) => p !== '')", "putanje.map((p) => p.trim()).filter(Boolean)");
+      expect(mutant).not.toBe(IZVOR);
+      const put = join(dir, 'mutant.mjs');
+      writeFileSync(put, mutant);
+      const modul = (await import(pathToFileURL(put).href)) as { provjeriOpsegTasksJson: Presuda };
+      expect(problemiTablice(modul.provjeriOpsegTasksJson)).toEqual([
+        'ime s vodecim razmakom nije tasks.json',
+        'ime s CR na kraju nije tasks.json',
+        'tasks.json uz ime samo od razmaka',
       ]);
     } finally {
       rmSync(dir, { recursive: true, force: true });
@@ -120,6 +140,15 @@ describe('tasks-json-opseg: CLI nad git repozitorijem', () => {
     const ishod = pokreni('baza', 'mijesano');
     expect(ishod.status).toBe(1);
     expect(ishod.stdout).toContain('::error title=tasks-json-opseg::');
+  });
+
+  it('ime datoteke s razmakom uz tasks.json cita se tocno (git -z)', () => {
+    git(repo, 'checkout', '-q', '-b', 'razmak', 'baza');
+    writeFileSync(join(repo, TASKS_JSON), '{"tasks":[3]}\n');
+    writeFileSync(join(repo, ' '), 'x\n');
+    git(repo, 'add', '-A');
+    git(repo, 'commit', '-q', '-m', 'razmak');
+    expect(pokreni('baza', 'razmak').status).toBe(1);
   });
 
   it('nepostojeci ref rusi provjeru (izlaz 2), ne prolazi tiho', () => {
