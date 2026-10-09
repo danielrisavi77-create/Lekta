@@ -13,6 +13,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { isInOrigin, seoOriginProblems, SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
+import { findLegalPlaceholders } from './lib/legal-placeholders.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
 
@@ -116,6 +117,20 @@ for (const [file, marker] of LEGAL_PAGES) {
   const p = path.join(DIST, file);
   if (!fs.existsSync(p)) fail(`dist/${file} ne postoji (generate-legal-pages nije prosao?)`);
   if (!fs.readFileSync(p, 'utf8').includes(marker)) fail(`dist/${file} ne sadrzi "${marker}"`);
+}
+
+// 3a. pravni tekst bez neobjavljivih oznaka (T86). `[ODLUKA VLASNIKA: ...]` i `[PROVJERITI: ...]`
+// oznacavaju mjesto koje vlasnik jos nije odlucio ili cinjenicu koja nije provjerena; objava s
+// njima bi korisniku tvrdila nedovrsen pravni tekst. Ista funkcija iz `legal-content.ts` puni i
+// stranice i modal u JS bundleu, pa se gledaju oba.
+{
+  const problems = [];
+  const scan = (rel) => {
+    for (const hit of findLegalPlaceholders(fs.readFileSync(path.join(DIST, rel), 'utf8'))) problems.push(`  - dist/${rel}: ${hit}`);
+  };
+  for (const [file] of LEGAL_PAGES) scan(file);
+  for (const f of assets) scan(path.join('assets', f));
+  if (problems.length) fail(['pravni tekst nosi neobjavljive oznake (odluka vlasnika ili neprovjerena cinjenica):', ...problems].join(os.EOL));
 }
 
 // 3b. javna coverage stranica postoji i nije prazna (generate-coverage-page.mjs)

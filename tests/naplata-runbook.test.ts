@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad RUNBOOKOM naplate. Kod i runbook su ovdje jedan mehanizam, ne dvije stvari.
  *

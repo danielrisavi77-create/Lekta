@@ -1,4 +1,4 @@
-# Integracija vanjskih alata (plan, 2026-09-27)
+# Integracija vanjskih alata (plan, 2026-09-27, dopunjeno 2026-10-08)
 
 Plan kako vanjski open source alati mogu ojacati Lektine dokaze. Vecina ne ulazi u
 aplikaciju nego u testove i release razine, jer Lekta za ZIP, pregled dokumenta i
@@ -26,7 +26,12 @@ samo pomaze provjeriti formu. Teski alati zive samo na radnoj stanici
 
 | Alat | Licenca | Odluka | Razlog |
 |---|---|---|---|
-| [xarsh/ooxml-validator](https://github.com/xarsh/ooxml-validator) (Open XML SDK) | MIT | nova release razina, samo radna stanica | jedina rupa izmedju Tier 1 i Worda je shema |
+| [xarsh/ooxml-validator](https://github.com/xarsh/ooxml-validator) (Open XML SDK) | MIT | CI razina u `docx-strict-open.yml` kroz pinani `npx`; lokalno samo radna stanica (T111) | jedina rupa izmedju Tier 1 i Worda je shema; izmjereno 2026-10-08, vidi nize |
+| [JSv4/Python-Redlines](https://github.com/JSv4/Python-Redlines) (Docxodus) | MIT | samo CI, pip pin (T112) | neovisni svjedok vidljivog teksta uz vlastitu usporedbu |
+| [veraPDF](https://github.com/veraPDF) | GPL-3.0 ili MPL-2.0 | samo radna stanica, etalon (T114) | `src/pdf/pdf-preflight.ts` PDF/A provjerava heuristicki |
+| basejump supabase_test_helpers | nije potvrdjeno | ne uvoditi | 0.0.6, oko 2 godine bez izdanja; globalni RLS gard je jedan upit (T113) |
+| pa11y-ci | LGPL-3.0 | ne uvoditi | isto pokriva vec uvedeni axe |
+| Unlighthouse | MIT | povremeno rucno, ne gate | Lighthouse nad svim javnim stranicama; sitemap vec postoji |
 | [dubzzz/fast-check](https://github.com/dubzzz/fast-check) | MIT | devDependency | kljucne invarijante danas nemaju nasumicne ulaze |
 | [gildas-lormeau/zip.js](https://github.com/gildas-lormeau/zip.js) | BSD-3 | devDependency, samo neovisni kontrolor u testovima | vlastiti citac ne smije sam sebi biti jedini svjedok |
 | [citation-js](https://github.com/citation-js/citation-js) | MIT | devDependency, samo skripta za zlatne ispise | neovisan izvor ocekivanih APA, Harvard i Chicago zapisa |
@@ -44,11 +49,13 @@ Jedna faza je jedan PR. Svaki prolazi `npm run check` i `npm run orphan-scan`, s
 `Neto redaka` i `Nove ovisnosti`. Faze 2 i 3 diraju repair i docx testove, pa traze
 adversarijalni pregled drugog alata prije commita.
 
-### Faza 1: OOXML shema kao release razina
+### Faza 1: OOXML shema kao CI i release razina (T111)
 
 - Nova razina `ooxml-schema` u `scripts/release-tiers.mjs`, izmedju `strict-open` i Word razina.
-- Pokrece validator nad popravljenim stvarnim korpusom. Validator dolazi s radne stanice, ne iz
-  `package.json`, jer nosi .NET binarni program; bez njega razina javlja NEPOKRIVEN.
+- Pokrece validator nad popravljenim stvarnim korpusom. Validator ne ide u `package.json`, jer
+  nosi samostalni binarni program od 79 MB po platformi (bez potrebe za .NET-om). U CI-ju ga
+  `docx-strict-open.yml` poziva kroz pinani `npx @xarsh/ooxml-validator@0.4.0` nad izlazom
+  `repair-real-corpus:review`; lokalno dolazi s radne stanice, a bez njega razina javlja NEPOKRIVEN.
 - Prije ukljucivanja se biljezi zateceno stanje: koliko fixtura danas prolazi i koliko pada.
   Postojeci pad je nalaz, ne razlog za slabljenje razine.
 - Mutacija u `tests/gate-mutations.test.ts`: namjerno pokvaren `document.xml` mora oboriti razinu.
@@ -86,8 +93,49 @@ adversarijalni pregled drugog alata prije commita.
 - Usporedba vremena i rezultata na istom skupu dokumenata; ishod mora biti bajtno ili
   semanticki jednak, inace se ne mijenja.
 
+### Faza 6: neovisni svjedok vidljivog teksta (T112)
+
+- Python-Redlines s Docxodus enginom u `docx-strict-open.yml`, nakon Faze 1 jer dira isti workflow.
+- Za svaki par original i popravak tvrdnja je 0 umetanja i 0 brisanja teksta; promjene
+  oblikovanja su dopustene i ne broje se.
+- Mutacije: promijenjena rijec i obican razmak zamijenjen neprelomivim moraju oboriti korak.
+- Samo CI uz pip pin, nikad `package.json` ni `src/`. Isporuka redline dokumenta kupcu bila bi
+  nova funkcija i zasebna odluka vlasnika.
+
+### Faza 7: globalni RLS gard (T113)
+
+- Nakon svih migracija svaka tablica u shemi `public` mora imati ukljucen RLS, a tablica bez
+  ijedne politike mora biti na izricitom popisu namjerno zatvorenih tablica.
+- Jedan upit nad `pg_class` u `db-smoke.yml` ili PGlite testu; basejump helperi nisu potrebni.
+- Mutacija: migracija s tablicom bez RLS-a mora oboriti test. Nema `supabase db push`.
+
+### Faza 8: veraPDF etalon (T114)
+
+- Na radnoj stanici mjeri slaganje heuristike iz `src/pdf/pdf-preflight.ts` s veraPDF-om nad
+  korpusom PDF-ova; nesuglasja postaju fixture.
+- veraPDF nikad ne ulazi u proizvod ni `package.json`; bez njega skripta javlja NEPOKRIVEN.
+
+## Mjerenje 2026-10-08
+
+Izolirani klon na `986ff14`, bez izmjene koda. Ulaz: 26 fixtura iz `tests/fixtures/docx`
+provucenih kroz popravak s fixerima koje Lekta sama odabire, plus 29 uzoraka tamnih
+strukturnih fixera iz `scripts/emit-repair-samples.mjs` (K5, K6, K7).
+
+| Provjera | Rezultat |
+|---|---|
+| ooxml-validator 0.4.0: nove greske sheme koje uvodi popravak | 0 od 26 popravaka, 0 od 29 tamnih uzoraka |
+| ooxml-validator: zatecene greske u ulaznim fixturama | 8 gresaka u 5 fixtura: redoslijed u `sectPr` i `settings.xml`, reference na fusnote |
+| ooxml-validator: podmetnut krivi redoslijed, nepoznat element, kriva enum vrijednost | sve tri uhvacene, kontrola prolazi; 29 s za 52 dokumenta |
+| python-docx (Tier 1) nad istim podmetnutim greskama | sve tri prolaze neopazeno |
+| Python-Redlines 1.0.0: umetnut ili obrisan tekst u 26 popravaka | 0 |
+| Python-Redlines: podmetnuta promijenjena rijec, neprelomivi razmak, dodana crtica | sve tri uhvacene, kontrola prolazi; 0,3 do 2 s po dokumentu |
+
+Zatecene greske fixtura su nalaz za ratchet Faze 1, ne razlog za slabljenje razine.
+Mjerenje nad stvarnim korpusom iz CI-ja je prvi korak T111.
+
 ## Redoslijed
 
-Faza 1 je najmanja i odmah daje novi dokaz, pa ide prva. Faze 2 i 3 slijede, jer stite
-glavni ugovor o vidljivom tekstu. Faza 4 ovisi o kapacitetu za citate, a faza 5 o Dockeru
-na radnoj stanici.
+Faza 1 je najmanja i odmah daje novi dokaz, pa ide prva; Faza 6 slijedi odmah iza nje jer dijeli
+workflow. Faze 2 i 3 stite glavni ugovor o vidljivom tekstu (Faza 2 je T96). Faza 7 je neovisna i
+moze ici paralelno. Faza 4 ovisi o kapacitetu za citate, Faza 5 o Dockeru na radnoj stanici, a
+Faza 8 o korpusu PDF-ova na radnoj stanici.

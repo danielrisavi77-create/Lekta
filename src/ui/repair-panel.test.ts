@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { finalDocumentInspectorRepairableItem } from './repair-items';
 import { renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
 import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
 import type { Check } from '../scoring/checks';
@@ -120,6 +121,35 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
     expect(form.findings[0].evidence[0].revisionAction).toBe('reject');
     const disabled = details.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__final-inspector input[disabled]');
     expect(disabled).toHaveLength(1);
+  });
+
+  it('finalni inspektor: izricit odabir privatnih metapodataka stize do parametara popravka', () => {
+    const mountEl = mount();
+    const result = {
+      details: {
+        finalDocumentInspector: {
+          summary: { comments: 0, revisions: 0, privateMetadata: 1, staleFields: 0 },
+          findings: [{
+            id: 'private-metadata', category: 'private-metadata', summary: 'Osobni metapodaci', count: 1, severity: 'warning',
+            supported: true, destructive: true, defaultSelected: false, action: 'remove-metadata',
+            evidence: [{ part: 'docProps/core.xml', location: 'dc:creator', fingerprint: 'fp-creator', field: 'creator' }],
+          }],
+        },
+      },
+    };
+    const [inspectorItem] = finalDocumentInspectorRepairableItem(result);
+    expect((inspectorItem.params as { metadata: unknown[] }).metadata).toEqual([]);
+    renderRepairPanel({ ...ctxBase, mountEl, items: [inspectorItem] });
+    const details = openTierBDetails(openLedger(mountEl));
+    const check = details.querySelector<HTMLInputElement>('.lekta-repair-panel__final-inspector input[type="checkbox"]')!;
+    expect(check.checked).toBe(false);
+    check.checked = true;
+    check.dispatchEvent(new Event('change'));
+    expect((inspectorItem.params as { metadata: Array<{ field: string; action: string }> }).metadata)
+      .toEqual([expect.objectContaining({ field: 'creator', action: 'remove', part: 'core' })]);
+    check.checked = false;
+    check.dispatchEvent(new Event('change'));
+    expect((inspectorItem.params as { metadata: unknown[] }).metadata).toEqual([]);
   });
 
   it('prekrsene su predodabrane, neprekrsene odznacene i iza podnaslova', () => {

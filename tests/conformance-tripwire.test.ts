@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Conformance tripwire u redovnom `npm run check`: po JEDAN profil za svaku instituciju
  * iz kataloga (deterministicki, leksikografski prvi), uskladjen + neuskladjen sintetski

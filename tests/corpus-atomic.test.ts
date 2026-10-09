@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): ATOMSKI slucajevi. Za svaki dokazujemo UZROCNOST:
  *   (1) u PROLAZNOJ bazi ciljana provjera prolazi (baseline je zasebno dokazan),

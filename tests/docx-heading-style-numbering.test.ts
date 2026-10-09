@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-06: naslov numeriran preko STILA nije se prepoznavao kao numeriran.
  *

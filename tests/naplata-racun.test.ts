@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * ISTI RACUN U OBJE FUNKCIJE NAPLATE: create-checkout i webhook-mor se ne smiju razici oko toga
  * na cijem je Stripe racunu kupnja.

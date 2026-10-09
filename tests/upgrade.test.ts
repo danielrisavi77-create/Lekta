@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Nadogradnja Repair -> Final Pass (docs/decisions/MONETIZACIJA_V1.md odjeljak 14): cista odluka.
  *

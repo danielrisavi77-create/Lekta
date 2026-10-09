@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift + vjernost guard za JAVNU projekciju razine dokaza (SCOPE-01).
  *

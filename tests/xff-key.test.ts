@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T84 XFF: baseline garda izvora (zadnji unos x-forwarded-for, svi pozivatelji kroz hashClientIpSalted)
  * i bihevioralni ugovor izvrsenog izvora hash-ip.ts. Ponasanje pomocnika je i u

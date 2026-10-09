@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za fbf (Farmaceutsko-biokemijski fakultet) i fhs zavrsni (Hrvatski studiji).
  *

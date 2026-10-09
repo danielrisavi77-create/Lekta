@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
