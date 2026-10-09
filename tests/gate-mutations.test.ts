@@ -5077,7 +5077,7 @@ const MUTATIONS: Mutation[] = [
     imitates: 'T84 XFF: uz cf-connecting-ip se dodaje rezerva x-real-ip ili x-forwarded-for, pa klijent bez Cloudflarea bira kljuc.',
     caught: () => {
       const { hashIp } = xffRealSources();
-      const mut = hashIp.replace("const ip = (headers.get('cf-connecting-ip') ?? '').trim();", "const ip = (headers.get('cf-connecting-ip') ?? headers.get('x-real-ip') ?? '').trim();");
+      const mut = hashIp.replace("const raw = (headers.get('cf-connecting-ip') ?? '').trim();", "const raw = (headers.get('cf-connecting-ip') ?? headers.get('x-real-ip') ?? '').trim();");
       return mut !== hashIp && xffBehaviourProblems(loadClientIpFromHeaders(mut)).length > 0;
     },
     cleanBefore: () => xffBehaviourProblems(loadClientIpFromHeaders(xffRealSources().hashIp)).length === 0,
