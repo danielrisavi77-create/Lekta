@@ -12770,6 +12770,7 @@ describe('mutacije: Upisnik preflight ne smije mijenjati autoritativni registar'
       writeFileSync(join(root, 'data', 'programs', 'invented.json'), '{}\n');
       expect(changedAuthoritativePaths(root)).toContain('data/programs/invented.json');
     });
+  });
 });
 /**
  * SUPABASE MCP GARD (odluka vlasnika 2026-10-08, popravak po Codex pregledu #327). Mutira se KOPIJA
