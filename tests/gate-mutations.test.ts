@@ -9441,12 +9441,11 @@ describe('mutacije: gate preflight i omotac locka', () => {
     // linije obrane na izlazu procesa.
     const mutated = wrapper
       .replace("  process.on('exit', release);\n", '')
-      .replace(
-        '    return code;\n  } finally {\n    release();\n  }',
-        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
-      );
+      .replace('    return code;\n  } finally {\n', '    if (code === 0) release();\n    return code;\n  } finally {\n')
+      .replace('    }\n    release();\n  }', '    }\n    // otpustanje premjesteno na uspjeh\n  }');
     expect(mutated).not.toBe(wrapper);
     expect(mutated).not.toContain("process.on('exit', release)");
+    expect(mutated).toContain('// otpustanje premjesteno na uspjeh');
     expect(releasesOnFailure(mutated)).toBe(false);
   }, 120_000);
 
@@ -10868,6 +10867,85 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
  * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
  * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
  */
+/**
+ * T110: omotac locka na prekid salje signal cijelom stablu djeteta. Mutant koji trazi samo izravnu
+ * djecu (bez unuka) vraca stari kvar: `npm` i `vitest` ispod `sh -c` prezive, a lock se otpusti.
+ * Mutira se kopija izvora (uz gate-preflight.mjs koji uvozi), presudu racuna cisti node.
+ */
+describe('mutacije: scripts/with-gate-lock.mjs stablo procesa (T110)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const preflight = readFileSync(resolve(process.cwd(), 'scripts/gate-preflight.mjs'), 'utf8');
+
+  async function signaliziraniPidovi(source: string): Promise<number[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const stablo = [{ pid: 101, ppid: 100 }, { pid: 102, ppid: 101 }, { pid: 103, ppid: 102 }];
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `const r = m.signalTree(100, 'SIGTERM', { list: () => ${JSON.stringify(stablo)}, kill: () => true });`
+        + 'process.stdout.write(JSON.stringify(r));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as number[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: signal ide djetetu, ljusci i unucima', async () => {
+    expect(await signaliziraniPidovi(izvor)).toEqual([100, 101, 102, 103]);
+  });
+
+  it('mutant: samo izravna djeca (bez unuka) se hvata', async () => {
+    const mutant = izvor.replace('        queue.push(p.pid);\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await signaliziraniPidovi(mutant)).toEqual([100, 101]);
+  });
+
+  // Grok pregled #329: reapTree mora preostale gasiti SIGKILL-om i nepoznato stanje (null) drzati zivim.
+  async function zetva(source: string): Promise<Array<[number, string]>> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const sent = [];'
+        + 'await m.reapTree([7, 8], { graceMs: 5, stepMs: 1, sleep: async () => {}, alive: (p) => (p === 7 ? true : null), kill: (p, s) => { sent.push([p, s]); return true; } });'
+        + 'process.stdout.write(JSON.stringify(sent));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as Array<[number, string]>;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: zivi i nepoznati proces nakon roka dobivaju SIGKILL', async () => {
+    expect(await zetva(izvor)).toEqual([[7, 'SIGKILL'], [8, 'SIGKILL']]);
+  });
+
+  it('mutant: reapTree salje SIGTERM umjesto SIGKILL', async () => {
+    const mutant = izvor.replace("kill(pid, 'SIGKILL');", "kill(pid, 'SIGTERM');");
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGTERM'], [8, 'SIGTERM']]);
+  });
+
+  it('mutant: nepoznato stanje (null) se tretira kao mrtav proces', async () => {
+    const mutant = izvor.replaceAll('alive(pid) !== false', 'alive(pid) === true');
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGKILL']]);
+  });
+});
+
 /**
  * T109: cpu-discipline i heredoc (allowlist citaca nakon tri runde Grok pregleda #328). Tijelo se
  * preskace samo za prvi redak `citac arg ... <<'IME'` s cistim rijecima; sve ostalo ide starim
