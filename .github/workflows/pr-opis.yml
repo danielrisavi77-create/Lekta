@@ -1,7 +1,7 @@
 # T58: opis PR-a mora imati `Neto redaka: +x/-y` i `Nove ovisnosti: nema | <popis>`, a "nema" ne
-# smije stajati kad package.json dodaje paket. Job samo izvjestava: nije u branch protection popisu
-# obveznih provjera i ne smije se tamo dodati. Isto vrijedi za korak tasks-json-opseg (DAN-79): crven
-# korak upozorava, koordinator ne spaja PR s crvenim pr-opis.
+# smije stajati kad package.json dodaje paket. Job je obvezna provjera grane (ruleset "master",
+# odluka vlasnika 2026-10-09). Isto vrijedi za korak tasks-json-opseg (DAN-79): crven korak blokira
+# spajanje PR-a.
 #
 # ZASEBAN WORKFLOW, ne job u foundation-check.yml: provjera cita tijelo PR-a, pa mora reagirati na
 # `edited` (uredjivanje opisa kroz `gh pr edit` ili web). Da je job u foundation-check.yml, `edited`
