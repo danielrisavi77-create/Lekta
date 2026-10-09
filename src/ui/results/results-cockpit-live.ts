@@ -32,6 +32,13 @@ export interface UpgradeResultCockpitArgs {
   rerender: () => void;
 }
 
+/** Vraca fokus na element kokpita; naslov presude nije fokusabilan sam od sebe pa dobiva tabindex. */
+function fokusirajCilj(mount: HTMLElement, selector: string): void {
+  const target = mount.querySelector<HTMLElement>(selector);
+  if (target?.matches('[data-cockpit-verdict-title]') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+  target?.focus({ preventScroll: true });
+}
+
 /** Z34 zivi u lijenom modulu; puna Z8 montaza ostaje aktivna dok se modul ucitava. */
 export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
   if (args.cacheOnly) {
@@ -78,9 +85,7 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
     const focus = preferredFocus ?? fokusKokpita();
     args.rerender();
     if (focus) {
-      const target = mount.querySelector<HTMLElement>(focus);
-      if (target?.matches('[data-cockpit-verdict-title]') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
-      target?.focus({ preventScroll: true });
+      fokusirajCilj(mount, focus);
     }
   };
   const stanjeZaZ34 = (): LiveStanje => {
@@ -143,9 +148,7 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
     const focus = fokusKokpita();
     args.rerender();
     if (focus) {
-      const target = mount.querySelector<HTMLElement>(focus);
-      if (target?.matches('[data-cockpit-verdict-title]') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
-      target?.focus({ preventScroll: true });
+      fokusirajCilj(mount, focus);
     } else if (direction) {
       const other = direction === 'next' ? 'prev' : 'next';
       (mount.querySelector<HTMLElement>('.desk-nav__btn--' + direction + ':not([disabled])')

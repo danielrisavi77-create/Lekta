@@ -18,7 +18,7 @@ import { rokZaSesiju } from '../../shared/intake-choice';
 import { parseSessionFragment } from '../../session/local-document-session';
 import { pluralHr } from '../results/plural-hr';
 import { decisionHtml, evidenceHtml, locationHtml, recommendation } from '../results/priority-findings';
-import { radnjaZaKlik } from '../results/desk-mount';
+import { obradiIgnoreKlik, radnjaZaKlik } from '../results/desk-mount';
 import type { DeskItem } from '../results/desk-model';
 import type { ResultsCockpitAction } from '../results/results-cockpit';
 import type { VisualFindingModel } from '../results/visual-result-model';
@@ -638,14 +638,7 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
       q<HTMLButtonElement>('[data-rl-toggle]')?.focus();
       return;
     }
-    if (cilj.closest('[data-finding-ignore]')) {
-      cilj.closest<HTMLElement>('[data-finding-id]')?.querySelector<HTMLElement>('[data-finding-ignore-form]')?.removeAttribute('hidden');
-      return;
-    }
-    if (cilj.closest('[data-finding-ignore-cancel]')) {
-      cilj.closest<HTMLElement>('[data-finding-ignore-form]')?.setAttribute('hidden', '');
-      return;
-    }
+    if (obradiIgnoreKlik(cilj)) return;
     const radnja = radnjaZaKlik(cilj);
     if (radnja) o.onAction?.(radnja);
   };
