@@ -253,9 +253,10 @@ vrijedi jedno pravilo za lokalni rad:
   uobicajena praksa iz nuzde; ovaj odjeljak je tu praksu pretvara u pisano pravilo koje vrijedi
   za svaku sesiju, ne samo kad je stroj vidljivo pretrpan.
 
-Ovo ne mijenja CLAUDE.md tvrdi gate (`npm run check` + `npm run orphan-scan` prije commita);
-mijenja SAMO gdje se taj puni gate izvrsava kad je stroj zauzet. CI i dalje mjeri stanje mastera
-prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
+Od DAN-80 CLAUDE.md tvrdi gate glasi: lokalno `npm run orphan-scan` i ciljani testovi, a puni gate je
+CI na zadnjem commitu PR-a (`build-gate` plus `vitest-gate`, Vitest u 4 sharda po Node 20 i 24).
+Lokalni `npm run check` ostaje puni lanac za `release:check` i kad je CI nedostupan. CI i dalje mjeri
+stanje mastera prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
 
 ## Teski poslovi na laptopu
 
