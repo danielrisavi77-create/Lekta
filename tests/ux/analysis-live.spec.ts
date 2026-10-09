@@ -554,7 +554,7 @@ async function ekranRezultata(page: Page): Promise<EkranRezultata> {
     // Z34 postavlja vlastiti opis 'Ocjena sada N[, najviše M...]', razlicit od baznog Z8.
     const described = await scoredRing.getAttribute('aria-label');
     const match = /^Ocjena sada (\d+)(?:, najviše \d+ ako svi zahvati uspiju)?$/.exec(described ?? '');
-    expect(match, 'bodovani prsten mora javno izreci mjerodavnu ocjenu i nazivnik').not.toBeNull();
+    expect(match, 'Z34 bodovani prsten mora javno izreci trenutačnu ocjenu').not.toBeNull();
     await expect(scoredRing.locator('.cockpit-ring__core'), 'ocjena se mora dovrsiti prije usporedbe dvaju tokova')
       .toHaveText(match![1], { timeout: 15_000 });
   }
