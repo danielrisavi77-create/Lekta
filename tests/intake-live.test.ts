@@ -1116,6 +1116,20 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(rokZaSesiju('s-20'), 'raniji rad ostaje kakav je bio').toEqual({ datum: '2026-10-20', neznam: false });
   });
 
+  it('novi odabir prekida vezu roka s prethodnom sesijom do spremanja nove', () => {
+    ulaz();
+    live = mountIntakeLive(document, { search: '', danas });
+    rokPolje().value = '2026-10-20';
+    rokPolje().dispatchEvent(new Event('change'));
+    live.onSessionStored('s-30');
+    live.onFileChosen('drugi.docx');
+    rokPolje().value = '2026-10-27';
+    rokPolje().dispatchEvent(new Event('change'));
+    expect(rokZaSesiju('s-30'), 'S1 ostaje s rokom prije drugog odabira').toEqual({ datum: '2026-10-20', neznam: false });
+    live.onSessionStored('s-31');
+    expect(rokZaSesiju('s-31')).toEqual({ datum: '2026-10-27', neznam: false });
+  });
+
   it('pecat provjere prati stanje kontrolera: "Čeka provjeru" -> "Čitam"', async () => {
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });

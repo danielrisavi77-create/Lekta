@@ -219,6 +219,8 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   let tipkanje: ReturnType<typeof setInterval> | null = null;
   const stani = (): void => { if (tipkanje !== null) { clearInterval(tipkanje); tipkanje = null; } };
   const onFileChosen = (name: string): void => {
+    // Novi odabir prekida vezu s prethodnom sesijom: rok se do spremanja nove ne smije upisati u staru.
+    spremljenaSesija = null;
     stani();
     if (!ime) return;
     if (prigusen()) { ime.textContent = name; ime.classList.remove('is-tipka'); return; }
