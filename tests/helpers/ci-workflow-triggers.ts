@@ -239,6 +239,14 @@ export function findSelfHostedProblems(
 /** Strukturni gate za puni Word proof. Vrijedi i kada je YAML promijenjen ili preflight skriven u komentaru. */
 export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
   const errors: string[] = [];
+  // Full mode is selected through this exact dispatch input; if renamed, the workflow
+  // silently falls back to word-only and skips all three full-mode preflights.
+  const mode = triggerValue(doc.on, 'workflow_dispatch')?.inputs?.razine;
+  const options = Array.isArray(mode?.options) ? mode.options.map(String) : [];
+  if (mode?.type !== 'choice' || mode.default !== 'word'
+    || mode.required !== false || !sameSet(options, ['word', 'sve'])) {
+    errors.push('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
+  }
   const steps = doc.jobs?.['word-proof']?.steps ?? [];
   const stepNames = [
     'Deno preflight (samo razine=sve)',
