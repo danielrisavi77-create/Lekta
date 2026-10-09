@@ -18,18 +18,20 @@ const h = (values: Record<string, string>) => ({ get: (name: string) => values[n
 const FWD = h({ 'cf-connecting-ip': '203.0.113.7' });
 
 describe('clientIpFromHeaders (T84 XFF: cf-connecting-ip)', () => {
-  it('uzima cf-connecting-ip, inace unknown', () => {
+  it('prihvaca samo IPv4 i IPv6, prazne i krive zaglavlje odbija prije hashiranja', () => {
     expect(clientIpFromHeaders(h({ 'cf-connecting-ip': '198.51.100.9' }))).toBe('198.51.100.9');
     expect(clientIpFromHeaders(h({ 'cf-connecting-ip': ' 2001:db8::1 ' }))).toBe('2001:db8::1');
-    expect(clientIpFromHeaders(h({}))).toBe('unknown');
-    expect(clientIpFromHeaders(h({ 'cf-connecting-ip': '' }))).toBe('unknown');
-    expect(clientIpFromHeaders(h({ 'cf-connecting-ip': '   ' }))).toBe('unknown');
-    expect(clientIpFromHeaders(h({ 'cf-connecting-ip': 'a'.repeat(65) }))).toBe('unknown');
+    for (const invalid of [{}, { 'cf-connecting-ip': '' }, { 'cf-connecting-ip': '   ' },
+      { 'cf-connecting-ip': 'a'.repeat(65) }, { 'cf-connecting-ip': 'spoofed-address' },
+      { 'cf-connecting-ip': '999.0.0.1' }, { 'cf-connecting-ip': '198.51.100.9, 1.1.1.1' },
+      { 'cf-connecting-ip': '1.2.3.04' }, { 'cf-connecting-ip': '2001:db8::zz' }]) {
+      expect(() => clientIpFromHeaders(h(invalid))).toThrow('UNTRUSTED_CLIENT_IP');
+    }
   });
 
   it('x-forwarded-for, x-real-ip i true-client-ip se ne citaju (izmjereno: gateway ih prepisuje ili klijent bira)', () => {
     const spoofed = { 'x-forwarded-for': '198.51.100.1, 10.0.0.1', 'x-real-ip': '198.51.100.2', 'true-client-ip': '198.51.100.3' };
-    expect(clientIpFromHeaders(h(spoofed))).toBe('unknown');
+    expect(() => clientIpFromHeaders(h(spoofed))).toThrow('UNTRUSTED_CLIENT_IP');
     expect(clientIpFromHeaders(h({ ...spoofed, 'cf-connecting-ip': '203.0.113.50' }))).toBe('203.0.113.50');
   });
 
@@ -79,4 +81,10 @@ describe('hashClientIpSalted', () => {
     const direct = await hashClientIp(FWD, 'dedicirani');
     expect(withSalt).toBe(direct);
   });
+  it('ne hashira zajednicki unknown kljuc ni lazni, ne-IP header', async () => {
+    await expect(hashClientIpSalted(h({}), '', KEY)).rejects.toThrow('UNTRUSTED_CLIENT_IP');
+    await expect(hashClientIpSalted(h({ 'cf-connecting-ip': 'attacker-supplied-text' }), '', KEY))
+      .rejects.toThrow('UNTRUSTED_CLIENT_IP');
+  });
+
 });
