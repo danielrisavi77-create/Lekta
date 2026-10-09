@@ -174,16 +174,13 @@ async function ispustiNaList(page: Page, datoteka: string, ime: string): Promise
   }, { b: bajtovi, n: ime });
 }
 
-test('Z32: posjetitelj BEZ postavki i linka ubacuje rad nakon "Još ne znam rok"; fakultet se prepoznaje iz rada', async ({ page }) => {
+test('Z32: posjetitelj BEZ postavki i linka ubacuje rad odmah, bez roka; fakultet se prepoznaje iz rada', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('[data-intake-fakultet-napomena]')).toHaveText('Prepoznat ćemo ga iz rada.');
   await expect(page.locator('[data-intake-potvrdi]')).toBeHidden();
   await expect(page.locator('[data-intake-promijeni]')).toBeHidden();
-  // Bez roka: ispustanje na list se odbija s porukom i nigdje ne vodi.
-  await ispustiNaList(page, DOCX, 'rad.docx');
-  await expect(page.locator('#intakeError')).toHaveText('Učitavanje trenutačno nije dostupno. Pokušaj ponovno.');
-  expect(page.url(), 'zatvorena vrata su primila rad').not.toMatch(/\/rad\//);
-  await page.getByLabel('Još ne znam rok').check();
+  // Bez roka: rok nije uvjet (od 2026-10-06), ispustanje na list odmah vodi na /rad/.
+  await expect(page.locator('#intakeError')).toBeHidden();
   await ispustiNaList(page, DOCX_FPZG, 'rad.docx');
   await page.waitForURL(/\/rad\/#session=/);
   const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
