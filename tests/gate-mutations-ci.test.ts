@@ -172,8 +172,10 @@ describe('Word proof: nezasticene i neizvedive PowerShell naredbe moraju pasti',
 
 describe('Word proof: release gate error propagation and full-mode input wiring', () => {
   it('MUTANT: job-level continue-on-error true prikriva pad Word joba', () => {
-    const before = "  word-proof:\\n    if: github.event.repository.fork == false";
-    const after = "  word-proof:\\n    continue-on-error: true\\n    if: github.event.repository.fork == false";
+    const nl = String.fromCharCode(10);
+    const before = '  word-proof:' + nl + '    if: github.event.repository.fork == false';
+    const after = '  word-proof:' + nl + '    continue-on-error: true'
+      + nl + '    if: github.event.repository.fork == false';
     expect(wordYml.split(before)).toHaveLength(2);
     const changed = wordYml.replace(before, () => after);
     expect(wordProblems(changed)).toContain(
