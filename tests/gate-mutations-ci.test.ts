@@ -168,3 +168,36 @@ describe('Word proof: nezasticene i neizvedive PowerShell naredbe moraju pasti',
     expect(wordProblems(withExit)).toContain('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
   });
 });
+
+
+describe('Word proof: release gate error propagation and full-mode input wiring', () => {
+  it('MUTANT: continue-on-error true na release:check ne smije prikriti crveni Word gate', () => {
+    const before = '      - name: release:check\n        shell: powershell';
+    const after = '      - name: release:check\n        continue-on-error: true\n        shell: powershell';
+    expect(wordYml.split(before)).toHaveLength(2);
+    const changed = wordYml.replace(before, () => after);
+    expect(wordProblems(changed)).toContain('word-proof: zasticeni koraci ne smiju imati continue-on-error');
+  });
+
+  it('MUTANT: continue-on-error true na Deno preflightu ne smije dati lazni GO', () => {
+    const before = '      - name: Deno preflight (samo razine=sve)\n        if: inputs.razine == \'sve\'';
+    const after = '      - name: Deno preflight (samo razine=sve)\n        continue-on-error: true\n        if: inputs.razine == \'sve\'';
+    expect(wordYml.split(before)).toHaveLength(2);
+    const changed = wordYml.replace(before, () => after);
+    expect(wordProblems(changed)).toContain('word-proof: zasticeni koraci ne smiju imati continue-on-error');
+  });
+
+  it('MUTANT: full mode razine preimenovan u mode ne smije tiho pokrenuti samo Word', () => {
+    const before = '      razine:\n';
+    expect(wordYml.split(before)).toHaveLength(2);
+    const changed = wordYml.replace(before, () => '      mode:\n');
+    expect(wordProblems(changed)).toContain('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
+  });
+
+  it('MUTANT: release RAZINE odvojen od workflow_dispatch inputa', () => {
+    const before = 'RAZINE: ' + String.fromCharCode(36) + "{{ inputs.razine || 'word' }}";
+    expect(wordYml.split(before)).toHaveLength(2);
+    const changed = wordYml.replace(before, () => 'RAZINE: word');
+    expect(wordProblems(changed)).toContain('word-proof: release RAZINE ne cita odabir workflow_dispatch.razine');
+  });
+});
