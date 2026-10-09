@@ -43,19 +43,38 @@ const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 const HEREDOC_READERS = new Set(['cat', 'git', 'python', 'python3']);
 const HEREDOC_WORD_RE = /^[A-Za-z0-9_./:+-]+$/;
 const PYTHON_READERS = new Set(['python', 'python3']);
-const PYTHON_SAFE_MODULES = 'json|re|csv|string|textwrap|datetime|math|collections|itertools|pathlib|html|unicodedata|argparse';
+const PYTHON_SAFE_MODULES = new Set([
+  'json', 're', 'csv', 'string', 'textwrap', 'datetime', 'math',
+  'collections', 'itertools', 'pathlib', 'html', 'unicodedata', 'argparse',
+]);
+const PYTHON_UNSAFE_RE = /__|\b(?:exec|eval|compile|getattr|setattr|delattr|globals|locals|vars|breakpoint)\b/;
+const PYTHON_IMPORT_RE = /\bfrom\s+([^\s]+)\s+import\b|\bimport\s+([^;\r\n#]+)/g;
+const UNSAFE_PYTHON_HEREDOC = '__LEKTA_UNSAFE_PYTHON_HEREDOC__';
+
 /**
- * T109 (cetvrta runda Grok pregleda #328): Python iz heredoca moze sam izvrsiti naredbu (`os.system`,
- * `subprocess`, `eval`, `__import__`, `breakpoint()`), pa se njegovo tijelo preskace samo kad nema
- * nista od toga: nikakvog dunder imena, izvrsavanja koda iz stringa, refleksije, `breakpoint` ni
- * uvoza izvan malog popisa cistih modula. Provjera je savjetodavna ograda od slucajnog teskog posla,
- * ne sandbox. Tijelo se prije provjere NFKC-normalizira jer Python tako normalizira identifikatore.
+ * Provjerava sve module u Python import listi, uključujući import json, os.
+ * Neparsabilan ili relativan uvoz odbija se; ovo je konzervativna CPU ograda, ne sandbox.
  */
-const PYTHON_UNSAFE_RE = new RegExp(
-  '__|\\b(?:exec|eval|compile|getattr|setattr|delattr|globals|locals|vars|breakpoint)\\b'
-  + `|\\bimport\\s+(?!(?:${PYTHON_SAFE_MODULES})\\b)`
-  + `|\\bfrom\\s+(?!(?:${PYTHON_SAFE_MODULES})\\b)`,
-);
+function pythonImportsAreSafe(body) {
+  const logical = body.replace(/\\\r?\n/g, ' ');
+  for (const match of logical.matchAll(PYTHON_IMPORT_RE)) {
+    if (match[1] !== undefined) {
+      const module = match[1];
+      if (module.startsWith('.') || !PYTHON_SAFE_MODULES.has(module.split('.')[0])) return false;
+      continue;
+    }
+    for (const spec of match[2].split(',')) {
+      const imported = /^\s*([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)\s*(?:as\s+[A-Za-z_][A-Za-z0-9_]*)?\s*$/.exec(spec);
+      if (!imported || !PYTHON_SAFE_MODULES.has(imported[1].split('.')[0])) return false;
+    }
+  }
+  return true;
+}
+
+function unsafePythonBody(body) {
+  const normalized = body.normalize('NFKC');
+  return PYTHON_UNSAFE_RE.test(normalized) || !pythonImportsAreSafe(normalized);
+}
 
 /**
  * T109: tijelo heredoca smije se preskociti kao stdin samo u jednom jednoznacnom obliku (fail-closed):
@@ -66,7 +85,7 @@ const PYTHON_UNSAFE_RE = new RegExp(
  * vrijedi stari rastav po retku, pa se teska naredba u tijelu odbija kao prije T109.
  * @param {string} command
  * @param {number} start indeks prvog `<` od `<<`
- * @returns {{ delim: string, stripTabs: boolean, end: number } | null}
+ * @returns {{ delim: string, stripTabs: boolean, end: number, unsafePython: boolean } | null}
  */
 function simpleQuotedHeredoc(command, start) {
   const lineStart = command.lastIndexOf('\n', start - 1) + 1;
@@ -79,8 +98,9 @@ function simpleQuotedHeredoc(command, start) {
   const words = m[1].trim().split(/[ \t]+/).filter(Boolean);
   if (!words.length || !words.every((w) => HEREDOC_WORD_RE.test(w))) return null;
   if (!HEREDOC_READERS.has(words[0])) return null;
-  if (PYTHON_READERS.has(words[0]) && PYTHON_UNSAFE_RE.test(heredocBody(command, lineEnd, m[4], m[2] === '-').normalize('NFKC'))) return null;
-  return { delim: m[4], stripTabs: m[2] === '-', end: lineEnd };
+  const unsafePython = PYTHON_READERS.has(words[0])
+    && unsafePythonBody(heredocBody(command, lineEnd, m[4], m[2] === '-'));
+  return { delim: m[4], stripTabs: m[2] === '-', end: lineEnd, unsafePython };
 }
 
 /** Tijelo heredoca: retci iza `lineEnd` do retka koji je jednak delimiteru (ili do kraja naredbe). */
@@ -162,6 +182,7 @@ export function splitCommand(command) {
       const op = simpleQuotedHeredoc(command, i);
       if (op) {
         endToken();
+        if (op.unsafePython) tokens.push(UNSAFE_PYTHON_HEREDOC);
         pending.push({ delim: op.delim, stripTabs: op.stripTabs });
         i = op.end - 1;
         continue;
@@ -215,6 +236,7 @@ function firstNonFlag(tokens, from) {
  */
 function judgeTokens(tokens, readScript, heavyBinaries = HEAVY_BINARIES) {
   if (tokens.some((t) => programName(t) === 'with-gate-lock')) return { heavy: false };
+  if (tokens.includes(UNSAFE_PYTHON_HEREDOC)) return { heavy: true, what: 'nesiguran Python heredoc' };
   let i = 0;
   while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
   if (i >= tokens.length) return { heavy: false };

@@ -146,6 +146,8 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     // Bash ovaj ulaz izvrsi (provjereno s `echo`); master prije T109 ga je odbijao zbog `\\"` u retku.
     const izvrsi = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
     expect(judge(izvrsi)).toMatchObject({ allow: false });
+    const unsafeMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+    expect(judge(unsafeMixedImport)).toMatchObject({ allow: false });
     // Isto za python bez broja i za uvoz izvan popisa, __ ime i izvrsavanje koda iz stringa.
     expect(judge(izvrsi.replace('python3', 'python'))).toMatchObject({ allow: false });
     for (const tijelo of [
@@ -158,6 +160,10 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     }
     // Cisti Python (uvoz s popisa, hrvatski tekst) i dalje se preskace kao stdin.
     expect(judge("python3 - <<'EOF'\nimport json\nprint(json.dumps({'a': 'č ć š'}))\nnpx vitest run je u biljesci\nEOF")).toMatchObject({ allow: true });
+    for (const safe of [
+      "python3 - <<'EOF'\nimport json as jsonlib, re as regex\nprint(jsonlib.dumps({'ok': True}))\nEOF",
+      "python3 - <<'EOF'\nfrom collections.abc import Mapping\nprint('safe')\nEOF",
+    ]) expect(judge(safe), safe).toMatchObject({ allow: true });
   });
 
   it('proces: 7 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {

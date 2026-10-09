@@ -10963,6 +10963,7 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
   // Cetvrta runda: Python koji sam izvrsi naredbu (bash ga izvrsi) i NFKC oblik naziva `eval`.
   const pythonOs = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
+  const pythonMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
   const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
@@ -10986,7 +10987,7 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
@@ -11019,10 +11020,22 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
     expect(await dopusta(mutant, ljuska)).toBe(true);
   });
 
-  it('mutant: tijelo Pythona se ne provjerava (os.system iz heredoca prolazi)', async () => {
-    const mutant = izvor.replace('PYTHON_READERS.has(words[0]) && PYTHON_UNSAFE_RE', 'false && PYTHON_UNSAFE_RE');
+  it('mutant: unsafe Python sentinel se ne blokira', async () => {
+    const mutant = izvor.replace(
+      "if (tokens.includes(UNSAFE_PYTHON_HEREDOC)) return { heavy: true, what: 'nesiguran Python heredoc' };",
+      'if (false) return { heavy: true, what: "nesiguran Python heredoc" };',
+    );
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, pythonOs)).toBe(true);
+  });
+
+  it('mutant: u import listi provjerava se samo prvi modul', async () => {
+    const mutant = izvor.replace(
+      "for (const spec of match[2].split(',')) {",
+      "for (const spec of match[2].split(',').slice(0, 1)) {",
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonMixedImport)).toBe(true);
   });
 
   it('mutant: tijelo Pythona se ne NFKC-normalizira (naziv pisan punom sirinom prolazi)', async () => {
