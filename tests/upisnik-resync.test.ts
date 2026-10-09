@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allProgrammesQuery, compareHarvests, latestReportPaths, validateHarvest } from '../src/programs/upisnik-resync';
+import { allProgrammesQuery, compareHarvests, latestFailureReport, latestReportPaths, validateHarvest } from '../src/programs/upisnik-resync';
 import { UPISNIK_VRSTE, type UpisnikRow } from '../src/programs/upisnik-parse';
 
 const row = (code = '3', patch: Partial<UpisnikRow> = {}): UpisnikRow => ({
@@ -121,5 +121,36 @@ describe('latest-report: tocne relativne putanje dokaza', () => {
       .toThrow('INVALID_RUN_DIRECTORY');
     expect(() => latestReportPaths({ recordsPath: '../secret.json', reviewPath: null, candidatePath: null }, run))
       .toThrow('INVALID_ARTIFACT_FILENAME');
+  });
+});
+
+
+describe('latest-report on validation failure keeps the blocked run evidence', () => {
+  const runName = 'a'.repeat(20) + '-abc123';
+  const prior = {
+    status: 'SOURCE_BLOCKED', source: { snapshotHash: 'a'.repeat(64) },
+    sourceIntegrity: 'FAIL',
+    recordsPath: runName + '/records-upisnik.json',
+    reviewPath: null,
+    candidatePath: null,
+    canonicalSync: 'NOT_APPLIED',
+  };
+  it('keeps source, records and the precise run path while still blocking candidate', () => {
+    const result = latestFailureReport(prior, 'count mismatch');
+    expect(result).toMatchObject({
+      status: 'SOURCE_BLOCKED', error: 'count mismatch', source: prior.source,
+      recordsPath: prior.recordsPath, reviewPath: null, candidatePath: null,
+      canonicalSync: 'NOT_APPLIED',
+    });
+    expect(prior).not.toHaveProperty('error');
+  });
+  it('early failures before creating a run do not link stale evidence', () => {
+    expect(latestFailureReport({ status: 'FETCH_IN_PROGRESS' }, 'network error')).toEqual({
+      status: 'SOURCE_BLOCKED', error: 'network error', canonicalSync: 'NOT_APPLIED', candidatePath: null,
+    });
+  });
+  it('tampered traversal or arbitrary report paths are not carried into a failure', () => {
+    expect(latestFailureReport({ ...prior, recordsPath: '../old/records-upisnik.json' }, 'invalid')).not.toHaveProperty('recordsPath');
+    expect(latestFailureReport({ ...prior, source: null }, 'invalid')).not.toHaveProperty('recordsPath');
   });
 });
