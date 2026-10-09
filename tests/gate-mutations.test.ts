@@ -10961,6 +10961,17 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const komentar = "cat # <<'EOF'\nnpx vitest run";
   const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
   const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+  // Cetvrta runda: Python koji sam izvrsi naredbu (bash ga izvrsi) i NFKC oblik naziva `eval`.
+  const pythonOs = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
+  const pythonMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonWrapped = "env FOO=1 python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonLater = "echo ready\npython3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonUnquoted = "python3 - <<EOF\nimport os\nos.system('npx vitest run')\nEOF";
+  // Uvoz izvan popisa bez imena iz PYTHON_ESCAPE_NAMES_RE: hvata ga samo provjera cijele import liste.
+  const pythonMixedZip = "python3 - <<'EOF'\nimport json, zipfile\nprint(1)\nEOF";
+  const pythonEnvFlag = "env -i python3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonArgparse = "python3 - <<'EOF'\nimport argparse\nargparse.os.system('npx vitest run')\nEOF";
+  const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
@@ -10983,7 +10994,9 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport, pythonWrapped, pythonLater, pythonUnquoted, pythonEnvFlag, pythonArgparse, pythonMixedZip]) {
+      expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    }
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
@@ -10993,27 +11006,80 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   });
 
   it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
-    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    const mutant = izvor.replace('const skipBody = Boolean(m[3]) && simplePrefix;', 'const skipBody = simplePrefix;');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, bezNavodnika)).toBe(true);
   });
 
   it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
-    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    const mutant = izvor.replace(
+      'words.every((w) => HEREDOC_WORD_RE.test(w) || (pythonReader && ENV_ASSIGN_RE.test(w)))',
+      'true',
+    );
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, komentar)).toBe(true);
   });
 
   it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
-    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    const mutant = izvor.replace('lineStart === 0', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, funkcija)).toBe(true);
   });
 
   it('mutant: program izvan allowliste citaca', async () => {
-    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    const mutant = izvor.replace('HEREDOC_READERS.has(programName(words[0])) || pythonReader', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+
+  it('mutant: unsafe Python sentinel se ne blokira', async () => {
+    const mutant = izvor.replace(
+      "if (tokens.includes(UNSAFE_PYTHON_HEREDOC)) return { heavy: true, what: 'nesiguran Python heredoc' };",
+      'if (false) return { heavy: true, what: "nesiguran Python heredoc" };',
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: Python reader iza omotača i assignmenta se ne prepoznaje', async () => {
+    const mutant = izvor.replace(
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
+      'return false;',
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: omotac sa zastavicom (env -i python3) sakriva Python citac', async () => {
+    const mutant = izvor.replace(
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
+      `let i = 0;
+  while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
+  return PYTHON_READERS.has(programName(tokens[i] ?? ''));`,
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonEnvFlag)).toBe(true);
+  });
+
+  it('mutant: os/sys dohvacen kroz sigurni modul (argparse.os) prolazi', async () => {
+    const mutant = izvor.replace(' || PYTHON_ESCAPE_NAMES_RE.test(normalized)', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonArgparse)).toBe(true);
+  });
+
+  it('mutant: u import listi provjerava se samo prvi modul', async () => {
+    const mutant = izvor.replace(
+      "for (const spec of match[2].split(',')) {",
+      "for (const spec of match[2].split(',').slice(0, 1)) {",
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonMixedZip)).toBe(true);
+  });
+
+  it('mutant: tijelo Pythona se ne NFKC-normalizira (naziv pisan punom sirinom prolazi)', async () => {
+    const mutant = izvor.replace(".normalize('NFKC')", '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonNfkc)).toBe(true);
   });
 });
 
