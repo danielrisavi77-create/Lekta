@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad obilaskom draftova koji DIJELE generator i njegov drift test.
  *

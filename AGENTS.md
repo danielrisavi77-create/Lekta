@@ -7,7 +7,8 @@ relevantna za zahvat.
 
 - Multi-provider routing, billing, context i usage: `docs/agents/ORCHESTRATION.md`.
 - Detaljne projektne invarijante i povijesni razlozi: `docs/agents/PROJECT_RULES.md`.
-- Red zadataka: `docs/agents/tasks.json`; kriteriji: `docs/agents/development-plan.md`.
+- Mjerodavan status zadataka: Linear (daniel77, projekt Lekta). Inventar i snimak statusa:
+  `docs/agents/tasks.json`, koji PR zadatka ne dira; kriteriji: `docs/agents/development-plan.md`.
 - Repair: `src/repair/CLAUDE.md`.
 - Citati: `src/citations/CLAUDE.md`.
 - DOCX/OOXML: `src/docx/CLAUDE.md`.
@@ -26,20 +27,25 @@ ne prepravlja akademski sadrzaj; repair je deterministicki formalni zahvat.
 
 ## Tvrdi gate
 
-Svaka promjena prije tvrdnje da je gotova mora proci:
+Svaka promjena prije tvrdnje da je gotova mora proci lokalno:
 
 ```bash
-npm run check
+npm run orphan-scan
 ```
 
-Bez Dena gate pada. `npm run master-ci` zasebno mjeri master i nije zamjena za lokalni gate.
+plus ciljani testovi dirnutih domena (`node scripts/with-gate-lock.mjs ciljano -- npx vitest run <datoteke>`),
+a oxlint i `node scripts/with-gate-lock.mjs tsc -- npx tsc --noEmit` kad su brzi. Puni gate je CI na zadnjem
+commitu PR-a: `build-gate` (Node 20 i 24) i `vitest-gate` moraju biti zeleni prije spajanja. Puni
+`npm run check` ostaje lokalni lanac za `release:check` i kad je CI nedostupan.
+
+Bez Dena lokalni `npm run check` pada. `npm run master-ci` zasebno mjeri master i nije zamjena za gate.
 Domenski golden, mutation, strict-open, Word, security i release gateovi ostaju obavezni kada ih
 scoped pravila traze. Modelova tvrdnja da je test prosao nije dokaz.
 
 Popravni krug nakon pregleda je razmjeran dosegu nalaza: mali lokalni nalaz mjeri doseg,
 regenerira samo pogodjene artefakte u dva prolaza (drugi no-op) i ide mehanicki uz ciljani
-pregled; dizajn (nov zapis, ozicenje, mutacija) nije mehanicki. Puni `npm run check`,
-`orphan-scan` i jedan pregled drugog providera ostaju obvezni prije commita. Sirenje izvan
+pregled; dizajn (nov zapis, ozicenje, mutacija) nije mehanicki. Puni gate (CI) i jedan
+pregled drugog providera ostaju obvezni prije spajanja, a `orphan-scan` i ciljani testovi prije commita. Sirenje izvan
 izvornih stavki staje i postaje zaseban zadatak. Detalji: `docs/agents/no-fable-workflow.md`.
 
 ## Git i izolacija

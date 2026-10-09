@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva SEO/social head na statickim tool stranicama: svaka mora imati self-canonical (apsolutni,
  * po imenu datoteke), og:url == canonical, og:image i twitter:image na /og-image.png i

@@ -328,6 +328,10 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
   zapisi('health:post', 'functions', healthPost, () => assertHealthRejectsPost(healthPost));
   const repair = await observeImpl(`${functions}/repair-docx`, { method: 'POST', body: '{}' });
   zapisi('auth:repair-docx', 'functions', repair, () => assertRequiresAuth(repair, 'repair-docx'));
+  // create-checkout ide u istoj objavi kao klijent (release.yml); bez ovoga bi izostala ili pala
+  // funkcija prosla neopazeno (Codex na #339). Samo citanje: poziv bez tokena mora dobiti 401.
+  const checkout = await observeImpl(`${functions}/create-checkout`, { method: 'POST', body: '{}' });
+  zapisi('auth:create-checkout', 'functions', checkout, () => assertRequiresAuth(checkout, 'create-checkout'));
 
   return nalazi;
 }

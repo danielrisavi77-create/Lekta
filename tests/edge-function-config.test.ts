@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Deny-by-default gard nad autorizacijom Edge funkcija.
  *

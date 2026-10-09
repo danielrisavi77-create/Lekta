@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Invarijanta bodova: bodovana provjera koja je izgubila bodove NE SMIJE javiti 'pass'.
  *

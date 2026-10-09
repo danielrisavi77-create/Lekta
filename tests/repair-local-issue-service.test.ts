@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { sha256Hex, verifyRepairContractV1 } from '../src/repair/contract/index.ts';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift + korektnost katedra-pack.json (izvoz za sestrinski proizvod Katedra).
  *

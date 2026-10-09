@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Guard nad odlukom o pilot skupini (SCOPE-01).
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { MAX_RECORDS, buildLayaCandidates, type CandidateSnapshot } from '../../scripts/laya/candidate-builder.ts';
 import { DecisionContractError, validateDecisionCase } from '../../scripts/laya/contracts-v2.ts';

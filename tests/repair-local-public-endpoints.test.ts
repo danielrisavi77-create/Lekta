@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Izvorni dokaz: javni runner endpointi su zadano ISKLJUCENI.
  *

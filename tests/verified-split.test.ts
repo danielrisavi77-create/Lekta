@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift + korektnost splita verificiranih profila (perf: lazy heavy chunk).
  *

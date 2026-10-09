@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * B5.2 smoke test: dokazuje da src/title-pages/title-page-web.ts, esbuild-bundlan u IIFE i
  * evaluiran u Node (isti obrazac kao scripts/generate-citation-tools.mjs koristi za

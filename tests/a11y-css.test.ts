@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva tri a11y CSS popravka: fokus prsten dovoljnog kontrasta (BL-P3-05, WCAG 1.4.11) na svih 8
  * stranica, minimalnu velicinu male mete 24x24 (BL-P3-04, WCAG 2.5.8) na index.html gumbima, i

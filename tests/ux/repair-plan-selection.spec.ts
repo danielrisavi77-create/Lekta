@@ -2,14 +2,17 @@ import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
+import { karticaSaZahvatom, otvoriLadicu } from './result-live-ladica';
 
 /**
- * T09 (plan razvoja): plan ispravaka je STVARNO upravljiv prikaz. Kvacice su pravi checkboxovi vezani na jedan
- * `ruleId`; odabir u planu je isti odabir koji panel drzi prije slanja (kontroler toka, T08). Tipkovnica radi, a na
- * mobilnom je glavna radnja dostupna bez otvaranja skrivenih detalja (spec se vrti i u `mobile-chromium`).
+ * T09 (plan razvoja): plan ispravaka je STVARNO upravljiv prikaz, i odabir u planu je isti odabir koji
+ * panel drzi prije slanja (kontroler toka, T08). Od ALIGNMENT Z34 plan se slaze na kartici nalaza
+ * ("U planu ✓" / "Uključi u plan"), a salje iz ladice plana (`[data-repair-plan-go]`,
+ * `repair-plan-continue`). Tipkovnica radi, a na mobilnom je glavna radnja dostupna bez otvaranja
+ * skrivenih detalja (spec se vrti i u `mobile-chromium`).
  *
- * Fixture `lo-fpzg-zavrsni-neuskladjen.docx` ima cetiri automatska zahvata (repair-real-corpus.json: targeted 4), pa plan ima
- * "Sigurne zahvate" i ima sto iskljuciti.
+ * Fixture `lo-fpzg-zavrsni-neuskladjen.docx` ima cetiri automatska zahvata (repair-real-corpus.json:
+ * targeted 4), pa plan ima sigurne zahvate i ima sto iskljuciti.
  */
 const fixture = path.resolve('tests/fixtures/docx/lo-fpzg-zavrsni-neuskladjen.docx');
 
@@ -34,68 +37,77 @@ async function analyzeToResult(page: Page) {
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
 }
 
-async function openPlan(page: Page) {
-  await expect(page.locator('[data-desk-host]'), 'fixture mora imati korektorski stol').toHaveCount(1);
-  const otvori = page.locator('[data-desk-plan-open]');
-  if ((await otvori.count()) > 0) await otvori.first().click();
-  await expect(page.locator('[data-repair-plan]')).toBeVisible();
-}
+const brojUPlanu = async (page: Page): Promise<number> =>
+  Number(await page.locator('[data-rl-tray-n]').getAttribute('data-rl-tray-n'));
 
 test.describe('T09: odabir u planu je odabir koji se salje', () => {
   test.setTimeout(300_000);
 
-  test('iskljucen zahvat nestaje iz sazetka, brojac pada, a panel dobiva isti odabir', async ({ page }) => {
+  test('iskljucen zahvat nestaje iz ladice, brojac pada, a panel dobiva isti odabir', async ({ page }) => {
     await analyzeToResult(page);
-    await openPlan(page);
-    const kutije = page.locator('[data-repair-plan-item]');
-    const n = await kutije.count();
-    expect(n, 'plan mora imati barem dva zahvata s kontrolom').toBeGreaterThanOrEqual(2);
-    const prva = kutije.first();
-    const ruleId = await prva.getAttribute('data-repair-plan-item');
-    const label = (await page.locator(`label[for="${await prva.getAttribute('id')}"]`).textContent())?.trim() ?? '';
-    expect(label.length).toBeGreaterThan(0);
-    await expect(prva).toBeChecked();
-    const brojacPrije = Number(await page.locator('[data-repair-plan-count]').getAttribute('data-repair-plan-count'));
+    await karticaSaZahvatom(page);
+    await otvoriLadicu(page);
+    const prije = await brojUPlanu(page);
+    expect(prije, 'plan mora imati barem dva zahvata').toBeGreaterThanOrEqual(2);
 
-    // Pravi checkbox, dostupan kao role=checkbox s imenom iz labela.
-    await page.getByRole('checkbox', { name: label }).uncheck();
-    await expect(page.locator('[data-repair-plan-count]')).toHaveAttribute('data-repair-plan-count', String(brojacPrije - 1));
-    await expect(page.getByTestId('repair-selected-summary')).not.toContainText(label);
+    const gumb = page.locator('#resultCockpit [data-rl-toggle]');
+    await expect(gumb).toHaveAttribute('aria-pressed', 'true');
+    await gumb.click();
+    await expect(gumb).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => brojUPlanu(page)).toBe(prije - 1);
 
     await page.getByTestId('repair-plan-continue').click();
     await expect(page.getByTestId('repair-workflow')).toBeVisible();
-    // ISTI odabir prije slanja: skriveni checkbox tog zahvata u panelu je iskljucen, ostali ukljuceni.
-    const uPanelu = await page.evaluate((rid) => {
-      const rows = Array.from(document.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__list input[type="checkbox"][data-idx]'));
-      const byRule = (r: string) => rows.find((cb) => cb.closest('li')?.getAttribute('data-rule-id') === r);
-      return { target: byRule(rid)?.checked ?? null, ukupno: rows.length, ukljuceno: rows.filter((cb) => cb.checked).length };
-    }, ruleId);
-    expect(uPanelu.target, 'iskljuceni zahvat mora ostati iskljucen u panelu').toBe(false);
-    expect(uPanelu.ukljuceno).toBe(brojacPrije - 1);
+    // ISTI odabir prije slanja: panel ima tocno onoliko ukljucenih zahvata koliko je pisalo u ladici.
+    const uPanelu = await page.evaluate(() => Array.from(document.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__list input[type="checkbox"][data-idx]')).filter((cb) => cb.checked).length);
+    expect(uPanelu).toBe(prije - 1);
     // Ledger (vidljivi prikaz odabira) pokazuje isti broj.
-    await expect(page.locator('.lekta-repair-trigger__price').first()).toContainText(`${brojacPrije - 1} od`);
+    await expect(page.locator('.lekta-repair-trigger__price').first()).toContainText(`${prije - 1} od`);
   });
 
-  test('tipkovnica: razmaknica mijenja odabir, Enter na "Izradi" vodi na panel', async ({ page }) => {
+  test('tipkovnica: razmaknica mijenja odabir, Enter na ladici vodi na panel', async ({ page }) => {
     await analyzeToResult(page);
-    await openPlan(page);
-    const prva = page.locator('[data-repair-plan-item]').first();
-    await prva.focus();
+    await karticaSaZahvatom(page);
+    const gumb = page.locator('#resultCockpit [data-rl-toggle]');
+    await gumb.focus();
     await page.keyboard.press('Space');
-    await expect(prva).not.toBeChecked();
+    await expect(page.locator('#resultCockpit [data-rl-toggle]')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('#resultCockpit [data-rl-toggle]'), 'fokus ostaje na gumbu').toBeFocused();
+    await otvoriLadicu(page);
     const nastavi = page.getByTestId('repair-plan-continue');
     await nastavi.focus();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('repair-workflow')).toBeVisible();
   });
 
-  test('bez ijednog zahvata glavna radnja je onemogucena, bez privida', async ({ page }) => {
+  test('iskljucivanje svih zahvata s kartica spusta ladicu tocno za njih; s nula je radnja onemogucena', async ({ page }) => {
     await analyzeToResult(page);
-    await openPlan(page);
-    const kutije = page.locator('[data-repair-plan-item]');
-    const n = await kutije.count();
-    for (let i = 0; i < n; i += 1) await kutije.nth(i).uncheck();
-    await expect(page.getByTestId('repair-plan-continue')).toBeDisabled();
-    await expect(page.getByTestId('repair-selected-summary')).toContainText('Nijedan zahvat nije odabran');
+    await otvoriLadicu(page);
+    const prije = await brojUPlanu(page);
+    const nalaza = Number((await page.locator('[data-desk-count]').textContent())?.split(' od ')[1] ?? '0');
+    // Zahvat koji nijedna kartica ne nosi (plan ga nudi, nalaz nije vezan) ostaje u planu: skup
+    // iskljucenih se broji po `ruleId`, ne po kartici, jer dvije kartice mogu nositi isti zahvat.
+    const iskljuceni = new Set<string>();
+    for (let i = 0; i < nalaza; i += 1) {
+      const gumb = page.locator('#resultCockpit [data-rl-toggle][aria-pressed="true"]');
+      if (await gumb.count()) {
+        ((await gumb.getAttribute('data-rl-toggle')) ?? '').split(' ').filter(Boolean).forEach((id) => iskljuceni.add(id));
+        await gumb.click();
+      }
+      const dalje = page.locator('#resultCockpit .rl-card .desk-nav__btn--next');
+      if (await dalje.isDisabled()) break;
+      await dalje.click();
+    }
+    expect(iskljuceni.size, 'fixture mora imati zahvate na karticama').toBeGreaterThan(0);
+    await otvoriLadicu(page);
+    await expect.poll(() => brojUPlanu(page)).toBe(prije - iskljuceni.size);
+    const ostalo = await brojUPlanu(page);
+    if (ostalo === 0) {
+      await expect(page.getByTestId('repair-plan-continue')).toBeDisabled();
+      await expect(page.locator('[data-rl-tray-n]')).toHaveText('0 zahvata');
+    } else {
+      await expect(page.getByTestId('repair-plan-continue')).toBeEnabled();
+      test.info().annotations.push({ type: 'zahvati bez kartice', description: `${ostalo} zahvat(a) plana nema karticu nalaza; nula je izmjerena u tests/result-live.test.ts` });
+    }
   });
 });

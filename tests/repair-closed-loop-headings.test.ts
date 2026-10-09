@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Closed-loop provjera profilno-ovisnih fixera koji IMAJU stvarnu institucijsku varijaciju
  * danas: heading-format-fixer, heading-case-fixer, heading-style-fixer, footnote-typography-fixer

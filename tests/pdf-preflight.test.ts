@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Testovi PDF preflight heuristike (izvucene iz monolita). Sinteticki PDF-oliki bajtovi
  * pokrivaju zaglavlje, EOF, sifriranje, PDF/A, A4, fontove, JavaScript i S5 granicu skeniranja.

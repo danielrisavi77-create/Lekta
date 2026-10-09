@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Učitaj .docx akademski rad i pokreni lokalnu provjeru oblikovanja, strukture, opsega i citiranja prema pravilima tvog fakulteta. Dokument pri automatskoj provjeri ostaje na tvom uređaju.">
+<meta name="description" content="Provjeri oblikovanje, strukturu i citate akademskog rada prema pravilima fakulteta. Besplatna lokalna provjera .docx-a, bez prijave.">
 <meta name="color-scheme" content="light dark">
 <script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme')||'dark';if(_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
 <title>Lekta: učitaj rad za lokalnu provjeru</title>
@@ -94,7 +94,7 @@
     <div class="intake-stol">
     <div class="intake-deadline">
       <div class="intake-polje">
-        <label class="intake-polje-oznaka" for="intakeRok">Rok predaje</label>
+        <label class="intake-polje-oznaka" for="intakeRok">Rok predaje · neobavezno</label>
         <div class="intake-polje-red">
           <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
           <label class="intake-kvacica"><input type="checkbox" id="intakeRokNeznam" data-intake-rok-neznam>Još ne znam rok</label>
@@ -134,17 +134,17 @@
           <span class="intake-pecat" aria-hidden="true" data-intake-pecat>Čeka provjeru</span>
           <span class="intake-kicker">Besplatna provjera · lokalno na uređaju</span>
           <h1 class="intake-title" id="intakeTitle">Ubaci rad.</h1>
-          <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> prije nego ga predaš.</p>
+          <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> — oblikovanje, strukturu i citate prema pravilima tvog fakulteta. Lokalno, bez prijave.</p>
           <!-- LINIJA SKENIRANJA: vidljiva samo dok ulaz cita dokument; pomice se `transform`om,
                konacan broj ponavljanja, i staje izvan pogleda (`data-motion-offscreen`, ui-boot). -->
           <div class="intake-sken" aria-hidden="true" data-motion-offscreen><i></i></div>
-          <!-- IME GUMBA SE IZRICE (`aria-label`), ne skuplja iz sadrzaja. Dok rok nije odlucen,
-               gumb nosi `aria-disabled` i natpis sto nedostaje (`#intakeHint`, Z32 tocka 3).
-               Fakultet nije uvjet (odluka vlasnika 2026-09-27); `/rad/` ga prepoznaje iz rada. -->
-          <div class="intake-paper__gumb" role="button" tabindex="0" aria-label="Odaberi .docx dokument ili ga ispusti ovdje" aria-controls="intakeFile" aria-describedby="intakeHint intakeMeta" aria-disabled="true">
+          <!-- IME GUMBA SE IZRICE (`aria-label`), ne skuplja iz sadrzaja. Dokument se moze
+               odabrati odmah; rok i fakultet su neobavezni kontekst koji se moze dopuniti
+               naknadno. `/rad/` bez potvrde prepoznaje fakultet iz rada. -->
+          <div class="intake-paper__gumb" role="button" tabindex="0" aria-label="Odaberi .docx dokument ili ga ispusti ovdje" aria-controls="intakeFile" aria-describedby="intakeHint intakeMeta" aria-disabled="false">
             <span class="intake-akcija">
               <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
-              <span class="intake-hint" id="intakeHint">Prvo potvrdi rok</span>
+              <span class="intake-hint" id="intakeHint">ili ispusti dokument ovdje</span>
             </span>
           </div>
           <!-- MALI PECAT ROKA (Z32 tocka 2): padne na list kad je rok upisan ili izricito nepoznat.
@@ -190,6 +190,58 @@
     <p class="intake-continue" id="intakeContinue" hidden></p>
   </div>
 </section>
+<section class="intake-seo" aria-labelledby="intakeSeoNaslov">
+  <div class="intake-seo__shell">
+    <div class="intake-seo__intro">
+      <span class="intake-seo__eyebrow">Prije predaje</span>
+      <h2 id="intakeSeoNaslov">Tehnička provjera rada bez slanja dokumenta.</h2>
+      <p>Lekta pregledava tehničku spremnost akademskog rada prije predaje. Fokus je na stvarima koje je lako previdjeti u zadnjem prolazu: oblikovanju, strukturi dokumenta, opsegu, citatima i popisu literature te elementima koje traži profil tvog fakulteta. Rezultat nije ocjena sadržaja i nije potvrda da će fakultet prihvatiti rad — dobivaš popis konkretnih tehničkih nalaza koje možeš provjeriti i ispraviti.</p>
+    </div>
+    <div class="intake-seo__grid">
+      <article>
+        <span>01 · Forma</span>
+        <h3>Oblikovanje i struktura</h3>
+        <p>Provjera može uočiti nedosljedne margine, font, prored, numeraciju stranica, hijerarhiju naslova, položaj tablica i slika te druge tehničke detalje koje profil pouzdano propisuje. Lekta ne mijenja tvoje argumente, rečenice ni zaključke.</p>
+      </article>
+      <article>
+        <span>02 · Izvori</span>
+        <h3>Citati i literatura</h3>
+        <p>Lokalna analiza uspoređuje citate u tekstu s popisom literature i upozorava na tehničke nedosljednosti koje može prepoznati. Kad je za fakultet potvrđen poseban citatni profil, nalaz se veže uz ta pravila; gdje pravilo nije javno potvrđeno, Lekta to ne pretpostavlja.</p>
+      </article>
+      <article>
+        <span>03 · Fakultet</span>
+        <h3>Pravila iz službenih izvora</h3>
+        <p>Profili fakulteta grade se iz javno dostupnih službenih uputa i uz njih se prikazuju izvor i datum provjere. Ako posebna pravila još nisu potvrđena, profil je označen kao opći. Tako možeš razlikovati verificirano pravilo od tehničke preporuke.</p>
+      </article>
+    </div>
+    <div class="intake-seo__privacy">
+      <div>
+        <span class="intake-seo__eyebrow">Privatnost</span>
+        <h2>Dokument pri besplatnoj automatskoj provjeri ostaje na tvom uređaju.</h2>
+      </div>
+      <p>Word dokument se za ovu provjeru obrađuje lokalno u pregledniku i ne šalje se modelu umjetne inteligencije na čitanje ili učenje. Slanje na poslužitelj postoji samo za zasebne usluge koje ga stvarno trebaju i tek nakon jasne potvrde korisnika. <a href="/saznaj-vise/#privatnost">Pogledaj kako obrada radi →</a></p>
+    </div>
+    <div class="intake-seo__faq" aria-label="Česta pitanja o provjeri">
+      <details>
+        <summary>Moram li prije učitavanja znati rok predaje?</summary>
+        <p>Ne. Rok je neobavezan i služi samo kao kontekst. Dokument možeš učitati odmah, bez roka.</p>
+      </details>
+      <details>
+        <summary>Trebam li račun ili prijavu?</summary>
+        <p>Ne za besplatnu lokalnu provjeru. Odaberi .docx i kreni; dokument se analizira u pregledniku.</p>
+      </details>
+      <details>
+        <summary>Provjerava li Lekta plagijat ili kvalitetu teksta?</summary>
+        <p>Ne. Lekta provjerava tehničku formu i citatne nedosljednosti. Ne uspoređuje tekst s bazama radova, ne ocjenjuje argumentaciju i nije zamjena za Turnitin, mentora ili povjerenstvo.</p>
+      </details>
+      <details>
+        <summary>Što ako Lekta ne zna moj fakultet?</summary>
+        <p>Nakon učitavanja pokušat će prepoznati profil iz dokumenta, a ti ga možeš potvrditi ili promijeniti. Ako za ustanovu još nema potvrđenih posebnih pravila, i dalje je dostupna opća tehnička provjera bez izmišljanja fakultetskih zahtjeva.</p>
+      </details>
+    </div>
+    <p class="intake-seo__links"><a href="/fakulteti/">Pronađi pravila svog fakulteta</a><span aria-hidden="true">·</span><a href="/alati">Otvori besplatni pribor za akademski rad</a></p>
+  </div>
+</section>
 </main>
 <!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
      copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06). -->
@@ -206,7 +258,7 @@
          u svom podnozju nabraja sve ostale pravne dokumente, pa poveznica vodi na popis, ne u prazno. -->
     <a class="site-footer__sve" href="/privatnost.html">Sve pravno &rarr;</a>
   </nav>
-  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
+  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Tijekom besplatne bete ništa se ne naplaćuje &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
 </div></footer>
 <div class="toast-wrap" id="toastWrap" role="status" aria-live="polite" aria-atomic="false"></div>
 <script type="module" src="/src/routes/intake/main.ts"></script>

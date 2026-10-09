@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * supabase/functions/create-checkout/handler.ts: IZVRSEN put handlera (F18 krug 2).
  *
