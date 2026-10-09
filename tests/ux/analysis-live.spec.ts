@@ -552,7 +552,7 @@ async function ekranRezultata(page: Page): Promise<EkranRezultata> {
   const scoredRing = page.locator('#resultCockpit .cockpit-ring[data-cockpit-score="scored"]');
   if (await scoredRing.count()) {
     const described = await scoredRing.getAttribute('aria-label');
-    const match = /^Tehnička ocjena (\\d+) od (\\d+)$/.exec(described ?? '');
+    const match = /^Tehnička ocjena (\d+) od (\d+)$/.exec(described ?? '');
     expect(match, 'bodovani prsten mora javno izreci mjerodavnu ocjenu i nazivnik').not.toBeNull();
     await expect(scoredRing.locator('.cockpit-ring__core'), 'ocjena se mora dovrsiti prije usporedbe dvaju tokova')
       .toHaveText(match![1], { timeout: 15_000 });
