@@ -97,7 +97,7 @@ Deno.serve(async (req: Request) => {
       });
       if (userOk !== true) return json({ error: 'rate_limited', reason: 'user' }, 429);
     }
-    const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+    const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
     const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
       p_scope: 'profile_rules_ip', p_ip_hash: ipHash, p_daily_cap: IP_DAILY_CAP,
     });

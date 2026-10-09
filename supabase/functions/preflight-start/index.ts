@@ -120,8 +120,7 @@ Deno.serve(async (req: Request) => {
     .gt('created_at', dayAgo);
   if ((userCount ?? 0) >= DAILY_CAP_USER) return json({ error: 'rate_limited' }, 429, origin);
 
-  const ipHash = await hashClientIpSalted(
-    req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
   // AUD-27: atomicna rezervacija per-IP dnevnog slota (0022). Zamjenjuje raniji
   // ne-atomicni COUNT nad preflight_checks.ip_hash. claim_ip_rate_slot radi ON
   // CONFLICT increment WHERE count < cap pod row-lockom, pa nema TOCTOU. Ugovor:

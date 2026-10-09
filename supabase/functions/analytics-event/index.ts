@@ -50,7 +50,7 @@ Deno.serve(async (req: Request) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
-    const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+    const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
     const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
       p_scope: 'analytics',
       p_ip_hash: ipHash,

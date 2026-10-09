@@ -12,20 +12,25 @@
 // salt iz service-role kljuca (hashiran, ne sirovi) kad dedicirani secret fali, pa ip_hash
 // NIKAD nije nesoljen. faculty-request od T84 koristi ovaj isti pomocnik (prije vlastitu derivaciju).
 
+/** Samo `get`, da pomocnik radi i s Headers iz Deno-a i s lazom u testu. */
+export interface HeaderReader { get(name: string): string | null }
+
+/** Gornja granica duljine kljuca: najdulji tekstualni IPv6 zapis ima 45 znakova. */
+const MAX_IP_KEY_LENGTH = 64;
+
 /**
- * IP kljuc iz x-forwarded-for: ZADNJI unos liste, tj. adresa koju je dodao najblizi proxy (gateway).
- * 'unknown' ako header nedostaje ili je prazan.
+ * IP kljuc iz zaglavlja `cf-connecting-ip` koje postavlja Cloudflare ispred Supabase gatewaya.
+ * 'unknown' ako zaglavlja nema, prazno je ili nije kratki tekst.
  *
- * T84 XFF (2026-10-04): mjerenje na stagingu pokazalo je da Supabase gateway CUVA klijentski
- * x-forwarded-for i svoju adresu dodaje iza njega. Prvi unos zato bira klijent: svaki izmisljen prvi
- * unos davao je nov brojac za IP limite (besplatni popravak, source-check, waitlist) i za IP usporedbu
- * u nagradi preporucitelju. Zadnji unos klijent ne moze postaviti. Prije deploya mjerenje na stagingu
- * mora potvrditi i drugu stranu: zadnji unos nije zajednicka unutarnja adresa (inace bi svi korisnici
- * dijelili jedan brojac).
+ * T84 XFF (izmjereno na stagingu 2026-10-09, funkcija diag-headers): gateway PREPISUJE klijentski
+ * x-forwarded-for u oblik "<ip klijenta>,<ip klijenta>, <promjenjivi AWS cvor>". Zadnji unos je dakle
+ * jedan od nekoliko unutarnjih cvorova (isti za mnogo korisnika, i mijenja se), pa je ne valja kao
+ * kljuc (zajednicki brojac za sve). Klijentski `cf-connecting-ip` Cloudflare odbija (greska 1000),
+ * pa tu vrijednost klijent ne moze podmetnuti. x-forwarded-for i x-real-ip se namjerno NE citaju.
  */
-export function clientIpFromForwarded(forwardedFor: string | null): string {
-  const hops = (forwardedFor ?? '').split(',').map((h) => h.trim()).filter(Boolean);
-  return hops.at(-1) ?? 'unknown';
+export function clientIpFromHeaders(headers: HeaderReader): string {
+  const ip = (headers.get('cf-connecting-ip') ?? '').trim();
+  return ip !== '' && ip.length <= MAX_IP_KEY_LENGTH ? ip : 'unknown';
 }
 
 /** sha256(input) kao hex. */
@@ -51,9 +56,9 @@ export async function deriveIpSalt(
   return sha256Hex('lekta-ip-hash-salt|' + serviceRoleKey);
 }
 
-/** sha256(salt + clientIp) kao hex. Ekstrakcija IP-a je fiksna (clientIpFromForwarded). */
-export async function hashClientIp(forwardedFor: string | null, salt: string): Promise<string> {
-  const ip = clientIpFromForwarded(forwardedFor);
+/** sha256(salt + clientIp) kao hex. Ekstrakcija IP-a je fiksna (clientIpFromHeaders). */
+export async function hashClientIp(headers: HeaderReader, salt: string): Promise<string> {
+  const ip = clientIpFromHeaders(headers);
   return sha256Hex(salt + ip);
 }
 
@@ -62,10 +67,10 @@ export async function hashClientIp(forwardedFor: string | null, salt: string): P
  * pa hashira. Pozivatelji NE smiju vise slati goli '' salt (security-02).
  */
 export async function hashClientIpSalted(
-  forwardedFor: string | null,
+  headers: HeaderReader,
   explicitSalt: string | null | undefined,
   serviceRoleKey: string,
 ): Promise<string> {
   const salt = await deriveIpSalt(explicitSalt, serviceRoleKey);
-  return hashClientIp(forwardedFor, salt);
+  return hashClientIp(headers, salt);
 }

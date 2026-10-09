@@ -67,7 +67,7 @@ Deno.serve(async (req: Request) => {
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
     // Rate limit PRIJE upisa. IP hash je prolazan: koristi se za kvotu i nikad ne ulazi u redak.
-    const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+    const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
     const { data: ok } = await admin.rpc('claim_ip_rate_slot', {
       p_scope: 'client_error', p_ip_hash: ipHash, p_daily_cap: DAILY_CAP_IP,
     });

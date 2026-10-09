@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
   if (existing) return jsonResponse({ ok: true, reason: 'already_referred' }, 200);
 
   // Isti kanonski hash (ekstrakcija + izvedeni salt) kao generate-report, inace fraud usporedba pada.
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE_KEY);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE_KEY);
 
   const { error: insertError } = await supabase.from('referral_signups').insert({
     referrer_user_id: codeRow.user_id,

@@ -6,7 +6,7 @@
 // Dvije akcije, razlucene poljem `requestId`:
 //   bez requestId  -> novi upis (submit_faculty_request), vraca { requestId }.
 //   s requestId    -> naknadno vezanje e-maila (attach_email_to_faculty_request), vraca { attached }.
-// ip_hash se racuna SERVERSKI iz zadnjeg unosa x-forwarded-for (nikad sirovi IP, isto kao
+// ip_hash se racuna SERVERSKI iz zaglavlja cf-connecting-ip (nikad sirovi IP, isto kao
 // generate-report), uz TAJNI salt (IP_HASH_SALT ili izveden iz service-role kljuca), kroz _shared/hash-ip.ts.
 // Rate limit i upis su u SQL security-definer funkcijama (0011), ovdje je samo I/O omotac.
 //
@@ -23,8 +23,8 @@ const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
-// IP kljuc i salt dolaze iz _shared/hash-ip.ts (zadnji unos x-forwarded-for, T84 XFF), isti kao u
-// ostalim funkcijama. Prije je ovdje hashiran CIJELI header, pa je svaki izmisljen prvi unos davao nov
+// IP kljuc i salt dolaze iz _shared/hash-ip.ts (cf-connecting-ip, T84 XFF), isti kao u
+// ostalim funkcijama. Prije je ovdje hashiran CIJELI x-forwarded-for, pa je svaki izmisljen unos davao nov
 // prozor rate limita.
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
@@ -82,7 +82,7 @@ Deno.serve(async (req: Request) => {
   const emailIn = String(body.email ?? '').trim();
   const email = emailIn && isEmail(emailIn) ? emailIn.slice(0, 320) : null;
   const source = body.source ? String(body.source).slice(0, 40) : 'upload_flow';
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
 
   const { data: requestId, error } = await admin.rpc('submit_faculty_request', {
     p_faculty_id: facultyId,

@@ -105,6 +105,6 @@ položene sekcije. Ostaje, po vrijednosti:
       praćenih izmjena; `pgNumType` taj čuvar već ima).
 - [ ] **Golden s pravim Wordovim dokumentom** (fixture su sintetički, 4 dijela, STORED): dokazati da
       slike, `numbering.xml`, `settings.xml` i `theme` prolaze bit-identično.
-- [ ] **`x-forwarded-for` provjera prije naplate**: `ip_hash` se računa iz PRVOG zapisa. Ako klijent
-      može utjecati na njega, IP limit (jedina obrana od farmanja anonimnih računa) i referral
-      anti-fraud su zaobilazni. Provjera je jedan poziv s izmišljenim zaglavljem pa usporedba hasha.
+- [ ] **IP kljuc `cf-connecting-ip` na produkciji**: kljuc za `ip_hash` je `cf-connecting-ip` (T84 XFF, mjereno
+      na stagingu 2026-10-09). Prije naplate potvrditi na produkciji: dva poziva s istog stroja s izmisljenim
+      `x-forwarded-for` daju isti hash, poziv s druge mreze razlicit.

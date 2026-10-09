@@ -163,7 +163,7 @@ Deno.serve(async (req: Request) => {
   const dayAgoIso = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
   // Per-IP identitet (AUD-22): soljeni hash klijentskog IP-ja. Racuna se prije capa (full
   // koristi ga za claim_ip_rate_slot) i upisuje se u integrity_checks.ip_hash (stupac 0023).
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
 
   // 3. gate: teaser = besplatno uz dnevni limit; full = trazi aktivan entitlement (Thesis Pass/slot).
   //    (MVP: bilo koji aktivan entitlement otkljucava puni izvjestaj; vezanje iskljucivo na Pass

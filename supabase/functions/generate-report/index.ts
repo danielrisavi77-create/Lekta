@@ -139,7 +139,7 @@ Deno.serve(async (req: Request) => {
     if (friend.granted) decision = await decide();
   }
 
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
   const log = (status: string, slotId: string | null) =>
     admin.from('report_generations').insert({
       user_id: user.id,

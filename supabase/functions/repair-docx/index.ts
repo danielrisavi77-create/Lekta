@@ -446,7 +446,7 @@ Deno.serve(async (req: Request) => {
     } catch (_e) {
       return json({ error: 'invalid_docx' }, 422);
     }
-    const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+    const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
     // Svaki zapis u report_generations broji drugi strop (besplatna kvota ili placeni dnevni), pa se
     // rezervacija u repair_attempt_log tada brise da se isti pokusaj ne broji dvaput (T84 RD-2).
     const log = async (status: string, sId: string | null) => {

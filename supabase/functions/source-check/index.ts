@@ -78,7 +78,7 @@ Deno.serve(async (req: Request) => {
     //
     //    Drugi argument svakog para je IDENTITET za taj scope: uuid korisnika za per-user,
     //    soljeni hash IP-ja za per-IP. Ugovor RPC-a: 'ok' | 'denied_a' (korisnik) | 'denied_b' (IP).
-    const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+    const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
     const { data: slots } = await admin.rpc('claim_two_rate_slots', {
       p_scope_a: 'source_check_user', p_hash_a: user.id, p_cap_a: USER_DAILY_CAP,
       p_scope_b: 'source_check_ip', p_hash_b: ipHash, p_cap_b: IP_DAILY_CAP,
