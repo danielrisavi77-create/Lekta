@@ -257,25 +257,70 @@ export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
       errors.push('word-proof: ' + name + ' mora biti aktivan za sve na powershell runneru');
     }
   }
-  const denoScript = active(deno.run);
-  const pythonScript = active(python.run);
-  if (!denoScript.includes('Get-Command deno -ErrorAction Stop')
-    || !denoScript.includes('deno --version')
-    || !denoScript.includes("$verzija -notmatch '^deno 2[.]9[.]7 '")
-    || !denoScript.includes('throw ')
-    || /if\s*\(\s*\$false\s*\)/i.test(denoScript)) {
-    errors.push('word-proof: Deno preflight ne izvodi verzijsku provjeru uz fail-closed');
-  }
-  if (!pythonScript.includes('Get-Command python -ErrorAction Stop')
-    || !pythonScript.includes('python --version')
-    || !pythonScript.includes("$verzija -notmatch '^Python 3[.]14[.]3$'")
-    || !pythonScript.includes('python -m venv $venv')
-    || !pythonScript.includes('GITHUB_PATH')
-    || !pythonScript.includes('throw ')
-    || /if\s*\(\s*\$false\s*\)/i.test(pythonScript)) {
-    errors.push('word-proof: Python preflight ne izvodi provjeru verzije i izoliranog okruzenja');
-  }
-  if (release.shell !== 'powershell' || release.if !== undefined || !active(release.run).includes('node @gate')) {
+  // Fail-closed tocna aktivna PowerShell linija po linija: 
+  // za promjene u Word runneru zahtijevamo eksplicitan review novog ugovora.
+  // Ovim se hvata exit/return prije garda, here-string, komentirana naredba i prazni install korak.
+  const expectedScripts: readonly string[][] = [
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "$deno = Get-Command deno -ErrorAction Stop",
+          "$verzija = deno --version | Select-Object -First 1",
+          "if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^deno 2[.]9[.]7 ') {",
+          "throw \"Ocekivan je Deno 2.9.7; pronadjeno: $verzija\"",
+          "}",
+          "Write-Output \"Deno $verzija ($($deno.Source))\""
+      ],
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "$python = Get-Command python -ErrorAction Stop",
+          "$verzija = python --version",
+          "if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^Python 3[.]14[.]3$') {",
+          "throw \"Ocekivan je Python 3.14.3; pronadjeno: $verzija\"",
+          "}",
+          "$venv = Join-Path $env:RUNNER_TEMP 'lekta-word-proof-venv'",
+          "python -m venv $venv",
+          "if ($LASTEXITCODE -ne 0) { throw \"Kreiranje Python okruzenja nije uspjelo ($LASTEXITCODE).\" }",
+          "[IO.File]::AppendAllText($env:GITHUB_PATH, ((Join-Path $venv 'Scripts') + [Environment]::NewLine))",
+          "Write-Output \"Python $verzija ($($python.Source)); venv $venv\""
+      ],
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "python -m pip install python-docx==1.2.0 lxml==6.1.3",
+          "if ($LASTEXITCODE -ne 0) { throw \"pip install nije uspio ($LASTEXITCODE).\" }",
+          "npx playwright install chromium",
+          "if ($LASTEXITCODE -ne 0) { throw \"playwright install nije uspio ($LASTEXITCODE).\" }"
+      ],
+      [
+          "$ErrorActionPreference = 'Continue'",
+          "$log = Join-Path $env:RUNNER_TEMP 'release-check.log'",
+          "$gate = @('scripts/with-gate-lock.mjs', 'release:check', '--', 'node', 'scripts/release-check.mjs')",
+          "if ($env:RAZINE -eq 'sve') {",
+          "node @gate 2>&1 | Tee-Object -FilePath $log",
+          "} elseif ($env:RAZINE -eq 'word') {",
+          "node @gate '--only=word,word-worst,word-corpus,word-toc' 2>&1 | Tee-Object -FilePath $log",
+          "} else {",
+          "throw \"Nepoznata vrijednost razine: $env:RAZINE\"",
+          "}",
+          "$kod = $LASTEXITCODE",
+          "$trajno = Join-Path $env:LOCALAPPDATA 'lekta-word-proof\\logs'",
+          "New-Item -ItemType Directory -Force -Path $trajno | Out-Null",
+          "Copy-Item $log (Join-Path $trajno \"$env:GITHUB_RUN_ID.log\")",
+          "exit $kod"
+      ]
+  ];
+  const scriptProblems = [
+    'word-proof: Deno preflight ne izvodi verzijsku provjeru uz fail-closed',
+    'word-proof: Python preflight ne izvodi provjeru verzije i izoliranog okruzenja',
+    'word-proof: lxml/Playwright instalacija nije aktivna ili nije vezana uz fail-closed',
+    'word-proof: release:check je preskocen ili ne izvrsava postojeci gate',
+  ];
+  [deno, python, install, release].forEach((step, index) => {
+    const actual = active(step.run).split('\n');
+    if (JSON.stringify(actual) !== JSON.stringify(expectedScripts[index])) {
+      errors.push(scriptProblems[index]);
+    }
+  });
+  if (release.shell !== 'powershell' || release.if !== undefined || release.uses) {
     errors.push('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
   }
   return errors;
