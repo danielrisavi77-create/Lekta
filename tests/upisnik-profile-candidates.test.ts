@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import upisnik from '../data/programs/drafts/upisnik.json';
@@ -289,7 +290,7 @@ describe('Upisnik profile decision inventory', () => {
     expect(new Set(report.programs.map((program) => program.programCode)).size).toBe(1312);
     expect(report.programs).toHaveLength(1312);
     const byCode = new Map(report.programs.map((program) => [program.programCode, program]));
-    for (const code of ['109', '4830', '85', '52', '246', '247', '248', '249', '250', '251', '252', '253', '254',
+    for (const code of ['109', '4830', '85', '246', '247', '248', '249', '250', '251', '252', '253', '254',
       '857', '865', '868', '869', '870', '872', '889', '1805']) {
       expect(byCode.get(code)?.profileDecisionEvidence, code).toEqual([]);
       expect(byCode.get(code)?.remainingHold?.reason, code).toBeTruthy();
@@ -2488,7 +2489,7 @@ describe('Upisnik heuristic guard redesign', () => {
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 
-  it('preserves all 373 evidence links and every coverage status in the committed inventory', () => {
+  it('preserves all 374 evidence links and every coverage status in the committed inventory', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
       profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
@@ -2499,12 +2500,14 @@ describe('Upisnik heuristic guard redesign', () => {
     // 341 veza nakon #182 plus 13 AGR diplomskih programa po pravilu o najnovijem izdanju (2026-09-27)
     // plus 10 EFOS programa kroz izricitu izjavu o opsegu iz izvora profila (#206, 2026-09-28)
     // plus 9 iz pilota kategorije A (2026-10-03): 6 EFST sveucilisnih (izjava o opsegu, https izvor) i 3 FER diplomska
-    // (stranica studija kao dokaz identiteta po vlasnikovu pravilu za jedini profil sastavnice). FER 52 ostaje na
-    // autorskom holdu; EFST 938, 939 i 1770 ostaju na holdu (Codex #284: izjava o opsegu ne imenuje te programe).
-    expect(links(report.programs)).toHaveLength(373);
+    // (stranica studija kao dokaz identiteta po vlasnikovu pravilu za jedini profil sastavnice). EFST 938, 939 i 1770
+    // ostaju na holdu (Codex #284: izjava o opsegu ne imenuje te programe).
+    // plus FER 52 (2026-10-05): vlasnik je 2026-10-04 prihvatio izvor profila fer-zavrsni iz 2013., pa autorski hold
+    // otpada i 52 ide pravilom jedinog profila kroz stranicu prijediplomskog studija.
+    expect(links(report.programs)).toHaveLength(374);
     const pilot = new Map(report.programs.filter((row) => row.profileDecisionEvidence.some((e) => /^(efst|fer)-/u.test(e.profileId)))
       .map((row) => [row.programCode, row.profileDecisionEvidence.map((e) => e.profileId)]));
-    for (const [code, profileId] of [['375', 'fer-diplomski'], ['392', 'fer-diplomski'], ['393', 'fer-diplomski'],
+    for (const [code, profileId] of [['52', 'fer-zavrsni'], ['375', 'fer-diplomski'], ['392', 'fer-diplomski'], ['393', 'fer-diplomski'],
       ['261', 'efst-zavrsni'], ['262', 'efst-zavrsni'], ['263', 'efst-zavrsni'],
       ['591', 'efst-diplomski'], ['592', 'efst-diplomski'], ['1807', 'efst-diplomski']] as const) {
       expect(pilot.get(code)).toEqual([profileId]);

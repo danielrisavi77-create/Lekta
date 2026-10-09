@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import {
   FAZA_NATPIS, phaseFor, SVA_STANJA, SVE_FAZE, transition, viewFor,

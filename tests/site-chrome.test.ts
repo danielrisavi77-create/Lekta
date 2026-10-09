@@ -37,6 +37,7 @@ import {
   SITE_CHROME_PLATE_EMPTY,
 } from '../src/shared/site-chrome';
 import { unitKratica } from '../src/coverage/site-stats';
+import { BETA_FOOTER_NOTE } from '../src/legal/legal-content';
 import {
   DESK_NO_WORK,
   INK_CLASS,
@@ -1079,6 +1080,8 @@ describe('Z15 podnozje: pravni minimum', () => {
     expect(foot).toContain('Sve pravno');
     expect(foot).toContain('Automatska provjera je lokalna');
     expect(foot).toContain('Nije provjera plagijata ni službena potvrda fakulteta');
+    // T86 (kriterij 6 T81): podnozje kaze da se tijekom besplatne bete nista ne naplacuje.
+    expect(foot).toContain(BETA_FOOTER_NOTE);
     // JEDNA recenica, ne odlomak: podnozje nije mjesto za odricanje od odgovornosti u cijelosti.
     expect((foot.match(/<p class="site-footer__nota">/g) ?? []).length).toBe(1);
   });
@@ -1188,7 +1191,9 @@ describe('Z15 drugi krug: puno podnozje', () => {
     expect(PREDLOZAK).not.toBeNull();
     expect(PREDLOZAK!.stupci.map((c) => c.naziv)).toEqual(['Proizvod', 'Pribor', 'Pravno']);
     expect(PREDLOZAK!.stupci.flatMap((c) => c.stavke)).toHaveLength(19);
-    expect(PREDLOZAK!.granice).toHaveLength(4);
+    // T86: peta granica je recenica besplatne bete (predlozak i obje stranice).
+    expect(PREDLOZAK!.granice).toHaveLength(5);
+    expect(PREDLOZAK!.granice).toContain(BETA_FOOTER_NOTE);
     expect(PREDLOZAK!.moto).toContain('Mjeri, ne piše.');
   });
 

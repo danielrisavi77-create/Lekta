@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za `npm run orphan-scan`.
  *

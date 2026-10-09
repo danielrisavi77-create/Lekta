@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden testovi za STEM profile s brojcanim citiranjem: fer (FER),
  * fsb (Strojarstvo i brodogradnja), ttf (Tekstilno-tehnoloski), grad (Gradevinski).

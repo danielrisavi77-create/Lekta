@@ -12,7 +12,7 @@
  * Core (URL gradnja, slicnost naslova, verdikt iz kandidata) je CIST i mrezno-neovisan; mrezni
  * fetch je INJEKTIRAN (`fetchImpl`) pa je sve testabilno bez prave mreze.
  */
-import type { CitationInput } from '../tools/citation.ts';
+import { parseAuthors, type CitationInput } from '../tools/citation.ts';
 import { normalize } from '../utils/helpers.ts';
 
 export type ExistenceVerdict = 'found' | 'weak' | 'not-found' | 'not-indexed' | 'unchecked';
@@ -25,6 +25,59 @@ export interface ExistenceResult {
   matchedTitle?: string;
   /** true kad je DOI razrijesen (200) kroz CrossRef works/<doi>. */
   doiResolved?: boolean;
+  /**
+   * Oznaka povucenog rada ili izraza zabrinutosti iz Crossref `updated-by` (T98, issue #219). Postoji
+   * SAMO uz verdikt `found`; odsutnost NIJE tvrdnja "nije povuceno", nego "nepoznato".
+   */
+  retraction?: RetractionInfo;
+}
+
+export interface RetractionInfo {
+  kind: 'retracted' | 'partial' | 'concern';
+  /** `retraction-watch` ili `publisher` (kako ga Crossref imenuje). */
+  source: string;
+  /** DOI obavijesti o povlacenju ili zabrinutosti. */
+  noticeDoi: string;
+  /** Datum obavijesti (YYYY-MM-DD) ili prazan niz. */
+  date: string;
+}
+
+const RETRACTED_TYPES = new Set(['retraction', 'withdrawal', 'removal']);
+const CONCERN_TYPES = new Set(['expression_of_concern']);
+
+/**
+ * Povlacenje ili zabrinutost iz Crossref `works` zapisa. Cita ISKLJUCIVO `updated-by` (zapis rada koji je
+ * azuriran), nikad `update-to` (zapis same obavijesti), da se obavijest ne oznaci kao povucen rad.
+ * Djelomicno povlacenje (`partial_retraction`) ostaje zasebno. Ispravci (`correction`, `erratum`)
+ * se ignoriraju. Potpuno povlacenje ima prednost pred djelomicnim, zatim zabrinutoscu.
+ * Nepoznat ili nevaljan oblik daje `null`, nikad iznimku.
+ */
+export function retractionFromWork(message: unknown): RetractionInfo | null {
+  try {
+    const updatedBy = (message as { 'updated-by'?: unknown } | null)?.['updated-by'];
+    if (!Array.isArray(updatedBy)) return null;
+    let concern: RetractionInfo | null = null;
+    let partial: RetractionInfo | null = null;
+    for (const u of updatedBy) {
+      if (!u || typeof u !== 'object') continue;
+      const e = u as { type?: unknown; source?: unknown; DOI?: unknown; updated?: { 'date-time'?: unknown; 'date-parts'?: unknown } };
+      const type = typeof e.type === 'string' ? e.type.toLowerCase() : '';
+      const kind = RETRACTED_TYPES.has(type) ? 'retracted' : type === 'partial_retraction' ? 'partial' : CONCERN_TYPES.has(type) ? 'concern' : null;
+      if (!kind) continue;
+      const dt = e.updated?.['date-time'];
+      const dateParts = e.updated?.['date-parts'];
+      const parts = Array.isArray(dateParts) ? (dateParts as unknown[])[0] : null;
+      const date = typeof dt === 'string' ? dt.slice(0, 10)
+        : Array.isArray(parts) && parts.every((n) => typeof n === 'number') ? (parts as number[]).map((n, i) => (i ? String(n).padStart(2, '0') : String(n))).join('-') : '';
+      const info: RetractionInfo = { kind, source: typeof e.source === 'string' ? e.source : '', noticeDoi: typeof e.DOI === 'string' ? e.DOI : '', date };
+      if (kind === 'retracted') return info;
+      if (kind === 'partial') partial ??= info;
+      else concern ??= info;
+    }
+    return partial ?? concern;
+  } catch {
+    return null;
+  }
 }
 
 // Pragovi uskladjeni s m2_references.py (isti CrossRef bibliografski put): >=0.80 pouzdano, >=0.60 slab.
@@ -89,7 +142,8 @@ export function crossrefQueryUrl(inp: Partial<CitationInput>, mailto?: string): 
   const params = new URLSearchParams();
   params.set('query.bibliographic', biblio);
   params.set('rows', '5');
-  params.set('select', 'title,author,issued,DOI');
+  // `updated-by` nosi oznaku povucenog rada (T98); select ga prihvaca (snimka tests/fixtures/crossref/select-updated-by.json).
+  params.set('select', 'title,author,issued,DOI,updated-by');
   if (mailto) params.set('mailto', mailto);
   return `${CROSSREF_BASE}?${params.toString()}`;
 }
@@ -97,9 +151,11 @@ export function crossrefQueryUrl(inp: Partial<CitationInput>, mailto?: string): 
 // --- Verdikt iz CrossRef kandidata (cisto) ------------------------------------
 
 interface CrossrefItem {
+  author?: Array<{ family?: string; given?: string }>;
   title?: string[];
   issued?: { 'date-parts'?: number[][] };
   DOI?: string;
+  'updated-by'?: unknown;
 }
 
 function itemYear(item: CrossrefItem): number | null {
@@ -115,11 +171,37 @@ export function scoreCandidate(inp: Partial<CitationInput>, item: CrossrefItem):
   return Math.min(1, sim + (yearOk ? 0.05 : 0));
 }
 
+/** Za identitet cuvamo slova (ukljucujuci grcka), dijakritike, interpunkciju i granice rijeci.
+ * ASCII normalizacija fuzzy skora ovdje bi izjednacila razlicite radove. */
+function identityText(s: unknown): string {
+  return typeof s === 'string' ? s.normalize('NFC').toLowerCase().replace(/\s+/gu, ' ').trim() : '';
+}
+
+/** Strozi identitet SAMO za upozorenje; fuzzy verdikt postojanja ostaje nepromijenjen.
+ * Potrebni su puni naslov, tocna godina i svi puni autori. Inicijali i nepotpuni metapodaci
+ * ostaju nepoznati. Crossref moze dodati RETRACTED: i inline HTML stvarnom naslovu rada. */
+function exactWorkIdentity(inp: Partial<CitationInput>, item: CrossrefItem): boolean {
+  if (!item || typeof item !== 'object') return false;
+  const title = (s: string | undefined) => identityText((typeof s === 'string' ? s : '').replace(/<[^>]*>/g, '').replace(/^\s*retracted(?: article)?\s*:\s*/i, ''));
+  if (!title(inp.title) || title(inp.title) !== title(item.title?.[0])) return false;
+  const year = String(inp.year || '').trim();
+  if (!/^\d{4}$/.test(year) || Number(year) !== itemYear(item)) return false;
+  const authors = parseAuthors(inp.authors);
+  if (!authors.length || !Array.isArray(item.author) || authors.length !== item.author.length) return false;
+  const fullName = (s: string | undefined) => typeof s === 'string' && !!s && s.split(/[\s.-]+/).filter(Boolean).every((part) => part.length > 1);
+  return authors.every((a, i) => {
+    const b = item.author![i];
+    if (!b || typeof b !== 'object' || typeof b.family !== 'string') return false;
+    return fullName(a.first) && fullName(b.given) && !!identityText(a.last) && identityText(a.last) === identityText(b.family)
+      && identityText(a.first) === identityText(b.given);
+  });
+}
+
 /** Najbolji kandidat -> verdikt (found/weak/not-found). looksCroatian spust ide u verifyReference. */
 export function verdictFromCandidates(
   inp: Partial<CitationInput>,
   items: CrossrefItem[],
-): { verdict: 'found' | 'weak' | 'not-found'; score: number; matchedTitle?: string } {
+): { verdict: 'found' | 'weak' | 'not-found'; score: number; matchedTitle?: string; retraction?: RetractionInfo } {
   if (!inp.title) return { verdict: 'not-found', score: 0 };
   let best: CrossrefItem | null = null, bestScore = 0;
   for (const it of items || []) {
@@ -127,7 +209,14 @@ export function verdictFromCandidates(
     if (s > bestScore) { bestScore = s; best = it; }
   }
   const matchedTitle = best?.title?.[0];
-  if (bestScore >= FOUND_MIN) return { verdict: 'found', score: bestScore, matchedTitle };
+  if (bestScore >= FOUND_MIN) {
+    // Oznaka trazi found I pouzdan, nedvosmislen identitet; fuzzy found sam nije dovoljan.
+    const matching = (items || []).filter((it) => exactWorkIdentity(inp, it));
+    const workDois = new Set(matching.map((it) => normalizeDoi(typeof it.DOI === 'string' ? it.DOI : '').toLowerCase()).filter(Boolean));
+    const retraction = best && exactWorkIdentity(inp, best) && workDois.size === 1
+      && matching.every((it) => typeof it.DOI === 'string' && !!normalizeDoi(it.DOI)) ? retractionFromWork(best) : null;
+    return { verdict: 'found', score: bestScore, matchedTitle, ...(retraction ? { retraction } : {}) };
+  }
   if (bestScore >= WEAK_MIN) return { verdict: 'weak', score: bestScore, matchedTitle };
   return { verdict: 'not-found', score: bestScore, matchedTitle };
 }
@@ -157,7 +246,17 @@ export async function verifyReference(inp: Partial<CitationInput>, opts: VerifyO
   if (doi) {
     try {
       const res = await fetchImpl(crossrefWorksUrl(doi), { headers, signal: opts.signal });
-      if (res.ok) return { verdict: 'found', doiResolved: true };
+      if (res.ok) {
+        // Tijelo se cita samo radi oznake povlacenja; neispravno tijelo ne mijenja verdikt `found`.
+        let retraction: RetractionInfo | null = null;
+        try {
+          const message = (await res.json())?.message;
+          if (typeof message?.DOI === 'string' && normalizeDoi(message.DOI).toLowerCase() === doi.toLowerCase()) {
+            retraction = retractionFromWork(message);
+          }
+        } catch { retraction = null; }
+        return { verdict: 'found', doiResolved: true, ...(retraction ? { retraction } : {}) };
+      }
       if (res.status === 404) return { verdict: 'not-found', doiResolved: false };
       return { verdict: 'unchecked' };
     } catch {
@@ -176,7 +275,7 @@ export async function verifyReference(inp: Partial<CitationInput>, opts: VerifyO
     if (v.verdict === 'not-found' && looksCroatian(inp)) {
       return { verdict: 'not-indexed', score: v.score };
     }
-    return { verdict: v.verdict, score: v.score, matchedTitle: v.matchedTitle };
+    return { verdict: v.verdict, score: v.score, matchedTitle: v.matchedTitle, ...(v.retraction ? { retraction: v.retraction } : {}) };
   } catch {
     return { verdict: 'unchecked' };
   }
@@ -195,7 +294,7 @@ const sessionCache = new Map<string, ExistenceResult>();
 
 function cacheKey(inp: Partial<CitationInput>): string {
   const doi = normalizeDoi(inp.doi);
-  return doi ? `doi:${doi}` : `t:${normalize(inp.title)}|y:${(inp.year || '').trim()}`;
+  return doi ? `doi:${doi.toLowerCase()}` : JSON.stringify([identityText(inp.title), (inp.year || '').trim(), (inp.authors || '').trim()]);
 }
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));

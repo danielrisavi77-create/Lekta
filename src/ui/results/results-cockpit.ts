@@ -14,6 +14,20 @@ import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
 import { repairPlanHtml } from './repair-plan-view';
+import type { LiveHandle, LiveStanje, mountResultLive } from '../result-live/result-live';
+
+/** Modul Z34 kad je jednom stigao: sljedeca crtanja ga montiraju odmah, bez novog cekanja. */
+let montazaZ34: typeof mountResultLive | null = null;
+const ROK_Z34_MS = 6_000;
+const resultKeys = new WeakMap<object, string>();
+let nextResultKey = 0;
+export function resultAnalysisKey(result: unknown): string {
+  if ((typeof result !== 'object' && typeof result !== 'function') || result === null) return `result-${++nextResultKey}`;
+  const object = result as object;
+  let key = resultKeys.get(object);
+  if (!key) { key = `result-${++nextResultKey}`; resultKeys.set(object, key); }
+  return key;
+}
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
 export type ResultsCockpitAction =
@@ -52,6 +66,12 @@ export interface ResultsCockpitDesk {
    * `app.ts` je na svom budzetu, i klasifikacija pripada sloju rezultata koji vec drzi nalaze.
    */
   readonly planItems?: readonly PlanItemInput[];
+  /**
+   * REZULTAT: SVE U JEDNOM (ALIGNMENT Z34). Kad ga `app.ts` preda i presuda nije `clear`, stol Z8
+   * zamjenjuje lijeni modul `../result-live/result-live` (jezicci, stranica rada, hrpa kartica,
+   * traka stranica, ladica plana). Bez njega (testovi, stari pozivatelji) stol ostaje Z8.
+   */
+  readonly live?: { readonly preview: unknown; readonly storedPages: unknown; readonly checks?: unknown; readonly analysisKey?: string };
 }
 
 export interface ResultsCockpitOptions {
@@ -297,13 +317,44 @@ export function resultRendererFor(doc: Document): ResultsRenderer {
 export function renderResultsCockpit(mount: HTMLElement, model: VisualResultModel, options: ResultsCockpitOptions): void {
   // Stari stol se odbacuje PRIJE nego `innerHTML` odnese njegov DOM: inace bi mu kasni
   // `mountDocument` mogao razapeti slusace po elementima kojih vise nema.
-  const drzac = mount as HTMLElement & { _desk?: DeskHandle | null };
+  // `_rlPao` pamti rezultat za koji je Z34 pao (rok, uvoz, montaza): taj rezultat se do kraja crta
+  // kao Z8, bez novog praznog stola pri svakoj radnji nad nalazom. Novi rezultat pokusava ponovno.
+  const drzac = mount as HTMLElement & {
+    _desk?: DeskHandle | null; _live?: LiveHandle | null; _rlStanje?: LiveStanje; _rlToken?: number;
+    _rlPao?: { readonly kljuc: string; readonly razlog: 'rok' | 'uvoz' | 'montaza' };
+    _rlUvoz?: { readonly kljuc: string; readonly rok: number; timer: number };
+  };
   // POLOZAJ PREZIVLJAVA ponovnu montazu; vidi `startIndex` u `desk-mount.ts`.
   const prethodniIndex = drzac._desk?.index ?? 0;
   drzac._desk?.dispose();
   drzac._desk = null;
+  // Z34: stanje stola (filtar, odabrani nalaz, plan) prezivljava ponovnu montazu isto kao polozaj Z8.
+  if (drzac._live) drzac._rlStanje = drzac._live.stanje();
+  drzac._live?.dispose();
+  drzac._live = null;
+  delete mount.dataset.rlPending;
+  const rlToken = (drzac._rlToken ?? 0) + 1;
+  drzac._rlToken = rlToken;
   const stol = options.desk && options.desk.items.length ? options.desk : null;
   const status = statusCopy(model);
+  const kljuc = stol?.live?.analysisKey || `${model.header.documentName}|${model.score.kind === 'scored' ? model.score.value : '-'}`;
+  const prethodniUvoz = drzac._rlUvoz;
+  if (prethodniUvoz && prethodniUvoz.kljuc !== kljuc) {
+    mount.ownerDocument.defaultView?.clearTimeout(prethodniUvoz.timer);
+    delete drzac._rlUvoz;
+  }
+  const pao = drzac._rlPao?.kljuc === kljuc ? drzac._rlPao.razlog : null;
+  const liveRequested = stol?.live && status.tone !== 'clear' && !pao ? stol.live : null;
+  // Dok modul ceka, prikaz ostaje potpuni Z8; Z34 preuzima tek kad je modul spreman.
+  const live = liveRequested && montazaZ34 ? liveRequested : null;
+  if ((!liveRequested || live) && drzac._rlUvoz?.kljuc === kljuc) {
+    mount.ownerDocument.defaultView?.clearTimeout(drzac._rlUvoz.timer);
+    delete drzac._rlUvoz;
+  }
+  // `data-rl-povratak` kaze ZASTO je stol Z8 iako je Z34 trazen; bez njega test ne bi znao je li
+  // mjerio povratak ili obican Z8.
+  if (pao && stol?.live && status.tone !== 'clear') mount.dataset.rlPovratak = pao;
+  else delete mount.dataset.rlPovratak;
   const action = primaryAction(model, options.repairAvailable);
   const advancedOpen = options.advancedOpen === true;
   const sazetak = findingSummary(model.signals, model.score, model.readiness.authoritative, options.repairAvailable);
@@ -372,16 +423,20 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '</section>',
     // STOL ZAMJENJUJE POPIS, ne stoji uz njega. Tri kartice i stol odgovaraju na isto pitanje
     // ("sto prvo"), pa bi jedno ispod drugoga bilo dvostruko citanje istih nalaza.
-    '<section class="cockpit-priority', stol ? ' cockpit-priority--stol' : '', '" aria-labelledby="cockpitPriorityTitle">',
+    '<section class="cockpit-priority', stol ? ' cockpit-priority--stol' : '', live ? ' cockpit-priority--live' : '', '" aria-labelledby="cockpitPriorityTitle">',
     '<div class="cockpit-section-heading"><span class="cockpit-kicker">', stol ? 'Korektorski stol' : 'Prvo pogledajte', '</span>',
     '<h2 id="cockpitPriorityTitle">', stol ? 'Nalaz uz dokument' : 'Najvažniji nalazi', '</h2></div>',
-    stol ? '<div data-desk-host></div>' : priorityFindingsHtml(model.findings.top, options.repairAvailable),
+    // Z34 dobiva isti domacin (`data-desk-host`), da ulaz "ima li stola" ostane jedan ugovor.
+    stol
+      ? `<div data-desk-host${live ? ' data-rl-host' : ''}></div>`
+      : priorityFindingsHtml(model.findings.top, options.repairAvailable),
     '</section>',
     // SEKUNDARNI LISTOVI: DNA i kategorije u JEDNOM redu ispod stola, prigusenim tonom. Oba su
     // pregled, ne radnja, pa ne smiju tezinom konkurirati presudi i stolu iznad.
     '<div class="cockpit-secondary" data-cockpit-secondary>',
-    options.documentDna ? documentDnaHtml(options.documentDna) : '',
-    categorySummaryHtml(model.categories),
+    // Z34: kategorije su jezicci, a DNA je traka stranica, pa ih stol nosi sam.
+    options.documentDna && !live ? documentDnaHtml(options.documentDna) : '',
+    live ? '' : categorySummaryHtml(model.categories),
     // "Sve provjere (N)" zamjenjuje gumb "Detalji provjere" preko cijele sirine: ista meta
     // (`data-cockpit-advanced`), ali oblik poveznice, jer je to izlaz za manjinu. N je STVARAN
     // broj provjera iz modela; fiksna brojka bi lagala na svakom drugom profilu.
@@ -399,7 +454,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
 
   if (stol) {
     const domacin = mount.querySelector<HTMLElement>('[data-desk-host]');
-    if (domacin) {
+    const montirajStol = (): void => {
+      if (!domacin) return;
       const plan = buildRepairPlan(stol.planItems ?? [], model.findings.document, options.repairAvailable);
       drzac._desk = mountDesk(domacin, {
         items: stol.items,
@@ -413,14 +469,82 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
         mountDocument: (host, signal) => stol.mountDocument(host, signal),
         onAction: (action, opener) => opener ? options.onAction?.(action, opener) : options.onAction?.(action),
       });
-    }
+    };
+    if (liveRequested && domacin) {
+      // Z8 se montira sinkrono i ostaje aktivan; sva orkestracija Z34 živi u lijenom modulu.
+      let uvoz = drzac._rlUvoz?.kljuc === kljuc ? drzac._rlUvoz : null;
+      if (!live) {
+        montirajStol();
+        mount.dataset.rlPending = 'true';
+        if (!uvoz) {
+          const noviUvoz = { kljuc, rok: Date.now() + ROK_Z34_MS, timer: 0 };
+          drzac._rlUvoz = noviUvoz;
+          noviUvoz.timer = mount.ownerDocument.defaultView?.setTimeout(() => {
+            if (drzac._rlUvoz !== noviUvoz) return;
+            noviUvoz.timer = 0;
+            if (drzac._rlPao?.kljuc === kljuc) return;
+            drzac._rlPao = { kljuc, razlog: 'rok' };
+            delete mount.dataset.rlPending;
+            mount.dataset.rlPovratak = 'rok';
+          }, ROK_Z34_MS) ?? 0;
+          uvoz = noviUvoz;
+        }
+      }
+      void import('./results-cockpit-live').then(({ upgradeResultCockpit }) => {
+        const istekao = drzac._rlPao?.kljuc === kljuc || (uvoz !== null && Date.now() >= uvoz.rok);
+        if (drzac._rlToken !== rlToken || istekao) {
+          // Kasni prvi import smije ucitati Z34 za buduci rezultat, ali ne preuzeti ovaj Z8.
+          upgradeResultCockpit({
+            mount, domacin, model, options, desk: stol, live: liveRequested, key: kljuc,
+            previousIndex: prethodniIndex, ceiling: strop, loadedMount: montazaZ34,
+            isCurrent: () => false,
+            setLoadedMount: (mountFn) => { montazaZ34 = mountFn; },
+            rerender: () => renderResultsCockpit(mount, model, options),
+            cacheOnly: true,
+          });
+          return;
+        }
+        upgradeResultCockpit({
+          mount,
+          domacin,
+          model,
+          options,
+          desk: stol,
+          live: liveRequested,
+          key: kljuc,
+          previousIndex: prethodniIndex,
+          ceiling: strop,
+          loadedMount: montazaZ34,
+          timeoutMs: uvoz ? Math.max(0, uvoz.rok - Date.now()) : ROK_Z34_MS,
+          isCurrent: () => drzac._rlToken === rlToken && drzac._rlPao?.kljuc !== kljuc,
+          setLoadedMount: (mountFn) => { montazaZ34 = mountFn; },
+          rerender: () => renderResultsCockpit(mount, model, options),
+        });
+      }, () => {
+        if (drzac._rlToken !== rlToken) return;
+        if (drzac._rlPao?.kljuc === kljuc) return;
+        const razlog = uvoz && Date.now() >= uvoz.rok ? 'rok' : 'uvoz';
+        drzac._rlPao = { kljuc, razlog };
+        if (uvoz && drzac._rlUvoz === uvoz) {
+          mount.ownerDocument.defaultView?.clearTimeout(uvoz.timer);
+          delete drzac._rlUvoz;
+        }
+        delete mount.dataset.rlPending;
+        mount.dataset.rlPovratak = razlog;
+      });
+    } else montirajStol();
   }
+  // Sinkrona montaza Z34 koja je pala vec je nacrtala potpun Z8 (ugnijezdeni poziv) i povezala ga;
+  // vezati slusace i ovdje znacilo bi da svaki klik salje radnju dvaput.
+  if (drzac._rlToken !== rlToken) return;
 
   // DNA salje iste akcije kao kartice nalaza, pa ljuska ne mora znati odakle je klik dosao.
   bindDocumentDna(mount, (action) => options.onAction?.(action));
 
   mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.addEventListener('click', (event) => {
-    if (action) options.onAction?.(action, event.currentTarget as HTMLElement);
+    // Z34: kad je korisnik promijenio plan na stolu, ulaz u popravak nosi TAJ odabir (T09 ugovor).
+    const odabir = action?.kind === 'repair-safe' ? drzac._live?.odabir() ?? null : null;
+    if (action) options.onAction?.(action.kind === 'repair-safe' && odabir ? { ...action, ruleIds: odabir } : action, event.currentTarget as HTMLElement);
     else options.onAdvancedToggle?.(true);
   });
   mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.addEventListener('click', () => options.onAction?.({ kind: 'open-findings' }));

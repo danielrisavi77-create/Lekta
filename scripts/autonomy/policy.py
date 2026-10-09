@@ -46,7 +46,8 @@ CONTROL_PATH_PREFIXES = (
     "docs/agents/PROJECT_RULES.md",
     "data/",
     "supabase/",
-    "tests/gate-mutations.test.ts",
+    # Prefiks, ne tocno ime: T106 dijeli mutacije u vise datoteka tests/gate-mutations-*.test.ts.
+    "tests/gate-mutations",
     "tests/ui-module-budget.test.ts",
     "package.json",
     "package-lock.json",

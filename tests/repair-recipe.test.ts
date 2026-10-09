@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift guard za pisani recept popravka (docs/REPAIR_RECIPE.md, docs/generated/repair-recipe.json).
  *

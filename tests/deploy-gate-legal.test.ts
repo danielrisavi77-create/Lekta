@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Deploy gate nad pravnim identitetom pruzatelja: DVA praga, ne jedan.
  *

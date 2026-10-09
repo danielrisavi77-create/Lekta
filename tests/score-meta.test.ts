@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Testovi scoreMeta (BL-P0-06-2, ux-04 preobecavanje spremnosti). Oznaka razreda mora govoriti o
  * USKLADJENOSTI S PROFILOM (tehnicka provjera), a NE davati predajni verdikt ("spremno/nije spremno

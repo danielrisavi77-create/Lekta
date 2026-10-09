@@ -124,8 +124,8 @@ export function siteChromeProfileNote(): string {
   return `${n.toLocaleString('hr-HR')} ${hrPlural(n, 'profil', 'profila', 'profila')}`;
 }
 
-/** Natpis na plocici bez odabranog profila; copy predlozak nema, pa je ovo doslovna odluka F8. */
-export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
+/** Bez potvrđenog profila traka je status, ne lažni aktivni CTA; profil se otkriva iz rada. */
+export const SITE_CHROME_PLATE_EMPTY = 'Profil: automatski';
 
 /**
  * NATPIS MJEDENE PLOCICE (F8, odluka 2026-09-23): "FPZG · Dipl.".

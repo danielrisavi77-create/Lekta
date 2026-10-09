@@ -11,6 +11,8 @@ export const ANALYTICS_DATA_KEYS: ReadonlySet<string> = new Set([
   'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount', 'kind',
   'manual', 'count', 'score', 'demo', 'method', 'product', 'ruleId',
   'changes', 'stored', 'ms', 'auto', 'assisted', 'unknown', 'structureGaps',
+  // T98: broj povucenih radova u provjeri postojanja izvora (`references_existence_checked`).
+  'retracted',
 ] as const);
 
 export function sanitizeAnalyticsEventData(input: unknown): Record<string, string | number | boolean> {

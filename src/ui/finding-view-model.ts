@@ -3,6 +3,7 @@ import { scopeForCheckId } from '../scoring/finding-scope-map';
 import type { Fixability, TriageFinding, TriageModel } from '../analysis/triage';
 import { collectFootnoteAnchors, collectIssueAnchors } from '../preview/preview-anchors';
 import { safeHref } from '../utils/helpers';
+import { publicSourceUrl } from '../shared/source-url.mjs';
 import { suggestTool, type ToolSuggestion } from './tool-suggestions';
 
 export type FindingSeverity = 'error' | 'warning' | 'info';
@@ -245,8 +246,13 @@ export function findingCardHtml(finding: FindingViewModel, repairAvailable: bool
   const statusLabel = finding.status === 'confirmed' ? 'Ručno provjereno' : finding.status === 'ignored' ? 'Zanemareno' : 'Otvoreno';
   // Profilni kontekst nije dokaz pojedinog pravila. Link se ovdje prikazuje samo
   // kad buduci model stvarno donese izravno povezani izvor.
+  // Ista provjera adrese kao na staticnim stranicama fakulteta (src/shared/source-url.mjs).
+  const sourceUrl = finding.source?.exact ? publicSourceUrl(finding.source.url) : null;
+  const sourceTitle = finding.source?.exact
+    ? (sourceUrl ? `<a href="${esc(sourceUrl)}" target="_blank" rel="noopener">${esc(finding.source.title)}</a>` : `${esc(finding.source.title)} <span>(Poveznica nije dostupna)</span>`)
+    : '';
   const source = finding.source?.exact
-    ? `<div class="finding-source"><span>Izvor pravila:</span> <a href="${esc(safeHref(finding.source.url))}" target="_blank" rel="noopener">${esc(finding.source.title)}</a>${finding.source.date ? ` <small>(${esc(finding.source.date)})</small>` : ''}</div>`
+    ? `<div class="finding-source"><span>Izvor pravila:</span> ${sourceTitle}${finding.source.date ? ` <small>(${esc(finding.source.date)})</small>` : ''}</div>`
     : '';
   const measured = finding.measured ? `<div class="finding-evidence"><span>Izmjereno</span><p>${esc(finding.measured)}</p></div>` : '';
   const auto = repairAvailable && finding.autoRepairable

@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Locator, type Page } from '@playwright/test';
@@ -10,6 +11,32 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
  * po testu ne moze bez parsiranja, pa bi tvrdnja o ulazu smjestena u datoteku punu analizatorskih
  * selektora pala iako s analizatorom nema veze. Ulazni specovi zato zive ovdje.
  */
+
+test('ulaz `/`: nema novih critical/serious a11y problema i fokus uploada je vidljiv', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+
+  const rezultat = await new AxeBuilder({ page }).include('main').exclude('iframe').analyze();
+  const ozbiljno = rezultat.violations
+    .filter((v) => v.impact === 'critical' || v.impact === 'serious')
+    .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length }));
+  expect(ozbiljno, 'novi critical/serious problem pristupacnosti na ulazu').toEqual([]);
+
+  const upload = page.locator('.intake-paper__gumb');
+  await upload.focus();
+  const fokus = await page.evaluate(() => {
+    const g = document.querySelector<HTMLElement>('.intake-paper__gumb');
+    const papir = document.getElementById('intakeDropzone');
+    if (!g || !papir) return { aktivan: false, prsten: false };
+    const stil = getComputedStyle(papir);
+    return {
+      aktivan: document.activeElement === g,
+      prsten: stil.boxShadow !== 'none' || (stil.outlineStyle !== 'none' && parseFloat(stil.outlineWidth) > 0),
+    };
+  });
+  expect(fokus.aktivan, 'tipkovnicki fokus nije na upload kontroli').toBe(true);
+  expect(fokus.prsten, 'fokus uploada nema vidljiv prsten na papiru').toBe(true);
+});
 
 test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
   /**
@@ -41,8 +68,8 @@ test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
  *
  * Postavke (`lekta.preferences.v2`) se podmecu PRIJE ucitavanja (`addInitScript`), jer kartica
  * fakulteta cita isti izvor kao plocica u traci; bez njih predodabira nema, pa kartica kaze da ce
- * fakultet biti prepoznat iz rada. Fakultet NIJE uvjet za ubacivanje (odluka vlasnika
- * 2026-09-27); vrata otvara samo rok.
+ * fakultet biti prepoznat iz rada. Od 2026-10-06 ni fakultet ni rok nisu uvjet za ubacivanje:
+ * rok ostaje neobavezan kontekst, a profil se moze potvrditi poslije.
  */
 const DOCX = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 /**
@@ -65,32 +92,24 @@ async function sPostavkama(page: Page): Promise<void> {
 
 const gumb = (page: Page) => page.locator('.intake-paper__gumb');
 
-test('Z32: CTA je zatvoren bez roka, "Još ne znam rok" ga otvara i bez potvrde fakulteta', async ({ page }) => {
+test('Z32: CTA je otvoren odmah, a rok i profil ostaju neobavezni', async ({ page }) => {
   await sPostavkama(page);
   await page.goto('/');
-  await expect(gumb(page)).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#intakeHint')).toHaveText('Prvo potvrdi rok');
-  // Zatvorena vrata: klik na list NE otvara odabir datoteke, nego kaze da rad nije primljen i
-  // vodi na rok. Klika se po listu (naslov), ne po gumbu: Playwright odbija kliknuti
-  // `aria-disabled` element, a ploha lista vodi isti tok (kontroler slusa cijeli `#intakeDropzone`).
-  let otvoren = false;
-  page.on('filechooser', () => { otvoren = true; });
-  await page.locator('.intake-title').click();
-  await expect(page.getByLabel('Rok predaje')).toBeFocused();
-  await expect(page.locator('#intakeError')).toHaveText('Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.');
-  expect(otvoren, 'zatvorena vrata su otvorila odabir datoteke').toBe(false);
+  await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
+  await expect(page.locator('#intakeHint')).toHaveText('ili ispusti dokument ovdje');
+  await expect(page.locator('#intakeError')).toBeHidden();
 
   // Predodabir iz postavki se nudi na potvrdu, ali nije uvjet.
   await expect(page.locator('[data-intake-fakultet]')).toHaveText('FER · Računarstvo · Dipl.');
   await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · prepoznato iz profila');
-  await page.getByLabel('Još ne znam rok').check();
   await expect(page.locator('[data-intake-potvrdi]')).toHaveAttribute('aria-pressed', 'false');
-  await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
-  await expect(page.locator('#intakeHint')).toHaveText('ili ispusti dokument ovdje');
-  await expect(page.locator('[data-intake-rok-pecat]')).toHaveText('Rok nije zadan');
-  await expect(page.locator('#intakeError')).toBeHidden();
 
-  // Otvorena vrata: dodir ili klik lista otvara odabir datoteke (Z32 tocka 4, mobitel).
+  // Rok se i dalje moze dodati bez utjecaja na dostupnost uploada.
+  await page.getByLabel('Još ne znam rok').check();
+  await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
+  await expect(page.locator('[data-intake-rok-pecat]')).toHaveText('Rok nije zadan');
+
+  // Dodir ili klik lista otvara odabir datoteke odmah.
   const odabir = page.waitForEvent('filechooser');
   await page.locator('.intake-title').click();
   await odabir;
@@ -155,16 +174,13 @@ async function ispustiNaList(page: Page, datoteka: string, ime: string): Promise
   }, { b: bajtovi, n: ime });
 }
 
-test('Z32: posjetitelj BEZ postavki i linka ubacuje rad nakon "Još ne znam rok"; fakultet se prepoznaje iz rada', async ({ page }) => {
+test('Z32: posjetitelj BEZ postavki i linka ubacuje rad odmah, bez roka; fakultet se prepoznaje iz rada', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('[data-intake-fakultet-napomena]')).toHaveText('Prepoznat ćemo ga iz rada.');
   await expect(page.locator('[data-intake-potvrdi]')).toBeHidden();
   await expect(page.locator('[data-intake-promijeni]')).toBeHidden();
-  // Bez roka: ispustanje na list se odbija s porukom i nigdje ne vodi.
-  await ispustiNaList(page, DOCX, 'rad.docx');
-  await expect(page.locator('#intakeError')).toHaveText('Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.');
-  expect(page.url(), 'zatvorena vrata su primila rad').not.toMatch(/\/rad\//);
-  await page.getByLabel('Još ne znam rok').check();
+  // Bez roka: rok nije uvjet (od 2026-10-06), ispustanje na list odmah vodi na /rad/.
+  await expect(page.locator('#intakeError')).toBeHidden();
   await ispustiNaList(page, DOCX_FPZG, 'rad.docx');
   await page.waitForURL(/\/rad\/#session=/);
   const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden testovi za mef (Medicinski fakultet) i geof (Geodetski fakultet),
  * diplomski rad. Oba imaju autor-godina (harvard) citiranje.

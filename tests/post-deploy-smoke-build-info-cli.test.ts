@@ -40,7 +40,7 @@ beforeAll(async () => {
       res.end(JSON.stringify({ status: 'ok', dependencies: { database: { ok: true } } }));
       return;
     }
-    if (url.pathname.endsWith('/repair-docx')) { res.writeHead(401); res.end(); return; }
+    if (url.pathname.endsWith('/repair-docx') || url.pathname.endsWith('/create-checkout')) { res.writeHead(401); res.end(); return; }
     if (url.pathname.endsWith('.js')) { res.writeHead(200, { 'content-type': 'text/javascript' }); res.end(''); return; }
     const pravna = LEGAL_PAGES.find(([f]: [string, string]) => url.pathname.endsWith(`/${f}`));
     res.writeHead(200, HEADERS);

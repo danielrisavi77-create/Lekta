@@ -72,16 +72,19 @@ Teski alati zive samo na radnoj stanici, laptop ostaje lagan; vidi `docs/agents/
 
 ## Tvrdi gate
 
-Svaka promjena prije commita mora proci:
+Svaka promjena prije commita mora proci lokalno:
 
 ```bash
-npm run check
 npm run orphan-scan
 ```
 
-`npm run check` pokrece lint, TypeScript, Edge provjeru, Vitest i Vite build.
-Zahtijeva Deno; `check:edge` se ne preskace. Zeleni izlazni kod bez Vitest retka
-`Test Files` nije dovoljan dokaz.
+plus ciljani testovi dirnutih domena (`node scripts/with-gate-lock.mjs ciljano -- npx vitest run <datoteke>`),
+a oxlint i `node scripts/with-gate-lock.mjs tsc -- npx tsc --noEmit` kad su brzi. Puni gate je CI na zadnjem commitu PR-a: `build-gate` (Node 20 i 24:
+lint, TypeScript, Edge, Vite build) i `vitest-gate` (Vitest u shardovima) moraju biti zeleni, a PR se ne
+spaja prije toga. Zeleni izlazni kod bez Vitest retka `Test Files` (zbroj shardova) nije dokaz.
+
+`npm run check` ostaje puni lokalni lanac (lint, TypeScript, Edge, Vitest, Vite build; zahtijeva Deno,
+`check:edge` se ne preskace) i obvezan je za `release:check` i kad je CI nedostupan. Lokalno nije uvjet commita.
 
 Stanje mastera je zasebno pitanje:
 
@@ -94,7 +97,8 @@ ne tumaci kao zeleno.
 
 ## Verifikacijska disciplina
 
-- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`.
+- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`
+  ili domenskoj datoteci `tests/gate-mutations-<domena>.test.ts`.
 - Novi mehanizam ima vlastiti izravni signal; nizvodno poboljsanje nije dokaz uzroka.
 - Generator testa mora dokazati da proizvodi ciljanu klasu ulaza.
 - Idempotencija se dokazuje dvama prolazima; drugi mora biti no-op.
@@ -103,8 +107,8 @@ ne tumaci kao zeleno.
 - Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
 - Popravni krug nakon pregleda je razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali
   lokalni nalaz mjeri doseg, regenerira samo pogodjene artefakte u dva prolaza i ide mehanicki
-  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate i jedan pregled drugog providera
-  ostaju obvezni prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
+  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate (CI) i jedan pregled drugog providera
+  ostaju obvezni prije spajanja, a ciljani testovi i `orphan-scan` prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
   Detalji: `docs/agents/no-fable-workflow.md`.
 
 Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
@@ -129,8 +133,8 @@ poziva na svaki prompt.
 
 Pregled mora doci od drugog CLI providera od implementatora. Modelski rezultat nije
 dokaz prolaza: izolacija, deterministicni gateovi, Word oracle i commit pravila ostaju
-obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
-`docs/agents/tasks.json`.
+obvezni. Operativne naredbe su u `docs/agents/README.md`. Mjerodavan status zadataka je u Linearu;
+`docs/agents/tasks.json` je inventar i snimak koji PR zadatka ne dira (osvjezava ga koordinator, skupno).
 
 ## Implementatorske sesije
 
@@ -159,6 +163,8 @@ obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
 - `src/docx/CLAUDE.md`: OOXML parser, golden fixture i integritet paketa.
 - `supabase/CLAUDE.md`: migracije, Edge Functions, sigurnost i deploy dokaz.
 - `scripts/autonomy/CLAUDE.md`: projekcije, mjerenja, mutacije i resursni gateovi.
+- `data/profiles/CLAUDE.md`: profili, ruleEntries, bodovane vrijednosti i generirane projekcije.
+- `tests/CLAUDE.md`: gardovi, mutacije, svojstva, fixture i pokretanje testova.
 
 Inventar migriranih pravila je u `docs/decisions/CLAUDE_V2_RULE_INVENTORY.md`.
 Povijesni v1 vodič ostaje u `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md`.

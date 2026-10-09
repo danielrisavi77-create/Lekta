@@ -50,11 +50,14 @@ function fireChange(id: string, v: string) { const el = $(id); el.value = v; el.
 describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
   beforeAll(async () => {
     buildDom();
+    document.documentElement.removeAttribute('data-lekta-ready');
+    expect(document.documentElement.hasAttribute('data-lekta-ready')).toBe(false);
     await import('../src/tools/citat-page'); // init() se okine na import (readyState !== loading)
     // Puni specovi (custom-spec formatFromSpec) su lijeno ucitani (perf split); eksplicitno
     // pricekaj umjesto oslanjanja na mikrotaskove izmedju testova (isti obrazac kao
     // naslovnica-page.dom.test.ts + ensureTemplatesHeavy).
     await ensureFacultySpecsLoaded();
+    expect(document.documentElement.getAttribute('data-lekta-ready')).toBe('1');
   });
 
   it('prazan FPZG unos nije uspjeh niti kopirljiva interpunkcija; djelomicni je nacrt', () => {

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Regresijska zastita copy-ja tool stranica: CLAUDE.md zabranjuje em i en crtice u sadrzaju,
  * a nijedan test dosad nije citao HTML pa bi ih buduci uredak tiho prosvercao. Ovdje se

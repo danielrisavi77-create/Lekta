@@ -2,7 +2,7 @@
 /**
  * GATE PREFLIGHT: deterministicka brava umjesto dogovora medju sesijama (T62, vlasnik 2026-09-26).
  *
- * Problem koji rjesava: stroj je i3 s 2 jezgre i 8 GB RAM-a, a na njemu istodobno radi vise
+ * Problem koji rjesava: stroj je i3 s 2 jezgre (4 niti) i 16 GB RAM-a (izmjereno 2026-10-08), a na njemu istodobno radi vise
  * Claude/Codex sesija. Dva `npm run check` ili `test:ux` u isto vrijeme ne padnu cisto nego
  * mlate memoriju, pa padaju testovi koji izolirano prolaze (OOM, `spawn UNKNOWN`, istek
  * webServera). Dogovor "pricekaj da drugi zavrsi" nije dokaz; ova skripta jest.
@@ -48,11 +48,14 @@ export const THRESHOLDS = Object.freeze({
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * Slab stroj (pravilo vlasnika 2026-09-28, docs/agents/ROUTING.md "Teski poslovi na laptopu"):
- * najvise 4 logicke jezgre ili manje od 12 GB RAM-a. Na takvom stroju gate pokrece Vitest s
- * jednim radnikom (`vitest.config.ts` cita `VITEST_MAX_THREADS`).
+ * Slab stroj (pravilo vlasnika 2026-09-28, promijenjeno 2026-10-08, docs/agents/ROUTING.md "Teski
+ * poslovi na laptopu"): najvise 2 logicke jezgre ili manje od 12 GB RAM-a. Na takvom stroju gate
+ * pokrece Vitest s jednim radnikom (`vitest.config.ts` cita `VITEST_MAX_THREADS`).
+ * Izmjereno 2026-10-08 (izolirani klon, 4 jezgre i 15 GB): 1 radnik 1314 s, 2 radnika 672 s uz vrh
+ * 2,4 GB RSS svih node procesa. Laptop (4 niti, 16 GB) zato dobiva zadana 2 radnika; granica od
+ * 4 jezgre bila je stroza od izmjerene potrebe i laptop je drzala na dvostrukom vremenu.
  */
-const WEAK_MACHINE = Object.freeze({ maxCpus: 4, minTotalMemBytes: 12 * GB });
+const WEAK_MACHINE = Object.freeze({ maxCpus: 2, minTotalMemBytes: 12 * GB });
 
 /** Logicke jezgre i ukupni RAM; nemjerljivo je `null` (fail-open: ne proglasava stroj slabim). */
 export function measureMachine() {

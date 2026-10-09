@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { adjudicate, modelDigest, type NoAdjudicationReason } from '../../scripts/laya/contracts-v2.ts';
 import { makeCase, makePolicy, makeResult, makeRuntime } from '../helpers/laya-v2-fixtures.ts';

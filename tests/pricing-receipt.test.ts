@@ -356,7 +356,8 @@ describe('soft launch i pismo za instituciju', () => {
     expect(gumb.textContent).toBe(PRICING_COPY.ctaUskoro);
     expect(gumb.disabled).toBe(true);
     expect(gumb.getAttribute('aria-disabled')).toBe('true');
-    expect(tekst(host, 'cta')).toContain('Provjera radi već sad, besplatno');
+    expect(tekst(host, 'cta')).toContain('Naplata još nije aktivna');
+    expect(tekst(host, 'cta')).toContain('Besplatna lokalna provjera radi već sada');
   });
 
   it('ziv placeni sloj mijenja rijec CTA-a po stanju preklopnika', () => {

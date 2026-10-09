@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Zastavica lokalnog popravka (WordReplica) mora biti SIGURNO ISKLJUCENA na lansiranju.
  *

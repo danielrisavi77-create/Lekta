@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T84 SC-1: source-check i repair-docx salju naslove u `corpus_search_many`; trosak trigram upita raste
  * s duljinom, a budzet ne prekida RPC u tijeku. Gard: nijedan kljuc poslan bazi nije dulji od 400 code

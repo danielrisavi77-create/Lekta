@@ -239,8 +239,15 @@ header.site-chrome--scrolled {
   white-space: nowrap;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
 }
-.site-chrome__plate[aria-disabled="true"] { cursor: default; }
+.site-chrome__plate[aria-disabled="true"] {
+  cursor: default;
+  background: color-mix(in srgb, var(--desk-ink) 5%, transparent);
+  color: var(--desk-muted);
+  border-color: var(--desk-line);
+  box-shadow: none;
+}
 .site-chrome__plate-dot { width: 6px; height: 6px; border-radius: 50%; background: #6E5A34; }
+.site-chrome__plate[aria-disabled="true"] .site-chrome__plate-dot { background: currentColor; opacity: .72; }
 
 /* PECAT "Provjeri rad": jedna primarna radnja po ekranu, radius 2px, hover je podigne. */
 .site-chrome__stamp {
