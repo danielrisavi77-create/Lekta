@@ -10967,6 +10967,10 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const pythonWrapped = "env FOO=1 python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
   const pythonLater = "echo ready\npython3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
   const pythonUnquoted = "python3 - <<EOF\nimport os\nos.system('npx vitest run')\nEOF";
+  // Uvoz izvan popisa bez imena iz PYTHON_ESCAPE_NAMES_RE: hvata ga samo provjera cijele import liste.
+  const pythonMixedZip = "python3 - <<'EOF'\nimport json, zipfile\nprint(1)\nEOF";
+  const pythonEnvFlag = "env -i python3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonArgparse = "python3 - <<'EOF'\nimport argparse\nargparse.os.system('npx vitest run')\nEOF";
   const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
@@ -10990,7 +10994,7 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport, pythonWrapped, pythonLater, pythonUnquoted]) {
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport, pythonWrapped, pythonLater, pythonUnquoted, pythonEnvFlag, pythonArgparse, pythonMixedZip]) {
       expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
     }
   });
@@ -11039,11 +11043,28 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('mutant: Python reader iza omotača i assignmenta se ne prepoznaje', async () => {
     const mutant = izvor.replace(
-      "return PYTHON_READERS.has(programName(tokens[i] ?? ''));",
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
       'return false;',
     );
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: omotac sa zastavicom (env -i python3) sakriva Python citac', async () => {
+    const mutant = izvor.replace(
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
+      `let i = 0;
+  while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
+  return PYTHON_READERS.has(programName(tokens[i] ?? ''));`,
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonEnvFlag)).toBe(true);
+  });
+
+  it('mutant: os/sys dohvacen kroz sigurni modul (argparse.os) prolazi', async () => {
+    const mutant = izvor.replace(' || PYTHON_ESCAPE_NAMES_RE.test(normalized)', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonArgparse)).toBe(true);
   });
 
   it('mutant: u import listi provjerava se samo prvi modul', async () => {
@@ -11052,7 +11073,7 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
       "for (const spec of match[2].split(',').slice(0, 1)) {",
     );
     expect(mutant).not.toBe(izvor);
-    expect(await dopusta(mutant, pythonMixedImport)).toBe(true);
+    expect(await dopusta(mutant, pythonMixedZip)).toBe(true);
   });
 
   it('mutant: tijelo Pythona se ne NFKC-normalizira (naziv pisan punom sirinom prolazi)', async () => {

@@ -167,6 +167,19 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     ]) {
       expect(judge(`python3 - <<'EOF'\n${tijelo}\nEOF`), tijelo).toMatchObject({ allow: false });
     }
+    // Peta runda: os/sys dohvaceni kroz sigurni modul i omotac sa zastavicom.
+    for (const tijelo of [
+      "import argparse\nargparse.os.system('npx vitest run')",
+      "from argparse import os\nos.system('npx vitest run')",
+      "import pathlib\npathlib.os.system('npx vitest run')",
+      "from pathlib._local import os\nos.system('npx vitest run')",
+      "import argparse\nargparse._sys.modules",
+    ]) expect(judge(`python3 - <<'EOF'\n${tijelo}\nEOF`), tijelo).toMatchObject({ allow: false });
+    for (const prefiks of ['env -i python3', 'nice -n 10 python3', 'sudo -E python3']) {
+      const ulaz = `${prefiks} - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF`;
+      expect(judge(ulaz), ulaz).toMatchObject({ allow: false });
+    }
+    expect(judge("env -i python3 - <<'EOF'\nimport json\nprint('npx vitest run je tekst')\nEOF")).toMatchObject({ allow: true });
     // Cisti Python (uvoz s popisa, hrvatski tekst) i dalje se preskace kao stdin.
     expect(judge("python3 - <<'EOF'\nimport json\nprint(json.dumps({'a': 'č ć š'}))\nnpx vitest run je u biljesci\nEOF")).toMatchObject({ allow: true });
     for (const safe of [

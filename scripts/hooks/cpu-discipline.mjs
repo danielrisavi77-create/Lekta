@@ -48,6 +48,9 @@ const PYTHON_SAFE_MODULES = new Set([
   'collections', 'itertools', 'pathlib', 'html', 'unicodedata', 'argparse',
 ]);
 const PYTHON_UNSAFE_RE = /__|\b(?:exec|eval|compile|getattr|setattr|delattr|globals|locals|vars|breakpoint)\b/;
+// Sigurni moduli unutar sebe uvoze `os`/`sys` (`argparse.os`, `pathlib._local`, `argparse._sys`), pa se
+// ti nazivi (i s vodecim podvlakama) ne smiju pojaviti nigdje u tijelu, ni kao atribut ni kao uvoz.
+const PYTHON_ESCAPE_NAMES_RE = /(?<![A-Za-z0-9])_*(?:os|sys|posix|nt|subprocess|pty|shutil|ctypes|importlib|builtins|runpy|socket|signal|multiprocessing|threading|code|pdb)(?![A-Za-z0-9])/;
 const PYTHON_IMPORT_RE = /\bfrom\s+([^\s]+)\s+import\b|\bimport\s+([^;\r\n#]+)/g;
 const UNSAFE_PYTHON_HEREDOC = '__LEKTA_UNSAFE_PYTHON_HEREDOC__';
 
@@ -73,14 +76,15 @@ function pythonImportsAreSafe(body) {
 
 function unsafePythonBody(body) {
   const normalized = body.normalize('NFKC');
-  return PYTHON_UNSAFE_RE.test(normalized) || !pythonImportsAreSafe(normalized);
+  return PYTHON_UNSAFE_RE.test(normalized) || PYTHON_ESCAPE_NAMES_RE.test(normalized) || !pythonImportsAreSafe(normalized);
 }
 
-/** Prvi izvrsni Python program nakon varijabli i omotaca, istim pravilima kao judgeTokens. */
+/**
+ * Je li Python bilo gdje u naredbi prije heredoca. Namjerno siroko: omotac sa zastavicom
+ * (`env -i python3`, `nice -n 10 python3`, `sudo -E python3`) ne smije sakriti citac.
+ */
 function pythonReaderInCommand(tokens) {
-  let i = 0;
-  while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
-  return PYTHON_READERS.has(programName(tokens[i] ?? ''));
+  return tokens.some((t) => PYTHON_READERS.has(programName(t)));
 }
 
 /**
