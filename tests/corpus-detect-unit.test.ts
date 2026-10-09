@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Ustanova s naslovnice iz kataloga (src/corpus/detect-unit.ts).
  *

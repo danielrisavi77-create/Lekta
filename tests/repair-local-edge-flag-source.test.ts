@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Izvorni dokaz: lokalni popravak se u Edge funkciji `repair-docx` izdaje SAMO iza zastavice.
  *

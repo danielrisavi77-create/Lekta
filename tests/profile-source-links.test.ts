@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';

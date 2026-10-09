@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * BINARNI OBLIK ODGOVORA POPRAVKA (audit DOCX-05).
  *

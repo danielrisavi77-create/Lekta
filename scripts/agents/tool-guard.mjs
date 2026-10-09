@@ -18,6 +18,10 @@
  * gore od uputa u promptu koje barem ne rusi alat.
  */
 
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
+
 /**
  * Poznati resursi koje gard smije zasticivati. Putanje su Windows stil (repo zivi na Windowsu),
  * usporedba je case-insensitive jer je NTFS neosjetljiv na velicinu slova.
@@ -99,29 +103,191 @@ function isPathInsideAllowedRoots(rawPath) {
 }
 
 /**
+ * Dovrsenja koja, kao i goli `git commit`, commitaju CIJELI indeks.
+ * Preneseno iz `~/.claude/hooks/lekta-git-guard.mjs` (2026-10-08), da pravilo vrijedi i u cloud
+ * sesijama i na svakoj radnoj stanici, ne samo na stroju gdje je ta datoteka bila ozicena.
+ */
+const PROMJENA_DIREKTORIJA = new Set(['cd', 'chdir', 'pushd', 'set-location', 'sl', 'push-location']);
+
+const NASTAVCI_SPAJANJA = new Set(['merge', 'rebase', 'cherry-pick', 'revert', 'am']);
+
+/**
+ * Usporediv oblik putanje: apsolutna, kose crte, bez zavrsne crte, mala slova (NTFS ne razlikuje
+ * velicinu slova, a git na Windowsu vraca i `C:/...` i `c:/...`).
+ * @param {string} p
+ * @returns {string}
+ */
+function normalizirajPut(p) {
+  return resolve(windowsPut(p)).replace(/\\/g, '/').replace(/\/+$/, '').toLowerCase();
+}
+
+/**
+ * Git Bash pise `/c/Users/...`; Node na Windowsu to cita kao `C:\c\Users`, pa bi `existsSync`
+ * lazno javio da staza ne postoji. Na drugim platformama putanja ostaje kakva jest.
+ * @param {string} p
+ * @returns {string}
+ */
+function windowsPut(p) {
+  if (process.platform !== 'win32') return p;
+  const m = /^\/([a-zA-Z])(?:\/(.*))?$/.exec(p);
+  return m ? `${m[1].toUpperCase()}:\\${(m[2] ?? '').replace(/\//g, '\\')}` : p;
+}
+
+/**
+ * Razrjesava putanju iz naredbe prema trenutnom direktoriju.
+ * @param {string} put
+ * @param {string} baza
+ * @returns {string}
+ */
+function razrijesiPut(put, baza) {
+  const p = windowsPut(put);
+  return isAbsolute(p) ? p : resolve(baza, p);
+}
+
+/**
+ * Cinjenicno stanje stabla u kojem bi git radio: `{ izoliran, spajanje }`, ili `null` kad se ne
+ * moze utvrditi. Povezani worktree ima `--git-dir` razlicit od `--git-common-dir`. Samostalni klon
+ * izvan dijeljenog stabla (CLAUDE.md: "vlastiti izolirani worktree ili clone") ima ih iste, pa se
+ * prepoznaje po korijenu: dijeljeno je samo stablo ciji je korijen `dijeljeniKorijen`. Spajanje se
+ * cita iz sekvencerskih tragova, istog izvora iz kojeg ga cita i sam git.
+ * @param {string} dir
+ * @param {string} [dijeljeniKorijen]
+ * @returns {{izoliran: boolean, spajanje: boolean} | null}
+ */
+export function stanjeStabla(dir, dijeljeniKorijen = REPO_ROOT) {
+  dir = dir ? windowsPut(dir) : dir;
+  if (!dir || !existsSync(dir)) return null;
+  const r = spawnSync('git', ['rev-parse', '--git-dir', '--git-common-dir', '--show-toplevel'], {
+    cwd: dir, encoding: 'utf8', windowsHide: true, timeout: 5000,
+  });
+  if (r.status !== 0 || !r.stdout) return null;
+  const [gitDir, commonDir, vrh] = r.stdout.trim().split(/\r?\n/).map((x) => x.trim());
+  if (!gitDir || !commonDir || !vrh) return null;
+  const g = resolve(dir, gitDir);
+  const c = resolve(dir, commonDir);
+  const spajanje = ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-merge', 'rebase-apply']
+    .some((trag) => existsSync(join(g, trag)));
+  const dijeljeno = normalizirajPut(vrh) === normalizirajPut(dijeljeniKorijen);
+  return { izoliran: normalizirajPut(g) !== normalizirajPut(c) || !dijeljeno, spajanje };
+}
+
+/**
+ * Presuda za naredbu koja commita CIJELI indeks (goli `git commit` ili `<x> --continue`).
+ *
+ * Prava podjela nije commit vs merge, nego DIJELJENO vs IZOLIRANO stablo: u dijeljenom stablu
+ * cijeli indeks povuce tudje stagirane datoteke (2026-08-31: 21 tudja datoteka pod krivom porukom).
+ * Tijekom spajanja git odbija `--only` ("cannot do a partial commit during a merge"), pa je jedini
+ * valjan put dovrsiti spajanje u vlastitom worktreeju ili klonu. Cloud sesija radi u vlastitom klonu
+ * izvan `REPO_ROOT`, pa je izolirana po korijenu; zastavica okoline se namjerno ne koristi, jer bi
+ * otvorila i dijeljeno stablo kad je postavljena na stroju gdje ono zivi.
+ *
+ * FAIL-CLOSED samo ovdje: kad se stanje ne moze utvrditi, odbija i to kaze, jer bi bez spajanja
+ * naredba ionako bila odbijena. Vlastita greska hooka i dalje propusta (vidi `main`).
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} okolina
+ * @param {boolean} nastavak - `<merge|rebase|cherry-pick|revert|am> --continue`
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+function judgeWholeIndexCommit(okolina, nastavak) {
+  const stanje = okolina.ispitaj(okolina.dir);
+  if (!stanje) {
+    return {
+      allow: false,
+      reason:
+        'Nije se moglo utvrditi radi li se u vlastitom worktreeju, pa gard odbija umjesto da pogadja. Pokreni naredbu iz direktorija repozitorija (ili s vodecim `cd <put> &&`).',
+    };
+  }
+  const izoliran = stanje.izoliran;
+  if (nastavak) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        'Dovrsenje spajanja commita CIJELI indeks, pa u DIJELJENOM stablu povuce tudje stagirane datoteke pod tvoj merge. Spajanje radi u vlastitom `git worktree`.',
+    };
+  }
+  if (stanje.spajanje) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        '`git commit` bez `--only` commita CIJELI indeks. Tijekom spajanja `--only` nije moguc (git: "cannot do a partial commit during a merge"), pa se spajanje radi u vlastitom `git worktree`, a ne u dijeljenom stablu.',
+    };
+  }
+  return {
+    allow: false,
+    reason:
+      '`git commit` bez `--only` commita CIJELI indeks, ne samo tvoje putanje. Koristi `git commit --only <putanje>`.',
+  };
+}
+
+/**
  * Ispituje jednu podnaredbu (vec rastavljenu od `&&`/`;`/...) i vraca presudu ako prepozna opasan
  * obrazac, ili `null` ako podnaredba nije predmet ovog garda.
  * @param {string[]} tokens
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} okolina
  * @returns {{allow: boolean, reason: string} | null}
  */
-function judgeSingleCommand(tokens) {
+function judgeSingleCommand(tokens, okolina) {
+  // PowerShell poziv `& git ...` presuduje se kao sam `git ...`.
+  if (tokens[0] === '&') tokens = tokens.slice(1);
   if (tokens.length === 0) return null;
   const head = tokens[0].toLowerCase();
+  // `git.exe` i puna putanja do gita su ista naredba kao `git`.
+  const glava = head.replace(/\\/g, '/').split('/').pop() ?? '';
 
-  if (head === 'git') {
-    const sub = (tokens[1] ?? '').toLowerCase();
-    const args = tokens.slice(2);
+  if (glava === 'git' || glava === 'git.exe') {
+    // Globalne opcije prije podnaredbe (`git -C <put> commit`, `git -c k=v merge --continue`)
+    // inace bi zaobisle cijeli gard. `-C`, `--work-tree` i `--git-dir` mijenjaju stablo u kojem
+    // git stvarno radi, pa i stablo koje se ispituje.
+    let i = 1;
+    let gitDir = okolina.dir;
+    /** @type {string | null} */
+    let radnoStablo = null;
+    /** @type {string | null} */
+    let gitDirOpcija = null;
+    while (i < tokens.length && tokens[i].startsWith('-')) {
+      const opcija = tokens[i];
+      const [ime, vrijednost] = opcija.includes('=') ? [opcija.slice(0, opcija.indexOf('=')), opcija.slice(opcija.indexOf('=') + 1)] : [opcija, null];
+      if (opcija === '-C' && tokens[i + 1] !== undefined) {
+        gitDir = razrijesiPut(tokens[i + 1], gitDir);
+        i += 2;
+      } else if (ime === '--work-tree' || ime === '--git-dir') {
+        const put = vrijednost ?? tokens[i + 1];
+        if (put !== undefined) {
+          if (ime === '--work-tree') radnoStablo = put;
+          else gitDirOpcija = put;
+        }
+        i += vrijednost === null ? 2 : 1;
+      } else if (vrijednost === null && ['-c', '--namespace', '--exec-path', '--config-env'].includes(opcija)) {
+        i += 2;
+      } else {
+        i += 1;
+      }
+    }
+    // Indeks i stanje spajanja zive u git-diru, pa uz oba izolirani `--work-tree` ne smije prekriti
+    // dijeljeni `--git-dir`: git-dir odreduje stablo, work-tree samo kad je sam.
+    if (gitDirOpcija !== null) {
+      const gd = razrijesiPut(gitDirOpcija, gitDir);
+      gitDir = /[\\/]\.git[\\/]?$/i.test(gd) ? dirname(gd) : gd;
+    } else if (radnoStablo !== null) {
+      gitDir = razrijesiPut(radnoStablo, gitDir);
+    }
+    okolina = { ...okolina, dir: gitDir };
+    const sub = (tokens[i] ?? '').toLowerCase();
+    const args = tokens.slice(i + 1);
 
     if (sub === 'add') {
       if (
         hasFlag(args, '-A') ||
         hasFlag(args, '--all') ||
+        hasFlag(args, '-u') ||
+        hasFlag(args, '--update') ||
         args.some((a) => a === '.')
       ) {
         return {
           allow: false,
           reason:
-            'git add -A / git add . / git add --all nije dopusten. Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
+            'git add -A / git add . / git add --all / git add -u nije dopusten (stagira i tudji necommitani rad). Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
         };
       }
       return null;
@@ -135,7 +301,12 @@ function judgeSingleCommand(tokens) {
         };
       }
       const hasAllFlag = hasFlag(args, '-a') || hasFlag(args, '--all');
-      const hasOnly = hasFlag(args, '--only');
+      // Pathspec iza `--` git commita kao `--only` (samo te putanje), osim uz `-i`/`--include`
+      // (cijeli indeks PLUS te putanje). Kratki `-o` se namjerno ne priznaje: kao vrijednost tudje
+      // opcije (`-m -o`) ne moze se razlikovati bez punog parsera, a `--only` je propisani oblik.
+      const crta = args.indexOf('--');
+      const uzmiIndeks = hasFlag(args, '-i') || hasFlag(args, '--include');
+      const hasOnly = hasFlag(args, '--only') || (!uzmiIndeks && crta >= 0 && crta < args.length - 1);
       if (hasAllFlag && !hasOnly) {
         return {
           allow: false,
@@ -143,7 +314,12 @@ function judgeSingleCommand(tokens) {
             'git commit s -a/--all bez --only nije dopusten (uzima cijeli indeks). Koristi git commit --only <putanje>.',
         };
       }
+      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);
       return null;
+    }
+
+    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {
+      return judgeWholeIndexCommit(okolina, true);
     }
 
     if (sub === 'push') {
@@ -454,9 +630,12 @@ export function judgeSupabaseMcp(toolNameLower, toolInput) {
  * @param {string | undefined} command - `tool_input.command` za Bash/PowerShell; nedefinirano za
  *   alate bez naredbe u ljusci.
  * @param {Record<string, unknown>} [toolInput] - cijeli `tool_input`; MCP alati nose argumente ovdje.
+ * @param {{cwd?: string, ispitaj?: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} [okolina] -
+ *   stanje stabla za naredbe koje commitaju cijeli indeks. Bez `ispitaj` stanje je nepoznato, pa
+ *   presuda ostaje cista (bez gita) i za takve naredbe odbija; `main` predaje stvarni `stanjeStabla`.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command, toolInput) {
+export function judgeCommand(toolName, command, toolInput, okolina = {}) {
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -472,10 +651,21 @@ export function judgeCommand(toolName, command, toolInput) {
   }
 
   const subcommands = splitChainedCommands(command);
+  const stanje = {
+    dir: okolina.cwd || process.cwd(),
+    ispitaj: okolina.ispitaj ?? (() => null),
+  };
   let warning = null;
   for (const sub of subcommands) {
     const tokens = tokenize(sub);
-    const verdict = judgeSingleCommand(tokens);
+    // `cd <put>` (i PowerShell `Set-Location`/`Push-Location`, `pushd`) u lancu mijenja gdje
+    // sljedeci git stvarno radi. Preskacu se `/d`, `-Path` i `-LiteralPath`.
+    if (PROMJENA_DIREKTORIJA.has((tokens[0] ?? '').toLowerCase())) {
+      const put = tokens.slice(1).find((t) => !['/d', '-path', '-literalpath'].includes(t.toLowerCase()));
+      if (put) stanje.dir = razrijesiPut(put, stanje.dir);
+      continue;
+    }
+    const verdict = judgeSingleCommand(tokens, stanje);
     if (verdict === null) continue;
     if (!verdict.allow) return verdict;
     warning = verdict;
@@ -522,7 +712,10 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command, payload?.tool_input);
+    verdict = judgeCommand(toolName, command, payload?.tool_input, {
+      cwd: typeof payload?.cwd === 'string' ? payload.cwd : undefined,
+      ispitaj: stanjeStabla,
+    });
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);

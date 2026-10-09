@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Brzi tripwire za SLOZENI (zivi) profil u redovnom `npm run check`; puna uzorkovana matrica je
  * u tests/conformance/composed.test.ts (samo `npm run conformance`).

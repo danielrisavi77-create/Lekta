@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za parser Upisnika studijskih programa (P1-2 u docs/PLAN_POTPUNA_POKRIVENOST.md).
  *

@@ -9272,6 +9272,87 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
 });
 
 /**
+ * Commit cijelog indeksa i dovrsenje spajanja (preneseno iz `~/.claude/hooks/lekta-git-guard.mjs`,
+ * 2026-10-08). Mutira se KOPIJA izvora u privremenom direktoriju i presuduje cisti node, jer
+ * vitestov loader ne ucitava module izvan korijena projekta, a mutant ne smije u repozitorij.
+ */
+describe('mutacije: tool-guard commit cijelog indeksa', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const GOLI_COMMIT = '      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);\n';
+  const NASTAVAK = "    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {\n";
+
+  async function presude(source: string): Promise<boolean[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-mut-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const o = (s) => ({ cwd: "/x", ispitaj: () => s });'
+        + 'process.stdout.write(JSON.stringify(['
+        + 'm.judgeCommand("Bash", "git commit -m x", undefined, o({ izoliran: false, spajanje: false })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: false, spajanje: true })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: true, spajanje: true })).allow,'
+        + ']));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: goli commit i merge --continue u dijeljenom stablu su odbijeni, u worktreeju merge prolazi', async () => {
+    expect(izvor).toContain(GOLI_COMMIT);
+    expect(izvor).toContain(NASTAVAK);
+    expect(await presude(izvor)).toEqual([false, false, true]);
+  });
+
+  it('mutant: gard bez provjere golog commita propusta commit cijelog indeksa', async () => {
+    expect(await presude(izvor.replace(GOLI_COMMIT, ''))).toEqual([true, false, true]);
+  });
+
+  /** `stanjeStabla` nad STVARNIM samostalnim klonom; `repo` glumi dijeljeno stablo. */
+  async function klonIzoliran(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync, execFileSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-klon-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const repo = join(dir, 'repo');
+      const g = (args: string[], cwd: string) => execFileSync('git', args, { cwd, windowsHide: true });
+      g(['init', '-q', repo], dir);
+      g(['-c', 'user.email=x@y.z', '-c', 'user.name=T', '-c', 'commit.gpgsign=false', 'commit', '-q', '--allow-empty', '-m', 'prvi'], repo);
+      const klon = join(dir, 'klon');
+      g(['clone', '-q', repo, klon], dir);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.stanjeStabla(${JSON.stringify(klon)}, ${JSON.stringify(repo)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { izoliran: boolean }).izoliran;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline i mutant: samostalni klon izvan dijeljenog korijena je izoliran samo uz provjeru korijena', async () => {
+    const KORIJEN = ' || !dijeljeno, spajanje };';
+    expect(izvor).toContain(KORIJEN);
+    expect(await klonIzoliran(izvor)).toBe(true);
+    expect(await klonIzoliran(izvor.replace(KORIJEN, ', spajanje };'))).toBe(false);
+  });
+
+  it('mutant: gard koji ne gada --continue propusta dovrsenje spajanja u dijeljenom stablu', async () => {
+    const mutant = izvor.replace(NASTAVAK, "    if (false && hasFlag(args, '--continue')) {\n");
+    expect(await presude(mutant)).toEqual([false, true, true]);
+  });
+});
+
+/**
  * GATE PREFLIGHT I OMOTAC (T62, pravila za stroj). Dva kvara koja bi lock ucinila ukrasom:
  *  (a) preflight koji propusta iako radi tudji vitest (dvije sesije opet mlate isti stroj);
  *  (b) omotac koji otpusta lock samo na uspjeh (lanac `a && b && release`), pa pad gatea ostavi
@@ -9360,12 +9441,11 @@ describe('mutacije: gate preflight i omotac locka', () => {
     // linije obrane na izlazu procesa.
     const mutated = wrapper
       .replace("  process.on('exit', release);\n", '')
-      .replace(
-        '    return code;\n  } finally {\n    release();\n  }',
-        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
-      );
+      .replace('    return code;\n  } finally {\n', '    if (code === 0) release();\n    return code;\n  } finally {\n')
+      .replace('    }\n    release();\n  }', '    }\n    // otpustanje premjesteno na uspjeh\n  }');
     expect(mutated).not.toBe(wrapper);
     expect(mutated).not.toContain("process.on('exit', release)");
+    expect(mutated).toContain('// otpustanje premjesteno na uspjeh');
     expect(releasesOnFailure(mutated)).toBe(false);
   }, 120_000);
 
@@ -10787,6 +10867,156 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
  * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
  * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
  */
+/**
+ * T110: omotac locka na prekid salje signal cijelom stablu djeteta. Mutant koji trazi samo izravnu
+ * djecu (bez unuka) vraca stari kvar: `npm` i `vitest` ispod `sh -c` prezive, a lock se otpusti.
+ * Mutira se kopija izvora (uz gate-preflight.mjs koji uvozi), presudu racuna cisti node.
+ */
+describe('mutacije: scripts/with-gate-lock.mjs stablo procesa (T110)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const preflight = readFileSync(resolve(process.cwd(), 'scripts/gate-preflight.mjs'), 'utf8');
+
+  async function signaliziraniPidovi(source: string): Promise<number[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const stablo = [{ pid: 101, ppid: 100 }, { pid: 102, ppid: 101 }, { pid: 103, ppid: 102 }];
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `const r = m.signalTree(100, 'SIGTERM', { list: () => ${JSON.stringify(stablo)}, kill: () => true });`
+        + 'process.stdout.write(JSON.stringify(r));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as number[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: signal ide djetetu, ljusci i unucima', async () => {
+    expect(await signaliziraniPidovi(izvor)).toEqual([100, 101, 102, 103]);
+  });
+
+  it('mutant: samo izravna djeca (bez unuka) se hvata', async () => {
+    const mutant = izvor.replace('        queue.push(p.pid);\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await signaliziraniPidovi(mutant)).toEqual([100, 101]);
+  });
+
+  // Grok pregled #329: reapTree mora preostale gasiti SIGKILL-om i nepoznato stanje (null) drzati zivim.
+  async function zetva(source: string): Promise<Array<[number, string]>> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const sent = [];'
+        + 'await m.reapTree([7, 8], { graceMs: 5, stepMs: 1, sleep: async () => {}, alive: (p) => (p === 7 ? true : null), kill: (p, s) => { sent.push([p, s]); return true; } });'
+        + 'process.stdout.write(JSON.stringify(sent));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as Array<[number, string]>;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: zivi i nepoznati proces nakon roka dobivaju SIGKILL', async () => {
+    expect(await zetva(izvor)).toEqual([[7, 'SIGKILL'], [8, 'SIGKILL']]);
+  });
+
+  it('mutant: reapTree salje SIGTERM umjesto SIGKILL', async () => {
+    const mutant = izvor.replace("kill(pid, 'SIGKILL');", "kill(pid, 'SIGTERM');");
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGTERM'], [8, 'SIGTERM']]);
+  });
+
+  it('mutant: nepoznato stanje (null) se tretira kao mrtav proces', async () => {
+    const mutant = izvor.replaceAll('alive(pid) !== false', 'alive(pid) === true');
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGKILL']]);
+  });
+});
+
+/**
+ * T109: cpu-discipline i heredoc (allowlist citaca nakon tri runde Grok pregleda #328). Tijelo se
+ * preskace samo za prvi redak `citac arg ... <<'IME'` s cistim rijecima; sve ostalo ide starim
+ * rastavom po retku. Svaki mutant uklanja jedan uvjet i mora pustiti ulaz koji bash izvrsi.
+ * Mutira se kopija izvora, presudu racuna cisti node.
+ */
+describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/cpu-discipline.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+  // Redak tijela koji pocinje teskom naredbom: stari rastav po novom retku ga je citao kao naredbu.
+  const citirani = "python3 - <<'PYEOF'\nnpx vitest run je samo tekst u biljesci\nPYEOF";
+  const bezNavodnika = 'cat <<EOF\n$(npx vitest run)\nEOF';
+  const komentar = "cat # <<'EOF'\nnpx vitest run";
+  const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
+  const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+
+  async function dopusta(source: string, command: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-cpu-mut-'));
+    try {
+      const file = join(dir, 'cpu-discipline.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeCpuDiscipline(${JSON.stringify(command)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
+    expect(await dopusta(izvor, citirani)).toBe(true);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+  });
+
+  it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
+    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", 'if (false) {');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, citirani)).toBe(false);
+  });
+
+  it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
+    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, bezNavodnika)).toBe(true);
+  });
+
+  it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
+    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, komentar)).toBe(true);
+  });
+
+  it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
+    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, funkcija)).toBe(true);
+  });
+
+  it('mutant: program izvan allowliste citaca', async () => {
+    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+});
+
 describe('mutacije: scripts/hooks/dash-guard.mjs', () => {
   const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/dash-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
   const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');

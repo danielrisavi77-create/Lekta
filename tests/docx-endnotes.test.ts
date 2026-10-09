@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-04: biljeske na KRAJU dokumenta (Word Endnotes) postoje u modelu analize.
  *

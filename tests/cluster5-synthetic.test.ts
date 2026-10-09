@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za klaster grf/kbf/kif/mef/muza/pbf (doktorski + size-bug profili).
  *

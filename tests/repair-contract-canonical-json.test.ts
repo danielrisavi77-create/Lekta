@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { canonicalJson, canonicalUtf8, fromBase64Url, sha256Hex, toBase64Url } from '../src/repair/contract';
 

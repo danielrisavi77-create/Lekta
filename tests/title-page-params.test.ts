@@ -1,3 +1,4 @@
+// @vitest-environment node
 /** URL parametri alata naslovnice: parse/serialize round-trip i tolerancija na smece. */
 import { describe, it, expect } from 'vitest';
 import { parseTitlePageParams, serializeTitlePageParams } from '../src/title-pages/title-page-params';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Dev-only strip (audit P0): setup modal ("Produkcijska konfiguracija") i QA konzola
  * REZU se iz DEPLOY builda, ne skrivaju. Ovaj test cuva: (1) markeri u index.html su

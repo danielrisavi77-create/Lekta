@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sintaksa svake `.mjs` skripte u `scripts/`, mjerena BAS ONIM parserom koji te skripte izvodi.
  *

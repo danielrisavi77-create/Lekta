@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition, viewFor,

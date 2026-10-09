@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): INTERPUNKCIJA CITATA - zadnja preostala bodovana provjera bez
  * atomskog slucaja, na referentnom fpzg profilu, bez izmjene buildera (tekst-mutacija). Dokazujemo:

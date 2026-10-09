@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { buildLektaResult } from '../src/integrations/lekta-result';
 import type { FindingSessionState } from '../src/ui/finding-view-model';
