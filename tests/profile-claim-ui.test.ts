@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * SCOPE-01: razina dokaza u zivom sucelju.
  *

@@ -4,10 +4,11 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { BLOCK_MESSAGE, judgeCpuDiscipline, packageScriptReader, splitCommand } from '../scripts/hooks/cpu-discipline.mjs';
 import { MAX_BLOCKS, counterPath, decideStop, openItems } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
-import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { matcherCovers, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 
 // Stvarne definicije skripti iz package.json: `npm run check` vec ide kroz with-gate-lock, `build` ne.
 const readScript = packageScriptReader(resolve('.'));
@@ -82,7 +83,66 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     ]);
   });
 
-  it('proces: 6 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
+  it('T109: tijelo heredoca pod navodnicima je stdin, ne naredba', () => {
+    // Stvarni lazni pad 2026-10-08: python3 heredoc s JSON tekstom koji spominje gate i closed-loop.
+    const heredoc = "python3 - <<'PYEOF'\nnpm run build\ntests/repair-closed-loop.test.ts samo u test:slow\nPYEOF";
+    expect(judge(heredoc)).toMatchObject({ allow: true });
+    expect(judge("cat <<'EOF'\nnpx vitest run\nEOF")).toMatchObject({ allow: true });
+    expect(judge('git commit -F - <<"EOF"\nnpx vitest run je u poruci\nEOF')).toMatchObject({ allow: true });
+    expect(judge("cat <<-'EOF'\n\tvitest\n\tEOF")).toMatchObject({ allow: true });
+    expect(judge('cat <<< "npx vitest"')).toMatchObject({ allow: true });
+  });
+
+  it('T109: naredba iza heredoca i heredoc bez navodnika i dalje se odbijaju', () => {
+    expect(judge("cat <<'X'\nhi\nX\nnpx vitest run")).toMatchObject({ allow: false });
+    expect(judge("cat <<-'EOF'\n\tvitest\n\tEOF\ntsc --noEmit")).toMatchObject({ allow: false });
+    expect(judge('cat <<EOF\nnpx vitest run\nEOF')).toMatchObject({ allow: false });
+    expect(judge('cat <<EOF\n`tsc --noEmit`\nEOF')).toMatchObject({ allow: false });
+    expect(judge("cat <<A <<'B'\n$(tsc)\nA\nvitest\nB")).toMatchObject({ allow: false });
+  });
+
+  it('T109 (Grok pregled #328, tri runde): ulazi koje ljuska izvrsi i dalje se odbijaju', () => {
+    const izvrsivo = [
+      // prva runda
+      "cat <<EOF\n$(echo ')'; npx vitest run)\nEOF",
+      'cat <<EOF\n$(echo hi # )\nnpx vitest run\n)\nEOF',
+      'echo ok # <<EOF\nnpx vitest run',
+      "echo ok # <<'EOF'\nnpx vitest run",
+      "cat <<$'EOF'\nhello\nEOF\nnpx vitest run",
+      'cat <<EOF\\\nxxx\nbody\nEOFxxx\nnpx vitest run',
+      'EOF=EOF\ncat <<$EOF\nbody\nEOF\nnpx vitest run',
+      "bash <<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' | sh\nnpx vitest run\nEOF",
+      // druga runda
+      'echo $((1<<8))\nnpx vitest run',
+      'echo ${x#<<Z}\nnpx vitest run',
+      "bash \\\n<<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' \\\n| sh\nnpx vitest run\nEOF",
+      'cat <<EOF\n$\\\n(npx vitest run)\nEOF',
+      "$'bash' <<'EOF'\nnpx vitest run\nEOF",
+      "b=bash\n$b <<'EOF'\nnpx vitest run\nEOF",
+      "rbash <<'EOF'\nnpx vitest run\nEOF",
+      "bash -s \\\nx <<'EOF'\nnpx vitest run\nEOF",
+      "source /dev/stdin <<'EOF'\nnpx vitest run\nEOF",
+      "cat <<'EOF' |\nsh\nnpx vitest run\nEOF",
+      // treca runda: program izvan popisa ljuski izvrsi tijelo, ili je citac ranije prepisan
+      "IFS=:\nsh:-s <<'EOF'\nnpx vitest run\nEOF",
+      "/usr/bin/s[h] <<'EOF'\nnpx vitest run\nEOF",
+      "read -r line <<'EOF'\nnpx vitest run\nEOF\neval \"$line\"",
+      "f() { bash; }\nf <<'EOF'\nnpx vitest run\nEOF",
+      "shopt -s expand_aliases\nalias r=bash\nr <<'EOF'\nnpx vitest run\nEOF",
+      "sed e <<'EOF'\nnpx vitest run\nEOF",
+      "make -f - <<'EOF'\n.PHONY: x\nx:\n\tnpx vitest run\nEOF",
+      "powershell -NoProfile -Command - <<'EOF'\nnpx vitest run\nEOF",
+      "ksh93 <<'EOF'\nnpx vitest run\nEOF",
+      "sudo -s <<'EOF'\nnpx vitest run\nEOF",
+      "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF",
+      "git -c alias.x=!sh x <<'EOF'\nnpx vitest run\nEOF",
+    ];
+    for (const command of izvrsivo) expect(judge(command), command).toMatchObject({ allow: false });
+  });
+
+  it('proces: 7 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
     const cases: Array<[unknown, NodeJS.ProcessEnv, number]> = [
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv(), 2],
       [{ tool_name: 'Bash', tool_input: { command: 'npm run build' } }, cleanEnv(), 2],
@@ -90,6 +150,7 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv({ LEKTA_GATE_LOCK_TOKEN: 'ugnijezdjeno' }), 0],
       [{ tool_name: 'Bash', tool_input: { command: 'git status' } }, cleanEnv(), 0],
       ['nije json', cleanEnv(), 0],
+      [{ tool_name: 'Bash', tool_input: { command: "python3 - <<'X'\nnpx vitest run\nX" } }, cleanEnv(), 0],
     ];
     for (const [input, env, code] of cases) {
       const r = runHook('scripts/hooks/cpu-discipline.mjs', input, env);
@@ -160,9 +221,49 @@ describe('A3 implementer-stop', () => {
 });
 
 describe('registracija u repo .claude/settings.json', () => {
-  it('sva tri hooka su registrirana, uz postojeci tool-guard', () => {
+  it('svi ocekivani hookovi su registrirani, tool-guard i za Supabase MCP apply_migration', () => {
     const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
     expect(missingHookRegistrations(settings)).toEqual([]);
-    expect(JSON.stringify(settings)).toContain('scripts/agents/tool-guard.mjs');
+  });
+
+  it('tool-guard za MCP apply_migration blokira i kad je sesija u poddirektoriju (izravni signal)', () => {
+    const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8')) as {
+      hooks: { PreToolUse: Array<{ matcher?: string; hooks?: Array<{ command?: string }> }> };
+    };
+    const entry = settings.hooks.PreToolUse.find((e) => matcherCovers(String(e.matcher ?? ''), 'mcp__supabase__apply_migration'));
+    const command = entry?.hooks?.[0]?.command ?? '';
+    expect(command).toContain('tool-guard.mjs');
+    const ulaz = JSON.stringify({ tool_name: 'mcp__supabase__apply_migration', tool_input: { name: 'x', query: 'select 1' } });
+    const env = { ...process.env, CLAUDE_PROJECT_DIR: process.cwd() };
+    const poddir = resolve('supabase');
+    const sidreno = spawnSync('sh', ['-c', command], { cwd: poddir, input: ulaz, env, encoding: 'utf8', timeout: 30_000 });
+    expect(sidreno.status).toBe(2);
+    expect(sidreno.stderr).toContain('apply_migration');
+    // Kontrola: stara relativna naredba iz istog poddirektorija ne nalazi skriptu i ne blokira (exit 1, ne 2).
+    const relativno = spawnSync('sh', ['-c', 'node scripts/agents/tool-guard.mjs'], { cwd: poddir, input: ulaz, env, encoding: 'utf8', timeout: 30_000 });
+    expect(relativno.status).not.toBe(2);
+  });
+
+  it('matcher po semantici Claude Code: popis tocnih imena ili regex', () => {
+    expect(matcherCovers('Bash|PowerShell', 'Bash')).toBe(true);
+    expect(matcherCovers('Bash|PowerShell', 'mcp__Supabase__apply_migration')).toBe(false);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__claude_ai_Supabase__apply_migration')).toBe(true);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__supabase__apply_migration')).toBe(true);
+    expect(matcherCovers('mcp__.*__apply_migration', 'mcp__Supabase__list_tables')).toBe(false);
+    // Stari matcher iz prve verzije PR-a #326 nije vidio lokalno ime servera malim slovima.
+    expect(matcherCovers('mcp__.*Supabase.*__apply_migration', 'mcp__supabase__apply_migration')).toBe(false);
+  });
+});
+
+describe('SessionEnd worktree GC hook', () => {
+  it('uvoz skripte ne pokrece GC (samo izravan poziv uklanja stabla stroja)', () => {
+    const url = pathToFileURL(resolve('scripts/hooks/session-end-gc.mjs')).href;
+    const res = spawnSync(process.execPath, ['--input-type=module', '-e', `await import(${JSON.stringify(url)})`], {
+      env: { ...process.env, CLAUDE_PROJECT_DIR: process.cwd() },
+      encoding: 'utf8',
+      timeout: 15_000,
+    });
+    expect(res.status).toBe(0);
+    expect(res.stderr).toBe('');
   });
 });

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Skup dopustenih velicina slova NIJE izmisljena ciljana vrijednost.
  *

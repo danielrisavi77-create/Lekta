@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Pravni tekstovi (src/legal/legal-content.ts) su jedini izvor istine za modal I javne
  * stranice, a TERMS_VERSION se trajno biljezi uz kupnju (checkout_consents). Ovaj test

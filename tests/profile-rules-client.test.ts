@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Klijent rules-on-demand isporuke (faza B): diskriminirani union po HTTP statusu,
  * nikad ne baca, timeout preko AbortControllera, JEDAN retry samo za 'unavailable'.

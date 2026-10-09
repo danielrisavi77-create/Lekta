@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { buildKatedraHandoffFragment, buildKatedraHandoffUrl } from '../src/integration/katedra-handoff';
 import type { LektaResult } from '../src/integration/academic-suite-contracts';

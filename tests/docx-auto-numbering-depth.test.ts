@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-06: dubina AUTOMATSKI numeriranih naslova nije se provjeravala.
  *

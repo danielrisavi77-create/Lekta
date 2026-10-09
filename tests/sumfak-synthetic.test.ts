@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test sumfak profila (Fakultet sumarstva i drvne tehnologije).
  *

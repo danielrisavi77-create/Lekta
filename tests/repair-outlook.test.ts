@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { buildRepairOutlook } from '../src/ui/results/repair-outlook';
 import type { Check } from '../src/scoring/checks';

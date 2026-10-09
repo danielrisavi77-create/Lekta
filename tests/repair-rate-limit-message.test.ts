@@ -1,3 +1,4 @@
+// @vitest-environment node
 /** T84 RD-2 (Codex R9 na #294): zaseban razlog i poruka za strop pokusaja bez izmjena. */
 import { describe, expect, it } from 'vitest';
 import { repairRateLimitMessage } from '../src/report/repair-rate-limit-message';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { collectPreviewFlags, collectIssueAnchors, collectFootnoteAnchors, collectAllPreviewFlags, collectExistenceFlags } from '../src/preview/preview-anchors';
 import { KIND_HOMOGLIF_CIRILICA, KIND_DVOSTRUKI_RAZMAK } from '../src/tools/typo-lint';

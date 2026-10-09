@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * buildFacultyStylePage()/buildIndexPage() u scripts/generate-citation-tools.mjs generiraju
  * <title>/<meta description> za staticke SEO stranice citatnog alata. Regresija: description

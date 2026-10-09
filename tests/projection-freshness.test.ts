@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad detektorom svjezine pecenih projekcija.
  *
