@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD MREZOM POPRAVKA (`docs/generated/repair-net.json`, `data/profiles/repair-net-ratchet.json`).
  *

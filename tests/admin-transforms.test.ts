@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { computeDelta, formatDeltaPct, formatCount, formatEur, formatPct } from '../src/admin/admin-transforms';
 

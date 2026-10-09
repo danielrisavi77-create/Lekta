@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * MODALITET i OPSEG kao polja tvrdnje.
  *

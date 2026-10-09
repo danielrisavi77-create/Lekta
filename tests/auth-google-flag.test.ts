@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T102 gard: zastavica prijave Googleom ne smije biti ukljucena kroz netlify.toml dok vlasnik ne
  * odluci, a .env.example je dokumentira kao [klijent] s praznom vrijednoscu. Mutacije su u

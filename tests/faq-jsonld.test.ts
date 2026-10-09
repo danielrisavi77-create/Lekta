@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva sinkronizaciju vidljivog FAQ-a (<div class="faq">) i FAQPage JSON-LD mirrora.
  *

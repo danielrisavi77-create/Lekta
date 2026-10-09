@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Monetizacija V1 (M2), krug 3: migracija 0207 IZVRSENA u stvarnom Postgresu (PGlite), dvaput.
  *

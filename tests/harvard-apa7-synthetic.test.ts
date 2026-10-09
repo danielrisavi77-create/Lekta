@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test za profile s harvard/apa7 citiranjem (autor-godina).
  *

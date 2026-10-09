@@ -140,6 +140,8 @@ async function main(argv) {
 
   const childEnv = { ...env, ...extraEnv };
   if (gate.token) childEnv.LEKTA_GATE_LOCK_TOKEN = gate.token;
+  // Vitest ispisuje redak po zavrsenoj datoteci (vitest.config.ts); korisnik moze nadjacati s 0.
+  if (childEnv.LEKTA_GATE_PROGRESS === undefined) childEnv.LEKTA_GATE_PROGRESS = '1';
   // Slab stroj: jedan Vitest radnik, osim kad je VITEST_MAX_THREADS vec postavljen (ROUTING.md).
   const workers = weakMachineWorkerEnv({ ...measureMachine(), env: childEnv });
   if (workers) {

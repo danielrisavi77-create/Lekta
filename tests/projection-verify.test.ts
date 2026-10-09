@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad SADRZAJNOM presudom o pecenim projekcijama.
  *

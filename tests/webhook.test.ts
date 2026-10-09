@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { createHmac } from 'node:crypto';
 import { readFileSync } from 'node:fs';

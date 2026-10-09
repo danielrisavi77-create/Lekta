@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva CTA u praznom stanju taba "Spremnost za predaju" (BL-P3-17). U zadanoj fazi "Samo dokument"
  * nema administrativne checkliste; umjesto slijepe poruke prikazuje se gumb koji vraca u carobnjak,

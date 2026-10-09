@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Dokaziva privatnost (src/ui/network-proof.ts): agregacija resource zapisa (total/external) i
  * postena poruka. Nikad hardkodirana nula; ako mjerenje nije pouzdano, poruke nema.

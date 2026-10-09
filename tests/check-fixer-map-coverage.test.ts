@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { classifyFixability } from '../src/analysis/check-fixer-map';
 import { REPAIR_SURFACE } from '../src/repair/repair-surface';
