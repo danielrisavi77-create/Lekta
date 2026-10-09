@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readZip } from '../src/repair/zip-codec';
 import { buildRepairTemplate, REPAIR_TEMPLATES } from './helpers/repair-templates';

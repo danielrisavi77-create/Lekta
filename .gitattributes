@@ -1,3 +1,30 @@
+# Globalno: tekst je LF i u repozitoriju i na checkoutu, neovisno o core.autocrlf (odluka vlasnika
+# 2026-10-08). CRLF je prva stavka kataloga kvarova (.claude/skills/lekta-protokol/SKILL.md): pojedinacna
+# pravila nize gasila su incident po incident, ovo zatvara razred. Izmjereno 2026-10-08: indeks je vec
+# LF (3707 datoteka, 0 CRLF osim jedne fixture izuzete na dnu), pa pravilo NISTA ne prekonvertira.
+# Mijenja se samo ono sto checkout upisuje na disk. Posebna pravila nize i dalje vrijede (zadnje vrijedi).
+* text=auto eol=lf
+
+# Binarni formati: nikad diff ni normalizacija, i kad heuristika text=auto pogrijesi.
+*.docx binary
+*.doc binary
+*.dotx binary
+*.dot binary
+*.rar binary
+*.odt binary
+*.pdf binary
+*.zip binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
 # Hunspell rjecnik (hrvatski pravopis): cuvaj TOCNE bajtove, bez EOL konverzije.
 # Uz core.autocrlf=true git bi ih na checkoutu pretvorio u CRLF, a \r bi usao u
 # affix polja (.aff) i unose (.dic) pa bi Hunspell parsiranje puklo. -text = binarno.
@@ -42,3 +69,11 @@ docs/agents/plan-do-live-2026-09-12.md text eol=lf
 # Snimke izvora Upisnika: gard citata u snimci provjerava sha256 TOCNIH bajtova prema registru, pa git ne smije
 # normalizirati zavrsetke redaka (CRLF/mixed u HTML-u bi promijenio hash). -text = binarno.
 data/sources/**/upisnik-*.html -text
+
+# Snimka Crossref odgovora (tests/helpers/retraction-guard.ts, tests/t98-*.test.ts) commitana je s CRLF:
+# cuvaj tocne bajtove da je svaki stroj cita jednako. Jedina CRLF datoteka u indeksu na dan 2026-10-08.
+tests/fixtures/crossref/select-with-authors.json -text
+
+# Sve snimke izvora: gardovi citata provjeravaju sha256 tocnih bajtova prema registru (vidi pravilo za
+# upisnik-*.html gore), pa git ni na checkoutu ne smije dirati njihove krajeve redaka.
+data/sources/** -text

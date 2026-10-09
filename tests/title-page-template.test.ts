@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Predlozak fakulteta u jezgri generatora naslovnice (buildTitlePage(input, template)).
  * Kljucno: grana BEZ predloska mora ostati bajt-identicna staroj (regresijski deep-equal),

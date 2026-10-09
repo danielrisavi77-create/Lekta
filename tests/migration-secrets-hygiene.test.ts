@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard: nijedna SQL migracija ne nosi tvrdo upisan endpoint ni Bearer kljuc, i svaki
  * `cron.unschedule` je zasticen (dakle migracija je idempotentna).

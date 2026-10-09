@@ -18,6 +18,10 @@
  * gore od uputa u promptu koje barem ne rusi alat.
  */
 
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
+
 /**
  * Poznati resursi koje gard smije zasticivati. Putanje su Windows stil (repo zivi na Windowsu),
  * usporedba je case-insensitive jer je NTFS neosjetljiv na velicinu slova.
@@ -99,29 +103,191 @@ function isPathInsideAllowedRoots(rawPath) {
 }
 
 /**
+ * Dovrsenja koja, kao i goli `git commit`, commitaju CIJELI indeks.
+ * Preneseno iz `~/.claude/hooks/lekta-git-guard.mjs` (2026-10-08), da pravilo vrijedi i u cloud
+ * sesijama i na svakoj radnoj stanici, ne samo na stroju gdje je ta datoteka bila ozicena.
+ */
+const PROMJENA_DIREKTORIJA = new Set(['cd', 'chdir', 'pushd', 'set-location', 'sl', 'push-location']);
+
+const NASTAVCI_SPAJANJA = new Set(['merge', 'rebase', 'cherry-pick', 'revert', 'am']);
+
+/**
+ * Usporediv oblik putanje: apsolutna, kose crte, bez zavrsne crte, mala slova (NTFS ne razlikuje
+ * velicinu slova, a git na Windowsu vraca i `C:/...` i `c:/...`).
+ * @param {string} p
+ * @returns {string}
+ */
+function normalizirajPut(p) {
+  return resolve(windowsPut(p)).replace(/\\/g, '/').replace(/\/+$/, '').toLowerCase();
+}
+
+/**
+ * Git Bash pise `/c/Users/...`; Node na Windowsu to cita kao `C:\c\Users`, pa bi `existsSync`
+ * lazno javio da staza ne postoji. Na drugim platformama putanja ostaje kakva jest.
+ * @param {string} p
+ * @returns {string}
+ */
+function windowsPut(p) {
+  if (process.platform !== 'win32') return p;
+  const m = /^\/([a-zA-Z])(?:\/(.*))?$/.exec(p);
+  return m ? `${m[1].toUpperCase()}:\\${(m[2] ?? '').replace(/\//g, '\\')}` : p;
+}
+
+/**
+ * Razrjesava putanju iz naredbe prema trenutnom direktoriju.
+ * @param {string} put
+ * @param {string} baza
+ * @returns {string}
+ */
+function razrijesiPut(put, baza) {
+  const p = windowsPut(put);
+  return isAbsolute(p) ? p : resolve(baza, p);
+}
+
+/**
+ * Cinjenicno stanje stabla u kojem bi git radio: `{ izoliran, spajanje }`, ili `null` kad se ne
+ * moze utvrditi. Povezani worktree ima `--git-dir` razlicit od `--git-common-dir`. Samostalni klon
+ * izvan dijeljenog stabla (CLAUDE.md: "vlastiti izolirani worktree ili clone") ima ih iste, pa se
+ * prepoznaje po korijenu: dijeljeno je samo stablo ciji je korijen `dijeljeniKorijen`. Spajanje se
+ * cita iz sekvencerskih tragova, istog izvora iz kojeg ga cita i sam git.
+ * @param {string} dir
+ * @param {string} [dijeljeniKorijen]
+ * @returns {{izoliran: boolean, spajanje: boolean} | null}
+ */
+export function stanjeStabla(dir, dijeljeniKorijen = REPO_ROOT) {
+  dir = dir ? windowsPut(dir) : dir;
+  if (!dir || !existsSync(dir)) return null;
+  const r = spawnSync('git', ['rev-parse', '--git-dir', '--git-common-dir', '--show-toplevel'], {
+    cwd: dir, encoding: 'utf8', windowsHide: true, timeout: 5000,
+  });
+  if (r.status !== 0 || !r.stdout) return null;
+  const [gitDir, commonDir, vrh] = r.stdout.trim().split(/\r?\n/).map((x) => x.trim());
+  if (!gitDir || !commonDir || !vrh) return null;
+  const g = resolve(dir, gitDir);
+  const c = resolve(dir, commonDir);
+  const spajanje = ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-merge', 'rebase-apply']
+    .some((trag) => existsSync(join(g, trag)));
+  const dijeljeno = normalizirajPut(vrh) === normalizirajPut(dijeljeniKorijen);
+  return { izoliran: normalizirajPut(g) !== normalizirajPut(c) || !dijeljeno, spajanje };
+}
+
+/**
+ * Presuda za naredbu koja commita CIJELI indeks (goli `git commit` ili `<x> --continue`).
+ *
+ * Prava podjela nije commit vs merge, nego DIJELJENO vs IZOLIRANO stablo: u dijeljenom stablu
+ * cijeli indeks povuce tudje stagirane datoteke (2026-08-31: 21 tudja datoteka pod krivom porukom).
+ * Tijekom spajanja git odbija `--only` ("cannot do a partial commit during a merge"), pa je jedini
+ * valjan put dovrsiti spajanje u vlastitom worktreeju ili klonu. Cloud sesija radi u vlastitom klonu
+ * izvan `REPO_ROOT`, pa je izolirana po korijenu; zastavica okoline se namjerno ne koristi, jer bi
+ * otvorila i dijeljeno stablo kad je postavljena na stroju gdje ono zivi.
+ *
+ * FAIL-CLOSED samo ovdje: kad se stanje ne moze utvrditi, odbija i to kaze, jer bi bez spajanja
+ * naredba ionako bila odbijena. Vlastita greska hooka i dalje propusta (vidi `main`).
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} okolina
+ * @param {boolean} nastavak - `<merge|rebase|cherry-pick|revert|am> --continue`
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+function judgeWholeIndexCommit(okolina, nastavak) {
+  const stanje = okolina.ispitaj(okolina.dir);
+  if (!stanje) {
+    return {
+      allow: false,
+      reason:
+        'Nije se moglo utvrditi radi li se u vlastitom worktreeju, pa gard odbija umjesto da pogadja. Pokreni naredbu iz direktorija repozitorija (ili s vodecim `cd <put> &&`).',
+    };
+  }
+  const izoliran = stanje.izoliran;
+  if (nastavak) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        'Dovrsenje spajanja commita CIJELI indeks, pa u DIJELJENOM stablu povuce tudje stagirane datoteke pod tvoj merge. Spajanje radi u vlastitom `git worktree`.',
+    };
+  }
+  if (stanje.spajanje) {
+    if (izoliran) return null;
+    return {
+      allow: false,
+      reason:
+        '`git commit` bez `--only` commita CIJELI indeks. Tijekom spajanja `--only` nije moguc (git: "cannot do a partial commit during a merge"), pa se spajanje radi u vlastitom `git worktree`, a ne u dijeljenom stablu.',
+    };
+  }
+  return {
+    allow: false,
+    reason:
+      '`git commit` bez `--only` commita CIJELI indeks, ne samo tvoje putanje. Koristi `git commit --only <putanje>`.',
+  };
+}
+
+/**
  * Ispituje jednu podnaredbu (vec rastavljenu od `&&`/`;`/...) i vraca presudu ako prepozna opasan
  * obrazac, ili `null` ako podnaredba nije predmet ovog garda.
  * @param {string[]} tokens
+ * @param {{dir: string, ispitaj: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} okolina
  * @returns {{allow: boolean, reason: string} | null}
  */
-function judgeSingleCommand(tokens) {
+function judgeSingleCommand(tokens, okolina) {
+  // PowerShell poziv `& git ...` presuduje se kao sam `git ...`.
+  if (tokens[0] === '&') tokens = tokens.slice(1);
   if (tokens.length === 0) return null;
   const head = tokens[0].toLowerCase();
+  // `git.exe` i puna putanja do gita su ista naredba kao `git`.
+  const glava = head.replace(/\\/g, '/').split('/').pop() ?? '';
 
-  if (head === 'git') {
-    const sub = (tokens[1] ?? '').toLowerCase();
-    const args = tokens.slice(2);
+  if (glava === 'git' || glava === 'git.exe') {
+    // Globalne opcije prije podnaredbe (`git -C <put> commit`, `git -c k=v merge --continue`)
+    // inace bi zaobisle cijeli gard. `-C`, `--work-tree` i `--git-dir` mijenjaju stablo u kojem
+    // git stvarno radi, pa i stablo koje se ispituje.
+    let i = 1;
+    let gitDir = okolina.dir;
+    /** @type {string | null} */
+    let radnoStablo = null;
+    /** @type {string | null} */
+    let gitDirOpcija = null;
+    while (i < tokens.length && tokens[i].startsWith('-')) {
+      const opcija = tokens[i];
+      const [ime, vrijednost] = opcija.includes('=') ? [opcija.slice(0, opcija.indexOf('=')), opcija.slice(opcija.indexOf('=') + 1)] : [opcija, null];
+      if (opcija === '-C' && tokens[i + 1] !== undefined) {
+        gitDir = razrijesiPut(tokens[i + 1], gitDir);
+        i += 2;
+      } else if (ime === '--work-tree' || ime === '--git-dir') {
+        const put = vrijednost ?? tokens[i + 1];
+        if (put !== undefined) {
+          if (ime === '--work-tree') radnoStablo = put;
+          else gitDirOpcija = put;
+        }
+        i += vrijednost === null ? 2 : 1;
+      } else if (vrijednost === null && ['-c', '--namespace', '--exec-path', '--config-env'].includes(opcija)) {
+        i += 2;
+      } else {
+        i += 1;
+      }
+    }
+    // Indeks i stanje spajanja zive u git-diru, pa uz oba izolirani `--work-tree` ne smije prekriti
+    // dijeljeni `--git-dir`: git-dir odreduje stablo, work-tree samo kad je sam.
+    if (gitDirOpcija !== null) {
+      const gd = razrijesiPut(gitDirOpcija, gitDir);
+      gitDir = /[\\/]\.git[\\/]?$/i.test(gd) ? dirname(gd) : gd;
+    } else if (radnoStablo !== null) {
+      gitDir = razrijesiPut(radnoStablo, gitDir);
+    }
+    okolina = { ...okolina, dir: gitDir };
+    const sub = (tokens[i] ?? '').toLowerCase();
+    const args = tokens.slice(i + 1);
 
     if (sub === 'add') {
       if (
         hasFlag(args, '-A') ||
         hasFlag(args, '--all') ||
+        hasFlag(args, '-u') ||
+        hasFlag(args, '--update') ||
         args.some((a) => a === '.')
       ) {
         return {
           allow: false,
           reason:
-            'git add -A / git add . / git add --all nije dopusten. Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
+            'git add -A / git add . / git add --all / git add -u nije dopusten (stagira i tudji necommitani rad). Koristi git add <tocne putanje> i commitaj s git commit --only <putanje>.',
         };
       }
       return null;
@@ -135,7 +301,12 @@ function judgeSingleCommand(tokens) {
         };
       }
       const hasAllFlag = hasFlag(args, '-a') || hasFlag(args, '--all');
-      const hasOnly = hasFlag(args, '--only');
+      // Pathspec iza `--` git commita kao `--only` (samo te putanje), osim uz `-i`/`--include`
+      // (cijeli indeks PLUS te putanje). Kratki `-o` se namjerno ne priznaje: kao vrijednost tudje
+      // opcije (`-m -o`) ne moze se razlikovati bez punog parsera, a `--only` je propisani oblik.
+      const crta = args.indexOf('--');
+      const uzmiIndeks = hasFlag(args, '-i') || hasFlag(args, '--include');
+      const hasOnly = hasFlag(args, '--only') || (!uzmiIndeks && crta >= 0 && crta < args.length - 1);
       if (hasAllFlag && !hasOnly) {
         return {
           allow: false,
@@ -143,7 +314,12 @@ function judgeSingleCommand(tokens) {
             'git commit s -a/--all bez --only nije dopusten (uzima cijeli indeks). Koristi git commit --only <putanje>.',
         };
       }
+      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);
       return null;
+    }
+
+    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {
+      return judgeWholeIndexCommit(okolina, true);
     }
 
     if (sub === 'push') {
@@ -254,17 +430,212 @@ function judgeSingleCommand(tokens) {
 }
 
 /**
+ * Supabase MCP alati koji samo citaju. Sve ostalo se odbija (fail-closed): nepoznat ili nov alat
+ * (npr. `create_edge_function_secret`) ne smije proci samo zato sto ga popis zabrana ne zna.
+ * Usporedba je po zadnjem dijelu imena, jer isti alat dolazi kao `mcp__Supabase__list_tables`
+ * (claude.ai konektor) i `mcp__claude_ai_Supabase__list_tables` (lokalni CLI). `execute_sql` ima
+ * zasebnu presudu nize.
+ */
+const SUPABASE_MCP_READ_TOOLS = Object.freeze(new Set([
+  'list_tables',
+  'list_extensions',
+  'list_migrations',
+  'list_edge_functions',
+  'get_edge_function',
+  'list_branches',
+  'list_projects',
+  'get_project',
+  'list_organizations',
+  'get_organization',
+  'get_logs',
+  'query_logs',
+  'get_advisors',
+  'get_project_url',
+  'get_anon_key',
+  'get_publishable_keys',
+  'generate_typescript_types',
+  'search_docs',
+  'list_storage_buckets',
+  'get_storage_config',
+]));
+
+/**
+ * Rijeci koje znace pisanje, zakljucavanje ili izvrsavanje. Trazi se cijela rijec u kodu nakon
+ * `stripSqlNonCode`, pa `created_at` ili 'delete' u literalu ne okidaju. Lazno pozitivan ishod (npr.
+ * stupac imena `comment`) samo odbija citanje.
+ */
+const SQL_WRITE_RE = /\b(insert|update|delete|merge|upsert|truncate|drop|alter|create|grant|revoke|comment|vacuum|reindex|cluster|copy|call|do|refresh|lock|share|into|analyze|analyse|reassign|import|security|set|reset|discard|notify|listen|prepare|execute|begin|commit|rollback|savepoint|checkpoint|load)\b/i;
+
+/**
+ * Pozivi oblika `ime(` dopusteni u upitu koji samo cita: SQL kljucne rijeci koje stoje ispred
+ * zagrade i mali skup cistih funkcija. Svaki drugi poziv se odbija, jer funkcija moze imati
+ * nuspojavu (`pg_notify`, `pg_advisory_lock`, `set_config`, vlastiti RPC). Ime u navodnicima
+ * postaje `qid` i nije na popisu.
+ */
+const SQL_SAFE_CALLS = Object.freeze(new Set([
+  'select', 'from', 'join', 'in', 'exists', 'any', 'all', 'some', 'as', 'on', 'where', 'and', 'or',
+  'not', 'when', 'then', 'else', 'case', 'by', 'over', 'filter', 'within', 'values', 'array', 'row',
+  'using', 'lateral', 'between', 'is', 'distinct', 'union', 'intersect', 'except', 'with', 'having',
+  'limit', 'offset', 'cast', 'extract', 'coalesce', 'nullif', 'greatest', 'least',
+  'count', 'sum', 'avg', 'min', 'max', 'bool_and', 'bool_or', 'array_agg', 'string_agg', 'json_agg',
+  'jsonb_agg', 'lower', 'upper', 'length', 'char_length', 'trim', 'substring', 'replace', 'round',
+  'abs', 'floor', 'ceil', 'now', 'date_trunc', 'date_part', 'to_char', 'to_date', 'age',
+  'jsonb_array_length', 'jsonb_typeof', 'jsonb_build_object', 'json_build_object', 'row_number',
+  'rank', 'dense_rank', 'lag', 'lead', 'pg_size_pretty', 'pg_total_relation_size', 'pg_relation_size',
+]));
+
+/** Prva rijec naredbe koja samo cita. `EXPLAIN ANALYZE` izvrsava upit pa ga odbija SQL_WRITE_RE. */
+const SQL_READ_START_RE = /^(select|with|show|explain)\b/;
+
+/**
+ * Jedan prolaz slijeva nadesno, kao PostgreSQL leksik: komentari (`--`, ugnijezdeni slash-zvjezdica),
+ * `$tag$...$tag$`, `E'...'` s backslash escapeom, `'...'` s `''` i `"..."` identifikatori. Literali i
+ * komentari postaju razmak, identifikator u navodnicima `qid`. Redoslijed je bitan: odvojeni
+ * regexi (prvo komentari, pa literali) sakriju naredbu iza `'--'` ili `E'\''`.
+ * @param {string} sql
+ * @returns {{code: string, unterminated: boolean}}
+ */
+export function stripSqlNonCode(sql) {
+  let out = '';
+  let i = 0;
+  const n = sql.length;
+  while (i < n) {
+    const c = sql[i];
+    const next = sql[i + 1];
+    if (c === '-' && next === '-') {
+      const end = sql.indexOf('\n', i);
+      if (end === -1) return { code: out, unterminated: false };
+      out += ' ';
+      i = end + 1;
+      continue;
+    }
+    if (c === '/' && next === '*') {
+      let depth = 1;
+      i += 2;
+      while (i < n && depth > 0) {
+        if (sql[i] === '/' && sql[i + 1] === '*') { depth += 1; i += 2; continue; }
+        if (sql[i] === '*' && sql[i + 1] === '/') { depth -= 1; i += 2; continue; }
+        i += 1;
+      }
+      if (depth > 0) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '$') {
+      const tag = /^\$([A-Za-z_][A-Za-z_0-9]*)?\$/.exec(sql.slice(i));
+      if (tag) {
+        const close = sql.indexOf(tag[0], i + tag[0].length);
+        if (close === -1) return { code: out, unterminated: true };
+        out += ' ';
+        i = close + tag[0].length;
+        continue;
+      }
+    }
+    const prev = i > 0 ? sql[i - 1] : '';
+    const eString = (c === 'e' || c === 'E') && next === "'" && !/[A-Za-z0-9_$]/.test(prev);
+    if (eString || c === "'") {
+      i += eString ? 2 : 1;
+      let closed = false;
+      while (i < n) {
+        if (eString && sql[i] === '\\') { i += 2; continue; }
+        if (sql[i] === "'") {
+          if (sql[i + 1] === "'") { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' ';
+      continue;
+    }
+    if (c === '"') {
+      i += 1;
+      let closed = false;
+      while (i < n) {
+        if (sql[i] === '"') {
+          if (sql[i + 1] === '"') { i += 2; continue; }
+          i += 1;
+          closed = true;
+          break;
+        }
+        i += 1;
+      }
+      if (!closed) return { code: out, unterminated: true };
+      out += ' qid ';
+      continue;
+    }
+    out += c;
+    i += 1;
+  }
+  return { code: out, unterminated: false };
+}
+
+/**
+ * Razlog zbog kojeg `execute_sql` upit nije siguran za citanje, ili `null` kad jest. Ovo je druga
+ * razina; jamstvo daje tek konektor s `read_only=true` (izvrsavanje pod korisnikom baze koji samo cita).
+ * @param {string} query
+ * @returns {string | null}
+ */
+export function sqlReadOnlyProblem(query) {
+  const { code, unterminated } = stripSqlNonCode(query);
+  if (unterminated) return 'nezatvoren literal, komentar ili identifikator';
+  const body = code.trim().replace(/;\s*$/, '').toLowerCase();
+  if (body.length === 0) return 'prazan upit';
+  if (body.includes(';')) return 'vise naredbi';
+  if (!SQL_READ_START_RE.test(body)) return 'naredba ne pocinje sa SELECT, WITH, SHOW ili EXPLAIN';
+  const write = body.match(SQL_WRITE_RE);
+  if (write) return `sadrzi "${write[1]}"`;
+  for (const call of body.matchAll(/([a-z_][a-z0-9_$]*)\s*\(/g)) {
+    if (!SQL_SAFE_CALLS.has(call[1])) return `poziva funkciju "${call[1]}"`;
+  }
+  return null;
+}
+
+/**
+ * Presuda za Supabase MCP alat. `null` znaci da alat nije Supabase MCP i odlucuje ostatak garda.
+ * @param {string} toolNameLower
+ * @param {Record<string, unknown> | undefined} toolInput
+ * @returns {{allow: boolean, reason: string} | null}
+ */
+export function judgeSupabaseMcp(toolNameLower, toolInput) {
+  if (!toolNameLower.startsWith('mcp__') || !toolNameLower.includes('supabase')) return null;
+  const name = toolNameLower.split('__').pop() ?? '';
+  if (name === 'execute_sql') {
+    const query = toolInput && typeof toolInput.query === 'string' ? toolInput.query : '';
+    const problem = sqlReadOnlyProblem(query);
+    if (problem) {
+      return {
+        allow: false,
+        reason: `Supabase MCP execute_sql dopusta samo jednu naredbu koja cita (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; upit: ${problem}. Promjena sheme ide kroz migraciju i supabase db push, promjena podataka kroz vlasnika. Puno jamstvo daje konektor s read_only=true.`,
+      };
+    }
+    return { allow: true, reason: 'Supabase MCP execute_sql: upit oblikom samo cita.' };
+  }
+  if (SUPABASE_MCP_READ_TOOLS.has(name)) return { allow: true, reason: 'Supabase MCP alat samo cita.' };
+  return {
+    allow: false,
+    reason: `Supabase MCP ${name} nije na popisu alata koji samo citaju, pa se odbija. Migracije idu kroz supabase db push, deploy Edge funkcija s dokazom po supabase/CLAUDE.md, a tajne, projekt i grane mijenja samo vlasnik.`,
+  };
+}
+
+/**
  * Cista funkcija bez nuspojava: presuduje smije li se naredba izvrsiti. Ne poziva git/fs; prima
  * samo ime alata i tekst naredbe (za MCP alate poput apply_migration, `command` je izostavljen i
- * odluka se donosi po imenu alata).
+ * odluka se donosi po imenu alata, a za Supabase `execute_sql` po `toolInput.query`).
  *
  * @param {string} toolName - npr. "Bash", "PowerShell", ili ime MCP alata poput
  *   "mcp__claude_ai_Supabase__apply_migration".
  * @param {string | undefined} command - `tool_input.command` za Bash/PowerShell; nedefinirano za
  *   alate bez naredbe u ljusci.
+ * @param {Record<string, unknown>} [toolInput] - cijeli `tool_input`; MCP alati nose argumente ovdje.
+ * @param {{cwd?: string, ispitaj?: (dir: string) => ({izoliran: boolean, spajanje: boolean} | null)}} [okolina] -
+ *   stanje stabla za naredbe koje commitaju cijeli indeks. Bez `ispitaj` stanje je nepoznato, pa
+ *   presuda ostaje cista (bez gita) i za takve naredbe odbija; `main` predaje stvarni `stanjeStabla`.
  * @returns {{allow: boolean, reason: string}}
  */
-export function judgeCommand(toolName, command) {
+export function judgeCommand(toolName, command, toolInput, okolina = {}) {
   const toolNameLower = (toolName ?? '').toLowerCase();
   if (toolNameLower.includes('apply_migration')) {
     return {
@@ -272,16 +643,29 @@ export function judgeCommand(toolName, command) {
       reason: 'MCP apply_migration nije dopusten. Migracije idu iskljucivo kroz supabase db push --linked.',
     };
   }
+  const supabaseVerdict = judgeSupabaseMcp(toolNameLower, toolInput);
+  if (supabaseVerdict) return supabaseVerdict;
 
   if (typeof command !== 'string' || command.trim().length === 0) {
     return { allow: true, reason: 'Nema naredbe za provjeru, propusteno.' };
   }
 
   const subcommands = splitChainedCommands(command);
+  const stanje = {
+    dir: okolina.cwd || process.cwd(),
+    ispitaj: okolina.ispitaj ?? (() => null),
+  };
   let warning = null;
   for (const sub of subcommands) {
     const tokens = tokenize(sub);
-    const verdict = judgeSingleCommand(tokens);
+    // `cd <put>` (i PowerShell `Set-Location`/`Push-Location`, `pushd`) u lancu mijenja gdje
+    // sljedeci git stvarno radi. Preskacu se `/d`, `-Path` i `-LiteralPath`.
+    if (PROMJENA_DIREKTORIJA.has((tokens[0] ?? '').toLowerCase())) {
+      const put = tokens.slice(1).find((t) => !['/d', '-path', '-literalpath'].includes(t.toLowerCase()));
+      if (put) stanje.dir = razrijesiPut(put, stanje.dir);
+      continue;
+    }
+    const verdict = judgeSingleCommand(tokens, stanje);
     if (verdict === null) continue;
     if (!verdict.allow) return verdict;
     warning = verdict;
@@ -328,7 +712,10 @@ async function main() {
 
   let verdict;
   try {
-    verdict = judgeCommand(toolName, command);
+    verdict = judgeCommand(toolName, command, payload?.tool_input, {
+      cwd: typeof payload?.cwd === 'string' ? payload.cwd : undefined,
+      ispitaj: stanjeStabla,
+    });
   } catch (err) {
     process.stderr.write(`tool-guard: interna greska u judgeCommand, propustam (fail-open). ${String(err)}\n`);
     process.exit(0);

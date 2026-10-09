@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift guard za real-corpus backlog (docs/generated/real-corpus-backlog.json/.md).
  *

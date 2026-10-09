@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cisti HTML sloj triage prikaza (src/ui/triage-view.ts): brojaci-filteri, tri razine,
  * lokacije/skok, manual lijevak, redakcija isjecka izvan otkljucanog recepta.

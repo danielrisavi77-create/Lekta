@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T83: jedan dokument, jedan glas. Isti rad iz vise korijena korpusa mjeri se jednom; nesuglasni
  * duplikati i isti sadrzaj pod dva imena rusu mjerenje; ovjera odbija napuhano ili palo mjerenje, a

@@ -94,6 +94,14 @@ npm run orphan-scan
 ```
 `npm run check` traži Deno, `check:edge` se ne preskoči. Zeleni izlazni kod bez retka `Test Files` nije dokaz (može biti prekid zbog RAM-a). Stanje mastera je zasebno: `npm run master-ci` (zeleno, CRVENO ili NE ZNAM, nepoznato nije zeleno). Teški poslovi samo kroz `node scripts/with-gate-lock.mjs`. Parser, audit ili citations: prvo golden koji biljezi zatečeno ponašanje. Netrivijalna promjena u repair, citations, docx ili security kodu traži adversarijalni pregled DRUGOG providera od implementatora. Nalaz je advisory i re-verificira se.
 
+## Razine testiranja: unutarnja petlja nije gate
+Puni gate se ne vrti nakon svake male izmjene, ali se nikad ne zamjenjuje djelomičnim. Izmjereno 2026-10-08 (cloud s 4 jezgre, gdje `with-gate-lock` postavlja `VITEST_MAX_THREADS=1`): puni `vitest run` traje oko 1230 s, pa ga ponavljati nakon svakog popravka znači sat čekanja po zadatku.
+1. Unutarnja petlja, dok se popravlja: samo pogođeni testovi, i dalje kroz lock. `node scripts/with-gate-lock.mjs <oznaka> -- npx vitest run <datoteke>` ili `npx vitest related <promijenjene datoteke>`; nakon pada samo taj test (`-t "<ime>"`), uz `tsc --noEmit` ako je dirnut tip. Ovo je međusignal, nikad dokaz u izvještaju.
+2. Prije commita: jedan svjež puni `npm run check` nad konačnim stanjem stabla, plus `npm run orphan-scan`. Ne mijenjaj stablo dok gate radi, jer mjerenje tada ne odgovara nijednom stanju koda.
+3. CI: sve na čistom checkoutu, uključujući korake koje lokalna okolina ne može (npr. `check:edge` bez pristupa `esm.sh`). Takav korak se u izvještaju navodi kao neprovjeren, ne zelen.
+
+"Ponovi samo dio koji je pao" nije dopušten kao završni dokaz: popravak jednog dijela zna slomiti drugi, a to hvata samo puni prolaz.
+
 ## Popravni krug nakon pregleda
 Razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali lokalni nalaz mjeri doseg, regenerira samo pogođene artefakte u dva prolaza. Novi dizajn (nov zapis, ožičenje, mutacija) nije mehanički. Širenje izvan izvornih stavki staje i postaje zaseban zadatak.
 

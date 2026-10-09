@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * process-bonus-outbox, obveza `referrer_reward` (F21, stavka 1): nagrada preporucitelju se ne
  * isplacuje za vracen novac.

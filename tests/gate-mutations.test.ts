@@ -123,13 +123,9 @@ import {
   STRIPE_HANDLED_EVENTS,
   buildEntitlementInsert,
 } from '../src/report/webhook';
-import { quoteUpgrade, readBoundSlotIntact, upgradeIdempotencyKey } from '../src/report/upgrade';
+import { quoteUpgrade, upgradeIdempotencyKey } from '../src/report/upgrade';
 import {
-  accessRowsProblems,
   bonusOutboxWorkerProblems,
-  referrerRewardDecisionProblems,
-  referrerRewardRetryProblems,
-  boundSlotReadProblems,
   entitlementAccessProblems,
   entitlementConsumerProblems,
   entitlementProductFkCount,
@@ -141,29 +137,13 @@ import {
   upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
-import type * as GrantModul from '../supabase/functions/_shared/grant-referrer-reward';
-import type * as RadnikModul from '../supabase/functions/process-bonus-outbox/referrer-reward';
-import { ACTIVE_SLOT_SELECT, ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
-import type { SlotRow } from '../src/report/slot-logic';
+import { bonusOutboxModuleSource } from './helpers/bonus-outbox-source';
+import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb } from '../src/report/entitlement-access';
 import { billableMismatch, SPECIALIST_TIER_ENABLED } from '../src/report/billable-work-type';
 import { applyGuard as stripeSyncApplyGuard, parseArgs as stripeSyncParseArgs } from '../scripts/stripe-sync-products.mjs';
 import { checkoutMismatch } from '../src/report/checkout';
 import { estimateWorkType, unambiguousMismatch } from '../src/report/work-type-estimate';
 import { isReportWorkType } from '../src/report/pricing';
-import {
-  V1_MIGRATION,
-  catalogProblems,
-  constraintDropProblems,
-  definerOwnerProblems,
-  idempotencyProblems,
-  partialRefundSqlProblems,
-  privilegeProblems,
-  readMigration,
-  runV1,
-  snapshotProblems,
-  upgradeRevertSqlProblems,
-  upgradeSqlProblems,
-} from './helpers/monetizacija-v1-sql';
 import { findBotsImplementingProtected, findImplementEffortDrift, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
 import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import { FIXTURE_FILES, gradeTests, probeModel } from '../scripts/agents/model-probe.mjs';
@@ -266,7 +246,7 @@ import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers
 import { judgeCpuDiscipline, packageScriptReader, HEAVY_BINARIES } from '../scripts/hooks/cpu-discipline.mjs';
 import { decideStop, MAX_BLOCKS } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
-import { missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { hookCommand, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 import { leanPromptProblems } from './helpers/lean-prompts';
 import { weakMachineProblems, weakMachineWiringProblems } from './helpers/weak-machine';
 import { weakMachineWorkerEnv } from '../scripts/gate-preflight.mjs';
@@ -319,6 +299,7 @@ import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRea
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
+import { supabaseMcpGuardProblems, supabaseMcpGuardProblemsForSource, toolGuardMatcherProblems } from './helpers/supabase-mcp-guard';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -8670,9 +8651,6 @@ function migrationsForFkGuard(): { name: string; sql: string }[] {
     .map((name) => ({ name, sql: readTextLf(resolve(dir, name)) }));
 }
 
-function bonusOutboxModuleSource(): string {
-  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'referrer-reward.ts'));
-}
 
 function bonusOutboxIndexSource(): string {
   return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'process-bonus-outbox', 'index.ts'));
@@ -8772,472 +8750,6 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   });
 });
 
-/**
- * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0207 se
- * izvrsava u stvarnom Postgresu (PGlite, tests/helpers/monetizacija-v1-sql.ts). Isti ugovor kao
- * MUTATIONS: cisti baseline, pa mutacija koja mora oboriti gard.
- */
-describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
-  const ROK_SQL = 180_000;
-
-  /**
-   * Codex pregled PR #217 runda 2: mutacija nagrade mora pogoditi PRODUKCIJSKI izvor, ne ubrizganu
-   * funkciju. Tekst supabase/functions/_shared/grant-referrer-reward.ts se mijenja zamjenom, a
-   * mutirani modul i radnik koji ga uvozi (process-bonus-outbox/referrer-reward.ts) prevode se
-   * esbuildom i stvarno izvrsavaju; radnikov uvoz zajednicke odluke dobiva MUTIRANI modul. Zamjena
-   * koja ne pogodi tekst obara test, pa gard ne moze tiho postati slijep nakon preoblikovanja izvora.
-   * Bez privremenih datoteka: modulski runner Vitesta odbija uvoz izvan korijena projekta.
-   */
-  const GRANT_IZVOR = resolve(process.cwd(), 'supabase', 'functions', '_shared', 'grant-referrer-reward.ts');
-
-  function mutirajNagradu(od: string, u: string): string {
-    const izvor = readTextLf(GRANT_IZVOR);
-    const mutiran = izvor.replace(od, u);
-    expect(mutiran, `zamjena nije pogodila izvor nagrade: ${od}`).not.toBe(izvor);
-    return mutiran;
-  }
-
-  /** Izvrsi TypeScript izvor kao CommonJS modul; svaki uvoz mora biti zadan u `uvozi`. */
-  function izvrsiIzvor(izvor: string, uvozi: Record<string, unknown>): unknown {
-    const { code } = esbuild.transformSync(izvor, { loader: 'ts', format: 'cjs' });
-    const modul: { exports: Record<string, unknown> } = { exports: {} };
-    const zahtjev = (ime: string): unknown => {
-      if (!(ime in uvozi)) throw new Error(`neocekivan uvoz u mutiranom izvoru: ${ime}`);
-      return uvozi[ime];
-    };
-    new Function('module', 'exports', 'require', code)(modul, modul.exports, zahtjev);
-    return modul.exports;
-  }
-
-  async function nagradniModuliIz(grantIzvor: string) {
-    const grant = izvrsiIzvor(grantIzvor, {}) as typeof GrantModul;
-    const worker = izvrsiIzvor(bonusOutboxModuleSource(), {
-      '../_shared/grant-referrer-reward.ts': grant,
-      '../webhook-mor/handler.ts': await import('../supabase/functions/webhook-mor/handler'),
-    }) as typeof RadnikModul;
-    return { grant, worker };
-  }
-
-  it('Codex PR #217 r2: nemutirani izvor nagrade kroz isti ucitavac je cist (gard odluke i gard radnika)', async () => {
-    const { grant, worker } = await nagradniModuliIz(readTextLf(GRANT_IZVOR));
-    expect(await referrerRewardDecisionProblems(grant)).toEqual([]);
-    expect(await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).toEqual([]);
-  });
-
-  it('Codex PR #217 M2: izvor koji svaki ishod zatvara (stanje f466d454, zanemaren ishod) obara oba garda', async () => {
-    const { grant, worker } = await nagradniModuliIz(mutirajNagradu(
-      'return { settled: r.granted === false && TRAJNI_RAZLOZI.has(reason), reason };',
-      'return { settled: true, reason };',
-    ));
-    const radnik = await referrerRewardRetryProblems(worker.runReferrerRewardObligation);
-    expect(radnik.some((x) => x.startsWith('grant_failed:'))).toBe(true);
-    expect(radnik.some((x) => x.startsWith('error:'))).toBe(true);
-    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith('prolazan ishod'))).toBe(true);
-  });
-
-  it('Codex PR #217 M2: izvor u kojem je ip_match_fraud prolazan pad (ponavlja se) obara gard radnika', async () => {
-    const { worker } = await nagradniModuliIz(mutirajNagradu("'self_referral', 'ip_match_fraud', ", "'self_referral', "));
-    expect((await referrerRewardRetryProblems(worker.runReferrerRewardObligation)).some((x) => x.includes('ip_match_fraud se ponavlja'))).toBe(true);
-  });
-
-  it.each([
-    ['anonimni kupac', "    if (buyer.user.is_anonymous) return { granted: false, reason: 'ineligible_buyer' };\n", ''],
-    ['samopreporuka', "    if (signup.referrer_user_id === buyerUserId) return { granted: false, reason: 'self_referral' };\n", ''],
-    ['IP preporucitelja se poklapa', 'referrerIpHashes.has(signup.referred_ip_hash)', 'false'],
-    ['mjesecni strop', 'count >= MAX_REWARDED_PER_MONTH && !signup.converted_order_id', 'false'],
-    // Codex pregled delte (G-1): filtri upita, ne samo grane odluke.
-    ['signup vec nagradjen', "      .eq('referred_user_id', buyerUserId)\n      .eq('status', 'friend_rewarded')\n", "      .eq('referred_user_id', buyerUserId)\n"],
-    ['IP trece osobe', "      .eq('user_id', signup.referrer_user_id)\n", ''],
-    // Filtri upita brojanja mjesecnog stropa (rezultat ispod stropa ne smije zbrajati tudje ni nenagradjene retke).
-    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('status', 'rewarded')\n"],
-    ['brojanje stropa', "      .eq('referrer_user_id', signup.referrer_user_id)\n      .eq('status', 'rewarded')\n", "      .eq('referrer_user_id', signup.referrer_user_id)\n"],
-    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'false'],
-    ['signup preuzeo drugi order', 'signup.converted_order_id && signup.converted_order_id !== buyerOrderId', 'signup.converted_order_id && signup.converted_order_id === buyerOrderId'],
-  ])('Codex PR #217 r2 M2b: izvor bez uvjeta "%s" obara gard odluke', async (uvjet, od, u) => {
-    const { grant } = await nagradniModuliIz(mutirajNagradu(od, u));
-    expect((await referrerRewardDecisionProblems(grant)).some((x) => x.startsWith(`${uvjet}:`))).toBe(true);
-  });
-
-  it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
-    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
-    const mutant: typeof readAccessRows = async (db, u, w, n) => {
-      const r = await readAccessRows(db, u, w, n);
-      return r.ok ? r : { ok: true, activeSlots: [], entitlements: [] };
-    };
-    expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
-  });
-
-  it('krug 4: citanje pristupa koje slot uzima bez obzira na status prava (stanje kruga 3) obara gard povrata nadogradnje', async () => {
-    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
-    const mutant: typeof readAccessRows = async (db, u, w, n) => {
-      const r = await readAccessRows(db, u, w, n);
-      if (!r.ok) return r;
-      // Slotovi kao prije kruga 4: svaki zivi slot, bez veze na entitlement_id i status prava.
-      const raw = await db.from('document_slots').select(ACTIVE_SLOT_SELECT).eq('user_id', u).eq('work_type', w).gt('slot_expires_at', n);
-      const activeSlots = (Array.isArray(raw.data) ? raw.data : []).map((x) => {
-        const s = x as Record<string, unknown>;
-        return { id: String(s.id), workType: w, fingerprint: s.fingerprint, slotExpiresAt: String(s.slot_expires_at) } as SlotRow;
-      });
-      return { ...r, activeSlots };
-    };
-    expect((await accessRowsProblems(mutant)).some((p) => p.includes('povrat nadogradnje') && p.includes('umjesto 402'))).toBe(true);
-  });
-
-  it('krug 4: citanje vezanog slota po isteku prozora (stara granica) obara gard kredita za popravak', async () => {
-    expect(await boundSlotReadProblems(readBoundSlotIntact, quoteUpgrade)).toEqual([]);
-    const staro: typeof readBoundSlotIntact = async (admin, id) => {
-      const q = admin.from('document_slots').select('id, fingerprint, slot_expires_at').eq('entitlement_id', id);
-      const { data, error } = await q;
-      if (error) return { ok: false, error: String(error) };
-      const zivi = (Array.isArray(data) ? data : []).filter((r) => Date.parse(String((r as Record<string, unknown>).slot_expires_at)) > Date.UTC(2026, 8, 27));
-      return { ok: true, intact: zivi.length > 0 };
-    };
-    expect((await boundSlotReadProblems(staro, quoteUpgrade)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
-    const bezOtiska: typeof readBoundSlotIntact = async (admin, id) => {
-      const r = await readBoundSlotIntact(admin, id);
-      return r.ok ? { ok: true, intact: true } : r;
-    };
-    expect((await boundSlotReadProblems(bezOtiska, quoteUpgrade)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
-  });
-
-  it('catalogProblems: baseline cist nad 0207', async () => {
-    const run = await runV1();
-    try {
-      expect(await catalogProblems(run.db)).toEqual([]);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('catalogProblems: do_obrane ostaje active=true -> gard obara', async () => {
-    const mutated = mutirajRe(/set active = false(\r?\n\s+where id in \('slot_zavrsni_do_obrane')/, 'set active = true$1');
-    const run = await runV1(mutated);
-    try {
-      expect((await catalogProblems(run.db)).some((p) => p.startsWith('slot_zavrsni_do_obrane:') || p.startsWith('slot_diplomski_do_obrane:'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('catalogProblems: cijena mimo set_product_price (bez pricing_changelog traga) -> gard obara', async () => {
-    const mutated = mutirajRe(
-      /perform public\.set_product_price\(v\.id, v\.price_eur::numeric,\s*'[^']*'\);/,
-      'update public.products set price_eur = v.price_eur::numeric where id = v.id;',
-    );
-    const run = await runV1(mutated);
-    try {
-      expect((await catalogProblems(run.db)).some((p) => p.includes('nije u pricing_changelog'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('catalogProblems: specijalisticki izostavljen iz work_type CHECK-a repair_jobs -> gard obara', async () => {
-    const mutated = mutirajRe(
-      /(add constraint repair_jobs_work_type_check\r?\n\s+check \(work_type in \('seminarski', 'zavrsni', 'diplomski', )'specijalisticki', /,
-      '$1',
-    );
-    const run = await runV1(mutated);
-    try {
-      expect((await catalogProblems(run.db)).some((p) => p.startsWith('repair_jobs: work_type CHECK'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('0207 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
-    const run = await runV1();
-    try {
-      // Nadogradnja prva: snapshotProblems mijenja katalog (namjerno, da dokaze da kupljeno ostaje).
-      expect(await upgradeSqlProblems(run.db)).toEqual([]);
-      expect(await snapshotProblems(run)).toEqual([]);
-    } finally {
-      await run.db.close();
-    }
-    const drugi = await runV1();
-    try {
-      expect(await idempotencyProblems(drugi)).toEqual([]);
-    } finally {
-      await drugi.db.close();
-    }
-  }, ROK_SQL);
-
-  function mutiraj(od: string, u: string): string {
-    const sql = readMigration(V1_MIGRATION);
-    const mutated = sql.replace(od, u);
-    expect(mutated, `mutacija nije primijenjena: ${od.slice(0, 60)}`).not.toBe(sql);
-    return mutated;
-  }
-
-  /** Kao mutiraj, ali regexom (neovisno o CRLF-u radne kopije). */
-  function mutirajRe(od: RegExp, u: string): string {
-    const sql = readMigration(V1_MIGRATION);
-    const mutated = sql.replace(od, u);
-    expect(mutated, `mutacija nije primijenjena: ${od.source.slice(0, 60)}`).not.toBe(sql);
-    return mutated;
-  }
-
-  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja anonimiziranog rada obara gard', async () => {
-    const mutated = mutiraj('  if v_ent.slots_used > 0 and not found then', '  if false then');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('anonimiziran vezani slot'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: apply_entitlement_upgrade sa starom granicom (slot_expires_at > now) odbija istekao, a netaknut slot i obara gard', async () => {
-    const mutated = mutirajRe(/and s\.fingerprint \?\| array\['authorNorm', 'titleNorm', 'headings'\]/, 'and s.slot_expires_at > now()');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao prije 5 dana'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: apply_entitlement_upgrade s rokom potrosnje i za vezano pravo odbija vezan Repair izvan roka i obara gard', async () => {
-    const mutated = mutirajRe(/(or v_ent\.status <> 'active')/, '$1 or v_ent.purchase_expires_at <= now()');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('rok potrosnje istekao'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: apply_entitlement_upgrade bez roka potrosnje za nevezano pravo obara gard', async () => {
-    const mutated = mutirajRe(/if v_ent\.slots_used = 0 and v_ent\.purchase_expires_at <= now\(\) then/, 'if false then');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('nevezan izvan roka potrosnje'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: povrat nadogradnje baseline cist nad svjezom bazom', async () => {
-    const run = await runV1();
-    try {
-      expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: revert_entitlement_upgrade bez vracanja slota ostavlja produljen prozor i obara gard (dan 60 besplatan)', async () => {
-    const mutated = mutirajRe(/  update public\.document_slots s\r?\n     set slot_expires_at = least\(/, '  update public.document_slots s\n     set slot_expires_at = greatest(');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('dan 60'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: povrat nadogradnje koji gasi pravo (umjesto vracanja Repaira) obara gard placenog Repaira', async () => {
-    const mutated = mutirajRe(/         upgrade_reverted_at = now\(\)\r?\n   where id = v_ent\.id;/, "         upgrade_reverted_at = now(),\n         status = 'refunded'\n   where id = v_ent.id;");
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('Repair kupac kaznjen'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: pretvorba koja ne pamti istek slota prije nadogradnje obara gard (ozivljen slot ostaje produljen)', async () => {
-    const mutated = mutirajRe(/upgraded_from_slot_expires_at = v_slot_prije,/, 'upgraded_from_slot_expires_at = null,');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ozivljen slot'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('krug 4: povrat nadogradnje koji ozivljava vec ugaseno pravo obara gard', async () => {
-    const mutated = mutirajRe(/  if v_ent\.status <> 'active' then\r?\n    return 'inactive';\r?\n  end if;\r?\n/, '');
-    const run = await runV1(mutated);
-    try {
-      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ugasenog prava'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('Codex PR #217 M1: djelomican povrat baseline cist nad svjezom bazom', async () => {
-    const run = await runV1();
-    try {
-      expect(await partialRefundSqlProblems(run.db)).toEqual([]);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('Codex PR #217 M1: pretvorba bez provjere djelomicnog povrata (stanje f466d454) obara gard', async () => {
-    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if false\n     and exists (');
-    const run = await runV1(mutated);
-    try {
-      const p = await partialRefundSqlProblems(run.db);
-      expect(p.some((x) => x.startsWith('povrat prije pretvorbe: apply_entitlement_upgrade vraca upgraded'))).toBe(true);
-      expect(p.some((x) => x.includes('povrat uplate nadogradnje prije pretvorbe'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('Codex PR #217 M1: pretvorba koja cita samo oznaku izvorne uplate (ne refunded_cents) obara gard', async () => {
-    const mutated = mutirajRe(/  if v_ent\.refunded_cents > 0\r?\n     or exists \(/, '  if exists (');
-    const run = await runV1(mutated);
-    try {
-      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('samo refunded_cents'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('Codex PR #217 M1: povrat nakon pretvorbe koji ne javlja nadogradjeno pravo obara gard', async () => {
-    const mutated = mutirajRe(/      v_ishod := 'upgraded_needs_review';/, "      v_ishod := 'noted';");
-    const run = await runV1(mutated);
-    try {
-      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('Final Pass tiho ostaje'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('Codex PR #217 M1: povrat koji ne vodi iznos u bazi obara gard', async () => {
-    const mutated = mutirajRe(/set refunded_cents = greatest\(refunded_cents, coalesce\(p_refunded_cents, 0\)\)/, 'set refunded_cents = refunded_cents');
-    const run = await runV1(mutated);
-    try {
-      expect((await partialRefundSqlProblems(run.db)).some((x) => x.includes('iznos se ne vodi u bazi'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  /** M4: privilegije se mjere u bazi sa zadanim privilegijama Supabasea i u bazi bez njih. */
-  async function privilegijeNad(sql: string): Promise<string[]> {
-    const sZadanima = await runV1(sql, { supabaseDefaults: true });
-    const bez = await runV1(sql);
-    try {
-      return await privilegeProblems(sZadanima.db, bez.db);
-    } finally {
-      await sZadanima.db.close();
-      await bez.db.close();
-    }
-  }
-
-  it('Codex PR #217 M4: privilegije baseline ciste', async () => {
-    expect(await privilegijeNad(readMigration(V1_MIGRATION))).toEqual([]);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M4: offer_codes bez revoke (stanje f466d454) daje anon zadane privilegije i obara gard', async () => {
-    const mutated = mutiraj('revoke all on table public.offer_codes from public, anon, authenticated;', '');
-    const p = await privilegijeNad(mutated);
-    expect(p.some((x) => x.startsWith('anon ima INSERT na offer_codes'))).toBe(true);
-    expect(p.some((x) => x.startsWith('authenticated ima TRUNCATE na offer_codes'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M4: RPC bez izricitog grant execute service_role (stanje f466d454) obara gard u bazi bez zadanih', async () => {
-    const mutated = mutirajRe(/grant execute on function public\.apply_entitlement_upgrade\([^)]*\)\r?\n  to service_role;/, '');
-    expect((await privilegijeNad(mutated)).some((x) => x.includes('service_role nema EXECUTE na public.apply_entitlement_upgrade') && x.includes('bez zadanih'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M4: RPC bez revoke za anon obara gard', async () => {
-    const mutated = mutiraj('revoke all on function public.note_entitlement_partial_refund(text, integer) from public, anon, authenticated;', '');
-    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('anon ima EXECUTE na public.note_entitlement_partial_refund'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M4: offer_codes bez grant service_role obara gard u bazi bez zadanih', async () => {
-    const mutated = mutiraj('grant select, insert, update, delete on table public.offer_codes to service_role;', '');
-    expect((await privilegijeNad(mutated)).some((x) => x.startsWith('service_role nema SELECT na offer_codes (bez zadanih'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M3: brisanje CHECK-ova baseline cisto', async () => {
-    expect(await constraintDropProblems()).toEqual([]);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M3: work_type CHECK se brise bez provjere imena i definicije (stanje f466d454) i obara gard', async () => {
-    const mutated = mutiraj("raise exception '0207: neocekivan work_type CHECK %.% (%); ne brise se naslijepo', r.tabela, r.ime, r.def;", 'null;');
-    const p = await constraintDropProblems(mutated);
-    expect(p.some((x) => x.includes('tiho brise entitlements_doktorski_slotovi'))).toBe(true);
-    expect(p.some((x) => x.includes('ne pada glasno (RAISE EXCEPTION) na repair_jobs_work_type_check'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 M3: bonus_outbox status CHECK se brise bez provjere i obara gard', async () => {
-    const mutated = mutiraj("raise exception '0207: neocekivan status CHECK bonus_outbox.% (%); ne brise se naslijepo', r.ime, r.def;", 'null;');
-    expect((await constraintDropProblems(mutated)).some((x) => x.includes('tiho brise bonus_outbox_pending_pokusaji'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 r2 M3: work_type CHECK bez usporedbe cijelog izraza (samo ime i stupac) tiho brise stroziji izraz istog imena i obara gard', async () => {
-    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan work_type/, "       or false then\n      raise exception '0207: neocekivan work_type");
-    const p = await constraintDropProblems(mutated);
-    expect(p.some((x) => x.includes('stroziji izraz (work_type)') && x.includes('tiho brise corpus_contributions_work_type_check'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 r2 M3: bonus_outbox status CHECK bez usporedbe cijelog izraza tiho brise stroziji izraz istog imena i obara gard', async () => {
-    const mutated = mutirajRe(/       or not v_poznat then\r?\n      raise exception '0207: neocekivan status CHECK/, "       or false then\n      raise exception '0207: neocekivan status CHECK");
-    const p = await constraintDropProblems(mutated);
-    expect(p.some((x) => x.includes('stroziji izraz (bonus_outbox.status)') && x.includes('tiho brise bonus_outbox_status_check'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 r2 M4: vlasnik SECURITY DEFINER funkcija baseline cist (0207 pod drugom ulogom)', async () => {
-    expect(await definerOwnerProblems()).toEqual([]);
-  }, ROK_SQL);
-
-  it('Codex PR #217 r2 M4: funkcija bez izricitog owner to postgres (stanje 7ae20bba) pripada ulozi koja je migrirala i obara gard', async () => {
-    const mutated = mutirajRe(/alter function public\.revert_entitlement_upgrade\(text\) owner to postgres;\r?\n/, '');
-    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('revert_entitlement_upgrade: vlasnik je lekta_tudji_migrator'))).toBe(true);
-  }, ROK_SQL);
-
-  it('Codex PR #217 r2 M4: SECURITY DEFINER funkcija bez praznog search_path obara gard', async () => {
-    const mutated = mutirajRe(/(create or replace function public\.note_entitlement_partial_refund\([\s\S]*?security definer\r?\n)set search_path = ''\r?\n/, '$1');
-    expect((await definerOwnerProblems(mutated)).some((x) => x.startsWith('note_entitlement_partial_refund: search_path nije izricito prazan'))).toBe(true);
-  }, ROK_SQL);
-
-  it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
-    const mutated = mutiraj('    if p.price_eur is distinct from v.price_eur::numeric then', '    if true then');
-    const run = await runV1(mutated);
-    try {
-      expect((await idempotencyProblems(run, mutated)).some((p) => p.includes('dopisuje pricing_changelog'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('backfill prozora POSLIJE promjene kataloga: staro pravo dobiva novi prozor i obara gard snapshota', async () => {
-    const sql = readMigration(V1_MIGRATION);
-    const backfill = sql.slice(
-      sql.indexOf('update public.entitlements e\n   set slot_window_days = p.slot_window_days'),
-      sql.indexOf('-- Snapshot pri svakom upisu prava'),
-    );
-    expect(backfill.length).toBeGreaterThan(50);
-    const bez = sql.replace(backfill, '');
-    const mutated = bez.replace('-- 6. Kanibalizirajuci', `${backfill}\n-- 6. Kanibalizirajuci`);
-    expect(mutated).not.toBe(sql);
-    const run = await runV1(mutated);
-    try {
-      expect((await snapshotProblems(run)).some((p) => p.includes('umjesto kupljenih 14'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-
-  it('bez triggera snapshota: pravo upisano mimo webhooka ostaje bez ponude i obara gard', async () => {
-    const mutated = mutiraj(
-      'create trigger entitlements_snapshot_offer\n  before insert on public.entitlements\n  for each row execute function public.entitlements_snapshot_offer();',
-      '',
-    );
-    const run = await runV1(mutated);
-    try {
-      expect((await snapshotProblems(run)).some((p) => p.includes('trigger ne snapshotira'))).toBe(true);
-    } finally {
-      await run.db.close();
-    }
-  }, ROK_SQL);
-});
 
 // Agent result success cannot bypass dependency or independent-review gates.
 describe('agent workflow guards', () => {
@@ -9762,6 +9274,87 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
 });
 
 /**
+ * Commit cijelog indeksa i dovrsenje spajanja (preneseno iz `~/.claude/hooks/lekta-git-guard.mjs`,
+ * 2026-10-08). Mutira se KOPIJA izvora u privremenom direktoriju i presuduje cisti node, jer
+ * vitestov loader ne ucitava module izvan korijena projekta, a mutant ne smije u repozitorij.
+ */
+describe('mutacije: tool-guard commit cijelog indeksa', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const GOLI_COMMIT = '      if (!hasOnly) return judgeWholeIndexCommit(okolina, false);\n';
+  const NASTAVAK = "    if (NASTAVCI_SPAJANJA.has(sub) && (hasFlag(args, '--continue') || (sub === 'am' && hasFlag(args, '--resolved')))) {\n";
+
+  async function presude(source: string): Promise<boolean[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-mut-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const o = (s) => ({ cwd: "/x", ispitaj: () => s });'
+        + 'process.stdout.write(JSON.stringify(['
+        + 'm.judgeCommand("Bash", "git commit -m x", undefined, o({ izoliran: false, spajanje: false })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: false, spajanje: true })).allow,'
+        + 'm.judgeCommand("Bash", "git merge --continue", undefined, o({ izoliran: true, spajanje: true })).allow,'
+        + ']));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as boolean[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: goli commit i merge --continue u dijeljenom stablu su odbijeni, u worktreeju merge prolazi', async () => {
+    expect(izvor).toContain(GOLI_COMMIT);
+    expect(izvor).toContain(NASTAVAK);
+    expect(await presude(izvor)).toEqual([false, false, true]);
+  });
+
+  it('mutant: gard bez provjere golog commita propusta commit cijelog indeksa', async () => {
+    expect(await presude(izvor.replace(GOLI_COMMIT, ''))).toEqual([true, false, true]);
+  });
+
+  /** `stanjeStabla` nad STVARNIM samostalnim klonom; `repo` glumi dijeljeno stablo. */
+  async function klonIzoliran(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync, execFileSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-toolguard-klon-'));
+    try {
+      const file = join(dir, 'tool-guard.mjs');
+      write(file, source);
+      const repo = join(dir, 'repo');
+      const g = (args: string[], cwd: string) => execFileSync('git', args, { cwd, windowsHide: true });
+      g(['init', '-q', repo], dir);
+      g(['-c', 'user.email=x@y.z', '-c', 'user.name=T', '-c', 'commit.gpgsign=false', 'commit', '-q', '--allow-empty', '-m', 'prvi'], repo);
+      const klon = join(dir, 'klon');
+      g(['clone', '-q', repo, klon], dir);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.stanjeStabla(${JSON.stringify(klon)}, ${JSON.stringify(repo)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { izoliran: boolean }).izoliran;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline i mutant: samostalni klon izvan dijeljenog korijena je izoliran samo uz provjeru korijena', async () => {
+    const KORIJEN = ' || !dijeljeno, spajanje };';
+    expect(izvor).toContain(KORIJEN);
+    expect(await klonIzoliran(izvor)).toBe(true);
+    expect(await klonIzoliran(izvor.replace(KORIJEN, ', spajanje };'))).toBe(false);
+  });
+
+  it('mutant: gard koji ne gada --continue propusta dovrsenje spajanja u dijeljenom stablu', async () => {
+    const mutant = izvor.replace(NASTAVAK, "    if (false && hasFlag(args, '--continue')) {\n");
+    expect(await presude(mutant)).toEqual([false, true, true]);
+  });
+});
+
+/**
  * GATE PREFLIGHT I OMOTAC (T62, pravila za stroj). Dva kvara koja bi lock ucinila ukrasom:
  *  (a) preflight koji propusta iako radi tudji vitest (dvije sesije opet mlate isti stroj);
  *  (b) omotac koji otpusta lock samo na uspjeh (lanac `a && b && release`), pa pad gatea ostavi
@@ -9850,12 +9443,11 @@ describe('mutacije: gate preflight i omotac locka', () => {
     // linije obrane na izlazu procesa.
     const mutated = wrapper
       .replace("  process.on('exit', release);\n", '')
-      .replace(
-        '    return code;\n  } finally {\n    release();\n  }',
-        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
-      );
+      .replace('    return code;\n  } finally {\n', '    if (code === 0) release();\n    return code;\n  } finally {\n')
+      .replace('    }\n    release();\n  }', '    }\n    // otpustanje premjesteno na uspjeh\n  }');
     expect(mutated).not.toBe(wrapper);
     expect(mutated).not.toContain("process.on('exit', release)");
+    expect(mutated).toContain('// otpustanje premjesteno na uspjeh');
     expect(releasesOnFailure(mutated)).toBe(false);
   }, 120_000);
 
@@ -11203,13 +10795,13 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
     const mutant = JSON.parse(JSON.stringify(settings));
     mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
       (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('cpu-discipline')));
-    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: node scripts/hooks/cpu-discipline.mjs']);
+    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: ' + hookCommand('scripts/hooks/cpu-discipline.mjs')]);
   });
 
   it('mutant: Stop hook maknut iz settings.json se hvata', () => {
     const mutant = JSON.parse(JSON.stringify(settings));
     delete mutant.hooks.Stop;
-    expect(missingHookRegistrations(mutant)).toEqual(['Stop: node scripts/hooks/implementer-stop.mjs']);
+    expect(missingHookRegistrations(mutant)).toEqual(['Stop: ' + hookCommand('scripts/hooks/implementer-stop.mjs')]);
   });
 
   it('mutant: vitest ispao s popisa teskih alata obara tvrdnju A1', () => {
@@ -11223,6 +10815,259 @@ describe('mutacije: hookovi discipline (odluka vlasnika 2026-09-28)', () => {
 
   it('mutant: Stop hook bez gornje granice blokiranja obara tvrdnju A3', () => {
     expect(a3Grize(Number.POSITIVE_INFINITY)).toBe(false);
+  });
+
+  it('mutant: tool-guard samo pod matcherom Bash|PowerShell ne stize do Supabase MCP apply_migration', () => {
+    // Zateceno stanje prije popravka: zabrana u tool-guard.mjs je postojala, ali je hook nikad nije vidio.
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => !String(e.matcher ?? '').startsWith('mcp__'));
+    expect(missingHookRegistrations(mutant)).toEqual([
+      'PreToolUse[mcp__supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+      'PreToolUse[mcp__Supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+      'PreToolUse[mcp__claude_ai_Supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+      'PreToolUse[mcp__plugin_supabase_supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+    ]);
+  });
+
+  it('mutant: matcher samo za Supabase velikim slovom propusta lokalni server supabase', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    // Registracija `mcp__.*[Ss]upabase.*` (PR #327) pokriva iste alate; makni je da mutant mjeri
+    // bas ovu registraciju, ne preklapanje dviju.
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => e.matcher !== 'mcp__.*[Ss]upabase.*');
+    for (const e of mutant.hooks.PreToolUse as Array<{ matcher?: string }>) {
+      if (e.matcher === 'mcp__.*__apply_migration') e.matcher = 'mcp__.*Supabase.*__apply_migration';
+    }
+    expect(missingHookRegistrations(mutant)).toEqual([
+      'PreToolUse[mcp__supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+      'PreToolUse[mcp__plugin_supabase_supabase__apply_migration]: ' + hookCommand('scripts/agents/tool-guard.mjs'),
+    ]);
+  });
+
+  it('mutant: relativna putanja hooka (ne postoji nakon cd u poddirektorij) se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    for (const e of mutant.hooks.PreToolUse as Array<{ hooks?: Array<{ command?: string }> }>) {
+      for (const h of e.hooks ?? []) {
+        if (h.command === hookCommand('scripts/hooks/cpu-discipline.mjs')) h.command = 'node scripts/hooks/cpu-discipline.mjs';
+      }
+    }
+    expect(missingHookRegistrations(mutant)).toEqual(['PreToolUse[Bash]: ' + hookCommand('scripts/hooks/cpu-discipline.mjs')]);
+  });
+
+  it('mutant: dash-guard maknut iz settings.json se hvata', () => {
+    const mutant = JSON.parse(JSON.stringify(settings));
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter(
+      (e: { hooks?: Array<{ command?: string }> }) => !(e.hooks ?? []).some((h) => h.command?.includes('dash-guard')));
+    expect(missingHookRegistrations(mutant)).toEqual([
+      'PreToolUse[Edit]: ' + hookCommand('scripts/hooks/dash-guard.mjs'),
+      'PreToolUse[Write]: ' + hookCommand('scripts/hooks/dash-guard.mjs'),
+    ]);
+  });
+});
+
+/**
+ * DASH-GUARD (pravilo "bez em i en crtica" iz CLAUDE.md, Konvencije). Mutira se KOPIJA izvora u
+ * privremenom direktoriju i presuda se racuna u cistom node procesu (Vitest ne ucitava module izvan
+ * korijena projekta). Tvrdnja: Edit koji uvodi en crticu u src/ se odbija.
+ */
+/**
+ * T110: omotac locka na prekid salje signal cijelom stablu djeteta. Mutant koji trazi samo izravnu
+ * djecu (bez unuka) vraca stari kvar: `npm` i `vitest` ispod `sh -c` prezive, a lock se otpusti.
+ * Mutira se kopija izvora (uz gate-preflight.mjs koji uvozi), presudu racuna cisti node.
+ */
+describe('mutacije: scripts/with-gate-lock.mjs stablo procesa (T110)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/with-gate-lock.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const preflight = readFileSync(resolve(process.cwd(), 'scripts/gate-preflight.mjs'), 'utf8');
+
+  async function signaliziraniPidovi(source: string): Promise<number[]> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const stablo = [{ pid: 101, ppid: 100 }, { pid: 102, ppid: 101 }, { pid: 103, ppid: 102 }];
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `const r = m.signalTree(100, 'SIGTERM', { list: () => ${JSON.stringify(stablo)}, kill: () => true });`
+        + 'process.stdout.write(JSON.stringify(r));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as number[];
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: signal ide djetetu, ljusci i unucima', async () => {
+    expect(await signaliziraniPidovi(izvor)).toEqual([100, 101, 102, 103]);
+  });
+
+  it('mutant: samo izravna djeca (bez unuka) se hvata', async () => {
+    const mutant = izvor.replace('        queue.push(p.pid);\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await signaliziraniPidovi(mutant)).toEqual([100, 101]);
+  });
+
+  // Grok pregled #329: reapTree mora preostale gasiti SIGKILL-om i nepoznato stanje (null) drzati zivim.
+  async function zetva(source: string): Promise<Array<[number, string]>> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-lock-mut-'));
+    try {
+      const file = join(dir, 'with-gate-lock.mjs');
+      write(file, source);
+      write(join(dir, 'gate-preflight.mjs'), preflight);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + 'const sent = [];'
+        + 'await m.reapTree([7, 8], { graceMs: 5, stepMs: 1, sleep: async () => {}, alive: (p) => (p === 7 ? true : null), kill: (p, s) => { sent.push([p, s]); return true; } });'
+        + 'process.stdout.write(JSON.stringify(sent));';
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return JSON.parse(res.stdout) as Array<[number, string]>;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: zivi i nepoznati proces nakon roka dobivaju SIGKILL', async () => {
+    expect(await zetva(izvor)).toEqual([[7, 'SIGKILL'], [8, 'SIGKILL']]);
+  });
+
+  it('mutant: reapTree salje SIGTERM umjesto SIGKILL', async () => {
+    const mutant = izvor.replace("kill(pid, 'SIGKILL');", "kill(pid, 'SIGTERM');");
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGTERM'], [8, 'SIGTERM']]);
+  });
+
+  it('mutant: nepoznato stanje (null) se tretira kao mrtav proces', async () => {
+    const mutant = izvor.replaceAll('alive(pid) !== false', 'alive(pid) === true');
+    expect(mutant).not.toBe(izvor);
+    expect(await zetva(mutant)).toEqual([[7, 'SIGKILL']]);
+  });
+});
+
+/**
+ * T109: cpu-discipline i heredoc (allowlist citaca nakon tri runde Grok pregleda #328). Tijelo se
+ * preskace samo za prvi redak `citac arg ... <<'IME'` s cistim rijecima; sve ostalo ide starim
+ * rastavom po retku. Svaki mutant uklanja jedan uvjet i mora pustiti ulaz koji bash izvrsi.
+ * Mutira se kopija izvora, presudu racuna cisti node.
+ */
+describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/cpu-discipline.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+  // Redak tijela koji pocinje teskom naredbom: stari rastav po novom retku ga je citao kao naredbu.
+  const citirani = "python3 - <<'PYEOF'\nnpx vitest run je samo tekst u biljesci\nPYEOF";
+  const bezNavodnika = 'cat <<EOF\n$(npx vitest run)\nEOF';
+  const komentar = "cat # <<'EOF'\nnpx vitest run";
+  const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
+  const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+
+  async function dopusta(source: string, command: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-cpu-mut-'));
+    try {
+      const file = join(dir, 'cpu-discipline.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeCpuDiscipline(${JSON.stringify(command)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
+    expect(await dopusta(izvor, citirani)).toBe(true);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+  });
+
+  it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
+    const mutant = izvor.replace("if (ch === '<' && command[i + 1] === '<') {", 'if (false) {');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, citirani)).toBe(false);
+  });
+
+  it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
+    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, bezNavodnika)).toBe(true);
+  });
+
+  it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
+    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, komentar)).toBe(true);
+  });
+
+  it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
+    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, funkcija)).toBe(true);
+  });
+
+  it('mutant: program izvan allowliste citaca', async () => {
+    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+});
+
+describe('mutacije: scripts/hooks/dash-guard.mjs', () => {
+  const izvor = readFileSync(resolve(process.cwd(), 'scripts/hooks/dash-guard.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const pomoc = readFileSync(resolve(process.cwd(), 'scripts/hooks/hook-input.mjs'), 'utf8');
+
+  const premjestena = { toolName: 'Edit', rel: 'docs/a.md', toolInput: { old_string: 'citat \u2013 izvora', new_string: 'novi tekst \u2014 autora' }, postojeci: null };
+  const odbijaEnCrticu = (source: string) =>
+    odbijaUlaz(source, { toolName: 'Edit', rel: 'src/a.ts', toolInput: { old_string: 'x', new_string: 'x \u2013 y' }, postojeci: null });
+
+  async function odbijaUlaz(source: string, ulaz: unknown): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-dash-mut-'));
+    try {
+      const file = join(dir, 'dash-guard.mjs');
+      write(file, source);
+      write(join(dir, 'hook-input.mjs'), pomoc);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeDashWrite(${JSON.stringify(ulaz)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      return (JSON.parse(res.stdout) as { allow: boolean }).allow === false;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('baseline: stvarni gard odbija novu en crticu', async () => {
+    expect(await odbijaEnCrticu(izvor)).toBe(true);
+  });
+
+  it('mutant: regex koji lovi samo em crticu se hvata', async () => {
+    const mutant = izvor.replace('/[\\u2013\\u2014]/g', '/[\\u2014]/g');
+    expect(mutant).not.toBe(izvor);
+    expect(await odbijaEnCrticu(mutant)).toBe(false);
+  });
+
+  it('mutant: presuda samo po zbroju (bez sidrenja) propusta premjestenu crticu', async () => {
+    const mutant = izvor.replace(' && neusidrene.length === 0) return', ') return');
+    expect(mutant).not.toBe(izvor);
+    // Stvarni gard odbija zamjenu en crtice em crticom na novom mjestu, mutant je propusta.
+    expect(await odbijaUlaz(izvor, premjestena)).toBe(true);
+    expect(await odbijaUlaz(mutant, premjestena)).toBe(false);
+  });
+
+  it('mutant: src/ ispao iz opsega se hvata', async () => {
+    const mutant = izvor.replace('[/^src\\//, ', '[');
+    expect(mutant).not.toBe(izvor);
+    expect(await odbijaEnCrticu(mutant)).toBe(false);
   });
 });
 
@@ -11245,14 +11090,29 @@ describe('slab stroj: VITEST_MAX_THREADS gard (pravilo vlasnika 2026-09-28)', ()
   it('mutant: gleda samo jezgre, ne RAM, se hvata', () => {
     const samoJezgre: Fn = (input) => weakMachineWorkerEnv({ ...input, totalMemBytes: null });
     expect(weakMachineProblems(samoJezgre)).toEqual([
+      'laptop (4 niti, 8 GB): postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
       '8 jezgri uz 8 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
     ]);
   });
 
-  it('mutant: stroga granica jezgri (< 4 umjesto <= 4) se hvata', () => {
-    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 4 ? 5 : input?.cpus });
+  it('mutant: stroga granica jezgri (< 2 umjesto <= 2) se hvata', () => {
+    const stroga: Fn = (input) => weakMachineWorkerEnv({ ...input, cpus: input?.cpus === 2 ? 3 : input?.cpus });
     expect(weakMachineProblems(stroga)).toEqual([
-      'tocno 4 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+      'tocno 2 jezgre uz 32 GB: postavlja 1: dobiveno null, ocekivano {"VITEST_MAX_THREADS":"1"}',
+    ]);
+  });
+
+  it('mutant: stara granica od 4 jezgre (laptop 16 GB na jednom radniku) se hvata', () => {
+    const stara: Fn = (input) => {
+      const presuda = weakMachineWorkerEnv(input);
+      const cpus = input?.cpus;
+      const ci = input?.env?.CI;
+      const vecPostavljen = input?.env?.VITEST_MAX_THREADS;
+      return presuda ?? (typeof cpus === 'number' && cpus <= 4 && !ci && !vecPostavljen ? { VITEST_MAX_THREADS: '1' } : null);
+    };
+    expect(weakMachineProblems(stara)).toEqual([
+      'laptop (4 niti, 16 GB): ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
+      '3 jezgre uz 16 GB: ne dira: dobiveno {"VITEST_MAX_THREADS":"1"}, ocekivano null',
     ]);
   });
 
@@ -12736,5 +12596,84 @@ describe('mutations: actual verification focus restoration', () => {
   ]) it(`actual focus guard removal fails: ${before}`, async () => {
     expect(verifyBadgesSource()).toContain(before);
     expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * SUPABASE MCP GARD (odluka vlasnika 2026-10-08, popravak po Codex pregledu #327). Mutira se KOPIJA
+ * izvora `scripts/agents/tool-guard.mjs` (tests/helpers/supabase-mcp-guard.ts), nikad omotac.
+ *  (a) matcher hooka bez MCP alata: presuda se nikad ne pozove (stanje do 2026-10-08);
+ *  (b) E-string bez backslash escapea, poziv funkcije bez provjere, nepoznat alat kao citanje i
+ *      vise naredbi u jednom upitu: svaki propusta pisanje koje je Codex ili mjerenje nasao.
+ */
+describe('mutacije: Supabase MCP gard u tool-guard.mjs', () => {
+  const settingsText = readTextLf(resolve(process.cwd(), '.claude/settings.json'));
+  const settings = JSON.parse(settingsText);
+  const izvor = readTextLf(resolve(process.cwd(), 'scripts/agents/tool-guard.mjs'));
+  const mutiraj = (from: string, to: string) => {
+    const m = izvor.replace(from, to);
+    expect(m, from).not.toBe(izvor);
+    return m;
+  };
+
+  it('BASELINE: stvarna presuda, nemutirana kopija izvora i stvarna registracija su ciste', async () => {
+    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
+    expect(supabaseMcpGuardProblems(judgeCommand)).toEqual([]);
+    expect(supabaseMcpGuardProblemsForSource(izvor)).toEqual([]);
+    expect(toolGuardMatcherProblems(settings)).toEqual([]);
+  });
+
+  it('mutant: bez registracije mcp__.*[Ss]upabase.* ostali Supabase MCP alati ne stizu do garda', () => {
+    // apply_migration i dalje pokriva zasebna registracija `mcp__.*__apply_migration` (PR #326).
+    const mutant = JSON.parse(settingsText);
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => e.matcher !== 'mcp__.*[Ss]upabase.*');
+    expect(mutant.hooks.PreToolUse.length).toBe(settings.hooks.PreToolUse.length - 1);
+    expect(toolGuardMatcherProblems(mutant)).toEqual([
+      'tool-guard matcher ne pokriva mcp__Supabase__execute_sql',
+      'tool-guard matcher ne pokriva mcp__claude_ai_Supabase__deploy_edge_function',
+    ]);
+  });
+
+  it('mutant: tool-guard samo pod Bash|PowerShell (stanje do 2026-10-08) se hvata', () => {
+    const mutant = JSON.parse(settingsText);
+    mutant.hooks.PreToolUse = mutant.hooks.PreToolUse.filter((e: { matcher?: string }) => !String(e.matcher ?? '').startsWith('mcp__'));
+    expect(toolGuardMatcherProblems(mutant)).toEqual([
+      'tool-guard matcher ne pokriva mcp__Supabase__apply_migration',
+      'tool-guard matcher ne pokriva mcp__Supabase__execute_sql',
+      'tool-guard matcher ne pokriva mcp__claude_ai_Supabase__deploy_edge_function',
+    ]);
+  });
+
+  it('mutant: E-string bez backslash escapea se hvata', () => {
+    const m = mutiraj("if (eString && sql[i] === '\\\\') { i += 2; continue; }", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql E-string s parnim navodnicima skriva update: dobiveno allow=true, ocekivano allow=false',
+    ]);
+  });
+
+  it('mutant: poziv funkcije bez provjere se hvata', () => {
+    const m = mutiraj('if (!SQL_SAFE_CALLS.has(call[1])) return', 'if (false) return');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql pg_notify (Codex #327, nalaz 2): dobiveno allow=true, ocekivano allow=false',
+      'execute_sql pg_advisory_lock: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql vlastiti RPC: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql funkcija u navodnicima: dobiveno allow=true, ocekivano allow=false',
+      'execute_sql set_config: dobiveno allow=true, ocekivano allow=false',
+    ]);
+  });
+
+  it('mutant: nepoznat Supabase alat kao citanje se hvata', () => {
+    const m = mutiraj('if (SUPABASE_MCP_READ_TOOLS.has(name))', 'if (true)');
+    const problems = supabaseMcpGuardProblemsForSource(m);
+    expect(problems).toContain('create_edge_function_secret (nije na popisu zabrana): dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('nepoznat buduci alat: dobiveno allow=true, ocekivano allow=false');
+    expect(problems).toContain('deploy_edge_function (konektor): dobiveno allow=true, ocekivano allow=false');
+  });
+
+  it('mutant: vise naredbi u jednom upitu se hvata', () => {
+    const m = mutiraj("if (body.includes(';')) return 'vise naredbi';", '');
+    expect(supabaseMcpGuardProblemsForSource(m)).toEqual([
+      'execute_sql dvije naredbe koje citaju: dobiveno allow=true, ocekivano allow=false',
+    ]);
   });
 });
