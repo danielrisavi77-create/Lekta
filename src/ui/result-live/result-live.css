@@ -410,8 +410,9 @@
 }
 .rl-tray__go[disabled] { opacity: .45; cursor: not-allowed }
 .rl-tray__go:focus-visible { outline: none; box-shadow: var(--focus) }
-/* Kad je ladica otvorena, dno rezultata dobiva mjesto, da zadnji redak ne lezi ispod nje. */
-.result-cockpit[data-rl-tray-open] { padding-bottom: 140px }
+/* Dno rezultata stalno ima mjesta za ladicu, da zadnji redak ne lezi ispod nje; stalno, jer padding vezan uz
+   otvorenost mijenja visinu i ladica treperi (otvori-zatvori petlja). */
+.result-cockpit[data-rl-tray-reserve] { padding-bottom: 140px }
 
 /* Cedulja koja leti do prstena ili ladice (WAAPI na klonu, samo transform i opacity). */
 .rl-fly {

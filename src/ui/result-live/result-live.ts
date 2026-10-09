@@ -454,7 +454,11 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
     doc.body.append(ladicaEl);
     // Uklanjanje je ciscenje od trenutka umetanja, pa ga pokrije i djelomicna montaza (Codex R1).
     const el = ladicaEl;
-    ciscenja.push(() => { el.remove(); mount.removeAttribute('data-rl-tray-open'); });
+    // Mjesto za ladicu se rezervira STALNO (ne samo dok je otvorena): padding vezan uz otvorenost
+    // mijenjao je visinu stranice, a to je micalo stol u/iz pogleda i ladica je treperila (petlja
+    // otvori-zatvori), pa elementi ispod nisu bili stabilni za klik.
+    mount.setAttribute('data-rl-tray-reserve', '');
+    ciscenja.push(() => { el.remove(); mount.removeAttribute('data-rl-tray-open'); mount.removeAttribute('data-rl-tray-reserve'); });
     crtajLadicu();
   }
 
