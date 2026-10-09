@@ -20,6 +20,7 @@ export interface WorkflowStepShape {
 
 export interface WorkflowJobShape {
   'runs-on'?: unknown;
+  'continue-on-error'?: unknown;
   if?: unknown;
   permissions?: unknown;
   uses?: string;
@@ -248,6 +249,10 @@ export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
     errors.push('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
   }
   const steps = doc.jobs?.['word-proof']?.steps ?? [];
+  // Job-level continue-on-error can turn a failing Word verification into a green workflow.
+  if (doc.jobs?.['word-proof']?.['continue-on-error'] !== undefined) {
+    errors.push('word-proof: job-level continue-on-error ne smije prikriti neuspjeli Word gate');
+  }
   const stepNames = [
     'Deno preflight (samo razine=sve)',
     'Python preflight (samo razine=sve)',
