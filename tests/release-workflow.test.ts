@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { releaseWorkflowProblems } from './helpers/release-workflow';
-import { anonKeyClaims, canonicalProductionAnonKey, canonicalProductionRef, releaseInputProblems, TARGETS } from '../scripts/release-inputs.mjs';
+import { anonKeyClaims, anonKeyLiveProblem, canonicalProductionAnonKey, canonicalProductionRef, releaseInputProblems, TARGETS } from '../scripts/release-inputs.mjs';
 import { rollbackPlan } from '../scripts/release-edge-rollback.mjs';
 import { isKatedraVersion, stagingHistoryPlan } from '../scripts/release-staging-history.mjs';
 import { migrationKey, missingMigrations, parseArgs } from '../scripts/release-migration-check.mjs';
@@ -111,6 +111,14 @@ describe('objava jednim gumbom: ulazi (scripts/release-inputs.mjs)', () => {
       .toEqual(['PRODUCTION_SUPABASE_ANON_KEY u src/config/deployment.ts pripada bnyemcnsphlitjradrst (anon), a ne anon kljucu zrrjttizjyfcxmcpgzml']);
     expect(anonKeyClaims(canonicalProductionAnonKey(DEPLOYMENT_TS))).toEqual({ ref: TARGETS.production.projectRef, role: 'anon' });
     expect(anonKeyClaims('nije.jwt!.x')).toBeNull();
+  });
+
+  it('potpis anon kljuca presudjuje projekt: samo 200 prolazi, bez odgovora je NE ZNAM (Codex na #339)', () => {
+    expect(anonKeyLiveProblem(200, 'vars.SUPABASE_ANON_KEY', 'bnyemcnsphlitjradrst')).toBeNull();
+    expect(anonKeyLiveProblem(401, 'vars.SUPABASE_ANON_KEY', 'bnyemcnsphlitjradrst'))
+      .toBe('vars.SUPABASE_ANON_KEY: projekt bnyemcnsphlitjradrst odbija kljuc (HTTP 401)');
+    expect(anonKeyLiveProblem(null, 'vars.SUPABASE_ANON_KEY', 'bnyemcnsphlitjradrst'))
+      .toBe('vars.SUPABASE_ANON_KEY: projekt bnyemcnsphlitjradrst nije odgovorio (NE ZNAM)');
   });
 
   it('kanonski produkcijski ref se cita iz stvarnog src/config/deployment.ts', () => {

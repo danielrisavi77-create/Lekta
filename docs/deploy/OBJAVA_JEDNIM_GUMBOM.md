@@ -19,7 +19,8 @@ drzala samo disciplinom.
    ispasti iz popisa; `SUPABASE_PROJECT_REF`, `NETLIFY_SITE_ID` i `SITE_ORIGIN` moraju biti tocno
    kanonske vrijednosti cilja (`TARGETS` u skripti), a produkcijski ref i onaj iz
    `src/config/deployment.ts`; anon kljuc (staging iz vars, produkcija iz izvora) nosi `ref`
-   cilja i `role` anon; SHA je malim slovima, jer ga smoke usporedjuje doslovno.
+   cilja i `role` anon, a ciljni projekt ga prihvaca (`GET /auth/v1/settings` vraca 200); SHA je
+   malim slovima, jer ga smoke usporedjuje doslovno.
 2. Netlify CLI (`netlify-cli@27.10.2`) se instalira u koraku bez ikakvih tajni.
 3. `node scripts/build-production.mjs`: isti lanac kao `netlify.toml`. Build ide PRIJE ikakvog
    deploya, pa pad builda ne ostavlja nista napola objavljeno. Produkcija trazi tvrdi dokaz izdanja

@@ -63,6 +63,16 @@ export function anonKeyClaims(key) {
   }
 }
 
+/**
+ * Presuda nad odgovorom `GET /auth/v1/settings` s anon kljucem: tvrdnje u JWT-u su samo nepotpisan
+ * tekst, a potpis provjerava tek projekt (Codex na #339). 200 je valjan kljuc, sve drugo pad.
+ */
+export function anonKeyLiveProblem(status, keyName, ref) {
+  if (status === 200) return null;
+  if (status === null) return `${keyName}: projekt ${ref} nije odgovorio (NE ZNAM)`;
+  return `${keyName}: projekt ${ref} odbija kljuc (HTTP ${status})`;
+}
+
 /** Produkcijski anon kljuc iz izvora klijenta (src/config/deployment.ts). */
 export function canonicalProductionAnonKey(deploymentTs) {
   const m = /PRODUCTION_SUPABASE_ANON_KEY =\s*'([A-Za-z0-9._-]+)'/.exec(deploymentTs);
@@ -142,7 +152,7 @@ function isOnMaster(sha) {
   }
 }
 
-function main() {
+async function main() {
   const root = process.cwd();
   const fnDir = join(root, 'supabase', 'functions');
   const deploymentTs = readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8');
@@ -171,7 +181,21 @@ function main() {
     for (const p of problems) console.error(`[release-inputs] ${p}`);
     process.exit(1);
   }
+  const keyName = facts.target === 'production' ? 'PRODUCTION_SUPABASE_ANON_KEY' : 'vars.SUPABASE_ANON_KEY';
+  const key = facts.target === 'production' ? facts.prodAnonKey : facts.anonKey;
+  let status = null;
+  try {
+    const res = await fetch(`https://${facts.projectRef}.supabase.co/auth/v1/settings`, { headers: { apikey: key } });
+    status = res.status;
+  } catch {
+    status = null;
+  }
+  const live = anonKeyLiveProblem(status, keyName, facts.projectRef);
+  if (live) {
+    console.error(`[release-inputs] ${live}`);
+    process.exit(1);
+  }
   console.log(`[release-inputs] OK: ${sha} na masteru; funkcije: ${facts.functions.trim()}; cilj ${facts.projectRef}, ${facts.siteOrigin}`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main();
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) await main();
