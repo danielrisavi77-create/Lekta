@@ -115,7 +115,7 @@
 .intake-paper:hover .intake-cta,.intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{
   transform:translateY(-2px);box-shadow:0 14px 30px color-mix(in srgb,var(--brand) 34%,transparent);
 }
-.intake-hint{color:var(--paper-muted);font-family:var(--ui);font-size:var(--fs-ui-sm)}
+.intake-hint{color:color-mix(in srgb,var(--paper-ink) 72%,var(--paper));font-family:var(--ui);font-size:var(--fs-ui-sm);font-weight:550}
 .intake-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* --- ispod papira ------------------------------------------------------------------------- */
@@ -127,10 +127,10 @@
   /* 11px je mjera OZNAKE NA PAPIRU (zaglavlje, pecat, koraci, sitni otisak). Ovaj redak nosi
      jedinu poveznicu ispod papira, pa ostaje na `--fs-ui-sm`, kao i predlozak (13px).
      Obitelj je `--ui`, ne `--mono`: ulaz mono ne ucitava (vidi biljesku uz `.intake-cta`). */
-  margin-top:20px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui-sm);
-  letter-spacing:.02em;
+  margin-top:20px;color:color-mix(in srgb,var(--desk-ink) 76%,var(--desk));font-family:var(--ui);font-size:var(--fs-ui-sm);
+  font-weight:520;letter-spacing:.02em;
 }
-.intake-meta a{color:var(--muted);text-underline-offset:4px}
+.intake-meta a{color:var(--desk-ink);text-underline-offset:4px}
 .intake-meta a:hover,.intake-meta a:focus-visible{color:var(--brand)}
 .intake-status:not(:empty){margin-top:10px;color:var(--text);font-family:var(--ui);font-weight:600;font-size:var(--fs-ui)}
 .intake-error:not([hidden]){
@@ -147,6 +147,59 @@
 .intake-memory-action:hover,.intake-memory-action:focus-visible{border-color:var(--brand)}
 .intake-continue:not([hidden]){display:block;margin-top:14px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui)}
 .intake-continue a{color:var(--brand);font-weight:650}
+
+/* --- sadrzaj ispod glavne radnje: SEO i povjerenje bez opterecenja heroja ------------------- */
+.intake-seo{
+  border-top:1px solid var(--desk-line);
+  padding:clamp(56px,8vw,104px) 0 clamp(64px,9vw,120px);
+  background:color-mix(in srgb,var(--desk-2) 72%,var(--desk));
+  color:var(--desk-ink);
+}
+.intake-seo__shell{width:min(1180px,calc(100% - 40px));margin:0 auto;display:grid;gap:40px}
+.intake-seo__intro{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,6vw,84px);align-items:start}
+.intake-seo__eyebrow{
+  display:block;margin-bottom:12px;font-family:var(--mono);font-size:var(--fs-mono-label);font-weight:650;
+  letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--desk-ink) 88%,var(--desk));
+}
+.intake-seo h2{
+  margin:0;font-family:var(--display-serif);font-weight:400;font-size:clamp(31px,4.2vw,58px);
+  line-height:1.03;letter-spacing:-.018em;text-wrap:balance;
+}
+.intake-seo__intro>p,.intake-seo__privacy>p{
+  margin:0;color:color-mix(in srgb,var(--desk-ink) 88%,var(--desk));font-family:var(--display-serif);
+  font-size:clamp(15px,1.5vw,17px);line-height:1.75;--emph-weight:400;--emph-style:italic;
+}
+.intake-seo__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.intake-seo__grid article{
+  min-width:0;padding:24px;border:1px solid var(--desk-line);background:color-mix(in srgb,var(--desk-ink) 4%,transparent);
+}
+.intake-seo__grid article>span{
+  font-family:var(--mono);font-size:10px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--desk-ink) 88%,var(--desk));
+}
+.intake-seo__grid h3{margin:14px 0 10px;font-family:var(--display-serif);font-size:26px;font-weight:400;line-height:1.1}
+.intake-seo__grid p{
+  margin:0;color:color-mix(in srgb,var(--desk-ink) 88%,var(--desk));font-family:var(--display-serif);font-size:14px;line-height:1.7;--emph-weight:400;--emph-style:italic;
+}
+.intake-seo__privacy{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,6vw,84px);
+  padding:32px 0;border-top:1px solid var(--desk-line);border-bottom:1px solid var(--desk-line);align-items:start;
+}
+.intake-seo__privacy h2{font-size:clamp(28px,3.4vw,46px)}
+.intake-seo__privacy a,.intake-seo__links a{color:var(--desk-ink);font-weight:650;text-underline-offset:4px}
+.intake-seo__privacy a:hover,.intake-seo__privacy a:focus-visible,
+.intake-seo__links a:hover,.intake-seo__links a:focus-visible{color:var(--brand)}
+.intake-seo__faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.intake-seo__faq details{border:1px solid var(--desk-line);padding:16px 18px;background:color-mix(in srgb,var(--desk-ink) 3%,transparent)}
+.intake-seo__faq summary{cursor:pointer;font-family:var(--ui);font-size:14px;font-weight:650;color:var(--desk-ink)}
+.intake-seo__faq p{margin:10px 0 0;color:color-mix(in srgb,var(--desk-ink) 88%,var(--desk));font-family:var(--display-serif);font-size:13.5px;line-height:1.65;--emph-weight:400;--emph-style:italic;}
+.intake-seo__links{margin:0;display:flex;gap:12px;flex-wrap:wrap;font-family:var(--ui);font-size:13px;color:var(--desk-muted)}
+@media(max-width:760px){
+  .intake-seo__shell{width:min(100% - 28px,1180px);gap:28px}
+  .intake-seo__intro,.intake-seo__privacy{grid-template-columns:1fr;gap:18px}
+  .intake-seo__grid,.intake-seo__faq{grid-template-columns:1fr}
+  .intake-seo__grid article{padding:20px}
+}
 
 /* NAVIGACIJA ULAZA JE OD Z15 DIJELJENA TRAKA (`src/shared/site-chrome.css`).
    `.intake-nav` i `.intake-nav-help` su UKLONJENI: ulaz nosi istu traku kao ostale rute,
@@ -346,21 +399,22 @@
   transform:rotate(.6deg);font-family:var(--mono);font-size:13px;
 }
 .intake-pribor-oznaka,.intake-polje-oznaka{
-  font-size:var(--fs-mono-label);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-muted);
+  font-size:var(--fs-mono-label);letter-spacing:.08em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--desk-ink) 74%,var(--desk));
 }
 .intake-polje{display:grid;gap:6px}
 .intake-polje-red{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .intake-fakultet{flex:1 1 160px;min-width:0;padding:12px 0;border-bottom:1px solid var(--desk-line);overflow-wrap:anywhere}
 /* Bez predodabira kartica ne tvrdi fakultet nego kaze da ce biti prepoznat iz rada: isti redak,
    prigusen ton oznake, pa se ne cita kao odabrana vrijednost. */
-.intake-napomena{color:var(--desk-muted)}
+.intake-napomena{color:color-mix(in srgb,var(--desk-ink) 74%,var(--desk));font-size:13px;line-height:1.5}
 .intake-potvrdi{
   min-height:44px;padding:0 14px;border:1.5px solid var(--red);border-radius:2px;
   background:var(--red);color:var(--on-red,#fff);font:inherit;font-size:12px;cursor:pointer;
 }
 .intake-potvrdi[aria-pressed="true"]{background:transparent;border-color:var(--pass);color:var(--desk-ink)}
 .intake-potvrdi:disabled{opacity:.5;cursor:not-allowed}
-.intake-promijeni{justify-self:start;font-size:12px;color:var(--desk-muted);text-underline-offset:3px}
+.intake-promijeni{justify-self:start;font-size:13px;color:color-mix(in srgb,var(--desk-ink) 78%,var(--desk));text-underline-offset:3px}
 .intake-promijeni:hover,.intake-promijeni:focus-visible{color:var(--brand)}
 .intake-rok{
   flex:1 1 150px;min-width:0;min-height:44px;padding:0 4px;

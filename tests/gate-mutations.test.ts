@@ -10162,19 +10162,19 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     )).toEqual([]);
   });
 
-  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
+  it('(a) povratak gatea za rok ili fakultet obara gard otvorenog ulaza', async () => {
     const { vrataProblemi } = await import('./helpers/intake-live-guards');
     const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
     const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
     const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi rok' };
-    // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
-    const samoDatum = (s: Vrata) => (!s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
-    expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
-    // Kvar (izvedba prije odluke vlasnika 2026-09-27): vrata traze i potvrdjen fakultet.
-    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
-    expect(vrataProblemi(traziFakultet)).toContain('fakultet nepotvrdjen, "Još ne znam rok": spremno=false, ocekivano true');
-    // Kvar: natpis zatvorenih vrata i dalje trazi fakultet.
-    const stariNatpis = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' });
+    // Kvar: stari tok u kojem rok mora biti odlucen prije prve vrijednosti proizvoda.
+    const traziRok = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(traziRok).length).toBeGreaterThan(0);
+    // Kvar: vrata opet traze i potvrdjen fakultet.
+    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet' });
+    expect(vrataProblemi(traziFakultet).length).toBeGreaterThan(0);
+    // Kvar: tok je otvoren, ali copy korisniku i dalje lazno govori da prvo mora potvrditi rok.
+    const stariNatpis = (_s: Vrata) => ({ spremno: true, natpis: 'Prvo potvrdi rok' });
     expect(vrataProblemi(stariNatpis).length).toBeGreaterThan(0);
   });
 
