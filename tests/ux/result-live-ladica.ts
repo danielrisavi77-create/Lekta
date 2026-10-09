@@ -24,6 +24,9 @@ export async function otvoriLadicu(page: Page): Promise<void> {
 export async function sljedecaKartica(page: Page): Promise<boolean> {
   const kokpit = page.locator('#resultCockpit');
   const brojac = kokpit.locator('[data-rl-card] [data-desk-count]');
+  // Prije klika slot mora biti miran: klik usred ulazne animacije prethodne kartice u WebKitu je
+  // jednom propao (brojac je ostao "5 od 12"), pa se prelazak ne mjeri nad prijelaznim stanjem.
+  await expect(kokpit.locator('[data-rl-slot]')).not.toHaveAttribute('data-anim', /^(out|outR|in|inR)$/);
   const prije = await brojac.textContent();
   const dalje = kokpit.locator('[data-rl-card] .desk-nav__btn--next');
   if (await dalje.isDisabled()) return false;
