@@ -546,6 +546,17 @@ async function ekranRezultata(page: Page): Promise<EkranRezultata> {
     await expect(page.locator('#resultCockpit')).toHaveAttribute('data-rl-ready', 'true', { timeout: 30_000 });
     await expect(page.locator('#resultCockpit [data-rl-stamp="ceka"]')).toHaveCount(0, { timeout: 10_000 });
   }
+  // Z33-09 regresija: pecat se NE crta za needs-work/manual-review. Tada je 'stamp ceka = 0'
+  // vakuumski zelen dok prsten Z34 i dalje broji 0 -> konacna ocjena (na CI-u 5 umjesto 72).
+  // Ocjena u aria-label ne animira se i daje mjerodavan cilj za stvarnu brojcanu jezgru.
+  const scoredRing = page.locator('#resultCockpit .cockpit-ring[data-cockpit-score="scored"]');
+  if (await scoredRing.count()) {
+    const described = await scoredRing.getAttribute('aria-label');
+    const match = /^Tehnička ocjena (\\d+) od (\\d+)$/.exec(described ?? '');
+    expect(match, 'bodovani prsten mora javno izreci mjerodavnu ocjenu i nazivnik').not.toBeNull();
+    await expect(scoredRing.locator('.cockpit-ring__core'), 'ocjena se mora dovrsiti prije usporedbe dvaju tokova')
+      .toHaveText(match![1], { timeout: 15_000 });
+  }
   const osnova = await page.evaluate((sel) => {
     const t = (s: string): string => (document.querySelector(s)?.textContent ?? '').replace(/\s+/g, ' ').trim();
     return {
