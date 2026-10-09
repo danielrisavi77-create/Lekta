@@ -5201,6 +5201,17 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => referrerSchemeProblems(xffRealSources().functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!.text).length === 0,
   },
+  {
+    id: 't84/xff-nagrada-trajno-zatvara',
+    imitates: 'T84 XFF: ip_scheme_unverifiable vraca se u TRAJNI_RAZLOZI, pa se obveza nagrade tiho zatvara kao done i pravo preporucitelja trajno propada (Daniel, review na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const grant = functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!;
+      const mut = grant.text.replace("'ip_match_fraud', 'monthly_cap_reached'", "'ip_match_fraud', 'ip_scheme_unverifiable', 'monthly_cap_reached'");
+      return mut !== grant.text && referrerSchemeProblems(mut).includes('grant-referrer-reward: ip_scheme_unverifiable je trajna odluka');
+    },
+    cleanBefore: () => referrerSchemeProblems(xffRealSources().functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!.text).length === 0,
+  },
   ...([
     ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',
       'qs: keys.map(corpusQueryKey),', 'qs: keys,', 'corpus-check: kljuc ide bazi bez gornje granice duljine'],

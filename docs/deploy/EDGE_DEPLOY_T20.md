@@ -68,10 +68,10 @@ deployati na produkciju.
   funkciji i izvrsava omotac iz izvora `hash-ip.ts`.
 - Novi hashevi nose oznaku sheme `v2:`; stari (bez prefiksa) su `legacy`. `ip_hash` je `text`, migracija nije potrebna.
 - `tryGrantReferrerReward` ne usporeduje hasheve razlicitih shema. Ako preporuciteljevi izvjestaji sadrze hash druge
-  sheme od signupa, nagrada se ZADRZAVA (`ip_scheme_unverifiable`, trajna odluka u outboxu, signup ostaje
+  sheme od signupa, nagrada se ZADRZAVA (`ip_scheme_unverifiable`, NIJE trajna odluka: obveza u outboxu ostaje `pending`, ponavlja se do granice pokusaja, pa `failed` i ceka pregled; signup ostaje
   `friend_rewarded`, bez `fraud_blocked`). Izmjereno 2026-10-09: produkcija ima 0 `referral_signups` i 32
   `report_generations.ip_hash` (17 korisnika, 2026-07-20 do 2026-08-04, ni jedan mladi od 30 dana); staging 1.
-  Utjecaj: preporucitelji s takvim starim izvjestajem ne dobivaju automatsku nagradu dok vlasnik ne odluci o retenciji.
+  Utjecaj: preporucitelji s takvim starim izvjestajem ne dobivaju automatsku nagradu, ali pravo nije izgubljeno: obveza zavrsava kao `failed` (rucni pregled) dok vlasnik ne odluci o retenciji.
 - Staging provjera prije produkcije: poziv na zasticenom ulazu daje 200 uz valjan `cf-connecting-ip`, a klijentski
   `CF-Connecting-IP` Cloudflare odbija (403, izmjereno 2026-10-09 na `health`).
 

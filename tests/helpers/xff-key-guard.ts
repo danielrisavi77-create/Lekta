@@ -82,7 +82,7 @@ export function referrerSchemeProblems(grantSrc: string): string[] {
   const code = stripComments(grantSrc);
   if (!/\bipHashScheme\(/.test(code)) out.push('grant-referrer-reward: ne razlikuje sheme ip hasha');
   if (!/return \{ granted: false, reason: 'ip_scheme_unverifiable' \};/.test(code)) out.push('grant-referrer-reward: mijesane sheme ne zadrzavaju nagradu');
-  if (!/'ip_scheme_unverifiable', 'monthly_cap_reached'\]\)/.test(code)) out.push('grant-referrer-reward: ip_scheme_unverifiable nije trajna odluka');
+  if (/TRAJNI_RAZLOZI = new Set\([^)]*ip_scheme_unverifiable/.test(code)) out.push('grant-referrer-reward: ip_scheme_unverifiable je trajna odluka');
   return out;
 }
 

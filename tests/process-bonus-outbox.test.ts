@@ -450,7 +450,15 @@ describe('tryGrantReferrerReward: uvjeti podobnosti (Codex r2, M2b)', () => {
       .toEqual({ granted: false, reason: 'ip_scheme_unverifiable' });
     expect(nagradnoPravo(admin)).toHaveLength(0);
     expect(admin.poziviDetalji.flatMap((p) => p.operacije).filter((o) => o.metoda === 'update' || o.metoda === 'insert')).toEqual([]);
-    expect(referrerRewardSettlement({ granted: false, reason: 'ip_scheme_unverifiable' })).toEqual({ settled: true, reason: 'ip_scheme_unverifiable' });
+    expect(referrerRewardSettlement({ granted: false, reason: 'ip_scheme_unverifiable' })).toEqual({ settled: false, reason: 'ip_scheme_unverifiable' });
+  });
+
+  it('runReferrerRewardObligation: ip_scheme_unverifiable NE zatvara obvezu (bez done), baca za ponavljanje, nitko ne dobiva nagradu', async () => {
+    const { db } = scenario();
+    const grant = async () => ({ granted: false, reason: 'ip_scheme_unverifiable' });
+    await expect(runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, grant as never))
+      .rejects.toThrow('referrer_reward_retry: ip_scheme_unverifiable');
+    expect(outboxWrites(db.calls)).toHaveLength(0);
   });
 
   it('mijesani zapisi preporucitelja (legacy i v2): i dalje zadrzava, cak i kad v2 dio ne poklapa mrezu', async () => {

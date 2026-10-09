@@ -13,7 +13,9 @@
 // i generate-report, pa se vrijednosti poklapaju i provjera stvarno okida.
 // T84 XFF: hashevi nose oznaku sheme (v2: = cf-connecting-ip, bez prefiksa = stara x-forwarded-for).
 // Hash iz druge sheme se NE smije proglasiti ni jednakim ni razlicitim, pa se nagrada tada zadrzava
-// (`ip_scheme_unverifiable`) umjesto da se pogada.
+// (`ip_scheme_unverifiable`) umjesto da se pogada. To NIJE trajna odluka (nije u TRAJNI_RAZLOZI): obveza
+// ostaje `pending`, ponavlja se do granice pokusaja pa prelazi u `failed` i ceka covjeka. Bez vlasnicke
+// odluke o referral pravima nitko ne smije izgubiti pravo tihim zatvaranjem obveze kao `done`.
 //
 // buyerOrderId se biljezi u converted_order_id da refund te kupnje (webhook-mor refund grana)
 // moze povuci nepotrosenu nagradu preporucitelju.
@@ -42,7 +44,7 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
  * povrat ne vidi. NIJE uvjet: da kupac nikad prije nije platio (MONETIZACIJA_V1.md odjeljak 21 i 0013
  * to ne traze); kupac s ranijom kupnjom koji tek kasnije iskoristi kod moze donijeti nagradu.
  */
-const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'ip_scheme_unverifiable', 'monthly_cap_reached']);
+const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'monthly_cap_reached']);
 
 /**
  * Smije li se obveza nagrade zatvoriti. `grant_failed`, `error` i svaki nepoznat oblik rezultata NISU
