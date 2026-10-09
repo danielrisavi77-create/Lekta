@@ -1,6 +1,27 @@
 /** Read-only resync preflight. No registry writes or automatic identity decisions. */
 import type { ParseResult, UpisnikRow } from './upisnik-parse';
 
+/** Putanje iz latest-report.json racunaju se u odnosu na samu kopiju u .artifacts/upisnik-resync. */
+export interface UpisnikReportPaths {
+  recordsPath: string;
+  reviewPath: string | null;
+  candidatePath: string | null;
+}
+
+export function latestReportPaths(paths: UpisnikReportPaths, runName: string): UpisnikReportPaths {
+  if (!/^[a-f0-9]{20}-[A-Za-z0-9_-]{6,}$/.test(runName)) throw new Error('INVALID_RUN_DIRECTORY');
+  const prefix = (filename: string | null): string | null => {
+    if (filename === null) return null;
+    if (!/^[a-z0-9-]+[.]json$/.test(filename)) throw new Error('INVALID_ARTIFACT_FILENAME');
+    return runName + '/' + filename;
+  };
+  return {
+    recordsPath: prefix(paths.recordsPath)!,
+    reviewPath: prefix(paths.reviewPath),
+    candidatePath: prefix(paths.candidatePath),
+  };
+}
+
 /** Empty checkbox groups mean all; selecting every known value excludes unlisted values. */
 export function allProgrammesQuery(): string {
   const query = new URLSearchParams();
