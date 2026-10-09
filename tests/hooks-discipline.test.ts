@@ -142,6 +142,24 @@ describe('A1 cpu-discipline: tezak posao samo kroz with-gate-lock', () => {
     for (const command of izvrsivo) expect(judge(command), command).toMatchObject({ allow: false });
   });
 
+  it('T109 (cetvrta runda Grok pregleda): Python tijelo koje moze izvrsiti naredbu ne preskace se', () => {
+    // Bash ovaj ulaz izvrsi (provjereno s `echo`); master prije T109 ga je odbijao zbog `\\"` u retku.
+    const izvrsi = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
+    expect(judge(izvrsi)).toMatchObject({ allow: false });
+    // Isto za python bez broja i za uvoz izvan popisa, __ ime i izvrsavanje koda iz stringa.
+    expect(judge(izvrsi.replace('python3', 'python'))).toMatchObject({ allow: false });
+    for (const tijelo of [
+      'from os import system\nnpx vitest run',
+      '__import__("os")\nnpx vitest run',
+      'eval("1")\nnpx vitest run',
+      '\uFF45\uFF56\uFF41\uFF4C("1")\nnpx vitest run',
+    ]) {
+      expect(judge(`python3 - <<'EOF'\n${tijelo}\nEOF`), tijelo).toMatchObject({ allow: false });
+    }
+    // Cisti Python (uvoz s popisa, hrvatski tekst) i dalje se preskace kao stdin.
+    expect(judge("python3 - <<'EOF'\nimport json\nprint(json.dumps({'a': 'č ć š'}))\nnpx vitest run je u biljesci\nEOF")).toMatchObject({ allow: true });
+  });
+
   it('proces: 7 ubrizganih ulaza, izlazni kod 0 ili 2 i poruka za model', () => {
     const cases: Array<[unknown, NodeJS.ProcessEnv, number]> = [
       [{ tool_name: 'Bash', tool_input: { command: 'npx vitest run' } }, cleanEnv(), 2],

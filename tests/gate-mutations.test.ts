@@ -10961,6 +10961,9 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const komentar = "cat # <<'EOF'\nnpx vitest run";
   const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
   const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+  // Cetvrta runda: Python koji sam izvrsi naredbu (bash ga izvrsi) i NFKC oblik naziva `eval`.
+  const pythonOs = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
+  const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
@@ -10983,7 +10986,7 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
@@ -11014,6 +11017,18 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
     const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+
+  it('mutant: tijelo Pythona se ne provjerava (os.system iz heredoca prolazi)', async () => {
+    const mutant = izvor.replace('PYTHON_READERS.has(words[0]) && PYTHON_UNSAFE_RE', 'false && PYTHON_UNSAFE_RE');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonOs)).toBe(true);
+  });
+
+  it('mutant: tijelo Pythona se ne NFKC-normalizira (naziv pisan punom sirinom prolazi)', async () => {
+    const mutant = izvor.replace(".normalize('NFKC')", '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonNfkc)).toBe(true);
   });
 });
 

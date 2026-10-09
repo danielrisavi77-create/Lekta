@@ -42,6 +42,20 @@ const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
  */
 const HEREDOC_READERS = new Set(['cat', 'git', 'python', 'python3']);
 const HEREDOC_WORD_RE = /^[A-Za-z0-9_./:+-]+$/;
+const PYTHON_READERS = new Set(['python', 'python3']);
+const PYTHON_SAFE_MODULES = 'json|re|csv|string|textwrap|datetime|math|collections|itertools|pathlib|html|unicodedata|argparse';
+/**
+ * T109 (cetvrta runda Grok pregleda #328): Python iz heredoca moze sam izvrsiti naredbu (`os.system`,
+ * `subprocess`, `eval`, `__import__`, `breakpoint()`), pa se njegovo tijelo preskace samo kad nema
+ * nista od toga: nikakvog dunder imena, izvrsavanja koda iz stringa, refleksije, `breakpoint` ni
+ * uvoza izvan malog popisa cistih modula. Provjera je savjetodavna ograda od slucajnog teskog posla,
+ * ne sandbox. Tijelo se prije provjere NFKC-normalizira jer Python tako normalizira identifikatore.
+ */
+const PYTHON_UNSAFE_RE = new RegExp(
+  '__|\\b(?:exec|eval|compile|getattr|setattr|delattr|globals|locals|vars|breakpoint)\\b'
+  + `|\\bimport\\s+(?!(?:${PYTHON_SAFE_MODULES})\\b)`
+  + `|\\bfrom\\s+(?!(?:${PYTHON_SAFE_MODULES})\\b)`,
+);
 
 /**
  * T109: tijelo heredoca smije se preskociti kao stdin samo u jednom jednoznacnom obliku (fail-closed):
@@ -65,7 +79,24 @@ function simpleQuotedHeredoc(command, start) {
   const words = m[1].trim().split(/[ \t]+/).filter(Boolean);
   if (!words.length || !words.every((w) => HEREDOC_WORD_RE.test(w))) return null;
   if (!HEREDOC_READERS.has(words[0])) return null;
+  if (PYTHON_READERS.has(words[0]) && PYTHON_UNSAFE_RE.test(heredocBody(command, lineEnd, m[4], m[2] === '-').normalize('NFKC'))) return null;
   return { delim: m[4], stripTabs: m[2] === '-', end: lineEnd };
+}
+
+/** Tijelo heredoca: retci iza `lineEnd` do retka koji je jednak delimiteru (ili do kraja naredbe). */
+function heredocBody(command, lineEnd, delim, stripTabs) {
+  const lines = [];
+  let pos = lineEnd + 1;
+  while (pos > 0 && pos <= command.length) {
+    const eol = command.indexOf('\n', pos);
+    const end = eol < 0 ? command.length : eol;
+    let line = command.slice(pos, end).replace(/\r$/, '');
+    if (stripTabs) line = line.replace(/^\t+/, '');
+    if (line === delim) break;
+    lines.push(line);
+    pos = eol < 0 ? command.length + 1 : eol + 1;
+  }
+  return lines.join('\n');
 }
 
 /**
