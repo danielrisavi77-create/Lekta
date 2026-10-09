@@ -50,16 +50,18 @@ test('audit: mobilna analiza pa desktop prikaz bez reload i dosljedni koraci', a
   await expect(page.locator('[data-site-chrome]')).toHaveAttribute('data-site-chrome-stage', 'findings');
   await page.screenshot({ path: info.outputPath('results-mobile.png') });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await expect(page.locator('[data-desk-doc] .lekta-fac-page').first()).toBeVisible({ timeout: 30_000 });
-  await expect(page.locator('[data-desk-doc] .lekta-facsimile')).toHaveCount(1);
-  const count = await page.locator('[data-desk-doc] .lekta-fac-page').count();
+  // Z34: stranica rada se crta tek na sirini od 900 px (na mobitelu je nema) i preziv promjenu sirine.
+  await expect(page.locator('[data-rl-page]')).toBeVisible({ timeout: 30_000 });
+  const count = await page.locator('[data-rl-text="now"] p').count();
+  expect(count, 'stranica rada nosi stvarni tekst').toBeGreaterThan(0);
   for (const theme of ['light', 'dark']) {
     await page.evaluate((t) => document.documentElement.dataset.theme = t, theme);
     await page.screenshot({ path: info.outputPath(`resized-document-${theme}.png`) });
   }
   await page.setViewportSize({ width: 375, height: 844 });
+  await expect(page.locator('[data-rl-pagecol]')).toHaveCount(0);
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await expect(page.locator('[data-desk-doc] .lekta-fac-page')).toHaveCount(count);
+  await expect(page.locator('[data-rl-text="now"] p')).toHaveCount(count);
   await page.getByTestId('repair-entry').click();
   await expect(page.locator('#repairView')).toBeVisible();
   await expect(page.locator('[data-site-chrome]')).toHaveAttribute('data-site-chrome-stage', 'plan');

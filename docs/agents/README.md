@@ -214,9 +214,8 @@ ispocetka (2026-10-08 tri puta). Nove zadatke, biljeske i snimak statusa iz Line
 koordinator, skupno, u zasebnom PR-u koji dira samo `tasks.json`. `statusNote` je zamrznut
 povijesni zapis koji nijedan alat ne cita.
 Gard: CI korak u jobu `pr-opis` (`scripts/agents/tasks-json-opseg.mjs`) postaje crven kad PR
-mijenja `tasks.json` zajedno s bilo kojom drugom putanjom. `pr-opis` nije obvezna provjera grane
-(T58), pa je gard savjetodavan: koordinator ne spaja PR s crvenim `pr-opis`. Obvezna provjera
-trazila bi promjenu skupa obveznih provjera grane, a to odlucuje vlasnik.
+mijenja `tasks.json` zajedno s bilo kojom drugom putanjom. `pr-opis` je obvezna provjera grane
+(ruleset "master", odluka vlasnika 2026-10-09), pa gard blokira spajanje takvog PR-a.
 
 Put statusa je `blocked -> ready -> in_progress -> in_review -> done`. Povratak na `ready` znaci
 novi pokusaj nakon pregledane i spremljene prethodne promjene, ne slijepi nastavak preko nje.

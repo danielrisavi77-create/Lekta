@@ -51,6 +51,8 @@ import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
+import { cijenaProblems, plusBodIzvorProblems, plusBodProblems } from './helpers/result-live-guard';
+import { ladica, pocetniOdabir, prsten, zahvatiPlana } from '../src/ui/result-live/result-live-model';
 import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { loadVerifyExistence, retractionProblems, retractionIdentityProblems, loadVerificationSummary, retractionSummaryProblems, verifyBadgesSource, verifyExistenceSource } from './helpers/retraction-guard';
@@ -154,6 +156,7 @@ import {
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { mobileDocMetaProblems, mobileTapeProblems } from './helpers/mobile-tape-guard';
 import { mentorCollapseProblems, mentorModuleFromSource, mentorResizeProblems, mobileTiltProblems } from './helpers/mobile-result-guards';
+import { mobileFieldsProblems } from './helpers/mobile-fields-guard';
 import { consentRevealFromSource, consentRevealProblems, consentThresholdProblems, mobileConsentProblems } from './helpers/mobile-consent-guard';
 import { extractFingerprintInputFromDocx } from '../src/fingerprint/extract-from-docx';
 import { linearnostProblemi, mutiraniSkener } from './helpers/fingerprint-legacy';
@@ -10152,19 +10155,19 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     )).toEqual([]);
   });
 
-  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
+  it('(a) povratak gatea za rok ili fakultet obara gard otvorenog ulaza', async () => {
     const { vrataProblemi } = await import('./helpers/intake-live-guards');
     const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
     const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
     const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi rok' };
-    // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
-    const samoDatum = (s: Vrata) => (!s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
-    expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
-    // Kvar (izvedba prije odluke vlasnika 2026-09-27): vrata traze i potvrdjen fakultet.
-    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
-    expect(vrataProblemi(traziFakultet)).toContain('fakultet nepotvrdjen, "Još ne znam rok": spremno=false, ocekivano true');
-    // Kvar: natpis zatvorenih vrata i dalje trazi fakultet.
-    const stariNatpis = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' });
+    // Kvar: stari tok u kojem rok mora biti odlucen prije prve vrijednosti proizvoda.
+    const traziRok = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(traziRok).length).toBeGreaterThan(0);
+    // Kvar: vrata opet traze i potvrdjen fakultet.
+    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet' });
+    expect(vrataProblemi(traziFakultet).length).toBeGreaterThan(0);
+    // Kvar: tok je otvoren, ali copy korisniku i dalje lazno govori da prvo mora potvrditi rok.
+    const stariNatpis = (_s: Vrata) => ({ spremno: true, natpis: 'Prvo potvrdi rok' });
     expect(vrataProblemi(stariNatpis).length).toBeGreaterThan(0);
   });
 
@@ -10953,6 +10956,17 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   const komentar = "cat # <<'EOF'\nnpx vitest run";
   const funkcija = "cat() { bash; }\ncat <<'EOF'\nnpx vitest run\nEOF";
   const ljuska = "sh <<'EOF'\nnpx vitest run\nEOF";
+  // Cetvrta runda: Python koji sam izvrsi naredbu (bash ga izvrsi) i NFKC oblik naziva `eval`.
+  const pythonOs = 'python3 - <<\'EOF\'\nimport os\nos.system("\\";npx vitest run".replace(chr(34), "").replace(";", ""))\nEOF';
+  const pythonMixedImport = "python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonWrapped = "env FOO=1 python3 - <<'EOF'\nimport json, os\nos.system('npx vitest run')\nEOF";
+  const pythonLater = "echo ready\npython3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonUnquoted = "python3 - <<EOF\nimport os\nos.system('npx vitest run')\nEOF";
+  // Uvoz izvan popisa bez imena iz PYTHON_ESCAPE_NAMES_RE: hvata ga samo provjera cijele import liste.
+  const pythonMixedZip = "python3 - <<'EOF'\nimport json, zipfile\nprint(1)\nEOF";
+  const pythonEnvFlag = "env -i python3 - <<'EOF'\nimport os\nos.system('npx vitest run')\nEOF";
+  const pythonArgparse = "python3 - <<'EOF'\nimport argparse\nargparse.os.system('npx vitest run')\nEOF";
+  const pythonNfkc = "python3 - <<'EOF'\n\uFF45\uFF56\uFF41\uFF4C('1')\nnpx vitest run\nEOF";
 
   async function dopusta(source: string, command: string): Promise<boolean> {
     const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
@@ -10975,7 +10989,9 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
 
   it('baseline: citirani heredoc prolazi, ostali oblici se odbijaju', async () => {
     expect(await dopusta(izvor, citirani)).toBe(true);
-    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska]) expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    for (const ulaz of [bezNavodnika, komentar, funkcija, ljuska, pythonOs, pythonNfkc, pythonMixedImport, pythonWrapped, pythonLater, pythonUnquoted, pythonEnvFlag, pythonArgparse, pythonMixedZip]) {
+      expect(await dopusta(izvor, ulaz), ulaz).toBe(false);
+    }
   });
 
   it('mutant: bez prepoznavanja heredoca citirani tekst se opet lazno odbija', async () => {
@@ -10985,27 +11001,80 @@ describe('mutacije: scripts/hooks/cpu-discipline.mjs heredoc (T109)', () => {
   });
 
   it('mutant: delimiter bez navodnika preskace tijelo sa supstitucijom', async () => {
-    const mutant = izvor.replace("(['\"])([A-Za-z_]", "(['\"]?)([A-Za-z_]");
+    const mutant = izvor.replace('const skipBody = Boolean(m[3]) && simplePrefix;', 'const skipBody = simplePrefix;');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, bezNavodnika)).toBe(true);
   });
 
   it('mutant: rijeci u retku operatora se ne provjeravaju (# vise ne iskljucuje heredoc)', async () => {
-    const mutant = izvor.replace('!words.every((w) => HEREDOC_WORD_RE.test(w))', 'false');
+    const mutant = izvor.replace(
+      'words.every((w) => HEREDOC_WORD_RE.test(w) || (pythonReader && ENV_ASSIGN_RE.test(w)))',
+      'true',
+    );
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, komentar)).toBe(true);
   });
 
   it('mutant: heredoc i iza prvog retka (funkcija cat definirana ranije)', async () => {
-    const mutant = izvor.replace('  if (lineStart > 0) return null;\n', '');
+    const mutant = izvor.replace('lineStart === 0', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, funkcija)).toBe(true);
   });
 
   it('mutant: program izvan allowliste citaca', async () => {
-    const mutant = izvor.replace('  if (!HEREDOC_READERS.has(words[0])) return null;\n', '');
+    const mutant = izvor.replace('HEREDOC_READERS.has(programName(words[0])) || pythonReader', 'true');
     expect(mutant).not.toBe(izvor);
     expect(await dopusta(mutant, ljuska)).toBe(true);
+  });
+
+  it('mutant: unsafe Python sentinel se ne blokira', async () => {
+    const mutant = izvor.replace(
+      "if (tokens.includes(UNSAFE_PYTHON_HEREDOC)) return { heavy: true, what: 'nesiguran Python heredoc' };",
+      'if (false) return { heavy: true, what: "nesiguran Python heredoc" };',
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: Python reader iza omotača i assignmenta se ne prepoznaje', async () => {
+    const mutant = izvor.replace(
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
+      'return false;',
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonWrapped)).toBe(true);
+  });
+
+  it('mutant: omotac sa zastavicom (env -i python3) sakriva Python citac', async () => {
+    const mutant = izvor.replace(
+      'return tokens.some((t) => PYTHON_READERS.has(programName(t)));',
+      `let i = 0;
+  while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
+  return PYTHON_READERS.has(programName(tokens[i] ?? ''));`,
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonEnvFlag)).toBe(true);
+  });
+
+  it('mutant: os/sys dohvacen kroz sigurni modul (argparse.os) prolazi', async () => {
+    const mutant = izvor.replace(' || PYTHON_ESCAPE_NAMES_RE.test(normalized)', '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonArgparse)).toBe(true);
+  });
+
+  it('mutant: u import listi provjerava se samo prvi modul', async () => {
+    const mutant = izvor.replace(
+      "for (const spec of match[2].split(',')) {",
+      "for (const spec of match[2].split(',').slice(0, 1)) {",
+    );
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonMixedZip)).toBe(true);
+  });
+
+  it('mutant: tijelo Pythona se ne NFKC-normalizira (naziv pisan punom sirinom prolazi)', async () => {
+    const mutant = izvor.replace(".normalize('NFKC')", '');
+    expect(mutant).not.toBe(izvor);
+    expect(await dopusta(mutant, pythonNfkc)).toBe(true);
   });
 });
 
@@ -12017,10 +12086,11 @@ describe('Z33 analiza uzivo: gardovi pokreta i lijene granice grizu', () => {
 
   it('MUTACIJA: dinamicki uvoz zamijenjen statickim u progress-scan.ts obara gard', () => {
     const uvoz = "import { mountAnalysisLive } from './analysis-live/analysis-live';";
-    const dinamicki = "import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null)";
+    // Od runde 2 (Z33-02, rok uvoza) dinamicki uvoz stoji u vlastitom pokusaju s rokom.
+    const dinamicki = "import('./analysis-live/analysis-live')";
     const src = izvori['src/ui/progress-scan.ts'];
     expect(src).toContain(dinamicki);
-    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve(mountAnalysisLive)') };
+    const mutant = { ...izvori, 'src/ui/progress-scan.ts': uvoz + '\n' + src.replace(dinamicki, 'Promise.resolve({ mountAnalysisLive })') };
     expect(liveBoundaryProblems(mutant, 'src/ui/progress-scan.ts')).toEqual([
       'src/ui/progress-scan.ts: staticki uvoz ./analysis-live/analysis-live',
       'src/ui/progress-scan.ts: nema dinamickog uvoza ./analysis-live/analysis-live',
@@ -12058,6 +12128,80 @@ describe('Z33 analiza uzivo: gard doslovnog copyja grize', () => {
   });
 });
 
+/**
+ * REZULTAT: SVE U JEDNOM (ALIGNMENT Z34). Gardovi iz `tests/helpers/analysis-live-guard.ts` (pokret,
+ * lijena granica, doslovni copy) i `tests/helpers/result-live-guard.ts` (cijena, "+N"):
+ *  - Z31 pokret na listu Z34 (predlozak animira padding i line-height prijelazom "Nakon plana");
+ *  - kod Z34 ulazi u `/rad/` samo dinamickim uvozom iz kokpita (ulaz je tik ispod 960 KB);
+ *  - natpisi gumba doslovno iz `ResultLive.dc.html`;
+ *  - nema cijene u klijentskom kodu i nema bodova po zahvatu (odluka vlasnika, F37).
+ */
+describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
+  const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
+  const css = citaj('src/ui/result-live/result-live.css');
+  const modul = citaj('src/ui/result-live/result-live.ts');
+  const predlozak = citaj('design/templates/result-live/ResultLive.dc.html');
+  const SHIM = 'src/ui/results/results-cockpit-live.ts';
+  const KOKPIT = 'src/ui/results/results-cockpit.ts';
+  const MODUL = '../result-live/result-live';
+  const izvori = { [SHIM]: citaj(SHIM), [KOKPIT]: citaj(KOKPIT), 'src/ui/app.ts': citaj('src/ui/app.ts') };
+  const zahvati = zahvatiPlana([{ ruleId: 'm', label: 'Margine', violated: true, matchKeys: ['M'] }], true);
+  const racun = ladica(pocetniOdabir(zahvati), zahvati, 71, 88).racun ?? '';
+
+  it('BASELINE: stvarni list, ulaz, kostur i racun su cisti', () => {
+    expect(motionCssProblems(css)).toEqual([]);
+    expect(izvori[KOKPIT]).toContain("import('./results-cockpit-live')");
+    expect(liveBoundaryProblems(izvori, SHIM, MODUL)).toEqual([]);
+    expect(copyProblems(modul, predlozak, [])).toEqual([]);
+    expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': modul, 'src/ui/result-live/result-live.css': css })).toEqual([]);
+    expect(racun).toBe('71 → najviše 88');
+    expect(plusBodProblems(`${racun} ${prsten(71, 88)?.opis}`)).toEqual([]);
+  });
+
+  it('MUTACIJA: prijelaz sirine na hrpi kartica obara gard pokreta', () => {
+    const mutant = css.replace('.rl-slot { position: relative;', '.rl-slot { transition: width .3s; position: relative;');
+    expect(mutant).not.toBe(css);
+    expect(motionCssProblems(mutant)).toEqual(['transition mijenja width']);
+  });
+
+  it('MUTACIJA: staticki uvoz modula Z34 u kokpit (bez dinamickog) obara gard granice', () => {
+    const dinamicki = "import('../result-live/result-live')";
+    const src = izvori[SHIM];
+    expect(izvori[KOKPIT]).toContain("import('./results-cockpit-live')");
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, [SHIM]: "import { mountResultLive } from '../result-live/result-live';\n" + src.replaceAll(dinamicki, 'Promise.resolve({ mountResultLive })') };
+    expect(liveBoundaryProblems(mutant, SHIM, MODUL)).toEqual([
+      `${SHIM}: staticki uvoz ../result-live/result-live`,
+      `${SHIM}: nema dinamickog uvoza ../result-live/result-live`,
+    ]);
+  });
+
+  it('MUTACIJA: preformuliran natpis gumba obara gard copyja', () => {
+    const mutant = modul.replace('>Uključi u plan</button>', '>Dodaj u plan</button>');
+    expect(mutant).not.toBe(modul);
+    expect(copyProblems(mutant, predlozak, [])).toEqual(['natpis "Dodaj u plan" nije u predlosku']);
+  });
+
+  it('MUTACIJA: cijena iz predloska upisana u ladicu obara gard cijene', () => {
+    const mutant = modul.replace('>Cijena ne ovisi o odabiru.</span>', '>14,99 €</span>');
+    expect(mutant).not.toBe(modul);
+    expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': mutant })).toEqual(['src/ui/result-live/result-live.ts: znak eura']);
+  });
+
+  it('MUTACIJA: stvarni literal gumba Z34 s +N obara gard izvora', () => {
+    const mutant = modul.replace('>U planu ✓</button>', '>U planu ✓ · +7</button>');
+    expect(mutant).not.toBe(modul);
+    expect(plusBodIzvorProblems({ 'src/ui/result-live/result-live.ts': mutant })).toEqual([
+      'src/ui/result-live/result-live.ts: "+7" u tekstu',
+    ]);
+  });
+
+  it('MUTACIJA: bodovi po zahvatu u natpisu ili racunu obaraju gard', () => {
+    expect(plusBodProblems('U planu ✓ · +7')).toEqual(['bodovi po zahvatu: "+7"']);
+    expect(plusBodProblems(`${racun} · +17`)).toEqual(['bodovi po zahvatu: "+17"']);
+  });
+});
+
 describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog vlasnika 2026-10-04)', () => {
   type Validator = (queue: unknown) => unknown;
   const IZVORNI_UZORAK = '/^T(?:\\d{2}|[1-9]\\d{2})$/';
@@ -12089,6 +12233,64 @@ describe('mutacije: ID zadatka u validateQueue prima T100 do T999 (T100, nalog v
 
   it('mutant: bilo koliko znamenki propusta T017 i T1000', () => {
     expect(gardDrzi(validatorIzIzvora('/^T\\d+$/'))).toBe(false);
+  });
+});
+
+describe('mobilna polja i mete alata (mobilni audit 2026-09-28, PR 4)', () => {
+  const lf = (p: string) => readFileSync(resolve(process.cwd(), p), 'utf8').replace(/\r/g, '');
+  const TOOL = 'src/shared/tool-page.css';
+  const CHROME = 'src/shared/site-chrome.css';
+
+  it('BASELINE: polja 16 px, .row2 u jednom stupcu, pravne poveznice 44 px', () => {
+    expect(mobileFieldsProblems(lf(TOOL), lf(CHROME))).toEqual([]);
+  });
+
+  it('mutant: bez 16 px u poljima se hvata', () => {
+    const m = lf(TOOL).replace('select,textarea){font-size:16px}', 'select,textarea){font-size:14px}');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['polja alata nemaju 16 px na uskom ekranu']);
+  });
+
+  it('mutant: .row2 u dva stupca se hvata', () => {
+    const m = lf(TOOL).replace('.tool-workspace .row2{grid-template-columns:1fr}', '');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['.row2 ostaje u dva stupca na uskom ekranu']);
+  });
+
+  it('mutant: pravne poveznice opet 24 px se hvata', () => {
+    const m = lf(CHROME).replace('.site-footer__pravno a { min-height: 44px;', '.site-footer__pravno a { min-height: 24px;');
+    expect(m).not.toBe(lf(CHROME));
+    expect(mobileFieldsProblems(lf(TOOL), m)).toEqual(['pravne poveznice u podnozju nisu mete od 44 px na uskom ekranu']);
+  });
+
+  it('mutant: pravne poveznice bez najmanje sirine se hvata (Codex 310-2)', () => {
+    const m = lf(CHROME).replace(' min-width: 44px;', '');
+    expect(m).not.toBe(lf(CHROME));
+    expect(mobileFieldsProblems(lf(TOOL), m)).toEqual(['pravne poveznice u podnozju su uze od 44 px na uskom ekranu']);
+  });
+
+  for (const [tip, novo] of [['select', 'textarea){font-size:16px}'], ['textarea', 'select){font-size:16px}']] as const) {
+    it(`mutant: pravilo od 16 px bez ${tip} se hvata (Codex 310-3)`, () => {
+      const m = lf(TOOL).replace('select,textarea){font-size:16px}', novo);
+      expect(m).not.toBe(lf(TOOL));
+      expect(mobileFieldsProblems(m, lf(CHROME))).toEqual([`pravilo od 16 px ne obuhvaca ${tip}`]);
+    });
+  }
+
+  it('mutant: pravilo samo za radni prostor ne obuhvaca ostatak stranice ni karticu Cijela literatura (Codex 310-1)', () => {
+    const m = lf(TOOL).replace(':is(main:has(.tool-workspace),#panel-bulk) :is(input', '.tool-workspace :is(input');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['pravilo od 16 px ne obuhvaca cijeli sadrzaj stranice alata', 'pravilo od 16 px ne obuhvaca karticu Cijela literatura']);
+  });
+
+  it('mutant: bez #panel-bulk pravilo gubi specificnost iznad #bulk-input i karticu Cijela literatura', () => {
+    const m = lf(TOOL).replace(':is(main:has(.tool-workspace),#panel-bulk) :is(input', ':is(main:has(.tool-workspace)) :is(input');
+    expect(m).not.toBe(lf(TOOL));
+    expect(mobileFieldsProblems(m, lf(CHROME))).toEqual(['pravilo od 16 px ne obuhvaca karticu Cijela literatura']);
+  });
+
+  it('mutant: kasnije pravilo koje poljima vraca 14 px se hvata (Codex 310-3)', () => {
+    expect(mobileFieldsProblems(`${lf(TOOL)}\n#panel-bulk textarea{font-size:14px}`, lf(CHROME))).toEqual(['kasnije pravilo vraca poljima slova manja od 16 px']);
   });
 });
 

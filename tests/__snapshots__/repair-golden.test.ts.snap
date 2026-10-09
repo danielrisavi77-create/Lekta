@@ -466,7 +466,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fer-diplomski-puna-struktura.docx": {
     "__kombinirano": {
-      "applied": 6,
+      "applied": 5,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -483,10 +483,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Word natpisi, izvori i potvrđeni popisi",
           "before": "postojeći natpisi ili sidra",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "spašene tablice i slike",
@@ -574,6 +570,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "margins-fixer-rule",
         "paper-size-fixer-rule",
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
@@ -1112,135 +1109,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": {
-              "fmt": "lowerRoman",
-              "start": "1",
-            },
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": true,
-          },
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": "1",
-            },
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": false,
-          },
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "11906",
-              "w": "16838",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "creator",
-            "fingerprint": "inspector-9cc2ba4f",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "lastModifiedBy",
-            "fingerprint": "inspector-a0262d9d",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "revision",
-            "fingerprint": "inspector-aa15a180",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "application",
-            "fingerprint": "inspector-d1a743e0",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "appVersion",
-            "fingerprint": "inspector-4ca290ec",
-            "part": "app",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -2889,7 +2771,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fpzg-novinarstvo-bibliografija.docx": {
     "__kombinirano": {
-      "applied": 10,
+      "applied": 9,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -2914,10 +2796,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "bibliografija usklađena prema potvrđenom planu",
@@ -2982,6 +2860,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "paper-size-fixer-rule",
         "consistency-fixer-rule",
         "link-doi-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "citation-bibliography-sync-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -3502,76 +3381,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": "1",
-            },
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "creator",
-            "fingerprint": "inspector-9cc2ba4f",
-            "part": "core",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -4721,7 +4544,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "lo-fpzg-zavrsni-neuskladjen.docx": {
     "__kombinirano": {
-      "applied": 8,
+      "applied": 7,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -4750,10 +4573,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
       ],
       "markers": {
@@ -4804,6 +4623,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "bibliography-repair-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -5170,90 +4990,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 59,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Arial",
-          "hAnsi": "Arial",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": null,
-          "line": "240",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1670",
-              "left": "1134",
-              "right": "1134",
-              "top": "1134",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": null,
-            },
-            "pgSz": {
-              "h": "15840",
-              "w": "12240",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "revision",
-            "fingerprint": "inspector-ad15a639",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "application",
-            "fingerprint": "inspector-570280be",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "appVersion",
-            "fingerprint": "inspector-dd6e9f35",
-            "part": "app",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -5847,7 +5597,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "lo-fpzg-zavrsni-uskladjen.docx": {
     "__kombinirano": {
-      "applied": 5,
+      "applied": 4,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -5864,10 +5614,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
       ],
       "markers": {
@@ -5922,6 +5668,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "alignment-fixer-rule",
         "heading-style-fixer-rule",
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "bibliography-repair-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -6199,90 +5946,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 120,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Times New Roman",
-          "hAnsi": "Times New Roman",
-          "sz": "24",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "both",
-          "line": "360",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1976",
-              "left": "1417",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": null,
-            },
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "revision",
-            "fingerprint": "inspector-ad15a639",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "application",
-            "fingerprint": "inspector-570280be",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "appVersion",
-            "fingerprint": "inspector-dd6e9f35",
-            "part": "app",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -7916,7 +7593,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "pravo-integrirani-fusnote.docx": {
     "__kombinirano": {
-      "applied": 12,
+      "applied": 11,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -7957,10 +7634,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Naslovi: velikim slovima (4 naslova)",
           "before": "Naslovi: kako ih je autor napisao",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
@@ -8012,6 +7685,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
@@ -8298,73 +7972,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "creator",
-            "fingerprint": "inspector-9cc2ba4f",
-            "part": "core",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -9330,7 +8951,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "pravo-socijalni-rad-fusnote.docx": {
     "__kombinirano": {
-      "applied": 10,
+      "applied": 9,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -9363,10 +8984,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Fusnote: 10 pt; izravno formatiranje uklonjeno u 3 odlomaka (fusnote)",
           "before": "Fusnote: 9 pt",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
@@ -9419,6 +9036,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "section-insert-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -9706,73 +9324,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "creator",
-            "fingerprint": "inspector-9cc2ba4f",
-            "part": "core",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -10883,6 +10448,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": {
         "comments": [],
         "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 35,
+          "runFonts": 69,
+          "runSz": 69,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "850",
+              "left": "850",
+              "right": "850",
+              "top": "850",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
         "metadata": [
           {
             "action": "remove",
@@ -11613,6 +11237,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "final-document-inspector-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 35,
+          "runFonts": 69,
+          "runSz": 69,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "850",
+              "left": "850",
+              "right": "850",
+              "top": "850",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -12431,6 +12114,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": {
         "comments": [],
         "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 35,
+          "runFonts": 69,
+          "runSz": 69,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1134",
+              "left": "1134",
+              "right": "1134",
+              "top": "1134",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
         "metadata": [
           {
             "action": "remove",
@@ -13151,6 +12893,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "final-document-inspector-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 35,
+          "runFonts": 69,
+          "runSz": 69,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "567",
+              "left": "1417",
+              "right": "850",
+              "top": "567",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -13921,6 +13722,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "final-document-inspector-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 35,
+          "runFonts": 69,
+          "runSz": 69,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "850",
+              "left": "850",
+              "right": "850",
+              "top": "850",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -16530,7 +16390,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-mentor-komentari.docx": {
     "__kombinirano": {
-      "applied": 8,
+      "applied": 7,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -16559,10 +16419,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
-        },
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
       ],
       "markers": {
@@ -16613,6 +16469,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "consistency-fixer-rule",
+        "final-document-inspector-fixer-rule",
         "bibliography-repair-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -16979,90 +16836,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "final-document-inspector-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 59,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": "Arial",
-          "hAnsi": "Arial",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": null,
-          "line": "240",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1670",
-              "left": "1134",
-              "right": "1134",
-              "top": "1134",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": null,
-            },
-            "pgSz": {
-              "h": "15840",
-              "w": "12240",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "revision",
-            "fingerprint": "inspector-ad15a639",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "application",
-            "fingerprint": "inspector-570280be",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "appVersion",
-            "fingerprint": "inspector-dd6e9f35",
-            "part": "app",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "final-document-inspector-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer(potvrdjeno)": {
       "applied": true,
@@ -20821,6 +20608,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": {
         "comments": [],
         "hiddenText": [],
+        "metadata": [],
+        "revisions": [],
+        "settings": {
+          "removeRevisionIds": true,
+        },
+        "version": 1,
+      },
+      "skipped": [],
+    },
+    "final-document-inspector-fixer(potvrdjeno)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": null,
+          "hAnsi": null,
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1440",
+              "left": "1440",
+              "right": "1440",
+              "top": "1440",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "15840",
+              "w": "12240",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "comments": [],
+        "hiddenText": [],
         "metadata": [
           {
             "action": "remove",
@@ -22339,64 +22185,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": {
         "comments": [],
         "hiddenText": [],
-        "metadata": [
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "creator",
-            "fingerprint": "inspector-0d06d093",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "lastModifiedBy",
-            "fingerprint": "inspector-5c58437d",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "created",
-            "fingerprint": "inspector-ef43a080",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "modified",
-            "fingerprint": "inspector-cd59bb36",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "revision",
-            "fingerprint": "inspector-ac15a4a6",
-            "part": "core",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "company",
-            "fingerprint": "inspector-9cf9de09",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "application",
-            "fingerprint": "inspector-d1a743e0",
-            "part": "app",
-          },
-          {
-            "action": "remove",
-            "confirmed": true,
-            "field": "appVersion",
-            "fingerprint": "inspector-fceda172",
-            "part": "app",
-          },
-        ],
+        "metadata": [],
         "revisions": [],
         "settings": {
           "removeRevisionIds": true,

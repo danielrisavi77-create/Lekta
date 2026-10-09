@@ -255,6 +255,19 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overfl
   .tool-workspace>.card{padding:18px}
   .tool-workspace .out-panel>.card{padding:18px}
   .tool-workspace .out-bar .btn{flex:1 1 auto;justify-content:center}
+  /* Dva polja u retku (`.row2` u naslovnici, izjavi, citatu, karticama) na 360 do 480 px rezu izbornike
+     ("Slobodan unc…", "Prvo odaberi…"); jedno polje po retku (mobilni audit 2026-09-28). */
+  .tool-workspace .row2{grid-template-columns:1fr}
+}
+/* SLOVA U POLJIMA NA MOBITELU: 16 px. Ispod toga iOS Safari pri dodiru polja povecava cijelu stranicu i
+   ostavlja je povecanu. Stranice alata polja slazu vlastitim stilom (`font:inherit` ili 13 do 14 px), pa
+   ovo pravilo namjerno ima vecu specificnost od njih (mobilni audit 2026-09-28). Doseg je CIJELI `main` stranice alata
+   (`main:has(.tool-workspace)`): na citat.html polja stoje i izvan radnog prostora, u kartici fakulteta (#f-faculty
+   15 px) i u kartici "Cijela literatura" (#bulk-style 13 px, #bulk-input 14 px i polja nastala prepoznavanjem;
+   Codex 310-1). `#panel-bulk` u istom :is() daje pravilu specificnost (1,5,1), vecu od `#bulk-input{font-size:14px}`
+   u stilu stranice. */
+@media(max-width:720px){
+  :is(main:has(.tool-workspace),#panel-bulk) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea){font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.tool-workspace *{scroll-behavior:auto}}
 

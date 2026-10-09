@@ -1,174 +1,119 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { cekajApp, cekajKorak } from './app-ready';
 import { potvrdiProfil } from './confirm-profile';
+import { otvoriLadicu, sljedecaKartica } from './result-live-ladica';
 
 /**
- * KOREKTORSKI STOL na ekranu rezultata.
+ * KOREKTORSKI STOL na ekranu rezultata, od ALIGNMENT Z34 ("Rezultat: sve u jednom").
  *
- * Brif vlasnika (2026-09-08): "Rezultat bi trebao biti pravi Korektorski stol. Vasa specifikacija
- * vec predvidja otprilike 58% sirine za dokument i 42% za nalaze. Digitalni korektor koji sjedi uz
- * tvoj Word. Ne dashboard, ne tablica provjera, ne score app. Klik na nalaz pomakne dokument. Klik
- * na oznaceno mjesto aktivira nalaz."
+ * Brif vlasnika (2026-09-08): "Digitalni korektor koji sjedi uz tvoj Word. Ne dashboard, ne tablica
+ * provjera, ne score app. Klik na nalaz pomakne dokument." Z34 je taj stol preoblikovao: lijevo
+ * stranica rada (sticky), desno hrpa kartica s jezicima kategorija, ispod traka stranica, a plan se
+ * slaze na samoj kartici ("U planu ✓") i salje iz ladice. Stol Z8 (faksimil, red cekanja, plan u
+ * panou) ostaje samo za stanje `clear`.
  *
- * ZASTO OVAJ SPEC POSTOJI, iako stol ima 36 jedinicnih testova: oni mjere ODLUKE (navigacija ne
- * omata, zastavica bez nalaza ne pomice nista), a ovaj mjeri RASPORED I SPOJ, dakle tocno ono sto
- * se u happy-domu ne moze dokazati. Omjer stupaca nema rasporeda u jedinicnom testu, a lijeni uvoz
- * faksimila ondje se nikad ne izvodi.
+ * ZASTO OVAJ SPEC POSTOJI uz `tests/result-live.test.ts`: jedinicni testovi mjere ODLUKE (filtar,
+ * navigacija ne omata, strop ne ovisi o planu), a ovaj RASPORED I SPOJ, dakle ono sto se u
+ * happy-domu ne moze dokazati: omjer stupaca, sticky stranica, lijeni uvoz modula, slijetanje u panel.
  */
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
-async function doRezultata(page: import('@playwright/test').Page): Promise<void> {
+async function doRezultata(page: Page): Promise<void> {
   await page.goto('/rad/');
   await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(fixture);
   await cekajKorak(page, '2');
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
+  await expect(page.locator('#resultCockpit')).toHaveAttribute('data-rl-ready', 'true', { timeout: 30_000 });
 }
 
-test('stol dijeli ekran 58/42: dokument lijevo, jedan nalaz desno', async ({ page }) => {
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+const rok = (): number => Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000);
+
+test('stol: stranica rada lijevo i sticky, jedna kartica desno', async ({ page }) => {
+  test.setTimeout(rok());
   await page.setViewportSize({ width: 1440, height: 1000 });
   await doRezultata(page);
 
-  const stol = page.locator('[data-desk]');
-  await expect(stol).toBeVisible();
+  const stranica = await page.locator('[data-rl-pagewrap]').boundingBox();
+  const hrpa = await page.locator('[data-rl-stack]').boundingBox();
+  expect(stranica, 'stranica mora imati mjerljivu kutiju').toBeTruthy();
+  expect(hrpa, 'hrpa kartica mora imati mjerljivu kutiju').toBeTruthy();
+  expect(stranica!.x + stranica!.width, 'stranica stoji lijevo od kartica').toBeLessThanOrEqual(hrpa!.x + 1);
 
-  const doc = await page.locator('[data-desk-doc]').boundingBox();
-  const pane = await page.locator('[data-desk-pane]').boundingBox();
-  expect(doc, 'dokument mora imati mjerljivu kutiju').toBeTruthy();
-  expect(pane, 'ploca nalaza mora imati mjerljivu kutiju').toBeTruthy();
+  // OMJER SE MJERI, ne pretpostavlja iz CSS-a (predlozak: 1,15fr / 1fr).
+  const udio = stranica!.width / (stranica!.width + hrpa!.width);
+  expect(udio, `stranica zauzima ${(udio * 100).toFixed(1)}% sirine stola`).toBeGreaterThan(0.45);
+  expect(udio).toBeLessThan(0.62);
+  expect(await page.locator('[data-rl-pagewrap]').evaluate((el) => getComputedStyle(el).position)).toBe('sticky');
 
-  // OMJER SE MJERI, ne pretpostavlja iz CSS-a. Gard nad samim CSS-om vec je jednom bio zelen dok je
-  // preglednik crtao nesto drugo; mjerodavan je izracunati raspored.
-  const udio = doc!.width / (doc!.width + pane!.width);
-  expect(udio, `dokument zauzima ${(udio * 100).toFixed(1)}% sirine stola`).toBeGreaterThan(0.5);
-  expect(udio).toBeLessThan(0.66);
+  // Stranica je STVARNO iscrtana tekstom rada, ne samo rezerviran prostor.
+  expect(await page.locator('[data-rl-text="now"] p').count()).toBeGreaterThan(0);
+  await expect(page.locator('[data-rl-card]')).toHaveCount(1);
 
-  // Dokument je STVARNO iscrtan, ne samo rezerviran prostor.
-  await expect(page.locator('[data-desk-doc] .lekta-facsimile')).toBeVisible({ timeout: 30_000 });
-  await expect(page.locator('[data-desk-doc] .desk-doc__cekanje')).toHaveCount(0);
-
-  // DOKUMENT NE SMIJE BITI ODREZAN. Faksimil je pravi A4 (21 cm), a pano stola je uzi, pa se bez
-  // uklapanja po sirini stranica rezala po desnom rubu i rijeci su se lomile nasred retka
-  // ("...akademskog tel"). Dokument tada prestaje biti citljiv upravo u alatu koji sluzi citanju.
-  //
-  // ZASTO OVA TVRDNJA POSTOJI: kvar je prosao SVE ostale provjere. Faksimil je bio vidljiv, omjer
-  // stupaca tocan, oba mjerena. Rez se vidio tek na snimci ekrana. Tvrdnja o postojanju elementa
-  // ne mjeri je li sadrzaj upotrebljiv; ova mjeri.
-  //
-  // Izmjereno nakon popravka: pano 677 px, `scrollWidth` 684 px, dakle 1,01. Bez uklapanja je
-  // stranica ~794 px u istom panu. Prag 1,05 propusta rub za scrollbar, a ne propusta rez.
-  const prelijev = await page.evaluate(() => {
-    const pano = document.querySelector('[data-desk-doc]') as HTMLElement | null;
-    return pano ? pano.scrollWidth / pano.clientWidth : 0;
-  });
-  expect(prelijev, `dokument prelijeva pano za ${((prelijev - 1) * 100).toFixed(0)}%`).toBeLessThan(1.05);
-
-  // JEDAN OTVOREN DETALJ, ali SVI nalazi vidljivi kao redci. To je sesta tocka brifa:
-  // "Nalazi ne smiju izgledati kao 25 jednakih kartica... Odmah je vidljivo sto prvo, sto Lekta
-  // moze rijesiti, sto mora student."
-  const redci = page.locator('[data-desk-queue] .dq-item');
-  expect(await redci.count(), 'popis mora pokazati SVE nalaze, ne samo otvoreni').toBeGreaterThan(3);
-  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
-  // Z8: detalj je IZVADEN iz retka i podignut iznad popisa kao jedna kartica s pagerom, pa
-  // `.dq-detalj` vise ne postoji. Tvrdnja je ista ("tocno jedan otvoren detalj"), samo je sad
-  // mjeri kartica u panou (redak iznad) uz redak koji je u popisu oznacen kao odabran.
-  await expect(page.locator('[data-desk-queue] .dq-item--open')).toHaveCount(1);
-
-  // OBJE OSI U RETKU: ozbiljnost lijevo, popravljivost desno. Bez druge osi popis ne odgovara na
-  // "sto Lekta moze rijesiti", sto je pola onoga zbog cega je trazen.
-  await expect(page.locator('[data-desk-queue] .dq-sev').first()).toBeVisible();
-  expect(await page.locator('[data-desk-queue] .dq-fix').count()).toBeGreaterThan(0);
-
-  // REDAK SE NE SMIJE PRELIJEVATI. Dug naslov nalaza bi bez `minmax(0,1fr)` izgurao oznaku AUTO
-  // izvan panoa; isti razred kvara vec je uhvacen na `.rad-doc` i na samom dokumentu stola.
-  const prelijevRetka = await page.evaluate(() => {
-    const b = document.querySelector('[data-desk-queue] .dq-btn') as HTMLElement | null;
-    return b ? b.scrollWidth / b.clientWidth : 0;
-  });
-  expect(prelijevRetka, `redak popisa prelijeva za ${((prelijevRetka - 1) * 100).toFixed(0)}%`).toBeLessThan(1.02);
+  // Kartica se ne prelijeva (dug naslov nalaza ne gura strelice izvan stupca).
+  const prelijev = await page.locator('[data-rl-card]').evaluate((el) => el.scrollWidth / el.clientWidth);
+  expect(prelijev, `kartica prelijeva za ${((prelijev - 1) * 100).toFixed(0)}%`).toBeLessThan(1.02);
 });
 
-test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+test('jezicak filtrira hrpu kartica, a prazna kategorija se ne moze kliknuti', async ({ page }) => {
+  test.setTimeout(rok());
   await page.setViewportSize({ width: 1440, height: 1000 });
   await doRezultata(page);
 
-  // Doslovno po brifu: "Kliknes 03 i samo se njegov detalj otvori."
-  await page.locator('[data-desk-queue] [data-desk-go="2"]').click();
-  await expect(page.locator('[data-desk-count]')).toHaveText(/^3 od \d+$/);
-  // Z8: jedna kartica u panou umjesto detalja unutar retka; "samo njegov detalj" se sad mjeri
-  // time da je kartica jedna i da je odabran tocno taj redak.
-  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
-  // Z8 (commit cd42c90f): gumb ne rasklapa nista na sebi, pa `aria-expanded` vise ne postoji
-  // (`desk-queue.ts` redak 67). Odabrani redak nosi `aria-current="true"`; provjeravamo i da je
-  // TOCNO jedan takav redak, ne samo da ovaj ima atribut.
-  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="2"]')).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('[data-desk-queue] [aria-current="true"]')).toHaveCount(1);
-
-  // Popis i navigacija su DVA nacina rada nad istim stanjem, ne dva stanja: nakon klika na redak
-  // navigacija nastavlja odande, a ne od pocetka.
-  await page.locator('.desk-nav__btn--next').click();
-  await expect(page.locator('[data-desk-count]')).toHaveText(/^4 od \d+$/);
-  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('[data-desk-queue] [aria-current="true"]')).toHaveCount(1);
-  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
+  for (const key of ['Format', 'Struktura', 'Citati', 'Predaja']) {
+    const tab = page.locator(`[data-rl-tab="${key}"]`);
+    const n = (await tab.locator('.rl-tab__n').textContent())?.trim() ?? '';
+    // Prazna kategorija: kvacica samo kad je izmjerena, inace 'nije mjereno' (Z34, Codex R2).
+    if (n === '✓' || n === 'nije mjereno') { await expect(tab).toBeDisabled(); continue; }
+    await tab.click();
+    await expect(page.locator('[data-desk-count]')).toHaveText(`1 od ${n}`);
+    if (n === '1') await expect(page.locator('.rl-card .desk-nav__btn--next')).toBeDisabled();
+  }
 });
 
 test('navigacija stolom mijenja nalaz i ne omata na kraju', async ({ page }) => {
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+  test.setTimeout(rok());
   await page.setViewportSize({ width: 1440, height: 1000 });
   await doRezultata(page);
 
   const brojac = page.locator('[data-desk-count]');
-  const prvi = await brojac.textContent();
-  expect(prvi).toMatch(/^1 od \d+$/);
-
+  expect(await brojac.textContent()).toMatch(/^1 od \d+$/);
   // Prvi nalaz: "Prethodni" je ugasen, jer navigacija namjerno ne omata.
-  await expect(page.locator('.desk-nav__btn--prev')).toBeDisabled();
+  await expect(page.locator('.rl-card .desk-nav__btn--prev')).toBeDisabled();
 
-  const naslovPrije = await page.locator('[data-desk-pane] h3').first().textContent();
-  await page.locator('.desk-nav__btn--next').click();
+  const naslovPrije = await page.locator('[data-rl-card] h3').textContent();
+  await page.locator('.rl-card .desk-nav__btn--next').click();
   await expect(brojac).toHaveText(/^2 od \d+$/);
-  const naslovPoslije = await page.locator('[data-desk-pane] h3').first().textContent();
+  const naslovPoslije = await page.locator('[data-rl-card] h3').textContent();
   expect(naslovPoslije, 'drugi nalaz mora biti DRUGI, a ne isti pod novim brojem').not.toBe(naslovPrije);
 
   // Delegacija prezivi ponovno crtanje: drugi klik je onaj koji bi pao uz izravne slusace.
-  await page.locator('.desk-nav__btn--next').click();
+  await page.locator('.rl-card .desk-nav__btn--next').click();
   await expect(brojac).toHaveText(/^3 od \d+$/);
-  await expect(page.locator('.desk-nav__btn--prev')).toBeEnabled();
+  await expect(page.locator('.rl-card .desk-nav__btn--prev')).toBeEnabled();
 });
 
-test('na uskom zaslonu stol NE crta dokument, umjesto da ga stisne', async ({ page }) => {
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+test('na uskom zaslonu stol NE crta stranicu rada, umjesto da je stisne', async ({ page }) => {
+  test.setTimeout(rok());
   await page.setViewportSize({ width: 390, height: 844 });
   await doRezultata(page);
 
-  // Raspored 58/42 na 390 px nema smisla: dokument bi dobio manje od sirine A4 stranice.
-  await expect(page.locator('[data-desk-doc]')).toBeHidden();
-  // A kad je skriven, faksimil se ne smije ni renderirati: to je najskuplji posao na uredaju s
-  // najmanje memorije. Provjerava se ODSUTNOST iscrtanog dokumenta, ne samo nevidljivost.
-  await expect(page.locator('[data-desk-doc] .lekta-facsimile')).toHaveCount(0);
-  // Nalazi i navigacija ostaju: stol bez dokumenta je losiji stol, ali prazan ekran bio bi kvar.
-  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
+  // Ispod 900 px stranica se ne crta uopce (ni skrivena): najskuplji dio na najslabijem uredaju.
+  await expect(page.locator('[data-rl-pagecol]')).toHaveCount(0);
+  // Kartice, navigacija i traka ostaju: stol bez stranice je losiji stol, prazan ekran bio bi kvar.
+  await expect(page.locator('[data-rl-card]')).toHaveCount(1);
   await expect(page.locator('[data-desk-count]')).toBeVisible();
 });
 
-test('CTA plana slijece na ODLUKU, i namjerno ne pokrece popravak', async ({ page }) => {
+test('ladica plana slijece na ODLUKU u panelu, i namjerno ne pokrece popravak', async ({ page }) => {
   /**
-   * Sedma tocka, drugi dio. Do 2026-09-09 je CTA otvarao panel i doskrolao na njegov VRH, a fokus
-   * je isao na prvi omoguceni gumb, sto je znalo biti "Uredi..." iz popisa: ulaz je postojao, ali
-   * je korisnik i dalje morao pronaci radnju.
-   *
    * NE POKRECE POPRAVAK, i to je odluka a ne izostanak. Izmedju "prihvacam plan" i "dokument je
-   * poslan" stoji trenutak privole iz osme tocke; gumb koji ga preskoci ponistava taj dogovor, a
-   * gumb koji ga ne preskoci bi odmah pao na upozorenje. Zato se mjeri i da privola NIJE oznacena.
+   * poslan" stoji trenutak privole; gumb koji ga preskoci ponistava taj dogovor. Zato se mjeri i
+   * da privola NIJE oznacena.
    */
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
-  // Glatko klizanje je JS i `reducedMotion` ga ne gasi; bez ovoga Playwright ceka element koji
-  // putuje. Isti razlog i isti lijek kao u `repair-panel.spec.ts`.
+  test.setTimeout(rok());
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.addInitScript(() => {
     const st = document.createElement('style');
@@ -178,52 +123,38 @@ test('CTA plana slijece na ODLUKU, i namjerno ne pokrece popravak', async ({ pag
   await page.setViewportSize({ width: 1440, height: 1000 });
   await doRezultata(page);
 
-  await page.locator('[data-desk-plan-open]').click();
-  await expect(page.locator('[data-repair-plan]')).toBeVisible({ timeout: 15_000 });
-  await page.locator('[data-repair-plan-go]').click();
+  await otvoriLadicu(page);
+  await page.locator('[data-rl-tray] [data-repair-plan-go]').click();
 
-  // Panel je otvoren I fokus je na glavnoj radnji, ne na prvom gumbu koji se zatekne.
   const glavna = page.locator('#repairPanelMount .lekta-repair-panel__download');
   await expect(glavna).toBeVisible({ timeout: 15_000 });
   await expect(glavna).toBeFocused();
-
-  // Trenutak slanja je u vidnom polju, jer je to ono na sto se slijece.
   await expect(page.locator('#repairPanelMount [data-privacy-prijelaz]')).toBeInViewport();
-
-  // NISTA NIJE POSLANO: privola je i dalje neoznacena, a gumb nosi svoj izvorni natpis.
   await expect(page.locator('#repairPanelMount [data-repair-consent]')).not.toBeChecked();
   await expect(glavna).toHaveText('Popravi sve jednim klikom');
 });
 
-test('plan ispravaka je jedan klik od nalaza, i cita se kao plan rada', async ({ page }) => {
+test('svaka kartica nosi tocno jedno: zahvat u planu, rucnu napomenu ili nista', async ({ page }) => {
   /**
-   * Sedma tocka: "Popravak ne smije biti feature koji se pronadje. Nalaz prirodno zavrsava u
-   * popravku." Do 2026-09-08 je jedini ulaz bio CTA uz ocjenu koji vodi na panel skriven u kartici
-   * "Spremnost za predaju"; kod je uz taj CTA sam pisao da ga "ni autor aplikacije nije nasao".
+   * "Popravak ne smije biti feature koji se pronadje. Nalaz prirodno zavrsava u popravku." Od Z34
+   * nalaz s automatskim zahvatom nosi "U planu ✓" / "Uključi u plan" na samoj kartici; rucni nalaz
+   * nosi plavu napomenu UMJESTO gumba, jer gumb bi obecavao nesto sto Lekta ne smije napraviti.
    */
-  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+  test.setTimeout(rok());
   await page.setViewportSize({ width: 1440, height: 1000 });
   await doRezultata(page);
 
-  await page.locator('[data-desk-plan-open]').click();
-  await expect(page.locator('[data-repair-plan]')).toBeVisible({ timeout: 15_000 });
-
-  // PLAN ZAMJENJUJE POPIS, ne stoji uz njega: dva pogleda na isti posao jedan ispod drugoga
-  // trazila bi da korisnik dvaput procita iste stavke.
-  await expect(page.locator('[data-desk-queue]')).toHaveCount(0);
-
-  // Tri skupine, tri razlicita registra. Bez njih plan je opet popis kvacica.
-  const naslovi = await page.locator('.rp-naslov').allTextContents();
-  expect(naslovi).toContain('Sigurni zahvati');
-  expect(naslovi).toContain('Ručno');
-
-  // RUCNE STAVKE NEMAJU KVACICU. Prazna kvacica bi izgledala kao nesto sto se moze ukljuciti, a
-  // Lekta to ne moze napraviti ni kad bi htjela.
-  const rucniOkvir = page.locator('.rp-popis--rucno');
-  await expect(rucniOkvir.locator('.rp-kvacica')).toHaveCount(0);
-  expect(await rucniOkvir.locator('.rp-tocka').count()).toBeGreaterThan(0);
-
-  // Povratak je uvijek ponudjen: plan je odluka, a odluka bez izlaza nije odluka.
-  await page.locator('[data-desk-plan-close]').click();
-  await expect(page.locator('[data-desk-queue]')).toHaveCount(1);
+  const ukupno = Number((await page.locator('[data-desk-count]').textContent())?.split(' od ')[1] ?? '0');
+  let zahvata = 0;
+  let rucnih = 0;
+  for (let i = 0; i < ukupno; i += 1) {
+    const kartica = page.locator('[data-rl-card]');
+    const g = await kartica.locator('[data-rl-toggle]').count();
+    const r = await kartica.locator('[data-rl-manual]').count();
+    expect(g + r, 'kartica nosi najvise jednu od dvije stvari').toBeLessThanOrEqual(1);
+    zahvata += g;
+    rucnih += r;
+    if (i < ukupno - 1) expect(await sljedecaKartica(page)).toBe(true);
+  }
+  expect(zahvata + rucnih, 'fixture mora imati barem jedan nalaz s planom ili rucnom napomenom').toBeGreaterThan(0);
 });

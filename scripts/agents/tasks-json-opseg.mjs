@@ -6,8 +6,8 @@
 // samo koordinatorov skupni PR koji ne dira nista drugo, pa gard odbija PR koji mijenja `tasks.json`
 // ZAJEDNO s bilo kojom drugom putanjom.
 //
-// Savjetodavno: CI job `pr-opis` nije obvezna provjera grane (T58, vidi pr-opis.yml), pa crveni korak
-// upozorava, a ne blokira spajanje; koordinator ne spaja PR s crvenim `pr-opis`.
+// Blokira spajanje: CI job `pr-opis` je obvezna provjera grane (ruleset "master", odluka vlasnika
+// 2026-10-09; vidi pr-opis.yml).
 //
 // Cista funkcija `provjeriOpsegTasksJson` ne pokrece git; testira je
 // `tests/gate-mutations-tasks-json.test.ts`. CLI (`<baseRef> <headRef>`) koristi CI job `pr-opis`.

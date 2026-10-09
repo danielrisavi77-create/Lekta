@@ -1087,6 +1087,52 @@ describe('Z33-02/03: rezultat ne ceka lijeni modul', () => {
     await pricekajUvoz();
     expect(v.querySelector('.z33')).toBeNull();
   });
+
+  // Runda 2 (Codex Z33-02): odbijen uvoz se ne pamti, a viseci uvoz ima rok.
+  it('odbijen uvoz se ne pamti: sljedeca analiza pokusava ponovno i montira prikaz', async () => {
+    vi.resetModules();
+    let pokusaja = 0;
+    vi.doMock(MODUL, async () => {
+      pokusaja += 1;
+      if (pokusaja === 1) throw new Error('mreza pala');
+      return vi.importActual(MODUL);
+    });
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(8);
+    await pricekajUvoz();
+    expect(v.querySelector('.z33'), 'odbijen uvoz ne smije montirati prikaz').toBeNull();
+    await ps.revealLiveAnalysis(sampleResult());
+    // Mreza se oporavila: nova analiza u istoj kartici.
+    ps.startLiveAnalysis(null);
+    await pricekajUvoz();
+    expect(pokusaja, 'sljedeca analiza mora ponovno pokusati uvoz').toBe(2);
+    expect(v.querySelector('.z33')).not.toBeNull();
+  });
+
+  it('viseci uvoz: nakon ROK_UVOZA slusaci skrola su uklonjeni, kasni modul ne preuzima tu analizu, a sljedeca ga koristi', async () => {
+    vi.resetModules();
+    const pusti = kasniModul();
+    const v = ekranProvjere();
+    const ps = await import('../src/ui/progress-scan');
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const skinuto = vi.spyOn(window, 'removeEventListener');
+    const skinutiSkrol = (): string[] => skinuto.mock.calls.map((c) => String(c[0])).filter((d) => ['wheel', 'touchmove', 'keydown'].includes(d));
+    ps.startLiveAnalysis(null);
+    ps.renderProgressScan(8);
+    await vi.advanceTimersByTimeAsync(ps.ROK_UVOZA - 1);
+    expect(skinutiSkrol(), 'KONTROLA: prije roka slusaci stoje').toEqual([]);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(skinutiSkrol()).toEqual(['wheel', 'touchmove', 'keydown']);
+    skinuto.mockRestore();
+    vi.useRealTimers();
+    pusti();
+    await pricekajUvoz();
+    expect(v.querySelector('.z33'), 'modul nakon roka ne smije preuzeti tekucu analizu').toBeNull();
+    ps.startLiveAnalysis(null);
+    expect(v.querySelector('.z33'), 'kasni modul mora ostati zapamcen za sljedecu analizu').not.toBeNull();
+  });
 });
 
 /**
@@ -1137,6 +1183,35 @@ describe('Z33-09: zavrsno stanje uzivo = postojeci prikaz rezultata nad istim ul
       for (const k of kartice) expect(uzivo).toContain(k);
       const svi = buildVisualResultModel(result).findings.document.map((f) => f.title);
       for (const u of uzivo) expect(svi).toContain(u);
+      // Runda 2 (Codex Z33-09): puniji DOM, ne samo naslovi. Za svaku karticu kokpita isti nalaz
+      // uzivo nosi istu ozbiljnost, isto ocekivano i (kad stane u 32 znaka) isto izmjereno.
+      const karticeKokpita = [...kokpit.querySelectorAll<HTMLElement>('[data-cockpit-priority-card]')];
+      for (const k of karticeKokpita) {
+        const naslov = t(k, 'h3');
+        const slot = [...v.querySelectorAll<HTMLElement>('.z33-slot[data-state="filled"]')].find((s) => t(s, '.z33-slot-title') === naslov)!;
+        expect(slot, `nalaz "${naslov}" uzivo`).toBeDefined();
+        const ozbiljnost = [...k.classList].map((c) => /^cockpit-finding--(error|warning|info)$/.exec(c)?.[1]).find(Boolean);
+        expect(slot.dataset.severity, `ozbiljnost "${naslov}"`).toBe(ozbiljnost);
+        const odgovor = (oznaka: string): string => {
+          const blok = [...k.querySelectorAll('.cockpit-finding__answer')].find((b) => t(b, 'strong') === oznaka);
+          return blok ? t(blok, 'p') : '';
+        };
+        const meta = slot.querySelector('.z33-slot-meta')!;
+        const izmjerenoUzivo = (meta.querySelector('s')?.textContent ?? '').trim();
+        const ocekivanoUzivo = (meta.lastChild?.textContent ?? '').replace(/^\s*→\s*/, '').trim();
+        expect(ocekivanoUzivo, `ocekivano "${naslov}"`).toBe(odgovor('Očekivano'));
+        const izmjereno = odgovor('Izmjereno');
+        expect(izmjerenoUzivo, `izmjereno "${naslov}"`).toBe(izmjereno.length <= 32 ? izmjereno : '');
+      }
+      // Kategorije: zbroj nalaza po kategorijama uzivo jednak je broju otvorenih nalaza kokpita,
+      // a kategorija "u redu" nema nijednog.
+      const kategorije = [...v.querySelectorAll('.z33-cat')].map((c) => ({ ime: t(c, '.z33-cat-label'), stanje: t(c, '.z33-cat-status') }));
+      expect(kategorije.map((c) => c.ime)).toEqual(['Format', 'Struktura', 'Citati', 'Predaja']);
+      for (const c of kategorije) expect(c.stanje, c.ime).toMatch(/^(u redu|\d+ nalaza?)$/);
+      const zbroj = kategorije.reduce((s, c) => s + (Number(/^(\d+)/.exec(c.stanje)?.[1]) || 0), 0);
+      const otvorenoKokpit = Number(/^(\d+)/.exec(t(kokpit, '.fsum-naslov'))?.[1] ?? 0);
+      expect(zbroj, 'zbroj kategorija uzivo').toBe(otvorenoKokpit);
+      expect(otvorenoKokpit, 'fixture mora imati otvorene nalaze').toBeGreaterThan(0);
       // Gumb plana uzivo postoji tocno kad kokpit nudi `repair-safe`.
       const plan = !v.querySelector<HTMLButtonElement>('[data-z33="plan"]')!.hidden;
       expect(plan).toBe(!!kokpit.querySelector('[data-cockpit-primary][data-cockpit-action="repair-safe"]'));

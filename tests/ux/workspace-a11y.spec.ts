@@ -207,6 +207,12 @@ async function dodjiDoNalaza(page: Page): Promise<void> {
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
   await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 120_000 });
+  // Z34 is loaded after the analysis-ready signal. Wait for either its completed mount or the
+  // explicit Z8 fallback before capturing Tab candidates; a mid-walk upgrade replaces those nodes
+  // and invalidates the indices assigned by `kandidati`.
+  await expect.poll(async () => page.locator('#resultCockpit').evaluate((el) =>
+    (el as HTMLElement).dataset.rlReady === 'true' || Boolean((el as HTMLElement).dataset.rlPovratak),
+  ), { timeout: 30_000, message: 'result cockpit never reached Z34-ready or stable Z8 fallback' }).toBe(true);
 }
 
 test.describe('pristupacnost radnog prostora', () => {
