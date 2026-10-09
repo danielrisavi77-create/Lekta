@@ -116,3 +116,55 @@ describe('Word proof preflight: mutacije stvarnog workflow YAML-a obaraju strukt
     );
   });
 });
+
+
+describe('Word proof: nezasticene i neizvedive PowerShell naredbe moraju pasti', () => {
+  const mutant = (before: string, after: string): string => {
+    expect(wordYml.split(before)).toHaveLength(2);
+    return wordYml.replace(before, () => after);
+  };
+  it('blokira uklanjanje instalacije lxml biblioteke', () => {
+    const changed = mutant(
+      '          python -m pip install python-docx==1.2.0 lxml==6.1.3',
+      '          # python -m pip install python-docx==1.2.0 lxml==6.1.3',
+    );
+    expect(wordProblems(changed)).toContain(
+      'word-proof: lxml/Playwright instalacija nije aktivna ili nije vezana uz fail-closed',
+    );
+  });
+  it('blokira uklanjanje instalacije Playwright browsera', () => {
+    const changed = mutant(
+      '          npx playwright install chromium',
+      '          # npx playwright install chromium',
+    );
+    expect(wordProblems(changed)).toContain(
+      'word-proof: lxml/Playwright instalacija nije aktivna ili nije vezana uz fail-closed',
+    );
+  });
+  it('prepoznaje rani exit 0 prije Deno provjere', () => {
+    const changed = mutant(
+      '      - name: Deno preflight (samo razine=sve)\n        if: inputs.razine == \'sve\'\n        shell: powershell\n        run: |\n',
+      '      - name: Deno preflight (samo razine=sve)\n        if: inputs.razine == \'sve\'\n        shell: powershell\n        run: |\n          exit 0\n',
+    );
+    expect(wordProblems(changed)).toContain('word-proof: Deno preflight ne izvodi verzijsku provjeru uz fail-closed');
+  });
+  it('prepoznaje rani exit 0 prije Python provjere', () => {
+    const changed = mutant(
+      '      - name: Python preflight (samo razine=sve)\n        if: inputs.razine == \'sve\'\n        shell: powershell\n        run: |\n',
+      '      - name: Python preflight (samo razine=sve)\n        if: inputs.razine == \'sve\'\n        shell: powershell\n        run: |\n          exit 0\n',
+    );
+    expect(wordProblems(changed)).toContain('word-proof: Python preflight ne izvodi provjeru verzije i izoliranog okruzenja');
+  });
+  it('prepoznaje rani exit 0 u release:check', () => {
+    const changed = mutant(
+      '      - name: release:check\n        shell: powershell\n        env:',
+      '      - name: release:check\n        shell: powershell\n        env:',
+    );
+    const withExit = changed.replace(
+      "          $ErrorActionPreference = 'Continue'\n          $log = Join-Path $env:RUNNER_TEMP 'release-check.log'",
+      "          exit 0\n          $ErrorActionPreference = 'Continue'\n          $log = Join-Path $env:RUNNER_TEMP 'release-check.log'",
+    );
+    expect(withExit).not.toBe(changed);
+    expect(wordProblems(withExit)).toContain('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
+  });
+});
