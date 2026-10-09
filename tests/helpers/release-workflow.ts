@@ -6,7 +6,8 @@
  *   2. produkcija ide tek iza zelenog staginga i iza GitHub environmenta `production` (odobrenje);
  *   3. u svakoj okolini redoslijed je ulazi, build, migracije (citanje), upload klijenta (neobjavljen),
  *      Edge, objava klijenta, strogi smoke, pa klijent nikad ne ode van bez funkcija s kojima dijeli
- *      ugovor o privoli, a pad uploada ne ostavlja nove funkcije uz stari klijent. Pokrece samo vlasnik;
+ *      ugovor o privoli, a pad uploada ne ostavlja nove funkcije uz stari klijent. Pad izmedju Edgea i
+ *      objave vraca funkcije na commit zivog klijenta (release-edge-rollback). Pokrece samo vlasnik;
  *   4. produkcijski build trazi tvrdi dokaz izdanja; migracije (`supabase db push`) workflow primjenjuje
  *      SAMO na staging (odluka vlasnika 2026-10-08), poslije builda i prije provjere migracija i Edgea.
  *      Prije db push Katedrine verzije samo u bazi dobivaju privremeni placeholder
@@ -20,7 +21,7 @@ import { parse } from 'yaml';
 
 export const RELEASE_WORKFLOW_PATH = join(import.meta.dirname, '..', '..', '.github', 'workflows', 'release.yml');
 
-interface Step { name?: string; run?: string; uses?: string; env?: Record<string, unknown> }
+interface Step { name?: string; id?: string; if?: string; run?: string; uses?: string; env?: Record<string, unknown> }
 interface Job { needs?: string | string[]; if?: string; environment?: string | { name?: string }; steps?: Step[] }
 interface Workflow { on?: unknown; jobs?: Record<string, Job> }
 
@@ -39,6 +40,8 @@ const PHASES: { id: string; test: (run: string) => boolean }[] = [
 const OWNER_ONLY = "github.actor == 'danielrisavi77-create' && github.triggering_actor == 'danielrisavi77-create'";
 const FORBIDDEN_RUN = /\bnetlify-cli@[\d.]+ deploy\b[^\n]*--prod\b|\bsupabase\s+(?:db\s+reset|migration\s+(?:up|repair))\b|\bsecrets\s+set\b/;
 const DB_PUSH = /\bsupabase\s+db\s+push\b/;
+const ROLLBACK = /\bnode scripts\/release-edge-rollback\.mjs\b/;
+const ROLLBACK_IF = "failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'";
 const HISTORY = /\bnode scripts\/release-staging-history\.mjs\b/;
 
 function envName(job: Job): string | undefined {
@@ -67,6 +70,12 @@ function jobProblems(name: string, job: Job | undefined, expectedEnv: string): s
     if (positions[i] >= 0 && positions[i - 1] >= 0 && positions[i] < positions[i - 1]) {
       out.push(`job ${name}: faza ${PHASES[i].id} dolazi prije faze ${PHASES[i - 1].id}`);
     }
+  }
+  // Povrat funkcija: pad izmedju Edge deploya i objave klijenta vraca funkcije na zivi klijent.
+  const rb = runs.findIndex((r) => ROLLBACK.test(r));
+  if (rb < 0 || rb < at('objava') || steps[rb].if !== ROLLBACK_IF
+    || steps[at('edge')]?.id !== 'edge' || steps[at('objava')]?.id !== 'objava') {
+    out.push(`job ${name} nema povrat Edge funkcija nakon pada (id edge i objava, uvjet ${ROLLBACK_IF})`);
   }
   runs.forEach((r) => { if (FORBIDDEN_RUN.test(r)) out.push(`job ${name} mijenja bazu ili tajne: "${r.trim()}"`); });
   const pushes = runs.map((r, i) => (DB_PUSH.test(r) ? i : -1)).filter((i) => i >= 0);

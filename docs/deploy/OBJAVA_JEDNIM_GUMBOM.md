@@ -18,7 +18,8 @@ drzala samo disciplinom.
    popisu; migracije koje funkcija trazi (`repair-docx` 0209, `create-checkout` 0207) ne smiju
    ispasti iz popisa; `SUPABASE_PROJECT_REF`, `NETLIFY_SITE_ID` i `SITE_ORIGIN` moraju biti tocno
    kanonske vrijednosti cilja (`TARGETS` u skripti), a produkcijski ref i onaj iz
-   `src/config/deployment.ts`.
+   `src/config/deployment.ts`; anon kljuc (staging iz vars, produkcija iz izvora) nosi `ref`
+   cilja i `role` anon; SHA je malim slovima, jer ga smoke usporedjuje doslovno.
 2. Netlify CLI (`netlify-cli@27.10.2`) se instalira u koraku bez ikakvih tajni.
 3. `node scripts/build-production.mjs`: isti lanac kao `netlify.toml`. Build ide PRIJE ikakvog
    deploya, pa pad builda ne ostavlja nista napola objavljeno. Produkcija trazi tvrdi dokaz izdanja
@@ -40,6 +41,9 @@ drzala samo disciplinom.
    zajedno.
 8. `post-deploy-smoke --require-build-info --expect-commit <sha> --strict-commit`: posluzeno je
    bas ovo izdanje, a `repair-docx` i `create-checkout` bez tokena vracaju 401 (funkcija postoji).
+9. Samo nakon pada izmedju Edge deploya i objave klijenta: `scripts/release-edge-rollback.mjs`
+   procita commit zivog klijenta (`build-info.json`) i vrati funkcije na taj commit, jer deploy
+   vise funkcija nije transakcija. Necitljiv commit je NE ZNAM i povrat ide rucno.
 
 Oba joba smije pokrenuti samo vlasnik (`github.actor` i `github.triggering_actor`), jer staging
 nema odobravatelja. Produkcijski job pocinje tek kad je staging job zelen i kad vlasnik klikne
@@ -84,6 +88,8 @@ vrijednosti. Staging job ide odmah; produkcijski ceka odobrenje.
 ## Povrat
 
 Klijent: Netlify, Deploys, prethodni deploy, Publish deploy. Funkcije: isti workflow s prethodnim
-SHA mastera radi samo ako taj SHA vec sadrzi `release.yml` i `scripts/release-*.mjs`; za starije
-SHA povrat ide rucno prema `docs/deploy/EDGE_DEPLOY_T20.md`, odjeljak Povrat. Migracije 0207 i
+SHA mastera radi samo ako taj SHA vec sadrzi `release.yml` i `scripts/release-*.mjs` i ako od
+njega na staging nije primijenjena nijedna nova migracija (staging job tada namjerno pada na
+neuskladenoj povijesti). Inace povrat ide rucno prema `docs/deploy/EDGE_DEPLOY_T20.md`, odjeljak
+Povrat. Migracije 0207 i
 0209 su aditivne, pa povrat koda ne trazi povrat baze.

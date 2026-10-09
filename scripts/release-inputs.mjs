@@ -51,6 +51,24 @@ export const TARGETS = {
   },
 };
 
+/** Tvrdnje `ref` i `role` iz Supabase anon JWT-a; null ako kljuc nije citljiv JWT. */
+export function anonKeyClaims(key) {
+  const part = String(key ?? '').split('.')[1];
+  if (!part) return null;
+  try {
+    const c = JSON.parse(Buffer.from(part, 'base64url').toString('utf8'));
+    return { ref: String(c?.ref ?? ''), role: String(c?.role ?? '') };
+  } catch {
+    return null;
+  }
+}
+
+/** Produkcijski anon kljuc iz izvora klijenta (src/config/deployment.ts). */
+export function canonicalProductionAnonKey(deploymentTs) {
+  const m = /PRODUCTION_SUPABASE_ANON_KEY =\s*'([A-Za-z0-9._-]+)'/.exec(deploymentTs);
+  return m ? m[1] : null;
+}
+
 /** Kanonski produkcijski Supabase ref iz izvora klijenta (src/config/deployment.ts). */
 export function canonicalProductionRef(deploymentTs) {
   const m = /PRODUCTION_SUPABASE_URL = 'https:\/\/([a-z0-9]{20})\.supabase\.co'/.exec(deploymentTs);
@@ -60,7 +78,7 @@ export function canonicalProductionRef(deploymentTs) {
 /** Popis problema nad vec prikupljenim cinjenicama; prazan popis znaci valjano. */
 export function releaseInputProblems(f) {
   const out = [];
-  if (!/^[0-9a-f]{40}$/.test(f.sha)) out.push(`sha "${f.sha}" nije 40-znamenkasti commit`);
+  if (!/^[0-9a-f]{40}$/.test(f.sha)) out.push(`sha "${f.sha}" nije 40-znamenkasti commit malim slovima`);
   else {
     if (f.head !== f.sha) out.push(`checkoutan je ${f.head}, a trazen ${f.sha}`);
     if (!f.onMaster) out.push(`commit ${f.sha} nije na origin/master`);
@@ -99,6 +117,14 @@ export function releaseInputProblems(f) {
   if (f.projectRef !== t.projectRef) out.push(`vars.SUPABASE_PROJECT_REF "${f.projectRef}" nije kanonski ${f.target} ref ${t.projectRef}`);
   if (f.netlifySiteId !== t.netlifySiteId) out.push(`vars.NETLIFY_SITE_ID "${f.netlifySiteId}" nije kanonski ${f.target} site ${t.netlifySiteId}`);
   if (f.siteOrigin !== t.siteOrigin) out.push(`vars.SITE_ORIGIN "${f.siteOrigin}" nije kanonski ${f.target} origin ${t.siteOrigin}`);
+  // Klijent s kljucem drugog projekta prolazi smoke (koji kljuc ne koristi), a prijava i svaki
+  // upit iz preglednika padaju (Codex na #339). Staging kljuc dolazi iz vars, produkcijski iz izvora.
+  const keyName = f.target === 'production' ? 'PRODUCTION_SUPABASE_ANON_KEY u src/config/deployment.ts' : 'vars.SUPABASE_ANON_KEY';
+  const claims = anonKeyClaims(f.target === 'production' ? f.prodAnonKey : f.anonKey);
+  if (!claims) out.push(`${keyName} nije citljiv Supabase anon JWT`);
+  else if (claims.ref !== t.projectRef || claims.role !== 'anon') {
+    out.push(`${keyName} pripada ${claims.ref || '?'} (${claims.role || '?'}), a ne anon kljucu ${t.projectRef}`);
+  }
   return out;
 }
 
@@ -119,7 +145,9 @@ function isOnMaster(sha) {
 function main() {
   const root = process.cwd();
   const fnDir = join(root, 'supabase', 'functions');
-  const sha = (process.env.RELEASE_SHA ?? '').trim().toLowerCase();
+  const deploymentTs = readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8');
+  // Bez normalizacije: isti RELEASE_SHA ide kasnije u `--expect-commit`, koji usporedjuje doslovno.
+  const sha = process.env.RELEASE_SHA ?? '';
   const facts = {
     sha,
     head: git(['rev-parse', 'HEAD']),
@@ -134,7 +162,9 @@ function main() {
     siteOrigin: (process.env.SITE_ORIGIN ?? '').trim(),
     netlifySiteId: (process.env.NETLIFY_SITE_ID ?? '').trim(),
     target: (process.env.RELEASE_TARGET ?? '').trim(),
-    canonicalProdRef: canonicalProductionRef(readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8')),
+    canonicalProdRef: canonicalProductionRef(deploymentTs),
+    anonKey: (process.env.SUPABASE_ANON_KEY ?? '').trim(),
+    prodAnonKey: canonicalProductionAnonKey(deploymentTs),
   };
   const problems = releaseInputProblems(facts);
   if (problems.length > 0) {

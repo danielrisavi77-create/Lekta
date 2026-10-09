@@ -3,12 +3,20 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { releaseWorkflowProblems } from './helpers/release-workflow';
-import { canonicalProductionRef, releaseInputProblems, TARGETS } from '../scripts/release-inputs.mjs';
+import { anonKeyClaims, canonicalProductionAnonKey, canonicalProductionRef, releaseInputProblems, TARGETS } from '../scripts/release-inputs.mjs';
+import { rollbackPlan } from '../scripts/release-edge-rollback.mjs';
 import { isKatedraVersion, stagingHistoryPlan } from '../scripts/release-staging-history.mjs';
 import { migrationKey, missingMigrations, parseArgs } from '../scripts/release-migration-check.mjs';
 
 const root = join(import.meta.dirname, '..');
 const SHA = 'a'.repeat(40);
+const DEPLOYMENT_TS = readFileSync(join(root, 'src', 'config', 'deployment.ts'), 'utf8');
+
+/** Nepotpisan JWT s danim tvrdnjama; gard cita samo `ref` i `role`. */
+function jwt(claims: object): string {
+  return `e30.${Buffer.from(JSON.stringify(claims)).toString('base64url')}.x`;
+}
+const STAGING_ANON = jwt({ ref: 'bnyemcnsphlitjradrst', role: 'anon' });
 
 function facts(over: Partial<Parameters<typeof releaseInputProblems>[0]> = {}) {
   return {
@@ -24,6 +32,8 @@ function facts(over: Partial<Parameters<typeof releaseInputProblems>[0]> = {}) {
     netlifySiteId: 'f432ae00-c4f6-4ded-8c22-d4b71c7b8687',
     target: 'staging',
     canonicalProdRef: 'zrrjttizjyfcxmcpgzml',
+    anonKey: STAGING_ANON,
+    prodAnonKey: canonicalProductionAnonKey(DEPLOYMENT_TS),
     ...over,
   };
 }
@@ -40,7 +50,10 @@ describe('objava jednim gumbom: ulazi (scripts/release-inputs.mjs)', () => {
   });
 
   it('svaki los ulaz daje tocan problem', () => {
-    expect(releaseInputProblems(facts({ sha: 'master' }))).toEqual(['sha "master" nije 40-znamenkasti commit']);
+    expect(releaseInputProblems(facts({ sha: 'master' }))).toEqual(['sha "master" nije 40-znamenkasti commit malim slovima']);
+    // Velika slova: Git ih prihvaca, ali `--expect-commit` usporedjuje doslovno s build-info.json.
+    expect(releaseInputProblems(facts({ sha: SHA.toUpperCase(), head: SHA })))
+      .toEqual([`sha "${SHA.toUpperCase()}" nije 40-znamenkasti commit malim slovima`]);
     expect(releaseInputProblems(facts({ head: 'b'.repeat(40) }))).toEqual([`checkoutan je ${'b'.repeat(40)}, a trazen ${SHA}`]);
     expect(releaseInputProblems(facts({ onMaster: false }))).toEqual([`commit ${SHA} nije na origin/master`]);
     const bezUgovora = (fn: string) => `objava mora nositi funkciju "${fn}" (dijeli ugovor o privoli s klijentom)`;
@@ -85,6 +98,19 @@ describe('objava jednim gumbom: ulazi (scripts/release-inputs.mjs)', () => {
     expect(releaseInputProblems(facts({ ...prod, canonicalProdRef: 'abcdefghijklmnopqrst' })))
       .toEqual(['src/config/deployment.ts cilja abcdefghijklmnopqrst, a TARGETS.production zrrjttizjyfcxmcpgzml']);
     expect(releaseInputProblems(facts({ target: '' }))).toEqual(['nepoznat cilj objave ""']);
+  });
+
+  it('anon kljuc mora pripadati projektu cilja (Codex na #339)', () => {
+    expect(releaseInputProblems(facts({ anonKey: jwt({ ref: 'zrrjttizjyfcxmcpgzml', role: 'anon' }) })))
+      .toEqual(['vars.SUPABASE_ANON_KEY pripada zrrjttizjyfcxmcpgzml (anon), a ne anon kljucu bnyemcnsphlitjradrst']);
+    expect(releaseInputProblems(facts({ anonKey: jwt({ ref: 'bnyemcnsphlitjradrst', role: 'service_role' }) })))
+      .toEqual(['vars.SUPABASE_ANON_KEY pripada bnyemcnsphlitjradrst (service_role), a ne anon kljucu bnyemcnsphlitjradrst']);
+    expect(releaseInputProblems(facts({ anonKey: '' }))).toEqual(['vars.SUPABASE_ANON_KEY nije citljiv Supabase anon JWT']);
+    const prod = { target: 'production', ...TARGETS.production };
+    expect(releaseInputProblems(facts({ ...prod, prodAnonKey: STAGING_ANON })))
+      .toEqual(['PRODUCTION_SUPABASE_ANON_KEY u src/config/deployment.ts pripada bnyemcnsphlitjradrst (anon), a ne anon kljucu zrrjttizjyfcxmcpgzml']);
+    expect(anonKeyClaims(canonicalProductionAnonKey(DEPLOYMENT_TS))).toEqual({ ref: TARGETS.production.projectRef, role: 'anon' });
+    expect(anonKeyClaims('nije.jwt!.x')).toBeNull();
   });
 
   it('kanonski produkcijski ref se cita iz stvarnog src/config/deployment.ts', () => {
@@ -144,5 +170,24 @@ describe('objava jednim gumbom: povijest staginga (scripts/release-staging-histo
 
   it('Katedrin raspon je tocno 0104 do 0199', () => {
     expect(['0103', '0104', '0199', '0200', '104', '20261008120000'].map(isKatedraVersion)).toEqual([false, true, true, false, false, false]);
+  });
+});
+
+describe('objava jednim gumbom: povrat funkcija (scripts/release-edge-rollback.mjs)', () => {
+  const B = 'b'.repeat(40);
+  const fns = 'repair-docx create-checkout';
+
+  it('zivi klijent na starom commitu: vracaju se funkcije koje ondje postoje, ostale se imenuju', () => {
+    expect(rollbackPlan({ liveCommit: B, releaseSha: SHA, functions: fns, prevHas: () => true }))
+      .toEqual({ action: 'deploy', deploy: ['repair-docx', 'create-checkout'], missing: [] });
+    expect(rollbackPlan({ liveCommit: B, releaseSha: SHA, functions: fns, prevHas: (f: string) => f === 'repair-docx' }))
+      .toEqual({ action: 'deploy', deploy: ['repair-docx'], missing: ['create-checkout'] });
+  });
+
+  it('zivi klijent vec nosi izdanje: nista; necitljiv commit: NE ZNAM, ne pogadjanje', () => {
+    const never = () => { throw new Error('prevHas se ne smije zvati'); };
+    expect(rollbackPlan({ liveCommit: SHA, releaseSha: SHA, functions: fns, prevHas: never }).action).toBe('none');
+    expect(rollbackPlan({ liveCommit: null, releaseSha: SHA, functions: fns, prevHas: never }).action).toBe('unknown');
+    expect(rollbackPlan({ liveCommit: 'abc123', releaseSha: SHA, functions: fns, prevHas: never }).action).toBe('unknown');
   });
 });

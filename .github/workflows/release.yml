@@ -61,6 +61,7 @@ jobs:
     environment: staging
     env:
       RELEASE_TARGET: staging
+      SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
       RELEASE_SHA: ${{ inputs.sha }}
       RELEASE_FUNCTIONS: ${{ inputs.functions }}
       RELEASE_MIGRATIONS: ${{ inputs.migrations }}
@@ -135,6 +136,7 @@ jobs:
           echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
 
       - name: Edge funkcije
+        id: edge
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
@@ -142,6 +144,7 @@ jobs:
       # Objava vec ucitanog deploya (isto sto i "Publish deploy" u Netlify sucelju); radi i kad je
       # auto publishing zakljucan.
       - name: Klijent objavljen
+        id: objava
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           DEPLOY_ID: ${{ steps.upload.outputs.deploy_id }}
@@ -152,6 +155,15 @@ jobs:
           node scripts/post-deploy-smoke.mjs --site "$SITE_ORIGIN"
           --functions "https://$PROJECT_REF.supabase.co/functions/v1"
           --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
+
+      # Pad nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
+      # klijenta (Codex na #339): deploy vise funkcija nije transakcija, a ni objava ne smije pasti
+      # uz vec nove funkcije.
+      - name: Povrat Edge funkcija (samo nakon pada)
+        if: failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: node scripts/release-edge-rollback.mjs
 
   production:
     needs: staging
@@ -218,6 +230,7 @@ jobs:
           echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
 
       - name: Edge funkcije
+        id: edge
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: npx supabase functions deploy $RELEASE_FUNCTIONS --project-ref "$PROJECT_REF" --use-api
@@ -225,6 +238,7 @@ jobs:
       # Objava vec ucitanog deploya (isto sto i "Publish deploy" u Netlify sucelju); radi i kad je
       # auto publishing zakljucan.
       - name: Klijent objavljen
+        id: objava
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           DEPLOY_ID: ${{ steps.upload.outputs.deploy_id }}
@@ -235,3 +249,12 @@ jobs:
           node scripts/post-deploy-smoke.mjs --site "$SITE_ORIGIN"
           --functions "https://$PROJECT_REF.supabase.co/functions/v1"
           --require-build-info --expect-commit "$RELEASE_SHA" --strict-commit
+
+      # Pad nakon pocetka Edge deploya, a prije objave klijenta, vraca funkcije na commit zivog
+      # klijenta (Codex na #339): deploy vise funkcija nije transakcija, a ni objava ne smije pasti
+      # uz vec nove funkcije.
+      - name: Povrat Edge funkcija (samo nakon pada)
+        if: failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: node scripts/release-edge-rollback.mjs

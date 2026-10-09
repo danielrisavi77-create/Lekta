@@ -131,6 +131,27 @@ describe('mutacije: objava jednim gumbom', () => {
     expect(p[0]).toMatch(/^job staging mijenja bazu ili tajne: "node scripts\/release-staging-history\.mjs[\s\S]*migration repair/);
   });
 
+  it('povrat funkcija koji se vrti samo na uspjeh (bez uvjeta) obara gard', () => {
+    const m = mutiraj(/(\n  production:[\s\S]*Povrat Edge funkcija \(samo nakon pada\)\n)        if: [^\n]*\n/, '$1');
+    expect(releaseWorkflowProblems(m)).toEqual([
+      "job production nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+    ]);
+  });
+
+  it('Edge korak bez id-a (uvjet povrata nista ne vidi) obara gard', () => {
+    const m = mutiraj(/(\n  staging:[\s\S]*?- name: Edge funkcije\n)        id: edge\n/, '$1');
+    expect(releaseWorkflowProblems(m)).toEqual([
+      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+    ]);
+  });
+
+  it('staging bez povrata funkcija obara gard', () => {
+    const m = mutiraj(stepBlock(SOURCE, 'staging', 'Povrat Edge funkcija (samo nakon pada)'), '');
+    expect(releaseWorkflowProblems(m)).toEqual([
+      "job staging nema povrat Edge funkcija nakon pada (id edge i objava, uvjet failure() && steps.edge.outcome != 'skipped' && steps.objava.outcome != 'success')",
+    ]);
+  });
+
   it('push okidac obara gard', () => {
     const m = mutiraj('on:\n  workflow_dispatch:\n', 'on:\n  push:\n    branches: [master]\n  workflow_dispatch:\n');
     expect(releaseWorkflowProblems(m)).toEqual(['okidaci nisu samo workflow_dispatch: push, workflow_dispatch']);
