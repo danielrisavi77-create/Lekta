@@ -8,7 +8,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseUpisnikResults, UPISNIK_VRSTE, type UpisnikRow } from '../src/programs/upisnik-parse';
-import { allProgrammesQuery, latestReportPaths } from '../src/programs/upisnik-resync';
+import { allProgrammesQuery, latestFailureReport, latestReportPaths } from '../src/programs/upisnik-resync';
 import { assessRecordHarvest, reportedRowCount, reviewHarvests } from '../src/programs/upisnik-record-review';
 import { createUpisnikSession } from '../src/programs/upisnik-session';
 
@@ -93,7 +93,13 @@ main().catch((error: unknown) => {
   mkdirSync(output, { recursive: true });
   const failure = { status: 'SOURCE_BLOCKED', error: message, canonicalSync: 'NOT_APPLIED', candidatePath: null };
   writeFileSync(join(output, 'failure.json'), `${JSON.stringify(failure, null, 2)}\n`);
-  writeFileSync(join(output, 'latest-report.json'), `${JSON.stringify(failure, null, 2)}\n`);
+  let prior: unknown = null;
+  try { prior = JSON.parse(readFileSync(join(output, 'latest-report.json'), 'utf8')); }
+  catch { /* no previously generated run evidence */ }
+  // Source validation can fail AFTER source.html and records-upisnik.json were written.
+  // Preserve those run-scoped links, but never advertise a canonical candidate on failure.
+  writeFileSync(join(output, 'latest-report.json'),
+    JSON.stringify(latestFailureReport(prior, message), null, 2) + '\n');
   console.error(message);
   process.exitCode = 1;
 });
