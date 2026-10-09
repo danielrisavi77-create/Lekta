@@ -90,4 +90,39 @@ describe('javna Upisnik sesija', () => {
     expect(JSON.stringify(unknown)).not.toContain('secret-path');
   });
 
+
+  it.each([
+    'JSESSIONID=expired; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Path=/usp',
+    'JSESSIONID=expired; Max-Age=-1; Path=/usp',
+    'JSESSIONID=expired; Max-Age=0; Path=/usp',
+  ])('uklanja sesijski cookie po Expires ili nepozitivnom Max-Age (%s)', async (expired) => {
+    const seen: RequestInit[] = [];
+    const read = createUpisnikSession(async (_url, options) => {
+      seen.push(options!);
+      const header = seen.length === 1 ? 'JSESSIONID=old; Path=/usp' : seen.length === 2 ? expired : '';
+      return new Response('ok', header ? { headers: { 'set-cookie': header } } : {});
+    });
+    await read('index'); await read('index'); await read('pretrazivanje');
+    expect(new Headers(seen[1].headers).get('cookie')).toBe('JSESSIONID=old');
+    expect(new Headers(seen[2].headers).get('cookie')).toBeNull();
+  });
+
+  it('pozitivan Max-Age prestaje vaziti nakon isteka i nadjacava Expires iz proslosti', async () => {
+    let now = 1_790_000_000_000;
+    const seen: RequestInit[] = [];
+    const read = createUpisnikSession(async (_url, options) => {
+      seen.push(options!);
+      return new Response('ok', seen.length === 1 ? {
+        headers: { 'set-cookie': 'JSESSIONID=short; Max-Age=1; Expires=Wed, 21 Oct 2015 07:28:00 GMT' },
+      } : {});
+    }, () => now);
+    await read('index');
+    await read('index');
+    expect(new Headers(seen[1].headers).get('cookie')).toBe('JSESSIONID=short');
+    now += 1_001;
+    const next = await read('pretrazivanje');
+    expect(new Headers(seen[2].headers).get('cookie')).toBeNull();
+    expect(next.hasSessionCookie).toBe(false);
+  });
+
 });
