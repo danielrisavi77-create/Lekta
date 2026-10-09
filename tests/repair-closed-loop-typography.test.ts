@@ -97,8 +97,8 @@ describe('Repair Engine closed-loop: final-document-inspector-fixer', () => {
       label: `final-document-inspector/${profileId}`,
       profileId,
       buildBrokenDocx: () => packageDoc({ documentXml: body, stylesXml, settingsXml, commentsXml, docPropsCoreXml }),
-      // Zadani oblik (bez korisnicke potvrde) selektira SAMO ne-destruktivne nalaze (tracking,
-      // private-metadata); revizije/komentari/skriveni tekst su destructive:true, default false,
+      // Zadani oblik selektira samo ne-destruktivne nalaze (tracking, revision-metadata).
+      // Privatni metapodaci, revizije, komentari i skriveni tekst su destructive:true, default false,
       // trebaju odvojenu potvrdu PO STAVCI (isti obrazac kao heading-case-fixer). Ovdje simuliramo
       // da je korisnik potvrdio SVE, po uzoru na src/repair/final-document-inspector-fixer.test.ts.
       buildItems: (before) => {

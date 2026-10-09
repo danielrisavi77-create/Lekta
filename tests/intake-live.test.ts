@@ -26,7 +26,7 @@ import {
   zapisiOdlukuNapomene, zapisiPotvrdu, zapisiRok, type PotvrdaUlaza,
 } from '../src/shared/intake-choice';
 import { safeStorageSet, STORAGE_KEYS } from '../src/shared/browser-storage';
-import { izvorFakulteta, mountIntakeLive, PORUKA_ODBIJENO, tekstPecataProvjere } from '../src/routes/intake/intake-live';
+import { izvorFakulteta, mountIntakeLive, tekstPecataProvjere } from '../src/routes/intake/intake-live';
 import { mountIntakeController } from '../src/routes/intake/intake-controller';
 import { odabirFakulteta, primijeniPotvrduUlaza } from '../src/routes/workspace/intake-confirmation';
 import {
@@ -105,10 +105,15 @@ describe('Z32 vrata ubacivanja', () => {
     expect(vrataProblemi(spremnostUlaza)).toEqual([]);
   });
 
-  it('fakultet NIJE uvjet: natpis spominje samo rok, a rok ili "Još ne znam rok" otvara vrata', () => {
-    expect(spremnostUlaza({ rok: { datum: null, neznam: false } })).toEqual({ spremno: false, natpis: 'Prvo potvrdi rok' });
-    expect(spremnostUlaza({ rok: { datum: null, neznam: true } })).toEqual({ spremno: true, natpis: 'ili ispusti dokument ovdje' });
-    expect(spremnostUlaza({ rok: { datum: '2026-10-15', neznam: false } }).spremno).toBe(true);
+  it('rok i fakultet nisu uvjet: ulaz je otvoren odmah u svakom stanju', () => {
+    for (const rok of [
+      { datum: null, neznam: false },
+      { datum: null, neznam: true },
+      { datum: '2026-10-15', neznam: false },
+      { datum: '2026-02-30', neznam: false },
+    ]) {
+      expect(spremnostUlaza({ rok })).toEqual({ spremno: true, natpis: 'ili ispusti dokument ovdje' });
+    }
   });
 
   it('istekao rok iz proslog posjeta se ne vraca; rok danas i "Još ne znam rok" se vracaju', () => {
@@ -960,26 +965,25 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
   const rokPecat = () => document.querySelector<HTMLElement>('[data-intake-rok-pecat]')!;
   const greska = () => document.getElementById('intakeError')!;
 
-  it('bez roka vrata su zatvorena, a "Još ne znam rok" ih otvara i BEZ potvrde fakulteta', () => {
+  it('bez roka dokument se moze ubaciti odmah, a rok ostaje neobavezan kontekst', () => {
     localStorage.setItem(STORAGE_KEYS.preferences, JSON.stringify({ unit: 'fpzg', program: 'Politologija', workType: 'graduate' }));
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });
-    expect(gumb().getAttribute('aria-disabled')).toBe('true');
-    expect(hint()).toBe('Prvo potvrdi rok');
-    expect(live.canAccept()).toBe(false);
-    neznam().checked = true;
-    neznam().dispatchEvent(new Event('change'));
-    expect(potvrdi().getAttribute('aria-pressed'), 'fakultet nije potvrdjen').toBe('false');
-    expect(live.canAccept()).toBe(true);
     expect(gumb().getAttribute('aria-disabled')).toBe('false');
     expect(hint()).toBe('ili ispusti dokument ovdje');
+    expect(live.canAccept()).toBe(true);
+    expect(potvrdi().getAttribute('aria-pressed'), 'fakultet nije potvrdjen').toBe('false');
+    expect(rokPecat().hidden).toBe(true);
+
+    // Rok se i dalje moze dodati i vizualizira se, ali ne mijenja spremnost ulaza.
+    neznam().checked = true;
+    neznam().dispatchEvent(new Event('change'));
+    expect(live.canAccept()).toBe(true);
     expect(rokPecat().hidden).toBe(false);
     expect(rokPecat().textContent).toBe('Rok nije zadan');
     expect(rokPolje().disabled).toBe(true);
-    // Potvrda fakulteta i dalje radi kao prekidac i ne dira vrata.
     potvrdi().click();
     expect(potvrdi().getAttribute('aria-pressed')).toBe('true');
-    expect(potvrdi().textContent).toBe('✓ Potvrđeno');
     expect(live.canAccept()).toBe(true);
   });
 
@@ -993,10 +997,9 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(potvrdi().hidden, 'nema sto potvrditi').toBe(true);
     expect(document.querySelector<HTMLElement>('[data-intake-promijeni]')!.hidden).toBe(true);
     expect(document.querySelector('[data-intake-fakultet-izvor]')!.textContent).toBe('');
-    expect(hint()).toBe('Prvo potvrdi rok');
-    neznam().click();
+    expect(hint()).toBe('ili ispusti dokument ovdje');
     expect(live.canAccept()).toBe(true);
-    // Stvaran kontroler: ispustanje na list sada prima rad (`inspectFile` je pozvan).
+    // Stvaran kontroler: ispustanje na list prima rad odmah (`inspectFile` je pozvan).
     const inspectFile = vi.fn(async () => ({ kind: 'reject' as const, code: 'empty' as const, message: 'test' }));
     const kontroler = mountIntakeController(document, {
       maxUploadBytes: 1024 * 1024, inspectFile, createSession: vi.fn(),
@@ -1074,14 +1077,14 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(hint()).toBe('ili ispusti dokument ovdje');
   });
 
-  it('ISTEKAO rok iz pohrane ne otvara vrata sam po sebi', () => {
+  it('ISTEKAO rok iz pohrane se ne vraca, ali upload ostaje otvoren', () => {
     zapisiRok({ datum: '2026-09-01', neznam: false });
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });
     expect(rokPolje().value, 'istekao datum se ne vraca').toBe('');
     expect(rokPecat().hidden).toBe(true);
-    expect(live.canAccept()).toBe(false);
-    expect(hint()).toBe('Prvo potvrdi rok');
+    expect(live.canAccept()).toBe(true);
+    expect(hint()).toBe('ili ispusti dokument ovdje');
   });
 
   it('spremljena sesija dobiva rok tog rada, a potvrdu samo ako je fakultet potvrdjen', () => {
@@ -1096,6 +1099,35 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     live.onSessionStored('s-10');
     expect(procitajIzborUlaza().potvrda).toMatchObject({ unit: 'fer', program: null, sesija: 's-10' });
     expect(rokZaSesiju('s-10')).toEqual({ datum: '2026-10-15', neznam: false });
+  });
+
+  it('rok zadan NAKON spremanja sesije ulazi u mapu te sesije', () => {
+    ulaz();
+    live = mountIntakeLive(document, { search: '', danas });
+    live.onSessionStored('s-20');
+    expect(rokZaSesiju('s-20'), 'bez roka u trenutku spremanja').toEqual({ datum: null, neznam: false });
+    rokPolje().value = '2026-10-20';
+    rokPolje().dispatchEvent(new Event('change'));
+    expect(rokZaSesiju('s-20')).toEqual({ datum: '2026-10-20', neznam: false });
+    live.onSessionStored('s-21');
+    rokPolje().value = '2026-10-25';
+    rokPolje().dispatchEvent(new Event('change'));
+    expect(rokZaSesiju('s-21')).toEqual({ datum: '2026-10-25', neznam: false });
+    expect(rokZaSesiju('s-20'), 'raniji rad ostaje kakav je bio').toEqual({ datum: '2026-10-20', neznam: false });
+  });
+
+  it('novi odabir prekida vezu roka s prethodnom sesijom do spremanja nove', () => {
+    ulaz();
+    live = mountIntakeLive(document, { search: '', danas });
+    rokPolje().value = '2026-10-20';
+    rokPolje().dispatchEvent(new Event('change'));
+    live.onSessionStored('s-30');
+    live.onFileChosen('drugi.docx');
+    rokPolje().value = '2026-10-27';
+    rokPolje().dispatchEvent(new Event('change'));
+    expect(rokZaSesiju('s-30'), 'S1 ostaje s rokom prije drugog odabira').toEqual({ datum: '2026-10-20', neznam: false });
+    live.onSessionStored('s-31');
+    expect(rokZaSesiju('s-31')).toEqual({ datum: '2026-10-27', neznam: false });
   });
 
   it('pecat provjere prati stanje kontrolera: "Čeka provjeru" -> "Čitam"', async () => {
@@ -1133,7 +1165,7 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(ime.textContent).toBe('drugi.docx');
   });
 
-  it('vrata grizu i u kontroleru: klik ne otvara odabir, fokus ide na rok, uz poruku', () => {
+  it('kontroler otvara odabir dokumenta odmah bez roka', () => {
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });
     const input = document.getElementById('intakeFile') as HTMLInputElement;
@@ -1144,23 +1176,17 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
       canAccept: live.canAccept, onBlocked: live.onBlocked,
     });
     gumb().click();
-    expect(otvori).not.toHaveBeenCalled();
-    expect(document.activeElement).toBe(rokPolje());
-    expect(greska().hidden).toBe(false);
-    expect(greska().textContent).toBe(PORUKA_ODBIJENO);
-    neznam().click();
-    expect(greska().hidden, 'otvorena vrata brisu poruku o odbijenom radu').toBe(true);
-    gumb().click();
     expect(otvori).toHaveBeenCalledOnce();
+    expect(greska().hidden).toBe(true);
+    expect(live.canAccept()).toBe(true);
     kontroler.destroy();
   });
 
   /**
-   * ISPUSTANJE KAD SU VRATA ZATVORENA (nalaz pregleda Z32): obje staze, NA list (kontroler) i
-   * IZVAN lista (zivi list), odbijaju rad s porukom. Kontrola u istom testu: isti kontroler bez
-   * kuke `canAccept` rad PRIMA, pa opazanje (`inspectFile`) stvarno razlikuje otvoreno od zatvorenog.
+   * Ispustanje i na list i izvan lista mora ostati dostupno bez roka. Time se cuva UX odluka da
+   * neobavezni kontekst ne postane skriveni drag-and-drop gate.
    */
-  it('ispustanje na list i izvan lista bez roka: rad se odbija s porukom; bez vrata bi prosao', async () => {
+  it('ispustanje dokumenta bez roka radi i na listu i izvan njega', async () => {
     ulaz();
     live = mountIntakeLive(document, { search: '', danas });
     const inspectFile = vi.fn(async () => ({ kind: 'reject' as const, code: 'empty' as const, message: 'test' }));
@@ -1170,22 +1196,15 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     };
     const kontroler = mountIntakeController(document, { ...deps, canAccept: live.canAccept, onBlocked: live.onBlocked });
     live.poveziOdabir((file) => { void kontroler.selectFile(file); });
-    document.getElementById('intakeDropzone')!.dispatchEvent(ispustanje(new File(['x'], 'rad.docx')));
-    expect(greska().textContent).toBe(PORUKA_ODBIJENO);
-    expect(greska().hidden).toBe(false);
-    expect(document.activeElement).toBe(rokPolje());
-    greska().hidden = true;
-    (document.querySelector('.site-footer') ?? document.body).dispatchEvent(ispustanje(new File(['x'], 'rad.docx')));
-    expect(greska().hidden, 'ispustanje izvan lista nije odbijeno porukom').toBe(false);
-    await new Promise((r) => setTimeout(r, 0));
-    expect(inspectFile, 'zatvorena vrata su primila rad').not.toHaveBeenCalled();
-    kontroler.destroy();
 
-    // KONTROLA: bez kuke vrata isti tok rad prima, pa gornja tvrdnja nije prazna.
-    const bezVrata = mountIntakeController(document, deps);
     document.getElementById('intakeDropzone')!.dispatchEvent(ispustanje(new File(['x'], 'rad.docx')));
-    await vi.waitFor(() => expect(inspectFile).toHaveBeenCalledOnce());
-    bezVrata.destroy();
+    await vi.waitFor(() => expect(inspectFile).toHaveBeenCalledTimes(1));
+    expect(greska().hasAttribute('data-intake-vrata'), 'upload je pogresno tretiran kao blokiran').toBe(false);
+
+    (document.querySelector('.site-footer') ?? document.body).dispatchEvent(ispustanje(new File(['y'], 'drugi.docx')));
+    await vi.waitFor(() => expect(inspectFile).toHaveBeenCalledTimes(2));
+    expect(greska().hasAttribute('data-intake-vrata'), 'drop izvan lista je pogresno tretiran kao blokiran').toBe(false);
+    kontroler.destroy();
   });
 });
 

@@ -54,6 +54,10 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
 
 - [ ] Registrirati subjekt i upisati `oib` i `address` u `data/legal/provider.json`. Dok su prazni,
       pravne stranice nose napomenu da registracijski podaci slijede (`registrationNote`).
+- [ ] **Prije prve naplate zamijeniti privremene osobne kontaktne podatke poslovnim/registriranim
+      podacima subjekta gdje god je to pravno dopušteno.** Ne brisati podatke koje GDPR i
+      potrošačko pravo stvarno traže; cilj je ne objavljivati privatnu kućnu adresu nakon što
+      postoji valjana poslovna adresa.
 - [ ] Porezni tretman prije prve naplate: Stripe nije Merchant of Record, pa PDV (HR i OSS) obracunava i prijavljuje vlasnik.
 
 ## D. Operativno
