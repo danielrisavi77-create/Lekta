@@ -1,7 +1,10 @@
 import {
   initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyFacultyIds,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
+  toast, setAuthStatus, maybeRedeemReferral, afterAuthChange,
 } from '../../ui/app';
+import { browserGoogleSignInDeps, mountGoogleSignIn } from './google-sign-in';
+import { loadProductionConfig } from '../../config/production-config';
 import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
 import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
@@ -115,6 +118,15 @@ async function start(): Promise<void> {
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);
   mountConsentReveal(document);
+  // T102: prijava Googleom iza VITE_AUTH_GOOGLE_ENABLED; bez zastavice ne radi nista (google-sign-in.ts).
+  {
+    const pc = loadProductionConfig();
+    const auth = { supabaseUrl: String(pc?.supabaseUrl || '').trim(), anonKey: String(pc?.supabaseAnonKey || '').trim() };
+    void mountGoogleSignIn(browserGoogleSignInDeps(auth, {
+      toast, setStatus: setAuthStatus, track: trackWorkspaceEvent,
+      afterSignIn: () => { void maybeRedeemReferral(); afterAuthChange(); },
+    }));
+  }
 
   const storage = detectStorage();
   let sessionId: string | null = null;

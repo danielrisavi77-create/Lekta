@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { parseRepairConfirmationReceipts } from '../src/repair/local-runner/confirmation-receipts.ts';

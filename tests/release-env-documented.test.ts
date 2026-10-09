@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard: varijabla koja GATE-a objavu mora biti popisana u `.env.example`.
  *

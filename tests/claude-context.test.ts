@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import {
   REQUIRED_CONTEXT_FILES,
@@ -17,7 +18,8 @@ const ALL_FILES = new Set(REQUIRED_CONTEXT_FILES);
 describe('CLAUDE.md context guard', () => {
   it('accepts a compact root whose scoped routes exist', () => {
     expect(auditClaudeContext(VALID_ROOT, ALL_FILES)).toMatchObject({
-      lineCount: 8,
+      // Tri retka zaglavlja i jedan redak po obveznoj ruti; broj ruta raste s novim vodicima.
+      lineCount: 3 + REQUIRED_SCOPED_GUIDES.length,
       problems: [],
       routes: REQUIRED_SCOPED_GUIDES,
     });

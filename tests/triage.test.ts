@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Triage model (src/analysis/triage.ts): klasifikacija nalaza u auto/assisted/manual,
  * fixId/groupKey, lokacije (sidra za skok) i brojaci. Ukljucuje integracijski smoke kroz

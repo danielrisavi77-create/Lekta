@@ -143,11 +143,11 @@ export const ALL_UX_PROJECTS: PlaywrightTestProject[] = [
    * allowlisti) davao je 2 prije i poslije, pa mjerenje nije bilo pokvareno.
    */
   { name: 'firefox', use: { ...devices['Desktop Firefox'] },
-    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|retraction-badges)\.spec\.ts/ },
+    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|mobile-a11y-audit|tool-print|retraction-badges)\.spec\.ts/ },
   { name: 'webkit', use: { ...devices['Desktop Safari'] },
-    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|retraction-badges)\.spec\.ts/ },
+    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|mobile-a11y-audit|tool-print|retraction-badges)\.spec\.ts/ },
   { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
-    testMatch: /(roadmap-v2|mobile-critical-path|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|retraction-badges)\.spec\.ts/ },
+    testMatch: /(roadmap-v2|mobile-critical-path|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports|free-tools-responsive|visual-audit-surfaces|visual-audit-edge-cases|mobile-a11y-audit|tool-print|retraction-badges)\.spec\.ts/ },
 ];
 
 export default defineConfig({

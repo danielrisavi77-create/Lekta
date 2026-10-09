@@ -94,7 +94,8 @@ ne tumaci kao zeleno.
 
 ## Verifikacijska disciplina
 
-- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`.
+- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`
+  ili domenskoj datoteci `tests/gate-mutations-<domena>.test.ts`.
 - Novi mehanizam ima vlastiti izravni signal; nizvodno poboljsanje nije dokaz uzroka.
 - Generator testa mora dokazati da proizvodi ciljanu klasu ulaza.
 - Idempotencija se dokazuje dvama prolazima; drugi mora biti no-op.
@@ -129,8 +130,8 @@ poziva na svaki prompt.
 
 Pregled mora doci od drugog CLI providera od implementatora. Modelski rezultat nije
 dokaz prolaza: izolacija, deterministicni gateovi, Word oracle i commit pravila ostaju
-obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
-`docs/agents/tasks.json`.
+obvezni. Operativne naredbe su u `docs/agents/README.md`. Mjerodavan status zadataka je u Linearu;
+`docs/agents/tasks.json` je inventar i snimak koji PR zadatka ne dira (osvjezava ga koordinator, skupno).
 
 ## Implementatorske sesije
 
@@ -159,6 +160,8 @@ obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
 - `src/docx/CLAUDE.md`: OOXML parser, golden fixture i integritet paketa.
 - `supabase/CLAUDE.md`: migracije, Edge Functions, sigurnost i deploy dokaz.
 - `scripts/autonomy/CLAUDE.md`: projekcije, mjerenja, mutacije i resursni gateovi.
+- `data/profiles/CLAUDE.md`: profili, ruleEntries, bodovane vrijednosti i generirane projekcije.
+- `tests/CLAUDE.md`: gardovi, mutacije, svojstva, fixture i pokretanje testova.
 
 Inventar migriranih pravila je u `docs/decisions/CLAUDE_V2_RULE_INVENTORY.md`.
 Povijesni v1 vodič ostaje u `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md`.

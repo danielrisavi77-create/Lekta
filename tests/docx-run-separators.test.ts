@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-06: `w:cr` i `w:ptab` nisu bili razdjelnici, pa su se rijeci slijepile.
  *

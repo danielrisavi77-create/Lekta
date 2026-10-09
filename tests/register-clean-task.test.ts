@@ -138,6 +138,14 @@ describe('register-clean-task.ps1: vlasnistvo nad taskom (Codex krug 2, M2)', ()
   });
 });
 
+/**
+ * Svaki win32 test niže pokreće powershell jednom do vise puta (svaki start ~1-3 s, pod opterecenjem
+ * i do 8 s), pa je zajednicki timeout testa 60 s. Izmjereno 2026-10-08 na radnoj stanici: dva od 13
+ * testova pala su na 16 s i 21 s uz zadani `testTimeout` 15000 ms, a izolirano prolaze. Spawn
+ * ima vlastitih 60 s, pa test nikad ne zavrsava prije svog procesa. Test se NE preskace.
+ */
+const WIN_POWERSHELL_TEST_TIMEOUT = 60_000;
+
 function powershell(args: string[]) {
   return spawnSync('powershell', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', ...args], {
     encoding: 'utf8',
@@ -163,7 +171,7 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: -DryRun 
     expect(def.LogonType).toBe('Interactive');
     expect(def.Triggers).toEqual(['MSFT_TaskDailyTrigger', 'MSFT_TaskLogonTrigger']);
     expect(exists()).toBe(prije);
-  });
+  }, WIN_POWERSHELL_TEST_TIMEOUT);
 });
 
 describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-LektaCleanTaskOwned stvarno izvedena (M1)', () => {
@@ -199,7 +207,7 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-Lek
     expect(out).toContain('DRUGI_REPO=False');
     expect(out).toContain('DVIJE_AKCIJE=False');
     expect(out).toContain('POWERSHELL_EXECUTE=False');
-  });
+  }, WIN_POWERSHELL_TEST_TIMEOUT);
 });
 
 function psQuote(s: string): string {
@@ -229,13 +237,13 @@ describe.skipIf(process.platform !== 'win32')(
       expect(r.stdout).toMatch(/Odbijam:.*-TaskName.*nedopusteni znak/);
       expect(taskExists(lose)).toBe(prije);
       expect(taskExists(lose)).toBe('NE');
-    });
+    }, WIN_POWERSHELL_TEST_TIMEOUT);
 
     it("odbija ':' u -TaskName i uz -Unregister, prije Get-/Unregister-ScheduledTask", () => {
       const r = powershell(['-File', SCRIPT, '-RepoRoot', process.cwd(), '-TaskName', lose, '-Unregister']);
       expect(r.status).toBe(1);
       expect(r.stdout).toMatch(/Odbijam:.*-TaskName.*nedopusteni znak/);
-    });
+    }, WIN_POWERSHELL_TEST_TIMEOUT);
   },
 );
 
@@ -300,6 +308,6 @@ describe.skipIf(!REGISTER_TEST_HAS_CMDLET)(
       const unreg = powershell(['-File', SCRIPT, '-RepoRoot', repo, '-TaskName', REGISTER_TEST_TASK_NAME, '-Unregister']);
       expect(unreg.status, unreg.stderr || unreg.stdout).toBe(0);
       expect(taskExists(REGISTER_TEST_TASK_NAME)).toBe('NE');
-    });
+    }, WIN_POWERSHELL_TEST_TIMEOUT);
   },
 );

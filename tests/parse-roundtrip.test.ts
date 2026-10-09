@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 
 import { formatCitation, parseAuthors, type CitationInput, type CitationStyle } from '../src/tools/citation';

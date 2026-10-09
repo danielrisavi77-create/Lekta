@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 1 (Lekta Error Corpus): inventar provjera je neprazan, potpun i determinist ican.
  *

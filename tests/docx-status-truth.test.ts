@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-01: status bodovane provjere ne smije lagati.
  *

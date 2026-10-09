@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { createLocalRepairStatusSupabaseDependencies } from '../src/repair/local-runner/status-supabase-adapter.ts';

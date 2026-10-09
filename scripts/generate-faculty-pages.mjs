@@ -28,6 +28,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
+import { publicSourceUrl } from '../src/shared/source-url.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -98,6 +99,12 @@ function escapeHtml(value) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+export function sourceLinkHtml(source) {
+  const title = escapeHtml(source.title);
+  const url = publicSourceUrl(source.url);
+  return url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${title}</a>` : `${title} <span>(Poveznica nije dostupna)</span>`;
 }
 
 function jsonInline(value) {
@@ -724,7 +731,7 @@ ${deadlineHtml}
   <p class="priv">Automatska provjera ostaje na tvom uređaju · bez registracije · nije provjera plagijata</p>
 </div>
 
-${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja provjera izvora: <strong>${fmtDateHr(verifiedAt)}</strong>.` : ''} Pravila su izvedena iz sljedećih službenih izvora:</p><ul class="source-list">${sources.map((s) => `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></li>`).join('')}</ul>` : ''}
+${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja provjera izvora: <strong>${fmtDateHr(verifiedAt)}</strong>.` : ''} Pravila su izvedena iz sljedećih službenih izvora:</p><ul class="source-list">${sources.map((s) => `<li>${sourceLinkHtml(s)}</li>`).join('')}</ul>` : ''}
 
 <div class="lekta-disclaimer">
   Ova stranica je pomoćni sažetak, ne službena obavijest fakulteta. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu ni odluku mentora ili povjerenstva.
