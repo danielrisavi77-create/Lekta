@@ -21,6 +21,10 @@ import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { trackRepairResultOk } from '../analytics/repair-result';
 
+// Jedno mjesto za iste UI poruke i klase: manji pocetni JS graf bez mijenjanja ponasanja.
+const NO_SCORE = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+const ROW_CLASS = 'lekta-repair-panel__bibliography-row';
+
 export interface TitlePageFormField {
   key: string;
   label: string;
@@ -945,7 +949,7 @@ export function renderBibliographyControls(li: HTMLElement, item: RepairableItem
   const sync = () => { item.params = definition.buildParams(definition); };
   for (const entry of definition.entries) {
     const row = document.createElement('div');
-    row.className = 'lekta-repair-panel__bibliography-row';
+    row.className = ROW_CLASS;
     const check = document.createElement('input');
     check.type = 'checkbox';
     check.checked = entry.selected;
@@ -1024,7 +1028,7 @@ export function renderCitationBibliographySyncControls(li: HTMLElement, item: Re
   const sync = () => { item.params = definition.buildParams(definition); };
   for (const citation of definition.citations) {
     const row = document.createElement('div');
-    row.className = 'lekta-repair-panel__bibliography-row';
+    row.className = ROW_CLASS;
     const check = document.createElement('input');
     check.type = 'checkbox';
     check.checked = citation.selected;
@@ -1110,7 +1114,7 @@ export function renderLegalFootnoteRepairControls(li: HTMLElement, item: Repaira
     section.appendChild(heading);
     for (const operation of candidate.operations) {
       const row = document.createElement('div');
-      row.className = 'lekta-repair-panel__bibliography-row';
+      row.className = ROW_CLASS;
       const check = document.createElement('input');
       check.type = 'checkbox';
       check.checked = operation.selected;
@@ -1169,7 +1173,13 @@ export function renderFinalDocumentInspectorControls(li: HTMLElement, item: Repa
     check.type = 'checkbox';
     check.checked = finding.selected;
     check.disabled = !finding.supported;
-    check.addEventListener('change', () => { finding.selected = check.checked; sync(); });
+    check.addEventListener('change', () => {
+      finding.selected = check.checked;
+      // buildParams cita odabir PO dokazu: bez ovoga opt-in na redu (npr. privatni metapodaci,
+      // koji nisu zadano odabrani) ne bi stigao do parametara popravka.
+      for (const evidence of finding.evidence) evidence.selected = check.checked;
+      sync();
+    });
     label.append(check, document.createTextNode(' ' + finding.summary + ' (' + finding.count + ')'));
     row.appendChild(label);
     const meta = document.createElement('small');
@@ -1871,7 +1881,7 @@ async function renderRecheck(
   }
   if (after === null) {
     const note = document.createElement('p');
-    note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+    note.textContent = NO_SCORE;
     el.appendChild(note);
     return { unavailable: true, regressions: 0, outcome: null, verified: null };
   }
@@ -2058,7 +2068,7 @@ function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapsho
 
   if (before.score == null || after.score == null) {
     const p = document.createElement('p');
-    p.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+    p.textContent = NO_SCORE;
     wrap.appendChild(p);
     return wrap;
   }

@@ -530,8 +530,7 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [
-        "field-integrity-fixer",
-        "final-document-inspector-fixer"
+        "field-integrity-fixer"
       ],
       "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
@@ -606,7 +605,6 @@
         "line-spacing-fixer",
         "alignment-fixer",
         "section-surgery-fixer",
-        "final-document-inspector-fixer",
         "bibliography-repair-fixer",
         "required-section-fixer"
       ],
@@ -753,8 +751,7 @@
         "line-spacing-fixer",
         "paper-size-fixer",
         "alignment-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer"
+        "section-surgery-fixer"
       ],
       "targetedCheckCount": 4,
       "targetedResolvedCount": 4,
@@ -825,8 +822,7 @@
       ],
       "changedFixerIds": [
         "field-integrity-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer"
+        "section-surgery-fixer"
       ],
       "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
@@ -905,8 +901,7 @@
         "footnote-spacing-fixer",
         "heading-format-fixer",
         "footnote-typography-fixer",
-        "heading-case-fixer",
-        "final-document-inspector-fixer"
+        "heading-case-fixer"
       ],
       "targetedCheckCount": 8,
       "targetedResolvedCount": 8,
@@ -989,8 +984,7 @@
         "line-spacing-fixer",
         "margins-fixer",
         "page-number-alignment-fixer",
-        "heading-format-fixer",
-        "final-document-inspector-fixer"
+        "heading-format-fixer"
       ],
       "targetedCheckCount": 6,
       "targetedResolvedCount": 6,
@@ -1312,8 +1306,7 @@
         "line-spacing-fixer",
         "paper-size-fixer",
         "alignment-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer"
+        "section-surgery-fixer"
       ],
       "targetedCheckCount": 4,
       "targetedResolvedCount": 4,
