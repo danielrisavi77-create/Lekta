@@ -25,6 +25,7 @@ import { retractionUiProblems, citatSource, analyzerSource, verificationFocusPro
  */
 import { afterAll, beforeAll, describe, it, expect, vi } from 'vitest';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
