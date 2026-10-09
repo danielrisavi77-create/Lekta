@@ -64,6 +64,7 @@ import { isInOrigin } from '../scripts/site-origin.mjs';
 import { runGuard5Block, writeSyntheticDist } from './helpers/seo-origin-wiring';
 import { dependabotIznimkaDrzi, napraviPrLinesRepo, PR_LINES_IZVOR } from './helpers/pr-lines-cli';
 import { collectScannedSources, CRLF_DETECTORS, crlfGuardVerdict, crlfReadProblems } from './helpers/crlf-read-guard';
+import { changedAuthoritativePaths } from '../scripts/check-upisnik-readonly';
 import { bundleFunkcije, mapaModula } from './helpers/eszip-fixture';
 import {
   stripeSecretNameProblems,
@@ -12420,5 +12421,53 @@ describe('mutations: actual verification focus restoration', () => {
   ]) it(`actual focus guard removal fails: ${before}`, async () => {
     expect(verifyBadgesSource()).toContain(before);
     expect((await verificationFocusProblems((s) => s.replace(before, after))).length).toBeGreaterThan(0);
+  });
+});
+
+
+/**
+ * Central mutation inventory (docs/agents/PROJECT_RULES.md):
+ * independent negative controls for the Upisnik read-only Git worktree gate.
+ * The isolated Git fixture is deleted after each test; never touches project data.
+ */
+describe('mutacije: Upisnik preflight ne smije mijenjati autoritativni registar', () => {
+  function fixture(check: (root: string, file: string, runGit: (...args: string[]) => void) => void): void {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-upisnik-gate-mutation-'));
+    const git = (...args: string[]) => { execFileSync('git', args, { cwd: root, stdio: 'pipe' }); };
+    try {
+      git('init', '-q');
+      const dir = join(root, 'data', 'programs');
+      mkdirSync(dir, { recursive: true });
+      const file = join(dir, 'registry.json');
+      writeFileSync(file, '{"baseline":true}\n');
+      git('add', 'data/programs/registry.json');
+      git('-c', 'user.name=Guard Test', '-c', 'user.email=guard@example.invalid', 'commit', '-qm', 'baseline');
+      check(root, file, git);
+    } finally {
+      rmSync(root, { force: true, recursive: true });
+    }
+  }
+
+  it('BASELINE: netaknuto radno stablo nema problema', () => {
+    fixture((root) => expect(changedAuthoritativePaths(root)).toEqual([]));
+  });
+  it('MUTANT: unstaged izmjena stvarnog kanonskog zapisa se otkriva', () => {
+    fixture((root, file) => {
+      writeFileSync(file, '{"mutant":true}\n');
+      expect(changedAuthoritativePaths(root)).toContain('data/programs/registry.json');
+    });
+  });
+  it('MUTANT: staged izmjena ne smije zaobici guard (stari git diff nije vidio staged)', () => {
+    fixture((root, file, git) => {
+      writeFileSync(file, '{"mutant":true}\n');
+      git('add', 'data/programs/registry.json');
+      expect(changedAuthoritativePaths(root)).toContain('data/programs/registry.json');
+    });
+  });
+  it('MUTANT: novi untracked autoritativni zapis se otkriva', () => {
+    fixture((root) => {
+      writeFileSync(join(root, 'data', 'programs', 'invented.json'), '{}\n');
+      expect(changedAuthoritativePaths(root)).toContain('data/programs/invented.json');
+    });
   });
 });
