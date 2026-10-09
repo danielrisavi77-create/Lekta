@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Lansiranje bez lokalnog popravka: klijentski tok mora biti INERTAN.
  *

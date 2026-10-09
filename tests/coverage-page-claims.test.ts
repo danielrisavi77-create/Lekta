@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za P0-4 (docs/PLAN_POTPUNA_POKRIVENOST.md): javna tvrdnja o pokrivenosti mora se IZVODITI
  * iz completion ledgera, a ne nastajati u generatoru stranice.

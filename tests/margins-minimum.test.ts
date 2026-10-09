@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Margine kao NAJMANJA dopustena vrijednost, a ne kao ciljana.
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * JEDAN SASTAVLJAC PONUDE POPRAVAKA (E2, 2026-09-12).
  *

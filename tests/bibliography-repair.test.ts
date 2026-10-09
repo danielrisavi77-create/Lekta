@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem } from '../src/ui/repair-items';

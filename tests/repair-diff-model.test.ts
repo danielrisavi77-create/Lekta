@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { buildDiffOps, diffWords, locateChanges, type DiffParagraph } from '../src/ui/repair-diff-model';
 

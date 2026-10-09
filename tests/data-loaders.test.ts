@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faithfulness testovi za data/** loadere (CLAUDE.md backlog 1 i 3).
  * Dokazuju: (1) loaderi su vjeran prolaz kroz JSON (deep-equal, bez mutacije),

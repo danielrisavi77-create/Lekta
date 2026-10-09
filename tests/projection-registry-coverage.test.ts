@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard: drift test koji zna kako se artefakt regenerira mora imati i SCREENING unos.
  *

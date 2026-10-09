@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/generate-title-page-tools.mjs: SEO-claims testovi (B5.4). Dokazuje da generirane
  * stranice ne "pregovaraju" gramaticki krivo (npr. "na {Ime fakulteta}" trazi lokativ/dekli-

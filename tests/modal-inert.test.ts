@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva inertnu pozadinu dok je modal otvoren (BL-P2-03, WCAG). trapModal mora postaviti inert +
  * aria-hidden na pozadinske landmarke (header/main/footer), releaseModal ih ukloniti; brojac

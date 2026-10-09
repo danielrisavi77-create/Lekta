@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Feature #4: analizator izlaze sirovi popis literature (details.references) da UI moze
  * pokrenuti opt-in online provjeru postojanja. Dokazuje golden-safe oblik + paritet broja.

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za usporedbu iza `npm run deploy-drift`.
  *

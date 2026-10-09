@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { buildRepairableItems, pageNumberingRepairableItem, pickTargetItem, type AnalyzedCheck } from '../src/ui/repair-items';
 import type { RuleEntry } from '../src/profiles/profile-schema';

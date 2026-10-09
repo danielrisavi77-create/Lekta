@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift gard za verifikacijske dosjee citatnih specova (data/verification/citation-dossiers/**).
  *

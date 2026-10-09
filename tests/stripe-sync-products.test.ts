@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/stripe-sync-products.mjs: zrcalo kataloga u Stripeu (Monetizacija V1, M2).
  *
