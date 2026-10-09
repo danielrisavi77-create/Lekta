@@ -15,22 +15,34 @@
 /** Samo `get`, da pomocnik radi i s Headers iz Deno-a i s lazom u testu. */
 export interface HeaderReader { get(name: string): string | null }
 
-/** Gornja granica duljine kljuca: najdulji tekstualni IPv6 zapis ima 45 znakova. */
-const MAX_IP_KEY_LENGTH = 64;
+/** IPV6 moze imati 45 znakova; dulji ili ne-IP header ne stvara zajednicki unknown bucket. */
+const MAX_IP_KEY_LENGTH = 45;
 
 /**
- * IP kljuc iz zaglavlja `cf-connecting-ip` koje postavlja Cloudflare ispred Supabase gatewaya.
- * 'unknown' ako zaglavlja nema, prazno je ili nije kratki tekst.
- *
- * T84 XFF (izmjereno na stagingu 2026-10-09, funkcija diag-headers): gateway PREPISUJE klijentski
- * x-forwarded-for u oblik "<ip klijenta>,<ip klijenta>, <promjenjivi AWS cvor>". Zadnji unos je dakle
- * jedan od nekoliko unutarnjih cvorova (isti za mnogo korisnika, i mijenja se), pa je ne valja kao
- * kljuc (zajednicki brojac za sve). Klijentski `cf-connecting-ip` Cloudflare odbija (greska 1000),
- * pa tu vrijednost klijent ne moze podmetnuti. x-forwarded-for i x-real-ip se namjerno NE citaju.
+ * IP dolazi samo iz cf-connecting-ip postavljenog na ZASTICENOM proxy ulazu.
+ * Nepostojeci/krivotvoreni oblik ne smije postati novi quota ili anti-fraud identitet.
+ * To NE dokazuje da origin odbija izravan promet; to se mora potvrditi na stagingu.
  */
 export function clientIpFromHeaders(headers: HeaderReader): string {
-  const ip = (headers.get('cf-connecting-ip') ?? '').trim();
-  return ip !== '' && ip.length <= MAX_IP_KEY_LENGTH ? ip : 'unknown';
+  const raw = (headers.get('cf-connecting-ip') ?? '').trim();
+  if (!raw || raw.length > MAX_IP_KEY_LENGTH) throw new Error('UNTRUSTED_CLIENT_IP');
+
+  if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(raw)) {
+    const octets = raw.split('.');
+    if (octets.every((part) => Number(part) <= 255 && (part === '0' || !part.startsWith('0')))) {
+      return octets.join('.');
+    }
+    throw new Error('UNTRUSTED_CLIENT_IP');
+  }
+
+  // URL standard canonicalizes IPv6 without relying on Node-only net.isIP inside Deno Edge.
+  if (raw.includes(':') && !/[\s,;/%]/.test(raw)) {
+    try {
+      const host = new URL('http://[' + raw + ']/').hostname;
+      if (host.startsWith('[') && host.endsWith(']')) return host.slice(1, -1);
+    } catch { /* invalid IPv6 syntax */ }
+  }
+  throw new Error('UNTRUSTED_CLIENT_IP');
 }
 
 /** sha256(input) kao hex. */
