@@ -8,6 +8,7 @@ on:
       - scripts/resync-upisnik.mts
       - scripts/check-upisnik-readonly.mts
       - tests/upisnik-worktree-guard.test.ts
+      - tests/gate-mutations.test.ts
       - src/programs/upisnik-resync.ts
       - src/programs/upisnik-session.ts
       - src/programs/upisnik-record-review.ts
