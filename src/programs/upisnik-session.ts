@@ -15,16 +15,19 @@ export function reportableUpisnikUrl(url: URL): string {
 }
 
 
-export function createUpisnikSession(fetcher: typeof fetch = fetch):
+export function createUpisnikSession(fetcher: typeof fetch = fetch, now: () => number = Date.now):
   (path: string) => Promise<{ url: string; html: string; contentType: string | null; hasSessionCookie: boolean }> {
-  const cookies = new Map<string, string>();
+  const cookies = new Map<string, { pair: string; expiresAt: number | null }>();
   return async (path) => {
     let url = new URL(path, UPISNIK_BASE);
     for (let hop = 0; hop <= 5; hop += 1) {
       if (url.origin !== new URL(UPISNIK_BASE).origin || !url.pathname.startsWith('/usp/')) {
         throw new Error('UNEXPECTED_SOURCE_ORIGIN');
       }
-      const cookie = [...cookies.values()].join('; ');
+      for (const [name, current] of cookies) {
+        if (current.expiresAt !== null && current.expiresAt <= now()) cookies.delete(name);
+      }
+      const cookie = [...cookies.values()].map((current) => current.pair).join('; ');
       const response = await fetcher(url.href, {
         redirect: 'manual', signal: AbortSignal.timeout(45_000),
         headers: {
@@ -40,8 +43,22 @@ export function createUpisnikSession(fetcher: typeof fetch = fetch):
         const separator = pair.indexOf('=');
         if (separator < 1) continue;
         const name = pair.slice(0, separator);
-        if (/;\s*max-age\s*=\s*0\s*(?:;|$)/i.test(value)) cookies.delete(name);
-        else cookies.set(name, pair);
+        // Max-Age ima prednost nad Expires; negativne, nulte i istekle vrijednosti brisu cookie.
+        const age = /;\s*max-age\s*=\s*(-?\d+)\s*(?:;|$)/i.exec(value);
+        const expires = /;\s*expires\s*=\s*([^;]+)/i.exec(value);
+        let expiresAt: number | null = null;
+        if (age) {
+          const seconds = Number(age[1]);
+          if (!Number.isSafeInteger(seconds) || seconds <= 0) { cookies.delete(name); continue; }
+          expiresAt = now() + seconds * 1000;
+        } else if (expires) {
+          expiresAt = Date.parse(expires[1].trim());
+        }
+        if (expiresAt !== null && (!Number.isFinite(expiresAt) || expiresAt <= now())) {
+          cookies.delete(name);
+        } else {
+          cookies.set(name, { pair, expiresAt });
+        }
       }
       if ([301, 302, 303, 307, 308].includes(response.status)) {
         const location = response.headers.get('location');
