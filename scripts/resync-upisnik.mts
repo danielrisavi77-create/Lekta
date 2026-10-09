@@ -5,10 +5,10 @@
  */
 import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseUpisnikResults, UPISNIK_VRSTE, type UpisnikRow } from '../src/programs/upisnik-parse';
-import { allProgrammesQuery } from '../src/programs/upisnik-resync';
+import { allProgrammesQuery, latestReportPaths } from '../src/programs/upisnik-resync';
 import { assessRecordHarvest, reportedRowCount, reviewHarvests } from '../src/programs/upisnik-record-review';
 import { createUpisnikSession } from '../src/programs/upisnik-session';
 
@@ -78,7 +78,9 @@ async function main(): Promise<void> {
     source, rowCount: parsed.rows.length, rows: review.latestComparableRecords,
   }, null, 2)}\n`);
   writeFileSync(join(runDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
-  writeFileSync(join(output, 'latest-report.json'), `${JSON.stringify(report, null, 2)}\n`);
+  // Kopija latest-report zivi direktorij iznad report.json; njezine su putanje relativne.
+  const latestPaths = latestReportPaths(report, basename(runDir));
+  writeFileSync(join(output, 'latest-report.json'), `${JSON.stringify({ ...report, ...latestPaths }, null, 2)}\n`);
   console.log(JSON.stringify({ ...report, skippedRows: parsed.skipped.slice(0, 5), diff: review && {
     added: review.diff.added.length, missingFromLatest: review.diff.missingFromLatest.length,
     changed: review.diff.changed.length, unchanged: review.diff.unchanged, requiresReview: review.requiresReview,
