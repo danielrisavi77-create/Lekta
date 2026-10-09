@@ -590,6 +590,13 @@ header.site-chrome--scrolled {
   align-items: center;
 }
 .site-footer__pravno a:hover { color: var(--desk-ink); }
+/* Na dodirnom ekranu pravne poveznice su mete za prst: 44 x 44 px (bilo 24 px visine na svakoj stranici,
+   mobilni audit 2026-09-28; kratka "Uvjeti" bez najmanje sirine ima oko 40 px, Codex 310-2). Razmak izmedju
+   redaka se smanjuje da podnozje ne naraste dvostruko. */
+@media (max-width: 720px) {
+  .site-footer__pravno { row-gap: 0; }
+  .site-footer__pravno a { min-height: 44px; min-width: 44px; justify-content: center; }
+}
 .site-footer__nota {
   margin: 0;
   max-width: 70ch;
