@@ -66,6 +66,16 @@
         ]
       }
     ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/session-end-gc.mjs\""
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

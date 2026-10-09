@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { BLOCK_MESSAGE, judgeCpuDiscipline, packageScriptReader, splitCommand } from '../scripts/hooks/cpu-discipline.mjs';
 import { MAX_BLOCKS, counterPath, decideStop, openItems } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
@@ -251,5 +252,18 @@ describe('registracija u repo .claude/settings.json', () => {
     expect(matcherCovers('mcp__.*__apply_migration', 'mcp__Supabase__list_tables')).toBe(false);
     // Stari matcher iz prve verzije PR-a #326 nije vidio lokalno ime servera malim slovima.
     expect(matcherCovers('mcp__.*Supabase.*__apply_migration', 'mcp__supabase__apply_migration')).toBe(false);
+  });
+});
+
+describe('SessionEnd worktree GC hook', () => {
+  it('uvoz skripte ne pokrece GC (samo izravan poziv uklanja stabla stroja)', () => {
+    const url = pathToFileURL(resolve('scripts/hooks/session-end-gc.mjs')).href;
+    const res = spawnSync(process.execPath, ['--input-type=module', '-e', `await import(${JSON.stringify(url)})`], {
+      env: { ...process.env, CLAUDE_PROJECT_DIR: process.cwd() },
+      encoding: 'utf8',
+      timeout: 15_000,
+    });
+    expect(res.status).toBe(0);
+    expect(res.stderr).toBe('');
   });
 });

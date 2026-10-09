@@ -27,6 +27,7 @@ export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; co
   { event: 'PreToolUse', matcher: 'mcp__plugin_supabase_supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
   { event: 'PreToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/dash-guard.mjs') },
   { event: 'PreToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/dash-guard.mjs') },
+  { event: 'SessionEnd', command: hookCommand('scripts/hooks/session-end-gc.mjs') },
   { event: 'Stop', command: hookCommand('scripts/hooks/implementer-stop.mjs') },
 ];
 
