@@ -172,10 +172,21 @@ describe('judgeCommand - commit cijelog indeksa i dovrsenje spajanja', () => {
       vidjeno.push(dir);
       return WORKTREE_U_SPAJANJU();
     };
-    judgeCommand('Bash', 'cd /a/b && git commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    // Putanje bez jednoslovnog prvog dijela: na Windowsu se Git Bash `/c/...` namjerno preslikava u `C:\...`.
+    judgeCommand('Bash', 'cd /repo/b && git commit --no-edit', undefined, { cwd: '/session', ispitaj });
     judgeCommand('Bash', 'git commit --no-edit', undefined, { cwd: '/session', ispitaj });
-    judgeCommand('Bash', 'git -C /c/d commit --no-edit', undefined, { cwd: '/session', ispitaj });
-    expect(vidjeno.map((d) => d.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''))).toEqual(['/a/b', '/session', '/c/d']);
+    judgeCommand('Bash', 'git -C /work/d commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    expect(vidjeno.map((d) => d.replace(/\\/g, '/').replace(/^[A-Za-z]:/, ''))).toEqual(['/repo/b', '/session', '/work/d']);
+  });
+
+  it('Git Bash putanja /c/... na Windowsu se ispituje kao C:\\...', () => {
+    const vidjeno: string[] = [];
+    const ispitaj = (dir: string) => {
+      vidjeno.push(dir);
+      return WORKTREE_U_SPAJANJU();
+    };
+    judgeCommand('Bash', 'cd /c/lekta-probe && git commit --no-edit', undefined, { cwd: '/session', ispitaj });
+    expect(vidjeno).toEqual([process.platform === 'win32' ? 'C:\\lekta-probe' : '/c/lekta-probe']);
   });
 
   it('bez podmetnutog stanja presuda ne poziva git i odbija goli commit', () => {
