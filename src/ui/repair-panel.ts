@@ -22,8 +22,8 @@ import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } fro
 import { trackRepairResultOk } from '../analytics/repair-result';
 
 // Jedno mjesto za iste UI poruke i klase: manji pocetni JS graf bez mijenjanja ponasanja.
-const NO_SCORE = NO_SCORE;
-const ROW_CLASS = ROW_CLASS;
+const NO_SCORE = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+const ROW_CLASS = 'lekta-repair-panel__bibliography-row';
 
 export interface TitlePageFormField {
   key: string;
