@@ -435,6 +435,67 @@ describe('tryGrantReferrerReward: uvjeti podobnosti (Codex r2, M2b)', () => {
     expect(admin.poziviDetalji.at(-1)?.operacije).toContainEqual({ metoda: 'update', argumenti: [{ status: 'fraud_blocked' }] });
   });
 
+  // T84 XFF (Codex P1 na #346): hashevi nose oznaku sheme. v2: = cf-connecting-ip, bez prefiksa = stara
+  // x-forwarded-for. Hash iz druge sheme nije dokaz ni poklapanja ni razlicitosti mreze.
+  const V2_A = 'v2:' + 'a'.repeat(64);
+  const V2_B = 'v2:' + 'b'.repeat(64);
+  const LEGACY = 'c'.repeat(64);
+
+  it('novi signup (v2) i stari izvjestaj preporucitelja (legacy): ip_scheme_unverifiable, bez prava i bez izmjene signupa', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: V2_A }, error: null },
+      { data: [{ ip_hash: LEGACY }], error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ip_scheme_unverifiable' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+    expect(admin.poziviDetalji.flatMap((p) => p.operacije).filter((o) => o.metoda === 'update' || o.metoda === 'insert')).toEqual([]);
+    expect(referrerRewardSettlement({ granted: false, reason: 'ip_scheme_unverifiable' })).toEqual({ settled: true, reason: 'ip_scheme_unverifiable' });
+  });
+
+  it('mijesani zapisi preporucitelja (legacy i v2): i dalje zadrzava, cak i kad v2 dio ne poklapa mrezu', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: V2_A }, error: null },
+      { data: [{ ip_hash: V2_B }, { ip_hash: LEGACY }], error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ip_scheme_unverifiable' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+  });
+
+  it('isti v2 hash: ip_match_fraud ostaje (nova shema vs nova shema)', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: V2_A }, error: null },
+      { data: [{ ip_hash: V2_A }, { ip_hash: LEGACY }], error: null },
+      { data: { id: SIGNUP.id }, error: null }, // fraud_blocked
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ip_match_fraud' });
+  });
+
+  it('razliciti v2 hashevi, svi iz nove sheme: nagrada se dodjeljuje kao prije', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: V2_A }, error: null },
+      { data: [{ ip_hash: V2_B }], error: null },
+      { data: null, error: null, count: 0 },
+      { data: { id: SIGNUP.id }, error: null },
+      { data: { id: 'ent-1' }, error: null },
+      { data: null, error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1')).toEqual({ granted: true });
+    expect(nagradnoPravo(admin)).toHaveLength(1);
+  });
+
+  it('stari signup (legacy) i novi izvjestaj preporucitelja (v2): zadrzava, ne pogada', async () => {
+    const admin = sequentialAdmin([
+      { data: { ...SIGNUP, referred_ip_hash: LEGACY }, error: null },
+      { data: [{ ip_hash: V2_A }], error: null },
+    ]);
+    expect(await tryGrantReferrerReward(admin as never, 'buyer-1', 'diplomski', 'pi_1'))
+      .toEqual({ granted: false, reason: 'ip_scheme_unverifiable' });
+    expect(nagradnoPravo(admin)).toHaveLength(0);
+  });
+
   // POZNATI RIZIK (odluka vlasnika 2026-10-03, Codex PR #217 runda 3). IP blokada gleda SAMO
   // report_generations.ip_hash preporucitelja. Preporucitelj koji ima kod, a nikad nije izradio
   // izvjestaj, nema IP povijest, pa drugi stalni racun s iste mreze dobije nagradu. Signal uredjaja

@@ -4,7 +4,10 @@
  * gateway prepisuje klijentski x-forwarded-for, zadnji unos mu je promjenjivi unutarnji cvor). Gard trazi
  * (1) da _shared/hash-ip.ts cita samo cf-connecting-ip, i izvorom i ponasanjem, (2) da nijedan .ts modul
  * Edge funkcija ne navodi naziv IP headera (x-forwarded-for, x-real-ip, cf-connecting-ip, true-client-ip)
- * mimo hash-ip.ts i (3) da svaki poziv hashClientIpSalted dobije req.headers. Baseline je u
+ * mimo hash-ip.ts, (3) da svaki poziv hashClientIpSalted dobije req.headers, (4) da svaki od 10 IP
+ * pozivatelja bude omotan u requireTrustedClientIp (403 prije rukovatelja, dakle prije citanja tijela,
+ * auth poziva, upisa, rezervacije ili nagrade) i da omotac to stvarno cini, i (5) da hash nosi oznaku sheme v2: a nagrada preporucitelju ne
+ * usporeduje hasheve iz razlicitih shema. Baseline je u
  * tests/xff-key.test.ts, mutacije u tests/gate-mutations.test.ts.
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -25,6 +28,8 @@ export const IP_CALLERS = [
   'analytics-event', 'client-error', 'faculty-request', 'generate-report', 'integrity-check',
   'preflight-start', 'profile-rules', 'redeem-referral-signup', 'repair-docx', 'source-check',
 ].map((n) => `supabase/functions/${n}/index.ts`);
+/** Ulazni omotac: nepouzdan IP vraca 403 client_ip_untrusted prije rukovatelja. */
+const ENTRY_WRAP = /Deno\.serve\(requireTrustedClientIp\(async \(req: Request\) => \{/g;
 /** Poziv pomocnika, s prvim argumentom do zareza. */
 const HELPER_CALL = /hashClientIpSalted\(\s*([^,]*?)\s*,/g;
 
@@ -37,6 +42,9 @@ export function xffKeyProblems(hashIpSrc: string, functions: SourceFile[]): stri
   const out: string[] = [];
   const code = stripComments(hashIpSrc);
   if (!/headers\.get\('cf-connecting-ip'\)/.test(code)) out.push('hash-ip: kljuc nije cf-connecting-ip');
+  if (!/IP_HASH_SCHEME_PREFIX = 'v2:'/.test(code) || !/return IP_HASH_SCHEME_PREFIX \+ \(await sha256Hex\(salt \+ ip\)\);/.test(code)) {
+    out.push('hash-ip: hash ne nosi oznaku sheme v2:');
+  }
   const others = (code.match(HEADER_LITERAL) ?? []).filter((l) => !/cf-connecting-ip/i.test(l));
   if (others.length > 0) out.push('hash-ip: cita se i drugi IP header (' + others.join(' ') + ')');
   for (const f of functions) {
@@ -61,8 +69,20 @@ export function xffCallerProblems(functions: SourceFile[]): string[] {
   for (const path of IP_CALLERS) {
     const f = functions.find((x) => x.path === path);
     if (!f) { out.push(`${path}: IP pozivatelj nedostaje`); continue; }
-    if ((stripComments(f.text).match(CANONICAL_BINDING) ?? []).length !== 1) out.push(`${path}: nema kanonske veze ipHash s hashClientIpSalted`);
+    const code = stripComments(f.text);
+    if ((code.match(CANONICAL_BINDING) ?? []).length !== 1) out.push(`${path}: nema kanonske veze ipHash s hashClientIpSalted`);
+    if ((code.match(ENTRY_WRAP) ?? []).length !== 1) out.push(`${path}: Deno.serve nije omotan u requireTrustedClientIp (403 client_ip_untrusted)`);
   }
+  return out;
+}
+
+/** Nagrada preporucitelju ne smije usporedivati hasheve iz razlicitih shema (Codex P1 na #346). */
+export function referrerSchemeProblems(grantSrc: string): string[] {
+  const out: string[] = [];
+  const code = stripComments(grantSrc);
+  if (!/\bipHashScheme\(/.test(code)) out.push('grant-referrer-reward: ne razlikuje sheme ip hasha');
+  if (!/return \{ granted: false, reason: 'ip_scheme_unverifiable' \};/.test(code)) out.push('grant-referrer-reward: mijesane sheme ne zadrzavaju nagradu');
+  if (!/'ip_scheme_unverifiable', 'monthly_cap_reached'\]\)/.test(code)) out.push('grant-referrer-reward: ip_scheme_unverifiable nije trajna odluka');
   return out;
 }
 
@@ -88,6 +108,35 @@ export function xffRealSources(root: string = process.cwd()): { hashIp: string; 
 export function loadClientIpFromHeaders(hashIpSrc: string): (headers: HeaderReader) => string {
   const js = transformSync(hashIpSrc, { loader: 'ts', format: 'esm' }).code.replace(/^export /gm, '');
   return new Function(`${js}\nreturn clientIpFromHeaders;`)() as (headers: HeaderReader) => string;
+}
+
+/** Izvrsi izvor hash-ip.ts i vrati omotac requireTrustedClientIp (za bihevioralni gard ulaza). */
+export function loadRequireTrustedClientIp(hashIpSrc: string): (handler: (req: Request) => Response | Promise<Response>) => (req: Request) => Response | Promise<Response> {
+  const js = transformSync(hashIpSrc, { loader: 'ts', format: 'esm' }).code.replace(/^export /gm, '');
+  return new Function(`${js}\nreturn requireTrustedClientIp;`)() as ReturnType<typeof loadRequireTrustedClientIp>;
+}
+
+/** Omotac mora odbiti nepouzdan IP s 403 BEZ poziva rukovatelja, a pouzdan i OPTIONS propustiti. */
+export function entryWrapperProblems(wrap: ReturnType<typeof loadRequireTrustedClientIp>): string[] {
+  const out: string[] = [];
+  let pozivi = 0;
+  const handler = wrap(() => { pozivi += 1; return new Response('ok'); });
+  const zahtjev = (method: string, headers: Record<string, string>) => new Request('http://lazni/fn', { method, headers });
+  for (const [ime, headers] of [
+    ['bez zaglavlja', {}],
+    ['izmisljen x-forwarded-for', { 'x-forwarded-for': '203.0.113.9' }],
+    ['nevaljan cf-connecting-ip', { 'cf-connecting-ip': 'napadac' }],
+  ] as const) {
+    const odgovor = handler(zahtjev('POST', headers)) as Response;
+    if (odgovor.status !== 403) out.push(`${ime}: status ${odgovor.status}, ocekivan 403`);
+    if (odgovor.headers.get('content-type') !== 'application/json') out.push(`${ime}: odgovor nije JSON`);
+  }
+  if (pozivi !== 0) out.push('rukovatelj je pozvan za nepouzdan IP');
+  const dobar = handler(zahtjev('POST', { 'cf-connecting-ip': '203.0.113.9' }));
+  if ((dobar as Response).status !== 200 || pozivi !== 1) out.push('pouzdan IP ne dolazi do rukovatelja');
+  const preflight = handler(zahtjev('OPTIONS', {}));
+  if ((preflight as Response).status !== 200 || pozivi !== 2) out.push('OPTIONS preflight ne prolazi do rukovatelja');
+  return out;
 }
 
 function fake(values: Record<string, string>): HeaderReader {

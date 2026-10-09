@@ -11,11 +11,15 @@
 // Fraud (salt): usporeduje referral_signups.referred_ip_hash s report_generations.ip_hash. Oba se
 // sada racunaju kroz _shared/hash-ip.ts (ista ekstrakcija + IP_HASH_SALT) u redeem-referral-signup
 // i generate-report, pa se vrijednosti poklapaju i provjera stvarno okida.
+// T84 XFF: hashevi nose oznaku sheme (v2: = cf-connecting-ip, bez prefiksa = stara x-forwarded-for).
+// Hash iz druge sheme se NE smije proglasiti ni jednakim ni razlicitim, pa se nagrada tada zadrzava
+// (`ip_scheme_unverifiable`) umjesto da se pogada.
 //
 // buyerOrderId se biljezi u converted_order_id da refund te kupnje (webhook-mor refund grana)
 // moze povuci nepotrosenu nagradu preporucitelju.
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
+import { ipHashScheme } from './hash-ip.ts';
 
 const MAX_REWARDED_PER_MONTH = 10;
 const REWARD_WINDOW_DAYS = 90;
@@ -38,7 +42,7 @@ const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).
  * povrat ne vidi. NIJE uvjet: da kupac nikad prije nije platio (MONETIZACIJA_V1.md odjeljak 21 i 0013
  * to ne traze); kupac s ranijom kupnjom koji tek kasnije iskoristi kod moze donijeti nagradu.
  */
-const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'monthly_cap_reached']);
+const TRAJNI_RAZLOZI = new Set(['no_pending_referral', 'ineligible_buyer', 'self_referral', 'ip_match_fraud', 'ip_scheme_unverifiable', 'monthly_cap_reached']);
 
 /**
  * Smije li se obveza nagrade zatvoriti. `grant_failed`, `error` i svaki nepoznat oblik rezultata NISU
@@ -107,6 +111,15 @@ export async function tryGrantReferrerReward(
       if (fraudUpdateError) return { granted: false, reason: 'error' };
       if (!blocked) return { granted: false, reason: 'no_pending_referral' };
       return { granted: false, reason: 'ip_match_fraud' };
+    }
+    // T84 XFF: preporuciteljevi izvjestaji iz DRUGE sheme hashiranja od signupa ne mogu potvrditi ni
+    // opovrgnuti poklapanje mreze. Ne proglasavamo fraud i ne dodjeljujemo nagradu: signup ostaje u
+    // stanju friend_rewarded, bez izmjene, a ishod se biljezi kao trajna odluka s razlogom.
+    if (signup.referred_ip_hash) {
+      const signupScheme = ipHashScheme(signup.referred_ip_hash);
+      if ([...referrerIpHashes].some((h) => ipHashScheme(h) !== signupScheme)) {
+        return { granted: false, reason: 'ip_scheme_unverifiable' };
+      }
     }
 
     // Mjesecni strop nagradenih po preporucitelju.

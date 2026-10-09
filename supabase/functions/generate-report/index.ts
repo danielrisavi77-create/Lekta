@@ -19,7 +19,7 @@ import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { friendRewardCaller, tryGrantFriendReferralReward } from '../_shared/grant-friend-referral-reward.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -42,7 +42,8 @@ async function sha256Hex(input: string): Promise<string> {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
  const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
  const json = (body: unknown, status = 200): Response =>
    new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -194,4 +195,4 @@ Deno.serve(async (req: Request) => {
   console.error('[generate-report]', e); // Supabase Edge Function logovi = error tracking (P0 8-1)
   return json({ error: 'internal' }, 500);
  }
-});
+}));

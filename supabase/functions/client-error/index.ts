@@ -23,7 +23,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import { readTextBounded } from '../_shared/read-body.ts';
 import { buildErrorReport, makeIncidentId, INCIDENT_ID_RE } from '../../../src/report/error-redaction.ts';
 
@@ -51,7 +51,8 @@ function browserFamily(ua: string | null): string {
   return 'ostalo';
 }
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -104,4 +105,4 @@ Deno.serve(async (req: Request) => {
     console.error('[client-error]', e);
     return json({ error: 'internal' }, 500);
   }
-});
+}));

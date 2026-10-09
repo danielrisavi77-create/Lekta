@@ -296,7 +296,7 @@ import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
-import { loadClientIpFromHeaders, xffBehaviourProblems, xffCallerProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
+import { entryWrapperProblems, loadClientIpFromHeaders, loadRequireTrustedClientIp, referrerSchemeProblems, xffBehaviourProblems, xffCallerProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -5148,6 +5148,58 @@ const MUTATIONS: Mutation[] = [
       return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: IP se cita mimo hash-ip.ts (trag headera ili adrese veze)');
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-ulazni-omotac-uklonjen',
+    imitates: 'T84 XFF: generate-report izgubi ulazni omotac nepouzdanog IP-a, pa nevaljan cf-connecting-ip tek kasnije baci iznimku, nakon sto je nagrada ili upis vec promijenio stanje (Codex P1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const mutated = functions.map((f) => (f.path.endsWith('generate-report/index.ts') ? { ...f, text: f.text.replace('Deno.serve(requireTrustedClientIp(async (req: Request) => {', 'Deno.serve(async (req: Request) => {') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).includes('supabase/functions/generate-report/index.ts: Deno.serve nije omotan u requireTrustedClientIp (403 client_ip_untrusted)');
+    },
+    cleanBefore: () => xffCallerProblems(xffRealSources().functions).length === 0,
+  },
+  {
+    id: 't84/xff-omotac-ne-odbija',
+    imitates: 'T84 XFF: requireTrustedClientIp prosljeduje svaki zahtjev rukovatelju, pa nepouzdan IP prolazi do upisa i nagrade (Codex P1 na #346).',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("if (req.method !== 'OPTIONS' && !hasTrustedClientIp(req.headers)) {", 'if (false) {');
+      return mut !== hashIp && (entryWrapperProblems(loadRequireTrustedClientIp(mut))).length > 0;
+    },
+    cleanBefore: () => (entryWrapperProblems(loadRequireTrustedClientIp(xffRealSources().hashIp))).length === 0,
+  },
+  {
+    id: 't84/xff-omotac-blokira-preflight',
+    imitates: 'T84 XFF: omotac odbija i OPTIONS preflight, pa CORS preflight pada prije rukovatelja i preglednik ne moze pozvati funkciju.',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("req.method !== 'OPTIONS' && !hasTrustedClientIp", '!hasTrustedClientIp');
+      return mut !== hashIp && (entryWrapperProblems(loadRequireTrustedClientIp(mut))).some((p) => p.includes('OPTIONS'));
+    },
+    cleanBefore: () => (entryWrapperProblems(loadRequireTrustedClientIp(xffRealSources().hashIp))).length === 0,
+  },
+  {
+    id: 't84/xff-hash-bez-oznake-sheme',
+    imitates: 'T84 XFF: hashClientIp vrati goli hash bez oznake sheme v2:, pa se novi i stari zapisi vise ne razlikuju i mijesaju u usporedbi nagrade (Codex P1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace('return IP_HASH_SCHEME_PREFIX + (await sha256Hex(salt + ip));', 'return sha256Hex(salt + ip);');
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: hash ne nosi oznaku sheme v2:');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-nagrada-mijesa-sheme',
+    imitates: 'T84 XFF: grant-referrer-reward uklanja provjeru sheme, pa se hashevi iz razlicitih shema tretiraju kao razliciti i nagrada prolazi uz neusporedivu mrezu (Codex P1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const grant = functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!;
+      const mut = grant.text.replace("return { granted: false, reason: 'ip_scheme_unverifiable' };", 'void 0;');
+      return mut !== grant.text && referrerSchemeProblems(mut).includes('grant-referrer-reward: mijesane sheme ne zadrzavaju nagradu');
+    },
+    cleanBefore: () => referrerSchemeProblems(xffRealSources().functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!.text).length === 0,
   },
   ...([
     ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',

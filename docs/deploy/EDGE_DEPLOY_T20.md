@@ -60,6 +60,21 @@ kodom, dva poziva s istog stroja i razlicitim izmisljenim `X-Forwarded-For` i `x
 `ip_hash`, a poziv s druge mreze (mobilni hotspot) daje RAZLICIT. Ako drugi uvjet padne: STANI, ne
 deployati na produkciju.
 
+**Prijelaz s x-forwarded-for na cf-connecting-ip (T84 XFF, Codex P1 na #346).**
+
+- Svih 10 IP funkcija ima `Deno.serve(requireTrustedClientIp(...))`: nepouzdan ili nedostajuci `cf-connecting-ip` dobiva
+  `403 client_ip_untrusted` prije rukovatelja, dakle prije citanja tijela, auth poziva, rezervacije slota, upisa ili
+  nagrade (OPTIONS prolazi). Odgovor nema CORS zaglavlja. Gard `tests/helpers/xff-key-guard.ts` trazi omotac u svakoj
+  funkciji i izvrsava omotac iz izvora `hash-ip.ts`.
+- Novi hashevi nose oznaku sheme `v2:`; stari (bez prefiksa) su `legacy`. `ip_hash` je `text`, migracija nije potrebna.
+- `tryGrantReferrerReward` ne usporeduje hasheve razlicitih shema. Ako preporuciteljevi izvjestaji sadrze hash druge
+  sheme od signupa, nagrada se ZADRZAVA (`ip_scheme_unverifiable`, trajna odluka u outboxu, signup ostaje
+  `friend_rewarded`, bez `fraud_blocked`). Izmjereno 2026-10-09: produkcija ima 0 `referral_signups` i 32
+  `report_generations.ip_hash` (17 korisnika, 2026-07-20 do 2026-08-04, ni jedan mladi od 30 dana); staging 1.
+  Utjecaj: preporucitelji s takvim starim izvjestajem ne dobivaju automatsku nagradu dok vlasnik ne odluci o retenciji.
+- Staging provjera prije produkcije: poziv na zasticenom ulazu daje 200 uz valjan `cf-connecting-ip`, a klijentski
+  `CF-Connecting-IP` Cloudflare odbija (403, izmjereno 2026-10-09 na `health`).
+
 ### Val 2: ostale deployane funkcije bez T84 promjena
 
 `admin-stats`, `cleanup-orphan-repairs`, `create-checkout`, `delete-repair-job`,

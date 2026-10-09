@@ -36,7 +36,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import type { ProfileRulesServerArtifact, ProfileRulesResponseV1 } from '../../../src/profiles/profile-rules-contract.ts';
 import artifactRaw from '../../../data/generated/profile-rules-server.json' with { type: 'json' };
 
@@ -62,7 +62,8 @@ const IP_DAILY_CAP = Number(Deno.env.get('PROFILE_RULES_IP_DAILY_CAP') ?? '150')
 // profileId format iz registra (kebab, npr. fpzg-politologija-diplomski).
 const PROFILE_ID_RE = /^[a-z0-9][a-z0-9-]{0,79}$/;
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS, 'GET, OPTIONS');
   const json = (body: unknown, status = 200, extra: Record<string, string> = {}): Response =>
     new Response(JSON.stringify(body), {
@@ -131,4 +132,4 @@ Deno.serve(async (req: Request) => {
     console.error('[profile-rules]', e);
     return json({ error: 'internal' }, 500);
   }
-});
+}));

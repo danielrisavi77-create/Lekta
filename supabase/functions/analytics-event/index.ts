@@ -10,7 +10,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import { sanitizeAnalyticsEventData } from '../../../src/analytics/event-sanitizer.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
@@ -27,7 +27,8 @@ const MAX_BODY = 4 * 1024;
 const EVENT_RE = /^[a-z][a-z0-9_]{0,59}$/;
 
 // Isti sanitizer koristi i browser: jedna allowlista, bez drifta klijent/server.
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -75,4 +76,4 @@ Deno.serve(async (req: Request) => {
     console.error('[analytics-event]', e);
     return json({ ok: true, stored: false, reason: 'unhandled' }, 202);
   }
-});
+}));

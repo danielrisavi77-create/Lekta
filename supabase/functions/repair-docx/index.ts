@@ -29,7 +29,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import { readFormDataBounded, metaWithinBudget } from '../_shared/read-body.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
@@ -223,7 +223,8 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
   return { jobId, localRepairReady };
 }
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -803,4 +804,4 @@ Deno.serve(async (req: Request) => {
       releaseGate?.();
     }
   }
-});
+}));

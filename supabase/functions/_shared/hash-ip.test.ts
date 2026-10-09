@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   clientIpFromHeaders,
+  hasTrustedClientIp,
+  ipHashScheme,
   deriveIpSalt,
   hashClientIp,
   hashClientIpSalted,
@@ -66,7 +68,7 @@ describe('hashClientIpSalted', () => {
   it('s praznim IP_HASH_SALT hash je SOLJEN (razlicit od nesoljenog)', async () => {
     const salted = await hashClientIpSalted(FWD, '', KEY);
     const unsalted = await hashClientIp(FWD, ''); // stari, ranjivi put
-    expect(salted).toMatch(HEX64);
+    expect(salted).toMatch(/^v2:[0-9a-f]{64}$/);
     expect(salted).not.toBe(unsalted);
   });
 
@@ -87,4 +89,22 @@ describe('hashClientIpSalted', () => {
       .rejects.toThrow('UNTRUSTED_CLIENT_IP');
   });
 
+});
+
+describe('hasTrustedClientIp i oznaka sheme (T84 XFF, Codex P1 na #346)', () => {
+  it('pouzdan je samo valjan cf-connecting-ip; sve ostalo je nepouzdano bez iznimke', () => {
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '203.0.113.7' }))).toBe(true);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '2001:db8::1' }))).toBe(true);
+    expect(hasTrustedClientIp(h({}))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'x-forwarded-for': '203.0.113.7' }))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': 'napadac' }))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '999.1.1.1' }))).toBe(false);
+  });
+
+  it('novi hash nosi oznaku v2:, stari (bez prefiksa) je legacy', async () => {
+    const novi = await hashClientIpSalted(FWD, '', KEY);
+    expect(ipHashScheme(novi)).toBe('v2');
+    expect(ipHashScheme('a'.repeat(64))).toBe('legacy');
+    expect(ipHashScheme('h-ista-mreza')).toBe('legacy');
+  });
 });
