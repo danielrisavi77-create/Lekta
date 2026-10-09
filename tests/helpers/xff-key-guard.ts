@@ -94,15 +94,21 @@ function fake(values: Record<string, string>): HeaderReader {
   return { get: (name) => values[name.toLowerCase()] ?? null };
 }
 
-/** Bihevioralni ugovor kljuca: odlucuje samo cf-connecting-ip, ostali IP headeri se ne citaju. */
+/** Behavorial contract: only verified Cloudflare client IPs; missing/malformed must fail closed. */
 export function xffBehaviourProblems(clientIpFromHeaders: (headers: HeaderReader) => string): string[] {
   const out: string[] = [];
   const cf = '203.0.113.50';
   const spoofed = { 'x-forwarded-for': '198.51.100.1, 10.9.9.9', 'x-real-ip': '198.51.100.2', 'true-client-ip': '198.51.100.3' };
+  const rejects = (input: HeaderReader): boolean => {
+    try { clientIpFromHeaders(input); return false; }
+    catch (error) { return error instanceof Error && error.message === 'UNTRUSTED_CLIENT_IP'; }
+  };
   if (clientIpFromHeaders(fake({ ...spoofed, 'cf-connecting-ip': cf })) !== cf) out.push('uz izmisljene headere kljuc nije cf-connecting-ip');
-  if (clientIpFromHeaders(fake({ 'cf-connecting-ip': ` ${cf} ` })) !== cf) out.push('razmaci oko cf-connecting-ip se ne skidaju');
-  if (clientIpFromHeaders(fake(spoofed)) !== 'unknown') out.push('bez cf-connecting-ip kljuc nije unknown (cita se drugi header)');
-  if (clientIpFromHeaders(fake({ 'cf-connecting-ip': '   ' })) !== 'unknown') out.push('prazan cf-connecting-ip nije unknown');
-  if (clientIpFromHeaders(fake({ 'cf-connecting-ip': 'a'.repeat(65) })) !== 'unknown') out.push('predugacak cf-connecting-ip nije unknown');
+  if (clientIpFromHeaders(fake({ 'cf-connecting-ip': ' ' + cf + ' ' })) !== cf) out.push('razmaci oko cf-connecting-ip se ne skidaju');
+  if (!rejects(fake(spoofed))) out.push('bez cf-connecting-ip nije fail-closed');
+  if (!rejects(fake({ 'cf-connecting-ip': '   ' }))) out.push('prazan cf-connecting-ip nije fail-closed');
+  if (!rejects(fake({ 'cf-connecting-ip': 'a'.repeat(65) }))) out.push('predugacak cf-connecting-ip nije fail-closed');
+  if (!rejects(fake({ 'cf-connecting-ip': 'attacker-value' }))) out.push('proizvoljan string ne smije biti IP kljuc');
+  if (!rejects(fake({ 'cf-connecting-ip': '999.999.9.9' }))) out.push('nevaljani IPv4 ne smije biti IP kljuc');
   return out;
 }
