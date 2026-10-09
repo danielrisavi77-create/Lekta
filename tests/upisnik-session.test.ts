@@ -64,4 +64,30 @@ describe('javna Upisnik sesija', () => {
     await read('index'); await read('index'); await read('index');
     expect(new Headers(seen[2].headers).get('cookie')).toBeNull();
   });
+
+  it('redaktira URL-rewritten jsessionid i upitne tokene iz izvjestaja, ali prati puni redirect tijekom dohvata', async () => {
+    const fetched: string[] = [];
+    const read = createUpisnikSession(async (url) => {
+      fetched.push(String(url));
+      if (fetched.length === 1) {
+        return new Response('', { status: 302, headers: { location: '/usp/index;jsessionid=secret-path?access_token=secret-query#secret-fragment' } });
+      }
+      return new Response('<html>public</html>');
+    });
+    const report = await read('index');
+    expect(fetched[1]).toContain('jsessionid=secret-path');
+    expect(fetched[1]).toContain('access_token=secret-query');
+    expect(report.url).toBe('https://hko.srce.hr/usp/index');
+    expect(JSON.stringify(report)).not.toContain('secret-');
+  });
+
+  it('ne iznosi query token ni neocekivani path segment u auditu', async () => {
+    const read = createUpisnikSession(async () => new Response('<html>public</html>'));
+    const query = await read('pretrazivanje?session=secret-query');
+    expect(query.url).toBe('https://hko.srce.hr/usp/pretrazivanje');
+    const unknown = await read('private/secret-path');
+    expect(unknown.url).toBe('https://hko.srce.hr/usp/');
+    expect(JSON.stringify(unknown)).not.toContain('secret-path');
+  });
+
 });
