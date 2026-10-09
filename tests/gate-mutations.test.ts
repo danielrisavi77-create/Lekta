@@ -295,7 +295,7 @@ import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
-import { loadClientIpFromHeaders, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
+import { loadClientIpFromHeaders, xffBehaviourProblems, xffCallerProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -5114,6 +5114,37 @@ const MUTATIONS: Mutation[] = [
       const mutated = functions.map((f) => (f.path.endsWith('source-check/index.ts') ? { ...f, text: f.text.replace(from, 'hashClientIpSalted(new Headers(), IP_HASH_SALT, SERVICE_ROLE)') } : f));
       const changed = mutated.some((f, i) => f.text !== functions[i].text);
       return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/source-check/index.ts: hashClientIpSalted ne dobiva req.headers (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-pozivatelj-zamijenjen-klijentskim-hashem',
+    imitates: 'T84 XFF: source-check umjesto pomocnika uzima ipHash iz tijela zahtjeva, pa klijent bira kljuc IP limita (Codex XFF-1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mutated = functions.map((f) => (f.path.endsWith('source-check/index.ts') ? { ...f, text: f.text.replace(/const ipHash = await hashClientIpSalted\([^;]*;/, 'const ipHash = String(body.ipHash);') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).length > 0 && xffKeyProblems(hashIp, mutated).length > 0;
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffCallerProblems(functions).length === 0 && xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-pozivatelj-uklonjen',
+    imitates: 'T84 XFF: jedan od deset IP pozivatelja se ukloni iz funkcije, a globalni prag broja poziva i dalje prolazi (Codex XFF-1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const mutated = functions.filter((f) => !f.path.endsWith('analytics-event/index.ts'));
+      return mutated.length < functions.length && xffCallerProblems(mutated).includes('supabase/functions/analytics-event/index.ts: IP pozivatelj nedostaje');
+    },
+    cleanBefore: () => xffCallerProblems(xffRealSources().functions).length === 0,
+  },
+  {
+    id: 't84/xff-sastavljen-naziv-headera',
+    imitates: 'T84 XFF: naziv headera se sastavi konkatenacijom pa ga doslovni skener ne vidi (Codex XFF-1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: "const h = 'x-forwarded-' + 'for';\nexport const ip = (req: Request) => req.headers.get(h);\n" };
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: IP se cita mimo hash-ip.ts (trag headera ili adrese veze)');
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
   },

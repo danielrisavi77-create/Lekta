@@ -16,6 +16,15 @@ export interface HeaderReader { get(name: string): string | null }
 
 /** Svaki doslovni naziv IP headera, bez obzira na velika slova i vrstu navodnika (Codex XFF-3 na #295). */
 const HEADER_LITERAL = /(['"`])(?:x-forwarded-for|x-real-ip|cf-connecting-ip|true-client-ip|forwarded)\1/gi;
+/** Zabranjeni tragovi citanja IP-a u funkcijama, i kad je naziv sastavljen (Codex XFF-1 na #346). */
+const IP_SOURCE_TRACE = /forwarded|x-real-ip|real-ip|cf-connecting|connecting-ip|true-client|remoteaddr|conninfo/i;
+/** Jedina dopustena veza `ipHash` s pomocnikom. */
+const CANONICAL_BINDING = /\bconst ipHash = await hashClientIpSalted\(req\.headers, IP_HASH_SALT, SERVICE_ROLE(?:_KEY)?\);/g;
+/** Funkcije koje limitiraju ili usporeduju po IP-u. Ispad ili zamjena pozivatelja mora pasti na gardu. */
+export const IP_CALLERS = [
+  'analytics-event', 'client-error', 'faculty-request', 'generate-report', 'integrity-check',
+  'preflight-start', 'profile-rules', 'redeem-referral-signup', 'repair-docx', 'source-check',
+].map((n) => `supabase/functions/${n}/index.ts`);
 /** Poziv pomocnika, s prvim argumentom do zareza. */
 const HELPER_CALL = /hashClientIpSalted\(\s*([^,]*?)\s*,/g;
 
@@ -33,8 +42,26 @@ export function xffKeyProblems(hashIpSrc: string, functions: SourceFile[]): stri
   for (const f of functions) {
     const literals = (stripComments(f.text).match(HEADER_LITERAL) ?? []).length;
     if (literals > 0) out.push(`${f.path}: IP header se cita mimo hash-ip.ts (${literals}x)`);
+    const code = stripComments(f.text);
+    if (IP_SOURCE_TRACE.test(code)) out.push(`${f.path}: IP se cita mimo hash-ip.ts (trag headera ili adrese veze)`);
+    if (/\bipHash\b/.test(code)) {
+      const bindings = (code.match(CANONICAL_BINDING) ?? []).length;
+      const assigns = (code.match(/\bipHash\s*=(?!=)/g) ?? []).length;
+      if (bindings !== 1 || assigns !== 1) out.push(`${f.path}: ipHash ne dolazi iskljucivo iz hashClientIpSalted(req.headers, ...) (${bindings} kanonskih, ${assigns} dodjela)`);
+    }
     const badCalls = [...stripComments(f.text).matchAll(HELPER_CALL)].filter((m) => m[1] !== 'req.headers').length;
     if (badCalls > 0) out.push(`${f.path}: hashClientIpSalted ne dobiva req.headers (${badCalls}x)`);
+  }
+  return out;
+}
+
+/** Svaki poznati IP pozivatelj postoji i jedini mu je ipHash kanonska veza s pomocnikom (Codex XFF-1 na #346). */
+export function xffCallerProblems(functions: SourceFile[]): string[] {
+  const out: string[] = [];
+  for (const path of IP_CALLERS) {
+    const f = functions.find((x) => x.path === path);
+    if (!f) { out.push(`${path}: IP pozivatelj nedostaje`); continue; }
+    if ((stripComments(f.text).match(CANONICAL_BINDING) ?? []).length !== 1) out.push(`${path}: nema kanonske veze ipHash s hashClientIpSalted`);
   }
   return out;
 }
