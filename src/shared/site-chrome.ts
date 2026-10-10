@@ -49,6 +49,28 @@ export const SITE_CHROME_DESTINATIONS: ReadonlyArray<{ readonly id: string; read
 export const SITE_CHROME_SCROLL_THRESHOLD = 40;
 
 /**
+ * PRAG POVRATKA U DEBELO STANJE JE NIZI OD PRAGA ULASKA (histereza), jer jedan prag tjera traku u
+ * petlju. Traka je `sticky`, dakle u toku stranice: promjena njezine visine pomakne sav sadrzaj
+ * ispod nje, preglednik (sidrenje skrola) to nadoknadi pomakom `scrollY`, a taj pomak prijede
+ * natrag preko istog praga. Traka se tada prebacuje SVAKI kadar dok god nitko ne skrola.
+ *
+ * IZMJERENO 2026-10-10 (Chromium, `/rad/` nakon uploada, 1,5 s bez ikakvog unosa): `scrollTo(41)`
+ * dao je 92 promjene klase i `scrollY` koji skace 27 <-> 41; `scrollTo(45)` 31 <-> 48. Najveci
+ * skok je 17 px. Ista petlja je u WebKitu rusila `browser-matrix`: gumb ispod trake nikad nije
+ * bio "stable" (`desktop-flow`, klik na kokpit i na `#previewModeFaksimil`), ili je `mousedown`
+ * pao na gumb a `mouseup` pokraj njega pa klik nije nastao (`#profileSheet` ostaje `hidden`).
+ *
+ * Razmak 40 - 12 = 28 px veci je od najveceg izmjerenog skoka, pa pomak koji sama traka izazove ne
+ * moze prijeci natrag preko drugog praga.
+ */
+export const SITE_CHROME_SCROLL_EXIT = 12;
+
+/** Tanko stanje iz polozaja skrola i trenutnog stanja; vidi `SITE_CHROME_SCROLL_EXIT`. */
+export function siteChromeScrolled(scrollY: number, sada: boolean): boolean {
+  return sada ? scrollY > SITE_CHROME_SCROLL_EXIT : scrollY > SITE_CHROME_SCROLL_THRESHOLD;
+}
+
+/**
  * KORACI EKRANA `/rad/` (Z8, od Z15 zive u TRAKI, ne u kokpitu).
  *
  * Do Z15 ih je crtao `results-cockpit.ts`, pa su na `/rad/` stajali ISPOD ljepljive trake i bili
@@ -504,7 +526,8 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
       markActiveDestination(chrome, aktivno);
     }, { signal });
     const onScroll = (): void => {
-      chrome.classList.toggle('site-chrome--scrolled', view.scrollY > SITE_CHROME_SCROLL_THRESHOLD);
+      const sada = chrome.classList.contains('site-chrome--scrolled');
+      chrome.classList.toggle('site-chrome--scrolled', siteChromeScrolled(view.scrollY, sada));
     };
     onScroll();
     view.addEventListener('scroll', onScroll, { passive: true, signal });
