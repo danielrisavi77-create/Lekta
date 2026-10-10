@@ -18,7 +18,7 @@ import { estimateWorkType, workTypeMismatchLevel, TIER_RANK } from '../report/wo
 import { fetchRetailCatalog } from '../catalog/products-catalog';
 import { KIND_LABELS_HR, KIND_DOCUMENT_WIDE } from '../tools/typo-lint';
 import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
-import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr';
+import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr-labels';
 import { slotProductForWorkType } from '../report/rulebook';
 import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, PROFILE_STATUS, PROFILE_AUTHORITY, ensureProfileRules, setProfileRulesProvider, profileRulesLoaded, profileRulesFailed } from '../profiles/profile-registry';
 import { ensureRulesForCurrentSelection } from '../profiles/ensure-current-rules';
