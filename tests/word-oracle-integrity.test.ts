@@ -54,6 +54,51 @@ describe('Word oracle: integrityFailure u izvjestaju repair.mts', () => {
     expect(parsed.izgubljeniDijelovi).toEqual([]);
     expect(parsed.bitIdenticnih).toBe(entries.length);
   });
+
+  // Od #325 privatni metapodaci po zadanom ostaju, pa check-worst-case.ps1 ciscenje dc:creator
+  // ocekuje samo kad ga zahtjev stvarno trazi. Polje mora razlikovati oba smjera.
+  it('trazenoUklanjanjeMeta nosi samo stvarno trazena polja jezgre', async () => {
+    const bytes = new Uint8Array(readFileSync(resolve(process.cwd(), FIXTURE)));
+    const entries = await readZip(bytes);
+    const result = { docxBytes: bytes, changelog: [], skipped: [], skippedReasons: {}, integrityFailure: null };
+    const inspektor = (metadata: unknown[]) => ({
+      ruleId: 'final-document-inspector-assisted',
+      fixerId: 'final-document-inspector-fixer',
+      params: { version: 1, revisions: [], comments: [], metadata, hiddenText: [] },
+    });
+    const izvjestaj = (assisted: Parameters<typeof buildRepairReport>[0]['assisted']) =>
+      JSON.parse(JSON.stringify(buildRepairReport({ inPath: FIXTURE, before: entries, after: entries, assisted, result }))) as Record<string, unknown>;
+
+    expect(izvjestaj([]).trazenoUklanjanjeMeta).toEqual([]);
+    expect(izvjestaj([inspektor([])]).trazenoUklanjanjeMeta).toEqual([]);
+    expect(izvjestaj([inspektor([
+      { part: 'core', field: 'creator', fingerprint: 'x', action: 'remove', confirmed: true },
+      { part: 'app', field: 'company', fingerprint: 'y', action: 'remove', confirmed: true },
+    ])]).trazenoUklanjanjeMeta).toEqual(['creator']);
+  });
+
+  it('zadani prolaz oraclea ne trazi uklanjanje privatnih metapodataka', async () => {
+    const bytes = new Uint8Array(readFileSync(resolve(process.cwd(), FIXTURE)));
+    const { report } = await runOracleRepair(bytes, FIXTURE);
+    const parsed = JSON.parse(JSON.stringify(report)) as Record<string, unknown>;
+    expect(parsed.trazenoUklanjanjeMeta).toEqual([]);
+  }, 60000);
+});
+
+describe('Word oracle: check-worst-case.ps1 veze ciscenje autora uz stvarni zahtjev', () => {
+  const text = readFileSync(resolve(process.cwd(), 'scripts/word-verify/check-worst-case.ps1'), 'utf8').replace(/\r/g, '');
+
+  it('uvjet cita trazenoUklanjanjeMeta, a polje koje nedostaje je PAD', () => {
+    expect(text).toContain("Test-TrazenoCiscenjeAutora $inspektor $res.trazenoUklanjanjeMeta");
+    expect(text).toContain("'NEUSPJEH: repair.mts nije javio trazenoUklanjanjeMeta.'");
+  });
+
+  it('negativna kontrola je ziva i broji se kao pad', () => {
+    const blok = /\$kontrolaTrazi = [\s\S]*?\n\}\n/.exec(text)?.[0] ?? '';
+    expect(blok).toContain("Test-TrazenoCiscenjeAutora $true @('creator')");
+    expect(blok).toContain("Test-Ocekivanje 'Autor' 'Autor' '-'");
+    expect(blok).toContain('$script:fail++');
+  });
 });
 
 describe('Word oracle: PowerShell skripte tvrde integrityFailure === null', () => {
