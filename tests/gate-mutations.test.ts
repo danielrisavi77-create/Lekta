@@ -41,6 +41,7 @@ import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSyn
 import { tmpdir } from 'node:os';
 import esbuild from 'esbuild';
 import { basename, dirname, join, resolve } from 'node:path';
+import { taskPriorityProblems } from './helpers/scheduled-task-priority';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
@@ -226,7 +227,7 @@ import {
   findSelfHostedProblems,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
-import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
+import { executePlan, measureDir, planCleanup, VITEST_SUBDIRS } from '../scripts/clean-vitest-tmp.mjs';
 import {
   LICENCE, SVI_ULAZI, listoviSWebfontom, preloadObrasci, problemiFontova, problemiGlasovaUlaza,
   problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada, problemiRuta,
@@ -7897,6 +7898,32 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'clean-tmp/vitest4-client-oblik',
+    imitates: 'cistac zna samo Vitest 2 podmape web/ssr: nakon nadogradnje na Vitest 4 (client/ssr) odbija svaku novu '
+      + 'kes mapu kao "nije Vitest oblik", vraca "greske: nema" i disk pada ispod praga gatea (4. 10.: 9 mapa, 909 MB)',
+    caught: () => {
+      // Mutant: skup podmapa kakav je bio prije popravka. Vraca se u finally da ne zagadi druge testove.
+      VITEST_SUBDIRS.delete('client');
+      try {
+        const staro = cleanTmpRun(cleanTmpVitest4Fs(), CT_QUIET);
+        return staro.rmCalls.length === 0 && staro.plan.refused.some((r) => r.path === CT_NANO);
+      } finally {
+        VITEST_SUBDIRS.add('client');
+      }
+    },
+    cleanBefore: () => {
+      const fs = cleanTmpVitest4Fs();
+      // Generator dokazuje klasu ulaza: tocno podmape client i ssr, bez web.
+      const podmape = fs.readdir(CT_NANO).map((e) => e.name).sort();
+      if (podmape.join(',') !== 'client,ssr') return false;
+      const run = cleanTmpRun(fs, CT_QUIET);
+      // Ziv vitest i dalje cuva mapu i u novom obliku.
+      const zivi = cleanTmpRun(cleanTmpVitest4Fs(), CT_LIVE_VITEST);
+      return run.rmCalls.length === 1 && run.rmCalls[0] === CT_NANO && run.plan.refused.length === 0
+        && zivi.rmCalls.length === 0;
+    },
+  },
+  {
     id: 'clean-tmp/starost-po-mtime-mape',
     imitates: 'zamka 26. 9.: starost <nanoid> mape racunata po mtime korijena mape, koji se ne osvjezava '
       + 'dok Vitest pise u postojece podmape, pa je ciscenje obrisalo mapu zivog gatea (466 umjesto 613 test datoteka)',
@@ -8506,6 +8533,19 @@ function cleanTmpOldFs(): CleanTmpFs {
     [CT_NANO]: { dir: true, mtimeMs: t },
     [join(CT_NANO, 'web')]: { dir: true, mtimeMs: t },
     [join(CT_NANO, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+  });
+}
+
+/** Stara mapa u obliku Vitesta 4: podmape `client` i `ssr` (environment.name), sve 9 h staro. */
+function cleanTmpVitest4Fs(): CleanTmpFs {
+  const t = CT_NOW - 9 * CT_HOUR;
+  return cleanTmpVirtualFs({
+    [CT_ROOT]: { dir: true, mtimeMs: t },
+    [CT_NANO]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'client')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'client', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+    [join(CT_NANO, 'ssr')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'ssr', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
   });
 }
 
@@ -10582,6 +10622,73 @@ describe('mutacije: petlja ucenja, skupljac broji kvar jednom i samo is_error', 
     const mutant = fnBlok.replace("if (b?.type !== 'tool_result' || b.is_error !== true) continue;", "if (b?.type !== 'tool_result') continue;");
     expect(mutant).not.toBe(fnBlok);
     expect(cisto(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: brojac rasipnih poziva konteksta broji tocan broj u sintetickom transkriptu', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/quality/context-waste.mjs'), 'utf8').replace(/\r/g, '');
+  const start = src.indexOf('export function classifyWaste(');
+  const fnBlok = src.slice(start, src.indexOf('\n}\n', start) + 3);
+  type Klas = (tool: string, input: Record<string, unknown>, redaka: number) => null | { vrsta: string; oznaka: string };
+  const izvedi = (fn: string): Klas => new Function(`${fn.replace('export ', '')}\nreturn classifyWaste;`)() as Klas;
+  // Sinteticki skup poziva: 5 rasipnih (po jedan svake vrste) i 5 kontrola tik ispod praga ili s rezom.
+  const POZIVI: Array<[string, Record<string, unknown>, number]> = [
+    ['Read', { file_path: 'a/velika.ts' }, 201],
+    ['Bash', { command: 'gh pr view 7 --json body' }, 41],
+    ['Bash', { command: 'git log --stat' }, 41],
+    ['Agent', { subagent_type: 'codex:codex-rescue' }, 61],
+    ['SendMessage', { message: 'x' }, 6],
+    ['Read', { file_path: 'a/mala.ts' }, 200],
+    ['Read', { file_path: 'a/rezana.ts', limit: 100 }, 900],
+    ['Bash', { command: 'gh pr view 7 --json body --jq .body' }, 900],
+    ['Bash', { command: 'git log -n 500 --stat' }, 900],
+    ['SendMessage', { message: 'x' }, 5],
+  ];
+  const broj = (k: Klas) => POZIVI.filter(([t, i, r]) => k(t, i, r) !== null).length;
+
+  it('baseline: stvarni classifyWaste nalazi tocno 5 od 10', () => {
+    expect(fnBlok.length).toBeGreaterThan(200);
+    expect(broj(izvedi(fnBlok))).toBe(5);
+  });
+
+  it('mutant koji ne gleda limit kod Read broji i rezano citanje', () => {
+    const mutant = fnBlok.replace('if (input?.limit != null || redaka <= 200) return null;', 'if (redaka <= 200) return null;');
+    expect(mutant).not.toBe(fnBlok);
+    expect(broj(izvedi(mutant))).toBe(6);
+  });
+
+  it('mutant koji ne priznaje --jq broji filtrirani gh view', () => {
+    const mutant = fnBlok.replace('/--jq\\b|\\s-q\\s|--log-failed\\b/.test(c)', 'false');
+    expect(mutant).not.toBe(fnBlok);
+    expect(broj(izvedi(mutant))).toBe(6);
+  });
+
+  it('mutant s pragom poruke 6 propusta poruku od 6 redaka', () => {
+    const mutant = fnBlok.replace('return redaka > 5 ?', 'return redaka > 6 ?');
+    expect(mutant).not.toBe(fnBlok);
+    expect(broj(izvedi(mutant))).toBe(4);
+  });
+});
+
+describe('mutacije: dnevni izvjestaj potrosnje se registrira s normalnim I/O prioritetom', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/agents/register-usage-daily-task.ps1'), 'utf8').replace(/\r/g, '');
+
+  it('baseline: stvarna skripta postavlja -Priority unutar 4 do 6', () => {
+    expect(taskPriorityProblems(src)).toEqual([]);
+  });
+
+  it('mutant bez -Priority (zadano 7, zadatak visi na I/O) se hvata', () => {
+    const mutant = src.replace(/ -Priority 5\b/, '');
+    expect(mutant).not.toBe(src);
+    expect(taskPriorityProblems(mutant)).toHaveLength(1);
+  });
+
+  it('mutant s -Priority 7 se hvata, a -Priority samo u komentaru ne zadovoljava gard', () => {
+    const sedam = src.replace(/ -Priority 5\b/, ' -Priority 7');
+    expect(sedam).not.toBe(src);
+    expect(taskPriorityProblems(sedam)).toHaveLength(1);
+    const uKomentaru = src.replace(/ -Priority 5\b/, '').replace('$postavke =', '# -Priority 5\n$postavke =');
+    expect(taskPriorityProblems(uKomentaru)).toHaveLength(1);
   });
 });
 
@@ -12711,9 +12818,10 @@ describe('mutacije: quality datum i konacni izlaz cuvaju checkout', () => {
     const proc: { exitCode?: number; stdout: { write: () => void }; stderr: { write: () => void } } = {
       stdout: { write: () => undefined }, stderr: { write: () => undefined },
     };
-    const main = new Function('localDay', 'addDays', 'collectFailures', 'summarize', 'renderMarkdown', 'resolve', 'join', 'homedir', 'repositoryOutput', 'mkdirSync', 'writeFileSync', 'renameSync', 'existsSync', 'unlinkSync', 'randomBytes', 'process',
+    const main = new Function('localDay', 'addDays', 'collectAll', 'summarize', 'renderMarkdown', 'summarizeWaste', 'renderWasteMarkdown', 'resolve', 'join', 'homedir', 'repositoryOutput', 'mkdirSync', 'writeFileSync', 'renameSync', 'existsSync', 'unlinkSync', 'randomBytes', 'process',
       `${block(source, 'function parseArgs(')}\n${block(source, 'function validDay(')}\n${block(source, 'function main(')}\nreturn main;`)(
-      () => '2026-10-04', (day: string) => day, () => ({ failures: [], stats: {} }), () => ({ clusters: [], dug: [] }), () => 'synthetic',
+      () => '2026-10-04', (day: string) => day, () => ({ failures: [], waste: [], stats: {} }), () => ({ clusters: [], dug: [] }), () => 'synthetic',
+      () => ({ sesije: [], ukupno: 0, tokeni: 0 }), () => 'synthetic-waste',
       resolve, join, () => dir, (p: string) => rejectFile && p === out,
       () => undefined, (p: string) => writes.push(p), (_from: string, to: string) => renames.push(to), () => false, () => undefined,
       () => ({ toString: () => 'synthetic-random' }), proc,

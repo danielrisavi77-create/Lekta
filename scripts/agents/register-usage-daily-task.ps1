@@ -30,7 +30,10 @@ $okidaci = @(
   (New-ScheduledTaskTrigger -Daily -At '07:55')
 )
 $principal = New-ScheduledTaskPrincipal -UserId $korisnik -LogonType Interactive -RunLevel Limited
-$postavke = New-ScheduledTaskSettingsSet -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 15) -MultipleInstances IgnoreNew
+# Priority 5: Task Scheduler po zadanom daje 7, a uz njega ide i nizak I/O prioritet. Izmjereno
+# 2026-10-04 na laptopu: s 7 je citanje transkripata gladovalo uz tudje gateove (3 s CPU-a u
+# 12 min, prekid na 15 min, LastTaskResult 267014, bez izvjestaja); s 5 zavrsava za 102 s.
+$postavke = New-ScheduledTaskSettingsSet -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 15) -MultipleInstances IgnoreNew -Priority 5
 
 Register-ScheduledTask -TaskName $Ime -Action $akcija -Trigger $okidaci -Principal $principal -Settings $postavke -Force | Out-Null
 Write-Host "Registriran zadatak '$Ime' za $korisnik (pri prijavi i svaki dan u 07:55)."

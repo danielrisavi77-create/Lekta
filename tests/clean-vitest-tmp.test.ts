@@ -104,6 +104,15 @@ describe('clean-vitest-tmp: sto se brise', () => {
     expect(existsSync(dir)).toBe(false);
   });
 
+  it('brise staru mapu u obliku Vitesta 4 (client i ssr)', () => {
+    const dir = makeVitestDir(NANO_B, 5 * HOUR, ['client', 'ssr']);
+    const p = plan();
+    expect(p.refused).toEqual([]);
+    expect(p.remove.map((r) => r.path)).toEqual([dir]);
+    executePlan(p);
+    expect(existsSync(dir)).toBe(false);
+  });
+
   it('brise stari word-replica-tests-* bez obzira na sadrzaj, i prazan', () => {
     const full = join(root, 'word-replica-tests-abc123');
     mkdirSync(join(full, 'nesto'), { recursive: true });
