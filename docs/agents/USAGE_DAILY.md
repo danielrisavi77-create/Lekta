@@ -45,3 +45,8 @@ Zadatak `Lekta usage daily` se pokrece pri prijavi i svaki dan u 07:55, samo dok
 prijavljen, bez najvisih prava. Skripta ga odmah jednom pokrene i ispise
 `Get-ScheduledTaskInfo` (`LastRunTime`, `LastTaskResult` 0 znaci uspjeh). Na laptopu ga
 registrira lekta-9b ili vlasnik po istoj uputi.
+
+Zadatak se registrira s prioritetom 5. Zadani prioritet Task Schedulera (7) nosi i nizak I/O
+prioritet, pa je 4. 10. 2026. na laptopu zadatak visio do prekida na 15 minuta
+(`LastTaskResult` 267014) i nije napisao izvjestaj. Zadatak registriran prije te izmjene treba
+jednom ponovno registrirati istom naredbom.
