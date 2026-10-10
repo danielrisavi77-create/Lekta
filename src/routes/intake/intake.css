@@ -148,6 +148,43 @@
 .intake-continue:not([hidden]){display:block;margin-top:14px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui)}
 .intake-continue a{color:var(--brand);font-weight:650}
 
+/* --- promo ispod ulaza: list papira postaje ekran, isti stol i lampa ------------------------ */
+.intake-promo{padding:clamp(8px,2vw,20px) 0 clamp(48px,7vw,88px)}
+.intake-promo__shell{width:min(920px,calc(100% - 32px));margin:0 auto;display:grid;gap:22px}
+.intake-promo__head{display:grid;gap:10px;text-align:center}
+.intake-promo__eyebrow{
+  font-family:var(--mono);font-size:var(--fs-mono-label);font-weight:650;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--red-on-desk);
+}
+.intake-promo h2{
+  margin:0;font-family:var(--display-serif);font-weight:400;font-size:clamp(28px,3.6vw,46px);
+  line-height:1.05;letter-spacing:-.018em;color:var(--desk-ink);text-wrap:balance;
+}
+.intake-promo__frame{
+  position:relative;aspect-ratio:16/9;overflow:hidden;background:#191512;
+  border:1px solid var(--desk-line);border-radius:2px;
+  box-shadow:0 2px 6px rgba(0,0,0,.28),0 28px 60px -18px rgba(0,0,0,.6);
+}
+.intake-promo__video{display:block;width:100%;height:100%;object-fit:cover;background:#191512}
+/* Gumb je CIJELI kadar (klik bilo gdje pokrece), a vidljivi znak sjedi dolje lijevo, u tamnom
+   dijelu postera, da ne prekrije logo ni pecat sa zavrsne kartice. */
+.intake-promo__play:not([hidden]){
+  position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-start;gap:14px;
+  padding:clamp(14px,3vw,28px);border:0;background:linear-gradient(180deg,transparent 55%,rgba(25,21,18,.6));
+  cursor:pointer;color:#F7F3E8;text-align:left;
+}
+.intake-promo__krug{
+  display:grid;place-items:center;flex:none;width:clamp(48px,6vw,68px);aspect-ratio:1;border-radius:50%;
+  background:var(--brand);color:#fff;box-shadow:0 10px 30px rgba(228,87,61,.35);
+  transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1));
+}
+.intake-promo__krug svg{width:42%;height:42%;margin-left:6%}
+.intake-promo__nota{line-height:clamp(48px,6vw,68px);font-family:var(--mono);font-size:var(--fs-mono-label);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+@media(max-width:520px){.intake-promo__nota{display:none}}
+.intake-promo__play:hover .intake-promo__krug,.intake-promo__play:focus-visible .intake-promo__krug{transform:scale(1.06)}
+.intake-promo__play:focus-visible{outline:2px solid var(--brand);outline-offset:-4px}
+:root[data-motion="reduce"] .intake-promo__krug{transition:none;transform:none}
+
 /* --- sadrzaj ispod glavne radnje: SEO i povjerenje bez opterecenja heroja ------------------- */
 .intake-seo{
   border-top:1px solid var(--desk-line);
@@ -473,6 +510,8 @@
   .intake-tragovi{display:none}
   .intake-paper.is-podignut{transform:rotate(-.35deg)}
   .intake-sken i,.intake-lead{animation:none;transition:none}
+  .intake-promo__krug{transition:none}
+  .intake-promo__play:hover .intake-promo__krug,.intake-promo__play:focus-visible .intake-promo__krug{transform:none}
 }
 
 /* Atribut mora pobijediti klasu: vidi ugovor 2 na vrhu datoteke. */
