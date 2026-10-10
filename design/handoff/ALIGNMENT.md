@@ -547,7 +547,9 @@ Repo je već pažljiv (statičan hero, bez beskonačne trake, `.motion-offscreen
 
 ---
 
-## Z32. Ulaz kao živi list (varijanta B)
+## Z32. ⚠ ZAMIJENJENO zadacima Z38 i Z39 (2026-10-04). Iz Z32 vrijedi samo ponašanje kontrolera (`intake-controller.ts`, upis imena, pečat stanja). Predlošci `templates/intake/` i `templates/intake-live/` su označeni kao zamijenjeni.
+
+### (izvorni tekst Z32) Ulaz kao živi list (varijanta B)
 
 **Referenca.** `design/templates/intake-live/IntakeLive.dc.html`, tweak `variant=B` (zadano). Autor je odabrao B: fakultet i rok su pribor na stolu uz list, a ne polja na listu. Zamjenjuje raspored iz Z7; copy lista (naslov, podnaslov, podnožje) ostaje iz Z7.
 
@@ -680,6 +682,40 @@ Z36 ide nakon Z35. Za plaćanje ovisi o Z24 (cijene), a za jamstvo o Z20 (uvjeti
 
 ---
 
+## Z37. Ekrani po širini (tablet, veliki ekran, položen mobitel)
+
+**Referenca.** `design/state-breakpoints.html` (svi ključni predlošci u 768, 1024, 1920 i 844×390). Nadopunjuje Z16 (mobitel) i pravila po zadacima; gdje zadatak kaže drukčije, vrijedi ovaj Z37.
+
+**Globalna pravila (u `design-system.css`):**
+- `--content-max: 1320px` za ekrane sa stolom i bilješkama (faksimil, rezultat, popravak), `--content-max-narrow: 1180px` za ostalo, `--sheet-max: 640px` za ulazni list i stanja. Sadržaj je centriran; **stol (pozadina, lampa) uvijek ide do rubova**, a papir ne raste preko svoje veličine.
+- Naslovi imaju gornju granicu: `clamp()` nikad ne prelazi 120 px (ulaz) ni 72 px (ostalo), ni na 2560 px.
+- Točke loma samo ove: **600, 760, 900, 1024, 1180, 1440**. Nove ne izmišljati.
+- **Položen mobitel** = `@media (max-height: 500px) and (orientation: landscape)`: nema `position: sticky` (osim trake, koja je odmah tanka), stepper se skraćuje na "02 / 04", animacije koje zauzimaju visinu (stroj, cedulje, tragovi olovke) se ne prikazuju, a primarni gumb je uvijek vidljiv bez skrolanja.
+- Dodir: na `(hover: none)` sve što se otvara prelaskom miša (povećalo, objašnjenja slojeva, lampa uz miš) otvara se dodirom ili se ne prikazuje; ciljevi dodira najmanje 44 px i na tabletu.
+
+**Tablica po ekranu** (stupci · što se mijenja):
+
+| Ekran | 768 tablet | 1024 tablet položen | 1440 | 1920+ | 844×390 položen |
+|---|---|---|---|---|---|
+| Ulaz (Z32) | 1 stupac; fakultet i rok iznad lista | kao 768 | pribor uz list | kao 1440, list max 640 px, stol se širi | list skraćen, tragovi se ne prikazuju, CTA vidljiv |
+| Analiza (Z33) | 1 stupac, bez cedulja | cedulje od 980 px | puno | max 1320 | samo popis provjera i traka napretka |
+| Rezultat (Z34) | bez stranice rada, kartice u 2 stupca | stranica rada od 900 px | puno | max 1320 | presuda + prsten u redu, kartice ispod |
+| Faksimil (Z35) | bilješke kao popis ispod stranice | stranica + bilješke, kartica ispod | stranica · bilješke · kartica | max 1320, stranica ne raste | stranica bez bilješki, popis ispod |
+| Popravak (Z36) | 1 stupac, račun ispod | račun uz popis | puno | max 1320 | bez stroja i minijatura, samo popis i napredak |
+| Moji radovi | 2 stupca kartica | 3 | 3 | 4, max 1320 | 2, bez rokova u kartici |
+| Pribor i alati | predmeti u 3 stupca, listovi jedan ispod drugog | listovi jedan uz drugi | puno | max 1180 | jedan list, traka predmeta vodoravno |
+| Registar i stranica fakulteta | faksimil ispod pravilnika | faksimil desno sticky | puno | max 1180 | faksimil se ne prikazuje |
+| Usporedba fakulteta | 2 stupca, treći ("Tvoj rad") ispod | 3 stupca | puno | max 1180 | kartica po pristupu, listanje prstom |
+| Saznaj više i SEO | 1 stupac, margina s brojevima gore | margina lijevo | puno | max 1180 | kao 768 |
+| Traka (Z15) | izbornik (list koji pada) | grupe lijevo/desno | puno | max 1320 | tanka traka, izbornik |
+| Pravni tekstovi (Z20) | sadržaj gore kao popis | sadržaj lijevo sticky | puno | max 1180, tekst max 68ch | kao 768 |
+
+**Provjera.** Playwright snimke svakog ekrana u 360, 768, 1024, 1440, 1920, 2560 i 844×390, u obje teme. Nigdje tekst preko teksta, nigdje vodoravno skrolanje, primarni gumb vidljiv u prvom ekranu na 844×390. Snimke spremi u `tests/screenshots/breakpoints/`.
+
+Z37 ide nakon Z16 i prije završnog pregleda nakon Synca.
+
+---
+
 ## Z33. Analiza: rezultat se gradi uživo
 
 **Referenca.** `design/templates/analysis/Analysis.dc.html` (zadano `variant: A`; B i C su samo izolirani efekti za usporedbu).
@@ -698,3 +734,113 @@ Pod `prefers-reduced-motion` sve je odmah u završnom stanju. Na < 980 px nema s
 
 ## Redoslijed i rizik (dopuna 11)
 Z33 zamjenjuje stanje `scanning` iz Z8 i ide nakon Z32.
+
+---
+
+## Z38. Početna: list, pribor, traka, ladica profila, ⌘K
+
+**Referenca.** `design/templates/home/Home.dc.html` (+ `HomeNav.dc.html`). Dopunjuje Z32 (ulaz) i Z15 (traka); gdje se razlikuju, vrijedi Z38. Odluka F8 ("ladica Z13 ne postoji") se ukida: pločica se otvara.
+
+**Ukloniti.**
+- `.intake-tragovi` i 7 `.intake-trag` u `index.html` (elipse na hover), s pripadnim CSS-om i `@keyframes intake-tragovi` u `src/routes/intake/intake.css`.
+- `.ks-decor`, `.ks-lamp` i `.ks-kava` u `index.html` (pozadina koja se miče).
+- Na pločici `aria-disabled="true"` i `title="Uskoro"` (`index.html` r. 64 i ista traka na svih 13 stranica).
+
+**Stol.** Pozadina je `--desk` s nepomičnom teksturom šuma (SVG `feTurbulence`, alfa 0,07) i jednim mekim krugom svjetla iznad lista, koji se ne miče. Gumb lampe (i tipka L) samo prigušuje krug (opacity 1 → .18).
+
+**List (prednja strana).**
+1. Pečat u mirovanju: "PREGLEDANO / 526.370 radova". Broj je `works` iz `data/coverage/site-stats.json` (nikad prepisan) i broji od 0 za 1,4 s (ease-out, `tabular-nums`). Pri čitanju se pečat ponovno otisne kao "LEKTA / Čitam" (oker), na kraju "Pročitano" (zeleno). **Provjeri s vlasnikom** smije li "Pregledano" stajati uz broj iz korpusa.
+2. Hover (samo `hover:hover`): list se podigne 5 px. **Kote se crtaju samo kad je profil odabran.** Lijevo je kota margine preko cijele unutarnje margine (crta se `scaleX` 0 → 1, oznaka npr. "2,5 cm"), desno ravnalo s crticama svakih 9 px i okomitim natpisom "PRORED 1,5 · TNR 12". Kote stoje samo u margini lista i ne smiju doći preko teksta.
+3. Lijeva unutarnja margina lista = margina pravilnika × 22 px (2,5 cm → 55 px), uz prijelaz .5 s. Prored uvoda = prored pravilnika + .05. Na < 760 px margina je fiksna (22 px).
+4. Kad je profil odabran: okrugli žig "PRAVILNIK / FPZG / AŽ. 2. 10." padne u retku iznad podnožja (u toku, ne apsolutno). Datum je datum zadnje izmjene pravila profila.
+5. Ispod CTA-a: "ili ispusti dokument bilo gdje na stol" i "ili pritisni [D]" (samo ≥ 760 px). Tipka D otvara dijalog datoteke, osim kad je fokus u polju ili je otvorena ladica/paleta.
+6. Savijen donji desni kut (30 px, na hover 40 px) i poveznica "Pogledaj primjer nalaza ↻" okreću list (tipka P).
+
+**Ispuštanje.** Dok se datoteka nosi iznad stranice, iza lista se pojavi crveni fascikl s jezičkom "LEKTA · FASCIKL" (`#B5332A`, opacity + scale), a list se podigne 16 px. Desno u zaglavlju piše ".docx · pusti ovdje". Ime se ne može pročitati prije ispuštanja, pa se nakon `drop` upisuje slovo po slovo (32 ms).
+
+**Okretanje (primjer).** `rotateY(180deg)` 0,9 s, obje strane u istoj ćeliji mreže (iste visine). Na poleđini su "Ovo bi Lekta našla.", pečat PRIMJER i 3 kartice nalaza od 6, svakih 3,2 s se jedna zamijeni (opacity + 6 px). Ispod je 6 crtica koje pokazuju koji su nalazi vidljivi, te gumbi "Ubaci svoj rad" (okrene list natrag i otvori dijalog) i "↺ Okreni natrag". Nalazi su doslovno iz predloška.
+
+**Pribor.** ≥ 1180 px stoji desno uz list, ispod 1180 px ispod lista u `auto-fit minmax(260px,1fr)`.
+- *Listić kalendara*: crvena traka "ROK PREDAJE" s dvije rupe, veliki serifni broj dana do roka i ispod "predaja 14. 10. 2026.". Bez roka piše "?" i "upiši rok". Kad je označeno "Još ne znam rok", listić se precrta crvenom crtom (`scaleX`, .45 s). Donji rub je perforiran. Vrata ubacivanja ostaju kao u Z32: bez odluke o roku nema primanja, a listić dobije crveni prsten.
+- *Kartica kartoteke*: plave crte svakih 28 px i crvena margina. Tekst je na crtama (line-height 28 px). Bez profila: "Prepoznat ćemo ga iz rada." i "ili odaberi profil na pločici gore desno". S profilom: "FPZG · Politologija", mjere i zeleni pečatić PROFIL.
+
+**Traka (sve stranice).** Lijevo "Izbornik" (mono, dvije crtice, kraća crvena) | logo. Desno polje "Traži alate, fakultete, vodiče ⌘K" (≥ 1180 px; ispod toga samo "Traži ⌘K"), "Moji radovi" s brojem (**skriveno kad je 0**), pločica, Aa, lampa. Četiri stara odredišta iz `SITE_CHROME_DESTINATIONS` prelaze u Izbornik.
+- *Izbornik* (ladica slijeva, `min(420px,100vw)`): Primjer nalaza · Kako radi · Pribor (6 alata u mreži) · Po fakultetu (polje za pretragu, 4 rezultata) · Vodiči (3) · Cjenik "od 3,99 €" (iz `siteChromeLowestPrice()`).
+- *Paleta ⌘K/Ctrl+K i tipka /* zove se **Kazalo**. Na traci je to polje s kurzivnim serifom "Kazalo", mono napomenom "alati, fakulteti, vodiči" i trakom kazala na desnom rubu (tri jezička, srednji crveni, kao kazalo rječnika). Nema ikone povećala ni natpisa ⌘K, a prečac je u `title`. U paleti je oznaka KAZALO, upit "Što tražiš?", tamna kartica, serifni upit i grupe RADNJE (Ubaci rad D, Pogledaj primjer P, Odaberi profil, Lampa L) / PRIBOR / FAKULTETI / VODIČI / OSTALO. Strelice, Enter i Esc. Aktivni redak ima crveni kvadratić kao kvačica trake.
+- *Ladica profila* (zdesna, `min(460px,100vw)`, otvara se **samo s pločice**). Koraci 01 Fakultet (pretraga po kratici/nazivu i datum pravilnika) → 02 Studij → 03 Vrsta rada (s cijenom popravka). Zatim papirić "LIST ĆE DOBITI" (margina, prored, font) i gumb "Spremi profil · FPZG · Dipl.". Spremanje piše u `STORAGE_KEYS.preferences`, pločica dobije zelenu točku i natpis iz `siteChromePlateLabel`, a list odmah promijeni marginu. Na kraju je "Ukloni profil s ovog preglednika".
+
+**Prikaz (Aa).** Gumb Aa otvara ladicu "Prilagodi prikaz" (zdesna). Sadržaj je doslovno iz `display-settings.ts`: Osvjetljenje (Radna lampa / Danje svjetlo / Kao sustav, kao tri pločice s uzorkom stola), Pismo za čitanje, Pojačan kontrast, Manje pokreta, Primjer i "Vrati zadano". Lampa na traci i tipka L prebacuju Radna lampa ↔ Danje svjetlo. Na mobitelu je u donjoj traci "Prikaz" umjesto "Lampa". Danje svjetlo mijenja samo stol i traku (`--desk`, `--ink`, `--line`), a papir ostaje papir.
+
+**Ispod lista.** Redak ".docx · do 20 MB · bez prijave · Kako radi?" (postojeći `.intake-meta`), zatim crta "RUB TVOG UREĐAJA" (≥ 760 px), pa pravni minimum podnožja (Z15).
+
+**Mobitel (< 760 px).** Gore logo i pločica. Dolje fiksna traka (60 px, `safe-area-inset-bottom`): Izbornik · Kazalo · Radovi (ako > 0) · Prikaz. List ide preko cijele širine, CTA na punu širinu, bez reda "ili pritisni D", a `padding-bottom` stranice je 96 px.
+
+**Pokret.** Samo `transform`, `opacity` i `clip-path`. Pod `prefers-reduced-motion` broj je odmah konačan, ime se upiše odjednom, a okretanje i ladice su bez prijelaza.
+
+**Provjera.** Snimke na 360, 768, 1024, 1440 i 1920 px te 844×390: mirovanje, hover s profilom (kote), nošenje datoteke (fascikl), poleđina, otvoren izbornik, paleta i ladica profila. Nigdje tekst preko teksta: kote ni kut ne smiju dodirivati tekst, a žig je u toku. Tipke D, P, L i ⌘K rade, a Esc zatvara sve.
+
+Z38 ide nakon Z32 i Z15, prije Z37.
+
+**Dopuna Z38 (2026-10-04).**
+- **Vrata ubacivanja se uklanjaju.** Rok je neobavezan ("ROK PREDAJE · NEOBAVEZNO"), CTA je uvijek aktivan, a ispuštanje uvijek prima rad. Iz `intake-live.ts` treba ukloniti `canAccept`/`onBlocked`, `PORUKA_ODBIJENO` i `aria-disabled` na gumbu. "Još ne znam rok" se miče, a uz upisan rok stoji "Ukloni rok". Prazan listić pokazuje "— dana do roka" i "Uz rok nalaz pokaže koliko dana imaš za popravak." `veziRokZaSesiju` i dalje ide uvijek (rok `null` je valjan).
+- **List se sam okreće svakih 10 s** (prednja strana ↔ primjer). Napredak je crvena crta od 2 px na donjem rubu zaglavlja lista (`scaleX`). Okretanje se zaustavlja dok je miš nad listom, dok se nosi datoteka, dok je fokus u polju, dok je otvorena ladica ili kazalo, kad je kartica skrivena i pod smanjenim pokretom (crta se tada ne vidi). Ručno okretanje vraća mjerač na 0.
+- **Traka**: `grid 1fr auto 1fr`. Lijevo logo | Izbornik (bez okvira), u sredini "Kazalo" (samo riječ, kurzivni serif, bez jezičaka i ikone), desno Moji radovi (≥ 900 px), pločica i spojena grupa [Aa | lampa].
+- **Izbornik** ima numerirane skupine: 01 Provjera rada (Kako radi, Primjer nalaza, Cjenik) · 02 Pribor (6) · 03 Po fakultetu (pretraga, "Svi fakulteti →") · 04 Vodiči, a na dnu Moji radovi.
+
+## Z39. Početna: predmeti na stolu s vrijednošću odmah
+
+**ODLUKA 2026-10-04: raspored B "Kartoteka s jezičcima"** (`design/templates/home/Opcije pribora.html`, okvir B). Uz list stoje samo DVA predmeta. Prvi je listić roka s planom, nepromijenjen. Drugi je jedna kartica kartoteke s tri jezička: Pravila · Citat · Opseg. Aktivni jezičak je viši, iste je boje kao kartica i pokriva njezin gornji rub. Sva tri panela dijele isti papir s crtama (28 px), isto zaglavlje (mono oznaka lijevo, crveni detalj desno) i istu minimalnu visinu, pa promjena jezička ne pomiče stol. Brojilo 0 B je tanki redak ispod lista, a ne zaseban predmet. Ispod 1180 px dva predmeta stoje jedan uz drugi (`auto-fit minmax(300px,1fr)`), a na mobitelu jedan ispod drugog. Vodoravno listanje iz prvog nacrta Z39 se ukida.
+
+**Pravni tekstovi kao modal.** Privatnost, Uvjeti, Obrada dokumenata i Kolačići u podnožju otvaraju list preko stola (okvir P). Gore su jezičci za svih 7 pravnih dokumenata, lijevo kazalo odjeljaka (skrola unutar lista), a gore u tekstu sažetak s kvačicama. Dolje stoji "Otvori kao stranicu ↗" (postojeći URL ostaje zbog SEO-a). Modal se zatvara s Esc, klikom izvan lista ili ×, a fokus se vraća na poveznicu. Sadržaj je isti izvor kao `templates/legal` (u predlošku `templates/home/legal-docs.json`). Poveznice ostaju `<a href>` s `preventDefault` kad je JS dostupan.
+
+(Opis četiri zasebna predmeta niže vrijedi za SADRŽAJ panela, ne za raspored.)
+
+**Referenca.** `design/templates/home/HomeDesk.dc.html` (uvozi ga `Home.dc.html`). Dopunjuje Z38: pribor više nisu dva predmeta nego četiri. Na ≥ 1180 px stoje u stupcu desno, a ispod 1180 px u vodoravnom redu koji se lista prstom (`scroll-snap-type: x mandatory`, kartica `min(300px,84vw)`).
+
+1. **Rok i plan do roka.** Listić kalendara ("ROK PREDAJE · NEOBAVEZNO"). Kad se upiše rok, ispod se rastvori papir "PLAN DO ROKA" (`grid-template-rows 0fr → 1fr`). Na crti su 4 točke: 1 Provjera · 2 Popravak gotov · 3 Ispis i uvez · 4 Predaja (crvena), a okomita crvena crta je rok. Prijedlog: Provjera danas, Ispis i uvez 2 dana prije predaje (diplomski i doktorski 3), Popravak gotov 2 dana prije uveza. **Sve se točke povlače** (pointer events + strelice, `role="slider"`) i ne mogu se preskočiti. Ako Predaja nije na roku, pojavi se pitanje "Pomaknuti rok?" [Pomakni rok] [Ostavi rok]. Pečat "TIJESNO" dolazi kad je za popravak < 2 dana ili je između uveza i predaje < 1 dan, a "IZA ROKA" kad je predaja nakon roka. Plan se veže uz sesiju kao i rok.
+2. **Kartica fakulteta i 6 pravila.** S profilom gumb "6 ključnih pravila ▾" rastvori karticu prema dolje: Margine · Prored · Font · Citiranje · Opseg (po vrsti rada) · Naslovnica. Retci padaju jedan za drugim (70 ms) i stoje na crtama kartice (28 px), a ispod je izvor i datum pravilnika. Pravila dolaze iz registra profila (lijeni chunk se smije učitati tek na klik). Bez profila: "Pravila tvog fakulteta stanu na ovu karticu." + "Odaberi profil →" (otvara ladicu).
+3. **Citat odmah.** Zalijepi se bilo kakav tekst izvora, a Lekta ga lokalno razloži na oznake AUTOR · GOD. · NASLOV · IZDAVAČ · STR. Uz profil se odmah ispiše citat u stilu fakulteta (naslov u kurzivu) s gumbom Kopiraj. Bez profila se izvor razloži i stoji poziv na odabir profila. Gumb je "Probaj s primjerom". Parser u predlošku je samo skica, a u kodu ide postojeći parser alata Citat (Z-alat citat).
+4. **Ravnalo opsega.** Prekidač Riječi | Kartice i broj. Velik broj stranica izračunan po margini i proredu profila. Na ravnalu je zeleni raspon pravilnika za vrstu rada i crvena oznaka, a uz broj piše "u rasponu 40–60", "fali ~6 str." ili "višak ~4 str.".
+5. **Brojilo "POSLANO NA POSLUŽITELJ 0 B"**, ispod lista, uvijek vidljivo. Dok Lekta čita, uz nulu broji "pročitano lokalno N KB" do veličine datoteke, a ispod piše "Isključi Wi-Fi i probaj. Provjera radi i bez mreže." Brojilo mora biti istinito: mjeri se stvarnim `PerformanceObserver`/`fetch` presretanjem za vrijeme provjere. Ako se išta pošalje, brojilo to pokaže, a ne skriva.
+6. **Primjer po tvom fakultetu.** S profilom nalazi na poleđini koriste mjere profila (npr. "Lijeva margina je 2 cm. FPZG traži 2,5 cm."), a citat i fusnota prate stil citiranja.
+
+**Podaci u predlošku su primjer** (6 fakulteta, stilovi, rasponi opsega, datumi). U kodu sve dolazi iz registra profila i `site-stats.json`.
+
+**Provjera.** 360 px: red predmeta se lista i nijedan nije odrezan po visini. Povlačenje točaka radi mišem, prstom i strelicama, a pečat "TIJESNO" ne prekriva oznaku. Rastvaranje pravila ne pomiče list.
+
+---
+
+## Z40. Stanje lekta.hr naspram dizajna (pregled 2026-10-04)
+
+**Izvor.** Tekstualni pregled 7 živih stranica: `/`, `/saznaj-vise/`, `/alati`, `/fakulteti/`, `/moji-radovi/`, `/privatnost`, `/fpzg/diplomski-rad/`. Stranice alata, `/pokrivenost` i cjenik nisu pregledani.
+
+**A. Početna (`/`): Z38 i Z39 još nisu ugrađeni.**
+1. Traka: i dalje 4 odredišta i "Odaberi profil" koji ne radi → Z38 (Izbornik, Kazalo, ladica profila, [Aa | lampa]).
+2. `.intake-tragovi` (margine, prored, font…) i dalje stoje → ukloniti, kote po Z38 t. 2.
+3. Vrata roka su i dalje aktivna ("Prvo potvrdi rok", "Još ne znam rok") → ukloniti po dopuni Z38.
+4. Pečat "Čeka provjeru" → "PREGLEDANO / 526.370 radova" (Z38 t. 1).
+5. "Pribor · prije ubacivanja" + kartica Fakultet → listić roka s planom + kartoteka s jezičcima (Z39, raspored B).
+6. Nema okretanja na primjer, fascikla, brojila 0 B, tipki D, P, L, / ni pravnih modala.
+7. **Greška u tekstu:** ".docx · do dopuštene veličine". Treba stvarna granica ("do 20 MB") iz iste konstante koju koristi provjera veličine.
+
+**B. Jedna traka i jedno podnožje na svim stranicama (Z15/Z38).**
+8. `/saznaj-vise/`, `/alati`, `/moji-radovi/` imaju staru traku s "Prijava" i "Provjeri rad ↓" → nova traka.
+9. `/fakulteti/`, sve `/<unit>/<razina>/` i pravne stranice imaju vlastita zaglavlja ("Lekta · Besplatna tehnička provjera", "← Lekta") → nova traka i pravni minimum podnožja. Pravne poveznice u podnožju otvaraju modal (Z39), a na samim pravnim stranicama ostaju poveznice.
+
+**C. Stranice koje nisu dobile svoj predložak.**
+10. `/fakulteti/`: ravni popis od oko 200 poveznica → predložak `profile-picker` (pretraga, skupine po sveučilištu, oznaka potvrđeno/opće).
+11. `/<unit>/<razina>/` (npr. FPZG diplomski): liste i tablica → predložak `faculty-page` (slojevita usporedba, faksimil).
+12. Pravne stranice: gol tekst → predložak `legal` (sažetak s kvačicama, rječnik, postotak pročitanog, razlike između verzija).
+13. `/alati`: "Pet besplatnih alata" i "05 lokalnih alata" → `tool-hub` sa šest alata (uključuje Pravila po fakultetu). Ukloniti zastarjelo "uskoro puni izvještaj ili ljudska lektura".
+
+**D. Tekst i podaci.**
+14. Nazivi ustanova bez dijakritika u katalogu (vidljivo na `/fakulteti/`): Prirodoslovno-matematicki, Gradevinski, Kinezioloski, Katolicki … u Djakovu, Tehnicki fakultet u Puli, Tehnicki/Biotehnicki odjel (UNISB), Sveucilisni odjel, forenzicke, Umjetnicka akademija, Fakultet gradevinarstva, u Pozegi, Sveuciliste obrane … Tudjman. Ispraviti u izvoru kataloga, ne u predlošku.
+15. Meta opisi bez dijakritika: `/saznaj-vise/` ("Sto Lekta provjerava… uredaju"), `/moji-radovi/` ("uredaju… racunu").
+16. Isti alati na dvije adrese (`/saznaj-vise/citat.html` i `/citat`, isto za kartice, naslovnicu, literaturu i izjavu) → jedna kanonska adresa, druga 301.
+
+**E. SEO (nije vizualno, ali hitno).**
+17. `<link rel="canonical">` i `og:url` na svim pregledanim stranicama pokazuju na `https://lektahr.netlify.app/…` → `https://lekta.hr/…`. Isto vrijedi za `og:image` i interne poveznice u tekstu pravnih stranica (`lektahr.netlify.app/alati`).
+
+**F. Podaci u predlošku početne usklađeni s profilom FPZG (stvarna stranica):** citatni stil "FPZG autor-godina", opseg diplomskog u RIJEČIMA (Politologija 10.000–12.000, Novinarstvo 12.000–15.000), najmanje 15 izvora, pravila ažurirana 28. 6. 2026. Ravnalo opsega zato za profile koji opseg zadaju u riječima prikazuje riječi, a stranice samo kao procjenu. U kodu sve dolazi iz registra profila.
+
+**Redoslijed:** 17 → 7 → A (Z38/Z39) → B → 14–16 → C.

@@ -1,0 +1,32 @@
+<!-- @dsCard group="Tokeni" viewport="1100x640" name="Dubina i pokret" subtitle="4 razine sjene po predmetu na stolu, 3 tempa, razmaci" -->
+<!DOCTYPE html>
+<html lang="hr"><head><meta charset="utf-8"><link rel="stylesheet" href="styles.css"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1C1915;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;padding:40px;box-sizing:border-box}
+a{color:#E4573D}a:hover{color:#F7F3E8}
+h2{font:400 32px/1 'Instrument Serif',Georgia,serif;margin:0 0 6px}.lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(237,231,220,.6)}
+.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;margin:28px 0 44px}
+.obj{height:120px;background:#F7F3E8;color:#26221B;padding:14px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;font-size:12px;border-radius:2px}
+.obj b{font:400 22px/1 'Instrument Serif',Georgia,serif}
+.m{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.track{height:44px;border-top:1px solid rgba(237,231,220,.16);position:relative;margin-top:10px}
+.dot{position:absolute;top:12px;left:0;width:20px;height:20px;border-radius:50%;background:#E4573D}
+.m div:hover .dot{transform:translateX(220px)}
+.sp{display:flex;gap:24px;align-items:end;margin-top:12px}.sp span{display:grid;gap:6px;justify-items:start;font-size:11px}.sp i{display:block;height:10px;background:#E4573D}
+</style></head><body>
+<h2>Dubina</h2><div class="lab">Visina predmeta iznad stola. Isti predmet uvijek ima istu sjenu.</div>
+<div class="row">
+<div class="obj" style="box-shadow:var(--shadow-1)"><span class="lab" style="color:#6E6653">--shadow-1</span><b>Leži na stolu</b><span>čipovi, pribor, gumbi</span></div>
+<div class="obj" style="box-shadow:var(--shadow-2)"><span class="lab" style="color:#6E6653">--shadow-2</span><b>Podignuto</b><span>bilješke, izbornici, kartice</span></div>
+<div class="obj" style="box-shadow:var(--shadow-3)"><span class="lab" style="color:#6E6653">--shadow-3</span><b>List papira</b><span>rad, pravilnik, račun</span></div>
+<div class="obj" style="box-shadow:var(--shadow-4)"><span class="lab" style="color:#6E6653">--shadow-4</span><b>U ruci</b><span>ladica, modal, list koji vučeš</span></div>
+</div>
+<h2>Pokret</h2><div class="lab">Prijeđi mišem preko trake. Jedna krivulja za sve, prebačaj samo za pečat.</div>
+<div class="m" style="margin:20px 0 44px">
+<div><span class="lab">--dur-1 · .18s · hover, pritisak</span><div class="track"><span class="dot" style="transition:transform var(--dur-1) var(--ease-spring)"></span></div></div>
+<div><span class="lab">--dur-2 · .32s · izbornik, fade</span><div class="track"><span class="dot" style="transition:transform var(--dur-2) var(--ease-spring)"></span></div></div>
+<div><span class="lab">--dur-3 · .5s · papir, pečat</span><div class="track"><span class="dot" style="transition:transform var(--dur-3) var(--ease-stamp)"></span></div></div>
+</div>
+<h2>Razmak</h2>
+<div class="sp"><span><i style="width:4px"></i>4</span><span><i style="width:8px"></i>8</span><span><i style="width:12px"></i>12</span><span><i style="width:16px"></i>16</span><span><i style="width:24px"></i>24</span><span><i style="width:32px"></i>32</span><span><i style="width:48px"></i>48</span><span><i style="width:64px"></i>64</span></div>
+</body></html>
