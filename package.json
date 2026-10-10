@@ -196,7 +196,7 @@
     "canvas-confetti": "^1.9.4",
     "hunspell-asm": "^4.0.2",
     "lucide": "^1.49.0",
-    "motion": "^12.42.2",
+    "motion": "^14.0.0",
     "open-props": "^1.7.23"
   },
   "knip": {
