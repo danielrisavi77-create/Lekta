@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:grid;grid-template-columns:{{ cols }};gap:30px 22px;font-family:'Geist Mono',ui-monospace,monospace;color:#26221B;align-items:start">
+<div style="scroll-snap-align:start;display:grid;gap:0;min-width:0">
+<div style="position:relative;z-index:1;background:#F7F3E8;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);transform:rotate(-1deg)">
+<div style="display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 16px;background:#C4372E;border-radius:2px 2px 0 0;color:#F7F3E8;font-size:10.5px;letter-spacing:.14em"><span style="white-space:nowrap">ROK PREDAJE</span><span aria-hidden="true" style="display:flex;gap:26px"><i style="width:9px;height:9px;border-radius:50%;background:var(--desk,#191512)"></i><i style="width:9px;height:9px;border-radius:50%;background:var(--desk,#191512)"></i></span></div>
+<div style="padding:16px 18px 4px"><div style="display:flex;align-items:baseline;gap:10px;min-height:72px"><span style="font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:72px;line-height:.9;letter-spacing:-.03em;color:{{ calBigCol }}">{{ calBig }}</span><span style="font-size:12px;letter-spacing:.06em;color:var(--pmuted,#6E6656)">{{ calUnit }}</span></div><p style="margin:6px 0 0;font-size:11.5px;line-height:1.5;color:var(--pmuted,#6E6656)">{{ calSub }}</p></div>
+<div style="display:grid;gap:2px;padding:6px 18px 16px;border-top:1px dashed #DCD4BF;margin-top:10px"><input type="date" value="{{ rok }}" onChange="{{ onRok }}" aria-label="Rok predaje (neobavezno)" style="min-height:44px;padding:0 2px;border:0;border-bottom:1px solid #B8AE96;border-radius:0;background:transparent;color:#26221B;font:inherit;font-size:13px;color-scheme:light"><sc-if value="{{ hasRok }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ clearRok }}" style="justify-self:start;min-height:36px;padding:0;border:0;background:transparent;color:var(--pmuted,#6E6656);font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Ukloni rok</button></sc-if></div>
+</div>
+<div style="display:grid;grid-template-rows:{{ planRows }};transition:grid-template-rows .55s cubic-bezier(.22,1,.36,1);margin:0 8px"><div style="overflow:hidden;min-height:0"><div style="padding:18px 16px 16px;background:#EFE8D6;border:1px solid #DCD4BF;border-top:0;border-radius:0 0 2px 2px;box-shadow:0 10px 24px rgba(0,0,0,.35)">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:28px"><span style="font-size:10.5px;letter-spacing:.14em;color:var(--pmuted,#6E6656)">PLAN DO ROKA</span><sc-if value="{{ tight }}" hint-placeholder-val="{{ false }}"><span key="{{ tightTxt }}" style="padding:4px 9px;border:2px solid #C4372E;border-radius:2px;color:#A62B23;font-size:10px;font-weight:600;letter-spacing:.14em;transform:rotate(-6deg);animation:hmZig .3s cubic-bezier(.2,.9,.3,1.25) both">{{ tightTxt }}</span></sc-if></div>
+<div ref="{{ trackRef }}" style="position:relative;height:44px;margin:12px 10px 4px;touch-action:none"><span aria-hidden="true" style="position:absolute;left:0;right:0;top:21px;height:2px;background:#B8AE96"></span><span aria-hidden="true" style="position:absolute;left:{{ rokX }};top:8px;width:2px;height:28px;margin-left:-1px;background:#C4372E"></span><sc-for list="{{ marks }}" as="m" hint-placeholder-count="4"><button type="button" role="slider" aria-label="{{ m.aria }}" aria-valuemin="0" aria-valuemax="{{ span }}" aria-valuenow="{{ m.day }}" aria-valuetext="{{ m.date }}" onPointerDown="{{ m.down }}" onPointerMove="{{ m.move }}" onPointerUp="{{ m.up }}" onKeyDown="{{ m.key }}" style="position:absolute;left:{{ m.x }};top:9px;width:26px;height:26px;margin-left:-13px;padding:0;border:2px solid {{ m.bd }};border-radius:50%;background:{{ m.bg }};color:{{ m.ink }};font:inherit;font-size:10.5px;font-weight:600;cursor:grab;touch-action:none;box-shadow:0 2px 6px rgba(38,34,27,.25);transition:background .2s">{{ m.n }}</button></sc-for></div>
+<div style="display:flex;justify-content:space-between;margin:0 10px;font-size:10px;color:var(--pmuted,#6E6656)"><span>danas</span><span>{{ endLabel }}</span></div>
+<ol style="display:grid;gap:4px;margin:14px 0 0;padding:0;list-style:none"><sc-for list="{{ marks }}" as="m" hint-placeholder-count="4"><li style="display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:baseline;font-size:11.5px"><b style="font-weight:600;color:{{ m.numCol }}">{{ m.n }}</b><span>{{ m.label }}</span><span style="color:var(--pmuted,#6E6656);font-variant-numeric:tabular-nums">{{ m.date }}</span></li></sc-for></ol>
+<sc-if value="{{ ask }}" hint-placeholder-val="{{ false }}"><div role="alert" style="display:grid;gap:10px;margin-top:14px;padding:12px;border:1px dashed #C4372E;border-radius:2px;font-size:11.5px;line-height:1.5"><span>{{ askText }}</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" onClick="{{ askYes }}" style="min-height:36px;padding:0 12px;border:0;border-radius:2px;background:#C4372E;color:#F7F3E8;font:inherit;font-size:11.5px;cursor:pointer">Pomakni rok</button><button type="button" onClick="{{ askNo }}" style="min-height:36px;padding:0 12px;border:1px solid #B8AE96;border-radius:2px;background:transparent;color:#26221B;font:inherit;font-size:11.5px;cursor:pointer">Ostavi rok</button></span></div></sc-if>
+<p style="margin:12px 0 0;font-size:10.5px;line-height:1.5;color:var(--pmuted,#6E6656)">Povuci točke ili ih pomakni strelicama. Lekta samo predlaže.</p>
+</div></div></div>
+</div>
+<div style="min-width:0;display:grid;align-content:start">
+<div role="tablist" aria-label="Pribor uz rad" style="display:flex;align-items:flex-end;gap:4px;padding-left:8px"><sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3"><button type="button" role="tab" aria-selected="{{ tb.on }}" onClick="{{ tb.pick }}" style="position:relative;z-index:{{ tb.z }};margin-bottom:{{ tb.mb }};padding:{{ tb.pad }};border:1px solid #CFC5AC;border-bottom:0;border-radius:3px 3px 0 0;background:{{ tb.bg }};color:#26221B;font:inherit;font-size:11px;letter-spacing:.06em;white-space:nowrap;cursor:pointer;transition:background .2s,padding .2s">{{ tb.label }}</button></sc-for></div>
+<div role="tabpanel" aria-label="{{ panelLabel }}" style="position:relative;display:grid;align-content:start;gap:12px;min-height:330px;padding:16px 18px 18px;background-color:#F3EEDF;background-image:repeating-linear-gradient(to bottom,transparent 0 27px,rgba(70,110,170,.15) 27px 28px);background-position:0 46px;border:1px solid #CFC5AC;border-radius:0 2px 2px 2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);color:#26221B">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:18px"><span style="font-size:10.5px;letter-spacing:.14em;color:var(--pmuted,#6E6656);white-space:nowrap">{{ panelLabel }}</span><span style="font-size:10.5px;color:#A62B23;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ panelRight }}</span></div>
+<sc-if value="{{ isPrav }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ hasFac }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:22px;line-height:28px">{{ facName }}</p><dl style="margin:0;display:grid"><sc-for list="{{ rules }}" as="r" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;align-items:baseline;min-height:28px;opacity:{{ r.op }};transform:{{ r.tr }};transition:opacity .35s {{ r.delay }},transform .35s {{ r.delay }}"><dt style="font-size:10px;letter-spacing:.08em;line-height:28px;color:var(--pmuted,#6E6656)">{{ r.k }}</dt><dd style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:17px;line-height:28px">{{ r.v }}</dd></div></sc-for></dl><p style="margin:0;font-size:10px;line-height:1.5;color:var(--pmuted,#6E6656)">{{ rulesSrc }}</p></sc-if><sc-if value="{{ noFac }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:22px;line-height:28px">Prepoznat ćemo fakultet iz rada.</p><p style="margin:0;font-size:11.5px;line-height:28px;color:var(--pmuted,#6E6656)">Uz profil ovdje stoji šest ključnih pravila tvog fakulteta: margine, prored, font, citiranje, opseg i naslovnica.</p><button type="button" onClick="{{ openProf }}" style="justify-self:start;min-height:36px;padding:0;border:0;background:transparent;color:#A62B23;font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap">Odaberi profil →</button></sc-if></sc-if>
+<sc-if value="{{ isCit }}" hint-placeholder-val="{{ false }}"><textarea value="{{ src }}" onInput="{{ onSrc }}" rows="3" placeholder="Zalijepi izvor s weba ili iz PDF-a" aria-label="Izvor za citiranje" style="width:100%;box-sizing:border-box;min-height:84px;padding:10px;border:1px dashed #B8AE96;border-radius:2px;background:rgba(251,248,240,.7);color:#26221B;font:inherit;font-size:12px;line-height:1.5;resize:vertical"></textarea><sc-if value="{{ noSrc }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ trySample }}" style="justify-self:start;min-height:32px;padding:0;border:0;background:transparent;color:#26221B;font:inherit;font-size:11.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Probaj s primjerom</button></sc-if><sc-if value="{{ hasParts }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ parts }}" as="pt" hint-placeholder-count="0"><span style="display:inline-flex;gap:6px;max-width:100%;padding:3px 7px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0;font-size:10px;letter-spacing:.04em;overflow:hidden"><b style="font-weight:600;color:#A62B23">{{ pt.k }}</b><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ pt.v }}</span></span></sc-for></div></sc-if><sc-if value="{{ showOut }}" hint-placeholder-val="{{ false }}"><div style="display:grid;gap:10px;padding:12px 14px;background:#FBF8F0;border:1px solid #DCD4BF;border-radius:2px"><p style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:17px;line-height:1.4;text-wrap:pretty">{{ out.a }}<i>{{ out.t }}</i>{{ out.b }}</p><button type="button" onClick="{{ copy }}" style="justify-self:start;min-height:32px;padding:0 10px;border:1px solid #B8AE96;border-radius:2px;background:transparent;color:#26221B;font:inherit;font-size:11px;cursor:pointer">{{ copyLbl }}</button></div></sc-if><sc-if value="{{ needProf }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:11.5px;line-height:1.5">Izvor je razložen. Odaberi profil i citat dobije stil tvog fakulteta. <button type="button" onClick="{{ openProf }}" style="padding:0;border:0;background:transparent;color:#A62B23;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap">Odaberi profil →</button></p></sc-if></sc-if>
+<sc-if value="{{ isOps }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span role="group" aria-label="Jedinica" style="display:inline-flex;border:1px solid #B8AE96;border-radius:2px"><sc-for list="{{ units }}" as="u" hint-placeholder-count="2"><button type="button" onClick="{{ u.pick }}" aria-pressed="{{ u.on }}" style="min-height:32px;padding:0 10px;border:0;background:{{ u.bg }};color:{{ u.ink }};font:inherit;font-size:10.5px;cursor:pointer">{{ u.label }}</button></sc-for></span><span style="font-size:10.5px;color:var(--pmuted,#6E6656)">{{ unitWord }}</span></div><input type="number" min="0" inputmode="numeric" value="{{ val }}" onInput="{{ onVal }}" aria-label="{{ valAria }}" style="width:100%;box-sizing:border-box;min-height:44px;padding:0;border:0;border-bottom:1px solid #B8AE96;background:transparent;color:#26221B;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:30px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span style="font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:44px;line-height:1;white-space:nowrap">{{ pages }}<small style="font-family:'Geist Mono',monospace;font-size:12px;margin-left:6px">str.</small></span><span style="font-size:11px;text-align:right;color:{{ verdictCol }}">{{ verdict }}</span></div><div aria-hidden="true" style="position:relative;height:32px;margin-top:4px;border-top:1px solid #26221B;background:repeating-linear-gradient(90deg,rgba(38,34,27,.5) 0 1px,transparent 1px 8px) 0 0/100% 6px no-repeat"><span style="position:absolute;top:0;height:8px;left:{{ bandL }};width:{{ bandW }};background:rgba(30,127,79,.4);transition:left .4s,width .4s"></span><span style="position:absolute;top:-6px;left:{{ markX }};width:2px;height:20px;margin-left:-1px;background:#C4372E;transition:left .45s cubic-bezier(.22,1,.36,1)"></span><sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="5"><span style="position:absolute;top:16px;left:{{ tk.x }};transform:translateX(-50%);font-size:9.5px;color:var(--pmuted,#6E6656)">{{ tk.n }}</span></sc-for></div><p style="margin:0;font-size:10.5px;line-height:1.5;color:var(--pmuted,#6E6656)">{{ rulerNote }}</p></sc-if>
+</div>
+</div>
+</div>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;340px&quot;,&quot;height&quot;:&quot;1400px&quot;},&quot;fac&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;raz&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;seminarski&quot;,&quot;zavrsni&quot;,&quot;diplomski&quot;,&quot;doktorski&quot;],&quot;default&quot;:&quot;diplomski&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;razKr&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Dipl.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;studij&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { w: 1280, tab: 'pravila', rok: '', plan: null, drag: null, ask: false, rulesOpen: true, src: '', copied: false, unit: 'rijeci', val: '12000' };
+  trackRef = React.createRef();
+  STYLE = { fpzg: 'FPZG autor-godina', harvard: 'Harvard', apa: 'APA 7', ieee: 'IEEE', chicago: 'Chicago (autor-datum)', note: 'Fusnote' };
+  RANGE = { seminarski: [10, 15], zavrsni: [20, 30], diplomski: [40, 60], doktorski: [150, 250] };
+  SAMPLE = 'Horvat, Ivana. 2019. „Politička komunikacija u Hrvatskoj“. Zagreb: Fakultet političkih znanosti, str. 45–67.';
+  componentDidMount() { this.onR = () => this.setState({ w: window.innerWidth }); this.onR(); window.addEventListener('resize', this.onR); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onR); }
+  today() { const t = new Date(); t.setHours(0, 0, 0, 0); return t; }
+  dd(rok) { return rok ? Math.round((new Date(rok + 'T00:00') - this.today()) / 864e5) : null; }
+  dateAt(n) { const d = this.today(); d.setDate(d.getDate() + n); return d; }
+  fmt(n) { const d = this.dateAt(n); return d.getDate() + '. ' + (d.getMonth() + 1) + '.'; }
+  iso(n) { const d = this.dateAt(n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  suggest(rok) {
+    const r = Math.max(1, this.dd(rok)), big = ['diplomski', 'doktorski'].includes(this.props.raz);
+    const pred = r, uvez = Math.max(0, pred - (big ? 3 : 2)), pop = Math.max(0, uvez - 2);
+    return [0, pop, uvez, pred];
+  }
+  setRok = (rok) => this.setState({ rok, plan: rok ? this.suggest(rok) : null, ask: false });
+  moveMark(i, day) {
+    this.setState(s => { const p = s.plan.slice(), lo = i ? p[i - 1] : 0, hi = i < 3 ? p[i + 1] : this.span(s) ; p[i] = Math.max(lo, Math.min(hi, day)); return { plan: p }; });
+  }
+  span(s) { const r = Math.max(1, this.dd(s.rok) || 1); return Math.max(7, r + 4); }
+  dayFromX(x) { const el = this.trackRef.current; if (!el) return 0; const b = el.getBoundingClientRect(); return Math.round(Math.max(0, Math.min(1, (x - b.left) / b.width)) * this.span(this.state)); }
+  parse(t) {
+    t = (t || '').replace(/\s+/g, ' ').trim(); if (t.length < 8) return null;
+    const ym = t.match(/\b(1[89]\d{2}|20\d{2})\b/); const year = ym ? ym[1] : '';
+    let auth = ym ? t.slice(0, ym.index) : t.split('.')[0]; auth = auth.replace(/[\s.(,]+$/, '').trim();
+    let rest = ym ? t.slice(ym.index + 4).replace(/^[\s).,:]+/, '') : '';
+    const qm = rest.match(/[„“"«]([^“”"»]+)[“”"»]/); let title = qm ? qm[1] : rest.split('. ')[0];
+    if (qm) rest = rest.slice(qm.index + qm[0].length); else rest = rest.slice(title.length);
+    rest = rest.replace(/^[\s.,]+/, '');
+    const pm = rest.match(/(?:str\.|pp?\.)\s*([\d–-]+)/i); const pages = pm ? pm[1] : '';
+    if (pm) rest = rest.slice(0, pm.index);
+    rest = rest.replace(/[\s,.]+$/, ''); const pub = rest.split(':'); const city = pub.length > 1 ? pub[0].trim() : ''; const publisher = (pub.length > 1 ? pub.slice(1).join(':') : pub[0]).trim();
+    let last = auth, first = ''; if (auth.includes(',')) { [last, first] = auth.split(',').map(x => x.trim()); } else { const w = auth.split(' '); if (w.length > 1) { last = w.pop(); first = w.join(' '); } }
+    return { last, first, year, title: title.replace(/[.\s]+$/, ''), city, publisher, pages };
+  }
+  format(p, st) {
+    const ini = p.first ? p.first.split(/[\s-]+/).map(x => x[0] + '.').join(' ') : '', place = [p.city, p.publisher].filter(Boolean).join(': ');
+    if (st === 'apa') return { a: `${p.last}${ini ? ', ' + ini : ''} (${p.year}). `, t: p.title, b: `. ${p.publisher}.` };
+    if (st === 'ieee') return { a: `${ini ? ini + ' ' : ''}${p.last}, `, t: p.title, b: `. ${place}, ${p.year}.` };
+    if (st === 'chicago') return { a: `${p.last}${p.first ? ', ' + p.first : ''}. ${p.year}. `, t: p.title, b: `. ${place}.` };
+    if (st === 'note') return { a: `${p.first ? p.first + ' ' : ''}${p.last}, `, t: p.title, b: ` (${place}, ${p.year})${p.pages ? ', ' + p.pages.split(/[–-]/)[0] : ''}.` };
+    if (st === 'fpzg') return { a: `${p.last}${p.first ? ', ' + p.first : ''} (${p.year}) `, t: p.title, b: `. ${place}.` };
+    return { a: `${p.last}${ini ? ', ' + ini : ''} (${p.year}) `, t: p.title, b: `. ${place}.` };
+  }
+  renderVals() {
+    const s = this.state, P = this.props, f = P.fac || null, wide = s.w >= 1100, raz = P.raz || 'diplomski';
+    const dd = this.dd(s.rok), span = this.span(s), x = n => (n / span * 100) + '%';
+    const NAMES = ['Provjera', 'Popravak gotov', 'Ispis i uvez', 'Predaja'];
+    const p = s.plan || [0, 0, 0, 0];
+    const tightPred = s.plan && p[3] > dd, tight = !!s.plan && (tightPred || p[1] - p[0] < 2 || p[2] - p[1] < 1 || p[3] - p[2] < 1);
+    const marks = NAMES.map((label, i) => ({
+      n: String(i + 1), label, day: p[i], x: x(p[i]), date: p[i] === 0 ? 'danas' : this.fmt(p[i]), aria: label + ', povuci ili strelice',
+      bd: i === 3 ? '#C4372E' : '#26221B', bg: i === 3 ? '#C4372E' : (s.drag === i ? '#26221B' : '#FBF8F0'), ink: i === 3 || s.drag === i ? '#F7F3E8' : '#26221B', numCol: i === 3 ? '#A62B23' : '#26221B',
+      down: e => { e.currentTarget.setPointerCapture(e.pointerId); this.setState({ drag: i }); },
+      move: e => { if (this.state.drag === i) this.moveMark(i, this.dayFromX(e.clientX)); },
+      up: () => { this.setState({ drag: null }); if (i === 3 && this.state.plan[3] !== this.dd(this.state.rok)) this.setState({ ask: true }); },
+      key: e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); this.moveMark(i, p[i] + (e.key === 'ArrowRight' ? 1 : -1)); if (i === 3) setTimeout(() => this.setState(st => ({ ask: st.plan[3] !== this.dd(st.rok) })), 0); } },
+    }));
+    const st = f ? f.cit : null, parsed = this.parse(s.src);
+    const wr = f && f.words && raz === 'diplomski' ? (f.words[P.studij] || null) : null;
+    const range = this.RANGE[raz], m = f ? f.m : 2.5, l = f ? f.l : 1.5;
+    const cpp = 1800 * (1.5 / l) * ((21 - 2 * m) / 16), n = Math.max(0, parseInt(s.val, 10) || 0);
+    const chars = s.unit === 'rijeci' ? n * 6.4 : n * 1800, pages = Math.round(chars / cpp);
+    const max = Math.max(range[1] * 1.35, pages * 1.1, 10), rx = v => Math.min(100, v / max * 100) + '%';
+    const step = max > 120 ? 50 : max > 40 ? 20 : 5, ticks = []; for (let t = 0; t <= max; t += step) ticks.push({ n: String(t), x: rx(t) });
+    const words = s.unit === 'rijeci' ? n : Math.round(n * 1800 / 6.4);
+    const inR = wr ? (words >= wr[0] && words <= wr[1]) : (pages >= range[0] && pages <= range[1]);
+    const fmtN = v => v.toLocaleString('hr-HR');
+    const RZ = { seminarski: 'seminarski', zavrsni: 'završni', diplomski: 'diplomski', doktorski: 'doktorski' }[raz];
+    const rules = f ? [['MARGINE', String(f.m).replace('.', ',') + ' cm, uvez +0,5 cm'], ['PRORED', String(f.l).replace('.', ',')], ['FONT', f.fLong], ['CITIRANJE', this.STYLE[f.cit]], ['OPSEG', wr ? fmtN(wr[0]) + '–' + fmtN(wr[1]) + ' riječi' : RZ + ' ' + range[0] + '–' + range[1] + ' str.'], ['NASLOVNICA', 'bez broja stranice']] : [];
+    return {
+      cols: wide ? 'minmax(0,1fr)' : 'repeat(auto-fit,minmax(min(100%,300px),1fr))',
+      tabs: [['pravila', 'Pravila'], ['citat', 'Citat'], ['opseg', 'Opseg']].map(x2 => { const on = s.tab === x2[0]; return { label: x2[1], on, bg: on ? '#F3EEDF' : '#DCD3BC', z: on ? '2' : '1', mb: on ? '-1px' : '0', pad: on ? '10px 16px 11px' : '7px 14px 8px', pick: () => this.setState({ tab: x2[0] }) }; }),
+      isPrav: s.tab === 'pravila', isCit: s.tab === 'citat', isOps: s.tab === 'opseg',
+      panelLabel: s.tab === 'pravila' ? (f ? 'PRAVILA ' + f.kr : 'PRAVILA FAKULTETA') : s.tab === 'citat' ? 'CITAT ODMAH' : 'RAVNALO OPSEGA',
+      panelRight: s.tab === 'pravila' ? (f ? 'ažurirano ' + f.upd : '') : s.tab === 'citat' ? (st ? this.STYLE[st] + ' · ' + f.kr : 'stil fakulteta') : (f ? (wr ? fmtN(wr[0]) + '–' + fmtN(wr[1]) + ' riječi' : RZ + ' ' + range[0] + '–' + range[1] + ' str.') : ''),
+      rok: s.rok, hasRok: !!s.rok, onRok: e => this.setRok(e.target.value), clearRok: () => this.setRok(''),
+      calBig: dd === null ? '—' : dd < 0 ? '0' : String(dd), calBigCol: dd === null ? '#B8AE96' : '#26221B',
+      calUnit: dd === null ? 'dana do roka' : dd < 0 ? 'rok je prošao' : dd === 0 ? 'predaješ danas' : ((dd % 10 === 1 && dd % 100 !== 11) ? 'dan' : 'dana') + ' do roka',
+      calSub: s.rok ? 'predaja ' + s.rok.split('-').reverse().map(v => String(+v)).join('. ') + '.' : 'Neobavezno. Upiši rok i Lekta predloži plan do predaje.',
+      planRows: s.plan ? '1fr' : '0fr', trackRef: this.trackRef, marks, span: String(span), rokX: x(Math.max(0, dd || 0)), endLabel: this.fmt(span),
+      tight, tightTxt: tightPred ? 'IZA ROKA' : 'TIJESNO',
+      ask: s.ask, askText: 'Predaja je sada ' + this.fmt(p[3]) + ', a rok ' + (dd !== null ? this.fmt(dd) : '') + ' Pomaknuti rok?',
+      askYes: () => this.setState(st2 => ({ rok: this.iso(st2.plan[3]), ask: false })), askNo: () => this.setState({ ask: false }),
+      hasFac: !!f, noFac: !f, facName: f ? f.kr + ' · ' + (P.studij || '') : 'Prepoznat ćemo ga iz rada.',
+      facNote: f ? (P.razKr || '') + ' · pravilnik ažuriran ' + f.upd : '',
+      rulesOpen: s.rulesOpen, toggleRules: () => this.setState(x2 => ({ rulesOpen: !x2.rulesOpen })),
+      rulesBtn: s.rulesOpen ? 'Sakrij pravila' : '6 ključnih pravila', rulesArrow: s.rulesOpen ? 'rotate(180deg)' : 'none', rulesRows: s.rulesOpen ? '1fr' : '0fr',
+      rules: rules.map((r, i) => ({ k: r[0], v: r[1], op: s.rulesOpen ? '1' : '0', tr: s.rulesOpen ? 'none' : 'translateY(-6px)', delay: (s.rulesOpen ? i * 70 + 120 : 0) + 'ms' })),
+      rulesSrc: f ? 'Izvor: pravilnik ' + f.kr + ', ' + f.upd + ' · provjeri na stranici fakulteta' : '',
+      openProf: () => window.__lektaNav && window.__lektaNav.openProf(),
+      styleName: st ? this.STYLE[st] : 'stil fakulteta', src: s.src, onSrc: e => this.setState({ src: e.target.value, copied: false }), noSrc: !s.src, trySample: () => this.setState({ src: this.SAMPLE }),
+      hasParts: !!parsed, parts: parsed ? [['AUTOR', parsed.last + (parsed.first ? ', ' + parsed.first : '')], ['GOD.', parsed.year], ['NASLOV', parsed.title], ['IZDAVAČ', [parsed.city, parsed.publisher].filter(Boolean).join(': ')], ['STR.', parsed.pages]].filter(x2 => x2[1]).map(x2 => ({ k: x2[0], v: x2[1] })) : [],
+      showOut: !!(parsed && f), out: parsed && f ? this.format(parsed, st) : { a: '', t: '', b: '' }, needProf: !!(parsed && !f),
+      copyLbl: s.copied ? 'Kopirano ✓' : 'Kopiraj',
+      copy: () => { const o = this.format(parsed, st); try { navigator.clipboard.writeText(o.a + o.t + o.b); } catch (e) {} this.setState({ copied: true }); },
+      units: [['rijeci', 'Riječi'], ['kartice', 'Kartice']].map(u => ({ label: u[1], on: s.unit === u[0], bg: s.unit === u[0] ? '#26221B' : 'transparent', ink: s.unit === u[0] ? '#F3EEDF' : '#26221B', pick: () => this.setState({ unit: u[0], val: u[0] === 'rijeci' ? '12000' : '45' }) })),
+      val: s.val, onVal: e => this.setState({ val: e.target.value }), valAria: s.unit === 'rijeci' ? 'Broj riječi' : 'Broj kartica', unitWord: s.unit === 'rijeci' ? 'riječi' : 'kartica',
+      pages: String(pages), verdict: f ? (wr ? (inR ? fmtN(words) + ' riječi · u rasponu' : words < wr[0] ? 'fali ~' + fmtN(wr[0] - words) + ' riječi' : 'višak ~' + fmtN(words - wr[1]) + ' riječi') : (inR ? 'u rasponu ' + range[0] + '–' + range[1] : pages < range[0] ? 'fali ~' + (range[0] - pages) + ' str.' : 'višak ~' + (pages - range[1]) + ' str.')) : 'po 2,5 cm i 1,5',
+      verdictCol: f ? (inR ? '#17693F' : '#A62B23') : '#4A4438',
+      bandL: f && !wr ? rx(range[0]) : '0%', bandW: f && !wr ? 'calc(' + rx(range[1]) + ' - ' + rx(range[0]) + ')' : '0%', markX: rx(pages), ticks,
+      rulerNote: wr ? f.kr + ' opseg mjeri u riječima (' + P.studij + ': ' + fmtN(wr[0]) + '–' + fmtN(wr[1]) + '). Stranice su procjena po margini i proredu.' : f ? 'Zeleno je raspon koji traži pravilnik ' + f.kr + ' za ' + RZ + ' rad.' : 'Odaberi profil i ravnalo pokaže raspon tvog pravilnika.',
+    };
+  }
+}
+</script>
+</body>
+</html>
