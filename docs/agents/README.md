@@ -24,7 +24,7 @@ katalog ponavljanih kvarova (iz gita i iz sesija) i lista provjere prije commita
 | Implementator | Sol | `gpt-5.6-sol` | Dodijeljena implementacija i dokazi |
 | Implementator | Build | `build` | Grok Build implementacija i dokazi (`command: grok`) |
 
-Aktivni koordinator: `lekta-40` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
+Aktivni koordinator: `lekta-b1` (ime sesije u porukama `from-name`; mijenja se samo vlasnikovom
 rijecju ili commitom ovog retka). Ime sesije mijenja se pri svakom resetu sesije, pa se pri zamjeni
 ovaj redak azurira commitom; vrijedi uloga, ne ime. Njegov nalog vrijedi kao vlasnikova trajna rijec, osim za
 radnje koje CLAUDE.md, "Implementatorske sesije", navodi kao samo vlasnikove. Nalog vrijedi samo kad
