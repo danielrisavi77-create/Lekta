@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
-  clientIpFromForwarded,
+  clientIpFromHeaders,
+  hasTrustedClientIp,
+  ipHashScheme,
   deriveIpSalt,
   hashClientIp,
   hashClientIpSalted,
@@ -13,30 +15,34 @@ import {
 
 const HEX64 = /^[0-9a-f]{64}$/;
 const KEY = 'service-role-kljuc-ABC';
-const FWD = '203.0.113.7, 10.0.0.1';
 
-describe('clientIpFromForwarded (T84 XFF: zadnji unos, hop gatewaya)', () => {
-  it('uzima ZADNJI unos liste, inace unknown', () => {
-    expect(clientIpFromForwarded(FWD)).toBe('10.0.0.1');
-    expect(clientIpFromForwarded('198.51.100.9')).toBe('198.51.100.9');
-    expect(clientIpFromForwarded(null)).toBe('unknown');
-    expect(clientIpFromForwarded('')).toBe('unknown');
-    expect(clientIpFromForwarded(' , ')).toBe('unknown');
+const h = (values: Record<string, string>) => ({ get: (name: string) => values[name.toLowerCase()] ?? null });
+const FWD = h({ 'cf-connecting-ip': '203.0.113.7' });
+
+describe('clientIpFromHeaders (T84 XFF: cf-connecting-ip)', () => {
+  it('prihvaca samo IPv4 i IPv6, prazne i krive zaglavlje odbija prije hashiranja', () => {
+    expect(clientIpFromHeaders(h({ 'cf-connecting-ip': '198.51.100.9' }))).toBe('198.51.100.9');
+    expect(clientIpFromHeaders(h({ 'cf-connecting-ip': ' 2001:db8::1 ' }))).toBe('2001:db8::1');
+    for (const invalid of [{}, { 'cf-connecting-ip': '' }, { 'cf-connecting-ip': '   ' },
+      { 'cf-connecting-ip': 'a'.repeat(65) }, { 'cf-connecting-ip': 'spoofed-address' },
+      { 'cf-connecting-ip': '999.0.0.1' }, { 'cf-connecting-ip': '198.51.100.9, 1.1.1.1' },
+      { 'cf-connecting-ip': '1.2.3.04' }, { 'cf-connecting-ip': '2001:db8::zz' }]) {
+      expect(() => clientIpFromHeaders(h(invalid))).toThrow('UNTRUSTED_CLIENT_IP');
+    }
   });
 
-  it('vise unosa, razmaci i prazni unosi: odlucuje zadnji neprazni', () => {
-    expect(clientIpFromForwarded('1.1.1.1,2.2.2.2 , 3.3.3.3')).toBe('3.3.3.3');
-    expect(clientIpFromForwarded('1.1.1.1, 3.3.3.3, ')).toBe('3.3.3.3');
+  it('x-forwarded-for, x-real-ip i true-client-ip se ne citaju (izmjereno: gateway ih prepisuje ili klijent bira)', () => {
+    const spoofed = { 'x-forwarded-for': '198.51.100.1, 10.0.0.1', 'x-real-ip': '198.51.100.2', 'true-client-ip': '198.51.100.3' };
+    expect(() => clientIpFromHeaders(h(spoofed))).toThrow('UNTRUSTED_CLIENT_IP');
+    expect(clientIpFromHeaders(h({ ...spoofed, 'cf-connecting-ip': '203.0.113.50' }))).toBe('203.0.113.50');
   });
 
-  it('izmisljeni klijentski unosi ispred hopa gatewaya ne mijenjaju kljuc ni hash', async () => {
-    const gateway = '203.0.113.50';
-    const spoofs = ['198.51.100.1', '198.51.100.2, 10.9.9.9', 'neki-tekst'];
-    const keys = spoofs.map((s) => clientIpFromForwarded(`${s}, ${gateway}`));
-    expect(new Set(keys)).toEqual(new Set([gateway]));
-    const hashes = await Promise.all(spoofs.map((s) => hashClientIpSalted(`${s}, ${gateway}`, '', KEY)));
-    expect(new Set(hashes).size).toBe(1);
-    expect(await hashClientIpSalted(gateway, '', KEY)).toBe(hashes[0]);
+  it('izmisljeni headeri ne mijenjaju hash, razlicit cf-connecting-ip ga mijenja', async () => {
+    const a = await hashClientIpSalted(h({ 'cf-connecting-ip': '203.0.113.50', 'x-forwarded-for': '1.1.1.1' }), '', KEY);
+    const b = await hashClientIpSalted(h({ 'cf-connecting-ip': '203.0.113.50', 'x-forwarded-for': '2.2.2.2, 3.3.3.3' }), '', KEY);
+    const c = await hashClientIpSalted(h({ 'cf-connecting-ip': '203.0.113.51' }), '', KEY);
+    expect(a).toBe(b);
+    expect(a).not.toBe(c);
   });
 });
 
@@ -62,7 +68,7 @@ describe('hashClientIpSalted', () => {
   it('s praznim IP_HASH_SALT hash je SOLJEN (razlicit od nesoljenog)', async () => {
     const salted = await hashClientIpSalted(FWD, '', KEY);
     const unsalted = await hashClientIp(FWD, ''); // stari, ranjivi put
-    expect(salted).toMatch(HEX64);
+    expect(salted).toMatch(/^v2:[0-9a-f]{64}$/);
     expect(salted).not.toBe(unsalted);
   });
 
@@ -76,5 +82,29 @@ describe('hashClientIpSalted', () => {
     const withSalt = await hashClientIpSalted(FWD, 'dedicirani', KEY);
     const direct = await hashClientIp(FWD, 'dedicirani');
     expect(withSalt).toBe(direct);
+  });
+  it('ne hashira zajednicki unknown kljuc ni lazni, ne-IP header', async () => {
+    await expect(hashClientIpSalted(h({}), '', KEY)).rejects.toThrow('UNTRUSTED_CLIENT_IP');
+    await expect(hashClientIpSalted(h({ 'cf-connecting-ip': 'attacker-supplied-text' }), '', KEY))
+      .rejects.toThrow('UNTRUSTED_CLIENT_IP');
+  });
+
+});
+
+describe('hasTrustedClientIp i oznaka sheme (T84 XFF, Codex P1 na #346)', () => {
+  it('pouzdan je samo valjan cf-connecting-ip; sve ostalo je nepouzdano bez iznimke', () => {
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '203.0.113.7' }))).toBe(true);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '2001:db8::1' }))).toBe(true);
+    expect(hasTrustedClientIp(h({}))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'x-forwarded-for': '203.0.113.7' }))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': 'napadac' }))).toBe(false);
+    expect(hasTrustedClientIp(h({ 'cf-connecting-ip': '999.1.1.1' }))).toBe(false);
+  });
+
+  it('novi hash nosi oznaku v2:, stari (bez prefiksa) je legacy', async () => {
+    const novi = await hashClientIpSalted(FWD, '', KEY);
+    expect(ipHashScheme(novi)).toBe('v2');
+    expect(ipHashScheme('a'.repeat(64))).toBe('legacy');
+    expect(ipHashScheme('h-ista-mreza')).toBe('legacy');
   });
 });

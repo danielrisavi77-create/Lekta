@@ -296,7 +296,7 @@ import { publicSourceUrl } from '../src/shared/source-url.mjs';
 import { sourceLinkHtml } from '../scripts/generate-faculty-pages.mjs';
 import { idempotenceProperty, realRepair, repairWith, visibleTextProperty, type RepairFn } from './helpers/repair-arbitraries';
 import { repairCostGuardProblems } from './helpers/repair-cost-guard';
-import { loadClientIpFromForwarded, xffBehaviourProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
+import { entryWrapperProblems, loadClientIpFromHeaders, loadRequireTrustedClientIp, referrerSchemeProblems, xffBehaviourProblems, xffCallerProblems, xffKeyProblems, xffRealSources } from './helpers/xff-key-guard';
 import { corpusTitleBoundProblems } from './helpers/corpus-title-bound';
 import { friendRewardAnonGuardProblems } from './helpers/friend-referral-guard';
 import { netlifyPinProblems, netlifyPinRealSources } from './helpers/netlify-cli-pin';
@@ -5062,49 +5062,155 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => repairCostGuardProblems(readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'repair-docx', 'index.ts'))).length === 0,
   },
-  // T84 XFF: IP kljuc iz zadnjeg unosa x-forwarded-for, svi pozivatelji kroz isti pomocnik.
+  // T84 XFF: IP kljuc iz cf-connecting-ip, svi pozivatelji kroz isti pomocnik s req.headers.
   {
-    id: 't84/xff-prvi-unos',
-    imitates: 'T84 XFF: kljuc se opet uzima iz PRVOG unosa x-forwarded-for, koji bira klijent, pa svaki izmisljen unos daje nov brojac IP limita.',
+    id: 't84/xff-zadnji-unos',
+    imitates: 'T84 XFF: kljuc se vraca na x-forwarded-for, pa zadnji unos (promjenjivi unutarnji cvor gatewaya) postaje zajednicki brojac svih korisnika, a prvi unos bi bio klijentski.',
     caught: () => {
       const { hashIp, functions } = xffRealSources();
-      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops[0] ?? 'unknown';");
-      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije zadnji unos x-forwarded-for');
+      const mut = hashIp.replace("headers.get('cf-connecting-ip')", "headers.get('x-forwarded-for')");
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: kljuc nije cf-connecting-ip');
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
   },
   {
-    id: 't84/xff-obrnuti-hopovi',
-    imitates: 'T84 XFF: hopovi se obrnu prije at(-1), pa tekst jos sadrzi zadnji unos, a kljuc je opet PRVI (klijentov) unos (Codex XFF-4 na #295).',
+    id: 't84/xff-fallback-na-drugi-header',
+    imitates: 'T84 XFF: uz cf-connecting-ip se dodaje rezerva x-real-ip ili x-forwarded-for, pa klijent bez Cloudflarea bira kljuc.',
     caught: () => {
       const { hashIp } = xffRealSources();
-      const mut = hashIp.replace("return hops.at(-1) ?? 'unknown';", "return hops.reverse().at(-1) ?? 'unknown';");
-      return mut !== hashIp && xffBehaviourProblems(loadClientIpFromForwarded(mut)).length > 0;
+      const mut = hashIp.replace("const raw = (headers.get('cf-connecting-ip') ?? '').trim();", "const raw = (headers.get('cf-connecting-ip') ?? headers.get('x-real-ip') ?? '').trim();");
+      return mut !== hashIp && xffBehaviourProblems(loadClientIpFromHeaders(mut)).length > 0;
     },
-    cleanBefore: () => xffBehaviourProblems(loadClientIpFromForwarded(xffRealSources().hashIp)).length === 0,
+    cleanBefore: () => xffBehaviourProblems(loadClientIpFromHeaders(xffRealSources().hashIp)).length === 0,
   },
   {
-    id: 't84/xff-header-velikim-slovima-u-shared',
+    id: 't84/xff-ip-header-u-shared',
     imitates: 'T84 XFF: _shared modul cita X-Forwarded-For velikim slovima mimo pomocnika, a skener je gledao samo index.ts i samo mala slova (Codex XFF-2 i XFF-3 na #295).',
     caught: () => {
       const { hashIp, functions } = xffRealSources();
       const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: 'export const ip = (req: Request) => req.headers.get("X-Forwarded-For");\n' };
-      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: IP header se cita mimo hash-ip.ts (1x)');
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
   },
   {
-    id: 't84/xff-cijeli-header-u-faculty-request',
-    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen prvi unos otvara nov prozor limita.',
+    id: 't84/xff-faculty-request-mimo-pomocnika',
+    imitates: 'T84 XFF: faculty-request opet hashira cijeli x-forwarded-for mimo pomocnika, pa izmisljen unos otvara nov prozor limita.',
     caught: () => {
       const { hashIp, functions } = xffRealSources();
-      const from = "hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE)";
+      const from = 'hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE)';
       const to = "sha256(IP_HASH_SALT + '|' + (req.headers.get('x-forwarded-for') ?? ''))";
       const mutated = functions.map((f) => (f.path.endsWith('faculty-request/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
       const changed = mutated.some((f, i) => f.text !== functions[i].text);
-      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: x-forwarded-for se cita mimo hashClientIpSalted (1x)');
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/faculty-request/index.ts: IP header se cita mimo hash-ip.ts (1x)');
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-krivi-argument-pomocnika',
+    imitates: 'T84 XFF: funkcija pomocniku preda kopiju ili drugi objekt umjesto req.headers, pa se kljuc ne cita iz stvarnog zahtjeva.',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = 'hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE)';
+      const mutated = functions.map((f) => (f.path.endsWith('source-check/index.ts') ? { ...f, text: f.text.replace(from, 'hashClientIpSalted(new Headers(), IP_HASH_SALT, SERVICE_ROLE)') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffKeyProblems(hashIp, mutated).includes('supabase/functions/source-check/index.ts: hashClientIpSalted ne dobiva req.headers (1x)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-pozivatelj-zamijenjen-klijentskim-hashem',
+    imitates: 'T84 XFF: source-check umjesto pomocnika uzima ipHash iz tijela zahtjeva, pa klijent bira kljuc IP limita (Codex XFF-1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mutated = functions.map((f) => (f.path.endsWith('source-check/index.ts') ? { ...f, text: f.text.replace(/const ipHash = await hashClientIpSalted\([^;]*;/, 'const ipHash = String(body.ipHash);') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).length > 0 && xffKeyProblems(hashIp, mutated).length > 0;
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffCallerProblems(functions).length === 0 && xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-pozivatelj-uklonjen',
+    imitates: 'T84 XFF: jedan od deset IP pozivatelja se ukloni iz funkcije, a globalni prag broja poziva i dalje prolazi (Codex XFF-1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const mutated = functions.filter((f) => !f.path.endsWith('analytics-event/index.ts'));
+      return mutated.length < functions.length && xffCallerProblems(mutated).includes('supabase/functions/analytics-event/index.ts: IP pozivatelj nedostaje');
+    },
+    cleanBefore: () => xffCallerProblems(xffRealSources().functions).length === 0,
+  },
+  {
+    id: 't84/xff-sastavljen-naziv-headera',
+    imitates: 'T84 XFF: naziv headera se sastavi konkatenacijom pa ga doslovni skener ne vidi (Codex XFF-1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const extra = { path: 'supabase/functions/_shared/podmetnut.ts', text: "const h = 'x-forwarded-' + 'for';\nexport const ip = (req: Request) => req.headers.get(h);\n" };
+      return xffKeyProblems(hashIp, [...functions, extra]).includes('supabase/functions/_shared/podmetnut.ts: IP se cita mimo hash-ip.ts (trag headera ili adrese veze)');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-ulazni-omotac-uklonjen',
+    imitates: 'T84 XFF: generate-report izgubi ulazni omotac nepouzdanog IP-a, pa nevaljan cf-connecting-ip tek kasnije baci iznimku, nakon sto je nagrada ili upis vec promijenio stanje (Codex P1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const mutated = functions.map((f) => (f.path.endsWith('generate-report/index.ts') ? { ...f, text: f.text.replace('Deno.serve(requireTrustedClientIp(async (req: Request) => {', 'Deno.serve(async (req: Request) => {') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).includes('supabase/functions/generate-report/index.ts: Deno.serve nije omotan u requireTrustedClientIp (403 client_ip_untrusted)');
+    },
+    cleanBefore: () => xffCallerProblems(xffRealSources().functions).length === 0,
+  },
+  {
+    id: 't84/xff-omotac-ne-odbija',
+    imitates: 'T84 XFF: requireTrustedClientIp prosljeduje svaki zahtjev rukovatelju, pa nepouzdan IP prolazi do upisa i nagrade (Codex P1 na #346).',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("if (req.method !== 'OPTIONS' && !hasTrustedClientIp(req.headers)) {", 'if (false) {');
+      return mut !== hashIp && (entryWrapperProblems(loadRequireTrustedClientIp(mut))).length > 0;
+    },
+    cleanBefore: () => (entryWrapperProblems(loadRequireTrustedClientIp(xffRealSources().hashIp))).length === 0,
+  },
+  {
+    id: 't84/xff-omotac-blokira-preflight',
+    imitates: 'T84 XFF: omotac odbija i OPTIONS preflight, pa CORS preflight pada prije rukovatelja i preglednik ne moze pozvati funkciju.',
+    caught: () => {
+      const { hashIp } = xffRealSources();
+      const mut = hashIp.replace("req.method !== 'OPTIONS' && !hasTrustedClientIp", '!hasTrustedClientIp');
+      return mut !== hashIp && (entryWrapperProblems(loadRequireTrustedClientIp(mut))).some((p) => p.includes('OPTIONS'));
+    },
+    cleanBefore: () => (entryWrapperProblems(loadRequireTrustedClientIp(xffRealSources().hashIp))).length === 0,
+  },
+  {
+    id: 't84/xff-hash-bez-oznake-sheme',
+    imitates: 'T84 XFF: hashClientIp vrati goli hash bez oznake sheme v2:, pa se novi i stari zapisi vise ne razlikuju i mijesaju u usporedbi nagrade (Codex P1 na #346).',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const mut = hashIp.replace('return IP_HASH_SCHEME_PREFIX + (await sha256Hex(salt + ip));', 'return sha256Hex(salt + ip);');
+      return mut !== hashIp && xffKeyProblems(mut, functions).includes('hash-ip: hash ne nosi oznaku sheme v2:');
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-nagrada-mijesa-sheme',
+    imitates: 'T84 XFF: grant-referrer-reward uklanja provjeru sheme, pa se hashevi iz razlicitih shema tretiraju kao razliciti i nagrada prolazi uz neusporedivu mrezu (Codex P1 na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const grant = functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!;
+      const mut = grant.text.replace("return { granted: false, reason: 'ip_scheme_unverifiable' };", 'void 0;');
+      return mut !== grant.text && referrerSchemeProblems(mut).includes('grant-referrer-reward: mijesane sheme ne zadrzavaju nagradu');
+    },
+    cleanBefore: () => referrerSchemeProblems(xffRealSources().functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!.text).length === 0,
+  },
+  {
+    id: 't84/xff-nagrada-trajno-zatvara',
+    imitates: 'T84 XFF: ip_scheme_unverifiable vraca se u TRAJNI_RAZLOZI, pa se obveza nagrade tiho zatvara kao done i pravo preporucitelja trajno propada (Daniel, review na #346).',
+    caught: () => {
+      const { functions } = xffRealSources();
+      const grant = functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!;
+      const mut = grant.text.replace("'ip_match_fraud', 'monthly_cap_reached'", "'ip_match_fraud', 'ip_scheme_unverifiable', 'monthly_cap_reached'");
+      return mut !== grant.text && referrerSchemeProblems(mut).includes('grant-referrer-reward: ip_scheme_unverifiable je trajna odluka');
+    },
+    cleanBefore: () => referrerSchemeProblems(xffRealSources().functions.find((f) => f.path === 'supabase/functions/_shared/grant-referrer-reward.ts')!.text).length === 0,
   },
   ...([
     ['t84/korpus-naslov-bez-granice', 'kljuc ide u corpus_search_many bez gornje granice, pa 60 naslova od 4 000 znakova drzi dijeljenu bazu desetke sekundi po seriji',

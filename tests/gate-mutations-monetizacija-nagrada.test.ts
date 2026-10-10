@@ -54,7 +54,9 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
   }
 
   async function nagradniModuliIz(grantIzvor: string) {
-    const grant = izvrsiIzvor(grantIzvor, {}) as typeof GrantModul;
+    const grant = izvrsiIzvor(grantIzvor, {
+      './hash-ip.ts': await import('../supabase/functions/_shared/hash-ip'),
+    }) as typeof GrantModul;
     const worker = izvrsiIzvor(bonusOutboxModuleSource(), {
       '../_shared/grant-referrer-reward.ts': grant,
       '../webhook-mor/handler.ts': await import('../supabase/functions/webhook-mor/handler'),

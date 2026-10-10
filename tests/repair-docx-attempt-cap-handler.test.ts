@@ -67,7 +67,7 @@ beforeEach(() => {
 const SLOT_OK: FakeResult = { data: [{ slot_id: 's-1', reason: 'ok' }] };
 const post = () => handler(new Request('http://lazni/repair-docx', {
   method: 'POST',
-  headers: { Authorization: 'Bearer token', 'content-type': 'multipart/form-data; boundary=x' },
+  headers: { Authorization: 'Bearer token', 'cf-connecting-ip': '203.0.113.7', 'content-type': 'multipart/form-data; boundary=x' },
   body: 'x',
 }));
 const attemptWrites = () => state.calls.filter((c) => c.table === 'repair_attempt_log' && writeOp(c) !== 'select');

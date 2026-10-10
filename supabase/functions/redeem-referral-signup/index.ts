@@ -9,7 +9,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
@@ -25,7 +25,8 @@ const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const jsonResponse = (body: unknown, status: number): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
@@ -80,7 +81,7 @@ Deno.serve(async (req: Request) => {
   if (existing) return jsonResponse({ ok: true, reason: 'already_referred' }, 200);
 
   // Isti kanonski hash (ekstrakcija + izvedeni salt) kao generate-report, inace fraud usporedba pada.
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE_KEY);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE_KEY);
 
   const { error: insertError } = await supabase.from('referral_signups').insert({
     referrer_user_id: codeRow.user_id,
@@ -94,4 +95,4 @@ Deno.serve(async (req: Request) => {
   if (insertError) return jsonResponse({ ok: false }, 500);
 
   return jsonResponse({ ok: true }, 200);
-});
+}));

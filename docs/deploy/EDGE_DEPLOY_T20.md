@@ -20,7 +20,7 @@ ne deploya i ne cita produkciju.
 ## Preduvjeti prije bilo kojeg deploya
 
 1. U masteru su spojeni T84 PR-ovi: #289 (RF-1, spojen 4. 10. 2026.), #291 (SC-1), #294 (RD-2/RD-3 i
-   migracija 0209), #295 (XFF). Deploy se radi s tocnog commita mastera; commit se zapisuje.
+   migracija 0209), #295 (XFF, zamijenjen kljucem `cf-connecting-ip`). Deploy se radi s tocnog commita mastera; commit se zapisuje.
 2. `npm run check` zelen na tom commitu, ukljucujuci `check:edge` (Deno), koji cloud sesija ne moze
    izvesti: vlasnik ga izvodi lokalno.
 3. Staging ide cijelim redoslijedom prvi. Produkcija tek kad staging ima zapisane dokaze.
@@ -48,14 +48,32 @@ globalni RPC, ali strop ne pada nigdje. Migracija trazi pg_cron (bez njega pada 
 `preflight-start`, `profile-rules`, `redeem-referral-signup`, `repair-docx`, `source-check`.
 
 Zasto zajedno: anti-fraud u nagradi preporucitelju usporeduje `ip_hash` iz `redeem-referral-signup`
-s onim iz `generate-report`. Ako jedna funkcija racuna stari (prvi unos), a druga novi kljuc (zadnji
-unos), usporedba ne pogadja nista dok obje nisu na istom commitu. `repair-docx`, `generate-report` i
+s onim iz `generate-report`. Ako jedna funkcija racuna stari (prvi unos), a druga novi kljuc (`cf-connecting-ip`),
+usporedba ne pogadja nista dok obje nisu na istom commitu. `repair-docx`, `generate-report` i
 `source-check` nose i svoje T84 promjene, pa se njihov rizik navodi zasebno u tablici.
 
-**Uvjet prije produkcije (iz #295):** na stagingu, s ovim kodom, dva poziva s istog stroja i
-razlicitim izmisljenim `X-Forwarded-For` daju ISTI `ip_hash`, a poziv s druge mreze (mobilni
-hotspot) daje RAZLICIT. Drugi uvjet iskljucuje zajednicku unutarnju adresu gatewaya kao kljuc. Mjeri
-Terminal laptop. Ako drugi uvjet padne: STANI, ne deployati na produkciju.
+**Uvjet prije produkcije (kljuc `cf-connecting-ip`, T84 XFF):** zadnji unos `x-forwarded-for` iz #295 nije
+smio na produkciju: mjerenje na stagingu (2026-10-09) pokazalo je da gateway prepisuje klijentski header u
+`<ip klijenta>,<ip klijenta>, <promjenjivi AWS cvor>`, pa bi zadnji unos bio zajednicki brojac. Kljuc je
+`cf-connecting-ip` (Cloudflare ga postavlja, klijentski pokusaj odbija greskom 1000). Na stagingu, s ovim
+kodom, dva poziva s istog stroja i razlicitim izmisljenim `X-Forwarded-For` i `x-real-ip` daju ISTI
+`ip_hash`, a poziv s druge mreze (mobilni hotspot) daje RAZLICIT. Ako drugi uvjet padne: STANI, ne
+deployati na produkciju.
+
+**Prijelaz s x-forwarded-for na cf-connecting-ip (T84 XFF, Codex P1 na #346).**
+
+- Svih 10 IP funkcija ima `Deno.serve(requireTrustedClientIp(...))`: nepouzdan ili nedostajuci `cf-connecting-ip` dobiva
+  `403 client_ip_untrusted` prije rukovatelja, dakle prije citanja tijela, auth poziva, rezervacije slota, upisa ili
+  nagrade (OPTIONS prolazi). Odgovor nema CORS zaglavlja. Gard `tests/helpers/xff-key-guard.ts` trazi omotac u svakoj
+  funkciji i izvrsava omotac iz izvora `hash-ip.ts`.
+- Novi hashevi nose oznaku sheme `v2:`; stari (bez prefiksa) su `legacy`. `ip_hash` je `text`, migracija nije potrebna.
+- `tryGrantReferrerReward` ne usporeduje hasheve razlicitih shema. Ako preporuciteljevi izvjestaji sadrze hash druge
+  sheme od signupa, nagrada se ZADRZAVA (`ip_scheme_unverifiable`, NIJE trajna odluka: obveza u outboxu ostaje `pending`, ponavlja se do granice pokusaja, pa `failed` i ceka pregled; signup ostaje
+  `friend_rewarded`, bez `fraud_blocked`). Izmjereno 2026-10-09: produkcija ima 0 `referral_signups` i 32
+  `report_generations.ip_hash` (17 korisnika, 2026-07-20 do 2026-08-04, ni jedan mladi od 30 dana); staging 1.
+  Utjecaj: preporucitelji s takvim starim izvjestajem ne dobivaju automatsku nagradu, ali pravo nije izgubljeno: obveza zavrsava kao `failed` (rucni pregled) dok vlasnik ne odluci o retenciji.
+- Staging provjera prije produkcije: poziv na zasticenom ulazu daje 200 uz valjan `cf-connecting-ip`, a klijentski
+  `CF-Connecting-IP` Cloudflare odbija (403, izmjereno 2026-10-09 na `health`).
 
 ### Val 2: ostale deployane funkcije bez T84 promjena
 

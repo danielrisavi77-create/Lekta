@@ -15,7 +15,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import {
   isValidPreflightConsent,
   PREFLIGHT_RESULT_RETENTION_DAYS,
@@ -68,7 +68,8 @@ async function mintToken(payload: unknown, secret: string): Promise<string> {
   return `${body}.${b64url(sig)}`;
 }
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
  const origin = req.headers.get('origin');
  try {
   if (req.method === 'OPTIONS') {
@@ -120,8 +121,7 @@ Deno.serve(async (req: Request) => {
     .gt('created_at', dayAgo);
   if ((userCount ?? 0) >= DAILY_CAP_USER) return json({ error: 'rate_limited' }, 429, origin);
 
-  const ipHash = await hashClientIpSalted(
-    req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
   // AUD-27: atomicna rezervacija per-IP dnevnog slota (0022). Zamjenjuje raniji
   // ne-atomicni COUNT nad preflight_checks.ip_hash. claim_ip_rate_slot radi ON
   // CONFLICT increment WHERE count < cap pod row-lockom, pa nema TOCTOU. Ugovor:
@@ -196,4 +196,4 @@ Deno.serve(async (req: Request) => {
   console.error('[preflight-start]', e);
   return json({ error: 'internal' }, 500, origin);
  }
-});
+}));
