@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Invarijanti data-driven conformance derivacije (tests/helpers/conformance.ts),
  * BEZ ijedne analize dokumenta (brzo, u redovnom `npm run check`).

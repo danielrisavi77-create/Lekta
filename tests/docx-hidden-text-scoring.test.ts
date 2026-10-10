@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T26 / audit 22. 9. nalaz #17: skriveni tekst (w:vanish) ne smije odlucivati o bodovanju
  * oblikovanja. Word ga ne prikazuje ni ne ispisuje, pa rad s vidljivim tijelom u Times New Roman

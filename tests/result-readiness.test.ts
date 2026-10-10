@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { resultReadiness, repairCeiling } from '../src/ui/result-readiness';
 import type { Check } from '../src/scoring/checks';

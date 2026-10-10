@@ -186,7 +186,8 @@ Veza s `trackEvent` u `src/ui/telemetry.ts`:
     `kind`, `category`, `pick`, `demo`, `manual`;
   - profil i vrsta rada: `profileId`, `profileStatus`, `workType`, `ruleId`;
   - brojevi i ishodi provjere: `total`, `found`, `missing`, `flagged`, `checked`, `issueCount`,
-    `count`, `changes`, `stored`, `score`, `scoreBand`;
+    `count`, `changes`, `stored`, `score`, `scoreBand`, `retracted` (broj povucenih radova u
+    provjeri postojanja izvora, T98);
   - velicina i trajanje: `sizeBucket` (razred velicine, ne tocna velicina), `ms`.
 - Opportunity Report dodatno koristi brojcane kljuceve `auto`, `assisted`, `unknown` i `structureGaps`; structure/no-op detalji koriste samo postojece dopustene `category`, `kind` i `count`. Svi ostaju anonimni agregati bez teksta rada, izvornog skip razloga ili `ruleId`-a.
 - Nijedan kljuc ne nosi tekst rada ni ime datoteke; `tests/product-journey-telemetry.test.ts` tvrdi

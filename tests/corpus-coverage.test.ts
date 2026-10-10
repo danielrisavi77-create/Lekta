@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 6 (Lekta Error Corpus): coverage izvjestaj je KONZISTENTAN i posten.
  *

@@ -9,6 +9,9 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  # DAN-80: GitHub merge queue gradi PR s najnovijim masterom na grani gh-readonly-queue/* i trazi
+  # iste provjere pod ovim okidacem; bez njega PR u redu visi bez statusa.
+  merge_group:
   workflow_dispatch:
 
 # Least-privilege token (AUD-48): gate nista ne pise, samo cita kod.
@@ -59,8 +62,11 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Build gate (oxlint + tsc + edge + vitest + vite build)
-        run: npm run check
+      # DAN-80: vitest je izdvojen u `vitest-shard` + `vitest-gate` (isti `npm run check` lanac, samo
+      # paralelno). `check:static` je `check:inner` bez `vitest run`; da se dva lanca ne razilaze
+      # cuva tests/ci-gate-split.test.ts. Lokalno `npm run check` ostaje PUNI gate.
+      - name: Build gate bez vitesta (oxlint + tsc + edge + vite build)
+        run: npm run check:static
 
       # Typecheck Edge funkcija NE dira lockfile (`check-edge.mjs` svakom pozivu Dena predaje
       # `--no-lock`), pa tranzitivni graf koji esm.sh posluzuje nitko nije provjeravao:
@@ -168,3 +174,52 @@ jobs:
           name: lean-report
           path: docs/generated/LEAN_REPORT.md
           if-no-files-found: ignore
+
+  # DAN-80: vitest podijeljen na 4 shardova po Node verziji (isti skup kao nekadasnji `vitest run`
+  # unutar build-gatea). Obvezna provjera je agregat `vitest-gate` ispod, ne pojedini shard.
+  # Bez `if` uvjeta na dogadjaj: treba i na push na master i na merge_group (merge queue).
+  vitest-shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 24]
+        shard: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: ${{ matrix.node }}
+          npm-version: 11.11.0
+
+      - name: Vitest shard ${{ matrix.shard }}/4 (Node ${{ matrix.node }})
+        run: |
+          node scripts/clean-vitest-tmp.mjs
+          npx vitest run --shard=${{ matrix.shard }}/4 --reporter=default --reporter=json --outputFile.json=shard.json
+
+      # `vitest list --shard` IGNORIRA shard, pa se particija dokazuje brojem iz runa: zbroj preko
+      # 4 shardova mora biti jednak punom popisu (719 na 2026-10-08, izmjereno u #336).
+      - name: Broj datoteka u shardu
+        if: always()
+        run: |
+          node -e "const r=JSON.parse(require('fs').readFileSync('shard.json','utf8'));console.log('node ${{ matrix.node }} shard ${{ matrix.shard }}/4 datoteka: '+r.testResults.length)" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # Jedina obvezna provjera za vitest. `always()` + izricita provjera rezultata: preskocen,
+  # otkazan ili pao shard NE smije proci kao zeleno (needs bez always() bi se preskocio i GitHub bi
+  # ga u zasticenoj grani tretirao kao uspjeh).
+  vitest-gate:
+    if: always()
+    needs: vitest-shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Svi shardovi uspjesni
+        env:
+          SHARD_RESULT: ${{ needs.vitest-shard.result }}
+        run: |
+          echo "vitest-shard: $SHARD_RESULT"
+          test "$SHARD_RESULT" = "success"

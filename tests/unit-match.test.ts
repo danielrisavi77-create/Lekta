@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za uparivanje sastavnica iz Upisnika s nasim jedinicama (P1-6 u
  * docs/PLAN_POTPUNA_POKRIVENOST.md).

@@ -35,8 +35,112 @@ const RUNNERS = new Set(['npx', 'pnpx', 'bunx']);
 const ENV_ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 
 /**
+ * Citaci kojima se tijelo heredoca smije preskociti: `cat` ga ispisuje, `git` ga uzima kao poruku
+ * (`git commit -F -`), a `python`/`python3` kao Python kod (isti doseg kao `python3 -c "..."`, koji hook vec pusta).
+ * Allowlist, ne denylist ljuski: treca runda Grok pregleda #328 pokazala je da svaki program izvan
+ * popisa ljuski moze izvrsiti tijelo (`sed e`, `make -f -`, `read` pa `eval`, funkcija, alias, glob).
+ */
+const HEREDOC_READERS = new Set(['cat', 'git', 'python', 'python3']);
+const HEREDOC_WORD_RE = /^[A-Za-z0-9_./:+-]+$/;
+const PYTHON_READERS = new Set(['python', 'python3']);
+const PYTHON_SAFE_MODULES = new Set([
+  'json', 're', 'csv', 'string', 'textwrap', 'datetime', 'math',
+  'collections', 'itertools', 'pathlib', 'html', 'unicodedata', 'argparse',
+]);
+const PYTHON_UNSAFE_RE = /__|\b(?:exec|eval|compile|getattr|setattr|delattr|globals|locals|vars|breakpoint)\b/;
+// Sigurni moduli unutar sebe uvoze `os`/`sys` (`argparse.os`, `pathlib._local`, `argparse._sys`), pa se
+// ti nazivi (i s vodecim podvlakama) ne smiju pojaviti nigdje u tijelu, ni kao atribut ni kao uvoz.
+const PYTHON_ESCAPE_NAMES_RE = /(?<![A-Za-z0-9])_*(?:os|sys|posix|nt|subprocess|pty|shutil|ctypes|importlib|builtins|runpy|socket|signal|multiprocessing|threading|code|pdb)(?![A-Za-z0-9])/;
+const PYTHON_IMPORT_RE = /\bfrom\s+([^\s]+)\s+import\b|\bimport\s+([^;\r\n#]+)/g;
+const UNSAFE_PYTHON_HEREDOC = '__LEKTA_UNSAFE_PYTHON_HEREDOC__';
+
+/**
+ * Provjerava sve module u Python import listi, uključujući import json, os.
+ * Neparsabilan ili relativan uvoz odbija se; ovo je konzervativna CPU ograda, ne sandbox.
+ */
+function pythonImportsAreSafe(body) {
+  const logical = body.replace(/\\\r?\n/g, ' ');
+  for (const match of logical.matchAll(PYTHON_IMPORT_RE)) {
+    if (match[1] !== undefined) {
+      const module = match[1];
+      if (module.startsWith('.') || !PYTHON_SAFE_MODULES.has(module.split('.')[0])) return false;
+      continue;
+    }
+    for (const spec of match[2].split(',')) {
+      const imported = /^\s*([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)\s*(?:as\s+[A-Za-z_][A-Za-z0-9_]*)?\s*$/.exec(spec);
+      if (!imported || !PYTHON_SAFE_MODULES.has(imported[1].split('.')[0])) return false;
+    }
+  }
+  return true;
+}
+
+function unsafePythonBody(body) {
+  const normalized = body.normalize('NFKC');
+  return PYTHON_UNSAFE_RE.test(normalized) || PYTHON_ESCAPE_NAMES_RE.test(normalized) || !pythonImportsAreSafe(normalized);
+}
+
+/**
+ * Je li Python bilo gdje u naredbi prije heredoca. Namjerno siroko: omotac sa zastavicom
+ * (`env -i python3`, `nice -n 10 python3`, `sudo -E python3`) ne smije sakriti citac.
+ */
+function pythonReaderInCommand(tokens) {
+  return tokens.some((t) => PYTHON_READERS.has(programName(t)));
+}
+
+/**
+ * Preskače samo jednostavan citirani heredoc. Nesiguran Python dobiva sentinel i kada je naredba
+ * složena, ima omotač, nalazi se kasnije u nizu ili koristi delimiter bez navodnika.
+ * @param {string} command
+ * @param {number} start indeks prvog '<' od '<<'
+ * @param {string[]} commandTokens trenutačni tokeni naredbe prije heredoca
+ * @returns {{ delim: string, stripTabs: boolean, end: number, unsafePython: boolean, skipBody: boolean } | null}
+ */
+function simpleQuotedHeredoc(command, start, commandTokens = []) {
+  const lineStart = command.lastIndexOf('\n', start - 1) + 1;
+  const nl = command.indexOf('\n', start);
+  const lineEnd = nl < 0 ? command.length : nl;
+  const line = command.slice(lineStart, lineEnd).replace(/\r$/, '');
+  const m = /^([^<]*)<<(-?)[ \t]*(?:(['"])([A-Za-z_][A-Za-z0-9_]*)\3|([A-Za-z_][A-Za-z0-9_]*))[ \t]*$/.exec(line);
+  if (!m || start - lineStart !== m[1].length) return null;
+  const words = m[1].trim().split(/[ \t]+/).filter(Boolean);
+  if (!words.length) return null;
+
+  const pythonReader = pythonReaderInCommand(commandTokens);
+  const delim = m[4] ?? m[5];
+  const stripTabs = m[2] === '-';
+  const unsafePython = pythonReader && unsafePythonBody(heredocBody(command, lineEnd, delim, stripTabs));
+  const simplePrefix = lineStart === 0
+    && words.every((w) => HEREDOC_WORD_RE.test(w) || (pythonReader && ENV_ASSIGN_RE.test(w)))
+    && (HEREDOC_READERS.has(programName(words[0])) || pythonReader);
+  const skipBody = Boolean(m[3]) && simplePrefix;
+
+  // Even a complex or unquoted Python heredoc must not hide unsafe code from the CPU guard.
+  if (unsafePython) return { delim, stripTabs, end: lineEnd, unsafePython: true, skipBody };
+  if (!skipBody) return null;
+  return { delim, stripTabs, end: lineEnd, unsafePython: false, skipBody: true };
+}
+
+/** Tijelo heredoca: retci iza `lineEnd` do retka koji je jednak delimiteru (ili do kraja naredbe). */
+function heredocBody(command, lineEnd, delim, stripTabs) {
+  const lines = [];
+  let pos = lineEnd + 1;
+  while (pos > 0 && pos <= command.length) {
+    const eol = command.indexOf('\n', pos);
+    const end = eol < 0 ? command.length : eol;
+    let line = command.slice(pos, end).replace(/\r$/, '');
+    if (stripTabs) line = line.replace(/^\t+/, '');
+    if (line === delim) break;
+    lines.push(line);
+    pos = eol < 0 ? command.length + 1 : eol + 1;
+  }
+  return lines.join('\n');
+}
+
+/**
  * Rastavlja naredbu na podnaredbe po `&&`, `||`, `;`, `|`, `&`, novom retku, zagradama i `$(`,
  * postujuci jednostruke i dvostruke navodnike: sadrzaj pod navodnicima je argument, ne naredba.
+ * Kao stdin preskače se samo jednostavan citirani heredoc. Nesiguran Python dobiva sentinel i kada je
+ * naredba složena, ima omotač, nalazi se kasnije ili koristi delimiter bez navodnika.
  * @param {string} command
  * @returns {string[][]} podnaredbe kao nizovi tokena
  */
@@ -46,6 +150,8 @@ export function splitCommand(command) {
   let current = '';
   let quote = null;
   let hasToken = false;
+  /** @type {Array<{ delim: string, stripTabs: boolean }>} */
+  let pending = [];
   const endToken = () => {
     if (hasToken) tokens.push(current);
     current = '';
@@ -55,6 +161,27 @@ export function splitCommand(command) {
     endToken();
     if (tokens.length) parts.push(tokens);
     tokens = [];
+  };
+  /** Preskace tijela heredoca koja pocinju iza novog retka na `nl`; vraca indeks zadnjeg procitanog znaka. */
+  const skipHeredocBodies = (nl) => {
+    let pos = nl + 1;
+    for (const h of pending) {
+      let next = command.length;
+      while (pos < command.length) {
+        const eol = command.indexOf('\n', pos);
+        const lineEnd = eol < 0 ? command.length : eol;
+        let line = command.slice(pos, lineEnd).replace(/\r$/, '');
+        if (h.stripTabs) line = line.replace(/^\t+/, '');
+        if (line === h.delim) {
+          next = eol < 0 ? command.length : eol + 1;
+          break;
+        }
+        pos = eol < 0 ? command.length : eol + 1;
+      }
+      pos = next;
+    }
+    pending = [];
+    return pos - 1;
   };
   for (let i = 0; i < command.length; i += 1) {
     const ch = command[i];
@@ -66,6 +193,24 @@ export function splitCommand(command) {
     if (ch === '"' || ch === "'") {
       quote = ch;
       hasToken = true;
+      continue;
+    }
+    if (ch === '<' && command[i + 1] === '<') {
+      const openerTokens = hasToken ? [...tokens, current] : tokens;
+      const op = simpleQuotedHeredoc(command, i, openerTokens);
+      if (op) {
+        endToken();
+        if (op.unsafePython) tokens.push(UNSAFE_PYTHON_HEREDOC);
+        if (op.skipBody) {
+          pending.push({ delim: op.delim, stripTabs: op.stripTabs });
+          i = op.end - 1;
+        }
+        continue;
+      }
+    }
+    if (ch === '\n' && pending.length) {
+      endPart();
+      i = skipHeredocBodies(i);
       continue;
     }
     if (ch === '$' && command[i + 1] === '(') {
@@ -111,6 +256,7 @@ function firstNonFlag(tokens, from) {
  */
 function judgeTokens(tokens, readScript, heavyBinaries = HEAVY_BINARIES) {
   if (tokens.some((t) => programName(t) === 'with-gate-lock')) return { heavy: false };
+  if (tokens.includes(UNSAFE_PYTHON_HEREDOC)) return { heavy: true, what: 'nesiguran Python heredoc' };
   let i = 0;
   while (i < tokens.length && (ENV_ASSIGN_RE.test(tokens[i]) || WRAPPERS.has(programName(tokens[i])))) i += 1;
   if (i >= tokens.length) return { heavy: false };

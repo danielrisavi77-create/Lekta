@@ -54,6 +54,10 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
 
 - [ ] Registrirati subjekt i upisati `oib` i `address` u `data/legal/provider.json`. Dok su prazni,
       pravne stranice nose napomenu da registracijski podaci slijede (`registrationNote`).
+- [ ] **Prije prve naplate zamijeniti privremene osobne kontaktne podatke poslovnim/registriranim
+      podacima subjekta gdje god je to pravno dopušteno.** Ne brisati podatke koje GDPR i
+      potrošačko pravo stvarno traže; cilj je ne objavljivati privatnu kućnu adresu nakon što
+      postoji valjana poslovna adresa.
 - [ ] Porezni tretman prije prve naplate: Stripe nije Merchant of Record, pa PDV (HR i OSS) obracunava i prijavljuje vlasnik.
 
 ## D. Operativno
@@ -105,6 +109,6 @@ položene sekcije. Ostaje, po vrijednosti:
       praćenih izmjena; `pgNumType` taj čuvar već ima).
 - [ ] **Golden s pravim Wordovim dokumentom** (fixture su sintetički, 4 dijela, STORED): dokazati da
       slike, `numbering.xml`, `settings.xml` i `theme` prolaze bit-identično.
-- [ ] **`x-forwarded-for` provjera prije naplate**: `ip_hash` se računa iz PRVOG zapisa. Ako klijent
-      može utjecati na njega, IP limit (jedina obrana od farmanja anonimnih računa) i referral
-      anti-fraud su zaobilazni. Provjera je jedan poziv s izmišljenim zaglavljem pa usporedba hasha.
+- [ ] **IP kljuc `cf-connecting-ip` na produkciji**: kljuc za `ip_hash` je `cf-connecting-ip` (T84 XFF, mjereno
+      na stagingu 2026-10-09). Prije naplate potvrditi na produkciji: dva poziva s istog stroja s izmisljenim
+      `x-forwarded-for` daju isti hash, poziv s druge mreze razlicit.

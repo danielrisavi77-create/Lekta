@@ -496,6 +496,23 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 }
 
 @media print {
+  .tool-workspace .card {
+    background: #fff !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  [data-premium-tilt] {
+    transform: none !important;
+    transform-style: flat;
+    transition: none !important;
+    will-change: auto;
+  }
+  .premium-paper-stack,
+  .premium-paper-stack:hover { box-shadow: none !important; border-radius: 0 }
+  .premium-paper-stack::before,
+  .premium-paper-stack::after { display: none !important }
   .premium-tool-index__intro,
   .premium-viz-card,
   .premium-tool-index__signal { box-shadow: none }

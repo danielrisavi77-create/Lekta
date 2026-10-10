@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za genericke ("opci") pravo profile: pravo-opci-pravni-akademski-rad,
  * pravo-socijalni-opci-akademski-rad, pravo-specijalisticki-pravni-opci.

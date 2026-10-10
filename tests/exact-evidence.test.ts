@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import type { RuleEntry } from '../src/profiles/profile-schema';

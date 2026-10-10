@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * RAZLOG NEPOKRIVENE CELIJE MORA BITI ISTINIT, ne samo prisutan.
  *

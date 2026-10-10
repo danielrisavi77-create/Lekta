@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 
 import { parseReference, splitReferences, type BulkStyle } from '../src/citations/parse-reference';

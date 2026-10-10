@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva pristupacnost usporedne tablice u landing_usporedba.html (BL-P3-01, WCAG 1.3.1):
  * <caption>, scope=col na zaglavljima stupaca i <th scope=row> na prvom (dimenzijskom) stupcu,

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * `post-deploy-smoke` se mora STVARNO POKRENUTI, na svakoj platformi.
  *

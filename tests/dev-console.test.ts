@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error .mjs bez tipova (isti obrazac kao ostali scripts/* helperi)
 import { resolveDevTools } from '../scripts/dev-console.mjs';

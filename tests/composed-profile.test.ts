@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Invarijanti SLOZENOG profila (src/profiles/compose-profile.ts), BEZ ijedne analize dokumenta.
  *

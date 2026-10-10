@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Kanal A, klijent za popis i povlacenje priloga (src/report/corpus-contribution-client.ts). Lazni fetch: provjerava se
  * URL, zaglavlja i ugovor ishoda; nista ne ide na mrezu.

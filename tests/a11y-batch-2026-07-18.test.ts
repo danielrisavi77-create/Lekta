@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva a11y popravke iz auditnog batcha 2026-07-18 (18 nalaza, Hub/Naslovnica/Citat/Kartice/
  * Izjava/Literatura/dijeljena infrastruktura): WCAG kontrast (eyebrow, tp-badge), mobileNav

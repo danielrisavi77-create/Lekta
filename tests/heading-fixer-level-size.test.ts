@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { headingFormatRepairableItem } from '../src/ui/repair-items';
 

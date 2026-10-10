@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift-guard: landing_usporedba.html hardkodira najavljene cijene (nakon bete) kao literalni
  * tekst, jer statichke marketing stranice nemaju build-time uvoz iz src/report/pricing.ts

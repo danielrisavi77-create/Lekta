@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za razrjesavanje ZADANOG PARAGRAF STILA kad `w:default="1"` nedostaje.
  *

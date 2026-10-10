@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): FOOTNOTE-FORMAT atomski slucajevi. Ciljane provjere oblikovanja
  * (font/razmak fusnota, oznake u tijelu, razmak odlomaka) emitira samo pravni profil s footnote

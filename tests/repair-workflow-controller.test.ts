@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { RepairWorkflowController, transition, type RepairWorkflowAdapter } from '../src/repair/workflow-controller';
 

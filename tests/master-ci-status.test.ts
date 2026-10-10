@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error: cisti .mjs alat bez tipova, namjerno izvan `src/`
 import { formatOcjenu, ocijeniRunove } from '../scripts/master-ci-core.mjs';

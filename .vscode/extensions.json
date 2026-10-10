@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "oxc.oxc-vscode",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "denoland.vscode-deno",
+    "yuenm18.ooxml-viewer",
+    "redhat.vscode-xml",
+    "ms-python.python",
+    "ms-vscode.powershell",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "usernamehw.errorlens",
+    "editorconfig.editorconfig",
+    "anthropic.claude-code",
+    "openai.chatgpt"
+  ]
+}

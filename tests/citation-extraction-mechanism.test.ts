@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad tim da mehanizam koji smo dodali STVARNO OPALI, a ne da samo postoji.
  *

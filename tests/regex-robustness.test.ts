@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { headingLevel } from '../src/docx/parser';
 import { extractCitations } from '../src/citations/author-year';

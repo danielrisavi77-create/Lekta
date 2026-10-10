@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad tajnama naplate: jedno ime po tajni, i nijedno ime koje nitko ne cita.
  *

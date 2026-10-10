@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za umjetnicke/projektne fakultete: alu (Akademija likovnih umjetnosti)
  * i arh (Arhitektonski fakultet).

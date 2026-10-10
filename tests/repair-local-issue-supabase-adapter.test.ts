@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { persistIssuedLocalRepairJob } from '../src/repair/local-runner/supabase-issue-adapter.ts';

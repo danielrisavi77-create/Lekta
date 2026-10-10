@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { createHash, generateKeyPairSync } from 'node:crypto';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';

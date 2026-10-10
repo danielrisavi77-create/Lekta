@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { runSpellcheckHr, type SpellChecker, type SpellParagraph } from '../src/audits/spellcheck-hr';
 

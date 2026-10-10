@@ -207,6 +207,12 @@ async function dodjiDoNalaza(page: Page): Promise<void> {
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
   await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 120_000 });
+  // Z34 is loaded after the analysis-ready signal. Wait for either its completed mount or the
+  // explicit Z8 fallback before capturing Tab candidates; a mid-walk upgrade replaces those nodes
+  // and invalidates the indices assigned by `kandidati`.
+  await expect.poll(async () => page.locator('#resultCockpit').evaluate((el) =>
+    (el as HTMLElement).dataset.rlReady === 'true' || Boolean((el as HTMLElement).dataset.rlPovratak),
+  ), { timeout: 30_000, message: 'result cockpit never reached Z34-ready or stable Z8 fallback' }).toBe(true);
 }
 
 test.describe('pristupacnost radnog prostora', () => {
@@ -218,21 +224,26 @@ test.describe('pristupacnost radnog prostora', () => {
     await cekajApp(page);
   });
 
-  test('faza Dokument: Tab obilazi svaku kontrolu redom, s vidljivim prstenom, a Enter i Space na dropzoneu otvaraju izbor datoteke', async ({ page }) => {
+  test('faza Dokument: Tab obilazi svaku kontrolu redom, s vidljivim prstenom, a Enter i Space na gumbu za odabir otvaraju izbor datoteke', async ({ page }) => {
     const k = await kandidati(page, '#wizardView');
-    expect(k.length, 'sentinel: faza Dokument nema kontrola').toBeGreaterThan(1);
-    expect(k, 'dropzone i gumb za odabir moraju biti medju kontrolama faze').toEqual(expect.arrayContaining(['dropzone', 'browseBtn']));
+    // Bez dropzonea kao tab stanice faza ima jednu kontrolu (#browseBtn); prazno citanje i dalje pada.
+    expect(k.length, 'sentinel: faza Dokument nema kontrola').toBeGreaterThan(0);
+    // Ugovor promijenjen u #238 (Codex N2): dropzone je skupina s gumbima unutra, pa NIJE vlastita
+    // tab stanica (role=button s ugnijezdjenim gumbima axe javlja kao nested-interactive, a
+    // fokusabilna skupina citacu zaslona ne daje semantiku gumba). Tipkovnica ide kroz imenovani gumb.
+    expect(k, 'gumb za odabir mora biti medju kontrolama faze').toContain('browseBtn');
+    expect(k, 'dropzone ne smije biti zasebna tab stanica').not.toContain('dropzone');
 
     const { posjeceni, bezPrstena } = await prodjiTabom(page, '#themeBtn', '#wizardView', k.length);
     expect(posjeceni, `Tab je preskocio kontrolu ili promijenio redoslijed; kandidati: ${k.join(', ')}`)
       .toEqual(k.map((_, i) => i));
     expect(bezPrstena, 'kontrola dobiva fokus tipkovnicom bez vidljivog prstena').toEqual([]);
 
-    // Enter i Space na dropzoneu otvaraju IZVORNI izbornik datoteke; mjeri se dogadjaj preglednika,
-    // ne poziv funkcije.
+    // Enter i Space na imenovanom gumbu otvaraju IZVORNI izbornik datoteke; mjeri se dogadjaj
+    // preglednika, ne poziv funkcije.
     for (const tipka of ['Enter', 'Space'] as const) {
-      await page.locator('#dropzone').focus();
-      expect((await aktivno(page, '#wizardView')).id, 'sentinel: dropzone nije primio fokus').toBe('dropzone');
+      await page.locator('#browseBtn').focus();
+      expect((await aktivno(page, '#wizardView')).id, 'sentinel: gumb za odabir nije primio fokus').toBe('browseBtn');
       const izbornik = page.waitForEvent('filechooser', { timeout: 5_000 });
       await page.keyboard.press(tipka);
       const fc = await izbornik;

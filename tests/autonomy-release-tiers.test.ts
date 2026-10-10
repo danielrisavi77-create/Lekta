@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Predlozak autonomnog kontrolera trazi iste obvezne razine kao dokaz izdanja.
  * Vidi `tests/helpers/autonomy-release-tiers.ts` za razlog; mutacija je u `tests/gate-mutations.test.ts`.

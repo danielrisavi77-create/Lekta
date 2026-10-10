@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * supabase/functions/webhook-mor/handler.ts: IZVRSEN put handlera, ne samo ciste funkcije.
  *

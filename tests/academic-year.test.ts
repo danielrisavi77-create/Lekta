@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { academicYearFromDate, effectiveAcademicYear, ACADEMIC_YEAR_RE } from '../src/profiles/academic-year';
 

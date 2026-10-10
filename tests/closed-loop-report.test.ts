@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad izvjestajem closed-loop petlje kroz katalog (P4-3 u docs/PLAN_POTPUNA_POKRIVENOST.md).
  *

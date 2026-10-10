@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { buildRepairOutcome, type VerifiedCheck } from '../src/repair/repair-outcome-verified';
 

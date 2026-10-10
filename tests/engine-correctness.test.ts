@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Regresijski testovi za engine korektnosne popravke iz audita 2026-07-16.
  * Svaki test bi PAO na kodu prije popravka (dokaz zatecenog buga), sada prolazi.

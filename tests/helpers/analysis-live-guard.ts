@@ -68,19 +68,26 @@ export function motionCssProblems(cssSirov: string): string[] {
 /**
  * `izvori` je karta putanja -> tekst. `shim` je jedina datoteka koja smije znati za modul, i to
  * samo dinamickim uvozom; nijedan izvor ga ne smije uvesti staticki (`import type` je dopusten,
- * jer nestaje pri prevodjenju).
+ * jer nestaje pri prevodjenju). `modul` je specifikator kako ga shim pise; zadano je Z33, a Z34
+ * (`../result-live/result-live`) koristi isti gard. Usporedba je doslovna (zadnja dva segmenta
+ * putanje), ne regex gradjen iz niza.
  */
-export function liveBoundaryProblems(izvori: Readonly<Record<string, string>>, shim: string): string[] {
+export function liveBoundaryProblems(
+  izvori: Readonly<Record<string, string>>,
+  shim: string,
+  modul = './analysis-live/analysis-live',
+): string[] {
   const problemi: string[] = [];
+  const kraj = modul.split('/').slice(-2).join('/');
   for (const [ime, src] of Object.entries(izvori)) {
     const kod = src.replace(/\r/g, '');
     for (const m of kod.matchAll(/^\s*import\s+(?!type\b)(?:[^'";]*?\sfrom\s+)?['"]([^'"]+)['"]/gm)) {
-      if (/analysis-live\/analysis-live(?:\.ts)?$/.test(m[1])) problemi.push(`${ime}: staticki uvoz ${m[1]}`);
+      if (m[1].replace(/\.ts$/, '').endsWith(kraj)) problemi.push(`${ime}: staticki uvoz ${m[1]}`);
     }
   }
-  const shimKod = izvori[shim] ?? '';
-  if (!/import\(\s*['"]\.\/analysis-live\/analysis-live['"]\s*\)/.test(shimKod)) {
-    problemi.push(`${shim}: nema dinamickog uvoza ./analysis-live/analysis-live`);
+  const shimKod = (izvori[shim] ?? '').replace(/\s+/g, '');
+  if (!shimKod.includes(`import('${modul}')`) && !shimKod.includes(`import("${modul}")`)) {
+    problemi.push(`${shim}: nema dinamickog uvoza ${modul}`);
   }
   return problemi;
 }

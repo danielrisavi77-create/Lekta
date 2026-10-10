@@ -184,6 +184,11 @@ function New-Witness($word, [string]$profileId, [string]$outFile, $violations) {
   }
 }
 
+# UGOVOR PRIJELAZA (pregled #302 R2): pocetni status koji analiza daje namjernom prekrsaju. Poravnanje i
+# format papira analiza ocjenjuje UPOZORENJEM (warn), ostalo padom (fail). Harness tvrdi tocno
+# `expectedBefore -> pass` za svaki ciljani prekrsaj (tests/real-corpus/harness.ts, `witnessTransitions`).
+$EXPECTED_BEFORE = @{ 'font' = 'fail'; 'font-size' = 'fail'; 'line-spacing' = 'fail'; 'margins' = 'fail'; 'justify' = 'warn'; 'paper-size' = 'warn' }
+
 function Get-Plan([string]$profileId) {
   $rules = Get-ProfileRules $profileId
   $scored = Get-ScoredRules $profileId
@@ -195,7 +200,7 @@ function Get-Plan([string]$profileId) {
     if ($_.checkId -eq 'line-spacing' -and ($pick.expected | Where-Object { [Math]::Abs($_ - [double]$pick.set) -le 0.2 })) {
       throw "Profil ${profileId}: prored $($pick.set) je unutar 0,2 od dopustenog."
     }
-    [ordered]@{ ruleId = $_.ruleId; checkId = $_.checkId; expected = $pick.expected; set = $pick.set }
+    [ordered]@{ ruleId = $_.ruleId; checkId = $_.checkId; expected = $pick.expected; set = $pick.set; expectedBefore = $EXPECTED_BEFORE[$_.checkId] }
   })
 }
 

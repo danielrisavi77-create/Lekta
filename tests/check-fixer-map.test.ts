@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Anti-drift gard za vezu PROVJERA -> POPRAVAK.
  *

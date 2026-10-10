@@ -2,7 +2,7 @@
 
 Datum konsolidacije: 28. srpnja 2026. Pregledan commit: `1329c43` (grana `audit/remediation-2026-07-16`).
 
-**Mjerodavno stanje zadataka je `docs/agents/tasks.json` te CI i generirani artefakti (`docs/generated/`); ovaj dokument je povijesni pregled.**
+**Mjerodavno stanje zadataka je od 2026-10-08 u Linearu (DAN-79; `docs/agents/tasks.json` je snimak), a tehnicko stanje CI i generirani artefakti (`docs/generated/`); ovaj dokument je povijesni pregled.**
 
 **Zadnje ažuriranje: 12. rujna 2026.** (poglavlje 17, program do javnog lansiranja). Ažuriranje od 17.
 kolovoza 2026. (grana `fix/audit-remediation-2026-08`) napravljeno je nakon vanjskog

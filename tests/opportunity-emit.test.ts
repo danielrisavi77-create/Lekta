@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { emitAnalysisOpportunitySignals, emitRepairNoOpSignals } from '../src/analytics/opportunity-emit';
 import { opportunityContextFor, trackRepairResultOk } from '../src/analytics/repair-result';

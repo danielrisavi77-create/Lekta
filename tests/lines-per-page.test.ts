@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { linesPerPageCapacity, evaluateLinesPerPage } from '../src/scoring/lines-per-page';
 import { evaluateFormatting } from '../src/scoring/evaluate/formatting';

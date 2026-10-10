@@ -1,0 +1,67 @@
+{
+    "profileId":  "effectus-diplomski",
+    "track":  "witness",
+    "synthetic":  true,
+    "generator":  "scripts/corpus-gen/word/make-violation-witnesses.ps1",
+    "wordVersion":  "14.0",
+    "violations":  [
+                       {
+                           "ruleId":  "effectus-diplomski--paper-size",
+                           "checkId":  "paper-size",
+                           "expected":  "A4",
+                           "set":  "Letter",
+                           "expectedBefore":  "warn"
+                       },
+                       {
+                           "ruleId":  "effectus-diplomski--margins",
+                           "checkId":  "margins",
+                           "expected":  {
+                                            "top":  2.5,
+                                            "right":  2.5,
+                                            "bottom":  2.5,
+                                            "left":  2.5
+                                        },
+                           "set":  {
+                                       "top":  1.5,
+                                       "right":  1.5,
+                                       "bottom":  1.5,
+                                       "left":  1.5
+                                   },
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "effectus-diplomski--font",
+                           "checkId":  "font",
+                           "expected":  [
+                                            "Times New Roman"
+                                        ],
+                           "set":  "Courier New",
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "effectus-diplomski--font-size",
+                           "checkId":  "font-size",
+                           "expected":  [
+                                            12
+                                        ],
+                           "set":  9,
+                           "expectedBefore":  "fail"
+                       },
+                       {
+                           "ruleId":  "effectus-diplomski--justify",
+                           "checkId":  "justify",
+                           "expected":  "obostrano",
+                           "set":  "lijevo",
+                           "expectedBefore":  "warn"
+                       },
+                       {
+                           "ruleId":  "effectus-diplomski--line-spacing",
+                           "checkId":  "line-spacing",
+                           "expected":  [
+                                            1.15
+                                        ],
+                           "set":  2,
+                           "expectedBefore":  "fail"
+                       }
+                   ]
+}

@@ -19,7 +19,22 @@ import {
   formattingCoverage,
   citationCoverage,
   titlePageCoverage,
+  sourceLinkHtml,
 } from '../scripts/generate-faculty-pages.mjs';
+
+describe('sourceLinkHtml', () => {
+  it('keeps a valid document URL and escapes its query string', () => {
+    expect(sourceLinkHtml({ title: 'Upute', url: 'https://example.edu/file?a=1&b=2' }))
+      .toContain('href="https://example.edu/file?a=1&amp;b=2"');
+  });
+  it.each(['https://example.edu/upute.pdf (opis dokumenta)', 'javascript:alert(1)', '/local.pdf', 'https://user:password@example.edu/file'])
+    ('does not turn an unavailable source address into a link: %s', (url) => {
+      const html = sourceLinkHtml({ title: '<Upute>', url });
+      expect(html).not.toContain('href=');
+      expect(html).toContain('&lt;Upute&gt;');
+      expect(html).toContain('Poveznica nije dostupna');
+    });
+});
 
 describe('normalizeSearch', () => {
   it('lowercases i strippa dijakritiku', () => {

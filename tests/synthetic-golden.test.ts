@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden korpus (CLAUDE.md golden harness, trajni regresijski net).
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD DETEKTOROM OBLIKA (`src/corpus/docx-shapes.ts`).
  *

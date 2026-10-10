@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Tema (#themeBtn) i mobilni izbornik (#mobileMenuBtn/#mobileNav) su centralizirani u
  * ui-boot.ts (setupThemeToggle/setupMobileNav). Prije commit F3 svaka stranica je nosila

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T83: jedan dokument, jedan glas. Isti rad iz vise korijena korpusa mjeri se jednom; nesuglasni
  * duplikati i isti sadrzaj pod dva imena rusu mjerenje; ovjera odbija napuhano ili palo mjerenje, a
@@ -299,7 +300,9 @@ describe('T83-06: stvarna skripta ovjere', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
-  }, 60_000);
+    // Osam pokretanja stvarne skripte ovjere; pet ih racuna otisak koda popravka kroz git. Izmjereno
+    // 2026-10-08/09 na Windows radnoj stanici: 65 s i 78 s u `release:check`, 66 s izolirano.
+  }, 180_000);
 
   it('bez --source-kind odbija pisati; PDF izvor upisuje sourceKind i nije prava ovjera (Codex #225, nalaz 1)', () => {
     const dir = mkdtempSync(join(tmpdir(), 'lekta-225-attest-'));

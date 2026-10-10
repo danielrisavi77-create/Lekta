@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Dokaz izdanja se veze uz OTISAK STABLA, ne uz git povijest (vanjski audit 2026-09-08, nalaz 1).
  *

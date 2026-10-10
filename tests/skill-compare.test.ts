@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD USPOREDBOM DVAJU ALATA (`docs/generated/skill-compare.json`).
  *

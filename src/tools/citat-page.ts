@@ -10,7 +10,7 @@ import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type F
 import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
 import { parseReferenceFile } from '../citations/import-references';
 import { verifyReferences } from '../citations/verify-existence';
-import { VERDICT_BADGE, summarizeVerification } from '../citations/verify-badges';
+import { RETRACTION_BADGE, VERDICT_BADGE, clearVerifyBadges, retractionNoticeUrl, summarizeVerification, restoreVerificationFocus } from '../citations/verify-badges';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
@@ -387,7 +387,9 @@ async function verifyBulk(): Promise<void> {
   const inputs = cards.map((c) => readBulkCard(c.querySelector('.bulk-card-fields')));
   const btn = $('#bulk-verify');
   const orig = btn ? btn.textContent : '';
-  cards.forEach((c) => c.querySelector('.verify-badge')?.remove());
+  const wasFocused = document.activeElement === btn;
+  // SVE znacke kartice (verdikt i oznaka povlacenja): ponovljena provjera ne smije ostaviti staru oznaku.
+  cards.forEach((c) => clearVerifyBadges(c));
   if (btn) { btn.disabled = true; btn.textContent = 'Provjeravam…'; }
   announceBulk('Provjera postojanja izvora u tijeku…');
   try {
@@ -402,6 +404,23 @@ async function verifyBulk(): Promise<void> {
         ? ` — podudara se s: „${res.matchedTitle}”` : '';
       badge.textContent = meta.text + match;
       cards[i].appendChild(badge);
+      // Oznaka povucenog rada (T98): samo uz `found`; odsutnost nikad ne znaci "nije povuceno".
+      if (res.verdict === 'found' && res.retraction) {
+        const rb = RETRACTION_BADGE[res.retraction.kind];
+        const r = document.createElement('div');
+        r.className = 'verify-badge ' + rb.cls;
+        r.textContent = rb.text;
+        const url = retractionNoticeUrl(res.retraction);
+        if (url) {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = 'obavijest';
+          r.append(' ', a);
+        }
+        cards[i].appendChild(r);
+      }
     });
     // Dijeljeni sazetak (broji SVIH pet verdikta; bez lazne nule za sve-domace/slabe popise).
     announceBulk(summarizeVerification(results));
@@ -409,6 +428,7 @@ async function verifyBulk(): Promise<void> {
     announceBulk('Provjera nije uspjela (mreža). Pokušaj ponovno.');
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = orig; }
+    restoreVerificationFocus(btn, wasFocused);
   }
 }
 
@@ -663,6 +683,8 @@ function init() {
   // pokreni dohvat ODMAH (fire-and-forget, ne blokira init) i korigiraj prikaz cim stignu -
   // dotad je vec render()irano s obiteljskim motorom kao privremenom aproksimacijom.
   void ensureFacultySpecsLoaded().then(() => render());
+  // Uvoz je spreman tek nakon vezanja svih dogadjaja, ne nakon popunjavanja izbornika.
+  document.documentElement.setAttribute('data-lekta-ready', '1');
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

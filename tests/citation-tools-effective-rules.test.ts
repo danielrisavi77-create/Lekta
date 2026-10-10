@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * generate-citation-tools.mjs (build script, plain JS, no TS loader wired for scripts/) resolves
  * each faculty's citation token via scripts/citation-effective-rules.mjs's recommendedCitationOf(),

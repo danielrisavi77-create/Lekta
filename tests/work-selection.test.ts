@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Regresija za automatski odabir vrste rada (feature 2) i citatnog stila (feature 3).
  * Testira cistu logiku iz src/ui/work-selection.ts protiv STVARNOG registra profila,

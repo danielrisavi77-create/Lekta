@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za efzg (Ekonomski fakultet Zagreb).
  *

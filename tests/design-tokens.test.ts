@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Z5: tipografska ljestvica kao tokeni (design/handoff/ALIGNMENT.md).
  *

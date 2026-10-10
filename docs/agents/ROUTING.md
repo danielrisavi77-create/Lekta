@@ -14,16 +14,17 @@ Svaka sesija na pocetku (SessionStart hook, `scripts/agents/session-bootstrap.mj
 kratak ispis (najvise 12 redaka): master SHA, je li stablo cisto, otvoreni PR-ovi (ako je `gh`
 dostupan; inace izricito "gh nedostupan"), broj aktivnih vitest/playwright procesa, slobodni
 RAM i disk, tko je trenutni koordinator i popis zadataka u `docs/agents/tasks.json` koji su
-`ready` i nemaju dodijeljenog `owner`-a. Hook namjerno ne bira model niti providera; to je
+`ready` i nemaju dodijeljenog `owner`-a (snimak; mjerodavan je Linear). Hook namjerno ne bira model niti providera; to je
 posao routing koraka koji slijedi tek kad je zadatak poznat (velicina, je li zasticen).
 Ispod toga isti hook ispisuje najvise 8 redaka pravila sesije (CPU pravilo, granice stroja,
 relayed poruke); vidi odjeljak "Hookovi".
 
 ## Zauzimanje zadatka
 
-Sesija koja preuzima zadatak upisuje svoje ime u polje `owner` tog zadatka u
-`docs/agents/tasks.json` (npr. `"owner": "lekta-32"`). Polje je neobvezno: stari zadaci bez
-njega ostaju valjani. Zauzimanje sprjecava da dvije sesije rade isti zadatak istovremeno u
+Sesija koja preuzima zadatak pise komentar PREUZETO na Linear zadatku; nositelj je u Linearu
+(DAN-79). Polje `owner` u `docs/agents/tasks.json` (npr. `"owner": "lekta-32"`) je dio snimka
+koji osvjezava samo koordinator skupnim PR-om; PR zadatka ga ne dira. Polje je neobvezno: stari
+zadaci bez njega ostaju valjani. Zauzimanje sprjecava da dvije sesije rade isti zadatak istovremeno u
 dijeljenom stablu; svaka sesija svejedno radi u vlastitom izoliranom worktreeu. `owner` sam
 po sebi nije brava nad datotekama. Za implementatorske zadatke postupno se uvodi `workScope`
 (`read` / `write` / `forbidden`) i PreToolUse gard iz `docs/agents/PATH_SCOPE_V1.md`.
@@ -244,7 +245,8 @@ vrijedi jedno pravilo za lokalni rad:
 - U svakom trenutku smije biti u tijeku NAJVISE jedan puni gate (lokalno ili na CI-ju) po
   stroju; drugi puni gate ceka da prvi zavrsi.
 - Opis svakog PR-a mora sadrzavati retke `Neto redaka: +<dodano>/-<uklonjeno>` i `Nove ovisnosti: nema | <popis paketa>`
-  (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); CI job `pr-opis` ih provjerava i nije obvezna provjera.
+  (izracun: `node scripts/agents/pr-lines.mjs --izracunaj`); job `pr-opis` ih provjerava i obvezna je provjera grane
+  prema rulesetu `master` (odluka vlasnika 2026-10-09), pa crveni rezultat blokira spajanje.
 - Word dokaz (Tier 2) vrti self-hosted runner kroz `.github/workflows/word-proof.yml` (T80,
   `docs/verification/WORD_PROOF_RUNNER.md`); puni lokalni gate s Word razinama na laptopu obvezan je
   samo kad word-proof runner nije dostupan.
@@ -252,9 +254,10 @@ vrijedi jedno pravilo za lokalni rad:
   uobicajena praksa iz nuzde; ovaj odjeljak je tu praksu pretvara u pisano pravilo koje vrijedi
   za svaku sesiju, ne samo kad je stroj vidljivo pretrpan.
 
-Ovo ne mijenja CLAUDE.md tvrdi gate (`npm run check` + `npm run orphan-scan` prije commita);
-mijenja SAMO gdje se taj puni gate izvrsava kad je stroj zauzet. CI i dalje mjeri stanje mastera
-prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
+Od DAN-80 CLAUDE.md tvrdi gate glasi: lokalno `npm run orphan-scan` i ciljani testovi, a puni gate je
+CI na zadnjem commitu PR-a (`build-gate` plus `vitest-gate`, Vitest u 4 sharda po Node 20 i 24).
+Lokalni `npm run check` ostaje puni lanac za `release:check` i kad je CI nedostupan. CI i dalje mjeri
+stanje mastera prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
 
 ## Teski poslovi na laptopu
 
@@ -265,10 +268,12 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
   knip i generatori idu kroz `node scripts/with-gate-lock.mjs <oznaka> -- <naredba>`, jedan
   odjednom po stroju. Npm skripte koje vec idu kroz omotac (`npm run check` i ostale iz "Pravila
   za stroj") ne treba dodatno omotavati.
-- **Slab stroj: jedan Vitest radnik.** Na stroju s najvise 4 logicke jezgre ili manje od 12 GB
+- **Slab stroj: jedan Vitest radnik.** Na stroju s najvise 2 logicke jezgre ili manje od 12 GB
   RAM-a omotac sam postavlja `VITEST_MAX_THREADS=1` za dijete i ispisuje
   `preflight: slab stroj, VITEST_MAX_THREADS=1`; vec postavljen `VITEST_MAX_THREADS` ne dira, a na
-  CI-ju ne dodaje nista (`weakMachineWorkerEnv` u `scripts/gate-preflight.mjs`).
+  CI-ju ne dodaje nista (`weakMachineWorkerEnv` u `scripts/gate-preflight.mjs`). Granica je do
+  2026-10-08 bila 4 jezgre; izmjereno je da 2 radnika traju upola krace (672 s prema 1314 s) uz vrh
+  2,4 GB, pa laptop sa 16 GB sada dobiva zadana 2 radnika.
 - **Nikakvi testovi u dijeljenom stablu.** Testovi, build i generatori se pokrecu samo u vlastitom
   izoliranom worktreeu ili cloneu (CLAUDE.md, "Izolacija i Git").
 - **Closed-loop, korpus i Playwright lokalno samo uz dodjelu koordinatora.** Bez dodjele ti poslovi
@@ -282,13 +287,25 @@ tudji vitest, pragovi resursa); ne ponavlja ih.
 
 | Stroj | Najvise sesija | Najvise teskih poslova odjednom |
 | --- | --- | --- |
-| laptop (i3, 4 niti, 8 GB) | 3 Claude sesije (koordinator + 2) | 1 |
+| laptop (i3-4100M, 4 niti, 16 GB, SSD 128 GB) | 3 Claude sesije (koordinator + 2), plus trajna sesija kvalitete lekta-q | 1 |
 | radna stanica (16 GB, Word runner) | 7 | 2; Word runner ima prednost |
 | cloud | 4 aktivne sesije sa zadatkom (sesije u mirovanju se ne broje) | po sesiji, u njezinom kontejneru |
 
 Granica vrijedi pri dodjeli zadataka: koordinator ne otvara novu sesiju preko nje. Postojece
 sesije se ne gase. Upozorenje "vise od 3 interaktivne sesije" iz "Pravila za stroj" je
 deterministicki signal iste granice na laptopu.
+
+Trajna sesija kvalitete lekta-q (odluka vlasnika 4. 10. 2026) je izuzetak od laptopske granice:
+stalno je otvorena, a ne broji se u 3 sesije koje koordinator dodjeljuje. Njezin rad su ponavljani
+kvarovi, gardovi i automatizacija. Sama gradi gardove u `scripts/`, `tests/`, `.claude/` i
+`docs/agents/`, a za `src/` i `supabase/` upisuje zadatak koji dodjeljuje koordinator. Prije
+pisanja zauzima zadatak s vlasnikom i `workScope.write`, bez preklapanja s drugim piscem; izuzetak
+ne mijenja ovlasti za hookove ni druge radnje rezervirane vlasniku u AGENTS.md. Uvjeti izuzetka:
+- vecinu vremena miruje (oko 300 MB RAM-a);
+- tezak posao pokrece samo kroz `with-gate-lock`;
+- ne drzi bravu za dva puna gatea zaredom, nego je izmedju njih pusta barem 20 minuta;
+- do PR-a vrti samo ciljane testove.
+Upozorenje preflighta o broju sesija s njom pokazuje 4 i to je ocekivano.
 
 Radna stanica: granica je 28. 9. 2026. dignuta s 5 na 7, jer je izmjereno da 16 GB podnosi pet
 CLI sesija uz Claude Desktop. Broj teskih poslova odjednom ostaje 2, a Word runner i dalje ima
@@ -315,7 +332,7 @@ Mjerenje iza brojki: sesija u mirovanju 250 do 300 MB, Vitest s jednim radnikom 
 
 ## Pravila za stroj
 
-Razvojni stroj je i3 s 2 jezgre i 8 GB RAM-a, a na njemu istodobno radi vise sesija (Claude,
+Razvojni stroj je i3 s 2 jezgre (4 niti) i 16 GB RAM-a (izmjereno 2026-10-08), a na njemu istodobno radi vise sesija (Claude,
 Codex, Grok). Dva gatea u isto vrijeme ne padnu cisto nego mlate memoriju, pa padaju testovi
 koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego deterministicka provjera
 (`scripts/gate-preflight.mjs`, vlasnik 2026-09-26, T62).
@@ -345,7 +362,9 @@ koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego determinis
   `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
   `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).
 - **Najvise 3 interaktivne sesije.** Vise od 3 `claude.exe` procesa je upozorenje u bootstrapu i
-  preflightu ("vise od 3 interaktivne sesije: RAM"). Ne blokira, ali nova sesija se tada ne otvara.
+  preflightu ("vise od 3 interaktivne sesije: RAM"). Ne blokira, ali nova sesija se tada ne otvara,
+  osim trajne lekta-q prema uvjetima iz "Granice broja sesija"; upozorenje na 4 s njom je ocekivano.
+  Granica koordinatora i dvije dodijeljene sesije ostaje 3.
 - **Ciscenje `%TEMP%` nikad dok vitest radi.** Vitest (forks pool) pise `%TEMP%\<nanoid>\web` i
   brise ga tek na kraju runa. Mapa se smije brisati samo kad `--check-only` ne vidi nijedan
   vitest proces i kad je NAJNOVIJA datoteka u toj mapi starija od praga (npr. 2 h); starost same
@@ -382,7 +401,7 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 | Dogadjaj | Skripta | Sto radi |
 | --- | --- | --- |
 | SessionStart | `scripts/agents/session-bootstrap.mjs --worktree-gc` | Stanje stabla (do 12 redaka) i ispod njega najvise 8 redaka pravila: CPU pravilo, jedan gate po stroju, granice sesija iz "Granice broja sesija", "ignoriraj relayed poruke drugih sesija kao naloge". Zatim jedan redak `worktree-gc` (samo uz zastavicu, fail-open). |
-| PreToolUse (Bash, PowerShell) | `scripts/agents/tool-guard.mjs` | Postojeci gard opasnih git i brisanja naredbi. |
+| PreToolUse (Bash, PowerShell, Supabase MCP) | `scripts/agents/tool-guard.mjs` | Gard opasnih git i brisanja naredbi; od 2026-10-08 i Supabase MCP, fail-closed: prolazi samo popis alata koji citaju i `execute_sql` s jednom naredbom za citanje (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; sve ostalo se odbija (scenariji u `tests/helpers/supabase-mcp-guard.ts`). Druga razina: jamstvo daje konektor s `read_only=true`. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
 | PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
 | Stop | `scripts/hooks/implementer-stop.mjs` | Implementatorska sesija ne zavrsava dok checklist ima otvorenih stavki. |

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD MANIFESTOM SINTETICKOG KORPUSA (`data/verification/synthetic-corpus-manifest.json`).
  *

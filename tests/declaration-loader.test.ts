@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Testovi sloja predlozaka izjave o izvornosti (data/declarations + src/declarations).
  * Tri uloge: (1) faithfulness loadera, (2) ponasanje izbora (BEZ cross-level reuse-a,

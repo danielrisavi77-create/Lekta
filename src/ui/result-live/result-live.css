@@ -1,0 +1,456 @@
+/* REZULTAT: SVE U JEDNOM (ALIGNMENT Z34). Lijeni list: dolazi s modulom result-live.ts tek kad
+ * stvarni rezultat ima nalaze. Inline stilovi predloska ResultLive.dc.html prepisani su u klase,
+ * boje na tokene sustava (desk/paper rade u obje teme).
+ *
+ * POKRET (Z31): animira se SAMO transform, opacity i clip-path. Nema backdrop-filter. Prsten se ne
+ * animira lukom (to bi bila boja pozadine u petlji); raste samo broj u jezgri.
+ * Gard: tests/result-live.test.ts (motionCssProblems), mutacija u tests/gate-mutations.test.ts. */
+
+/* ---------------- list presude (pojacan, ne zamijenjen) ---------------- */
+
+.rl-trakica {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  width: 100%;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ck-line);
+}
+.rl-trakica .cockpit-eyebrow { min-width: 0; overflow-wrap: anywhere; text-transform: uppercase }
+.rl-rok {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ck-ink);
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.rl-rok__tocka { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%; background: var(--ck-amber) }
+
+.cockpit-ring.rl-ring {
+  background: conic-gradient(
+    var(--ck-red) 0 calc(var(--ck-ring, 0) * 1%),
+    var(--ck-green) 0 calc(var(--rl-ceil, 0) * 1%),
+    var(--ck-line) 0
+  );
+}
+.rl-legend {
+  display: grid;
+  gap: 4px;
+  max-width: 22ch;
+  margin: 0;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .66rem;
+  line-height: 1.4;
+}
+.rl-legend__red { display: flex; align-items: baseline; gap: 6px }
+.rl-legend b { color: var(--ck-ink); font-weight: 500 }
+.rl-sw { flex: 0 0 auto; width: 8px; height: 8px; transform: translateY(1px) }
+.rl-sw--sada { background: var(--ck-red) }
+.rl-sw--strop { background: var(--ck-green) }
+
+/* Pecat pada TEK kad ocjena dodje do kraja, ispod legende, u toku stranice. */
+.cockpit-stamp[data-rl-stamp='ceka'] { opacity: 0 }
+.cockpit-stamp[data-rl-stamp='pada'] { animation: rl-stamp .34s var(--ease-pop, ease-out) both }
+@keyframes rl-stamp {
+  from { transform: rotate(-7deg) scale(1.7); opacity: 0 }
+  to { transform: rotate(-7deg) scale(1); opacity: .85 }
+}
+
+/* ---------------- stol ---------------- */
+
+.result-cockpit .cockpit-priority--live { display: block }
+[data-rl-host] { min-width: 0 }
+.cockpit-priority--live .cockpit-section-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rl {
+  display: grid;
+  gap: 24px;
+  margin: 0 calc(-1 * clamp(1.25rem, 3.2vw, 3rem));
+  padding: 8px clamp(16px, 3.2vw, 3rem) 32px;
+  background: var(--desk);
+  color: var(--desk-ink);
+  font-family: var(--mono, monospace);
+}
+
+.rl-tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--desk-line) }
+.rl-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--desk-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: .04em;
+  transition: opacity var(--dur-1, .18s) ease;
+}
+.rl-tab[aria-selected='true'] { background: var(--desk-ink); color: var(--desk) }
+.rl-tab:hover:not([disabled]):not([aria-selected='true']) { color: var(--desk-ink) }
+.rl-tab:focus-visible { outline: 2px solid var(--desk-ink); outline-offset: -2px }
+.rl-tab[disabled] { cursor: default; color: var(--desk-faint) }
+.rl-tab__n { font-size: 11px; opacity: .75 }
+.rl-tab[disabled] .rl-tab__n { color: var(--pass); opacity: 1 }
+/* Nemjerena kategorija (Codex R2): bez kvacice i bez zelene boje, jer nije potvrda da je uredno. */
+.rl-tab[disabled] .rl-tab__n--nemjereno { color: var(--desk-faint); letter-spacing: .02em }
+
+.rl-desk {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: start;
+}
+.rl-desk[data-rl-bez-stranice] { grid-template-columns: minmax(0, 1fr) }
+.rl-desk[data-rl-bez-stranice] .rl-pagewrap { display: none }
+.rl-pagewrap { min-width: 0; position: sticky; top: 88px }
+.rl-pagecol { display: grid; gap: 12px; min-width: 0 }
+.rl-pagebar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px }
+.rl-label { color: var(--desk-faint); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
+.rl-mode { display: inline-flex; padding: 3px; border: 1px solid var(--desk-line); border-radius: var(--radius-pill, 999px) }
+/* Mete dodira najmanje 44 x 44 px (Codex R8); mjeri tests/ux/result-live.spec.ts. */
+.rl-mode button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-pill, 999px);
+  background: transparent;
+  color: var(--desk-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+.rl-mode button[aria-pressed='true'] { background: var(--desk-ink); color: var(--desk) }
+.rl-mode button[data-rl-mode='after'][aria-pressed='true'] { background: var(--pass); color: var(--desk) }
+.rl-mode button:focus-visible { outline: 2px solid var(--desk-ink); outline-offset: 2px }
+
+.rl-page {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh);
+}
+.rl-zoom { position: absolute; inset: 0; transform-origin: 50% 50%; transition: transform .7s var(--ease-spring) }
+.rl-text {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  padding: var(--rl-pad, 11.9cqw);
+  font-family: var(--rl-ff, var(--font-doc));
+  font-size: var(--rl-fs, 2.02cqw);
+  line-height: var(--rl-lh, 1.15);
+  text-align: left;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+  transition: opacity var(--dur-2, .32s) ease;
+}
+.rl-text p { margin: 0 0 .9em }
+.rl-text .rl-h { font-weight: 700 }
+.rl-text--after { opacity: 0 }
+.rl-page[data-mode='after'] .rl-text--after { opacity: 1 }
+.rl-page[data-mode='after'] .rl-text:not(.rl-text--after) { opacity: 0 }
+.rl-text [data-rl-hit] { background: var(--red-soft); box-shadow: 0 0 0 .6cqw var(--red-soft) }
+.rl-pn {
+  position: absolute;
+  left: 50%;
+  bottom: 3cqw;
+  min-width: 6cqw;
+  padding: .4cqw 1cqw;
+  border: 1.5px dashed var(--red-on-soft);
+  border-radius: 50%;
+  font-family: var(--font-doc);
+  font-size: 2.6cqw;
+  text-align: center;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity var(--dur-2, .32s) ease;
+}
+.rl-page[data-mode='after'][data-rl-broj] .rl-pn { opacity: 1 }
+.rl-note {
+  justify-self: start;
+  max-width: 46ch;
+  margin: 6px 0 0;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--warn) 28%, var(--paper));
+  color: var(--paper-ink);
+  font-family: var(--display-serif);
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.25;
+  --emph-weight: 400;
+  --emph-style: italic;
+  box-shadow: var(--paper-sh-sm);
+  transform: rotate(-1deg);
+}
+
+/* ---------------- hrpa kartica ---------------- */
+
+.rl-cardcol { display: grid; gap: 18px; min-width: 0 }
+.rl-stack { position: relative }
+.rl-under { position: absolute; inset: 0; background: var(--paper-line) }
+.rl-under--2 { transform: translate(8px, 10px) rotate(1.6deg); box-shadow: var(--paper-sh-sm) }
+.rl-under--1 { transform: translate(4px, 5px) rotate(.7deg); background: var(--paper-2) }
+.rl-slot { position: relative; transition: transform .2s ease, opacity .2s ease }
+.rl-slot[data-anim='out'] { transform: translate(-56px, 8px) rotate(-5deg); opacity: 0 }
+.rl-slot[data-anim='outR'] { transform: translate(56px, 8px) rotate(5deg); opacity: 0 }
+.rl-slot[data-anim='in'] { transform: translate(56px, 0) rotate(4deg); opacity: 0; transition: none }
+.rl-slot[data-anim='inR'] { transform: translate(-56px, 0) rotate(-4deg); opacity: 0; transition: none }
+
+/* Kartica nosi i razred `cockpit-finding` (ugovor specova i dnevnika odluka), pa ovdje gasi
+   raspored Z8 (stupac s rednim brojem, rub, lebdenje): u hrpi je kartica list papira. */
+.result-cockpit .rl-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  padding: 22px 26px 24px;
+  border: 0;
+  border-radius: 0;
+  background: var(--paper-2);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh-sm);
+  transition: none;
+}
+.result-cockpit .rl-card:hover { transform: none; box-shadow: var(--paper-sh-sm) }
+.rl-card__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--paper-muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
+.rl-card__nav { display: inline-flex; gap: 6px }
+.rl-nav {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--paper-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--paper-ink);
+  cursor: pointer;
+  font: inherit;
+}
+.rl-nav:hover:not([disabled]) { background: var(--paper) }
+.rl-nav[disabled] { opacity: .35; cursor: default }
+.rl-nav:focus-visible { outline: none; box-shadow: var(--focus) }
+.rl-card__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
+.rl-card__eyebrow[data-ton='blok'] { color: var(--red-on-soft) }
+/* Kartica je papir, svijetao u OBJE teme, pa ton teksta ne smije uzeti --warn/--scan tamne teme
+   (ugodjeni za stol): jantar i plava su paper-safe vrijednosti iz predloska (isto kao Z8). */
+.rl-card__eyebrow[data-ton='dorada'] { color: #8A5D14 }
+.rl-card__eyebrow[data-ton='provjera'] { color: #2F3F8F }
+.rl-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor }
+.rl-card__title {
+  margin: 0;
+  font-family: var(--display-serif);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -.01em;
+  --emph-weight: 400;
+  --emph-style: italic;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.rl-mr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--paper-line);
+  background: var(--paper);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.rl-mr--jedno { grid-template-columns: minmax(0, 1fr) }
+.rl-mr__k { display: block; color: var(--paper-muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase }
+.rl-mr s { color: var(--red-on-soft); text-decoration-thickness: 1px }
+.rl-mr__arrow { color: var(--paper-muted) }
+.rl-card__why {
+  margin: 0;
+  color: var(--paper-ink);
+  font-family: var(--display-serif);
+  font-size: 17px;
+  line-height: 1.4;
+  --emph-weight: 400;
+  --emph-style: italic;
+  text-wrap: pretty;
+}
+.rl-card__do { margin: 0; color: var(--paper-ink); font-size: 13px; line-height: 1.5 }
+.rl-card__where .cockpit-finding__location { margin: 0; color: var(--paper-muted); font-size: 12px }
+.rl-card__where button.cockpit-finding__location {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rl-card__where button.cockpit-finding__location:focus-visible { outline: none; box-shadow: var(--focus) }
+.rl-card .cockpit-finding__evidence { color: var(--paper-ink); font-size: 13px }
+.rl-card .cockpit-finding__evidence summary { min-height: 44px; display: flex; align-items: center; cursor: pointer }
+.rl-card .cockpit-finding__evidence p { margin: 0 0 6px; font-family: var(--display-serif); font-size: 16px; font-style: italic; line-height: 1.4 }
+.rl-card .cockpit-finding__evidence small { color: var(--paper-muted) }
+.rl-card .cockpit-finding__source { display: inline-flex; align-items: center; min-height: 44px; color: var(--paper-ink); font-size: 12px }
+.rl-plan { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding-top: 4px }
+.rl-toggle {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid var(--paper-ink);
+  border-radius: var(--radius-btn, 10px);
+  background: var(--paper-ink);
+  color: var(--paper);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.rl-toggle--on { border-color: var(--ok-on-soft); background: transparent; color: var(--ok-on-soft) }
+.rl-toggle:focus-visible { outline: none; box-shadow: var(--focus) }
+.rl-plan__note { color: var(--paper-muted); font-size: 12px }
+.rl-manual { margin: 0; padding: 12px 14px; background: color-mix(in srgb, #4A6CF0 10%, var(--paper-2)); color: #2F3F8F; font-size: 12px; line-height: 1.5 }
+.rl-card__decide { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px solid var(--paper-line) }
+
+/* ---------------- traka stranica ---------------- */
+
+.rl-strip { display: grid; gap: 10px; padding-top: 18px }
+.rl-strip__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--desk-faint); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
+.rl-strip__line { height: 3px; background: var(--red-deep); opacity: .85 }
+.rl-strip__cells { display: grid; grid-template-columns: repeat(var(--rl-n, 1), minmax(0, 1fr)); gap: 2px }
+/* Celije su karta (aria-hidden), ne mete: mete su gumbi .rl-go ispod nje (Codex R8). */
+.rl-cell { display: block; height: 28px; min-width: 0; background: var(--desk-line) }
+.rl-cell--hit { background: var(--warn) }
+.rl-cell--cur { box-shadow: inset 0 0 0 1.5px var(--desk-ink) }
+.rl-strip__go { display: flex; flex-wrap: wrap; gap: 6px }
+.rl-go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--desk-line);
+  border-radius: var(--radius-btn, 10px);
+  background: transparent;
+  color: var(--desk-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.rl-go:not(.rl-go--skup) { border-color: var(--warn) }
+.rl-go--cur { background: var(--desk-ink); color: var(--desk) }
+.rl-go:focus-visible { outline: 2px solid var(--desk-ink); outline-offset: 2px }
+.rl-strip__legend { margin: 0; color: var(--desk-faint); font-size: 11px; line-height: 1.55 }
+
+/* ---------------- ladica plana ---------------- */
+
+.rl-tray {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  width: min(760px, calc(100% - 24px));
+  box-sizing: border-box;
+  padding: 12px 12px 12px 22px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--mono, monospace);
+  box-shadow: var(--paper-sh);
+  opacity: 0;
+  transform: translate(-50%, 140%);
+  transition: transform .35s var(--ease-spring), opacity .25s ease;
+}
+.rl-tray[data-open='true'] { opacity: 1; transform: translate(-50%, 0) }
+.rl-tray__k { color: var(--paper-muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase }
+.rl-tray__n { font-family: var(--display-serif); font-size: 20px; --emph-weight: 400; --emph-style: italic }
+.rl-tray__r { font-size: 13px }
+.rl-tray__r b { color: var(--ok-on-soft); font-weight: 600 }
+.rl-tray__p { color: var(--paper-muted); font-size: 12px }
+.rl-tray__go {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-btn, 10px);
+  background: var(--red-deep);
+  color: var(--paper);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+}
+.rl-tray__go[disabled] { opacity: .45; cursor: not-allowed }
+.rl-tray__go:focus-visible { outline: none; box-shadow: var(--focus) }
+/* Dno rezultata stalno ima mjesta za ladicu, da zadnji redak ne lezi ispod nje; stalno, jer padding vezan uz
+   otvorenost mijenja visinu i ladica treperi (otvori-zatvori petlja). */
+.result-cockpit[data-rl-tray-reserve] { padding-bottom: 140px }
+
+/* Cedulja koja leti do prstena ili ladice (WAAPI na klonu, samo transform i opacity). */
+.rl-fly {
+  position: fixed;
+  z-index: 80;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--warn) 28%, var(--paper));
+  color: var(--paper-ink);
+  font-family: var(--display-serif);
+  font-size: 17px;
+  font-style: italic;
+  --emph-weight: 400;
+  --emph-style: italic;
+  box-shadow: var(--paper-sh-sm);
+  pointer-events: none;
+}
+
+/* ---------------- uzi zasloni ---------------- */
+
+@media (max-width: 899px) {
+  .rl-desk { grid-template-columns: minmax(0, 1fr) }
+  .rl-pagewrap { display: none }
+}
+/* Stol se prelijeva do ruba lista: negativna margina mora biti TOCNO padding kokpita, koji je
+   ispod 780 px 1rem (result-visuals.css); veca margina gura list u vodoravni skrol. */
+@media (max-width: 780px) {
+  .rl { margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem }
+}
+@media (max-width: 520px) {
+  .rl-tab { padding: 0 12px }
+  .result-cockpit .rl-card { padding: 18px 16px 20px }
+  .rl-mr { grid-template-columns: minmax(0, 1fr); gap: 6px }
+  .rl-mr__arrow { display: none }
+  .rl-tray { gap: 6px 14px; padding: 10px 10px 10px 14px }
+  .rl-tray__go { margin-left: 0 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rl-zoom, .rl-slot, .rl-tray, .rl-text, .rl-pn, .rl-tab { transition: none }
+  .cockpit-stamp[data-rl-stamp] { animation: none; opacity: .85 }
+}

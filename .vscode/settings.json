@@ -1,0 +1,24 @@
+{
+  "deno.enablePaths": ["supabase/functions", "ops/agent-control-plane/function"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/dist-packs/**": true,
+    "**/.artifacts/**": true,
+    "**/.claude/worktrees/**": true,
+    "**/visual-system-v2/**": true
+  },
+  "search.exclude": {
+    "**/dist": true,
+    "**/dist-packs": true,
+    "**/.artifacts": true,
+    "**/.claude/worktrees": true,
+    "**/visual-system-v2": true
+  },
+  "vitest.nodeEnv": {
+    "VITEST_MAX_THREADS": "1"
+  }
+}

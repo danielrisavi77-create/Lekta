@@ -43,7 +43,7 @@ agenata se vracaju iz predmemorije.
 ## Granice koje workflow ne rjesava
 
 - Ne zamjenjuje `npm run check` u CI-ju ni dokaz izdanja; gate u workflowu je ISTI gate, samo pokrenut ranije.
-- Stroj ima 8 GB i 4 jezgre: ne pokretati workflow dok se pece dokaz izdanja ili vrti puni UX prolaz (UX razina je
+- Stroj ima 16 GB i 4 niti (izmjereno 2026-10-08): ne pokretati workflow dok se pece dokaz izdanja ili vrti puni UX prolaz (UX razina je
   osjetljiva na opterecenje, CLAUDE.md "stroj je granica").
 - Podagenti dobivaju CLAUDE.md automatski; tvrda pravila koja zadatak posebno pogadjaju izvidjaj IMENUJE u briefu, pa
   ih implementator ne mora traziti.

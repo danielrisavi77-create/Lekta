@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import schema from '../../schemas/laya/finding-v2.schema.json';
 import {

@@ -6,14 +6,14 @@
 // Dvije akcije, razlucene poljem `requestId`:
 //   bez requestId  -> novi upis (submit_faculty_request), vraca { requestId }.
 //   s requestId    -> naknadno vezanje e-maila (attach_email_to_faculty_request), vraca { attached }.
-// ip_hash se racuna SERVERSKI iz zadnjeg unosa x-forwarded-for (nikad sirovi IP, isto kao
+// ip_hash se racuna SERVERSKI iz zaglavlja cf-connecting-ip (nikad sirovi IP, isto kao
 // generate-report), uz TAJNI salt (IP_HASH_SALT ili izveden iz service-role kljuca), kroz _shared/hash-ip.ts.
 // Rate limit i upis su u SQL security-definer funkcijama (0011), ovdje je samo I/O omotac.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
-import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -23,8 +23,8 @@ const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
-// IP kljuc i salt dolaze iz _shared/hash-ip.ts (zadnji unos x-forwarded-for, T84 XFF), isti kao u
-// ostalim funkcijama. Prije je ovdje hashiran CIJELI header, pa je svaki izmisljen prvi unos davao nov
+// IP kljuc i salt dolaze iz _shared/hash-ip.ts (cf-connecting-ip, T84 XFF), isti kao u
+// ostalim funkcijama. Prije je ovdje hashiran CIJELI x-forwarded-for, pa je svaki izmisljen unos davao nov
 // prozor rate limita.
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
@@ -32,7 +32,8 @@ const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 const WORK_TYPES = ['seminarski', 'zavrsni', 'diplomski', 'specijalisticki', 'doktorski'];
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-Deno.serve(async (req: Request) => {
+// T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
+Deno.serve(requireTrustedClientIp(async (req: Request) => {
  const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
  const json = (body: unknown, status = 200): Response =>
    new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -82,7 +83,7 @@ Deno.serve(async (req: Request) => {
   const emailIn = String(body.email ?? '').trim();
   const email = emailIn && isEmail(emailIn) ? emailIn.slice(0, 320) : null;
   const source = body.source ? String(body.source).slice(0, 40) : 'upload_flow';
-  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
+  const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
 
   const { data: requestId, error } = await admin.rpc('submit_faculty_request', {
     p_faculty_id: facultyId,
@@ -102,4 +103,4 @@ Deno.serve(async (req: Request) => {
   console.error('[faculty-request]', e); // Edge Function logovi = error tracking (P0 8-1)
   return json({ error: 'internal' }, 500);
  }
-});
+}));

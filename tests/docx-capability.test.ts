@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Jedna granica preko sva tri sloja (analiza / lokalni popravak / serverski popravak).
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Ratchet nad punim grafom `npm audit` (vanjski audit 2026-09-08, nalaz 6).
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * SVAKI FIXER MORA BITI DOSEZAN, ILI IZRICITO IZUZET.
  *

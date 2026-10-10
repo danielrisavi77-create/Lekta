@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Invarijanta profilnog baselinea: checkX zastavica smije biti UKLJUCENA samo ako profil ima
  * vrijednost prema kojoj se provjera uopce moze izvesti.

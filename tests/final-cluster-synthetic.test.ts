@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za zadnji klaster: erf/sfzg diplomski (stvarni uzorci) + svi preostali
  * doktorski profili (sintetika; doktorske disertacije se dosljedno ne serviraju kao otvoreni

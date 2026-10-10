@@ -62,11 +62,25 @@ function zadanoPomicanje(el: HTMLElement): void {
   }
 }
 
+/** Otvara ili zatvara obrazac „Zanemari” uz nalaz; `true` kad je klik bio na tom obrascu (Z8 i Z34 dijele ga). */
+export function obradiIgnoreKlik(cilj: HTMLElement): boolean {
+  if (cilj.closest('[data-finding-ignore]')) {
+    cilj.closest<HTMLElement>('[data-finding-id]')?.querySelector<HTMLElement>('[data-finding-ignore-form]')?.removeAttribute('hidden');
+    return true;
+  }
+  if (cilj.closest('[data-finding-ignore-cancel]')) {
+    cilj.closest<HTMLElement>('[data-finding-ignore-form]')?.setAttribute('hidden', '');
+    return true;
+  }
+  return false;
+}
+
 /**
  * Prevede klik unutar kartice u radnju ljuske. Isti skup radnji koji `renderResultsCockpit` vec
- * salje, jer kartica je ISTA (`priority-findings.ts`); stol joj samo mijenja okvir.
+ * salje, jer kartica je ISTA (`priority-findings.ts`); stol joj samo mijenja okvir. Dijeli ga i
+ * stol Z34 (`result-live.ts`), da odluka nad nalazom ima jedan prevoditelj.
  */
-function radnjaZaKlik(cilj: HTMLElement): ResultsCockpitAction | null {
+export function radnjaZaKlik(cilj: HTMLElement): ResultsCockpitAction | null {
   const kartica = cilj.closest<HTMLElement>('[data-finding-id]');
   const findingId = kartica?.dataset.findingId;
   if (!findingId) return null;
@@ -153,14 +167,7 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       o.onAction?.({ kind: 'repair-safe', ruleIds: planOdabir() }, cilj.closest<HTMLElement>('[data-repair-plan-go]') ?? undefined);
       return;
     }
-    if (cilj.closest('[data-finding-ignore]')) {
-      cilj.closest<HTMLElement>('[data-finding-id]')?.querySelector<HTMLElement>('[data-finding-ignore-form]')?.removeAttribute('hidden');
-      return;
-    }
-    if (cilj.closest('[data-finding-ignore-cancel]')) {
-      cilj.closest<HTMLElement>('[data-finding-ignore-form]')?.setAttribute('hidden', '');
-      return;
-    }
+    if (obradiIgnoreKlik(cilj)) return;
     const radnja = radnjaZaKlik(cilj);
     if (radnja?.kind === 'repair') o.onAction?.(radnja, cilj.closest<HTMLElement>('[data-finding-action]') ?? undefined);
     else if (radnja) o.onAction?.(radnja);

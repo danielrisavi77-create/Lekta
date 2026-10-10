@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za ffrz (Fakultet filozofije i religijskih znanosti).
  *

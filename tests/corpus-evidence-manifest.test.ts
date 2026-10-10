@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad manifestom dokaza: kada pokretanje nad stvarnim radom vrijedi kao DOKAZ (razina A), a
  * kada je samo run koji se nije srusio.

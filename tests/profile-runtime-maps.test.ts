@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift + faithfulness guard za PECENE runtime mape (audit performance-01/02).
  *

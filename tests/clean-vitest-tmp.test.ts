@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/clean-vitest-tmp.mjs: ciscenje ostataka Vitesta i WordReplica testova iz %TEMP%.
  *

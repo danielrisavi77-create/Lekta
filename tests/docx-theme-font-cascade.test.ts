@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-06: tema-font zapisan na RUNU nije nadjacavao izricit font iz stila.
  *

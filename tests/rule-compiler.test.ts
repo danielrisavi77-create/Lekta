@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { compileEffectiveRules, collectCompileDiagnostics } from '../src/profiles/rule-compiler';
 import type { ThesisProfile } from '../src/profiles/profile-schema';

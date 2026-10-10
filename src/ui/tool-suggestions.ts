@@ -11,7 +11,7 @@ import { LEVEL_SLUGS } from '../title-pages/level-slugs';
 import type { WorkType } from '../profiles/profile-schema';
 
 export interface ToolSuggestion {
-  /** Relativna putanja alata (postojeca stranica u root-u). */
+  /** Putanja alata od korijena stranice, neovisna o trenutnoj ruti. */
   href: string;
   /** Poziv na akciju na hrvatskom. */
   label: string;
@@ -51,19 +51,19 @@ export function suggestTool(issue: IssueLike, ctx?: SuggestionContext): ToolSugg
   const cat = issue.category ?? '';
 
   if (/naslovnic|naslovna stranica/.test(text)) {
-    return { href: `naslovnica.html${titlePageQuery(ctx)}`, label: 'Složi naslovnicu' };
+    return { href: `/naslovnica.html${titlePageQuery(ctx)}`, label: 'Složi naslovnicu' };
   }
   if (/izjav|izvornost|plagijat/.test(text)) {
-    return { href: 'izjava.html', label: 'Izradi izjavu o izvornosti' };
+    return { href: '/izjava.html', label: 'Izradi izjavu o izvornosti' };
   }
   if (/literatur|bibliografij|popis izvora|popis literature/.test(text)) {
-    return { href: 'literatura.html', label: 'Sredi literaturu' };
+    return { href: '/literatura.html', label: 'Sredi literaturu' };
   }
   if (/opseg|broj rije|kartic|premalo rije|previse rije|duljina teksta/.test(text)) {
-    return { href: 'kartice.html', label: 'Prebroji kartice' };
+    return { href: '/kartice.html', label: 'Prebroji kartice' };
   }
   if (cat === 'citations' || /citat|navod|referenc|fusnot/.test(text)) {
-    return { href: 'citat.html', label: 'Otvori citat generator' };
+    return { href: '/citat.html', label: 'Otvori citat generator' };
   }
   return null;
 }

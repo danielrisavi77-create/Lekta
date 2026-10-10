@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T84 RD-3: slot popravka s limitom po korisniku (global-slot.ts) i RD-2 strop ishoda bez potrosnje.
  * Mjeri se izvrseni modul nad laznom bazom (rpc odgovori), plus gard izvora index.ts.

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';

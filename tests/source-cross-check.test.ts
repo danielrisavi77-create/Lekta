@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { analyzeSourceCrossCheck } from '../src/analysis/source-cross-check';
 import { analyzeDocx } from '../src/analysis/analyze-docx';

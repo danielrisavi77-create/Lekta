@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cuva pokrivenost favicona (BL-P3-10): svaka stranica referencira /favicon.svg + /favicon.ico
  * (legacy fallback, bez njega browseri traze /favicon.ico i dobiju 404) + /apple-touch-icon.png

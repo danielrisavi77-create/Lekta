@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * GARD NAD KATALOGOM STUDENTSKE NEUREDNOSTI (`scripts/corpus-gen/mutations.mts`).
  *

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard: korisnik ne smije moci mijenjati vlastiti redak u `corpus_contributions`.
  *

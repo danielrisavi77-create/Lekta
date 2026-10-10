@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { canonicalUtf8, sha256Hex, toBase64Url, type JsonValue } from '../src/repair/contract/index.ts';

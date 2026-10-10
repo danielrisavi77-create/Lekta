@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import {
   redactErrorText, buildErrorReport, makeIncidentId, INCIDENT_ID_RE,

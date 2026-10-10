@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/generate-title-page-tools.mjs: honesty-gate testovi (B5.4). Generator SMIJE
  * proizvesti staticku SEO stranicu SAMO za predloske s provenance.status==='official' (imamo

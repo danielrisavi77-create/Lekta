@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift i korektnost pecenog serverskog artefakta profile-rules isporuke (faza B0).
  * Commitani data/generated/profile-rules-server.json mora biti IDENTICAN ponovnom

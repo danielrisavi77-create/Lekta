@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad tim koliko je citatni stil profila POTKRIJEPLJEN tvrdnjom (T3).
  *

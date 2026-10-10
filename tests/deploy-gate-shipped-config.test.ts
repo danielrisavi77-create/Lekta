@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard nad citanjem sposobnosti IZ ISPORUCENOG paketa (scripts/deploy-gate-shipped-config.mjs).
  *

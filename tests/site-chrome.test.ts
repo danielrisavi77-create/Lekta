@@ -19,7 +19,9 @@ import { resolve } from 'node:path';
 import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import {
   SITE_CHROME_DESTINATIONS,
+  SITE_CHROME_SCROLL_EXIT,
   SITE_CHROME_SCROLL_THRESHOLD,
+  siteChromeScrolled,
   applySiteChromeStage,
   disposeSiteChrome,
   isSiteChromeStage,
@@ -37,6 +39,7 @@ import {
   SITE_CHROME_PLATE_EMPTY,
 } from '../src/shared/site-chrome';
 import { unitKratica } from '../src/coverage/site-stats';
+import { BETA_FOOTER_NOTE } from '../src/legal/legal-content';
 import {
   DESK_NO_WORK,
   INK_CLASS,
@@ -592,6 +595,34 @@ describe('Z15 stanje nakon skrola', () => {
     expect(chrome.classList.contains('site-chrome--scrolled')).toBe(false);
   });
 
+  it('histereza: pomak koji izazove sama traka (do 17 px, izmjereno) ne vraca je preko praga', () => {
+    // Bez histereze je 41 -> 27 -> 41 petlja: traka se prebacuje svaki kadar (vidi SITE_CHROME_SCROLL_EXIT).
+    expect(SITE_CHROME_SCROLL_THRESHOLD - SITE_CHROME_SCROLL_EXIT).toBeGreaterThan(17);
+    const doc = dom(zaglavlje(read('alati.html')));
+    mountSiteChrome(doc);
+    const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]')!;
+    const skrol = (y: number): boolean => {
+      Object.defineProperty(doc.defaultView!, 'scrollY', { value: y, configurable: true });
+      doc.defaultView!.dispatchEvent(new Event('scroll'));
+      return chrome.classList.contains('site-chrome--scrolled');
+    };
+    expect(skrol(41)).toBe(true);
+    expect(skrol(41 - 17)).toBe(true);
+    expect(skrol(SITE_CHROME_SCROLL_EXIT + 1)).toBe(true);
+    expect(skrol(SITE_CHROME_SCROLL_EXIT)).toBe(false);
+    // Na putu dolje debelo stanje ostaje do istog praga ulaska kao i prije.
+    expect(skrol(30)).toBe(false);
+    expect(skrol(SITE_CHROME_SCROLL_THRESHOLD)).toBe(false);
+    expect(skrol(SITE_CHROME_SCROLL_THRESHOLD + 1)).toBe(true);
+  });
+
+  it('siteChromeScrolled: ulaz iznad praga, izlaz tek ispod nizeg praga', () => {
+    expect(siteChromeScrolled(SITE_CHROME_SCROLL_THRESHOLD + 1, false)).toBe(true);
+    expect(siteChromeScrolled(SITE_CHROME_SCROLL_THRESHOLD, false)).toBe(false);
+    expect(siteChromeScrolled(SITE_CHROME_SCROLL_EXIT + 1, true)).toBe(true);
+    expect(siteChromeScrolled(SITE_CHROME_SCROLL_EXIT, true)).toBe(false);
+  });
+
   it('`rad/index.html` pocinje bez faze (scanning): nijedan korak nije aktivan i traka je skrivena', () => {
     // Z15 popravak: prije Z15 popravka je statican atribut tvrdio "findings" od prvog kadra, dakle
     // prije nego je dokument uopce odabran. `scanning` vraca PRAZAN popis koraka (site-chrome.ts),
@@ -1079,6 +1110,8 @@ describe('Z15 podnozje: pravni minimum', () => {
     expect(foot).toContain('Sve pravno');
     expect(foot).toContain('Automatska provjera je lokalna');
     expect(foot).toContain('Nije provjera plagijata ni službena potvrda fakulteta');
+    // T86 (kriterij 6 T81): podnozje kaze da se tijekom besplatne bete nista ne naplacuje.
+    expect(foot).toContain(BETA_FOOTER_NOTE);
     // JEDNA recenica, ne odlomak: podnozje nije mjesto za odricanje od odgovornosti u cijelosti.
     expect((foot.match(/<p class="site-footer__nota">/g) ?? []).length).toBe(1);
   });
@@ -1188,7 +1221,9 @@ describe('Z15 drugi krug: puno podnozje', () => {
     expect(PREDLOZAK).not.toBeNull();
     expect(PREDLOZAK!.stupci.map((c) => c.naziv)).toEqual(['Proizvod', 'Pribor', 'Pravno']);
     expect(PREDLOZAK!.stupci.flatMap((c) => c.stavke)).toHaveLength(19);
-    expect(PREDLOZAK!.granice).toHaveLength(4);
+    // T86: peta granica je recenica besplatne bete (predlozak i obje stranice).
+    expect(PREDLOZAK!.granice).toHaveLength(5);
+    expect(PREDLOZAK!.granice).toContain(BETA_FOOTER_NOTE);
     expect(PREDLOZAK!.moto).toContain('Mjeri, ne piše.');
   });
 

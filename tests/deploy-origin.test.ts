@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * BL-P0-01-4: origin generatora SEO stranica mora doci iz JEDNOG izvora (scripts/site-origin.mjs)
  * s fallbackom na zivu primarnu domenu (od T49 lekta.hr; prije lektahr.netlify.app). Prije

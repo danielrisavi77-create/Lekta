@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import type { DocumentFingerprint } from '../src/fingerprint/fingerprint';
 import {

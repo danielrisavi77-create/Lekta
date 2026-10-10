@@ -2,13 +2,14 @@ import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
+import { karticaSaZahvatom, otvoriLadicu } from './result-live-ladica';
 
 /**
  * T02 (plan razvoja): SVE ulazne akcije koje vode na popravak otvaraju nadredjeni prikaz, unutarnje detalje i
  * panel, te fokusiraju vidljivu kontrolu. Tri ulaza postoje i sva tri idu kroz `scrollToRepairPanel`:
- *   1. opca akcija      `[data-testid="repair-entry"]` (cockpit, "Popravi sigurne stavke"),
- *   2. akcija nalaza    `[data-finding-action="repair"]` (kartica prioritetnog nalaza),
- *   3. akcija iz plana  `[data-repair-plan-go]` (korektorski stol, prikaz plana).
+ *   1. opca akcija      `[data-testid="repair-entry"]` (cockpit, "Napravi plan popravka"),
+ *   2. akcija nalaza    od Z34 "U planu ✓" / "Uključi u plan" na kartici nalaza (`[data-rl-toggle]`), pa ladica,
+ *   3. akcija iz plana  `[data-repair-plan-go]` (od Z34 ladica plana, ista radnja kao plan Z8).
  * Kriterij iz plana: prolaze mis, tipkovnica i mobilni prikaz; spec se vrti u `chromium` i `mobile-chromium`.
  *
  * Detalji se NE otvaraju u pripremi: upravo sklopljeno stanje je kvar koji se mjeri (audit 2026-09-08, nalaz 2).
@@ -104,20 +105,25 @@ test.describe('T02: svaki ulaz u popravak otkriva nastavak', () => {
   test('akcija konkretnog nalaza vodi na panel i oznacava bas taj zahvat', async ({ page }) => {
     await analyzeToResult(page);
     await expectCollapsedBaseline(page);
-    const findingRepair = page.locator('#resultCockpit [data-finding-action="repair"]');
-    // Prioritetne kartice nude "Popravi automatski" samo za nalaze koji imaju zahvat; ovaj fixture ih ima
-    // (prazni odlomci). Kad ih ne bi bilo, tvrdnja pada umjesto da put ostane nemjeren.
-    await expect(findingRepair.first(), 'fixture mora nuditi barem jedan nalaz s automatskim zahvatom').toBeVisible();
-    await findingRepair.first().click();
+    // Z34: kartica nalaza s automatskim zahvatom nosi "U planu ✓" / "Uključi u plan"; fixture ih ima.
+    // Kad ih ne bi bilo, `karticaSaZahvatom` pada umjesto da put ostane nemjeren.
+    await karticaSaZahvatom(page);
+    const gumb = page.locator('#resultCockpit [data-rl-toggle]');
+    const ruleIds = ((await gumb.getAttribute('data-rl-toggle')) ?? '').split(' ').filter(Boolean);
+    expect(ruleIds.length, 'gumb nalaza mora nositi svoj zahvat').toBeGreaterThan(0);
+    // Iskljuci pa ukljuci: odabir je sad KORISNIKOV, i bas taj zahvat mora stici u panel.
+    await gumb.click();
+    await expect(gumb).toHaveAttribute('aria-pressed', 'false');
+    await gumb.click();
+    await expect(gumb).toHaveAttribute('aria-pressed', 'true');
+    await otvoriLadicu(page);
+    await page.locator('[data-rl-tray] [data-repair-plan-go]').click();
     await expectWorkflowRevealed(page);
-    // Ispravan odabir se cuva: ciljani zahvat je oznacen (ledger redak ili checkbox), ne neki drugi.
-    const oznacen = await page.evaluate(() => {
-      const row = document.querySelector('.lekta-repair-ledger-row--target');
-      if (row) return row.getAttribute('aria-checked') === 'true';
-      const item = document.querySelector('.lekta-repair-panel__item--target input[type="checkbox"]') as HTMLInputElement | null;
-      return item ? item.checked : null;
-    });
-    expect(oznacen, 'ciljani zahvat mora biti oznacen nakon akcije nalaza').toBe(true);
+    const oznaceni = await page.evaluate((ids) => ids.map((id) => {
+      const cb = document.querySelector<HTMLInputElement>(`.lekta-repair-panel__list li[data-rule-id="${id}"] input[type="checkbox"]`);
+      return cb ? cb.checked : null;
+    }), ruleIds);
+    expect(oznaceni, 'zahvat nalaza mora biti oznacen u panelu').toEqual(ruleIds.map(() => true));
   });
 
   test('akcija iz plana (korektorski stol) vodi na isti panel', async ({ page }) => {
@@ -125,8 +131,8 @@ test.describe('T02: svaki ulaz u popravak otkriva nastavak', () => {
     await expectCollapsedBaseline(page);
     const stol = page.locator('[data-desk-host]');
     await expect(stol, 'fixture mora imati korektorski stol; bez njega put kroz plan nije izmjeren').toHaveCount(1);
-    const otvori = page.locator('[data-desk-plan-open]');
-    if ((await otvori.count()) > 0) await otvori.first().click();
+    // Z34: plan se salje iz ladice, koja se pojavi kad presuda izadje iz pogleda.
+    await otvoriLadicu(page);
     const go = page.locator('[data-repair-plan-go]');
     await expect(go.first()).toBeVisible();
     await go.first().click();

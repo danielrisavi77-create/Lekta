@@ -23,7 +23,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { driftFor, labelForOnlyLive, configVerifyJwt, verifyJwtDrift } from './deploy-drift-core.mjs';
+import {
+  configVerifyJwt,
+  contentDrift,
+  deployedModules,
+  deployIdentityProblem,
+  driftFor,
+  labelForOnlyLive,
+  parseEszip,
+  verifyJwtDrift,
+} from './deploy-drift-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FUNCTIONS_DIR = path.join(ROOT, 'supabase', 'functions');
@@ -51,6 +60,64 @@ function repoFunctions() {
     .sort();
 }
 
+/**
+ * Deployani bundle funkcije (binarni ESZIP), ili null kad ga API ne da. Null nije "jednako":
+ * presuda za tu funkciju je tada NE ZNAM.
+ */
+async function deployedBundle(ref, slug) {
+  try {
+    const res = await fetch(`${API}/projects/${ref}/functions/${slug}/body`, {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      signal: AbortSignal.timeout(180_000),
+    });
+    if (!res.ok) return null;
+    return new Uint8Array(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+/** Trenutni zapis jedne funkcije (`version`, `updated_at`), ili null kad ga API ne da. */
+async function functionRecord(ref, slug) {
+  try {
+    const res = await fetch(`${API}/projects/${ref}/functions/${slug}`, {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      signal: AbortSignal.timeout(60_000),
+    });
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Sadrzaj datoteke iz repoa po putanji relativnoj na korijen, ili null kad je nema. */
+function readRepo(repoPath) {
+  const p = path.join(ROOT, ...repoPath.split('/'));
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
+}
+
+/**
+ * Presuda po sadrzaju za svaku funkciju koja je i u repou i deployana (T101). Body se veze uz
+ * verziju deploya: zapis funkcije cita se prije i poslije dohvata bodyja, a promjena izmedju dva
+ * citanja daje NE ZNAM, jer body tada mozda pripada drugoj verziji od one koja se biljezi.
+ */
+async function contentVerdicts(ref, both) {
+  const verdicts = [];
+  for (const slug of [...both].sort()) {
+    const before = await functionRecord(ref, slug);
+    const bundle = await deployedBundle(ref, slug);
+    const after = await functionRecord(ref, slug);
+    const identity = deployIdentityProblem(before, after);
+    const deployed = identity !== null
+      ? { status: 'ne-znam', reason: identity }
+      : bundle === null
+        ? { status: 'ne-znam', reason: 'API nije vratio bundle' }
+        : deployedModules(parseEszip(bundle), slug);
+    verdicts.push({ slug, version: before?.version ?? null, updatedAt: before?.updated_at ?? null, ...contentDrift(slug, deployed, readRepo) });
+  }
+  return verdicts;
+}
+
 async function deployedFunctions(ref) {
   const res = await fetch(`${API}/projects/${ref}/functions`, {
     headers: { Authorization: `Bearer ${TOKEN}` },
@@ -59,7 +126,34 @@ async function deployedFunctions(ref) {
   return await res.json();
 }
 
-function section(label, ref, { onlyRepo, onlyLive, both, live }) {
+const OZNAKA_SADRZAJA = { jednako: 'JEDNAKO', drift: 'DRIFT', 'ne-znam': 'NE ZNAM' };
+
+const OZNAKA_MODULA = { jednako: 'jednako', drift: 'razlicit', 'nema-u-repou': 'nema u repou' };
+
+/** Tablica po sadrzaju (jednako / drift / ne znam) i popis SVIH usporedjenih modula po funkciji. */
+function contentSection(verdicts) {
+  const lines = ['### Sadrzaj deployanih funkcija nasuprot repou (T101)', ''];
+  lines.push(
+    'Deployani bundle (`GET /functions/{slug}/body`) cita se kao binarni ESZIP; izvorni TS svakog',
+    'lokalnog modula dolazi iz njegove source mape i usporedjuje se s repoom bajt po bajt (CR',
+    'normaliziran). NE ZNAM znaci da se deploy nije mogao procitati ili vezati uz verziju; to nije prolaz.',
+    '',
+  );
+  lines.push('| Funkcija | Verzija | Azurirano | Sadrzaj | Razlog |', '| --- | --- | --- | --- | --- |');
+  for (const v of verdicts) {
+    const azurirano = typeof v.updatedAt === 'number' ? new Date(v.updatedAt).toISOString() : (v.updatedAt ?? '');
+    lines.push(`| \`${v.slug}\` | ${v.version ?? ''} | ${azurirano} | ${OZNAKA_SADRZAJA[v.status]} | ${v.reason ?? ''} |`);
+  }
+  lines.push('', '#### Usporedjeni moduli', '');
+  for (const v of verdicts) {
+    const moduli = v.modules.map((m) => `\`${m.file}\` ${OZNAKA_MODULA[m.ishod]}`).join('; ');
+    lines.push(`- \`${v.slug}\`: ${moduli || 'nijedan (NE ZNAM)'}`);
+  }
+  lines.push('');
+  return lines;
+}
+
+function section(label, ref, { onlyRepo, onlyLive, both, live }, verdicts = []) {
   const lines = [`## ${label} (\`${ref}\`)`, ''];
   lines.push(`Repo: ${both.length + onlyRepo.length} funkcija. Deployano: ${live.size}.`, '');
 
@@ -71,6 +165,8 @@ function section(label, ref, { onlyRepo, onlyLive, both, live }) {
     for (const slug of onlyLive) lines.push(`| \`${slug}\` | ${labelForOnlyLive(label)} |`);
     lines.push('');
   }
+
+  if (verdicts.length) lines.push(...contentSection(verdicts));
 
   // Konfiguracijski raskorak: do 2026-08-30 se usporedjivalo samo POSTOJANJE funkcije, pa je
   // funkcija bez `[functions.<slug>]` bloka izgledala uredno sve dok je prvi deploy ne zatvori.
@@ -116,13 +212,21 @@ const out = [
 ];
 
 let drifted = 0;
+let contentDrifted = 0;
+let unknown = 0;
 for (const env of ENVIRONMENTS) {
   const deployed = await deployedFunctions(env.ref);
   const d = driftFor(repo, deployed);
   drifted += d.onlyRepo.length + d.onlyLive.length;
-  out.push(...section(env.label, env.ref, d));
+  const verdicts = await contentVerdicts(env.ref, d.both);
+  contentDrifted += verdicts.filter((v) => v.status === 'drift').length;
+  unknown += verdicts.filter((v) => v.status === 'ne-znam').length;
+  out.push(...section(env.label, env.ref, d, verdicts));
 }
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, out.join('\n'), 'utf8');
-console.log(`[deploy-drift] zapisano ${path.relative(ROOT, OUT)}; stavki drifta: ${drifted}`);
+console.log(
+  `[deploy-drift] zapisano ${path.relative(ROOT, OUT)}; postojanje: ${drifted}, ` +
+  `sadrzaj DRIFT: ${contentDrifted}, NE ZNAM: ${unknown}`,
+);

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Napomena uz ocjenu nakon zaostravanja provjera (2026-08-20) mora se prikazivati u razdoblju
  * u kojem korisnici jos pamte staru, previsoku brojku, i sama se ugasiti poslije.

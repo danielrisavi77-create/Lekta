@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Concurrency gate popravka (audit DOCX-07).
  *

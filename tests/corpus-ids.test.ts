@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 2 (Lekta Error Corpus): stabilni ID-evi pokrivaju SVE provjere, jedinstveni su i
  * dobro oblikovani, a registar nema mrtvih unosa. Ovime korpus testovi mogu keyati po

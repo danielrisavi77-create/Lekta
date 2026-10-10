@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { validateProfiles } from '../src/profiles/profile-validator';
 import {

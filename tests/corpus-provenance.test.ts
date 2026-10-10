@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * PROVENIJENCIJA KORPUSA: dokazuje da fixture koje tvrde da su iz nekog alata doista jesu.
  *

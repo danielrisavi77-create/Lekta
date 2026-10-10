@@ -162,6 +162,61 @@
       "analyzerSkips": 0
     }
   },
+  "svjedok-apuri-zavrsni.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "svjedok-effectus-diplomski.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "svjedok-efri-diplomski.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "svjedok-grf-zavrsni.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
+  "svjedok-hks-diplomski.docx": {
+    "version": 1,
+    "status": "no-known-limits",
+    "items": [],
+    "analyzerSkips": [],
+    "summary": {
+      "limitedKinds": 0,
+      "limitedOccurrences": 0,
+      "analyzerSkips": 0
+    }
+  },
   "synthetic-formula-omath.docx": {
     "version": 1,
     "status": "partial",

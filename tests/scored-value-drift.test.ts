@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Vezanje BODOVANE VRIJEDNOSTI na verificiranu tvrdnju (`src/verification/scored-value-binding.ts`).
  *

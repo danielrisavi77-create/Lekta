@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test fhs profila (Fakultet hrvatskih studija, diplomski).
  *

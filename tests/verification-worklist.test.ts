@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Drift gard za verifikacijski worklist (data/verification/dossiers/**).
  *

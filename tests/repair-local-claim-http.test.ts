@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 
 import { handleLocalRepairClaimHttp } from '../src/repair/local-runner/claim-http.ts';

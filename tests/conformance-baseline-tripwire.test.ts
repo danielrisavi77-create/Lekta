@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Brzi tripwire za fallback baseline u redovnom `npm run check` (puna matrica je u
  * tests/conformance/baseline.test.ts, samo pod `npm run conformance`). Dva slucaja: jedan lightBaseline

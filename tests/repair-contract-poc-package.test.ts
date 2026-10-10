@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it, vi } from 'vitest';
 
 import { CONTRACT_FIXER_IDS, toBase64Url } from '../src/repair/contract';

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * SERVER, NE KLIJENT, ODLUCUJE CILJANU VRIJEDNOST (RE-62).
  *

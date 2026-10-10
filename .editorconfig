@@ -1,0 +1,24 @@
+# Isti kraj retka i kodiranje u svakom uredjivacu. CRLF je prva stavka kataloga kvarova
+# (.claude/skills/lekta-protokol/SKILL.md); .gitattributes cuva repozitorij, ovo cuva uredjivac.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Fixture i snimke izvora se usporeduju po bajtovima: uredjivac ih ne smije normalizirati.
+[{tests/fixtures/**,data/sources/**,src/audits/hr-dict/**}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+indent_style = unset
+indent_size = unset

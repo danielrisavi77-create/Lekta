@@ -10,6 +10,9 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  # DAN-80: GitHub merge queue gradi PR s najnovijim masterom na grani gh-readonly-queue/* i trazi
+  # iste provjere pod ovim okidacem; bez njega PR u redu visi bez statusa.
+  merge_group:
   workflow_dispatch:
 
 # Least-privilege token (kao check.yml): samo cita kod.

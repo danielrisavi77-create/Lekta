@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/clean-vitest-tmp.mjs, stavka G (odluka vlasnika 2026-09-26): ostaci testova i alata koji
  * nisu Vitest (lekta-* mkdtemp mape, lekta-oracle-*, playwright_*dev_profile-*). Kategorija

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za fkit (Fakultet kemijskog inzenjerstva i tehnologije) i
  * fpz (Fakultet prometnih znanosti).

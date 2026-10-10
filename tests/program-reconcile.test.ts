@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard za registar studijskih programa i njegovo uskladjivanje s profilima (P1-1, P1-3, P1-4 u
  * docs/PLAN_POTPUNA_POKRIVENOST.md).

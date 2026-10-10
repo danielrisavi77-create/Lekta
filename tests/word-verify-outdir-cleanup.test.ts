@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Stavka G: Word check skripte brisu svoj izlazni direktorij SAMO na uspjehu (exit 0) i samo kad je
  * Word provjerio barem jedan dokument, ime je .tmp-word-verify ili .tmp-word-corpus, roditelj je

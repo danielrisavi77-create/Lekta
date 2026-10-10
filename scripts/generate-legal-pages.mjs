@@ -17,11 +17,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
+import { loadEnv } from 'vite';
+
 import { SITE_ORIGIN } from './site-origin.mjs';
 import { fallbackFaces, ubaciU404, webfontFaces } from './lib/legal-webfonts.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+const buildEnv = loadEnv('production', ROOT, 'VITE_');
+const googleSignIn = ['true', '1'].includes(String(buildEnv.VITE_AUTH_GOOGLE_ENABLED ?? '').trim().toLowerCase());
 const DIST = path.join(ROOT, 'dist');
 
 if (!fs.existsSync(DIST)) {
@@ -150,6 +154,7 @@ function pageShell(doc, allDocs) {
 ${doc.html}
 </main>
 <footer>
+<p>${esc(legal.BETA_FOOTER_NOTE)}.</p>
 <p>Trebaš provjeriti rad ili ti treba besplatan alat (citati, naslovnica, brojač kartica...)? <a href="/alati.html">Svi besplatni alati</a> &middot; <a data-analyzer-cta href="/#top">Provjeri rad</a></p>
 Pravni dokumenti:
 <nav>${nav}</nav>
@@ -169,6 +174,7 @@ const docs = legal.legalDocuments({
   logDays: provider.retentionDaysLogs,
   oib: provider.oib,
   address: provider.address,
+  googleSignIn,
 });
 
 const list = Object.values(docs);

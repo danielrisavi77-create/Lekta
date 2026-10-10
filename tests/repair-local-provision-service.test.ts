@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it, vi } from 'vitest';
 
 import { provisionLocalRepairJob } from '../src/repair/local-runner/provision-service.ts';

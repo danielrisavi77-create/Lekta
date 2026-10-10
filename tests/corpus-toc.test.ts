@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): TOC + HIJERARHIJA atomski slucajevi. Ciljane provjere sadrzaja
  * (font/brojevi stranica/pokrivenost) i hijerarhije naslova emitira samo profil s TOC-detalj

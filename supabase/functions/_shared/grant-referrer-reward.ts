@@ -11,11 +11,17 @@
 // Fraud (salt): usporeduje referral_signups.referred_ip_hash s report_generations.ip_hash. Oba se
 // sada racunaju kroz _shared/hash-ip.ts (ista ekstrakcija + IP_HASH_SALT) u redeem-referral-signup
 // i generate-report, pa se vrijednosti poklapaju i provjera stvarno okida.
+// T84 XFF: hashevi nose oznaku sheme (v2: = cf-connecting-ip, bez prefiksa = stara x-forwarded-for).
+// Hash iz druge sheme se NE smije proglasiti ni jednakim ni razlicitim, pa se nagrada tada zadrzava
+// (`ip_scheme_unverifiable`) umjesto da se pogada. To NIJE trajna odluka (nije u TRAJNI_RAZLOZI): obveza
+// ostaje `pending`, ponavlja se do granice pokusaja pa prelazi u `failed` i ceka covjeka. Bez vlasnicke
+// odluke o referral pravima nitko ne smije izgubiti pravo tihim zatvaranjem obveze kao `done`.
 //
 // buyerOrderId se biljezi u converted_order_id da refund te kupnje (webhook-mor refund grana)
 // moze povuci nepotrosenu nagradu preporucitelju.
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
+import { ipHashScheme } from './hash-ip.ts';
 
 const MAX_REWARDED_PER_MONTH = 10;
 const REWARD_WINDOW_DAYS = 90;
@@ -107,6 +113,15 @@ export async function tryGrantReferrerReward(
       if (fraudUpdateError) return { granted: false, reason: 'error' };
       if (!blocked) return { granted: false, reason: 'no_pending_referral' };
       return { granted: false, reason: 'ip_match_fraud' };
+    }
+    // T84 XFF: preporuciteljevi izvjestaji iz DRUGE sheme hashiranja od signupa ne mogu potvrditi ni
+    // opovrgnuti poklapanje mreze. Ne proglasavamo fraud i ne dodjeljujemo nagradu: signup ostaje u
+    // stanju friend_rewarded, bez izmjene, a ishod se biljezi kao trajna odluka s razlogom.
+    if (signup.referred_ip_hash) {
+      const signupScheme = ipHashScheme(signup.referred_ip_hash);
+      if ([...referrerIpHashes].some((h) => ipHashScheme(h) !== signupScheme)) {
+        return { granted: false, reason: 'ip_scheme_unverifiable' };
+      }
     }
 
     // Mjesecni strop nagradenih po preporucitelju.

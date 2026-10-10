@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * T84 RF-1: nagrada prijatelju iz preporuke (interni entitlement = placeni slot) ne smije pripasti
  * anonimnom Auth racunu. Anonimni racun nastaje bez e-maila i captche, pa bi svaki novi anonimni racun s

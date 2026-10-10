@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): PROFILNO-UVJETOVANI atomski slucajevi. Iste atomske uzrocnosti kao
  * corpus-atomic, ali "prolazna baza" je per-profil (cleanBuild), jer se ciljane provjere u engineu

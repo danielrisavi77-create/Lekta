@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Gard: svaka npm skripta mora gadjati COMMITANU datoteku.
  *

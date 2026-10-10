@@ -44,7 +44,7 @@
 import PLATE_INDEX from '../../data/coverage/unit-kratice.json';
 import { workTypeFromSlug } from '../title-pages/level-slugs';
 import { safeStorageGet, safeStorageSet, STORAGE_KEYS } from './browser-storage';
-import { danaDoRoka, normalizirajRok, rokOdlucen, ROK_PRAZAN, type RokStanje } from '../routes/intake/deadline-stamp';
+import { danaDoRoka, normalizirajRok, ROK_PRAZAN, type RokStanje } from '../routes/intake/deadline-stamp';
 
 /**
  * Sto je korisnik potvrdio na ulazu. `program` postoji samo kad je predodabir dosao iz postavki;
@@ -252,21 +252,17 @@ export function procitajPostavke(): unknown {
 }
 
 /**
- * SPREMNOST ZA UBACIVANJE: rok ILI "Još ne znam rok". Fakultet NIJE uvjet (odluka vlasnika
- * 2026-09-27: "Ne treba upisati faks odmah, nego aplikacija automatski prepoznaje. Ako je
- * prepozna, onda korisnik može odabrati sam"). Bez potvrde ga `/rad/` prepoznaje iz dokumenta.
+ * SPREMNOST ZA UBACIVANJE: dokument se prima odmah. Rok i fakultet su korisni kontekst, ali nisu
+ * preduvjet za prvu vrijednost proizvoda. Fakultet se bez potvrde prepoznaje iz dokumenta na
+ * `/rad/`, a prazan rok ostaje prazan i korisnik ga može dodati kasnije.
  *
- * Natpis zatvorenih vrata spominje samo rok. Predlozak ima zbirni oblik ("Prvo potvrdi fakultet i
- * rok"); ovo je njegov skraceni oblik bez fakulteta, isti koji je ulaz vec nosio kad je nedostajao
- * samo rok.
+ * Ovaj mali adapter ostaje između kontrolera i UI-ja da se pravilo "rok nije gate" može
+ * regresijski testirati na jednom mjestu i da ga buduća promjena obrasca ne uvede natrag.
  */
 const NATPIS_SPREMNO = 'ili ispusti dokument ovdje';
-const NATPIS_BEZ_ROKA = 'Prvo potvrdi rok';
 
-export function spremnostUlaza(stanje: { rok: RokStanje }): { spremno: boolean; natpis: string } {
-  return rokOdlucen(stanje.rok)
-    ? { spremno: true, natpis: NATPIS_SPREMNO }
-    : { spremno: false, natpis: NATPIS_BEZ_ROKA };
+export function spremnostUlaza(_stanje: { rok: RokStanje }): { spremno: boolean; natpis: string } {
+  return { spremno: true, natpis: NATPIS_SPREMNO };
 }
 
 /**

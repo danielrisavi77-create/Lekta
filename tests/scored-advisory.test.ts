@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { applyScoredAdvisory, DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-demotion';
 import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';

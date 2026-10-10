@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { claimLocalRepairJob } from '../src/repair/local-runner/claim-service.ts';
 import { sha256Hex, toBase64Url } from '../src/repair/contract/hash.ts';

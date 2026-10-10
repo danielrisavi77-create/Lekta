@@ -446,8 +446,9 @@ test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao',
  *  - naslovnica ima VLASTITU `#consentBanner`, pisanu rucno u `index.html`.
  * Prvi popravak je pokrio samo alate, pa je najvaznija stranica ostala zaklonjena; zato par.
  *
- * Mjere se i OBA praga: ispod 720 px vrijedi mobilna rezerva, iznad desktopska. Bez sirokog
- * viewporta bi se desktopska grana mogla obrisati a suite bi ostao zelen.
+ * Mjere se i OBA praga: ispod 721 px traka stoji u toku stranice bez rezerve (mobilni audit PR 3),
+ * iznad je fiksna s rezervom. Bez sirokog viewporta bi se desktopska grana mogla obrisati a suite bi
+ * ostao zelen.
  */
 const TRAKE = [
   { ruta: '/citat.html', vidljiva: '.lekta-consent-banner.is-visible', traka: '.lekta-consent-banner', odbij: '.lekta-consent-banner [data-consent="deny"]' },
@@ -503,9 +504,15 @@ for (const t of TRAKE) {
       expect(m.brojLinkova, 'podnozje mora imati poveznice').toBeGreaterThan(0);
       expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
 
-      // Traka ima i vlastiti odmak od dna (`bottom:18px`), pa rezerva mora pokriti oboje.
-      expect(m.rezerva, 'rezerva mora pokriti visinu trake i njezin odmak od dna')
-        .toBeGreaterThanOrEqual(m.visinaTrake + m.odmakOdDna);
+      if (v.width > 720) {
+        // Traka ima i vlastiti odmak od dna (`bottom:18px`), pa rezerva mora pokriti oboje.
+        expect(m.rezerva, 'rezerva mora pokriti visinu trake i njezin odmak od dna')
+          .toBeGreaterThanOrEqual(m.visinaTrake + m.odmakOdDna);
+      } else {
+        // Mobilni audit PR 3: ispod 721 px traka stoji u toku stranice, ispod podnozja, pa rezerve nema.
+        expect(await page.locator(t.traka).evaluate((el) => getComputedStyle(el).position), 'usko: traka je u toku').toBe('static');
+        expect(m.rezerva, 'usko: traka u toku ne treba rezervu').toBe(0);
+      }
       expect(m.zaklonjena, 'zadnja poveznica podnozja zalazi pod traku').toBe(false);
       expect(m.pogodakNad, 'na mjestu zadnje poveznice mora biti bas ona').toBe('poveznica');
     });
@@ -513,8 +520,9 @@ for (const t of TRAKE) {
 }
 
 for (const t of TRAKE) {
+  // Rezerva postoji samo za fiksnu traku, dakle iznad 720 px (ispod je traka u toku, mobilni audit PR 3).
   test(`rezerva za traku nestaje kad je privola rijesena (${t.ruta})`, async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(t.ruta);
     await page.waitForSelector(t.vidljiva);
     const prije = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));

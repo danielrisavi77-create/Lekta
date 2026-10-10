@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Tripwire za check-fixer-map.ts (RE-43, CLAUDE.md golden harness).
  *

@@ -179,6 +179,11 @@ export interface SourceEntry {
   kind: SourceKind;
   title: string;
   url: string;
+  /**
+   * Kad `url` vodi na arhivu (npr. ZIP s vise dokumenata), ime clana arhive koji je izvor;
+   * `snapshotPath` i `snapshotHash` se tada odnose na taj clan, ne na cijelu arhivu.
+   */
+  archiveMember?: string;
   publisher?: string;
   fetchedAt: string | null;
   snapshotPath: string | null;

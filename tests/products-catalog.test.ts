@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 
 import { mapProductRow, fetchRetailCatalog, formatPriceEur } from '../src/catalog/products-catalog';

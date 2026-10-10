@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden test pbf profila (Prehrambeno-biotehnoloski fakultet, diplomski).
  *

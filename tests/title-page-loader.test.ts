@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Testovi sloja predlozaka naslovnice (data/title-pages + src/title-pages).
  * Tri uloge: (1) faithfulness loadera, (2) ponasanje izbora predloska,

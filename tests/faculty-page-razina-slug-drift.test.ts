@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * scripts/generate-faculty-pages.mjs duplicira LEVEL_SLUGS (src/title-pages/level-slugs.ts) kao
  * RAZINA_PARAM_SLUGS jer .mjs build skripte su odvojene od src/ TS-a (nema bundlera). Naslovnica

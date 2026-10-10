@@ -6,6 +6,8 @@ export const REQUIRED_SCOPED_GUIDES = [
   'src/docx/CLAUDE.md',
   'supabase/CLAUDE.md',
   'scripts/autonomy/CLAUDE.md',
+  'data/profiles/CLAUDE.md',
+  'tests/CLAUDE.md',
 ];
 
 export const RULE_INVENTORY_PATH = 'docs/decisions/CLAUDE_V2_RULE_INVENTORY.md';

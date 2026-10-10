@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { cekajApp } from './app-ready';
 
 for (const route of ['citat', 'naslovnica']) {
   test(`audit async: ${route} koristi posljednji unos nakon sporog fakultetskog ucitavanja`, async ({ page }, info) => {
@@ -8,6 +9,7 @@ for (const route of ['citat', 'naslovnica']) {
     const pattern = route === 'citat' ? '**/data/tools/citation-specs/verified/*.json*' : '**/data/title-pages/templates-heavy.json*';
     await page.route(pattern, async request => { intercepted++; await blocked; await request.continue(); });
     await page.goto(`/${route}.html`, { waitUntil: 'domcontentloaded' });
+    if (route === 'citat') await cekajApp(page);
     if (route === 'citat') {
       await page.locator('#f-faculty').selectOption('fpzg');
       await page.locator('#f-title').fill('Stari naslov');
@@ -40,8 +42,27 @@ test('audit zoom: CTA i datum ostaju dostupni na dvostrukom povecanju', async ({
   await page.setViewportSize({ width: 720, height: 500 });
   for (const [route, sample, target] of [['citat', '#c-sample', '.success-cta a'], ['izjava', '#st-sample', '#st-date']]) {
     await page.goto(`/${route}.html`);
+    if (route === 'citat') await cekajApp(page);
     await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 2000 }).catch(() => {});
-    await page.locator(sample).click();
+    const sampleControl = page.locator(sample);
+    // Zavrsimo pomicanje prije geste: CI trag je pokazao presretanje zaglavljem.
+    await sampleControl.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'center' }));
+    let previousPosition = '';
+    let stablePositions = 0;
+    await expect.poll(async () => {
+      const position = await sampleControl.evaluate(el => {
+        const r = el.getBoundingClientRect();
+        const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return hit && el.contains(hit) ? [r.left, r.top, r.width, r.height, scrollY].join(',') : '';
+      });
+      stablePositions = position && position === previousPosition ? stablePositions + 1 : 0;
+      previousPosition = position;
+      return stablePositions;
+    }).toBeGreaterThanOrEqual(2);
+    // Mobilni projekt koristi stvarni touch, a desktop mouse klik.
+    if (info.project.use.hasTouch) await sampleControl.tap();
+    else await sampleControl.click();
+    if (route === 'citat') await expect(page.locator('#f-title')).toHaveValue('Ustavno pravo Republike Hrvatske');
     for (const theme of ['light', 'dark']) {
       await page.evaluate(t => { document.documentElement.dataset.theme = t; }, theme);
       const control = page.locator(target);

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * DOCX-02: "nije moguce utvrditi" nije "ispravno je".
  *

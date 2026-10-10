@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { canLinkSession, emptyLedger } from '../src/routes/workspace/workspace-state';
 // Kompozitori zive u `bootstrap.ts`; razlog je zapisan ondje.

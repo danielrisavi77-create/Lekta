@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { findingSummary, findingSummaryHtml, summaryNaslov } from '../src/ui/results/finding-summary';
 import type { VisualReadinessSignals, VisualScoreModel } from '../src/ui/results/visual-result-model';

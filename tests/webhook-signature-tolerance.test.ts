@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * MUTACIJSKI GARD NAD PROVJEROM STRIPE POTPISA.
  *

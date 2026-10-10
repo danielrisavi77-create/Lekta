@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * UGOVOR ISPORUKE: ponovna analiza se izvodi PRIJE nego sto sucelje preporuci preuzimanje.
  *

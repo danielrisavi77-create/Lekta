@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { gzipSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';

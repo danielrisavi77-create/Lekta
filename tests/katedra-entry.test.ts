@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { GOOGLE_PKCE_STORAGE_KEY, PKCE_MAX_AGE_MS } from '../src/auth/google-callback';
+import { safeStorageSet } from '../src/shared/browser-storage';
 import {
   applyKatedraEntryContext,
+  bootstrapKatedraEntryContext,
   clearKatedraProjectId,
   currentCompletionHandoffToken,
   currentKatedraProjectId,
@@ -10,7 +13,27 @@ import {
 
 beforeEach(() => {
   sessionStorage.clear();
+  window.history.replaceState(null, '', '/rad/');
+  safeStorageSet(GOOGLE_PKCE_STORAGE_KEY, null);
 });
+
+function seedKatedraState(): { token: string; result: string } {
+  const token = 'h'.repeat(43);
+  const result = '{"analysisId":"analysis-a"}';
+  applyKatedraEntryContext({ projectId: 'project-a', handoffToken: token });
+  sessionStorage.setItem('lekta.katedra-handoff-result.v0.1', result);
+  return { token, result };
+}
+
+function setPendingGooglePkce(createdAt = Date.now()): void {
+  safeStorageSet(GOOGLE_PKCE_STORAGE_KEY, { verifier: 'v'.repeat(43), createdAt });
+}
+
+function expectKatedraStateCleared(): void {
+  expect(currentKatedraProjectId()).toBeUndefined();
+  expect(currentCompletionHandoffToken()).toBeUndefined();
+  expect(sessionStorage.getItem('lekta.katedra-handoff-result.v0.1')).toBeNull();
+}
 
 describe('Katedra -> Lekta entry context', () => {
   it('maps current Katedra Croatian work slugs to canonical work types', () => {
@@ -68,6 +91,42 @@ describe('Katedra -> Lekta entry context', () => {
     expect(currentCompletionHandoffToken()).toBeUndefined();
     expect(sessionStorage.getItem('lekta.katedra-handoff-result.v0.1')).toBeNull();
     expect(sessionStorage.getItem('lekta.completion-handoff.v0.1')).toBeNull();
+  });
+
+  it.each([
+    ['authorization code', '/rad/?code=oauth-code'],
+    ['provider error query', '/rad/?error=access_denied'],
+    ['provider error fragment', '/rad/#error=access_denied'],
+  ])('preserves the current handoff on a verifier-backed OAuth %s callback', (_kind, href) => {
+    const state = seedKatedraState();
+    setPendingGooglePkce();
+    window.history.replaceState(null, '', href);
+    bootstrapKatedraEntryContext();
+    expect(currentKatedraProjectId()).toBe('project-a');
+    expect(currentCompletionHandoffToken()).toBe(state.token);
+    expect(sessionStorage.getItem('lekta.katedra-handoff-result.v0.1')).toBe(state.result);
+  });
+
+  it('clears stale Katedra handoff for an OAuth-looking URL without a verifier', () => {
+    seedKatedraState();
+    window.history.replaceState(null, '', '/rad/?code=unverified');
+    bootstrapKatedraEntryContext();
+    expectKatedraStateCleared();
+  });
+
+  it('still clears a direct visit when a verifier exists without a callback', () => {
+    seedKatedraState();
+    setPendingGooglePkce();
+    bootstrapKatedraEntryContext();
+    expectKatedraStateCleared();
+  });
+
+  it('clears stale Katedra handoff for a callback with an expired verifier', () => {
+    seedKatedraState();
+    setPendingGooglePkce(Date.now() - PKCE_MAX_AGE_MS - 1);
+    window.history.replaceState(null, '', '/rad/?code=expired');
+    bootstrapKatedraEntryContext();
+    expectKatedraStateCleared();
   });
 
   it('drops a captured result and capability when switching to a different project', () => {

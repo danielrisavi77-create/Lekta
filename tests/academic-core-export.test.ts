@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { exportAcademicRuleSet, isKatedraExportableRule } from '../src/integration/academic-core-export';
 import type { RuleEntry, VerifiedProfile } from '../src/profiles/profile-schema';

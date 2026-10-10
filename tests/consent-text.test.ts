@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Privola pri kupnji mora biti DOKAZIVA, ne prepricana (audit A26-08 / LEG-04..07).
  *

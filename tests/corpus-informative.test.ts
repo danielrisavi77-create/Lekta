@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 prosirenje (Lekta Error Corpus): INFORMATIVNI valid-controli (P3).
  *

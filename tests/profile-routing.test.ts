@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Rutiranje odabira u profil: za SVAKU kataloski ponudjenu trojku (jedinica, program, vrsta rada)
  * dokazuje da carobnjak dobije determinirani ishod, i da nijedan profil registra nije nedostizan.

@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Jedinicni testovi ciste detekcije profila (BL-P0-05-8): detectContextFromText radi po SVIM
  * institucijama (ne samo unizg), longest-match s guardom, i needsProfileConfirmation predikat.

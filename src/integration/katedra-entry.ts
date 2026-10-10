@@ -1,5 +1,7 @@
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { isAcademicWorkType, type AcademicWorkType } from './academic-suite-contracts';
+import { callbackFrom, GOOGLE_PKCE_STORAGE_KEY, hasFreshPendingPkce, type PkceStore } from '../auth/google-callback';
+import { safeStorageGet } from '../shared/browser-storage';
 
 const PROJECT_SESSION_SLOT = 'lekta.katedra-project.v0.1';
 const COMPLETION_HANDOFF_SESSION_SLOT = 'lekta.completion-handoff.v0.1';
@@ -201,6 +203,15 @@ export function applyKatedraEntryContext(context: KatedraEntryContext): boolean 
   return changed;
 }
 
+function hasVerifierBackedGoogleCallback(): boolean {
+  if (!callbackFrom(window.location.search, window.location.hash)) return false;
+  const store: PkceStore = {
+    load: () => safeStorageGet(GOOGLE_PKCE_STORAGE_KEY, null),
+    save: () => {},
+  };
+  return hasFreshPendingPkce(store, Date.now());
+}
+
 /** Runs after Lekta's main UI bootstrap, which populates the selects. */
 export function bootstrapKatedraEntryContext(): void {
   if (typeof window === 'undefined') return;
@@ -213,6 +224,8 @@ export function bootstrapKatedraEntryContext(): void {
   // Katedra/Completion project or result. Query/hash metadata is the authority
   // for whether this page load belongs to a cross-product workflow.
   if (!hasEntryContext) {
+    // Same-tab OAuth callbacks preserve this tab's Katedra handoff; unrelated direct visits still reset it.
+    if (hasVerifierBackedGoogleCallback()) return;
     clearKatedraProjectId();
     return;
   }

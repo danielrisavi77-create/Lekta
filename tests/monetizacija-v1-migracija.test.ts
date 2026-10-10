@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Migracija 0207 (Monetizacija V1, M2) mjerena nad TEKSTOM, jer se migracije u ovom toku ne
  * primjenjuju ni na jednu bazu. Kriterij je IZVAN diffa: tablice iz

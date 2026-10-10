@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Detektor profila pri ulazu stvarnih radova u korpus (src/corpus/detect-profile.ts).
  *

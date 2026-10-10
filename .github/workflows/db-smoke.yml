@@ -30,7 +30,10 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16
+        # Ista sluzbena slika, ali s AWS-ovog zrcala Docker Official Images. Od 2026-10-09 ~21:20
+        # svaki PR je ovdje padao na `Docker pull failed` s Docker Huba (dohvat s runnera), prije
+        # ijednog testa. Zrcalo je drugi izvor iste slike `postgres:16`.
+        image: public.ecr.aws/docker/library/postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres

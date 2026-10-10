@@ -102,12 +102,19 @@ function mount(view: HTMLElement): { root: HTMLElement; items: HTMLElement[] } |
  * pomaknuo prikaz preuzima ekran; inace ceka SLJEDECU analizu, da se veliki prikaz ne umetne pod
  * prstom ili usred rezultata. Analiza bez montiranog prikaza otkriva rezultat odmah, kao prije
  * Z33, a modul koji nikad ne stigne ili baci pri montazi ostavlja upravo taj put.
+ *
+ * ROK UVOZA (Codex Z33-02, runda 2). Odbijen uvoz se ne pamti: sljedeca analiza pokusava ponovno
+ * (npr. nakon oporavka mreze). Uvoz koji ne zavrsi u `ROK_UVOZA` otpusta slusace skrola i vise ne
+ * preuzima OVU analizu; sljedeca analiza pokusava ponovno, a modul koji ipak stigne kasnije ostaje
+ * zapamcen za nju.
  */
 type Montaza = (view: HTMLElement) => LiveHandle;
 const SKROL_TIPKE = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
 const SKROL_DOGADAJI = ['wheel', 'touchmove', 'keydown'] as const;
 /** Otkrivanje traje najvise oko 4 s i ima vlastiti osigurac; ovo je ograda i za njegov kvar. */
 const OGRADA_OTKRIVANJA = 6_000;
+/** Koliko analiza ceka lijeni modul prije nego odustane od njega za sebe (rezultat ga nikad ne ceka). */
+export const ROK_UVOZA = 10_000;
 let modul: Promise<Montaza | null> | null = null;
 let montaza: Montaza | null = null;
 let handle: LiveHandle | null = null;
@@ -145,9 +152,32 @@ export function startLiveAnalysis(profile: unknown): void {
     if (e.type !== 'keydown' || SKROL_TIPKE.has((e as KeyboardEvent).key)) skrolao = true;
   };
   for (const d of SKROL_DOGADAJI) window.addEventListener(d, naSkrol, { passive: true });
-  modul ??= import('./analysis-live/analysis-live').then((m) => (montaza = m.mountAnalysisLive), () => null);
-  void modul.then((m) => {
+  if (!modul) {
+    const pokusaj: Promise<Montaza | null> = import('./analysis-live/analysis-live').then(
+      (m) => (montaza = m.mountAnalysisLive),
+      () => {
+        // Odbijen uvoz se ne pamti: sljedeca analiza pokusava ponovno.
+        if (modul === pokusaj) modul = null;
+        return null;
+      },
+    );
+    modul = pokusaj;
+  }
+  const ovaj = modul;
+  let otpusten = false;
+  const otpusti = (): void => {
+    otpusten = true;
+    window.clearTimeout(rok);
     for (const d of SKROL_DOGADAJI) window.removeEventListener(d, naSkrol);
+  };
+  const rok = window.setTimeout(() => {
+    otpusti();
+    // Viseci uvoz: sljedeca analiza pokusava ponovno; kasni modul se ipak zapamti u `montaza`.
+    if (modul === ovaj && !montaza) modul = null;
+  }, ROK_UVOZA);
+  void ovaj.then((m) => {
+    if (otpusten) return;
+    otpusti();
     if (!skrolao && !rezultatStigao) pokreni(m);
   });
 }

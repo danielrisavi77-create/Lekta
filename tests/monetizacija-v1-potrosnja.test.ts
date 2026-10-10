@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Monetizacija V1 (M2), krug 2: kupljeno pravo se mora moci POTROSITI, i to pod uvjetima pod kojima je
  * kupljeno. Tri nalaza pregleda, svaki s vlastitim izravnim signalom:

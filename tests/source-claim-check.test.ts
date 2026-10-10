@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { crossCheckClaims, findContext } from '../src/analysis/source-claim-check';
 import type { ExtractedClaim } from '../src/analysis/domains';

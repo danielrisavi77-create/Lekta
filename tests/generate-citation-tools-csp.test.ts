@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * CSP script-src (public/_headers) NEMA 'unsafe-inline'; jedini dopusteni inline <script> je
  * FOUC prekidac teme, preko sha256 hasha (isti hash pokriva index.html i sve stranice alata,

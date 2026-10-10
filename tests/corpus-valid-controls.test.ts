@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Faza 4 (Lekta Error Corpus): VALID CONTROL slucajevi. Valjani dokumenti s netipicnom ali
  * ispravnom reprezentacijom (font/velicina iz docDefaults, nbsp u citatnici, gola godina bez

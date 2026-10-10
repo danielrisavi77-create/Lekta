@@ -15,35 +15,29 @@ import type { RokStanje } from '../../src/routes/intake/deadline-stamp';
 type Spremnost = (s: { rok: RokStanje; fakultetPotvrden?: boolean }) => { spremno: boolean; natpis: string };
 
 /**
- * VRATA UBACIVANJA (Z32, odluka vlasnika 2026-09-27): otvara ih rok ILI "Još ne znam rok";
- * fakultet NIJE uvjet. Kvar koji imitira: "Još ne znam rok" se ne broji kao odluka, pa student
- * bez roka nikad ne ubaci rad; ili vrata opet traze fakultet, pa posjetitelj bez zapamcenih
- * postavki ne moze ubaciti rad bez odlaska na odabir fakulteta.
+ * ULAZ DOKUMENTA (odluka 2026-10-06): rok i fakultet su neobavezni kontekst. Dokument mora biti
+ * moguce ubaciti u svim stanjima roka i bez potvrde fakulteta. Kvar koji gard hvata: povratak na
+ * stari gate "prvo potvrdi rok" ili novi gate koji bi opet poceo traziti fakultet.
  */
 export function vrataProblemi(spremnost: Spremnost): string[] {
   const problemi: string[] = [];
-  const rokovi: Array<[string, RokStanje, boolean]> = [
-    ['bez roka', { datum: null, neznam: false }, false],
-    ['s datumom', { datum: '2026-10-15', neznam: false }, true],
-    ['"Još ne znam rok"', { datum: null, neznam: true }, true],
-    ['nevaljan datum', { datum: '2026-02-30', neznam: false }, false],
+  const rokovi: Array<[string, RokStanje]> = [
+    ['bez roka', { datum: null, neznam: false }],
+    ['s datumom', { datum: '2026-10-15', neznam: false }],
+    ['"Još ne znam rok"', { datum: null, neznam: true }],
+    ['nevaljan datum', { datum: '2026-02-30', neznam: false }],
   ];
   for (const fakultetPotvrden of [false, true]) {
-    for (const [ime, rok, ocekivano] of rokovi) {
+    for (const [ime, rok] of rokovi) {
       const dobiveno = spremnost({ fakultetPotvrden, rok });
-      if (dobiveno.spremno !== ocekivano) {
-        problemi.push(`fakultet ${fakultetPotvrden ? 'potvrdjen' : 'nepotvrdjen'}, ${ime}: spremno=${dobiveno.spremno}, ocekivano ${ocekivano}`);
+      if (!dobiveno.spremno) {
+        problemi.push(`fakultet ${fakultetPotvrden ? 'potvrdjen' : 'nepotvrdjen'}, ${ime}: spremno=false, ocekivano true`);
       }
-      if (!dobiveno.spremno && dobiveno.natpis === 'ili ispusti dokument ovdje') {
-        problemi.push(`zatvorena vrata nose natpis otvorenih (${ime})`);
-      }
-      if (!dobiveno.spremno && /fakultet/i.test(dobiveno.natpis)) {
-        problemi.push(`natpis zatvorenih vrata trazi fakultet (${ime}): "${dobiveno.natpis}"`);
+      if (dobiveno.natpis !== 'ili ispusti dokument ovdje') {
+        problemi.push(`${ime}: natpis nije otvoreni ulaz: "${dobiveno.natpis}"`);
       }
     }
   }
-  const bezRoka = spremnost({ fakultetPotvrden: false, rok: { datum: null, neznam: false } }).natpis;
-  if (bezRoka !== 'Prvo potvrdi rok') problemi.push(`natpis bez roka nije "Prvo potvrdi rok": "${bezRoka}"`);
   return problemi;
 }
 

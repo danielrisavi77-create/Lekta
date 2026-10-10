@@ -42,7 +42,7 @@ const read = (f: string): string => readFileSync(resolve(ROOT, f), 'utf8').repla
 const HTML = read('index.html');
 const CSS = read('src/routes/intake/intake.css');
 
-it('rok prethodi uploadu u DOM i tipkovnickom slijedu, izvan klikabilnog papira', () => {
+it('neobavezni rok prethodi uploadu u DOM i tipkovnickom slijedu, izvan klikabilnog papira', () => {
   const doc = ulaz();
   const rok = doc.querySelector('#intakeRok')!;
   const upload = doc.querySelector('.intake-paper__gumb')!;
@@ -146,12 +146,10 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     const cta = doc.querySelector('.intake-cta');
     expect(cta, 'nema CTA-a').not.toBeNull();
     expect(tekst(cta)).toBe('Odaberi .docx');
-    // Z32: STATICKI natpis je natpis ZATVORENIH vrata, a gumb je `aria-disabled`, jer dok JS ne
-    // procita pribor rok nije odlucen. Od odluke vlasnika 2026-09-27 fakultet nije uvjet, pa
-    // natpis spominje samo rok (skraceni oblik predloska "Prvo potvrdi fakultet i rok"). "ili
-    // ispusti dokument ovdje" upisuje `intake-live.ts` kad je rok odlucen (tests/intake-live.test.ts).
-    expect(tekst(doc.querySelector('.intake-hint'))).toBe('Prvo potvrdi rok');
-    expect(doc.querySelector('.intake-paper__gumb')!.getAttribute('aria-disabled')).toBe('true');
+    // Od 2026-10-06 rok je neobavezan kontekst: staticki markup je vec spreman za upload,
+    // a JS samo potvrduje isto pravilo. Time nema prvog kadra koji lazno trazi rok.
+    expect(tekst(doc.querySelector('.intake-hint'))).toBe('ili ispusti dokument ovdje');
+    expect(doc.querySelector('.intake-paper__gumb')!.getAttribute('aria-disabled')).toBe('false');
     // Isti redak: oboje su ista radnja izvedena na dva nacina.
     const akcija = doc.querySelector('.intake-akcija');
     expect(akcija, 'nema retka radnje').not.toBeNull();

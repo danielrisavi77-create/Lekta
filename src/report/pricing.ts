@@ -135,7 +135,7 @@ export const PRICING_COPY = {
   ctaPopravi: 'Popravi za',
   ctaBesplatno: 'Provjeri rad besplatno',
   ctaUskoro: 'Uskoro',
-  ctaUskoroNapomena: 'Plaćeni sloj je u pripremi. Provjera radi već sad, besplatno.',
+  ctaUskoroNapomena: 'Naplata još nije aktivna. Besplatna lokalna provjera radi već sada.',
 
   /**
    * RETENCIJA SE NE SMIJE POGADJATI. Predlozak je ovdje pisao "briše se nakon preuzimanja", a to je

@@ -57,8 +57,8 @@ export function izvorFakulteta(predodabir: Predodabir | null, potvrden: boolean)
 /** Kartica bez predodabira: fakultet se ne trazi na ulazu, `/rad/` ga prepoznaje iz dokumenta. */
 const NAPOMENA_BEZ_FAKULTETA = 'Prepoznat ćemo ga iz rada.';
 
-/** Poruka kad korisnik pokusa ubaciti rad prije nego je rok odlucen (klik ili ispustanje). */
-export const PORUKA_ODBIJENO = 'Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.';
+/** Obrambena poruka ako kontroler ikad pozove blokiranu stazu. Rok više nije razlog blokiranja. */
+export const PORUKA_ODBIJENO = 'Učitavanje trenutačno nije dostupno. Pokušaj ponovno.';
 
 /** Koliko milisekundi traje jedno slovo pri upisu imena (predlozak: 32 ms). */
 const SLOVO_MS = 32;
@@ -104,12 +104,17 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
 
   const predodabir = predodabirFakulteta(options.search, procitajPostavke());
   let potvrden = false;
-  // Istekao rok iz proslog posjeta se ne vraca: sam bi otvorio vrata za novi rad.
+  // Istekao rok iz proslog posjeta se ne vraca: rok je neobavezan kontekst i ne smije se
+  // tiho prenijeti na novi dokument.
   let rok: RokStanje = rokZaPovratak(procitajIzborUlaza().rok, danas());
   let odabir: ((file: File) => void) | null = null;
+  // Zadnja spremljena sesija: rok zadan NAKON spremanja (promjena u debounce prozoru ili dok se
+  // cita) mora ici i u mapu `rokSesije` te sesije, ne samo u globalni slot.
+  let spremljenaSesija: string | null = null;
 
-  // --- vrata ubacivanja ------------------------------------------------------------------
-  // Vrata otvara SAMO rok; fakultet nije uvjet (vidi zaglavlje).
+  // --- ulaz dokumenta ---------------------------------------------------------------------
+  // Dokument se prima odmah. Rok i fakultet su neobavezni kontekst; spremnostUlaza postoji kao
+  // regresijski gard da nijedan od njih kasnije opet ne postane preduvjet.
   const spremnost = () => spremnostUlaza({ rok });
 
   const osvjeziVrata = (): void => {
@@ -187,6 +192,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     const datum = rokPolje?.value ? rokPolje.value : null;
     rok = { datum, neznam: false };
     zapisiRok(rok);
+    if (spremljenaSesija) veziRokZaSesiju(spremljenaSesija, rok);
     osvjeziRok(true);
     osvjeziVrata();
   };
@@ -195,6 +201,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     const oznaceno = Boolean(neznam?.checked);
     rok = oznaceno ? { datum: null, neznam: true } : { datum: rokPolje?.value || null, neznam: false };
     zapisiRok(rok);
+    if (spremljenaSesija) veziRokZaSesiju(spremljenaSesija, rok);
     osvjeziRok(true);
     osvjeziVrata();
   };
@@ -212,6 +219,8 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   let tipkanje: ReturnType<typeof setInterval> | null = null;
   const stani = (): void => { if (tipkanje !== null) { clearInterval(tipkanje); tipkanje = null; } };
   const onFileChosen = (name: string): void => {
+    // Novi odabir prekida vezu s prethodnom sesijom: rok se do spremanja nove ne smije upisati u staru.
+    spremljenaSesija = null;
     stani();
     if (!ime) return;
     if (prigusen()) { ime.textContent = name; ime.classList.remove('is-tipka'); return; }
@@ -253,17 +262,15 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     odabir?.(file);
   };
 
-  // --- vrata: sto kad korisnik pokusa prerano --------------------------------------------
+  // --- obrambena blokirana staza ----------------------------------------------------------
   function onBlocked(): void {
-    // Rad NIJE primljen, i to se kaze (poruka s `role="alert"`), a fokus ide na rok, jedino sto
-    // vrata traze; na mobitelu (pribor je ispod lista) ekran se sam pomakne do njega.
+    // U normalnom toku se ne poziva: upload više nije vezan uz rok ni fakultet. Ostaje kao
+    // obrambena kuka kontrolera za budući stvarni blocker (npr. nedostupna platformna mogućnost).
     if (greska) {
       greska.textContent = PORUKA_ODBIJENO;
       greska.hidden = false;
       greska.setAttribute('data-intake-vrata', '');
     }
-    const cilj = rokPolje && !rokPolje.disabled ? rokPolje : neznam;
-    cilj?.focus();
   }
 
   potvrdi?.addEventListener('click', onPotvrdi);
@@ -285,7 +292,9 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     onBlocked,
     onFileChosen,
     onSessionStored(sessionId: string): void {
-      // Rok se veze za sesiju UVIJEK (Z34 i Z36 citaju rok tog rada); potvrda samo ako je dana.
+      // Rok se veze za sesiju i kad je prazan: Z34/Z36 tako znaju da korisnik nije dao rok,
+      // bez izmisljanja datuma. Potvrda fakulteta se veze samo ako je dana.
+      spremljenaSesija = sessionId;
       veziRokZaSesiju(sessionId, rok);
       if (potvrden) veziPotvrduZaSesiju(sessionId);
     },

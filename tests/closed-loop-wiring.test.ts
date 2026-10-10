@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * OZICENJE DOKAZA PO OSI: gard koji do 2026-08-31 nije bio ni u jednom gateu.
  *

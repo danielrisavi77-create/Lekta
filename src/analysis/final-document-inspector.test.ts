@@ -16,6 +16,9 @@ describe('final document inspector', () => {
     expect(result.summary.comments).toBe(1);
     expect(result.summary.hiddenText).toBe(1);
     expect(result.summary.privateMetadata).toBe(3);
+    const metadataFinding = result.findings.find((finding) => finding.category === 'private-metadata');
+    expect(metadataFinding?.defaultSelected).toBe(false);
+    expect(metadataFinding?.destructive).toBe(true);
     expect(result.summary.customXmlParts).toBe(1);
     expect(result.summary.brokenBookmarks).toBeGreaterThan(0);
     expect(result.findings.some((finding) => finding.id === 'tracking-enabled')).toBe(true);

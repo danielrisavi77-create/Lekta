@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { FIXER_IDS, type FixerId } from '../src/repair/apply-fixers';
 import {

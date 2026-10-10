@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Sinteticki golden za ffzg (Filozofski fakultet, odsjecki profili) i pmf (Prirodoslovno-
  * matematicki fakultet). Primarno dokazuje crash-fix: ranije su ovi profili rusili analyzer
