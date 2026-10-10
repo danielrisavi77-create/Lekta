@@ -71,8 +71,7 @@ do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrije
    Ocekivano: `14.0` (Word 2010, referentni oracle na kojem su nastali svi Tier 2 dokazi). Otvori Word jednom rucno i zatvori sve dijaloge prvog
    pokretanja (licenca, privatnost), inace ih COM automatizacija ceka zauvijek.
 4. Iskljuci spavanje i hibernaciju: Postavke > Sustav > Napajanje > Zaslon i spavanje > Nikad.
-5. Za razine `sve` workflow sam instalira Deno, Python 3.12, `lxml` i Playwright chromium.
-   Za zadani `word` nista od toga ne treba.
+5. Za razine `sve` runner mora imati Deno 2.9.7 i Python 3.14.3 u korisnickom PATH-u; workflow provjerava obje verzije prije nastavka. Instaliraj ih i provjeri prije registracije runnera. Workflow stvara privremeno Python virtualno okruzenje u `RUNNER_TEMP` te u njemu instalira `python-docx`, `lxml` i Playwright chromium, bez administratorske instalacije. Za zadani `word` Deno i Python nisu potrebni.
 
 ## 3. Registracija runnera
 

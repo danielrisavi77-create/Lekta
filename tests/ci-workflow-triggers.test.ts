@@ -10,6 +10,7 @@ import {
   findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
+  findWordProofPreflightProblems,
   WORD_PROOF_FILE,
   type NamedWorkflow,
   type WorkflowFile,
@@ -92,6 +93,12 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
     expect(wordProof).toBeDefined();
     const runsOn = wordProof?.doc.jobs?.['word-proof']?.['runs-on'];
     expect(runsOn).toEqual(['self-hosted', 'windows', 'word']);
+  });
+
+  it('puni Word proof provjerava redoslijed Deno/Python gateova nad parsiranim workflowom', () => {
+    const wordProof = workflows.find((w) => w.file === 'word-proof.yml');
+    expect(wordProof).toBeDefined();
+    expect(findWordProofPreflightProblems(wordProof!.doc)).toEqual([]);
   });
 
   it('required job imena postoje: conformance-matrix, build-gate/ux-gate, unittest', () => {

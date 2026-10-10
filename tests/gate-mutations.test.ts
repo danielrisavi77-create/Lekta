@@ -24,6 +24,7 @@ import { retractionUiProblems, citatSource, analyzerSource, verificationFocusPro
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { afterAll, beforeAll, describe, it, expect, vi } from 'vitest';
+import { parse as parseYaml } from 'yaml';
 import { createHash } from 'node:crypto';
 import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
@@ -225,6 +226,7 @@ import {
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
   type NamedWorkflow,
+  type WorkflowFile,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
 import {
@@ -9704,24 +9706,14 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
 describe('mutacije: self-hosted Word runner na javnom repou (T80, Codex F1, F3, F5 na #162)', () => {
   const IF = "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'";
   const RAW = 'name: word-proof\npermissions:\n  contents: read\n';
+  // Ugovor mutacijskog testa mora sadrzavati stvarne Word preflight korake.
+  // Minimalni stari fixture (checkout + origin + release) vise ne zadovoljava P1 fail-closed guard,
+  // pa bi njegovi sintetski mutanti padali zbog NEPOVEZANIH praznih Deno/Python koraka.
+  const actualWordProof = parseYaml(readFileSync('.github/workflows/word-proof.yml', 'utf8')) as WorkflowFile;
   const wordProof = (): NamedWorkflow => ({
     file: 'word-proof.yml',
     raw: RAW,
-    doc: {
-      on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
-      permissions: { contents: 'read' },
-      jobs: {
-        'word-proof': {
-          'runs-on': ['self-hosted', 'windows', 'word'],
-          if: IF,
-          steps: [
-            { name: 'Checkout', uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' },
-            { name: 'Porijeklo commita (samo tocan vrh)', run: 'git for-each-ref --format=x refs/remotes/origin/master' },
-            { name: 'release:check', run: 'npm run release:check' },
-          ],
-        },
-      },
-    },
+    doc: structuredClone(actualWordProof),
   });
   const drugi = (runsOn: unknown): NamedWorkflow => ({
     file: 'drugi.yml',

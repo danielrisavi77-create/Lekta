@@ -5,16 +5,22 @@ export interface WorkflowTrigger {
   branches?: string[];
   tags?: string[];
   types?: string[];
+  inputs?: Record<string, { type?: string; required?: boolean; default?: unknown; options?: unknown[] }>;
 }
 
 export interface WorkflowStepShape {
   name?: string;
   uses?: string;
   run?: string;
+  if?: unknown;
+  shell?: string;
+  env?: Record<string, unknown>;
+  'continue-on-error'?: unknown;
 }
 
 export interface WorkflowJobShape {
   'runs-on'?: unknown;
+  'continue-on-error'?: unknown;
   if?: unknown;
   permissions?: unknown;
   uses?: string;
@@ -136,6 +142,18 @@ function checkWordProof(file: string, doc: WorkflowFile, raw: string | undefined
   if (!sameSet(triggers, WORD_PROOF_SHAPE.triggers)) {
     problems.push(`${file}: trigeri moraju biti tocno ${WORD_PROOF_SHAPE.triggers.join(', ')} (ima: ${triggers.join(', ')})`);
   }
+  // Full release mode MUST remain a selectable workflow_dispatch input wired into the release step.
+  // A renamed input would silently default a requested full release to word-only.
+  const dispatch = triggerValue(doc.on, 'workflow_dispatch');
+  const inputs = dispatch?.inputs;
+  const mode = inputs?.razine;
+  const refInput = inputs?.ref;
+  if (!inputs || !sameSet(Object.keys(inputs), ['ref', 'razine'])
+    || !refInput || refInput.default !== 'master' || refInput.required !== false
+    || !mode || mode.type !== 'choice' || mode.default !== 'word' || mode.required !== false
+    || !Array.isArray(mode.options) || !sameSet(mode.options.map(String), ['word', 'sve'])) {
+    problems.push('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
+  }
   const push = triggerValue(doc.on, 'push') as Record<string, unknown> | null | undefined;
   const pushKeys = push ? Object.keys(push) : [];
   if (!sameSet(pushKeys, ['branches'])) {
@@ -174,6 +192,7 @@ function checkWordProof(file: string, doc: WorkflowFile, raw: string | undefined
   }
   if (raw === undefined) problems.push(`${file}: nema sirovog teksta za provjeru tajni`);
   else if (/\bsecrets\b/.test(raw)) problems.push(`${file}: spominje secrets (secrets., secrets[ ili secrets: inherit)`);
+  problems.push(...findWordProofPreflightProblems(doc));
   return problems;
 }
 
@@ -216,6 +235,133 @@ export function findSelfHostedProblems(
     }
   }
   return problems;
+}
+
+/** Strukturni gate za puni Word proof. Vrijedi i kada je YAML promijenjen ili preflight skriven u komentaru. */
+export function findWordProofPreflightProblems(doc: WorkflowFile): string[] {
+  const errors: string[] = [];
+  // Full mode is selected through this exact dispatch input; if renamed, the workflow
+  // silently falls back to word-only and skips all three full-mode preflights.
+  const mode = triggerValue(doc.on, 'workflow_dispatch')?.inputs?.razine;
+  const options = Array.isArray(mode?.options) ? mode.options.map(String) : [];
+  if (mode?.type !== 'choice' || mode.default !== 'word'
+    || mode.required !== false || !sameSet(options, ['word', 'sve'])) {
+    errors.push('word-proof: workflow_dispatch.razine input i opcije word/sve moraju ostati povezani');
+  }
+  const steps = doc.jobs?.['word-proof']?.steps ?? [];
+  // Job-level continue-on-error can turn a failing Word verification into a green workflow.
+  if (doc.jobs?.['word-proof']?.['continue-on-error'] !== undefined) {
+    errors.push('word-proof: job-level continue-on-error ne smije prikriti neuspjeli Word gate');
+  }
+  const stepNames = [
+    'Deno preflight (samo razine=sve)',
+    'Python preflight (samo razine=sve)',
+    'lxml i Playwright chromium (samo razine=sve)',
+    'release:check',
+  ];
+  const indices = stepNames.map((name) => steps.findIndex((step) => step.name === name));
+  for (let i = 0; i < stepNames.length; i += 1) {
+    if (indices[i] < 0 || steps.filter((step) => step.name === stepNames[i]).length !== 1) {
+      errors.push('word-proof: nedostaje ili je dupliciran korak ' + stepNames[i]);
+    }
+  }
+  if (indices.some((index) => index < 0)) return errors;
+  if (indices.some((index, i) => i > 0 && index <= indices[i - 1])) {
+    errors.push('word-proof: preflighti, instalacija i release:check nisu u sigurnom redoslijedu');
+  }
+  // PowerShell komentari ne mogu zadovoljiti uvjete; YAML se prethodno parsira u stvarne korake.
+  const active = (run: string | undefined): string => (run ?? '')
+    .replace(/<#(?:.|\r|\n)*?#>/g, '')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !line.startsWith('#'))
+    .join('\n');
+  const deno = steps[indices[0]];
+  const python = steps[indices[1]];
+  const install = steps[indices[2]];
+  const release = steps[indices[3]];
+  for (const [name, step] of [[stepNames[0], deno], [stepNames[1], python], [stepNames[2], install]] as const) {
+    if (step.if !== "inputs.razine == 'sve'" || step.shell !== 'powershell' || step.uses) {
+      errors.push('word-proof: ' + name + ' mora biti aktivan za sve na powershell runneru');
+    }
+  }
+  // Fail-closed tocna aktivna PowerShell linija po linija: 
+  // za promjene u Word runneru zahtijevamo eksplicitan review novog ugovora.
+  // Ovim se hvata exit/return prije garda, here-string, komentirana naredba i prazni install korak.
+  const expectedScripts: readonly string[][] = [
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "$deno = Get-Command deno -ErrorAction Stop",
+          "$verzija = deno --version | Select-Object -First 1",
+          "if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^deno 2[.]9[.]7 ') {",
+          "throw \"Ocekivan je Deno 2.9.7; pronadjeno: $verzija\"",
+          "}",
+          "Write-Output \"Deno $verzija ($($deno.Source))\""
+      ],
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "$python = Get-Command python -ErrorAction Stop",
+          "$verzija = python --version",
+          "if ($LASTEXITCODE -ne 0 -or $verzija -notmatch '^Python 3[.]14[.]3$') {",
+          "throw \"Ocekivan je Python 3.14.3; pronadjeno: $verzija\"",
+          "}",
+          "$venv = Join-Path $env:RUNNER_TEMP 'lekta-word-proof-venv'",
+          "python -m venv $venv",
+          "if ($LASTEXITCODE -ne 0) { throw \"Kreiranje Python okruzenja nije uspjelo ($LASTEXITCODE).\" }",
+          "[IO.File]::AppendAllText($env:GITHUB_PATH, ((Join-Path $venv 'Scripts') + [Environment]::NewLine))",
+          "Write-Output \"Python $verzija ($($python.Source)); venv $venv\""
+      ],
+      [
+          "$ErrorActionPreference = 'Stop'",
+          "python -m pip install python-docx==1.2.0 lxml==6.1.3",
+          "if ($LASTEXITCODE -ne 0) { throw \"pip install nije uspio ($LASTEXITCODE).\" }",
+          "npx playwright install chromium",
+          "if ($LASTEXITCODE -ne 0) { throw \"playwright install nije uspio ($LASTEXITCODE).\" }"
+      ],
+      [
+          "$ErrorActionPreference = 'Continue'",
+          "$log = Join-Path $env:RUNNER_TEMP 'release-check.log'",
+          "$gate = @('scripts/with-gate-lock.mjs', 'release:check', '--', 'node', 'scripts/release-check.mjs')",
+          "if ($env:RAZINE -eq 'sve') {",
+          "node @gate 2>&1 | Tee-Object -FilePath $log",
+          "} elseif ($env:RAZINE -eq 'word') {",
+          "node @gate '--only=word,word-worst,word-corpus,word-toc' 2>&1 | Tee-Object -FilePath $log",
+          "} else {",
+          "throw \"Nepoznata vrijednost razine: $env:RAZINE\"",
+          "}",
+          "$kod = $LASTEXITCODE",
+          "$trajno = Join-Path $env:LOCALAPPDATA 'lekta-word-proof\\logs'",
+          "New-Item -ItemType Directory -Force -Path $trajno | Out-Null",
+          "Copy-Item $log (Join-Path $trajno \"$env:GITHUB_RUN_ID.log\")",
+          "exit $kod"
+      ]
+  ];
+  const scriptProblems = [
+    'word-proof: Deno preflight ne izvodi verzijsku provjeru uz fail-closed',
+    'word-proof: Python preflight ne izvodi provjeru verzije i izoliranog okruzenja',
+    'word-proof: lxml/Playwright instalacija nije aktivna ili nije vezana uz fail-closed',
+    'word-proof: release:check je preskocen ili ne izvrsava postojeci gate',
+  ];
+  [deno, python, install, release].forEach((step, index) => {
+    const actual = active(step.run).split('\n');
+    if (JSON.stringify(actual) !== JSON.stringify(expectedScripts[index])) {
+      errors.push(scriptProblems[index]);
+    }
+  });
+  const protectedSteps = [deno, python, install, release];
+  for (const step of protectedSteps) {
+    if (step['continue-on-error'] !== undefined) {
+      errors.push('word-proof: zasticeni koraci ne smiju imati continue-on-error');
+    }
+  }
+  const expectedModeExpression = String.fromCharCode(36) + "{{ inputs.razine || 'word' }}";
+  if (!release.env || release.env.RAZINE !== expectedModeExpression) {
+    errors.push('word-proof: release RAZINE ne cita odabir workflow_dispatch.razine');
+  }
+  if (release.shell !== 'powershell' || release.if !== undefined || release.uses) {
+    errors.push('word-proof: release:check je preskocen ili ne izvrsava postojeci gate');
+  }
+  return errors;
 }
 
 const PR_EVENTS = ['pull_request', 'pull_request_target'] as const;
