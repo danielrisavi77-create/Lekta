@@ -53,17 +53,18 @@ curl -s https://<site>/build-info.json
 ```
 mora vratiti commit ocekivanog deploya i `"captchaSiteKey": true`. `false` ili bez polja: STANI.
 
-**Produkcija je drukcija.** Produkcijska objava je zakljucana i ide rucno iz lokalne gradnje
-([`RELEASE_PROOF_WORKFLOW.md`](RELEASE_PROOF_WORKFLOW.md), korak 6), pa Netlify varijabla na nju ne
-djeluje. `VITE_TURNSTILE_SITE_KEY` mora biti postavljen u okolini lokalne gradnje (ista ljuska kao
-`DEPLOY=1` i ostale varijable koraka 6) prije `node scripts/build-production.mjs`. Prvi dokaz je nad
-lokalnim artefaktom, prije objave:
+**Produkcijska objava ide kroz GitHub Actions.** Workflow .github/workflows/release.yml gradi klijent
+i objavljuje ga preko Netlify CLI-ja. Varijabla VITE_TURNSTILE_SITE_KEY u tom workflowu dolazi iz
+TURNSTILE_SITE_KEY u GitHub Actions production environmentu; Netlify build varijabla nije izvor za
+taj build. Run 38430199081 objavio je SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99, ali javni
+build-info.json nakon objave prijavio je captchaSiteKey=false. Stoga se Auth zaštita još ne smije
+uključiti. Vlasnik najprije postavlja site key u GitHub production environment, zatim kroz release
+workflow objavljuje build i provjerava javni rezultat:
 ```bash
-node -e "console.log(JSON.parse(require('fs').readFileSync('dist/build-info.json','utf8')).captchaSiteKey)"
+curl -s https://lekta.hr/build-info.json
 ```
-mora ispisati `true`. Nakon objave isti `curl` na `https://lektahr.netlify.app/build-info.json` mora
-vratiti commit objavljenog izdanja i `"captchaSiteKey": true`. `false`: STANI, ne ukljucuj korak 4
-na produkciji.
+Polje captchaSiteKey mora biti true, a commit mora biti SHA novog builda. false ili nedostajuće polje:
+stani i ne uključuj korak 4 na produkciji.
 
 ### 3. Frontend salje token (vlasnik, preglednik)
 

@@ -7,8 +7,8 @@ produkciju tek kad vlasnik odobri u GitHub environmentu `production`. Odluka vla
 ## Zasto
 
 Klijent i te dvije funkcije dijele ugovor o privoli (`termsVersion`). Klijent objavljen bez njih
-dobiva `400 consent_required` na popravku i kupnji (`docs/GO_LIVE_REPAIR.md`). Rucna objava je to
-drzala samo disciplinom.
+dobiva `400 consent_required` na popravku i kupnji (`docs/GO_LIVE_REPAIR.md`). Prije ovog workflowa
+klijent i funkcije objavljivali su se odvojeno; sada release workflow čuva njihov zajednički redoslijed.
 
 ## Redoslijed (u svakoj okolini)
 
@@ -56,7 +56,7 @@ Workflow namjerno NE primjenjuje migracije na produkciju, ne
 mijenja tajne i ne dira Supabase ni Netlify postavke. Gard: `tests/release-workflow.test.ts`,
 mutacije u `tests/gate-mutations-release.test.ts`.
 
-Preostali rizik: `netlify-cli` i `supabase` se izvrsavaju uz token, kao i u rucnoj objavi
+Preostali rizik: `netlify-cli` i `supabase` se izvrsavaju uz token u vlasnikovu kontroliranom release workflowu
 (`docs/quality/dependency-decisions.md`). Verzije su prikovane.
 
 ## Postavke (postavljene 2026-10-08)
