@@ -16,8 +16,8 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
-import { readHookInput } from './hook-input.mjs';
+import { join } from 'node:path';
+import { hookFilePath, readHookInput } from './hook-input.mjs';
 
 const EKSTENZIJE = /\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/;
 const IZVAN_OPSEGA = [/^node_modules\//, /^dist\//, /^dist-packs\//, /^data\//, /^docs\//, /^public\//,
@@ -53,16 +53,6 @@ export function judgeLint(rel, ishod) {
   };
 }
 
-function findRepoRoot(start) {
-  let current = resolve(start || process.cwd());
-  while (true) {
-    if (existsSync(join(current, 'docs', 'agents', 'tasks.json'))) return current;
-    const parent = dirname(current);
-    if (parent === current) return null;
-    current = parent;
-  }
-}
-
 /** Lokalni oxlint iz `node_modules`; null kad nije instaliran. */
 function oxlintBin(root) {
   const ime = process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint';
@@ -75,14 +65,10 @@ async function main() {
   if (!payload) process.exit(0);
   let presuda;
   try {
-    const filePath = payload?.tool_input?.file_path;
-    if (typeof filePath !== 'string' || !filePath.trim()) process.exit(0);
-    const cwd = payload?.cwd || process.cwd();
-    const absolute = isAbsolute(filePath) ? resolve(filePath) : resolve(cwd, filePath);
-    const root = findRepoRoot(dirname(absolute));
-    if (!root || !existsSync(absolute)) process.exit(0);
-    const rel = relative(root, absolute).replace(/\\/g, '/');
-    if (rel.startsWith('../') || isAbsolute(rel) || !uOpsegu(rel)) process.exit(0);
+    const putanja = hookFilePath(payload);
+    if (!putanja || !putanja.root || !putanja.rel || !existsSync(putanja.absolute)) process.exit(0);
+    const { root, rel } = putanja;
+    if (!uOpsegu(rel)) process.exit(0);
     const bin = oxlintBin(root);
     if (!bin) process.exit(0);
     const ishod = spawnSync(bin, ['--format', 'unix', rel], {

@@ -19,8 +19,7 @@
  * vlastita greska hooka nikad ne blokira rad.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
-import { readHookInput } from './hook-input.mjs';
+import { hookFilePath, readHookInput } from './hook-input.mjs';
 
 const CRTICE = /[\u2013\u2014]/g;
 /** Broj znakova konteksta s jedne strane crtice koji mora vec postojati u starom tekstu. */
@@ -95,28 +94,14 @@ export function judgeDashWrite({ toolName, rel, toolInput, postojeci }) {
   };
 }
 
-function findRepoRoot(start) {
-  let current = resolve(start || process.cwd());
-  while (true) {
-    if (existsSync(join(current, 'docs', 'agents', 'tasks.json'))) return current;
-    const parent = dirname(current);
-    if (parent === current) return null;
-    current = parent;
-  }
-}
-
 async function main() {
   const payload = await readHookInput('dash-guard');
   if (!payload) process.exit(0);
   let verdict;
   try {
-    const filePath = payload?.tool_input?.file_path;
-    if (typeof filePath !== 'string' || !filePath.trim()) process.exit(0);
-    const cwd = payload?.cwd || process.cwd();
-    const absolute = isAbsolute(filePath) ? resolve(filePath) : resolve(cwd, filePath);
-    const root = findRepoRoot(dirname(absolute));
-    let rel = root ? relative(root, absolute).replace(/\\/g, '/') : null;
-    if (rel && (rel.startsWith('../') || isAbsolute(rel))) rel = null;
+    const putanja = hookFilePath(payload);
+    if (!putanja) process.exit(0);
+    const { absolute, rel } = putanja;
     const postojeci = payload.tool_name === 'Write' && existsSync(absolute) ? readFileSync(absolute, 'utf8') : null;
     verdict = judgeDashWrite({ toolName: String(payload.tool_name ?? ''), rel, toolInput: payload.tool_input ?? {}, postojeci });
   } catch (err) {
