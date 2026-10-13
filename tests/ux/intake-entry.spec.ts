@@ -38,7 +38,7 @@ test('ulaz `/`: nema novih critical/serious a11y problema i fokus uploada je vid
   expect(fokus.prsten, 'fokus uploada nema vidljiv prsten na papiru').toBe(true);
 });
 
-test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
+test('ulaz `/` nema vodoravni scroll kroz širine zaslona', async ({ page }, testInfo) => {
   /**
    * MJERI SE U OBICNOM (desktop) KONTEKSTU, NE U MOBILNOJ EMULACIJI, i to je cijela poanta.
    *
@@ -48,18 +48,21 @@ test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
    * ni kad se sadrzaj prelijeva. Mutacija je zato prosla i izgledala kao da gard ne grize.
    *
    * Stvaran slucaj je USKI PROZOR NA RACUNALU: ondje se prelijevanje vidi kao vodoravna traka.
-   * Izmjereno 2026-09-07: `.hero-atmos` (snop lampe) prelijeva izvan roditelja
-   * (`inset: -8% -6% -12%`), roditelj ga ne smije rezati jer bi odrezao sjenu papira i listove
-   * ispod njega, pa je dokument bio sirok 384 px u prozoru od 375.
+   * Izmjereno 2026-09-07: `.hero-atmos` (snop lampe) prelijevao je bočno izvan roditelja.
+   * Roditelj ga ne smije rezati jer bi odrezao sjenu papira i listove ispod njega, pa se sam
+   * dekorativni sloj sada širi samo okomito. Provjeravaju se i prijelomne širine oko 600 px.
    */
-  await page.setViewportSize({ width: 375, height: 800 });
+  test.skip(testInfo.project.name !== 'chromium', 'vodoravni scroll provjerava se u desktop prozoru');
   await page.goto('/');
-  const mjera = await page.evaluate(() => ({
-    scroll: document.documentElement.scrollWidth,
-    viewport: window.innerWidth,
-  }));
-  expect(mjera.scroll, `dokument je siri od prozora za ${mjera.scroll - mjera.viewport} px`)
-    .toBeLessThanOrEqual(mjera.viewport);
+  for (const width of [320, 360, 375, 480, 600, 601, 680, 720, 768, 819, 820, 1024, 1180, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    const mjera = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      viewport: window.innerWidth,
+    }));
+    expect(mjera.scroll, `na ${width}px dokument je siri od prozora za ${mjera.scroll - mjera.viewport} px`)
+      .toBeLessThanOrEqual(mjera.viewport);
+  }
 });
 
 /**

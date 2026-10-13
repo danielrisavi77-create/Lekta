@@ -1,20 +1,12 @@
-import './site-profile-drawer.css';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
-import { WORK_TYPE_LABELS } from '../config/config-loader';
+import rawWorkTypeLabels from '../../data/work-type-labels.json';
 import { safeStorageGet, safeStorageSet, STORAGE_KEYS } from './browser-storage';
-import {
-  VERIFIED_PROFILE_REGISTRY,
-} from '../profiles/profile-registry';
-import {
-  defaultWorkTypeForProgram,
-  eligibleDefinitionsFor,
-  visibleProgramsForUnit,
-  workTypesForSelection,
-} from '../ui/work-selection';
+import { defaultWorkTypeForProgram, visibleProgramsForUnit } from '../ui/work-selection';
 
 type Preferences = Record<string, unknown>;
 
 const PROFILE_KEYS = ['institution', 'unit', 'program', 'workType', 'variant'] as const;
+const WORK_TYPE_LABELS = rawWorkTypeLabels as Record<string, string>;
 
 function text(value: unknown): string {
   return typeof value === 'string' ? value : '';
@@ -75,7 +67,7 @@ export function openSiteProfileDrawer(
         </fieldset>
         <fieldset><legend>03 · Vrsta rada</legend>
           <label for="siteProfileWorkType">Vrsta rada</label><select id="siteProfileWorkType"></select>
-          <label for="siteProfileVariant">Varijanta</label><select id="siteProfileVariant"></select>
+          <small class="site-profile-dialog__field-note">Dostupnost pravila i posebne varijante potvrđuju se u radnom prostoru.</small>
         </fieldset>
       </div>
       <p class="site-profile-dialog__note" data-profile-note role="status" aria-live="polite"></p>
@@ -90,7 +82,6 @@ export function openSiteProfileDrawer(
   const unit = dialog.querySelector<HTMLSelectElement>('#siteProfileUnit')!;
   const program = dialog.querySelector<HTMLSelectElement>('#siteProfileProgram')!;
   const workType = dialog.querySelector<HTMLSelectElement>('#siteProfileWorkType')!;
-  const variant = dialog.querySelector<HTMLSelectElement>('#siteProfileVariant')!;
   const search = dialog.querySelector<HTMLInputElement>('#siteProfileSearch')!;
   const note = dialog.querySelector<HTMLElement>('[data-profile-note]')!;
   const institutions = [...ZAGREB_CATALOG].sort((a, b) => a.name.localeCompare(b.name, 'hr'));
@@ -128,51 +119,34 @@ export function openSiteProfileDrawer(
 
   const fillPrograms = (preferred = program.value || text(saved.program)): void => {
     const pickedUnit = selectedInstitution()?.units.find((item) => item.id === unit.value);
-    const values = pickedUnit ? visibleProgramsForUnit(VERIFIED_PROFILE_REGISTRY, pickedUnit) : [];
+    const values = pickedUnit ? visibleProgramsForUnit([], pickedUnit) : [];
     program.replaceChildren(option(program, '', values.length ? 'Odaberi studij' : 'Odaberi fakultet za popis studija'), ...values.map((value) => option(program, value, value)));
     program.value = values.includes(preferred) ? preferred : values[0] ?? '';
     program.disabled = !pickedUnit || values.length === 0;
   };
 
   const fillWorkTypes = (preferred = workType.value || text(saved.workType)): void => {
-    const supported = workTypesForSelection(VERIFIED_PROFILE_REGISTRY, unit.value, program.value);
-    const current = defaultWorkTypeForProgram(program.value, supported, preferred || 'graduate');
+    const current = defaultWorkTypeForProgram(program.value, new Set(), preferred || 'graduate');
     const all = Object.entries(WORK_TYPE_LABELS).sort((a, b) => a[1].localeCompare(b[1], 'hr'));
     workType.replaceChildren(...all.map(([key, label]) => option(workType, key, label)));
     workType.value = all.some(([key]) => key === current) ? current : all[0]?.[0] ?? '';
     workType.disabled = all.length === 0;
   };
 
-  const fillVariants = (preferred = text(saved.variant)): void => {
-    const definitions = eligibleDefinitionsFor(VERIFIED_PROFILE_REGISTRY, unit.value, program.value, workType.value);
-    const variants = definitions.length
-      ? definitions.map((item) => ({ value: item.variant ?? 'default', label: item.variantLabel ?? item.profileLabel ?? 'Opći profil' }))
-      : [{ value: 'default', label: 'Opći profil ustanove' }];
-    const unique = [...new Map(variants.map((item) => [item.value, item])).values()];
-    variant.replaceChildren(...unique.map((item) => option(variant, item.value, item.label)));
-    variant.value = unique.some((item) => item.value === preferred) ? preferred : unique[0]?.value ?? 'default';
-    variant.disabled = unique.length < 2;
-    note.textContent = definitions.length
-      ? 'Odabrana varijanta postoji u registru profila. Puna pravila učitavaju se za samu provjeru.'
-      : 'Za ovu kombinaciju nema zasebne varijante u registru; provjera može koristiti opći profil.';
-  };
-
   fillUnits(savedUnit);
   fillPrograms(text(saved.program));
   fillWorkTypes(savedWorkType);
-  fillVariants();
 
-  institution.addEventListener('change', () => { fillUnits(''); fillPrograms(''); fillWorkTypes(''); fillVariants(''); });
+  institution.addEventListener('change', () => { fillUnits(''); fillPrograms(''); fillWorkTypes(''); });
   unit.addEventListener('change', () => {
     const owner = institutions.find((item) => item.units.some((entry) => entry.id === unit.value));
     if (owner) institution.value = owner.id;
-    fillPrograms(''); fillWorkTypes(''); fillVariants('');
+    fillPrograms(''); fillWorkTypes('');
   });
-  program.addEventListener('change', () => { fillWorkTypes(''); fillVariants(''); });
-  workType.addEventListener('change', () => fillVariants(''));
+  program.addEventListener('change', () => { fillWorkTypes(''); });
   search.addEventListener('input', () => {
     searchValue = normalizeSearch(search.value.trim());
-    fillUnits(''); fillPrograms(''); fillWorkTypes(''); fillVariants('');
+    fillUnits(''); fillPrograms(''); fillWorkTypes('');
   });
 
   const zatvori = (): void => dialog.close();
@@ -190,13 +164,14 @@ export function openSiteProfileDrawer(
       return;
     }
     const previous = preferences();
+    const next = { ...previous };
+    delete next.variant;
     const stored = safeStorageSet(STORAGE_KEYS.preferences, {
-      ...previous,
+      ...next,
       institution: institution.value,
       unit: unit.value,
       program: program.value,
       workType: workType.value,
-      variant: variant.value || 'default',
     });
     if (!stored) {
       safeStorageSet(STORAGE_KEYS.preferences, previous);

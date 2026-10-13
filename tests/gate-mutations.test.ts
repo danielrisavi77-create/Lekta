@@ -268,6 +268,8 @@ import {
   markerMotionProblems,
   markerTravelProblems,
   MAX_LAZY_FOOTER_JS_GZIP,
+  MAX_LAZY_PROFILE_DRAWER_JS_GZIP,
+  MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP,
   scrolledBarProblems,
   shortStepperProblems,
   type ChromeMetafile,
@@ -996,6 +998,44 @@ function z15bMetafile(staticki: boolean): ChromeMetafile {
   };
 }
 
+/** Izmjerena iznimka: profilna ladica je lijena i ne uvozi registry popravaka. */
+function z15bMetafileProfil(): ChromeMetafile {
+  const cist = z15bMetafile(false);
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const picker = 'site-chrome-budget/site-profile-drawer-C.js';
+  const ulazni = cist.outputs[ulaz]!;
+  return {
+    outputs: {
+      ...cist.outputs,
+      [ulaz]: { ...ulazni, imports: [...ulazni.imports, { path: picker, kind: 'dynamic-import' }] },
+      [picker]: {
+        entryPoint: 'src/shared/site-profile-drawer.ts',
+        inputs: { 'src/shared/site-profile-drawer.ts': {}, 'data/catalog/zagreb-catalog.json': {} },
+        imports: [],
+      },
+    },
+  };
+}
+
+/** Isti ograniceni graf za lijeno Kazalo; route directory ne ulazi u pocetno zaglavlje. */
+function z15bMetafileKazalo(): ChromeMetafile {
+  const cist = z15bMetafile(false);
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const picker = 'site-chrome-budget/site-command-dialog-D.js';
+  const ulazni = cist.outputs[ulaz]!;
+  return {
+    outputs: {
+      ...cist.outputs,
+      [ulaz]: { ...ulazni, imports: [...ulazni.imports, { path: picker, kind: 'dynamic-import' }] },
+      [picker]: {
+        entryPoint: 'src/shared/site-command-dialog.ts',
+        inputs: { 'src/shared/site-command-dialog.ts': {}, 'src/routes/shared/public-route-directory.ts': {} },
+        imports: [],
+      },
+    },
+  };
+}
+
 /**
  * Isti metafile s DRUGIM dinamickim uvozom u traci (`import('../ui/app')`): esbuild ga emitira
  * kao jos jedan lijeni izlaz s vlastitim `entryPoint`, izvan proracuna od 8 KB.
@@ -1015,14 +1055,20 @@ function z15bMetafileDrugiLijeni(): ChromeMetafile {
 }
 
 /** Gzip velicine lijenih izlaza, s podesivom velicinom komada podnozja (izmjereno 1174 B). */
-function z15bLijeneVelicine(meta: ChromeMetafile, podnozje: number): Record<string, number> {
+function z15bLijeneVelicine(meta: ChromeMetafile, podnozje: number, profil = 900, kazalo = 900): Record<string, number> {
   const graf = chromeGraph(meta, 'src/shared/site-chrome.ts');
-  return Object.fromEntries(graf.lazyOutputs.map((p) => [p, p.includes('site-footer-full') ? podnozje : 900]));
+  return Object.fromEntries(graf.lazyOutputs.map((p) => [p, p.includes('site-footer-full') ? podnozje : p.includes('site-profile-drawer') ? profil : p.includes('site-command-dialog') ? kazalo : 900]));
 }
 
 /** Lijeni gard nad metafileom i velicinama. */
-function z15bLijeniProblemi(meta: ChromeMetafile, podnozje: number): string[] {
-  return lazyFooterBudgetProblems(meta, chromeGraph(meta, 'src/shared/site-chrome.ts'), z15bLijeneVelicine(meta, podnozje), MAX_LAZY_FOOTER_JS_GZIP);
+function z15bLijeniProblemi(meta: ChromeMetafile, podnozje: number, profil = 900, kazalo = 900): string[] {
+  const imaProfil = Object.values(meta.outputs).some((o) => o.entryPoint === 'src/shared/site-profile-drawer.ts');
+  const imaKazalo = Object.values(meta.outputs).some((o) => o.entryPoint === 'src/shared/site-command-dialog.ts');
+  return lazyFooterBudgetProblems(
+    meta, chromeGraph(meta, 'src/shared/site-chrome.ts'), z15bLijeneVelicine(meta, podnozje, profil, kazalo),
+    MAX_LAZY_FOOTER_JS_GZIP, imaProfil ? MAX_LAZY_PROFILE_DRAWER_JS_GZIP : 0,
+    imaKazalo ? MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP : 0,
+  );
 }
 
 /** Stvarni izvor trake i podnozja, LF. */
@@ -7863,8 +7909,24 @@ const MUTATIONS: Mutation[] = [
       'Lijeno podnozje naraste preko 3 KB gzip (npr. uvoz cijelog site-stats.json s nazivima jedinica): ' +
       'proracun trake zbraja samo staticki graf, pa bi rast prosao bez signala.',
     caught: () => z15bLijeniProblemi(z15bMetafile(false), MAX_LAZY_FOOTER_JS_GZIP + 1)
-      .includes(`lijeni komad je ${MAX_LAZY_FOOTER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_FOOTER_JS_GZIP} B`),
+      .includes(`lijeni komad src/shared/site-footer-full.ts je ${MAX_LAZY_FOOTER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_FOOTER_JS_GZIP} B`),
     cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
+  {
+    id: 'z15b/profilna-ladica-prerasla',
+    imitates: 'Profilni birač počne vući prevelik katalog ili feature kod; granica je zasebna od podnožja.',
+    caught: () => z15bLijeniProblemi(
+      z15bMetafileProfil(), 1174, MAX_LAZY_PROFILE_DRAWER_JS_GZIP + 1,
+    ).includes(`lijeni komad src/shared/site-profile-drawer.ts je ${MAX_LAZY_PROFILE_DRAWER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_PROFILE_DRAWER_JS_GZIP} B`),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafileProfil(), 1174, 8_000).length === 0,
+  },
+  {
+    id: 'z15b/kazalo-preraslo',
+    imitates: 'Kazalo počne povlačiti prevelik javni direktorij; njegova granica je zasebna od trake i podnožja.',
+    caught: () => z15bLijeniProblemi(
+      z15bMetafileKazalo(), 1174, 900, MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP + 1,
+    ).includes(`lijeni komad src/shared/site-command-dialog.ts je ${MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP} B`),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafileKazalo(), 1174, 900, 1_500).length === 0,
   },
   {
     id: 'z15b/drugi-lijeni-uvoz',

@@ -13,6 +13,9 @@ import '../../shared/ui-boot';
 // mjeru i razmak slova. Gard: `tests/entry-fonts.test.ts`.
 import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
 import './intake.css';
+// Prazan stol pod lampom: postojeci sloj dubine (snop, prasina, sjene) BEZ demo dokumenta i bez
+// sekvence. Papir za ucitavanje je jedini predmet na stolu.
+import '../../ui/hero-depth';
 
 /**
  * ULAZ RUTE `/`: samo ucitavanje dokumenta.

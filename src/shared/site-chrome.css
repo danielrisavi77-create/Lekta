@@ -1,3 +1,5 @@
+@import './site-profile-drawer.css';
+
 /*
  * TRAKA I PODNOZJE KAO SUSTAV (ALIGNMENT Z15, prvi krug).
  *
@@ -304,7 +306,7 @@ header.site-chrome--scrolled {
   color: var(--desk-ink);
 }
 .site-chrome[data-site-menu-wired] .site-chrome__burger { display: inline-flex; }
-.site-chrome__burger-label { color: var(--desk-ink); font: 500 11px/1.2 var(--mono); letter-spacing: .06em; }
+.site-chrome__burger-label { color: var(--desk-ink); font: 500 var(--fs-mono-label)/1.2 var(--mono); letter-spacing: .06em; }
 .site-chrome__burger-glif { display: grid; gap: 5px; width: 16px; }
 .site-chrome__burger-glif i { display: block; height: 1.5px; background: currentColor; }
 .site-chrome__burger-glif i:last-child { width: 10px; background: var(--red); }
@@ -473,7 +475,7 @@ body:has(.site-chrome__sheet.open) { overflow: hidden; }
 .site-command-dialog__item:hover,.site-command-dialog__item:focus-visible { background: var(--paper-2); }
 .site-command-dialog__copy { display: grid; gap: 3px; min-width: 0; }
 .site-command-dialog__copy strong { font: 400 20px/1.1 var(--display-serif); --emph-weight: 400; --emph-style: italic; }
-.site-command-dialog__copy small { color: var(--paper-muted); font: 400 11px/1.4 var(--ui); }
+.site-command-dialog__copy small { color: var(--paper-muted); font: 400 var(--fs-mono-label)/1.4 var(--ui); }
 .site-command-dialog__group,.site-command-dialog__hint { flex: 0 0 auto; color: var(--paper-muted); font: 500 9px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
 .site-command-dialog__hint { margin: 14px 0 0; text-align: right; }
 .site-command-dialog__empty { margin: 0; padding: 20px 8px; border-top: 1px solid var(--paper-line); color: var(--paper-muted); font: 400 14px/1.5 var(--ui); }

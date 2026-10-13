@@ -114,8 +114,8 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   // znači da rok nije zadan, pa uklanjamo zastarjelu kvačicu iz lokalnog izbora.
   if (rok.neznam) {
     rok = { datum: null, neznam: false };
-    zapisiRok(rok);
   }
+  zapisiRok(rok);
   let odabir: ((file: File) => void) | null = null;
   // Zadnja spremljena sesija: rok zadan NAKON spremanja (promjena u debounce prozoru ili dok se
   // cita) mora ici i u mapu `rokSesije` te sesije, ne samo u globalni slot.
