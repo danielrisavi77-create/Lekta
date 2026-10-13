@@ -13,6 +13,8 @@ Izravni GET na lekta.hr vratio je HTTP 200 za svih 20 pregledanih ruta:
 | Katalog i pokrivenost | /fakulteti/, /pokrivenost, /fpzg/diplomski-rad/ |
 | Pravni sadržaj | /privatnost, /uvjeti-koristenja, /obrada-dokumenata, /kolacici, /garancija, /pravila-povrata, /odricanje-od-odgovornosti |
 
+Dodatni prolaz 13. listopada ponovno je dohvatio ovih 20 ruta i pregledao njihove `a[href]` poveznice u vraćenom HTML-u. Izdvojena je 281 jedinstvena interna HTTP(S) adresa na `lekta.hr` i poddomenama; sve su prošle bez HTTP ili mrežne pogreške, a nijedna nije preusmjerena. Ovo pokriva samo poveznice u HTML-u tih 20 ruta: vanjske poveznice, kontrole koje se stvaraju tek JavaScriptom i neuzorkovane stranice nisu provjerene.
+
 Tijekom ručnog prolaza kroz početnu i stranicu Saznaj više otvorene su povezane javne stranice; pregledani sadržaji imali su naslov, glavni naslov i tijelo. Na početnoj je plaćeni popravak vidljivo označen kao uskoro, a naplata kao neaktivna. U tom uzorku nije pronađena slijepa ulica.
 
 Glavna stranica vraća canonical i og:url na https://lekta.hr/. Alati dostupni na putanjama bez nastavka .html vraćaju canonical na odgovarajuću .html adresu; to samo po sebi ne dokazuje HTTP 301 preusmjerenje. Za /saznaj-vise/, /rad/, /pokrivenost/, /moji-radovi/ i dio pravnih stranica og:url nije bio prisutan u HTML-u. To nije prekinuta korisnička poveznica, ali ostaje SEO stavka za pregled u zasebnom zadatku.
@@ -23,7 +25,7 @@ Ograničenja: nisu provjereni svi profili fakulteta, svaka vrsta rada, svaka van
 
 Frontend ima Turnstile put za signup, e-mail OTP i prijavu lozinkom. Token se šalje u GoTrue obliku gotrue_meta_security.captcha_token. Testovi auth-captcha.test.ts pokrivaju tokove s tokenom i ponašanje bez ključa.
 
-Klijent namjerno vraća bez tokena dok VITE_TURNSTILE_SITE_KEY nije postavljen. To je sigurno samo prije uključivanja captcha zaštite u Supabase Authu. Javni produkcijski build-info.json 13. listopada navodio je captchaSiteKey=false. Kodna integracija je spremna za konfiguraciju, ali produkcija nije spremna za uključivanje. Vlasnik najprije postavlja TURNSTILE_SITE_KEY u GitHub Actions production okruženju, objavljuje build, provjerava captchaSiteKey=true na javnom build-info.json, a tek zatim unosi Turnstile secret i uključuje zaštitu u Supabase Authu. Ne čitati ni zapisivati secret u ovom izvještaju.
+Klijent namjerno vraća bez tokena dok VITE_TURNSTILE_SITE_KEY nije postavljen. To je sigurno samo prije uključivanja captcha zaštite u Supabase Authu. Ponovljeni dohvat javnog `build-info.json` 13. listopada vratio je commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`. Kodna integracija je spremna za konfiguraciju, ali produkcija nije spremna za uključivanje. Vlasnik najprije postavlja TURNSTILE_SITE_KEY u GitHub Actions production okruženju, objavljuje build, provjerava `captchaSiteKey=true` na javnom build-info.json, a tek zatim unosi Turnstile secret i uključuje zaštitu u Supabase Authu. Ne čitati ni zapisivati secret u ovom izvještaju.
 
 Postupak i redoslijed: docs/deploy/AUTH_CAPTCHA.md i docs/deploy/TURNSTILE_T89.md. Službena Supabase uputa potvrđuje da se production Edge Function secrets mogu postaviti u nadzornoj ploči ili CLI-jem i da novi secret ne traži redeploy: [Supabase Edge Function secrets](https://supabase.com/docs/guides/functions/secrets).
 
@@ -35,5 +37,7 @@ Issue [#318](https://github.com/danielrisavi77-create/Lekta/issues/318) ostaje o
 - smol-toml je 1.9.0, izvan pogođenog raspona do 1.8.0; [GHSA-r4xh-jqrq-34v2](https://github.com/advisories/GHSA-r4xh-jqrq-34v2).
 - Security workflow 38429623801 na SHA-u f758ba2bde00c7f2d37daa789a39ed1e4168db99 završio je uspješno. Uspješno su prošli audit produkcijskih ovisnosti, audit cijelog grafa, audit ratchet i provjera izvora lockfilea.
 - GitHub Actions rezultat vrijedi za točan SHA i lockfile iz tog runa; stariji lokalni node_modules nije mjerodavan dokaz.
+- Popravak je ušao kroz [PR #319](https://github.com/danielrisavi77-create/Lekta/pull/319), spojen 9. listopada u commit `4911855f066b85fe555cc0a2b239726fec06852a`. PR je mijenjao samo lockfile: `source-map-js` 1.2.1 → 1.2.2 i `smol-toml` 1.8.0 → 1.9.0. Trenutačni `master` sadrži te verzije; `fullGraphHighCritical` ostaje 0, bez iznimki. Službeni GitHub advisories navode 1.2.2 i 1.9.0 kao zakrpane verzije.
+- Issue je i dalje otvoren. GitHub ne prikazuje zabilježeni pregled PR-a #319, a komentar na issueu od 6. listopada bilježi da neovisni pregled tada nije bio potvrđen. Ovaj odjeljak daje tehničke dokaze za vlasnikov pregled zatvaranja; ne zatvara issue i ne tvrdi da postoji dokaz drugog providera.
 
-Ovi podaci daju dokaz za predloženo zatvaranje issuea nakon pregleda diff-a i potvrde da prag ostaje nepromijenjen. Issue nije zatvoren ovim izvještajem.
+Ovi podaci podupiru vlasnikovu odluku o zatvaranju issuea: zakrpe su u spojenom lockfileu, aktivni prag ostaje nula, a security workflow prolazi na aktualnom masteru. Issue nije zatvoren ovim izvještajem.
