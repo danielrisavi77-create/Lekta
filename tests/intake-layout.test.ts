@@ -649,9 +649,10 @@ describe('Z7 a11y: zaglavlje, kicker, naslov, uvod i podnozje nisu u gumbu', () 
     'Ulazni list',
     // Z32: tri recenice koraka su otisle s koracima (vidi prvi describe); pribor uz list je nova
     // proza na ekranu i ne smije zavrsiti ni u gumbu ni pod aria-hidden.
-    'Pribor · prije ubacivanja',
+    'Prije predaje',
     'Rok predaje',
-    'Još ne znam rok',
+    '— dana do roka',
+    'CITAT I LITERATURA',
     'Dokument ostaje na uređaju',
     'Provjeravamo formu, ne sadržaj',
   ];

@@ -146,8 +146,8 @@ export function siteChromeProfileNote(): string {
   return `${n.toLocaleString('hr-HR')} ${hrPlural(n, 'profil', 'profila', 'profila')}`;
 }
 
-/** Bez potvrđenog profila traka je status, ne lažni aktivni CTA; profil se otkriva iz rada. */
-export const SITE_CHROME_PLATE_EMPTY = 'Profil: automatski';
+/** Bez odabira profila traka ostaje jasan poziv za odabir. */
+export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
 
 /**
  * NATPIS MJEDENE PLOCICE (F8, odluka 2026-09-23): "FPZG · Dipl.".
@@ -214,12 +214,13 @@ export function siteChromeNote(kind: string): string | null {
 /**
  * Upise natpis plocice nad POSTOJECIM markupom. Staticki natpis je "Odaberi profil", pa stranica
  * bez JavaScripta ne tvrdi profil koji ne moze procitati; s JS-om se natpis zamijeni kraticom.
- * `aria-disabled` i `title="Uskoro"` ostaju NETAKNUTI (odluka F8: ladica Z13 ne postoji).
  */
 function fillPlate(root: ParentNode): void {
   const slot = root.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
   if (!slot) return;
-  slot.textContent = siteChromePlateFromStorage();
+  const label = siteChromePlateFromStorage();
+  slot.textContent = label;
+  slot.closest<HTMLElement>('[data-site-chrome-profile]')?.toggleAttribute('data-profile-selected', label !== SITE_CHROME_PLATE_EMPTY);
 }
 
 function fillNotes(root: ParentNode): void {
@@ -417,6 +418,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
   const btn = doc.getElementById('mobileMenuBtn');
   const sheet = doc.getElementById('mobileNav');
   if (!btn || !sheet) return;
+  doc.querySelector<HTMLElement>('[data-site-chrome]')?.setAttribute('data-site-menu-wired', '');
   btn.setAttribute('aria-expanded', 'false');
   btn.setAttribute('aria-controls', 'mobileNav');
   const zatvori = (vratiFokus: boolean): void => {
@@ -435,7 +437,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
     if (sheet.classList.contains('open')) zatvori(true); else otvori();
   }, { signal });
   sheet.addEventListener('click', (event) => {
-    const meta = (event.target as HTMLElement | null)?.closest('a, [data-display-open]');
+    const meta = (event.target as HTMLElement | null)?.closest('a, [data-display-open], [data-site-command]');
     if (meta) zatvori(false);
   }, { signal });
   doc.addEventListener('keydown', (event) => {
@@ -446,6 +448,119 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
     const target = event.target as HTMLElement | null;
     if (target && (sheet.contains(target) || btn.contains(target))) return;
     zatvori(false);
+  }, { signal });
+}
+
+/** Kazalo otvara samo javne rute koje su u izdanju; upit pretražuje njihov stvarni naziv i opis. */
+function wireSiteCommand(doc: Document, signal: AbortSignal): void {
+  const triggers = [...doc.querySelectorAll<HTMLButtonElement>('[data-site-command]')];
+  if (!triggers.length) return;
+  const dialog = doc.createElement('dialog');
+  dialog.className = 'site-command-dialog';
+  dialog.setAttribute('aria-labelledby', 'siteCommandTitle');
+  dialog.innerHTML = `
+    <div class="site-command-dialog__head">
+      <div><span class="site-command-dialog__eyebrow">KAZALO</span><h2 id="siteCommandTitle">Što tražiš?</h2></div>
+      <button type="button" class="site-command-dialog__close" data-command-close aria-label="Zatvori Kazalo">×</button>
+    </div>
+    <label class="site-command-dialog__search"><span class="sr-only">Traži alate, fakultete i vodiče</span><input type="search" autocomplete="off" placeholder="Alati, fakulteti, vodiči…" data-command-query></label>
+    <div class="site-command-dialog__results" role="list" data-command-results></div>
+    <p class="site-command-dialog__hint">↑ ↓ za kretanje · Esc za zatvaranje</p>`;
+  doc.body.append(dialog);
+  const query = dialog.querySelector<HTMLInputElement>('[data-command-query]')!;
+  const results = dialog.querySelector<HTMLElement>('[data-command-results]')!;
+  const close = dialog.querySelector<HTMLButtonElement>('[data-command-close]')!;
+  const destinations = releasedPublicRouteGroups.flatMap((group) => group.destinations.map((destination) => ({
+    group: group.label,
+    ...destination,
+  })));
+  let lastTrigger: HTMLButtonElement | null = null;
+
+  const render = (): void => {
+    const term = query.value.trim().toLocaleLowerCase('hr');
+    const matching = destinations.filter((item) => !term || `${item.label} ${item.description} ${item.group}`.toLocaleLowerCase('hr').includes(term));
+    const fragment = doc.createDocumentFragment();
+    for (const item of matching) {
+      const link = doc.createElement('a');
+      link.className = 'site-command-dialog__item';
+      link.href = item.href;
+      link.setAttribute('role', 'listitem');
+      const copy = doc.createElement('span');
+      copy.className = 'site-command-dialog__copy';
+      const title = doc.createElement('strong');
+      title.textContent = item.label;
+      const description = doc.createElement('small');
+      description.textContent = item.description;
+      copy.append(title, description);
+      const category = doc.createElement('small');
+      category.className = 'site-command-dialog__group';
+      category.textContent = item.group;
+      link.append(copy, category);
+      fragment.append(link);
+    }
+    if (!matching.length) {
+      const empty = doc.createElement('p');
+      empty.className = 'site-command-dialog__empty';
+      empty.textContent = 'Nema rezultata za taj upit.';
+      fragment.append(empty);
+    }
+    results.replaceChildren(fragment);
+  };
+  const open = (trigger: HTMLButtonElement): void => {
+    lastTrigger = trigger;
+    render();
+    dialog.showModal();
+    query.value = '';
+    render();
+    query.focus();
+  };
+  triggers.forEach((trigger) => trigger.addEventListener('click', () => open(trigger), { signal }));
+  query.addEventListener('input', render, { signal });
+  close.addEventListener('click', () => dialog.close(), { signal });
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }, { signal });
+  dialog.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    const links = [...results.querySelectorAll<HTMLAnchorElement>('a')];
+    if (!links.length) return;
+    event.preventDefault();
+    const active = doc.activeElement;
+    const current = links.indexOf(active as HTMLAnchorElement);
+    const next = event.key === 'ArrowDown'
+      ? (current + 1) % links.length
+      : current < 0 ? links.length - 1 : (current - 1 + links.length) % links.length;
+    links[next]?.focus();
+  }, { signal });
+  dialog.addEventListener('close', () => lastTrigger?.focus(), { signal });
+  doc.addEventListener('keydown', (event) => {
+    const key = event as KeyboardEvent;
+    if ((key.ctrlKey || key.metaKey) && key.key.toLowerCase() === 'k') {
+      key.preventDefault();
+      open(triggers[0]!);
+    }
+  }, { signal });
+}
+
+/** Profilska pločica otvara lagani, lijeno učitani izbor; `/rad/` koristi postojeći birač. */
+function wireSiteProfile(doc: Document, chrome: HTMLElement, signal: AbortSignal): void {
+  const trigger = chrome.querySelector<HTMLElement>('[data-site-chrome-profile]');
+  if (!trigger || chrome.dataset.siteChrome === 'workspace') return;
+  trigger.removeAttribute('aria-disabled');
+  trigger.removeAttribute('title');
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.addEventListener('click', () => {
+    void import('./site-profile-drawer')
+      .then(({ openSiteProfileDrawer }) => {
+        if (signal.aborted) return;
+        openSiteProfileDrawer(doc, trigger, (selection) => {
+          setSiteChromePlate(doc);
+          doc.dispatchEvent(new CustomEvent('lekta:profile-saved', { detail: selection }));
+        });
+      })
+      .catch(() => {
+        // Nedostupan picker ne smije prekinuti upload ni navesti da je profil spremljen.
+        trigger.setAttribute('aria-expanded', 'false');
+      });
   }, { signal });
 }
 
@@ -536,6 +651,8 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
 
   wireSiteLamp(doc, signal);
   wireSiteMenu(doc, signal);
+  wireSiteCommand(doc, signal);
+  wireSiteProfile(doc, chrome, signal);
 
   return {
     refresh,
@@ -574,7 +691,9 @@ export function setSiteChromePlate(doc: Document): void {
   const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]');
   const slot = chrome?.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
   if (!slot) return;
-  slot.textContent = siteChromePlateFromStorage();
+  const label = siteChromePlateFromStorage();
+  slot.textContent = label;
+  slot.closest<HTMLElement>('[data-site-chrome-profile]')?.toggleAttribute('data-profile-selected', label !== SITE_CHROME_PLATE_EMPTY);
 }
 
 /**

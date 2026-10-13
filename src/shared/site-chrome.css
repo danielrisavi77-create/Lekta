@@ -69,6 +69,7 @@ header.site-chrome--scrolled {
 .site-chrome__hairline { width: 1px; height: 18px; background: var(--desk-line); flex: none; }
 
 .site-chrome__dests { position: relative; display: flex; align-items: center; gap: 2px; }
+.site-chrome[data-site-menu-wired] .site-chrome__dests { display: none; }
 .site-chrome__marker {
   position: absolute;
   top: 50%;
@@ -221,33 +222,26 @@ header.site-chrome--scrolled {
 }
 .site-chrome__work:hover { color: var(--desk-ink); background: color-mix(in srgb, var(--desk-ink) 6%, transparent); }
 
-/* MJEDENA PLOCICA PROFILA. Ladica Z13 jos ne postoji, pa je gumb `aria-disabled` i nosi "Uskoro";
-   ponasanje se ne izmislja unaprijed. */
+/* Profil je aktivna postavka preglednika; crvena točka označava odabir. */
 .site-chrome__plate {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 24px;
   padding: 8px 10px;
-  background: linear-gradient(180deg, #C9A96A, #A98649);
-  color: #26221B;
-  border: 1px solid #6E5A34;
+  background: transparent;
+  color: var(--desk-ink);
+  border: 1px solid var(--desk-line);
   border-radius: 2px;
   font-family: var(--ui);
   font-size: 10.5px;
   letter-spacing: .04em;
   white-space: nowrap;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
-}
-.site-chrome__plate[aria-disabled="true"] {
-  cursor: default;
-  background: color-mix(in srgb, var(--desk-ink) 5%, transparent);
-  color: var(--desk-muted);
-  border-color: var(--desk-line);
   box-shadow: none;
+  cursor: pointer;
 }
-.site-chrome__plate-dot { width: 6px; height: 6px; border-radius: 50%; background: #6E5A34; }
-.site-chrome__plate[aria-disabled="true"] .site-chrome__plate-dot { background: currentColor; opacity: .72; }
+.site-chrome__plate-dot { width: 7px; height: 7px; border: 1px solid var(--desk-muted); border-radius: 50%; background: transparent; }
+.site-chrome__plate[data-profile-selected] .site-chrome__plate-dot { border-color: var(--red); background: var(--red); }
 
 /* PECAT "Provjeri rad": jedna primarna radnja po ekranu, radius 2px, hover je podigne. */
 .site-chrome__stamp {
@@ -296,18 +290,39 @@ header.site-chrome--scrolled {
 
 .site-chrome__burger {
   display: none;
-  width: 36px;
+  width: auto;
   height: 36px;
   min-width: 24px;
   min-height: 24px;
-  place-items: center;
-  border: 1px solid var(--desk-line);
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 8px;
+  border: 0;
   border-radius: 2px;
   background: transparent;
   color: var(--desk-ink);
 }
+.site-chrome[data-site-menu-wired] .site-chrome__burger { display: inline-flex; }
+.site-chrome__burger-label { color: var(--desk-ink); font: 500 11px/1.2 var(--mono); letter-spacing: .06em; }
 .site-chrome__burger-glif { display: grid; gap: 5px; width: 16px; }
 .site-chrome__burger-glif i { display: block; height: 1.5px; background: currentColor; }
+.site-chrome__burger-glif i:last-child { width: 10px; background: var(--red); }
+.site-chrome__command {
+  min-width: 92px;
+  min-height: 38px;
+  padding: 2px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--desk-line);
+  background: transparent;
+  color: var(--desk-ink);
+  font: italic 400 21px/1.1 var(--display-serif);
+  --emph-weight: 400;
+  --emph-style: italic;
+  cursor: pointer;
+}
+.site-chrome__command:hover,.site-chrome__command:focus-visible { border-color: var(--red); }
+.site-chrome[data-site-chrome="workspace"] .site-chrome__command { display: none; }
 
 /* LAMPA: overlay boje CILJNE teme otkriva stol iz sredista gumba, zatim nestaje. Boja NIJE
    duplicirana ovdje (Z15 popravak F5): `data-theme` ciljne teme stoji na SAMOM overlayu
@@ -328,7 +343,7 @@ header.site-chrome--scrolled {
   to { clip-path: circle(160% at var(--lx, 90%) var(--ly, 40px)); }
 }
 
-/* MOBILNI LIST: pada na stol. Papir je svijetla ploha u OBJE teme, kao i svaki drugi list. */
+/* Izbornik: ladica s papirnatom podlogom; ista je na uskom i širokom zaslonu. */
 .site-chrome__sheet { display: none; }
 .site-chrome__sheet-eyebrow {
   font-family: var(--ui);
@@ -368,6 +383,15 @@ header.site-chrome--scrolled {
   --emph-weight: 400;
   --emph-style: italic;
 }
+.site-chrome__sheet-command {
+  width: 100%;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
 .site-chrome__sheet-note {
   font-family: var(--ui);
   font-size: 10px;
@@ -398,6 +422,65 @@ header.site-chrome--scrolled {
   letter-spacing: .08em;
   min-height: 24px;
   padding: 5px 9px;
+}
+.site-chrome__sheet.open {
+  display: grid;
+  gap: 4px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  max-height: 100dvh;
+  box-sizing: border-box;
+  align-content: start;
+  overflow-y: auto;
+  margin: 0;
+  padding: max(24px, env(safe-area-inset-top)) 28px max(24px, env(safe-area-inset-bottom));
+  background: var(--paper);
+  color: var(--paper-ink);
+  border: 0;
+  border-right: 1px solid var(--paper-line);
+  border-radius: 0;
+  box-shadow: var(--paper-sh);
+  z-index: 250;
+  animation: siteChromeDrop .32s var(--ease-out-3, ease) both;
+}
+body:has(.site-chrome__sheet.open) { overflow: hidden; }
+.site-command-dialog {
+  box-sizing: border-box;
+  width: min(620px, calc(100vw - 24px));
+  max-width: 620px;
+  max-height: min(76dvh, 680px);
+  margin: 12dvh auto 0;
+  padding: 22px;
+  border: 1px solid var(--paper-line);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh);
+}
+.site-command-dialog::backdrop { background: rgb(10 8 6 / 62%); }
+.site-command-dialog__head { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.site-command-dialog__eyebrow { color: var(--paper-muted); font: 600 10px/1.3 var(--mono); letter-spacing: .12em; }
+.site-command-dialog h2 { margin: 6px 0 0; font: italic 400 32px/1.1 var(--display-serif); --emph-weight: 400; --emph-style: italic; }
+.site-command-dialog__close { flex: 0 0 38px; width: 38px; height: 38px; border: 1px solid var(--paper-line); border-radius: 2px; background: transparent; color: var(--paper-ink); font: 400 23px/1 var(--ui); cursor: pointer; }
+.site-command-dialog__search { display: block; margin: 18px 0 12px; }
+.site-command-dialog__search input { box-sizing: border-box; width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--paper-line); border-radius: 2px; background: var(--paper-2); color: var(--paper-ink); font: 400 16px/1.4 var(--ui); }
+.site-command-dialog__search input:focus-visible,.site-command-dialog__close:focus-visible,.site-command-dialog__item:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.site-command-dialog__results { display: grid; max-height: 48dvh; overflow-y: auto; }
+.site-command-dialog__item { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 54px; padding: 9px 10px; border-top: 1px solid var(--paper-line); color: var(--paper-ink); text-decoration: none; }
+.site-command-dialog__item:hover,.site-command-dialog__item:focus-visible { background: var(--paper-2); }
+.site-command-dialog__copy { display: grid; gap: 3px; min-width: 0; }
+.site-command-dialog__copy strong { font: 400 20px/1.1 var(--display-serif); --emph-weight: 400; --emph-style: italic; }
+.site-command-dialog__copy small { color: var(--paper-muted); font: 400 11px/1.4 var(--ui); }
+.site-command-dialog__group,.site-command-dialog__hint { flex: 0 0 auto; color: var(--paper-muted); font: 500 9px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.site-command-dialog__hint { margin: 14px 0 0; text-align: right; }
+.site-command-dialog__empty { margin: 0; padding: 20px 8px; border-top: 1px solid var(--paper-line); color: var(--paper-muted); font: 400 14px/1.5 var(--ui); }
+body:has(.site-command-dialog[open]) { overflow: hidden; }
+@media (max-width: 520px) {
+  .site-command-dialog { margin-top: max(8dvh, 24px); padding: 16px; }
+  .site-command-dialog__group { display: none; }
 }
 
 @media (max-width: 819px) {
@@ -461,31 +544,17 @@ header.site-chrome--scrolled {
     white-space: nowrap;
     border: 0;
   }
-  .site-chrome__burger { display: grid; }
+  .site-chrome__burger { display: inline-flex; min-width: 36px; }
+  .site-chrome__burger-label { display: none; }
+  .site-chrome__command { min-width: 0; min-height: 34px; padding: 2px 8px; font-size: 19px; }
+  .site-chrome[data-site-chrome="marketing"] .site-chrome__plate,
+  .site-chrome[data-site-chrome="intake"] .site-chrome__plate { display: inline-flex; }
   /* TANKO STANJE NE SMIJE BITI DEBLJE OD DEBELOG. Na mobitelu zaglavlje ima dva reda, pa je
      `padding-block: 8px` iz stanja nakon skrola dodavao 16 px, a prvi red se stisnuo samo 11 px:
      izmjereno na 390 px, 122 px nakon skrola naspram 113 px prije njega. Proracun mjeri
      `tests/ux/workspace-viewports.spec.ts`, i u skrolanom stanju. */
   header.site-chrome--scrolled { padding-block: 2px; }
-  .site-chrome__sheet.open {
-    display: grid;
-    gap: 4px;
-    position: absolute;
-    left: 10px;
-    right: 10px;
-    top: 100%;
-    margin-top: 14px;
-    padding: 22px 24px 24px;
-    background: var(--paper);
-    color: var(--paper-ink);
-    border: 1px solid var(--paper-line);
-    border-radius: 2px;
-    box-shadow: var(--paper-sh);
-    z-index: 29;
-    transform: rotate(-.8deg);
-    animation: siteChromeDrop .45s var(--ease-out-3, ease) both;
-  }
-  body:has(.site-chrome__sheet.open) { overflow: hidden; }
+  .site-chrome__sheet.open { width: min(420px, 100vw); }
 }
 /* KRATKI OBLIK KORAKA (samo brojevi) NA `/rad/`, IZMJEREN, NE POGODJEN (Z15 drugi krug, stavka 4).
    Stoji IZA mobilnog bloka namjerno: osnovni sloj (sve prije prvog `@media`) ne smije nositi

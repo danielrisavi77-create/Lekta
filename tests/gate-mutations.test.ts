@@ -10442,17 +10442,16 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     expect(ozicenjeUlazaProblemi(bezVeze).length).toBeGreaterThan(0);
   });
 
-  it('(e) tragovi bez gasenja pod prigusenim pokretom, beskonacno skeniranje ili linija bez opt-ina obaraju gard', async () => {
+  it('(e) vraćeni tragovi, beskonačno skeniranje ili linija bez opt-ina obaraju gard', async () => {
     const { pokretProblemi } = await import('./helpers/intake-live-guards');
     const css = procitaj('src/routes/intake/intake.css');
     const html = procitaj('index.html');
     const boot = procitaj('src/shared/ui-boot.ts');
-    const bezUpita = css.replace('  .intake-tragovi{display:none}\n', '');
-    expect(bezUpita).not.toBe(css);
-    expect(pokretProblemi(bezUpita, html, boot)).toContain('tragovi olovke se prikazuju pod prefers-reduced-motion');
-    const bezRucnog = css.replace(':root[data-motion="reduce"] .intake-tragovi{display:none}', '');
-    expect(bezRucnog).not.toBe(css);
-    expect(pokretProblemi(bezRucnog, html, boot).length).toBeGreaterThan(0);
+    const vraceniTragovi = html.replace('<div class="intake-poziv">', '<div class="intake-tragovi"></div><div class="intake-poziv">');
+    expect(vraceniTragovi).not.toBe(html);
+    expect(pokretProblemi(css, vraceniTragovi, boot)).toContain('pokretni tragovi su se vratili na ulaz');
+    const vraceniStil = `${css}\n.intake-tragovi{animation:intake-tragovi 3s infinite}`;
+    expect(pokretProblemi(vraceniStil, html, boot)).toContain('pokretni tragovi su se vratili na ulaz');
     const beskonacno = css.replace('animation:intake-sken 1.2s linear 14', 'animation:intake-sken 1.2s linear infinite');
     expect(beskonacno).not.toBe(css);
     expect(pokretProblemi(beskonacno, html, boot)).toContain('beskonacna animacija na ulazu');

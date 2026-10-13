@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('audit: rok prije uploada i citljive postavke na mobitelu', async ({ page }, info) => {
+test('audit: opcionalni rok i citljive postavke na mobitelu', async ({ page }, info) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
@@ -11,10 +11,12 @@ test('audit: rok prije uploada i citljive postavke na mobitelu', async ({ page }
   const a = await date.boundingBox(), b = await upload.boundingBox();
   expect(a!.y + a!.height).toBeLessThan(b!.y);
   await page.screenshot({ path: info.outputPath('intake-deadline-mobile.png') });
-  await page.locator('#intakeRokNeznam').check();
+  await date.fill('2026-10-15');
   await expect(upload).toHaveAttribute('aria-disabled', 'false');
-  await page.reload();
-  await expect(page.locator('#intakeRokNeznam')).toBeChecked();
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText(/do roka/);
+  await page.locator('[data-intake-rok-clear]').click();
+  await expect(date).toHaveValue('');
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('— dana do roka');
   await page.goto('/alati.html');
   await page.locator('#mobileMenuBtn').click();
   await page.locator('[data-display-open]:visible').click();

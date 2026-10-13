@@ -147,17 +147,13 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overfl
 h1,h2,h3,h4{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 .shell{width:min(var(--max),calc(100% - 72px))}
 @media(max-width:720px){.shell{width:min(100% - 24px,var(--max))}}
-/* Dekor stola: svjetlo lampe (parallax u korektorski.ts), traka citanja, vinjeta, trag salice.
-   Sve zivi u .ks-decor wrapperu (overflow:hidden) da nista ne prosiruje scrollWidth stranice. */
+/* Zajedničke površine stranice i traka čitanja. */
 body{position:relative}
-.ks-decor{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.ks-lamp{position:absolute;top:-320px;right:-100px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,var(--lamp),transparent 62%)}
 .ks-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:110;pointer-events:none}
 .ks-progress>i{display:block;height:100%;width:0;background:var(--red);box-shadow:0 0 14px color-mix(in srgb,var(--red) 60%,transparent)}
 .ks-vignette{display:none}
-.ks-kava{position:absolute;top:920px;left:-40px;width:170px;height:170px;border:14px solid color-mix(in srgb,var(--desk-ink) 7%,transparent);border-radius:50%;transform:rotate(-8deg)}
 .topbar,main,footer{position:relative;z-index:2}
-@media print{.ks-decor,.ks-progress,.ks-vignette{display:none}}
+@media print{.ks-progress,.ks-vignette{display:none}}
 /* Gumbi: ostri rubovi; primarni CTA na stolu = papir s crvenom offset sjenom (potpis dizajna),
    a unutar papira = blok tinte s crveno-dubokom offset sjenom. Nav CTA je mala crvena marka. */
 .btn{border-radius:var(--radius-btn);font-family:var(--sans);font-weight:600;letter-spacing:.04em}

@@ -29,7 +29,6 @@
 
 </head>
 <body>
-<div class="ks-decor" aria-hidden="true"><div class="ks-lamp"></div><div class="ks-kava"></div></div>
 <div class="ks-progress" aria-hidden="true"><i></i></div>
 <div class="ks-vignette" aria-hidden="true"></div>
 <!-- TRAKA JE SUSTAV, NE PO STRANICI (ALIGNMENT Z15). Izgled je u `src/shared/site-chrome.css`,
@@ -50,21 +49,13 @@
         <a class="site-chrome__dest" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu</a>
       </nav>
     </div>
-      <div class="site-chrome__mid" data-site-chrome-mid></div>
+      <div class="site-chrome__mid" data-site-chrome-mid><button class="site-chrome__command" type="button" data-site-command title="Otvori Kazalo (Ctrl+K)"><span>Kazalo</span></button></div>
       <div class="site-chrome__right">
         <a class="site-chrome__work" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi</a>
-        <!-- MJEDENA PLOCICA PROFILA. Ladica profila (Z13) jos ne postoji, pa gumb NOSI "Uskoro"
-             i aria-disabled, umjesto da se ponasanje izmislja unaprijed (odluka F8).
-             NATPIS JE OD F8 "FPZG · Dipl." IZ PREDLOSKA, i ne dolazi iz registra profila (194 KB
-             lazy chunk koji traka ne smije ucitati na svakoj stranici) nego iz pecenog indeksa
-             `data/coverage/site-stats.json` (`units[unitId].kratica`, `workTypes[workType]`) i
-             odabira u `lekta.preferences.v2`. Staticki natpis je "Odaberi profil", jer stranica bez
-             JavaScripta pohranu ne moze procitati i ne smije tvrditi profil; `site-chrome.ts` ga
-             zamijeni kraticom. -->
-        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span><span data-site-chrome-profile-label>Odaberi profil</span></button>
+        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-haspopup="dialog" aria-expanded="false"><span class="site-chrome__plate-dot" aria-hidden="true"></span><span data-site-chrome-profile-label>Odaberi profil</span></button>
         <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i></button>
         <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
-        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span><span class="site-chrome__burger-label">Izbornik</span></button>
       </div>
   </div>
   <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
@@ -78,6 +69,7 @@
     <a class="site-chrome__sheet-item" data-site-chrome-dest="tools" href="/alati.html">Pribor<small class="site-chrome__sheet-note" data-site-chrome-note="tools"></small></a>
     <a class="site-chrome__sheet-item" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu<small class="site-chrome__sheet-note" data-site-chrome-note="profiles"></small></a>
     <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
+    <button class="site-chrome__sheet-item site-chrome__sheet-command" type="button" data-site-command>Kazalo<span aria-hidden="true">Ctrl / ⌘ K</span></button>
     <div class="site-chrome__sheet-foot">
       <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
       <button class="site-chrome__sheet-aa" type="button" data-display-open>Aa &middot; Prikaz</button>
@@ -92,32 +84,22 @@
          podnozje) ostaje iz Z7; tri koraka Z7 su otisla s rasporedom koji je Z32 zamijenio
          (predlozak B ih nema), a obecanje o uredjaju nose podnozje lista i redak ispod njega. -->
     <div class="intake-stol">
-    <div class="intake-deadline">
+    <section class="intake-deadline" aria-labelledby="intakeRokNaslov">
       <div class="intake-polje">
-        <label class="intake-polje-oznaka" for="intakeRok">Rok predaje · neobavezno</label>
+        <label class="intake-polje-oznaka" id="intakeRokNaslov" for="intakeRok">Rok predaje · neobavezno</label>
         <div class="intake-polje-red">
           <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
-          <label class="intake-kvacica"><input type="checkbox" id="intakeRokNeznam" data-intake-rok-neznam>Još ne znam rok</label>
+          <button class="intake-rok-ukloni" type="button" data-intake-rok-clear hidden>Ukloni rok</button>
         </div>
+        <p class="intake-rok-sazetak" data-intake-deadline-summary aria-live="polite">— dana do roka</p>
+        <p class="intake-rok-napomena">Uz rok nalaz može pokazati koliko dana imaš za popravak.</p>
       </div>
-    </div>
+    </section>
     <div class="intake-desk" id="paperCover">
       <!-- PAPIR JE PLOHA, GUMB JE UNUTAR NJEGA (pregled Z7): uloga `button` bi sve potomke ucinila
            prezentacijskima, pa je na unutarnjem `.intake-paper__gumb`. Klik i ispustanje hvata
            CIJELA ploha `#intakeDropzone`. Gard: tests/intake-layout.test.ts. -->
       <div class="intake-paper" id="intakeDropzone" aria-busy="false">
-        <!-- TRAGOVI OLOVKE (Z32 tocka 1): sedam oznaka onoga sto se provjerava, jednom pri
-             ucitavanju pa izblijede; na racunalu se vrate na hover lista. Cisto CSS, samo
-             `opacity`; pod prigusenim pokretom se ne prikazuju. Dekoracija, pa `aria-hidden`. -->
-        <div class="intake-tragovi" aria-hidden="true">
-          <span class="intake-trag"><i></i>margine</span>
-          <span class="intake-trag"><i></i>prored</span>
-          <span class="intake-trag"><i></i>font</span>
-          <span class="intake-trag"><i></i>broj stranice</span>
-          <span class="intake-trag"><i></i>naslovi</span>
-          <span class="intake-trag"><i></i>literatura</span>
-          <span class="intake-trag"><i></i>opseg</span>
-        </div>
         <div class="intake-poziv">
           <!-- ZAGLAVLJE OBRASCA (Z7). Broj lista je stvaran (`src/routes/intake/list-number.ts`).
                Od Z32 se na ispustanje ime datoteke upisuje slovo po slovo na mjesto stanja:
@@ -167,17 +149,36 @@
          za ubacivanje (odluka vlasnika 2026-09-27): bez predodabira kartica kaze da ce biti
          prepoznat iz rada; taj tekst predlozak nema (pitanje F26, docs/agents/orchestrator-backlog.md). -->
     <aside class="intake-pribor" aria-labelledby="intakePriborNaslov" data-intake-pribor>
-      <span class="intake-pribor-oznaka" id="intakePriborNaslov">Pribor · prije ubacivanja</span>
-      <div class="intake-polje">
-        <span class="intake-polje-oznaka" id="intakeFakultetOznaka">Fakultet<span data-intake-fakultet-izvor></span></span>
-        <div class="intake-polje-red">
+      <div class="intake-kartoteka-naslov">
+        <span class="intake-pribor-oznaka" id="intakePriborNaslov">Prije predaje</span>
+        <span class="intake-kartoteka-profil">
+          <span class="intake-polje-oznaka" id="intakeFakultetOznaka">Profil<span data-intake-fakultet-izvor></span></span>
           <span class="intake-fakultet" data-intake-fakultet hidden></span>
-          <span class="intake-fakultet intake-napomena" data-intake-fakultet-napomena>Prepoznat ćemo ga iz rada.</span>
+          <span class="intake-fakultet intake-napomena" data-intake-fakultet-napomena>Fakultet ćemo prepoznati iz rada.</span>
           <button class="intake-potvrdi" type="button" data-intake-potvrdi aria-pressed="false" aria-describedby="intakeFakultetOznaka" disabled hidden>Potvrdi</button>
-        </div>
-        <a class="intake-promijeni" href="/fakulteti/" data-intake-promijeni hidden>Promijeni</a>
+          <a class="intake-promijeni" href="/fakulteti/" data-intake-promijeni hidden>Promijeni</a>
+        </span>
       </div>
-
+      <div class="intake-kartoteka-tabs" role="tablist" aria-label="Brzi alati">
+        <button type="button" role="tab" id="intakeTabPravila" aria-controls="intakePanelPravila" aria-selected="true" data-intake-topic="pravila">Pravila</button>
+        <button type="button" role="tab" id="intakeTabCitat" aria-controls="intakePanelCitat" aria-selected="false" tabindex="-1" data-intake-topic="citat">Citat</button>
+        <button type="button" role="tab" id="intakeTabOpseg" aria-controls="intakePanelOpseg" aria-selected="false" tabindex="-1" data-intake-topic="opseg">Opseg</button>
+      </div>
+      <div class="intake-kartoteka-panel" role="tabpanel" id="intakePanelPravila" aria-labelledby="intakeTabPravila" data-intake-topic-panel="pravila">
+        <span class="intake-kartoteka-oznaka">PRAVILA FAKULTETA</span>
+        <p>Odaberi profil da bi nalaz mogao uzeti u obzir dostupna pravila tvog studija.</p>
+        <a href="/fakulteti/">Odaberi fakultet <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="intake-kartoteka-panel" role="tabpanel" id="intakePanelCitat" aria-labelledby="intakeTabCitat" data-intake-topic-panel="citat" hidden>
+        <span class="intake-kartoteka-oznaka">CITAT I LITERATURA</span>
+        <p>Složi citat iz podataka izvora. Tekst ostaje u pregledniku osim ako zatražiš online dohvat.</p>
+        <a href="/citat.html">Otvori alat za citat <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="intake-kartoteka-panel" role="tabpanel" id="intakePanelOpseg" aria-labelledby="intakeTabOpseg" data-intake-topic-panel="opseg" hidden>
+        <span class="intake-kartoteka-oznaka">OPSEG RADA</span>
+        <p>Prebroji riječi i stranice u dokumentu prije nego što ga predaš.</p>
+        <a href="/kartice.html">Otvori brojač kartica <span aria-hidden="true">→</span></a>
+      </div>
     </aside>
     </div>
 

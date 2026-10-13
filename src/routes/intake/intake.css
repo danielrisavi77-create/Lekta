@@ -13,8 +13,10 @@
       `:not([hidden])`, a na kraju stoji izricito `[hidden]{display:none!important}`. */
 
 .intake-main{position:relative}
-.intake-stage{padding:clamp(20px,5vh,52px) 0 clamp(24px,5vh,48px)}
-.intake-shell{width:min(1064px,calc(100% - 32px));margin:0 auto;text-align:center}
+.intake-stage{position:relative;isolation:isolate;padding:clamp(20px,5vh,52px) 0 clamp(24px,5vh,48px)}
+.intake-stage::before{content:"";position:absolute;z-index:-1;top:-32rem;left:50%;width:min(1260px,150vw);aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lamp) 62%,transparent) 0,color-mix(in srgb,var(--lamp) 24%,transparent) 37%,transparent 65%);opacity:1;pointer-events:none}
+:root[data-theme="light"] .intake-stage::before{opacity:.22}
+.intake-shell{width:min(1180px,calc(100% - 32px));margin:0 auto;text-align:center}
 
 /* --- stol i papir ------------------------------------------------------------------------- */
 .intake-desk{position:relative;padding:clamp(8px,2vw,16px)}
@@ -23,19 +25,19 @@
   position:relative;display:grid;justify-items:center;gap:0;
   padding:clamp(30px,5.5vw,52px) clamp(22px,5vw,54px) clamp(26px,4.5vw,44px);
   background:var(--paper);color:var(--paper-ink);
-  border:1px solid var(--paper-line);border-radius:6px;box-shadow:var(--paper-sh);
-  cursor:pointer;outline:none;transform:rotate(-.35deg);
+  border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--paper-sh);
+  cursor:pointer;outline:none;transform:translateY(0);
   transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1));
 }
 /* Dva lista ispod: debljina snopa, ne ukras. Cisto CSS, bez ijednog dodatnog cvora. */
 .intake-paper::before,.intake-paper::after{
   content:"";position:absolute;z-index:-1;inset:10px -5px -7px 6px;
-  background:var(--paper-2);border:1px solid var(--paper-line);border-radius:6px;transform:rotate(.9deg);
+  background:var(--paper-2);border:1px solid var(--paper-line);border-radius:2px;transform:rotate(.25deg);
 }
-.intake-paper::after{inset:16px 6px -12px -5px;transform:rotate(-.7deg);opacity:.75}
+.intake-paper::after{inset:16px 6px -12px -5px;transform:rotate(-.2deg);opacity:.75}
 
 .intake-paper:hover,.intake-paper:has(.intake-paper__gumb:focus-visible),.intake-paper.is-dragging{
-  transform:rotate(0) translateY(-4px);
+  transform:translateY(-4px);
   box-shadow:var(--paper-sh),0 0 0 1px color-mix(in srgb,var(--brand) 30%,transparent);
 }
 /* PRSTEN FOKUSA CRTA CIJELI PAPIR, iako fokus od pregleda Z7 nosi unutarnji `.intake-paper__gumb`:
@@ -393,82 +395,77 @@
   text-transform:uppercase;line-height:1;transform:rotate(4deg);pointer-events:none;
 }
 
-/* TRAGOVI OLOVKE: jednom pri ucitavanju (0,3 s dolazak, do 2,8 s stoje, pa izblijede), samo
-   `opacity`. Na racunalu se vrate na hover lista; na dodirnom ekranu nema hovera, pa ni povratka. */
-.intake-tragovi{
-  position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;border-radius:inherit;
-  opacity:0;transition:opacity var(--dur-3,.5s) ease;
-}
-.intake-stage[data-intake-state="idle"] .intake-tragovi{animation:intake-tragovi 3.3s linear 1}
-.intake-stage:not([data-intake-state="idle"]) .intake-tragovi{display:none}
-@keyframes intake-tragovi{0%{opacity:0}9%{opacity:1}85%{opacity:1}100%{opacity:0}}
-@media (hover:hover) and (pointer:fine){
-  .intake-stage[data-intake-state="idle"] .intake-paper:hover .intake-tragovi{opacity:1}
-}
-.intake-trag{
-  position:absolute;display:flex;align-items:center;gap:6px;white-space:nowrap;
-  color:var(--paper-muted);font:italic 400 15px/1 var(--display-serif);
-  --emph-weight:400;--emph-style:italic;
-}
-.intake-trag i{display:block;width:40px;height:18px;border:1.5px solid currentColor;border-radius:50%;transform:rotate(-4deg)}
-.intake-trag:nth-child(1){left:6px;top:46%}
-.intake-trag:nth-child(2){left:60%;top:60%}
-.intake-trag:nth-child(3){left:58%;top:30%}
-.intake-trag:nth-child(3) i{width:46px}
-.intake-trag:nth-child(4){left:38%;bottom:10px}
-.intake-trag:nth-child(4) i{width:28px}
-.intake-trag:nth-child(5){left:6%;top:24%}
-.intake-trag:nth-child(5) i{width:70px}
-.intake-trag:nth-child(6){left:6%;top:74%}
-.intake-trag:nth-child(6) i{width:60px}
-.intake-trag:nth-child(7){left:64%;top:80%}
-.intake-trag:nth-child(7) i{width:44px}
-:root[data-motion="reduce"] .intake-tragovi{display:none}
-
-/* PRIBOR UZ LIST: predmet na STOLU, ne na papiru, pa ide na tokene stola. Tekstovi su oznake i
-   mjere, dakle mono (predlozak: Geist Mono). */
+/* PRIBOR UZ LIST: rok i kartoteka sjedaju na stol, a sadrzaj ostaje na papiru. */
 .intake-stol>.intake-desk{grid-column:1;grid-row:1 / span 2}
 .intake-stol>.intake-pribor{grid-column:2;grid-row:2}
-.intake-deadline{grid-column:2;grid-row:1;padding:20px;background:var(--desk-2);color:var(--desk-ink);text-align:left;font-family:var(--mono);font-size:13px}
+.intake-deadline{grid-column:2;grid-row:1}
 .intake-pribor{
-  display:grid;gap:16px;padding:20px;text-align:left;
-  background:var(--desk-2);color:var(--desk-ink);border-radius:2px;box-shadow:var(--paper-sh-sm);
-  transform:rotate(.6deg);font-family:var(--mono);font-size:13px;
+  display:grid;gap:0;min-width:0;padding:0;text-align:left;
+  background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--paper-sh-sm);
+  font-family:var(--mono);font-size:13px;
 }
-.intake-pribor-oznaka,.intake-polje-oznaka{
+.intake-deadline{
+  min-width:0;padding:18px 20px;background:var(--paper);color:var(--paper-ink);
+  border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--paper-sh-sm);
+  text-align:left;font-family:var(--mono);font-size:13px;
+}
+.intake-pribor-oznaka,.intake-polje-oznaka,.intake-kartoteka-oznaka{
   font-size:var(--fs-mono-label);letter-spacing:.08em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--desk-ink) 74%,var(--desk));
+  color:var(--paper-muted);
 }
 .intake-polje{display:grid;gap:6px}
 .intake-polje-red{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
-.intake-fakultet{flex:1 1 160px;min-width:0;padding:12px 0;border-bottom:1px solid var(--desk-line);overflow-wrap:anywhere}
+.intake-fakultet{flex:1 1 160px;min-width:0;padding:8px 0;overflow-wrap:anywhere;color:var(--paper-ink)}
 /* Bez predodabira kartica ne tvrdi fakultet nego kaze da ce biti prepoznat iz rada: isti redak,
    prigusen ton oznake, pa se ne cita kao odabrana vrijednost. */
-.intake-napomena{color:color-mix(in srgb,var(--desk-ink) 74%,var(--desk));font-size:13px;line-height:1.5}
+.intake-napomena{color:var(--paper-muted);font-size:13px;line-height:1.5}
 .intake-potvrdi{
   min-height:44px;padding:0 14px;border:1.5px solid var(--red);border-radius:2px;
   background:var(--red);color:var(--on-red,#fff);font:inherit;font-size:12px;cursor:pointer;
 }
-.intake-potvrdi[aria-pressed="true"]{background:transparent;border-color:var(--pass);color:var(--desk-ink)}
+.intake-potvrdi[aria-pressed="true"]{background:transparent;border-color:var(--paper-line);color:var(--paper-ink)}
 .intake-potvrdi:disabled{opacity:.5;cursor:not-allowed}
-.intake-promijeni{justify-self:start;font-size:13px;color:color-mix(in srgb,var(--desk-ink) 78%,var(--desk));text-underline-offset:3px}
+.intake-promijeni{justify-self:start;font-size:13px;color:var(--paper-ink);text-underline-offset:3px}
 .intake-promijeni:hover,.intake-promijeni:focus-visible{color:var(--brand)}
 .intake-rok{
   flex:1 1 150px;min-width:0;min-height:44px;padding:0 4px;
   border:0;border-bottom:1px solid var(--desk-line);border-radius:0;background:transparent;
   color:inherit;font:inherit;
 }
-.intake-rok:disabled{opacity:.5}
-.intake-kvacica{display:flex;align-items:center;gap:8px;min-height:44px;font-size:12px;cursor:pointer}
-.intake-kvacica input{width:16px;height:16px;accent-color:var(--red)}
+.intake-rok-ukloni{min-height:40px;padding:0 10px;border:1px solid var(--paper-line);border-radius:2px;background:transparent;color:var(--paper-ink);font:inherit;font-size:11px;cursor:pointer}
+.intake-rok-ukloni:hover,.intake-rok-ukloni:focus-visible{border-color:var(--red)}
+.intake-rok-sazetak{margin:14px 0 0;color:var(--paper-ink);font-family:var(--display-serif);font-size:26px;line-height:1.05;--emph-weight:400;--emph-style:italic}
+.intake-rok-napomena{margin:8px 0 0;color:var(--paper-muted);font-family:var(--ui);font-size:12px;line-height:1.5}
+.intake-kartoteka-naslov{display:grid;gap:6px;padding:16px 18px 10px}
+.intake-kartoteka-profil{display:grid;gap:2px;min-width:0}
+.intake-kartoteka-tabs{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--paper-line)}
+.intake-kartoteka-tabs [role="tab"]{position:relative;top:1px;min-height:40px;padding:8px 10px;border:1px solid transparent;border-bottom:0;border-radius:2px 2px 0 0;background:transparent;color:var(--paper-muted);font:inherit;font-size:12px;cursor:pointer}
+.intake-kartoteka-tabs [role="tab"][aria-selected="true"]{border-color:var(--paper-line);background:var(--paper);color:var(--paper-ink)}
+.intake-kartoteka-tabs [role="tab"][aria-selected="true"]::after{content:"";position:absolute;top:0;left:10px;right:10px;height:2px;background:var(--red)}
+.intake-kartoteka-panel{min-height:142px;padding:14px 18px 18px;background:repeating-linear-gradient(to bottom,var(--paper) 0 27px,color-mix(in srgb,var(--paper-line) 68%,transparent) 27px 28px)}
+.intake-kartoteka-panel[hidden]{display:none}
+.intake-kartoteka-panel p{margin:9px 0 12px;max-width:34ch;color:var(--paper-ink);font-family:var(--display-serif);font-size:17px;line-height:1.45;--emph-weight:400;--emph-style:italic}
+.intake-kartoteka-panel a{display:inline-flex;gap:6px;align-items:center;color:var(--red-on-soft);font:600 12px/1.4 var(--ui);text-underline-offset:3px}
+.intake-kartoteka-panel a:hover,.intake-kartoteka-panel a:focus-visible{color:var(--red)}
 
+@media (max-width:1179px){
+  .intake-stol{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .intake-stol>.intake-desk{grid-column:1/-1;grid-row:1}
+  .intake-deadline{grid-column:1;grid-row:2}
+  .intake-stol>.intake-pribor{grid-column:2;grid-row:2}
+}
 @media (max-width:900px){
-  /* Ispod 900 px pribor pada ISPOD lista (Z32 tocka 2), iste sirine kao list. */
-  .intake-stol{grid-template-columns:minmax(0,700px)}
+  .intake-stol{grid-template-columns:minmax(0,1fr)}
   .intake-deadline{grid-column:1;grid-row:1}
   .intake-stol>.intake-desk{grid-column:1;grid-row:2}
   .intake-stol>.intake-pribor{grid-column:1;grid-row:3}
-  .intake-pribor{transform:none;margin-top:8px}
+}
+@media (max-width:680px){
+  .intake-shell{width:min(100% - 24px,560px)}
+  .intake-stol{grid-template-columns:minmax(0,1fr);gap:12px}
+  .intake-deadline{grid-column:1;grid-row:1}
+  .intake-stol>.intake-desk{grid-column:1;grid-row:2}
+  .intake-stol>.intake-pribor{grid-column:1;grid-row:3}
 }
 
 /* --- stanja ------------------------------------------------------------------------------- */
@@ -492,7 +489,7 @@
   /* Velicina naslova se vise NE prepisuje: `clamp(40px,7vw,120px)` na 375 px vec daje 40 px.
      Ostaje samo mjera retka, da naslov ostane u dva reda. */
   .intake-title{max-width:14ch}
-  .intake-paper{border-radius:5px}
+  .intake-paper{border-radius:2px}
   .intake-paper::before,.intake-paper::after{display:none}
   /* PECAT OSTAJE I NA USKOM EKRANU. Dok je bio apsolutan, ovdje je morao nestati jer je papir uzi
      od pecata plus teksta ispod njega, pa bi prekrio necije slovo. U toku mu raspored rezervira
@@ -503,12 +500,11 @@
 @media (prefers-reduced-motion:reduce){
   .intake-paper,.intake-cta{transition:none}
   .intake-paper:hover,.intake-paper:has(.intake-paper__gumb:focus-visible),.intake-paper.is-dragging,
-  .intake-stage.intake-leaving .intake-paper{transform:rotate(-.35deg)}
+  .intake-stage.intake-leaving .intake-paper{transform:translateY(0)}
   .intake-paper:hover .intake-cta,
   .intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{transform:none}
-  /* Z32: nema tragova, list se ne podize, linija skeniranja stoji, margina se mijenja odmah. */
-  .intake-tragovi{display:none}
-  .intake-paper.is-podignut{transform:rotate(-.35deg)}
+  /* Smanjeni pokret ostavlja list i pribor mirnima; linija skeniranja stoji. */
+  .intake-paper.is-podignut{transform:translateY(0)}
   .intake-sken i,.intake-lead{animation:none;transition:none}
   .intake-promo__krug{transition:none}
   .intake-promo__play:hover .intake-promo__krug,.intake-promo__play:focus-visible .intake-promo__krug{transform:none}
