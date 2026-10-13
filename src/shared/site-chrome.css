@@ -571,7 +571,7 @@ body:has(.site-command-dialog[open]) { overflow: hidden; }
    U debelom stanju su pilula i stepper u DVA reda, pa natpisi padaju tek kad sam stepper ne stane
    (sredina ispod 377px, npr. 270px na 960px). */
 @media (min-width: 721px) {
-  @container site-chrome-mid (max-width: 599px) {
+  @container site-chrome-mid (max-width: 530px) {
     /* Na 1180px stvarni debeli prikaz ima sredinu 525,4px, a cetiri oznacena koraka 530px.
        Jedan piksel manje sa svake strane svake oznake cuva tekst i pristupacno ime, a stane u sredinu. */
     .site-chrome:not(.site-chrome--scrolled) .site-chrome__step { padding-inline: 9px; }
