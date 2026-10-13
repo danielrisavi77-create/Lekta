@@ -133,6 +133,7 @@
     "lint": "oxlint",
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
     "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
+    "review:repair-free-limits": "node scripts/review-repair-free-limits.mjs",
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
     "audit:lockfile": "node scripts/lockfile-sources.mjs",
     "audit:osv": "node scripts/osv-query.mjs",
