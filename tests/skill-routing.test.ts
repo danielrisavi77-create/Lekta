@@ -101,6 +101,8 @@ describe('skill-routing: skup upita u repou', () => {
   });
 
   it('svaki skill u .claude/skills ima SKILL.md (inace ga mjerenje ne vidi)', () => {
-    for (const s of skillovi) expect(readFileSync(join(resolve('.claude/skills'), s, 'SKILL.md'), 'utf8')).toMatch(/^---\nname:/);
+    for (const s of skillovi) {
+      expect(readFileSync(join(resolve('.claude/skills'), s, 'SKILL.md'), 'utf8').replace(/\r\n/g, '\n')).toMatch(/^---\nname:/);
+    }
   });
 });

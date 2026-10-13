@@ -17,7 +17,8 @@ describe('lint-feedback: opseg', () => {
     expect(uOpsegu('docs/x.ts')).toBe(false);
     expect(uOpsegu('data/profiles/a.json')).toBe(false);
     expect(uOpsegu('.claude/workflows/lekta-lean.js')).toBe(false);
-    expect(uOpsegu('tests/fixtures/x/a.js')).toBe(false);
+    // `.oxlintrc.json` ne ignorira tests/fixtures, pa ih lintaju i `npm run lint` i build-gate (Grok nit na #366).
+    expect(uOpsegu('tests/fixtures/x/a.js')).toBe(true);
     expect(uOpsegu('src/styles/app.css')).toBe(false);
     expect(uOpsegu(null)).toBe(false);
   });
@@ -46,6 +47,13 @@ describe('lint-feedback: presuda', () => {
   it('timeout ili greska pokretanja je fail-open', () => {
     expect(judgeLint('src/a.ts', { status: null }).prijavi).toBe(false);
     expect(judgeLint('src/a.ts', { status: 1, error: new Error('ENOENT') }).prijavi).toBe(false);
+  });
+
+  it('neuspjeh bez ijednog retka nalaza je kvar alata, fail-open s razlogom', () => {
+    const r = judgeLint('src/a.ts', { status: 1, stdout: '', stderr: "'C:\\Program' is not recognized\nvise" });
+    expect(r.prijavi).toBe(false);
+    expect(r.poruka).toContain("'C:\\Program' is not recognized");
+    expect(r.poruka).not.toContain('vise');
   });
 });
 

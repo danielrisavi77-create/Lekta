@@ -7,12 +7,13 @@
  * mora popraviti; izlaz 0 znaci cisto ili izvan opsega. Samo oxlint (Rust, desetinke sekunde po datoteci);
  * `tsc` nad cijelim projektom je tezak posao i ide kroz `with-gate-lock`, ne kroz hook na svaki zapis.
  *
- * Opseg: JS/TS izvor izvan putanja koje `.oxlintrc.json` ignorira (`data/`, `docs/`, `public/`, `.claude/`,
- * `dist/`, `visual-system-v2/`) i izvan `tests/fixtures/`. Pravila i ignore i dalje cita sam oxlint iz
- * `.oxlintrc.json`, pa hook i `npm run lint` ne mogu razilaziti u presudi nad istom datotekom.
+ * Opseg: JS/TS izvor izvan putanja koje `.oxlintrc.json` ignorira (`node_modules/`, `dist/`, `dist-packs/`,
+ * `data/`, `docs/`, `public/`, `.claude/`, `visual-system-v2/`), dakle isti skup koji lintaju `npm run lint` i
+ * build-gate. Pravila i ignore i dalje cita sam oxlint iz `.oxlintrc.json`, pa hook i `npm run lint` ne mogu
+ * razilaziti u presudi nad istom datotekom.
  *
- * FAIL-OPEN kao ostali hookovi: bez `node_modules` (npr. svjez clone), na timeout ili vlastitu gresku
- * hook sutke propusta, uz kratku napomenu na stderr.
+ * FAIL-OPEN kao ostali hookovi: bez `node_modules` (npr. svjez clone), na timeout, vlastitu gresku ili
+ * neuspjeh oxlinta bez ijednog retka nalaza (kvar alata, ne nalaz) hook propusta, uz kratku napomenu na stderr.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -21,7 +22,7 @@ import { hookFilePath, readHookInput } from './hook-input.mjs';
 
 const EKSTENZIJE = /\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/;
 const IZVAN_OPSEGA = [/^node_modules\//, /^dist\//, /^dist-packs\//, /^data\//, /^docs\//, /^public\//,
-  /^\.claude\//, /^visual-system-v2\//, /^tests\/fixtures\//];
+  /^\.claude\//, /^visual-system-v2\//];
 /** Najvise redaka nalaza koje hook vraca modelu; ostatak se sazima u jedan redak. */
 const MAX_REDAKA = 40;
 const TIMEOUT_MS = 20_000;
@@ -45,7 +46,11 @@ export function judgeLint(rel, ishod) {
   const retci = String(ishod.stdout ?? '').replace(/\r\n/g, '\n').split('\n').filter((r) => r.trim() !== '');
   const prikaz = retci.slice(0, MAX_REDAKA);
   if (retci.length > MAX_REDAKA) prikaz.push(`... jos ${retci.length - MAX_REDAKA} redaka`);
-  if (prikaz.length === 0) prikaz.push(String(ishod.stderr ?? '').trim() || `oxlint izlaz ${ishod.status}`);
+  if (prikaz.length === 0) {
+    // Neuspjeh bez ijednog retka nalaza je kvar pokretanja (putanja, konfiguracija), ne lint greska.
+    const razlog = String(ishod.stderr ?? '').trim().split('\n')[0] || `izlaz ${ishod.status}`;
+    return { prijavi: false, poruka: `lint-feedback: oxlint nije dao nalaz za ${rel} (${razlog}), propustam (fail-open).` };
+  }
   return {
     prijavi: true,
     poruka: `lint-feedback: oxlint nalazi greske u ${rel} (isto pravilo kao build-gate). Popravi ih prije sljedeceg koraka:\n`
@@ -71,8 +76,10 @@ async function main() {
     if (!uOpsegu(rel)) process.exit(0);
     const bin = oxlintBin(root);
     if (!bin) process.exit(0);
-    const ishod = spawnSync(bin, ['--format', 'unix', rel], {
-      cwd: root, encoding: 'utf8', timeout: TIMEOUT_MS, shell: process.platform === 'win32',
+    // Na Windowsu je `.cmd` omotac i trazi shell; shell spaja argumente, pa putanje s razmakom idu u navodnicima.
+    const win = process.platform === 'win32';
+    const ishod = spawnSync(win ? `"${bin}"` : bin, ['--format', 'unix', win ? `"${rel}"` : rel], {
+      cwd: root, encoding: 'utf8', timeout: TIMEOUT_MS, shell: win,
     });
     presuda = judgeLint(rel, ishod);
   } catch (err) {
