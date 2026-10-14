@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+import { klikniBezSkrolUtrke } from './stabilan-skrol';
 
 /**
  * STOL Z34 (rezultat sve u jednom): zajednicki koraci za specove koji kroz rezultat idu u plan.
@@ -30,7 +31,7 @@ export async function sljedecaKartica(page: Page): Promise<boolean> {
   const prije = await brojac.textContent();
   const dalje = kokpit.locator('[data-rl-card] .desk-nav__btn--next');
   if (await dalje.isDisabled()) return false;
-  await dalje.click();
+  await klikniBezSkrolUtrke(page, dalje);
   await expect(brojac).not.toHaveText(prije ?? '');
   return true;
 }
