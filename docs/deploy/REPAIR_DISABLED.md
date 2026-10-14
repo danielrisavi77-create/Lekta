@@ -19,7 +19,7 @@ Supabase navodi da se novi Edge Function secret može koristiti bez redeploya, a
 
 1. Nakon što vlasnik potvrdi da je uzrok otklonjen, ukloni REPAIR_DISABLED iz istog produkcijskog projekta:
 
-    npx supabase secrets unset REPAIR_DISABLED --project-ref $ProductionProjectRef
+    npx supabase secrets unset REPAIR_DISABLED --project-ref '<provjereni-produkcijski-project-ref>'
 
    U nadzornoj ploči ukloni taj secret ako se postupak vodi kroz UI.
 2. Ponovi istu sondu. Povijesni staging dokaz vratio je HTTP 401 unauthorized kad je zastavica uklonjena, što znači da je zahtjev stigao do provjere prijave. Ne tumači sam HTTP 401 kao dokaz da popravak radi za prijavljene korisnike.
