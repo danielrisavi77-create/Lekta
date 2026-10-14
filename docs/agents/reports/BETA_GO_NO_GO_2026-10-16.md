@@ -31,6 +31,23 @@ Netlify Deploy Preview i GitHub status presjek provjereni su 14. listopada oko 0
 U sva tri detaljna Netlify loga `vite build` i generiranje artefakata završavaju, a `dist/build-info.json` odgovara SHA-u koji se gradi. Zatim `node scripts/verify-deploy-dist.mjs` odbija zastarjeli `RELEASE_PROOF.json`, pečen na `9eaefcf46648`, jer se stablo razlikuje od kandidata. Logovi prikazuju `projections: fail` i `extraction: unavailable (missing-env:LEKTA_STAGING_ORIGIN)` kao neizmjerene razine, ne kao prolaze; korak `Deploying` je preskočen, pa nijedan preview nije objavljen. Četiri Netlify statusa na PR-ovima #367 i #369, odnosno četiri od pet na #368, vode na taj isti neuspjeli deploy i nisu četiri zasebna kvara aplikacije. Ovo je odvojeno od produkcijskog smoke incidenta 13. listopada, kada je uspješna objava bila pogrešno označena zbog prolazne mrežne pogreške.
 
 Brojevi provjera pripadaju navedenim SHA-ovima i vremenu presjeka; nova izmjena PR-a pokreće nove provjere. `db-smoke` na #368 ostaje neriješena crvena provjera premda log upućuje na ograničenje image registryja, a tri navedena posla tada još su trajala. Preview statusi ne dokazuju je li Netlify Git auto-publish postavka zaključana niti potvrđuju produkcijsku objavu.
+
+## Dopunski presjek — 14. listopada, 06:56 CEST
+
+Ovaj presjek zamjenjuje ranije stanje za odluku o trenutačnim glavama; prethodna tablica ostaje povijesna snimka u 05:59 CEST.
+
+| PR | Trenutačni SHA | Netlify Deploy Preview | GitHub provjere |
+| --- | --- | --- | --- |
+| #367 | `d38639a504896cd9035750cc506abf24e3f2e0f1` | [Deploy](https://app.netlify.com/projects/lektahr/deploys/6acefeeec4232518b5fb8467) — `error` | 30 uspješnih, 4 neuspješne, 2 preskočene, 0 u tijeku. |
+| #368 | `f6a3acc875e9aa91f49f0f714ce44950de1e5e39` | [Deploy](https://app.netlify.com/projects/lektahr/deploys/6acf06b20a72e93282763c33) — `error` | 30 uspješnih, 4 neuspješne, 2 preskočene, 0 u tijeku. |
+| #369 | `6351bc928c5772ee7f1fe5c8d43b2dfe0146510f` | [Deploy](https://app.netlify.com/projects/lektahr/deploys/6ace6a3c186b7c2b0fcbe418) — `error` | 30 uspješnih, 4 neuspješne, 2 preskočene, 0 u tijeku. |
+
+Četiri crvene provjere na svakom PR-u jesu Netlify Deploy Preview, Header rules, Pages changed i Redirect rules; svaka skupina pokazuje na odgovarajući neuspjeli deploy. Netlifyjev zapis za sva tri deploya kaže `Failed during stage 'building site': Build script returned non-zero exit code: 2`, s `published_at=null`; nijedan preview nije objavljen. `netlify.toml` globalno postavlja `LEKTA_REQUIRE_RELEASE_PROOF=1`, a `scripts/build-production.mjs` zadnje pokreće `verify-deploy-dist`. Trenutačni zapisi ne otkrivaju pojedinačni korak koji je vratio kod 2. To je u skladu s ranijim detaljnim logovima, gdje je ista provjera odbila dokaz vezan uz drugo stablo, ali se taj točan uzrok ne tvrdi za ove nove deploy ID-jeve bez njihovih punih logova.
+
+Na trenutačnom SHA-u PR-a #368 lokalno prolaze ciljani test Kazala na desktopu i mobitelu (2/2), `npm run orphan-scan`, `npm run lint` i `npx tsc --noEmit`; svi GitHub gateovi osim četiri Netlify provjere prolaze. `pr-intake` potvrđuje bazu `master` na `f758ba2b` i nema zaštićenih staza, ali označava da se opis PR-a ne slaže s diffom: 39 datoteka, `+1328/-435` prema PR opisu `+239/-13`. Nezavisni pregled drugog providera još nije zabilježen. PR #368 ostaje draft; opis i neovisni pregled moraju se riješiti prije nego vlasnik odluči o spajanju.
+
+Svi PR-ovi su draftovi. Netlify preview pad nije dokaz produkcijskog pada niti potvrda da je automatska objava zaključana. Vlasnikova granica bez spajanja i objave ostaje nepromijenjena.
+
 Turnstile se ne smije uključiti na Supabase Authu dok vlasnik ne postavi production site key, objavi build i javni `build-info.json` ne potvrdi `captchaSiteKey=true`.
 
 Nakon vlasnikova odabira i spajanja paketa — prema operativnom planu 16. listopada, uz nerazriješen Linearov rok 19. listopada — vlasnik radi jedan novi puni dokaz nad točnim čistim kandidatom, zatim najviše jednu produkcijsku objavu. Svaka naknadna izmjena traži novi dokaz prije objave.
