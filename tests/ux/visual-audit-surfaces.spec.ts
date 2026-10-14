@@ -19,7 +19,7 @@ test('audit: glavni odabir rada stane prije neobaveznog roka na malom mobitelu',
   await expect(page.locator('[data-intake-deadline-summary]')).toHaveText(/do roka/);
   await page.locator('[data-intake-rok-clear]').click();
   await expect(date).toHaveValue('');
-  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('— dana do roka');
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('Rok još nije unesen');
   await page.goto('/alati.html');
   await page.locator('#mobileMenuBtn').click();
   await page.locator('[data-display-open]:visible').click();
@@ -53,4 +53,15 @@ test('audit: prazni alati ostaju nacrti nakon ucitavanja fakulteta', async ({ pa
   await expect(page.locator('#tp-success-cta')).toBeHidden();
   await page.locator('#tp-sheet').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('title-empty-mobile.png') });
+});
+
+test('audit: tekst kartice profila ostaje čitljiv na desktopu', async ({ page }, info) => {
+  test.skip(info.project.name === 'mobile-chromium');
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
+  const panel = page.locator('#intakePanelPravila');
+  await expect(panel).toBeVisible();
+  expect(await panel.evaluate((el) => getComputedStyle(el).backgroundImage)).toBe('none');
+  await page.screenshot({ path: info.outputPath('intake-profile-desktop.png') });
 });

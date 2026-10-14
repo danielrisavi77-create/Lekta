@@ -110,7 +110,7 @@ test('Z32: CTA je otvoren odmah, a rok i profil ostaju neobavezni', async ({ pag
   // Rok se i dalje moze dodati bez utjecaja na dostupnost uploada.
   await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
   await expect(page.locator('[data-intake-rok-pecat]')).toBeHidden();
-  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('— dana do roka');
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('Rok još nije unesen');
 
   // Dodir ili klik lista otvara odabir datoteke odmah.
   const odabir = page.waitForEvent('filechooser');

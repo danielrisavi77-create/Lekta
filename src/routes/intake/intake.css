@@ -442,7 +442,7 @@
 .intake-kartoteka-tabs [role="tab"]{position:relative;top:1px;min-height:40px;padding:8px 10px;border:1px solid transparent;border-bottom:0;border-radius:2px 2px 0 0;background:transparent;color:var(--paper-muted);font:inherit;font-size:12px;cursor:pointer}
 .intake-kartoteka-tabs [role="tab"][aria-selected="true"]{border-color:var(--paper-line);background:var(--paper);color:var(--paper-ink)}
 .intake-kartoteka-tabs [role="tab"][aria-selected="true"]::after{content:"";position:absolute;top:0;left:10px;right:10px;height:2px;background:var(--red)}
-.intake-kartoteka-panel{min-height:142px;padding:14px 18px 18px;background:repeating-linear-gradient(to bottom,var(--paper) 0 27px,color-mix(in srgb,var(--paper-line) 68%,transparent) 27px 28px)}
+.intake-kartoteka-panel{min-height:142px;padding:14px 18px 18px;background:var(--paper)}
 .intake-kartoteka-panel[hidden]{display:none}
 .intake-kartoteka-panel p{margin:9px 0 12px;max-width:34ch;color:var(--paper-ink);font-family:var(--display-serif);font-size:17px;line-height:1.45;--emph-weight:400;--emph-style:italic}
 .intake-kartoteka-panel a{display:inline-flex;gap:6px;align-items:center;color:var(--red-on-soft);font:600 12px/1.4 var(--ui);text-underline-offset:3px}

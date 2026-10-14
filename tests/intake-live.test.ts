@@ -977,7 +977,7 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(rokPecat().hidden).toBe(true);
 
     // Rok se moze dodati i ukloniti, ali ne mijenja spremnost ulaza.
-    expect(sazetakRoka().textContent).toBe('— dana do roka');
+    expect(sazetakRoka().textContent).toBe('Rok još nije unesen');
     rokPolje().value = '2026-10-15';
     rokPolje().dispatchEvent(new Event('change'));
     expect(live.canAccept()).toBe(true);
@@ -987,7 +987,7 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(ukloniRok().hidden).toBe(false);
     expect(rokPolje().disabled).toBe(false);
     ukloniRok().click();
-    expect(sazetakRoka().textContent).toBe('— dana do roka');
+    expect(sazetakRoka().textContent).toBe('Rok još nije unesen');
     expect(ukloniRok().hidden).toBe(true);
     expect(procitajIzborUlaza().rok).toEqual({ datum: null, neznam: false });
     expect(rokPecat().hidden).toBe(true);

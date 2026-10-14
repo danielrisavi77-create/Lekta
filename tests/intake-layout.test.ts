@@ -651,7 +651,7 @@ describe('Z7 a11y: zaglavlje, kicker, naslov, uvod i podnozje nisu u gumbu', () 
     // proza na ekranu i ne smije zavrsiti ni u gumbu ni pod aria-hidden.
     'Prije predaje',
     'Rok predaje',
-    '— dana do roka',
+    'Rok još nije unesen',
     'CITAT I LITERATURA',
     'Dokument ostaje na uređaju',
     'Provjeravamo formu, ne sadržaj',

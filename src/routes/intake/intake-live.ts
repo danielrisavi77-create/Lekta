@@ -199,7 +199,7 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     if (sazetakRoka) {
       const dana = rok.datum ? danaDoRoka(rok.datum, danas()) : null;
       sazetakRoka.textContent = dana === null
-        ? '— dana do roka'
+        ? 'Rok još nije unesen'
         : dana < 0
           ? `Rok je prošao prije ${daniRijecju(Math.abs(dana))}`
           : dana === 0 ? 'Rok je danas' : `${daniRijecju(dana)} do roka`;
