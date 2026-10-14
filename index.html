@@ -79,22 +79,10 @@
 <main id="top" class="intake-main">
 <section class="intake-stage" id="intakeStage" data-intake-state="idle" aria-labelledby="intakeTitle">
   <div class="intake-shell">
-    <!-- ZIVI LIST, VARIJANTA B (ALIGNMENT Z32). Fakultet i rok su PRIBOR NA STOLU uz list, ne polja
-         na listu: desno od lista, a ispod 900 px ispod njega. Copy lista (naslov, podnaslov,
-         podnozje) ostaje iz Z7; tri koraka Z7 su otisla s rasporedom koji je Z32 zamijenio
-         (predlozak B ih nema), a obecanje o uredjaju nose podnozje lista i redak ispod njega. -->
+    <!-- ZIVI LIST, VARIJANTA B (ALIGNMENT Z32). Fakultet i rok su neobavezni pribor uz list.
+         Na mobitelu se glavni odabir rada prikazuje prije pribora kako primarna radnja stane na
+         prvi zaslon. Copy lista i postojece putanje ostaju nepromijenjeni. -->
     <div class="intake-stol">
-    <section class="intake-deadline">
-      <div class="intake-polje">
-        <label class="intake-polje-oznaka" id="intakeRokNaslov" for="intakeRok">Rok predaje · neobavezno</label>
-        <div class="intake-polje-red">
-          <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
-          <button class="intake-rok-ukloni" type="button" data-intake-rok-clear hidden>Ukloni rok</button>
-        </div>
-        <p class="intake-rok-sazetak" data-intake-deadline-summary aria-live="polite">— dana do roka</p>
-        <p class="intake-rok-napomena">Uz rok nalaz može pokazati koliko dana imaš za popravak.</p>
-      </div>
-    </section>
     <div class="intake-desk" id="paperCover">
       <!-- PAPIR JE PLOHA, GUMB JE UNUTAR NJEGA (pregled Z7): uloga `button` bi sve potomke ucinila
            prezentacijskima, pa je na unutarnjem `.intake-paper__gumb`. Klik i ispustanje hvata
@@ -140,6 +128,18 @@
       </div>
       <input class="intake-file-input" id="intakeFile" type="file" tabindex="-1" aria-hidden="true" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
     </div>
+
+    <section class="intake-deadline">
+      <div class="intake-polje">
+        <label class="intake-polje-oznaka" id="intakeRokNaslov" for="intakeRok">Rok predaje · neobavezno</label>
+        <div class="intake-polje-red">
+          <input class="intake-rok" id="intakeRok" type="date" data-intake-rok>
+          <button class="intake-rok-ukloni" type="button" data-intake-rok-clear hidden>Ukloni rok</button>
+        </div>
+        <p class="intake-rok-sazetak" data-intake-deadline-summary aria-live="polite">— dana do roka</p>
+        <p class="intake-rok-napomena">Uz rok nalaz može pokazati koliko dana imaš za popravak.</p>
+      </div>
+    </section>
 
     <!-- PRIBOR UZ LIST (Z32 tocka 2). Kartica fakulteta cita ISTI izvor kao plocica u traci
          (`lekta.preferences.v2` i `data/coverage/unit-kratice.json`), uz izricit `?unit=` link

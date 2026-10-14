@@ -1,15 +1,18 @@
 import { expect, test } from '@playwright/test';
 
-test('audit: opcionalni rok i citljive postavke na mobitelu', async ({ page }, info) => {
+test('audit: glavni odabir rada stane prije neobaveznog roka na malom mobitelu', async ({ page }, info) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
   const date = page.locator('#intakeRok');
+  const rok = page.locator('.intake-deadline');
   const upload = page.locator('.intake-paper__gumb');
   await expect(date).toBeVisible();
-  const a = await date.boundingBox(), b = await upload.boundingBox();
-  expect(a!.y + a!.height).toBeLessThan(b!.y);
+  const a = await rok.boundingBox(), b = await upload.boundingBox();
+  const height = await page.evaluate(() => window.innerHeight);
+  expect(b!.y + b!.height).toBeLessThanOrEqual(height);
+  expect(b!.y + b!.height).toBeLessThan(a!.y);
   await page.screenshot({ path: info.outputPath('intake-deadline-mobile.png') });
   await date.fill('2026-10-15');
   await expect(upload).toHaveAttribute('aria-disabled', 'false');
