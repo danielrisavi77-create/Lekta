@@ -1,0 +1,1552 @@
+{
+  "checkedAtUtc": "2026-10-14T03:42:32.781Z",
+  "timezone": "Europe/Zagreb (UTC+02:00)",
+  "scope": {
+    "origin": "https://lekta.hr",
+    "routes": [
+      "/",
+      "/rad/",
+      "/moji-radovi/",
+      "/saznaj-vise/",
+      "/alati",
+      "/citat",
+      "/kartice",
+      "/naslovnica",
+      "/literatura",
+      "/izjava",
+      "/fakulteti/",
+      "/pokrivenost",
+      "/fpzg/diplomski-rad/",
+      "/privatnost",
+      "/uvjeti-koristenja",
+      "/obrada-dokumenata",
+      "/kolacici",
+      "/garancija",
+      "/pravila-povrata",
+      "/odricanje-od-odgovornosti"
+    ],
+    "extraction": "href values from HTML anchor elements on the 20 routes; relative URLs resolved against origin; fragments removed; HTTP(S) URLs on lekta.hr and subdomains retained; unique URLs only",
+    "requests": {
+      "rootPages": 20,
+      "internalAnchors": 281,
+      "redirects": "manual; not followed",
+      "concurrency": 10
+    }
+  },
+  "summary": {
+    "rootPagesHttp200": 20,
+    "uniqueInternalAnchors": 281,
+    "successfulInternalAnchors": 281,
+    "failedOrRedirectedRootPages": 0,
+    "failedOrRedirectedInternalAnchors": 0
+  },
+  "rootPages": [
+    {
+      "url": "https://lekta.hr/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/moji-radovi/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/saznaj-vise/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/citat",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kartice",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/naslovnica",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/literatura",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/izjava",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fakulteti/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pokrivenost",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/privatnost",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/uvjeti-koristenja",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/obrada-dokumenata",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kolacici",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/garancija",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravila-povrata",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/odricanje-od-odgovornosti",
+      "status": 200,
+      "location": null
+    }
+  ],
+  "internalAnchors": [
+    {
+      "url": "https://lekta.hr/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=cps",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=fbf",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=fpzg&amp;utm_source=faculty_page&amp;utm_medium=organic&amp;utm_campaign=fpzg_graduate",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=rit",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=tvz",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?unit=vern",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?utm_source=alat_citat&utm_medium=organic&utm_campaign=free_tool",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?utm_source=alat_izjava&utm_medium=organic&utm_campaign=free_tool",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?utm_source=alat_kartice&utm_medium=organic&utm_campaign=free_tool",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?utm_source=alat_literatura&utm_medium=organic&utm_campaign=free_tool",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/?utm_source=alat_naslovnica&utm_medium=organic&utm_campaign=free_tool",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/adu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/agr/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/agr/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/agromed/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati/brojac-kartica",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati/citati/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati/citati/fpzg",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alati/naslovnica/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/algebra/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/algebra/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/alu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/apuri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/apuri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/arca/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/arh/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/aspira/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/aspira/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/bak/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/bak/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/biolos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/biolos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/biotech/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/biotech/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/btho/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/btho/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/citat",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/citati-i-literatura",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/effectus/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/effectus/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/effectus/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efos/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efst/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efzg/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/efzg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/erf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/evtos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/evtos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fakulteti/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fazos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fazos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fdmri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fdmri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fdmz/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fer/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fer/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ferit/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ferit/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fesb/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fesb/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fetpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fetpu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffpu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffrz/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffrz/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ffzg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fgag/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fgag/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fhs/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fhs/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fipu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fipu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fizos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fizri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fizri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fkit/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fkit/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fmtu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fmtu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/foi/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/foi/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/foozos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/foozpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/foozpu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/forenzika/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpz/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpz/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzg/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fpzpu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fsb/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fsb/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fsb/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ftrr/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ftrr/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fzsri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/fzsri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/garancija",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/geof/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/geof/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/geoteh/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/geoteh/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grad/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grad/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/gradri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/gradri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grafos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grafos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/grf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/hig/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/hks/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/inf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/inf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/iv/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/iv/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/izjava",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kartice",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kbf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kbf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kbfdj/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kbfst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kemos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kemos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kif/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kifos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kifos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kifst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/kolacici",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ktfst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ktfst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/libertas/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/libertas/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/literatura",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/logri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mapu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mapu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/matematika/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/matematika/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mathos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mathos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/medri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mef/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mefos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mefos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mefst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mev/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mev/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mfpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/moji-radovi/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/more/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/more/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/muza/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mvi/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/mvi/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/naslovnica",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/naslovnica?fakultet=fpzg&amp;razina=diplomski",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/obrada-dokumenata",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/odhz/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/odhz/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/odricanje-od-odgovornosti",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/oss/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/oss/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ozs/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ozs/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/par/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/par/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pbf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pfri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pfri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pfst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pfst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pmf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pmf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pmfst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pmfst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pokrivenost",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravila-povrata",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravo/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravo/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravo/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravri/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravst/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pravst/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/privatnost",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ptfos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pvzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/pvzg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/rgnf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/rgnf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/riteh/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/riteh/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/rrif/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/saznaj-vise/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/securus/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sfsb/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sfsb/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sfzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/simet/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sois-ft/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sois-ft/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sumfak/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/sumfak/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/teho/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/teho/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/tfpu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/tfpu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ttf/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ttf/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/uaos/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/uaos/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ufri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ufzg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/ufzg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/umas/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/umas/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unidu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unidu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unin/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unin/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unizd/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/unizd/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/uvjeti-koristenja",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vef/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/veleknin/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/veleknin/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/veleri/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/veleri/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vevu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vevu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vguk/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vguk/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vhzk/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vkjs/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vkjs/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vnt/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vnt/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vsig/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vsig/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vsite/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vsite/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vss/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vss/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vub/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vub/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vuka/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vuka/seminarski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vuka/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vus/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vus/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vuv/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vuv/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vvg/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/vvg/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/zsem/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/zsem/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/zvu/diplomski-rad/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://lekta.hr/zvu/zavrsni-rad/",
+      "status": 200,
+      "location": null
+    }
+  ]
+}
