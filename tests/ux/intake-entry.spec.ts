@@ -166,6 +166,18 @@ test('Z32: ispustanje bilo gdje upisuje ime u zaglavlje, a pecat prolazi "Čeka 
   expect(zapis.potvrda).toMatchObject({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija });
 });
 
+test('prvi odabir profila ne pretpostavlja sveučilište', async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem('lekta.preferences.v2'));
+  await page.goto('/');
+  await page.locator('[data-site-chrome-profile]').click();
+
+  const dialog = page.locator('[data-site-profile-dialog]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('#siteProfileInstitution')).toHaveValue('');
+  await expect(dialog.locator('#siteProfileInstitution option').first()).toHaveText('Odaberi sveučilište');
+  await expect(dialog.locator('#siteProfileUnit')).toBeDisabled();
+  await expect(dialog.locator('#siteProfileUnit option').first()).toHaveText('Najprije odaberi sveučilište');
+});
 test('profil se može pronaći, odabrati i potvrditi iz kartice zaglavlja', async ({ page }) => {
   await page.goto('/');
   const okidac = page.locator('[data-site-chrome-profile]');

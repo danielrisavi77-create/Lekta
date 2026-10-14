@@ -92,26 +92,32 @@ export function openSiteProfileDrawer(
   const savedWorkType = text(saved.workType) || text(query.get('work'));
   let searchValue = '';
 
-  institution.replaceChildren(...institutions.map((item) => option(institution, item.id, item.name)));
+  institution.replaceChildren(
+    option(institution, '', 'Odaberi sveučilište'),
+    ...institutions.map((item) => option(institution, item.id, item.name)),
+  );
   const institutionForUnit = (unitId: string): string => institutions.find((item) => item.units.some((entry) => entry.id === unitId))?.id ?? '';
   const savedInstitution = text(saved.institution);
   institution.value = institutionForUnit(savedUnit)
-    || (institutions.some((item) => item.id === savedInstitution) ? savedInstitution : '')
-    || institutions[0]?.id || '';
+    || (institutions.some((item) => item.id === savedInstitution) ? savedInstitution : '');
 
-  const selectedInstitution = () => institutions.find((item) => item.id === institution.value) ?? institutions[0];
+  const selectedInstitution = () => institutions.find((item) => item.id === institution.value);
   const allVisibleUnits = () => {
+    const selected = selectedInstitution();
     const candidates = searchValue
       ? institutions.flatMap((owner) => owner.units.map((item) => ({ item, owner })))
-      : (selectedInstitution()?.units ?? []).map((item) => ({ item, owner: selectedInstitution()! }));
+      : selected ? selected.units.map((item) => ({ item, owner: selected })) : [];
     return candidates
       .filter(({ item, owner }) => !searchValue || normalizeSearch(`${item.name} ${item.id} ${owner.name}`).includes(searchValue))
       .sort((a, b) => a.item.name.localeCompare(b.item.name, 'hr') || a.owner.name.localeCompare(b.owner.name, 'hr'));
   };
-
   const fillUnits = (preferred = unit.value || savedUnit): void => {
     const visible = allVisibleUnits();
-    const placeholder = option(unit, '', visible.length ? 'Odaberi fakultet ili akademiju' : 'Nema rezultata');
+    let emptyLabel = 'Najprije odaberi sveučilište';
+    if (searchValue) emptyLabel = 'Nema rezultata';
+    else if (selectedInstitution()) emptyLabel = 'Nema dostupnih fakulteta';
+    if (visible.length) emptyLabel = 'Odaberi fakultet ili akademiju';
+    const placeholder = option(unit, '', emptyLabel);
     unit.replaceChildren(placeholder, ...visible.map(({ item, owner }) => option(unit, item.id, searchValue ? `${item.name} · ${owner.name}` : item.name)));
     unit.value = visible.some(({ item }) => item.id === preferred) ? preferred : '';
     unit.disabled = visible.length === 0;
