@@ -14,7 +14,12 @@ test('audit: glavni odabir rada stane prije neobaveznog roka na malom mobitelu',
   expect(b!.y + b!.height).toBeLessThanOrEqual(height);
   expect(b!.y + b!.height).toBeLessThan(a!.y);
   await page.screenshot({ path: info.outputPath('intake-deadline-mobile.png') });
-  await date.fill('2026-10-15');
+  const rokZaTriDana = await page.evaluate(() => {
+    const rok = new Date();
+    rok.setDate(rok.getDate() + 3);
+    return [rok.getFullYear(), String(rok.getMonth() + 1).padStart(2, '0'), String(rok.getDate()).padStart(2, '0')].join('-');
+  });
+  await date.fill(rokZaTriDana);
   await expect(upload).toHaveAttribute('aria-disabled', 'false');
   await expect(page.locator('[data-intake-deadline-summary]')).toHaveText(/do roka/);
   await page.locator('[data-intake-rok-clear]').click();
