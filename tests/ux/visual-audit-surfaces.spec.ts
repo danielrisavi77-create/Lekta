@@ -65,3 +65,33 @@ test('audit: tekst kartice profila ostaje čitljiv na desktopu', async ({ page }
   expect(await panel.evaluate((el) => getComputedStyle(el).backgroundImage)).toBe('none');
   await page.screenshot({ path: info.outputPath('intake-profile-desktop.png') });
 });
+
+test('audit: Kazalo ima jedan pomični popis na desktopu i mobitelu', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
+
+  const dialog = page.locator('.site-command-dialog');
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    if (viewport.width < 768) await page.getByRole('button', { name: 'Izbornik' }).click();
+    const trigger = page.getByRole('button', { name: 'Kazalo' });
+    await trigger.click();
+    await expect(dialog).toBeVisible();
+    const metrics = await dialog.evaluate((element) => {
+      const results = element.querySelector<HTMLElement>('.site-command-dialog__results')!;
+      return {
+        dialogScrollHeight: element.scrollHeight,
+        dialogClientHeight: element.clientHeight,
+        dialogOverflowY: getComputedStyle(element).overflowY,
+        resultsOverflowY: getComputedStyle(results).overflowY,
+      };
+    });
+    expect(metrics.dialogScrollHeight).toBeLessThanOrEqual(metrics.dialogClientHeight);
+    expect(metrics.dialogOverflowY).toBe('hidden');
+    expect(metrics.resultsOverflowY).toBe('auto');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    const focusTarget = viewport.width < 768 ? page.getByRole('button', { name: 'Izbornik' }) : trigger;
+    await expect(focusTarget).toBeFocused();
+  }
+});

@@ -65,7 +65,12 @@ export function openSiteCommandDialog(doc: Document, trigger: HTMLButtonElement)
     const next = event.key === 'ArrowDown' ? (current + 1) % links.length : current < 0 ? links.length - 1 : (current - 1 + links.length) % links.length;
     links[next]?.focus();
   });
-  dialog.addEventListener('close', () => { dialog.remove(); trigger.focus(); }, { once: true });
+  dialog.addEventListener('close', () => {
+    dialog.remove();
+    const triggerIsVisible = trigger.getClientRects().length > 0;
+    const focusTarget = triggerIsVisible ? trigger : doc.querySelector<HTMLButtonElement>('.site-chrome__burger');
+    focusTarget?.focus();
+  }, { once: true });
   render();
   dialog.showModal();
   query.focus();
