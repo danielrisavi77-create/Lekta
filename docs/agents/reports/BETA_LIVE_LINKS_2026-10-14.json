@@ -1,5 +1,5 @@
 {
-  "checkedAtUtc": "2026-10-14T03:42:32.781Z",
+  "checkedAtUtc": "2026-10-14T06:35:00.989Z",
   "timezone": "Europe/Zagreb (UTC+02:00)",
   "scope": {
     "origin": "https://lekta.hr",
@@ -159,7 +159,7 @@
       "location": null
     },
     {
-      "url": "https://lekta.hr/?unit=fpzg&amp;utm_source=faculty_page&amp;utm_medium=organic&amp;utm_campaign=fpzg_graduate",
+      "url": "https://lekta.hr/?unit=fpzg&utm_source=faculty_page&utm_medium=organic&utm_campaign=fpzg_graduate",
       "status": 200,
       "location": null
     },
@@ -1019,7 +1019,7 @@
       "location": null
     },
     {
-      "url": "https://lekta.hr/naslovnica?fakultet=fpzg&amp;razina=diplomski",
+      "url": "https://lekta.hr/naslovnica?fakultet=fpzg&razina=diplomski",
       "status": 200,
       "location": null
     },

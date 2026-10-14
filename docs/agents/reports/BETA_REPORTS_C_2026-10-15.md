@@ -13,7 +13,7 @@ Izravni GET na lekta.hr vratio je HTTP 200 za svih 20 pregledanih ruta:
 | Katalog i pokrivenost | /fakulteti/, /pokrivenost, /fpzg/diplomski-rad/ |
 | Pravni sadržaj | /privatnost, /uvjeti-koristenja, /obrada-dokumenata, /kolacici, /garancija, /pravila-povrata, /odricanje-od-odgovornosti |
 
-Ponovljeni GET prolaz 14. listopada u 05:42 CEST (03:42:32 UTC) vratio je HTTP 200 za svih 20 ruta. Iz HTML-a je izdvojena 281 jedinstvena interna HTTP(S) adresa na `lekta.hr` i poddomenama; svih 281 vratilo je 2xx bez mrežne/HTTP pogreške. Preusmjeravanja nisu automatski praćena, pa bi se svaki 3xx zabilježio kao nalaz; nije ih bilo. Pojedinačni statusi i popis ciljeva nalaze se u [BETA_LIVE_LINKS_2026-10-14.json](BETA_LIVE_LINKS_2026-10-14.json). Ovo pokriva samo poveznice u HTML-u tih 20 ruta: vanjske poveznice, kontrole koje se stvaraju tek JavaScriptom i neuzorkovane stranice nisu provjerene.
+Ponovljeni GET prolaz 14. listopada u 08:35:00 CEST (06:35:00 UTC) vratio je HTTP 200 za svih 20 ruta. Iz HTML-a je izdvojena 281 jedinstvena interna HTTP(S) adresa na lekta.hr i poddomenama; svih 281 vratilo je 2xx bez mrežne/HTTP pogreške. Preusmjeravanja nisu automatski praćena; bilo ih je 0. Pojedinačni statusi i popis ciljeva nalaze se u [BETA_LIVE_LINKS_2026-10-14.json](BETA_LIVE_LINKS_2026-10-14.json). Ovo pokriva samo poveznice u HTML-u tih 20 ruta: vanjske poveznice, kontrole koje se stvaraju tek JavaScriptom i neuzorkovane stranice nisu provjerene.
 
 Tijekom ručnog prolaza kroz početnu i stranicu Saznaj više otvorene su povezane javne stranice; pregledani sadržaji imali su naslov, glavni naslov i tijelo. Na početnoj je plaćeni popravak vidljivo označen kao uskoro, a naplata kao neaktivna. U tom uzorku nije pronađena slijepa ulica.
 
