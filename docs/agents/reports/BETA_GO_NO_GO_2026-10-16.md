@@ -54,6 +54,26 @@ Turnstile se ne smije uključiti na Supabase Authu dok vlasnik ne postavi produc
 
 Nakon vlasnikova odabira i spajanja paketa — prema operativnom planu 16. listopada, uz nerazriješen Linearov rok 19. listopada — vlasnik radi jedan novi puni dokaz nad točnim čistim kandidatom, zatim najviše jednu produkcijsku objavu. Svaka naknadna izmjena traži novi dokaz prije objave.
 
+## Najnoviji presjek — 14. listopada 2026., 05:32 UTC
+
+Ovaj presjek zamjenjuje ranije tablice za trenutačne glave, opseg, provjere, preglede i produkcijski build-info. `origin/master` i baza sva tri PR-a ostaju `f758ba2bde00c7f2d37daa789a39ed1e4168db99`; svaki PR je na toj bazi bez zaostatka. Metrike PR-a #367 odnose se na HEAD prije ove dokumentacijske dopune; commit ove dopune mijenja njegov vlastiti diff, pa za konačnu brojku treba ponoviti `pr-intake`.
+
+| PR | Trenutačni HEAD | Stvarni diff prema bazi | Neto promjena navedena u PR opisu | GitHub provjere |
+| --- | --- | --- | --- | --- |
+| #367 | `b80eb3832b6f87919ab0cd41087deb9222fbab9e` | 13 datoteka, +1822/-39 | +223/-39 — ne podudara se | 30 prolaznih, 4 neuspješne, 2 preskočene |
+| #368 | `f6a3acc875e9aa91f49f0f714ce44950de1e5e39` | 39 datoteka, +1328/-435 | +239/-13 — ne podudara se | 30 prolaznih, 4 neuspješne, 2 preskočene |
+| #369 | `6351bc928c5772ee7f1fe5c8d43b2dfe0146510f` | 1 datoteka, +2/-2 | +2/-2 — podudara se | 30 prolaznih, 4 neuspješne, 2 preskočene |
+
+Svježi `pr-intake` i GitHub pregledi potvrđuju da su sva tri PR-a i dalje draftovi, ciljaju `master`, nemaju zaštićenih staza, nemaju zabilježen review i vraćaju `mergeStateStatus=UNSTABLE`. Šest trenutačno obaveznih statusa grane (`conformance-matrix`, `check`, `ux-gate`, `build-gate` za Node 20 i 24 te `unittest (3.12)`) prolazi. Četiri neuspješna statusa na svakom PR-u odnose se na Netlify Deploy Preview i njegova tri pravila; dva preskočena statusa su Supabase Preview i `postgres-smoke`. Na aktualnom SHA-u #368 `db-smoke` prolazi, pa je raniji ECR limit iz tablice 05:59 samo povijesna snimka.
+
+Odstupanje opisa od stvarnog diff-a ostaje otvoreno za #367 i #368; samo zeleni `pr-opis` check ne uklanja to neslaganje koje je pronašao `pr-intake`. PR #367 uključuje 1552 retka izvještaja JSON-a među dokumentacijskim datotekama. PR #368 uključuje redizajn ulaza i zajedničke navigacije uz smoke popravak i pregled zadanih limita. Nijedan PR nema odobrenje drugog providera. Dok se opisi ne usklade, oba PR-a ostaju draftovi i vlasnik ih ne treba tretirati kao spremne za spajanje.
+
+Za PR #368 je na točnom SHA-u lokalno izvršen `npm run test:ux -- tests/ux/intake-entry.spec.ts tests/ux/visual-audit-surfaces.spec.ts`: 50 prolaza i 2 očekivana preskakanja za desktop-only testove u mobilnom projektu, u 7,5 minuta. Pokriveni su pristupačnost i fokus ulaza, širine zaslona, odabir profila, tokovi učitavanja, teme kartoteke, mobilni izbornik i Kazalo te ponašanje Turnstilea bez site keyja. Razvojna konzola potvrđuje lokalni Supabase emulator; ovo nije dokaz produkcijske autentikacije. Testni izlaz vrijedi za `f6a3acc875e9aa91f49f0f714ce44950de1e5e39`.
+
+Ponovljeni javni `build-info.json` u 05:32 UTC potvrđuje produkcijski commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`. Issue #318 je i dalje otvoren (GitHub ga je zadnji put ažurirao 6. listopada); priloženi dokazi ne zatvaraju ga i ne potvrđuju neovisni review PR-a #319.
+
+**Odluka za objavu: HOLD.** Paketi i lokalni UX prolaz pripremljeni su, ali još nema vlasnikovog odabira i spajanja, novog dokaza izdanja, captcha konfiguracije, svježeg očitanja živih limita i troškovnih alarma ni vlasnikova prolaza glavnog toka s 2–3 rada. Netlify preview i dalje ne nastaje jer završna provjera odbija dokaz izdanja vezan uz drugo stablo; taj zaštitni uvjet se ne zaobilazi.
+
 ## Kriteriji za odluku
 
 | Kriterij | Stanje 14. listopada | Vlasnikov završni dokaz |
