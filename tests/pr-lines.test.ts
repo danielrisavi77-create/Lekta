@@ -153,6 +153,24 @@ describe('Dependabot autor (koordinator lekta-37)', () => {
     expect(() => nepodrzaneDatoteke(undefined as unknown as string[])).toThrow();
   });
 
+  it('Dependabot PR za workflow datoteke prolazi samo s rucnim redcima opisa', () => {
+    const datoteke = ['.github/workflows/check.yml', '.github/workflows/word-proof.yaml'];
+    const opis = 'Neto redaka: +9/-9\nNove ovisnosti: nema';
+    expect(provjeriPrZaAutora(opis, [], DEPENDABOT, datoteke)).toEqual([]);
+    expect(provjeriPrZaAutora('', [], DEPENDABOT, datoteke)).toHaveLength(2);
+  });
+
+  it('Dependabot PR s workflowom i nepoznatim manifestom ostaje fail-closed', () => {
+    const g = provjeriPrZaAutora(
+      'Neto redaka: +1/-1\nNove ovisnosti: nema',
+      [],
+      DEPENDABOT,
+      ['.github/workflows/check.yml', 'requirements.txt'],
+    );
+    expect(g).toHaveLength(1);
+    expect(g[0]).toContain('requirements.txt');
+  });
+
   it('bump nije nova ovisnost: Nove ovisnosti koristi istu definiciju kao za ljude, bump ide zasebno', () => {
     const base = { dependencies: { vite: '7.1.0' }, devDependencies: { vitest: '4.0.0' } };
     const head = { dependencies: { vite: '7.1.2' }, devDependencies: { vitest: '4.0.0', 'left-pad': '1.3.0' } };
