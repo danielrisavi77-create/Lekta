@@ -143,3 +143,19 @@ Javni `GET https://lekta.hr/build-info.json` i dalje vraća commit `f758ba2bde00
 Javni `GET https://lekta-staging.netlify.app/build-info.json` vraća HTTP 200, commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, `builtAt=2026-10-13T16:25:40.268Z` i `captchaSiteKey=true`. To dokazuje samo da taj staging build sadrži javni site key. U dostupnim dokazima nisu potvrđeni token u pregledniku, Supabase Auth secret/uključivanje CAPTCHA ni negativni i pozitivni Auth testovi; te korake treba tretirati kao neprovjerene dok vlasnik ne zabilježi staging rezultate.
 
 Svježi javni `GET https://lekta.hr/build-info.json` vraća HTTP 200, isti commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, `builtAt=2026-10-13T16:37:42.888Z` i `captchaSiteKey=false`. Produkcijski secret se ne postavlja i Turnstile se ne uključuje prije staging dokaza; za konačni kandidat vlasnik postavlja production site key prije jedine planirane objave, potvrđuje `captchaSiteKey=true`, pa tek onda dovršava Auth aktivaciju prema `docs/deploy/TURNSTILE_T89.md`.
+
+## Svježi presjek — 15. listopada 2026., 20:50 UTC
+
+Ovo je presjek prije ove dopune dosjea. Javni `GET https://lekta.hr/build-info.json` vratio je HTTP 200, commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, `builtAt=2026-10-15T13:18:38.258Z` i `captchaSiteKey=false`. Produkcija i dalje služi postojeći master; ovaj presjek ne predstavlja novu objavu.
+
+Svježi `pr-intake` za sva tri beta PR-a potvrđuje bazu `master` na `f758ba2b`, nula commita ispred/iza, draft status i ispravan broj/redaka u opisu:
+
+| PR | HEAD u trenutku presjeka | `pr-intake` i dodatne provjere |
+| --- | --- | --- |
+| #367 | `b87f46c6b0e680e5deee5d940e911e3c78724443` | 32 zelena, 3 crvena Netlify pravila (Header/Pages/Redirect), 0 u tijeku; devet obveznih statusa, `browser-matrix`, te ponovljeni `db-smoke` i `npm-audit` prolaze. |
+| #368 | `d502a6bb70c15e2d412c06bdecacb1b0d9b9700c` | 32 zelena, 3 crvena Netlify pravila, 0 u tijeku; devet obveznih statusa, `browser-matrix` (175 prošlo, 4 preskočeno), `db-smoke` i `npm-audit` prolaze. |
+| #369 | `79e5e15647e5de32a804ad12955b476f24393025` | 32 zelena, 3 crvena Netlify pravila, 0 u tijeku; devet obveznih statusa i `browser-matrix` prolaze. |
+
+`netlify/lektahr/deploy-preview` je i dalje neuspješan, a preview nije objavljen (`published_at=null`); to ne mijenja produkciju. `pr-intake` ne bilježi neovisan pregled drugog providera ni za jedan PR. Svi ostaju draftovi. Na PR-ovima #367 i #368 proof-only provjera još ne prihvaća `RELEASE_PROOF` jer je vezan uz stariji SHA; nema kombiniranog kandidata ni novog završnog dokaza. Staging `build-info.json` ima `captchaSiteKey=true`, ali produkcijski ga nema. Supabase Auth captcha/token provjere te živi limiti popravaka, zastavice i alarmi troškova i dalje su neprovjereni; u ovom presjeku nijedna produkcijska/Supabase postavka nije promijenjena.
+
+**Odluka ostaje HOLD.** Ovo stanje podupire redoslijed korak-po-korak s ciljanom provjerom nakon svake promjene. Završni dokaz i produkcijska objava ostaju jednom, nakon što se odabere i zamrzne kandidat i vlasnik dovrši potrebne konfiguracije i ručni prolaz.
