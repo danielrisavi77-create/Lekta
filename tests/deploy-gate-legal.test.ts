@@ -8,14 +8,19 @@
  * dokument, sto GO_LIVE_REPAIR.md sam zove privatnosnim zaokretom, pa GDPR cl. 13 trazi
  * imenovanog voditelja obrade neovisno o naplati.
  *
- * `verify-deploy-dist.mjs` se izvodi tek na kraju netlify build lanca i trazi pravi `dist/`,
- * pa se ne moze pozvati iz vitesta. Zato se, kao u `deploy-origin.test.ts`, cita IZVOR i tvrdi
- * struktura gatea.
+ * `verify-deploy-dist.mjs` se izvodi tek na kraju Netlify build lanca i trazi pravi `dist/`, pa se cijeli
+ * skript ne pokrece u Vitestu. Pravilo registracije izvuceno je u izvrsivi helper; AST provjera
+ * potvrduje da skript njegovu gresku spaja s fatalnim deploy padom.
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse } from '@babel/parser';
+import {
+  COMMERCE_PROVIDER_REGISTRATION_REQUIRED,
+  enforceCommerceProviderRegistration,
+} from '../scripts/deploy-gate-provider.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = readFileSync(path.join(ROOT, 'scripts/verify-deploy-dist.mjs'), 'utf8');
@@ -44,6 +49,48 @@ function branchBody(marker: string): string {
   throw new Error(`grana nije zatvorena: ${marker}`);
 }
 
+type AstNode = { type: string; [key: string]: unknown };
+
+function astNodes(value: unknown): AstNode[] {
+  const values = Array.isArray(value) ? value : [value];
+  return values.filter(
+    (entry): entry is AstNode => typeof entry === 'object' && entry !== null && 'type' in entry && typeof (entry as { type?: unknown }).type === 'string',
+  );
+}
+
+function callName(node: AstNode): string | null {
+  const callee = astNodes(node.callee)[0];
+  return callee?.type === 'Identifier' && typeof callee.name === 'string' ? callee.name : null;
+}
+
+function containsCall(node: AstNode, name: string): boolean {
+  if (node.type === 'CallExpression' && callName(node) === name) return true;
+  return Object.values(node).some((value) => astNodes(value).some((child) => containsCall(child, name)));
+}
+
+function commercePolicyWiring(source: string): { properties: string[]; failureCallbackCallsFail: boolean }[] {
+  const ast = parse(source, { sourceType: 'module', plugins: ['topLevelAwait'] }) as unknown as AstNode;
+  const wirings: { properties: string[]; failureCallbackCallsFail: boolean }[] = [];
+  const visit = (node: AstNode): void => {
+    if (node.type === 'CallExpression' && callName(node) === 'enforceCommerceProviderRegistration') {
+      const options = astNodes(node.arguments)[0];
+      if (options?.type === 'ObjectExpression') {
+        const properties = astNodes(options.properties);
+        const propertyName = (property: AstNode): string => {
+          const key = astNodes(property.key)[0];
+          return key?.type === 'Identifier' && typeof key.name === 'string' ? key.name : '';
+        };
+        const failure = properties.find((property) => propertyName(property) === 'fail');
+        const initializer = failure ? astNodes(failure.value)[0] : undefined;
+        const failureCallbackCallsFail = initializer?.type === 'ArrowFunctionExpression' && containsCall(initializer, 'fail');
+        wirings.push({ properties: properties.map(propertyName), failureCallbackCallsFail });
+      }
+    }
+    Object.values(node).forEach((value) => astNodes(value).forEach(visit));
+  };
+  visit(ast);
+  return wirings;
+}
 describe('deploy gate: pravni identitet pruzatelja', () => {
   it('gard protiv vakuumskog prolaza: gate i dalje cita data/legal/provider.json', () => {
     expect(src).toContain("'data', 'legal', 'provider.json'");
@@ -84,13 +131,32 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     expect(body).not.toContain('console.warn');
   });
 
-  it('naplata je blokirana dok provider.json ne potvrdi registraciju, i uz OIB i telefon', () => {
+  it('naplata prolazi samo kad je isključena ili pružatelj izričito registriran', () => {
     expect(provider.providerRegistered).toBe(false);
     expect(String(provider.oib ?? '').trim()).not.toBe('');
     expect(String(provider.phone ?? '').trim()).not.toBe('');
-    const body = branchBody('if (commerceLive && provider.providerRegistered !== true)');
-    expect(body).toContain('fail(');
-    expect(body).toContain('providerRegistered');
+
+    const run = (commerceLive: boolean, providerRegistered: unknown) => {
+      const failures: string[] = [];
+      enforceCommerceProviderRegistration({
+        commerceLive,
+        provider: { ...provider, providerRegistered },
+        fail: (message) => failures.push(message),
+      });
+      return failures;
+    };
+
+    expect(run(true, false)).toEqual([COMMERCE_PROVIDER_REGISTRATION_REQUIRED]);
+    expect(run(true, null)).toEqual([COMMERCE_PROVIDER_REGISTRATION_REQUIRED]);
+    expect(run(true, true)).toEqual([]);
+    expect(run(false, false)).toEqual([]);
+  });
+
+  it('verify-deploy-dist wires the executed policy to its fatal deploy failure', () => {
+    expect(commercePolicyWiring(src)).toEqual([{
+      properties: ['commerceLive', 'provider', 'fail'],
+      failureCallbackCallsFail: true,
+    }]);
   });
 
   it('okidac praga obrade se izvodi iz ISPORUCENOG bundlea, ne samo iz zastavice', () => {

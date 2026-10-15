@@ -16,6 +16,7 @@ import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { findLegalPlaceholders } from './lib/legal-placeholders.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
+import { enforceCommerceProviderRegistration } from './deploy-gate-provider.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
@@ -539,14 +540,17 @@ if (fs.existsSync(naslovnicaDir)) {
   const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
   const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
 
-  if (commerceLive && provider.providerRegistered !== true) {
-    fail(
-      [
-        `naplata je ZIVA (${commerceWhy}), a data/legal/provider.json ne potvrđuje registriranog pružatelja`,
-        '  providerRegistered mora biti true tek nakon dovršetka registracije subjekta.',
-      ].join(os.EOL),
-    );
-  }
+  enforceCommerceProviderRegistration({
+    commerceLive,
+    provider,
+    fail: (problem) =>
+      fail(
+        [
+          `naplata je ZIVA (${commerceWhy}), a data/legal/provider.json ne potvrđuje registriranog pružatelja`,
+          `  ${problem}`,
+        ].join(os.EOL),
+      ),
+  });
   if (commerceLive && missingForCommerce.length) {
     fail(
       [`naplata je ZIVA (${commerceWhy}), a data/legal/provider.json nema:`, ...missingForCommerce].join(os.EOL),
