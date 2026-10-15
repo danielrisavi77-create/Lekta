@@ -84,6 +84,15 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     expect(body).not.toContain('console.warn');
   });
 
+  it('naplata je blokirana dok provider.json ne potvrdi registraciju, i uz OIB i telefon', () => {
+    expect(provider.providerRegistered).toBe(false);
+    expect(String(provider.oib ?? '').trim()).not.toBe('');
+    expect(String(provider.phone ?? '').trim()).not.toBe('');
+    const body = branchBody('if (commerceLive && provider.providerRegistered !== true)');
+    expect(body).toContain('fail(');
+    expect(body).toContain('providerRegistered');
+  });
+
   it('okidac praga obrade se izvodi iz ISPORUCENOG bundlea, ne samo iz zastavice', () => {
     // Prva verzija je visjela SAMO o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja nista u
     // lancu deploya, dok DEFAULT_PRODUCTION_CONFIG odavno salje zivi repair-docx. Gate je time
@@ -105,31 +114,16 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     expect(src).not.toContain('if (!commerceLive && !repairLive && missingForCommerce.length)');
   });
 
-  it('identitet voditelja obrade je sve-ili-nista, nikad polovican', () => {
-    /**
-     * Polovicno popunjen identitet je GORI od praznog: `legal-content.ts` tada prestaje
-     * renderirati napomenu "subjekt nije registriran" cim se pojavi OIB, pa dokument citatelju
-     * izgleda kao da je voditelj obrade potpuno identificiran iako mu fali sjediste.
-     */
+  it('javni podaci voditelja su potpuni, a registracija ima neovisno eksplicitno stanje', () => {
     const controller = String(provider.privacyController ?? '').trim();
     const address = String(provider.address ?? '').trim();
     const oib = String(provider.oib ?? '').trim();
+    const phone = String(provider.phone ?? '').trim();
 
-    expect(
-      Boolean(controller) === Boolean(address),
-      `privacyController=${JSON.stringify(controller)} i address=${JSON.stringify(address)} moraju biti oba prazna ili oba popunjena`,
-    ).toBe(true);
-
-    // OIB je okidac koji GASI napomenu (`registrationNote` u legal-content.ts: `if (c.oib) return ''`).
-    // Zato upisan OIB bez voditelja ili bez sjedista daje najgori ishod: napomena "subjekt nije
-    // registriran" nestane, a polja koja bi ga identificirala se i dalje ne renderiraju.
-    if (oib) {
-      expect(controller, 'OIB je upisan pa privacyController vise ne smije biti prazan').not.toBe('');
-      expect(address, 'OIB je upisan pa address vise ne smije biti prazan').not.toBe('');
-      // `phone` je bio izvan ove tvrdnje, pa je popunjavanje TRI od cetiri polja prolazilo i test
-      // i gate, iako napomena vec nestane na sam OIB. Prag naplate trazi i telefon.
-      const phone = String(provider.phone ?? '').trim();
-      expect(phone, 'OIB je upisan pa phone vise ne smije biti prazan (ZZP predugovorna informacija)').not.toBe('');
-    }
+    expect(controller).not.toBe('');
+    expect(address).not.toBe('');
+    expect(oib).not.toBe('');
+    expect(phone).not.toBe('');
+    expect(provider.providerRegistered).toBe(false);
   });
 });
