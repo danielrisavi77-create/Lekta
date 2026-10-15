@@ -138,5 +138,7 @@ deploya. Site key u Netlifyju smije ostati (server token koji ne trazi ignorira)
 [`AUTH_CAPTCHA.md`](AUTH_CAPTCHA.md#povrat).
 
 Tekst privatnosti (odjeljak 1d i popis izvrsitelja u `src/legal/legal-content.ts`) vec navodi
-Cloudflare Turnstile, pa uvjet iz `AUTH_CAPTCHA.md` "Otvoreno" za produkciju je ispunjen u kodu;
-vlasnik potvrduje da je objavljena verzija ona koju je odobrio.
+Cloudflare Turnstile i opisuje obradu nakon ukljucivanja zastite. To ispunjava dokumentacijski
+uvjet za kod, ali ne dokazuje da je Turnstile aktivan u produkciji; provjeri `captchaSiteKey` u
+`build-info.json` i stanje Supabase Autha. Vlasnik prije ukljucivanja potvrduje da odobrava tocnu
+objavljenu formulaciju.

@@ -82,8 +82,10 @@ trazi deploy. Frontend s kljucem smije ostati, jer token koji server ne trazi se
 
 ## Otvoreno
 
-- Turnstile salje Cloudflareu signale preglednika (IP adresa, preglednik, korisnicki agent). Tekst
-  privatnosti (`src/legal/legal-content.ts`) Cloudflare jos ne navodi. To je UVJET za ukljucivanje
-  na produkciji (Codex T89-03), ne za merge koda; ide vlasniku i T86.
+- Tekst privatnosti (`src/legal/legal-content.ts`, odjeljak 1d i popis izvrsitelja) vec navodi
+  Cloudflare Turnstile i opisuje signale obrade. Formulacija je uvjetna: vrijedi od dana
+  ukljucivanja zastite. Sama objava teksta ne dokazuje da je Turnstile aktivan u produkciji;
+  provjeri `captchaSiteKey` u `build-info.json` i stanje Supabase Autha prema koracima 3 do 7.
+  Vlasnik prije ukljucivanja potvrduje da odobrava tocnu objavljenu formulaciju.
 - Ponasanje u stvarnom pregledniku sa stvarnim kljucem nije provjereno u T89 PR-u (nema kljuca ni
   ukljucenog staginga); provjerava se koracima 3 do 7.
