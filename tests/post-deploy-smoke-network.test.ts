@@ -42,6 +42,18 @@ describe('post-deploy-smoke: network retry', () => {
     expect(result.retries).toBe(0);
   });
 
+  it('does not retry a network failure for a POST request', async () => {
+    const fetchImpl = vi.fn().mockRejectedValue(new TypeError('fetch failed'));
+    const sleepImpl = vi.fn().mockResolvedValue(undefined);
+
+    const result = await observe('https://example.test/repair-docx', { method: 'POST', body: '{}' }, { fetchImpl, sleepImpl });
+
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+    expect(sleepImpl).not.toHaveBeenCalled();
+    expect(result.transport).toBe('fetch failed');
+    expect(result.retries).toBe(0);
+  });
+
   it('stops after the single retry if the network error repeats', async () => {
     const fetchImpl = vi.fn()
       .mockRejectedValueOnce(new TypeError('fetch failed'))

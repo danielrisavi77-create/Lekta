@@ -194,6 +194,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function observe(url, init = {}, { fetchImpl = fetch, sleepImpl = wait } = {}) {
   let retries = 0;
+  const retrySafe = ['GET', 'HEAD'].includes(String(init.method ?? 'GET').toUpperCase());
   while (true) {
     try {
       const res = await fetchImpl(url, { redirect: 'follow', signal: AbortSignal.timeout(TIMEOUT_MS), ...init });
@@ -207,7 +208,7 @@ export async function observe(url, init = {}, { fetchImpl = fetch, sleepImpl = w
       }
       return { status: res.status, headers: res.headers, text, retries };
     } catch (error) {
-      if (retries === 0 && isRetryableNetworkFailure(error)) {
+      if (retrySafe && retries === 0 && isRetryableNetworkFailure(error)) {
         retries++;
         await sleepImpl(RETRY_DELAY_MS);
         continue;
