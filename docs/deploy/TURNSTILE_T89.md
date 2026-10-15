@@ -14,7 +14,7 @@ popravak za svakog novog korisnika.
 | --- | --- | --- |
 | Supabase projekt | `bnyemcnsphlitjradrst` | `zrrjttizjyfcxmcpgzml` |
 | Netlify site | `lekta-staging.netlify.app` | `lektahr.netlify.app` (kasnije i `lekta.hr`, `www.lekta.hr`, T49) |
-| Netlify kontekst za varijablu | onaj koji gradi staging site | Production |
+| Izvor build varijable | GitHub Actions `staging` environment | GitHub Actions `production` environment |
 | Turnstile hostnameovi | `lekta-staging.netlify.app`, `localhost` | `lektahr.netlify.app`, `lekta.hr`, `www.lekta.hr` |
 
 `lekta.hr` i `www.lekta.hr` upisuju se u widget odmah, iako domena jos nije spojena (T49). Inace bi
@@ -37,15 +37,15 @@ Cloudflare dashboard > Turnstile > Add widget:
 **Dokaz:** snimka zaslona popisa hostnameova widgeta; site key zapisan (javan), secret key spremljen
 u upravitelj lozinki.
 
-### 2. Netlify: site key u build (vlasnik)
+### 2. GitHub Actions: site key u staging build (vlasnik)
 
-Netlify > site > Site configuration > Environment variables > Add variable:
-- kljuc: `VITE_TURNSTILE_SITE_KEY`;
-- vrijednost: site key iz koraka 1;
-- scope: Builds; kontekst: samo onaj koji se ukljucuje (staging prvo).
+GitHub repozitorij > Settings > Environments > `staging` > Variables > Add variable:
+- kljuc: `TURNSTILE_SITE_KEY`;
+- vrijednost: staging site key iz koraka 1.
 
-Zatim Deploys > Trigger deploy > Clear cache and deploy site. Varijabla se ugradjuje PRI BUILDU:
-bez novog deploya nema ucinka.
+Workflow `.github/workflows/release.yml` cita varijablu iz `staging` environmenta i prosljedjuje je
+buildu kao `VITE_TURNSTILE_SITE_KEY`. Promjena vrijedi tek nakon sljedece staging objave kroz
+release workflow; rucni Netlify deploy ne koristi ovu varijablu.
 
 **Dokaz:**
 ```bash
@@ -53,10 +53,11 @@ curl -s https://<site>/build-info.json
 ```
 mora vratiti commit ocekivanog deploya i `"captchaSiteKey": true`. `false` ili bez polja: STANI.
 
-**Produkcijska objava ide kroz GitHub Actions.** Workflow .github/workflows/release.yml gradi klijent
-i objavljuje ga preko Netlify CLI-ja. Varijabla VITE_TURNSTILE_SITE_KEY u tom workflowu dolazi iz
-TURNSTILE_SITE_KEY u GitHub Actions production environmentu; Netlify build varijabla nije izvor za
-taj build. Run 38430199081 objavio je SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99, ali javni
+**Staging i produkcijska objava idu kroz GitHub Actions.** Workflow
+`.github/workflows/release.yml` gradi klijent i objavljuje ga preko Netlify CLI-ja. Za staging i
+produkciju workflow cita `TURNSTILE_SITE_KEY` iz odgovarajuceg GitHub Actions environmenta te ga
+prosljedjuje buildu kao `VITE_TURNSTILE_SITE_KEY`; Netlify build varijabla nije izvor za te release
+buildove. Run 38430199081 objavio je SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99, ali javni
 build-info.json nakon objave prijavio je captchaSiteKey=false. Stoga se Auth zaštita još ne smije
 uključiti. Vlasnik najprije postavlja site key u GitHub production environment, zatim kroz release
 workflow objavljuje build i provjerava javni rezultat:
@@ -134,7 +135,8 @@ se korak 4 radi tek nakon dokaza 2 i 3 na produkciji.
 ## Ako nesto podje krivo
 
 Najbrži povrat: Supabase Dashboard > projekt > Project Settings > Authentication > Bot and Abuse Protection > isključi CAPTCHA zaštitu. Djeluje odmah, bez
-deploya. Site key u Netlifyju smije ostati (server token koji ne trazi ignorira). Detalji u
+deploya. Site key u GitHub Actions environmentu smije ostati (bez ukljucene serverske CAPTCHA
+zastite Auth ne zahtijeva token). Detalji u
 [`AUTH_CAPTCHA.md`](AUTH_CAPTCHA.md#povrat).
 
 Tekst privatnosti (odjeljak 1d i popis izvrsitelja u `src/legal/legal-content.ts`) vec navodi
