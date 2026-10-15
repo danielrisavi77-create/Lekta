@@ -105,3 +105,19 @@ Ponovljeni javni `build-info.json` u 05:32 UTC potvrđuje produkcijski commit `f
 - Povijesni staging dokaz prekidača: T85_PREKIDACI_PRODUKCIJA.md.
 - Postupak uključivanja captche: docs/deploy/AUTH_CAPTCHA.md.
 - Postupak hitnog gašenja popravka: docs/deploy/REPAIR_DISABLED.md.
+
+## Dopunski presjek — 15. listopada, 13:15 CEST
+
+Javni `GET https://lekta.hr/build-info.json` vraća HTTP 200 i još pokazuje commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, vrijeme izgradnje `2026-10-13T16:37:42.888Z` i `captchaSiteKey=false`. Nije bilo nove produkcijske objave. Vlasnik je 15. listopada potvrdio pravne podatke pružatelja, status da subjekt nije registriran i besplatne popravke tijekom bete; izmjene su u nacrtu PR-a #367, ne na produkciji. Potvrdio je i da mu odgovara objavljena formulacija privatnosti koja spominje Turnstile i Cloudflare.
+
+Trenutačni GitHub presjek za nacrte, svi prema bazi `f758ba2bde00c7f2d37daa789a39ed1e4168db99`:
+
+| PR | SHA | Status provjera |
+| --- | --- | --- |
+| #367 | `16901890fcaf72d9ffd4168c77da9397a0df99bf` | Nacrt. Najnoviji intake presjek ima 32 uspješne provjere, 3 neuspješne Netlify pravila (Header/Pages/Redirect) i nema provjera u tijeku; preview status upućuje na isti deploy `6ad0abd6f8ca5991c9290115`. `pr-opis` je prošao u 10:44 UTC nakon uređivanja opisa u 10:43 UTC. |
+| #368 | `541c3bd76024f3ea9d6108fb7f12ff4538f5fbd9` | Nacrt. 33 uspješne, 2 neutralne i 2 preskočene provjere; nema neuspjelih ni aktivnih provjera. Lokalni pregled izvornog koda za limite popravka i ciljani proof-only prolaz ranije su završili, ali taj prolaz bilježi `projections: fail` i `extraction: unavailable` zbog nedostajućeg `LEKTA_STAGING_ORIGIN`. To su neriješene razine dokaza, ne prolazi. |
+| #369 | `6351bc928c5772ee7f1fe5c8d43b2dfe0146510f` | Nacrt. Netlify Deploy Preview, Header/Pages/Redirect pravila i status `netlify/lektahr/deploy-preview` upućuju na isti neuspjeli deploy `6ace6a3c186b7c2b0fcbe418`. |
+
+Issue #318 ostaje otvoren. PR #319 jest spojen, a dosje C sadrži dokaze, no ti dokazi ne zatvaraju issue niti potvrđuju neovisni review.
+
+**Radni redoslijed:** rješavati preostale stavke jednu po jednu i odmah nakon svake pokrenuti samo njene ciljane provjere. Nakon odabira beta-paketa zamrznuti točan kandidat, napraviti jedan završni dokaz izdanja, pregledati svaki neprolaz ili nedostupnu razinu i objaviti jednom. Do tada odluka ostaje HOLD: nema spajanja u `master` ni produkcijske objave.
