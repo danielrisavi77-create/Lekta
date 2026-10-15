@@ -1,8 +1,8 @@
 {
-  "commit": "f6a3acc875e9aa91f49f0f714ce44950de1e5e39",
-  "treeDigest": "147d7267833e6ccb72e23ca1a852f7baebecab5f892c30dbb7a2ae19e03612d2",
+  "commit": "7537cfb3de1e84dbd0ed7fbba2a4393b2a512b5e",
+  "treeDigest": "ac44f350afffd0d7afcb09b614b702dbb188efb08c78c8f08252a1ded3d94019",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-10-14T19:44:39.465Z",
+  "createdAt": "2026-10-15T00:40:57.451Z",
   "platform": "win32",
   "partial": false,
   "complete": true,
@@ -12,67 +12,67 @@
       "id": "check",
       "label": "Tier 0: oxlint + tsc + edge (deno) + vitest + build",
       "status": "pass",
-      "durationMs": 3579096
+      "durationMs": 3444039
     },
     {
       "id": "projections",
       "label": "Tier 0: svjezina pecenih projekcija (screening)",
       "status": "fail",
-      "durationMs": 9655
+      "durationMs": 8646
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 162080
+      "durationMs": 156107
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 223684
+      "durationMs": 216566
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 3556717
+      "durationMs": 3052742
     },
     {
       "id": "ux-dist",
       "label": "Tier 0: Playwright nad dist/ (vite preview)",
       "status": "pass",
-      "durationMs": 52078
+      "durationMs": 50980
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 37883
+      "durationMs": 36686
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 69509
+      "durationMs": 65716
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 31584
+      "durationMs": 32540
     },
     {
       "id": "word-corpus",
       "label": "Tier 2: Word nad commitanim korpusom",
       "status": "pass",
-      "durationMs": 482982
+      "durationMs": 472740
     },
     {
       "id": "word-toc",
       "label": "Tier 2: Word, TOC slucaj (vidljivi tekst oko Fields.Update)",
       "status": "pass",
-      "durationMs": 25000
+      "durationMs": 24831
     },
     {
       "id": "extraction",
