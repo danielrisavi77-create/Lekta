@@ -542,7 +542,7 @@
     {
       "id": "T49",
       "title": "Domena, DNS, SPF/DKIM/DMARC i support sanducic",
-      "status": "in_progress",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
@@ -737,7 +737,7 @@
     {
       "id": "T72",
       "title": "Svjez RELEASE_PROOF nad aktualnim masterom",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
       "note": "Blokira T46. Stanje 2026-10-13: origin/master f758ba2bde00c7f2d37daa789a39ed1e4168db99; docs/generated/RELEASE_PROOF.json je complete=true, missingRequired=[], commit 9eaefcf466486ad4a0daa9297d5e4bd59161dea7 i treeDigest odgovara stablu kandidata. node scripts/verify-release-proof.mjs --proof-only potvrdio je otisak; to nije novo puno mjerenje. Objavom od 13.10. objavljen je f758ba2bde00 uz strogu potvrdu identiteta; post-deploy smoke pao je samo na jednom fetch failed za JS asset, ostalih 29/30 provjera proslo je. projections je u dokazu fail, a extraction unavailable zbog nedostajuceg LEKTA_STAGING_ORIGIN; to su oznacene neobavezne/neizmjerene razine, ne prolazi. Nakon vlasnikovih odabranih spajanja 16.10. treba izvesti jedan novi dokaz nad tocno tim cistim stablom prije jedne objave."
     },
@@ -830,7 +830,7 @@
     {
       "id": "T84",
       "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
-      "status": "in_progress",
+      "status": "done",
       "owner": "lekta-00",
       "dependsOn": [],
       "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295."
@@ -968,12 +968,12 @@
     {
       "id": "T102",
       "title": "Prijava Googleom prije bete: Supabase Google provider, UI u src/auth, T86 tekst o Googleu kao primatelju",
-      "status": "blocked",
+      "status": "in_progress",
       "owner": "radna-stanica-ubrzavanje",
       "dependsOn": [
         "T49"
       ],
-      "note": "Odluka vlasnika 2026-10-04 (sesija Terminal laptop). Preduvjet: Google OAuth klijent koji vlasnik napravi u Google Cloudu (consent screen na lekta.hr). Auth je DIJELJEN s Katedrom (uri_allow_list), pa se ukljucivanje providera uskladjuje s Katedrom. Status blocked jer T49 jos nije done. Blokiraju ga T49 i Google OAuth klijent vlasnika. 2026-10-04: priprema koda iza zastavice (radna-stanica-ubrzavanje)."
+      "note": "Linear DAN-20 presjek 2026-10-15: status In Progress. T49/DAN-8 je Done od 2026-10-08; preostaje vlasnikov Google OAuth klijent/consent screen te uskladjenje dijeljenog Auth projekta s Katedrom, Supabase provider/redirect allowlist, zavrsni tekst privatnosti i stvarni E2E/aktivacija. PR #307 spojen 2026-10-08; kod ostaje iza zadano iskljucene zastavice VITE_AUTH_GOOGLE_ENABLED."
     },
     {
       "id": "T103",
