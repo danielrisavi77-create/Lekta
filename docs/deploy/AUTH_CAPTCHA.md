@@ -45,9 +45,14 @@ Obrnuti redoslijed lomi prijave. Prvo staging, zatim produkcija.
 1. **Cloudflare, Turnstile:** novi widget, nacin rada "Managed", hostnameovi tocno one domene na
    kojima Lekta radi (produkcijska domena, staging domena; za lokalni razvoj `localhost`). Iz
    widgeta se dobivaju SITE key (javan) i SECRET key (tajna).
-2. **Netlify, environment variables:** `VITE_TURNSTILE_SITE_KEY` = site key, za kontekst koji se
-   ukljucuje (staging ili production). Varijabla se ugradjuje pri buildu, pa je potreban NOVI
-   deploy; postavljanje varijable bez deploya ne mijenja nista.
+2. **Postavi site key u build okruženje (vlasnik):**
+   - **Staging:** u Netlify > site > Site configuration > Environment variables postavi
+     `VITE_TURNSTILE_SITE_KEY` na site key za staging build context.
+   - **Produkcija:** u GitHub repozitoriju > Settings > Environments > `production` > Variables
+     postavi `TURNSTILE_SITE_KEY` na site key. Release workflow ga prosljeđuje buildu kao
+     `VITE_TURNSTILE_SITE_KEY`; Netlify build varijabla ne upravlja produkcijskim release workflowom.
+   Site key je javan. Secret key se ovdje ne postavlja. Promjena se ugrađuje pri buildu, pa svaki
+   kontekst zahtijeva novi deploy. Za produkciju postavi varijablu prije završne objave.
 3. **Dokaz deployanog kljuca:** `curl -s https://<domena>/build-info.json` mora vratiti ocekivani
    `commit` i `"captchaSiteKey": true`. `false` ili bez polja znaci da build nema kljuc: STANI.
 4. **Provjera frontenda prije Autha:** na deployanom sajtu pokreni tok koji trazi anonimnu prijavu
