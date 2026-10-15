@@ -27,7 +27,7 @@ Frontend ima Turnstile put za signup, e-mail OTP i prijavu lozinkom. Token se š
 
 Klijent namjerno vraća bez tokena dok VITE_TURNSTILE_SITE_KEY nije postavljen. To je sigurno samo prije uključivanja captcha zaštite u Supabase Authu. Ponovljeni dohvat javnog `build-info.json` 14. listopada potvrdio je da produkcija i dalje koristi commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`. Kodna integracija je spremna za konfiguraciju, ali produkcija nije spremna za uključivanje. Vlasnik najprije postavlja TURNSTILE_SITE_KEY u GitHub Actions production okruženju, objavljuje build, provjerava `captchaSiteKey=true` na javnom build-info.json, a tek zatim unosi Turnstile secret i uključuje zaštitu u Supabase Authu. Ne čitati ni zapisivati secret u ovom izvještaju.
 
-Postupak i redoslijed: docs/deploy/AUTH_CAPTCHA.md i docs/deploy/TURNSTILE_T89.md. Službena Supabase uputa potvrđuje da se production Edge Function secrets mogu postaviti u nadzornoj ploči ili CLI-jem i da novi secret ne traži redeploy: [Supabase Edge Function secrets](https://supabase.com/docs/guides/functions/secrets).
+Postupak i redoslijed: docs/deploy/AUTH_CAPTCHA.md i docs/deploy/TURNSTILE_T89.md. Službena [Supabase Auth CAPTCHA uputa](https://supabase.com/docs/guides/auth/auth-captcha) potvrđuje da se zaštita uključuje u Project Settings > Authentication > Bot and Abuse Protection, uz odabir pružatelja i unos tajnog ključa, te da frontend šalje CAPTCHA token u Auth pozivu.
 
 ## 3. Dokaz za issue #318
 
