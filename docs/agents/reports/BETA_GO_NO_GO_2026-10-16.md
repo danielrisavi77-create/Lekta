@@ -137,3 +137,9 @@ Javni `GET https://lekta.hr/build-info.json` i dalje vraća commit `f758ba2bde00
 **Odluka ostaje HOLD.** Sljedeći rad ide stavku po stavku uz ciljanu provjeru; puni dokaz radi se jednom nakon odabira i zamrzavanja kandidata. Produkcijska objava i GO/NO-GO ostaju vlasnikove radnje.
 
 **Radni redoslijed:** rješavati preostale stavke jednu po jednu i odmah nakon svake pokrenuti samo njene ciljane provjere. Nakon odabira beta-paketa zamrznuti točan kandidat, napraviti jedan završni dokaz izdanja, pregledati svaki neprolaz ili nedostupnu razinu i objaviti jednom. Do tada odluka ostaje HOLD: nema spajanja u `master` ni produkcijske objave.
+
+## Dopuna — svježi presjek Captche, 15. listopada 2026.
+
+Javni `GET https://lekta-staging.netlify.app/build-info.json` vraća HTTP 200, commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, `builtAt=2026-10-13T16:25:40.268Z` i `captchaSiteKey=true`. To dokazuje samo da taj staging build sadrži javni site key. U dostupnim dokazima nisu potvrđeni token u pregledniku, Supabase Auth secret/uključivanje CAPTCHA ni negativni i pozitivni Auth testovi; te korake treba tretirati kao neprovjerene dok vlasnik ne zabilježi staging rezultate.
+
+Svježi javni `GET https://lekta.hr/build-info.json` vraća HTTP 200, isti commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, `builtAt=2026-10-13T16:37:42.888Z` i `captchaSiteKey=false`. Produkcijski secret se ne postavlja i Turnstile se ne uključuje prije staging dokaza; za konačni kandidat vlasnik postavlja production site key prije jedine planirane objave, potvrđuje `captchaSiteKey=true`, pa tek onda dovršava Auth aktivaciju prema `docs/deploy/TURNSTILE_T89.md`.
