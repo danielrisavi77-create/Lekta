@@ -113,7 +113,7 @@ export function provjeriOpisPr(body, stvarneNove = []) {
  * loginu I tipu racuna iz dogadjaja PR-a; za svakog drugog autora ponasanje je nepromijenjeno.
  *
  * Bez opisa Dependabot prolazi samo kad mijenja korijenske package manifeste, koje provjera moze
- * izmjeriti. Promjene GitHub Actions workflowa prolaze samo uz rucne, obvezne retke opisa jer se
+ * izmjeriti. Promjene GitHub Actions workflowa i ovog validatora prolaze samo uz rucne, obvezne retke opisa jer se
  * njihove ovisnosti ne racunaju automatski. Nepoznati manifesti (requirements*.txt, deno.lock,
  * ugnijezdeni package.json...) i dalje obaraju provjeru: ne tvrdimo `nema` za ekosustav koji ne citamo.
  *
@@ -122,6 +122,10 @@ export function provjeriOpisPr(body, stvarneNove = []) {
 export const DEPENDABOT_LOGIN = 'dependabot[bot]';
 export const DEPENDABOT_PODRZANE_DATOTEKE = ['package.json', 'package-lock.json'];
 const DEPENDABOT_RUCNI_WORKFLOW_REDAK_RE = /^\.github\/workflows\/[^/]+\.(?:yml|yaml)$/i;
+const DEPENDABOT_RUCNI_VALIDATOR_DATOTEKE = new Set([
+  'scripts/agents/pr-lines.mjs',
+  'tests/pr-lines.test.ts',
+]);
 
 export function jeDependabot(autor) {
   return autor != null && autor.login === DEPENDABOT_LOGIN && autor.type === 'Bot';
@@ -165,11 +169,14 @@ export function provjeriPrZaAutora(body, stvarneNove, autor, datoteke) {
   if (!jeDependabot(autor)) return provjeriOpisPr(body, stvarneNove);
   const izvan = nepodrzaneDatoteke(datoteke);
   if (izvan.length) {
-    const nepodrzane = izvan.filter((datoteka) => !DEPENDABOT_RUCNI_WORKFLOW_REDAK_RE.test(datoteka));
+    const nepodrzane = izvan.filter((datoteka) => (
+      !DEPENDABOT_RUCNI_WORKFLOW_REDAK_RE.test(datoteka)
+      && !DEPENDABOT_RUCNI_VALIDATOR_DATOTEKE.has(datoteka)
+    ));
     if (!nepodrzane.length) return provjeriOpisPr(body, stvarneNove);
     return [
       `Dependabot iznimka bez rucnog opisa podrzava samo ${DEPENDABOT_PODRZANE_DATOTEKE.join(' i ')}; `
-        + `workflow YAML datoteke zahtijevaju rucne retke, a ostale promjene nisu podrzane: ${nepodrzane.join(', ')}. `
+        + `workflow YAML i validator datoteke zahtijevaju rucne retke, a ostale promjene nisu podrzane: ${nepodrzane.join(', ')}. `
         + 'Nove ovisnosti za te datoteke se ne racunaju.',
     ];
   }
