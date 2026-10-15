@@ -15,6 +15,8 @@ Izravni GET na lekta.hr vratio je HTTP 200 za svih 20 pregledanih ruta:
 
 Ponovljeni GET prolaz 14. listopada u 08:35:00 CEST (06:35:00 UTC) vratio je HTTP 200 za svih 20 ruta. Iz HTML-a je izdvojena 281 jedinstvena interna HTTP(S) adresa na lekta.hr i poddomenama; svih 281 vratilo je 2xx bez mrežne/HTTP pogreške. Preusmjeravanja nisu automatski praćena; bilo ih je 0. Pojedinačni statusi i popis ciljeva nalaze se u [BETA_LIVE_LINKS_2026-10-14.json](BETA_LIVE_LINKS_2026-10-14.json). Ovo pokriva samo poveznice u HTML-u tih 20 ruta: vanjske poveznice, kontrole koje se stvaraju tek JavaScriptom i neuzorkovane stranice nisu provjerene.
 
+Svježi ponovljeni GET prolaz 15. listopada u 23:47:36 CEST (21:47:36 UTC) ponovno je vratio HTTP 200 za svih 20 ruta. Izdvojena je ista 281 jedinstvena interna adresa; svih 281 vratilo je 2xx, bez mrežne/HTTP pogreške ili preusmjeravanja. Pojedinačni svježi statusi nalaze se u [BETA_LIVE_LINKS_2026-10-15.json](BETA_LIVE_LINKS_2026-10-15.json). Ograničenja opsega iz prethodnog odlomka ostaju ista.
+
 Tijekom ručnog prolaza kroz početnu i stranicu Saznaj više otvorene su povezane javne stranice; pregledani sadržaji imali su naslov, glavni naslov i tijelo. Na početnoj je plaćeni popravak vidljivo označen kao uskoro, a naplata kao neaktivna. U tom uzorku nije pronađena slijepa ulica.
 
 Glavna stranica vraća canonical i og:url na https://lekta.hr/. Alati dostupni na putanjama bez nastavka .html vraćaju canonical na odgovarajuću .html adresu; to samo po sebi ne dokazuje HTTP 301 preusmjerenje. Za /saznaj-vise/, /rad/, /pokrivenost/, /moji-radovi/ i dio pravnih stranica og:url nije bio prisutan u HTML-u. To nije prekinuta korisnička poveznica, ali ostaje SEO stavka za pregled u zasebnom zadatku.
