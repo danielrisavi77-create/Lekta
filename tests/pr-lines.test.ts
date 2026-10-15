@@ -154,7 +154,12 @@ describe('Dependabot autor (koordinator lekta-37)', () => {
   });
 
   it('Dependabot PR za workflow datoteke prolazi samo s rucnim redcima opisa', () => {
-    const datoteke = ['.github/workflows/check.yml', '.github/workflows/word-proof.yaml'];
+    const datoteke = [
+      '.github/workflows/check.yml',
+      '.github/workflows/word-proof.yaml',
+      'scripts/agents/pr-lines.mjs',
+      'tests/pr-lines.test.ts',
+    ];
     const opis = 'Neto redaka: +9/-9\nNove ovisnosti: nema';
     expect(provjeriPrZaAutora(opis, [], DEPENDABOT, datoteke)).toEqual([]);
     expect(provjeriPrZaAutora('', [], DEPENDABOT, datoteke)).toHaveLength(2);
@@ -169,6 +174,17 @@ describe('Dependabot autor (koordinator lekta-37)', () => {
     );
     expect(g).toHaveLength(1);
     expect(g[0]).toContain('requirements.txt');
+  });
+
+  it('Dependabot PR s rucno opisanim CI opsegom odbija neodobrenu izvornu datoteku', () => {
+    const g = provjeriPrZaAutora(
+      'Neto redaka: +1/-1\nNove ovisnosti: nema',
+      [],
+      DEPENDABOT,
+      ['.github/workflows/check.yml', 'src/app.ts'],
+    );
+    expect(g).toHaveLength(1);
+    expect(g[0]).toContain('src/app.ts');
   });
 
   it('bump nije nova ovisnost: Nove ovisnosti koristi istu definiciju kao za ljude, bump ide zasebno', () => {
