@@ -159,3 +159,37 @@ Svježi `pr-intake` za sva tri beta PR-a potvrđuje bazu `master` na `f758ba2b`,
 `netlify/lektahr/deploy-preview` je i dalje neuspješan, a preview nije objavljen (`published_at=null`); to ne mijenja produkciju. `pr-intake` ne bilježi neovisan pregled drugog providera ni za jedan PR. Svi ostaju draftovi. Na PR-ovima #367 i #368 proof-only provjera još ne prihvaća `RELEASE_PROOF` jer je vezan uz stariji SHA; nema kombiniranog kandidata ni novog završnog dokaza. Staging `build-info.json` ima `captchaSiteKey=true`, ali produkcijski ga nema. Supabase Auth captcha/token provjere te živi limiti popravaka, zastavice i alarmi troškova i dalje su neprovjereni; u ovom presjeku nijedna produkcijska/Supabase postavka nije promijenjena.
 
 **Odluka ostaje HOLD.** Ovo stanje podupire redoslijed korak-po-korak s ciljanom provjerom nakon svake promjene. Završni dokaz i produkcijska objava ostaju jednom, nakon što se odabere i zamrzne kandidat i vlasnik dovrši potrebne konfiguracije i ručni prolaz.
+
+## Dopuna nakon svježih provjera — 16. listopada 2026.
+
+Javni `GET` za produkcijski i staging `build-info.json` vraća HTTP 200 i isti commit
+`f758ba2bde00c7f2d37daa789a39ed1e4168db99`. Produkcija ima `captchaSiteKey=false`
+(`builtAt=2026-10-15T13:18:38.258Z`), a staging `captchaSiteKey=true`
+(`builtAt=2026-10-13T16:25:40.268Z`). Staging strogi post-deploy smoke za taj očekivani SHA prošao
+je **29/29**; to potvrđuje samo trenutačno objavljeni staging build, ne PR grane ni Supabase Auth
+captcha.
+
+PR-ovi su i dalje draftovi prema `master` na `f758ba2b`. Svježe GitHub provjere pokazuju da su
+repozitorijski CI, build i browser-matrix statusi zeleni za beta PR-ove. `netlify/lektahr/deploy-preview`
+i pripadajuća Netlify Header/Pages/Redirect pravila padaju na previewima; to nije produkcijska
+objava ni dokaz produkcijskog kvara. GitHub ne bilježi pregled drugog providera.
+
+| PR | HEAD | Dodatna provjera i status |
+| --- | --- | --- |
+| #367 | `a52613c3e67c191fe51af0838ebe0b0f2cb2e8ef` | Ciljani lokalni pravni testovi 36/36 i `npm run orphan-scan` prolaze. Nema neovisnog pregleda. |
+| #368 | `d502a6bb70c15e2d412c06bdecacb1b0d9b9700c` | Ciljani lokalni testovi 7/7 datoteka, 1.151/1.151 testova (uključujući 845 mutacijskih); `npm run orphan-scan` prolazi. Nema neovisnog pregleda. |
+| #369 | `79e5e15647e5de32a804ad12955b476f24393025` | Izvještaj/snimka zadataka; repo CI i browser-matrix prolaze. Issue #318 još je otvoren. Nema neovisnog pregleda. |
+
+Otvoren je i zaseban SEO draft PR #370 (`d41214a85a09d5fb433a86a6cbda9586e18b8393`), koji nije
+među tri imenovana beta paketa #367–#369. Njegovi repo CI/build/browser statusi prolaze, dok su
+Netlify preview statusi neuspješni; GitHub About već ima `https://lekta.hr` kao homepage. Odluka o
+uključivanju #370 u beta kandidata još nije zabilježena.
+
+Auth Turnstile token, Supabase Auth uključivanje i pozitivni/negativni staging testovi ostaju
+nepotvrđeni. Produkcijski limiti popravaka i alarma troškova također nemaju svježe očitanje u ovom
+presjeku. Nije promijenjena nijedna produkcijska ni Supabase postavka; kandidat nije zamrznut i nema
+novog punog `release:check` ni novog `RELEASE_PROOF`.
+
+**Odluka ostaje HOLD.** Nastaviti ciljane provjere stavku po stavku. Puni dokaz, spajanje odabranih
+beta paketa i produkcijska objava ostaju tek nakon vlasnikovih staging/operativnih dokaza i odabira
+paketa.
