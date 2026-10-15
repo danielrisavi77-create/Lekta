@@ -86,6 +86,7 @@ trazi deploy. Frontend s kljucem smije ostati, jer token koji server ne trazi se
   Cloudflare Turnstile i opisuje signale obrade. Formulacija je uvjetna: vrijedi od dana
   ukljucivanja zastite. Sama objava teksta ne dokazuje da je Turnstile aktivan u produkciji;
   provjeri `captchaSiteKey` u `build-info.json` i stanje Supabase Autha prema koracima 3 do 7.
-  Vlasnik prije ukljucivanja potvrduje da odobrava tocnu objavljenu formulaciju.
+  Vlasnik je 2026-10-15 potvrdio objavljenu formulaciju; to ne potvrduje da je Turnstile ukljucen
+  ili testiran u produkciji.
 - Ponasanje u stvarnom pregledniku sa stvarnim kljucem nije provjereno u T89 PR-u (nema kljuca ni
   ukljucenog staginga); provjerava se koracima 3 do 7.

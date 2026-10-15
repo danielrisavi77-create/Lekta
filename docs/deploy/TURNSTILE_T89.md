@@ -140,5 +140,5 @@ deploya. Site key u Netlifyju smije ostati (server token koji ne trazi ignorira)
 Tekst privatnosti (odjeljak 1d i popis izvrsitelja u `src/legal/legal-content.ts`) vec navodi
 Cloudflare Turnstile i opisuje obradu nakon ukljucivanja zastite. To ispunjava dokumentacijski
 uvjet za kod, ali ne dokazuje da je Turnstile aktivan u produkciji; provjeri `captchaSiteKey` u
-`build-info.json` i stanje Supabase Autha. Vlasnik prije ukljucivanja potvrduje da odobrava tocnu
-objavljenu formulaciju.
+`build-info.json` i stanje Supabase Autha. Vlasnik je 2026-10-15 potvrdio objavljenu formulaciju;
+to ne potvrduje da je Turnstile ukljucen ili testiran u produkciji.
