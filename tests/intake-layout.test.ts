@@ -104,7 +104,8 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
   it('naslov je i dalje jedan H1, s lokalnim Z7 predefiniranjem velicine', () => {
     const naslovi = [...doc.querySelectorAll('h1')];
     expect(naslovi).toHaveLength(1);
-    expect(tekst(naslovi[0])).toBe('Ubaci rad.');
+    expect(tekst(naslovi[0])).toBe('Lekta: ubaci rad.');
+    expect(tekst(naslovi[0])).toContain('Lekta');
     expect(naslovi[0].id).toBe('intakeTitle');
     expect(CSS).toMatch(/\.intake-title\{[^}]*font-size:clamp\(40px,7vw,120px\)/);
     expect(CSS).toMatch(/\.intake-title\{[^}]*line-height:\.92/);
@@ -643,8 +644,8 @@ describe('Z7 a11y: zaglavlje, kicker, naslov, uvod i podnozje nisu u gumbu', () 
   }
 
   const TEKSTOVI = [
-    'Ubaci rad.',
-    'Provjerit ćemo formu',
+    'Lekta: ubaci rad.',
+    'Učitaj rad u Lektu',
     'Nepregledano',
     'Ulazni list',
     // Z32: tri recenice koraka su otisle s koracima (vidi prvi describe); pribor uz list je nova

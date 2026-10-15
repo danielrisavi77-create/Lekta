@@ -285,15 +285,9 @@
    znamenki bi "0001" i "0013" bili razlicite sirine pa bi se desna strana zaglavlja trznula. */
 .intake-list-broj{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 
-/* PECAT JE U TOKU, NE IZNAD SADRZAJA, i to je popravak izmjerenog sudara, ne stilska sitnica.
-   Predlozak ga sidri apsolutno u gornji desni kut. Izracunato za 1440px: sadrzaj papira je ~538px,
-   naslov `clamp(40px,7vw,120px)` daje 100,8px pa "Ubaci rad." mjeri ~437px i centriran zauzima
-   x 50..488; pecat je ~136px sirok uz `right:0`, dakle x 402..538, i nakon `rotate(-9deg)` pada
-   preko zadnjih slova naslova. Na 1920px je naslov na stropu od 120px i preklop je veci.
-   Apsolutno sidro se time ne da popraviti pomakom, jer su obje mjere elasticne i rastu jedna
-   prema drugoj; u toku je sudar NEMOGUC, jer raspored sam rezervira redak.
-   Zakret ostaje: rotacija ne ulazi u raspored, pa nakon nje nista ne moze nalegnuti na naslov.
-   `transform-origin` je desni rub, pa se natpis spusta ulijevo i ostaje u svojoj koloni. */
+/* Pecat ostaje u vlastitom redu umjesto apsolutno preko glavnog naslova. Tako se izbjegava sudar
+   neovisno o duljini brendiranog naslova i širini prikaza. Zakret je samo vizualan; raspored već
+   rezervira prostor, a transform-origin na desnom rubu zadržava natpis u svojoj koloni. */
 .intake-pecat{
   justify-self:end;margin:16px 0 24px;
   padding:8px 14px;border:2.5px solid var(--red);border-radius:2px;
