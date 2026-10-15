@@ -193,3 +193,30 @@ novog punog `release:check` ni novog `RELEASE_PROOF`.
 **Odluka ostaje HOLD.** Nastaviti ciljane provjere stavku po stavku. Puni dokaz, spajanje odabranih
 beta paketa i produkcijska objava ostaju tek nakon vlasnikovih staging/operativnih dokaza i odabira
 paketa.
+
+## Presjek nakon WebKit ponovne provjere — 16. listopada 2026., 01:35 CEST
+
+Sva tri PR-a i dalje su draftovi prema `master` na bazi
+`f758ba2bde00c7f2d37daa789a39ed1e4168db99`; nijedan nije spojen. Svježe stanje PR-ova:
+
+| PR | HEAD | Repo CI i browser-matrix | Netlify preview |
+| --- | --- | --- | --- |
+| #367 | `00a55c8ff8fc2ee5527f1fbcac3c3e7b381f07e5` | Obvezni repo statusi prolaze. Prvi browser-matrix pokušaj pao je u WebKitu u Z34 scenariju; isti test lokalno je prošao 1/1 za 2,5 min. Ponovljeni GitHub job na istom SHA-u prošao je: 169 prošlo, 4 preskočena, za 12m48s. | Deploy Preview i pravila Header/Pages/Redirect ne prolaze. |
+| #368 | `d502a6bb70c15e2d412c06bdecacb1b0d9b9700c` | Repo CI i browser-matrix prolaze. Ciljani lokalni skup prošao je 7/7 datoteka i 1.151/1.151 testova; `orphan-scan` prolazi. | Deploy Preview i pravila Header/Pages/Redirect ne prolaze. |
+| #369 | `79e5e15647e5de32a804ad12955b476f24393025` | Repo CI i browser-matrix prolaze. | Deploy Preview i pravila Header/Pages/Redirect ne prolaze. |
+
+Netlify API za sva tri aktualna previewa javlja stanje `error`,
+`published_at=null` i samo opću poruku `Build script returned non-zero exit code: 2`; API ne otkriva
+koji je korak izgradnje pao. Lokalna stroga provjera na HEAD-u PR-a #367 (PowerShell:
+`$env:LEKTA_REQUIRE_RELEASE_PROOF='1'; node scripts/verify-release-proof.mjs`) pada jer `RELEASE_PROOF.json` pripada commitu
+`9eaefcf466486ad4a0daa9297d5e4bd59161dea7`, a ne ovom stablu. `netlify.toml` traži taj strogi dokaz.
+To je potvrđen lokalni razlog za odbijanje zastarjelog dokaza i vjerojatno objašnjenje Netlify pada;
+točan korak Netlify gradnje nije potvrđen u njihovim nedostupnim detaljnim logovima. Ne isključivati
+gate i ne izrađivati dokaz za pojedini PR. Novi dokaz pripada tek odabranom, zamrznutom kandidatu.
+
+GitHub i dalje ne bilježi neovisni pregled drugog providera. Produkcijski build-info još pripada
+SHA-u `f758ba2bde00c7f2d37daa789a39ed1e4168db99` i nema Captcha site key. Živi limiti i alarmi,
+Auth Captcha dokaz, vlasnikov ručni prolaz glavnog toka te novi završni dokaz i dalje nedostaju.
+**Odluka ostaje HOLD; nema spajanja ni produkcijske objave.** Nastaviti ciljanim korakom po korak,
+ali završni `release:check`, novi dokaz i produkcijsku objavu napraviti jedanput nakon konačnog
+odabira i zamrzavanja kandidata.
