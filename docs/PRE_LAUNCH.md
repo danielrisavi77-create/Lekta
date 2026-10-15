@@ -3,37 +3,19 @@
 Popis stvari koje NE blokiraju razvoj ni internu betu, ali moraju biti gotove prije nego se
 aplikacija pozove ljudima. Sve niže je vanjska infrastruktura ili odluka vlasnika, ne kod.
 
-Stanje na 2026-07-20: besplatna beta radi s **anonimnom prijavom** (bez e-maila), pa se
-aplikacija može koristiti i testirati dok ovo nije riješeno.
+Napomena: statusi iz ove starije checklist-e nisu potvrda današnjih živih postavki. Za betu koristi [aktualni go/no-go dosje](agents/reports/BETA_GO_NO_GO_2026-10-16.md); ne tumači povijesne stavke u nastavku kao trenutačno stanje.
 
 ---
 
-## A. E-mail (blokira prijavu e-mailom) [otkriveno 2026-07-20]
+## A. E-mail prijava i Auth limit za betu
 
-Trenutno se **ne može** koristiti prijava e-mailom. Nije stvar postavke nego plana:
+Stanje iz pregleda 15.10.2026.: `docs/agents/tasks.json` bilježi da je Resend SMTP postavljen 4.10. i da je `rate_limit_email_sent` još 2/h. To je povijesna projektna bilješka, ne svježe očitanje Supabasea.
 
-> Supabase Management API, doslovno: *"Email template modification is not available for free tier
-> projects using the default email provider. Please upgrade your plan or configure a custom SMTP
-> provider."*
+U produkcijskom projektu `zrrjttizjyfcxmcpgzml` otvori Supabase Dashboard > Authentication > Rate Limits i provjeri trenutni e-mail provider i limit slanja. Supabaseov ugrađeni e-mail provider ograničen je na 2 e-maila na sat; prilagođeni limit zahtijeva Custom SMTP ili Send Email hook. Vidi [Supabase Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits).
 
-Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) očekuje 6-znamenkasti
-**kod** i nema callback rutu. Predložak se ne da promijeniti ni u dashboardu. Zato:
+Potvrdi da je Custom SMTP ili Send Email hook aktivan. Ako jest, odaberi limit koji odgovara beta opsegu i postavi ga u Rate Limits. Ako nije, prvo dovrši i provjeri e-mail provider; nemoj pokušavati zaobići ograničenje ugrađenog mailera.
 
-- [ ] **Kupiti i verificirati domenu.** Resend traži verificiranu domenu za slanje bilo kome;
-      `onboarding@resend.dev` šalje samo na vlasnikovu adresu (dovoljno za vlastiti test, ne za betu).
-      Site je na `lektahr.netlify.app`, što se ne može verificirati.
-- [ ] **Resend SMTP** u Supabase → Authentication → Emails → SMTP Settings:
-      `smtp.resend.com`, port `587`, user `resend`, pass = API ključ.
-- [ ] **Predlošci** (tek nakon SMTP-a, prije toga API odbija): sadržaj je gotov u repou,
-      `supabase/templates/magic_link.html` i `confirm_signup.html`. Oba MORAJU imati `{{ .Token }}`.
-      Postavljaju se `PATCH /v1/projects/{ref}/config/auth` na polja
-      `mailer_templates_{magic_link,confirmation}_content` + `mailer_subjects_*`.
-- [ ] **Rate limit.** `rate_limit_email_sent` je **2/h** i API ga ne da dići bez custom SMTP-a
-      (*"Custom SMTP required to configure RATE_LIMIT_EMAIL_SENT"*). Nakon Resenda dići na razumnu
-      vrijednost, inače treći korisnik u satu ne dobiva kod.
-
-> Riješeno usput 2026-07-20: `site_url` je bio `http://localhost:3000` na produkciji, sada je
-> `https://lektahr.netlify.app`.
+Pošalji probni OTP na beta testni račun i potvrdi isporuku i uspješnu prijavu. Zapiši projekt, postavljeni limit i vrijeme u privatnu operativnu bilješku. Ne stavljaj tajne ni žive vrijednosti u javne zapise.
 
 ## B. Naplata (Faza 2, kad beta pokaže da radi)
 

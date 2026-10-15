@@ -79,7 +79,7 @@ bi korak 4 zakljucao prijave.
 
 ### 4. Supabase: captcha na Authu (vlasnik)
 
-Supabase dashboard > projekt > Authentication > Attack Protection > Enable Captcha protection:
+Supabase Dashboard > projekt > Project Settings > Authentication > Bot and Abuse Protection > Enable CAPTCHA protection:
 - provider: Turnstile (Cloudflare);
 - Captcha secret: secret key iz koraka 1;
 - Save.
@@ -133,7 +133,7 @@ se korak 4 radi tek nakon dokaza 2 i 3 na produkciji.
 
 ## Ako nesto podje krivo
 
-Najbrzi povrat: Supabase > Authentication > Attack Protection > iskljuci captchu. Djeluje odmah, bez
+Najbrži povrat: Supabase Dashboard > projekt > Project Settings > Authentication > Bot and Abuse Protection > isključi CAPTCHA zaštitu. Djeluje odmah, bez
 deploya. Site key u Netlifyju smije ostati (server token koji ne trazi ignorira). Detalji u
 [`AUTH_CAPTCHA.md`](AUTH_CAPTCHA.md#povrat).
 

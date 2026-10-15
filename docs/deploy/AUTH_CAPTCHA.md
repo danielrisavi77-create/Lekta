@@ -59,9 +59,10 @@ Obrnuti redoslijed lomi prijave. Prvo staging, zatim produkcija.
    (popravak dokumenta) u novom privatnom prozoru. U DevToolsu zahtjev `POST /auth/v1/signup` mora
    imati tijelo s `gotrue_meta_security.captcha_token`, a u konzoli ne smije biti CSP greske za
    `challenges.cloudflare.com`. Ako tokena nema, STANI: ukljucivanje na Authu bi slomilo prijave.
-5. **Supabase dashboard:** Authentication > Attack Protection > Enable Captcha protection, provider
-   Turnstile (Cloudflare), upisi SECRET key i spremi. Secret key ide SAMO ovdje, nikad u repozitorij,
-   `.env.example`, Netlify ni u poruku.
+5. **Supabase Dashboard:** odaberi projekt, zatim Project Settings > Authentication > Bot and Abuse
+   Protection > Enable CAPTCHA protection. Odaberi Turnstile (Cloudflare), unesi SECRET key i spremi.
+   Secret key ide samo ovdje, nikad u repozitorij, `.env.example`, Netlify, GitHub ni u poruku.
+   [Službene Supabase upute](https://supabase.com/docs/guides/auth/auth-captcha).
 6. **Serversko odbijanje bez tokena:** odmah nakon ukljucivanja
 
    ```bash
