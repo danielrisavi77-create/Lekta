@@ -8,8 +8,8 @@ Raspored nije potpuno usklađen: vlasnikova operativna uputa planira odabir i sp
 
 | Paket | Sadržaj | Trenutačna granica |
 | --- | --- | --- |
-| [PR #367 — dokumentacija](https://github.com/danielrisavi77-create/Lekta/pull/367) | Ispravak tvrdnje o Netlify auto-publishu, zapis incidenta od 13. listopada, dosje go/no-go, pripremljeni odgovori za podršku, postupak `REPAIR_DISABLED` te izvještaji C o živim poveznicama, captcha spremnosti i issueu #318. | Samo dokumentacija; ne mijenja aplikacijski kod. |
-| [PR #368 — smoke, limiti i redizajn](https://github.com/danielrisavi77-create/Lekta/pull/368) | Jedan ponovni pokušaj smoke testa samo nakon mrežne pogreške, statički pregled zadanih limita besplatnog popravka i redizajn beta ulaza/zajedničke navigacije. Birač fakulteta traži izričit odabir; pregled nije očitanje živih Supabase limita. Nema novih ovisnosti. | Na SHA-u `3fb474dd6564`, ciljani UX testovi prošli su 4/4 na desktopu i mobilnom Chromiumu; `orphan-scan`, oxlint i TypeScript također su prošli. GitHub `db-smoke` pao je prije testova zbog ECR kvote, a tri druga CI posla još su u tijeku u presjeku niže. Preview blokira zastarjeli dokaz. |
+| [PR #367 — beta dosje i pravni podaci](https://github.com/danielrisavi77-create/Lekta/pull/367) | Incident, go/no-go dosje, podrška, `REPAIR_DISABLED` i izvještaji C; dodaje potvrđene javne pravne podatke, besplatnu beta formulaciju i eksplicitan registracijski status. Deploy gate blokira trgovinu dok pružatelj nije registriran. | Dokumentacija te pravni prikaz/gate u kodu; ne uključuje naplatu i ne mijenja produkciju. |
+| [PR #368 — smoke, limiti i redizajn](https://github.com/danielrisavi77-create/Lekta/pull/368) | Jedan ponovni pokušaj smoke testa samo nakon mrežne pogreške, statički pregled zadanih limita besplatnog popravka i redizajn beta ulaza/zajedničke navigacije. Birač fakulteta traži izričit odabir; pregled nije očitanje živih Supabase limita. Nema novih ovisnosti. | Na HEAD-u `9cdb5f191eb06bc9af80c363ed0ebb52e61b7c2e` svih šest obveznih master provjera, `browser-matrix` i Netlify Deploy Preview prolaze; `postgres-smoke`, Supabase Preview te Netlify Pages/Redirect pravila su preskočeni. Neovisan pregled drugog providera još nije zabilježen. |
 | [PR #369 — zadaci](https://github.com/danielrisavi77-create/Lekta/pull/369) | Samo izolirani snimak `docs/agents/tasks.json`; Linear ostaje mjerodavan status zadataka. | Dokumentacijska promjena; ne mijenja aplikacijski kod. |
 
 Sva tri PR-a ostaju draftovi prema `master`; ništa nije spojeno ni objavljeno. PR #367 sadrži i izvještaje C kako bi vlasnik dobio jedan pregledni dosje, dok je ažuriranje snimka zadataka zaseban PR #369. Ako PR #367 ili #368 nije spreman nakon četvrtka 15. listopada, izostaviti ga iz bete prema vlasnikovoj uputi. Redizajn je dio PR-a #368, ne zaseban četvrti paket.
@@ -83,7 +83,7 @@ Ponovljeni javni `build-info.json` u 05:32 UTC potvrđuje produkcijski commit `f
 | Word oracle na Windowsu | Povijesni prolazi nisu dokaz novog kandidata. | Ponovno pokrenuti četiri obvezne Word razine na završnom kandidatu i zadržati stvarne izlaze. |
 | Sigurnosni podskup živih endpointa, T84 | Linear DAN-12 bilježi Done od 10. listopada; PR #346 je priloženi dokaz. | Koristiti zabilježeni dokaz i provjeriti ima li novog otvorenog P0 prije objave. |
 | Captcha, T89 | Linear DAN-14 je In Progress. Javni build-info 14. listopada ima `captchaSiteKey=false`; produkcijska zaštita nije uključena. | Vlasnik postavlja ključ, objavljuje build, potvrđuje `captchaSiteKey=true`, zatim postavlja secret i uključuje Turnstile u Supabase Authu. |
-| Popravak i troškovne granice, T85 | `tasks.json` bilježi Done na temelju staging dokaza i produkcijskog očitanja od 28. rujna; to očitanje nije svježe. | Vlasnik ponovno očitava `REPAIR_DISABLED`, `REPAIR_FREE_MODE`, dnevne limite i alarme troška. Ne zapisivati njihove vrijednosti u support ili javne zapise. |
+| Popravak i troškovne granice, T85 | `tasks.json` bilježi Done na temelju staging dokaza i produkcijskog očitanja od 28. rujna; to očitanje nije svježe. | Za besplatnu betu vlasnik potvrđuje da `REPAIR_DISABLED` nije `true` i postavlja/potvrđuje `REPAIR_FREE_MODE=true` prema `docs/GO_LIVE_REPAIR.md`, odjeljku B. Zatim svježe očitava dnevne limite i alarme troška; njihove vrijednosti ne zapisivati u support ili javne zapise. |
 | Pravne stranice, T86 | Linear DAN-13 je In Review. Produkcijski smoke 13. listopada pronašao je sedam očekivanih stranica; HTTP dostupnost ne potvrđuje sadržaj ni vlasnikovo odobrenje. | Vlasnik pregledava aktualne uvjete, privatnost i besplatnu beta formulaciju. |
 | Domena i support, T49 | Linear DAN-8 bilježi Done od 8. listopada za domenu, DNS i support. `tasks.json` bilježi Resend SMTP od 4.10. i limit 2/h, ali to nije živo očitanje. | Vlasnik u produkcijskom projektu otvara Supabase Dashboard > Authentication > Rate Limits, potvrđuje aktivni provider i `rate_limit_email_sent`, pa tek onda povisuje limit po svojoj procjeni. Ugrađeni provider je 2 e-maila/h; promjena zahtijeva Custom SMTP ili Send Email hook. Probni OTP i prijavu potvrditi te vrijeme i rezultat zabilježiti privatno; ovaj limit nije ovdje očitan ni promijenjen. [Supabase Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits). |
 | Glavni tok i go/no-go | Još nema vlasnikova završnog prolaza na kandidatu. | Vlasnik prolazi glavni tok s dva do tri vlastita rada, provjerava limite i troškovne alarme te odlučuje GO ili NO-GO. Nepoznato stanje znači NO-GO. |
@@ -119,5 +119,21 @@ Trenutačni GitHub presjek za nacrte, svi prema bazi `f758ba2bde00c7f2d37daa789a
 | #369 | `6351bc928c5772ee7f1fe5c8d43b2dfe0146510f` | Nacrt. Netlify Deploy Preview, Header/Pages/Redirect pravila i status `netlify/lektahr/deploy-preview` upućuju na isti neuspjeli deploy `6ace6a3c186b7c2b0fcbe418`. |
 
 Issue #318 ostaje otvoren. PR #319 jest spojen, a dosje C sadrži dokaze, no ti dokazi ne zatvaraju issue niti potvrđuju neovisni review.
+
+## Završni presjek — 15. listopada 2026., 14:12 CEST
+
+Presjek je za trenutačne glave; svi beta PR-ovi su i dalje draftovi prema `master`, bez spajanja.
+
+| PR | HEAD | Trenutačni dokaz |
+| --- | --- | --- |
+| #367 | `a2c1d45c785b886a0198588ade4cf69488bea3bb` | Šest obveznih master provjera i `browser-matrix` prolaze. Netlify Deploy Preview i tri Netlify pravila padaju; to nisu obvezne master provjere. Lokalni ciljani pravni testovi prošli su 33/33, a `npm run orphan-scan` prolazi. |
+| #368 | `9cdb5f191eb06bc9af80c363ed0ebb52e61b7c2e` | Šest obveznih master provjera, `browser-matrix` i Netlify Deploy Preview prolaze. `postgres-smoke`, Supabase Preview te Netlify Pages/Redirect pravila su preskočeni. PR opis je osvježen, a `pr-opis` prolazi. |
+| #369 | `6351bc928c5772ee7f1fe5c8d43b2dfe0146510f` | Šest obveznih master provjera prolazi. Netlify Deploy Preview i tri Netlify pravila padaju; nisu obvezni master statusi. |
+
+GitHub ne bilježi neovisan pregled drugog providera ni na jednom beta PR-u. PR #368 ima `mergeStateStatus=CLEAN`, ali ostaje draft; #367 i #369 su `UNSTABLE` zbog neobveznih Netlify statusa. Nitko nije spojio PR-ove.
+
+Javni `GET https://lekta.hr/build-info.json` i dalje vraća commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`, vrijeme izgradnje `2026-10-13T16:37:42.888Z` i `captchaSiteKey=false`. Pravne izmjene iz PR-a #367 nisu na produkciji. Živi Supabase repair limiti, `REPAIR_DISABLED`, `REPAIR_FREE_MODE`, troškovni alarmi, Auth pružatelj i `rate_limit_email_sent` nisu svježe očitani. Konačni kombinirani kandidat još nema novi puni Windows `release:check`, release proof ni vlasnikov ručni prolaz s 2–3 rada.
+
+**Odluka ostaje HOLD.** Sljedeći rad ide stavku po stavku uz ciljanu provjeru; puni dokaz radi se jednom nakon odabira i zamrzavanja kandidata. Produkcijska objava i GO/NO-GO ostaju vlasnikove radnje.
 
 **Radni redoslijed:** rješavati preostale stavke jednu po jednu i odmah nakon svake pokrenuti samo njene ciljane provjere. Nakon odabira beta-paketa zamrznuti točan kandidat, napraviti jedan završni dokaz izdanja, pregledati svaki neprolaz ili nedostupnu razinu i objaviti jednom. Do tada odluka ostaje HOLD: nema spajanja u `master` ni produkcijske objave.
