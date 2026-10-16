@@ -65,4 +65,24 @@ describe('sitemap dist integrity', () => {
       expect.stringContaining('not-built.html ne postoji'),
     ]);
   });
+
+  it('odbija sitemap i URL zapise s više od jednog <loc>', () => {
+    const indexDist = makeDist({
+      'sitemap.xml': '<sitemapindex><sitemap><loc>https://lekta.hr/sitemap-pages.xml</loc><loc>https://evil.example/other.xml</loc></sitemap></sitemapindex>',
+      'sitemap-pages.xml': '<urlset><url><loc>https://lekta.hr/</loc></url></urlset>',
+      'index.html': '<html></html>',
+    });
+    expect(sitemapDistProblems(indexDist, 'https://lekta.hr')).toEqual([
+      expect.stringContaining('sitemap unos mora imati točno jedan <loc>'),
+    ]);
+
+    const urlsetDist = makeDist({
+      'sitemap.xml': '<sitemapindex><sitemap><loc>https://lekta.hr/sitemap-pages.xml</loc></sitemap></sitemapindex>',
+      'sitemap-pages.xml': '<urlset><url><loc>https://lekta.hr/</loc><loc>https://evil.example/</loc></url></urlset>',
+      'index.html': '<html></html>',
+    });
+    expect(sitemapDistProblems(urlsetDist, 'https://lekta.hr')).toEqual([
+      expect.stringContaining('URL unos mora imati točno jedan <loc>'),
+    ]);
+  });
 });

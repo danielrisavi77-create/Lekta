@@ -76,11 +76,12 @@ export function sitemapDistProblems(distRoot, siteOrigin, indexName = 'sitemap.x
   if (!sitemapEntries.length) problems.push(`dist/${indexName} nema sitemap unosa`);
   const seenSitemaps = new Set();
   for (const entry of sitemapEntries) {
-    const [sitemapUrl] = locations(entry);
-    if (!sitemapUrl) {
-      problems.push(`dist/${indexName} sadrži sitemap bez <loc>`);
+    const sitemapLocs = locations(entry);
+    if (sitemapLocs.length !== 1) {
+      problems.push(`dist/${indexName} sitemap unos mora imati točno jedan <loc>`);
       continue;
     }
+    const [sitemapUrl] = sitemapLocs;
     const sitemapPath = localFileForUrl(sitemapUrl, distRoot, siteOrigin, `dist/${indexName}`, problems);
     if (!sitemapPath) continue;
     if (seenSitemaps.has(sitemapPath)) {
@@ -98,11 +99,12 @@ export function sitemapDistProblems(distRoot, siteOrigin, indexName = 'sitemap.x
     const urlEntries = groups(sitemapXml, 'url');
     if (!urlEntries.length) problems.push(`${label} nema URL unosa`);
     for (const urlEntry of urlEntries) {
-      const [pageUrl] = locations(urlEntry);
-      if (!pageUrl) {
-        problems.push(`${label} sadrži URL bez <loc>`);
+      const pageLocs = locations(urlEntry);
+      if (pageLocs.length !== 1) {
+        problems.push(`${label} URL unos mora imati točno jedan <loc>`);
         continue;
       }
+      const [pageUrl] = pageLocs;
       localFileForUrl(pageUrl, distRoot, siteOrigin, label, problems);
     }
   }
