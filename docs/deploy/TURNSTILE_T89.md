@@ -69,11 +69,16 @@ stani i ne uključuj korak 4 na produkciji.
 
 ### 3. Frontend salje token (vlasnik, preglednik)
 
-Novi privatni prozor, `https://<site>`, ucitaj `.docx` i pokreni automatski popravak (on trazi
-anonimnu prijavu). DevTools > Network:
-- `POST .../auth/v1/signup`: tijelo sadrzi `gotrue_meta_security.captcha_token` s nepraznom
-  vrijednoscu;
+Novi privatni prozor, otvori aplikaciju na `https://<site>/rad/`, ucitaj `.docx` i pokreni
+automatski popravak (on trazi anonimnu prijavu). DevTools > Network:
+- `POST https://<ref>.supabase.co/auth/v1/signup`: tijelo sadrzi
+  `gotrue_meta_security.captcha_token` s nepraznom vrijednoscu;
 - Console: nema CSP greske za `challenges.cloudflare.com`.
+
+Za e-mail tok klikni `Prijava` na istoj stranici `/rad/`, upisi testnu adresu i odaberi gumb
+`Pošalji kod`. Zahtjev `POST https://<ref>.supabase.co/auth/v1/otp` također mora sadržavati
+neprazan `gotrue_meta_security.captcha_token`. Ove su putanje Supabase Auth API pozivi, ne Lekta
+URL-ovi.
 
 **Dokaz:** snimka zaslona zahtjeva (vrijednost tokena smije biti zamagljena). Bez tokena: STANI, jer
 bi korak 4 zakljucao prijave.
@@ -107,9 +112,9 @@ ukljucen, STANI i provjeri korak 4.
 
 ### 6. Pozitivni slucaj: stvarni tok prolazi (vlasnik, preglednik)
 
-Novi privatni prozor: automatski popravak krece (anonimna prijava uspjela), a prijava e-mailom salje
-kod. Pogresan ili istekao token mora dati poruku za ponovni pokusaj (ne "e-mail ili lozinka nisu
-tocni").
+Na `/rad/` u novom privatnom prozoru: automatski popravak krece (anonimna prijava uspjela), a gumb
+`Prijava` salje e-mail kod. Pogresan ili istekao token mora dati poruku za ponovni pokusaj (ne
+"e-mail ili lozinka nisu tocni").
 
 **Dokaz:** vrijeme, projekt, ishod oba toka.
 
@@ -124,10 +129,11 @@ se korak 4 radi tek nakon dokaza 2 i 3 na produkciji.
 | --- | --- | --- | --- | --- |
 | 1 Widget | | | | |
 | 2 `captchaSiteKey: true` | staging | | | |
-| 3 token u `/signup` | staging | | | |
+| 3 token u Supabase Auth `/signup` | staging | | | |
+| 3 token u Supabase Auth `/otp` | staging | | | |
 | 4 captcha ukljucen | staging | | | |
-| 5 `/signup` bez tokena = 400 `captcha_failed` | staging | | | |
-| 5 `/otp` bez tokena = 400 `captcha_failed` | staging | | | |
+| 5 Supabase Auth `/signup` bez tokena = 400 `captcha_failed` | staging | | | |
+| 5 Supabase Auth `/otp` bez tokena = 400 `captcha_failed` | staging | | | |
 | 6 popravak i e-mail prijava prolaze | staging | | | |
 | 2 `captchaSiteKey: true` u lokalnom `dist` i na objavi | produkcija | | | |
 | 3 do 6 | produkcija | | | |
