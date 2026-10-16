@@ -504,3 +504,34 @@ Supabase Auth postavku ni stvarni token.
 
 Nisu provedeni staging signup, Turnstile ni pozitivni/negativni Auth pozivi i nijedna Auth postavka
 nije promijenjena. Stvarni staging korak T89 ostaje otvoren.
+
+## Svježa ciljana provjera kandidata — 16. listopada 2026., 06:55 UTC
+
+Radno stablo PR-a #367 čisto je na SHA `c116bf389674c722b9d90694d4987c9f2b66f1f7`, uz bazu
+`master` `f758ba2bde00c7f2d37daa789a39ed1e4168db99`. `orphan-scan` i `git diff --check` prolaze.
+Na ovom SHA-u pravni skup prolazi 36/36, captcha i session 70/70, a IP/CORS skup 27/27 ciljanih
+testova. `npm run build` završio je uspješno; zabilježio je postojeća Vite upozorenja o zastarjelom
+`advancedChunks`, dinamičkom uvozu i chunkovima većima od 500 kB. `npm run generate-legal-pages`
+izradio je sedam statičkih pravnih stranica u `dist/`, verzija uvjeta `2026-10-16`. Lokalno
+generirana privatnost sadrži potvrđene podatke voditelja, status neregistriranog pružatelja,
+besplatnu betu i Turnstile; uvjeti sadrže besplatnu beta formulaciju. To nije dokaz objave uživo.
+
+Na istom kandidatu GitHub `check` i `browser-matrix` prolaze; browser matrix ima 169 prolaza i 4
+preskočena testa. `ux-gate` je još bio u tijeku u 06:54 UTC. PR-ovi #367, #368 i #369 ostaju otvoreni
+draftovi. Za #368 i #369 obvezni GitHub provjeravatelji prolaze. Netlify Deploy Preview za sva tri
+PR-a završava greškom tijekom izgradnje i nije objavljen. Netlify prijavljuje samo generički kod 2;
+lokalni `npm run release:proof-gate -- --proof-only` utvrđuje da je dokaz izdanja zastario
+(`9eaefcf46648` naspram `c116bf389674`), a `netlify.toml` postavlja tvrdi dokazni gate i za ovaj
+build. To snažno podupire objašnjenje da Preview pada na zastarjelom dokazu, ali ne zamjenjuje puni
+Netlify build log. Ovaj proof-only poziv završio je porukom `NIJE POTVRĐENO`; nije puni release check.
+
+Svježi Supabase read-only inventar potvrđuje 116 migracija i 19 aktivnih Edge funkcija u produkciji,
+naspram 123 migracije i 28 aktivnih funkcija na stagingu. Četiri produkcijske migracije bez izvora
+u repozitoriju i staging/prod razlike funkcija ostaju neriješene; nisu primijenjene migracije ni
+deployane funkcije. T18 ostaje otvoren, T84 nije zatvoren testovima izvornog koda.
+
+DNS za domenu i poddomenu za slanje te Resendov status domene ponovno su provjereni read-only:
+slanje je omogućeno i domena je verificirana, primanje u Resendu je isključeno, a javni MX/SPF i
+DMARC zapisi razrješavaju se. Nije poslana testna poruka ni provjeren odgovor, a Auth
+`rate_limit_email_sent`, captcha postavke, limiti popravaka i alarmi troškova nisu očitani.
+Nije bilo spajanja, Supabase upisa, produkcijske objave ni novog `RELEASE_PROOF`.
