@@ -546,7 +546,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit nalaz 6; live je lektahr.netlify.app, send-reminders ocekuje podsjetnici@lekta.hr. AUDIT 27.9.: T50 odluka vlasnika: domena pocetkom listopada 2026. 2026-10-04: lekta.hr na vlasnika, Cloudflare DNS + Email Routing, Resend; #273 draft do delegacije i certifikata; ALLOWED_ORIGIN prod postavljen 4. 10. 2026-10-04 vecer: pregled #273 zatvoren, koraci 5 i 6 nakon spajanja; Auth SMTP preko Resenda (prijava@lekta.hr); otvoreno: rate_limit_email_sent 2/h. 2026-10-04: #273 spojen; koraci 5 i 6 cekaju objavu (produkcija vrti eaa29dde od 30. 9.), T72 dokaz u tijeku na radnoj stanici.",
+      "note": "VLASNIK: audit nalaz 6; live je lektahr.netlify.app, send-reminders ocekuje podsjetnici@lekta.hr. AUDIT 27.9.: T50 odluka vlasnika: domena pocetkom listopada 2026. 2026-10-04: lekta.hr na vlasnika, Cloudflare DNS + Email Routing, Resend; #273 draft do delegacije i certifikata; ALLOWED_ORIGIN prod postavljen 4. 10. 2026-10-04 vecer: pregled #273 zatvoren, koraci 5 i 6 nakon spajanja; Auth SMTP preko Resenda (prijava@lekta.hr); otvoreno: rate_limit_email_sent 2/h. 2026-10-04: #273 spojen; koraci 5 i 6 cekaju objavu (produkcija vrti eaa29dde od 30. 9.), T72 dokaz u tijeku na radnoj stanici. 2026-10-16: 2/h je biljeska od 4.10., nije svjeze ocitanje; slanje i odgovor support sanducica te aktualni Auth limit nisu provjereni. Supabase project API vraca samo status; Dashboard trazi rucnu prijavu. Nista nije mijenjano.",
       "owner": "Terminal laptop"
     },
     {
@@ -871,7 +871,7 @@
       "title": "Captcha (Cloudflare Turnstile) na produkcijskom Supabase Authu prije bete",
       "status": "in_progress",
       "dependsOn": [],
-      "note": "Odluka vlasnika 2026-09-28 (T84 nalaz: anonimne prijave ukljucene, captcha iskljucen). Kriterij 4 T81. Frontend salje captcha token na signup, otp i prijavu lozinkom; bez VITE_TURNSTILE_SITE_KEY fail-open samo dok captcha nije na Authu. Redoslijed ukljucivanja: docs/deploy/AUTH_CAPTCHA.md. Produkciju ukljucuje vlasnik ili koordinator na njegovu rijec nakon mergea. Razred: full. Zasticeno: security.",
+      "note": "Odluka vlasnika 2026-09-28 (T84 nalaz: anonimne prijave ukljucene, captcha iskljucen). Kriterij 4 T81. Frontend salje captcha token na signup, otp i prijavu lozinkom; bez VITE_TURNSTILE_SITE_KEY fail-open samo dok captcha nije na Authu. Redoslijed ukljucivanja: docs/deploy/AUTH_CAPTCHA.md. Produkciju ukljucuje vlasnik ili koordinator na njegovu rijec nakon mergea. Razred: full. Zasticeno: security. 2026-10-16: javni build-info pokazuje produkcijski SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99 s captchaSiteKey=false; staging ima isti SHA i true. Postavka Supabase Auth Turnstile te negativni/pozitivni testovi nisu provjereni; secret/postavke nisu mijenjani.",
       "owner": "lekta-00"
     },
     {
