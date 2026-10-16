@@ -22,6 +22,7 @@ const SIGNUP = '**/auth/v1/signup*';
 // Sesija S E-MAILOM: "Moji popravci" postoje samo uz e-mail (authSessionActive), a bas taj put spec mjeri. Za anonimnu
 // sesiju prikaz umjesto provjere daje napomenu i odmah dopusta ponovni pokusaj (tests/repair-recovery.test.ts).
 const FAKE_SESSION = { access_token: 'test-token', refresh_token: 'r', expires_in: 3600, user: { id: 'u-test', email: 'test@example.invalid', is_anonymous: false } };
+const ANONYMOUS_SESSION = { access_token: 'anon-token', refresh_token: 'anon-r', expires_in: 3600, user: { id: 'anon-user', email: '', is_anonymous: true } };
 
 /** Skrati samo zadani rok aplikacije da regresija ne čeka stvarnih 30 s / 3 min. */
 async function shortenAppTimeout(page: Page, originalMs: number) {
@@ -224,6 +225,47 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
     await expect(sendButton(page)).toBeDisabled();
     expect(repairRequests, 'prijava i provjera ne šalju novi popravak').toBe(1);
+  });
+
+  test('zavrsena e-mail prijava nadjacava kasni anonimni signup', async ({ page }) => {
+    await analyzeToPanel(page);
+    await page.unroute(SIGNUP);
+    let releaseSignup!: () => void;
+    const signupGate = new Promise<void>((resolve) => { releaseSignup = resolve; });
+    let signups = 0;
+    let repairs = 0;
+    let repairAuthorization = '';
+    await page.route(SIGNUP, async (route) => {
+      signups += 1;
+      await signupGate;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ANONYMOUS_SESSION) });
+    });
+    await page.route('**/auth/v1/otp*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+    await page.route('**/auth/v1/verify*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(FAKE_SESSION) }));
+    await page.route(REPAIR, async (route) => {
+      repairs += 1;
+      repairAuthorization = (await route.request().allHeaders()).authorization || '';
+      await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+    });
+
+    try {
+      await send(page);
+      await expect.poll(() => signups).toBe(1);
+      await page.locator('[data-auth-entry]').first().click();
+      await page.locator('#authEmail').fill('test@example.invalid');
+      await page.locator('#authSubmit').click();
+      await expect(page.locator('#authCodeField')).toBeVisible();
+      await page.locator('#authCode').fill('123456');
+      await page.locator('#authSubmit').click();
+      await expect(page.locator('#authModal')).toBeHidden();
+      releaseSignup();
+
+      await expect.poll(() => repairs).toBe(1);
+      expect(repairAuthorization).toBe('Bearer test-token');
+      expect(await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.session') || '{}').accessToken)).toBe('test-token');
+    } finally {
+      releaseSignup();
+    }
   });
 
   test('zastoj prijave prekida vrtnju prije slanja dokumenta', async ({ page }) => {

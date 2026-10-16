@@ -255,12 +255,16 @@ describe('signInAnonymously', () => {
   it('ne prekida poslani signup i nakon isteka UI cekanja', async () => {
     const controller = new AbortController();
     let seenSignal: AbortSignal | undefined;
+    let submitted = false;
     const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (_url, init) => {
       seenSignal = init.signal as AbortSignal | undefined;
+    }), 5_000, async () => undefined, controller.signal, () => {
+      submitted = true;
       controller.abort();
-    }), 5_000, async () => undefined, controller.signal);
+    });
 
     expect(out.ok).toBe(true);
+    expect(submitted).toBe(true);
     expect(seenSignal).toBeUndefined();
   });
 

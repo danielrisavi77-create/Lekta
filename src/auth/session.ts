@@ -225,6 +225,7 @@ export async function signInAnonymously(
   now: number = Date.now(),
   captcha: CaptchaSource = turnstileCaptcha,
   signal?: AbortSignal,
+  onSubmitted?: () => void,
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   const captchaToken = await captchaTokenFrom(captcha);
@@ -232,6 +233,7 @@ export async function signInAnonymously(
   // The UI may stop waiting; let an in-flight request finish so its session can be persisted.
   if (signal?.aborted) return { ok: false, message: 'mrežna greška' };
   try {
+    onSubmitted?.();
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/signup`, {
       method: 'POST',
       headers: authHeaders(cfg),
