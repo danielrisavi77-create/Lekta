@@ -318,3 +318,29 @@ Ovo potvrđuje da staging dopušta samo svoj testni origin, dok produkcijska fun
 Provjera mjeri samo preflight/CORS zaglavlja; ne potvrđuje autorizaciju, ponašanje POST rukovatelja ni
 potpunu sigurnost endpointa. Nije bilo promjena Supabase postavki niti produkcijske objave; T84 ostaje
 otvoren i beta odluka ostaje **HOLD**.
+
+## Usporedba živog Edge koda — 16. listopada 2026., 02:37 UTC
+
+Read-only ponovljena provjera potvrdila je da su oba Supabase projekta `ACTIVE_HEALTHY`. Produkcijski
+`faculty-request` i dalje vraća `Access-Control-Allow-Origin: *` za `https://lekta.hr` i
+`https://evil.example`; staging vraća samo svoj origin `https://lekta-staging.netlify.app`, a za
+produkcijski i nepoznati origin izostavlja ACAO.
+
+Supabase katalog sada i dalje pokazuje da produkciji nedostaju tri od deset ciljnih IP-zaštićenih
+funkcija: `client-error`, `integrity-check` i `preflight-start`. Svih deset ciljnih funkcija prisutno
+je na stagingu. Prisustvo u katalogu ne dokazuje ponašanje funkcije.
+
+Read-only izvor produkcijskog `faculty-request` je verzija 14, SHA-256
+`1ddc85c16d8d09c6514ad176a0c647c79e1535dbb257ab06a131ee8108095c41`; taj kod izravno postavlja
+wildcard CORS i koristi `x-forwarded-for`. Staging verzija 9, SHA-256
+`908a2645937a1a48db6a76954ec434430400cede1134b61793e326b10b63ed45`, koristi `corsHeadersFor`,
+`requireTrustedClientIp` i `hashClientIpSalted`, kao i aktualni repozitorijski izvor. To upućuje na
+zastarjeli produkcijski Edge kod, a ne na problem koji bi se riješio promjenom `ALLOWED_ORIGIN`;
+vrijednost produkcijske tajne nije očitana.
+
+Produkcijski `build-info.json` vraća SHA `f758ba2bde00c7f2d37daa789a39ed1e4168db99`,
+`builtAt=2026-10-15T13:18:38.258Z` i `captchaSiteKey=false`. Staging vraća isti SHA,
+`builtAt=2026-10-13T16:25:40.268Z` i `captchaSiteKey=true`. To ne dokazuje uključenost CAPTCHA-e u
+Supabase Authu. Nije bilo deploya Edge funkcija, promjena tajni ni drugih produkcijskih postavki.
+T84 ostaje blokiran T18; ciljane negativne i pozitivne provjere funkcija te stvarni staging korisnički
+tok nisu time potvrđeni. **Odluka ostaje HOLD.**
