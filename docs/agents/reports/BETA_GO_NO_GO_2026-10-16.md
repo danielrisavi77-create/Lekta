@@ -300,3 +300,21 @@ Ponovna provjera Linearove veze pokazala je da DAN-12/T84 ovisi o DAN-5/T18, koj
 ali nije `Done`. Zato je DAN-12 vraćen na `Backlog` s oznakom `Blocked`, a red zadataka sada
 zapisuje T18 kao T84 preduvjet. T49/DAN-8 ostaje `In Progress`. Ovo je promjena statusa i reda
 zadataka, ne produkcijska promjena. **Odluka ostaje HOLD.**
+
+## Svježa CORS usporedba — 16. listopada 2026., 02:23 UTC
+
+Read-only `OPTIONS` na `faculty-request` uz `Access-Control-Request-Method: POST`:
+
+| Okruženje | `Origin` | Rezultat |
+| --- | --- | --- |
+| Staging | `https://lekta-staging.netlify.app` | HTTP 200; `Access-Control-Allow-Origin` točno odgovara originu |
+| Staging | `https://lekta.hr` | HTTP 200; `Access-Control-Allow-Origin` izostaje |
+| Staging | `https://evil.example` | HTTP 200; `Access-Control-Allow-Origin` izostaje |
+| Produkcija | `https://lekta.hr` | HTTP 200; `Access-Control-Allow-Origin: *` |
+| Produkcija | `https://lektahr.netlify.app` | HTTP 200; `Access-Control-Allow-Origin: *` |
+| Produkcija | `https://evil.example` | HTTP 200; `Access-Control-Allow-Origin: *` |
+
+Ovo potvrđuje da staging dopušta samo svoj testni origin, dok produkcijska funkcija još vraća wildcard.
+Provjera mjeri samo preflight/CORS zaglavlja; ne potvrđuje autorizaciju, ponašanje POST rukovatelja ni
+potpunu sigurnost endpointa. Nije bilo promjena Supabase postavki niti produkcijske objave; T84 ostaje
+otvoren i beta odluka ostaje **HOLD**.
