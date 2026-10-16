@@ -344,3 +344,18 @@ Produkcijski `build-info.json` vraća SHA `f758ba2bde00c7f2d37daa789a39ed1e4168d
 Supabase Authu. Nije bilo deploya Edge funkcija, promjena tajni ni drugih produkcijskih postavki.
 T84 ostaje blokiran T18; ciljane negativne i pozitivne provjere funkcija te stvarni staging korisnički
 tok nisu time potvrđeni. **Odluka ostaje HOLD.**
+
+## Dopunska produkcijska i CI provjera — 16. listopada 2026., 03:58 UTC
+
+Izravni GET produkcijskog i staging `build-info.json` te produkcijske `/privatnost.html` u 03:55:42 UTC:
+oba builda i dalje navode commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99`; produkcija vraća
+`captchaSiteKey=false`, a staging `captchaSiteKey=true`. Javna politika privatnosti spominje Turnstile,
+ali još ne sadrži potvrđeni OIB ni telefon. Site key na stagingu ne potvrđuje da je Supabase Auth CAPTCHA
+uključena. Nije bilo promjene postavki ni objave.
+
+CI za PR #367, HEAD `4be95a9f2ea49d660d6878b1ba63e229591103ae`, dovršen je: 33 check-runova prošla su,
+3 Netlify pravila pala su, 2 provjere su preskočene i nema provjera u tijeku. Svih 9 jedinstvenih
+obveznih konteksta iz zaštite grane i ruleseta prolazi. Zasebni `netlify/lektahr/deploy-preview` status
+odnosi se na neobjavljeni preview s dokazom iz starog stabla; Netlify konteksti nisu obvezni u trenutačnim
+pravilima grane. PR je i dalje draft i čeka neovisni pregled drugog providera. Produkcijski build ostaje
+na starom SHA-u, CAPTCHA nije uključena, pa odluka ostaje **HOLD**.
