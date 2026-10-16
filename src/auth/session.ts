@@ -228,12 +228,14 @@ export async function signInAnonymously(
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   const captchaToken = await captchaTokenFrom(captcha);
+  // Signup creates a server-side user, so an abort after submission cannot safely cancel it.
+  // The UI may stop waiting; let an in-flight request finish so its session can be persisted.
+  if (signal?.aborted) return { ok: false, message: 'mrežna greška' };
   try {
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/signup`, {
       method: 'POST',
       headers: authHeaders(cfg),
       body: withCaptcha({}, captchaToken),
-      ...(signal ? { signal } : {}),
     });
     if (!res.ok) {
       if (await captchaRejected(res)) {

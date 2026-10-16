@@ -252,13 +252,29 @@ describe('signInAnonymously', () => {
     }
   });
 
-  it('prosljeđuje signal prekida na anonimnu prijavu', async () => {
+  it('ne prekida poslani signup i nakon isteka UI cekanja', async () => {
     const controller = new AbortController();
-    let seenSignal: AbortSignal | null = null;
-    const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (_url, init) => { seenSignal = init.signal as AbortSignal; }), 5_000, async () => undefined, controller.signal);
+    let seenSignal: AbortSignal | undefined;
+    const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (_url, init) => {
+      seenSignal = init.signal as AbortSignal | undefined;
+      controller.abort();
+    }), 5_000, async () => undefined, controller.signal);
 
     expect(out.ok).toBe(true);
-    expect(seenSignal).toBe(controller.signal);
+    expect(seenSignal).toBeUndefined();
+  });
+
+  it('ne salje signup ako je UI odustao dok se ceka captcha', async () => {
+    const controller = new AbortController();
+    let called = false;
+    const captcha = async () => {
+      controller.abort();
+      return undefined;
+    };
+    const out = await signInAnonymously(CFG, (async () => { called = true; return res(200, anonBody); }) as unknown as typeof fetch, 5_000, captcha, controller.signal);
+
+    expect(out.ok).toBe(false);
+    expect(called).toBe(false);
   });
 
   it('422 znaci da anonimne prijave nisu ukljucene (pozivatelj pada na e-mail)', async () => {

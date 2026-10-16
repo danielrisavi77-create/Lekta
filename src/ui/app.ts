@@ -6,6 +6,7 @@ import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-naj
 import { createAnimationRegistry } from '../shared/animation-registry';
 import { awaitAbortable } from '../shared/await-abortable';
 import { createAuthCompletion } from '../auth/auth-completion';
+import { createAnonymousSessionFlight } from '../auth/anonymous-session-flight';
 import { renderRepairHistoryView } from './repair-history-view';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
@@ -1612,17 +1613,17 @@ function paywallLockHtml(what: any){if(currentResult&&_paywallViewedFor!==curren
 function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlockReport});$$('[data-buy-obrana]').forEach(b=>{b.onclick=()=>startReportCheckout(b.dataset.buyObrana,'do_obrane')});window.__lektaIcons?.()}
 const SESSION_KEY=STORAGE_KEYS.session;
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
+const anonymousSessionFlight=createAnonymousSessionFlight(
+ signal=>signInAnonymously(authConfig(),signal),
+ session=>{authStore.save(session);renderAuthEntry()},
+);
 function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'').trim(),anonKey:String(productionConfig?.supabaseAnonKey||'').trim()}}
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
 // Valjan pristupni token: iz Supabase sesije ako je auth konfiguriran (null -> pozivatelj otvara prijavu),
 // inace null (nema vise statickog tokena; nekonfigurirano okruzenje nema pristup).
 async function resolveAccessToken(){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore)}catch(e: any){return null}}return null}
-/* Token BEZ trazenja e-maila: ako sesije nema, tiho otvori anonimnu. Sluzi tokovima koji moraju
-   biti bez trenja (popravak, "Moji popravci"). Identitet je i dalje pravi user_id, pa RLS, mapa u
-   Storageu i pravo na brisanje rade nepromijenjeno; samo ne trazimo e-mail. Ako anonimna prijava
-   nije ukljucena na projektu, vracamo null pa pozivatelj pada natrag na e-mail prijavu.
-   NE koristiti za admin/kupnju: ondje identitet mora biti vezan uz osobu. */
-async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const existing=await resolveAccessToken();if(existing)return existing;if(signal?.aborted)return null;try{const out=await signInAnonymously(authConfig(),signal);if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
+/* Tiha anon prijava za popravak/povijest; user_id nosi RLS, storage i brisanje. Admin/kupnja traze osobni racun. */
+async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const token=await resolveAccessToken();if(token||signal?.aborted)return token;return(await anonymousSessionFlight.run(signal))?.accessToken||null}
 // Referral (pozovi-prijatelja, 0013): kod se hvata iz ?ref na ucitavanju (safeStorage, prezivi
 // email-potvrdu u novom tabu), veze se na signup nakon OTP prijave, a share sekcija se prikaze na
 // ekranu 6 ako korisnik ima referral_code (prva kupnja). Sve preko service role u Edge Functionima.
@@ -1676,7 +1677,7 @@ async function authSubmit(){const sub=$('#authSubmit');if(!sub)return;if(sub.dis
    ?await confirmEmailLink(authConfig(),_authEmail,code,_authLinkUserId)
    :await verifyEmailOtp(authConfig(),_authEmail,code);
   sub.disabled=false;
-  if(out.ok){const upgraded=!!_authLinkUserId;authStore.save(out.session);void maybeRedeemReferral();_authCompletion.complete();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry()}
+  if(out.ok){const upgraded=!!_authLinkUserId;anonymousSessionFlight.invalidate();authStore.save(out.session);void maybeRedeemReferral();_authCompletion.complete();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry()}
   else{setAuthStatus('error',out.message||'Kod nije točan.')}
  }}
 function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#authEmail');if(em)em.disabled=false;const cc=$('#authCode');if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub)sub.textContent='Pošalji kod';setAuthStatus('','');em?.focus()}
@@ -1685,7 +1686,7 @@ function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#aut
 // toggle podsjetnika na rok. NE ovisi o naplati (reportEndpoint ostaje prazan).
 function authSessionActive(){const s=authStore.load();return authConfigured()&&s&&s.email?s:null}
 export function afterAuthChange(){renderAuthEntry();if(currentResult)renderSubmissionChecklist(currentResult)}
-function authLogout(){authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
+function authLogout(){anonymousSessionFlight.invalidate();authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
 function renderAuthEntry(){const s=authSessionActive();$$('[data-auth-entry]').forEach((b: any)=>{if(!authConfigured()){b.classList.add('hidden');return}b.classList.remove('hidden');if(s){b.textContent='Odjava';b.title=`Prijavljen/a: ${s.email}`;b.onclick=authLogout}else{b.textContent='Prijava';b.title='Prijava e-mailom (kod)';b.onclick=()=>openAuth(afterAuthChange)}})}
 // Garancijski zahtjev (file-guarantee-claim Edge Function). Pokriva TOCNOST verificiranih
 // bodovanih pravila (T2/T3, 30 dana od vezivanja), NE prihvacanje rada; odluka je rucna.
