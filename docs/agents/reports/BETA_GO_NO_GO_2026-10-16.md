@@ -359,3 +359,23 @@ obveznih konteksta iz zaštite grane i ruleseta prolazi. Zasebni `netlify/lektah
 odnosi se na neobjavljeni preview s dokazom iz starog stabla; Netlify konteksti nisu obvezni u trenutačnim
 pravilima grane. PR je i dalje draft i čeka neovisni pregled drugog providera. Produkcijski build ostaje
 na starom SHA-u, CAPTCHA nije uključena, pa odluka ostaje **HOLD**.
+
+## T18/T84: dodatna read-only provjera — 16. listopada 2026., 04:30 UTC
+
+Supabase MCP inventar uspoređen je s 112 SQL migracijskih datoteka na ovom kandidatu, normalizacijom
+identiteta iz `scripts/migration-identity.mjs`. Produkcija ima 116 zapisa: svih 112 repo identiteta
+postoji bez duplikata, uz četiri zapisa samo u produkciji:
+`sprint_engine_i_narudzbe`, `stavka_crm_leadovi`, `stavka_leadovi_email_nullable` i
+`stavka_revoke_trigger_fn_execute`. Staging ima 123 zapisa: svih 112 repo identiteta postoji bez
+duplikata, uz 11 Katedra migracija `0104`–`0114`. Porijeklo izvornog commita/PR-a za četiri
+produkcijska zapisa ostaje nerazriješeno; nisu dodana u Lekta repo i nisu ponovno primijenjena.
+
+Read-only `get_edge_function` usporedba pokazala je da staging `faculty-request` v9 odgovara lokalnom
+izvornom modulu, dok produkcijski v14 izravno postavlja `Access-Control-Allow-Origin: *` i čita
+`x-forwarded-for`. Time se potvrđuje postojeći T84 nalaz, ali ne dokazuju se ostali runtime tokovi.
+Provjera `docs/generated/MIGRATION_IDENTITY.md` našla je zastarjeli presjek od 94 migracije; taj
+generirani dokument ne predstavlja aktualni inventar.
+
+Nisu izvođene migracije, Edge deployi ni promjene tajni. T18 ostaje otvoren zbog izvora četiriju
+remote-only zapisa i staging korisničkog toka; T84 ostaje blokiran T18 te čeka odobren staging i
+naknadne ciljane runtime provjere. Odluka ostaje **HOLD**.
