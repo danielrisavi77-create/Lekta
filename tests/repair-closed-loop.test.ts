@@ -237,3 +237,70 @@ describe('Repair Engine closed-loop profilna matrica', () => {
     expect(second.docxBytes, `${profileId}: no-op mora zadrzati istu referencu`).toBe(applied.docxBytes);
   }, 120000);
 });
+
+describe('Repair Engine: provjere osnovnog teksta ne broje tablice koje fixer namjerno čuva', () => {
+  it('ponovna analiza potvrđuje prored i poravnanje tijela uz izvorno oblikovanje tablice', async () => {
+    const profileCase = profileCases().find(({ profileId, entries }) =>
+      entries.some((entry) => entry.checkId === 'line-spacing') &&
+      entries.some((entry) => entry.checkId === 'justify') &&
+      Number((resolveProfile(profileId) as Record<string, unknown>).spacing) === 1.5 &&
+      (resolveProfile(profileId) as Record<string, unknown>).justify === true,
+    );
+    expect(profileCase).toBeDefined();
+    const profileId = profileCase!.profileId;
+    const profile = resolveProfile(profileId) as Record<string, unknown>;
+    const runtimeEntries = repairEntriesFor(profileId);
+    const text = 'Kontrolirani tekst u tabličnom retku s jednostrukim proredom i lijevim poravnanjem. '.repeat(6);
+    const table =
+      '<w:tbl><w:tblPr/><w:tblGrid/><w:tr><w:tc><w:tcPr/>' +
+      '<w:p><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+      `<w:r><w:t>${text}</w:t></w:r></w:p></w:tc></w:tr></w:tbl>`;
+    const stylesXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:style w:type="paragraph" w:styleId="Normal" w:default="1">' +
+      '<w:name w:val="Normal"/><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+      '</w:style></w:styles>';
+    const input = buildDocxFile({
+      stylesXml,
+      paragraphs: [
+        ...Array.from({ length: 4 }, (_, index) => ({
+          text: `Kontrolirani odlomak tijela ${index + 1}.`,
+          spacingLine: 240,
+          jc: 'left' as const,
+        })),
+        { text: '', raw: table },
+      ],
+    }, `${profileId}-table-spacing.docx`);
+
+    const before = await analyzeFixture(input, { profileId });
+    const beforeSpacing = before.checks.find((check) => check.title === 'Prored osnovnog teksta');
+    const beforeAlignment = before.checks.find((check) => check.title === 'Poravnanje osnovnog teksta');
+    expect(before.stats.dominantSpacing).toBe('1');
+    expect(beforeSpacing?.status).not.toBe('pass');
+    expect(beforeAlignment?.status).not.toBe('pass');
+
+    const items = buildRepairableItems(before.checks, profile, runtimeEntries);
+    const lineSpacingItem = items.find((item) => item.fixerId === 'line-spacing-fixer');
+    const alignmentItem = items.find((item) => item.fixerId === 'alignment-fixer');
+    expect(lineSpacingItem?.params.multiplier).toBe(1.5);
+    expect(alignmentItem?.params.val).toBe('both');
+    const beforeTexts = await documentTexts(new Uint8Array(await input.arrayBuffer()));
+    const applied = await applyFixers(new Uint8Array(await input.arrayBuffer()), requestsFor([lineSpacingItem!, alignmentItem!]));
+    expect(applied.changelog.map((entry) => entry.fixerId)).toEqual(expect.arrayContaining(['line-spacing-fixer', 'alignment-fixer']));
+
+    const outputFile = new File([applied.docxBytes], `${profileId}-table-spacing-fixed.docx`, { type: DOCX_MIME });
+    const after = await analyzeFixture(outputFile, { profileId });
+    const afterSpacing = after.checks.find((check) => check.title === 'Prored osnovnog teksta');
+    const afterAlignment = after.checks.find((check) => check.title === 'Poravnanje osnovnog teksta');
+    expect(after.stats.dominantSpacing).toBe('1.5');
+    expect(afterSpacing?.status).toBe('pass');
+    expect(afterAlignment?.status).toBe('pass');
+    expect(await documentTexts(applied.docxBytes)).toEqual(beforeTexts);
+    const documentXml = (await readZip(applied.docxBytes))
+      .find((entry) => entry.name === 'word/document.xml');
+    expect(documentXml).toBeDefined();
+    expect(new TextDecoder().decode(documentXml!.data)).toContain('<w:spacing w:line="240" w:lineRule="auto"/>');
+    expect(new TextDecoder().decode(documentXml!.data)).toContain('<w:jc w:val="left"/>');
+  }, 120000);
+});
