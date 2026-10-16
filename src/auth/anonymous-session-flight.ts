@@ -25,7 +25,10 @@ export function createAnonymousSessionFlight(
   const persistFor = (targetGeneration: number, session: Session): boolean => {
     if (generation !== targetGeneration) return false;
     if (persisted?.generation === targetGeneration && persisted.session === session) return true;
-    if (persist(session) === false) return false;
+    if (persist(session) === false) {
+      if (staleSession === session) staleSession = null;
+      return false;
+    }
     persisted = { generation: targetGeneration, session };
     if (staleSession === session) staleSession = null;
     return true;
@@ -49,7 +52,8 @@ export function createAnonymousSessionFlight(
       .then((result) => {
         if (!result?.ok) return null;
         if (generation === flight.generation) persistFor(flight.generation, result.session);
-        else staleSession = result.session;
+        else if (canStart()) staleSession = result.session;
+        else staleSession = null;
         return result.session;
       })
       .catch(() => null)
@@ -86,6 +90,7 @@ export function createAnonymousSessionFlight(
     },
     invalidate() {
       generation += 1;
+      if (!canStart()) staleSession = null;
       if (inFlight) {
         inFlight.releaseInvalidated();
         let releaseInvalidated!: () => void;

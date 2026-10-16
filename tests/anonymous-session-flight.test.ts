@@ -100,12 +100,12 @@ describe('createAnonymousSessionFlight', () => {
   });
 
   it('ne zapocinje novi signup ako kasnu sesiju nije moguce spremiti', async () => {
-    let resolveSignIn!: (result: SessionResult) => void;
+    const resolveSignIn: ((result: SessionResult) => void)[] = [];
     let markSubmitted!: () => void;
     let stored: Session | null = null;
     const start = vi.fn((_signal: AbortSignal, submitted: () => void) => {
       markSubmitted = submitted;
-      return new Promise<SessionResult>((resolve) => { resolveSignIn = resolve; });
+      return new Promise<SessionResult>((resolve) => { resolveSignIn.push(resolve); });
     });
     const persist = vi.fn((value: Session) => {
       if (stored) return false;
@@ -119,12 +119,56 @@ describe('createAnonymousSessionFlight', () => {
     flight.invalidate();
     stored = emailSession;
     await expect(pending).resolves.toBeNull();
-    resolveSignIn({ ok: true, session });
+    resolveSignIn[0]({ ok: true, session });
     await expect(flight.run()).resolves.toBe(session);
 
     await expect(flight.run()).resolves.toBeNull();
     expect(start).toHaveBeenCalledOnce();
     expect(stored).toBe(emailSession);
+
+    flight.invalidate();
+    stored = null;
+    const afterLogout = flight.run();
+    await Promise.resolve();
+    expect(start).toHaveBeenCalledTimes(2);
+    const freshSession = { ...session, accessToken: 'fresh-access', refreshToken: 'fresh-refresh', userId: 'fresh-anon-user' };
+    resolveSignIn[1]({ ok: true, session: freshSession });
+    await expect(afterLogout).resolves.toBe(freshSession);
+    expect(stored).toBe(freshSession);
+  });
+
+  it('odjava ocisti kasnu anon sesiju koja je stigla prije e-mail prijave', async () => {
+    const resolveSignIn: ((result: SessionResult) => void)[] = [];
+    const start = vi.fn((_signal: AbortSignal, submitted: () => void) => {
+      submitted();
+      return new Promise<SessionResult>((resolve) => { resolveSignIn.push(resolve); });
+    });
+    let stored: Session | null = null;
+    const persist = vi.fn((value: Session) => {
+      if (stored) return false;
+      stored = value;
+      return true;
+    });
+    const flight = createAnonymousSessionFlight(start, persist, () => !stored);
+    const beforeLogout = flight.run();
+    await Promise.resolve();
+    flight.invalidate();
+    await expect(beforeLogout).resolves.toBeNull();
+    resolveSignIn[0]({ ok: true, session });
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+    flight.invalidate(); // email OTP saves the new session immediately after invalidating
+    stored = emailSession;
+    flight.invalidate(); // logout invalidates while that e-mail session is still in storage
+    stored = null;
+    const afterLogout = flight.run();
+    await Promise.resolve();
+
+    expect(start).toHaveBeenCalledTimes(2);
+    const freshSession = { ...session, accessToken: 'fresh-access', refreshToken: 'fresh-refresh', userId: 'fresh-anon-user' };
+    resolveSignIn[1]({ ok: true, session: freshSession });
+    await expect(afterLogout).resolves.toBe(freshSession);
+    expect(stored).toBe(freshSession);
   });
 });
 
