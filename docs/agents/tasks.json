@@ -178,7 +178,7 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "in_review",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
@@ -830,9 +830,11 @@
     {
       "id": "T84",
       "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "lekta-00",
-      "dependsOn": [],
+      "dependsOn": [
+        "T18"
+      ],
       "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295."
     },
     {
