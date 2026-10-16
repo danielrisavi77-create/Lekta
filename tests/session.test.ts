@@ -167,6 +167,15 @@ describe('getValidAccessToken', () => {
     expect(token).toBe('jwt-abc');
     expect(store.load()!.accessToken).toBe('jwt-abc');
   });
+  it('signal prekida obnove prolazi do Supabase fetch poziva', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | null = null;
+    const store = memStore({ accessToken: 'old', refreshToken: 'refresh-xyz', expiresAt: 5_000, email: '', userId: '' });
+    const token = await getValidAccessToken(CFG, store, fetchOnce(res(200, tokenBody), (_url, init) => { seenSignal = init.signal as AbortSignal; }), 10_000, controller.signal);
+
+    expect(token).toBe('jwt-abc');
+    expect(seenSignal).toBe(controller.signal);
+  });
   it('istekao bez refresh tokena -> null i čisti sesiju', async () => {
     const store = memStore({ accessToken: 'old', refreshToken: '', expiresAt: 5_000, email: '', userId: '' });
     const token = await getValidAccessToken(CFG, store, fetchOnce(res(200, tokenBody)), 10_000);
@@ -226,6 +235,15 @@ describe('signInAnonymously', () => {
       expect(out.session.isAnonymous).toBe(true);
       expect(out.session.email).toBe('');
     }
+  });
+
+  it('prosljeđuje signal prekida na anonimnu prijavu', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | null = null;
+    const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (_url, init) => { seenSignal = init.signal as AbortSignal; }), 5_000, async () => undefined, controller.signal);
+
+    expect(out.ok).toBe(true);
+    expect(seenSignal).toBe(controller.signal);
   });
 
   it('422 znaci da anonimne prijave nisu ukljucene (pozivatelj pada na e-mail)', async () => {

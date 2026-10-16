@@ -4,6 +4,7 @@ import { guaranteeAppliesToStatus, guaranteeStatusNote } from '../report/guarant
 import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
+import { awaitAbortable } from '../shared/await-abortable';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
 // pa njegov kod ispada iz landing chunka.
@@ -214,10 +215,10 @@ async function signRepairDownload(...args: any[]){return (await loadRepairHistor
 async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryClient()).deleteRepairJob(args[0],args[1],args[2],args[3])}
 let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
 function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
-async function getValidAccessToken(...args: any[]){return (await loadAuthClient()).getValidAccessToken(args[0],args[1])}
+async function getValidAccessToken(cfg: import('../auth/session').AuthConfig, store: import('../auth/session').SessionStore, signal?: AbortSignal){return (await loadAuthClient()).getValidAccessToken(cfg,store,fetch,Date.now(),signal)}
 async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1],fetch,location.origin+location.pathname)}
 async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
-async function signInAnonymously(...args: any[]){return (await loadAuthClient()).signInAnonymously(args[0])}
+async function signInAnonymously(cfg: import('../auth/session').AuthConfig, signal?: AbortSignal){return (await loadAuthClient()).signInAnonymously(cfg,fetch,Date.now(),undefined,signal)}
 async function linkEmailToAnonymous(...args: any[]){return (await loadAuthClient()).linkEmailToAnonymous(args[0],args[1],args[2],fetch,location.origin+location.pathname)}
 async function confirmEmailLink(...args: any[]){return (await loadAuthClient()).confirmEmailLink(args[0],args[1],args[2],args[3])}
 let _checkoutClientPromise: Promise<typeof import('../report/checkout')>|null=null;
@@ -1606,13 +1607,13 @@ function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
 // Valjan pristupni token: iz Supabase sesije ako je auth konfiguriran (null -> pozivatelj otvara prijavu),
 // inace null (nema vise statickog tokena; nekonfigurirano okruzenje nema pristup).
-async function resolveAccessToken(){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore)}catch(e: any){return null}}return null}
+async function resolveAccessToken(signal?: AbortSignal){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore,signal)}catch(e: any){return null}}return null}
 /* Token BEZ trazenja e-maila: ako sesije nema, tiho otvori anonimnu. Sluzi tokovima koji moraju
    biti bez trenja (popravak, "Moji popravci"). Identitet je i dalje pravi user_id, pa RLS, mapa u
    Storageu i pravo na brisanje rade nepromijenjeno; samo ne trazimo e-mail. Ako anonimna prijava
    nije ukljucena na projektu, vracamo null pa pozivatelj pada natrag na e-mail prijavu.
    NE koristiti za admin/kupnju: ondje identitet mora biti vezan uz osobu. */
-async function ensureAccessToken(){if(!authConfigured())return null;const existing=await resolveAccessToken();if(existing)return existing;try{const out=await signInAnonymously(authConfig());if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
+async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const existing=await resolveAccessToken(signal);if(existing)return existing;if(signal?.aborted)return null;try{const out=await signInAnonymously(authConfig(),signal);if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
 // Referral (pozovi-prijatelja, 0013): kod se hvata iz ?ref na ucitavanju (safeStorage, prezivi
 // email-potvrdu u novom tabu), veze se na signup nakon OTP prijave, a share sekcija se prikaze na
 // ekranu 6 ako korisnik ima referral_code (prva kupnja). Sve preko service role u Edge Functionima.
@@ -1901,6 +1902,7 @@ const REPAIR_MAX_UPLOAD_BYTES=DOCX_MAX_UPLOAD_BYTES;
 // Krajnji rok jednog popravka. Namjerno velikodusan (spor uplink + serverska obrada), ali konacan:
 // bez njega zaglavljen zahtjev ostavlja gumb zauvijek u stanju "Saljem".
 const REPAIR_TIMEOUT_MS=180000;
+const REPAIR_AUTH_TIMEOUT_MS=30000;
 /* Sekcija "zahvati u tekst rada": stavke koje mijenjaju AUTOROV TEKST. Namjerno izvan "Popravi
    sve" i s dvije ravnopravne opcije, jer je odluka o sadrzaju korisnikova, ne nasa:
      1. "Primijeni" (kvacica, po zadanom ISKLJUCENA) -> stavka ide uz popravak,
@@ -2018,6 +2020,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   if(inFlight)return;
   inFlight=true;
   const orig=btn.textContent;
+  const authController=new AbortController();
+  const authTimer=setTimeout(()=>authController.abort(),REPAIR_AUTH_TIMEOUT_MS);
   btn.disabled=true;
   try{
   // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
@@ -2026,7 +2030,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   const chosenItems=getCheckedItems();
   if(!chosenItems.length){setSummary('<strong>Odaberi barem jednu stavku za popravak.</strong>');return}
   // Bez trenja: anonimna sesija se otvara tiho. Pad na e-mail prijavu samo ako anonimne nisu ukljucene.
-  const token: any=await ensureAccessToken();
+  btn.textContent='Provjeravam prijavu…';
+  const token: any=await awaitAbortable(ensureAccessToken(authController.signal),authController.signal);
+  clearTimeout(authTimer);
   if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
   btn.textContent='Šaljem na server…';
   try{
@@ -2212,8 +2218,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
    else if(out.kind==='error'){renderRepairRecovery(summary,recoveryFor(out,'after-send'),{retry:()=>go(confirmedMismatch),openJobs:authSessionActive()?openRepairHistory:null},escapeHtml)}
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
-  }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
+  }catch(e: any){console.error('Server repair:',e);if(authController.signal.aborted){renderRepairRecovery(summary,{action:'retry',retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'},{retry:()=>go(confirmedMismatch),openJobs:null},escapeHtml)}else setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
   }finally{
+   clearTimeout(authTimer);
    inFlight=false;
    if(!lockButton){btn.disabled=false;btn.textContent=orig;binding.controller.backToPlan()}
   }

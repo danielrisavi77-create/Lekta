@@ -62,9 +62,30 @@ describe('renderRepairRecovery', () => {
     jobs.click();
     expect(opened).toBe(1);
     expect(retry.disabled).toBe(false);
+    expect(el.querySelector('[data-repair-recovery]')?.textContent).toMatch(/zatvori prozor/i);
     retry.click();
     expect(retries).toBe(1);
     expect(el.querySelector('[data-repair-recovery]')?.getAttribute('data-repair-recovery')).toBe('check-existing-job');
+  });
+
+  it('prikazuje stanje ponovnog slanja dok ceka odgovor', async () => {
+    let finish!: () => void;
+    const pending = new Promise<void>((resolve) => { finish = resolve; });
+    renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => pending, openJobs: null }, esc);
+    const retry = el.querySelector<HTMLButtonElement>('[data-repair-retry]')!;
+
+    retry.click();
+
+    expect(retry.disabled).toBe(true);
+    expect(retry.textContent).toBe('Pokušavam ponovno…');
+    expect(retry.getAttribute('aria-busy')).toBe('true');
+    expect(el.querySelector('[role="status"]')?.textContent).toMatch(/do 3 minute/);
+    finish();
+    await pending;
+    await Promise.resolve();
+    expect(retry.disabled).toBe(false);
+    expect(retry.textContent).toBe('Pokušaj ponovno');
+    expect(retry.hasAttribute('aria-busy')).toBe(false);
   });
 
   it('bez prijave provjera poslova nije dostupna i to se kaze, umjesto tihog no-opa', () => {

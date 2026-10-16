@@ -74,7 +74,14 @@ test.describe('T10: oporavak nakon greske popravka', () => {
   test('prekid veze nakon slanja: prvo provjera postojeceg posla, ponovni pokusaj tek onda', async ({ page }) => {
     await analyzeToPanel(page);
     let requests = 0;
-    await page.route(REPAIR, (route) => { requests += 1; void route.abort('connectionreset'); });
+    let finishRetry!: () => void;
+    const retryGate = new Promise<void>((resolve) => { finishRetry = resolve; });
+    await page.route(REPAIR, async (route) => {
+      requests += 1;
+      if (requests === 1) { await route.abort('connectionreset'); return; }
+      await retryGate;
+      await route.abort('connectionreset');
+    });
     await send(page);
     const recovery = page.getByTestId('repair-recovery');
     await expect(recovery).toBeVisible({ timeout: 60_000 });
@@ -90,7 +97,13 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     await expect(retry).toBeEnabled();
     await page.keyboard.press('Escape'); // zatvori modal "Moji popravci" ako se otvorio
     await retry.click();
+    await expect(retry).toBeDisabled();
+    await expect(retry).toHaveText('Pokušavam ponovno…');
+    await expect(retry).toHaveAttribute('aria-busy', 'true');
+    await expect(recovery.getByRole('status')).toContainText('do 3 minute');
     await expect.poll(() => requests, { timeout: 30_000 }).toBe(2);
+    finishRetry();
+    await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
   });
 
   test('odbijena prava pristupa (401): ponovna prijava, ne slijepi ponovni pokusaj', async ({ page }) => {
