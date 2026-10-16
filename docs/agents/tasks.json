@@ -830,10 +830,12 @@
     {
       "id": "T84",
       "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "lekta-00",
-      "dependsOn": [],
-      "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295."
+      "dependsOn": [
+        "T18"
+      ],
+      "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295. 2026-10-16: blokiran dok T18 ne bude done; read-only provjera potvrdila je da produkciji nedostaju client-error, integrity-check i preflight-start te da faculty-request vraća Access-Control-Allow-Origin: * za lekta.hr i evil.example."
     },
     {
       "id": "T85",
