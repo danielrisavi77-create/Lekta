@@ -281,6 +281,47 @@ describe('signInAnonymously', () => {
     expect(called).toBe(false);
   });
 
+  it('ne trazi captcha ni ne salje signup ako je store vec zauzet', async () => {
+    let captchaCalled = false;
+    let signupCalled = false;
+    const out = await signInAnonymously(
+      CFG,
+      (async () => { signupCalled = true; return res(200, anonBody); }) as unknown as typeof fetch,
+      5_000,
+      async () => { captchaCalled = true; return undefined; },
+      undefined,
+      undefined,
+      () => false,
+    );
+
+    expect(out.ok).toBe(false);
+    expect(captchaCalled).toBe(false);
+    expect(signupCalled).toBe(false);
+  });
+
+  it('ponovno provjerava je li store zauzet nakon captcha i prije slanja', async () => {
+    let releaseCaptcha!: () => void;
+    let canSubmit = true;
+    let signupCalled = false;
+    let submitted = false;
+    const pending = signInAnonymously(
+      CFG,
+      (async () => { signupCalled = true; return res(200, anonBody); }) as unknown as typeof fetch,
+      5_000,
+      () => new Promise<string | undefined>((resolve) => { releaseCaptcha = () => resolve(undefined); }),
+      undefined,
+      () => { submitted = true; },
+      () => canSubmit,
+    );
+    await Promise.resolve();
+    canSubmit = false;
+    releaseCaptcha();
+
+    expect(await pending).toEqual({ ok: false, message: 'mrežna greška' });
+    expect(signupCalled).toBe(false);
+    expect(submitted).toBe(false);
+  });
+
   it('422 znaci da anonimne prijave nisu ukljucene (pozivatelj pada na e-mail)', async () => {
     const out = await signInAnonymously(CFG, fetchOnce(res(422)));
     expect(out).toEqual({ ok: false, message: 'anonimna prijava nije uključena' });

@@ -233,12 +233,14 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     let releaseSignup!: () => void;
     const signupGate = new Promise<void>((resolve) => { releaseSignup = resolve; });
     let signups = 0;
+    let signupsFinished = 0;
     let repairs = 0;
     let repairAuthorization = '';
     await page.route(SIGNUP, async (route) => {
       signups += 1;
       await signupGate;
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ANONYMOUS_SESSION) });
+      signupsFinished += 1;
     });
     await page.route('**/auth/v1/otp*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
     await page.route('**/auth/v1/verify*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(FAKE_SESSION) }));
@@ -258,14 +260,48 @@ test.describe('T10: oporavak nakon greske popravka', () => {
       await page.locator('#authCode').fill('123456');
       await page.locator('#authSubmit').click();
       await expect(page.locator('#authModal')).toBeHidden();
-      releaseSignup();
 
-      await expect.poll(() => repairs).toBe(1);
+      await expect.poll(() => repairs, { timeout: 5_000 }).toBe(1);
       expect(repairAuthorization).toBe('Bearer test-token');
+      expect(signupsFinished, 'popravak se nastavlja dok je signup jos na cekanju').toBe(0);
+      releaseSignup();
+      await expect.poll(() => signupsFinished).toBe(1);
+      await page.evaluate(() => new Promise<void>((resolve) => setTimeout(resolve, 0)));
       expect(await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.session') || '{}').accessToken)).toBe('test-token');
     } finally {
       releaseSignup();
     }
+  });
+
+  test('postojeca sesija s neuspjelom obnovom ne stvara novi anonimni racun', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('lekta.session', JSON.stringify({
+        accessToken: 'expired-token', refreshToken: 'refresh-token', expiresAt: 0,
+        email: 'test@example.invalid', userId: 'u-test', isAnonymous: false,
+      }));
+    });
+    await analyzeToPanel(page);
+    let refreshes = 0;
+    let signups = 0;
+    let repairs = 0;
+    await page.route((url) => url.pathname.endsWith('/auth/v1/token') && url.searchParams.get('grant_type') === 'refresh_token', async (route) => {
+      refreshes += 1;
+      await route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
+    });
+    await page.route(SIGNUP, async (route) => {
+      signups += 1;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ANONYMOUS_SESSION) });
+    });
+    await page.route(REPAIR, async (route) => {
+      repairs += 1;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    await send(page);
+    await expect(page.locator('#authModal')).toBeVisible({ timeout: 10_000 });
+    expect(refreshes).toBeGreaterThan(0);
+    expect(signups).toBe(0);
+    expect(repairs).toBe(0);
   });
 
   test('zastoj prijave prekida vrtnju prije slanja dokumenta', async ({ page }) => {

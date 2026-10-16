@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Session, SessionResult } from '../src/auth/session';
-import { createAnonymousSessionFlight } from '../src/auth/anonymous-session-flight';
+import { createAnonymousSessionFlight, resolveAccessTokenOrAnonymous } from '../src/auth/anonymous-session-flight';
 
 const session: Session = {
   accessToken: 'anon-access', refreshToken: 'anon-refresh', expiresAt: 10_000,
@@ -62,16 +62,16 @@ describe('createAnonymousSessionFlight', () => {
     markSubmitted();
     flight.invalidate();
     expect(requestSignal.aborted).toBe(false);
+    await expect(beforeLogout).resolves.toBeNull();
     const afterLogout = flight.run();
     resolveSignIn({ ok: true, session });
 
-    await expect(beforeLogout).resolves.toBeNull();
     await expect(afterLogout).resolves.toBe(session);
     expect(stored).toBe(session);
     expect(persist).toHaveBeenCalledOnce();
   });
 
-  it('ne prepisuje e-mail sesiju kada anonimni signup stigne kasnije', async () => {
+  it('kasna anonimna sesija ne prepisuje e-mail sesiju', async () => {
     let resolveSignIn!: (result: SessionResult) => void;
     let markSubmitted!: () => void;
     const start = (_signal: AbortSignal, submitted: () => void) => {
@@ -90,10 +90,65 @@ describe('createAnonymousSessionFlight', () => {
     markSubmitted();
     flight.invalidate();
     stored = emailSession;
+    await expect(pending).resolves.toBeNull();
     resolveSignIn({ ok: true, session });
 
-    await expect(pending).resolves.toBeNull();
+    await expect(flight.run()).resolves.toBe(session);
     expect(stored).toBe(emailSession);
-    expect(persist).not.toHaveBeenCalled();
+    expect(persist).toHaveBeenCalledOnce();
+    expect(persist).toHaveBeenCalledWith(session);
+  });
+
+  it('ne zapocinje novi signup ako kasnu sesiju nije moguce spremiti', async () => {
+    let resolveSignIn!: (result: SessionResult) => void;
+    let markSubmitted!: () => void;
+    let stored: Session | null = null;
+    const start = vi.fn((_signal: AbortSignal, submitted: () => void) => {
+      markSubmitted = submitted;
+      return new Promise<SessionResult>((resolve) => { resolveSignIn = resolve; });
+    });
+    const persist = vi.fn((value: Session) => {
+      if (stored) return false;
+      stored = value;
+      return true;
+    });
+    const flight = createAnonymousSessionFlight(start, persist, () => !stored);
+    const pending = flight.run();
+    await Promise.resolve();
+    markSubmitted();
+    flight.invalidate();
+    stored = emailSession;
+    await expect(pending).resolves.toBeNull();
+    resolveSignIn({ ok: true, session });
+    await expect(flight.run()).resolves.toBe(session);
+
+    await expect(flight.run()).resolves.toBeNull();
+    expect(start).toHaveBeenCalledOnce();
+    expect(stored).toBe(emailSession);
+  });
+});
+
+describe('resolveAccessTokenOrAnonymous', () => {
+  it('postojeca sesija s neuspjelom obnovom ne zapocinje anonimni signup', async () => {
+    const load = vi.fn(() => ({ ...session, expiresAt: 0 }));
+    const resolve = vi.fn(async () => null);
+    const runAnonymous = vi.fn(async () => session);
+
+    await expect(resolveAccessTokenOrAnonymous(true, resolve, load, runAnonymous)).resolves.toBeNull();
+    expect(runAnonymous).not.toHaveBeenCalled();
+    expect(resolve).toHaveBeenCalledOnce();
+  });
+
+  it('uzima e-mail token spremljen dok se prva provjera odvijala', async () => {
+    let loads = 0;
+    const load = vi.fn(() => ++loads === 1 ? null : emailSession);
+    const resolve = vi.fn()
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(emailSession.accessToken);
+    const runAnonymous = vi.fn(async () => session);
+
+    await expect(resolveAccessTokenOrAnonymous(true, resolve, load, runAnonymous)).resolves.toBe(emailSession.accessToken);
+    expect(resolve).toHaveBeenCalledTimes(2);
+    expect(runAnonymous).not.toHaveBeenCalled();
   });
 });

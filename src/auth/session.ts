@@ -226,12 +226,14 @@ export async function signInAnonymously(
   captcha: CaptchaSource = turnstileCaptcha,
   signal?: AbortSignal,
   onSubmitted?: () => void,
+  canSubmit?: () => boolean,
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  if (canSubmit && !canSubmit()) return { ok: false, message: 'sesija je već spremljena' };
   const captchaToken = await captchaTokenFrom(captcha);
   // Signup creates a server-side user, so an abort after submission cannot safely cancel it.
   // The UI may stop waiting; let an in-flight request finish so its session can be persisted.
-  if (signal?.aborted) return { ok: false, message: 'mrežna greška' };
+  if (signal?.aborted || (canSubmit && !canSubmit())) return { ok: false, message: 'mrežna greška' };
   try {
     onSubmitted?.();
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/signup`, {

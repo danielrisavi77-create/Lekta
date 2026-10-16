@@ -6,7 +6,7 @@ import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-naj
 import { createAnimationRegistry } from '../shared/animation-registry';
 import { awaitAbortable } from '../shared/await-abortable';
 import { createAuthCompletion } from '../auth/auth-completion';
-import { createAnonymousSessionFlight } from '../auth/anonymous-session-flight';
+import { createAnonymousSessionFlight, resolveAccessTokenOrAnonymous } from '../auth/anonymous-session-flight';
 import { renderRepairHistoryView } from './repair-history-view';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
@@ -221,7 +221,7 @@ function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
 async function getValidAccessToken(cfg: import('../auth/session').AuthConfig, store: import('../auth/session').SessionStore){return (await loadAuthClient()).getValidAccessToken(cfg,store,fetch,Date.now())}
 async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1],fetch,location.origin+location.pathname)}
 async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
-async function signInAnonymously(cfg: import('../auth/session').AuthConfig, signal?: AbortSignal, onSubmitted?: () => void){return (await loadAuthClient()).signInAnonymously(cfg,fetch,Date.now(),undefined,signal,onSubmitted)}
+async function signInAnonymously(cfg: import('../auth/session').AuthConfig, signal?: AbortSignal, onSubmitted?: () => void, canSubmit?: () => boolean){return (await loadAuthClient()).signInAnonymously(cfg,fetch,Date.now(),undefined,signal,onSubmitted,canSubmit)}
 async function linkEmailToAnonymous(...args: any[]){return (await loadAuthClient()).linkEmailToAnonymous(args[0],args[1],args[2],fetch,location.origin+location.pathname)}
 async function confirmEmailLink(...args: any[]){return (await loadAuthClient()).confirmEmailLink(args[0],args[1],args[2],args[3])}
 let _checkoutClientPromise: Promise<typeof import('../report/checkout')>|null=null;
@@ -1614,8 +1614,9 @@ function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlo
 const SESSION_KEY=STORAGE_KEYS.session;
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
 const anonymousSessionFlight=createAnonymousSessionFlight(
- (signal,onSubmitted)=>signInAnonymously(authConfig(),signal,onSubmitted),
+ (signal,onSubmitted)=>signInAnonymously(authConfig(),signal,onSubmitted,()=>!authStore.load()),
  session=>{if(authStore.load())return false;authStore.save(session);renderAuthEntry();return true},
+ ()=>!authStore.load(),
 );
 function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'').trim(),anonKey:String(productionConfig?.supabaseAnonKey||'').trim()}}
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
@@ -1623,7 +1624,7 @@ function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey
 // inace null (nema vise statickog tokena; nekonfigurirano okruzenje nema pristup).
 async function resolveAccessToken(){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore)}catch(e: any){return null}}return null}
 /* Tiha anon prijava za popravak/povijest; user_id nosi RLS, storage i brisanje. Admin/kupnja traze osobni racun. */
-async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const token=await resolveAccessToken();if(token||signal?.aborted)return token;const session=await anonymousSessionFlight.run(signal);const latest=await resolveAccessToken();const stored=authStore.load();return latest||(session&&stored?.userId===session.userId?session.accessToken:null)}
+async function ensureAccessToken(signal?: AbortSignal){return resolveAccessTokenOrAnonymous(authConfigured(),resolveAccessToken,authStore.load,s=>anonymousSessionFlight.run(s),signal)}
 // Referral (pozovi-prijatelja, 0013): kod se hvata iz ?ref na ucitavanju (safeStorage, prezivi
 // email-potvrdu u novom tabu), veze se na signup nakon OTP prijave, a share sekcija se prikaze na
 // ekranu 6 ako korisnik ima referral_code (prva kupnja). Sve preko service role u Edge Functionima.
