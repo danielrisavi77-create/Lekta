@@ -49,3 +49,25 @@ PR [#317](https://github.com/danielrisavi77-create/Lekta/pull/317) ostaje otvore
 U odnosu na današnji `master` `f758ba2b`, PR #317 sada je raziđen: zajednički predak `c2767c18`, 22 commita ispred i 32 iza. To ne poništava povijesnu provjeru nakon #319, ali prije budućeg spajanja #317 treba uskladiti s aktualnim `masterom` i ponovno provjeriti.
 
 Zaključak: tehnički popravak #318 prisutan je na `master`, security workflow za SHA `f758ba2b` prolazi, a provjera #317 nakon #319 ima povijesni dokaz. Issue #318 još nije spreman za zatvaranje jer neovisan pregled drugog providera nije potvrđen. Ovaj izvještaj daje dokaze za vlasnikov pregled; ne zatvara issue.
+
+### Svježi audit i lockfile dokaz — 16. listopada 2026., 06:58 UTC
+
+Na trenutačnom PR #367 kandidatu `f69a31a3f45d1a43524ffe9f3723b3e27c406902` (isti `package.json`
+i `package-lock.json` kao roditeljski `c116bf389674c722b9d90694d4987c9f2b66f1f7`) provjerio sam:
+
+- `npm audit --audit-level=high` i `npm audit --omit=dev --audit-level=high`: oba nalaze 0 ranjivosti.
+- `node scripts/npm-audit-ratchet.mjs`: cijeli graf ima 0 high/critical i ostaje na pragu 0.
+- `node scripts/npm-audit-ratchet.mjs --selftest`: negativne kontrole za niži prag, novi identitet i novi advisory prolaze; nevaljan odgovor se odbija.
+- `node scripts/lockfile-sources.mjs`: 275 paketa dolazi s npm registra uz sha512 integritet; jedan root/inBundle zapis je izuzetak.
+- `node scripts/lockfile-sources.mjs --selftest`: svih 15 nevaljanih ulaza se hvata.
+
+`node_modules` u worktreeu je junction na drugi checkout i zato nije valjan za `npm explain`. Izolirani
+install `C:\Users\PC\AppData\Local\Temp\lekta-t318-c116bf38` ima iste SHA-256 otiske obaju manifestâ
+kao trenutačni PR kandidat. `npm explain` u toj izoliranoj instalaciji potvrđuje `source-map-js@1.2.2`
+preko `postcss@8.5.28` i `smol-toml@1.9.0` preko `knip@6.39.0`.
+
+Read-only GitHub provjera potvrđuje da je issue #318 još otvoren, PR #319 spojen u
+`4911855f066b85fe555cc0a2b239726fec06852a`, a PR #317 ostaje otvoren prema staroj bazi
+`c06bb8b98a4eb962b0276bf149bb56793efc3664`, ne aktualnom `masteru` `f758ba2bde00c7f2d37daa789a39ed1e4168db99`.
+Ovaj presjek potvrđuje trenutačni audit i točan roditeljski graf; ne zatvara issue #318. Neovisan
+pregled drugog providera i dalje nije potvrđen.
