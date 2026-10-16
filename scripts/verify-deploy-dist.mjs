@@ -16,6 +16,7 @@ import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { findLegalPlaceholders } from './lib/legal-placeholders.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
+import { sitemapDistProblems } from './sitemap-integrity.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
@@ -244,29 +245,21 @@ for (const p of collectFiles(DIST, '.html')) {
   }
 }
 
-// 7. dist/sitemap.xml i dist/robots.txt su RUCNO odrzavani staticki fajlovi (public/sitemap.xml,
-//    public/robots.txt), ne generirani iz SITE_ORIGIN kao ostatak SEO pipelinea (provjera #5
-//    hvata generirane kanonike/loc-ove, ali ne i ove); ako se LEKTA_SITE_ORIGIN ikad promijeni
-//    (netlify.toml predvidja moguc prelazak s domene), ova dva fajla bi tiho i dalje oglasavala
-//    staru domenu bez pada builda dok ostatak sitea vec prati novu.
-const sitemapPath = path.join(DIST, 'sitemap.xml');
-if (fs.existsSync(sitemapPath)) {
-  const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
-  const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  if (!locs.length) fail('dist/sitemap.xml nema <loc> unosa');
-  for (const loc of locs) {
-    if (!isInOrigin(loc, SITE_ORIGIN)) fail(`dist/sitemap.xml <loc>${loc}</loc> nije unutar ${SITE_ORIGIN}`);
-  }
-}
+// 7. Javni sitemap indeks, svi njegovi URLsetovi i svaka navedena stranica moraju postojati u
+//    dist/ i koristiti SITE_ORIGIN. Time se hvataju i rucni sitemapovi i oni koje generiraju
+//    alati/fakulteti/usporedbe; sama provjera da su <loc> URL-ovi na pravoj domeni nije dovoljna.
+for (const problem of sitemapDistProblems(DIST, SITE_ORIGIN)) fail(problem);
 const robotsPath = path.join(DIST, 'robots.txt');
-if (fs.existsSync(robotsPath)) {
-  const robotsTxt = fs.readFileSync(robotsPath, 'utf8');
-  const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
-  if (!sitemapLines.length) fail('dist/robots.txt nema Sitemap: retka');
-  for (const url of sitemapLines) {
-    if (!isInOrigin(url, SITE_ORIGIN)) fail(`dist/robots.txt "Sitemap: ${url}" nije unutar ${SITE_ORIGIN}`);
-  }
+if (!fs.existsSync(robotsPath)) fail('dist/robots.txt ne postoji');
+const robotsTxt = fs.readFileSync(robotsPath, 'utf8');
+const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
+if (!sitemapLines.length) fail('dist/robots.txt nema Sitemap: retka');
+for (const url of sitemapLines) {
+  if (!isInOrigin(url, SITE_ORIGIN)) fail(`dist/robots.txt "Sitemap: ${url}" nije unutar ${SITE_ORIGIN}`);
 }
+if (!sitemapLines.some((url) => {
+  try { return new URL(url).pathname === '/sitemap.xml'; } catch { return false; }
+})) fail('dist/robots.txt ne navodi glavni sitemap indeks');
 
 // 8. generirane citatne SEO stranice (dist/alati/citati/*.html + brojac-kartica.html) moraju
 //    imati puni OG/Twitter/favicon blok (prije ovog gate-a 0/142 ih je imalo - dijeljeni link

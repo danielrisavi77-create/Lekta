@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://lekta.hr/</loc></url>
-  <url><loc>https://lekta.hr/saznaj-vise/</loc></url>
-  <url><loc>https://lekta.hr/alati.html</loc></url>
-  <url><loc>https://lekta.hr/pokrivenost.html</loc></url>
-  <url><loc>https://lekta.hr/citat.html</loc></url>
-  <url><loc>https://lekta.hr/naslovnica.html</loc></url>
-  <url><loc>https://lekta.hr/literatura.html</loc></url>
-  <url><loc>https://lekta.hr/izjava.html</loc></url>
-  <url><loc>https://lekta.hr/kartice.html</loc></url>
-  <url><loc>https://lekta.hr/landing_usporedba.html</loc></url>
-  <url><loc>https://lekta.hr/landing_benchmark.html</loc></url>
-  <url><loc>https://lekta.hr/citati-i-literatura.html</loc></url>
-  <url><loc>https://lekta.hr/privatnost.html</loc></url>
-  <url><loc>https://lekta.hr/uvjeti-koristenja.html</loc></url>
-  <url><loc>https://lekta.hr/pravila-povrata.html</loc></url>
-  <url><loc>https://lekta.hr/odricanje-od-odgovornosti.html</loc></url>
-  <url><loc>https://lekta.hr/obrada-dokumenata.html</loc></url>
-  <url><loc>https://lekta.hr/kolacici.html</loc></url>
-  <url><loc>https://lekta.hr/garancija.html</loc></url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap><loc>https://lekta.hr/sitemap-pages.xml</loc></sitemap>
+  <sitemap><loc>https://lekta.hr/alati/sitemap-alati.xml</loc></sitemap>
+  <sitemap><loc>https://lekta.hr/alati/sitemap-naslovnica.xml</loc></sitemap>
+  <sitemap><loc>https://lekta.hr/sitemap-fakulteti.xml</loc></sitemap>
+  <sitemap><loc>https://lekta.hr/sitemap-usporedba.xml</loc></sitemap>
+</sitemapindex>

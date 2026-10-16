@@ -42,18 +42,24 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     }
   });
 
-  // public/sitemap.xml i public/robots.txt su rucno odrzavani (kopiraju se u dist/ nepromijenjeni,
-  // za razliku od ostatka SEO pipelinea koji ih derivira iz SITE_ORIGIN); testira se javna kopija
-  // izravno (dist/ zrcali public/ 1:1 preko Vite publicDir), bez potrebe za punim buildom.
-  it('public/sitemap.xml <loc> i public/robots.txt Sitemap: prate SITE_ORIGIN (dist/ ih zrcali)', () => {
+  // Vite kopira javne sitemap datoteke u dist/, a site-origin plugin prepisuje origin za staging.
+  it('javni sitemap indeks navodi sve zasebne skupove ruta, a robots.txt otkriva indeks', () => {
     const sitemapXml = read('public/sitemap.xml');
-    const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
-    expect(locs.length).toBeGreaterThan(0);
-    for (const loc of locs) expect(isInOrigin(loc, SITE_ORIGIN), loc).toBe(true);
+    expect(sitemapXml).toMatch(/<sitemapindex\b/);
+    const sitemapUrls = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
+    expect(sitemapUrls).toHaveLength(5);
+    expect(sitemapUrls.map((url) => new URL(url).pathname)).toEqual([
+      '/sitemap-pages.xml',
+      '/alati/sitemap-alati.xml',
+      '/alati/sitemap-naslovnica.xml',
+      '/sitemap-fakulteti.xml',
+      '/sitemap-usporedba.xml',
+    ]);
+    for (const url of sitemapUrls) expect(isInOrigin(url, SITE_ORIGIN), url).toBe(true);
 
     const robotsTxt = read('public/robots.txt');
     const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((mm) => mm[1]);
-    expect(sitemapLines.length).toBeGreaterThan(0);
+    expect(sitemapLines).toEqual(['https://lekta.hr/sitemap.xml']);
     for (const url of sitemapLines) expect(isInOrigin(url, SITE_ORIGIN), url).toBe(true);
   });
 
@@ -65,7 +71,7 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     expect(isInOrigin('nije-url', 'https://lekta.hr')).toBe(false);
   });
 
-  it('staging build prepisuje sitemap i robots na svoj origin i ne dopusta indeksiranje (Codex nalaz 1 na #273)', () => {
+  it('staging build prepisuje sve javne sitemapove i robots na svoj origin i ne dopusta indeksiranje (Codex nalaz 1 na #273)', () => {
     const staging = 'https://lekta-staging.netlify.app';
     const robots = rewritePublicSeo('robots.txt', read('public/robots.txt'), staging);
     expect(robots).toMatch(/^Disallow: \/$/m);
@@ -73,10 +79,12 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
     for (const url of [...robots.matchAll(/^Sitemap:\s*(\S+)/gim)].map((mm) => mm[1])) {
       expect(isInOrigin(url, staging), url).toBe(true);
     }
-    const sitemap = rewritePublicSeo('sitemap.xml', read('public/sitemap.xml'), staging);
-    const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
-    expect(locs.length).toBeGreaterThan(0);
-    for (const loc of locs) expect(isInOrigin(loc, staging), loc).toBe(true);
+    for (const name of ['sitemap.xml', 'sitemap-pages.xml']) {
+      const sitemap = rewritePublicSeo(name, read(`public/${name}`), staging);
+      const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
+      expect(locs.length).toBeGreaterThan(0);
+      for (const loc of locs) expect(isInOrigin(loc, staging), loc).toBe(true);
+    }
   });
 
   it('gard #5 nad sintetickim artefaktom: kanonik mora biti u originu (Codex runda 2, nalaz 7)', () => {
@@ -188,7 +196,7 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
   });
 
   it('produkcijski build ne dira sitemap ni robots i ostaje indeksiran', () => {
-    for (const name of ['robots.txt', 'sitemap.xml']) {
+    for (const name of ['robots.txt', 'sitemap.xml', 'sitemap-pages.xml']) {
       const src = read(`public/${name}`);
       expect(rewritePublicSeo(name, src, PRIMARY_ORIGIN)).toBe(src);
     }
