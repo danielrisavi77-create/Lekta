@@ -42,4 +42,8 @@ Issue [#318](https://github.com/danielrisavi77-create/Lekta/issues/318) ostaje o
 - Popravak je ušao kroz [PR #319](https://github.com/danielrisavi77-create/Lekta/pull/319), spojen 9. listopada u commit `4911855f066b85fe555cc0a2b239726fec06852a`. PR je mijenjao samo lockfile: `source-map-js` 1.2.1 → 1.2.2 i `smol-toml` 1.8.0 → 1.9.0. Trenutačni `master` sadrži te verzije; `fullGraphHighCritical` ostaje 0, bez iznimki. Službeni GitHub advisories navode 1.2.2 i 1.9.0 kao zakrpane verzije.
 - Issue je i dalje otvoren. GitHub ne prikazuje zabilježeni pregled PR-a #319, a komentar na issueu od 6. listopada bilježi da neovisni pregled tada nije bio potvrđen. Ovaj odjeljak daje tehničke dokaze za vlasnikov pregled zatvaranja; ne zatvara issue i ne tvrdi da postoji dokaz drugog providera.
 
-Ovi podaci podupiru vlasnikovu odluku o zatvaranju issuea: zakrpe su u spojenom lockfileu, aktivni prag ostaje nula, a security workflow prolazi na aktualnom masteru. Issue nije zatvoren ovim izvještajem.
+### Svježa provjera nakon spajanja PR-a #319 — 16. listopada 2026., 01:03 UTC
+
+PR [#317](https://github.com/danielrisavi77-create/Lekta/pull/317) ostaje otvoren prema `master` na bazi `c06bb8b98a4eb962b0276bf149bb56793efc3664`, dok je aktualni `master` `f758ba2bde00c7f2d37daa789a39ed1e4168db99`. HEAD PR-a #317 je `760c414418ae0ba7be925fb18b8f78b4e09d9544`; trenutačnih 30 uspješnih i 2 preskočene provjere pripadaju tom starom PR-u, ne ponovnoj provjeri nakon PR-a #319. Issue #318 izričito traži usklađivanje i ponovnu provjeru #317 nakon spajanja #319. Neću pripisati te stare zelene provjere novoj bazi.
+
+Zaključak: tehnički popravak #318 prisutan je na `master` i security workflow za SHA `f758ba2b` prolazi, ali issue još nije spreman za zatvaranje. Nedostaju neovisan pregled PR-a #319 i usklađivanje/ponovna provjera PR-a #317 prema aktualnom `master`. Ovaj izvještaj daje dokaze za vlasnikov pregled; ne zatvara issue.
