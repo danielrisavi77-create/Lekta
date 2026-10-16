@@ -65,6 +65,26 @@ test('ulaz `/` nema vodoravni scroll kroz širine zaslona', async ({ page }, tes
   }
 });
 
+test('ulaz `/`: logotip i odabir profila ne preklapaju se na uskom zaslonu', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(async () => { await document.fonts.ready; });
+
+  const profil = page.locator('[data-site-chrome-profile]');
+  await expect(profil).toBeVisible();
+  await expect(profil).toHaveAccessibleName('Odaberi profil');
+
+  for (const width of [320, 340, 360, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    const razmak = await page.evaluate(() => {
+      const logo = document.querySelector('.site-chrome__logo');
+      const odabir = document.querySelector('[data-site-chrome-profile]');
+      if (!logo || !odabir) throw new Error('nedostaje logotip ili odabir profila');
+      return odabir.getBoundingClientRect().left - logo.getBoundingClientRect().right;
+    });
+    expect(razmak, `na ${width}px odabir profila ulazi u logotip`).toBeGreaterThanOrEqual(8);
+  }
+});
+
 /**
  * ZIVI LIST (ALIGNMENT Z32, varijanta B). Mjeri se na stvarnoj ruti, u oba projekta (desktop i
  * Pixel 5), jer pribor mijenja mjesto na 900 px, a hover tragova postoji samo uz mis.

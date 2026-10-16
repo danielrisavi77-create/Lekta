@@ -561,6 +561,18 @@ body:has(.site-command-dialog[open]) { overflow: hidden; }
   header.site-chrome--scrolled { padding-block: 2px; }
   .site-chrome__sheet.open { width: min(420px, 100vw); }
 }
+/* Na 320 px dugi natpis profila širio je desnu skupinu preko logotipa. Suzi samo vidljivi natpis;
+   puno ime ostaje u stablu pristupačnosti, a klik i profil ne nestaju s uskog zaglavlja. */
+@media (max-width: 340px) {
+  .site-chrome__plate { min-width: 0; gap: 6px; padding-inline: 8px; }
+  .site-chrome__plate [data-site-chrome-profile-label] {
+    display: block;
+    min-width: 0;
+    max-width: 9ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 /* KRATKI OBLIK KORAKA (samo brojevi) NA `/rad/`, IZMJEREN, NE POGODJEN (Z15 drugi krug, stavka 4).
    Stoji IZA mobilnog bloka namjerno: osnovni sloj (sve prije prvog `@media`) ne smije nositi
    pravilo za natpis koraka, jer bi natpisi tada nestali na svakoj sirini.
