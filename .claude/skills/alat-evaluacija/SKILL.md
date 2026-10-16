@@ -1,6 +1,6 @@
 ---
 name: alat-evaluacija
-description: Okida se kad treba procijeniti vanjski alat, biblioteku, GitHub repozitorij, MCP server ili ekstenziju za Lektu prije uvodjenja. Postupak mjerenja nad Lektom, dokaza da alat grize i odluke koja se upisuje u plan.
+description: Okida se kad treba procijeniti vanjski alat, biblioteku, framework, GitHub repozitorij, MCP server, plugin ili ekstenziju za Lektu prije uvodjenja, ukljucujuci prijedlog da se postojeci alat zamijeni drugim ("prijedimo na X", "isplati li se Y"). Postupak mjerenja nad Lektom, dokaza da alat grize i odluke koja se upisuje u plan.
 ---
 
 # Evaluacija vanjskog alata

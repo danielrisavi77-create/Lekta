@@ -27,6 +27,9 @@ export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; co
   { event: 'PreToolUse', matcher: 'mcp__plugin_supabase_supabase__apply_migration', command: hookCommand('scripts/agents/tool-guard.mjs') },
   { event: 'PreToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/dash-guard.mjs') },
   { event: 'PreToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/dash-guard.mjs') },
+  // Brza povratna sprega: oxlint nad upravo zapisanom datotekom (odluka vlasnika 2026-10-13).
+  { event: 'PostToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/lint-feedback.mjs') },
+  { event: 'PostToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/lint-feedback.mjs') },
   { event: 'SessionEnd', command: hookCommand('scripts/hooks/session-end-gc.mjs') },
   { event: 'Stop', command: hookCommand('scripts/hooks/implementer-stop.mjs') },
 ];
