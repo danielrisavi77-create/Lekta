@@ -473,3 +473,14 @@ testova u `tests/xff-key.test.ts`, `supabase/functions/_shared/hash-ip.test.ts` 
 ni runtime. T18 ostaje otvoren zbog podrijetla migracija i staging korisničkog toka; T84 ostaje
 blokiran T18, uz potvrđen produkcijski CORS nalaz. Nije bilo Supabase upisa, Edge deploya ni izmjene
 produkcije. Odluka ostaje **HOLD**.
+
+## T49: svježa DNS i Resend provjera — 16. listopada 2026., 06:34 UTC
+
+Javni DNS upiti razrješavaju root MX/SPF, Resend DKIM, `send.lekta.hr` MX/SPF i DMARC. DMARC je
+`p=none` s izvještajima na `dmarc@lekta.hr`. Resendov read-only popis domena prikazuje `lekta.hr`
+kao `verified` i slanje kao omogućeno. Resend primanje je isključeno; to samo po sebi ne potvrđuje
+niti opovrgava odvojeno Cloudflare Email Routing/Gmail putanje za sandučić podrške.
+
+Nije poslana testna poruka, nije provjeren primitak ni odgovor iz sandučića, a Supabase Auth
+`rate_limit_email_sent` nije dostupan kroz ovaj read-only pregled. Zato je ovo samo DNS/domena dokaz,
+ne zatvaranje T49. Nije čitana ni mijenjana SMTP/API tajna.
