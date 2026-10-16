@@ -417,3 +417,31 @@ postavka. Stoga ostaju otvoreni: T18 (izvor četiri remote-only migracije i stag
 T18), T49 (support poruka/odgovor i Auth limit), T85 (žive granice i alarmi), T86 (provjera objavljenih
 pravnih stranica), T89 (staging Auth testovi) i vlasnikov završni T81 tok s dva do tri rada. Nema
 spajanja, deploya ni nove ovjere izdanja; odluka ostaje **HOLD**.
+
+## Naknadna ciljana provjera — 16. listopada 2026., 05:41 UTC
+
+Ovaj nastavak ažurira presjek iz 05:08 UTC. Produkcija nije mijenjana.
+
+- `supabase/functions/_shared/cors.test.ts` prošao je 8/8 testova kroz gate lock. Svježi HTTP `OPTIONS`
+  na `faculty-request` potvrđuje: staging vraća svoj dopušteni origin i izostavlja ACAO za nepoznati
+  origin; produkcija vraća `Access-Control-Allow-Origin: *` i za `https://lekta.hr` i za
+  `https://evil.example`. Test koda ne zatvara produkcijski nalaz.
+- Read-only `supabase secrets list` i izvor produkcijskog `repair-docx` v36 potvrđuju da je zastavica
+  besplatnog načina postavljena, kill switch nije postavljen, a posebni overridei limita nisu prisutni;
+  v36 zato koristi zadane vrijednosti iz deployanog izvora. Brojčane limite i digeste ne ponavljam u
+  ovom javnom izvještaju. Ovo ne dokazuje ponašanje pod opterećenjem.
+- Supabase metapodaci potvrđuju da je organizacija projekta na Free planu. Supabase navodi da je Spend
+  Cap dostupan samo na Pro planu i da Free plan nema usage charges, ali prekoračenja kvota mogu
+  ograničiti uslugu ([upute za kontrolu troškova](https://supabase.com/docs/guides/platform/cost-control)).
+  Trenutna potrošnja, odredište obavijesti i status eventualnih drugih troškovnih alarma nisu očitani;
+  T85 ostaje otvoren.
+- Osvježeni GitHub podaci potvrđuju da su #367, #368 i #369 i dalje otvoreni draftovi prema `master`;
+  nema spajanja. Nove pretrage dostupnih Lekta/Katedra repozitorija nisu našle izvorni commit ili PR za
+  četiri remote-only migracije. To ne dokazuje da izvor ne postoji; T18 ostaje otvoren, a T84 blokiran.
+- T49 još čeka test slanja/odgovora i očitanje Auth `rate_limit_email_sent`; T89 čeka staging Auth
+  negativne i pozitivne probe; T86 čeka provjeru živih pravnih stranica nakon objave. Vlasnikov T81
+  tok s dva do tri rada i GO/NO-GO odluka nisu provedeni.
+
+**Odluka ostaje HOLD.** Nisu primijenjene migracije, mijenjane tajne/postavke, deployane funkcije,
+spajani PR-ovi ni objavljena produkcija. Puni `release:check` i novi release proof ostaju za konačni,
+zamrznuti kandidat.
