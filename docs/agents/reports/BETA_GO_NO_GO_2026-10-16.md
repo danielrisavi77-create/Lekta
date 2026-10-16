@@ -273,3 +273,23 @@ Linear DAN-11/T81 je i dalje `Backlog` s rokom 19.10.2026.; DAN-14/T89 je `In Pr
 je `Done` za raniji dokaz, ne za budući kombinirani kandidat. **Odluka ostaje HOLD.** Staging probe
 je sada potvrđen; CAPTCHA Auth testovi, živi limiti i alarmi, e-mail limit, vlasnikov odabir paketa
 i ručni prolaz 2–3 rada i dalje su otvoreni. Nema spajanja, Supabase izmjena ni produkcijske objave.
+
+## Svježa produkcijska provjera — 16. listopada 2026., 02:08 UTC
+
+Javni `GET https://lekta.hr/build-info.json` vraća HTTP 200, commit
+`f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`.
+
+Preflight `OPTIONS` na produkcijskom `faculty-request` vraća
+`Access-Control-Allow-Origin: *` i za `Origin: https://lekta.hr` i za
+`Origin: https://evil.example`. To ne zadovoljava očekivani allowlist za betu.
+
+Supabaseov katalog navodi svih 10 ciljanih IP-zaštićenih funkcija kao aktivne na stagingu:
+`analytics-event`, `client-error`, `faculty-request`, `generate-report`, `integrity-check`,
+`preflight-start`, `profile-rules`, `redeem-referral-signup`, `repair-docx` i `source-check`.
+U produkcijskom katalogu nedostaju `client-error`, `integrity-check` i `preflight-start`.
+Katalog potvrđuje prisutnost i status, ne ponašanje koda za svaku funkciju.
+
+Linear DAN-8/T49 i DAN-12/T84 su `In Progress`; nijedna produkcijska Supabase postavka nije
+mijenjana. T49 ostaje otvoren dok se ne provjere slanje i odgovor support e-pošte te živi Auth
+limit. T84 ostaje otvoren zbog produkcijskog CORS-a i triju nedostajućih funkcija. **Odluka ostaje
+HOLD; nema spajanja ni produkcijske objave.**
