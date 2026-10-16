@@ -178,11 +178,11 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "in_review",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani. STANJE 27.9.: staging ima migracije do 0204 (Supabase list_migrations, procitano u sesiji lekta-00 27. 9.), Edge webhook-mor v5 i create-checkout v6 aktivni na stagingu (list_edge_functions), naplata inertna; disciplina numeracije ima gard tests/migration-numbering.test.ts. Preostaje dokaz korisnickog toka iz Dokaza iznad."
+      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani. STANJE 27.9.: staging ima migracije do 0204 (Supabase list_migrations, procitano u sesiji lekta-00 27. 9.), Edge webhook-mor v5 i create-checkout v6 aktivni na stagingu (list_edge_functions), naplata inertna; disciplina numeracije ima gard tests/migration-numbering.test.ts. Preostaje dokaz korisnickog toka iz Dokaza iznad. 2026-10-16: Linear In Progress. Read-only usporedba po normaliziranom imenu: 112/112 repo migracija prisutno u produkciji i stagingu; produkcija ima 4 dodatna zapisa bez potvrdenog SQL porijekla, staging 11 dodatnih Katedra zapisa 0104-0114. Nema duplikata; migracije nisu primijenjene."
     },
     {
       "id": "T19",
