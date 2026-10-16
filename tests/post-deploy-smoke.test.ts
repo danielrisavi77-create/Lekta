@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   assertHtmlOk, assertContains, assertSecurityHeaders, assertAssetOk,
-  assertHealth, assertHealthRejectsPost, assertRequiresAuth,
+  assertHealth, assertHealthRejectsPost, assertRequiresAuth, assertRepairCorsPreflight,
   extractLocalAssets, classifyRun, runSmoke, assertBuildInfo, buildInfoCommit,
 // @ts-expect-error - .mjs skripta bez tipova; ovdje se namjerno vrti IZVORNI alat, ne njegov prijepis.
 } from '../scripts/post-deploy-smoke.mjs';
@@ -91,6 +91,18 @@ describe('tvrdnje hvataju kvar zbog kojeg postoje', () => {
     expect(assertRequiresAuth({ status: 401 }, 'r').ok).toBe(true);
   });
 
+  it('repair-docx preflight mora dopustiti staging origin, POST, auth i binarni header', () => {
+    const headers = {
+      'access-control-allow-origin': 'https://lekta-staging.netlify.app',
+      'access-control-allow-methods': 'POST, OPTIONS',
+      'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+    };
+    expect(assertRepairCorsPreflight({ status: 200, headers }, 'https://lekta-staging.netlify.app').ok).toBe(true);
+    expect(assertRepairCorsPreflight({ status: 200, headers: { ...headers, 'access-control-allow-headers': 'authorization, content-type' } }, 'https://lekta-staging.netlify.app').ok).toBe(false);
+    expect(assertRepairCorsPreflight({ status: 200, headers }, 'https://lekta.hr').ok).toBe(false);
+    expect(assertRepairCorsPreflight({ status: 503, headers }, 'https://lekta-staging.netlify.app').ok).toBe(false);
+  });
+
   it('marker pravne stranice', () => {
     expect(assertContains({ text: 'prazno' }, 'AZOP', 'x').ok).toBe(false);
     expect(assertContains({ text: 'tijelo AZOP kraj' }, 'AZOP', 'x').ok).toBe(true);
@@ -140,12 +152,19 @@ describe('classifyRun: ispad ili promatrac bez mreze', () => {
 
 describe('runSmoke nad laznim opazanjima', () => {
   /** Zdrava produkcija u malom: naslovnica, resursi, sve pravne stranice, Edge. */
-  const zdravObserve = async (url: string, init: { method?: string } = {}) => {
+  const zdravObserve = async (url: string, init: { method?: string; headers?: Record<string, string> } = {}) => {
     const u = new URL(url);
     if (u.pathname.endsWith('/health')) {
       return init.method === 'POST'
         ? { status: 405, headers: {}, text: '' }
         : { status: 200, headers: {}, text: JSON.stringify({ status: 'ok', dependencies: { database: { ok: true } } }) };
+    }
+    if (u.pathname.endsWith('/repair-docx') && init.method === 'OPTIONS') {
+      return { status: 200, headers: {
+        'access-control-allow-origin': init.headers?.Origin || '',
+        'access-control-allow-methods': 'POST, OPTIONS',
+        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+      }, text: '' };
     }
     if (u.pathname.endsWith('/repair-docx') || u.pathname.endsWith('/create-checkout')) return { status: 401, headers: {}, text: '' };
     if (u.pathname.endsWith('/build-info.json')) {
@@ -180,6 +199,24 @@ describe('runSmoke nad laznim opazanjima', () => {
     const bi = nalazi.find((n: { id: string }) => n.id === 'build-info') as { ok: boolean; commit?: string } | undefined;
     expect(bi?.ok).toBe(true);
     expect(bi?.commit).toBe('c'.repeat(40));
+  });
+
+  it('staging smoke hvata preflight koji odbija x-lekta-response', async () => {
+    const bezBinaryHeader = async (url: string, init: { method?: string; headers?: Record<string, string> } = {}) => {
+      if (new URL(url).pathname.endsWith('/repair-docx') && init.method === 'OPTIONS') {
+        return { status: 200, headers: {
+          'access-control-allow-origin': init.headers?.Origin || '',
+          'access-control-allow-methods': 'POST, OPTIONS',
+          'access-control-allow-headers': 'authorization, content-type, apikey',
+        }, text: '' };
+      }
+      return zdravObserve(url, init);
+    };
+    const nalazi = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: bezBinaryHeader });
+    const cors = nalazi.find((n: { id: string }) => n.id === 'cors:repair-docx');
+    expect(cors?.ok).toBe(false);
+    expect(cors?.detail).toContain('x-lekta-response nije dopusten');
+    expect(classifyRun(nalazi)).toBe('fail');
   });
 
   it('build-info 404 je NEPOZNAT identitet, ne ispad: operativni status ostaje ok, nalaz nosi unknown', async () => {

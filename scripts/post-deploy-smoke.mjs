@@ -169,6 +169,26 @@ export function assertRequiresAuth(obs, name) {
   return bad(`${name} bez tokena: HTTP ${obs.status}, ocekivano 401`);
 }
 
+/**
+ * Browser mora proci CORS preflight prije slanja stvarnog upload POST-a. repair-docx salje
+ * `X-Lekta-Response` za binarni odgovor; ako taj header nije eksplicitno dopusten, preglednik
+ * prekida poziv nakon OPTIONS-a i korisniku ostane tijek popravka koji se vrti bez POST-a.
+ */
+export function assertRepairCorsPreflight(obs, origin) {
+  if (obs.status < 200 || obs.status >= 300) return bad(`repair-docx CORS preflight: HTTP ${obs.status}`);
+  if (String(header(obs, 'access-control-allow-origin') || '') !== origin) {
+    return bad(`repair-docx CORS preflight: origin nije dopusten (${header(obs, 'access-control-allow-origin') || 'nema zaglavlja'})`);
+  }
+  const methods = String(header(obs, 'access-control-allow-methods') || '')
+    .split(',').map((x) => x.trim().toLowerCase());
+  if (!methods.includes('post')) return bad('repair-docx CORS preflight: POST nije dopusten');
+  const allowedHeaders = String(header(obs, 'access-control-allow-headers') || '')
+    .split(',').map((x) => x.trim().toLowerCase());
+  if (!allowedHeaders.includes('authorization')) return bad('repair-docx CORS preflight: authorization nije dopusten');
+  if (!allowedHeaders.includes('x-lekta-response')) return bad('repair-docx CORS preflight: x-lekta-response nije dopusten');
+  return ok();
+}
+
 // ---------------------------------------------------------------------------
 // MREZA
 // ---------------------------------------------------------------------------
@@ -326,6 +346,15 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
   zapisi('health', 'functions', health, () => assertHealth(health));
   const healthPost = await observeImpl(`${functions}/health`, { method: 'POST' });
   zapisi('health:post', 'functions', healthPost, () => assertHealthRejectsPost(healthPost));
+  const repairCors = await observeImpl(`${functions}/repair-docx`, {
+    method: 'OPTIONS',
+    headers: {
+      Origin: site,
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'authorization,x-lekta-response',
+    },
+  });
+  zapisi('cors:repair-docx', 'functions', repairCors, () => assertRepairCorsPreflight(repairCors, site));
   const repair = await observeImpl(`${functions}/repair-docx`, { method: 'POST', body: '{}' });
   zapisi('auth:repair-docx', 'functions', repair, () => assertRequiresAuth(repair, 'repair-docx'));
   // create-checkout ide u istoj objavi kao klijent (release.yml); bez ovoga bi izostala ili pala
