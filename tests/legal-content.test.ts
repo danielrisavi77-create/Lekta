@@ -223,12 +223,14 @@ describe('legal-content', () => {
     const html = docs.privacy.html;
     expect(html).toContain('74684415764');
     expect(html).toContain('097 6570 399');
+    expect(html).toContain('OIB voditelja obrade');
     expect(html).toContain('još nije registrirani poslovni subjekt');
     expect(html.toLowerCase()).toContain('sve funkcije dostupne tijekom besplatne bete');
     expect(html).toContain('uključujući automatske popravke');
 
     const registered = legalDocuments({ providerRegistered: true });
     expect(registered.privacy.html).not.toContain('još nije registrirani poslovni subjekt');
+    expect(registered.privacy.html).toContain('<strong>OIB:</strong> 74684415764');
   });
 
   /** Javni kontaktni broj se renderira kad postoji; sam po sebi ne uključuje plaćanje. */

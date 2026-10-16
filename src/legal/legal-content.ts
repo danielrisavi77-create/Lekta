@@ -75,10 +75,13 @@ function resolveConfig(cfg?: Partial<LegalProviderConfig>): LegalProviderConfig 
   };
 }
 
-/** Redak identiteta u legal-meta: OIB i adresa se renderiraju samo kad postoje. */
+/** Redak identiteta u legal-meta; osobni OIB jasno je označen dok poslovni subjekt nije registriran. */
 function identityMeta(c: LegalProviderConfig): string {
   const bits = [`<strong>Voditelj obrade:</strong> ${esc(c.controller)}`];
-  if (c.oib) bits.push(`<strong>OIB:</strong> ${esc(c.oib)}`);
+  if (c.oib) {
+    const oibLabel = c.providerRegistered ? 'OIB' : 'OIB voditelja obrade';
+    bits.push(`<strong>${oibLabel}:</strong> ${esc(c.oib)}`);
+  }
   if (c.address) bits.push(`<strong>Adresa:</strong> ${esc(c.address)}`);
   bits.push(`<strong>Kontakt:</strong> ${esc(c.contact)}`);
   if (c.phone) bits.push(`<strong>Telefon:</strong> ${esc(c.phone)}`);

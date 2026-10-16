@@ -34,8 +34,9 @@ Pošalji probni OTP na beta testni račun i potvrdi isporuku i uspješnu prijavu
 
 ## C. Pravni subjekt
 
-- [ ] Registrirati subjekt i upisati `oib` i `address` u `data/legal/provider.json`. Dok su prazni,
-      pravne stranice nose napomenu da registracijski podaci slijede (`registrationNote`).
+- [ ] Registrirati poslovni subjekt prije prve naplate i tek tada postaviti
+      `providerRegistered: true` u `data/legal/provider.json`. Vlasnički potvrđeni OIB, telefon i
+      adresa već su javno navedeni; do registracije beta-popravci ostaju besplatni, a naplata zatvorena.
 - [ ] **Prije prve naplate zamijeniti privremene osobne kontaktne podatke poslovnim/registriranim
       podacima subjekta gdje god je to pravno dopušteno.** Ne brisati podatke koje GDPR i
       potrošačko pravo stvarno traže; cilj je ne objavljivati privatnu kućnu adresu nakon što
