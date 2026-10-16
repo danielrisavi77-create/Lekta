@@ -493,3 +493,14 @@ HTTP 200 za `/privatnost.html` i `/uvjeti-koristenja.html`; obje stranice imaju 
 formulaciju, a privatnost spominje Turnstile. Ni jedna živa stranica još ne sadrži potvrđeni OIB ni
 telefon. Pravne izmjene ostaju u draft PR-u; T86 se ne smatra dovršenim dok usklađeni klijent i
 `repair-docx` nisu objavljeni i živi tekst provjeren. Nije bilo produkcijske promjene.
+
+## T89: captcha kod i trenutni staging build — 16. listopada 2026., 06:39 UTC
+
+Na PR #367 HEAD-u `df9694a4697ec1091f0dbfac27fcbd29a4e64ddd` ciljani skup `auth-captcha` i `session`
+prolazi 70/70 testova; zaštitni test uključuje negativnu kontrolu za direktni Supabase Auth poziv.
+Javni `build-info.json` i dalje vraća SHA `f758ba2bde00c7f2d37daa789a39ed1e4168db99`: staging
+ima `captchaSiteKey=true`, produkcija `false`. To potvrđuje samo site key u ugrađenom buildu, ne
+Supabase Auth postavku ni stvarni token.
+
+Nisu provedeni staging signup, Turnstile ni pozitivni/negativni Auth pozivi i nijedna Auth postavka
+nije promijenjena. Stvarni staging korak T89 ostaje otvoren.
