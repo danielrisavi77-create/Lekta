@@ -239,3 +239,37 @@ U #367 je `TERMS_VERSION` podignut na `2026-10-16`, uz očuvani kanonski checkou
 Vlasnik još treba odabrati koji se paketi uključuju, razriješiti planirani datum prema Linearovu roku, potvrditi staging Turnstile token i Supabase Auth testove, provjeriti žive limite popravaka i troškovne alarme, očitati Supabase email limit, zatim proći glavni tok s 2–3 rada. Nepoznato stanje ostaje NO-GO. Tek nakon odabira i zamrzavanja točnog kandidata slijede jedan puni Windows `release:check`, obvezne Word provjere, jedan novi release proof, jedna produkcijska objava i strogi smoke.
 
 **Odluka ostaje HOLD.** Nije bilo spajanja, Supabase izmjena ni produkcijske objave.
+
+## Svježa staging provjera — 16. listopada 2026., 00:56 UTC
+
+Na čistom PR #367 worktreeju, HEAD `296b26a91d49bdd7f1598c6e10a08f8a868936bb`, pokrenut je samo
+`node scripts/extraction-probe.mjs` s `LEKTA_STAGING_ORIGIN=https://bnyemcnsphlitjradrst.supabase.co`.
+Supabase konektor potvrđuje da je projekt `Lekta staging` (`bnyemcnsphlitjradrst`)
+`ACTIVE_HEALTHY`. Probe je poslao 40 GET zahtjeva, dobio 7 različitih HTTP 200 profila, nije dosegao
+rate-limit u tom uzorku i nije našao evidence markere. Skripta je završila kodom 0: njezin prag je
+manje od 25 različitih profila unutar tvrdog capa od 40 zahtjeva. Ovo je svježa, usko ograničena
+staging provjera; ne mijenja `RELEASE_PROOF.json` i nije puni `release:check`.
+
+Javni `https://lekta-staging.netlify.app/build-info.json` vraća HTTP 200, SHA
+`f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=true`. Popis naziva GitHub Actions
+varijabli pokazuje `TURNSTILE_SITE_KEY` u `staging`, ali ne i u `production`. Produkcijski
+`https://lekta.hr/build-info.json` i dalje vraća isti SHA s `captchaSiteKey=false`. To ne dokazuje
+Supabase Auth CAPTCHA postavku: staging token u pregledniku, uključivanje Auth zaštite, negativni
+signup/OTP testovi bez tokena i pozitivni tokovi ostaju neprovjereni. Nije čitan ni mijenjan secret.
+
+Produkcijska `/privatnost.html` vraća HTTP 200, sadrži Turnstile, a ne sadrži potvrđeni OIB ni telefon
+iz PR-a #367; pravni sadržaj zato još nije objavljen. GitHub issue #318 ostaje otvoren. PR #319 je
+spojen u `4911855f066b85fe555cc0a2b239726fec06852a`, no nema zabilježenog neovisnog pregleda; issue
+se ne zatvara samo na temelju ovog izvještaja.
+
+Upravo osvježene GitHub provjere: #367 ima 23 uspješne, 6 u tijeku, 2 preskočene i 4 neuspješne
+(sva četiri vode na isti Netlify Deploy Preview); #368 ima 30 uspješnih, 2 preskočene i 4
+neuspješne; #369 ima 29 uspješnih, 1 u tijeku, 2 preskočene i 4 neuspješne; #370 ima 30
+uspješnih, 2 preskočene i 4 neuspješne. Četiri neuspjeha na svakom su `netlify/lektahr/deploy-preview`
+i povezani Header/Pages/Redirect statusi; detaljni log za #367 potvrđuje da strogi preview odbija
+zastarjeli proof prije objave previewja. To nisu produkcijska objava ni kvar živog mastera.
+
+Linear DAN-11/T81 je i dalje `Backlog` s rokom 19.10.2026.; DAN-14/T89 je `In Progress`, a DAN-9/T72
+je `Done` za raniji dokaz, ne za budući kombinirani kandidat. **Odluka ostaje HOLD.** Staging probe
+je sada potvrđen; CAPTCHA Auth testovi, živi limiti i alarmi, e-mail limit, vlasnikov odabir paketa
+i ručni prolaz 2–3 rada i dalje su otvoreni. Nema spajanja, Supabase izmjena ni produkcijske objave.
