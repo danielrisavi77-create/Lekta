@@ -6,6 +6,7 @@ import {
   linkEmailToAnonymous, confirmEmailLink,
   type Session, type SessionStore,
 } from '../src/auth/session';
+import { awaitAbortable } from '../src/shared/await-abortable';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon-key' };
 
@@ -167,6 +168,29 @@ describe('getValidAccessToken', () => {
     expect(token).toBe('jwt-abc');
     expect(store.load()!.accessToken).toBe('jwt-abc');
   });
+  it('timeout UI čekanja ne prekida refresh token koji Supabase može rotirati', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | null = null;
+    let fetchCount = 0;
+    const store = memStore({ accessToken: 'old', refreshToken: 'refresh-xyz', expiresAt: 5_000, email: '', userId: '' });
+    const finishFetches: ((response: Response) => void)[] = [];
+    const pendingFetch = ((_url: string | URL | Request, init: RequestInit) => {
+      fetchCount += 1;
+      seenSignal = init.signal ?? null;
+      return new Promise<Response>((resolve) => { finishFetches.push(resolve); });
+    }) as typeof fetch;
+    const refresh = getValidAccessToken(CFG, store, pendingFetch, 10_000);
+    const uiWait = awaitAbortable(refresh, controller.signal);
+    controller.abort();
+
+    await expect(uiWait).rejects.toMatchObject({ name: 'AbortError' });
+    const recoveredWait = getValidAccessToken(CFG, store, pendingFetch, 10_000);
+    expect(fetchCount, 'oporavak se pridružuje postojećem refreshu').toBe(1);
+    expect(seenSignal).toBeNull();
+    for (const finish of finishFetches) finish(res(200, tokenBody));
+    await expect(Promise.all([refresh, recoveredWait])).resolves.toEqual(['jwt-abc', 'jwt-abc']);
+    expect(store.load()).toMatchObject({ accessToken: 'jwt-abc', refreshToken: tokenBody.refresh_token });
+  });
   it('istekao bez refresh tokena -> null i čisti sesiju', async () => {
     const store = memStore({ accessToken: 'old', refreshToken: '', expiresAt: 5_000, email: '', userId: '' });
     const token = await getValidAccessToken(CFG, store, fetchOnce(res(200, tokenBody)), 10_000);
@@ -226,6 +250,76 @@ describe('signInAnonymously', () => {
       expect(out.session.isAnonymous).toBe(true);
       expect(out.session.email).toBe('');
     }
+  });
+
+  it('ne prekida poslani signup i nakon isteka UI cekanja', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | undefined;
+    let submitted = false;
+    const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (_url, init) => {
+      seenSignal = init.signal as AbortSignal | undefined;
+    }), 5_000, async () => undefined, controller.signal, () => {
+      submitted = true;
+      controller.abort();
+    });
+
+    expect(out.ok).toBe(true);
+    expect(submitted).toBe(true);
+    expect(seenSignal).toBeUndefined();
+  });
+
+  it('ne salje signup ako je UI odustao dok se ceka captcha', async () => {
+    const controller = new AbortController();
+    let called = false;
+    const captcha = async () => {
+      controller.abort();
+      return undefined;
+    };
+    const out = await signInAnonymously(CFG, (async () => { called = true; return res(200, anonBody); }) as unknown as typeof fetch, 5_000, captcha, controller.signal);
+
+    expect(out.ok).toBe(false);
+    expect(called).toBe(false);
+  });
+
+  it('ne trazi captcha ni ne salje signup ako je store vec zauzet', async () => {
+    let captchaCalled = false;
+    let signupCalled = false;
+    const out = await signInAnonymously(
+      CFG,
+      (async () => { signupCalled = true; return res(200, anonBody); }) as unknown as typeof fetch,
+      5_000,
+      async () => { captchaCalled = true; return undefined; },
+      undefined,
+      undefined,
+      () => false,
+    );
+
+    expect(out.ok).toBe(false);
+    expect(captchaCalled).toBe(false);
+    expect(signupCalled).toBe(false);
+  });
+
+  it('ponovno provjerava je li store zauzet nakon captcha i prije slanja', async () => {
+    let releaseCaptcha!: () => void;
+    let canSubmit = true;
+    let signupCalled = false;
+    let submitted = false;
+    const pending = signInAnonymously(
+      CFG,
+      (async () => { signupCalled = true; return res(200, anonBody); }) as unknown as typeof fetch,
+      5_000,
+      () => new Promise<string | undefined>((resolve) => { releaseCaptcha = () => resolve(undefined); }),
+      undefined,
+      () => { submitted = true; },
+      () => canSubmit,
+    );
+    await Promise.resolve();
+    canSubmit = false;
+    releaseCaptcha();
+
+    expect(await pending).toEqual({ ok: false, message: 'mrežna greška' });
+    expect(signupCalled).toBe(false);
+    expect(submitted).toBe(false);
   });
 
   it('422 znaci da anonimne prijave nisu ukljucene (pozivatelj pada na e-mail)', async () => {

@@ -32,11 +32,15 @@ export async function fetchActiveCorpusContributions(
   config: CorpusContributionConfig,
   accessToken: string,
   fetchImpl: typeof fetch = fetch,
+  signal?: AbortSignal,
 ): Promise<CorpusContributionRef[]> {
   if (!config.supabaseUrl || !config.anonKey || !accessToken) return [];
   try {
     const url = `${config.supabaseUrl}/rest/v1/corpus_contributions?select=id,repair_job_id,created_at&withdrawn_at=is.null&order=created_at.desc`;
-    const res = await fetchImpl(url, { headers: { apikey: config.anonKey, Authorization: `Bearer ${accessToken}` } });
+    const res = await fetchImpl(url, {
+      headers: { apikey: config.anonKey, Authorization: `Bearer ${accessToken}` },
+      ...(signal ? { signal } : {}),
+    });
     if (!res.ok) return [];
     const rows = (await res.json()) as unknown;
     if (!Array.isArray(rows)) return [];
