@@ -112,7 +112,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'ps', checkId: 'paper-size', fixerId: 'paper-size-fixer', label: 'Format' })],
     );
-    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 }, violated: true, authority: 'faculty-rule' }]);
+    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 }, violated: true, authority: 'faculty-rule', matchKeys: ['Format stranice (A4/A3)'] }]);
   });
 
   it('includeNonViolated (Feature B): vraca i neprekrsene s violated:false', () => {

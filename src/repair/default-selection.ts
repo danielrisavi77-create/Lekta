@@ -1,4 +1,4 @@
-import type { FixerId, FixerRequest } from './apply-fixers';
+import type { FixerId, FixerRequest } from './apply-fixers.ts';
 
 /**
  * Fixeri koji znaju ocistiti IZRAVNO oblikovanje (ne samo stilove).

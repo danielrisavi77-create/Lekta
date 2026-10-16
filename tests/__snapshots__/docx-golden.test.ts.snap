@@ -260,7 +260,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "left",
+        "detail": "both",
         "earned": 4,
         "max": 4,
         "status": "pass",
