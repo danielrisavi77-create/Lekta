@@ -293,3 +293,10 @@ Linear DAN-8/T49 i DAN-12/T84 su `In Progress`; nijedna produkcijska Supabase po
 mijenjana. T49 ostaje otvoren dok se ne provjere slanje i odgovor support e-pošte te živi Auth
 limit. T84 ostaje otvoren zbog produkcijskog CORS-a i triju nedostajućih funkcija. **Odluka ostaje
 HOLD; nema spajanja ni produkcijske objave.**
+
+## Usklađenje ovisnosti — 16. listopada 2026., 02:12 UTC
+
+Ponovna provjera Linearove veze pokazala je da DAN-12/T84 ovisi o DAN-5/T18, koji je `In Review`,
+ali nije `Done`. Zato je DAN-12 vraćen na `Backlog` s oznakom `Blocked`, a red zadataka sada
+zapisuje T18 kao T84 preduvjet. T49/DAN-8 ostaje `In Progress`. Ovo je promjena statusa i reda
+zadataka, ne produkcijska promjena. **Odluka ostaje HOLD.**
