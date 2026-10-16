@@ -380,3 +380,40 @@ generirani dokument ne predstavlja aktualni inventar.
 Nisu izvođene migracije, Edge deployi ni promjene tajni. T18 ostaje otvoren zbog izvora četiriju
 remote-only zapisa i staging korisničkog toka; T84 ostaje blokiran T18 te čeka odobren staging i
 naknadne ciljane runtime provjere. Odluka ostaje **HOLD**.
+
+## Ciljane provjere po koracima — 16. listopada 2026., 05:08 UTC
+
+Ovaj presjek bilježi stanje neposredno prije ove dopune dosjea. `pr-intake` je na tadašnjim HEAD-ovima
+potvrdio da su #367 (`94c8faf3`), #368 (`43330e12`) i #369 (`ad54bf11`) draftovi, poravnati s bazom
+`f758ba2b`, bez pending provjera i bez zabilježenog neovisnog reviewa. Svaki ima 32 zelena statusa i
+tri crvena Netlify preview pravila (`Header rules`, `Pages changed`, `Redirect rules`); status je
+`mergeableState=unstable`. Ti preview statusi nisu produkcijski testovi. Nakon ove dopune #367 dobiva
+novi HEAD i mora dobiti svježe CI rezultate prije odluke o paketu.
+
+Na #367 (`94c8faf3`) prolaze `tests/legal-content.test.ts` i `tests/deploy-gate-legal.test.ts`:
+34/34 testa; `npm run orphan-scan` je čist. Izvor prikazuje potvrđeni OIB kao osobni OIB voditelja
+obrade dok `providerRegistered=false`, javni telefon i besplatne popravke tijekom bete. `AUTH_CAPTCHA.md`
+navodi Cloudflare Turnstile i uvjetuje opis danom stvarnog uključivanja; više ne tvrdi da Cloudflare
+nedostaje u privatnosti. Lokalni `dist/build-info.json` nosi drugi SHA (`6cb58947`), pa taj artefakt
+nije korišten kao dokaz izgradnje HEAD-a #367.
+
+Na #368 (`43330e12`) smoke-testovi prolaze 27/27 (`post-deploy-smoke-network`, `post-deploy-smoke` i
+CLI ulazna točka); pokriveni su jedan oporavljeni mrežni kvar, bez ponavljanja HTTP 503 i ne-mrežne
+greške, bez ponavljanja POST-a te zaustavljanje nakon točno jednog ponovnog pokušaja. `npm run
+review:repair-free-limits` prikazuje zadane vrijednosti iz koda 10 po korisniku, 40 po IP-u i 30
+nebrojenih ishoda po korisniku u pomična 24 sata; skripta izričito ne očitava žive Supabase limite,
+brojače ni alarme troška. `npm run orphan-scan` je čist.
+
+Svježi javni GET-ovi vraćaju HTTP 200. Produkcijski `build-info.json` i dalje navodi
+`f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`; staging navodi isti commit i
+`captchaSiteKey=true`. Živa `/privatnost.html` sadrži Turnstile i besplatnu beta formulaciju, a
+`/uvjeti-koristenja.html` besplatnu beta formulaciju; obje stranice još nemaju potvrđeni OIB ni
+telefon iz #367. Staging site key ne dokazuje CAPTCHA postavku u Supabase Authu.
+
+Supabase read-only `get_project` potvrđuje da su Lekta produkcija i staging `ACTIVE_HEALTHY`, ali
+vraća samo metapodatke projekta, ne Auth CAPTCHA konfiguraciju, vrijednosti Edge tajni, žive kvote ili
+troškovne alarme. Supabase CLI nije instaliran u ovoj sesiji. Nije čitana ni mijenjana tajna ili
+postavka. Stoga ostaju otvoreni: T18 (izvor četiri remote-only migracije i staging tok), T84 (blokiran
+T18), T49 (support poruka/odgovor i Auth limit), T85 (žive granice i alarmi), T86 (provjera objavljenih
+pravnih stranica), T89 (staging Auth testovi) i vlasnikov završni T81 tok s dva do tri rada. Nema
+spajanja, deploya ni nove ovjere izdanja; odluka ostaje **HOLD**.
