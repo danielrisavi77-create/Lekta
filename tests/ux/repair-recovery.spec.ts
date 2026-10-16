@@ -23,6 +23,15 @@ const SIGNUP = '**/auth/v1/signup*';
 // sesiju prikaz umjesto provjere daje napomenu i odmah dopusta ponovni pokusaj (tests/repair-recovery.test.ts).
 const FAKE_SESSION = { access_token: 'test-token', refresh_token: 'r', expires_in: 3600, user: { id: 'u-test', email: 'test@example.invalid', is_anonymous: false } };
 
+/** Skrati samo zadani rok aplikacije da regresija ne čeka stvarnih 30 s / 3 min. */
+async function shortenAppTimeout(page: Page, originalMs: number) {
+  await page.evaluate((targetMs) => {
+    const nativeSetTimeout = window.setTimeout.bind(window);
+    window.setTimeout = ((handler: TimerHandler, timeout?: number, ...args: any[]) =>
+      nativeSetTimeout(handler, timeout === targetMs ? 1_000 : timeout, ...args)) as typeof window.setTimeout;
+  }, originalMs);
+}
+
 async function analyzeToPanel(page: Page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.addInitScript(() => {
@@ -104,6 +113,89 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     await expect.poll(() => requests, { timeout: 30_000 }).toBe(2);
     finishRetry();
     await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
+  });
+
+  test('zastoj prijave prekida vrtnju prije slanja dokumenta', async ({ page }) => {
+    await analyzeToPanel(page);
+    await shortenAppTimeout(page, 30_000);
+    await page.unroute(SIGNUP);
+    let releaseSignup!: () => void;
+    const signupGate = new Promise<void>((resolve) => { releaseSignup = resolve; });
+    let signups = 0;
+    let repairs = 0;
+    await page.route(SIGNUP, async (route) => {
+      signups += 1;
+      await signupGate;
+      await route.abort('timedout').catch(() => {});
+    });
+    await page.route(REPAIR, async (route) => {
+      repairs += 1;
+      await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+    });
+
+    try {
+      await send(page);
+      await expect.poll(() => signups, { timeout: 10_000 }).toBe(1);
+      const button = sendButton(page);
+      await expect(button).toContainText('Provjeravam prijavu…');
+      const recovery = page.getByTestId('repair-recovery');
+      await expect(recovery).toBeVisible({ timeout: 10_000 });
+      await expect(recovery).toContainText('Provjera prijave trajala je predugo');
+      await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
+      expect(signups).toBe(1);
+      expect(repairs, 'dokument se ne šalje dok prijava visi').toBe(0);
+    } finally {
+      releaseSignup();
+    }
+  });
+
+  test('zastoj u Moji popravci prekida Učitavam vrtnju', async ({ page }) => {
+    await analyzeToPanel(page);
+    await shortenAppTimeout(page, 30_000);
+    let releaseHistory!: () => void;
+    const historyGate = new Promise<void>((resolve) => { releaseHistory = resolve; });
+    let requests = 0;
+    await page.route('**/rest/v1/repair_jobs*', async (route) => {
+      requests += 1;
+      await historyGate;
+      await route.abort('timedout').catch(() => {});
+    });
+
+    try {
+      await page.locator('#repairHistoryBtn').click();
+      const list = page.locator('#repairHistoryList');
+      await expect.poll(() => requests, { timeout: 10_000 }).toBe(1);
+      await expect(list).toContainText('Učitavanje je trajalo predugo', { timeout: 10_000 });
+      await expect(list).not.toContainText('Učitavam…');
+    } finally {
+      releaseHistory();
+    }
+  });
+
+  test('zastoj uploada prekida vrtnju i prikazuje siguran oporavak', async ({ page }) => {
+    await analyzeToPanel(page);
+    await shortenAppTimeout(page, 180_000);
+    let releaseRepair!: () => void;
+    const repairGate = new Promise<void>((resolve) => { releaseRepair = resolve; });
+    let requests = 0;
+    await page.route(REPAIR, async (route) => {
+      requests += 1;
+      await repairGate;
+      await route.abort('timedout').catch(() => {});
+    });
+
+    try {
+      await send(page);
+      await expect.poll(() => requests, { timeout: 10_000 }).toBe(1);
+      const recovery = page.getByTestId('repair-recovery');
+      await expect(recovery).toBeVisible({ timeout: 10_000 });
+      await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
+      await expect(recovery).toContainText('Moje popravke');
+      await expect(recovery.locator('[data-repair-retry]')).toBeDisabled();
+      expect(requests, 'istek uploada ne salje drugi zahtjev').toBe(1);
+    } finally {
+      releaseRepair();
+    }
   });
 
   test('odbijena prava pristupa (401): ponovna prijava, ne slijepi ponovni pokusaj', async ({ page }) => {

@@ -5,6 +5,7 @@ import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, refram
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
 import { awaitAbortable } from '../shared/await-abortable';
+import { renderRepairHistoryView } from './repair-history-view';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
 // pa njegov kod ispada iz landing chunka.
@@ -210,7 +211,7 @@ let _repairHistoryClientPromise: Promise<typeof import('../report/repair-history
 function loadRepairHistoryClient(){return _repairHistoryClientPromise??=import('../report/repair-history')}
 let _corpusContribClientPromise: Promise<typeof import('../report/corpus-contribution-client')>|null=null;
 function loadCorpusContribClient(){return _corpusContribClientPromise??=import('../report/corpus-contribution-client')}
-async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],args[2])}
+async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],fetch,args[2])}
 async function signRepairDownload(...args: any[]){return (await loadRepairHistoryClient()).signRepairDownload(args[0],args[1],args[2],args[3])}
 async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryClient()).deleteRepairJob(args[0],args[1],args[2],args[3])}
 let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
@@ -626,15 +627,22 @@ function handleHistoryAction(e: any){const profileId=e.target.closest('[data-his
 // preko testirane src/report/repair-history.ts. RLS select-own: server vraca samo korisnikove poslove.
 function repairHistoryConfig(){return repairHistoryConfigFrom(productionConfig)}
 function updateRepairHistoryButton(){const b=$('#repairHistoryBtn');if(b)b.classList.toggle('hidden',!repairServerConfigured())}
-// Ime preuzete datoteke iz naslova rada: svi popravci su se prije zvali "popravljeno.docx", pa se u
-// mapi preuzimanja nisu razlikovali. Znakovi koje datotecni sustavi odbijaju se uklanjaju.
-function repairDownloadName(j: any){const raw=String(j?.label||'').trim().replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').slice(0,60).trim();return (raw?`${raw}-popravljeno`:'popravljeno')+'.docx'}
+let _repairHistoryLoad=0;
 function openRepairHistory(){$('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));void renderRepairHistoryList()}
-function closeRepairHistory(){$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
-async function renderRepairHistoryList(){const el=$('#repairHistoryList');if(!el)return;el.innerHTML='<div class="empty">Učitavam…</div>';const token: any=await ensureAccessToken();if(authConfigured()&&!token){el.innerHTML='<div class="empty">Za pregled popravaka potrebna je prijava.</div>';openAuth(()=>renderRepairHistoryList());return}let jobs: any[]=[];try{jobs=await fetchRepairJobs(repairHistoryConfig(),token||'')}catch(e: any){el.innerHTML='<div class="empty">Popravke trenutačno nije moguće učitati.</div>';return}
- // Kanal A: prilozi korpusu po poslu, samo kad je znacajka ukljucena; pad dohvata ne rusi popis (nema gumba, nista vise).
- const corpusByJob=new Map<string,string>();if(productionConfig?.corpusContribution===true){try{const cc=await loadCorpusContribClient();for(const c of await cc.fetchActiveCorpusContributions(cc.corpusContributionConfigFrom(productionConfig),token||''))if(c.repairJobId)corpusByJob.set(c.repairJobId,c.id)}catch{}}
-if(!jobs.length){el.innerHTML='<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';return}el.innerHTML=jobs.map((j: any)=>{const tier=tierFor(j.workType),date=j.createdAt?new Date(j.createdAt).toLocaleString('hr-HR'):'',mb=j.resultBytes?`${(j.resultBytes/1024/1024).toFixed(2)} MB`:'';return`<article class="history-card"><div class="history-head"><div><h4>${escapeHtml(j.label||'Popravljeni rad')}</h4><p>${escapeHtml(tier?tier.label:j.workType)}</p></div></div><div class="history-meta"><span>${escapeHtml(date)}</span>${j.changesCount!=null?`<span>${escapeHtml(_plIzmjena(j.changesCount))}</span>`:''}${mb?`<span>${escapeHtml(mb)}</span>`:''}</div><div class="history-actions">${j.deleting?'<span class="muted">Brisanje u tijeku…</span>':`<button class="btn btn-secondary btn-sm" data-repair-download="${escapeHtml(j.id)}" data-path="${escapeHtml(j.resultPath)}" data-name="${escapeHtml(repairDownloadName(j))}">Preuzmi</button><button class="btn btn-ghost btn-sm" data-repair-del="${escapeHtml(j.id)}">Obriši</button>${corpusByJob.has(j.id)?`<button class="btn btn-ghost btn-sm" data-corpus-withdraw="${escapeHtml(corpusByJob.get(j.id)||'')}">Povuci prilog korpusu</button>`:''}`}</div></article>`}).join('');window.__lektaIcons?.()}
+function closeRepairHistory(){_repairHistoryLoad+=1;$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
+async function renderRepairHistoryList(){
+ const el=$('#repairHistoryList');if(!el)return;
+ const loadId=++_repairHistoryLoad;
+ await renderRepairHistoryView(el,{
+  isCurrent:()=>loadId===_repairHistoryLoad,authConfigured:authConfigured(),ensureAccessToken,
+  openAuth,reload:()=>void renderRepairHistoryList(),
+  fetchJobs:(token,signal)=>fetchRepairJobs(repairHistoryConfig(),token,signal),
+  includeCorpusContributions:productionConfig?.corpusContribution===true,
+  fetchCorpusContributions:async(token,signal)=>{const cc=await loadCorpusContribClient();return cc.fetchActiveCorpusContributions(cc.corpusContributionConfigFrom(productionConfig),token,fetch,signal)},
+  tierLabel:(workType)=>{const tier=tierFor(workType);return tier?tier.label:workType},formatChanges:(count)=>_plIzmjena(count),
+  escape:escapeHtml,refreshIcons:()=>window.__lektaIcons?.(),
+ });
+}
 async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]'),cw=e.target.closest('[data-corpus-withdraw]');if(!dl&&!del&&!cw)return;
  if(cw){const cid=cw.dataset.corpusWithdraw;if(!confirm('Povući privolu za prilog korpusu? Pseudonimizirana kopija bit će obrisana sa servera.'))return;const t: any=await ensureAccessToken();if(authConfigured()&&!t){openAuth(()=>renderRepairHistoryList());return}cw.disabled=true;const cc=await loadCorpusContribClient();const out=await cc.withdrawCorpusContribution(cc.corpusContributionConfigFrom(productionConfig),t||'',cid);if(out.ok){toast('Privola je povučena, kopija je obrisana.');void renderRepairHistoryList()}else{cw.disabled=false;toast('Povlačenje trenutačno nije moguće.')}return}const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';
   // RE-39: a.click() NAKON awaita cesto je popup-blokiran (nema vise svjeze korisnicke geste iza sebe).
@@ -2218,8 +2226,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
    else if(out.kind==='error'){renderRepairRecovery(summary,recoveryFor(out,'after-send'),{retry:()=>go(confirmedMismatch),openJobs:authSessionActive()?openRepairHistory:null},escapeHtml)}
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
-  }catch(e: any){console.error('Server repair:',e);if(authController.signal.aborted){renderRepairRecovery(summary,{action:'retry',retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'},{retry:()=>go(confirmedMismatch),openJobs:null},escapeHtml)}else setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  }finally{
+   }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
+  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted){renderRepairRecovery(summary,{action:'retry',retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'},{retry:()=>go(confirmedMismatch),openJobs:null},escapeHtml)}else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
+  finally{
    clearTimeout(authTimer);
    inFlight=false;
    if(!lockButton){btn.disabled=false;btn.textContent=orig;binding.controller.backToPlan()}
