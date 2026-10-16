@@ -40,6 +40,15 @@ beforeAll(async () => {
       res.end(JSON.stringify({ status: 'ok', dependencies: { database: { ok: true } } }));
       return;
     }
+    if (url.pathname.endsWith('/repair-docx') && req.method === 'OPTIONS') {
+      res.writeHead(204, {
+        'access-control-allow-origin': String(req.headers.origin ?? ''),
+        'access-control-allow-methods': 'POST, OPTIONS',
+        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+      });
+      res.end();
+      return;
+    }
     if (url.pathname.endsWith('/repair-docx') || url.pathname.endsWith('/create-checkout')) { res.writeHead(401); res.end(); return; }
     if (url.pathname.endsWith('.js')) { res.writeHead(200, { 'content-type': 'text/javascript' }); res.end(''); return; }
     const pravna = LEGAL_PAGES.find(([f]: [string, string]) => url.pathname.endsWith(`/${f}`));
