@@ -537,7 +537,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
+      "note": "VLASNIK 2026-10-16: poslovni subjekt jos nije registriran; OIB, telefon, adresa i voditelj obrade potvrdjeni su za objavu u PR-u #367. Beta-popravci su besplatni, a naplata ostaje blokirana do registracije. Za placeno lansiranje i dalje su potrebni registrirani subjekt, Stripe isplatni racun i DPA sa Supabaseom. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
     },
     {
       "id": "T49",
