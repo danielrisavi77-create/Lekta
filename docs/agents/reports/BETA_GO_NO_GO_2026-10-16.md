@@ -220,3 +220,22 @@ Auth Captcha dokaz, vlasnikov ručni prolaz glavnog toka te novi završni dokaz 
 **Odluka ostaje HOLD; nema spajanja ni produkcijske objave.** Nastaviti ciljanim korakom po korak,
 ali završni `release:check`, novi dokaz i produkcijsku objavu napraviti jedanput nakon konačnog
 odabira i zamrzavanja kandidata.
+
+## Svježi presjek — 16. listopada 2026., 02:47 CEST
+
+Produkcijski `build-info.json` vraća HTTP 200, commit `f758ba2bde00c7f2d37daa789a39ed1e4168db99` i `captchaSiteKey=false`. Živa `/privatnost.html` vraća HTTP 200, sadrži Turnstile, ali još ne sadrži vlasnički potvrđeni OIB ni telefon iz PR-a #367. Točan javni tekst i nova verzija pravnih obavijesti zasad su samo u nacrtu.
+
+| PR | HEAD | `pr-intake` presjek | Napomena |
+| --- | --- | --- | --- |
+| #367 | `6cb58947b6b3e9de62898c6cc298a694df952fad` | 29 zelenih, 3 crvene Netlify rule provjere, 3 u tijeku | 115/115 ciljanih lokalnih testova, lint, orphan-scan, tsc i statički build/verifier prolaze. Lokalni verifier prijavljuje zastarjeli proof `9eaefcf46648`, `projections=fail`, `extraction=unavailable` i `captchaSiteKey=false`; to nisu prolazi ni release proof. |
+| #368 | `d502a6bb70c15e2d412c06bdecacb1b0d9b9700c` | 32 zelene, 3 crvene Netlify rule provjere, 0 u tijeku | Kodne provjere prolaze; pregled limita prikazuje samo zadane vrijednosti iz izvora, ne živo Supabase stanje. |
+| #369 | `b35dd432845296270802022c030a707dcce54365` | 25 zelenih, 3 crvene Netlify rule provjere, 6 u tijeku | T48 bilješka više ne tvrdi da OIB nedostaje; mijenja se samo `docs/agents/tasks.json`. |
+| #370 | `8c61339454e791e9bc6c0d715006c3cd257c88df` | 32 zelene, 3 crvene Netlify rule provjere, 0 u tijeku | SEO paket je zaseban draft i nije jedan od tri imenovana beta paketa. Odluka hoće li ući u beta kandidata nije zabilježena. |
+
+Sva četiri PR-a ostaju draftovi prema `master` na bazi `f758ba2bde00c7f2d37daa789a39ed1e4168db99`. Netlify Deploy Preview zasebno pada na svakom; tri prikazana crvena rule statusa pripadaju istim neuspjelim previewima. Za #367 i #369 dio GitHub provjera još se izvršava. Supabase Preview i `postgres-smoke` preskočeni su gdje su prikazani. Nijedan PR nema neovisan pregled drugog providera.
+
+U #367 je `TERMS_VERSION` podignut na `2026-10-16`, uz očuvani kanonski checkout tekst. Statičke pravne stranice i Supabase `repair-docx` moraju se objaviti zajedno. U #367 i #369 lokalni opisi sada odgovaraju točnom diffu; za #367 i #369 dio provjera se zato ponovno izvršava.
+
+Vlasnik još treba odabrati koji se paketi uključuju, razriješiti planirani datum prema Linearovu roku, potvrditi staging Turnstile token i Supabase Auth testove, provjeriti žive limite popravaka i troškovne alarme, očitati Supabase email limit, zatim proći glavni tok s 2–3 rada. Nepoznato stanje ostaje NO-GO. Tek nakon odabira i zamrzavanja točnog kandidata slijede jedan puni Windows `release:check`, obvezne Word provjere, jedan novi release proof, jedna produkcijska objava i strogi smoke.
+
+**Odluka ostaje HOLD.** Nije bilo spajanja, Supabase izmjena ni produkcijske objave.
