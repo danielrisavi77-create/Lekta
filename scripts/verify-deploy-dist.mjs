@@ -16,6 +16,7 @@ import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 import { findLegalPlaceholders } from './lib/legal-placeholders.mjs';
 import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 import { cspHeaderProblems } from './lib/csp-headers.mjs';
+import { enforceCommerceProviderRegistration } from './deploy-gate-provider.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
@@ -482,8 +483,8 @@ if (fs.existsSync(naslovnicaDir)) {
 // PRAVNI IDENTITET PRUZATELJA (audit A26-01, LEG-01/02/03).
 //
 // `data/legal/provider.json` je jedino mjesto s identitetom trgovca i voditelja obrade.
-// Dok je prazan, `legal-content.ts` ga tise ispusta (renderira napomenu "bit ce objavljeni"),
-// pa se prazno stanje moze deployati a da nitko ne primijeti.
+// Status registracije (`providerRegistered`) ne izvodi se iz OIB-a, adrese ni telefona: ti
+// podaci mogu pripadati fizičkoj osobi dok poslovni subjekt još nije registriran.
 //
 // DVA ODVOJENA PRAGA, jer ih pokrecu dva razlicita zakona i okidaju se u razlicitim trenucima:
 //
@@ -508,7 +509,7 @@ if (fs.existsSync(naslovnicaDir)) {
   // Prag 1: dokument napusta preglednik (GDPR cl. 13, identitet i sjediste voditelja obrade).
   const REQUIRED_FOR_PROCESSING = {
     privacyController: 'voditelj obrade (GDPR cl. 13): tko pravno odredjuje svrhe i sredstva obrade',
-    address: 'sjediste pravnog subjekta',
+    address: 'adresa voditelja obrade (GDPR cl. 13)',
   };
   // Prag 2: naplata (sve iz praga obrade + identifikacija trgovca po ZZP-u).
   const REQUIRED_FOR_COMMERCE = {
@@ -539,6 +540,17 @@ if (fs.existsSync(naslovnicaDir)) {
   const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
   const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
 
+  enforceCommerceProviderRegistration({
+    commerceLive,
+    provider,
+    fail: (problem) =>
+      fail(
+        [
+          `naplata je ZIVA (${commerceWhy}), a data/legal/provider.json ne potvrđuje registriranog pružatelja`,
+          `  ${problem}`,
+        ].join(os.EOL),
+      ),
+  });
   if (commerceLive && missingForCommerce.length) {
     fail(
       [`naplata je ZIVA (${commerceWhy}), a data/legal/provider.json nema:`, ...missingForCommerce].join(os.EOL),

@@ -1,8 +1,19 @@
-# Spremnost izdanja (T15)
+# Spremnost izdanja (T81)
 
 Zavrsni pregled obveznih provjera na TOCNOM kandidatu objave, povezan s manifestom i dokazom izdanja. Ovo nije
 popis kucica koje se oznace po sjecanju: svaki redak imenuje ARTEFAKT koji dokazuje tvrdnju i naredbu kojom se
 ponovno proizvodi. Bez artefakta redak nije zelen.
+
+## Trenutačni presjek, 13. listopada 2026.
+
+GitHub Actions produkcijski workflow 38430199081 objavio je SHA
+f758ba2bde00c7f2d37daa789a39ed1e4168db99. Strogi smoke potvrdio je objavljeni SHA i prošao je
+29 od 30 provjera; jedan asset nije bio dohvatljiv zbog fetch failed. Incident i ograničenja
+zaključka: docs/agents/incidents/PRODUCTION_SMOKE_2026-10-13.md.
+
+Postojeći RELEASE_PROOF odgovara stablu tadašnjeg origin/mastera, ali će zastarjeti kad se PR-ovi
+spoje. Nakon vlasnikova odabira i spajanja paketa 16. listopada potreban je jedan novi puni dokaz i
+zatim jedna produkcijska objava. Nema spajanja ili objave iz ovog postupka.
 
 ## Kandidat
 
@@ -29,7 +40,9 @@ ponovno proizvodi. Bez artefakta redak nije zelen.
 | objava | `node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit <sha> --strict-commit` | izlaz smokea, exit 0 | build-info nedostaje, identitet objave se ne da procitati, ili objavljeni sha nije kandidat |
 
 `--strict-commit` nije ukras: BEZ njega je neslaganje sha-a samo `::warning::` uz izlaz 0, jer je ta
-zastavica (bez stroge) periodicki nadzor nad namjerno zakljucanom objavom. Zavrsna potvrda izdanja
+zastavica (bez stroge) periodicki nadzor. Objavljena verzija moze zaostajati za masterom izmedu
+vlasnikovih kontroliranih release pokretanja; stanje Netlifyjeve Git auto-publish postavke nije
+potvrdeno ovim smokeom. Zavrsna potvrda izdanja
 mora biti stroga. Cijeli postupak ovjere i proof-only commita stoji u
 `docs/deploy/RELEASE_PROOF_WORKFLOW.md`; oba dokumenta opisuju isti korak i drzi ih usaglasenima
 `tests/release-gate-wiring.test.ts`.
@@ -38,15 +51,12 @@ mora biti stroga. Cijeli postupak ovjere i proof-only commita stoji u
 stabla iz kojeg se STVARNO gradi mjeri deploy gate (poruka `NECOMMITANE izmjene pracenih datoteka`),
 jer se otisak stabla racuna iz commitanog stabla pa necommitanu izmjenu po konstrukciji ne vidi.
 
-## Kriteriji koje pilot dodaje (T15)
+## Vlasnikova ručna provjera prije go/no-go
 
-- Nema otvorene prepreke koja onemogucuje osnovni tok (zadaci 1 do 3 protokola). Otvorena prepreka ide u tablicu
-  ispod s izricitom odlukom vlasnika: popraviti prije izdanja, ili isporuciti uz smanjen opseg.
-- Sudionici mogu objasniti rezultat bez zakljucka da tehnicka ocjena jamci prihvacanje rada.
-
-| prepreka | korak | odluka | tko / kada |
-| --- | --- | --- | --- |
-| (pilot nije proveden; vidi `usability-protocol.md`) | | | |
+Mali pilot iz ranijeg plana ukinut je odlukom vlasnika 4. listopada. Prije beta odluke vlasnik
+sam prolazi glavni tok s dva do tri rada, provjerava žive limite besplatnog popravka i alarme troška
+te bilježi otvorene prepreke i odluku GO ili NO-GO. Nepoznato stanje znači NO-GO. Pregled i kriteriji:
+docs/agents/reports/BETA_GO_NO_GO_2026-10-16.md.
 
 ## Stanje kandidata 2026-09-12
 
