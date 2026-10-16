@@ -6,8 +6,7 @@ export interface RepairHistoryViewDeps {
   isCurrent: () => boolean;
   authConfigured: boolean;
   ensureAccessToken: (signal: AbortSignal) => Promise<string | null>;
-  openAuth: (afterAuth: () => void) => void;
-  reload: () => void;
+  openAuth: () => Promise<boolean>;
   fetchJobs: (token: string, signal: AbortSignal) => Promise<RepairJob[]>;
   includeCorpusContributions: boolean;
   fetchCorpusContributions: (token: string, signal: AbortSignal) => Promise<CorpusContributionRef[]>;
@@ -46,8 +45,12 @@ export async function renderRepairHistoryView(el: HTMLElement, deps: RepairHisto
     if (!deps.isCurrent()) return false;
     if (deps.authConfigured && !token) {
       el.innerHTML = '<div class="empty">Za pregled popravaka potrebna je prijava.</div>';
-      deps.openAuth(deps.reload);
-      return false;
+      // Human login is not part of the network load deadline. After sign-in, continue this same
+      // check so the recovery button learns whether the job list actually loaded.
+      clearTimeout(timer);
+      const authenticated = await deps.openAuth();
+      if (!authenticated || !deps.isCurrent()) return false;
+      return renderRepairHistoryView(el, deps);
     }
     const jobs = await awaitAbortable(deps.fetchJobs(token || '', controller.signal), controller.signal);
     if (!deps.isCurrent()) return false;

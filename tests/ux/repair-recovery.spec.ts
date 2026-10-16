@@ -183,6 +183,49 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     }
   });
 
+  test('e-mail prijava tijekom provjere učita popis i tek tada otključa oporavak', async ({ page }) => {
+    await analyzeToPanel(page);
+    let repairRequests = 0;
+    await page.route(REPAIR, async (route) => {
+      repairRequests += 1;
+      await route.abort('connectionreset');
+    });
+    await page.route('**/rest/v1/repair_jobs*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+    await page.route((url) => url.pathname.endsWith('/auth/v1/token') && url.searchParams.get('grant_type') === 'refresh_token', (route) =>
+      route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'invalid_grant' }) }));
+    await page.route('**/auth/v1/otp*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+    await page.route('**/auth/v1/verify*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(FAKE_SESSION) }));
+
+    await send(page);
+    const recovery = page.getByTestId('repair-recovery');
+    await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
+    await expect(recovery.locator('[data-repair-retry]')).toBeDisabled();
+    await page.evaluate(() => {
+      const raw = localStorage.getItem('lekta.session');
+      if (!raw) throw new Error('Očekivana testna sesija nije spremljena');
+      const session = JSON.parse(raw);
+      session.expiresAt = Date.now() - 1_000;
+      localStorage.setItem('lekta.session', JSON.stringify(session));
+    });
+    await page.unroute(SIGNUP);
+    await page.route(SIGNUP, (route) => route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ msg: 'anonymous sign-in is disabled' }) }));
+    await recovery.locator('[data-repair-check-jobs]').click();
+    await expect(page.locator('#authModal')).toBeVisible();
+    await expect(recovery.locator('[data-repair-retry]')).toBeDisabled();
+
+    await page.locator('#authEmail').fill('test@example.invalid');
+    await page.locator('#authSubmit').click();
+    await expect(page.locator('#authCodeField')).toBeVisible();
+    await page.locator('#authCode').fill('123456');
+    await page.locator('#authSubmit').click();
+
+    await expect(page.locator('#authModal')).toBeHidden();
+    await expect(page.locator('#repairHistoryList')).toContainText('Još nemaš spremljenih popravaka');
+    await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
+    await expect(sendButton(page)).toBeDisabled();
+    expect(repairRequests, 'prijava i provjera ne šalju novi popravak').toBe(1);
+  });
+
   test('zastoj prijave prekida vrtnju prije slanja dokumenta', async ({ page }) => {
     await analyzeToPanel(page);
     await shortenAppTimeout(page, 30_000);

@@ -42,6 +42,8 @@ export type SessionResult =
   | { ok: true; session: Session }
   | { ok: false; message: string; fatal?: boolean };
 
+const refreshesInFlight = new WeakMap<SessionStore, { refreshToken: string; promise: Promise<SessionResult> }>();
+
 function trimUrl(url: string): string {
   return url.replace(/\/+$/, '');
 }
@@ -475,18 +477,30 @@ export async function getValidAccessToken(
     if (current) store.save(null);
     return null;
   }
-  // A refresh token may rotate as soon as Supabase accepts this request. Do not abort the
-  // network request when a UI wait times out; its result must still be saved to preserve identity.
-  const refreshed = await refreshSession(cfg, current.refreshToken, fetchImpl, now);
+  // A refresh token may rotate as soon as Supabase accepts this request. UI timeouts stop
+  // waiting, not the request. Join an existing refresh for the same store/token so recovery
+  // cannot race a second use of the single-use refresh token.
+  const active = refreshesInFlight.get(store);
+  const refreshPromise = active?.refreshToken === current.refreshToken
+    ? active.promise
+    : refreshSession(cfg, current.refreshToken, fetchImpl, now);
+  if (active?.refreshToken !== current.refreshToken) refreshesInFlight.set(store, { refreshToken: current.refreshToken, promise: refreshPromise });
+  let refreshed: SessionResult;
+  try {
+    refreshed = await refreshPromise;
+  } finally {
+    if (refreshesInFlight.get(store)?.promise === refreshPromise) refreshesInFlight.delete(store);
+  }
+  // Another auth action (or logout) may have changed the store while refresh was pending.
+  // Never overwrite a newer identity or resurrect a cleared session with the old response.
+  const latest = store.load();
+  if (!latest) return null;
+  if (latest.refreshToken !== current.refreshToken) return isExpired(latest, now) ? null : latest.accessToken;
   if (refreshed.ok) {
     store.save(refreshed.session);
     return refreshed.session.accessToken;
   }
-  // Race: paralelni poziv je mozda vec obnovio i spremio valjanu sesiju s novim tokenom.
-  const latest = store.load();
-  if (latest && latest.refreshToken !== current.refreshToken && !isExpired(latest, now)) {
-    return latest.accessToken;
-  }
+  // A transient failure keeps the current session; only an explicitly invalid refresh clears it.
   if (refreshed.fatal) store.save(null);
   return null;
 }

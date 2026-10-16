@@ -5,6 +5,7 @@ import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, refram
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
 import { awaitAbortable } from '../shared/await-abortable';
+import { createAuthCompletion } from '../auth/auth-completion';
 import { renderRepairHistoryView } from './repair-history-view';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
@@ -635,7 +636,7 @@ async function renderRepairHistoryList(){
  const loadId=++_repairHistoryLoad;
  return renderRepairHistoryView(el,{
   isCurrent:()=>loadId===_repairHistoryLoad,authConfigured:authConfigured(),ensureAccessToken,
-  openAuth,reload:()=>void renderRepairHistoryList(),
+  openAuth:()=>openAuth(),
   fetchJobs:(token,signal)=>fetchRepairJobs(repairHistoryConfig(),token,signal),
   includeCorpusContributions:productionConfig?.corpusContribution===true,
   fetchCorpusContributions:async(token,signal)=>{const cc=await loadCorpusContribClient();return cc.fetchActiveCorpusContributions(cc.corpusContributionConfigFrom(productionConfig),token,fetch,signal)},
@@ -1630,13 +1631,14 @@ function referralConfig(){const rf=String(productionConfig?.referralEndpoint||''
 function captureReferralCode(){try{const ref=new URLSearchParams(location.search).get('ref');if(ref)safeStorageSet(REFERRAL_CODE_KEY,ref.trim().toUpperCase())}catch(e: any){}}
 export async function maybeRedeemReferral(){const code=String(safeStorageGet(REFERRAL_CODE_KEY,'')||'').trim(),ep=referralConfig().endpoint;if(!code||!ep)return;const token: any=await resolveAccessToken();if(!token)return;try{await postReferralRedeem(ep,token,code)}finally{safeStorageSet(REFERRAL_CODE_KEY,'')}}
 async function renderReferralShareBar(r?: any){const el=$('#referralShareBar');if(!el)return;el.innerHTML='';const c=authConfig();if(!c.supabaseUrl||!c.anonKey)return;const token: any=await resolveAccessToken();if(!token)return;const facultyId=r?.settings?.selectionIds?.unit||null;const workType=facultyId?toReportWorkType(r.settings?.workType||r.selection?.workType||'final'):null;try{await renderReferralShareSection({supabaseUrl:c.supabaseUrl,anonKey:c.anonKey,accessToken:token,appBaseUrl:location.origin||'',mountEl:el,facultyId,workType,deadlineRegistry:ACADEMIC_DEADLINES,onShare:()=>{void trackEvent('referral_shared')}})}catch(e: any){}}
-let _authEmail='',_authStep='email',_pendingAuthAction: any=null;
+let _authEmail='',_authStep='email';
+const _authCompletion=createAuthCompletion();
 // Kad nije prazno, potvrda ide kroz email_change nad TIM uuid-om (P0-07), ne kroz obican OTP.
 let _authLinkUserId='';
 export function setAuthStatus(type: any,msg?: any){const st=$('#authStatus');if(!st)return;if(!msg){st.className='order-status hidden';st.textContent='';return}st.className=`order-status ${type}`;st.textContent=msg}
 function resetAuthModal(){_authEmail='';_authStep='email';_authLinkUserId='';const em=$('#authEmail'),cc=$('#authCode');if(em){em.value='';em.disabled=false}if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub){sub.textContent='Pošalji kod';sub.disabled=false}setAuthStatus('','')}
-function openAuth(afterSignIn: any){_pendingAuthAction=afterSignIn||null;resetAuthModal();$('#authModal')?.classList.remove('hidden');trapModal($('#authModal'));setTimeout(()=>$('#authEmail')?.focus(),40)}
-function closeAuth(){$('#authModal')?.classList.add('hidden');releaseModal($('#authModal'))}
+function openAuth(afterSignIn?: any){resetAuthModal();$('#authModal')?.classList.remove('hidden');trapModal($('#authModal'));setTimeout(()=>$('#authEmail')?.focus(),40);return _authCompletion.wait(afterSignIn)}
+function closeAuth(){_authCompletion.cancel();$('#authModal')?.classList.add('hidden');releaseModal($('#authModal'))}
 // PRIJAVA IZ ANONIMNE SESIJE IDE POVEZIVANJEM, NE NOVIM RACUNOM (audit P0-07).
 //
 // `requestEmailOtp` salje `create_user: true`, pa za nepoznat e-mail nastaje NOV korisnik s NOVIM
@@ -1674,7 +1676,7 @@ async function authSubmit(){const sub=$('#authSubmit');if(!sub)return;if(sub.dis
    ?await confirmEmailLink(authConfig(),_authEmail,code,_authLinkUserId)
    :await verifyEmailOtp(authConfig(),_authEmail,code);
   sub.disabled=false;
-  if(out.ok){const upgraded=!!_authLinkUserId;authStore.save(out.session);void maybeRedeemReferral();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry();const a=_pendingAuthAction;_pendingAuthAction=null;if(a)a()}
+  if(out.ok){const upgraded=!!_authLinkUserId;authStore.save(out.session);void maybeRedeemReferral();_authCompletion.complete();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry()}
   else{setAuthStatus('error',out.message||'Kod nije točan.')}
  }}
 function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#authEmail');if(em)em.disabled=false;const cc=$('#authCode');if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub)sub.textContent='Pošalji kod';setAuthStatus('','');em?.focus()}
@@ -2023,7 +2025,6 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
  let inFlight=false;
- // Nepoznat ishod nakon slanja zaključava glavni CTA dok se popis poslova ne učita i korisnik svjesno ne pokuša opet.
  let repairOutcomeUnknown=false;
  const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
  async function go(confirmedMismatch: boolean, recoveryRetry=false){

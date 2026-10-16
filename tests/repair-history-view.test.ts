@@ -19,8 +19,7 @@ describe('renderRepairHistoryView', () => {
         isCurrent: () => true,
         authConfigured: true,
         ensureAccessToken: async () => 'user-jwt',
-        openAuth: () => {},
-        reload: () => {},
+        openAuth: async () => true,
         fetchJobs: async () => [job],
         includeCorpusContributions: true,
         fetchCorpusContributions: async (_token, signal) => {
@@ -45,6 +44,44 @@ describe('renderRepairHistoryView', () => {
       expect(el.textContent).toContain('Preuzmi');
       expect(el.textContent).toContain('Obriši');
       expect(el.textContent).not.toContain('Učitavam');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('nastavlja istu provjeru nakon uspješne prijave', async () => {
+    vi.useFakeTimers();
+    try {
+      const el = document.createElement('div');
+      let signedIn = false;
+      let finishAuth!: (success: boolean) => void;
+      const openAuth = vi.fn(() => new Promise<boolean>((resolve) => { finishAuth = resolve; }));
+      const fetchJobs = vi.fn(async () => [job]);
+      const deps: RepairHistoryViewDeps = {
+        isCurrent: () => true,
+        authConfigured: true,
+        ensureAccessToken: async () => signedIn ? 'user-jwt' : null,
+        openAuth,
+        fetchJobs,
+        includeCorpusContributions: false,
+        fetchCorpusContributions: async () => [],
+        tierLabel: () => 'Završni rad',
+        formatChanges: (count) => `${count} izmjena`,
+        escape: (value) => value,
+        refreshIcons: () => {},
+      };
+
+      const rendering = renderRepairHistoryView(el, deps);
+      await Promise.resolve();
+      await Promise.resolve();
+      expect(openAuth).toHaveBeenCalledOnce();
+      expect(fetchJobs).not.toHaveBeenCalled();
+      signedIn = true;
+      finishAuth(true);
+
+      await expect(rendering).resolves.toBe(true);
+      expect(fetchJobs).toHaveBeenCalledOnce();
+      expect(el.textContent).toContain('Moj rad');
     } finally {
       vi.useRealTimers();
     }

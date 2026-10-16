@@ -171,20 +171,24 @@ describe('getValidAccessToken', () => {
   it('timeout UI čekanja ne prekida refresh token koji Supabase može rotirati', async () => {
     const controller = new AbortController();
     let seenSignal: AbortSignal | null = null;
+    let fetchCount = 0;
     const store = memStore({ accessToken: 'old', refreshToken: 'refresh-xyz', expiresAt: 5_000, email: '', userId: '' });
-    let resolveFetch!: (response: Response) => void;
+    const finishFetches: ((response: Response) => void)[] = [];
     const pendingFetch = ((_url: string | URL | Request, init: RequestInit) => {
+      fetchCount += 1;
       seenSignal = init.signal ?? null;
-      return new Promise<Response>((resolve) => { resolveFetch = resolve; });
+      return new Promise<Response>((resolve) => { finishFetches.push(resolve); });
     }) as typeof fetch;
     const refresh = getValidAccessToken(CFG, store, pendingFetch, 10_000);
     const uiWait = awaitAbortable(refresh, controller.signal);
     controller.abort();
 
     await expect(uiWait).rejects.toMatchObject({ name: 'AbortError' });
+    const recoveredWait = getValidAccessToken(CFG, store, pendingFetch, 10_000);
+    expect(fetchCount, 'oporavak se pridružuje postojećem refreshu').toBe(1);
     expect(seenSignal).toBeNull();
-    resolveFetch(res(200, tokenBody));
-    await expect(refresh).resolves.toBe('jwt-abc');
+    for (const finish of finishFetches) finish(res(200, tokenBody));
+    await expect(Promise.all([refresh, recoveredWait])).resolves.toEqual(['jwt-abc', 'jwt-abc']);
     expect(store.load()).toMatchObject({ accessToken: 'jwt-abc', refreshToken: tokenBody.refresh_token });
   });
   it('istekao bez refresh tokena -> null i čisti sesiju', async () => {
