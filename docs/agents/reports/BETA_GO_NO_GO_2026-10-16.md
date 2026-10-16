@@ -484,3 +484,12 @@ niti opovrgava odvojeno Cloudflare Email Routing/Gmail putanje za sandučić pod
 Nije poslana testna poruka, nije provjeren primitak ni odgovor iz sandučića, a Supabase Auth
 `rate_limit_email_sent` nije dostupan kroz ovaj read-only pregled. Zato je ovo samo DNS/domena dokaz,
 ne zatvaranje T49. Nije čitana ni mijenjana SMTP/API tajna.
+
+## T86: ciljane pravne provjere — 16. listopada 2026., 06:37 UTC
+
+Na PR #367 HEAD-u `58cac1abea3c5a32a06a4c9074db91b92b65def2` ciljani pravni skup prolazi 36/36
+testova (`deploy-gate-legal`, `gate-mutations-deploy-gate`, `legal-content`). Svježi javni GET vraća
+HTTP 200 za `/privatnost.html` i `/uvjeti-koristenja.html`; obje stranice imaju besplatnu beta
+formulaciju, a privatnost spominje Turnstile. Ni jedna živa stranica još ne sadrži potvrđeni OIB ni
+telefon. Pravne izmjene ostaju u draft PR-u; T86 se ne smatra dovršenim dok usklađeni klijent i
+`repair-docx` nisu objavljeni i živi tekst provjeren. Nije bilo produkcijske promjene.
