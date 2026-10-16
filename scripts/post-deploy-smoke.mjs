@@ -173,16 +173,52 @@ export function assertRequiresAuth(obs, name) {
 // MREZA
 // ---------------------------------------------------------------------------
 
-async function observe(url, init = {}) {
-  try {
-    const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(TIMEOUT_MS), ...init });
-    // Tijelo citamo uvijek: bez njega se ne moze provjeriti ni marker ni health.
-    const text = await res.text().catch(() => '');
-    return { status: res.status, headers: res.headers, text };
-  } catch (e) {
-    // DNS, TLS, odbijena veza, istek roka. Ovo NIJE tvrdnja o produkciji nego o tome da je nismo
-    // uspjeli ni pogledati, pa se dalje vodi odvojeno (vidi classifyRun).
-    return { transport: e?.name === 'TimeoutError' ? 'timeout' : (e?.message || 'nedostupno') };
+const RETRY_DELAY_MS = 250;
+const RETRYABLE_NETWORK_CODES = new Set([
+  'ECONNRESET', 'ECONNREFUSED', 'ENETUNREACH', 'EHOSTUNREACH', 'ENETDOWN',
+  'EAI_AGAIN', 'ENOTFOUND', 'ETIMEDOUT', 'UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_SOCKET',
+]);
+
+function isRetryableNetworkFailure(error) {
+  if (error?.name === 'TimeoutError') return true;
+  if (error?.name === 'TypeError' && /^(fetch failed|failed to fetch|network error)$/i.test(String(error.message ?? '').trim())) {
+    return true;
+  }
+  for (let current = error; current; current = current.cause) {
+    if (RETRYABLE_NETWORK_CODES.has(current.code)) return true;
+  }
+  return false;
+}
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export async function observe(url, init = {}, { fetchImpl = fetch, sleepImpl = wait } = {}) {
+  let retries = 0;
+  const retrySafe = ['GET', 'HEAD'].includes(String(init.method ?? 'GET').toUpperCase());
+  while (true) {
+    try {
+      const res = await fetchImpl(url, { redirect: 'follow', signal: AbortSignal.timeout(TIMEOUT_MS), ...init });
+      // Tijelo citamo uvijek. Mrežni prekid tijekom čitanja može ponoviti cijeli GET jednom.
+      let text;
+      try {
+        text = await res.text();
+      } catch (error) {
+        if (isRetryableNetworkFailure(error)) throw error;
+        text = '';
+      }
+      return { status: res.status, headers: res.headers, text, retries };
+    } catch (error) {
+      if (retrySafe && retries === 0 && isRetryableNetworkFailure(error)) {
+        retries++;
+        await sleepImpl(RETRY_DELAY_MS);
+        continue;
+      }
+      // HTTP odgovori i pogreške koje nisu transportne nikad se ne ponavljaju.
+      return {
+        transport: error?.name === 'TimeoutError' ? 'timeout' : (error?.message || 'nedostupno'),
+        retries,
+      };
+    }
   }
 }
 
@@ -265,11 +301,15 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
    */
   const zapisi = (id, host, obs, tvrdnja) => {
     if (obs && obs.transport) {
-      nalazi.push({ id, host, ok: false, unreachable: true, detail: `nedostupno: ${obs.transport}` });
+      const retryDetail = obs.retries ? ' (nakon jednog ponovnog pokušaja)' : '';
+      nalazi.push({ id, host, ok: false, unreachable: true, retries: obs.retries ?? 0, detail: `nedostupno: ${obs.transport}${retryDetail}` });
       return false;
     }
     const r = tvrdnja();
-    nalazi.push({ id, host, status: obs?.status, ...r });
+    nalazi.push({
+      id, host, status: obs?.status, ...r,
+      ...(obs?.retries ? { retries: obs.retries } : {}),
+    });
     return r.ok;
   };
 
@@ -569,7 +609,8 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     });
     if (nalazi) {
     for (const n of nalazi) {
-      console.log(n.ok ? `  ok    ${n.id}` : `  ${n.unreachable ? '????' : (n.unknown ? '????' : 'FAIL')}  ${n.id}: ${n.detail}`);
+      const retryDetail = n.retries ? ' (uspjelo nakon ponovnog pokušaja)' : '';
+      console.log(n.ok ? `  ok    ${n.id}${retryDetail}` : `  ${n.unreachable ? '????' : (n.unknown ? '????' : 'FAIL')}  ${n.id}: ${n.detail}`);
     }
     // Objavljeni commit naspram ocekivanog (`--expect-commit`, u cronu `github.sha` mastera). Bez
     // `--strict-commit` je UPOZORENJE, ne pad: zakljucana objava je namjerno stanje (vlasnik, 2026-09-09),

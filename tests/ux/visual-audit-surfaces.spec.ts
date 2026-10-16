@@ -1,20 +1,30 @@
 import { expect, test } from '@playwright/test';
 
-test('audit: rok prije uploada i citljive postavke na mobitelu', async ({ page }, info) => {
+test('audit: glavni odabir rada stane prije neobaveznog roka na malom mobitelu', async ({ page }, info) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
   const date = page.locator('#intakeRok');
+  const rok = page.locator('.intake-deadline');
   const upload = page.locator('.intake-paper__gumb');
   await expect(date).toBeVisible();
-  const a = await date.boundingBox(), b = await upload.boundingBox();
-  expect(a!.y + a!.height).toBeLessThan(b!.y);
+  const a = await rok.boundingBox(), b = await upload.boundingBox();
+  const height = await page.evaluate(() => window.innerHeight);
+  expect(b!.y + b!.height).toBeLessThanOrEqual(height);
+  expect(b!.y + b!.height).toBeLessThan(a!.y);
   await page.screenshot({ path: info.outputPath('intake-deadline-mobile.png') });
-  await page.locator('#intakeRokNeznam').check();
+  const rokZaTriDana = await page.evaluate(() => {
+    const rok = new Date();
+    rok.setDate(rok.getDate() + 3);
+    return [rok.getFullYear(), String(rok.getMonth() + 1).padStart(2, '0'), String(rok.getDate()).padStart(2, '0')].join('-');
+  });
+  await date.fill(rokZaTriDana);
   await expect(upload).toHaveAttribute('aria-disabled', 'false');
-  await page.reload();
-  await expect(page.locator('#intakeRokNeznam')).toBeChecked();
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText(/do roka/);
+  await page.locator('[data-intake-rok-clear]').click();
+  await expect(date).toHaveValue('');
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('Rok još nije unesen');
   await page.goto('/alati.html');
   await page.locator('#mobileMenuBtn').click();
   await page.locator('[data-display-open]:visible').click();
@@ -48,4 +58,45 @@ test('audit: prazni alati ostaju nacrti nakon ucitavanja fakulteta', async ({ pa
   await expect(page.locator('#tp-success-cta')).toBeHidden();
   await page.locator('#tp-sheet').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('title-empty-mobile.png') });
+});
+
+test('audit: tekst kartice profila ostaje čitljiv na desktopu', async ({ page }, info) => {
+  test.skip(info.project.name === 'mobile-chromium');
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
+  const panel = page.locator('#intakePanelPravila');
+  await expect(panel).toBeVisible();
+  expect(await panel.evaluate((el) => getComputedStyle(el).backgroundImage)).toBe('none');
+  await page.screenshot({ path: info.outputPath('intake-profile-desktop.png') });
+});
+
+test('audit: Kazalo ima jedan pomični popis na desktopu i mobitelu', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Samo nužno', exact: true }).click({ timeout: 3000 }).catch(() => {});
+
+  const dialog = page.locator('.site-command-dialog');
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    if (viewport.width < 768) await page.getByRole('button', { name: 'Izbornik' }).click();
+    const trigger = page.getByRole('button', { name: 'Kazalo' });
+    await trigger.click();
+    await expect(dialog).toBeVisible();
+    const metrics = await dialog.evaluate((element) => {
+      const results = element.querySelector<HTMLElement>('.site-command-dialog__results')!;
+      return {
+        dialogScrollHeight: element.scrollHeight,
+        dialogClientHeight: element.clientHeight,
+        dialogOverflowY: getComputedStyle(element).overflowY,
+        resultsOverflowY: getComputedStyle(results).overflowY,
+      };
+    });
+    expect(metrics.dialogScrollHeight).toBeLessThanOrEqual(metrics.dialogClientHeight);
+    expect(metrics.dialogOverflowY).toBe('hidden');
+    expect(metrics.resultsOverflowY).toBe('auto');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    const focusTarget = viewport.width < 768 ? page.getByRole('button', { name: 'Izbornik' }) : trigger;
+    await expect(focusTarget).toBeFocused();
+  }
 });

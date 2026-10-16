@@ -10,6 +10,8 @@ import {
 } from './helpers/route-shell-budget';
 import {
   MAX_LAZY_FOOTER_JS_GZIP,
+  MAX_LAZY_PROFILE_DRAWER_JS_GZIP,
+  MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP,
   chromeGraph,
   lazyFooterBudgetProblems,
   lazyFooterProblems,
@@ -37,8 +39,10 @@ import {
  * uvoz upise u isti izlaz i proracun bi mjerio kod koji ostalih jedanaest stranica nikad ne skine
  * (izmjereno: 7783 B bez razdvajanja). Sa `splitting` se zbrajaju gzip velicine ulaza trake i SVIH
  * komada koje on STATICKI uvozi (7008 B: 6299 + 709 zajednickog komada), a lijeni komad ima
- * vlastitu granicu (`MAX_LAZY_FOOTER_JS_GZIP`, 3 KB) i mora biti JEDINI lijeni ulaz trake
- * (`lazyFooterBudgetProblems`). Zabranjeni rjecnik i dalje vrijedi za CIJELI graf, lijeni ukljucivo.
+ * vlastitu granicu (`MAX_LAZY_FOOTER_JS_GZIP`, 3 KB). Profilna ladica je zaseban eksplicitni lijeni
+ * feature s granicom 14 KB; katalog se zato ne povlaci dok ga student ne otvori. Kazalo ima granicu
+ * 3 KB i ucitava javni direktorij tek na izricit poziv. Nema drugih lijenih ulaza, a zabranjeni
+ * rjecnik i dalje vrijedi za CIJELI graf, lijeni ukljucivo.
  */
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -72,7 +76,7 @@ describe('site chrome performance budget', () => {
 
     // STATICKI GRAF (uvijek skinut) naspram LIJENOG; izlazi metafilea su relativni na radni direktorij.
     const graf = chromeGraph(result.metafile, 'src/shared/site-chrome.ts');
-    expect(lazyFooterProblems(graf)).toEqual([]);
+    expect(lazyFooterProblems(graf, true, true)).toEqual([]);
     const gzipOd = (izlazi: readonly string[]): number => izlazi.reduce((zbroj, izlaz) => {
       const datoteka = result.outputFiles.find((f) => f.path.replaceAll('\\', '/').endsWith(izlaz.replaceAll('\\', '/')));
       expect(datoteka, `izlaz ${izlaz} nije emitiran`).toBeDefined();
@@ -81,10 +85,13 @@ describe('site chrome performance budget', () => {
     const statickiJs = gzipOd(graf.staticOutputs);
     // SENTINEL: nula bi znacila da zbrajanje nije naslo nijedan izlaz.
     expect(statickiJs, 'staticki JS trake je 0 B; mjerenje ne mjeri nista').toBeGreaterThan(1000);
-    // LIJENI DIO: jedini lijeni ulaz je podnozje, a zbroj svih lijenih izlaza je unutar granice.
+    // LIJENI DIO: podnozje, profilna ladica i Kazalo; svaki feature ima zasebnu granicu.
     // Gard i granica su u helperu; mutacije `z15b/lijeni-*` u `tests/gate-mutations.test.ts`.
     const lijeneVelicine = Object.fromEntries(graf.lazyOutputs.map((izlaz) => [izlaz, gzipOd([izlaz])]));
-    expect(lazyFooterBudgetProblems(result.metafile, graf, lijeneVelicine, MAX_LAZY_FOOTER_JS_GZIP)).toEqual([]);
+    expect(lazyFooterBudgetProblems(
+      result.metafile, graf, lijeneVelicine, MAX_LAZY_FOOTER_JS_GZIP,
+      MAX_LAZY_PROFILE_DRAWER_JS_GZIP, MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP,
+    )).toEqual([]);
 
     // Sentinel: prazan graf bi ucinio "nula zabranjenih ulaza" vakuumskim nalazom.
     const inputPaths = Object.keys(result.metafile.inputs);

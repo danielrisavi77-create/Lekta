@@ -56,10 +56,10 @@ function siteOriginHtml(siteOrigin: string) {
       }
     },
     writeBundle() {
-      // Vite kopira public/ nakon bundlanja, pa sitemap i robots.txt ne prolaze kroz
+      // Vite kopira public/ nakon bundlanja, pa sitemapovi i robots.txt ne prolaze kroz
       // generateBundle. Obradi ih ovdje da staging nema javne URL-ove produkcije i da nije
       // indeksiran (rewritePublicSeo u scripts/site-origin.mjs).
-      for (const name of ['sitemap.xml', 'robots.txt']) {
+      for (const name of ['sitemap.xml', 'sitemap-pages.xml', 'robots.txt']) {
         const file = resolve(__dirname, 'dist', name);
         if (!existsSync(file)) continue;
         const source = readFileSync(file, 'utf8');
