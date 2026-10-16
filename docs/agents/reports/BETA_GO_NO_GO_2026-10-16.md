@@ -84,7 +84,7 @@ Ponovljeni javni `build-info.json` u 05:32 UTC potvrđuje produkcijski commit `f
 | Word oracle na Windowsu | Povijesni prolazi nisu dokaz novog kandidata. | Ponovno pokrenuti četiri obvezne Word razine na završnom kandidatu i zadržati stvarne izlaze. |
 | Sigurnosni podskup živih endpointa, T84 | Linear DAN-12 je Backlog i blokiran je T18. Read-only presjek 16. listopada utvrdio je produkcijski wildcard CORS na `faculty-request` te tri ciljane funkcije kojih nema u produkciji; nalaz nije zatvoren. | Nakon T18 dovršiti staging i endpoint provjere, riješiti HTTP/XFF blokadu te dokumentirati da nema otvorenog P0. Produkcijske Edge promjene ostaju zasebno odobrenje. |
 | Captcha, T89 | Linear DAN-14 je In Progress. `TURNSTILE_SITE_KEY` nedostaje u GitHub `production` okruženju; javni produkcijski `build-info.json` javlja `captchaSiteKey=false`, a stvarno stanje Supabase Auth CAPTCHA nije potvrđeno. | Vlasnik postavlja produkcijski site key, objavljuje build, potvrđuje `captchaSiteKey=true`, zatim postavlja secret i uključuje Turnstile u Supabase Authu. Prvo dovršiti staging pozitivne i negativne probe prema `TURNSTILE_T89.md`. |
-| Popravak i troškovne granice, T85 | `tasks.json` bilježi Done na temelju staging dokaza i produkcijskog očitanja od 28. rujna; to očitanje nije svježe. | Za besplatnu betu vlasnik potvrđuje da `REPAIR_DISABLED` nije `true` i postavlja/potvrđuje `REPAIR_FREE_MODE=true` prema `docs/GO_LIVE_REPAIR.md`, odjeljku B. Zatim svježe očitava dnevne limite i alarme troška; njihove vrijednosti ne zapisivati u support ili javne zapise. |
+| Prekidači, T85; svježi limiti i alarmi za T81 | `tasks.json` bilježi T85 kao Done na temelju staging dokaza i produkcijskog očitanja od 28. rujna; povijesno očitanje nije svježe. | Prije GO odluke T81 vlasnik svježe potvrđuje da `REPAIR_DISABLED` nije `true` i `REPAIR_FREE_MODE=true` prema `docs/GO_LIVE_REPAIR.md`, odjeljku B, te očita stvarne dnevne limite i alarme troška. Vrijednosti zabilježiti privatno, ne u support ili javne zapise. |
 | Pravne stranice, T86 | Linear DAN-13 je In Review. Vlasnik je 16. listopada potvrdio podatke pružatelja i formulaciju privatnosti za besplatnu betu; ažurirani tekst još nije potvrđen na živoj produkciji. | Nakon objave provjeriti javne uvjete, privatnost, kontakt i besplatnu beta formulaciju na `lekta.hr`. |
 | Domena i support, T49 | Linear DAN-8 je In Progress. DNS, mail routing, Resend DKIM i DMARC razrješavaju se; testna poruka/odgovor i produkcijski Auth `rate_limit_email_sent` još nisu provjereni. | Poslati i odgovoriti na testnu poruku na support adresi. U produkcijskom Supabase projektu očitati aktivnog providera i `rate_limit_email_sent`; svaki limit mijenjati tek nakon tog očitanja. Zabilježiti vrijeme i rezultat privatno. |
 | Glavni tok i go/no-go, T81 | Linear DAN-11 je Backlog i ovisi o T26, T72, T49, T84, T85, T86, T87 i T89. Završni vlasnikov prolaz na kandidatu nije zabilježen. | Vlasnik prolazi glavni tok s dva do tri vlastita rada, provjerava limite i troškovne alarme te odlučuje GO ili NO-GO. Nepoznato stanje znači NO-GO. |
@@ -414,7 +414,7 @@ Supabase read-only `get_project` potvrđuje da su Lekta produkcija i staging `AC
 vraća samo metapodatke projekta, ne Auth CAPTCHA konfiguraciju, vrijednosti Edge tajni, žive kvote ili
 troškovne alarme. Supabase CLI nije instaliran u ovoj sesiji. Nije čitana ni mijenjana tajna ili
 postavka. Stoga ostaju otvoreni: T18 (izvor četiri remote-only migracije i staging tok), T84 (blokiran
-T18), T49 (support poruka/odgovor i Auth limit), T85 (žive granice i alarmi), T86 (provjera objavljenih
+T18), T49 (support poruka/odgovor i Auth limit), svježe očitanje limita i alarma za T81, T86 (provjera objavljenih
 pravnih stranica), T89 (staging Auth testovi) i vlasnikov završni T81 tok s dva do tri rada. Nema
 spajanja, deploya ni nove ovjere izdanja; odluka ostaje **HOLD**.
 
@@ -434,7 +434,7 @@ Ovaj nastavak ažurira presjek iz 05:08 UTC. Produkcija nije mijenjana.
   Cap dostupan samo na Pro planu i da Free plan nema usage charges, ali prekoračenja kvota mogu
   ograničiti uslugu ([upute za kontrolu troškova](https://supabase.com/docs/guides/platform/cost-control)).
   Trenutna potrošnja, odredište obavijesti i status eventualnih drugih troškovnih alarma nisu očitani;
-  T85 ostaje otvoren.
+  T85 je zabilježen kao Done; svježe očitanje limita i alarma za T81 ostaje otvoreno.
 - Osvježeni GitHub podaci potvrđuju da su #367, #368 i #369 i dalje otvoreni draftovi prema `master`;
   nema spajanja. Nove pretrage dostupnih Lekta/Katedra repozitorija nisu našle izvorni commit ili PR za
   četiri remote-only migracije. To ne dokazuje da izvor ne postoji; T18 ostaje otvoren, a T84 blokiran.
