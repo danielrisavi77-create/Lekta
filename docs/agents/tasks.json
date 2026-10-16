@@ -542,7 +542,7 @@
     {
       "id": "T49",
       "title": "Domena, DNS, SPF/DKIM/DMARC i support sanducic",
-      "status": "done",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
@@ -830,7 +830,7 @@
     {
       "id": "T84",
       "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
-      "status": "done",
+      "status": "in_progress",
       "owner": "lekta-00",
       "dependsOn": [],
       "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295."
@@ -968,12 +968,12 @@
     {
       "id": "T102",
       "title": "Prijava Googleom prije bete: Supabase Google provider, UI u src/auth, T86 tekst o Googleu kao primatelju",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "radna-stanica-ubrzavanje",
       "dependsOn": [
         "T49"
       ],
-      "note": "Linear DAN-20 presjek 2026-10-15: status In Progress. T49/DAN-8 je Done od 2026-10-08; preostaje vlasnikov Google OAuth klijent/consent screen te uskladjenje dijeljenog Auth projekta s Katedrom, Supabase provider/redirect allowlist, zavrsni tekst privatnosti i stvarni E2E/aktivacija. PR #307 spojen 2026-10-08; kod ostaje iza zadano iskljucene zastavice VITE_AUTH_GOOGLE_ENABLED."
+      "note": "2026-10-16: status reda je blocked dok T49 ne bude done; Linear DAN-20 je vracen na Backlog (oznaka Blocked). T49/DAN-8 je In Progress jer isporuka i odgovor support sanducica nisu provjereni; preostaje vlasnikov Google OAuth klijent/consent screen te uskladjenje dijeljenog Auth projekta s Katedrom, Supabase provider/redirect allowlist, zavrsni tekst privatnosti i stvarni E2E/aktivacija. PR #307 spojen 2026-10-08; kod ostaje iza zadano iskljucene zastavice VITE_AUTH_GOOGLE_ENABLED."
     },
     {
       "id": "T103",
