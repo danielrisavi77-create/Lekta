@@ -6,6 +6,7 @@ import {
   linkEmailToAnonymous, confirmEmailLink,
   type Session, type SessionStore,
 } from '../src/auth/session';
+import { awaitAbortable } from '../src/shared/await-abortable';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon-key' };
 
@@ -167,14 +168,24 @@ describe('getValidAccessToken', () => {
     expect(token).toBe('jwt-abc');
     expect(store.load()!.accessToken).toBe('jwt-abc');
   });
-  it('signal prekida obnove prolazi do Supabase fetch poziva', async () => {
+  it('timeout UI čekanja ne prekida refresh token koji Supabase može rotirati', async () => {
     const controller = new AbortController();
     let seenSignal: AbortSignal | null = null;
     const store = memStore({ accessToken: 'old', refreshToken: 'refresh-xyz', expiresAt: 5_000, email: '', userId: '' });
-    const token = await getValidAccessToken(CFG, store, fetchOnce(res(200, tokenBody), (_url, init) => { seenSignal = init.signal as AbortSignal; }), 10_000, controller.signal);
+    let resolveFetch!: (response: Response) => void;
+    const pendingFetch = ((_url: string | URL | Request, init: RequestInit) => {
+      seenSignal = init.signal ?? null;
+      return new Promise<Response>((resolve) => { resolveFetch = resolve; });
+    }) as typeof fetch;
+    const refresh = getValidAccessToken(CFG, store, pendingFetch, 10_000);
+    const uiWait = awaitAbortable(refresh, controller.signal);
+    controller.abort();
 
-    expect(token).toBe('jwt-abc');
-    expect(seenSignal).toBe(controller.signal);
+    await expect(uiWait).rejects.toMatchObject({ name: 'AbortError' });
+    expect(seenSignal).toBeNull();
+    resolveFetch(res(200, tokenBody));
+    await expect(refresh).resolves.toBe('jwt-abc');
+    expect(store.load()).toMatchObject({ accessToken: 'jwt-abc', refreshToken: tokenBody.refresh_token });
   });
   it('istekao bez refresh tokena -> null i čisti sesiju', async () => {
     const store = memStore({ accessToken: 'old', refreshToken: '', expiresAt: 5_000, email: '', userId: '' });

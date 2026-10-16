@@ -216,7 +216,7 @@ async function signRepairDownload(...args: any[]){return (await loadRepairHistor
 async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryClient()).deleteRepairJob(args[0],args[1],args[2],args[3])}
 let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
 function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
-async function getValidAccessToken(cfg: import('../auth/session').AuthConfig, store: import('../auth/session').SessionStore, signal?: AbortSignal){return (await loadAuthClient()).getValidAccessToken(cfg,store,fetch,Date.now(),signal)}
+async function getValidAccessToken(cfg: import('../auth/session').AuthConfig, store: import('../auth/session').SessionStore){return (await loadAuthClient()).getValidAccessToken(cfg,store,fetch,Date.now())}
 async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1],fetch,location.origin+location.pathname)}
 async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
 async function signInAnonymously(cfg: import('../auth/session').AuthConfig, signal?: AbortSignal){return (await loadAuthClient()).signInAnonymously(cfg,fetch,Date.now(),undefined,signal)}
@@ -628,12 +628,12 @@ function handleHistoryAction(e: any){const profileId=e.target.closest('[data-his
 function repairHistoryConfig(){return repairHistoryConfigFrom(productionConfig)}
 function updateRepairHistoryButton(){const b=$('#repairHistoryBtn');if(b)b.classList.toggle('hidden',!repairServerConfigured())}
 let _repairHistoryLoad=0;
-function openRepairHistory(){$('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));void renderRepairHistoryList()}
+function openRepairHistory(){ $('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));return renderRepairHistoryList() }
 function closeRepairHistory(){_repairHistoryLoad+=1;$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
 async function renderRepairHistoryList(){
- const el=$('#repairHistoryList');if(!el)return;
+ const el=$('#repairHistoryList');if(!el)return false;
  const loadId=++_repairHistoryLoad;
- await renderRepairHistoryView(el,{
+ return renderRepairHistoryView(el,{
   isCurrent:()=>loadId===_repairHistoryLoad,authConfigured:authConfigured(),ensureAccessToken,
   openAuth,reload:()=>void renderRepairHistoryList(),
   fetchJobs:(token,signal)=>fetchRepairJobs(repairHistoryConfig(),token,signal),
@@ -1615,13 +1615,13 @@ function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
 // Valjan pristupni token: iz Supabase sesije ako je auth konfiguriran (null -> pozivatelj otvara prijavu),
 // inace null (nema vise statickog tokena; nekonfigurirano okruzenje nema pristup).
-async function resolveAccessToken(signal?: AbortSignal){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore,signal)}catch(e: any){return null}}return null}
+async function resolveAccessToken(){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore)}catch(e: any){return null}}return null}
 /* Token BEZ trazenja e-maila: ako sesije nema, tiho otvori anonimnu. Sluzi tokovima koji moraju
    biti bez trenja (popravak, "Moji popravci"). Identitet je i dalje pravi user_id, pa RLS, mapa u
    Storageu i pravo na brisanje rade nepromijenjeno; samo ne trazimo e-mail. Ako anonimna prijava
    nije ukljucena na projektu, vracamo null pa pozivatelj pada natrag na e-mail prijavu.
    NE koristiti za admin/kupnju: ondje identitet mora biti vezan uz osobu. */
-async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const existing=await resolveAccessToken(signal);if(existing)return existing;if(signal?.aborted)return null;try{const out=await signInAnonymously(authConfig(),signal);if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
+async function ensureAccessToken(signal?: AbortSignal){if(!authConfigured())return null;const existing=await resolveAccessToken();if(existing)return existing;if(signal?.aborted)return null;try{const out=await signInAnonymously(authConfig(),signal);if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
 // Referral (pozovi-prijatelja, 0013): kod se hvata iz ?ref na ucitavanju (safeStorage, prezivi
 // email-potvrdu u novom tabu), veze se na signup nakon OTP prijave, a share sekcija se prikaze na
 // ekranu 6 ako korisnik ima referral_code (prva kupnja). Sve preko service role u Edge Functionima.
@@ -2023,9 +2023,11 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
  let inFlight=false;
+ // Nepoznat ishod nakon slanja zaključava glavni CTA dok se popis poslova ne učita i korisnik svjesno ne pokuša opet.
+ let repairOutcomeUnknown=false;
  const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
- async function go(confirmedMismatch: boolean){
-  if(inFlight)return;
+ async function go(confirmedMismatch: boolean, recoveryRetry=false){
+  if(inFlight||(repairOutcomeUnknown&&!recoveryRetry))return;
   inFlight=true;
   const orig=btn.textContent;
   const authController=new AbortController();
@@ -2041,7 +2043,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   btn.textContent='Provjeravam prijavu…';
   const token: any=await awaitAbortable(ensureAccessToken(authController.signal),authController.signal);
   clearTimeout(authTimer);
-  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
+  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch,repairOutcomeUnknown));return}
   btn.textContent='Šaljem na server…';
   try{
    // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
@@ -2077,6 +2079,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    pending={token:token||'',bytes,meta,signal:ac.signal};
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
+   if(out.kind==='error'&&out.status===undefined)repairOutcomeUnknown=true;
+   else if(recoveryRetry)repairOutcomeUnknown=false;
    if(out.kind==='ok')trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r));
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
@@ -2224,14 +2228,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
    // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
-   else if(out.kind==='error'){renderRepairRecovery(summary,recoveryFor(out,'after-send'),{retry:()=>go(confirmedMismatch),openJobs:authSessionActive()?openRepairHistory:null},escapeHtml)}
+   else if(out.kind==='error'){
+    const recovery=recoveryFor(out,'after-send');
+    if(recovery.action==='check-existing-job')repairOutcomeUnknown=true;
+    renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,recovery.action==='check-existing-job'),openJobs:recovery.action==='check-existing-job'?openRepairHistory:(authSessionActive()?openRepairHistory:null)},escapeHtml)
+   }
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
    }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted){renderRepairRecovery(summary,{action:'retry',retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'},{retry:()=>go(confirmedMismatch),openJobs:null},escapeHtml)}else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
+  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted){const recovery=repairOutcomeUnknown?{action:'check-existing-job' as const,retryAllowed:false,message:'Provjera prijave trajala je predugo. Prethodni popravak možda je još u obradi. Prvo učitaj Moje popravke prije novog pokušaja.'}:{action:'retry' as const,retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'};renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,repairOutcomeUnknown),openJobs:repairOutcomeUnknown?openRepairHistory:null},escapeHtml)}else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
   finally{
    clearTimeout(authTimer);
    inFlight=false;
-   if(!lockButton){btn.disabled=false;btn.textContent=orig;binding.controller.backToPlan()}
+   if(!lockButton){btn.textContent=orig;binding.controller.backToPlan();btn.disabled=repairOutcomeUnknown}
   }
  }
  // Potvrdni korak i receipt stanje zive u lijeno ucitanom modulu.

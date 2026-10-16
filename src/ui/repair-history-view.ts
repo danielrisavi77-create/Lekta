@@ -18,6 +18,7 @@ export interface RepairHistoryViewDeps {
 }
 
 const HISTORY_TIMEOUT_MS = 30_000;
+const CORPUS_TIMEOUT_MS = 5_000;
 
 function repairDownloadName(job: RepairJob): string {
   const raw = String(job.label || '').trim().replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').slice(0, 60).trim();
@@ -36,42 +37,48 @@ function jobsHtml(jobs: RepairJob[], corpusByJob: Map<string, string>, deps: Rep
   }).join('');
 }
 
-export async function renderRepairHistoryView(el: HTMLElement, deps: RepairHistoryViewDeps): Promise<void> {
+export async function renderRepairHistoryView(el: HTMLElement, deps: RepairHistoryViewDeps): Promise<boolean> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), HISTORY_TIMEOUT_MS);
   el.innerHTML = '<div class="empty">Učitavam…</div>';
   try {
     const token = await awaitAbortable(deps.ensureAccessToken(controller.signal), controller.signal);
-    if (!deps.isCurrent()) return;
+    if (!deps.isCurrent()) return false;
     if (deps.authConfigured && !token) {
       el.innerHTML = '<div class="empty">Za pregled popravaka potrebna je prijava.</div>';
       deps.openAuth(deps.reload);
-      return;
+      return false;
     }
     const jobs = await awaitAbortable(deps.fetchJobs(token || '', controller.signal), controller.signal);
-    if (!deps.isCurrent()) return;
+    if (!deps.isCurrent()) return false;
     // Kanal A je dodatni metapodatak; njegov zastoj ne može ostaviti "Moji popravci" u vrtnji.
     const corpusByJob = new Map<string, string>();
     if (deps.includeCorpusContributions) {
+      const corpusController = new AbortController();
+      const corpusTimer = setTimeout(() => corpusController.abort(), CORPUS_TIMEOUT_MS);
       try {
-        const contributions = await awaitAbortable(deps.fetchCorpusContributions(token || '', controller.signal), controller.signal);
+        const contributions = await awaitAbortable(deps.fetchCorpusContributions(token || '', corpusController.signal), corpusController.signal);
         for (const contribution of contributions) if (contribution.repairJobId) corpusByJob.set(contribution.repairJobId, contribution.id);
-      } catch (error) {
-        if (controller.signal.aborted) throw error;
+      } catch {
+        // Kanal A je samo dodatni metapodatak; njegovo kašnjenje ne smije sakriti učitane poslove.
+      } finally {
+        clearTimeout(corpusTimer);
       }
     }
-    if (!deps.isCurrent()) return;
+    if (!deps.isCurrent()) return false;
     if (!jobs.length) {
       el.innerHTML = '<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';
-      return;
+      return true;
     }
     el.innerHTML = jobsHtml(jobs, corpusByJob, deps);
     deps.refreshIcons();
+    return true;
   } catch {
-    if (!deps.isCurrent()) return;
+    if (!deps.isCurrent()) return false;
     el.innerHTML = controller.signal.aborted
       ? '<div class="empty">Učitavanje je trajalo predugo. Provjeri vezu i ponovno otvori Moje popravke.</div>'
       : '<div class="empty">Popravke trenutačno nije moguće učitati.</div>';
+    return false;
   } finally {
     clearTimeout(timer);
   }

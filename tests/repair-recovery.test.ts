@@ -50,7 +50,7 @@ describe('renderRepairRecovery', () => {
   let el: HTMLElement;
   beforeEach(() => { document.body.innerHTML = ''; el = document.createElement('div'); document.body.appendChild(el); });
 
-  it('za nepoznat ishod: ponovni pokusaj je onemogucen dok se ne otvori provjera, pa se otkljuca', () => {
+  it('za nepoznat ishod: ponovni pokusaj se otkljucava tek nakon zavrsene provjere', async () => {
     let retries = 0;
     let opened = 0;
     renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => { retries += 1; }, openJobs: () => { opened += 1; } }, esc);
@@ -60,12 +60,32 @@ describe('renderRepairRecovery', () => {
     retry.click();
     expect(retries, 'onemogucen gumb ne smije pokrenuti ponovni pokusaj').toBe(0);
     jobs.click();
+    await Promise.resolve();
     expect(opened).toBe(1);
     expect(retry.disabled).toBe(false);
     expect(el.querySelector('[data-repair-recovery]')?.textContent).toMatch(/zatvori prozor/i);
     retry.click();
     expect(retries).toBe(1);
     expect(el.querySelector('[data-repair-recovery]')?.getAttribute('data-repair-recovery')).toBe('check-existing-job');
+  });
+
+  it('zadrzava zakljucan retry ako se popis poslova nije uspio ucitati', async () => {
+    let finishCheck!: (loaded: boolean) => void;
+    const check = new Promise<boolean>((resolve) => { finishCheck = resolve; });
+    renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => {}, openJobs: () => check }, esc);
+    const retry = el.querySelector<HTMLButtonElement>('[data-repair-retry]')!;
+    const jobs = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]')!;
+
+    jobs.click();
+    expect(jobs.disabled).toBe(true);
+    expect(retry.disabled).toBe(true);
+    finishCheck(false);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(jobs.disabled).toBe(false);
+    expect(retry.disabled).toBe(true);
+    expect(el.querySelector('[role="status"]')?.textContent).toMatch(/ostaje zaključan/);
   });
 
   it('prikazuje stanje ponovnog slanja dok ceka odgovor', async () => {
@@ -79,7 +99,7 @@ describe('renderRepairRecovery', () => {
     expect(retry.disabled).toBe(true);
     expect(retry.textContent).toBe('Pokušavam ponovno…');
     expect(retry.getAttribute('aria-busy')).toBe('true');
-    expect(el.querySelector('[role="status"]')?.textContent).toMatch(/do 3 minute/);
+    expect([...el.querySelectorAll<HTMLElement>('[role="status"]')].some((status) => !status.hidden && /do 3 minute/.test(status.textContent || ''))).toBe(true);
     finish();
     await pending;
     await Promise.resolve();

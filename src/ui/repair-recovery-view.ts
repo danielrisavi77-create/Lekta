@@ -9,7 +9,7 @@ import type { RepairRecovery } from '../repair/recovery-policy';
 export interface RecoveryHooks {
   retry: () => void | Promise<void>;
   /** Postojeci mehanizam pregleda poslova (`openRepairHistory`); `null` kad nije dostupan (bez prijave). */
-  openJobs: (() => void) | null;
+  openJobs: (() => boolean | void | Promise<boolean | void>) | null;
   /** Ponovna prijava (`openAuth`), za `reauth`. */
   reauth?: () => void;
 }
@@ -30,10 +30,23 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
   const jobsBtn = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]');
   const reauthBtn = el.querySelector<HTMLButtonElement>('[data-repair-reauth]');
   if (jobsBtn) {
-    jobsBtn.onclick = () => {
-      hooks.openJobs?.();
-      // Provjera je otvorena: tek sada je ponovni pokusaj svjesna odluka, ne refleks.
-      if (retryBtn) retryBtn.disabled = false;
+    jobsBtn.onclick = async () => {
+      if (!hooks.openJobs) return;
+      jobsBtn.disabled = true;
+      try {
+        const checked = await hooks.openJobs();
+        if (checked === false) {
+          if (checkStatus) checkStatus.hidden = false;
+          return;
+        }
+        // Popis je stvarno učitan: tek sada je ponovni pokušaj svjesna odluka, ne refleks.
+        if (retryBtn) retryBtn.disabled = false;
+        if (checkStatus) checkStatus.hidden = true;
+      } catch {
+        if (checkStatus) checkStatus.hidden = false;
+      } finally {
+        if (jobsBtn.isConnected) jobsBtn.disabled = false;
+      }
     };
     if (!hooks.openJobs) {
       // Bez prijave e-mailom popis poslova ne postoji, pa provjera nije moguca. Slijepa ulica bi bila gora od rizika:
@@ -47,6 +60,17 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
       napomena.textContent = 'Bez prijave e-mailom ne možemo provjeriti je li prvi popravak dovršen. Ako pokušaš ponovno, moguće je da već postoji dovršena kopija.';
       el.firstElementChild?.appendChild(napomena);
     }
+  }
+  const checkStatus = jobsBtn
+    ? el.ownerDocument.createElement('p')
+    : null;
+  if (checkStatus) {
+    checkStatus.className = 'muted';
+    checkStatus.setAttribute('role', 'status');
+    checkStatus.setAttribute('aria-live', 'polite');
+    checkStatus.textContent = 'Popis popravaka nije potvrđen. Ponovni pokušaj ostaje zaključan; provjeri popis još jednom.';
+    checkStatus.hidden = true;
+    jobsBtn?.closest('[data-repair-recovery]')?.append(checkStatus);
   }
   if (reauthBtn && hooks.reauth) reauthBtn.onclick = hooks.reauth;
   if (retryBtn) {

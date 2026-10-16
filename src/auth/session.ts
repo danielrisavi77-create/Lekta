@@ -433,7 +433,6 @@ export async function refreshSession(
   refreshToken: string,
   fetchImpl: typeof fetch = fetch,
   now: number = Date.now(),
-  signal?: AbortSignal,
 ): Promise<SessionResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   if (!refreshToken) return { ok: false, message: 'nema refresh tokena' };
@@ -442,7 +441,6 @@ export async function refreshSession(
       method: 'POST',
       headers: authHeaders(cfg),
       body: JSON.stringify({ refresh_token: refreshToken }),
-      ...(signal ? { signal } : {}),
     });
     if (!res.ok) {
       // 400 invalid_grant / 401 / 403 = refresh token je nevaljan ili rotiran (potrosen) -> fatalno.
@@ -470,7 +468,6 @@ export async function getValidAccessToken(
   store: SessionStore,
   fetchImpl: typeof fetch = fetch,
   now: number = Date.now(),
-  signal?: AbortSignal,
 ): Promise<string | null> {
   const current = store.load();
   if (current && !isExpired(current, now)) return current.accessToken;
@@ -478,7 +475,9 @@ export async function getValidAccessToken(
     if (current) store.save(null);
     return null;
   }
-  const refreshed = await refreshSession(cfg, current.refreshToken, fetchImpl, now, signal);
+  // A refresh token may rotate as soon as Supabase accepts this request. Do not abort the
+  // network request when a UI wait times out; its result must still be saved to preserve identity.
+  const refreshed = await refreshSession(cfg, current.refreshToken, fetchImpl, now);
   if (refreshed.ok) {
     store.save(refreshed.session);
     return refreshed.session.accessToken;
