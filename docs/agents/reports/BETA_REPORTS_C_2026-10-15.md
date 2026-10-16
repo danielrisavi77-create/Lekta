@@ -40,7 +40,7 @@ Issue [#318](https://github.com/danielrisavi77-create/Lekta/issues/318) ostaje o
 - Security workflow 38429623801 na SHA-u f758ba2bde00c7f2d37daa789a39ed1e4168db99 završio je uspješno. Uspješno su prošli audit produkcijskih ovisnosti, audit cijelog grafa, audit ratchet i provjera izvora lockfilea.
 - GitHub Actions rezultat vrijedi za točan SHA i lockfile iz tog runa; stariji lokalni node_modules nije mjerodavan dokaz.
 - Popravak je ušao kroz [PR #319](https://github.com/danielrisavi77-create/Lekta/pull/319), spojen 9. listopada u commit `4911855f066b85fe555cc0a2b239726fec06852a`. PR je mijenjao samo lockfile: `source-map-js` 1.2.1 → 1.2.2 i `smol-toml` 1.8.0 → 1.9.0. Trenutačni `master` sadrži te verzije; `fullGraphHighCritical` ostaje 0, bez iznimki. Službeni GitHub advisories navode 1.2.2 i 1.9.0 kao zakrpane verzije.
-- Issue je i dalje otvoren. GitHub ne prikazuje zabilježeni pregled PR-a #319, a komentar na issueu od 6. listopada bilježi da neovisni pregled tada nije bio potvrđen. Ovaj odjeljak daje tehničke dokaze za vlasnikov pregled zatvaranja; ne zatvara issue i ne tvrdi da postoji dokaz drugog providera.
+- Izolirani npm ci na kopiji točnih package.json/package-lock.json uz --ignore-scripts uspješno je instalirao 133 paketa na SHA f515544171ca58395030cd7ceda3047c55b9031e. npm explain source-map-js pokazao je source-map-js@1.2.2 iz postcss@8.5.28; npm explain smol-toml pokazao je smol-toml@1.9.0 iz knip@6.39.0. Prvi pokušaj iz worktreea nije bio valjan jer node_modules vodi junctionom do Desktop\Lekta i ondje pokazuje extraneous rezultate te smol-toml@1.8.0. Izdvojeni install potvrđuje roditelje iz zaključanog grafa i ispunjava kriterij za npm explain. Neovisan pregled drugog providera i dalje nije potvrđen; issue se ne zatvara.
 
 ### Svježa provjera nakon spajanja PR-a #319 — 16. listopada 2026., 01:04 UTC
 
@@ -48,4 +48,4 @@ PR [#317](https://github.com/danielrisavi77-create/Lekta/pull/317) ostaje otvore
 
 U odnosu na današnji `master` `f758ba2b`, PR #317 sada je raziđen: zajednički predak `c2767c18`, 22 commita ispred i 32 iza. To ne poništava povijesnu provjeru nakon #319, ali prije budućeg spajanja #317 treba uskladiti s aktualnim `masterom` i ponovno provjeriti.
 
-Zaključak: tehnički popravak #318 prisutan je na `master`, security workflow za SHA `f758ba2b` prolazi, a zahtjev za ponovnu provjeru #317 nakon #319 ima dokaz. Issue #318 još nije spreman za zatvaranje jer GitHub ne bilježi neovisan pregled PR-a #319, što je traženo u kriterijima issuea. Ovaj izvještaj daje dokaze za vlasnikov pregled; ne zatvara issue.
+Zaključak: tehnički popravak #318 prisutan je na `master`, security workflow za SHA `f758ba2b` prolazi, a provjera #317 nakon #319 ima povijesni dokaz. Issue #318 još nije spreman za zatvaranje jer neovisan pregled drugog providera nije potvrđen. Ovaj izvještaj daje dokaze za vlasnikov pregled; ne zatvara issue.
