@@ -1,17 +1,68 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { DOMParser } from '@xmldom/xmldom';
 import { isInOrigin } from './site-origin.mjs';
 
-function xmlText(value) {
-  return value.trim().replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+const SITEMAP_NS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
+
+function parseXml(xml, label) {
+  const issues = [];
+  let document;
+  try {
+    document = new DOMParser({
+      onError: (level, message) => issues.push(`${level}: ${message}`),
+    }).parseFromString(xml, 'application/xml');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    issues.push(message);
+  }
+
+  if (issues.length || !document.documentElement || document.doctype) {
+    const detail = issues.length ? `: ${issues[0]}` : '';
+    return { document: null, problem: `${label} nije valjan XML${detail}` };
+  }
+  return { document, problem: null };
 }
 
-function groups(xml, name) {
-  return [...xml.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)<\\/${name}\\s*>`, 'gi'))].map((match) => match[1]);
+function childElements(node) {
+  const elements = [];
+  for (let child = node.firstChild; child; child = child.nextSibling) {
+    if (child.nodeType === 1) elements.push(child);
+  }
+  return elements;
 }
 
-function locations(xml) {
-  return [...xml.matchAll(/<loc\b[^>]*>([\s\S]*?)<\/loc\s*>/gi)].map((match) => xmlText(match[1]));
+function isSitemapElement(element, localName) {
+  return element.localName === localName && element.namespaceURI === SITEMAP_NS;
+}
+
+function locationForEntry(entry) {
+  const children = childElements(entry);
+  const locations = children.filter((child) => child.localName === 'loc');
+  if (locations.length !== 1 || !isSitemapElement(locations[0], 'loc')) {
+    return { value: null, problem: 'unos mora imati točno jedan <loc>' };
+  }
+
+  const location = locations[0];
+  if (childElements(location).length) {
+    return { value: null, problem: '<loc> mora sadržavati samo tekst' };
+  }
+  const value = location.textContent.trim();
+  if (!value) return { value: null, problem: '<loc> ne smije biti prazan' };
+  return { value, problem: null };
+}
+
+function rootEntries(document, rootName, entryName, label) {
+  const root = document.documentElement;
+  if (!isSitemapElement(root, rootName)) {
+    return { entries: [], problem: `${label} mora biti sitemap ${rootName === 'sitemapindex' ? 'indeks' : 'URLset'}` };
+  }
+
+  const entries = childElements(root);
+  if (entries.some((entry) => !isSitemapElement(entry, entryName))) {
+    return { entries: [], problem: `${label} sadrži nevaljan <${entryName}> element` };
+  }
+  return { entries, problem: null };
 }
 
 function localFileForUrl(value, distRoot, siteOrigin, label, problems) {
@@ -61,51 +112,55 @@ function localFileForUrl(value, distRoot, siteOrigin, label, problems) {
   return filePath;
 }
 
-/** Provjerava da sitemap indeks vodi do postojećih URLsetova i statičkih stranica u dist/. */
+/** Provjerava sitemap XML, lokalne URLsetove i statičke stranice u dist/. */
 export function sitemapDistProblems(distRoot, siteOrigin, indexName = 'sitemap.xml') {
   const problems = [];
   const indexPath = path.join(distRoot, indexName);
   if (!fs.existsSync(indexPath)) return [`dist/${indexName} ne postoji`];
 
   const indexXml = fs.readFileSync(indexPath, 'utf8');
-  if (!/<sitemapindex\b[^>]*>[\s\S]*<\/sitemapindex\s*>/i.test(indexXml)) {
-    return [`dist/${indexName} mora biti valjan sitemap indeks`];
-  }
+  const parsedIndex = parseXml(indexXml, `dist/${indexName}`);
+  if (!parsedIndex.document) return [parsedIndex.problem];
 
-  const sitemapEntries = groups(indexXml, 'sitemap');
-  if (!sitemapEntries.length) problems.push(`dist/${indexName} nema sitemap unosa`);
+  const index = rootEntries(parsedIndex.document, 'sitemapindex', 'sitemap', `dist/${indexName}`);
+  if (index.problem) return [index.problem];
+  if (!index.entries.length) problems.push(`dist/${indexName} nema sitemap unosa`);
+
   const seenSitemaps = new Set();
-  for (const entry of sitemapEntries) {
-    const sitemapLocs = locations(entry);
-    if (sitemapLocs.length !== 1) {
-      problems.push(`dist/${indexName} sitemap unos mora imati točno jedan <loc>`);
+  for (const entry of index.entries) {
+    const sitemapLocation = locationForEntry(entry);
+    if (sitemapLocation.problem) {
+      problems.push(`dist/${indexName} sitemap ${sitemapLocation.problem}`);
       continue;
     }
-    const [sitemapUrl] = sitemapLocs;
-    const sitemapPath = localFileForUrl(sitemapUrl, distRoot, siteOrigin, `dist/${indexName}`, problems);
+    const sitemapPath = localFileForUrl(sitemapLocation.value, distRoot, siteOrigin, `dist/${indexName}`, problems);
     if (!sitemapPath) continue;
     if (seenSitemaps.has(sitemapPath)) {
-      problems.push(`dist/${indexName} dvaput navodi ${sitemapUrl}`);
+      problems.push(`dist/${indexName} dvaput navodi ${sitemapLocation.value}`);
       continue;
     }
     seenSitemaps.add(sitemapPath);
 
     const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
     const label = `dist/${path.relative(distRoot, sitemapPath).split(path.sep).join('/')}`;
-    if (!/<urlset\b[^>]*>[\s\S]*<\/urlset\s*>/i.test(sitemapXml)) {
-      problems.push(`${label} mora biti sitemap URLset`);
+    const parsedSitemap = parseXml(sitemapXml, label);
+    if (!parsedSitemap.document) {
+      problems.push(parsedSitemap.problem);
       continue;
     }
-    const urlEntries = groups(sitemapXml, 'url');
-    if (!urlEntries.length) problems.push(`${label} nema URL unosa`);
-    for (const urlEntry of urlEntries) {
-      const pageLocs = locations(urlEntry);
-      if (pageLocs.length !== 1) {
-        problems.push(`${label} URL unos mora imati točno jedan <loc>`);
+    const urlset = rootEntries(parsedSitemap.document, 'urlset', 'url', label);
+    if (urlset.problem) {
+      problems.push(urlset.problem);
+      continue;
+    }
+    if (!urlset.entries.length) problems.push(`${label} nema URL unosa`);
+    for (const urlEntry of urlset.entries) {
+      const pageLocation = locationForEntry(urlEntry);
+      if (pageLocation.problem) {
+        problems.push(`${label} URL ${pageLocation.problem}`);
         continue;
       }
-      const [pageUrl] = pageLocs;
-      localFileForUrl(pageUrl, distRoot, siteOrigin, label, problems);
+      localFileForUrl(pageLocation.value, distRoot, siteOrigin, label, problems);
     }
   }
   return problems;
