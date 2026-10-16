@@ -445,3 +445,31 @@ Ovaj nastavak ažurira presjek iz 05:08 UTC. Produkcija nije mijenjana.
 **Odluka ostaje HOLD.** Nisu primijenjene migracije, mijenjane tajne/postavke, deployane funkcije,
 spajani PR-ovi ni objavljena produkcija. Puni `release:check` i novi release proof ostaju za konačni,
 zamrznuti kandidat.
+
+## Osvježena ciljana provjera T18/T84 — 16. listopada 2026., 06:31 UTC
+
+Read-only inventar Supabase migracija sada vraća 123 zapisa na stagingu i 116 u produkciji. Produkcija
+i dalje ima četiri zapisa koja nisu u 112 repozitorijskih migracija: `20260830005406`
+(`sprint_engine_i_narudzbe`), `20260830195311` (`stavka_crm_leadovi`), `20260830195452`
+(`stavka_leadovi_email_nullable`) i `20260830195905` (`stavka_revoke_trigger_fn_execute`). Staging
+ima 11 dodatnih Katedra zapisa `0104`–`0114`. Inventar potvrđuje identitete, ne izvorni commit/PR ni
+SQL podrijetlo. Nisu primijenjene migracije.
+
+Read-only Edge inventar vraća 28 aktivnih staging funkcija i 19 produkcijskih. Svih deset IP funkcija
+iz T20 aktivno je na stagingu; u produkciji nedostaju `client-error`, `integrity-check` i
+`preflight-start`. Verzije `faculty-request`, `repair-docx` i `source-check` razlikuju se između
+staginga i produkcije (9/14, 20/36 i 13/8). To je razlika kataloga/verzija; sama po sebi ne dokazuje
+ispravno ponašanje runtimea.
+
+Svježi HTTP `OPTIONS` u 06:31 UTC nad `faculty-request` vraća u produkciji HTTP 200 i
+`Access-Control-Allow-Origin: *` i za `https://lekta.hr` i za `https://evil.example`. Staging vraća
+HTTP 200 bez ACAO za zlonamjerni origin, a za svoj dopušteni `https://lekta-staging.netlify.app`
+vraća točan origin. Ovo potvrđuje produkcijski wildcard CORS odgovor, ali ne i uspješan pristup
+podacima iz tuđeg preglednika.
+
+Na PR #367 HEAD-u `8139e77a582f1abe5b1ecee594e98210d7aeef9b` kroz gate lock prolazi 27/27 ciljanih
+testova u `tests/xff-key.test.ts`, `supabase/functions/_shared/hash-ip.test.ts` i
+`supabase/functions/_shared/cors.test.ts`. To potvrđuje testirani lokalni kod, ne produkcijski deploy
+ni runtime. T18 ostaje otvoren zbog podrijetla migracija i staging korisničkog toka; T84 ostaje
+blokiran T18, uz potvrđen produkcijski CORS nalaz. Nije bilo Supabase upisa, Edge deploya ni izmjene
+produkcije. Odluka ostaje **HOLD**.
