@@ -163,6 +163,35 @@ describe('usage-daily: sinteticke mape', () => {
     expect(Object.isFrozen(COST_RATIOS)).toBe(true);
   });
 
+  it('poredak po trosku razlikuje se od poretka po tezini', () => {
+    // A ima vecu tezinu (izlaz), B veci trosak (kes): stari poredak bi stavio A prvu.
+    const recs = [
+      { provider: 'claude', day: DAN, session: 'aaaaaaaa Lekta', model: 'claude-sonnet-5', input: 0, output: 1000, cacheRead: 0, cacheWrite: 0 },
+      { provider: 'claude', day: DAN, session: 'bbbbbbbb Lekta', model: 'claude-sonnet-5', input: 0, output: 10, cacheRead: 1_000_000, cacheWrite: 0 },
+    ];
+    const s = summarizeDay(recs, DAN, WEIGHTS);
+    expect(s.topSessions[0].session).toBe('aaaaaaaa Lekta');
+    expect(s.topCostSessions[0].session).toBe('bbbbbbbb Lekta');
+  });
+
+  it('anomalija troska i tjedni prag pisanja kesa vrijede tocno na granici', () => {
+    const rec = (day: string, session: string, cacheWrite: number, input: number) => ({
+      provider: 'claude', day, session, model: 'claude-sonnet-5', input, output: 0, cacheRead: 0, cacheWrite,
+    });
+    // Povijest: jedna sesija s troskom 100; danas 301 (iznad 3x) i 300 (nije iznad).
+    const povijest = [rec('2026-09-26', 'hhhhhhhh Lekta', 0, 100)];
+    const iznad = summarizeDay([...povijest, rec(DAN, 'aaaaaaaa Lekta', 0, 301)], DAN, WEIGHTS);
+    expect(iznad.anomalies.some((a: string) => a.includes('trosak s kesom') && a.includes('aaaaaaaa'))).toBe(true);
+    const tocno = summarizeDay([...povijest, rec(DAN, 'aaaaaaaa Lekta', 0, 300)], DAN, WEIGHTS);
+    expect(tocno.anomalies.some((a: string) => a.includes('trosak s kesom'))).toBe(false);
+    // Tjedni prag: pisanje kesa 30 % troska ne okida prijedlog, 30,1 % okida (1,25 x 240 = 300 od 1000).
+    const tjedan = (pisanje: number) => summarizeDay([
+      rec(DAN, 'aaaaaaaa Lekta', pisanje / 1.25, 1000 - pisanje),
+    ], DAN, WEIGHTS, { weekly: true }).suggestions as string[];
+    expect(tjedan(300).some((x) => x.includes('pisanje kesa'))).toBe(false);
+    expect(tjedan(301).some((x) => x.includes('pisanje kesa'))).toBe(true);
+  });
+
   it('model bez costWeight nema izmisljen trosak', () => {
     const rec = { provider: 'codex', day: DAN, session: 'cccccccc Lekta', model: 'gpt-test', input: 5, output: 5, cacheRead: 500, cacheWrite: 0 };
     expect(costOf(rec, WEIGHTS)).toBeNull();
