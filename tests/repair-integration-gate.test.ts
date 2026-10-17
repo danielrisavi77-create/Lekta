@@ -9,6 +9,7 @@ const packagePath = join(root, 'package.json');
 const configPath = join(root, 'vitest.repair-integration.config.ts');
 const deploymentPath = join(root, 'src', 'config', 'deployment.ts');
 const appPath = join(root, 'src', 'ui', 'app.ts');
+const repairRequestRecoveryPath = join(root, 'src', 'ui', 'repair-request-recovery.ts');
 const serverPath = join(root, 'supabase', 'functions', 'repair-docx', 'index.ts');
 
 describe('brzi WordReplica-Lekta integracijski gate', () => {
@@ -41,6 +42,7 @@ describe('brzi WordReplica-Lekta integracijski gate', () => {
     expect(deployment).toContain('VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256');
 
     const app = readFileSync(appPath, 'utf8');
+    const repairRequestRecovery = readFileSync(repairRequestRecoveryPath, 'utf8');
     expect(app).toContain('confirmations,words:');
     expect(app).toContain("if(out.localRepair){");
     expect(app).toContain("import('../report/local-repair-runner-download')");
@@ -49,12 +51,17 @@ describe('brzi WordReplica-Lekta integracijski gate', () => {
     );
 
     const confirmationBuild = app.indexOf('const confirmations=');
-    const requestDispatch = app.indexOf('pending={token:token||', confirmationBuild);
+    const requestPreparation = app.indexOf('const requestRecovery=await prepareRepairRequestRecovery', confirmationBuild);
+    const requestDispatch = app.indexOf('pending=requestRecovery.createPending', confirmationBuild);
     const controllerStart = app.indexOf('binding.controller.start()', confirmationBuild);
     const offer = app.indexOf('renderLocalRepairRunnerOffer(summary,out.localRepair');
-    expect(app).toContain('uploadRepair(repairConfig()');
+    expect(app).toContain('run:()=>runPendingRepair(pending,loadRepairClient,repairConfig,fetch)');
+    expect(repairRequestRecovery).toContain('return uploadRepair(repairConfig(), pending.token');
+    expect(repairRequestRecovery).toContain('requestId: pending.requestId');
+    expect(repairRequestRecovery).toContain('requestFingerprint: pending.requestFingerprint');
     expect(confirmationBuild).toBeGreaterThan(-1);
-    expect(requestDispatch).toBeGreaterThan(confirmationBuild);
+    expect(requestPreparation).toBeGreaterThan(confirmationBuild);
+    expect(requestDispatch).toBeGreaterThan(requestPreparation);
     expect(controllerStart).toBeGreaterThan(requestDispatch);
     expect(offer).toBeGreaterThan(controllerStart);
   });
