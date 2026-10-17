@@ -1,7 +1,7 @@
 /**
  * PRIKAZ OPORAVKA NAKON GRESKE POPRAVKA (plan T10). Odluku donosi `recoveryFor` (`src/repair/recovery-policy.ts`);
- * ovdje se ona prevodi u DOM: poruka, gumb za provjeru postojeceg posla i gumb za ponovni pokusaj koji je za
- * `check-existing-job` ONEMOGUCEN dok korisnik ne otvori "Moje popravke". Time se nepoznat ishod nakon slanja ne
+ * ovdje se ona prevodi u DOM: poruka, gumb za autoritativnu provjeru statusa zahtjeva i gumb za ponovni pokusaj koji je za
+ * `check-existing-job` ONEMOGUCEN dok server ne potvrdi da je sigurno pokusati ponovno. Time se nepoznat ishod nakon slanja ne
  * moze slijepo ponoviti kao drugi naplativi posao.
  */
 import type { RepairRecovery } from '../repair/recovery-policy';
@@ -17,7 +17,7 @@ export interface RecoveryHooks {
 export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, hooks: RecoveryHooks, esc: (v: string) => string): void {
   el.hidden = false;
   const provjera = recovery.action === 'check-existing-job'
-    ? `<button type="button" class="btn btn-secondary btn-sm" data-repair-check-jobs>Provjeri Moje popravke</button>`
+    ? `<button type="button" class="btn btn-secondary btn-sm" data-repair-check-jobs>Provjeri status popravka</button>`
     : '';
   const prijava = recovery.action === 'reauth' && hooks.reauth
     ? `<button type="button" class="btn btn-secondary btn-sm" data-repair-reauth>Prijavi se ponovno</button>`
@@ -25,7 +25,7 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
   const ponovi = recovery.action === 'none' || recovery.action === 'refresh-consent'
     ? ''
     : `<button type="button" class="btn btn-primary btn-sm" data-repair-retry${recovery.retryAllowed ? '' : ' disabled'}>Pokušaj ponovno</button>`;
-  el.innerHTML = `<div class="lekta-repair-panel__recovery" data-testid="repair-recovery" data-repair-recovery="${esc(recovery.action)}"><p><strong>${esc(recovery.message)}</strong></p><p>${provjera}${prijava}${ponovi}</p>${recovery.action === 'check-existing-job' ? '<p class="muted">Ponovni pokušaj se otključava tek nakon provjere, da se isti popravak ne naplati dvaput. Nakon provjere zatvori prozor s popisom (X ili Esc) da se vratiš ovdje.</p>' : ''}</div>`;
+  el.innerHTML = `<div class="lekta-repair-panel__recovery" data-testid="repair-recovery" data-repair-recovery="${esc(recovery.action)}"><p><strong>${esc(recovery.message)}</strong></p><p>${provjera}${prijava}${ponovi}</p>${recovery.action === 'check-existing-job' ? '<p class="muted">Ponovni pokušaj se otključava tek kad poslužitelj potvrdi da je nastavak siguran: zahtjev ne postoji, može se ponoviti ili je dovršen bez spremljene kopije.</p>' : ''}</div>`;
   const retryBtn = el.querySelector<HTMLButtonElement>('[data-repair-retry]');
   const jobsBtn = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]');
   const reauthBtn = el.querySelector<HTMLButtonElement>('[data-repair-reauth]');
@@ -35,11 +35,12 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
       jobsBtn.disabled = true;
       try {
         const checked = await hooks.openJobs();
-        if (checked === false) {
+        if (checked !== true) {
           if (checkStatus) checkStatus.hidden = false;
           return;
         }
-        // Popis je stvarno učitan: tek sada je ponovni pokušaj svjesna odluka, ne refleks.
+        // Samo autoritativna potvrda (true) da nema aktivnog/dovršenog posla otključava retry.
+        // Stari callbacki koji vraćaju void ili prazna povijest nisu dokaz da ponavljanje ne duplira obradu.
         if (retryBtn) retryBtn.disabled = false;
         if (checkStatus) checkStatus.hidden = true;
       } catch {
@@ -68,7 +69,8 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
     checkStatus.className = 'muted';
     checkStatus.setAttribute('role', 'status');
     checkStatus.setAttribute('aria-live', 'polite');
-    checkStatus.textContent = 'Popis popravaka nije potvrđen. Ponovni pokušaj ostaje zaključan; provjeri popis još jednom.';
+    checkStatus.dataset.repairRecoveryStatus = '';
+    checkStatus.textContent = 'Poslužitelj nije potvrdio prethodni zahtjev. Ponovni pokušaj ostaje zaključan.';
     checkStatus.hidden = true;
     jobsBtn?.closest('[data-repair-recovery]')?.append(checkStatus);
   }

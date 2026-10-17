@@ -2,7 +2,7 @@
 // binarni odgovor. Browser preflight mora izricito dopustiti taj header prije POST-a.
 import { corsHeadersFor } from '../_shared/cors.ts';
 
-const REPAIR_DOCX_ALLOWED_HEADERS = 'authorization, content-type, apikey, x-lekta-response';
+const REPAIR_DOCX_ALLOWED_HEADERS = 'authorization, content-type, apikey, x-lekta-response, x-lekta-request-id, x-lekta-request-fingerprint, x-lekta-request-mode';
 
 export function repairDocxCorsHeaders(origin: string | null, allowedOrigins: string[]): Record<string, string> {
   return corsHeadersFor(origin, allowedOrigins, 'POST, OPTIONS', REPAIR_DOCX_ALLOWED_HEADERS);

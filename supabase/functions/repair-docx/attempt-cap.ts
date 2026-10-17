@@ -1,15 +1,15 @@
 // supabase/functions/repair-docx/attempt-cap.ts
 //
-// T84 RD-2: dnevni strop ishoda koji NE trose kvotu ni slot (popravak bez izmjena, odbijena isporuka na
-// vratima integriteta). Korisnik za njih ne placa, ali svaki je puni rad (citanje do 20 MB, readZip,
-// applyFixers), pa bez stropa jedan racun moze isti dokument ponavljati bez kraja.
+// T84 RD-2: dnevni strop punih pokusaja koji ne smiju ostati beskonacni (bez izmjena, odbijeni paket,
+// ili neuspjelo spremanje rezultata). Pohrana moze pasti nakon sto je placeni slot vec povezan, pa se
+// `delivery_failed` broji zasebno dok korisnik sigurno obnavlja isti zahtjev kroz postojeci slot.
 //
 // Dnevnik je zasebna tablica `repair_attempt_log` (0209), ne report_generations, pa ga ne vide placeni
 // strop generate-reporta ni ostali potrosaci te tablice (Codex R4 na #294).
 //
 // Pokusaj se REZERVIRA upisom retka `pending` PRIJE citanja tijela (Codex R3 na #294, runda 2), pa
 // skupi rad uvijek ima zapis koji strop broji. Neuspjela rezervacija je 503 prije skupog rada. Na
-// kraju se ishod dopisuje (`no_change`, `integrity_failed`), a kad je pokusaj zabiljezen u
+// kraju se ishod dopisuje (`no_change`, `integrity_failed`, `delivery_failed`), a kad je pokusaj zabiljezen u
 // report_generations (pa ga broji drugi strop), rezervacija se brise da se ne broji dvaput. Neuspjelo
 // dopisivanje ili brisanje ostavlja `pending`, koji se i dalje broji: greska je na strani stroze.
 //
@@ -17,7 +17,7 @@
 //
 // deno-lint-ignore-file no-explicit-any
 
-export type AttemptOutcome = 'no_change' | 'integrity_failed';
+export type AttemptOutcome = 'no_change' | 'integrity_failed' | 'delivery_failed';
 export type AttemptCapStatus = 'ok' | 'over' | 'error';
 
 const DAY_MS = 24 * 3600 * 1000;

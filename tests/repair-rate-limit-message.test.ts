@@ -12,6 +12,15 @@ describe('repairRateLimitMessage', () => {
     expect(msg).toContain('24 sata');
   });
 
+  it('recovery_daily ne zamjenjuje dnevni limit oporavka besplatnom kvotom', () => {
+    const msg = repairRateLimitMessage('recovery_daily');
+    expect(msg).toContain('sigurnog oporavka');
+    expect(msg).toContain('Novi popravak nije pokrenut');
+    expect(msg).toContain('Moji popravci');
+    expect(msg).toContain('24 sata');
+    expect(msg).not.toContain('besplatnih popravaka');
+  });
+
   it('ostali razlozi zadrzavaju dosadasnje poruke', () => {
     expect(repairRateLimitMessage('paid_daily')).toContain('Dnevni limit zahtjeva');
     expect(repairRateLimitMessage('free_ip')).toContain('mrežu/uređaj');

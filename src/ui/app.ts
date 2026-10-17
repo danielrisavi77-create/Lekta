@@ -1983,7 +1983,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // T08: kontroler toka je vlasnik odabira i faza; `pending` nosi zahtjev koji go() slozi PRIJE start().
  let pending: any=null;
  const binding=bindRepairWorkflow<any>({items,listEl:list,sessionToken:`${file?.name}:${file?.size}:${file?.lastModified}`,
-  run:async()=>{const p=pending;if(!p)throw new Error('zahtjev nije pripremljen');const {uploadRepair}=await loadRepairClient();return uploadRepair(repairConfig(),p.token,p.bytes,p.meta,fetch,{signal:p.signal})},
+  run:async()=>{const p=pending;if(!p)throw new Error('zahtjev nije pripremljen');const {uploadRepair}=await loadRepairClient();return uploadRepair(repairConfig(),p.token,p.bytes,p.meta,fetch,{signal:p.signal,requestId:p.requestId,requestFingerprint:p.requestFingerprint})},
   verify:async(out: any)=>out?.kind==='ok'?{ok:true}:{ok:false,error:String(out?.kind||'nepoznat ishod')}});
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
@@ -2033,6 +2033,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   if(inFlight||(repairOutcomeUnknown&&!recoveryRetry))return;
   inFlight=true;
   const orig=btn.textContent;
+  let requestId:string|null=null;
+  let requestFingerprint:string|null=null;
   const authController=new AbortController();
   const authTimer=setTimeout(()=>authController.abort(),REPAIR_AUTH_TIMEOUT_MS);
   btn.disabled=true;
@@ -2071,6 +2073,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
    const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,confirmations,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
    const bytes=new Uint8Array(await file.arrayBuffer());
+   const requestIdentity=await import('../report/repair-request-idempotency');
+   requestFingerprint=await requestIdentity.repairRequestFingerprint(bytes,meta);
+   requestId=await requestIdentity.repairRequestId(requestFingerprint);
+   if(!requestId){setSummary('<strong>Popravak nije poslan.</strong> Preglednik nije mogao izraditi stabilan ID ovog zahtjeva. Pokušaj ponovno za koji trenutak.');return}
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
    const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),REPAIR_TIMEOUT_MS);
@@ -2079,9 +2085,23 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // brojke je svaka optimizacija toka nagadjanje; ide uz repair_server_done.
    const tUpload=performance.now();
    // Slanje ide kroz kontroler (samo iz `ready`): nakon `complete` isti posao se ne moze poslati drugi put.
-   pending={token:token||'',bytes,meta,signal:ac.signal};
+   pending={token:token||'',bytes,meta,signal:ac.signal,requestId,requestFingerprint};
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
+   const checkExistingRequest=async()=>{
+    if(!requestId)return false;
+    const {checkRepairRequestStatus}=await loadRepairClient();
+    const state=await checkRepairRequestStatus(repairConfig(),token||'',requestId,fetch);
+    if('error' in state)return false;
+    const statusEl=summary.querySelector<HTMLElement>('[data-repair-recovery-status]');
+    if(state.status==='completed'&&state.jobId){if(statusEl)statusEl.textContent='Poslužitelj potvrđuje dovršetak i spremljenu kopiju. Ponovni pokušaj ostaje zaključan.';await openRepairHistory();return false}
+    if(state.status==='processing'){if(statusEl)statusEl.textContent='Poslužitelj potvrđuje da je popravak još u obradi. Nemoj ga slati ponovno; ponovno provjeri „Moji popravci” za koji trenutak.';return false}
+    if(state.status==='completed_unstored'){if(statusEl)statusEl.textContent='Poslužitelj je završio obradu, ali nije spremio kopiju. Možeš sigurno pokušati oporavak istog zahtjeva; poslužitelj ga prihvaća samo ako već postoji odgovarajući aktivni slot.';return true}
+    if(state.status==='no_change'){if(statusEl)statusEl.textContent='Poslužitelj je potvrdio da nije bilo potrebnih izmjena. Promijeni odabrane stavke za novi pokušaj.';return false}
+    if(state.status==='unknown'||state.status==='conflict'){if(statusEl)statusEl.textContent='Poslužitelj ne može potvrditi ishod. Ponovni pokušaj ostaje zaključan.';return false}
+    if(state.status==='missing'||state.status==='retryable')return true;
+    return false;
+   };
    if(out.kind==='error'&&out.status===undefined)repairOutcomeUnknown=true;
    else if(recoveryRetry)repairOutcomeUnknown=false;
    if(out.kind==='ok')trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r));
@@ -2228,13 +2248,19 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // paket ne bi bio ispravan. Kao i no_live_fixers, ovo je NASA greska - poruka to mora reci
    // umjesto da posudi tekst od invalid_docx i optuzi korisnikov rad. Nista nije naplaceno.
    else if(out.kind==='integrity_failed'){setSummary(`<strong>Popravak nije isporučen jer rezultat nije prošao provjeru ispravnosti.</strong><p>Tvoj dokument nije mijenjan i ništa nije naplaćeno.${out.preexisting?' Neispravan dio postojao je već u učitanoj datoteci, pa za rezultat popravka ne možemo jamčiti. Pokušaj dokument prvo otvoriti i ponovno spremiti u Wordu.':' Ovo je greška na našoj strani, ne u tvom radu.'}</p><p class="muted">Tehnički detalj: ${escapeHtml(out.part)} - ${escapeHtml(out.problem)}</p><p>Ručne upute iznad i dalje vrijede.</p>`)}
+   else if(out.kind==='request_in_progress'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:false,message:'Ovaj popravak još je u obradi. Provjeri status prije bilo kakvog novog pokušaja.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
+   else if(out.kind==='request_completed'){repairOutcomeUnknown=true;setSummary('<strong>Poslužitelj potvrđuje da je ovaj popravak već dovršen.</strong><p>Provjeri „Moji popravci” za spremljenu kopiju; ponovni pokušaj ostaje zaključan.</p>');if(out.jobId)void openRepairHistory()}
+   else if(out.kind==='request_completed_unstored'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:true,message:'Poslužitelj je završio obradu, ali nije spremio kopiju. Siguran oporavak ponavlja isti zahtjev i ne uzima novi plaćeni slot.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
+   else if(out.kind==='request_recovery_unavailable'){repairOutcomeUnknown=true;setSummary('<strong>Popravljena kopija nije spremljena i siguran oporavak više nije dostupan.</strong><p>Nije uzet novi plaćeni slot. Nemoj ponovno slati isti popravak; javi se podršci kako bismo provjerili postojeći slot i spremanje datoteke.</p>')}
+   else if(out.kind==='request_no_change'){repairOutcomeUnknown=false;setSummary('Prethodna obrada nije našla promjene za odabrane stavke. Odaberi druge stavke ako želiš pokušati novi popravak.')}
+   else if(out.kind==='request_unknown'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:false,message:'Ne mogu pouzdano utvrditi ishod prethodnog zahtjeva. Provjeri status na poslužitelju prije ponovnog pokušaja.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
    // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
    // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
    else if(out.kind==='error'){
     const recovery=recoveryFor(out,'after-send');
     if(recovery.action==='check-existing-job')repairOutcomeUnknown=true;
-    renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,recovery.action==='check-existing-job'),openJobs:recovery.action==='check-existing-job'?openRepairHistory:(authSessionActive()?openRepairHistory:null)},escapeHtml)
+    renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,recovery.action==='check-existing-job'),openJobs:recovery.action==='check-existing-job'?checkExistingRequest:(authSessionActive()?openRepairHistory:null)},escapeHtml)
    }
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
    }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}

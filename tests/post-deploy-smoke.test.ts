@@ -95,10 +95,10 @@ describe('tvrdnje hvataju kvar zbog kojeg postoje', () => {
     const headers = {
       'access-control-allow-origin': 'https://lekta-staging.netlify.app',
       'access-control-allow-methods': 'POST, OPTIONS',
-      'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+      'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response, x-lekta-request-id, x-lekta-request-fingerprint, x-lekta-request-mode',
     };
     expect(assertRepairCorsPreflight({ status: 200, headers }, 'https://lekta-staging.netlify.app').ok).toBe(true);
-    expect(assertRepairCorsPreflight({ status: 200, headers: { ...headers, 'access-control-allow-headers': 'authorization, content-type' } }, 'https://lekta-staging.netlify.app').ok).toBe(false);
+    expect(assertRepairCorsPreflight({ status: 200, headers: { ...headers, 'access-control-allow-headers': 'authorization, content-type, x-lekta-response' } }, 'https://lekta-staging.netlify.app').ok).toBe(false);
     expect(assertRepairCorsPreflight({ status: 200, headers }, 'https://lekta.hr').ok).toBe(false);
     expect(assertRepairCorsPreflight({ status: 503, headers }, 'https://lekta-staging.netlify.app').ok).toBe(false);
   });
@@ -163,7 +163,7 @@ describe('runSmoke nad laznim opazanjima', () => {
       return { status: 200, headers: {
         'access-control-allow-origin': init.headers?.Origin || '',
         'access-control-allow-methods': 'POST, OPTIONS',
-        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response, x-lekta-request-id, x-lekta-request-fingerprint, x-lekta-request-mode',
       }, text: '' };
     }
     if (u.pathname.endsWith('/repair-docx') || u.pathname.endsWith('/create-checkout')) return { status: 401, headers: {}, text: '' };
@@ -201,13 +201,13 @@ describe('runSmoke nad laznim opazanjima', () => {
     expect(bi?.commit).toBe('c'.repeat(40));
   });
 
-  it('staging smoke hvata preflight koji odbija x-lekta-response', async () => {
+  it('staging smoke hvata preflight koji odbija stabilni zahtjevni ID', async () => {
     const bezBinaryHeader = async (url: string, init: { method?: string; headers?: Record<string, string> } = {}) => {
       if (new URL(url).pathname.endsWith('/repair-docx') && init.method === 'OPTIONS') {
         return { status: 200, headers: {
           'access-control-allow-origin': init.headers?.Origin || '',
           'access-control-allow-methods': 'POST, OPTIONS',
-          'access-control-allow-headers': 'authorization, content-type, apikey',
+          'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
         }, text: '' };
       }
       return zdravObserve(url, init);
@@ -215,8 +215,26 @@ describe('runSmoke nad laznim opazanjima', () => {
     const nalazi = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: bezBinaryHeader });
     const cors = nalazi.find((n: { id: string }) => n.id === 'cors:repair-docx');
     expect(cors?.ok).toBe(false);
-    expect(cors?.detail).toContain('x-lekta-response nije dopusten');
+    expect(cors?.detail).toContain('x-lekta-request-id nije dopusten');
     expect(classifyRun(nalazi)).toBe('fail');
+  });
+
+  it('preflight ne prolazi ako server odbije zahtjevni ID ili njegov otisak', () => {
+    const base = {
+      status: 200,
+      headers: {
+        'access-control-allow-origin': 'https://s.test',
+        'access-control-allow-methods': 'POST, OPTIONS',
+      },
+    };
+    expect(assertRepairCorsPreflight({
+      ...base,
+      headers: { ...base.headers, 'access-control-allow-headers': 'authorization, content-type, x-lekta-response' },
+    }, 'https://s.test').detail).toContain('x-lekta-request-id nije dopusten');
+    expect(assertRepairCorsPreflight({
+      ...base,
+      headers: { ...base.headers, 'access-control-allow-headers': 'authorization, content-type, x-lekta-response, x-lekta-request-id' },
+    }, 'https://s.test').detail).toContain('x-lekta-request-fingerprint nije dopusten');
   });
 
   it('build-info 404 je NEPOZNAT identitet, ne ispad: operativni status ostaje ok, nalaz nosi unknown', async () => {

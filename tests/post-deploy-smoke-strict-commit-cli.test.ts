@@ -50,7 +50,7 @@ beforeAll(async () => {
       res.writeHead(204, {
         'access-control-allow-origin': String(req.headers.origin ?? ''),
         'access-control-allow-methods': 'POST, OPTIONS',
-        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response',
+        'access-control-allow-headers': 'authorization, content-type, apikey, x-lekta-response, x-lekta-request-id, x-lekta-request-fingerprint, x-lekta-request-mode',
       });
       res.end();
       return;

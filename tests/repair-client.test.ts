@@ -5,6 +5,7 @@ import {
   decodeBase64,
   buildRepairMeta,
   uploadRepair,
+  checkRepairRequestStatus,
   REPAIR_MAX_REFERENCES,
   type RepairMeta,
 } from '../src/report/repair-client';
@@ -156,6 +157,62 @@ describe('uploadRepair: sourceCheck je DODATAK, nikad uvjet', () => {
   });
 });
 
+describe('uploadRepair: stabilni zahtjevni ID', () => {
+  const requestId = '11111111-1111-4111-8111-111111111111';
+  const requestFingerprint = 'a'.repeat(64);
+
+  it('šalje stabilni identitet uz DOCX bez zasebnog poziva za rezervaciju', async () => {
+    const calls: RequestInit[] = [];
+    const out = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async (_url, init) => {
+      calls.push(init || {});
+      return res(200, { docxBase64: b64([0x50, 0x4b, 0x03, 0x04]), jobId: '22222222-2222-4222-8222-222222222222' });
+    }, { requestId, requestFingerprint });
+
+    expect(out.kind).toBe('ok');
+    expect(calls).toHaveLength(1);
+    const uploadHeaders = calls[0].headers as Record<string, string>;
+    expect(uploadHeaders['X-Lekta-Request-Id']).toBe(requestId);
+    expect(uploadHeaders['X-Lekta-Request-Fingerprint']).toBe(requestFingerprint);
+    expect(uploadHeaders['X-Lekta-Request-Mode']).toBeUndefined();
+  });
+
+  it('ne šalje DOCX kad server potvrdi da je isti zahtjev još u obradi', async () => {
+    let calls = 0;
+    const out = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () => {
+      calls += 1;
+      return res(202, { error: 'request_in_progress', status: 'processing', jobId: null });
+    }, { requestId, requestFingerprint });
+    expect(out).toEqual({ kind: 'request_in_progress', requestId });
+    expect(calls).toBe(1);
+  });
+
+  it('prepoznaje server-derived state odgovore kad klijent nije poslao svoj ID', async () => {
+    const completed = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () =>
+      res(409, { error: 'request_completed', status: 'completed', requestId, jobId: '22222222-2222-4222-8222-222222222222' }));
+    expect(completed).toEqual({ kind: 'request_completed', requestId, jobId: '22222222-2222-4222-8222-222222222222' });
+
+    const inProgress = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () =>
+      res(202, { error: 'request_in_progress', status: 'processing', requestId }));
+    expect(inProgress).toEqual({ kind: 'request_in_progress', requestId });
+
+    const recoveryUnavailable = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () =>
+      res(409, { error: 'request_recovery_unavailable', status: 'recovery_unavailable', requestId }));
+    expect(recoveryUnavailable).toEqual({ kind: 'request_recovery_unavailable', requestId });
+  });
+
+  it('upituje autoritativni status bez slanja dokumenta', async () => {
+    let seen: RequestInit | undefined;
+    const state = await checkRepairRequestStatus(config, 'jwt', requestId, async (_url, init) => {
+      seen = init;
+      return res(200, { status: 'completed', jobId: '22222222-2222-4222-8222-222222222222' });
+    });
+    expect(state).toEqual({ status: 'completed', jobId: '22222222-2222-4222-8222-222222222222' });
+    expect(seen).toBeDefined();
+    expect(seen?.body).toBeUndefined();
+    expect((seen!.headers as Record<string, string>)['X-Lekta-Request-Mode']).toBe('status');
+  });
+});
+
 describe('uploadRepair', () => {
   it('bez endpointa -> error', async () => {
     const out = await uploadRepair({ endpoint: '' }, 'jwt', new Uint8Array([1]), meta());
@@ -270,8 +327,8 @@ describe('uploadRepair', () => {
 
   // RE-33: 429 nosi razlog da poruka ne tvrdi "besplatnih" i kad je posrijedi placeni strop ili
   // dijeljeni IP-cap (korisnik osobno nije nista potrosio).
-  it('429 nosi reason kad ga server posalje (free_user/free_ip/paid_daily/attempts_daily)', async () => {
-    for (const reason of ['free_user', 'free_ip', 'paid_daily', 'attempts_daily'] as const) {
+  it('429 nosi reason kad ga server posalje (free_user/free_ip/paid_daily/attempts_daily/recovery_daily)', async () => {
+    for (const reason of ['free_user', 'free_ip', 'paid_daily', 'attempts_daily', 'recovery_daily'] as const) {
       const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(429, { reason }));
       expect(out).toEqual({ kind: 'rate_limited', reason });
     }

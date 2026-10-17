@@ -8,8 +8,8 @@ import { repairOutcomeHtml } from '../src/ui/results/repair-outcome-view';
  * T10: oporavak nakon greske i provjereni ishod.
  *
  * Politika oporavka: nepoznat ishod NAKON slanja ne smije zavrsiti slijepim ponovnim pokusajem (drugi naplativi
- * posao); prvo provjera postojeceg posla. Odgovor servera (bilo koji status) daje poznat ishod i ponovni pokusaj je
- * siguran. Prikaz to provodi: gumb za ponovni pokusaj je onemogucen dok se provjera ne otvori.
+ * posao); prvo provjeri autoritativni status stabilnog zahtjeva. Prazna povijest sama po sebi nije dokaz da nema posla.
+ * Prikaz drzi ponovni pokusaj zakljucanim dok server ne potvrdi da ga je sigurno poslati.
  */
 const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -18,7 +18,7 @@ describe('recoveryFor', () => {
     const r = recoveryFor({ kind: 'error', message: 'Failed to fetch' }, 'after-send');
     expect(r.action).toBe('check-existing-job');
     expect(r.retryAllowed).toBe(false);
-    expect(r.message).toMatch(/Moje popravke/);
+    expect(r.message).toMatch(/status popravka na poslužitelju/);
   });
 
   it('ista greska PRIJE slanja dopusta ponovni pokusaj odmah', () => {
@@ -50,10 +50,10 @@ describe('renderRepairRecovery', () => {
   let el: HTMLElement;
   beforeEach(() => { document.body.innerHTML = ''; el = document.createElement('div'); document.body.appendChild(el); });
 
-  it('za nepoznat ishod: ponovni pokusaj se otkljucava tek nakon zavrsene provjere', async () => {
+  it('za nepoznat ishod: ponovni pokusaj se otkljucava samo uz izricitu potvrdu servera', async () => {
     let retries = 0;
     let opened = 0;
-    renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => { retries += 1; }, openJobs: () => { opened += 1; } }, esc);
+    renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => { retries += 1; }, openJobs: () => { opened += 1; return true; } }, esc);
     const retry = el.querySelector<HTMLButtonElement>('[data-repair-retry]')!;
     const jobs = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]')!;
     expect(retry.disabled).toBe(true);
@@ -63,10 +63,22 @@ describe('renderRepairRecovery', () => {
     await Promise.resolve();
     expect(opened).toBe(1);
     expect(retry.disabled).toBe(false);
-    expect(el.querySelector('[data-repair-recovery]')?.textContent).toMatch(/zatvori prozor/i);
+    expect(el.querySelector('[data-repair-recovery]')?.textContent).toMatch(/status popravka/i);
     retry.click();
     expect(retries).toBe(1);
     expect(el.querySelector('[data-repair-recovery]')?.getAttribute('data-repair-recovery')).toBe('check-existing-job');
+  });
+
+  it('ne otkljucava ponovni pokusaj kad provjera statusa vrati void', async () => {
+    renderRepairRecovery(el, recoveryFor({ kind: 'error', message: 'x' }, 'after-send'), { retry: () => {}, openJobs: () => {} }, esc);
+    const retry = el.querySelector<HTMLButtonElement>('[data-repair-retry]')!;
+    const jobs = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]')!;
+
+    jobs.click();
+    await Promise.resolve();
+
+    expect(retry.disabled).toBe(true);
+    expect(el.querySelector('[role="status"]')?.textContent).toMatch(/poslužitelj nije potvrdio/i);
   });
 
   it('zadrzava zakljucan retry ako se popis poslova nije uspio ucitati', async () => {

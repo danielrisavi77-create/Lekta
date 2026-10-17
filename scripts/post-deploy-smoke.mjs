@@ -185,7 +185,9 @@ export function assertRepairCorsPreflight(obs, origin) {
   const allowedHeaders = String(header(obs, 'access-control-allow-headers') || '')
     .split(',').map((x) => x.trim().toLowerCase());
   if (!allowedHeaders.includes('authorization')) return bad('repair-docx CORS preflight: authorization nije dopusten');
-  if (!allowedHeaders.includes('x-lekta-response')) return bad('repair-docx CORS preflight: x-lekta-response nije dopusten');
+  for (const required of ['x-lekta-response', 'x-lekta-request-id', 'x-lekta-request-fingerprint', 'x-lekta-request-mode']) {
+    if (!allowedHeaders.includes(required)) return bad(`repair-docx CORS preflight: ${required} nije dopusten`);
+  }
   return ok();
 }
 
@@ -351,7 +353,7 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
     headers: {
       Origin: site,
       'Access-Control-Request-Method': 'POST',
-      'Access-Control-Request-Headers': 'authorization,x-lekta-response',
+      'Access-Control-Request-Headers': 'authorization,x-lekta-response,x-lekta-request-id,x-lekta-request-fingerprint,x-lekta-request-mode',
     },
   });
   zapisi('cors:repair-docx', 'functions', repairCors, () => assertRepairCorsPreflight(repairCors, site));
