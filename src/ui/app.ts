@@ -66,7 +66,7 @@ import { opportunityContextFor, trackRepairResultOk } from '../analytics/repair-
 import { buildExactEvidence } from './results/exact-evidence';
 import { buildRepairOutlook } from './results/repair-outlook';
 import { buildDefaultRepairRequests } from '../repair/default-selection';
-import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
+import { detectPassRegressions, dropStaleFieldRegressions, splitTemplateFillRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
 import { summarizeRepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
@@ -2161,8 +2161,11 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // ne ponistava nego se PREMJESTA prioritet: izvornik postaje glavni gumb, a popravljeni pada
       // na sporedni (zicanje odmah ispod). Prije je popravljeni ostajao vizualno glavni CTA i kad
       // je ponovna analiza upravo dokazala da je nesto srusio.
-      // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju (dropStaleFieldRegressions).
-      const regressions=(r.checks&&res.checks)?dropStaleFieldRegressions(detectPassRegressions(r.checks,res.checks),res):[];
+      // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju (dropStaleFieldRegressions). Z36: ni predlozak
+      // zapisa koji je umetnuo isti popravak; on je kratka stavka za popunu, kao i u lokalnom panelu.
+      const fillSplit=splitTemplateFillRegressions((r.checks&&res.checks)?dropStaleFieldRegressions(detectPassRegressions(r.checks,res.checks),res):[],res.checks||[]);
+      const regressions=fillSplit.regressions;
+      const fillHtml=fillSplit.fill?`<p class="lekta-repair-panel__fill">${escapeHtml(fillSplit.fill)}</p>`:'';
       // ISHOD: koliko je od CILJANOG stvarno razrijeseno. Isti izracun koji koristi lokalni panel
       // (src/repair/repair-outcome.ts); prije je serverski put znao samo broj izmjena i deltu
       // ocjene, pa je dokument s dvije od sest razrijesenih ciljanih provjera izgledao dovrseno.
@@ -2177,7 +2180,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // objasnjenje "zasto 97 nije nedovrsen posao" postojalo SAMO na besplatnom putu.
       const ceiling=res.checks?repairCeiling(res.checks):null;
       const ceilingHtml=(res.score<100&&ceiling&&ceiling.hasManualGap&&res.score===ceiling.maxScore)?`<div class="lekta-repair-panel__ceiling"><p><strong>${res.score}/100 je maksimalna ocjena koju automatski popravak može jamčiti</strong> za ovaj profil. Preostale stavke traže tvoju sadržajnu provjeru - alat ih namjerno ne smije mijenjati bez tebe:</p><ul>${ceiling.items.map((x: any)=>`<li>${escapeHtml(x.title)} (−${x.lostPoints})</li>`).join('')}</ul></div>`:'';
-      recheck.innerHTML=repairDoneHtml(repairDoneModel({outcome,regresije:regressions,changelog:out.changelog}),escapeHtml)+scoreLine+outcomeHtml+regressionHtml+ceilingHtml+flatNote;
+      recheck.innerHTML=repairDoneHtml(repairDoneModel({outcome,regresije:regressions,changelog:out.changelog}),escapeHtml)+scoreLine+outcomeHtml+fillHtml+regressionHtml+ceilingHtml+flatNote;
       // Zicanje TEK nakon zadnjeg innerHTML pisanja u ovaj element (inace se handler izgubi).
       const origBtn=recheck.querySelector<HTMLButtonElement>('[data-repair-original]');
       if(origBtn)origBtn.onclick=()=>downloadBlob(bytes,DOCX_MIME,r.file?.name||file.name||'rad.docx');

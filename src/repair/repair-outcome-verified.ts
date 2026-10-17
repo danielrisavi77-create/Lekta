@@ -21,6 +21,7 @@
 
 import { checksById, isFailingCheck, summarizeRepairOutcome, type OutcomeCheckLike, type OutcomeItemLike } from './repair-outcome';
 import { stableCheckId } from '../scoring/check-id-registry';
+import { unfilledTemplatesOf } from '../analysis/repair-regression';
 
 export interface VerifiedCheck {
   id: string;
@@ -35,6 +36,11 @@ export interface RepairOutcomeInput {
   after: VerifiedCheck[];
   skippedCheckIds: string[];
   integrity: RepairIntegrity;
+  /**
+   * Z36 krug 4: provjere koje poslije padaju SAMO zbog nepopunjenih predlozaka umetnutih istim popravkom
+   * (`Check.unfilledTemplates`). Nisu regresija i ne obaraju preporuku popravljene kopije.
+   */
+  templateFillIds?: string[];
 }
 
 export interface VerifiedRepairOutcome {
@@ -71,8 +77,9 @@ export function buildRepairOutcome(input: RepairOutcomeInput): VerifiedRepairOut
     else unresolvedIds.push(id); // fail, unmeasurable ili nema mjerenja: nije rijeseno
   }
   const regressedIds: string[] = [];
+  const templateFill = new Set(input.templateFillIds ?? []);
   for (const [id, was] of before) {
-    if (was === 'pass' && after.get(id) === 'fail') regressedIds.push(id);
+    if (was === 'pass' && after.get(id) === 'fail' && !templateFill.has(id)) regressedIds.push(id);
   }
   const sort = (xs: string[]) => [...xs].sort();
   return {
@@ -129,6 +136,7 @@ export function verifiedOutcomeFrom(src: VerifiedOutcomeSource): VerifiedRepairO
     before,
     after,
     skippedCheckIds,
+    templateFillIds: [...afterById].filter(([, check]) => unfilledTemplatesOf(check).length > 0).map(([id]) => id),
     integrity: src.after ? src.integrity : (src.integrity === 'failed' ? 'failed' : 'not-verified'),
   });
 }

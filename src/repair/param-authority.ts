@@ -40,6 +40,27 @@ export type ParamSource = 'profile' | 'client';
 export interface ResolvedParams {
   params: Record<string, unknown>;
   source: ParamSource;
+  /**
+   * Z36 krug 4: akcije koje je server uklonio iz zahtjeva (danas samo 'add' sinkronizacije bez dozvole
+   * profila). Edge funkcija ih vraca u odgovoru (`skippedActions` po ruleId), pa uklanjanje nije tiho.
+   * Izostaje kad nista nije uklonjeno.
+   */
+  skippedActions?: string[];
+}
+
+const CITATION_SYNC_FIXER = 'citation-bibliography-sync-fixer';
+const SKIPPED_NO_PERMISSION = 'zapis literature nije umetnut: profil fakulteta ne dopusta umetanje zapisa';
+
+/** Z36: zahtjev sinkronizacije bez umetanja zapisa literature ('add') i bez veza na te zapise. */
+function withoutEntryInsertion(params: Record<string, unknown>): Record<string, unknown> {
+  if (!Array.isArray(params.entries)) return params;
+  const isAdd = (entry: unknown) => !!entry && typeof entry === 'object' && (entry as Record<string, unknown>).action === 'add';
+  const added = new Set(params.entries.filter(isAdd).map((entry) => (entry as Record<string, unknown>).id));
+  if (!added.size) return params;
+  const mappings = Array.isArray(params.mappings)
+    ? params.mappings.filter((mapping) => !(mapping && typeof mapping === 'object' && added.has((mapping as Record<string, unknown>).bibliographyEntryId)))
+    : params.mappings;
+  return { ...params, entries: params.entries.filter((entry) => !isAdd(entry)), mappings };
 }
 
 /**
@@ -53,9 +74,20 @@ export function resolveParams(
   ruleId: string,
   fixerId: string,
   clientParams: Record<string, unknown>,
+  authority: ParamAuthorityMap = PARAM_AUTHORITY,
 ): ResolvedParams {
-  const forProfile = profileRef ? PARAM_AUTHORITY[profileRef] : undefined;
+  const forProfile = profileRef ? authority[profileRef] : undefined;
   const entry = forProfile ? forProfile[ruleId] : undefined;
+  if (fixerId === CITATION_SYNC_FIXER) {
+    // Z36: sinkronizacija nosi klijentove potvrde (citati, veze), pa params ostaju klijentovi, ali
+    // DOZVOLU umetanja zapisa literature daje samo peceni profil. Bez nje se svaki 'add' i njegova
+    // veza uklanjaju, a ostatak zahtjeva prolazi. Zastavicu iz klijentovih params server ne cita.
+    const allowed = !!entry && entry.f === fixerId && entry.p.allowMissingEntryInsertion === true;
+    if (allowed) return { params: clientParams, source: 'client' };
+    const stripped = withoutEntryInsertion(clientParams);
+    // Krug 4: uklonjeni 'add' se javlja u odgovoru (withoutEntryInsertion vraca isti objekt kad nema sto ukloniti).
+    return { params: stripped, source: 'client', ...(stripped !== clientParams ? { skippedActions: [SKIPPED_NO_PERMISSION] } : {}) };
+  }
   if (!entry || entry.f !== fixerId) return { params: clientParams, source: 'client' };
   // Klijentovi parametri se NE spajaju preko profilnih: spajanje bi vratilo upravo rupu koju ovo
   // zatvara (klijent bi dopisao kljuc koji profil ne propisuje).

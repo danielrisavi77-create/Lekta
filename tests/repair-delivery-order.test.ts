@@ -67,6 +67,15 @@ describe('serverski put: regresija demotira popravljeni dokument', () => {
     expect(APP).toContain("fixedBtn.textContent='Ipak preuzmi popravljeni dokument'");
     expect(APP).toContain("fixedBtn.className='btn btn-secondary btn-sm'");
   });
+
+  it('Z36 krug 4: regresije prolaze kroz isto izdvajanje predloska kao lokalni panel', () => {
+    // Isti izracun (splitTemplateFillRegressions) i na serverskom putu, inace bi se panel i app razisli:
+    // jedan bi za predlozak istog popravka preporucio izvornik, a drugi ne.
+    expect(APP).toContain('const fillSplit=splitTemplateFillRegressions((r.checks&&res.checks)?dropStaleFieldRegressions(detectPassRegressions(r.checks,res.checks),res):[],res.checks||[]);');
+    expect(APP).toContain('const regressions=fillSplit.regressions;');
+    expect(APP).toContain('+outcomeHtml+fillHtml+regressionHtml+');
+    expect(PANEL).toContain('const split = splitTemplateFillRegressions(');
+  });
 });
 
 describe('detectPassRegressions: uparuje po stabilnom ID-u, ne po naslovu', () => {

@@ -29,6 +29,7 @@ import {
   headingFormatRepairableItem,
   headingCaseRepairableItem,
   footnoteTypographyRepairableItem,
+  citationEntryInsertionAllowed,
 } from '../ui/repair-items';
 import type { SourceEntry } from '../profiles/profile-schema';
 
@@ -107,6 +108,20 @@ const DOCUMENT_CONDITIONAL: Array<{
       target: 'Word sam azurira sadrzaj',
       params: {},
       condition: 'Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu.',
+    }),
+  },
+  {
+    // Z36: dozvola umetanja zapisa literature. Peceni zapis je SERVERSKA dozvola: bez njega
+    // param-authority uklanja svaki 'add' iz zahtjeva sinkronizacije (src/repair/param-authority.ts).
+    gate: (p) => citationEntryInsertionAllowed(p),
+    item: () => ({
+      ruleId: 'citation-bibliography-sync-assisted',
+      fixerId: 'citation-bibliography-sync-fixer',
+      label: 'Dodavanje zapisa literature uz citat bez zapisa',
+      scope: 'profil',
+      target: 'potvrđeni zapis ili predložak "Prezime, [ime]. (godina). [Naslov djela]. [Mjesto: Izdavač]." na abecednom mjestu',
+      params: { allowMissingEntryInsertion: true },
+      condition: 'Trazi izricitu privolu, samo za citat koji nema zapis u literaturi. Prezime i godina dolaze iz zagradnog citata; ostala polja ostaju u uglatim zagradama.',
     }),
   },
   {

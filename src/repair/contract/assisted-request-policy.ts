@@ -134,19 +134,25 @@ function validateCitationSync(params: DataObject): boolean {
     && identifier(item.id) && integer(item.paragraphIndex, 1) && integer(item.start, 0) && integer(item.end, 1)
     && (item.end as number) > (item.start as number) && (item.end as number) - (item.start as number) <= 1_000 && fingerprint(item.anchorFingerprint)
     && text(item.replacementText) && text(item.reason, 2_000)) || !uniqueIds(params.citations)) return false;
+  const citationIds = new Set((params.citations as DataObject[]).map((item) => item.id));
   if (!array(params.entries, 500, (item) => {
-    if (!object(item, ['id', 'paragraphIndices', 'anchorFingerprint', 'action'], ['replacementText', 'insertionAnchor'])
+    if (!object(item, ['id', 'paragraphIndices', 'anchorFingerprint', 'action'], ['replacementText', 'insertionAnchor', 'citationId'])
       || !identifier(item.id) || !array(item.paragraphIndices, 2_000, integer) || !fingerprint(item.anchorFingerprint)
       || !oneOf(item.action, ['add', 'replace', 'remove'])) return false;
     if (!optional(item.insertionAnchor, (value) => object(value, ['paragraphIndex', 'anchorFingerprint'])
       && integer(value.paragraphIndex, 1) && fingerprint(value.anchorFingerprint))) return false;
+    if (item.action !== 'add' && item.citationId !== undefined) return false;
     if (item.action === 'replace') return text(item.replacementText);
     if (item.action === 'remove') return item.replacementText === undefined;
-    return text(item.replacementText, 20_000, 1) && item.replacementText.trim().length > 0
+    // Z36: korisnikov neprazan tekst ILI id citata iz istog zahtjeva, iz kojeg fixer sam cita prezime
+    // i godinu predloska. Isti uvjet provjerava validateParams u citation-bibliography-sync-fixer.ts.
+    const literal = typeof item.replacementText === 'string' && item.replacementText.trim().length > 0;
+    return optional(item.replacementText, (value) => text(value, 20_000))
+      && optional(item.citationId, (value) => identifier(value) && citationIds.has(value))
+      && (literal || item.citationId !== undefined)
       && object(item.insertionAnchor, ['paragraphIndex', 'anchorFingerprint'])
       && integer(item.insertionAnchor.paragraphIndex, 1) && fingerprint(item.insertionAnchor.anchorFingerprint);
   }) || !uniqueIds(params.entries)) return false;
-  const citationIds = new Set((params.citations as DataObject[]).map((item) => item.id));
   const entryIds = new Set((params.entries as DataObject[]).map((item) => item.id));
   if (!array(params.mappings, 1_000, (item) => object(item, ['citationId', 'bibliographyEntryId', 'confirmed'])
     && identifier(item.citationId) && citationIds.has(item.citationId)

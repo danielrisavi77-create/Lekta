@@ -16,7 +16,7 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
-import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
+import { detectPassRegressions, dropStaleFieldRegressions, splitTemplateFillRegressions } from '../analysis/repair-regression';
 import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { trackRepairResultOk } from '../analytics/repair-result';
@@ -85,7 +85,11 @@ export interface CitationBibliographySyncFormDefinition {
     reason: string;
     selected: boolean;
   }>;
-  missingEntries: Array<{ id: string; citationId: string; text: string; selected: boolean }>;
+  /**
+   * Z36: `templateAvailable` kaze smije li prazan `text` dati predlozak (zagradni citat s pouzdanim
+   * prezimenom); bez toga redak trazi upisani zapis, a plan ga bez teksta ne salje.
+   */
+  missingEntries: Array<{ id: string; citationId: string; text: string; selected: boolean; templateAvailable: boolean }>;
   duplicates: Array<{ entryId: string; rawText: string; selected: boolean }>;
   summary: string;
   buildParams: (form: CitationBibliographySyncFormDefinition) => Record<string, unknown>;
@@ -1048,7 +1052,8 @@ export function renderCitationBibliographySyncControls(li: HTMLElement, item: Re
   }
   if (definition.missingEntries.length) {
     const title = document.createElement('p');
-    title.textContent = 'Nedostajući zapisi, unesi potvrđeni puni bibliografski tekst:';
+    // Z36 krug 4: tekst opisuje oba ishoda istinito (fixer: upisani zapis doslovno, prazno polje predlozak).
+    title.textContent = 'Nedostajući zapisi. Upisani zapis Lekta umeće doslovno. Prazno polje, gdje je to moguće, daje predložak s prezimenom i godinom iz citata i poljima u zagradama za popunu:';
     section.appendChild(title);
     for (const missing of definition.missingEntries) {
       const row = document.createElement('label');
@@ -1059,7 +1064,9 @@ export function renderCitationBibliographySyncControls(li: HTMLElement, item: Re
       const input = document.createElement('input');
       input.type = 'text';
       input.value = missing.text;
-      input.placeholder = 'Potvrđeni bibliografski zapis';
+      input.placeholder = missing.templateAvailable
+        ? 'Prazno: predložak s prezimenom, godinom i poljima u zagradama'
+        : 'Upiši puni zapis (predložak ovdje nije moguć)';
       input.setAttribute('aria-label', `Nedostajući zapis ${missing.id}`);
       input.addEventListener('input', () => { missing.text = input.value; sync(); });
       row.append(check, input);
@@ -1886,11 +1893,19 @@ async function renderRecheck(
     return { unavailable: true, regressions: 0, outcome: null, verified: null };
   }
   const box = buildBeforeAfter(before, after);
-  // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju.
-  const regressions = before.checks && after.checks
+  // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju. Z36: ni predlozak zapisa koji je
+  // umetnuo isti popravak; on postaje kratka stavka za popunu (splitTemplateFillRegressions).
+  const split = splitTemplateFillRegressions(before.checks && after.checks
     ? dropStaleFieldRegressions(detectPassRegressions(before.checks, after.checks), after)
-    : [];
+    : [], after.checks);
+  const regressions = split.regressions;
   const regression = buildRegressionWarning(regressions);
+  if (split.fill) {
+    const fill = document.createElement('p');
+    fill.className = 'lekta-repair-panel__fill';
+    fill.textContent = split.fill;
+    box.insertBefore(fill, box.firstChild?.nextSibling ?? null);
+  }
   // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
   if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);

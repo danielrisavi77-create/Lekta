@@ -58,6 +58,28 @@ export function bibliographyAnchorFingerprint(paragraphIndices: number[], text: 
   return `biblio-${hash(`${paragraphIndices.join(',')}|${normalize(text)}`)}`;
 }
 
+/**
+ * Z36: konstantna polja predloska zapisa literature koji popravak umece kad korisnik ne upise zapis
+ * (`citation-bibliography-sync-fixer`). Jedno mjesto za fixer i analizu: zapis koji jos nosi ijedno
+ * od ovih polja je nepopunjen predlozak, a ne potpun izvor, pa ga provjera potpunosti oznacava.
+ */
+export const ENTRY_TEMPLATE_FIELDS = { name: '[ime]', title: '[Naslov djela]', publisher: '[Mjesto: Izdavač]' } as const;
+
+/** Z36: nosi li tekst zapisa ijedno nepopunjeno polje predloska. */
+export function hasUnfilledTemplateField(text: string): boolean {
+  return Object.values(ENTRY_TEMPLATE_FIELDS).some((field) => text.includes(field));
+}
+
+/**
+ * Z36 krug 4: oznake "Prezime (godina)" nepopunjenih predlozaka, ali SAMO kad su predlosci jedini razlog
+ * nepotpunosti. Ako ijedan nepotpun zapis nema polje predloska ili mu fali jos nesto (autor, godina,
+ * duljina), vraca prazno: pad provjere potpunosti je tada stvaran i ploca ga prikazuje kao i prije.
+ */
+export function unfilledTemplateLabels(incomplete: ReadonlyArray<{ text: string; author?: string; year?: string }>): string[] {
+  if (!incomplete.length || !incomplete.every((ref) => hasUnfilledTemplateField(ref.text) && !!ref.author && !!ref.year && ref.text.length >= 25)) return [];
+  return [...new Set(incomplete.map((ref) => `${ref.text.split(',')[0].trim()} (${ref.year})`))];
+}
+
 function firstAuthor(fields: Partial<CitationInput>, fallback: string): string {
   const parsed = String(fields.authors || fallback).split(/[;\n]/)[0] || '';
   return normalize(parsed.split(',')[0] || parsed).trim();
@@ -135,7 +157,7 @@ export function analyzeBibliographyStructure(
       ...(author && year ? { authorYearKey: `${author}|${year}` } : {}),
       cited: citations.some((citation) => citationMatches(author, year, citation)),
       evidence: [...quality.evidence, ...(parsed.lowConfidence ? ['parser označio zapis kao nesiguran'] : [])],
-      flags: [...quality.flags, ...(parsed.type === 'propis' ? ['legal-source'] : []), ...(fields.url ? ['online-source'] : [])],
+      flags: [...quality.flags, ...(parsed.type === 'propis' ? ['legal-source'] : []), ...(fields.url ? ['online-source'] : []), ...(hasUnfilledTemplateField(rawText) ? ['unfilled-template'] : [])],
     });
   }
 
@@ -159,7 +181,7 @@ export function analyzeBibliographyStructure(
     .filter((citation) => !entries.some((entry) => citationMatches(firstAuthor(entry.fields, ''), String(entry.fields.year || ''), citation)))
     .map((citation) => ({ author: String(citation.author || ''), year: String(citation.year || ''), paragraphIndex: Number(citation.p || 0) }));
   const uncitedEntryIds = entries.filter((entry) => !entry.cited && !!entry.authorYearKey).map((entry) => entry.id);
-  const incompleteEntryIds = entries.filter((entry) => entry.flags.some((flag) => ['missing-author', 'missing-year', 'missing-title'].includes(flag))).map((entry) => entry.id);
+  const incompleteEntryIds = entries.filter((entry) => entry.flags.some((flag) => ['missing-author', 'missing-year', 'missing-title', 'unfilled-template'].includes(flag))).map((entry) => entry.id);
   const warnings: string[] = [];
   if (!alphabetical.expected && entries.length > 1) warnings.push('Bibliografija nije abecedno poredana.');
   if (duplicateGroups.length) warnings.push(`Pronađeno je ${duplicateGroups.length} grupa potpuno identičnih duplikata.`);

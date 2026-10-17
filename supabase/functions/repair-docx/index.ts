@@ -402,6 +402,8 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     const profileRefForParams: string | null = typeof meta.profileRef === 'string' ? meta.profileRef : null;
     const requests: FixerRequest[] = [];
     const paramSources: Record<string, ParamSource> = {};
+    /** Z36 krug 4: ruleId -> akcije koje je server uklonio iz zahtjeva (resolveParams), da uklanjanje ne bude tiho. */
+    const paramSkippedActions: Record<string, string[]> = {};
     /**
      * Zahtjevi koje server NE prepoznaje (audit DOCX-13).
      *
@@ -424,6 +426,7 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       if (!budget.ok) return json({ error: 'bad_request', reason: budget.reason }, 400);
       const resolved = resolveParams(profileRefForParams, ruleId, r.fixerId, clientParams);
       paramSources[ruleId] = resolved.source;
+      if (resolved.skippedActions?.length) paramSkippedActions[ruleId] = [...new Set([...(paramSkippedActions[ruleId] ?? []), ...resolved.skippedActions])];
       requests.push({ fixerId: r.fixerId, ruleId, params: resolved.params });
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
@@ -586,6 +589,12 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
     }
 
+    // Z36 krug 4: preskocene akcije u odgovoru, po ruleId: one koje je uklonio server (dozvola profila) i one
+    // koje fixer namjerno nije proveo (ApplyFixersResult.skippedActions). Izostaje kad ih nema.
+    const skippedActions: Record<string, string[]> = { ...paramSkippedActions };
+    for (const [ruleId, notes] of Object.entries(result.skippedActions ?? {})) skippedActions[ruleId] = [...new Set([...(skippedActions[ruleId] ?? []), ...notes])];
+    const skippedActionsField = Object.keys(skippedActions).length ? { skippedActions } : {};
+
     if (result.changelog.length === 0) {
       const msRepair = ms(tRepair);
       const tCorpus = performance.now();
@@ -595,7 +604,7 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       await finishAttempt(admin, attempt, 'no_change');
       return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
-        changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,
+        changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons, ...skippedActionsField,
         slotId: null, jobId: null, fingerprint, sourceCheck,
       });
     }
@@ -775,6 +784,7 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       changelog: result.changelog,
       skipped: result.skipped,
       skippedReasons: result.skippedReasons,
+      ...skippedActionsField,
       // storagePending: pohrana jos traje u pozadini, pa jobId JEST rezerviran ali posao mozda jos
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
