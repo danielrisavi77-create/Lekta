@@ -174,7 +174,6 @@ function replaceParagraphText(block: string, replacement: string): string | null
   return replaceTextRange(block, 0, text.length, replacement);
 }
 
-const PARAGRAPH_PROPERTIES = /<w:pPr\b[\s\S]*?<\/w:pPr>/i;
 const SECTION_PROPERTIES = /<w:sectPr\b(?:[^>]*\/>|[\s\S]*?<\/w:sectPr>)/i;
 /** Revizije (Track Changes) u svojstvima: novi odlomak ne smije nositi tudju reviziju. */
 const PROPERTY_REVISION = /<w:(?:pPrChange|rPrChange|sectPrChange|ins|del|moveFrom|moveTo)\b/i;
@@ -234,7 +233,11 @@ const ANALYSIS_TOKEN = /<!--[\s\S]*?-->|<(\/?)((?:[A-Za-z_][\w.-]*:)?)(p|t|tab|p
  * parser cita kao vodece tabulatore i odmah ih odreze.
  */
 function analysisText(block: string): string {
-  const source = block.replace(PARAGRAPH_PROPERTIES, '');
+  // Krug 5 (pregled): skidaju se SAMO vlastita svojstva (prvo dijete w:p), procitana uz komentare
+  // maskirane razmacima iste duljine, pa pomak vrijedi i u izvornom bloku. Samozatvoreni `<w:pPr/>` nema
+  // djece i ostaje; nepohlepni regex bez njega brisao je do `</w:pPr>` odlomka okvira, s tekstom citata.
+  const own = ownProperties(block.replace(NOT_MARKUP, (comment) => ' '.repeat(comment.length)));
+  const source = own ? block.slice(0, own.index) + block.slice(own.index + own.xml.length) : block;
   const token = new RegExp(ANALYSIS_TOKEN.source, 'g');
   let depth = 0;
   let out = '';

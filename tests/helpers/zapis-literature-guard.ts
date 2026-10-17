@@ -840,11 +840,85 @@ export function brTabPotvrdeProblemi(build: PlanBuilder, fixer: SyncFixer): stri
   const second = fixer(first.parts, params);
   if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`br-tab: drugi prolaz nije no-op (${second.reason})`);
   formulaSlovaProblemi(build, fixer, problems);
+  samozatvoreniPprOkvirProblemi(build, fixer, problems);
   return problems;
 }
 
 const TEXTBOX_RUN = '<w:r><w:pict><v:shape><v:textbox><w:txbxContent><w:p><w:r><w:t>Okvir A1</w:t></w:r></w:p></w:txbxContent></v:textbox></v:shape></w:pict></w:r>';
 const omml = (value: string) => `<m:oMath><m:r><m:t>${value}</m:t></m:r></m:oMath>`;
+
+/** Ulaz iz pregleda kruga 5: citatni odlomak sa samozatvorenim `<w:pPr/>` i okvirom (DrawingML) cije odlomak ima pPr. */
+const SELF_CLOSED_PPR_TEXTBOX = '<w:p><w:pPr/><w:r><w:t>Tekst (Novak, 2022) i (Horvat, 2020).</w:t></w:r><w:r><w:drawing><wp:anchor><a:graphic><a:graphicData><wps:wsp><wps:txbx><w:txbxContent><w:p><w:pPr><w:jc w:val="left"/></w:pPr><w:r><w:t>Okvir A1</w:t></w:r></w:p></w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>';
+const DRAWING_NS = 'xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"';
+
+/**
+ * Z36 krug 5 (pregled): citatni odlomak sa samozatvorenim `<w:pPr/>` i okvirom cije ugnijezdeno odlomak
+ * ima svojstva. Tekst analize fixera skida SAMO vlastita svojstva odlomka; nepohlepni regex bez
+ * alternative za `<w:pPr/>` brisao je sve do `</w:pPr>` okvira, s tekstom citata, pa je otisak pao i
+ * cijeli recept zavrsio kao unsupported-structure. Nepromijenjeni citati (Novak uz predlozak, potvrdjena
+ * veza Horvat) se citaju, a ostala potvrda (Zorić u drugom odlomku) se primjenjuje.
+ */
+function samozatvoreniPprOkvirProblemi(build: PlanBuilder, fixer: SyncFixer, problems: string[]): void {
+  const tag = 'br-tab:samozatvoreni-ppr-okvir';
+  const paragraphsXml = [SELF_CLOSED_PPR_TEXTBOX, paragraph('Drugi odlomak (Zorić, 2021).'), paragraph('Literatura'), paragraph(entryText('Horvat', '2020')), paragraph(entryText('Zorić', '2021'))];
+  const documentXml = `<w:document><w:body>${paragraphsXml.join('')}<w:sectPr/></w:body></w:document>`;
+  const parse = (xml: string) => parseXml(xml.replace('<w:document>', `<w:document ${WORD_NS} ${DRAWING_NS}>`), 'test');
+  // Generator: ulaz ima samozatvoreni vlastiti pPr i ugnijezdeni pPr okvira, a stari regex mu brise tekst citata.
+  const ownSelfClosed = /^<w:p><w:pPr\/>/.test(SELF_CLOSED_PPR_TEXTBOX);
+  const nestedPPr = /<w:txbxContent>[\s\S]*<w:pPr><w:jc w:val="left"\/><\/w:pPr>[\s\S]*<\/w:txbxContent>/.test(SELF_CLOSED_PPR_TEXTBOX);
+  const oldCut = SELF_CLOSED_PPR_TEXTBOX.replace(/<w:pPr\b[\s\S]*?<\/w:pPr>/i, '');
+  if (!ownSelfClosed || !nestedPPr || oldCut.includes('Novak')) problems.push(`${tag}: ulaz nema samozatvoreni pPr uz pPr okvira koji stari regex reze`);
+  // Odlomci i tekst kako ih broji i cita analiza: odlomak okvira je zaseban odlomak iza onoga koji ga nosi.
+  const seen = bodyParagraphs(parse(documentXml)).map((p) => parserParagraphText(p).trim());
+  const at = (text: string) => seen.indexOf(text) + 1;
+  const literaturaAt = at('Literatura');
+  const entryAt = [at(entryText('Horvat', '2020')), at(entryText('Zorić', '2021'))];
+  if (seen[0] !== 'Tekst (Novak, 2022) i (Horvat, 2020).' || seen[1] !== 'Okvir A1' || literaturaAt !== 4 || entryAt.some((index) => index <= literaturaAt)) problems.push(`${tag}: ulaz nema ocekivane odlomke analize (${JSON.stringify(seen)})`);
+  const occurrences = seen.slice(0, literaturaAt - 1).flatMap((text, i) => extractCitationOccurrences([{ index: i + 1, text }]));
+  const citations = occurrences.map((occurrence) => ({ id: `citation-${occurrence.paragraphIndex}-${occurrence.start}`, paragraphIndex: occurrence.paragraphIndex, start: occurrence.start, end: occurrence.end, rawText: occurrence.rawText, author: occurrence.author, year: occurrence.year, form: occurrence.form, anchorFingerprint: citationAnchorFingerprint(occurrence.paragraphIndex, seen[occurrence.paragraphIndex - 1]), confidence: 'high' }));
+  const entries = entryAt.map((index) => ({ id: `bibliography-${index}`, paragraphIndices: [index], anchorFingerprint: bibliographyAnchorFingerprint([index], seen[index - 1]), rawText: seen[index - 1] }));
+  const isNovak = (citation: { author: string }) => citation.author === 'Novak';
+  const result = {
+    details: {
+      citationBibliographySync: {
+        citations,
+        links: citations.map((citation) => (isNovak(citation)
+          ? { citationId: citation.id, status: 'missing', candidates: [], reason: 'nedostaje' }
+          : { citationId: citation.id, status: 'matched', bibliographyEntryId: `bibliography-${citation.author === 'Horvat' ? entryAt[0] : entryAt[1]}`, candidates: [], reason: 'podudaranje' })),
+        missingEntries: citations.filter(isNovak),
+        duplicateCandidates: [],
+        summary: { citations: citations.length, matched: citations.length - 1, missing: 1, ambiguous: 0, pageIssues: 0 },
+      },
+      bibliographyStructure: { entries },
+    },
+  };
+  const form = build(result, planProfile({ mode: 'author-year', allowMissingEntryInsertion: true }))[0]?.citationBibliographySyncForm;
+  const horvat = form?.citations.find((row) => row.rawText === 'Horvat, 2020');
+  const zoric = form?.citations.find((row) => row.rawText === 'Zorić, 2021');
+  if (!form || form.missingEntries.length !== 1 || !horvat || !zoric || citations.length !== 3) { problems.push(`${tag}: plan ne nudi zapis Novak i citate Horvat i Zorić`); return; }
+  form.missingEntries[0].selected = true;
+  // Potvrda veze Horvat: citat ostaje isti, samo se cita uz potvrdjeni zapis.
+  horvat.selected = true;
+  zoric.selected = true;
+  zoric.replacementText = 'Zorić, 2021, str. 5';
+  const params = form.buildParams(form) as unknown as Parameters<SyncFixer>[1];
+  if (!params.mappings.some((mapping) => mapping.bibliographyEntryId === `bibliography-${entryAt[0]}`)) problems.push(`${tag}: plan ne salje potvrdu veze Horvat`);
+  const parts = { documentXml, stylesXml: '' };
+  const first = fixer(parts, params);
+  if (!first.applied || first.skippedActions) problems.push(`${tag}: recept je pao (${first.reason}, ${JSON.stringify(first.skippedActions)})`);
+  // Rezultat se parsira parserom analize: dobro oblikovan XML i tekst odlomaka kakav vidi analiza.
+  let after: string[] = [];
+  try {
+    after = bodyParagraphs(parse(first.parts.documentXml)).map((p) => parserParagraphText(p).trim());
+  } catch {
+    problems.push(`${tag}: rezultat nije dobro oblikovan XML`);
+  }
+  if (!after.includes('Drugi odlomak (Zorić, 2021, str. 5).')) problems.push(`${tag}: potvrda Zorić nije primijenjena`);
+  if (!after.includes(template('Novak', '2022'))) problems.push(`${tag}: zapis Novak nije umetnut (${JSON.stringify(first.skippedActions)})`);
+  if (!first.parts.documentXml.includes(SELF_CLOSED_PPR_TEXTBOX) || after[0] !== seen[0] || after[1] !== seen[1]) problems.push(`${tag}: odlomak citata ili okvira je prepisan`);
+  const second = fixer(first.parts, params);
+  if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${tag}: drugi prolaz nije no-op (${second.reason})`);
+}
 
 /**
  * Z36 krug 5 (F40): odlomak citata u kojem formula (OMML m:t) sa slovom ili znamenkom, ili tekst

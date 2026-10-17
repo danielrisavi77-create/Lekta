@@ -8564,6 +8564,14 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
   },
   {
+    id: 'z36/samozatvoreni-ppr-okvir',
+    imitates: 'tekst analize fixera skida svojstva odlomka nepohlepnim regexom bez alternative za samozatvoreni <w:pPr/> '
+      + '(pregled kruga 5): uz okvir cije odlomak ima pPr brise i tekst citata, pa cijeli recept padne kao unsupported-structure',
+    caught: () => brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer('const source = own ? block.slice(0, own.index) + block.slice(own.index + own.xml.length) : block;', "const source = block.replace(/<w:pPr\\b[\\s\\S]*?<\\/w:pPr>/i, '');"))
+      .some((p) => p.startsWith('br-tab:samozatvoreni-ppr-okvir: recept je pao')),
+    cleanBefore: () => z36FixerCist() && brTabPotvrdeProblemi(citationBibliographySyncRepairableItem, z36Fixer()).length === 0,
+  },
+  {
     id: 'z36/predlozak-imenovan-uz-drugi-razlog',
     imitates: 'analiza imenuje predloske i kad nisu jedini razlog nepotpunosti (kratak zapis ili zapis bez godine u '
       + 'istom popisu), pa ploca stvaran pad potpunosti sakrije kao stavku za popunu',
