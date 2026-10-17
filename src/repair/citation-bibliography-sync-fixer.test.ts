@@ -295,6 +295,60 @@ describe('citationBibliographySyncFixer: karakterizacija zatecenog dodavanja zap
     }
   });
 
+  it('samozatvoreni <w:rPr/> prvog runa sidra: novi odlomak nosi samo novi zapis, bez teksta sidra', () => {
+    // Ulaz iz zadnjeg pregleda. Stari regex svojstava runa ne zna za `<w:rPr/>`, pa je nepohlepno citao do
+    // `</w:rPr>` drugog runa i kopirao tekst sidra u novi zapis ("Horvat, I. Novak, [ime]. ...").
+    const ns = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+    const seenAll = (xml: string) => [...parseXml(xml.replace('<w:document>', `<w:document ${ns}>`), 'test').getElementsByTagName('w:p')].map((p) => parserParagraphText(p).trim());
+    const cite = 'Tekst (Novak, 2022).';
+    const anchor = 'Horvat, I. (2020). Naslov.';
+    const start = cite.indexOf('Novak, 2022');
+    const build = (anchorXml: string) => {
+      const documentXml = `<w:document><w:body>${paragraph(cite)}${paragraph('Literatura')}${anchorXml}<w:sectPr/></w:body></w:document>`;
+      const params = (entry: Partial<CitationBibliographySyncParams['entries'][number]>): CitationBibliographySyncParams => ({
+        version: 1,
+        citations: [{ id: 'c1', paragraphIndex: 1, start, end: start + 'Novak, 2022'.length, anchorFingerprint: citationAnchorFingerprint(1, cite), replacementText: 'Novak, 2022', reason: 'citat uz dodani zapis literature' }],
+        entries: [{ id: 'e1', paragraphIndices: [], anchorFingerprint: '', action: 'add', insertionAnchor: { paragraphIndex: 3, anchorFingerprint: bibliographyAnchorFingerprint([3], anchor) }, ...entry }],
+        mappings: [{ citationId: 'c1', bibliographyEntryId: 'e1', confirmed: true }],
+      });
+      return { parts: { documentXml, stylesXml: '' }, template: params({ citationId: 'c1' }), literal: params({ replacementText: 'Novak, N. (2021). Drugi naslov.' }) };
+    };
+    const insert = (anchorXml: string, expectedRPr: string) => {
+      const { parts, template, literal } = build(anchorXml);
+      const seen = seenAll(parts.documentXml);
+      expect(seen).toEqual([cite, 'Literatura', anchor]);
+      for (const [params, text] of [[template, 'Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač].'], [literal, 'Novak, N. (2021). Drugi naslov.']] as const) {
+        const result = citationBibliographySyncFixer(parts, params);
+        expect({ applied: result.applied, skipped: result.skippedActions }).toEqual({ applied: true, skipped: undefined });
+        // Tocno jedan novi odlomak; vidljivi tekst (parser analize) je samo novi zapis, ostalo nepromijenjeno.
+        expect(seenAll(result.parts.documentXml)).toEqual([...seen, text]);
+        const anchorEnd = parts.documentXml.indexOf('<w:sectPr/>');
+        expect(result.parts.documentXml).toBe(`${parts.documentXml.slice(0, anchorEnd)}<w:p><w:r>${expectedRPr}<w:t xml:space="preserve">${text}</w:t></w:r></w:p>${parts.documentXml.slice(anchorEnd)}`);
+        const second = citationBibliographySyncFixer(result.parts, params);
+        expect(second.applied).toBe(false);
+        expect(second.parts.documentXml).toBe(result.parts.documentXml);
+      }
+    };
+    const italic = '<w:r><w:rPr><w:i/></w:rPr><w:t>(2020). Naslov.</w:t></w:r>';
+    const selfClosed = `<w:p><w:r><w:rPr/><w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`;
+    // Generator: stari regex nad ovim sidrom stvarno hvata tekst sidra (ciljana klasa ulaza).
+    expect(selfClosed.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1]).toContain('Horvat, I. ');
+    insert(selfClosed, '');
+    // Rubovi: razmak ili novi red ispred `<w:rPr/>`, samozatvoreni rPr s atributom, prvi run bez rPr-a
+    // (ne preuzima rPr drugog runa) i prvi run s punim rPr-om (kopira se kao i dosad).
+    insert(`<w:p><w:r>\n  <w:rPr />\n<w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`, '');
+    insert(`<w:p><w:r><w:rPr w:rsidR="00AB"/><w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`, '');
+    insert(`<w:p><w:r><w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`, '');
+    insert(`<w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`, '<w:rPr><w:b/></w:rPr>');
+    // Povijest svojstava prvog runa (w:rPrChange) i dalje odbija predlozak, i uz samozatvoreni rPr u povijesti.
+    for (const history of ['<w:rPrChange w:id="1" w:author="A" w:date="2026-01-01T00:00:00Z"><w:rPr/></w:rPrChange>', '<w:rPrChange w:id="1" w:author="A" w:date="2026-01-01T00:00:00Z"><w:rPr><w:i/></w:rPr></w:rPrChange>']) {
+      const { parts, template } = build(`<w:p><w:r><w:rPr><w:b/>${history}</w:rPr><w:t xml:space="preserve">Horvat, I. </w:t></w:r>${italic}</w:p>`);
+      const result = citationBibliographySyncFixer(parts, template);
+      expect(result.applied).toBe(false);
+      expect(result.parts.documentXml).toBe(parts.documentXml);
+    }
+  });
+
   it('krug 4: formula sa slovom uz izmijenjen citat bez dodanog zapisa: odlomak se ne pise', () => {
     const citationXml = '<w:p><w:r><w:t xml:space="preserve">Tekst </w:t></w:r><m:oMath><m:r><m:t>x</m:t></m:r></m:oMath><w:r><w:t xml:space="preserve"> više (Novak, 2022).</w:t></w:r></w:p>';
     const seen = 'Tekst x više (Novak, 2022).';

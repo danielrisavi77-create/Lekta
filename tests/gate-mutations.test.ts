@@ -8709,6 +8709,14 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: z36FixerCist,
   },
   {
+    id: 'z36/samozatvoreni-rpr-prvog-runa',
+    imitates: 'svojstva prvog runa citaju se nepohlepnim regexom bez alternative za samozatvoreni <w:rPr/> (zadnji pregled): '
+      + 'regex ih cita do </w:rPr> sljedeceg runa, pa novi zapis kopira tekst sidra i vidljivi tekst se mijenja',
+    caught: () => zapisLiteratureProblemi(z36Fixer('/<w:r\\b[^>]*>\\s*(<w:rPr\\b[^>]*\\/>|<w:rPr\\b(?:[^>]*[^/>])?>[\\s\\S]*?<\\/w:rPr>)?/i', '/<w:r\\b[^>]*>\\s*(<w:rPr\\b[\\s\\S]*?<\\/w:rPr>)?/i'))
+      .some((p) => p.startsWith('rpr:predlozak:') || p.startsWith('rpr:korisnikov-zapis:')),
+    cleanBefore: z36FixerCist,
+  },
+  {
     id: 'z36/sekcija-s-komentarom',
     imitates: 'prijelom sekcije sidra cita se s komentarima (pregled drugog providera, runda 4): komentirani </w:sectPr> '
       + 'presijece prijelom koji prelazi na korisnikov zapis, pa rezultat nosi nezatvoren komentar',

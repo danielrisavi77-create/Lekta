@@ -283,7 +283,11 @@ function paragraphTemplate(block: string, replacement: string, sectPr = ''): str
   // a lazni pPr iz komentara ne postaje oblikovanje novog zapisa.
   const plain = block.replace(NOT_MARKUP, '');
   const pPr = ownProperties(plain)?.xml || '';
-  const rPr = plain.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1] || '';
+  // rPr se cita samo kao prvo dijete prvog runa, nikad preko granice runa (zadnji pregled): samozatvoreni
+  // `<w:rPr/>` nema svojstava (kao pPr u ownProperties), a puni par ne prihvaca samozatvorenu oznaku, pa ne
+  // moze nepohlepno citati do `</w:rPr>` sljedeceg runa i kopirati tekst sidra u novi zapis.
+  const firstRunPr = plain.match(/<w:r\b[^>]*>\s*(<w:rPr\b[^>]*\/>|<w:rPr\b(?:[^>]*[^/>])?>[\s\S]*?<\/w:rPr>)?/i)?.[1] || '';
+  const rPr = /\/>$/.test(firstRunPr) ? '' : firstRunPr;
   if (PROPERTY_REVISION.test(pPr) || PROPERTY_REVISION.test(rPr)) return null;
   const own = pPr.replace(SECTION_PROPERTIES, '');
   const properties = !sectPr ? own : own ? own.replace(/<\/w:pPr>$/i, `${sectPr}</w:pPr>`) : `<w:pPr>${sectPr}</w:pPr>`;

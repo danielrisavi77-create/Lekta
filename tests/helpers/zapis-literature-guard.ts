@@ -177,6 +177,7 @@ function granicePopisaProblemi(fixer: SyncFixer, problems: string[]): void {
   odmaciProblemi(fixer, problems);
   poljaIKontroleProblemi(fixer, problems);
   okviriProblemi(fixer, problems);
+  samozatvoreniRprProblemi(fixer, problems);
 }
 
 const FIELD_BEGIN = '<w:r><w:fldChar w:fldCharType="begin"/></w:r>';
@@ -374,6 +375,45 @@ function okviriProblemi(fixer: SyncFixer, problems: string[]): void {
 function masterLiteralInsertion(xml: string, anchorText: string, anchorPPr: string, literal: string): string {
   const anchorEnd = xml.indexOf('</w:p>', xml.indexOf(anchorText)) + '</w:p>'.length;
   return `${xml.slice(0, anchorEnd)}<w:p>${anchorPPr}<w:r><w:t xml:space="preserve">${encodeText(literal)}</w:t></w:r></w:p>${xml.slice(anchorEnd)}`;
+}
+
+/**
+ * Z36 (zadnji pregled): prvi run sidra nosi samozatvoreni `<w:rPr/>`, drugi run puna svojstva (kurziv).
+ * Svojstva prvog runa citaju se samo kao njegovo prvo dijete; nepohlepni regex bez alternative za
+ * `<w:rPr/>` cita ih do `</w:rPr>` drugog runa, pa novi odlomak kopira tekst sidra. Predlozak i korisnikov
+ * zapis: tocno jedan novi odlomak, cijim je tekstom (parser analize) samo novi zapis, ostali tekst isti,
+ * drugi prolaz no-op.
+ */
+function samozatvoreniRprProblemi(fixer: SyncFixer, problems: string[]): void {
+  const texts = [['Cvitan', '2015'], ['Horvat', '2020'], ['Zubak', '2019']].map(([surname, year]) => entryText(surname, year));
+  const cut = texts[2].indexOf('(');
+  const anchorXml = `<w:p><w:r><w:rPr/><w:t xml:space="preserve">${texts[2].slice(0, cut)}</w:t></w:r><w:r><w:rPr><w:i/></w:rPr><w:t>${texts[2].slice(cut)}</w:t></w:r></w:p>`;
+  const built = syncCase('Tekst rada (Novak, 2022).', 'Novak, 2022', [], { rawEntries: texts, entryXml: (text, index) => (index === 2 ? anchorXml : `<w:p>${LIST_PPR}${run(text)}</w:p>`) });
+  const seenAll = (xml: string) => bodyParagraphs(parseXml(xml.replace('<w:document>', `<w:document ${WORD_NS}>`), 'test')).map((p) => parserParagraphText(p).trim());
+  const seen = seenAll(built.parts.documentXml);
+  // Generator: sidro je zadnji zapis s `<w:rPr/>` kao prvim djetetom prvog runa, analiza vidi njegov cijeli
+  // tekst, a stari regex nad njim stvarno hvata tekst sidra (ciljana klasa ulaza).
+  const oldRPr = anchorXml.match(/<w:r\b[^>]*>\s*(<w:rPr\b[\s\S]*?<\/w:rPr>)?/i)?.[1] ?? '';
+  if (!built.parts.documentXml.includes(`${anchorXml}<w:sectPr/>`) || seen.at(-1) !== texts[2] || !oldRPr.includes(texts[2].slice(0, cut))) problems.push(`rpr:ulaz: sidro nema samozatvoreni rPr koji stari regex cita preko granice runa (${JSON.stringify(seen)})`);
+  const literalText = 'Novak, N. (2022). Pravi naslov. Zagreb: Izdavač.';
+  const variants = [
+    ['rpr:predlozak', built.params, template('Novak', '2022')],
+    ['rpr:korisnikov-zapis', { ...built.params, entries: [{ ...built.params.entries[0], citationId: undefined, replacementText: literalText }] }, literalText],
+  ] as const;
+  for (const [tag, params, expected] of variants) {
+    const first = fixer(built.parts, params);
+    let after: string[] = [];
+    try {
+      after = seenAll(first.parts.documentXml);
+    } catch {
+      problems.push(`${tag}: rezultat nije dobro oblikovan XML`);
+    }
+    const at = after.indexOf(expected);
+    if (!first.applied || after.length !== seen.length + 1 || at < 0) problems.push(`${tag}: nije umetnut tocno jedan odlomak s novim zapisom (${first.reason}, ${JSON.stringify(after)})`);
+    else if (JSON.stringify(after.filter((_text, index) => index !== at)) !== JSON.stringify(seen)) problems.push(`${tag}: promijenjen postojeci tekst`);
+    const second = fixer(first.parts, params);
+    if (second.applied || second.parts.documentXml !== first.parts.documentXml) problems.push(`${tag}: drugi prolaz nije no-op (${second.reason})`);
+  }
 }
 
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"';
