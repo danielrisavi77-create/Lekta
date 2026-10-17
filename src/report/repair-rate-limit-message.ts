@@ -3,7 +3,7 @@
  * "besplatnih" kad je posrijedi placeni strop, dijeljeni IP ili strop pokusaja bez izmjena (kada
  * besplatna kvota NIJE potrosena).
  */
-export type RepairRateLimitReason = 'free_user' | 'free_ip' | 'paid_daily' | 'attempts_daily' | undefined;
+export type RepairRateLimitReason = 'free_user' | 'free_ip' | 'paid_daily' | 'attempts_daily' | 'recovery_daily' | undefined;
 
 export function repairRateLimitMessage(reason: RepairRateLimitReason): string {
   switch (reason) {
@@ -11,6 +11,8 @@ export function repairRateLimitMessage(reason: RepairRateLimitReason): string {
       return '<strong>Dnevni limit pokušaja bez izmjena je dosegnut.</strong> Dokument je već usklađen, nije ga bilo moguće sigurno popraviti ili zahtjev nije uspio, pa besplatna kvota nije potrošena. Prozor je 24 sata, pa pokušaj ponovno sutra.';
     case 'paid_daily':
       return '<strong>Dnevni limit zahtjeva je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra.';
+    case 'recovery_daily':
+      return '<strong>Dnevni limit sigurnog oporavka je dosegnut.</strong> Novi popravak nije pokrenut. Provjeri „Moji popravci”; ako popravljene kopije nema, pokušaj ponovno nakon 24 sata.';
     case 'free_ip':
       return '<strong>Dnevni limit besplatnih popravaka za ovu mrežu/uređaj je iskorišten.</strong> Prozor je 24 sata; pokušaj ponovno sutra ili s drugog uređaja.';
     default:

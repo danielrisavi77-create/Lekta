@@ -19,6 +19,9 @@ export { REPAIR_MAX_REFERENCES } from './repair-contract';
 import { REPAIR_MAX_REFERENCES } from './repair-contract';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const REPAIR_REQUEST_ID_HEADER = 'X-Lekta-Request-Id';
+const REPAIR_REQUEST_FINGERPRINT_HEADER = 'X-Lekta-Request-Fingerprint';
+const REPAIR_REQUEST_MODE_HEADER = 'X-Lekta-Request-Mode';
 
 export interface RepairClientConfig {
   /** URL repair-docx Edge Functiona; prazno znaci nije konfigurirano. */
@@ -157,7 +160,7 @@ export type RepairOutcome =
   // osobno nije potrosio. Odsutan (stari server bez K-oznake) -> generic fallback tekst.
   // T84 RD-2: 'attempts_daily' je strop pokusaja BEZ izmjena (dokument vec uskladjen ili isporuka
   // odbijena); besplatna kvota tada NIJE potrosena, pa poruka to mora reci.
-  | { kind: 'rate_limited'; reason?: 'free_user' | 'free_ip' | 'paid_daily' | 'attempts_daily' }
+  | { kind: 'rate_limited'; reason?: 'free_user' | 'free_ip' | 'paid_daily' | 'attempts_daily' | 'recovery_daily' }
   | { kind: 'unauthorized' }
   | { kind: 'too_large' }
   | { kind: 'no_live_fixers' }
@@ -166,6 +169,12 @@ export type RepairOutcome =
    *  'ok' s praznim changelogom ("nema se sto popraviti"), inace UI tvrdi neistinu. */
   | { kind: 'integrity_failed'; part: string; problem: string; preexisting: boolean }
   | { kind: 'invalid_docx' }
+  | { kind: 'request_in_progress'; requestId: string | null }
+  | { kind: 'request_completed'; requestId: string | null; jobId: string | null }
+  | { kind: 'request_completed_unstored'; requestId: string | null }
+  | { kind: 'request_recovery_unavailable'; requestId: string | null }
+  | { kind: 'request_no_change'; requestId: string | null }
+  | { kind: 'request_unknown'; requestId: string | null }
   /**
    * `code` (T87): 503 iz repair-docx nosi razlog. `disabled` = kill switch REPAIR_DISABLED (ponovni pokusaj ne
    * pomaze), `busy` = popunjen gate (pokusaj za minutu). Oba nastaju PRIJE ikakve obrade i naplate.
@@ -293,9 +302,14 @@ export async function uploadRepair(
   fileBytes: Uint8Array,
   meta: RepairMeta,
   fetchImpl: typeof fetch = fetch,
-  options?: { signal?: AbortSignal },
+  options?: { signal?: AbortSignal; requestId?: string; requestFingerprint?: string },
 ): Promise<RepairOutcome> {
   if (!config.endpoint) return { kind: 'error', message: 'repairEndpoint nije konfiguriran' };
+  const requestId = options?.requestId;
+  const requestFingerprint = options?.requestFingerprint;
+  if ((requestId && !requestFingerprint) || (!requestId && requestFingerprint)) {
+    return { kind: 'error', message: 'nedostaje identitet zahtjeva za popravak' };
+  }
 
   const form = new FormData();
   const blob = new Blob([fileBytes as Uint8Array<ArrayBuffer>], { type: DOCX_MIME });
@@ -312,6 +326,10 @@ export async function uploadRepair(
         // base64 u JSON-u. Stariji server ovo zaglavlje ignorira i vrati zatecen JSON, pa
         // klijent mora znati oba oblika (grana ispod).
         [REPAIR_BINARY_REQUEST_HEADER]: REPAIR_BINARY_REQUEST_VALUE,
+        ...(requestId && requestFingerprint ? {
+          [REPAIR_REQUEST_ID_HEADER]: requestId,
+          [REPAIR_REQUEST_FINGERPRINT_HEADER]: requestFingerprint,
+        } : {}),
       },
       body: form,
       ...(options?.signal ? { signal: options.signal } : {}),
@@ -361,8 +379,18 @@ export async function uploadRepair(
     return okFromMeta(data as Record<string, unknown>, decodeBase64(data.docxBase64));
   }
   if (res.status === 409) {
-    const data = (await res.json().catch(() => ({}))) as { suggestedWorkType?: string; workType?: string };
+    const data = (await res.json().catch(() => ({}))) as { suggestedWorkType?: string; workType?: string; error?: string; jobId?: string | null; requestId?: string };
+    const responseRequestId = requestId ?? (typeof data.requestId === 'string' ? data.requestId : null);
+    if (data.error === 'request_completed') return { kind: 'request_completed', requestId: responseRequestId, jobId: data.jobId ?? null };
+    if (data.error === 'request_completed_unstored') return { kind: 'request_completed_unstored', requestId: responseRequestId };
+    if (data.error === 'request_recovery_unavailable') return { kind: 'request_recovery_unavailable', requestId: responseRequestId };
+    if (data.error === 'request_no_change') return { kind: 'request_no_change', requestId: responseRequestId };
+    if (data.error === 'request_unknown' || data.error === 'request_conflict') return { kind: 'request_unknown', requestId: responseRequestId };
     return { kind: 'tier_mismatch', suggestedWorkType: String(data.suggestedWorkType || data.workType || '') };
+  }
+  if (res.status === 202) {
+    const data = (await res.json().catch(() => ({}))) as { requestId?: string };
+    return { kind: 'request_in_progress', requestId: requestId ?? (typeof data.requestId === 'string' ? data.requestId : null) };
   }
   if (res.status === 402) {
     const data = (await res.json().catch(() => ({}))) as { workType?: string };
@@ -371,7 +399,8 @@ export async function uploadRepair(
   }
   if (res.status === 429) {
     const data = (await res.json().catch(() => ({}))) as { reason?: string };
-    const reason = data.reason === 'free_user' || data.reason === 'free_ip' || data.reason === 'paid_daily' || data.reason === 'attempts_daily' ? data.reason : undefined;
+    const reason = data.reason === 'free_user' || data.reason === 'free_ip' || data.reason === 'paid_daily'
+      || data.reason === 'attempts_daily' || data.reason === 'recovery_daily' ? data.reason : undefined;
     return { kind: 'rate_limited', reason };
   }
   if (res.status === 401) return { kind: 'unauthorized' };
@@ -401,4 +430,71 @@ export async function uploadRepair(
     }
   }
   return { kind: 'error', status: res.status, message: `neocekivani odgovor ${res.status}` };
+}
+
+export type RepairRequestServerStatus =
+  | 'missing' | 'processing' | 'completed' | 'completed_unstored' | 'no_change' | 'retryable' | 'unknown' | 'conflict';
+
+export interface RepairRequestServerState {
+  status: RepairRequestServerStatus;
+  jobId: string | null;
+}
+
+async function requestRepairRequestState(
+  config: RepairClientConfig,
+  accessToken: string,
+  requestId: string,
+  fetchImpl: typeof fetch,
+  signal?: AbortSignal,
+): Promise<{ status: RepairRequestServerStatus; jobId: string | null } | { error: RepairOutcome }> {
+  let response: Response;
+  try {
+    response = await fetchImpl(config.endpoint, {
+      method: 'POST',
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        [REPAIR_REQUEST_ID_HEADER]: requestId,
+        [REPAIR_REQUEST_MODE_HEADER]: 'status',
+      },
+      ...(signal ? { signal } : {}),
+    });
+  } catch (error) {
+    return { error: {
+      kind: 'error',
+      message: error instanceof Error ? error.message : 'mrežna greška pri provjeri zahtjeva za popravak',
+    } };
+  }
+
+  if (response.status === 401) return { error: { kind: 'unauthorized' } };
+  const body = await response.json().catch(() => ({})) as Record<string, unknown>;
+  if (!response.ok) {
+    if (response.status === 503 && body.error === 'disabled') {
+      return { error: { kind: 'error', status: 503, code: 'disabled', message: 'Automatski popravak je trenutačno isključen.' } };
+    }
+    if (response.status === 503 && body.error === 'busy') {
+      return { error: { kind: 'error', status: 503, code: 'busy', message: 'Poslužitelj je trenutačno zauzet drugim popravcima.' } };
+    }
+    const status = typeof response.status === 'number' ? response.status : undefined;
+    return { error: { kind: 'error', status, message: `provjera zahtjeva za popravak nije uspjela (${response.status})` } };
+  }
+  const allowed: RepairRequestServerStatus[] = [
+    'missing', 'processing', 'completed', 'completed_unstored', 'no_change', 'retryable', 'unknown', 'conflict',
+  ];
+  const status = typeof body.status === 'string' && allowed.includes(body.status as RepairRequestServerStatus)
+    ? body.status as RepairRequestServerStatus
+    : null;
+  if (!status) return { error: { kind: 'error', status: response.status, message: 'neispravan status zahtjeva za popravak' } };
+  return { status, jobId: typeof body.jobId === 'string' ? body.jobId : null };
+}
+
+/** Query the authoritative server state after a lost response; a missing row is safe to retry. */
+export async function checkRepairRequestStatus(
+  config: RepairClientConfig,
+  accessToken: string,
+  requestId: string,
+  fetchImpl: typeof fetch = fetch,
+  signal?: AbortSignal,
+): Promise<RepairRequestServerState | { error: RepairOutcome }> {
+  if (!config.endpoint) return { error: { kind: 'error', message: 'repairEndpoint nije konfiguriran' } };
+  return requestRepairRequestState(config, accessToken, requestId, fetchImpl, signal);
 }

@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { buildRepairableItems, pageNumberingRepairableItem, pickTargetItem, type AnalyzedCheck } from '../src/ui/repair-items';
 import type { RuleEntry } from '../src/profiles/profile-schema';
 import type { RepairableItem } from '../src/ui/repair-panel';
+import { summarizeRepairOutcome } from '../src/repair/repair-outcome';
 
 // Regresijska mreza za buildRepairableItems: PRVO dokazuje postojece ponasanje za obavezne
 // (autoFixable+verified) stavke, PA tek onda pokriva novi "preporuceno" (advisory+recommended)
@@ -128,6 +129,48 @@ describe('buildRepairableItems: preporucene (advisory+recommended) stavke, novo 
     const checks: AnalyzedCheck[] = [{ title: 'Dominantni font', status: 'fail', max: 8 }];
     const items = buildRepairableItems(checks, profile, [requiredEntry()]);
     expect(items[0].matchKeys).toEqual(['Dominantni font']);
+  });
+});
+
+describe('paper-size ishod popravka', () => {
+  it.each([
+    ['Format stranice A4', 'page.size.a4'],
+    ['Format stranice (A4)', 'page.size.a4-list'],
+  ])('dinamički naslov %s povezuje A4 nalaz s ishodom popravka', (title, id) => {
+    const before: AnalyzedCheck[] = [{ id, title, status: 'warn', max: 3 }];
+    const item = requiredEntry({
+      ruleId: 'p1--paper-size',
+      checkId: 'paper-size',
+      value: ['A4'],
+      fixerId: 'paper-size-fixer',
+      label: 'Format stranice',
+    });
+    const selected = buildRepairableItems(before, { requireA4: true, paperSizes: ['A4'] }, [item]);
+
+    expect(selected).toHaveLength(1);
+    expect(selected[0].matchKeys).toEqual([title]);
+
+    const outcome = summarizeRepairOutcome({
+      before: [{ id, title, earned: 1, max: 3 }],
+      after: [{ id, title, earned: 3, max: 3 }],
+      selected,
+    });
+    expect(outcome.kind).toBe('complete');
+    expect(outcome.targeted).toEqual([id]);
+    expect(outcome.resolved).toEqual([id]);
+    expect(outcome.manualOnly).toEqual([]);
+    expect(outcome.unmappedMatchKeys).toEqual([]);
+  });
+
+  it('negativna kontrola: bez uparivanja A4 ostaje izvan ciljanih i pogrešno izgleda kao ručni nalaz', () => {
+    const outcome = summarizeRepairOutcome({
+      before: [{ id: 'page.size.a4-list', title: 'Format stranice (A4)', earned: 1, max: 3 }],
+      after: [{ id: 'page.size.a4-list', title: 'Format stranice (A4)', earned: 3, max: 3 }],
+      selected: [{}],
+    });
+    expect(outcome.targeted).toEqual([]);
+    expect(outcome.manualOnly).toEqual(['page.size.a4-list']);
+    expect(outcome.unmappedMatchKeys).toEqual([]);
   });
 });
 

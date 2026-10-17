@@ -41,6 +41,46 @@ describe('resolveParams: profil pobjedjuje klijenta', () => {
     expect(out.params).not.toHaveProperty('fontName', 'Comic Sans MS');
   });
 
+  it('profilni cilj ostaje mjerodavan, a izričiti deep izbor stiže do profilnog fixera', () => {
+    const deepRule = Object.entries(PARAM_AUTHORITY[profileId]).find(([, candidate]) => candidate.f === 'line-spacing-fixer');
+    expect(deepRule, 'artefakt mora imati profilni popravak proreda').toBeDefined();
+    const [deepRuleId, deepEntry] = deepRule!;
+    const out = resolveParams(profileId, deepRuleId, deepEntry.f, {
+      multiplier: 4,
+      deep: true,
+      injected: 'ne smije proći',
+    });
+
+    expect(out.source).toBe('profile');
+    expect(out.params).toEqual({ ...deepEntry.p, deep: true });
+    expect(out.params.multiplier).toBe(deepEntry.p.multiplier);
+    expect(out.params).not.toHaveProperty('injected');
+  });
+
+  it('deep=false ostaje opt-out, a pogrešan tip se ne prenosi u profilni zahtjev', () => {
+    const deepRule = Object.entries(PARAM_AUTHORITY[profileId]).find(([, candidate]) => candidate.f === 'line-spacing-fixer');
+    expect(deepRule).toBeDefined();
+    const [deepRuleId, deepEntry] = deepRule!;
+
+    expect(resolveParams(profileId, deepRuleId, deepEntry.f, { deep: false }).params)
+      .toEqual({ ...deepEntry.p, deep: false });
+    expect(resolveParams(profileId, deepRuleId, deepEntry.f, { deep: 'true' }).params)
+      .toEqual(deepEntry.p);
+  });
+
+  it('deep zastavica se ne dodaje fixeru koji ne podržava dubinsko oblikovanje', () => {
+    const marginRule = Object.entries(PARAM_AUTHORITY).flatMap(([candidateProfileId, rules]) =>
+      Object.entries(rules)
+        .filter(([, candidate]) => candidate.f === 'margins-fixer')
+        .map(([candidateRuleId, candidate]) => ({ candidateProfileId, candidateRuleId, candidate })),
+    )[0];
+    expect(marginRule, 'artefakt mora imati profilni popravak margina').toBeDefined();
+    const { candidateProfileId, candidateRuleId, candidate } = marginRule!;
+
+    expect(resolveParams(candidateProfileId, candidateRuleId, candidate.f, { deep: true }).params)
+      .toEqual(candidate.p);
+  });
+
   it('bez profilnog zapisa ostaje sanirani klijentski put, ali je to OZNACENO', () => {
     const client = { keep: 1 };
     const out = resolveParams(profileId, 'pravilo-koje-ne-postoji', 'font-fixer', client);

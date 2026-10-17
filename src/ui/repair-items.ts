@@ -131,6 +131,15 @@ function findCheckForDimension(checks: AnalyzedCheck[], dimension: string): Anal
     : checks.find((c) => c.title === CHECK_TITLE[dimension]);
 }
 
+/** Naslov ciljane provjere za ishod popravka; format papira ima profilno ovisan naslov. */
+function matchKeysForCheckId(checkId: string, checks: AnalyzedCheck[]): string[] | undefined {
+  const title = CHECK_TITLE[checkId];
+  if (title) return [title];
+  const dimension = dimensionForCheckId(checkId) ?? checkId;
+  const check = findCheckForDimension(checks, dimension);
+  return check?.title ? [check.title] : undefined;
+}
+
 /**
  * Dokaz uz pravilo (stranica upute + datum provjere), kad ga pecena mapa nosi.
  *
@@ -183,6 +192,7 @@ export function buildRepairableItems(
     const isRecommended = e.recommended === true && e.status === 'advisory';
     const isRequired = e.autoFixable === true && e.status === 'verified';
     if ((!isRecommended && !isRequired) || !e.fixerId || !e.checkId) continue;
+    const matchKeys = matchKeysForCheckId(e.checkId, checks);
     if (isRecommended) {
       // Vrijednost dolazi IZ ZAPISA (pecena projekcija nosi e.value), ne iz `profile`:
       // effectiveRules iz ruleEntries nije zivo wiran u definition.rules (vidi paramsFromValue).
@@ -199,7 +209,7 @@ export function buildRepairableItems(
         // korisnik ne razlikuje fakultetsku preporuku od nase opce higijene.
         authority: 'faculty-recommendation',
         ...provenanceOf(e),
-        ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
+        ...(matchKeys ? { matchKeys } : {}),
       });
       continue;
     }
@@ -219,7 +229,7 @@ export function buildRepairableItems(
       // Verificirano pravilo fakulteta: jedina kategorija koja ulazi u ocjenu.
       authority: 'faculty-rule',
       ...provenanceOf(e),
-      ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
+      ...(matchKeys ? { matchKeys } : {}),
     });
   }
   return out;

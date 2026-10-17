@@ -17,9 +17,11 @@
  * klijentovu ignorira; kad zapisa nema (univerzalna higijena bez profila, npr. prazni odlomci ili
  * hrvatska tipografija), ostaje dosadasnji sanirani put, ali se to izricito oznaci u odgovoru.
  *
- * Bez tezih ovisnosti (samo JSON), da se moze uvesti i u Deno Edge funkciju.
+ * Bez tezih ovisnosti, da se moze uvesti i u Deno Edge funkciju.
  */
 import authorityRaw from '../../data/generated/repair-params-by-profile.json' with { type: 'json' };
+import { DEEP_CAPABLE } from './default-selection.ts';
+import type { FixerId } from './apply-fixers.ts';
 
 /** Jedan pecen zapis: fixer i njegovi kanonski parametri za to pravilo. */
 export interface AuthoritativeParams {
@@ -58,8 +60,14 @@ export function resolveParams(
   const entry = forProfile ? forProfile[ruleId] : undefined;
   if (!entry || entry.f !== fixerId) return { params: clientParams, source: 'client' };
   // Klijentovi parametri se NE spajaju preko profilnih: spajanje bi vratilo upravo rupu koju ovo
-  // zatvara (klijent bi dopisao kljuc koji profil ne propisuje).
-  return { params: { ...entry.p }, source: 'profile' };
+  // zatvara (klijent bi dopisao kljuc koji profil ne propisuje). `deep` je iznimka samo za
+  // eksplicitni operativni izbor korisnika: ne mijenja cilj iz profila, nego određuje treba li
+  // ukloniti izravno oblikovanje koje bi inače nadjačalo taj cilj.
+  const params = { ...entry.p };
+  if (DEEP_CAPABLE.has(fixerId as FixerId) && typeof clientParams.deep === 'boolean') {
+    params.deep = clientParams.deep;
+  }
+  return { params, source: 'profile' };
 }
 
 /** Ima li ovaj profil ijedno pravilo s pecenom vrijednoscu (za dijagnostiku i testove). */

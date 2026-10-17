@@ -23,11 +23,20 @@ const HEADER_LITERAL = /(['"`])(?:x-forwarded-for|x-real-ip|cf-connecting-ip|tru
 const IP_SOURCE_TRACE = /forwarded|x-real-ip|real-ip|cf-connecting|connecting-ip|true-client|remoteaddr|conninfo/i;
 /** Jedina dopustena veza `ipHash` s pomocnikom. */
 const CANONICAL_BINDING = /\bconst ipHash = await hashClientIpSalted\(req\.headers, IP_HASH_SALT, SERVICE_ROLE(?:_KEY)?\);/g;
+const CANONICAL_RECOVERY_BINDING = /\brecoveryIpHash\s*=\s*await hashClientIpSalted\(req\.headers, IP_HASH_SALT, SERVICE_ROLE(?:_KEY)?\);/g;
 /** Funkcije koje limitiraju ili usporeduju po IP-u. Ispad ili zamjena pozivatelja mora pasti na gardu. */
 export const IP_CALLERS = [
   'analytics-event', 'client-error', 'faculty-request', 'generate-report', 'integrity-check',
   'preflight-start', 'profile-rules', 'redeem-referral-signup', 'repair-docx', 'source-check',
 ].map((n) => `supabase/functions/${n}/index.ts`);
+// repair-docx now has separate, independently limited status and recovery paths in addition to
+// ordinary quota accounting. Each must keep its own canonical hash of the trusted request headers.
+const EXPECTED_IP_HASH_BINDINGS: Readonly<Record<string, number>> = {
+  'supabase/functions/repair-docx/index.ts': 3,
+};
+const EXPECTED_RECOVERY_IP_HASH_BINDINGS: Readonly<Record<string, number>> = {
+  'supabase/functions/repair-docx/index.ts': 1,
+};
 /** Ulazni omotac: nepouzdan IP vraca 403 client_ip_untrusted prije rukovatelja. */
 const ENTRY_WRAP = /Deno\.serve\(requireTrustedClientIp\(async \(req: Request\) => \{/g;
 /** Poziv pomocnika, s prvim argumentom do zareza. */
@@ -55,7 +64,16 @@ export function xffKeyProblems(hashIpSrc: string, functions: SourceFile[]): stri
     if (/\bipHash\b/.test(code)) {
       const bindings = (code.match(CANONICAL_BINDING) ?? []).length;
       const assigns = (code.match(/\bipHash\s*=(?!=)/g) ?? []).length;
-      if (bindings !== 1 || assigns !== 1) out.push(`${f.path}: ipHash ne dolazi iskljucivo iz hashClientIpSalted(req.headers, ...) (${bindings} kanonskih, ${assigns} dodjela)`);
+      const expected = EXPECTED_IP_HASH_BINDINGS[f.path] ?? 1;
+      if (bindings !== expected || assigns !== expected) out.push(`${f.path}: ipHash ne dolazi iskljucivo iz hashClientIpSalted(req.headers, ...) (${bindings} kanonskih, ${assigns} dodjela; ocekuje se ${expected})`);
+    }
+    const expectedRecovery = EXPECTED_RECOVERY_IP_HASH_BINDINGS[f.path];
+    if (expectedRecovery !== undefined) {
+      const recoveryBindings = (code.match(CANONICAL_RECOVERY_BINDING) ?? []).length;
+      const recoveryAssigns = (code.match(/\brecoveryIpHash\s*=(?!=)/g) ?? []).length;
+      if (recoveryBindings !== expectedRecovery || recoveryAssigns !== expectedRecovery) {
+        out.push(f.path + ': recoveryIpHash ne dolazi iskljucivo iz hashClientIpSalted(req.headers, ...) (' + recoveryBindings + ' kanonskih, ' + recoveryAssigns + ' dodjela; ocekuje se ' + expectedRecovery + ')');
+      }
     }
     const badCalls = [...stripComments(f.text).matchAll(HELPER_CALL)].filter((m) => m[1] !== 'req.headers').length;
     if (badCalls > 0) out.push(`${f.path}: hashClientIpSalted ne dobiva req.headers (${badCalls}x)`);
@@ -70,7 +88,23 @@ export function xffCallerProblems(functions: SourceFile[]): string[] {
     const f = functions.find((x) => x.path === path);
     if (!f) { out.push(`${path}: IP pozivatelj nedostaje`); continue; }
     const code = stripComments(f.text);
-    if ((code.match(CANONICAL_BINDING) ?? []).length !== 1) out.push(`${path}: nema kanonske veze ipHash s hashClientIpSalted`);
+    if (path === 'supabase/functions/repair-docx/index.ts') {
+      const rateLimitCalls = [...code.matchAll(/claimRepairRateSlots\(([\s\S]*?)\);/g)];
+      const statusCalls = rateLimitCalls.filter(([, args]) => /['"]repair_status['"]/.test(args ?? ''));
+      const ipBoundStatusCalls = statusCalls.filter(([, args]) =>
+        /^\s*admin,\s*user\.id,\s*ipHash,\s*'repair_status',\s*REPAIR_STATUS_USER_DAILY_CAP,\s*REPAIR_STATUS_IP_DAILY_CAP,\s*$/.test(args ?? ''),
+      );
+      if (statusCalls.length !== 2 || ipBoundStatusCalls.length !== 2) {
+        out.push(`${path}: oba statusna limita moraju koristiti ipHash kao IP kljuc (${ipBoundStatusCalls.length}/2 ispravno vezana)`);
+      }
+    }
+    const bindings = (code.match(CANONICAL_BINDING) ?? []).length;
+    const expected = EXPECTED_IP_HASH_BINDINGS[path] ?? 1;
+    if (bindings !== expected) out.push(`${path}: ${expected === 1 ? 'nema kanonske veze ipHash s hashClientIpSalted' : `ocekuje ${expected} kanonske IP veze, pronadjeno ${bindings}`}`);
+    const expectedRecovery = EXPECTED_RECOVERY_IP_HASH_BINDINGS[path];
+    if (expectedRecovery !== undefined && (code.match(CANONICAL_RECOVERY_BINDING) ?? []).length !== expectedRecovery) {
+      out.push(path + ': ocekuje ' + expectedRecovery + ' kanonsku recovery IP vezu s hashClientIpSalted, pronadjeno ' + ((code.match(CANONICAL_RECOVERY_BINDING) ?? []).length));
+    }
     if ((code.match(ENTRY_WRAP) ?? []).length !== 1) out.push(`${path}: Deno.serve nije omotan u requireTrustedClientIp (403 client_ip_untrusted)`);
   }
   return out;
