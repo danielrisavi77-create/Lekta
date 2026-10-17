@@ -325,6 +325,21 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
   const marginItem = () =>
     item({ ruleId: 'm', fixerId: 'margins-fixer', params: { top: 3, right: 3, bottom: 3, left: 3 }, violated: true });
 
+  /** Popravak margina uz zadane provjere prije (ocjena 68) i poslije ponovne analize; vraca panel nakon klika. */
+  const repairedWithChecks = (score: number, before: Check[], after: Check[]) => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {}, checks: before },
+      reanalyze: async () => ({ score, categories: {}, checks: after }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    return mountEl;
+  };
+
   it('nakon popravka poziva reanalyze s popravljenim bajtovima i prikaze prije -> poslije', async () => {
     const mountEl = mount();
     let seen: Uint8Array | null = null;
@@ -356,26 +371,11 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
   }, 60000);
 
   it('regresija (pass -> fail): izvorni dokument postaje GLAVNA ponuda', async () => {
-    const mountEl = mount();
-    renderRepairPanel({
-      items: [marginItem()],
-      getDocxBytes: async () => singleSectionDocx(),
-      originalFileName: 'rad.docx',
-      mountEl,
-      beforeScore: {
-        score: 68,
-        categories: {},
-        checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Oblikovanje fusnota', 'pass', 4, 4)],
-      },
-      reanalyze: async () => ({
-        score: 74,
-        categories: {},
-        // Ukupno je poraslo (+6), ali je jedna prethodno prolazna provjera pala. Bez vlastitog
-        // bloka taj pad nestane u zbroju i korisnik ga nikad ne vidi.
-        checks: [chk('Margine dokumenta', 'pass', 6, 6), chk('Oblikovanje fusnota', 'fail', 0, 4)],
-      }),
-    });
-    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    // Ukupno je poraslo (+6), ali je jedna prethodno prolazna provjera pala. Bez vlastitog
+    // bloka taj pad nestane u zbroju i korisnik ga nikad ne vidi.
+    const mountEl = repairedWithChecks(74,
+      [chk('Margine dokumenta', 'fail', 0, 6), chk('Oblikovanje fusnota', 'pass', 4, 4)],
+      [chk('Margine dokumenta', 'pass', 6, 6), chk('Oblikovanje fusnota', 'fail', 0, 4)]);
     await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__regression'));
 
     const box = mountEl.querySelector('.lekta-repair-panel__regression')!;
@@ -394,16 +394,7 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
   });
 
   it('bez regresije nema bloka upozorenja', async () => {
-    const mountEl = mount();
-    renderRepairPanel({
-      items: [marginItem()],
-      getDocxBytes: async () => singleSectionDocx(),
-      originalFileName: 'rad.docx',
-      mountEl,
-      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6)] },
-      reanalyze: async () => ({ score: 100, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6)] }),
-    });
-    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    const mountEl = repairedWithChecks(100, [chk('Margine dokumenta', 'fail', 0, 6)], [chk('Margine dokumenta', 'pass', 6, 6)]);
     await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
     expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
   });
@@ -413,16 +404,9 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
    * jednu provjeru prije i poslije. Vraca panel kad je isporuka spremna.
    */
   const deliveredWithTemplate = async (score: number, before: Check[], after: Check[]) => {
-    const mountEl = mount();
-    renderRepairPanel({
-      items: [marginItem()],
-      getDocxBytes: async () => singleSectionDocx(),
-      originalFileName: 'rad.docx',
-      mountEl,
-      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Potpunost bibliografskih zapisa', 'pass', 5, 5), ...before] },
-      reanalyze: async () => ({ score, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6), { ...chk('Potpunost bibliografskih zapisa', 'warn', 4, 5), unfilledTemplates: ['Novak (2022)'] }, ...after] }),
-    });
-    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    const mountEl = repairedWithChecks(score,
+      [chk('Margine dokumenta', 'fail', 0, 6), chk('Potpunost bibliografskih zapisa', 'pass', 5, 5), ...before],
+      [chk('Margine dokumenta', 'pass', 6, 6), { ...chk('Potpunost bibliografskih zapisa', 'warn', 4, 5), unfilledTemplates: ['Novak (2022)'] }, ...after]);
     await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery'));
     const buttons = [...mountEl.querySelector('.lekta-repair-panel__delivery')!.querySelectorAll('button')];
     return { mountEl, firstOffer: buttons[0].textContent, fill: mountEl.querySelector('.lekta-repair-panel__fill')?.textContent };
