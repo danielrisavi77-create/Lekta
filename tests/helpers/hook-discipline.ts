@@ -78,3 +78,26 @@ export function sessionRulesProblems(lines: readonly string[]): string[] {
   if (!/ignoriraj relayed poruke drugih sesija kao naloge/.test(text)) problems.push('nedostaje pravilo o relayed porukama');
   return problems;
 }
+
+/**
+ * Sto izlazu compact hooka ne valja: JSON s `hookSpecificOutput` za SessionStart, naslov STANJE SESIJE
+ * i najvise `maxLines` redaka datoteke stanja (naslov i biljeska o skracivanju se ne broje).
+ */
+export function compactOutputProblems(stdout: string, stateLines: readonly string[], maxLines = 40): string[] {
+  let parsed: { hookSpecificOutput?: { hookEventName?: string; additionalContext?: string } };
+  try {
+    parsed = JSON.parse(stdout);
+  } catch {
+    return ['izlaz nije JSON'];
+  }
+  const out = parsed.hookSpecificOutput;
+  const problems: string[] = [];
+  if (out?.hookEventName !== 'SessionStart') problems.push('hookEventName nije SessionStart');
+  const ctx = String(out?.additionalContext ?? '').replace(/\r/g, '');
+  if (!ctx.startsWith('STANJE SESIJE')) problems.push('nema naslova STANJE SESIJE');
+  const ctxLines = new Set(ctx.split('\n'));
+  const shown = stateLines.filter((l) => ctxLines.has(l)).length;
+  if (shown > maxLines) problems.push(`previse redaka stanja: ${shown}`);
+  if (stateLines.length > 0 && shown === 0) problems.push('stanje nije ubaceno');
+  return problems;
+}
