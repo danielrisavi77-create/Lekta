@@ -15,6 +15,8 @@ import {
   sessionLabel,
   renderMarkdown,
   summarizeDay,
+  costOf,
+  COST_RATIOS,
 } from '../scripts/agents/usage-daily.mjs';
 
 const WEIGHTS = { 'claude-sonnet-5': 1, 'claude-opus-5': 2.5 };
@@ -132,6 +134,42 @@ describe('usage-daily: sinteticke mape', () => {
     expect(sonnet.weight).toBe(1 * (200 + 100));
     const opus = s.rows.find((r: { model: string }) => r.model === 'claude-opus-5');
     expect(opus.weight).toBe(2.5 * (10 + 20));
+  });
+
+  it('trosak s kesom ukljucuje citanje i pisanje kesa, a tezina ga ne vidi', () => {
+    // Sinteticki zapisi: tipican dan duge sesije, gdje kes nosi gotovo sav trosak.
+    const r = (o: Partial<{ model: string; session: string; input: number; output: number; cacheRead: number; cacheWrite: number }>) => ({
+      provider: 'claude', day: DAN, session: o.session ?? 'aaaaaaaa Lekta', model: o.model ?? 'claude-sonnet-5',
+      input: o.input ?? 0, output: o.output ?? 0, cacheRead: o.cacheRead ?? 0, cacheWrite: o.cacheWrite ?? 0,
+    });
+    const records = [
+      r({ input: 10, output: 100, cacheRead: 1_000_000, cacheWrite: 40_000 }),
+      r({ model: 'claude-opus-5', session: 'bbbbbbbb Lekta', input: 2, output: 20, cacheRead: 100_000, cacheWrite: 0 }),
+    ];
+    const s = summarizeDay(records, DAN, WEIGHTS);
+    const sonnet = 1 * (10 + 5 * 100 + 0.1 * 1_000_000 + 1.25 * 40_000);
+    const opus = 2.5 * (2 + 5 * 20 + 0.1 * 100_000);
+    expect(costOf(records[0], WEIGHTS)).toBeCloseTo(sonnet, 6);
+    expect(s.totalCost).toBeCloseTo(sonnet + opus, 6);
+    expect(s.cacheWriteCost).toBeCloseTo(1.25 * 40_000, 6);
+    expect(s.cacheReadCost).toBeCloseTo(0.1 * 1_000_000 + 2.5 * 0.1 * 100_000, 6);
+    expect(s.totalWeight).toBe(1 * 110 + 2.5 * 22);
+    expect(s.weightVisibleShare).toBeLessThan(0.01);
+    expect(s.topCostSessions[0].session).toBe('aaaaaaaa Lekta');
+    expect(s.topCostSessions[0].cacheWriteCost).toBeCloseTo(1.25 * 40_000, 6);
+    const md = renderMarkdown(s, { malformedLines: 0, unreadableFiles: 0 });
+    expect(md).toContain('Stvarni trosak s kesom (donja granica)');
+    expect(md).toContain('## Top 5 sesija po trosku s kesom');
+    expect(Object.isFrozen(COST_RATIOS)).toBe(true);
+  });
+
+  it('model bez costWeight nema izmisljen trosak', () => {
+    const rec = { provider: 'codex', day: DAN, session: 'cccccccc Lekta', model: 'gpt-test', input: 5, output: 5, cacheRead: 500, cacheWrite: 0 };
+    expect(costOf(rec, WEIGHTS)).toBeNull();
+    const s = summarizeDay([rec], DAN, WEIGHTS);
+    expect(s.rows[0].cost).toBeNull();
+    expect(s.totalCost).toBe(0);
+    expect(s.weightVisibleShare).toBeNull();
   });
 
   it('prazan dan: nula, bez pada, uz anomaliju za providere aktivne ranije', () => {
