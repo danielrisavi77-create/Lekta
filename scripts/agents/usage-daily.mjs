@@ -18,6 +18,8 @@
  * imenom zadnje mape radnog direktorija (projekt ili worktree), bez ostatka putanje.
  *
  * Tezina = costWeight(model) x (ulaz + izlaz), kao u `usage-report.mjs`; citanje kesa nije ulaz.
+ * Trosak s kesom = costWeight(model) x (ulaz + 5 izlaz + 0,1 citanje kesa + 1,25 pisanje kesa), vidi
+ * `COST_RATIOS`; to je mjerilo za ustedu, jer kes cini velik dio stvarnog troska.
  * Model bez tezine u `config/agent-routing.json` dobiva null, nikad izmisljenu vrijednost.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
@@ -166,6 +168,25 @@ function addDays(day, n) {
 
 const weightOf = (r, weights) => (typeof weights[r.model] === 'number' ? weights[r.model] * (r.input + r.output) : null);
 
+/**
+ * Omjeri cijene po vrsti tokena, relativno prema cijeni ulaza (Anthropic cjenik: izlaz 5x ulaz,
+ * citanje kesa 0,1x, pisanje kesa 1,25x uz TTL od 5 min). Claude Code pise kes i s TTL-om od 1 h,
+ * sto je 2x, a transkript ne razdvaja TTL; zato je trosak DONJA granica.
+ *
+ * Zasto: `weight` broji samo ulaz + izlaz. Izmjereno 17. 10. 2026. nad 3. do 10. 10.: citanje i
+ * pisanje kesa cine 88 do 98 % stvarnog troska, pa je tezina vidjela 0,5 do 2,4 % troska.
+ */
+export const COST_RATIOS = Object.freeze({ input: 1, output: 5, cacheRead: 0.1, cacheWrite: 1.25 });
+
+/** Stvarni trosak u jedinicama ulaznog tokena modela s costWeight 1; null za model bez tezine. */
+export const costOf = (r, weights) => (typeof weights[r.model] === 'number'
+  ? weights[r.model] * (COST_RATIOS.input * r.input + COST_RATIOS.output * r.output
+    + COST_RATIOS.cacheRead * r.cacheRead + COST_RATIOS.cacheWrite * r.cacheWrite)
+  : null);
+
+const cacheWriteCostOf = (r, weights) => (typeof weights[r.model] === 'number' ? weights[r.model] * COST_RATIOS.cacheWrite * r.cacheWrite : 0);
+const cacheReadCostOf = (r, weights) => (typeof weights[r.model] === 'number' ? weights[r.model] * COST_RATIOS.cacheRead * r.cacheRead : 0);
+
 /** Cista agregacija za jedan dan uz prethodnih 7 dana kao usporedbu. */
 export function summarizeDay(records, day, weights, { weekly = false } = {}) {
   const today = records.filter((r) => r.day === day);
@@ -174,14 +195,14 @@ export function summarizeDay(records, day, weights, { weekly = false } = {}) {
   const models = new Map();
   for (const r of today) {
     const k = `${r.provider}\u0000${r.model}`;
-    const m = models.get(k) ?? { provider: r.provider, model: r.model, input: 0, output: 0, cacheRead: 0, cacheWrite: 0, weight: 0, weightKnown: true, costUsd: null };
+    const m = models.get(k) ?? { provider: r.provider, model: r.model, input: 0, output: 0, cacheRead: 0, cacheWrite: 0, weight: 0, cost: 0, weightKnown: true, costUsd: null };
     m.input += r.input; m.output += r.output; m.cacheRead += r.cacheRead; m.cacheWrite += r.cacheWrite;
     const w = weightOf(r, weights);
-    if (w == null) m.weightKnown = false; else m.weight += w;
+    if (w == null) m.weightKnown = false; else { m.weight += w; m.cost += costOf(r, weights); }
     if (typeof r.costUsd === 'number') m.costUsd = (m.costUsd ?? 0) + r.costUsd;
     models.set(k, m);
   }
-  const rows = [...models.values()].map((m) => ({ ...m, weight: m.weightKnown ? m.weight : null }))
+  const rows = [...models.values()].map((m) => ({ ...m, weight: m.weightKnown ? m.weight : null, cost: m.weightKnown ? m.cost : null }))
     .sort((a, b) => a.provider.localeCompare(b.provider) || (b.weight ?? -1) - (a.weight ?? -1));
 
   const sessionWeights = (list) => {
@@ -190,15 +211,28 @@ export function summarizeDay(records, day, weights, { weekly = false } = {}) {
       const w = weightOf(r, weights);
       if (w == null) continue;
       const k = `${r.day}\u0000${r.provider}\u0000${r.session}`;
-      s.set(k, { provider: r.provider, session: r.session, weight: (s.get(k)?.weight ?? 0) + w });
+      const prev = s.get(k);
+      s.set(k, {
+        provider: r.provider,
+        session: r.session,
+        weight: (prev?.weight ?? 0) + w,
+        cost: (prev?.cost ?? 0) + costOf(r, weights),
+        cacheWriteCost: (prev?.cacheWriteCost ?? 0) + cacheWriteCostOf(r, weights),
+      });
     }
     return [...s.values()];
   };
   const todaySessions = sessionWeights(today).sort((a, b) => b.weight - a.weight);
+  const todayCostSessions = [...todaySessions].sort((a, b) => b.cost - a.cost || a.session.localeCompare(b.session));
   const histSessions = sessionWeights(history);
   const avgSession = histSessions.length ? histSessions.reduce((a, s) => a + s.weight, 0) / histSessions.length : null;
+  const avgSessionCost = histSessions.length ? histSessions.reduce((a, s) => a + s.cost, 0) / histSessions.length : null;
 
   const total = (list) => list.reduce((a, r) => a + (weightOf(r, weights) ?? 0), 0);
+  const totalCostOf = (list) => list.reduce((a, r) => a + (costOf(r, weights) ?? 0), 0);
+  const totalCost = totalCostOf(today);
+  const cacheWriteCost = today.reduce((a, r) => a + cacheWriteCostOf(r, weights), 0);
+  const cacheReadCost = today.reduce((a, r) => a + cacheReadCostOf(r, weights), 0);
   const histDays = new Set(history.map((r) => r.day));
   const avgDay = histDays.size ? total(history) / 7 : null;
 
@@ -209,6 +243,9 @@ export function summarizeDay(records, day, weights, { weekly = false } = {}) {
   const anomalies = [];
   if (avgSession) {
     for (const s of todaySessions) if (s.weight > 3 * avgSession) anomalies.push(`sesija ${s.session} (${s.provider}) ima tezinu ${fmt(s.weight)}, vise od 3x prosjeka sesije prethodnih 7 dana (${fmt(avgSession)})`);
+  }
+  if (avgSessionCost) {
+    for (const s of todayCostSessions) if (s.cost > 3 * avgSessionCost) anomalies.push(`sesija ${s.session} (${s.provider}) ima trosak s kesom ${fmt(s.cost)}, vise od 3x prosjeka sesije prethodnih 7 dana (${fmt(avgSessionCost)})`);
   }
   for (const p of new Set(history.map((r) => r.provider))) {
     if (!today.some((r) => r.provider === p)) anomalies.push(`provider ${p} je bio aktivan u prethodnih 7 dana, a danas nema nijednog zapisa`);
@@ -227,6 +264,9 @@ export function summarizeDay(records, day, weights, { weekly = false } = {}) {
       const share = b.input + b.cacheRead > 0 ? b.cacheRead / (b.input + b.cacheRead) : null;
       if (share != null && share < 0.5) suggestions.push(`${p}: udio kesa u tjednu je ${pct(share)}, ispod 50 %; dulje sesije sa stabilnim uvodom i manje hladnih startova podizu ga`);
     }
+    const weekCost = totalCostOf(week);
+    const weekWrite = week.reduce((a, r) => a + cacheWriteCostOf(r, weights), 0);
+    if (weekCost > 0 && weekWrite / weekCost > 0.3) suggestions.push(`${pct(weekWrite / weekCost)} tjednog troska je pisanje kesa (hladni startovi: nove sesije, podagenti, workflowi, compact); jedna sesija po zadatku i bez podagenata za posao koji jedna sesija moze sama`);
     const wTotal = total(week);
     const heavy = week.filter((r) => (weights[r.model] ?? 0) >= 2.5).reduce((a, r) => a + (weightOf(r, weights) ?? 0), 0);
     if (wTotal > 0 && heavy / wTotal > 0.5) suggestions.push(`${pct(heavy / wTotal)} tjedne tezine otpada na modele s costWeight >= 2,5; docs i light zadatke iz docs/agents/tasks.json usmjeriti na claude-sonnet-5`);
@@ -243,8 +283,14 @@ export function summarizeDay(records, day, weights, { weekly = false } = {}) {
     day,
     rows,
     topSessions: todaySessions.slice(0, 5),
+    topCostSessions: todayCostSessions.slice(0, 5),
     cacheShare,
     totalWeight: total(today),
+    totalCost,
+    cacheReadCost,
+    cacheWriteCost,
+    // Koliki dio stvarnog troska stara tezina uopce vidi; null kad nema troska.
+    weightVisibleShare: totalCost > 0 ? total(today) / totalCost : null,
     avgDay,
     historyDays: histDays.size,
     anomalies,
@@ -262,11 +308,16 @@ function pct(x) {
 export function renderMarkdown(s, stats) {
   const L = [];
   L.push(`# Potrosnja tokena ${s.day}`, '');
+  const udio = (x) => (s.totalCost > 0 ? pct(x / s.totalCost) : 'n/a');
+  L.push(`Stvarni trosak s kesom (donja granica): ${fmt(s.totalCost)}; od toga citanje kesa ${udio(s.cacheReadCost)}, pisanje kesa ${udio(s.cacheWriteCost)}. Tezina (samo ulaz + izlaz) vidi ${pct(s.weightVisibleShare)} troska.`, '');
   L.push(`Ukupna tezina: ${fmt(s.totalWeight)}; prosjek dana u prethodnih 7 dana: ${fmt(s.avgDay)} (dana sa zapisom: ${s.historyDays}). Udio kesa: ${pct(s.cacheShare)}.`, '');
   L.push('## Po provideru i modelu', '');
-  L.push('| Provider | Model | Ulaz | Izlaz | Kes citanje | Kes pisanje | Tezina |', '| --- | --- | ---: | ---: | ---: | ---: | ---: |');
-  if (!s.rows.length) L.push('| - | nema zapisa za ovaj dan | 0 | 0 | 0 | 0 | 0 |');
-  for (const r of s.rows) L.push(`| ${r.provider} | ${r.model} | ${fmt(r.input)} | ${fmt(r.output)} | ${fmt(r.cacheRead)} | ${fmt(r.cacheWrite)} | ${fmt(r.weight)}${r.costUsd != null ? ` (${r.costUsd.toFixed(2)} USD)` : ''} |`);
+  L.push('| Provider | Model | Ulaz | Izlaz | Kes citanje | Kes pisanje | Tezina | Trosak s kesom |', '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |');
+  if (!s.rows.length) L.push('| - | nema zapisa za ovaj dan | 0 | 0 | 0 | 0 | 0 | 0 |');
+  for (const r of s.rows) L.push(`| ${r.provider} | ${r.model} | ${fmt(r.input)} | ${fmt(r.output)} | ${fmt(r.cacheRead)} | ${fmt(r.cacheWrite)} | ${fmt(r.weight)}${r.costUsd != null ? ` (${r.costUsd.toFixed(2)} USD)` : ''} | ${fmt(r.cost)} |`);
+  L.push('', '## Top 5 sesija po trosku s kesom', '');
+  if (!s.topCostSessions.length) L.push('- nema');
+  for (const t of s.topCostSessions) L.push(`- ${t.session} (${t.provider}): ${fmt(t.cost)}, od toga pisanje kesa ${t.cost > 0 ? pct(t.cacheWriteCost / t.cost) : 'n/a'}`);
   L.push('', '## Top 5 sesija po tezini', '');
   if (!s.topSessions.length) L.push('- nema');
   for (const t of s.topSessions) L.push(`- ${t.session} (${t.provider}): ${fmt(t.weight)}`);
