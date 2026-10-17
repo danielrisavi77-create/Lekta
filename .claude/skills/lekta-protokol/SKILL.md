@@ -7,6 +7,8 @@ description: "Koristi pri svakom radu u Lekta repou (src/repair, src/citations, 
 
 Kanonska pravila su u `CLAUDE.md` (root) i scoped `CLAUDE.md` vodičima (`src/repair`, `src/citations`, `src/docx`, `supabase`, `scripts/autonomy`). Ovaj skill ih ne duplicira. Prvo učitaj scoped vodič za domenu u kojoj radiš. Skill dodaje ono što se u fix commitima stvarno ponavljalo.
 
+Stednja konteksta (sazetak umjesto izvora, STANJE.md, compact na 60 posto): odjeljak `## Stednja konteksta` u root `CLAUDE.md`.
+
 ## Granica proizvoda
 Lekta analizira i deterministički popravlja FORMU. Nikad ne piše, ne prepravlja i ne ocjenjuje tekst, ni modelom ni drugim putem. Vidljivi autorski tekst mora biti isti prije i poslije Word `Fields.Update()`. Iznimke su popisane u `src/repair/CLAUDE.md`, ne proširuj ih.
 

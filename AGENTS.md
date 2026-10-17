@@ -95,6 +95,19 @@ API credentiale drugih providera. Tocan ugovor je `docs/agents/ORCHESTRATION.md`
 - Tezak posao ide samo kroz `node scripts/with-gate-lock.mjs`; vidi `docs/agents/ROUTING.md`,
   "Teski poslovi na laptopu".
 
+## Stednja konteksta
+
+1. Citaj sazetak, ne izvor: pregled samo tablica nalaza; CI pad kroz `--log-failed` i grep `FAIL` ili
+   `Error`, najvise 10 redaka; PR kroz kratki pregled, ne cijelo tijelo.
+2. Alati vracaju jedan redak: `gh` i `git` s `--jq` ili `tail -1`; `git log` uvijek s `-n`; nikad `cat`
+   velike datoteke ni cijeli predlozak; `ps` i `wmic` filtrirani.
+3. Poruke medju sesijama najvise 5 redaka, s brojevima i hashevima; "done" jednom porukom.
+4. Jedna datoteka stanja po sesiji, `scratchpad/STANJE.md`, najvise 20 redaka (zadatak, worktree, head,
+   sljedeci korak, otvoreni nalazi), osvjezena prije tezeg koraka; nakon compacta prvo nju (hook je ubacuje).
+5. Rucni compact kad kontekst predje 60 posto, s uputom: zadrzi zadatak, head, otvorene nalaze i proslijedjene
+   naredbe; odbaci logove, tijela PR-ova i stare poruke. Prozor je 400.000 tokena (`.claude/settings.json` env).
+6. Ne ucitavaj po navici cijele vodice: grep po naslovu, samo odjeljak domene.
+
 ## Završna provjera
 
 Navedi tocni HEAD/base, stvarni opseg, pokrenute naredbe i svjeze rezultate te neizvedene provjere.
