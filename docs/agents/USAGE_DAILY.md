@@ -4,6 +4,8 @@
 `%USERPROFILE%\Lekta-usage\YYYY-MM-DD.md`; `--json` ispisuje isti sazetak na standardni izlaz.
 Opcije: `--day YYYY-MM-DD`, `--repo <korijen klona>`, `--out-dir <mapa>`, `--weekly`.
 
+Mjerilo za ustedu je trosak s kesom, ne tezina; program i pravila stednje su u `docs/agents/STEDNJA_TOKENA.md`.
+
 ## Sto cita
 
 | Provider | Izvor | Napomena |
