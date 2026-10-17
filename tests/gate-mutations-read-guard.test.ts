@@ -12,7 +12,7 @@ const start = SOURCE.indexOf('export const PRAG_REDAKA');
 const end = SOURCE.indexOf('\n}\n', SOURCE.indexOf('export function judgeRead(')) + 3;
 const BLOK = SOURCE.slice(start, end);
 
-type Judge = (u: { toolInput: Record<string, unknown>; ext: string; redaka: number | null; bajtova: number | null }) => { allow: boolean };
+type Judge = (u: { toolInput: Record<string, unknown>; ext: string; redaka: number | null; bajtova: number | null; binarna?: boolean }) => { allow: boolean };
 const izvedi = (blok: string): Judge => new Function(`${blok.replace(/export /g, '')}\nreturn judgeRead;`)() as Judge;
 function mutiraj(from: string, to: string): string {
   const out = BLOK.replace(from, to);
@@ -31,9 +31,29 @@ describe('mutacije: read-guard presuda', () => {
     expect(izvedi(BLOK)(S_LIMIT).allow).toBe(true);
   });
 
-  it('mutant koji ignorira prag redaka propusta veliku datoteku', () => {
-    const m = mutiraj('if (redaka <= PRAG_REDAKA && bajtova <= PRAG_BAJTOVA)', 'if (true)');
-    expect(izvedi(m)(VELIKA).allow).toBe(true);
+  it('mutant koji ignorira prag redaka propusta mnogo kratkih redaka', () => {
+    const m = mutiraj('const prevelikaRedcima = redaka != null && redaka > PRAG_REDAKA;', 'const prevelikaRedcima = false;');
+    const kratki = { toolInput: {}, ext: '.ts', redaka: 301, bajtova: 602 };
+    expect(izvedi(BLOK)(kratki).allow).toBe(false);
+    expect(izvedi(m)(kratki).allow).toBe(true);
+  });
+
+  it('mutant s povisenim pragom redaka propusta 301 redak', () => {
+    const m = mutiraj('export const PRAG_REDAKA = 300;', 'export const PRAG_REDAKA = 3000;');
+    expect(izvedi(m)({ toolInput: {}, ext: '.ts', redaka: 301, bajtova: 602 }).allow).toBe(true);
+  });
+
+  it('mutant s povisenim pragom bajtova propusta 40.001 bajt', () => {
+    const m = mutiraj('export const PRAG_BAJTOVA = 40_000;', 'export const PRAG_BAJTOVA = 400_000;');
+    expect(izvedi(m)({ toolInput: {}, ext: '.js', redaka: null, bajtova: 40_001 }).allow).toBe(true);
+    expect(izvedi(BLOK)({ toolInput: {}, ext: '.js', redaka: null, bajtova: 40_001 }).allow).toBe(false);
+  });
+
+  it('mutant koji binarnu datoteku tretira kao tekst je odbija', () => {
+    const m = mutiraj('if (bajtova == null || binarna) return', 'if (bajtova == null) return');
+    const bin = { toolInput: {}, ext: '', redaka: null, bajtova: 5_000_000, binarna: true };
+    expect(izvedi(BLOK)(bin).allow).toBe(true);
+    expect(izvedi(m)(bin).allow).toBe(false);
   });
 
   it('mutant koji ne priznaje limit odbija i izricito ciljano citanje', () => {
@@ -42,7 +62,7 @@ describe('mutacije: read-guard presuda', () => {
   });
 
   it('mutant koji gleda samo retke propusta jedan golemi redak', () => {
-    const m = mutiraj('redaka <= PRAG_REDAKA && bajtova <= PRAG_BAJTOVA', 'redaka <= PRAG_REDAKA');
+    const m = mutiraj('const prevelikaBajtovima = bajtova > PRAG_BAJTOVA;', 'const prevelikaBajtovima = false;');
     expect(izvedi(m)({ toolInput: {}, ext: '.js', redaka: 1, bajtova: 500_000 }).allow).toBe(true);
     expect(izvedi(BLOK)({ toolInput: {}, ext: '.js', redaka: 1, bajtova: 500_000 }).allow).toBe(false);
   });

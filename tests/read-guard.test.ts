@@ -36,11 +36,18 @@ describe('read-guard: cista presuda', () => {
     expect(brojRedaka('a\r\nb')).toBe(2);
   });
 
-  it('prag je tocan: 300 redaka prolazi, 301 se odbija', () => {
-    expect(judgeRead({ toolInput: {}, ext: '.ts', redaka: PRAG_REDAKA, bajtova: 600 }).allow).toBe(true);
-    const r = judgeRead({ toolInput: {}, ext: '.ts', redaka: PRAG_REDAKA + 1, bajtova: 602 });
+  it('ugovoreni pragovi su doslovno 300 redaka i 40.000 bajtova', () => {
+    expect([PRAG_REDAKA, PRAG_BAJTOVA]).toEqual([300, 40_000]);
+    expect(judgeRead({ toolInput: {}, ext: '.ts', redaka: 300, bajtova: 600 }).allow).toBe(true);
+    const r = judgeRead({ toolInput: {}, ext: '.ts', redaka: 301, bajtova: 602 });
     expect(r.allow).toBe(false);
-    expect(r.reason).toContain(`limit: ${PRAG_REDAKA + 1}`);
+    expect(r.reason).toContain('limit: 301');
+    expect(judgeRead({ toolInput: {}, ext: '.js', redaka: null, bajtova: 40_000 }).allow).toBe(true);
+    expect(judgeRead({ toolInput: {}, ext: '.js', redaka: null, bajtova: 40_001 }).allow).toBe(false);
+  });
+
+  it('binarna datoteka prolazi bez obzira na velicinu', () => {
+    expect(judgeRead({ toolInput: {}, ext: '', redaka: null, bajtova: 5_000_000, binarna: true }).allow).toBe(true);
   });
 
   it('izricit limit, netekstualna datoteka i nepoznata velicina uvijek prolaze', () => {
@@ -59,6 +66,18 @@ describe('read-guard: hook kao proces', () => {
 
   it('odbija jedan dugi redak iznad praga bajtova', () => {
     expect(hook({ tool_name: 'Read', tool_input: { file_path: sirokiRedak } }).status).toBe(2);
+  });
+
+  it('limit prolazi prije pristupa disku: i direktorij s limit je exit 0', () => {
+    expect(hook({ tool_name: 'Read', tool_input: { file_path: dir, limit: 1 } }).status).toBe(0);
+  });
+
+  it('binarna datoteka bez ekstenzije iznad praga prolazi (NUL u uzorku)', () => {
+    const blob = join(dir, 'blob');
+    const b = Buffer.alloc(PRAG_BAJTOVA * 2, 0xff);
+    b[10] = 0;
+    writeFileSync(blob, b);
+    expect(hook({ tool_name: 'Read', tool_input: { file_path: blob } }).status).toBe(0);
   });
 
   it('propusta malu datoteku, limit, nepostojecu datoteku i neispravan ulaz (fail-open)', () => {
