@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { compactOutputProblems } from './helpers/hook-discipline';
+import { compactOutputProblems, compactSettingsProblems, missingHookRegistrations } from './helpers/hook-discipline';
 
 /**
  * COMPACT-STANJE GARD (Stednja konteksta, odluka vlasnika 2026-10-17). Mutira se KOPIJA izvora
@@ -78,5 +78,69 @@ describe('mutacije: compact-stanje hook (ogranicenje redaka)', () => {
   it('mutant: stanje se ne ubacuje (uvijek uputa) se hvata', () => {
     const m = mutiraj('context = formatStanje(findStanje(stanjeCandidates(input, deps), deps.read));', 'context = UPUTA;');
     expect(problemiKopije(m, 'uvijek-uputa')).toEqual(['stanje nije ubaceno']);
+  });
+});
+
+/**
+ * REGISTRACIJA COMPACT HOOKA (Stednja konteksta). Mutira se PARSIRANA kopija stvarnog
+ * `.claude/settings.json`, nikad datoteka. Prazan matcher pokriva i start sesije, pa ga gard mora
+ * odbiti iako ga `missingHookRegistrations` (matcherCovers) propusta.
+ */
+type Postavke = {
+  env?: Record<string, unknown>;
+  hooks: Record<string, Array<{ matcher?: string; hooks: Array<{ type?: string; command?: string }> }>>;
+};
+const postavke = (): Postavke => JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8')) as Postavke;
+const compactUnos = (p: Postavke) => {
+  const unos = p.hooks.SessionStart.find((e) => e.hooks.some((h) => String(h.command).includes('compact-stanje.mjs')));
+  if (!unos) throw new Error('compact unos nije u stvarnim postavkama');
+  return unos;
+};
+
+describe('mutacije: registracija compact hooka i prozora u settings.json', () => {
+  it('BASELINE: stvarne postavke su ciste', () => {
+    const p = postavke();
+    expect(compactSettingsProblems(p)).toEqual([]);
+    expect(missingHookRegistrations(p)).toEqual([]);
+  });
+
+  it('mutant: uklonjen compact unos se hvata (oba garda)', () => {
+    const p = postavke();
+    const unos = compactUnos(p);
+    p.hooks.SessionStart = p.hooks.SessionStart.filter((e) => e !== unos);
+    expect(compactSettingsProblems(p)).toEqual(['SessionStart nema compact-stanje hook']);
+    expect(missingHookRegistrations(p)).toContainEqual(expect.stringContaining('SessionStart[compact]'));
+  });
+
+  it('mutant: uklonjen matcher compact se hvata (iako ga matcherCovers propusta)', () => {
+    const p = postavke();
+    delete compactUnos(p).matcher;
+    expect(missingHookRegistrations(p)).toEqual([]);
+    expect(compactSettingsProblems(p)).toEqual(['compact-stanje hook nije pod matcherom compact: null']);
+  });
+
+  it('mutant: matcher startup umjesto compact se hvata', () => {
+    const p = postavke();
+    compactUnos(p).matcher = 'startup';
+    expect(compactSettingsProblems(p)).toEqual(['compact-stanje hook nije pod matcherom compact: "startup"']);
+    expect(missingHookRegistrations(p)).toContainEqual(expect.stringContaining('SessionStart[compact]'));
+  });
+
+  it('mutant: relativna naredba umjesto sidrene se hvata', () => {
+    const p = postavke();
+    compactUnos(p).hooks[0].command = 'node scripts/hooks/compact-stanje.mjs';
+    expect(compactSettingsProblems(p)).toEqual(['SessionStart nema compact-stanje hook']);
+  });
+
+  it('mutant: uklonjen env ili krivi prozor se hvata', () => {
+    const bez = postavke();
+    delete bez.env;
+    expect(compactSettingsProblems(bez)).toEqual(['env.CLAUDE_CODE_AUTO_COMPACT_WINDOW: null']);
+    const broj = postavke();
+    broj.env = { ...broj.env, CLAUDE_CODE_AUTO_COMPACT_WINDOW: 400000 };
+    expect(compactSettingsProblems(broj)).toEqual(['env.CLAUDE_CODE_AUTO_COMPACT_WINDOW: 400000']);
+    const veci = postavke();
+    veci.env = { ...veci.env, CLAUDE_CODE_AUTO_COMPACT_WINDOW: '1000000' };
+    expect(compactSettingsProblems(veci)).toEqual(['env.CLAUDE_CODE_AUTO_COMPACT_WINDOW: "1000000"']);
   });
 });

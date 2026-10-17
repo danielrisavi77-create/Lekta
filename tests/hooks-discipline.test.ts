@@ -8,7 +8,7 @@ import { pathToFileURL } from 'node:url';
 import { BLOCK_MESSAGE, judgeCpuDiscipline, packageScriptReader, splitCommand } from '../scripts/hooks/cpu-discipline.mjs';
 import { MAX_BLOCKS, counterPath, decideStop, openItems } from '../scripts/hooks/implementer-stop.mjs';
 import { formatSessionRules } from '../scripts/agents/session-bootstrap.mjs';
-import { matcherCovers, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
+import { compactSettingsProblems, matcherCovers, missingHookRegistrations, sessionRulesProblems } from './helpers/hook-discipline';
 
 // Stvarne definicije skripti iz package.json: `npm run check` vec ide kroz with-gate-lock, `build` ne.
 const readScript = packageScriptReader(resolve('.'));
@@ -270,6 +270,11 @@ describe('registracija u repo .claude/settings.json', () => {
   it('svi ocekivani hookovi su registrirani, tool-guard i za Supabase MCP apply_migration', () => {
     const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
     expect(missingHookRegistrations(settings)).toEqual([]);
+  });
+
+  it('Stednja konteksta: prozor 400000 u env i compact-stanje pod SessionStart matcherom compact', () => {
+    const settings = JSON.parse(readFileSync(resolve('.claude/settings.json'), 'utf8'));
+    expect(compactSettingsProblems(settings)).toEqual([]);
   });
 
   it('tool-guard za MCP apply_migration blokira i kad je sesija u poddirektoriju (izravni signal)', () => {

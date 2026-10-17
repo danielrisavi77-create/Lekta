@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "400000"
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -6,6 +9,15 @@
           {
             "type": "command",
             "command": "node scripts/agents/session-bootstrap.mjs --worktree-gc"
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/scripts/hooks/compact-stanje.mjs\""
           }
         ]
       }

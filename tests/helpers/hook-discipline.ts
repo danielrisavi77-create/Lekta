@@ -16,6 +16,8 @@ export const EXPECTED_HOOKS: ReadonlyArray<{ event: string; matcher?: string; co
   // `--worktree-gc` samo u hooku: rucni i testni poziv bootstrapa ne smije uklanjati stabla stroja.
   // SessionStart se izvodi u direktoriju u kojem sesija pocinje, pa ostaje relativan.
   { event: 'SessionStart', command: 'node scripts/agents/session-bootstrap.mjs --worktree-gc' },
+  // Stednja konteksta: nakon compacta ubaci STANJE.md; tocan matcher provjerava `compactSettingsProblems`.
+  { event: 'SessionStart', matcher: 'compact', command: hookCommand('scripts/hooks/compact-stanje.mjs') },
   { event: 'PreToolUse', matcher: 'Bash', command: hookCommand('scripts/hooks/cpu-discipline.mjs') },
   { event: 'PreToolUse', matcher: 'Edit', command: hookCommand('scripts/hooks/task-scope-guard.mjs') },
   { event: 'PreToolUse', matcher: 'Write', command: hookCommand('scripts/hooks/task-scope-guard.mjs') },
@@ -63,6 +65,29 @@ export function missingHookRegistrations(settings: unknown): string[] {
     if (!found) missing.push(`${want.event}${want.matcher ? `[${want.matcher}]` : ''}: ${want.command}`);
   }
   return missing;
+}
+
+/** Prozor auto compacta (Stednja konteksta, odluka vlasnika 2026-10-17); pravilo 5 u CLAUDE.md ga navodi. */
+export const AUTO_COMPACT_WINDOW = '400000';
+
+/**
+ * Sto u postavkama ne valja za Stednju konteksta: `env.CLAUDE_CODE_AUTO_COMPACT_WINDOW` mora biti tocno
+ * AUTO_COMPACT_WINDOW, a SessionStart mora imati unos s matcherom TOCNO `compact` i naredbom compact hooka.
+ * Tocan matcher je namjeran: prazan matcher bi pokrio i start sesije, pa `missingHookRegistrations` to ne vidi.
+ */
+export function compactSettingsProblems(settings: unknown): string[] {
+  const s = settings as { env?: Record<string, unknown>; hooks?: Record<string, HookEntry[]> } | null;
+  const problems: string[] = [];
+  const window = s?.env?.CLAUDE_CODE_AUTO_COMPACT_WINDOW;
+  if (window !== AUTO_COMPACT_WINDOW) problems.push(`env.CLAUDE_CODE_AUTO_COMPACT_WINDOW: ${JSON.stringify(window ?? null)}`);
+  const command = hookCommand('scripts/hooks/compact-stanje.mjs');
+  const entries = Array.isArray(s?.hooks?.SessionStart) ? s.hooks.SessionStart : [];
+  const withCommand = entries.filter((e) => (e.hooks ?? []).some((h) => h.type === 'command' && h.command === command));
+  if (withCommand.length === 0) problems.push('SessionStart nema compact-stanje hook');
+  else if (!withCommand.some((e) => e.matcher === 'compact')) {
+    problems.push(`compact-stanje hook nije pod matcherom compact: ${withCommand.map((e) => JSON.stringify(e.matcher ?? null)).join(', ')}`);
+  }
+  return problems;
 }
 
 /** Sto pravilima sesije nedostaje: najvise 8 redaka, CPU pravilo, granice stroja, relayed poruke. */

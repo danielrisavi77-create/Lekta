@@ -420,10 +420,16 @@ describe('integracija je fail-open i ne blokira start sesije', () => {
     expect(src).toMatch(/if \(process\.argv\.includes\('--worktree-gc'\)\) \{\n(?:\s*\/\/[^\n]*\n)*\s*console\.log\(runWorktreeGc\(\{ root \}\)\);/);
     expect(src.match(/runWorktreeGc\(\{ root \}\)/g)).toHaveLength(1);
     const settings = JSON.parse(readFileSync(resolve(process.cwd(), '.claude/settings.json'), 'utf8')) as {
-      hooks: { SessionStart: Array<{ hooks: Array<{ command: string }> }> };
+      hooks: { SessionStart: Array<{ matcher?: string; hooks: Array<{ command: string }> }> };
     };
     const commands = settings.hooks.SessionStart.flatMap((e) => e.hooks.map((h) => h.command));
-    expect(commands).toEqual(['node scripts/agents/session-bootstrap.mjs --worktree-gc']);
+    // Bootstrap (s --worktree-gc) je tocno jedan unos; uz njega smije biti samo compact-stanje pod matcherom compact.
+    expect(commands.filter((c) => c.includes('session-bootstrap.mjs'))).toEqual(['node scripts/agents/session-bootstrap.mjs --worktree-gc']);
+    expect(commands.filter((c) => c.includes('--worktree-gc'))).toHaveLength(1);
+    const ostali = settings.hooks.SessionStart.filter((e) => !e.hooks.some((h) => h.command.includes('session-bootstrap.mjs')));
+    expect(ostali.map((e) => [e.matcher, e.hooks.map((h) => h.command)])).toEqual([
+      ['compact', ['node "${CLAUDE_PROJECT_DIR}/scripts/hooks/compact-stanje.mjs"']],
+    ]);
   });
 
   it('gate preflight: redak s brojem uklonjivih i naredbom; pad mjerenja ne rusi poruku', () => {
