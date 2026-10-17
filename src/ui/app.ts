@@ -45,8 +45,7 @@ import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { renderRepairPanel, advancedFormFor, DEEP_TOGGLE_HTML, DEEP_CAPABLE, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
 import { trackProfileUpdate } from './profile-update-signal';
 import { bindRepairWorkflow } from './repair-workflow-binding';
-import { recoveryFor } from '../repair/recovery-policy';
-import { renderRepairRecovery } from './repair-recovery-view';
+import { confirmSeparateRepairAttempt, createRepairRequestOwnerResolver, prepareRepairRequestRecovery, renderRepairAuthTimeoutRecovery, runPendingRepair, type RepairRequestRecoveryIdentity } from './repair-request-recovery';
 import { verifiedOutcomeFrom } from '../repair/repair-outcome-verified';
 import { repairOutcomeHtml, outcomeSentenceHtml } from './results/repair-outcome-view';
 import { renderRepairLedgerModal } from './repair-price-slider';
@@ -1982,8 +1981,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  wrap.appendChild(renderRepairLedgerModal({items,listEl:list,advancedFormFor}));
  // T08: kontroler toka je vlasnik odabira i faza; `pending` nosi zahtjev koji go() slozi PRIJE start().
  let pending: any=null;
+ let checkExistingRequest:(()=>Promise<boolean>)|null=null;
+ const resolveRepairRequestOwner=createRepairRequestOwnerResolver(()=>authStore.load()?.userId||null);
  const binding=bindRepairWorkflow<any>({items,listEl:list,sessionToken:`${file?.name}:${file?.size}:${file?.lastModified}`,
-  run:async()=>{const p=pending;if(!p)throw new Error('zahtjev nije pripremljen');const {uploadRepair}=await loadRepairClient();return uploadRepair(repairConfig(),p.token,p.bytes,p.meta,fetch,{signal:p.signal,requestId:p.requestId,requestFingerprint:p.requestFingerprint})},
+  run:()=>runPendingRepair(pending,loadRepairClient,repairConfig,fetch),
   verify:async(out: any)=>out?.kind==='ok'?{ok:true}:{ok:false,error:String(out?.kind||'nepoznat ishod')}});
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
@@ -2021,26 +2022,22 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  const setSummary=(html: string)=>{summary.hidden=false;summary.innerHTML=html};
  consent.addEventListener('change',()=>{if(consent.checked){consentHint.hidden=true;consentRow.classList.remove('lekta-repair-panel__deep--alert')}});
  function getCheckedItems(): any[]{return binding.selectedItems(items)}
- // RE-37: uspjesan popravak TRAJNO zakljucava gumb (umjesto povratka na identican CTA), da drugi
- // klik ne posalje drugi upload/potrosi drugi slot jer korisnik misli da se nista nije dogodilo.
+ // Lock successful repairs to prevent duplicate uploads.
  let lockButton=false;
- // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
- // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
+ // Disable before awaiting to prevent double-click uploads.
  let inFlight=false;
  let repairOutcomeUnknown=false;
  const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
- async function go(confirmedMismatch: boolean, recoveryRetry=false){
-  if(inFlight||(repairOutcomeUnknown&&!recoveryRetry))return;
+ function confirmCurrentRepairSelection(onConfirmed:()=>void){void import('./local-repair-confirmation-flow').then(({confirmRepairSelection})=>confirmRepairSelection({consent,consentHint,consentRow,wrap,textItems,getCheckedItems,confirmBox,confirmations:localRepairConfirmations,onConfirmed}))}
+ async function go(confirmedMismatch: boolean, recoveryIdentity: RepairRequestRecoveryIdentity|null=null){
+  if(inFlight||(repairOutcomeUnknown&&!recoveryIdentity))return;
   inFlight=true;
   const orig=btn.textContent;
-  let requestId:string|null=null;
-  let requestFingerprint:string|null=null;
   const authController=new AbortController();
   const authTimer=setTimeout(()=>authController.abort(),REPAIR_AUTH_TIMEOUT_MS);
   btn.disabled=true;
   try{
-  // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
-  // prijenosa (413), a to je na studentskom uplinku minuta cekanja za poruku koju znamo unaprijed.
+  // Reject oversized files before auth and upload.
   if(file&&Number(file.size)>REPAIR_MAX_UPLOAD_BYTES){setSummary(`<strong>Dokument je prevelik za automatski popravak.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB, a ova datoteka ima ${(Number(file.size)/1024/1024).toFixed(1)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu (Format slike, Komprimiraj slike) pa pokušaj ponovno.`);return}
   const chosenItems=getCheckedItems();
   if(!chosenItems.length){setSummary('<strong>Odaberi barem jednu stavku za popravak.</strong>');return}
@@ -2048,7 +2045,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   btn.textContent='Provjeravam prijavu…';
   const token: any=await awaitAbortable(ensureAccessToken(authController.signal),authController.signal);
   clearTimeout(authTimer);
-  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch,repairOutcomeUnknown));return}
+  const requestSenderUserId=authStore.load()?.userId||null;
+  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch,recoveryIdentity));return}
   btn.textContent='Šaljem na server…';
   try{
    // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
@@ -2060,50 +2058,30 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const {buildRepairMeta}=await loadRepairClient();
    const {collectLocalRepairConfirmationReceipts}=await import('./local-repair-confirmation-flow');
    const confirmations=collectLocalRepairConfirmationReceipts(chosen,localRepairConfirmations);
-   // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
-   // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
-   // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
-   // neuspjeh je {kind:'unavailable'}), pa promise ne moze zavrsiti kao neuhvacena greska.
+   // Source checks use locally extracted titles and run separately from the repair upload.
    const scCfg=sourceCheckConfig();
    const sourceCheckSeparate=!!scCfg.endpoint&&refsForCorpus.length>0;
    const sourceCheckPromise: Promise<any>|null=sourceCheckSeparate
     ?loadSourceCheckClient().then(({checkSources})=>checkSources(scCfg,token||'',refsForCorpus.map((x: any)=>({title:x.title,year:x.year}))))
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
-   // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
+   // A separate source-check request keeps references out of the repair payload.
    const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,confirmations,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
    const bytes=new Uint8Array(await file.arrayBuffer());
-   const requestIdentity=await import('../report/repair-request-idempotency');
-   requestFingerprint=await requestIdentity.repairRequestFingerprint(bytes,meta);
-   requestId=await requestIdentity.repairRequestId(requestFingerprint);
-   if(!requestId){setSummary('<strong>Popravak nije poslan.</strong> Preglednik nije mogao izraditi stabilan ID ovog zahtjeva. Pokušaj ponovno za koji trenutak.');return}
-   // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
-   // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
+   const requestRecovery=await prepareRepairRequestRecovery({fileBytes:bytes,meta,loadRepairClient,repairConfig,token:token||'',recoveryIdentity,resolveRequestUserId:id=>resolveRepairRequestOwner(id,requestSenderUserId),getCurrentUserId:()=>authStore.load()?.userId||null,getAccessToken:signal=>ensureAccessToken(signal),fetcher:fetch,summary,openRepairHistory,setSummary,retry:identity=>go(confirmedMismatch,identity),startNewRepair:(identity,replacementRequestId)=>confirmSeparateRepairAttempt(message=>window.confirm(message),()=>confirmCurrentRepairSelection(()=>{resolveRepairRequestOwner.forget(identity.requestId);resolveRepairRequestOwner.forget(replacementRequestId);repairOutcomeUnknown=false;checkExistingRequest=null;void go(confirmedMismatch)})),setOutcomeUnknown:value=>{repairOutcomeUnknown=value}});
+   if(!requestRecovery)return;
+   checkExistingRequest=requestRecovery.checkExistingRequest;
+   // Bound the request so a stalled upload returns a visible error.
    const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),REPAIR_TIMEOUT_MS);
    let out: any;
-   // Koliko je korisnik STVARNO cekao (upload + serverska obrada + preuzimanje odgovora). Bez ove
-   // brojke je svaka optimizacija toka nagadjanje; ide uz repair_server_done.
+   // Measure end-to-end repair time for repair_server_done telemetry.
    const tUpload=performance.now();
    // Slanje ide kroz kontroler (samo iz `ready`): nakon `complete` isti posao se ne moze poslati drugi put.
-   pending={token:token||'',bytes,meta,signal:ac.signal,requestId,requestFingerprint};
+   pending=requestRecovery.createPending(ac.signal);
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
-   const checkExistingRequest=async()=>{
-    if(!requestId)return false;
-    const {checkRepairRequestStatus}=await loadRepairClient();
-    const state=await checkRepairRequestStatus(repairConfig(),token||'',requestId,fetch);
-    if('error' in state)return false;
-    const statusEl=summary.querySelector<HTMLElement>('[data-repair-recovery-status]');
-    if(state.status==='completed'&&state.jobId){if(statusEl)statusEl.textContent='Poslužitelj potvrđuje dovršetak i spremljenu kopiju. Ponovni pokušaj ostaje zaključan.';await openRepairHistory();return false}
-    if(state.status==='processing'){if(statusEl)statusEl.textContent='Poslužitelj potvrđuje da je popravak još u obradi. Nemoj ga slati ponovno; ponovno provjeri „Moji popravci” za koji trenutak.';return false}
-    if(state.status==='completed_unstored'){if(statusEl)statusEl.textContent='Poslužitelj je završio obradu, ali nije spremio kopiju. Možeš sigurno pokušati oporavak istog zahtjeva; poslužitelj ga prihvaća samo ako već postoji odgovarajući aktivni slot.';return true}
-    if(state.status==='no_change'){if(statusEl)statusEl.textContent='Poslužitelj je potvrdio da nije bilo potrebnih izmjena. Promijeni odabrane stavke za novi pokušaj.';return false}
-    if(state.status==='unknown'||state.status==='conflict'){if(statusEl)statusEl.textContent='Poslužitelj ne može potvrditi ishod. Ponovni pokušaj ostaje zaključan.';return false}
-    if(state.status==='missing'||state.status==='retryable')return true;
-    return false;
-   };
    if(out.kind==='error'&&out.status===undefined)repairOutcomeUnknown=true;
-   else if(recoveryRetry)repairOutcomeUnknown=false;
+   else if(recoveryIdentity)repairOutcomeUnknown=false;
    if(out.kind==='ok')trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r));
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
@@ -2235,7 +2213,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     // ploca kao drugdje u izvjestaju nosi cijenu i put do placanja.
     setSummary(`<p>Za popravak je potrebna kupnja odgovarajuće vrste rada.</p>${paywallLockHtml('Automatski popravak dokumenta')}`);wireLockCtas();
    }
-   else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch))}
+   else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch,recoveryIdentity))}
    // RE-33: razlog razlikuje placeni dnevni strop (uopce ne spominje "besplatno") od besplatne
    // kvote (po korisniku ili po dijeljenom IP-u, gdje korisnik OSOBNO nije nuzno nista potrosio).
    else if(out.kind==='rate_limited'){setSummary(repairRateLimitMessage(out.reason))}
@@ -2248,23 +2226,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // paket ne bi bio ispravan. Kao i no_live_fixers, ovo je NASA greska - poruka to mora reci
    // umjesto da posudi tekst od invalid_docx i optuzi korisnikov rad. Nista nije naplaceno.
    else if(out.kind==='integrity_failed'){setSummary(`<strong>Popravak nije isporučen jer rezultat nije prošao provjeru ispravnosti.</strong><p>Tvoj dokument nije mijenjan i ništa nije naplaćeno.${out.preexisting?' Neispravan dio postojao je već u učitanoj datoteci, pa za rezultat popravka ne možemo jamčiti. Pokušaj dokument prvo otvoriti i ponovno spremiti u Wordu.':' Ovo je greška na našoj strani, ne u tvom radu.'}</p><p class="muted">Tehnički detalj: ${escapeHtml(out.part)} - ${escapeHtml(out.problem)}</p><p>Ručne upute iznad i dalje vrijede.</p>`)}
-   else if(out.kind==='request_in_progress'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:false,message:'Ovaj popravak još je u obradi. Provjeri status prije bilo kakvog novog pokušaja.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
-   else if(out.kind==='request_completed'){repairOutcomeUnknown=true;setSummary('<strong>Poslužitelj potvrđuje da je ovaj popravak već dovršen.</strong><p>Provjeri „Moji popravci” za spremljenu kopiju; ponovni pokušaj ostaje zaključan.</p>');if(out.jobId)void openRepairHistory()}
-   else if(out.kind==='request_completed_unstored'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:true,message:'Poslužitelj je završio obradu, ali nije spremio kopiju. Siguran oporavak ponavlja isti zahtjev i ne uzima novi plaćeni slot.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
-   else if(out.kind==='request_recovery_unavailable'){repairOutcomeUnknown=true;setSummary('<strong>Popravljena kopija nije spremljena i siguran oporavak više nije dostupan.</strong><p>Nije uzet novi plaćeni slot. Nemoj ponovno slati isti popravak; javi se podršci kako bismo provjerili postojeći slot i spremanje datoteke.</p>')}
-   else if(out.kind==='request_no_change'){repairOutcomeUnknown=false;setSummary('Prethodna obrada nije našla promjene za odabrane stavke. Odaberi druge stavke ako želiš pokušati novi popravak.')}
-   else if(out.kind==='request_unknown'){repairOutcomeUnknown=true;renderRepairRecovery(summary,{action:'check-existing-job',retryAllowed:false,message:'Ne mogu pouzdano utvrditi ishod prethodnog zahtjeva. Provjeri status na poslužitelju prije ponovnog pokušaja.'},{retry:()=>go(confirmedMismatch,true),openJobs:checkExistingRequest},escapeHtml)}
+   else if(requestRecovery.handleOutcome(out))return;
    // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
    // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
-   else if(out.kind==='error'){
-    const recovery=recoveryFor(out,'after-send');
-    if(recovery.action==='check-existing-job')repairOutcomeUnknown=true;
-    renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,recovery.action==='check-existing-job'),openJobs:recovery.action==='check-existing-job'?checkExistingRequest:(authSessionActive()?openRepairHistory:null)},escapeHtml)
-   }
+   else if(out.kind==='error')requestRecovery.renderError(out,authSessionActive(),escapeHtml);
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
    }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted){const recovery=repairOutcomeUnknown?{action:'check-existing-job' as const,retryAllowed:false,message:'Provjera prijave trajala je predugo. Prethodni popravak možda je još u obradi. Prvo učitaj Moje popravke prije novog pokušaja.'}:{action:'retry' as const,retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'};renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,repairOutcomeUnknown),openJobs:repairOutcomeUnknown?openRepairHistory:null},escapeHtml)}else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
+  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted)renderRepairAuthTimeoutRecovery(summary,repairOutcomeUnknown,checkExistingRequest,()=>go(confirmedMismatch,recoveryIdentity),setSummary,escapeHtml);else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
   finally{
    clearTimeout(authTimer);
    inFlight=false;
@@ -2272,10 +2241,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   }
  }
  // Potvrdni korak i receipt stanje zive u lijeno ucitanom modulu.
- btn.onclick=async()=>{
-  const {confirmRepairSelection}=await import('./local-repair-confirmation-flow');
-  confirmRepairSelection({consent,consentHint,consentRow,wrap,textItems,getCheckedItems,confirmBox,confirmations:localRepairConfirmations,onConfirmed:()=>void go(false)});
- };
+ btn.onclick=()=>confirmCurrentRepairSelection(()=>void go(false));
  return buildRepairPanelHandle(binding,items,deepToggle,wrap); // C6: isti ugovor handlea kao lokalni panel (dispose, onSelectionChange, deep)
 }
 

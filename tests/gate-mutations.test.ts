@@ -5019,9 +5019,15 @@ const MUTATIONS: Mutation[] = [
       "if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);", 'repair-docx: user_busy ne vraca 503 busy'],
     ['t84/repair-greska-slota-prolazi', 'greska novog RPC-a se ne odbija pa popravak tece bez ikakvog slota (Codex R1 na #294)',
       "    if (globalSlot.kind === 'error') return json({ error: 'unavailable' }, 503);\n", '', 'repair-docx: greska slota ne vraca 503'],
-    ['t84/repair-strop-bez-429', 'grana 429 za strop pokusaja uklonjena, pa korisnik preko stropa i dalje salje pune popravke (Codex R7 na #294)',
-      "    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
-      'repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela'],
+    ['t84/repair-strop-bez-429', 'oporavak bez stabilnog identiteta zaobide strop pokusaja',
+      "      if (!requestId || !requestFingerprint) return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: strop ne blokira oporavak bez identiteta zahtjeva'],
+    ['t84/repair-strop-samo-nespremljeni', 'oporavak zahtjeva koji nije completed_unstored zaobide strop pokusaja',
+      "      if (priorRequest.status !== 'completed_unstored') {\n        return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n      }\n", '',
+      'repair-docx: strop ne ogranicava oporavak na dovrsen, nespremljen zahtjev'],
+    ['t84/repair-strop-status-bez-429', 'status koji nije completed_unstored ne odbija se, pa retryable zahtjev moze nastaviti iznad dnevnog stropa',
+      "        return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);\n", '',
+      'repair-docx: status koji nije completed_unstored ne odbija se s 429'],
     ['t84/repair-dnevnik-fail-open', 'necitljiv dnevnik pokusaja se tumaci kao nula, pa strop nestane bas kad dnevnik ne radi (Codex R2 na #294)',
       "    if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);\n", '',
       'repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela'],
@@ -5038,7 +5044,7 @@ const MUTATIONS: Mutation[] = [
       "    if (!attempt) return json({ error: 'unavailable' }, 503);\n", '',
       'repair-docx: neuspjela rezervacija ne vraca 503 prije citanja tijela'],
     ['t84/repair-dvostruko-brojanje', 'zapis u report_generations ne brise rezervaciju, pa uspjesan ili odbijen pokusaj puni i strop pokusaja',
-      '      if (!written.error) await dropAttempt(admin, attempt);\n', '',
+      '      if (!written.error && !retainAttempt) await dropAttempt(admin, attempt);\n', '',
       'repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)'],
   ] as const).map(([id, imitates, from, to, problem]) => ({
     id,
@@ -5127,6 +5133,46 @@ const MUTATIONS: Mutation[] = [
       const mutated = functions.map((f) => (f.path.endsWith('source-check/index.ts') ? { ...f, text: f.text.replace(/const ipHash = await hashClientIpSalted\([^;]*;/, 'const ipHash = String(body.ipHash);') } : f));
       const changed = mutated.some((f, i) => f.text !== functions[i].text);
       return changed && xffCallerProblems(mutated).length > 0 && xffKeyProblems(hashIp, mutated).length > 0;
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffCallerProblems(functions).length === 0 && xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-repair-docx-status-hash-uklonjen',
+    imitates: 'jedan od odvojenih statusnih ili recovery limita u repair-docx vise ne veze svoj slot uz pouzdani IP',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = '      const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);\n';
+      const mutated = functions.map((f) => (f.path.endsWith('repair-docx/index.ts') ? { ...f, text: f.text.replace(from, '') } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).length > 0 && xffKeyProblems(hashIp, mutated).length > 0;
+    },
+    cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffCallerProblems(functions).length === 0 && xffKeyProblems(hashIp, functions).length === 0; },
+  },
+  {
+    id: 't84/xff-repair-docx-status-ip-kljuc-zamijenjen',
+    imitates: 'jedan statusni limiter koristi user.id kao treci argument, pa zaobilazi dnevnu IP kvotu iako kanonski IP hashovi ostaju u handleru',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = "admin, user.id, ipHash, 'repair_status', REPAIR_STATUS_USER_DAILY_CAP, REPAIR_STATUS_IP_DAILY_CAP,";
+      const to = "admin, user.id, user.id, 'repair_status', REPAIR_STATUS_USER_DAILY_CAP, REPAIR_STATUS_IP_DAILY_CAP,";
+      const mutated = functions.map((f) => (f.path.endsWith('repair-docx/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed && xffCallerProblems(mutated).some((problem) => problem.includes('oba statusna limita moraju koristiti ipHash'));
+    },
+    cleanBefore: () => xffCallerProblems(xffRealSources().functions).length === 0,
+  },
+  {
+    id: 't84/xff-repair-docx-recovery-hash-zamijenjen',
+    imitates: 'T84 XFF: recovery IP limit koristi korisnicki ID umjesto pouzdanog IP hasha, pa ne ogranicava recovery po IP-u',
+    caught: () => {
+      const { hashIp, functions } = xffRealSources();
+      const from = '        recoveryIpHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);\n';
+      const to = '        recoveryIpHash = user.id;\n';
+      const mutated = functions.map((f) => (f.path.endsWith('repair-docx/index.ts') ? { ...f, text: f.text.replace(from, to) } : f));
+      const changed = mutated.some((f, i) => f.text !== functions[i].text);
+      return changed
+        && xffCallerProblems(mutated).some((problem) => problem.includes('kanonsku recovery IP vezu'))
+        && xffKeyProblems(hashIp, mutated).some((problem) => problem.includes('recoveryIpHash ne dolazi'));
     },
     cleanBefore: () => { const { hashIp, functions } = xffRealSources(); return xffCallerProblems(functions).length === 0 && xffKeyProblems(hashIp, functions).length === 0; },
   },

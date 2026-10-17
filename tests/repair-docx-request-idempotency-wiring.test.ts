@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const edgeSource = readFileSync(join(root, 'supabase', 'functions', 'repair-docx', 'index.ts'), 'utf8');
+const edgeSource = readFileSync(join(root, 'supabase', 'functions', 'repair-docx', 'index.ts'), 'utf8').replace(/\r\n?/g, '\n');
 
 describe('repair request idempotency Edge wiring', () => {
   it('creates idempotency rows only after attempt limits and bounded upload validation', () => {
