@@ -48,8 +48,14 @@ import { fileURLToPath } from 'node:url';
 /** Ime mape koju Vitest stvara nanoidom: tocno 21 znak iz URL-sigurne abecede. */
 export const NANOID_NAME = /^[A-Za-z0-9_-]{21}$/;
 export const WORD_REPLICA_PREFIX = 'word-replica-tests-';
-/** Jedine podmape koje Vitest stvara u svojoj tmp mapi (transformMode). */
-export const VITEST_SUBDIRS = new Set(['web', 'ssr']);
+/**
+ * Jedine podmape koje Vitest stvara u svojoj tmp mapi. Vitest 2 ih imenuje po transformMode
+ * (`web`, `ssr`), a Vitest 4 po Vite okruzenju: `join(tmpProjectDir, environment.name)`, zadano
+ * `client` i `ssr` (provjereno u vitest 4.1.11). Bez `client` cistac je nakon nadogradnje odbijao
+ * sve nove mape kao "nije Vitest oblik" i vracao "greske: nema" (izmjereno 2026-10-04: 9 mapa,
+ * 909 MB, gate odbijen zbog diska ispod praga).
+ */
+export const VITEST_SUBDIRS = new Set(['web', 'ssr', 'client']);
 export const DEFAULT_THRESHOLD_HOURS = 2;
 /**
  * Prag za ostatke testova i alata (stavka G). 24 h, a ne 2 h kao za Vitest: ove stavke stvaraju
@@ -286,7 +292,7 @@ export function classifyEntry(full, ent, fs = REAL_FS) {
   if (inner.length === 0) return { refused: 'prazna mapa (nije Vitest oblik)', kind: 'vitest' };
   for (const e of inner) {
     if (!VITEST_SUBDIRS.has(e.name) || e.isSymbolicLink() || !e.isDirectory()) {
-      return { refused: `sadrzi '${e.name}' uz web/ssr (nije Vitest oblik)`, kind: 'vitest' };
+      return { refused: `sadrzi '${e.name}' uz web/ssr/client (nije Vitest oblik)`, kind: 'vitest' };
     }
   }
   return { kind: 'vitest' };

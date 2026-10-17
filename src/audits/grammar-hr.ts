@@ -25,34 +25,21 @@ export interface GrammarFinding {
   suggestion: string;
 }
 
-// Nazivi provjera (kind): stabilni hrvatski identifikatori.
-export const KIND_NE_SPOJENO = 'ne-spojeno';
-export const KIND_KONDICIONAL = 'kondicional';
-export const KIND_DA_PREZENT = 'da-prezent';
-export const KIND_VEZNIK = 'veznik';
-export const KIND_JE_LI = 'je-li';
-export const KIND_S_SA = 's-sa';
-export const KIND_SRBIZAM = 'srbizam';
-export const KIND_PLEONAZAM = 'pleonazam';
-export const KIND_ADMINISTRATIVIZAM = 'administrativizam';
-export const KIND_IJE_JE = 'ije-je';
-export const KIND_ZAREZ = 'zarez';
-export const KIND_ANGLIZAM = 'anglizam';
-
-export const GRAMMAR_KIND_LABELS: Record<string, string> = {
-  [KIND_NE_SPOJENO]: 'Nijek „ne” (rastavljeno)',
-  [KIND_KONDICIONAL]: 'Kondicional (bih/bi/bismo/biste)',
-  [KIND_DA_PREZENT]: '„da” + prezent umjesto infinitiva',
-  [KIND_VEZNIK]: 'Veznik/prijedlog (s obzirom, u vezi)',
-  [KIND_JE_LI]: 'Upitna čestica „je li”',
-  [KIND_S_SA]: 'Prijedlog s/sa',
-  [KIND_SRBIZAM]: 'Nestandardni oblik',
-  [KIND_PLEONAZAM]: 'Pleonazam/suvišnost',
-  [KIND_ADMINISTRATIVIZAM]: 'Administrativni izraz / germanizam',
-  [KIND_IJE_JE]: 'Pisanje ije/je',
-  [KIND_ZAREZ]: 'Zarez (veznik „ali”)',
-  [KIND_ANGLIZAM]: 'Anglizam / kalk',
-};
+export * from './grammar-hr-labels';
+import {
+  KIND_NE_SPOJENO,
+  KIND_KONDICIONAL,
+  KIND_DA_PREZENT,
+  KIND_VEZNIK,
+  KIND_JE_LI,
+  KIND_S_SA,
+  KIND_SRBIZAM,
+  KIND_PLEONAZAM,
+  KIND_ADMINISTRATIVIZAM,
+  KIND_IJE_JE,
+  KIND_ZAREZ,
+  KIND_ANGLIZAM,
+} from './grammar-hr-labels';
 
 const EXCERPT_RADIUS = 24;
 const EXCERPT_MAX = 70;

@@ -7,9 +7,9 @@
 import type { RepairRecovery } from '../repair/recovery-policy';
 
 export interface RecoveryHooks {
-  retry: () => void;
+  retry: () => void | Promise<void>;
   /** Postojeci mehanizam pregleda poslova (`openRepairHistory`); `null` kad nije dostupan (bez prijave). */
-  openJobs: (() => void) | null;
+  openJobs: (() => boolean | void | Promise<boolean | void>) | null;
   /** Ponovna prijava (`openAuth`), za `reauth`. */
   reauth?: () => void;
 }
@@ -25,15 +25,28 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
   const ponovi = recovery.action === 'none' || recovery.action === 'refresh-consent'
     ? ''
     : `<button type="button" class="btn btn-primary btn-sm" data-repair-retry${recovery.retryAllowed ? '' : ' disabled'}>Pokušaj ponovno</button>`;
-  el.innerHTML = `<div class="lekta-repair-panel__recovery" data-testid="repair-recovery" data-repair-recovery="${esc(recovery.action)}"><p><strong>${esc(recovery.message)}</strong></p><p>${provjera}${prijava}${ponovi}</p>${recovery.action === 'check-existing-job' ? '<p class="muted">Ponovni pokušaj se otključava tek nakon provjere, da se isti popravak ne naplati dvaput.</p>' : ''}</div>`;
+  el.innerHTML = `<div class="lekta-repair-panel__recovery" data-testid="repair-recovery" data-repair-recovery="${esc(recovery.action)}"><p><strong>${esc(recovery.message)}</strong></p><p>${provjera}${prijava}${ponovi}</p>${recovery.action === 'check-existing-job' ? '<p class="muted">Ponovni pokušaj se otključava tek nakon provjere, da se isti popravak ne naplati dvaput. Nakon provjere zatvori prozor s popisom (X ili Esc) da se vratiš ovdje.</p>' : ''}</div>`;
   const retryBtn = el.querySelector<HTMLButtonElement>('[data-repair-retry]');
   const jobsBtn = el.querySelector<HTMLButtonElement>('[data-repair-check-jobs]');
   const reauthBtn = el.querySelector<HTMLButtonElement>('[data-repair-reauth]');
   if (jobsBtn) {
-    jobsBtn.onclick = () => {
-      hooks.openJobs?.();
-      // Provjera je otvorena: tek sada je ponovni pokusaj svjesna odluka, ne refleks.
-      if (retryBtn) retryBtn.disabled = false;
+    jobsBtn.onclick = async () => {
+      if (!hooks.openJobs) return;
+      jobsBtn.disabled = true;
+      try {
+        const checked = await hooks.openJobs();
+        if (checked === false) {
+          if (checkStatus) checkStatus.hidden = false;
+          return;
+        }
+        // Popis je stvarno učitan: tek sada je ponovni pokušaj svjesna odluka, ne refleks.
+        if (retryBtn) retryBtn.disabled = false;
+        if (checkStatus) checkStatus.hidden = true;
+      } catch {
+        if (checkStatus) checkStatus.hidden = false;
+      } finally {
+        if (jobsBtn.isConnected) jobsBtn.disabled = false;
+      }
     };
     if (!hooks.openJobs) {
       // Bez prijave e-mailom popis poslova ne postoji, pa provjera nije moguca. Slijepa ulica bi bila gora od rizika:
@@ -48,6 +61,45 @@ export function renderRepairRecovery(el: HTMLElement, recovery: RepairRecovery, 
       el.firstElementChild?.appendChild(napomena);
     }
   }
+  const checkStatus = jobsBtn
+    ? el.ownerDocument.createElement('p')
+    : null;
+  if (checkStatus) {
+    checkStatus.className = 'muted';
+    checkStatus.setAttribute('role', 'status');
+    checkStatus.setAttribute('aria-live', 'polite');
+    checkStatus.textContent = 'Popis popravaka nije potvrđen. Ponovni pokušaj ostaje zaključan; provjeri popis još jednom.';
+    checkStatus.hidden = true;
+    jobsBtn?.closest('[data-repair-recovery]')?.append(checkStatus);
+  }
   if (reauthBtn && hooks.reauth) reauthBtn.onclick = hooks.reauth;
-  if (retryBtn) retryBtn.onclick = () => { if (!retryBtn.disabled) hooks.retry(); };
+  if (retryBtn) {
+    const retryLabel = retryBtn.textContent || 'Pokušaj ponovno';
+    const retryStatus = el.ownerDocument.createElement('p');
+    retryStatus.className = 'muted';
+    retryStatus.setAttribute('role', 'status');
+    retryStatus.setAttribute('aria-live', 'polite');
+    retryStatus.textContent = 'Ponovni pokušaj traje. Može potrajati do 3 minute; nemoj klikati ponovno.';
+    retryStatus.hidden = true;
+    retryBtn.closest('[data-repair-recovery]')?.append(retryStatus);
+    retryBtn.onclick = async () => {
+      if (retryBtn.disabled) return;
+      retryBtn.disabled = true;
+      retryBtn.textContent = 'Pokušavam ponovno…';
+      retryBtn.setAttribute('aria-busy', 'true');
+      retryStatus.hidden = false;
+      try {
+        await hooks.retry();
+      } finally {
+        // Novi ishod zamjenjuje recovery panel. Ako isti gumb još postoji, pokušaj je završio
+        // bez novog prikaza (npr. prijava je otkazana), pa vrati mogućnost svjesnog pokušaja.
+        if (retryBtn.isConnected) {
+          retryBtn.disabled = false;
+          retryBtn.textContent = retryLabel;
+          retryBtn.removeAttribute('aria-busy');
+          retryStatus.remove();
+        }
+      }
+    };
+  }
 }

@@ -132,9 +132,20 @@ Write-Output "DIJELOVI:     $($res.bitIdenticnih)/$($res.dijelovaPrije) bit-iden
 Write-Output ''
 
 $script:fail = 0
+function Test-Ocekivanje {
+  param($Prije, $Poslije, $Cilj, [switch]$Preserve)
+  if ($Preserve) { return ($Poslije -eq $Prije) }
+  return ($Poslije -eq $Cilj)
+}
+# Autor se MORA ocistiti samo kad je final-document-inspector primijenjen I kad je uklanjanje
+# dc:creator stvarno trazeno. Sama primjena fixera nije dovoljna: on se primijeni i zbog rsid-ova.
+function Test-TrazenoCiscenjeAutora {
+  param([bool]$InspektorPrimijenjen, $TrazenaPolja)
+  return ($InspektorPrimijenjen -and (@($TrazenaPolja) -contains 'creator'))
+}
 function Check {
   param([string]$Naziv, $Prije, $Poslije, $Cilj, [switch]$Preserve)
-  $ok = if ($Preserve) { $Poslije -eq $Prije } else { $Poslije -eq $Cilj }
+  $ok = Test-Ocekivanje $Prije $Poslije $Cilj -Preserve:$Preserve
   if (-not $ok) { $script:fail++ }
   $ciljTxt = if ($Preserve) { "ostaje $Prije" } else { "$Cilj" }
   Write-Output ('{0} {1,-20} prije={2,-16} poslije={3,-16} cilj={4}' -f $(if ($ok) { 'DA' } else { 'NE' }), $Naziv, $Prije, $Poslije, $ciljTxt)
@@ -180,14 +191,34 @@ Check 'Dimenzije tablica' $prije.TablicaDim   $poslije.TablicaDim   $null -Prese
 Check 'Dimenzije slika'   $prije.SlikaDim     $poslije.SlikaDim     $null -Preserve
 Check 'Redoslijed elem.'  $prije.ElementRed   $poslije.ElementRed   $null -Preserve
 # docProps iz PAKETA (repair.mts), jer COM BuiltInDocumentProperties ovdje ne radi.
-# Autor SMIJE nestati samo ako je primijenjen final-document-inspector, koji po zadanom cisti
-# privatne metapodatke; bez njega je gubitak autorstva regresija. Ova je razlika i otkrivena
-# prvim pokretanjem: autor je pao s 'PC' na prazno, i to je bilo ISPRAVNO ponasanje.
-$ciscenjeMeta = $res.primijenjeno -contains 'final-document-inspector-assisted'
+# Autor SMIJE nestati samo ako je final-document-inspector primijenjen I ako je uklanjanje
+# dc:creator stvarno trazeno (`trazenoUklanjanjeMeta` iz repair.mts). Od #325 (e3ae7451) privatni
+# metapodaci po zadanom OSTAJU, a fixer se i dalje primijeni zbog rsid-ova, pa sama primjena vise
+# ne znaci ciscenje. Bez trazenog uklanjanja je gubitak autorstva regresija, i docProps/core.xml
+# mora ostati bajt-identican.
+if (-not ($res.PSObject.Properties.Name -contains 'trazenoUklanjanjeMeta')) {
+  Write-Output 'NEUSPJEH: repair.mts nije javio trazenoUklanjanjeMeta.'
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+  exit 1
+}
+# NEGATIVNA KONTROLA, svaki prolaz: trazeno uklanjanje uz neociscen dc:creator mora biti PAD.
+# Bez nje bi suzeni uvjet ispod mogao tiho postati "nikad ne trazi ciscenje".
+$kontrolaTrazi = Test-TrazenoCiscenjeAutora $true @('creator')
+$kontrolaProlazi = Test-Ocekivanje 'Autor' 'Autor' '-'
+$kontrolaBezZahtjeva = Test-TrazenoCiscenjeAutora $true @()
+if ($kontrolaTrazi -and -not $kontrolaProlazi -and -not $kontrolaBezZahtjeva) {
+  Write-Output 'DA Negativna kontrola: trazeno uklanjanje uz neociscen dc:creator PADA'
+} else {
+  $script:fail++
+  Write-Output 'NE Negativna kontrola: trazeno uklanjanje uz neociscen dc:creator NE pada'
+}
+$inspektor = $res.primijenjeno -contains 'final-document-inspector-assisted'
+$ciscenjeMeta = Test-TrazenoCiscenjeAutora $inspektor $res.trazenoUklanjanjeMeta
 if ($ciscenjeMeta) {
   Check 'docProps autor ocisc.' $res.docPropsPrije.autor $res.docPropsPoslije.autor '-'
 } else {
   Check 'docProps autor'    $res.docPropsPrije.autor  $res.docPropsPoslije.autor  $null -Preserve
+  Check 'core.xml promijenjen' $false ($res.promijenjeniDijelovi -contains 'docProps/core.xml') $null -Preserve
 }
 Check 'docProps naslov'   $res.docPropsPrije.naslov $res.docPropsPoslije.naslov $null -Preserve
 

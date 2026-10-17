@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Početna · stol s listom" description="Početni ekran: minimalna traka (Izbornik, ⌘K, Moji radovi, pločica profila), list s kotama pravilnika, pečat korpusa, fascikl pri ispuštanju, okretanje na primjer nalaza, rok kao listić kalendara i fakultet kao kartica kartoteke." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:var(--desk,#191512)}html{--desk:#191512;--desk2:#211C17;--ink:#EDE7DC;--inkrgb:237,231,220;--muted:rgba(237,231,220,.72);--faint:rgba(237,231,220,.6);--line:rgba(237,231,220,.16);--pmuted:#6E6656;--lampop:1}html[data-day="1"]{--desk:#E9E2D2;--desk2:#DED6C4;--ink:#26221B;--inkrgb:38,34,27;--muted:#4A4438;--faint:#5B5446;--line:rgba(38,34,27,.18);--lampop:.35}html[data-contrast="1"]{--muted:var(--ink);--faint:var(--ink);--line:rgba(var(--inkrgb),.4);--pmuted:#26221B}a{color:inherit}a:hover{color:#E4573D}@keyframes hmStamp{from{transform:rotate(-9deg) scale(1.6);opacity:0}to{transform:rotate(-9deg) scale(1);opacity:1}}@keyframes hmZig{from{transform:rotate(-12deg) scale(1.7);opacity:0}to{transform:rotate(-12deg) scale(1);opacity:1}}@keyframes hmScan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style></helmet>
+<div onDragEnter="{{ onDragIn }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragOut }}" onDrop="{{ onDrop }}" style="position:relative;min-height:100vh;overflow-x:hidden;background-color:var(--desk);background-image:url(data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27180%27%20height=%27180%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.85%27%20numOctaves=%272%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%200%200%200%200%20.92%200%200%200%200%20.8%200%200%200%20.07%200%27/%3E%3C/filter%3E%3Crect%20width=%27180%27%20height=%27180%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E);color:var(--ink);font-family:'Geist Mono',ui-monospace,monospace;padding-bottom:{{ padBottom }}">
+<div aria-hidden="true" style="position:absolute;left:50%;top:-38vh;width:min(1500px,170vw);height:min(1500px,170vw);margin-left:calc(min(1500px,170vw) / -2);border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.15),rgba(255,214,150,.05) 38%,transparent 62%);opacity:var(--lampop,1);transition:opacity .6s;pointer-events:none"></div>
+<dc-import name="HomeNav" profile="{{ profile }}" plate-label="{{ plate }}" works="{{ works }}" facs="{{ facs }}" on-profile="{{ setProfile }}" on-demo="{{ flip }}" on-upload="{{ upload }}" hint-size="100%,72px"></dc-import>
+<main data-screen-label="Početna" style="position:relative;width:min(1180px,calc(100% - 24px));margin:0 auto;padding:clamp(18px,5vh,52px) 0 32px;display:grid;justify-content:center;gap:clamp(28px,4vw,40px);grid-template-columns:{{ deskCols }};align-items:start">
+<div style="display:grid;gap:clamp(28px,4vw,40px);min-width:0;align-content:start"><div onMouseEnter="{{ hoverIn }}" onMouseLeave="{{ hoverOut }}" style="position:relative;min-width:0;perspective:2000px;margin-top:{{ folderGap }};transition:margin .3s">
+<div aria-hidden="true" style="position:absolute;inset:-20px -24px -30px;background:#B5332A;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2),0 20px 50px rgba(0,0,0,.5);opacity:{{ folderOp }};transform:{{ folderT }};transition:opacity .3s,transform .4s cubic-bezier(.22,1,.36,1)"><span style="position:absolute;left:30px;top:-28px;height:28px;padding:0 18px;display:flex;align-items:center;background:#B5332A;border-radius:3px 3px 0 0;color:#F7F3E8;font-size:10.5px;letter-spacing:.14em">LEKTA · FASCIKL</span><span style="position:absolute;left:0;right:0;bottom:0;height:46px;background:#C4372E;border-radius:0 0 3px 3px;box-shadow:0 -1px 0 rgba(0,0,0,.25)"></span></div>
+<div style="position:relative;display:grid;transform-style:preserve-3d;transform:{{ sheetT }};opacity:{{ sheetOp }};transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .4s">
+<section aria-hidden="{{ flipped }}" style="grid-area:1/1;position:relative;box-sizing:border-box;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:{{ shadow }};padding:34px {{ padR }} 44px {{ padL }};backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:padding .5s cubic-bezier(.22,1,.36,1),box-shadow .3s">
+<div style="position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid #DCD4BF;font-size:11px;letter-spacing:.08em;color:var(--pmuted)"><span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#C4372E;transform-origin:left;transform:scaleX({{ autoP }});opacity:{{ autoOp }};transition:transform .25s linear,opacity .3s"></span><span style="white-space:nowrap">Lekta · Ulazni list</span><span style="color:{{ headCol }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ headRight }}</span></div>
+<div style="display:flex;justify-content:flex-end;margin:18px 0 6px;min-height:52px"><div key="{{ stampKey }}" role="status" style="display:grid;justify-items:center;gap:3px;padding:8px 14px;border:2.5px solid {{ stampCol }};border-radius:2px;color:{{ stampInk }};transform:rotate(-9deg);transform-origin:100% 50%;animation:hmStamp .34s cubic-bezier(.2,.9,.3,1.25) both"><span style="font-size:10px;font-weight:600;letter-spacing:.16em">{{ stampTop }}</span><span style="font-size:15px;font-weight:600;letter-spacing:.06em;font-variant-numeric:tabular-nums">{{ stampMain }}</span></div></div>
+<p style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-style:italic;font-size:clamp(17px,2vw,20px);color:#A62B23">Besplatna provjera · lokalno na uređaju</p>
+<h1 style="margin:6px 0 0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:clamp(52px,9vw,116px);line-height:.92;letter-spacing:-.025em">{{ title }}</h1>
+<p style="margin:18px 0 0;max-width:40ch;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:clamp(19px,2.2vw,23px);line-height:{{ lead }};color:#5B5446;text-wrap:pretty;transition:line-height .5s">Provjerit ćemo <span style="position:relative;white-space:nowrap">formu<svg aria-hidden="true" viewBox="0 0 60 8" preserveAspectRatio="none" style="position:absolute;left:-2%;bottom:-.24em;width:104%;height:.32em;overflow:visible"><path d="M1 5 C 8 1, 14 8, 21 4 S 34 1, 41 5 S 53 7, 59 3" fill="none" stroke="#C4372E" stroke-width="2" stroke-linecap="round"></path></svg></span> prije nego ga predaš.</p>
+<sc-if value="{{ reading }}" hint-placeholder-val="{{ false }}"><div style="position:relative;height:2px;margin-top:30px;background:#DCD4BF;overflow:hidden"><span style="position:absolute;inset:0;background:#C4372E;animation:hmScan 1.1s linear 3"></span></div></sc-if>
+<sc-if value="{{ showCta }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:14px 20px;flex-wrap:wrap;margin-top:30px"><button type="button" onClick="{{ upload }}" aria-disabled="{{ ctaOff }}" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border:0;border-radius:2px;background:{{ ctaBg }};color:#F7F3E8;font:inherit;font-size:14px;font-weight:600;letter-spacing:.02em;box-shadow:{{ ctaSh }};cursor:pointer;flex:{{ ctaFlex }};transition:transform .18s,background .2s" style-hover="transform:translateY(-2px)">Odaberi .docx <span aria-hidden="true">↓</span></button><span style="display:grid;gap:6px;font-size:12.5px;color:var(--pmuted)"><sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}"><span>ili ispusti dokument bilo gdje na stol</span><span style="display:inline-flex;align-items:center;gap:6px">ili pritisni <kbd style="font:inherit;font-size:11px;padding:2px 7px;border:1px solid #B8AE96;border-bottom-width:2px;border-radius:2px;color:#26221B">D</kbd></span></sc-if></span></div></sc-if>
+<sc-if value="{{ gateMsg }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:14px 0 0;font-size:12px;line-height:1.5;color:#A62B23">{{ gateText }}</p></sc-if>
+<sc-if value="{{ leaving }}" hint-placeholder-val="{{ false }}"><p style="margin:26px 0 0;font-size:12px;color:var(--pmuted)">Otvaram nalaz →</p></sc-if>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:30px;min-height:80px"><sc-if value="{{ hasProfile }}" hint-placeholder-val="{{ false }}"><div key="{{ zigKey }}" aria-label="{{ zigLabel }}" style="display:grid;place-items:center;align-content:center;gap:1px;width:80px;height:80px;border:2px solid #C4372E;border-radius:50%;box-shadow:inset 0 0 0 3px #F7F3E8,inset 0 0 0 4px rgba(196,55,46,.6);color:#A62B23;transform:rotate(-12deg);animation:hmZig .36s cubic-bezier(.2,.9,.3,1.25) both"><span style="font-size:9.5px;letter-spacing:.14em">PRAVILNIK</span><b style="font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:22px;line-height:1">{{ zigKr }}</b><span style="font-size:9.5px;letter-spacing:.06em">{{ zigUpd }}</span></div></sc-if><sc-if value="{{ noProfile }}" hint-placeholder-val="{{ true }}"><span></span></sc-if><button type="button" onClick="{{ flip }}" style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 2px;border:0;border-bottom:1px solid #B8AE96;background:transparent;color:#26221B;font:inherit;font-size:12.5px;cursor:pointer;transition:border-color .18s" style-hover="border-color:#C4372E">Pogledaj primjer nalaza <span aria-hidden="true" style="color:#C4372E">↻</span></button></div>
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;margin-top:20px;padding-top:14px;border-top:1px solid #DCD4BF;font-size:11px;letter-spacing:.04em;color:var(--pmuted)"><span>Dokument ostaje na uređaju</span><span>Provjeravamo formu, ne sadržaj</span></div>
+<button type="button" onClick="{{ flip }}" aria-label="Okreni list: primjer nalaza" style="position:absolute;right:-1px;bottom:-1px;width:{{ cornerS }};height:{{ cornerS }};padding:0;border:0;background:linear-gradient(to top left,var(--desk) 50%,#E4DAC2 50%);box-shadow:-3px -3px 6px rgba(0,0,0,.12);cursor:pointer;transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1)" style-hover="width:48px;height:48px"></button>
+<div aria-hidden="true" style="position:absolute;left:0;top:50%;width:{{ padL }};display:grid;justify-items:center;gap:4px;opacity:{{ koteOp }};transition:opacity .3s,width .5s;pointer-events:none"><span style="font-size:10px;letter-spacing:.04em;color:#A62B23;white-space:nowrap">{{ koteM }}</span><span style="position:relative;display:block;width:calc(100% - 8px);height:1px;background:#C4372E;transform:scaleX({{ koteX }});transition:transform .55s cubic-bezier(.22,1,.36,1)"><i style="position:absolute;left:0;top:-4px;width:1px;height:9px;background:#C4372E"></i><i style="position:absolute;right:0;top:-4px;width:1px;height:9px;background:#C4372E"></i></span></div>
+<div aria-hidden="true" style="position:absolute;right:0;top:34px;bottom:44px;width:30px;opacity:{{ koteOp }};transition:opacity .3s;pointer-events:none"><span style="position:absolute;right:0;top:0;bottom:0;width:10px;background:repeating-linear-gradient(to bottom,#C4372E 0 1px,transparent 1px 9px);-webkit-mask:linear-gradient(to left,#000 60%,transparent);mask:linear-gradient(to left,#000 60%,transparent);transform:scaleY({{ koteX }});transform-origin:top;transition:transform .7s cubic-bezier(.22,1,.36,1)"></span><span style="position:absolute;right:14px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;font-size:10px;letter-spacing:.08em;color:#A62B23;white-space:nowrap">{{ koteR }}</span></div>
+<input ref="{{ fileRef }}" type="file" accept=".docx" onChange="{{ onFile }}" style="display:none">
+</section>
+<section aria-hidden="{{ notFlipped }}" aria-label="Primjer nalaza" style="grid-area:1/1;position:relative;box-sizing:border-box;background:#F3EEDF;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px clamp(20px,5vw,52px) 40px;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;align-content:start">
+<div style="position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid #DCD4BF;font-size:11px;letter-spacing:.08em;color:var(--pmuted)"><span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#C4372E;transform-origin:left;transform:scaleX({{ autoP }});opacity:{{ autoOp }};transition:transform .25s linear,opacity .3s"></span><span style="white-space:nowrap">Lekta · Primjer nalaza</span><span style="color:#26221B;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">diplomski-primjer.docx</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-top:26px"><h2 style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:clamp(40px,6vw,72px);line-height:.95;letter-spacing:-.02em">Ovo bi Lekta našla.</h2><span style="padding:7px 12px;border:2px solid #26221B;border-radius:2px;font-size:11px;font-weight:600;letter-spacing:.16em;transform:rotate(5deg)">PRIMJER</span></div>
+<p style="margin:14px 0 0;max-width:46ch;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:20px;line-height:1.45;color:#5B5446">{{ backLead }}</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-top:26px"><sc-for list="{{ cards }}" as="c" hint-placeholder-count="3"><article style="display:grid;align-content:start;gap:10px;min-height:150px;padding:16px;background:#FBF8F0;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 1px 2px rgba(38,34,27,.08);opacity:{{ c.op }};transform:{{ c.tr }};transition:opacity .3s,transform .3s"><span style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;font-size:10.5px;letter-spacing:.08em;color:#A62B23"><span style="white-space:nowrap">{{ c.code }}</span><span style="color:var(--pmuted);white-space:nowrap">{{ c.where }}</span></span><span style="font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:19px;line-height:1.3;text-wrap:pretty">{{ c.text }}</span></article></sc-for></div>
+<div aria-hidden="true" style="display:flex;gap:6px;margin-top:16px"><sc-for list="{{ dots }}" as="d" hint-placeholder-count="6"><span style="width:16px;height:3px;background:{{ d.bg }};transition:background .3s"></span></sc-for></div>
+<div style="display:flex;align-items:center;gap:14px 20px;flex-wrap:wrap;margin-top:28px"><button type="button" onClick="{{ uploadFromBack }}" style="display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:2px;background:#C4372E;color:#F7F3E8;font:inherit;font-size:14px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 10px 24px rgba(196,55,46,.28)">Ubaci svoj rad <span aria-hidden="true">↓</span></button><button type="button" onClick="{{ flip }}" style="min-height:44px;padding:0 2px;border:0;border-bottom:1px solid #B8AE96;background:transparent;color:#26221B;font:inherit;font-size:12.5px;cursor:pointer">↺ Okreni natrag</button></div>
+</section>
+</div>
+</div>
+<div aria-live="polite" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)"><span style="font-size:10px;letter-spacing:.14em;color:var(--faint);white-space:nowrap">POSLANO NA POSLUŽITELJ</span><b style="font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:26px;line-height:1;color:#34996A">0 B</b><sc-if value="{{ meterReading }}" hint-placeholder-val="{{ false }}"><span style="font-variant-numeric:tabular-nums;white-space:nowrap">pročitano lokalno {{ kbRead }}</span></sc-if><span style="flex:1 1 260px;min-width:0">{{ meterLine }}</span></div></div>
+<dc-import name="HomeDesk" fac="{{ facObj }}" raz="{{ raz }}" raz-kr="{{ razKr }}" studij="{{ studij }}" hint-size="100%,520px"></dc-import>
+<div style="grid-column:1 / -1;display:grid;gap:14px;justify-items:center;margin-top:12px"><p style="margin:0;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;font-size:13px;letter-spacing:.02em;color:var(--muted);text-align:center"><span style="white-space:nowrap">.docx</span><span aria-hidden="true">·</span><span style="white-space:nowrap">do <b style="font-weight:600;color:var(--ink)">20 MB</b></span><span aria-hidden="true">·</span><span style="white-space:nowrap">bez prijave</span><span aria-hidden="true">·</span><a href="#" style="color:var(--ink);text-underline-offset:4px;white-space:nowrap">Kako radi?</a></p><sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="width:100%;display:grid;gap:8px;justify-items:center;margin-top:8px"><div style="width:100%;border-top:1px dashed rgba(var(--inkrgb),.24)"></div><span style="font-size:10.5px;letter-spacing:.1em;color:var(--faint);text-align:center;text-wrap:balance">RUB TVOG UREĐAJA · DOKUMENT NE PRELAZI OVU CRTU</span></div></sc-if></div>
+</main>
+<footer style="border-top:1px solid var(--line);padding:34px 16px 40px;display:grid;gap:14px;justify-items:center;text-align:center"><nav aria-label="Pravno" style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px"><button type="button" onClick="{{ legal_privatnost }}" aria-haspopup="dialog" style="padding:6px 0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;letter-spacing:.03em;white-space:nowrap;cursor:pointer" style-hover="color:var(--ink)">Privatnost</button><button type="button" onClick="{{ legal_uvjeti_koristenja }}" aria-haspopup="dialog" style="padding:6px 0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;letter-spacing:.03em;white-space:nowrap;cursor:pointer" style-hover="color:var(--ink)">Uvjeti</button><button type="button" onClick="{{ legal_obrada_dokumenata }}" aria-haspopup="dialog" style="padding:6px 0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;letter-spacing:.03em;white-space:nowrap;cursor:pointer" style-hover="color:var(--ink)">Obrada dokumenata</button><button type="button" onClick="{{ legal_kolacici }}" aria-haspopup="dialog" style="padding:6px 0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;letter-spacing:.03em;white-space:nowrap;cursor:pointer" style-hover="color:var(--ink)">Kolačići</button><a href="#" style="color:var(--muted);text-decoration:none;font-size:13px;letter-spacing:.03em;white-space:nowrap">Sve pravno →</a></nav><p style="margin:0;max-width:62ch;font-size:11.5px;line-height:1.7;color:var(--faint);text-wrap:balance"><b style="font-weight:600;color:var(--muted)">© 2026 Lekta</b> · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p></footer>
+<div aria-hidden="true" onClick="{{ closeLegal }}" style="position:fixed;inset:0;z-index:60;background:rgba(10,8,6,.66);opacity:{{ lgOp }};pointer-events:{{ lgPe }};transition:opacity .3s"></div>
+<div role="dialog" aria-modal="true" aria-labelledby="lgNaslov" aria-hidden="{{ lgHidden }}" style="position:fixed;left:50%;top:50%;z-index:61;width:min(880px,calc(100vw - 20px));max-height:calc(100vh - 32px);box-sizing:border-box;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;background:#F7F3E8;color:#26221B;border-radius:2px;box-shadow:0 40px 120px rgba(0,0,0,.7);transform:{{ lgT }};opacity:{{ lgOp }};visibility:{{ lgVis }};transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .25s,visibility .4s">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 22px;border-bottom:1px solid #DCD4BF"><span style="font-size:10.5px;letter-spacing:.14em;color:#6E6656;white-space:nowrap">LEKTA · PRAVNO</span><span style="display:flex;align-items:center;gap:10px;font-size:11px;color:#6E6656">Esc<button type="button" ref="{{ lgCloseRef }}" onClick="{{ closeLegal }}" aria-label="Zatvori" style="width:40px;height:40px;border:1px solid #B8AE96;border-radius:2px;background:transparent;color:#26221B;font:inherit;font-size:17px;cursor:pointer">×</button></span></div>
+<div role="tablist" style="display:flex;gap:2px;padding:0 14px;border-bottom:1px solid #DCD4BF;overflow-x:auto;scrollbar-width:none"><sc-for list="{{ lgTabs }}" as="lt" hint-placeholder-count="7"><button type="button" role="tab" aria-selected="{{ lt.on }}" onClick="{{ lt.pick }}" style="flex:none;padding:12px 10px 10px;border:0;border-bottom:2px solid {{ lt.bd }};background:transparent;color:{{ lt.col }};font:inherit;font-size:11.5px;white-space:nowrap;cursor:pointer">{{ lt.title }}</button></sc-for></div>
+<div ref="{{ lgBodyRef }}" style="position:relative;overflow-y:auto;padding:26px clamp(18px,4vw,40px) 30px;display:grid;grid-template-columns:{{ lgCols }};gap:22px 36px;align-items:start">
+<nav aria-label="Sadržaj" style="display:grid;gap:8px;align-content:start;font-size:11.5px;line-height:1.4"><sc-for list="{{ lgSecs }}" as="ls" hint-placeholder-count="4"><a href="{{ ls.href }}" onClick="{{ ls.go }}" style="color:#6E6656;text-decoration:none" style-hover="color:#A62B23">{{ ls.h }}</a></sc-for></nav>
+<article style="min-width:0;max-width:62ch"><h2 id="lgNaslov" style="margin:0;font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:clamp(34px,5vw,48px);line-height:1">{{ lgTitle }}</h2><ul style="margin:18px 0 0;padding:14px 16px;list-style:none;display:grid;gap:8px;background:#EFE8D6;border-radius:2px;font-size:12px;line-height:1.55"><sc-for list="{{ lgSummary }}" as="lsm" hint-placeholder-count="3"><li style="display:grid;grid-template-columns:14px 1fr;gap:8px"><span style="color:#1E7F4F">✓</span>{{ lsm.t }}</li></sc-for></ul><sc-for list="{{ lgSecs }}" as="sec" hint-placeholder-count="0"><section id="{{ sec.id }}" style="margin-top:26px"><h3 style="margin:0 0 8px;font-family:var(--read,'Instrument Serif',Georgia,serif);font-weight:400;font-size:23px;line-height:1.2">{{ sec.h }}</h3><sc-for list="{{ sec.ps }}" as="pp" hint-placeholder-count="0"><p style="margin:0 0 10px;font-family:var(--read,'Instrument Serif',Georgia,serif);font-size:18px;line-height:1.55;color:#3A352C;text-wrap:pretty">{{ pp.t }}</p></sc-for></section></sc-for></article></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;padding:12px 22px;border-top:1px solid #DCD4BF;font-size:11.5px;color:#6E6656"><span>{{ lgCount }}</span><a href="#" style="color:#26221B;text-underline-offset:3px;white-space:nowrap">Otvori kao stranicu ↗</a></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;works&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:0,&quot;max&quot;:20,&quot;section&quot;:&quot;Stanje&quot;},&quot;startProfile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stanje&quot;}}">
+class Component extends DCLogic {
+  FACS = [
+    { id: 'fpzg', kr: 'FPZG', naziv: 'Fakultet političkih znanosti', upd: '28. 6.', words: { Politologija: [10000, 12000], Novinarstvo: [12000, 15000] }, minSrc: 15, studiji: ['Politologija', 'Novinarstvo'], m: 2.5, l: 1.5, f: 'TNR 12', fLong: 'Times New Roman 12 pt', cit: 'fpzg' },
+    { id: 'efzg', kr: 'EFZG', naziv: 'Ekonomski fakultet', upd: '18. 9.', studiji: ['Poslovna ekonomija', 'Ekonomija'], m: 3, l: 1.5, f: 'TNR 12', fLong: 'Times New Roman 12 pt', cit: 'apa' },
+    { id: 'fer', kr: 'FER', naziv: 'Fakultet elektrotehnike i računarstva', upd: '27. 9.', studiji: ['Računarstvo', 'Elektrotehnika'], m: 2, l: 1.15, f: 'Arial 11', fLong: 'Arial 11 pt', cit: 'ieee' },
+    { id: 'ffzg', kr: 'FFZG', naziv: 'Filozofski fakultet', upd: '30. 9.', studiji: ['Psihologija', 'Povijest', 'Kroatistika'], m: 2.5, l: 1.5, f: 'TNR 12', fLong: 'Times New Roman 12 pt', cit: 'chicago' },
+    { id: 'pmf', kr: 'PMF', naziv: 'Prirodoslovno-matematički fakultet', upd: '11. 9.', studiji: ['Matematika', 'Biologija'], m: 2.5, l: 1.5, f: 'TNR 12', fLong: 'Times New Roman 12 pt', cit: 'apa' },
+    { id: 'pfz', kr: 'PFZ', naziv: 'Pravni fakultet', upd: '22. 9.', studiji: ['Pravo'], m: 2.5, l: 1.5, f: 'TNR 12', fLong: 'Times New Roman 12 pt', cit: 'note' },
+  ];
+  FIND = [
+    ['§ 01 · MARGINA', 'Lijeva margina je 2,0 cm. Pravilnik traži 2,5 cm.', 'str. 1–48'],
+    ['§ 02 · CITAT', 'Citat (Horvat, 2019) nema broj stranice.', 'str. 14'],
+    ['§ 03 · NASLOVI', 'Naslov 2. razine „Metodologija” nema broj.', 'str. 9'],
+    ['§ 04 · PRORED', 'Prored je 1,15. Pravilnik traži 1,5.', 'str. 3–41'],
+    ['§ 05 · LITERATURA', 'Popis literature nije poredan abecedno.', 'str. 45'],
+    ['§ 06 · PAGINACIJA', 'Naslovnica nosi broj stranice.', 'str. 1'],
+  ];
+  CORPUS = 526370;
+  state = { lg: null, lgDocs: [], w: 1280, profile: null, rok: '', neznam: false, stage: 'idle', fname: '', typed: 0, drag: false, hover: false, flipped: false, lampOn: true, n: 0, gate: false, shown: [0, 1, 2], fade: -1, next: 3, tick: 0, zig: 0, el: 0 };
+  fileRef = React.createRef(); rokRef = React.createRef(); depth = 0;
+  componentDidMount() {
+    if (this.props.startProfile) this.setState({ profile: { fac: 'fpzg', studij: 'Politologija', raz: 'diplomski', razKr: 'Dipl.' } });
+    this.onR = () => this.setState({ w: window.innerWidth }); this.onR(); window.addEventListener('resize', this.onR);
+    const t0 = performance.now(), dur = 1400;
+    const step = (t) => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); this.setState({ n: Math.round(this.CORPUS * e) }); if (p < 1) this.raf = requestAnimationFrame(step); };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.setState({ n: this.CORPUS }); else this.raf = requestAnimationFrame(step);
+    this.onK = (e) => {
+      const tag = (e.target.tagName || '').toLowerCase();
+      if (e.metaKey || e.ctrlKey || e.altKey || tag === 'input' || tag === 'textarea') return;
+      if (window.__lektaNav && window.__lektaNav.busy()) return;
+      if (e.key === 'Escape' && this.state.lg) { this.closeLegal(); return; } if (this.state.lg) return;
+      const k = e.key.toLowerCase();
+      if (k === 'd') { e.preventDefault(); this.upload(); } else if (k === 'p') this.flip(); else if (k === 'l') window.__lektaNav && window.__lektaNav.toggleLamp();
+    };
+    window.addEventListener('keydown', this.onK);
+    this.iv = setInterval(() => this.rotate(), 3200);
+    this.auto = setInterval(() => this.autoTick(), 250);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.kr); clearInterval(this.iv); clearInterval(this.auto); clearInterval(this.ty); clearTimeout(this.t1); clearTimeout(this.t2); clearTimeout(this.t3); window.removeEventListener('resize', this.onR); window.removeEventListener('keydown', this.onK); }
+  rotate() {
+    const s = this.state; if (!s.flipped) return;
+    const slot = s.tick % 3; let nx = s.next; while (s.shown.includes(nx % 6)) nx++;
+    this.setState({ fade: slot });
+    this.t3 = setTimeout(() => this.setState(st => { const sh = st.shown.slice(); sh[slot] = nx % 6; return { shown: sh, fade: -1, next: nx + 1, tick: st.tick + 1 }; }), 320);
+  }
+  autoPaused() { const s = this.state, a = document.activeElement, tag = (a && a.tagName || '').toLowerCase(); return s.hover || s.drag || s.stage !== 'idle' || document.hidden || tag === 'input' || tag === 'select' || (window.__lektaNav && window.__lektaNav.busy()) || document.documentElement.dataset.motion === 'reduce' || window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  autoTick() { if (this.autoPaused()) return this.state.paused || this.setState({ paused: true }); const el = this.state.el + 250; if (el >= 10000) this.setState(s => ({ flipped: !s.flipped, el: 0, paused: false })); else this.setState({ el, paused: false }); }
+  findings(f) {
+    if (!f) return this.FIND; const c = v => String(v).replace('.', ','), F = this.FIND.map(x => x.slice());
+    const badM = f.m >= 2.5 ? 2 : 1.5, badL = f.l > 1.2 ? 1.15 : 1;
+    F[0][1] = 'Lijeva margina je ' + c(badM) + ' cm. ' + f.kr + ' traži ' + c(f.m) + ' cm.';
+    F[3][1] = 'Prored je ' + c(badL) + '. ' + f.kr + ' traži ' + c(f.l) + '.';
+    if (f.cit === 'ieee') F[1][1] = 'Citat [3] u tekstu nema broj stranice.'; else if (f.cit === 'note') F[1][1] = 'Fusnota 12 nema broj stranice.';
+    return F;
+  }
+  lgCloseRef = React.createRef(); lgBodyRef = React.createRef();
+  openLegal(slug) { this.lgOpener = document.activeElement; const go = () => { this.setState({ lg: slug }); setTimeout(() => { this.lgCloseRef.current && this.lgCloseRef.current.focus(); if (this.lgBodyRef.current) this.lgBodyRef.current.scrollTop = 0; }, 60); }; if (this.state.lgDocs.length) go(); else fetch('./legal-docs.json').then(r => r.json()).then(d => this.setState({ lgDocs: d }, go)).catch(go); }
+  closeLegal = () => { if (!this.state.lg) return; this.setState({ lg: null }); this.lgOpener && this.lgOpener.focus && this.lgOpener.focus(); };
+  rokOk() { return !!this.state.rok || this.state.neznam; }
+  fac() { const p = this.state.profile; return p ? this.FACS.find(f => f.id === p.fac) : null; }
+  blocked() { this.setState({ gate: true }); const r = this.rokRef.current; if (r) { r.focus({ preventScroll: true }); const y = r.getBoundingClientRect().top + window.scrollY - 160; if (this.state.w < 1100) window.scrollTo({ top: y, behavior: 'smooth' }); } }
+  upload = () => { if (this.state.stage !== 'idle') return; if (this.state.flipped) this.setState({ flipped: false, el: 0 }); this.fileRef.current && this.fileRef.current.click(); };
+  take(name) {
+    clearInterval(this.ty); this.setState({ fname: name, typed: 0, stage: 'file', drag: false, flipped: false, gate: false });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) this.setState({ typed: name.length }, () => this.read());
+    else this.ty = setInterval(() => this.setState(s => { const t = s.typed + 1; if (t >= s.fname.length) { clearInterval(this.ty); setTimeout(() => this.read(), 250); } return { typed: Math.min(t, s.fname.length) }; }), 32);
+  }
+  read() { const total = this.size || 480000, t0 = performance.now(); const tick = (now) => { const p = Math.min(1, (now - t0) / 2400); this.setState({ kb: Math.round(total * p / 1024) }); if (p < 1 && this.state.stage === 'reading') this.kr = requestAnimationFrame(tick); }; this.setState({ stage: 'reading', kb: 0 }, () => { this.kr = requestAnimationFrame(tick); }); this.t1 = setTimeout(() => { this.setState({ stage: 'leave' }); this.t2 = setTimeout(() => this.setState({ stage: 'idle', fname: '', typed: 0 }), 1600); }, 2600); }
+  flip = () => { if (this.state.stage !== 'idle') return; this.setState(s => ({ flipped: !s.flipped, el: 0 })); };
+  toggleLamp = () => this.setState(s => ({ lampOn: !s.lampOn }));
+  setProfile = (p) => this.setState(s => ({ profile: p, zig: s.zig + 1 }));
+  renderVals() {
+    const reduceAuto = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const s = this.state, desk = s.w >= 760, wide = s.w >= 1100, f = this.fac(), P = this.props;
+    const hasFile = s.stage !== 'idle', drag = s.drag && s.stage === 'idle';
+    const dd = s.rok ? Math.round((new Date(s.rok + 'T00:00') - new Date(new Date().toDateString())) / 864e5) : null;
+    const plural = n => (n % 10 === 1 && n % 100 !== 11) ? 'dan' : 'dana';
+    const fmtD = d => d.split('-').reverse().map(x => String(+x)).join('. ') + '.';
+    const lift = drag ? 'translateY(-16px) rotate(0deg)' : (s.hover && !s.flipped && s.stage === 'idle' && desk ? 'translateY(-5px) rotate(0deg)' : 'rotate(-.4deg)');
+    const sheetT = s.stage === 'leave' ? 'translateY(-70px) scale(.95)' : lift + ' rotateY(' + (s.flipped ? 180 : 0) + 'deg)';
+    const kote = desk && f && s.hover && !s.flipped && s.stage === 'idle' && !drag;
+    const padL = f && desk ? Math.round(f.m * 22) + 'px' : 'clamp(22px,6vw,56px)';
+    let stampTop = 'PREGLEDANO', stampMain = s.n.toLocaleString('hr-HR') + ' radova', stampCol = '#C4372E', stampInk = '#A62B23', stampKey = 'idle';
+    if (s.stage === 'reading' || s.stage === 'file') { stampTop = 'LEKTA'; stampMain = 'Čitam'; stampCol = '#8A5A12'; stampInk = '#6F470C'; stampKey = 'read'; }
+    if (s.stage === 'leave') { stampTop = 'LEKTA'; stampMain = 'Pročitano'; stampCol = '#1E7F4F'; stampInk = '#17693F'; stampKey = 'done'; }
+    const headRight = s.fname ? s.fname.slice(0, s.typed) + (s.typed < s.fname.length ? '▍' : '') : (drag ? '.docx · pusti ovdje' : 'Nº 0001 · Nepregledano');
+    const FD = this.findings(f); const cards = s.shown.map((i, k) => ({ code: FD[i][0], text: FD[i][1], where: FD[i][2], op: s.fade === k ? '0' : '1', tr: s.fade === k ? 'translateY(6px)' : 'none' }));
+    return {
+      desk, padBottom: desk ? '0px' : '76px',
+      facs: this.FACS, profile: s.profile, works: P.works ?? 2,
+      plate: f ? f.kr + ' · ' + s.profile.razKr : 'Odaberi profil',
+      setProfile: this.setProfile, flip: this.flip, upload: this.upload, toggleLamp: this.toggleLamp,
+      uploadFromBack: () => { this.setState({ flipped: false }); setTimeout(() => this.upload(), 500); },
+      deskCols: wide ? 'minmax(0,700px) 300px' : 'minmax(0,700px)',
+      priborCols: wide ? 'minmax(0,1fr)' : 'repeat(auto-fit,minmax(min(100%,260px),1fr))',
+      folderGap: drag ? '34px' : '0px', folderOp: drag ? '1' : '0', folderT: drag ? 'rotate(-1.2deg) scale(1)' : 'rotate(0deg) scale(.96)',
+      sheetT, sheetOp: s.stage === 'leave' ? '0' : '1', flipped: s.flipped, notFlipped: !s.flipped,
+      shadow: drag ? '0 4px 10px rgba(0,0,0,.35),0 34px 80px rgba(0,0,0,.6)' : '0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55)',
+      padL, padR: desk ? '56px' : '22px', lead: f ? String(f.l + 0.05) : '1.45',
+      headRight, headCol: s.fname || drag ? '#26221B' : '#6E6656',
+      stampTop, stampMain, stampCol, stampInk, stampKey,
+      title: s.stage === 'reading' || s.stage === 'file' ? 'Čitam formu.' : s.stage === 'leave' ? 'Pročitano.' : 'Ubaci rad.',
+      reading: s.stage === 'reading', leaving: s.stage === 'leave', showCta: !hasFile,
+      autoP: String(Math.min(1, s.el / 10000)), autoOp: s.paused || reduceAuto ? '0' : '.85', hasRok: !!s.rok, clearRok: () => this.setState({ rok: '' }),
+      ctaOff: false, ctaBg: '#E4573D', ctaSh: '0 12px 28px rgba(228,87,61,.3)', ctaFlex: desk ? '0 0 auto' : '1 1 100%',
+      gateMsg: false, gateText: 'Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“' + (wide ? ' (desno).' : ' (ispod).'),
+      hasProfile: !!f, noProfile: !f, zigKey: 'z' + s.zig, zigKr: f ? f.kr : '', zigUpd: f ? 'AŽ. ' + f.upd : '', zigLabel: f ? f.kr + ' pravilnik ažuriran ' + f.upd : '',
+      cornerS: s.hover && desk ? '40px' : '30px',
+      koteOp: kote ? '1' : '0', koteX: kote ? '1' : '0', koteM: f ? String(f.m).replace('.', ',') + ' cm' : '', koteR: f ? 'PRORED ' + String(f.l).replace('.', ',') + ' · ' + f.f.toUpperCase() : '',
+      hoverIn: () => this.setState({ hover: true }), hoverOut: () => this.setState({ hover: false }),
+      fileRef: this.fileRef, rokRef: this.rokRef,
+      onFile: e => { const fl = e.target.files && e.target.files[0]; if (fl) { this.size = fl.size; this.take(fl.name); } e.target.value = ''; },
+      onDragIn: e => { if (![...(e.dataTransfer?.types || [])].includes('Files')) return; this.depth++; this.setState({ drag: true }); },
+      onDragOver: e => { if ([...(e.dataTransfer?.types || [])].includes('Files')) e.preventDefault(); },
+      onDragOut: () => { this.depth = Math.max(0, this.depth - 1); if (!this.depth) this.setState({ drag: false }); },
+      onDrop: e => { e.preventDefault(); this.depth = 0; const fl = e.dataTransfer?.files?.[0]; this.setState({ drag: false }); if (!fl || s.stage !== 'idle') return; this.size = fl.size; this.take(fl.name); },
+      facObj: f, raz: s.profile ? s.profile.raz : 'diplomski', razKr: s.profile ? s.profile.razKr : '', studij: s.profile ? s.profile.studij : '',
+      meterReading: s.stage === 'reading' || s.stage === 'leave', kbRead: (s.kb || 0).toLocaleString('hr-HR') + ' KB',
+      meterLine: s.stage === 'reading' ? 'Lekta čita dokument u tvom pregledniku. Na mrežu ne ide nijedan bajt.' : s.stage === 'leave' ? 'Pročitano. Poslano: 0 B.' : 'Isključi Wi-Fi i probaj. Provjera radi i bez mreže.',
+      backLead: f ? 'Šest nalaza iz primjera diplomskog rada, mjereno po pravilniku ' + f.kr + '. Tri leže na stolu, ostali dolaze redom.' : 'Šest nalaza iz primjera diplomskog rada. Tri leže na stolu, ostali dolaze redom.',
+      ...Object.fromEntries(['privatnost', 'uvjeti-koristenja', 'obrada-dokumenata', 'kolacici'].map(sl => ['legal_' + sl.replace(/-/g, '_'), () => this.openLegal(sl)])),
+      lgCols: desk ? '190px minmax(0,1fr)' : 'minmax(0,1fr)', closeLegal: this.closeLegal, lgCloseRef: this.lgCloseRef, lgBodyRef: this.lgBodyRef,
+      lgOp: s.lg ? '1' : '0', lgPe: s.lg ? 'auto' : 'none', lgVis: s.lg ? 'visible' : 'hidden', lgHidden: !s.lg, lgT: s.lg ? 'translate(-50%,-50%)' : 'translate(-50%,-46%) scale(.98)',
+      lgTabs: s.lgDocs.map(d => ({ title: d.title, on: d.slug === s.lg, bd: d.slug === s.lg ? '#C4372E' : 'transparent', col: d.slug === s.lg ? '#26221B' : '#6E6656', pick: () => { this.setState({ lg: d.slug }); if (this.lgBodyRef.current) this.lgBodyRef.current.scrollTop = 0; } })),
+      lgTitle: (s.lgDocs.find(d => d.slug === s.lg) || {}).title || '',
+      lgSummary: ((s.lgDocs.find(d => d.slug === s.lg) || {}).summary || []).map(x => ({ t: x })),
+      lgSecs: ((s.lgDocs.find(d => d.slug === s.lg) || {}).sections || []).map((sec, i) => ({ h: sec.h, id: 'lg-' + i, href: '#lg-' + i, ps: (sec.p || []).map(x => ({ t: x })), go: e => { e.preventDefault(); const el = document.getElementById('lg-' + i), body = this.lgBodyRef.current; if (el && body) body.scrollTo({ top: el.offsetTop - 16, behavior: 'smooth' }); } })),
+      lgCount: s.lgDocs.length ? (s.lgDocs.findIndex(d => d.slug === s.lg) + 1) + ' / ' + s.lgDocs.length + ' · klikni izvan lista ili Esc za zatvaranje' : '',
+      cards, dots: this.FIND.map((_, i) => ({ bg: s.shown.includes(i) ? '#C4372E' : '#DCD4BF' })),
+      rok: s.rok, neznam: s.neznam, rokOp: s.neznam ? '.45' : '1',
+      onRok: e => this.setState({ rok: e.target.value }),
+      onNeznam: e => this.setState({ neznam: e.target.checked, gate: false }),
+      calBig: dd === null ? '—' : dd < 0 ? '0' : String(dd),
+      calBigCol: dd === null ? '#B8AE96' : '#26221B',
+      calUnit: dd === null ? 'dana do roka' : dd < 0 ? 'rok je prošao' : dd === 0 ? 'predaješ danas' : plural(dd) + ' do roka',
+      calSub: s.rok ? 'predaja ' + fmtD(s.rok) : 'Uz rok nalaz pokaže koliko dana imaš za popravak.',
+      strikeX: s.neznam ? '1' : '0',
+      calSh: '0 2px 6px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4)',
+      facName: f ? f.kr + ' · ' + s.profile.studij : 'Prepoznat ćemo ga iz rada.', facCol: f ? '#26221B' : '#5B5446',
+      facNote: f ? s.profile.razKr + ' · margina ' + String(f.m).replace('.', ',') + ' cm · prored ' + String(f.l).replace('.', ',') : (desk ? 'ili odaberi profil na pločici gore desno' : 'ili odaberi profil na pločici gore'),
+    };
+  }
+}
+</script>
+</body>
+</html>

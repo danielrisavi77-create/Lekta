@@ -24,6 +24,7 @@ import { homedir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { localDay, sessionLabel } from '../agents/usage-daily.mjs';
+import { renderWasteMarkdown, summarizeWaste, wasteFromLines } from './context-waste.mjs';
 
 /**
  * `gard`: postojeci mehanizam koji vec sprjecava ili hvata klasu (hook, test, skripta), ili null.
@@ -195,6 +196,29 @@ export function collectFailures({ home = homedir(), sinceDay = null } = {}) {
   return { failures, stats };
 }
 
+/**
+ * Jedan prolaz kroz transkripte za oba mjerenja (kvarovi i rasipni pozivi konteksta), da se
+ * stotine MB ne citaju dvaput.
+ * @returns {{ failures: object[], waste: object[], stats: { files: number, malformedLines: number, unreadableFiles: number } }}
+ */
+export function collectAll({ home = homedir(), sinceDay = null } = {}) {
+  const stats = { files: 0, malformedLines: 0, unreadableFiles: 0 };
+  // Osteceni redak se broji jednom, u prolazu kvarova; drugi prolaz ima vlastiti brojac koji se odbacuje.
+  const ctx = { seen: new Set(), stats };
+  const wasteCtx = { seenWaste: new Set(), stats: { malformedLines: 0 } };
+  const failures = [];
+  const waste = [];
+  for (const file of walkJsonl(join(home, '.claude', 'projects'), stats)) {
+    let text;
+    try { text = readFileSync(file, 'utf8'); } catch { stats.unreadableFiles += 1; continue; }
+    stats.files += 1;
+    const lines = text.split(/\r?\n/);
+    for (const f of failuresFromLines(lines, ctx)) if (!sinceDay || f.day >= sinceDay) failures.push(f);
+    for (const w of wasteFromLines(lines, wasteCtx)) if (!sinceDay || w.day >= sinceDay) waste.push(w);
+  }
+  return { failures, waste, stats };
+}
+
 function addDays(day, n) {
   const d = new Date(`${day}T12:00:00`);
   d.setDate(d.getDate() + n);
@@ -315,15 +339,16 @@ function main(argv) {
   }
   const day = a.day ?? localDay(new Date());
   const sinceDay = a.all ? null : (a.since ?? addDays(day, -29));
-  const { failures, stats } = collectFailures({ home: a.home ?? homedir(), sinceDay });
+  const { failures, waste, stats } = collectAll({ home: a.home ?? homedir(), sinceDay });
   const sum = summarize(failures, day);
+  const rasipno = summarizeWaste(waste, day);
   if (a.json) {
     const clusters = sum.clusters.map((c) => (a.samples ? c : { ...c, potpis: null }));
     const dug = sum.dug.map((c) => (a.samples ? c : { ...c, potpis: null }));
-    process.stdout.write(`${JSON.stringify({ ...sum, clusters, dug, stats, pokriveno: ['claude'] }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ ...sum, clusters, dug, rasipno, stats, pokriveno: ['claude'] }, null, 2)}\n`);
     return;
   }
-  const text = renderMarkdown(sum, stats, { samples: a.samples });
+  const text = `${renderMarkdown(sum, stats, { samples: a.samples })}\n${renderWasteMarkdown(rasipno)}`;
   const outDir = resolve(a.outDir ?? join(homedir(), 'Lekta-quality'));
   if (repositoryOutput(outDir)) {
     process.stderr.write(`--out-dir ${outDir} je unutar repozitorija; izvjestaj nikad ne ide u repo.\n`);

@@ -4,6 +4,10 @@ import { guaranteeAppliesToStatus, guaranteeStatusNote } from '../report/guarant
 import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
+import { awaitAbortable } from '../shared/await-abortable';
+import { createAuthCompletion } from '../auth/auth-completion';
+import { createAnonymousSessionFlight, resolveAccessTokenOrAnonymous } from '../auth/anonymous-session-flight';
+import { renderRepairHistoryView } from './repair-history-view';
 import { setSiteChromePlate } from '../shared/site-chrome';
 // BL-P0-05-4: DOCX parser se uvozi LIJENO (dinamicki import) tek nakon odabira datoteke,
 // pa njegov kod ispada iz landing chunka.
@@ -18,7 +22,7 @@ import { estimateWorkType, workTypeMismatchLevel, TIER_RANK } from '../report/wo
 import { fetchRetailCatalog } from '../catalog/products-catalog';
 import { KIND_LABELS_HR, KIND_DOCUMENT_WIDE } from '../tools/typo-lint';
 import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
-import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr';
+import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr-labels';
 import { slotProductForWorkType } from '../report/rulebook';
 import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, PROFILE_STATUS, PROFILE_AUTHORITY, ensureProfileRules, setProfileRulesProvider, profileRulesLoaded, profileRulesFailed } from '../profiles/profile-registry';
 import { ensureRulesForCurrentSelection } from '../profiles/ensure-current-rules';
@@ -209,15 +213,15 @@ let _repairHistoryClientPromise: Promise<typeof import('../report/repair-history
 function loadRepairHistoryClient(){return _repairHistoryClientPromise??=import('../report/repair-history')}
 let _corpusContribClientPromise: Promise<typeof import('../report/corpus-contribution-client')>|null=null;
 function loadCorpusContribClient(){return _corpusContribClientPromise??=import('../report/corpus-contribution-client')}
-async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],args[2])}
+async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],fetch,args[2])}
 async function signRepairDownload(...args: any[]){return (await loadRepairHistoryClient()).signRepairDownload(args[0],args[1],args[2],args[3])}
 async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryClient()).deleteRepairJob(args[0],args[1],args[2],args[3])}
 let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
 function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
-async function getValidAccessToken(...args: any[]){return (await loadAuthClient()).getValidAccessToken(args[0],args[1])}
+async function getValidAccessToken(cfg: import('../auth/session').AuthConfig, store: import('../auth/session').SessionStore){return (await loadAuthClient()).getValidAccessToken(cfg,store,fetch,Date.now())}
 async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1],fetch,location.origin+location.pathname)}
 async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
-async function signInAnonymously(...args: any[]){return (await loadAuthClient()).signInAnonymously(args[0])}
+async function signInAnonymously(cfg: import('../auth/session').AuthConfig, signal?: AbortSignal, onSubmitted?: () => void, canSubmit?: () => boolean){return (await loadAuthClient()).signInAnonymously(cfg,fetch,Date.now(),undefined,signal,onSubmitted,canSubmit)}
 async function linkEmailToAnonymous(...args: any[]){return (await loadAuthClient()).linkEmailToAnonymous(args[0],args[1],args[2],fetch,location.origin+location.pathname)}
 async function confirmEmailLink(...args: any[]){return (await loadAuthClient()).confirmEmailLink(args[0],args[1],args[2],args[3])}
 let _checkoutClientPromise: Promise<typeof import('../report/checkout')>|null=null;
@@ -625,15 +629,22 @@ function handleHistoryAction(e: any){const profileId=e.target.closest('[data-his
 // preko testirane src/report/repair-history.ts. RLS select-own: server vraca samo korisnikove poslove.
 function repairHistoryConfig(){return repairHistoryConfigFrom(productionConfig)}
 function updateRepairHistoryButton(){const b=$('#repairHistoryBtn');if(b)b.classList.toggle('hidden',!repairServerConfigured())}
-// Ime preuzete datoteke iz naslova rada: svi popravci su se prije zvali "popravljeno.docx", pa se u
-// mapi preuzimanja nisu razlikovali. Znakovi koje datotecni sustavi odbijaju se uklanjaju.
-function repairDownloadName(j: any){const raw=String(j?.label||'').trim().replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').slice(0,60).trim();return (raw?`${raw}-popravljeno`:'popravljeno')+'.docx'}
-function openRepairHistory(){$('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));void renderRepairHistoryList()}
-function closeRepairHistory(){$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
-async function renderRepairHistoryList(){const el=$('#repairHistoryList');if(!el)return;el.innerHTML='<div class="empty">Učitavam…</div>';const token: any=await ensureAccessToken();if(authConfigured()&&!token){el.innerHTML='<div class="empty">Za pregled popravaka potrebna je prijava.</div>';openAuth(()=>renderRepairHistoryList());return}let jobs: any[]=[];try{jobs=await fetchRepairJobs(repairHistoryConfig(),token||'')}catch(e: any){el.innerHTML='<div class="empty">Popravke trenutačno nije moguće učitati.</div>';return}
- // Kanal A: prilozi korpusu po poslu, samo kad je znacajka ukljucena; pad dohvata ne rusi popis (nema gumba, nista vise).
- const corpusByJob=new Map<string,string>();if(productionConfig?.corpusContribution===true){try{const cc=await loadCorpusContribClient();for(const c of await cc.fetchActiveCorpusContributions(cc.corpusContributionConfigFrom(productionConfig),token||''))if(c.repairJobId)corpusByJob.set(c.repairJobId,c.id)}catch{}}
-if(!jobs.length){el.innerHTML='<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';return}el.innerHTML=jobs.map((j: any)=>{const tier=tierFor(j.workType),date=j.createdAt?new Date(j.createdAt).toLocaleString('hr-HR'):'',mb=j.resultBytes?`${(j.resultBytes/1024/1024).toFixed(2)} MB`:'';return`<article class="history-card"><div class="history-head"><div><h4>${escapeHtml(j.label||'Popravljeni rad')}</h4><p>${escapeHtml(tier?tier.label:j.workType)}</p></div></div><div class="history-meta"><span>${escapeHtml(date)}</span>${j.changesCount!=null?`<span>${escapeHtml(_plIzmjena(j.changesCount))}</span>`:''}${mb?`<span>${escapeHtml(mb)}</span>`:''}</div><div class="history-actions">${j.deleting?'<span class="muted">Brisanje u tijeku…</span>':`<button class="btn btn-secondary btn-sm" data-repair-download="${escapeHtml(j.id)}" data-path="${escapeHtml(j.resultPath)}" data-name="${escapeHtml(repairDownloadName(j))}">Preuzmi</button><button class="btn btn-ghost btn-sm" data-repair-del="${escapeHtml(j.id)}">Obriši</button>${corpusByJob.has(j.id)?`<button class="btn btn-ghost btn-sm" data-corpus-withdraw="${escapeHtml(corpusByJob.get(j.id)||'')}">Povuci prilog korpusu</button>`:''}`}</div></article>`}).join('');window.__lektaIcons?.()}
+let _repairHistoryLoad=0;
+function openRepairHistory(){ $('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));return renderRepairHistoryList() }
+function closeRepairHistory(){_repairHistoryLoad+=1;$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
+async function renderRepairHistoryList(){
+ const el=$('#repairHistoryList');if(!el)return false;
+ const loadId=++_repairHistoryLoad;
+ return renderRepairHistoryView(el,{
+  isCurrent:()=>loadId===_repairHistoryLoad,authConfigured:authConfigured(),ensureAccessToken,
+  openAuth:()=>openAuth(),
+  fetchJobs:(token,signal)=>fetchRepairJobs(repairHistoryConfig(),token,signal),
+  includeCorpusContributions:productionConfig?.corpusContribution===true,
+  fetchCorpusContributions:async(token,signal)=>{const cc=await loadCorpusContribClient();return cc.fetchActiveCorpusContributions(cc.corpusContributionConfigFrom(productionConfig),token,fetch,signal)},
+  tierLabel:(workType)=>{const tier=tierFor(workType);return tier?tier.label:workType},formatChanges:(count)=>_plIzmjena(count),
+  escape:escapeHtml,refreshIcons:()=>window.__lektaIcons?.(),
+ });
+}
 async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]'),cw=e.target.closest('[data-corpus-withdraw]');if(!dl&&!del&&!cw)return;
  if(cw){const cid=cw.dataset.corpusWithdraw;if(!confirm('Povući privolu za prilog korpusu? Pseudonimizirana kopija bit će obrisana sa servera.'))return;const t: any=await ensureAccessToken();if(authConfigured()&&!t){openAuth(()=>renderRepairHistoryList());return}cw.disabled=true;const cc=await loadCorpusContribClient();const out=await cc.withdrawCorpusContribution(cc.corpusContributionConfigFrom(productionConfig),t||'',cid);if(out.ok){toast('Privola je povučena, kopija je obrisana.');void renderRepairHistoryList()}else{cw.disabled=false;toast('Povlačenje trenutačno nije moguće.')}return}const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';
   // RE-39: a.click() NAKON awaita cesto je popup-blokiran (nema vise svjeze korisnicke geste iza sebe).
@@ -1602,17 +1613,18 @@ function paywallLockHtml(what: any){if(currentResult&&_paywallViewedFor!==curren
 function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlockReport});$$('[data-buy-obrana]').forEach(b=>{b.onclick=()=>startReportCheckout(b.dataset.buyObrana,'do_obrane')});window.__lektaIcons?.()}
 const SESSION_KEY=STORAGE_KEYS.session;
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
+const anonymousSessionFlight=createAnonymousSessionFlight(
+ (signal,onSubmitted)=>signInAnonymously(authConfig(),signal,onSubmitted,()=>!authStore.load()),
+ session=>{if(authStore.load())return false;authStore.save(session);renderAuthEntry();return true},
+ ()=>!authStore.load(),
+);
 function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'').trim(),anonKey:String(productionConfig?.supabaseAnonKey||'').trim()}}
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
 // Valjan pristupni token: iz Supabase sesije ako je auth konfiguriran (null -> pozivatelj otvara prijavu),
 // inace null (nema vise statickog tokena; nekonfigurirano okruzenje nema pristup).
 async function resolveAccessToken(){if(authConfigured()){try{return await getValidAccessToken(authConfig(),authStore)}catch(e: any){return null}}return null}
-/* Token BEZ trazenja e-maila: ako sesije nema, tiho otvori anonimnu. Sluzi tokovima koji moraju
-   biti bez trenja (popravak, "Moji popravci"). Identitet je i dalje pravi user_id, pa RLS, mapa u
-   Storageu i pravo na brisanje rade nepromijenjeno; samo ne trazimo e-mail. Ako anonimna prijava
-   nije ukljucena na projektu, vracamo null pa pozivatelj pada natrag na e-mail prijavu.
-   NE koristiti za admin/kupnju: ondje identitet mora biti vezan uz osobu. */
-async function ensureAccessToken(){if(!authConfigured())return null;const existing=await resolveAccessToken();if(existing)return existing;try{const out=await signInAnonymously(authConfig());if(!out.ok)return null;authStore.save(out.session);renderAuthEntry();return out.session.accessToken}catch(e: any){return null}}
+/* Tiha anon prijava za popravak/povijest; user_id nosi RLS, storage i brisanje. Admin/kupnja traze osobni racun. */
+async function ensureAccessToken(signal?: AbortSignal){return resolveAccessTokenOrAnonymous(authConfigured(),resolveAccessToken,authStore.load,s=>anonymousSessionFlight.run(s),signal)}
 // Referral (pozovi-prijatelja, 0013): kod se hvata iz ?ref na ucitavanju (safeStorage, prezivi
 // email-potvrdu u novom tabu), veze se na signup nakon OTP prijave, a share sekcija se prikaze na
 // ekranu 6 ako korisnik ima referral_code (prva kupnja). Sve preko service role u Edge Functionima.
@@ -1621,13 +1633,14 @@ function referralConfig(){const rf=String(productionConfig?.referralEndpoint||''
 function captureReferralCode(){try{const ref=new URLSearchParams(location.search).get('ref');if(ref)safeStorageSet(REFERRAL_CODE_KEY,ref.trim().toUpperCase())}catch(e: any){}}
 export async function maybeRedeemReferral(){const code=String(safeStorageGet(REFERRAL_CODE_KEY,'')||'').trim(),ep=referralConfig().endpoint;if(!code||!ep)return;const token: any=await resolveAccessToken();if(!token)return;try{await postReferralRedeem(ep,token,code)}finally{safeStorageSet(REFERRAL_CODE_KEY,'')}}
 async function renderReferralShareBar(r?: any){const el=$('#referralShareBar');if(!el)return;el.innerHTML='';const c=authConfig();if(!c.supabaseUrl||!c.anonKey)return;const token: any=await resolveAccessToken();if(!token)return;const facultyId=r?.settings?.selectionIds?.unit||null;const workType=facultyId?toReportWorkType(r.settings?.workType||r.selection?.workType||'final'):null;try{await renderReferralShareSection({supabaseUrl:c.supabaseUrl,anonKey:c.anonKey,accessToken:token,appBaseUrl:location.origin||'',mountEl:el,facultyId,workType,deadlineRegistry:ACADEMIC_DEADLINES,onShare:()=>{void trackEvent('referral_shared')}})}catch(e: any){}}
-let _authEmail='',_authStep='email',_pendingAuthAction: any=null;
+let _authEmail='',_authStep='email';
+const _authCompletion=createAuthCompletion();
 // Kad nije prazno, potvrda ide kroz email_change nad TIM uuid-om (P0-07), ne kroz obican OTP.
 let _authLinkUserId='';
 export function setAuthStatus(type: any,msg?: any){const st=$('#authStatus');if(!st)return;if(!msg){st.className='order-status hidden';st.textContent='';return}st.className=`order-status ${type}`;st.textContent=msg}
 function resetAuthModal(){_authEmail='';_authStep='email';_authLinkUserId='';const em=$('#authEmail'),cc=$('#authCode');if(em){em.value='';em.disabled=false}if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub){sub.textContent='Pošalji kod';sub.disabled=false}setAuthStatus('','')}
-function openAuth(afterSignIn: any){_pendingAuthAction=afterSignIn||null;resetAuthModal();$('#authModal')?.classList.remove('hidden');trapModal($('#authModal'));setTimeout(()=>$('#authEmail')?.focus(),40)}
-function closeAuth(){$('#authModal')?.classList.add('hidden');releaseModal($('#authModal'))}
+function openAuth(afterSignIn?: any){resetAuthModal();$('#authModal')?.classList.remove('hidden');trapModal($('#authModal'));setTimeout(()=>$('#authEmail')?.focus(),40);return _authCompletion.wait(afterSignIn)}
+function closeAuth(){_authCompletion.cancel();$('#authModal')?.classList.add('hidden');releaseModal($('#authModal'))}
 // PRIJAVA IZ ANONIMNE SESIJE IDE POVEZIVANJEM, NE NOVIM RACUNOM (audit P0-07).
 //
 // `requestEmailOtp` salje `create_user: true`, pa za nepoznat e-mail nastaje NOV korisnik s NOVIM
@@ -1665,7 +1678,7 @@ async function authSubmit(){const sub=$('#authSubmit');if(!sub)return;if(sub.dis
    ?await confirmEmailLink(authConfig(),_authEmail,code,_authLinkUserId)
    :await verifyEmailOtp(authConfig(),_authEmail,code);
   sub.disabled=false;
-  if(out.ok){const upgraded=!!_authLinkUserId;authStore.save(out.session);void maybeRedeemReferral();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry();const a=_pendingAuthAction;_pendingAuthAction=null;if(a)a()}
+  if(out.ok){const upgraded=!!_authLinkUserId;anonymousSessionFlight.invalidate();authStore.save(out.session);void maybeRedeemReferral();_authCompletion.complete();closeAuth();toast(upgraded?'Račun je povezan, popravci su sačuvani.':'Prijava uspješna.');trackEvent(upgraded?'auth_anon_upgraded':'auth_signed_in',{});renderAuthEntry()}
   else{setAuthStatus('error',out.message||'Kod nije točan.')}
  }}
 function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#authEmail');if(em)em.disabled=false;const cc=$('#authCode');if(cc)cc.value='';$('#authCodeField')?.classList.add('hidden');$('#authChangeEmail')?.classList.add('hidden');const sub=$('#authSubmit');if(sub)sub.textContent='Pošalji kod';setAuthStatus('','');em?.focus()}
@@ -1674,7 +1687,7 @@ function authChangeEmail(){_authStep='email';_authLinkUserId='';const em=$('#aut
 // toggle podsjetnika na rok. NE ovisi o naplati (reportEndpoint ostaje prazan).
 function authSessionActive(){const s=authStore.load();return authConfigured()&&s&&s.email?s:null}
 export function afterAuthChange(){renderAuthEntry();if(currentResult)renderSubmissionChecklist(currentResult)}
-function authLogout(){authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
+function authLogout(){anonymousSessionFlight.invalidate();authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
 function renderAuthEntry(){const s=authSessionActive();$$('[data-auth-entry]').forEach((b: any)=>{if(!authConfigured()){b.classList.add('hidden');return}b.classList.remove('hidden');if(s){b.textContent='Odjava';b.title=`Prijavljen/a: ${s.email}`;b.onclick=authLogout}else{b.textContent='Prijava';b.title='Prijava e-mailom (kod)';b.onclick=()=>openAuth(afterAuthChange)}})}
 // Garancijski zahtjev (file-guarantee-claim Edge Function). Pokriva TOCNOST verificiranih
 // bodovanih pravila (T2/T3, 30 dana od vezivanja), NE prihvacanje rada; odluka je rucna.
@@ -1901,6 +1914,7 @@ const REPAIR_MAX_UPLOAD_BYTES=DOCX_MAX_UPLOAD_BYTES;
 // Krajnji rok jednog popravka. Namjerno velikodusan (spor uplink + serverska obrada), ali konacan:
 // bez njega zaglavljen zahtjev ostavlja gumb zauvijek u stanju "Saljem".
 const REPAIR_TIMEOUT_MS=180000;
+const REPAIR_AUTH_TIMEOUT_MS=30000;
 /* Sekcija "zahvati u tekst rada": stavke koje mijenjaju AUTOROV TEKST. Namjerno izvan "Popravi
    sve" i s dvije ravnopravne opcije, jer je odluka o sadrzaju korisnikova, ne nasa:
      1. "Primijeni" (kvacica, po zadanom ISKLJUCENA) -> stavka ide uz popravak,
@@ -2013,11 +2027,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
  let inFlight=false;
+ let repairOutcomeUnknown=false;
  const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
- async function go(confirmedMismatch: boolean){
-  if(inFlight)return;
+ async function go(confirmedMismatch: boolean, recoveryRetry=false){
+  if(inFlight||(repairOutcomeUnknown&&!recoveryRetry))return;
   inFlight=true;
   const orig=btn.textContent;
+  const authController=new AbortController();
+  const authTimer=setTimeout(()=>authController.abort(),REPAIR_AUTH_TIMEOUT_MS);
   btn.disabled=true;
   try{
   // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
@@ -2026,8 +2043,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   const chosenItems=getCheckedItems();
   if(!chosenItems.length){setSummary('<strong>Odaberi barem jednu stavku za popravak.</strong>');return}
   // Bez trenja: anonimna sesija se otvara tiho. Pad na e-mail prijavu samo ako anonimne nisu ukljucene.
-  const token: any=await ensureAccessToken();
-  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
+  btn.textContent='Provjeravam prijavu…';
+  const token: any=await awaitAbortable(ensureAccessToken(authController.signal),authController.signal);
+  clearTimeout(authTimer);
+  if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch,repairOutcomeUnknown));return}
   btn.textContent='Šaljem na server…';
   try{
    // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
@@ -2063,6 +2082,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    pending={token:token||'',bytes,meta,signal:ac.signal};
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
+   if(out.kind==='error'&&out.status===undefined)repairOutcomeUnknown=true;
+   else if(recoveryRetry)repairOutcomeUnknown=false;
    if(out.kind==='ok')trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r));
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
@@ -2213,12 +2234,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
    // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
    // T10: oporavak po recovery-policy.ts (prekid nakon slanja: prvo provjera posla).
-   else if(out.kind==='error'){renderRepairRecovery(summary,recoveryFor(out,'after-send'),{retry:()=>go(confirmedMismatch),openJobs:authSessionActive()?openRepairHistory:null},escapeHtml)}
+   else if(out.kind==='error'){
+    const recovery=recoveryFor(out,'after-send');
+    if(recovery.action==='check-existing-job')repairOutcomeUnknown=true;
+    renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,recovery.action==='check-existing-job'),openJobs:recovery.action==='check-existing-job'?openRepairHistory:(authSessionActive()?openRepairHistory:null)},escapeHtml)
+   }
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
-  }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  }finally{
+   }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
+  }catch(e: any){console.error('Provjera prijave za popravak:',e);if(authController.signal.aborted){const recovery=repairOutcomeUnknown?{action:'check-existing-job' as const,retryAllowed:false,message:'Provjera prijave trajala je predugo. Prethodni popravak možda je još u obradi. Prvo učitaj Moje popravke prije novog pokušaja.'}:{action:'retry' as const,retryAllowed:true,message:'Provjera prijave trajala je predugo. Popravak nije poslan; provjeri vezu i pokušaj ponovno.'};renderRepairRecovery(summary,recovery,{retry:()=>go(confirmedMismatch,repairOutcomeUnknown),openJobs:repairOutcomeUnknown?openRepairHistory:null},escapeHtml)}else setSummary('Provjera prijave nije uspjela. Provjeri vezu i pokušaj ponovno.')}
+  finally{
+   clearTimeout(authTimer);
    inFlight=false;
-   if(!lockButton){btn.disabled=false;btn.textContent=orig;binding.controller.backToPlan()}
+   if(!lockButton){btn.textContent=orig;binding.controller.backToPlan();btn.disabled=repairOutcomeUnknown}
   }
  }
  // Potvrdni korak i receipt stanje zive u lijeno ucitanom modulu.

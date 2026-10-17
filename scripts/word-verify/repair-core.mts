@@ -93,6 +93,21 @@ function coreProps(data?: Uint8Array): { naslov: string; autor: string } {
   return { naslov: pick('dc:title') || '-', autor: pick('dc:creator') || '-' };
 }
 
+/** Polja jezgrenih metapodataka (npr. `creator`) za koja zahtjevi traze `remove`. */
+function requestedCoreMetadataRemovals(assisted: FixerRequest[]): string[] {
+  const fields = new Set<string>();
+  for (const request of assisted) {
+    if (request.fixerId !== 'final-document-inspector-fixer') continue;
+    const metadata = (request.params as { metadata?: unknown }).metadata;
+    if (!Array.isArray(metadata)) continue;
+    for (const raw of metadata) {
+      const item = raw as { part?: unknown; field?: unknown; action?: unknown } | null;
+      if (item && item.part === 'core' && item.action === 'remove' && typeof item.field === 'string') fields.add(item.field);
+    }
+  }
+  return [...fields].sort();
+}
+
 /**
  * JSON izvjestaj koji `check.ps1`, `check-worst-case.ps1` i `check-corpus.ps1` parsiraju.
  *
@@ -124,6 +139,9 @@ export function buildRepairReport(input: {
     dijelovaPrije: before.length,
     dijelovaPoslije: after.length,
     asistiraniZahtjevi: assisted.map((request) => request.fixerId),
+    // Polja docProps/core.xml cije je uklanjanje STVARNO trazeno. Od #325 privatni metapodaci po
+    // zadanom ostaju, pa primjena final-document-inspectora sama ne govori je li autor smio nestati.
+    trazenoUklanjanjeMeta: requestedCoreMetadataRemovals(assisted),
     // Autor i naslov iz docProps/core.xml, cita se IZ PAKETA a ne preko Worda: COM
     // BuiltInDocumentProperties je u ovom okruzenju null, pa bi provjera bila vakuozna.
     docPropsPrije: coreProps(beforeMap.get('docProps/core.xml')),

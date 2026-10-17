@@ -43,6 +43,16 @@ describe('fetchActiveCorpusContributions', () => {
     ]);
   });
 
+  it('prosljeđuje signal prekida na PostgREST zahtjev', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | null = null;
+    await fetchActiveCorpusContributions(cfg, 'jwt', fakeFetch((_url, init) => {
+      seenSignal = init?.signal as AbortSignal;
+      return { status: 200, body: [] };
+    }), controller.signal);
+    expect(seenSignal).toBe(controller.signal);
+  });
+
   it('bez konfiguracije, bez tokena ili uz gresku vraca prazno, ne baca', async () => {
     expect(await fetchActiveCorpusContributions(corpusContributionConfigFrom({}), 'jwt')).toEqual([]);
     expect(await fetchActiveCorpusContributions(cfg, '')).toEqual([]);

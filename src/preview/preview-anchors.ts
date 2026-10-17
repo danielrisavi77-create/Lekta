@@ -28,7 +28,7 @@ import {
   KIND_PRVO_LICE,
 } from '../audits/register';
 import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
-import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr';
+import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr-labels';
 
 export type PreviewSeverity = 'error' | 'warning' | 'info';
 

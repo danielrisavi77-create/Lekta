@@ -1,0 +1,38 @@
+<!-- @dsCard group="Stanja" viewport="1400x900" name="Ekrani po širini" subtitle="Ključni predlošci na tabletu, malom laptopu, velikom ekranu i položenom mobitelu" -->
+<!DOCTYPE html>
+<html lang="hr"><head><meta charset="utf-8"><title>Ekrani po širini</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1C1915;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace}
+a{color:#E4573D}a:hover{color:#F7F3E8}
+.bp-top{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:space-between;padding:32px 40px 20px;border-bottom:1px solid rgba(237,231,220,.12)}
+.bp-top h1{margin:0;font:400 44px/1 'Instrument Serif',Georgia,serif}
+.bp-top p{margin:8px 0 0;font-size:12px;color:rgba(237,231,220,.65);max-width:60ch;line-height:1.5}
+.bp-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.bp-tabs button{all:unset;cursor:pointer;padding:10px 14px;border:1px solid rgba(237,231,220,.2);border-radius:999px;font-size:12px}
+.bp-tabs button[aria-pressed="true"]{background:#F7F3E8;color:#1C1915;border-color:#F7F3E8}
+.bp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:28px;padding:28px 40px 48px}
+.bp-cell{display:grid;gap:10px;min-width:0}
+.bp-cell header{display:flex;justify-content:space-between;gap:10px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(237,231,220,.7)}
+.bp-frame{position:relative;overflow:hidden;background:#111;border:1px solid rgba(237,231,220,.14);border-radius:6px}
+.bp-frame iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;pointer-events:none;background:#1C1915}
+.bp-rule{font-size:11px;line-height:1.5;color:rgba(237,231,220,.6)}
+</style></head>
+<body>
+<div class="bp-top"><div><h1>Ekrani po širini</h1><p>Isti predložak u svakoj širini. Pravila su u handoffu kao Z37: najveća širina sadržaja 1320 px, stol se širi, list ne raste preko svoje veličine.</p></div>
+<div class="bp-tabs" role="group" aria-label="Širina">
+<button type="button" data-w="768" data-h="1024" aria-pressed="true">Tablet 768</button>
+<button type="button" data-w="1024" data-h="768" aria-pressed="false">Tablet položen 1024</button>
+<button type="button" data-w="1920" data-h="1080" aria-pressed="false">Veliki 1920</button>
+<button type="button" data-w="844" data-h="390" aria-pressed="false">Mobitel položen 844×390</button>
+</div></div>
+<div class="bp-grid" id="bpGrid"></div>
+<script>
+const S=[['Ulaz','templates/intake-live/IntakeLive.dc.html','Fakultet i rok iznad lista do 1024; list max 640 px'],['Analiza','templates/analysis/Analysis.dc.html','Cedulje tek od 980; položeno: bez stupca cedulja'],['Rezultat','templates/result-live/ResultLive.dc.html','Stranica rada od 900; ladica preko cijele širine ispod'],['Faksimil','templates/facsimile-live/FacsimileLive.dc.html','Kartica ispod od 760 do 1180; bilješke uvijek izvan stranice'],['Popravak','templates/repair-live/RepairLive.dc.html','Račun uz popis od 900; položeno: stroj bez minijatura'],['Stranica fakulteta','templates/faculty-page/FacultyPage.dc.html','Faksimil desno sticky od 1024, ispod pravilnika manje'],['Traka i podnožje','templates/chrome/Chrome.dc.html','Grupe lijevo/desno od 1024; ispod toga izbornik']];
+const grid=document.getElementById('bpGrid');
+function render(w,h){grid.innerHTML='';S.forEach(([n,src,rule])=>{const c=document.createElement('div');c.className='bp-cell';c.innerHTML=`<header><span>${n}</span><span>${w}×${h}</span></header><div class="bp-frame"></div><div class="bp-rule">${rule}</div>`;grid.appendChild(c);const f=c.querySelector('.bp-frame');const fit=()=>{const s=f.clientWidth/w;f.style.height=Math.round(h*s)+'px';ifr.style.transform=`scale(${s})`;};const ifr=document.createElement('iframe');ifr.src=src;ifr.width=w;ifr.height=h;ifr.loading='lazy';ifr.title=n+' '+w;f.appendChild(ifr);new ResizeObserver(fit).observe(f);fit();});}
+document.querySelectorAll('.bp-tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.bp-tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(+b.dataset.w,+b.dataset.h);}));
+render(768,1024);
+</script>
+</body></html>
