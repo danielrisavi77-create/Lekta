@@ -15,6 +15,9 @@ import {
   sessionLabel,
   renderMarkdown,
   summarizeDay,
+  costOf,
+  priceOf,
+  CLAUDE_PRICES,
 } from '../scripts/agents/usage-daily.mjs';
 
 const WEIGHTS = { 'claude-sonnet-5': 1, 'claude-opus-5': 2.5 };
@@ -81,7 +84,9 @@ afterAll(() => {
 describe('usage-daily: tokeni po izvoru', () => {
   it('Claude: citanje kesa NIJE ulaz', () => {
     expect(claudeTokens({ input_tokens: 3, output_tokens: 4, cache_read_input_tokens: 500, cache_creation_input_tokens: 7 }))
-      .toEqual({ input: 3, output: 4, cacheRead: 500, cacheWrite: 7 });
+      .toEqual({ input: 3, output: 4, cacheRead: 500, cacheWrite: 7, cacheWrite1h: 0 });
+    expect(claudeTokens({ cache_creation_input_tokens: 9, cache_creation: { ephemeral_1h_input_tokens: 6, ephemeral_5m_input_tokens: 3 } }).cacheWrite1h)
+      .toBe(6);
   });
 
   it('oznaka sesije: ime zadnje mape za Windows i POSIX putanju, na svakoj platformi', () => {
@@ -132,6 +137,76 @@ describe('usage-daily: sinteticke mape', () => {
     expect(sonnet.weight).toBe(1 * (200 + 100));
     const opus = s.rows.find((r: { model: string }) => r.model === 'claude-opus-5');
     expect(opus.weight).toBe(2.5 * (10 + 20));
+  });
+
+  it('trosak s kesom po cjeniku modela, pisanje kesa 1 h po svojoj cijeni', () => {
+    // Sinteticki dan duge sesije Opusa 5.5: kes nosi gotovo sav trosak.
+    const rec = (o: Partial<{ model: string; session: string; input: number; output: number; cacheRead: number; cacheWrite: number; cacheWrite1h: number }>) => ({
+      provider: 'claude', day: DAN, session: o.session ?? 'aaaaaaaa Lekta', model: o.model ?? 'claude-opus-5-5',
+      input: o.input ?? 0, output: o.output ?? 0, cacheRead: o.cacheRead ?? 0, cacheWrite: o.cacheWrite ?? 0, cacheWrite1h: o.cacheWrite1h ?? 0,
+    });
+    const records = [
+      rec({ input: 1_000_000, output: 100_000, cacheRead: 10_000_000, cacheWrite: 2_000_000, cacheWrite1h: 1_500_000 }),
+      rec({ model: 'claude-haiku-4-5-20251001', session: 'bbbbbbbb Lekta', input: 1_000_000, cacheRead: 1_000_000 }),
+      rec({ model: 'gpt-test', session: 'cccccccc Lekta', input: 9_000_000, cacheRead: 9_000_000 }),
+    ];
+    // Opus 5.5: ulaz 4, izlaz 20, citanje 0,20, pisanje 1 h 8, 5 min 5 USD po milijunu.
+    const opus = 4 + 0.1 * 20 + 10 * 0.2 + 1.5 * 8 + 0.5 * 5;
+    const haiku = 1 + 0.1;
+    expect(costOf(records[0])).toBeCloseTo(opus, 9);
+    expect(costOf(records[1])).toBeCloseTo(haiku, 9);
+    expect(costOf(records[2])).toBeNull();
+    expect(priceOf('claude-opus-5-5[1m]')).toBe(CLAUDE_PRICES['claude-opus-5-5']);
+    const s = summarizeDay(records, DAN, WEIGHTS);
+    expect(s.totalCost).toBeCloseTo(opus + haiku, 9);
+    expect(s.cacheReadCost).toBeCloseTo(2 + 0.1, 9);
+    expect(s.cacheWriteCost).toBeCloseTo(1.5 * 8 + 0.5 * 5, 9);
+    expect(s.unpricedModels).toEqual(['gpt-test (claude)']);
+    expect(s.topCostSessions.map((t: { session: string }) => t.session)).toEqual(['aaaaaaaa Lekta', 'bbbbbbbb Lekta']);
+    const md = renderMarkdown(s, { malformedLines: 0, unreadableFiles: 0 });
+    expect(md).toContain('Trosak s kesom (procjena po API cjeniku, ne racun)');
+    expect(md).toContain('Bez cijene, nije u zbroju: gpt-test (claude)');
+    expect(md).toContain('## Top 5 sesija po trosku s kesom');
+    expect(Object.isFrozen(CLAUDE_PRICES)).toBe(true);
+  });
+
+  it('poredak po trosku razlikuje se od poretka po tezini', () => {
+    // A ima vecu tezinu (izlaz), B veci trosak (kes): stari poredak bi stavio A prvu.
+    const recs = [
+      { provider: 'claude', day: DAN, session: 'aaaaaaaa Lekta', model: 'claude-sonnet-5', input: 0, output: 1000, cacheRead: 0, cacheWrite: 0 },
+      { provider: 'claude', day: DAN, session: 'bbbbbbbb Lekta', model: 'claude-sonnet-5', input: 0, output: 10, cacheRead: 1_000_000, cacheWrite: 0 },
+    ];
+    const s = summarizeDay(recs, DAN, WEIGHTS);
+    expect(s.topSessions[0].session).toBe('aaaaaaaa Lekta');
+    expect(s.topCostSessions[0].session).toBe('bbbbbbbb Lekta');
+  });
+
+  it('anomalija troska i tjedni prag pisanja kesa vrijede tocno na granici', () => {
+    // Haiku 4.5: ulaz 1 USD, pisanje kesa 5 min 1,25 USD po milijunu.
+    const rec = (day: string, session: string, cacheWrite: number, input: number) => ({
+      provider: 'claude', day, session, model: 'claude-haiku-4-5', input, output: 0, cacheRead: 0, cacheWrite,
+    });
+    const povijest = [rec('2026-09-26', 'hhhhhhhh Lekta', 0, 1_000_000)];
+    const iznad = summarizeDay([...povijest, rec(DAN, 'aaaaaaaa Lekta', 0, 3_010_000)], DAN, WEIGHTS);
+    expect(iznad.anomalies.some((a: string) => a.includes('trosak s kesom') && a.includes('aaaaaaaa'))).toBe(true);
+    const tocno = summarizeDay([...povijest, rec(DAN, 'aaaaaaaa Lekta', 0, 3_000_000)], DAN, WEIGHTS);
+    expect(tocno.anomalies.some((a: string) => a.includes('trosak s kesom'))).toBe(false);
+    // Tjedni prag: pisanje 30 % troska ne okida prijedlog, 30,1 % okida (iznosi u USD x 1e6 tokena).
+    const tjedan = (pisanjeUsd: number) => summarizeDay([
+      rec(DAN, 'aaaaaaaa Lekta', (pisanjeUsd / 1.25) * 1e6, (1 - pisanjeUsd) * 1e6),
+    ], DAN, WEIGHTS, { weekly: true }).suggestions as string[];
+    expect(tjedan(0.3).some((x) => x.includes('pisanje kesa'))).toBe(false);
+    expect(tjedan(0.301).some((x) => x.includes('pisanje kesa'))).toBe(true);
+  });
+
+  it('model bez cijene nema izmisljen trosak, a dan samo s njim je n/a uz imenovan model', () => {
+    const rec = { provider: 'codex', day: DAN, session: 'cccccccc Lekta', model: 'gpt-test', input: 5, output: 5, cacheRead: 500, cacheWrite: 0 };
+    expect(costOf(rec)).toBeNull();
+    const s = summarizeDay([rec], DAN, WEIGHTS);
+    expect(s.rows[0].cost).toBeNull();
+    expect(s.totalCost).toBe(0);
+    expect(s.unpricedModels).toEqual(['gpt-test (codex)']);
+    expect(renderMarkdown(s, { malformedLines: 0, unreadableFiles: 0 })).toContain('Bez cijene, nije u zbroju: gpt-test (codex)');
   });
 
   it('prazan dan: nula, bez pada, uz anomaliju za providere aktivne ranije', () => {
