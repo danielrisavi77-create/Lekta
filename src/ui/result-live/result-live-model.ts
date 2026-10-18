@@ -160,7 +160,7 @@ export function pocetniOdabir(zahvati: readonly ZahvatPlana[]): Set<string> {
   return new Set(zahvati.filter((z) => z.vrsta === 'siguran').map((z) => z.ruleId));
 }
 
-type UlogaNalaza =
+export type UlogaNalaza =
   | { readonly kind: 'zahvat'; readonly ruleIds: readonly string[]; readonly label: string }
   | { readonly kind: 'rucno' }
   | { readonly kind: 'bez' };
@@ -405,7 +405,7 @@ function odlomciPregleda(preview: LivePreview | null): Array<{ index: number; te
  * kaze "Oko str." (F37). Karta vrijedi SAMO kad pregled nije skracen i kad tako dobiven broj
  * stranica TOCNO odgovara stvarnom; inace traka ne tvrdi stranicu koju ne zna.
  */
-function kartaStranica(preview: LivePreview | null, ukupno: number): Map<number, number> | null {
+export function kartaStranica(preview: LivePreview | null, ukupno: number): Map<number, number> | null {
   if (preview?.truncated === true) return null;
   const odlomci = odlomciPregleda(preview);
   if (!odlomci.length) return null;

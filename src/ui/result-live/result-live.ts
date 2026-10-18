@@ -37,6 +37,8 @@ export interface LiveStanje {
   readonly mode: 'now' | 'after';
   /** Ulazni trenutak (brojanje, pecat) je vec odigran za ovaj rezultat. */
   readonly odigrano: boolean;
+  /** Nalazi koje je korisnik u faksimilu Z35 oznacio "Napravit ću sam" (dijeljeno stanje plana). */
+  readonly rucno?: readonly string[];
 }
 
 interface LiveOptions {
@@ -53,6 +55,8 @@ interface LiveOptions {
   readonly kljuc: string;
   readonly stanje: LiveStanje | null;
   readonly esc: (v: string) => string;
+  /** "rad.docx · profil" za zaglavlje faksimila Z35. */
+  readonly naslov?: string | null;
   readonly onAction?: (action: ResultsCockpitAction, opener?: HTMLElement) => void;
 }
 
@@ -121,6 +125,9 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   const vidljivi = vidljiviZahvati(o.planItems, zahvati);
   const sada = izgledSada(preview);
   const p = prsten(o.score, o.ceiling);
+  // Faksimil Z35 je lijeni modul koji se ucitava tek na klik; plan i "Napravit ću sam" dijeli s ovim stolom.
+  const imaFaksimil = (preview?.paragraphs ?? []).some((pp) => typeof pp.text === 'string' && pp.text.trim() !== '');
+  let faksimil: { zatvori(): void } | null = null;
 
   const prije = o.stanje && o.stanje.kljuc === o.kljuc ? o.stanje : null;
   let cat: Jezicak = prije?.cat ?? 'all';
@@ -129,6 +136,7 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   let dirty = prije?.odabir != null;
   let mode: 'now' | 'after' = prije?.mode === 'after' && vidljivi.length ? 'after' : 'now';
   const odigrano = prije?.odigrano === true;
+  const rucno = new Set<string>(prije?.rucno ?? []);
   const tiho = pokretPrigusen(doc);
   const siroko = (): boolean => win?.matchMedia?.(SIROKO)?.matches ?? true;
   let odbacen = false;
@@ -350,6 +358,8 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
       + (celije ? `<div class="rl-strip__cells" style="--rl-n:${ukupno}" aria-hidden="true">${celije}</div>` : '')
       + (stranice || skup ? `<div class="rl-strip__go" role="group" aria-label="Skok na nalaze">${stranice}${skup}</div>` : '')
       + (legenda ? `<p class="rl-strip__legend">${legenda}</p>` : '')
+      // Ulaz u faksimil Z35 (lijeni modul); samo kad pregled dokumenta ima tekst koji se moze nacrtati.
+      + (imaFaksimil ? '<button type="button" class="rl-fax" data-rl-fax>Otvori faksimil</button>' : '')
       + '</div>';
   };
 
@@ -575,6 +585,43 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   };
   ciscenja.push(prekiniListanje);
 
+  /* ---------------------------------------------------------------- faksimil Z35 */
+
+  let otvara = false;
+  const otvoriFaksimil = (gumb: HTMLElement): void => {
+    if (faksimil || otvara) return;
+    otvara = true;
+    void import('../facsimile-live/facsimile-live').then(({ otvoriFaksimil: otvori }) => {
+      otvara = false;
+      if (odbacen || faksimil) return;
+      prekiniListanje();
+      faksimil = otvori(doc, {
+        nalazi, uloge, preview, traka, sada, stavke: o.planItems, zahvati,
+        repairAvailable: o.repairAvailable, autoritativno: o.authoritative, score: o.score, ceiling: o.ceiling,
+        naslov: o.naslov ?? null, pocetni: indeksOdabranog(), rucno, esc,
+        odabir: () => odabir,
+        postaviOdabir: (novi) => { odabir = novi; dirty = true; crtajKarticu(); crtajStranicu(); crtajLadicu(); },
+        // Isti ulaz u popravak kao ladica: odabir koji pise u planu je odabir koji ide u popravak.
+        naPlan: () => o.onAction?.({ kind: 'repair-safe', ruleIds: [...odabir] }, gumb),
+        naZatvori: (i) => {
+          faksimil = null;
+          if (odbacen) return;
+          cat = 'all';
+          selId = nalazi[i]?.id ?? selId;
+          const tabs = q<HTMLElement>('[data-rl-tabs]');
+          if (tabs) tabs.innerHTML = jezicciHtml();
+          crtajKarticu();
+          crtajStranicu();
+        },
+      });
+    }, () => {
+      // Lijeni uvoz nije uspio (mreza, stara objava): presuda ostaje kakva jest, s porukom u konzoli.
+      otvara = false;
+      console.warn('Faksimil se nije ucitao; presuda ostaje otvorena.');
+    });
+  };
+  ciscenja.push(() => { faksimil?.zatvori(); faksimil = null; });
+
   /* ---------------------------------------------------------------- dogadaji */
 
   const naKlik = (e: Event): void => {
@@ -643,6 +690,8 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
       return;
     }
     if (obradiIgnoreKlik(cilj)) return;
+    const fax = cilj.closest<HTMLElement>('[data-rl-fax]');
+    if (fax) { otvoriFaksimil(fax); return; }
     const radnja = radnjaZaKlik(cilj);
     if (radnja) o.onAction?.(radnja);
   };
@@ -681,7 +730,7 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   mount.dataset.rlReady = 'true';
 
   return {
-    stanje: () => ({ kljuc: o.kljuc, selId: nalazi[indeksOdabranog()]?.id ?? null, cat, odabir: dirty ? [...odabir] : null, mode, odigrano: true }),
+    stanje: () => ({ kljuc: o.kljuc, selId: nalazi[indeksOdabranog()]?.id ?? null, cat, odabir: dirty ? [...odabir] : null, mode, odigrano: true, rucno: [...rucno] }),
     odabir: () => (dirty ? [...odabir] : null),
     dispose() {
       odbacen = true;

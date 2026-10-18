@@ -1,0 +1,519 @@
+/* FAKSIMIL: SVE U JEDNOM (ALIGNMENT Z35). Lijeni list: dolazi s modulom facsimile-live.ts tek kad
+ * korisnik otvori faksimil s presude Z34. Inline stilovi predloska FacsimileLive.dc.html prepisani su
+ * u klase, boje na tokene sustava (stol i papir rade u obje teme).
+ *
+ * SIRINE (Z37 ima prednost pred Z35): biljeske uz stranicu od 900 px (na 768 su popis ispod), kartica
+ * uz stranicu i sticky od 1180 px, polozen mobitel bez sticky i bez biljeski uz stranicu. Tocke loma
+ * su iste kao u `facsimile-live-model.ts` (`raspored`); gard: tests/facsimile-live.test.ts.
+ *
+ * POKRET (Z31): animira se SAMO transform, opacity i clip-path. Nema backdrop-filter. Lampa i prsten
+ * prate mis kroz `transform`, ne kroz polozaj. Pod smanjenim pokretom nista se ne mice. */
+
+html[data-fl-open] { overflow: hidden }
+
+/* Serif nema rez iznad 400: naglasak u serifnim natpisima nosi kurziv (Z7, tests/design-tokens.test.ts). */
+.fl-mark, .fl-word, .fl-tip__t, .fl-note__t, .fl-li__t, .fl-card__t { --emph-weight: 400; --emph-style: italic }
+
+.fl {
+  --fl-note: #F1E6B8;
+  --fl-note-sel: #F6EBBE;
+  --fl-note-ink: #3E382C;
+  --fl-amber: var(--warn, #C98A2E);
+  --fl-pass: var(--pass, #34996A);
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  overflow: auto;
+  overflow-x: clip;
+  overscroll-behavior: contain;
+  background: var(--desk);
+  color: var(--desk-ink);
+  font-family: var(--mono, monospace);
+}
+/* Lampa stola ide do rubova (Z37), ali je obrezana: krug od 1200 px ne smije dati vodoravni skrol. */
+.fl-glow { position: absolute; inset: 0; overflow: hidden; pointer-events: none }
+.fl-glow::before {
+  content: '';
+  position: absolute;
+  top: -420px;
+  left: -160px;
+  width: 1200px;
+  height: 1200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--lamp, rgba(255, 214, 150, .13)), transparent 60%);
+}
+.fl button { font: inherit }
+.fl button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px }
+
+/* ---------------- zaglavlje ---------------- */
+
+.fl-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  width: min(1320px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 20px 0;
+}
+.fl-brand { display: inline-flex; align-items: center; gap: 10px }
+.fl-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: var(--desk-ink);
+  color: var(--desk);
+  font-family: var(--display-serif);
+  font-size: 20px;
+  line-height: 1;
+}
+.fl-mark i { position: absolute; right: -4px; bottom: -4px; width: 12px; height: 12px; background: var(--red) }
+.fl-word { font-family: var(--display-serif); font-style: italic; font-size: 28px }
+.fl-doc { min-width: 0; color: var(--desk-faint); font-size: 12px; overflow-wrap: anywhere }
+.fl-back {
+  margin-left: auto;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--desk-muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.fl-back:hover { color: var(--red) }
+
+/* ---------------- slojevi i objasnjenje ---------------- */
+
+.fl-main {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  width: min(1320px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 4px 0 56px;
+}
+.fl-layers { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-size: 11px; letter-spacing: .06em }
+.fl-k { margin-right: 4px; color: var(--desk-faint); font-size: 11px; letter-spacing: .08em }
+.fl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--desk-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--desk-muted);
+  font-size: 11px;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+.fl-pill[hidden] { display: none }
+.fl-pill[aria-pressed='true'] { border-color: var(--desk-ink); background: var(--desk-ink); color: var(--desk) }
+.fl-pill[data-peek] { border-color: var(--desk-faint); background: color-mix(in srgb, var(--desk-ink) 10%, transparent) }
+.fl-pill--slider[aria-pressed='true'] { border-color: var(--red-deep); background: var(--red-deep); color: var(--paper) }
+.fl-pill__dot { width: 7px; height: 7px; border-radius: 50% }
+.fl-pill__dot--notes { background: var(--fl-note) }
+.fl-pill__dot--dots { background: var(--red-deep) }
+.fl-pill__dot--rulers { background: var(--red-on-soft) }
+.fl-pill__dot--ghost { background: color-mix(in srgb, var(--red-deep) 45%, transparent) }
+.fl-sep { width: 1px; height: 20px; margin: 0 4px; background: var(--desk-line) }
+
+/* Objasnjenje ima SVOJ red (min-height), pa nikad ne prekriva stranicu (Z35, tocka 1). */
+.fl-tipbar { position: relative; min-height: 92px; margin-top: -10px }
+.fl-tiphint { margin: 0; padding-top: 4px; color: var(--desk-faint); font-size: 11px; letter-spacing: .04em }
+.fl-tip {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: start;
+  max-width: 620px;
+  padding: 14px 18px 14px 16px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .5);
+  animation: fl-in .22s var(--ease, ease-out) both;
+}
+.fl-tip__arrow { position: absolute; top: -6px; width: 12px; height: 12px; background: var(--paper); transform: rotate(45deg) }
+.fl-tip__icon { grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; font-size: 14px }
+.fl-tip__icon--notes { background: var(--fl-note); color: var(--fl-note-ink) }
+.fl-tip__icon--dots, .fl-tip__icon--slider { background: var(--red-deep); color: var(--paper) }
+.fl-tip__icon--rulers { background: var(--paper-ink); color: var(--paper) }
+.fl-tip__icon--ghost { background: color-mix(in srgb, var(--red-deep) 18%, transparent); color: var(--red-on-soft) }
+.fl-tip__t { font-family: var(--display-serif); font-size: 21px; line-height: 1.15 }
+.fl-tip__d { color: var(--paper-muted); font-size: 12px; line-height: 1.55; text-wrap: pretty }
+.fl-tip__foot { display: block; margin-top: 6px; color: var(--paper-muted); font-size: 11px; letter-spacing: .04em }
+
+/* ---------------- raspored ---------------- */
+
+.fl-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 22px; align-items: start }
+.fl-pagecol { display: grid; gap: 10px; min-width: 0 }
+.fl-notes { display: none }
+.fl-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none }
+.fl-list:empty { display: none }
+.fl-threads { display: none }
+
+@media (min-width: 900px) {
+  .fl-grid { grid-template-columns: minmax(0, 1fr) 210px }
+  .fl-notes { position: relative; display: block; align-self: stretch; margin-top: 54px }
+  .fl-list { display: none }
+  .fl-threads { position: absolute; inset: 0; display: block; overflow: visible; pointer-events: none }
+  .fl-card { grid-column: 1 / -1 }
+}
+@media (min-width: 1180px) {
+  .fl-grid { grid-template-columns: minmax(0, 1fr) 230px 360px }
+  .fl-card { grid-column: auto; position: sticky; top: 16px }
+}
+/* Polozen mobitel (Z37): bez sticky, stranica bez biljeski, popis ispod. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .fl-grid { grid-template-columns: minmax(0, 1fr) }
+  .fl-notes, .fl-threads { display: none }
+  .fl-list { display: grid }
+  .fl-card { grid-column: auto; position: relative; top: auto }
+}
+
+/* ---------------- stranica ---------------- */
+
+.fl-pagehead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px }
+.fl-readout { display: inline-flex; align-items: center; gap: 10px; min-width: 0; color: var(--desk-faint); font-size: 12px }
+.fl-readout[data-still] { color: var(--desk-ink) }
+.fl-readout__o { flex: 0 0 auto; width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 50% }
+.fl-nav { display: inline-flex; align-items: center; gap: 6px; color: var(--desk-muted); font-size: 12px }
+.fl-nav__t { min-width: 92px; text-align: center }
+.fl-nav__b {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--desk-line);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.fl-nav__b:hover:not([disabled]) { background: color-mix(in srgb, var(--desk-ink) 8%, transparent) }
+.fl-nav__b[disabled] { cursor: default; opacity: .4 }
+
+/* List raste s tekstom umjesto da ga reze: prikaz je priblizan, a sakriven tekst bio bi tiha laz. */
+.fl-page {
+  position: relative;
+  container-type: inline-size;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh);
+  touch-action: pan-y;
+}
+.fl-text { position: relative; hyphens: auto; overflow-wrap: anywhere }
+.fl-text p {
+  margin: 0 0 calc(6 * var(--fl-ptu));
+  font-size: calc(var(--fl-pt) * var(--fl-ptu));
+  line-height: var(--fl-lh, 1.15);
+}
+.fl-text [data-fx-par='h'] { font-weight: 700 }
+.fl-text [data-fl-hit='sel'] { background: var(--red-soft); box-shadow: 0 0 0 .6cqw var(--red-soft) }
+.fl-text [data-fl-hit='pop'] { background: var(--pass-soft); box-shadow: 0 0 0 .6cqw var(--pass-soft) }
+.fl-text [data-fl-hit='rucno'] { background: color-mix(in srgb, var(--fl-amber) 25%, transparent); box-shadow: 0 0 0 .5cqw color-mix(in srgb, var(--fl-amber) 25%, transparent) }
+.fl-pn { position: absolute; left: 0; right: 0; bottom: 3.4cqw; font-family: 'Times New Roman', serif; font-size: 2.8cqw; text-align: center }
+
+.fl-after { position: absolute; inset: 0; overflow: hidden; background: var(--paper-2); pointer-events: none }
+.fl-split { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--red-deep); pointer-events: none }
+.fl-handle {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--red-deep);
+  color: var(--paper);
+  font-size: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .4);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.fl-ghost, .fl-rulers, .fl-fx, .fl-dots, .fl-leaf { position: absolute; inset: 0; pointer-events: none }
+.fl-ghost, .fl-rulers { animation: fl-in .3s both }
+.fl-ghost__band { position: absolute; background: color-mix(in srgb, var(--red-deep) 14%, transparent) }
+.fl-ghost__frame { position: absolute; outline: 1.5px dashed color-mix(in srgb, var(--red-deep) 70%, transparent) }
+.fl-ghost__frame--bez { outline: 0 }
+.fl-ghost__frame[data-fl-prored] {
+  background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--fl-korak) - 1px),
+    color-mix(in srgb, var(--red-deep) 28%, transparent) calc(var(--fl-korak) - 1px) var(--fl-korak));
+}
+.fl-ghost__oval {
+  position: absolute;
+  left: 50%;
+  width: 9cqw;
+  height: 4.4cqw;
+  margin-left: -4.5cqw;
+  border: 1.5px dashed color-mix(in srgb, var(--red-deep) 70%, transparent);
+  border-radius: 50%;
+}
+.fl-rulers__line { position: absolute; top: 3cqw; bottom: 3cqw; border-left: 1.5px dashed var(--red-on-soft) }
+.fl-rulers__label {
+  position: absolute;
+  top: 50%;
+  left: 1.4cqw;
+  color: var(--red-on-soft);
+  font-size: 2.2cqw;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  transform: rotate(-90deg) translateX(50%);
+  transform-origin: left top;
+}
+.fl-rulers__lh { position: absolute; left: 4.2cqw; width: 1.4cqw; border: 1.5px solid var(--red-on-soft); border-right: 0 }
+.fl-rulers__lh span { position: absolute; top: 50%; right: calc(100% + .6cqw); color: var(--red-on-soft); font-size: 2cqw; transform: translateY(-50%) }
+
+.fl-fx { overflow: hidden }
+.fl-lamp {
+  position: absolute;
+  top: -170px;
+  left: -170px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 140, .2), rgba(255, 214, 140, 0) 70%);
+  opacity: 0;
+  transform: translate(var(--fl-mx, 0), var(--fl-my, 0));
+}
+.fl-ring {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--red-deep);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--red-soft);
+  opacity: 0;
+  transform: translate(var(--fl-mx, 0), var(--fl-my, 0));
+}
+.fl-page[data-lampa] .fl-lamp { opacity: 1 }
+.fl-page[data-still] .fl-ring { opacity: 1; transition: opacity .2s }
+
+.fl-dot {
+  position: absolute;
+  right: calc(2cqw + var(--fl-pomak, 0px));
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -22px -12px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.fl-dot[hidden] { display: none }
+.fl-dot span { width: 10px; height: 10px; border-radius: 50%; background: var(--red-deep) }
+.fl-dot--dorada span { background: var(--fl-amber) }
+.fl-dot--provjera span { background: var(--scan) }
+.fl-dot--done span { background: var(--fl-pass) }
+.fl-dot[data-sel] span { box-shadow: 0 0 0 6px color-mix(in srgb, var(--red-deep) 22%, transparent) }
+.fl-leaf {
+  background: linear-gradient(90deg, var(--paper-2), var(--paper) 60%, var(--paper-line));
+  box-shadow: 0 0 40px rgba(0, 0, 0, .35);
+  opacity: 0;
+}
+
+/* ---------------- biljeske ---------------- */
+
+.fl-note {
+  position: absolute;
+  left: 14px;
+  right: 0;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 0;
+  background: var(--fl-note);
+  color: var(--fl-note-ink);
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+  transform: rotate(var(--fl-rot, 0deg));
+  transition: opacity .25s;
+  cursor: pointer;
+}
+.fl-note::before { content: ''; position: absolute; top: 18px; left: -14px; width: 14px; height: 1.5px; background: var(--red-deep) }
+.fl-note--dorada::before { background: var(--fl-amber) }
+.fl-note--provjera::before { background: var(--scan) }
+.fl-note[data-sel] { background: var(--fl-note-sel) }
+.fl-note[data-far] { opacity: .38 }
+.fl-note__t, .fl-li__t { position: relative; font-family: var(--display-serif); font-style: italic; font-size: 17px; line-height: 1.15 }
+.fl-note__m, .fl-li__m { color: var(--paper-muted); font-size: 10px; letter-spacing: .04em }
+/* Precrtano po svakom retku naslova (naslov biljeske zna imati dva retka), bez animacije boje ili sirine. */
+.fl-note[data-done] .fl-note__t { text-decoration: line-through; text-decoration-color: var(--red-deep); text-decoration-thickness: 2px }
+.fl-li {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: 0;
+  background: var(--fl-note);
+  color: var(--fl-note-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.fl-li[data-sel] { background: var(--fl-note-sel) }
+.fl-li[data-done] .fl-li__t { text-decoration: line-through; text-decoration-color: var(--red-deep); text-decoration-thickness: 2px }
+.fl-li__m { font-size: 11px }
+.fl-thread { fill: none; stroke: color-mix(in srgb, var(--desk-ink) 45%, transparent); stroke-width: 1 }
+.fl-thread--sel { stroke: var(--red-deep); stroke-width: 1.6 }
+
+/* ---------------- kartica ---------------- */
+
+.fl-card {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px 24px 24px;
+  background: var(--paper-2);
+  color: var(--paper-ink);
+  box-shadow: var(--paper-sh-sm);
+}
+.fl-card__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--paper-muted); font-size: 11px; letter-spacing: .08em }
+.fl-card__sev { display: inline-flex; align-items: center; gap: 8px; color: var(--red-on-soft) }
+.fl-card__sev span { width: 7px; height: 7px; border-radius: 50%; background: var(--red-deep) }
+.fl-card__sev[data-ton='dorada'] { color: #8A5D14 }
+.fl-card__sev[data-ton='dorada'] span { background: var(--fl-amber) }
+.fl-card__sev[data-ton='provjera'] { color: #2F3F8F }
+.fl-card__sev[data-ton='provjera'] span { background: var(--scan) }
+.fl-card__t { margin: 0; font-family: var(--display-serif); font-size: clamp(26px, 2.6vw, 30px); font-weight: 400; line-height: 1.08; letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere }
+.fl-card__t:focus { outline: none }
+.fl-mr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--paper-line);
+  background: var(--paper);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.fl-mr--jedno { grid-template-columns: minmax(0, 1fr) }
+.fl-mr s { color: var(--red-on-soft) }
+.fl-mr__k { display: block; color: var(--paper-muted); font-size: 10px; letter-spacing: .08em }
+.fl-mr__a { color: var(--paper-muted) }
+.fl-fig {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  background: var(--paper);
+  box-shadow: 0 1px 0 var(--paper-line), 0 6px 14px rgba(0, 0, 0, .12);
+  transform: rotate(-.6deg);
+}
+.fl-fig figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; color: var(--paper-muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase }
+.fl-fig p { margin: 0; color: var(--paper-ink); font-family: 'Times New Roman', Times, serif; font-size: 16px; line-height: 1.45 }
+.fl-fig__k { text-decoration: underline wavy var(--red-deep); text-decoration-thickness: 1.5px; text-underline-offset: 4px }
+.fl-card__do { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-top: 2px }
+.fl-res {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--paper-ink);
+  color: var(--paper);
+  font-size: 13px;
+  cursor: pointer;
+}
+.fl-res[aria-pressed='true'] { border: 1.5px solid var(--pass); background: transparent; color: var(--pass) }
+.fl-prev {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--paper-muted);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.fl-card__note { margin: 0; color: var(--paper-muted); font-size: 11px; line-height: 1.5 }
+
+/* ---------------- red cekanja i stranice ---------------- */
+
+.fl-queue { display: grid; gap: 14px; padding-top: 6px }
+.fl-qrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-height: 48px }
+.fl-q {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--desk-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--desk-ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+.fl-q[aria-current='true'] { border-color: var(--desk-ink) }
+.fl-q[data-done] { color: var(--desk-faint); text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px }
+.fl-q__t { min-width: 0; max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.fl-q__n { color: var(--red) }
+.fl-q__n[data-ton='dorada'] { color: var(--fl-amber) }
+.fl-q__n[data-ton='provjera'] { color: var(--scan) }
+.fl-q__n[data-ton='done'] { color: var(--fl-pass) }
+.fl-stamp {
+  margin-left: auto;
+  padding: 7px 14px;
+  border: 2.5px solid var(--fl-pass);
+  border-radius: 2px;
+  color: var(--fl-pass);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+  animation: fl-stamp .34s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+.fl-tiles { display: grid; grid-template-columns: repeat(var(--fl-n, 1), minmax(0, 1fr)); gap: 2px }
+.fl-tile { height: 36px; padding: 0; border: 0; background: color-mix(in srgb, var(--desk-ink) 14%, transparent); cursor: pointer }
+span.fl-tile { cursor: default }
+.fl-tile--hit { background: var(--fl-amber) }
+.fl-tile--cur { box-shadow: inset 0 0 0 1.5px var(--desk-ink) }
+button.fl-tile:hover { background: var(--paper) }
+.fl-hint { margin: 0; color: var(--desk-faint); font-size: 11px; line-height: 1.55 }
+.fl-done { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; animation: fl-in .4s both }
+.fl-done span { color: var(--desk-muted); font-size: 12px }
+.fl-go {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--red-deep);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.fl-go:hover { background: var(--red-on-soft) }
+
+/* Dodir (Z37): sve mete najmanje 44 px, i na tabletu. */
+@media (hover: none) {
+  .fl-pill, .fl-q { min-height: 44px }
+}
+
+@keyframes fl-in { from { transform: translateY(8px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes fl-stamp { from { transform: rotate(-7deg) scale(1.7); opacity: 0 } to { transform: rotate(-7deg) scale(1); opacity: 1 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fl *, .fl *::before, .fl *::after { animation: none !important; transition: none !important }
+}
+html[data-motion='reduce'] .fl *, html[data-motion='reduce'] .fl *::before, html[data-motion='reduce'] .fl *::after { animation: none !important; transition: none !important }

@@ -111,6 +111,7 @@ export function upgradeResultCockpit(args: UpgradeResultCockpitArgs): void {
         kljuc: key,
         stanje: stanjeZaZ34(),
         esc: escapeHtml,
+        naslov: [model.header.documentName, model.header.profile].filter(Boolean).join(' · ') || null,
         onAction: (action: ResultsCockpitAction, opener?: HTMLElement) => opener
           ? options.onAction?.(action, opener)
           : options.onAction?.(action),

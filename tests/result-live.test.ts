@@ -567,7 +567,7 @@ describe('Z34 gardovi: pokret, lijena granica, copy i cijena', () => {
   });
 
   it('natpisi gumba su doslovno iz predloska ResultLive.dc.html', () => {
-    expect(copyProblems(read('src/ui/result-live/result-live.ts'), read('design/templates/result-live/ResultLive.dc.html'), [])).toEqual([]);
+    expect(copyProblems(read('src/ui/result-live/result-live.ts'), read('design/templates/result-live/ResultLive.dc.html'), ['Otvori faksimil'])).toEqual([]);
   });
 
   it('u kodu Z34 nema cijene', () => {

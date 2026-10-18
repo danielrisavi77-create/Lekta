@@ -12373,7 +12373,7 @@ describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
     expect(motionCssProblems(css)).toEqual([]);
     expect(izvori[KOKPIT]).toContain("import('./results-cockpit-live')");
     expect(liveBoundaryProblems(izvori, SHIM, MODUL)).toEqual([]);
-    expect(copyProblems(modul, predlozak, [])).toEqual([]);
+    expect(copyProblems(modul, predlozak, ['Otvori faksimil'])).toEqual([]);
     expect(cijenaProblems({ 'src/ui/result-live/result-live.ts': modul, 'src/ui/result-live/result-live.css': css })).toEqual([]);
     expect(racun).toBe('71 → najviše 88');
     expect(plusBodProblems(`${racun} ${prsten(71, 88)?.opis}`)).toEqual([]);
@@ -12400,7 +12400,7 @@ describe('Z34 rezultat sve u jednom: gardovi grizu', () => {
   it('MUTACIJA: preformuliran natpis gumba obara gard copyja', () => {
     const mutant = modul.replace('>Uključi u plan</button>', '>Dodaj u plan</button>');
     expect(mutant).not.toBe(modul);
-    expect(copyProblems(mutant, predlozak, [])).toEqual(['natpis "Dodaj u plan" nije u predlosku']);
+    expect(copyProblems(mutant, predlozak, ['Otvori faksimil'])).toEqual(['natpis "Dodaj u plan" nije u predlosku']);
   });
 
   it('MUTACIJA: cijena iz predloska upisana u ladicu obara gard cijene', () => {
