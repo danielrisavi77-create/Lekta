@@ -233,9 +233,11 @@ uredno uklanja prazan `word/comments.xml`); popravak harnessa je `ea15e9ce` na g
 
 ## C. Komercijalno, izvan koda
 
-### C1. `data/legal/provider.json`: `oib` i `phone` su prazni  (POTVRDJENO)
+### C1. `data/legal/provider.json`: OIB i telefon potvrđeni; subjekt nije registriran
 
-Bez njih naplata ne moze ici. Podatak je vlasnikov, ne moze ga izvesti nijedna sesija.
+Vlasnik je 2026-10-16 potvrdio OIB i telefon; javni podaci ih sadrže uz voditelja obrade i
+adresu. `providerRegistered: false` ostaje izričit: beta-popravci su besplatni, a naplata je
+blokirana do registracije poslovnog subjekta. OIB i telefon sami po sebi ne dokazuju registraciju.
 
 ### C2. Proizvodi bez `mor_product_id`
 

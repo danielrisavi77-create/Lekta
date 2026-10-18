@@ -103,7 +103,7 @@ njima. Dnevnik u bazi je ostao netaknut (samo u bazi i dalje 4).
 
 4. **Sesija, klijent:** `corpusContribution:true` u `DEFAULT_PRODUCTION_CONFIG` (`src/config/production-config.ts`),
    provjeriti `tests/ux/repair-panel.spec.ts:104` (prag broja interaktivnih elemenata, kucica dodaje jedan), puni gate,
-   push, merge na master. **Vlasnik:** objava na Netlifyju (auto-publishing je zakljucan).
+   push i merge na master. **Vlasnik:** odabire produkcijski release workflow i objavu. GitHub Actions workflow 13.10.2026. uspješno je objavio produkcijski build; vidi [run 38430199081](https://github.com/danielrisavi77-create/Lekta/actions/runs/38430199081). Ovo ne potvrđuje zasebnu Netlify postavku za automatsku objavu pri Git pushu.
 
 5. **Smoke (vlasnik ili sesija s racunom s e-mailom):** jedan sinteticki rad kroz "Popravi sve" s oznacenom kucicom;
    odgovor nosi `corpusContribution: 'pending'`; nakon minute u tablici `corpus_contributions` postoji redak s

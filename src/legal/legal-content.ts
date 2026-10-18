@@ -3,9 +3,8 @@
 // TERMS_VERSION se trajno bilježi uz svaku kupnju (checkout_consents.terms_version, migracija
 // 0008); bump verzije radi se ovdje i SAMO kad se sadržaj materijalno mijenja.
 //
-// Identitet voditelja obrade: dok su oib/address u data/legal/provider.json prazni, dokumenti
-// nose napomenu da registracijski podaci slijede; NE izmišljati ih (živi footer je povijesno
-// prikazivao OIB kojeg nema u izvoru, uskladiti tek uz potvrdu vlasnika).
+// Status registracije je eksplicitan (`providerRegistered`), ne izvodi se iz OIB-a, adrese ni
+// telefona. Javni osobni i kontaktni podaci dolaze iz data/legal/provider.json nakon potvrde vlasnika.
 //
 // Sav copy: hrvatski, bez em i en crtica (CLAUDE.md), bez vanjskih ovisnosti (modul bundla
 // i Vite za browser i esbuild za Node generator).
@@ -19,14 +18,16 @@ import { TERMS_VERSION } from './terms-version';
 
 export interface LegalProviderConfig {
   org: string;        // naziv pružatelja (brand ili pravni subjekt)
+  providerRegistered: boolean; // registrirani poslovni subjekt; ne zaključuje se iz OIB-a
   contact: string;    // kontakt e-mail
-  controller: string; // voditelj obrade (pada na org dok subjekt nije registriran)
+  controller: string; // voditelj obrade
   days: number;       // retencija podataka narudžbe i dokumenta (dana)
   logDays: number;    // retencija serverskih logova izvještaja (dana, migracija 0009)
-  oib: string;        // prazno = redak se ne renderira, dokument nosi napomenu o dopuni
+  oib: string;        // prazno = redak se ne renderira
   address: string;    // prazno = redak se ne renderira
   /**
-   * Telefonski broj trgovca. Prazno = redak se ne renderira.
+   * Javni kontaktni broj. Prazno = redak se ne renderira. Njegova prisutnost ne znači da je
+   * pružatelj registriran; naplatu zasebno blokira provjera `providerRegistered`.
    *
    * Zakon o zastiti potrosaca medju predugovornim informacijama trazi naziv, sjediste I
    * telefonski broj trgovca, pa e-mail sam po sebi nije dovoljan cim se nesto naplacuje
@@ -62,6 +63,7 @@ function resolveConfig(cfg?: Partial<LegalProviderConfig>): LegalProviderConfig 
   const org = cfg?.org || providerDefaults.businessName || 'Lekta';
   return {
     org,
+    providerRegistered: cfg?.providerRegistered ?? providerDefaults.providerRegistered ?? false,
     contact: cfg?.contact || providerDefaults.contactEmail || 'kontakt nije konfiguriran',
     controller: cfg?.controller || providerDefaults.privacyController || org,
     days: Number(cfg?.days) || providerDefaults.retentionDaysOrders || 30,
@@ -73,28 +75,34 @@ function resolveConfig(cfg?: Partial<LegalProviderConfig>): LegalProviderConfig 
   };
 }
 
-/** Redak identiteta u legal-meta: OIB i adresa se renderiraju samo kad postoje. */
+/** Redak identiteta u legal-meta; osobni OIB jasno je označen dok poslovni subjekt nije registriran. */
 function identityMeta(c: LegalProviderConfig): string {
   const bits = [`<strong>Voditelj obrade:</strong> ${esc(c.controller)}`];
-  if (c.oib) bits.push(`<strong>OIB:</strong> ${esc(c.oib)}`);
+  if (c.oib) {
+    const oibLabel = c.providerRegistered ? 'OIB' : 'OIB voditelja obrade';
+    bits.push(`<strong>${oibLabel}:</strong> ${esc(c.oib)}`);
+  }
   if (c.address) bits.push(`<strong>Adresa:</strong> ${esc(c.address)}`);
   bits.push(`<strong>Kontakt:</strong> ${esc(c.contact)}`);
   if (c.phone) bits.push(`<strong>Telefon:</strong> ${esc(c.phone)}`);
   return bits.join(' · ');
 }
 
-/** Napomena o registraciji: prikazuje se dok registracijski podaci (OIB) nisu upisani. */
+/** Napomena o statusu pružatelja: prikazuje se dok pružatelj nije registrirani poslovni subjekt. */
 function registrationNote(c: LegalProviderConfig): string {
-  if (c.oib) return '';
-  // Rečenica je prije tvrdila da je VODITELJ naziv usluge. To je vrijedilo samo dok je
-  // privacyController bio prazan pa se izvodio iz naziva usluge (`|| org`). Kad je voditelj
-  // imenovana fizička osoba, a GDPR čl. 13 to dopušta i bez registriranog subjekta, ta tvrdnja
-  // postaje neistinita: ime osobe nije naziv usluge. Naziv usluge je uvijek `c.org`.
+  if (c.providerRegistered) return '';
   const named = c.controller.trim() && c.controller.trim() !== c.org.trim();
+  const identityDetail = c.oib && c.address
+    ? ', s OIB-om i adresom navedenima iznad'
+    : c.oib
+      ? ', s OIB-om navedenim iznad'
+      : c.address
+        ? ', s adresom navedenom iznad'
+        : '';
   const who = named
-    ? ` Voditelj obrade je ${esc(c.controller)} kao fizička osoba, s adresom navedenom iznad.`
+    ? ` Voditelj obrade je ${esc(c.controller)} kao fizička osoba${identityDetail}.`
     : '';
-  return `<p class="legal-note">Puni registracijski podaci pružatelja (naziv subjekta, OIB, adresa, telefon) bit će objavljeni na ovoj stranici po dovršetku registracije subjekta. Do tada se za sva pitanja i zahtjeve koristi navedeni kontakt e-mail. Dok registracija nije dovršena, "${esc(c.org)}" je naziv usluge, a ne registrirani pravni subjekt, i usluga se ne naplaćuje.${who}</p>`;
+  return `<p class="legal-note">Pružatelj usluge još nije registrirani poslovni subjekt. "${esc(c.org)}" je naziv usluge, a ne registrirani pravni subjekt.${who} Zahtjeve u vezi s osobnim podacima i ostala pitanja pošalji na navedeni kontakt e-mail. Sve funkcije dostupne tijekom besplatne bete, uključujući automatske popravke, pružaju se bez naknade.</p>`;
 }
 
 /**

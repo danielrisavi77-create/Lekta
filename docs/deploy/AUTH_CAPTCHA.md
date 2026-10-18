@@ -45,18 +45,26 @@ Obrnuti redoslijed lomi prijave. Prvo staging, zatim produkcija.
 1. **Cloudflare, Turnstile:** novi widget, nacin rada "Managed", hostnameovi tocno one domene na
    kojima Lekta radi (produkcijska domena, staging domena; za lokalni razvoj `localhost`). Iz
    widgeta se dobivaju SITE key (javan) i SECRET key (tajna).
-2. **Netlify, environment variables:** `VITE_TURNSTILE_SITE_KEY` = site key, za kontekst koji se
-   ukljucuje (staging ili production). Varijabla se ugradjuje pri buildu, pa je potreban NOVI
-   deploy; postavljanje varijable bez deploya ne mijenja nista.
+2. **Postavi site key u build okruženje (vlasnik):**
+   - **Staging:** u GitHub repozitoriju > Settings > Environments > `staging` > Variables
+     postavi `TURNSTILE_SITE_KEY` na staging site key. Release workflow ga prosljeđuje buildu kao
+     `VITE_TURNSTILE_SITE_KEY`.
+   - **Produkcija:** u GitHub repozitoriju > Settings > Environments > `production` > Variables
+     postavi `TURNSTILE_SITE_KEY` na site key. Release workflow ga prosljeđuje buildu kao
+     `VITE_TURNSTILE_SITE_KEY`; Netlify build varijabla ne upravlja produkcijskim release workflowom.
+   Site key je javan. Secret key se ovdje ne postavlja. Promjena se ugrađuje pri buildu, pa svaki
+   kontekst zahtijeva novu objavu kroz release workflow. Za produkciju postavi varijablu prije
+   završne objave.
 3. **Dokaz deployanog kljuca:** `curl -s https://<domena>/build-info.json` mora vratiti ocekivani
    `commit` i `"captchaSiteKey": true`. `false` ili bez polja znaci da build nema kljuc: STANI.
 4. **Provjera frontenda prije Autha:** na deployanom sajtu pokreni tok koji trazi anonimnu prijavu
    (popravak dokumenta) u novom privatnom prozoru. U DevToolsu zahtjev `POST /auth/v1/signup` mora
    imati tijelo s `gotrue_meta_security.captcha_token`, a u konzoli ne smije biti CSP greske za
    `challenges.cloudflare.com`. Ako tokena nema, STANI: ukljucivanje na Authu bi slomilo prijave.
-5. **Supabase dashboard:** Authentication > Attack Protection > Enable Captcha protection, provider
-   Turnstile (Cloudflare), upisi SECRET key i spremi. Secret key ide SAMO ovdje, nikad u repozitorij,
-   `.env.example`, Netlify ni u poruku.
+5. **Supabase Dashboard:** odaberi projekt, zatim Project Settings > Authentication > Bot and Abuse
+   Protection > Enable CAPTCHA protection. Odaberi Turnstile (Cloudflare), unesi SECRET key i spremi.
+   Secret key ide samo ovdje, nikad u repozitorij, `.env.example`, Netlify, GitHub ni u poruku.
+   [Službene Supabase upute](https://supabase.com/docs/guides/auth/auth-captcha).
 6. **Serversko odbijanje bez tokena:** odmah nakon ukljucivanja
 
    ```bash
@@ -82,8 +90,11 @@ trazi deploy. Frontend s kljucem smije ostati, jer token koji server ne trazi se
 
 ## Otvoreno
 
-- Turnstile salje Cloudflareu signale preglednika (IP adresa, preglednik, korisnicki agent). Tekst
-  privatnosti (`src/legal/legal-content.ts`) Cloudflare jos ne navodi. To je UVJET za ukljucivanje
-  na produkciji (Codex T89-03), ne za merge koda; ide vlasniku i T86.
+- Tekst privatnosti (`src/legal/legal-content.ts`, odjeljak 1d i popis izvrsitelja) vec navodi
+  Cloudflare Turnstile i opisuje signale obrade. Formulacija je uvjetna: vrijedi od dana
+  ukljucivanja zastite. Sama objava teksta ne dokazuje da je Turnstile aktivan u produkciji;
+  provjeri `captchaSiteKey` u `build-info.json` i stanje Supabase Autha prema koracima 3 do 7.
+  Vlasnik je 2026-10-15 potvrdio objavljenu formulaciju; to ne potvrduje da je Turnstile ukljucen
+  ili testiran u produkciji.
 - Ponasanje u stvarnom pregledniku sa stvarnim kljucem nije provjereno u T89 PR-u (nema kljuca ni
   ukljucenog staginga); provjerava se koracima 3 do 7.

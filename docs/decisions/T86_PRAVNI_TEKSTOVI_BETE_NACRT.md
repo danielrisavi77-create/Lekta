@@ -7,7 +7,17 @@ misliš da je najbolje." Pregled: koordinator čita, zatim vlasnik.
 ## 1. Što je napisano i gdje
 
 Jedini izvor teksta ostaje `src/legal/legal-content.ts` (modal na indexu i statične stranice iz
-`scripts/generate-legal-pages.mjs`). `data/legal/provider.json` nije mijenjan; OIB ostaje prazan (T48).
+`scripts/generate-legal-pages.mjs`). U izvornom nacrtu od 4. listopada `data/legal/provider.json` nije
+mijenjan i OIB je ostao prazan prema tadašnjem stanju T48.
+
+### Dopuna 16. listopada 2026.
+
+Vlasnik je potvrdio da poslovni subjekt još nije registriran, da se automatski popravci tijekom bete
+ne naplaćuju te da su javni podaci voditelja obrade i kontaktni podaci točni. PR #367 ažurira
+`data/legal/provider.json` i pravni prikaz: `providerRegistered` ostaje `false`, a OIB se označava
+kao OIB voditelja obrade, ne kao OIB registriranog poslovnog subjekta. Ova dopuna zamjenjuje samo
+trenutačni zaključak o praznom OIB-u; opseg i ostale pravne odluke izvornog nacrta ostaju kakvi su
+zabilježeni u nastavku.
 
 | Dokument | Novo |
 |---|---|
