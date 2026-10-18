@@ -404,6 +404,8 @@ Registraciju i ponasanje cuvaju `tests/hooks-discipline.test.ts` i mutacije u
 | PreToolUse (Bash, PowerShell, Supabase MCP) | `scripts/agents/tool-guard.mjs` | Gard opasnih git i brisanja naredbi; od 2026-10-08 i Supabase MCP, fail-closed: prolazi samo popis alata koji citaju i `execute_sql` s jednom naredbom za citanje (SELECT, WITH, SHOW, EXPLAIN bez ANALYZE) uz poznate ciste funkcije; sve ostalo se odbija (scenariji u `tests/helpers/supabase-mcp-guard.ts`). Druga razina: jamstvo daje konektor s `read_only=true`. |
 | PreToolUse (Bash) | `scripts/hooks/cpu-discipline.mjs` | Odbija (izlaz 2) vitest, tsc, playwright, vite-node, closed-loop, knip, jscpd i `npm run check/test/build/gate/release` izvan `scripts/with-gate-lock.mjs`. |
 | PreToolUse (Edit, Write) | `scripts/hooks/task-scope-guard.mjs` | Kad implementatorska sesija ima `LEKTA_TASK_ID`, provjerava zapis prema `workScope.write`; `forbidden` i zapis izvan scopea blokira. |
+| PreToolUse (Edit, Write) | `scripts/hooks/dash-guard.mjs` | Odbija zapis koji u autorske putanje uvodi novu em ili en crticu (delta prema zamijenjenom tekstu, crtica mora biti usidrena). |
+| PostToolUse (Edit, Write) | `scripts/hooks/lint-feedback.mjs` | Nakon zapisa JS/TS izvora pokrece lokalni oxlint nad tom datotekom i nalaz vraca modelu (izlaz 2); opseg i pravila iz `.oxlintrc.json`, fail-open bez `node_modules`, na timeout i na kvar alata. |
 | Stop | `scripts/hooks/implementer-stop.mjs` | Implementatorska sesija ne zavrsava dok checklist ima otvorenih stavki. |
 
 **CPU disciplina (A1).** Prepoznaje se po poziciji naredbe, ne po podnizu, pa `grep vitest` ili

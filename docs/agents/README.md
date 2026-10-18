@@ -128,6 +128,11 @@ prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvi
 Sazetak PR-a za koordinatora (najvise 20 redaka, dohvat kroz `gh api`): `npm run pr-intake -- <broj PR-a>`.
 Isto kao jedan JSON objekt: `npm run pr-intake -- <broj PR-a> --json` (logika u `scripts/agents/pr-intake-core.mjs`).
 
+Nakon promjene opisa skilla izmjeri usmjeravanje, staro prema novom (worktree prije i poslije promjene,
+`--korijen <stablo>`): `node scripts/agents/skill-routing.mjs --model <id> --ponavljanja 3 [--samo <id,id>]`.
+Upiti su u `scripts/agents/skill-routing-upiti.json`; novi skill dobiva barem jedan pozitivan upit (gard u
+`tests/skill-routing.test.ts`). Svaki upit je placen poziv modela, pa skripta nije u CI-ju.
+
 ## Poruke izmedu neovisnih Claude Code sesija
 
 Provjereno prema aktualnoj Claude Code dokumentaciji 2026-10-02:
