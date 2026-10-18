@@ -308,17 +308,27 @@ export function chromeGraph(meta: ChromeMetafile, ulaz: string): ChromeGraph {
  * GARD: puno podnozje je LIJENO. Njegov modul ne smije biti u statickom grafu trake (inace ga skida
  * svaka stranica), a mora postojati kao lijeni izlaz (inace podnozje nema ponasanja).
  */
-export function lazyFooterProblems(graf: ChromeGraph): string[] {
+export function lazyFooterProblems(graf: ChromeGraph, profilLadica = false, kazalo = false): string[] {
   if (graf.staticOutputs.length === 0) return ['metafile nema izlaz ulaza trake; graf je prazan'];
-  const modul = 'src/shared/site-footer-full.ts';
+  const moduli = [
+    'src/shared/site-footer-full.ts',
+    ...(profilLadica ? ['src/shared/site-profile-drawer.ts'] : []),
+    ...(kazalo ? ['src/shared/site-command-dialog.ts'] : []),
+  ];
   const problemi: string[] = [];
-  if (graf.staticInputs.includes(modul)) problemi.push(`${modul} je u statickom grafu trake`);
-  if (!graf.lazyInputs.includes(modul)) problemi.push(`${modul} nije lijeni izlaz`);
+  for (const modul of moduli) {
+    if (graf.staticInputs.includes(modul)) problemi.push(`${modul} je u statickom grafu trake`);
+    if (!graf.lazyInputs.includes(modul)) problemi.push(`${modul} nije lijeni izlaz`);
+  }
   return problemi;
 }
 
 /** Granica lijenog komada punog podnozja (gzip); isti broj cita proracun trake i mutacija. */
 export const MAX_LAZY_FOOTER_JS_GZIP = 3 * 1024;
+/** Profilna ladica je izricit lijeni feature; katalog i ponasanje zajedno imaju zasebnu granicu. */
+export const MAX_LAZY_PROFILE_DRAWER_JS_GZIP = 14 * 1024;
+/** Kazalo i njegov javni direktorij ucitavaju se tek na izricit poziv. */
+export const MAX_LAZY_SITE_COMMAND_DIALOG_JS_GZIP = 3 * 1024;
 
 /**
  * GARD: lijeni dio grafa trake je SAMO puno podnozje i stane u vlastitu granicu. Proracun od 8 KB
@@ -331,25 +341,52 @@ export function lazyFooterBudgetProblems(
   meta: ChromeMetafile,
   graf: ChromeGraph,
   velicine: Readonly<Record<string, number>>,
-  max: number,
+  maxPodnozje: number,
+  maxProfil = 0,
+  maxKazalo = 0,
 ): string[] {
   if (graf.lazyOutputs.length === 0) return ['graf trake nema lijeni izlaz; granica lijenog komada ne mjeri nista'];
   const problemi: string[] = [];
-  const lijeniUlazi = graf.lazyOutputs
-    .map((p) => meta.outputs[p]?.entryPoint)
-    .filter((e): e is string => e !== undefined)
-    .map(norm)
-    .sort();
-  if (JSON.stringify(lijeniUlazi) !== JSON.stringify(['src/shared/site-footer-full.ts'])) {
-    problemi.push(`lijeni ulazi trake su ${JSON.stringify(lijeniUlazi)}; smije samo puno podnozje`);
+  const podnozje = 'src/shared/site-footer-full.ts';
+  const profil = 'src/shared/site-profile-drawer.ts';
+  const kazalo = 'src/shared/site-command-dialog.ts';
+  const ocekivani = [podnozje, ...(maxProfil > 0 ? [profil] : []), ...(maxKazalo > 0 ? [kazalo] : [])].sort();
+  const lijeniUlazi = graf.lazyOutputs.map((p) => meta.outputs[p]?.entryPoint).filter((e): e is string => e !== undefined).map(norm).sort();
+  if (JSON.stringify(lijeniUlazi) !== JSON.stringify(ocekivani)) {
+    problemi.push(`lijeni ulazi trake su ${JSON.stringify(lijeniUlazi)}; dopusteni su ${JSON.stringify(ocekivani)}`);
   }
-  let zbroj = 0;
-  for (const izlaz of graf.lazyOutputs) {
-    const v = velicine[izlaz];
-    if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0) { problemi.push(`lijeni izlaz ${izlaz} nema izmjerenu gzip velicinu`); continue; }
-    zbroj += v;
+
+  const lijeni = new Set(graf.lazyOutputs);
+  const obuhvat = (ulaz: string): string[] => {
+    const korijen = [...lijeni].find((p) => norm(meta.outputs[p]?.entryPoint ?? '') === ulaz);
+    if (!korijen) return [];
+    const dosegnuti = new Set<string>();
+    const red = [korijen];
+    while (red.length) {
+      const p = red.pop()!;
+      if (!lijeni.has(p) || dosegnuti.has(p)) continue;
+      dosegnuti.add(p);
+      for (const imp of meta.outputs[p]?.imports ?? []) if (lijeni.has(imp.path)) red.push(imp.path);
+    }
+    return [...dosegnuti];
+  };
+  const pokriveni = new Set<string>();
+  const grupe: Array<[string, number]> = [[podnozje, maxPodnozje]];
+  if (maxProfil > 0) grupe.push([profil, maxProfil]);
+  if (maxKazalo > 0) grupe.push([kazalo, maxKazalo]);
+  for (const [ulaz, granica] of grupe) {
+    const izlazi = obuhvat(ulaz);
+    if (!izlazi.length) { problemi.push(`${ulaz} nema izmjeren lijeni izlaz`); continue; }
+    let zbroj = 0;
+    for (const izlaz of izlazi) {
+      pokriveni.add(izlaz);
+      const v = velicine[izlaz];
+      if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0) { problemi.push(`lijeni izlaz ${izlaz} nema izmjerenu gzip velicinu`); continue; }
+      zbroj += v;
+    }
+    if (zbroj > granica) problemi.push(`lijeni komad ${ulaz} je ${zbroj} B gzip, granica ${granica} B`);
   }
-  if (zbroj > max) problemi.push(`lijeni komad je ${zbroj} B gzip, granica ${max} B`);
+  for (const izlaz of graf.lazyOutputs) if (!pokriveni.has(izlaz)) problemi.push(`lijeni izlaz ${izlaz} nije vezan uz dopusteni feature`);
   return problemi;
 }
 

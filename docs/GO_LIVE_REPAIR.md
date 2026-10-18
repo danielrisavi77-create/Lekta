@@ -170,6 +170,10 @@ Iste vrijednosti čita i `repair-docx` (naslijeđeni put) i `source-check` (uspo
 Dnevni limiti zasebne provjere (opcijski; brani da endpoint bez dokumenta ne postane besplatan javni
 pretraživač nad korpusom):
 
+Pregled zadanih kodnih limita besplatnog popravka: npm run review:repair-free-limits. Skripta čita
+izvor repair-docx funkcije i ne pristupa živim Supabase tajnama, brojačima, objavljenoj verziji ni
+alarmima troška. Za go/no-go vlasnik zasebno provjerava stvarne vrijednosti na produkciji.
+
 - `SOURCE_CHECK_USER_DAILY_CAP` (default 40), `SOURCE_CHECK_IP_DAILY_CAP` (default 120). Atomski su
   (`claim_ip_rate_slot`, migracija 0022), pa paralelni pozivi ne mogu proći kroz stale COUNT.
   Ne troše ni slot ni kvotu popravaka.

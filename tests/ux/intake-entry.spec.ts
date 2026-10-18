@@ -38,7 +38,7 @@ test('ulaz `/`: nema novih critical/serious a11y problema i fokus uploada je vid
   expect(fokus.prsten, 'fokus uploada nema vidljiv prsten na papiru').toBe(true);
 });
 
-test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
+test('ulaz `/` nema vodoravni scroll kroz širine zaslona', async ({ page }, testInfo) => {
   /**
    * MJERI SE U OBICNOM (desktop) KONTEKSTU, NE U MOBILNOJ EMULACIJI, i to je cijela poanta.
    *
@@ -48,18 +48,41 @@ test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
    * ni kad se sadrzaj prelijeva. Mutacija je zato prosla i izgledala kao da gard ne grize.
    *
    * Stvaran slucaj je USKI PROZOR NA RACUNALU: ondje se prelijevanje vidi kao vodoravna traka.
-   * Izmjereno 2026-09-07: `.hero-atmos` (snop lampe) prelijeva izvan roditelja
-   * (`inset: -8% -6% -12%`), roditelj ga ne smije rezati jer bi odrezao sjenu papira i listove
-   * ispod njega, pa je dokument bio sirok 384 px u prozoru od 375.
+   * Izmjereno 2026-09-07: `.hero-atmos` (snop lampe) prelijevao je bočno izvan roditelja.
+   * Roditelj ga ne smije rezati jer bi odrezao sjenu papira i listove ispod njega, pa se sam
+   * dekorativni sloj sada širi samo okomito. Provjeravaju se i prijelomne širine oko 600 px.
    */
-  await page.setViewportSize({ width: 375, height: 800 });
+  test.skip(testInfo.project.name !== 'chromium', 'vodoravni scroll provjerava se u desktop prozoru');
   await page.goto('/');
-  const mjera = await page.evaluate(() => ({
-    scroll: document.documentElement.scrollWidth,
-    viewport: window.innerWidth,
-  }));
-  expect(mjera.scroll, `dokument je siri od prozora za ${mjera.scroll - mjera.viewport} px`)
-    .toBeLessThanOrEqual(mjera.viewport);
+  for (const width of [320, 360, 375, 480, 600, 601, 680, 720, 768, 819, 820, 1024, 1180, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    const mjera = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      viewport: window.innerWidth,
+    }));
+    expect(mjera.scroll, `na ${width}px dokument je siri od prozora za ${mjera.scroll - mjera.viewport} px`)
+      .toBeLessThanOrEqual(mjera.viewport);
+  }
+});
+
+test('ulaz `/`: logotip i odabir profila ne preklapaju se na uskom zaslonu', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(async () => { await document.fonts.ready; });
+
+  const profil = page.locator('[data-site-chrome-profile]');
+  await expect(profil).toBeVisible();
+  await expect(profil).toHaveAccessibleName('Odaberi profil');
+
+  for (const width of [320, 340, 360, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    const razmak = await page.evaluate(() => {
+      const logo = document.querySelector('.site-chrome__logo');
+      const odabir = document.querySelector('[data-site-chrome-profile]');
+      if (!logo || !odabir) throw new Error('nedostaje logotip ili odabir profila');
+      return odabir.getBoundingClientRect().left - logo.getBoundingClientRect().right;
+    });
+    expect(razmak, `na ${width}px odabir profila ulazi u logotip`).toBeGreaterThanOrEqual(8);
+  }
 });
 
 /**
@@ -105,9 +128,9 @@ test('Z32: CTA je otvoren odmah, a rok i profil ostaju neobavezni', async ({ pag
   await expect(page.locator('[data-intake-potvrdi]')).toHaveAttribute('aria-pressed', 'false');
 
   // Rok se i dalje moze dodati bez utjecaja na dostupnost uploada.
-  await page.getByLabel('Još ne znam rok').check();
   await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
-  await expect(page.locator('[data-intake-rok-pecat]')).toHaveText('Rok nije zadan');
+  await expect(page.locator('[data-intake-rok-pecat]')).toBeHidden();
+  await expect(page.locator('[data-intake-deadline-summary]')).toHaveText('Rok još nije unesen');
 
   // Dodir ili klik lista otvara odabir datoteke odmah.
   const odabir = page.waitForEvent('filechooser');
@@ -129,7 +152,6 @@ test('Z32: ispustanje bilo gdje upisuje ime u zaglavlje, a pecat prolazi "Čeka 
   await page.exposeFunction('z32Biljezi', (vrsta: string, tekst: string) => { (vrsta === 'pecat' ? pecati : imena).push(tekst); });
   await page.goto('/');
   await page.locator('[data-intake-potvrdi]').click();
-  await page.getByLabel('Još ne znam rok').check();
   await page.evaluate(() => {
     const w = window as unknown as { z32Biljezi: (v: string, t: string) => void };
     const pecat = document.querySelector('[data-intake-pecat]')!;
@@ -158,10 +180,55 @@ test('Z32: ispustanje bilo gdje upisuje ime u zaglavlje, a pecat prolazi "Čeka 
   // Z32 tocka 7: potvrda je vezana za OVU sesiju, a rok ceka /rad/ kroz sigurni omotac.
   const sesija = new URL(page.url()).hash.replace('#session=', '');
   const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
-  expect(zapis.rok).toEqual({ datum: null, neznam: true });
+  expect(zapis.rok).toEqual({ datum: null, neznam: false });
   // rokSesije je mapa po id-u sesije (odluka: rok se veze uz rad, ne uz jedini slot).
-  expect(zapis.rokSesije, 'rok tog rada za Z34 i Z36').toEqual({ [sesija]: { datum: null, neznam: true } });
+  expect(zapis.rokSesije, 'rok tog rada za Z34 i Z36').toEqual({ [sesija]: { datum: null, neznam: false } });
   expect(zapis.potvrda).toMatchObject({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija });
+});
+
+test('prvi odabir profila ne pretpostavlja sveučilište', async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem('lekta.preferences.v2'));
+  await page.goto('/');
+  await page.locator('[data-site-chrome-profile]').click();
+
+  const dialog = page.locator('[data-site-profile-dialog]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('#siteProfileInstitution')).toHaveValue('');
+  await expect(dialog.locator('#siteProfileInstitution option').first()).toHaveText('Odaberi sveučilište');
+  await expect(dialog.locator('#siteProfileUnit')).toBeDisabled();
+  await expect(dialog.locator('#siteProfileUnit option').first()).toHaveText('Najprije odaberi sveučilište');
+});
+test('profil se može pronaći, odabrati i potvrditi iz kartice zaglavlja', async ({ page }) => {
+  await page.goto('/');
+  const okidac = page.locator('[data-site-chrome-profile]');
+  await okidac.click();
+
+  const dialog = page.locator('[data-site-profile-dialog]');
+  await expect(dialog).toBeVisible();
+  await dialog.locator('#siteProfileSearch').fill('politickih');
+  const jedinica = dialog.locator('#siteProfileUnit');
+  await expect(jedinica.locator('option[value="fpzg"]')).toHaveText('Fakultet političkih znanosti · Sveučilište u Zagrebu');
+  await jedinica.selectOption('fpzg');
+  await dialog.locator('#siteProfileProgram').selectOption('Diplomski studij Politologija');
+  await expect(dialog.locator('#siteProfileWorkType')).toHaveValue('graduate');
+  await dialog.getByRole('button', { name: 'Spremi profil' }).click();
+
+  await expect(dialog).toHaveCount(0);
+  await expect(okidac).toContainText('FPZG · Dipl.');
+  await expect(page.locator('[data-intake-potvrdi]')).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('lekta.preferences.v2') ?? '{}').unit)).toBe('fpzg');
+});
+
+test('mobilni izbornik otvara isto Kazalo koje radi tipkovničkim prečacem', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Izbornik' }).click();
+  await page.locator('.site-chrome__sheet-command').click();
+  const kazalo = page.locator('.site-command-dialog');
+  await expect(kazalo).toBeVisible();
+  await expect(kazalo.getByRole('heading', { name: 'Što tražiš?' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(kazalo).toBeHidden();
 });
 
 /** Ispustanje datoteke s diska NA list (`#intakeDropzone`), istim putem kao test iznad. */
@@ -197,7 +264,6 @@ test('Z32: fakultet potvrdjen na / (?unit=fer, bez studija) stize na /rad/ potvr
   await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · s poveznice');
   await page.locator('[data-intake-potvrdi]').click();
   await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · potvrđeno');
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX, 'rad.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   const sesija = new URL(page.url()).hash.replace('#session=', '');
@@ -219,7 +285,6 @@ test('Z32: fakultet potvrdjen na / (?unit=fer, bez studija) stize na /rad/ potvr
 test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz dokumenta', async ({ page }) => {
   // KONTROLA: bez potvrde detekcija prebaci fakultet na onaj iz dokumenta.
   await page.goto('/?unit=fer');
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   await expect(page.locator('#detectBadge')).toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
@@ -228,7 +293,6 @@ test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz do
   // S potvrdom: fakultet ostaje FER, a znacka kaze zasto studij nije prepoznat.
   await page.goto('/?unit=fer');
   await page.locator('[data-intake-potvrdi]').click();
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   // Znacka istinito imenuje prepoznati fakultet i nudi oba gumba (Z32: napomenaDrugiFakultet).
@@ -252,7 +316,6 @@ const GUMBI_FPZG_FER = ['Prebaci na Fakultet političkih znanosti', 'Zadrži Fak
 async function doRadaSPotvrdjenimFer(page: Page): Promise<void> {
   await page.goto('/?unit=fer');
   await page.locator('[data-intake-potvrdi]').click();
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
 }
@@ -384,7 +447,6 @@ test('Z32: potvrdjen cijeli profil (postavke FER · Računarstvo) uz rad FPZG-a 
   await page.goto('/');
   await expect(page.locator('[data-intake-fakultet]')).toHaveText('FER · Računarstvo · Dipl.');
   await page.locator('[data-intake-potvrdi]').click();
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/#session=/);
   const napomena = page.getByTestId('faculty-conflict');
@@ -414,7 +476,6 @@ test('Z32: potvrdjen cijeli profil (postavke FER · Računarstvo) uz rad FPZG-a 
  */
 test('Z32: "Prebaci" daje profil koji je detekcija prepoznala, ne prvi studij fakulteta', async ({ page }) => {
   await page.goto('/?unit=fer');
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   await expect(page.locator('#detectBadge')).toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
@@ -519,7 +580,6 @@ test('Z32: 360 px bez preklapanja, pribor ispod lista', async ({ page }) => {
   await sPostavkama(page);
   await page.goto('/');
   await page.locator('[data-intake-potvrdi]').click();
-  await page.getByLabel('Još ne znam rok').check();
   const kutije = await page.evaluate(() => {
     const k = (s: string) => { const r = document.querySelector(s)!.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; };
     return {
@@ -542,21 +602,17 @@ test('Z32: 360 px bez preklapanja, pribor ispod lista', async ({ page }) => {
   expect(sudari).toEqual([]);
 });
 
-test('Z32: tragovi olovke jednom pri ucitavanju pa izblijede; pod prigusenim pokretom ih nema', async ({ page }) => {
+test('početna kartoteka mijenja Pravila, Citat i Opseg bez pomaka rasporeda', async ({ page }) => {
   await page.goto('/');
-  const neprozirnost = () => page.evaluate(() => Number(getComputedStyle(document.querySelector('.intake-tragovi')!).opacity));
-  await expect.poll(neprozirnost, { timeout: 2_000 }).toBeGreaterThan(0.9);
-  await expect.poll(neprozirnost, { timeout: 6_000 }).toBeLessThan(0.05);
-  // Na racunalu se vracaju na hover lista; na dodirnom ekranu hovera nema, pa ni povratka.
-  const mis = await page.evaluate(() => matchMedia('(hover:hover) and (pointer:fine)').matches);
-  await page.locator('.intake-title').hover();
-  if (mis) await expect.poll(neprozirnost).toBeGreaterThan(0.9);
-  else expect(await neprozirnost()).toBeLessThan(0.05);
-
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.reload();
-  await expect(page.locator('.intake-tragovi')).toBeHidden();
-  await expect(page.locator('.intake-trag').first()).toBeHidden();
+  const card = page.locator('[data-intake-pribor]');
+  const before = await card.boundingBox();
+  await page.getByRole('tab', { name: 'Citat' }).click();
+  await expect(page.getByRole('tabpanel', { name: 'Citat' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Opseg' }).focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab', { name: 'Pravila' })).toHaveAttribute('aria-selected', 'true');
+  const after = await card.boundingBox();
+  expect(after?.height).toBe(before?.height);
 });
 
 /**
@@ -568,7 +624,6 @@ test('T89: bez site keyja Turnstile se ne ucitava i ne blokira ulaz', async ({ p
   const cloudflare: string[] = [];
   page.on('request', (req) => { if (req.url().includes('challenges.cloudflare.com')) cloudflare.push(req.url()); });
   await page.goto('/');
-  await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX, 'rad.docx');
   await page.waitForURL(/\/rad\/#session=/);
   await expect(page.locator('[data-lekta-captcha]')).toHaveCount(0);

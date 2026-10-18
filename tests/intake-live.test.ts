@@ -960,8 +960,9 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
   const gumb = () => document.querySelector<HTMLElement>('.intake-paper__gumb')!;
   const hint = () => document.getElementById('intakeHint')!.textContent;
   const potvrdi = () => document.querySelector<HTMLButtonElement>('[data-intake-potvrdi]')!;
-  const neznam = () => document.querySelector<HTMLInputElement>('[data-intake-rok-neznam]')!;
   const rokPolje = () => document.querySelector<HTMLInputElement>('[data-intake-rok]')!;
+  const ukloniRok = () => document.querySelector<HTMLButtonElement>('[data-intake-rok-clear]')!;
+  const sazetakRoka = () => document.querySelector<HTMLElement>('[data-intake-deadline-summary]')!;
   const rokPecat = () => document.querySelector<HTMLElement>('[data-intake-rok-pecat]')!;
   const greska = () => document.getElementById('intakeError')!;
 
@@ -975,13 +976,21 @@ describe('Z32 zivi list nad stvarnim index.html', () => {
     expect(potvrdi().getAttribute('aria-pressed'), 'fakultet nije potvrdjen').toBe('false');
     expect(rokPecat().hidden).toBe(true);
 
-    // Rok se i dalje moze dodati i vizualizira se, ali ne mijenja spremnost ulaza.
-    neznam().checked = true;
-    neznam().dispatchEvent(new Event('change'));
+    // Rok se moze dodati i ukloniti, ali ne mijenja spremnost ulaza.
+    expect(sazetakRoka().textContent).toBe('Rok još nije unesen');
+    rokPolje().value = '2026-10-15';
+    rokPolje().dispatchEvent(new Event('change'));
     expect(live.canAccept()).toBe(true);
     expect(rokPecat().hidden).toBe(false);
-    expect(rokPecat().textContent).toBe('Rok nije zadan');
-    expect(rokPolje().disabled).toBe(true);
+    expect(rokPecat().textContent).toBe('Rok 15. 10. · 22 dana');
+    expect(sazetakRoka().textContent).toBe('22 dana do roka');
+    expect(ukloniRok().hidden).toBe(false);
+    expect(rokPolje().disabled).toBe(false);
+    ukloniRok().click();
+    expect(sazetakRoka().textContent).toBe('Rok još nije unesen');
+    expect(ukloniRok().hidden).toBe(true);
+    expect(procitajIzborUlaza().rok).toEqual({ datum: null, neznam: false });
+    expect(rokPecat().hidden).toBe(true);
     potvrdi().click();
     expect(potvrdi().getAttribute('aria-pressed')).toBe('true');
     expect(live.canAccept()).toBe(true);
@@ -1220,8 +1229,10 @@ describe('Z32 ozicenje, pokret i redoslijed (baseline gardova)', () => {
     expect(ozicenjeUlazaProblemi(read('src/routes/intake/main.ts'))).toEqual([]);
   });
 
-  it('tragovi olovke i linija skeniranja postuju prigusen pokret i pokret izvan pogleda', () => {
+  it('ulaz nema pokretne tragove, a linija skeniranja postuje prigusen pokret i vidljivost', () => {
     expect(pokretProblemi(read('src/routes/intake/intake.css'), HTML, read('src/shared/ui-boot.ts'))).toEqual([]);
+    expect(HTML).not.toContain('class="intake-tragovi"');
+    expect(read('src/routes/intake/intake.css')).not.toContain('.intake-tragovi');
   });
 
   it('/rad/ primjenjuje potvrdu poslije obnove profila i prije detekcije iz dokumenta', () => {
@@ -1238,11 +1249,20 @@ describe('Z32 ozicenje, pokret i redoslijed (baseline gardova)', () => {
     )).toEqual([]);
   });
 
-  it('sedam tragova olovke nosi doslovno nabrojane oznake iz naloga Z32', () => {
-    const doc = document.implementation.createHTMLDocument('x');
-    doc.body.innerHTML = HTML.slice(HTML.indexOf('<body'));
-    const tragovi = [...doc.querySelectorAll('.intake-tragovi .intake-trag')].map((t) => t.textContent?.trim());
-    expect(tragovi).toEqual(['margine', 'prored', 'font', 'broj stranice', 'naslovi', 'literatura', 'opseg']);
-    expect(doc.querySelector('.intake-tragovi')!.getAttribute('aria-hidden')).toBe('true');
+  it('kartoteka ima tri pristupačna jezička i mijenja panel strelicama', () => {
+    ulaz();
+    const live = mountIntakeLive(document, { search: '', danas: () => new Date(2026, 8, 23, 12) });
+    try {
+      const citat = document.querySelector<HTMLButtonElement>('[data-intake-topic="citat"]')!;
+      citat.focus();
+      citat.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+      const opseg = document.querySelector<HTMLButtonElement>('[data-intake-topic="opseg"]')!;
+      expect(opseg.getAttribute('aria-selected')).toBe('true');
+      expect(opseg.tabIndex).toBe(0);
+      expect(document.querySelector<HTMLElement>('[data-intake-topic-panel="opseg"]')!.hidden).toBe(false);
+      expect(document.querySelector<HTMLElement>('[data-intake-topic-panel="citat"]')!.hidden).toBe(true);
+    } finally {
+      live.destroy();
+    }
   });
 });
