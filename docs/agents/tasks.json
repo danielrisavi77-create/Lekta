@@ -178,11 +178,11 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "in_review",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani. STANJE 27.9.: staging ima migracije do 0204 (Supabase list_migrations, procitano u sesiji lekta-00 27. 9.), Edge webhook-mor v5 i create-checkout v6 aktivni na stagingu (list_edge_functions), naplata inertna; disciplina numeracije ima gard tests/migration-numbering.test.ts. Preostaje dokaz korisnickog toka iz Dokaza iznad."
+      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani. STANJE 27.9.: staging ima migracije do 0204 (Supabase list_migrations, procitano u sesiji lekta-00 27. 9.), Edge webhook-mor v5 i create-checkout v6 aktivni na stagingu (list_edge_functions), naplata inertna; disciplina numeracije ima gard tests/migration-numbering.test.ts. Preostaje dokaz korisnickog toka iz Dokaza iznad. 2026-10-16: Linear In Progress. Read-only usporedba po normaliziranom imenu: 112/112 repo migracija prisutno u produkciji i stagingu; produkcija ima 4 dodatna zapisa bez potvrdenog SQL porijekla, staging 11 dodatnih Katedra zapisa 0104-0114. Nema duplikata; migracije nisu primijenjene."
     },
     {
       "id": "T19",
@@ -537,7 +537,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
+      "note": "VLASNIK 2026-10-16: poslovni subjekt jos nije registriran; OIB, telefon, adresa i voditelj obrade potvrdjeni su za objavu u PR-u #367. Beta-popravci su besplatni, a naplata ostaje blokirana do registracije. Za placeno lansiranje i dalje su potrebni registrirani subjekt, Stripe isplatni racun i DPA sa Supabaseom. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
     },
     {
       "id": "T49",
@@ -546,7 +546,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit nalaz 6; live je lektahr.netlify.app, send-reminders ocekuje podsjetnici@lekta.hr. AUDIT 27.9.: T50 odluka vlasnika: domena pocetkom listopada 2026. 2026-10-04: lekta.hr na vlasnika, Cloudflare DNS + Email Routing, Resend; #273 draft do delegacije i certifikata; ALLOWED_ORIGIN prod postavljen 4. 10. 2026-10-04 vecer: pregled #273 zatvoren, koraci 5 i 6 nakon spajanja; Auth SMTP preko Resenda (prijava@lekta.hr); otvoreno: rate_limit_email_sent 2/h. 2026-10-04: #273 spojen; koraci 5 i 6 cekaju objavu (produkcija vrti eaa29dde od 30. 9.), T72 dokaz u tijeku na radnoj stanici.",
+      "note": "VLASNIK: audit nalaz 6; live je lektahr.netlify.app, send-reminders ocekuje podsjetnici@lekta.hr. AUDIT 27.9.: T50 odluka vlasnika: domena pocetkom listopada 2026. 2026-10-04: lekta.hr na vlasnika, Cloudflare DNS + Email Routing, Resend; #273 draft do delegacije i certifikata; ALLOWED_ORIGIN prod postavljen 4. 10. 2026-10-04 vecer: pregled #273 zatvoren, koraci 5 i 6 nakon spajanja; Auth SMTP preko Resenda (prijava@lekta.hr); otvoreno: rate_limit_email_sent 2/h. 2026-10-04: #273 spojen; koraci 5 i 6 cekaju objavu (produkcija vrti eaa29dde od 30. 9.), T72 dokaz u tijeku na radnoj stanici. 2026-10-16: 2/h je biljeska od 4.10., nije svjeze ocitanje; slanje i odgovor support sanducica te aktualni Auth limit nisu provjereni. Supabase project API vraca samo status; Dashboard trazi rucnu prijavu. Nista nije mijenjano.",
       "owner": "Terminal laptop"
     },
     {
@@ -737,9 +737,9 @@
     {
       "id": "T72",
       "title": "Svjez RELEASE_PROOF nad aktualnim masterom",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [],
-      "note": "Blokira T46. RELEASE_PROOF.json iz T67 (PR #143) vezan je uz f754537c; origin/master cc9df523 je 37 commita i 315 datoteka dalje (git rev-list --count, git diff --shortstat), ukljucujuci #145 (Stripe i dizajn). Dokaz: sve cetiri Word razine (word, word worst-case, word-corpus, word-toc) i release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 nad commitom koji je tada HEAD mastera. AUDIT 27.9.: #4"
+      "note": "Blokira T46. Stanje 2026-10-13: origin/master f758ba2bde00c7f2d37daa789a39ed1e4168db99; docs/generated/RELEASE_PROOF.json je complete=true, missingRequired=[], commit 9eaefcf466486ad4a0daa9297d5e4bd59161dea7 i treeDigest odgovara stablu kandidata. node scripts/verify-release-proof.mjs --proof-only potvrdio je otisak; to nije novo puno mjerenje. Objavom od 13.10. objavljen je f758ba2bde00 uz strogu potvrdu identiteta; post-deploy smoke pao je samo na jednom fetch failed za JS asset, ostalih 29/30 provjera proslo je. projections je u dokazu fail, a extraction unavailable zbog nedostajuceg LEKTA_STAGING_ORIGIN; to su oznacene neobavezne/neizmjerene razine, ne prolazi. Nakon vlasnikovih odabranih spajanja 16.10. treba izvesti jedan novi dokaz nad tocno tim cistim stablom prije jedne objave."
     },
     {
       "id": "T73",
@@ -824,16 +824,18 @@
         "T87",
         "T89"
       ],
-      "note": "Datum se pomice samo zbog neispunjenog kriterija, ne zbog novih funkcija; nepoznato je NO-GO. Sigurnosni podskup T21 za zive endpointe je kriterij 4 (T21 nema zaseban podzadatak, pa nije u dependsOn). Javna beta: prije 19. 10. provjeriti troskovne granice i rate-limit besplatnog popravka te zive vrijednosti REPAIR_FREE_MODE i REPAIR_DISABLED. Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. Dosje, 9 kriterija iz odj. 6 prijedloga: (1) T26 zatvoren: conformance matrica prolazi, nalazi #14, #16 i #17 ispravljeni, nema sustavnog laznog nalaza na poznato ispravnim dokumentima; (2) T72: svjez RELEASE_PROOF nad tocnim commitom kandidata; (3) Word oracle zelen na Windowsu za popravljene dokumente (npm run verify:word); (4) sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0; (5) prekidaci provjereni na produkciji: REPAIR_DISABLED stvarno gasi popravak; stvarna vrijednost REPAIR_FREE_MODE procitana; (6) pravni tekstovi bete objavljeni (privatnost, uvjeti, \"tijekom besplatne bete\"); (7) T49: domena i support sanducic rade, SPF/DKIM/DMARC postavljeni; (8) vlasnik sam prodje glavni tok na lekta.hr s 2 do 3 vlastita rada; provjera opterecenja prije objave obvezna: rate limit besplatnog popravka, T45 granice troska, REPAIR_FREE_MODE (izmjena 2026-10-04, odluka vlasnika: zamjenjuje mini pilot od pet korisnika, T15 ukinut); (9) nijedan *_DISABLED ili prazan endpoint ne vodi korisnika u slijepu ulicu: iskljucene funkcije su skrivene ili jasno oznacene kao \"uskoro\". AUDIT 27.9.: T50 odluka vlasnika",
+      "note": "Datum se pomice samo zbog neispunjenog kriterija, ne zbog novih funkcija; nepoznato je NO-GO. Sigurnosni podskup T21 za zive endpointe je kriterij 4 (T21 nema zaseban podzadatak, pa nije u dependsOn). Javna beta: prije 19. 10. provjeriti troskovne granice i rate-limit besplatnog popravka te zive vrijednosti REPAIR_FREE_MODE i REPAIR_DISABLED. Odluka: docs/decisions/T50_OPSEG_LANSIRANJA_ODLUKA.md. Dosje, 9 kriterija iz odj. 6 prijedloga: (1) T26 zatvoren: conformance matrica prolazi, nalazi #14, #16 i #17 ispravljeni, nema sustavnog laznog nalaza na poznato ispravnim dokumentima; (2) T72: svjez RELEASE_PROOF nad tocnim commitom kandidata; (3) Word oracle zelen na Windowsu za popravljene dokumente (npm run verify:word); (4) sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0; (5) prekidaci provjereni na produkciji: REPAIR_DISABLED stvarno gasi popravak; stvarna vrijednost REPAIR_FREE_MODE procitana; (6) pravni tekstovi bete objavljeni (privatnost, uvjeti, \"tijekom besplatne bete\"); (7) T49: domena i support sanducic rade, SPF/DKIM/DMARC postavljeni; (8) vlasnik sam prodje glavni tok na lekta.hr s 2 do 3 vlastita rada; provjera opterecenja prije objave obvezna: rate limit besplatnog popravka, T45 granice troska, REPAIR_FREE_MODE (izmjena 2026-10-04, odluka vlasnika: zamjenjuje mini pilot od pet korisnika, T15 ukinut); (9) nijedan *_DISABLED ili prazan endpoint ne vodi korisnika u slijepu ulicu: iskljucene funkcije su skrivene ili jasno oznacene kao \"uskoro\". AUDIT 27.9.: T50 odluka vlasnika 2026-10-13: presjek kandidata, incidenta, captcha spremnosti, zivih ruta i issuea #318 je u docs/agents/reports/BETA_GO_NO_GO_2026-10-16.md i BETA_REPORTS_C_2026-10-15.md; incident je u docs/agents/incidents/PRODUCTION_SMOKE_2026-10-13.md. PR A i beta dokumentacija ciljaju 14.10.; PR B i izvjestaji 15.10.; vlasnik spaja odabrane pakete 16.10., zatim radi jedan novi dokaz i jednu objavu. Zakasnjeli PR A ili B izostavlja se iz bete. T89 se ne ukljucuje dok objavljeni build-info ne potvrdi captchaSiteKey=true.",
       "owner": "lekta-32"
     },
     {
       "id": "T84",
       "title": "Sigurnosni podskup T21 za zive endpointe (repair-docx, source-check, faculty-request, preporuke): nema otvorenog P0",
-      "status": "in_progress",
+      "status": "blocked",
       "owner": "lekta-00",
-      "dependsOn": [],
-      "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295."
+      "dependsOn": [
+        "T18"
+      ],
+      "note": "Kriterij 4 T81. Opseg samo zivi Edge endpointi i RLS; nalazi P0, P1 i P2 s dokazom. Vlasnik zadatka: cloud sesija po dodjeli koordinatora. Razred: full. Zasticeno: supabase. 2026-10-04: izvjestaj spojen (#293); popravci u PR-ovima #289, #291, #294 i #295. 2026-10-16: blokiran dok T18 ne bude done; read-only provjera potvrdila je da produkciji nedostaju client-error, integrity-check i preflight-start te da faculty-request vraća Access-Control-Allow-Origin: * za lekta.hr i evil.example."
     },
     {
       "id": "T85",
@@ -869,7 +871,7 @@
       "title": "Captcha (Cloudflare Turnstile) na produkcijskom Supabase Authu prije bete",
       "status": "in_progress",
       "dependsOn": [],
-      "note": "Odluka vlasnika 2026-09-28 (T84 nalaz: anonimne prijave ukljucene, captcha iskljucen). Kriterij 4 T81. Frontend salje captcha token na signup, otp i prijavu lozinkom; bez VITE_TURNSTILE_SITE_KEY fail-open samo dok captcha nije na Authu. Redoslijed ukljucivanja: docs/deploy/AUTH_CAPTCHA.md. Produkciju ukljucuje vlasnik ili koordinator na njegovu rijec nakon mergea. Razred: full. Zasticeno: security.",
+      "note": "Odluka vlasnika 2026-09-28 (T84 nalaz: anonimne prijave ukljucene, captcha iskljucen). Kriterij 4 T81. Frontend salje captcha token na signup, otp i prijavu lozinkom; bez VITE_TURNSTILE_SITE_KEY fail-open samo dok captcha nije na Authu. Redoslijed ukljucivanja: docs/deploy/AUTH_CAPTCHA.md. Produkciju ukljucuje vlasnik ili koordinator na njegovu rijec nakon mergea. Razred: full. Zasticeno: security. 2026-10-16: javni build-info pokazuje produkcijski SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99 s captchaSiteKey=false; staging ima isti SHA i true. Postavka Supabase Auth Turnstile te negativni/pozitivni testovi nisu provjereni; secret/postavke nisu mijenjani.",
       "owner": "lekta-00"
     },
     {
@@ -973,7 +975,7 @@
       "dependsOn": [
         "T49"
       ],
-      "note": "Odluka vlasnika 2026-10-04 (sesija Terminal laptop). Preduvjet: Google OAuth klijent koji vlasnik napravi u Google Cloudu (consent screen na lekta.hr). Auth je DIJELJEN s Katedrom (uri_allow_list), pa se ukljucivanje providera uskladjuje s Katedrom. Status blocked jer T49 jos nije done. Blokiraju ga T49 i Google OAuth klijent vlasnika. 2026-10-04: priprema koda iza zastavice (radna-stanica-ubrzavanje)."
+      "note": "2026-10-16: status reda je blocked dok T49 ne bude done; Linear DAN-20 je vracen na Backlog (oznaka Blocked). T49/DAN-8 je In Progress jer isporuka i odgovor support sanducica nisu provjereni; preostaje vlasnikov Google OAuth klijent/consent screen te uskladjenje dijeljenog Auth projekta s Katedrom, Supabase provider/redirect allowlist, zavrsni tekst privatnosti i stvarni E2E/aktivacija. PR #307 spojen 2026-10-08; kod ostaje iza zadano iskljucene zastavice VITE_AUTH_GOOGLE_ENABLED."
     },
     {
       "id": "T103",
