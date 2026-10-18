@@ -332,3 +332,107 @@ test('Z35 ruta: iza ?resultRenderer=legacy kartica "Faksimil" crta stari Z9 s al
   await page.locator('#previewModeCitljivo').click();
   await expect(page.locator('#previewZoomBar')).toHaveCount(0);
 });
+
+/** Stari Z9 (list, zoom, alatni red) nigdje u DOM-u. */
+async function bezZ9(page: Page): Promise<void> {
+  await expect(page.locator('.lekta-fac, .lekta-facsimile, .lekta-fac-page, #previewZoomBar, .is-facsimile')).toHaveCount(0);
+}
+
+/** 360 px: nema vodoravnog skrola stranice. */
+async function bezVodoravnog(page: Page, gdje: string): Promise<void> {
+  const prelijeva = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(prelijeva, `${gdje}: vodoravni skrol`).toBeLessThanOrEqual(1);
+}
+
+// F51 a ("Broj 2"), mjesto 1: stol Z8 (ovdje povratak, jer je uvoz Z34 odbijen) vise ne ugradjuje Z9.
+test('Z35 stol Z8: lijevi pano crta stranice Z35, ne stari Z9; gumb otvara faksimil, 360 px bez preklapanja', async ({ page }, info) => {
+  test.setTimeout(240_000);
+  await page.route(/\/src\/ui\/result-live\/result-live\.ts/, (r) => r.abort());
+  await doPresude(page, false);
+  const kokpit = page.locator('#resultCockpit');
+  await expect(kokpit).toHaveAttribute('data-rl-povratak', /uvoz|rok/, { timeout: 30_000 });
+  await expect(kokpit.locator('[data-desk] [data-cockpit-finding]')).toBeVisible();
+  const pano = kokpit.locator('[data-desk-doc]');
+  if ((page.viewportSize()?.width ?? 0) > 900) {
+    const listovi = pano.locator('[data-fl-stol] .fl-page');
+    await expect(listovi.first()).toBeVisible({ timeout: 30_000 });
+    expect(await listovi.count(), 'pano crta listove Z35').toBeGreaterThan(0);
+    const prelijeva = await pano.evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(prelijeva, 'list Z35 prati sirinu panoa bez zooma').toBeLessThanOrEqual(1);
+    // Mjesto aktivira nalaz: klik na oznaceni odlomak pali oznaku na tom odlomku.
+    const oznaka = pano.locator('[data-fl-hit="nalaz"]').first();
+    await expect(oznaka, 'fixture ima nalaz sa sidrom na listu').toBeVisible();
+    const p = await oznaka.getAttribute('data-fl-p');
+    await oznaka.click();
+    await expect(pano.locator('[data-desk-active]')).toHaveAttribute('data-fl-p', p ?? '');
+    await page.screenshot({ path: snimka(info, 'stol-z8-pano'), fullPage: false });
+  } else {
+    await expect(pano, 'uski zaslon ne crta pano').toBeHidden();
+  }
+  await bezZ9(page);
+  await page.setViewportSize({ width: 360, height: 780 });
+  await page.waitForTimeout(150);
+  await bezVodoravnog(page, 'stol Z8 na 360 px');
+  const gumb = kokpit.locator('[data-cockpit-fax]');
+  await gumb.scrollIntoViewIfNeeded();
+  const g = await kutija(gumb);
+  const k = await kutija(kokpit.locator('[data-desk] [data-cockpit-finding]'));
+  expect(sijeku(g, k), 'gumb "Otvori faksimil" ne prekriva karticu nalaza').toBe(false);
+  expect(g.x >= -0.5 && g.x + g.w <= 360.5, 'gumb je unutar 360 px').toBe(true);
+  await page.screenshot({ path: snimka(info, 'stol-z8-360'), fullPage: false });
+  await gumb.click();
+  const fl = page.locator('[data-fl]');
+  await expect(fl).toHaveAttribute('data-fl-ready', 'true', { timeout: 30_000 });
+  await provjeriRaspored(page, fl, 360);
+  await bezZ9(page);
+  await page.screenshot({ path: snimka(info, 'stol-z8-faksimil-360'), fullPage: false });
+});
+
+// F51 a, mjesto 2: rezultat bez ijednog nalaza. Kokpit se crta istim modulom i istim ulazom koji
+// `app.ts` predaje (stol bez nalaza, pregled), a kartica "Faksimil" ide kroz stvarni rukovatelj u `app.ts`.
+test('Z35 rezultat bez ijednog nalaza: kartica "Faksimil" otvara Z35 s praznim redom, ne stari Z9; 360 px', async ({ page }, info) => {
+  test.setTimeout(240_000);
+  await doPresude(page, false);
+  const kokpit = page.locator('#resultCockpit');
+  await expect(kokpit).toHaveAttribute('data-rl-ready', 'true', { timeout: 30_000 });
+  await kokpit.locator('[data-cockpit-action="open-findings"]').click();
+  await page.evaluate(async () => {
+    const { renderResultsCockpit } = await import('/src/ui/results/results-cockpit.ts');
+    const { buildVisualResultModel } = await import('/src/ui/results/visual-result-model.ts');
+    const mount = document.querySelector<HTMLElement>('#resultCockpit')!;
+    const paragraphs = Array.from({ length: 30 }, (_, k) => ({
+      index: k + 1, text: k === 0 ? 'Uvod' : `Odlomak ${k + 1} rada bez ijednog nalaza.`, headingLevel: k === 0 ? 1 : null,
+      align: 'both', size: 12, lineHeight: 1.5, runs: [],
+    }));
+    const model = buildVisualResultModel({
+      score: 100, scoredChecks: 8, file: { name: 'rad.docx' }, profile: 'Profil', profileStatus: 'verified',
+      issues: [], checks: [], categories: {}, capabilities: { repair: true, preview: true }, details: {},
+    } as never);
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: { items: [], planItems: [], live: { preview: { paragraphs, baseFont: 'Times New Roman', baseSize: 12 }, storedPages: null } },
+    });
+  });
+  await expect(kokpit.locator('[data-desk]'), 'bez nalaza nema stola').toHaveCount(0);
+  await page.setViewportSize({ width: 360, height: 780 });
+  const pregled = page.locator('#guideOpenPreview');
+  await pregled.scrollIntoViewIfNeeded();
+  await pregled.click();
+  await expect(page.locator('#previewModal')).toBeVisible();
+  await page.locator('#previewModeFaksimil').click();
+  const fl = page.locator('[data-fl]');
+  await expect(fl).toHaveAttribute('data-fl-ready', 'true', { timeout: 30_000 });
+  await expect(page.locator('#previewModal')).toBeHidden();
+  await bezZ9(page);
+  await expect(fl.locator('[data-fl-prazno]')).toHaveText('Nema otvorenih nalaza.');
+  await expect(fl.locator('[data-fl-card]')).toBeHidden();
+  await expect(fl.locator('[data-fl-q], [data-fl-note], [data-fl-dot], [data-fl-count]')).toHaveCount(0);
+  const stranica = fl.locator('[data-fl-page]');
+  await expect(stranica).toBeVisible();
+  const prelijeva = await fl.evaluate((el) => el.scrollWidth - el.clientWidth);
+  expect(prelijeva, '360 px: vodoravni skrol faksimila').toBeLessThanOrEqual(1);
+  expect(sijeku(await kutija(stranica), await kutija(fl.locator('[data-fl-prazno]'))), 'poruka ne prekriva stranicu').toBe(false);
+  await page.screenshot({ path: snimka(info, 'bez-nalaza-360'), fullPage: false });
+  await fl.locator('[data-fl-back]').click();
+  await expect(fl).toHaveCount(0);
+});
