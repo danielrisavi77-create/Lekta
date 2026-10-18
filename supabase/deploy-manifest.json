@@ -341,7 +341,11 @@
         "REPAIR_MAX_CONCURRENT",
         "REPAIR_MAX_DOCX_BYTES",
         "REPAIR_MAX_PER_USER",
+        "REPAIR_RECOVERY_IP_DAILY_CAP",
+        "REPAIR_RECOVERY_USER_DAILY_CAP",
         "REPAIR_SLOT_LEASE_SECONDS",
+        "REPAIR_STATUS_IP_DAILY_CAP",
+        "REPAIR_STATUS_USER_DAILY_CAP",
         "REPAIR_STORAGE_DAILY_CAP",
         "REPAIR_UNCOUNTED_DAILY_CAP",
         "SUPABASE_SERVICE_ROLE_KEY",
@@ -462,7 +466,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-10-04T18:29:20.140Z",
-  "generatedFromCommit": "adc543f31a640fc8da0d7bb25624a2fca057967d",
+  "generatedAt": "2026-10-17T00:24:03.170Z",
+  "generatedFromCommit": "20001f36142f4de12703ab775a1ea91ee47c9cdd",
   "generator": "npm run deploy-manifest"
 }

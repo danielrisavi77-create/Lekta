@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page, type Route } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
@@ -65,6 +65,17 @@ async function analyzeToPanel(page: Page) {
 
 const sendButton = (page: Page) => page.getByTestId('repair-workflow').locator('.lekta-repair-panel__download');
 
+async function fulfillRepairStatusProbe(route: Route, onStatusProbe?: () => void): Promise<boolean> {
+  if (route.request().headers()['x-lekta-request-mode'] !== 'status') return false;
+  onStatusProbe?.();
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ status: 'missing', jobId: null }),
+  });
+  return true;
+}
+
 /** Klik na slanje; kad odabir sadrzi zahvat koji trazi potvrdu lokacije (K6), prvo se potvrdi, pa tek onda ide zahtjev. */
 async function send(page: Page) {
   const button = sendButton(page);
@@ -84,9 +95,11 @@ test.describe('T10: oporavak nakon greske popravka', () => {
   test('prekid veze nakon slanja: prvo provjera postojeceg posla, ponovni pokusaj tek onda', async ({ page }) => {
     await analyzeToPanel(page);
     let requests = 0;
+    let statusProbes = 0;
     let finishRetry!: () => void;
     const retryGate = new Promise<void>((resolve) => { finishRetry = resolve; });
     await page.route(REPAIR, async (route) => {
+      if (await fulfillRepairStatusProbe(route, () => { statusProbes += 1; })) return;
       requests += 1;
       if (requests === 1) { await route.abort('connectionreset'); return; }
       await retryGate;
@@ -97,7 +110,7 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     const recovery = page.getByTestId('repair-recovery');
     await expect(recovery).toBeVisible({ timeout: 60_000 });
     await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
-    await expect(recovery).toContainText('Moje popravke');
+    await expect(recovery).toContainText('Moji popravci');
     const retry = recovery.locator('[data-repair-retry]');
     await expect(retry).toBeDisabled();
     await expect(sendButton(page)).toBeDisabled();
@@ -107,6 +120,7 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     await expect(jobs, 'uz sesiju s e-mailom provjera poslova mora biti dostupna').toBeEnabled();
     await jobs.click();
     await expect(page.locator('#repairHistoryList')).toContainText('Još nemaš spremljenih popravaka');
+    await expect.poll(() => statusProbes).toBe(1);
     await expect(retry).toBeEnabled();
     await page.keyboard.press('Escape'); // zatvori modal "Moji popravci" ako se otvorio
     await retry.click();
@@ -120,11 +134,91 @@ test.describe('T10: oporavak nakon greske popravka', () => {
     await expect(sendButton(page)).toBeDisabled();
   });
 
+  test('nova prijava ne moze otključati retry za popravak poslan starom prijavom', async ({ page }) => {
+    await analyzeToPanel(page);
+    let repairRequests = 0;
+    let statusProbes = 0;
+    await page.route(REPAIR, async (route) => {
+      if (await fulfillRepairStatusProbe(route, () => { statusProbes += 1; })) return;
+      repairRequests += 1;
+      await route.abort('connectionreset');
+    });
+
+    await send(page);
+    const recovery = page.getByTestId('repair-recovery');
+    await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
+    const retry = recovery.locator('[data-repair-retry]');
+    await expect(retry).toBeDisabled();
+    await page.evaluate(() => {
+      const raw = localStorage.getItem('lekta.session');
+      if (!raw) throw new Error('Očekivana testna sesija nije spremljena');
+      const session = JSON.parse(raw);
+      session.accessToken = 'different-account-token';
+      session.refreshToken = 'different-account-refresh';
+      session.userId = 'u-other';
+      session.expiresAt = Date.now() + 60_000;
+      localStorage.setItem('lekta.session', JSON.stringify(session));
+    });
+
+    await recovery.locator('[data-repair-check-jobs]').click();
+    await expect(recovery).toContainText('Provjera statusa i ponovni pokušaj ostaju zaključani');
+    await expect(retry).toBeDisabled();
+    expect(statusProbes, 'status drugog računa ne smije se koristiti kao dokaz da izvorni zahtjev nedostaje').toBe(0);
+    expect(repairRequests, 'promjena prijave ne smije poslati dupli repair').toBe(1);
+  });
+
+  test('promijenjeni odabir ne moze se poslati kroz retry; zaseban popravak trazi potvrdu', async ({ page }) => {
+    await analyzeToPanel(page);
+    let repairRequests = 0;
+    let statusProbes = 0;
+    await page.route(REPAIR, async (route) => {
+      if (await fulfillRepairStatusProbe(route, () => { statusProbes += 1; })) return;
+      repairRequests += 1;
+      await route.abort('connectionreset');
+    });
+    await page.route('**/rest/v1/repair_jobs*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+
+    await send(page);
+    const recovery = page.getByTestId('repair-recovery');
+    await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
+    await recovery.locator('[data-repair-check-jobs]').click();
+    await expect.poll(() => statusProbes).toBe(1);
+    await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
+    await page.keyboard.press('Escape');
+
+    const workflow = page.getByTestId('repair-workflow');
+    await workflow.locator('.lekta-repair-trigger__btn').click();
+    const ledger = page.locator('[data-lekta-repair-ledger-modal]');
+    await expect(ledger).toBeVisible();
+    await ledger.locator('[role="checkbox"][aria-checked="true"]').first().click();
+    await ledger.getByRole('button', { name: 'Gotovo' }).click();
+
+    await recovery.locator('[data-repair-retry]').click();
+    const summary = workflow.locator('.lekta-repair-panel__summary');
+    await expect(summary).toContainText('razlikuju se od izvornog zahtjeva');
+    await expect(summary.locator('[data-repair-start-new]')).toBeVisible();
+    expect(repairRequests, 'promijenjeni zahtjev ne smije se poslati kao retry').toBe(1);
+
+    let dialogMessage = '';
+    page.once('dialog', async (dialog) => {
+      dialogMessage = dialog.message();
+      await dialog.accept();
+    });
+    await summary.locator('[data-repair-start-new]').click();
+    expect(dialogMessage).toContain('Izvorni zahtjev možda još traje');
+    const itemConfirmation = workflow.locator('.lekta-repair-panel__confirm');
+    await expect.poll(async () => (await itemConfirmation.isVisible().catch(() => false)) || repairRequests === 2).toBe(true);
+    if (await itemConfirmation.isVisible().catch(() => false)) await itemConfirmation.click();
+    await expect.poll(() => repairRequests).toBe(2);
+  });
+
   test('timeout obnove sesije nakon nepoznatog ishoda zadržava zaključavanje do nove provjere', async ({ page }) => {
     await analyzeToPanel(page);
     await shortenAppTimeout(page, 30_000);
     let repairRequests = 0;
+    let statusProbes = 0;
     await page.route(REPAIR, async (route) => {
+      if (await fulfillRepairStatusProbe(route, () => { statusProbes += 1; })) return;
       repairRequests += 1;
       await route.abort('connectionreset');
     });
@@ -177,6 +271,7 @@ test.describe('T10: oporavak nakon greske popravka', () => {
       const checkedAgain = recovery.locator('[data-repair-check-jobs]');
       await checkedAgain.click();
       await expect.poll(() => historyRequests).toBe(2);
+      await expect.poll(() => statusProbes).toBe(2);
       await expect(page.locator('#repairHistoryList')).toContainText('Još nemaš spremljenih popravaka');
       await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
     } finally {
@@ -187,7 +282,9 @@ test.describe('T10: oporavak nakon greske popravka', () => {
   test('e-mail prijava tijekom provjere učita popis i tek tada otključa oporavak', async ({ page }) => {
     await analyzeToPanel(page);
     let repairRequests = 0;
+    let statusProbes = 0;
     await page.route(REPAIR, async (route) => {
+      if (await fulfillRepairStatusProbe(route, () => { statusProbes += 1; })) return;
       repairRequests += 1;
       await route.abort('connectionreset');
     });
@@ -222,6 +319,7 @@ test.describe('T10: oporavak nakon greske popravka', () => {
 
     await expect(page.locator('#authModal')).toBeHidden();
     await expect(page.locator('#repairHistoryList')).toContainText('Još nemaš spremljenih popravaka');
+    await expect.poll(() => statusProbes).toBe(1);
     await expect(recovery.locator('[data-repair-retry]')).toBeEnabled();
     await expect(sendButton(page)).toBeDisabled();
     expect(repairRequests, 'prijava i provjera ne šalju novi popravak').toBe(1);
@@ -379,7 +477,7 @@ test.describe('T10: oporavak nakon greske popravka', () => {
       const recovery = page.getByTestId('repair-recovery');
       await expect(recovery).toBeVisible({ timeout: 10_000 });
       await expect(recovery).toHaveAttribute('data-repair-recovery', 'check-existing-job');
-      await expect(recovery).toContainText('Moje popravke');
+      await expect(recovery).toContainText('Moji popravci');
       await expect(recovery.locator('[data-repair-retry]')).toBeDisabled();
       expect(requests, 'istek uploada ne salje drugi zahtjev').toBe(1);
     } finally {

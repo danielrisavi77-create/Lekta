@@ -20,8 +20,19 @@ export function repairCostGuardProblems(src: string): string[] {
   const body = src.indexOf('const bounded = await readFormDataBounded(');
   if (capCall < 0) out.push('repair-docx: nema stropa ishoda bez potrosnje');
   else if (body < 0 || capCall > body) out.push('repair-docx: strop ishoda bez potrosnje nije prije citanja tijela');
-  const over = src.indexOf("if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);");
-  if (over < 0 || (body >= 0 && over > body)) out.push('repair-docx: strop ishoda ne vraca 429 attempts_daily prije citanja tijela');
+  const over = src.indexOf("if (attemptCap === 'over') {");
+  const overEnd = src.indexOf('// Rezervacija PRIJE tijela', over);
+  const overBlock = over >= 0 && overEnd > over ? src.slice(over, overEnd) : '';
+  if (over < 0 || (body >= 0 && over > body)) out.push('repair-docx: strop ishoda ne provjerava se prije citanja tijela');
+  if (!overBlock.includes("if (!requestId || !requestFingerprint) return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);")) {
+    out.push('repair-docx: strop ne blokira oporavak bez identiteta zahtjeva');
+  }
+  if (!overBlock.includes("if (priorRequest.status !== 'completed_unstored')")) {
+    out.push('repair-docx: strop ne ogranicava oporavak na dovrsen, nespremljen zahtjev');
+  }
+  if (!/if\s*\(\s*priorRequest\.status\s*!==\s*'completed_unstored'\s*\)\s*\{\s*return\s+json\(\{\s*error:\s*'rate_limited',\s*reason:\s*'attempts_daily'\s*\},\s*429\s*\);\s*\}/.test(overBlock)) {
+    out.push('repair-docx: status koji nije completed_unstored ne odbija se s 429');
+  }
   const err = src.indexOf("if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);");
   if (err < 0 || (body >= 0 && err > body)) out.push('repair-docx: necitljiv dnevnik pokusaja ne vraca 503 prije citanja tijela');
   const reserve = src.indexOf('const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);');
@@ -32,7 +43,7 @@ export function repairCostGuardProblems(src: string): string[] {
   }
   if (!src.includes("await finishAttempt(admin, attempt, 'no_change');")) out.push('repair-docx: ishod bez izmjena se ne dopisuje na rezervaciju');
   if (!src.includes("await finishAttempt(admin, attempt, 'integrity_failed');")) out.push('repair-docx: odbijena isporuka se ne dopisuje na rezervaciju');
-  if (!/const log = async \(status: string, sId: string \| null\) => \{[\s\S]*?if \(!written\.error\) await dropAttempt\(admin, attempt\);/.test(src)) {
+  if (!/const log = async \(status: string, sId: string \| null(?:, retainAttempt = false)?\) => \{[\s\S]*?if \(!written\.error(?: && !retainAttempt)?\) await dropAttempt\(admin, attempt\);/.test(src)) {
     out.push('repair-docx: zapis u report_generations ne brise rezervaciju (dvostruko brojanje)');
   }
   if (/log\('(no_change|integrity_failed)'/.test(src)) out.push('repair-docx: ishod bez potrosnje ide u report_generations');

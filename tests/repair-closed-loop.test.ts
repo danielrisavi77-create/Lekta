@@ -24,6 +24,7 @@ import type { RepairableItem } from '../src/ui/repair-panel';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
 import { PAPER_SIZE_TITLE_PREFIX } from '../src/analysis/check-fixer-map';
 import { buildDocxFile, type DocSpec, type ParaSpec } from './helpers/docx-builder';
+import { resolveParams } from '../src/repair/param-authority';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const BODY_TEXT = 'Ovo je kontrolirani odlomak akademskog teksta za provjeru popravka.';
@@ -235,5 +236,142 @@ describe('Repair Engine closed-loop profilna matrica', () => {
     const second = await applyFixers(applied.docxBytes, requestsFor(items));
     expect(second.changelog, `${profileId}: drugi prolaz mora biti no-op`).toEqual([]);
     expect(second.docxBytes, `${profileId}: no-op mora zadrzati istu referencu`).toBe(applied.docxBytes);
+  }, 120000);
+});
+
+describe('Repair Engine: provjere osnovnog teksta ne broje tablice koje fixer namjerno čuva', () => {
+  it('ponovna analiza potvrđuje prored i poravnanje tijela uz izvorno oblikovanje tablice', async () => {
+    const profileCase = profileCases().find(({ profileId, entries }) =>
+      entries.some((entry) => entry.checkId === 'line-spacing') &&
+      entries.some((entry) => entry.checkId === 'justify') &&
+      Number((resolveProfile(profileId) as Record<string, unknown>).spacing) === 1.5 &&
+      (resolveProfile(profileId) as Record<string, unknown>).justify === true,
+    );
+    expect(profileCase).toBeDefined();
+    const profileId = profileCase!.profileId;
+    const profile = resolveProfile(profileId) as Record<string, unknown>;
+    const runtimeEntries = repairEntriesFor(profileId);
+    const text = 'Kontrolirani tekst u tabličnom retku s jednostrukim proredom i lijevim poravnanjem. '.repeat(6);
+    const table =
+      '<w:tbl><w:tblPr/><w:tblGrid/><w:tr><w:tc><w:tcPr/>' +
+      '<w:p><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+      `<w:r><w:t>${text}</w:t></w:r></w:p></w:tc></w:tr></w:tbl>`;
+    const stylesXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:style w:type="paragraph" w:styleId="Normal" w:default="1">' +
+      '<w:name w:val="Normal"/><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+      '</w:style></w:styles>';
+    const input = buildDocxFile({
+      stylesXml,
+      paragraphs: [
+        ...Array.from({ length: 4 }, (_, index) => ({
+          text: `Kontrolirani odlomak tijela ${index + 1}.`,
+          spacingLine: 240,
+          jc: 'left' as const,
+        })),
+        { text: '', raw: table },
+      ],
+    }, `${profileId}-table-spacing.docx`);
+
+    const before = await analyzeFixture(input, { profileId });
+    const beforeSpacing = before.checks.find((check) => check.title === 'Prored osnovnog teksta');
+    const beforeAlignment = before.checks.find((check) => check.title === 'Poravnanje osnovnog teksta');
+    expect(before.stats.dominantSpacing).toBe('1');
+    expect(beforeSpacing?.status).not.toBe('pass');
+    expect(beforeAlignment?.status).not.toBe('pass');
+
+    const items = buildRepairableItems(before.checks, profile, runtimeEntries);
+    const lineSpacingItem = items.find((item) => item.fixerId === 'line-spacing-fixer');
+    const alignmentItem = items.find((item) => item.fixerId === 'alignment-fixer');
+    expect(lineSpacingItem?.params.multiplier).toBe(1.5);
+    expect(alignmentItem?.params.val).toBe('both');
+    const beforeTexts = await documentTexts(new Uint8Array(await input.arrayBuffer()));
+    const applied = await applyFixers(new Uint8Array(await input.arrayBuffer()), requestsFor([lineSpacingItem!, alignmentItem!]));
+    expect(applied.changelog.map((entry) => entry.fixerId)).toEqual(expect.arrayContaining(['line-spacing-fixer', 'alignment-fixer']));
+
+    const outputFile = new File([applied.docxBytes], `${profileId}-table-spacing-fixed.docx`, { type: DOCX_MIME });
+    const after = await analyzeFixture(outputFile, { profileId });
+    const afterSpacing = after.checks.find((check) => check.title === 'Prored osnovnog teksta');
+    const afterAlignment = after.checks.find((check) => check.title === 'Poravnanje osnovnog teksta');
+    expect(after.stats.dominantSpacing).toBe('1.5');
+    expect(afterSpacing?.status).toBe('pass');
+    expect(afterAlignment?.status).toBe('pass');
+    expect(await documentTexts(applied.docxBytes)).toEqual(beforeTexts);
+    const documentXml = (await readZip(applied.docxBytes))
+      .find((entry) => entry.name === 'word/document.xml');
+    expect(documentXml).toBeDefined();
+    expect(new TextDecoder().decode(documentXml!.data)).toContain('<w:spacing w:line="240" w:lineRule="auto"/>');
+    expect(new TextDecoder().decode(documentXml!.data)).toContain('<w:jc w:val="left"/>');
+  }, 120000);
+
+  it('BodyText s izravnim jednostrukim proredom nakon dubinskog popravka prolazi ponovnu analizu i drugi prolaz je no-op', async () => {
+    const profileCase = profileCases().find(({ profileId, entries }) =>
+      entries.some((entry) => entry.checkId === 'line-spacing') &&
+      Number((resolveProfile(profileId) as Record<string, unknown>).spacing) === 1.5,
+    );
+    expect(profileCase).toBeDefined();
+    const profileId = profileCase!.profileId;
+    const profile = resolveProfile(profileId) as Record<string, unknown>;
+    const runtimeEntries = repairEntriesFor(profileId);
+    const stylesXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:style w:type="paragraph" w:styleId="Normal" w:default="1">' +
+      '<w:name w:val="Normal"/><w:pPr><w:spacing w:line="360" w:lineRule="auto"/><w:jc w:val="both"/></w:pPr>' +
+      '</w:style>' +
+      '<w:style w:type="paragraph" w:styleId="BodyText">' +
+      '<w:name w:val="Body Text"/><w:pPr><w:spacing w:line="360" w:lineRule="auto"/><w:jc w:val="both"/></w:pPr>' +
+      '</w:style></w:styles>';
+    const input = buildDocxFile({
+      stylesXml,
+      paragraphs: Array.from({ length: 4 }, (_, index) => ({
+        text: `Kontrolirani BodyText odlomak ${index + 1} s dovoljno teksta da sudjeluje u analizi osnovnog proreda.`,
+        styleId: 'BodyText',
+        spacingLine: 240,
+      })),
+    }, `${profileId}-bodytext-single-spacing.docx`);
+
+    const before = await analyzeFixture(input, { profileId });
+    expect(before.stats.dominantSpacing).toBe('1');
+    const beforeCheck = before.checks.find((check) => check.title === 'Prored osnovnog teksta');
+    expect(beforeCheck?.status).not.toBe('pass');
+    const items = buildRepairableItems(before.checks, profile, runtimeEntries);
+    const spacingItem = items.find((item) => item.fixerId === 'line-spacing-fixer');
+    expect(spacingItem?.params.multiplier).toBe(1.5);
+    const serverParams = resolveParams(profileId, spacingItem!.ruleId, spacingItem!.fixerId, {
+      ...spacingItem!.params,
+      deep: true,
+    });
+    expect(serverParams.source).toBe('profile');
+    expect(serverParams.params).toEqual({ ...spacingItem!.params, deep: true });
+
+    const beforeTexts = await documentTexts(new Uint8Array(await input.arrayBuffer()));
+    const applied = await applyFixers(new Uint8Array(await input.arrayBuffer()), [{
+      fixerId: spacingItem!.fixerId,
+      ruleId: spacingItem!.ruleId,
+      params: serverParams.params,
+    }]);
+    expect(applied.integrityFailure).toBeUndefined();
+    expect(applied.changelog.map((entry) => entry.fixerId)).toContain('line-spacing-fixer');
+    expect(applied.changelog.some((entry) => entry.afterLabel.includes('4 odlomaka'))).toBe(true);
+
+    const output = new File([applied.docxBytes], `${profileId}-bodytext-single-spacing-fixed.docx`, { type: DOCX_MIME });
+    const after = await analyzeFixture(output, { profileId });
+    expect(after.stats.dominantSpacing).toBe('1.5');
+    expect(after.checks.find((check) => check.title === 'Prored osnovnog teksta')?.status).toBe('pass');
+    expect(await documentTexts(applied.docxBytes)).toEqual(beforeTexts);
+    const documentXml = (await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/document.xml');
+    expect(documentXml).toBeDefined();
+    expect(new TextDecoder().decode(documentXml!.data)).not.toContain('w:line="240"');
+
+    const second = await applyFixers(applied.docxBytes, [{
+      fixerId: spacingItem!.fixerId,
+      ruleId: spacingItem!.ruleId,
+      params: serverParams.params,
+    }]);
+    expect(second.integrityFailure).toBeUndefined();
+    expect(second.changelog).toEqual([]);
+    expect(second.docxBytes).toBe(applied.docxBytes);
   }, 120000);
 });

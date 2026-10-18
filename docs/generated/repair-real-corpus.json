@@ -684,15 +684,15 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "targetedCheckCount": 3,
-      "targetedResolvedCount": 3,
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 4,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 4,
+      "manualOnlyCount": 3,
       "unmappedMatchKeys": [],
       "passRegressionCount": 0,
       "passRegressionChecks": [],
@@ -753,15 +753,15 @@
         "alignment-fixer",
         "section-surgery-fixer"
       ],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 4,
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 5,
+      "manualOnlyCount": 4,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1308,15 +1308,15 @@
         "alignment-fixer",
         "section-surgery-fixer"
       ],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 4,
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 5,
+      "manualOnlyCount": 4,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1393,8 +1393,8 @@
         "bibliography-repair-fixer",
         "required-section-fixer"
       ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 4,
+      "targetedCheckCount": 7,
+      "targetedResolvedCount": 5,
       "targetedUnresolvedCount": 2,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
@@ -1404,7 +1404,7 @@
         "structure.sections.profile"
       ],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 7,
+      "manualOnlyCount": 6,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1480,8 +1480,8 @@
         "required-section-fixer",
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 4,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 5,
       "targetedUnresolvedCount": 1,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
@@ -1490,7 +1490,7 @@
         "structure.sections.profile"
       ],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 9,
+      "manualOnlyCount": 8,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1535,13 +1535,13 @@
     "manualReviewCount": 13,
     "passRegressionCount": 0,
     "passRegressionChecks": [],
-    "targetedCheckCount": 49,
-    "targetedResolvedCount": 42,
+    "targetedCheckCount": 54,
+    "targetedResolvedCount": 47,
     "autoUnresolvedCount": 0,
     "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 7,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 69,
+    "manualOnlyCount": 64,
     "holdoutCount": 3,
     "independentlyConfirmedCount": 0
   },
@@ -1585,15 +1585,15 @@
         "alignment-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 3,
+      "manualOnlyCount": 2,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1632,15 +1632,14 @@
         "margins",
         "paper-size"
       ],
-      "intendedUntargeted": [
-        "paper-size"
-      ],
+      "intendedUntargeted": [],
       "expectedTransitions": [
         "font:fail->pass",
         "font-size:fail->pass",
         "justify:warn->pass",
         "line-spacing:fail->pass",
-        "margins:fail->pass"
+        "margins:fail->pass",
+        "paper-size:warn->pass"
       ],
       "transitionMismatches": [],
       "needsAssistance": [],
@@ -1685,308 +1684,8 @@
         "line-spacing-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 3,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "passRegressionChecks": [],
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null,
-      "statusChanges": [
-        "format.font.dominant:fail->pass",
-        "format.justify.body:warn->pass",
-        "format.size.body:fail->pass",
-        "format.spacing.body:fail->pass",
-        "page.margins:fail->pass",
-        "page.size.a4-list:warn->pass"
-      ],
-      "intendedChecks": [
-        "font",
-        "font-size",
-        "justify",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "intendedUntargeted": [
-        "paper-size"
-      ],
-      "expectedTransitions": [
-        "font:fail->pass",
-        "font-size:fail->pass",
-        "justify:warn->pass",
-        "line-spacing:fail->pass",
-        "margins:fail->pass"
-      ],
-      "transitionMismatches": [],
-      "needsAssistance": [],
-      "unexplainedUnresolved": []
-    },
-    {
-      "documentId": "svjedok-efri-diplomski",
-      "fileName": "svjedok-efri-diplomski.docx",
-      "profileId": "efri-diplomski",
-      "holdout": false,
-      "expectationProvenance": "derived",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 24,
-        "passCount": 10,
-        "score": 67
-      },
-      "after": {
-        "checkCount": 24,
-        "passCount": 16,
-        "score": 96
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "removedByFixers": [],
-      "offeredFixerIds": [
-        "paper-size-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "margins-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "paper-size-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "margins-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 3,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "passRegressionChecks": [],
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null,
-      "statusChanges": [
-        "format.font.dominant:fail->pass",
-        "format.justify.body:warn->pass",
-        "format.size.body:fail->pass",
-        "format.spacing.body:fail->pass",
-        "page.margins:fail->pass",
-        "page.size.a4-list:warn->pass"
-      ],
-      "intendedChecks": [
-        "font",
-        "font-size",
-        "justify",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "intendedUntargeted": [
-        "paper-size"
-      ],
-      "expectedTransitions": [
-        "font:fail->pass",
-        "font-size:fail->pass",
-        "justify:warn->pass",
-        "line-spacing:fail->pass",
-        "margins:fail->pass"
-      ],
-      "transitionMismatches": [],
-      "needsAssistance": [],
-      "unexplainedUnresolved": []
-    },
-    {
-      "documentId": "svjedok-grf-zavrsni",
-      "fileName": "svjedok-grf-zavrsni.docx",
-      "profileId": "grf-zavrsni",
-      "holdout": false,
-      "expectationProvenance": "derived",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 19,
-        "passCount": 7,
-        "score": 53
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 13,
-        "score": 86
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "removedByFixers": [],
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 4,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "passRegressionChecks": [],
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null,
-      "statusChanges": [
-        "format.font.dominant:fail->pass",
-        "format.justify.body:warn->pass",
-        "format.size.body:fail->pass",
-        "format.spacing.body:fail->pass",
-        "page.margins:fail->pass",
-        "page.size.a4-list:warn->pass"
-      ],
-      "intendedChecks": [
-        "font",
-        "font-size",
-        "justify",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "intendedUntargeted": [
-        "paper-size"
-      ],
-      "expectedTransitions": [
-        "font:fail->pass",
-        "font-size:fail->pass",
-        "justify:warn->pass",
-        "line-spacing:fail->pass",
-        "margins:fail->pass"
-      ],
-      "transitionMismatches": [],
-      "needsAssistance": [],
-      "unexplainedUnresolved": []
-    },
-    {
-      "documentId": "svjedok-hks-diplomski",
-      "fileName": "svjedok-hks-diplomski.docx",
-      "profileId": "hks-diplomski",
-      "holdout": false,
-      "expectationProvenance": "derived",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 19,
-        "passCount": 7,
-        "score": 60
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 13,
-        "score": 97
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "removedByFixers": [],
-      "offeredFixerIds": [
-        "paper-size-fixer",
-        "font-fixer",
-        "margins-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "paper-size-fixer",
-        "font-fixer",
-        "margins-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
@@ -2032,15 +1731,311 @@
         "margins",
         "paper-size"
       ],
-      "intendedUntargeted": [
-        "paper-size"
-      ],
+      "intendedUntargeted": [],
       "expectedTransitions": [
         "font:fail->pass",
         "font-size:fail->pass",
         "justify:warn->pass",
         "line-spacing:fail->pass",
-        "margins:fail->pass"
+        "margins:fail->pass",
+        "paper-size:warn->pass"
+      ],
+      "transitionMismatches": [],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-efri-diplomski",
+      "fileName": "svjedok-efri-diplomski.docx",
+      "profileId": "efri-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 24,
+        "passCount": 10,
+        "score": 67
+      },
+      "after": {
+        "checkCount": 24,
+        "passCount": 16,
+        "score": 96
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "margins-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "margins-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 2,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass",
+        "paper-size:warn->pass"
+      ],
+      "transitionMismatches": [],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-grf-zavrsni",
+      "fileName": "svjedok-grf-zavrsni.docx",
+      "profileId": "grf-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 19,
+        "passCount": 7,
+        "score": 53
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 86
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass",
+        "paper-size:warn->pass"
+      ],
+      "transitionMismatches": [],
+      "needsAssistance": [],
+      "unexplainedUnresolved": []
+    },
+    {
+      "documentId": "svjedok-hks-diplomski",
+      "fileName": "svjedok-hks-diplomski.docx",
+      "profileId": "hks-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 19,
+        "passCount": 7,
+        "score": 60
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 97
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "margins-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "margins-fixer",
+        "line-spacing-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 1,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.margins:fail->pass",
+        "page.size.a4-list:warn->pass"
+      ],
+      "intendedChecks": [
+        "font",
+        "font-size",
+        "justify",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "intendedUntargeted": [],
+      "expectedTransitions": [
+        "font:fail->pass",
+        "font-size:fail->pass",
+        "justify:warn->pass",
+        "line-spacing:fail->pass",
+        "margins:fail->pass",
+        "paper-size:warn->pass"
       ],
       "transitionMismatches": [],
       "needsAssistance": [],
@@ -2049,15 +2044,15 @@
   ],
   "witnessSummary": {
     "documents": 5,
-    "targetedCheckCount": 25,
-    "resolved": 25,
+    "targetedCheckCount": 30,
+    "resolved": 30,
     "needsAssistance": 0,
     "regressions": 0,
     "secondPassNoOp": 5,
     "unexplainedUnresolved": 0,
-    "intendedUntargeted": 5,
+    "intendedUntargeted": 0,
     "failToPass": 20,
-    "warnToPass": 5,
+    "warnToPass": 10,
     "transitionMismatches": 0
   }
 }

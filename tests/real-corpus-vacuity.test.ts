@@ -109,25 +109,21 @@ describe('commitani korpus: praznina mora biti glasna', () => {
  *
  * Svjedoke generira radna stanica s Wordom (`scripts/corpus-gen/word/make-violation-witnesses.ps1`).
  * Izmjereno 2026-10-04 (T68 dio 2): 5 svjedoka (apuri-zavrsni, hks-diplomski, effectus-diplomski,
- * efri-diplomski, grf-zavrsni), 25 ciljanih provjera, 25 rijeseno, 0 regresija, drugi prolaz 5 od 5 no-op.
+ * efri-diplomski, grf-zavrsni). A4 se od 2026-10-16 broji kao cilj popravka: 30 ciljanih provjera,
+ * 30 rijeseno, 0 regresija, drugi prolaz 5 od 5 no-op.
  * Ratchet se dize u ISTOM commitu u kojem svjedoci i regenerirani `docs/generated/repair-real-corpus.json`
  * ulaze u stablo.
  */
-const WITNESS_CILJANIH_RATCHET = 25;
+const WITNESS_CILJANIH_RATCHET = 30;
 
 const izvjestajSvjedoka = baked as unknown as RealCorpusReport;
 
 /**
- * POZNATI JAZ MJERENJA, imenovan umjesto prikriven. Izmjereno 2026-10-04 prvim Word-free svjedokom
- * (dolje): Letter umjesto A4 analiza vidi kao pad i `paper-size-fixer` ga popravlja (`statusChanges`
- * nosi `page.size.a4:warn->pass`), ali stavka formata papira nema `matchKeys`, jer `CHECK_TITLES` u
- * `src/analysis/check-fixer-map.ts` nema kljuc `paper-size` (naslov je dinamican). Zato je
- * `summarizeRepairOutcome` nikad ne broji kao ciljanu provjeru, ni ovdje ni u sucelju. Isto se vidi na
- * postojecim sintetickim fixturama (`lo-fpzg-zavrsni-neuskladjen`: format papira prelazi u `pass`, a
- * ciljane su samo cetiri druge osi). Ispravak je u kodu popravka i zaseban je zadatak; kad bude gotov,
- * ovaj popis se prazni i test dolje pada dok se to ne ucini.
+ * Nekad poznati jaz mjerenja, zatvoren 2026-10-16: dinamicni naslov formata papira sada se mapira na
+ * `paper-size`, pa `summarizeRepairOutcome` broji A4 kao ciljanu provjeru. Prazan popis je svjestan
+ * ratchet: svaki novi jaz mora se imenovati zasebno umjesto da se tiho odbroji iz ciljeva.
  */
-const POZNATI_NECILJANI_PREKRSAJI: readonly string[] = ['paper-size'];
+const POZNATI_NECILJANI_PREKRSAJI: readonly string[] = [];
 
 /**
  * Invarijante skupa svjedoka, kao imenovani problemi. Isti izracun vrijedi za commitani artefakt i za
@@ -178,20 +174,20 @@ describe('svjedoci (T68): commitani artefakt', () => {
     expect(witnessRatchetProblems(izvjestajSvjedoka, WITNESS_CILJANIH_RATCHET)).toEqual([]);
   });
 
-  /** NEGATIVNA KONTROLA (pregled #302 R1): 24 je gubitak i pada; 26 je poboljsanje i prolazi. */
-  it('ratchet: 24 ciljanih pada, 26 prolazi, neslaganje sa zbrojem pada', () => {
+  /** NEGATIVNA KONTROLA: 29 je gubitak i pada; 31 je poboljsanje i prolazi. */
+  it('ratchet: 29 ciljanih pada, 31 prolazi, neslaganje sa zbrojem pada', () => {
     const sa = (ukupno: number, poDokumentu: number[]) => ({
       witnessResults: poDokumentu.map((targetedCheckCount) => ({ targetedCheckCount })),
       witnessSummary: { targetedCheckCount: ukupno },
     });
-    expect(witnessRatchetProblems(sa(24, [5, 5, 5, 5, 4]), 25).some((p) => p.includes('ispod ratcheta'))).toBe(true);
-    expect(witnessRatchetProblems(sa(26, [6, 5, 5, 5, 5]), 25)).toEqual([]);
-    expect(witnessRatchetProblems(sa(25, [5, 5, 5, 5, 4]), 25).some((p) => p.includes('!= zbroj'))).toBe(true);
+    expect(witnessRatchetProblems(sa(29, [6, 6, 6, 6, 5]), 30).some((p) => p.includes('ispod ratcheta'))).toBe(true);
+    expect(witnessRatchetProblems(sa(31, [7, 6, 6, 6, 6]), 30)).toEqual([]);
+    expect(witnessRatchetProblems(sa(30, [6, 6, 6, 6, 5]), 30).some((p) => p.includes('!= zbroj'))).toBe(true);
   });
 
-  it('ugovor prijelaza: tocno 20 fail->pass i 5 warn->pass, bez neslaganja', () => {
+  it('ugovor prijelaza: tocno 20 fail->pass i 10 warn->pass, bez neslaganja', () => {
     const s = izvjestajSvjedoka.witnessSummary;
-    expect({ failToPass: s.failToPass, warnToPass: s.warnToPass, transitionMismatches: s.transitionMismatches }).toEqual({ failToPass: 20, warnToPass: 5, transitionMismatches: 0 });
+    expect({ failToPass: s.failToPass, warnToPass: s.warnToPass, transitionMismatches: s.transitionMismatches }).toEqual({ failToPass: 20, warnToPass: 10, transitionMismatches: 0 });
     expect(s.failToPass + s.warnToPass).toBe(s.targetedCheckCount);
   });
 
@@ -339,12 +335,11 @@ describe('svjedoci (T68): Word-free mjerenje sintetickog svjedoka', () => {
     const [w] = report.witnessResults;
     expect(w.error).toBeNull();
     expect(w.intendedChecks).toEqual(ocekivani);
-    // Format papira je poznati jaz mjerenja (POZNATI_NECILJANI_PREKRSAJI): fixer ga popravlja, ali ishod
-    // ga ne broji. Oba dijela se tvrde, da jaz ne nestane ni ne naraste tiho.
-    expect(w.intendedUntargeted).toEqual([...POZNATI_NECILJANI_PREKRSAJI]);
+    // Format papira mora biti cilj popravka, a ne samo promjena vidljiva u statusChanges.
+    expect(w.intendedUntargeted).toEqual([]);
     expect(w.statusChanges.some((c) => /^page\.size\.[^:]+:\w+->pass$/.test(c)), w.statusChanges.join(' ')).toBe(true);
-    expect(w.targetedCheckCount).toBeGreaterThanOrEqual(ocekivani.length - POZNATI_NECILJANI_PREKRSAJI.length);
-    expect(w.targetedResolvedCount).toBeGreaterThan(0);
+    expect(w.targetedCheckCount).toBeGreaterThanOrEqual(ocekivani.length);
+    expect(w.targetedResolvedCount).toBeGreaterThanOrEqual(ocekivani.length);
     expect(report.witnessSummary.targetedCheckCount).toBe(w.targetedCheckCount);
     expect(report.witnessSummary.resolved).toBe(w.targetedResolvedCount);
     expect(report.witnessSummary.documents).toBe(1);

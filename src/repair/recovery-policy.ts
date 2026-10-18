@@ -66,7 +66,7 @@ export function recoveryFor(outcome: RepairFailureLike, phase: RepairFailurePhas
       return {
         action: 'check-existing-job',
         retryAllowed: false,
-        message: 'Veza je prekinuta nakon slanja, pa ne znamo je li popravak na serveru dovršen. Prvo provjeri Moje popravke; ako popravka ondje nema, tek onda pokušaj ponovno.',
+        message: 'Veza je prekinuta nakon slanja. Prije novog pokušaja provjeri odjeljak „Moji popravci” i status popravka na poslužitelju kako se obrada ne bi slučajno udvostručila.',
       };
     }
     return { action: 'retry', retryAllowed: true, message: 'Dokument nije poslan (prekid veze prije slanja). Provjeri vezu i pokušaj ponovno; ništa nije naplaćeno.' };

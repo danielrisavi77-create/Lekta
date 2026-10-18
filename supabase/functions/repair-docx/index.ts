@@ -28,7 +28,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
-import { corsHeadersFor } from '../_shared/cors.ts';
+import { repairDocxCorsHeaders } from './cors.ts';
 import { hashClientIpSalted, requireTrustedClientIp } from '../_shared/hash-ip.ts';
 import { readFormDataBounded, metaWithinBudget } from '../_shared/read-body.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
@@ -62,6 +62,7 @@ import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../s
 import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
 import { acquireRepairSlot } from './global-slot.ts';
 import { attemptCapStatus, dropAttempt, finishAttempt, reserveAttempt } from './attempt-cap.ts';
+import { repairRequestFingerprint, repairRequestId } from '../../../src/report/repair-request-idempotency.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -160,6 +161,48 @@ const REPAIR_MAX_PER_USER = Number(Deno.env.get('REPAIR_MAX_PER_USER') ?? '1');
  * 20 MB, readZip, applyFixers), pa bez stropa jedan racun moze ponavljati isti dokument bez kraja.
  */
 const REPAIR_UNCOUNTED_DAILY_CAP = Number(Deno.env.get('REPAIR_UNCOUNTED_DAILY_CAP') ?? '30');
+// Status je potreban za pouzdan oporavak, ali je RPC koji dohvaca stanje poziv na bazu. Limiti
+// koriste postojeci atomarni claim_two_rate_slots/IP tablicu, pa status ne moze postati neograniceni
+// servis za citanje i dijeljenje identiteta.
+const REPAIR_STATUS_USER_DAILY_CAP = Number(Deno.env.get('REPAIR_STATUS_USER_DAILY_CAP') ?? '120');
+const REPAIR_STATUS_IP_DAILY_CAP = Number(Deno.env.get('REPAIR_STATUS_IP_DAILY_CAP') ?? '480');
+// Oporavak vec naplacenog/kvotiranog rezultata smije prijeći opci strop neuspjelih pokusaja, ali
+// zasebna mala kvota sprjecava da se isti skupi DOCX vrti neograniceno bez uspješne dostave.
+const REPAIR_RECOVERY_USER_DAILY_CAP = Number(Deno.env.get('REPAIR_RECOVERY_USER_DAILY_CAP') ?? '3');
+const REPAIR_RECOVERY_IP_DAILY_CAP = Number(Deno.env.get('REPAIR_RECOVERY_IP_DAILY_CAP') ?? '12');
+const REPAIR_REQUEST_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const REPAIR_REQUEST_FINGERPRINT_RE = /^[0-9a-f]{64}$/i;
+
+type RepairRateLimitScope = 'repair_status' | 'repair_recovery';
+type RepairRateLimitResult = 'ok' | 'user' | 'ip' | 'error';
+
+/** Atomska dnevna kvota po korisniku i IP-u; RPC fail-close jer citanje statusa i oporavak nisu neograniceni. */
+async function claimRepairRateSlots(
+  admin: any,
+  userId: string,
+  ipHash: string,
+  scope: RepairRateLimitScope,
+  userCap: number,
+  ipCap: number,
+): Promise<RepairRateLimitResult> {
+  try {
+    const { data, error } = await admin.rpc('claim_two_rate_slots', {
+      p_scope_a: `${scope}_user`, p_hash_a: userId, p_cap_a: userCap,
+      p_scope_b: `${scope}_ip`, p_hash_b: ipHash, p_cap_b: ipCap,
+    });
+    if (error) {
+      console.error(`[repair-docx] ${scope} rate limit unavailable`);
+      return 'error';
+    }
+    if (data === 'ok') return 'ok';
+    if (data === 'denied_a') return 'user';
+    if (data === 'denied_b') return 'ip';
+    return 'error';
+  } catch {
+    console.error(`[repair-docx] ${scope} rate limit unavailable`);
+    return 'error';
+  }
+}
 
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
 // 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
@@ -170,8 +213,27 @@ const REPAIR_UNCOUNTED_DAILY_CAP = Number(Deno.env.get('REPAIR_UNCOUNTED_DAILY_C
 // jobId dolazi IZVANA (od pozivatelja), a ne generira se ovdje, jer se pohrana od 2026-07-27 vrti
 // kao POZADINSKI zadatak: odgovor korisniku odlazi prije nego ona zavrsi, pa mora znati jobId
 // unaprijed. Vracena vrijednost tada sluzi samo logu (nitko je vise ne ceka).
+async function findRepairJobByRequestFingerprint(admin: any, userId: string, requestFingerprint: string) {
+  const { data, error } = await admin.from('repair_jobs')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('request_fingerprint', requestFingerprint)
+    .maybeSingle();
+  if (error) throw error;
+  return data && typeof data.id === 'string' ? { id: data.id as string } : null;
+}
+
+async function removeRepairObjects(bucket: any, paths: string[], reason: string): Promise<void> {
+  try {
+    const { error } = await bucket.remove(paths);
+    if (error) console.error(`[repair-docx] storage cleanup failed (${reason})`, error.message);
+  } catch (error) {
+    console.error(`[repair-docx] storage cleanup failed (${reason})`, error instanceof Error ? error.message : error);
+  }
+}
+
 async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
-  workType: string; fingerprint: any; slotId: string | null;
+  workType: string; fingerprint: any; slotId: string | null; requestFingerprint: string;
   originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
   consentVersion: string; // WS-6.3: uvijek prisutna (consent gate iznad je zahtijeva), NOT NULL u bazi
   // Anonimni racun (bez e-maila). Bitno za RETENCIJU: takav korisnik izgubi pristup ciscenjem
@@ -180,6 +242,20 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
   anonymous: boolean;
   localRepairRecord?: LocalRepairJobRecord;
 }): Promise<RepairStorageResult | null> {
+  if (!REPAIR_REQUEST_FINGERPRINT_RE.test(meta.requestFingerprint)) {
+    console.error('[repair-docx] refusing to store repair without a valid request fingerprint');
+    return null;
+  }
+  // If a previous worker stored the documents but failed to mark the request completed, a
+  // recovered run reuses that durable job instead of uploading a second copy.
+  try {
+    const existing = await findRepairJobByRequestFingerprint(admin, userId, meta.requestFingerprint);
+    if (existing) return { jobId: existing.id, localRepairReady: false };
+  } catch (error) {
+    // The database unique index is the race-safe backstop if this read failed.
+    console.error('[repair-docx] existing repair job lookup failed', error instanceof Error ? error.message : error);
+  }
+
   const origPath = `${userId}/${jobId}/original.docx`;
   const resPath = `${userId}/${jobId}/fixed.docx`;
   const bucket = admin.storage.from('repair');
@@ -192,7 +268,7 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
   ]);
   if (up1.error || up2.error) {
     console.error('[repair-docx] storage upload failed', up1.error?.message ?? up2.error?.message);
-    await bucket.remove([origPath, resPath]).catch(() => {});
+    await removeRepairObjects(bucket, [origPath, resPath], 'partial upload');
     return null;
   }
 
@@ -202,11 +278,31 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
     fingerprint: meta.fingerprint, label, original_path: origPath, result_path: resPath,
     original_bytes: meta.originalBytes.length, result_bytes: meta.resultBytes.length,
     changes_count: meta.changesCount, status: 'done', consent_version: meta.consentVersion,
-    anonymous: meta.anonymous,
+    anonymous: meta.anonymous, request_fingerprint: meta.requestFingerprint,
   }).select('id').single();
   if (error || !data) {
     console.error('[repair-docx] repair_jobs insert failed', error?.message);
-    await bucket.remove([origPath, resPath]).catch(() => {});
+    let existing: { id: string } | null = null;
+    let lookupFailed = false;
+    try {
+      existing = await findRepairJobByRequestFingerprint(admin, userId, meta.requestFingerprint);
+    } catch (lookupError) {
+      lookupFailed = true;
+      console.error('[repair-docx] post-insert repair job lookup failed', lookupError instanceof Error ? lookupError.message : lookupError);
+    }
+    if (existing) {
+      // The insert may have committed even though its response was lost. Keep this job's blobs;
+      // clean this attempt's blobs only when the unique request belongs to another job ID.
+      if (existing.id !== jobId) await removeRepairObjects(bucket, [origPath, resPath], 'duplicate request');
+      return { jobId: existing.id, localRepairReady: false };
+    }
+    if (!lookupFailed) {
+      await removeRepairObjects(bucket, [origPath, resPath], 'failed job insert');
+    } else {
+      // The insert outcome is ambiguous and the read could not resolve it. Preserve the blobs so
+      // an insert that actually committed cannot become a row pointing to deleted documents.
+      // The orphan sweep can safely remove them later if no repair_jobs row exists.
+    }
     return null;
   }
   let localRepairReady = false;
@@ -220,14 +316,24 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
       console.error('[repair-docx] local repair job insert failed');
     }
   }
-  return { jobId, localRepairReady };
+  return { jobId: data.id, localRepairReady };
 }
 
 // T84 XFF: nepouzdan ili nedostajuci klijentski IP odbija se 403 prije svega ostalog (OPTIONS prolazi).
 Deno.serve(requireTrustedClientIp(async (req: Request) => {
-  const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
+  const cors = repairDocxCorsHeaders(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
+  const requestStateResponse = (status: string, jobId: string | null = null, requestId: string | null = null): Response => {
+    const detail = { status, ...(jobId ? { jobId } : {}), ...(requestId ? { requestId } : {}) };
+    if (status === 'processing') return json({ error: 'request_in_progress', ...detail }, 202);
+    if (status === 'completed') return json({ error: 'request_completed', ...detail }, 409);
+    if (status === 'completed_unstored') return json({ error: 'request_completed_unstored', ...detail }, 409);
+    if (status === 'no_change') return json({ error: 'request_no_change', ...detail }, 409);
+    if (status === 'unknown') return json({ error: 'request_unknown', ...detail }, 409);
+    if (status === 'conflict' || status === 'missing') return json({ error: 'request_conflict', ...detail }, 409);
+    return json({ error: 'unavailable' }, 503);
+  };
 
   /**
    * Odgovor koji nosi popravljeni dokument (audit DOCX-05).
@@ -275,14 +381,85 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
   try {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
-    if (REPAIR_DISABLED) return json({ error: 'disabled' }, 503);
-
     // 1. auth
     const authHeader = req.headers.get('Authorization') ?? '';
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
     const { data: userData } = await admin.auth.getUser(authHeader.replace(/^Bearer\s+/i, ''));
     const user = userData?.user;
     if (!user) return json({ error: 'unauthorized' }, 401);
+
+    const requestMode = req.headers.get('X-Lekta-Request-Mode');
+    let requestId = req.headers.get('X-Lekta-Request-Id');
+    let requestFingerprint = req.headers.get('X-Lekta-Request-Fingerprint');
+
+    // Status reads remain available with the repair kill switch on, so a user can establish what
+    // happened to a request already sent. A missing row is the only status that safely permits retry.
+    if (requestMode === 'status') {
+      if (!requestId || !REPAIR_REQUEST_ID_RE.test(requestId)) return json({ error: 'bad_request' }, 400);
+      const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
+      const statusLimit = await claimRepairRateSlots(
+        admin, user.id, ipHash, 'repair_status', REPAIR_STATUS_USER_DAILY_CAP, REPAIR_STATUS_IP_DAILY_CAP,
+      );
+      if (statusLimit === 'error') return json({ error: 'unavailable' }, 503);
+      if (statusLimit !== 'ok') return json({ error: 'rate_limited', reason: `status_${statusLimit}` }, 429);
+      const { data: state, error } = await admin.rpc('repair_request_status', {
+        p_user_id: user.id,
+        p_request_id: requestId,
+      });
+      if (error || !state || typeof state.status !== 'string') return json({ error: 'unavailable' }, 503);
+      return json(state);
+    }
+
+    if (requestMode) return json({ error: 'bad_request' }, 400);
+    if (REPAIR_DISABLED) return json({ error: 'disabled' }, 503);
+    if ((requestId || requestFingerprint)
+      && (!requestId || !REPAIR_REQUEST_ID_RE.test(requestId)
+        || !requestFingerprint || !REPAIR_REQUEST_FINGERPRINT_RE.test(requestFingerprint))) {
+      return json({ error: 'bad_request' }, 400);
+    }
+
+    let requestRecovery = false;
+    const finishRequest = async (status: 'completed' | 'completed_unstored' | 'no_change' | 'retryable', jobId: string | null = null) => {
+      if (!requestId || !requestFingerprint) return true;
+      const { data, error } = await admin.rpc('finish_repair_request', {
+        p_user_id: user.id,
+        p_request_id: requestId,
+        p_request_fingerprint: requestFingerprint,
+        p_status: status,
+        p_job_id: jobId,
+      });
+      if (error || data !== true) {
+        console.error(`[repair-docx] repair request state update failed (${status})`);
+        return false;
+      }
+      return true;
+    };
+    const safeFinishRequest = async (
+      status: 'completed' | 'completed_unstored' | 'no_change' | 'retryable',
+      jobId: string | null = null,
+    ): Promise<boolean> => {
+      try {
+        return await finishRequest(status, jobId);
+      } catch (error) {
+        console.error(`[repair-docx] repair request state update failed (${status})`, error instanceof Error ? error.message : error);
+        return false;
+      }
+    };
+    const resetRecoveryRequest = () => safeFinishRequest('completed_unstored');
+    const finishRetryableRequest = () => finishRequest(requestRecovery ? 'completed_unstored' : 'retryable');
+    const markRequestDeliveryPending = async (): Promise<boolean> => {
+      if (!requestId || !requestFingerprint || requestRecovery) return true;
+      const { data, error } = await admin.rpc('mark_repair_request_delivery_pending', {
+        p_user_id: user.id,
+        p_request_id: requestId,
+        p_request_fingerprint: requestFingerprint,
+      });
+      if (error || data !== true) {
+        console.error('[repair-docx] could not persist delivery recovery marker');
+        return false;
+      }
+      return true;
+    };
 
     // Concurrency gate: NAKON autha (necemo brojati neautorizirani sum), PRIJE ijednog teskog
     // koraka (multipart parsing, zip citanje, applyFixers). release() u finally ispod jamci
@@ -320,7 +497,31 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // upravo taj rad ono sto bez stropa nije ograniceno. Fail-closed: necitljiv dnevnik je 503.
     const attemptCap = await attemptCapStatus(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);
     if (attemptCap === 'error') return json({ error: 'unavailable' }, 503);
-    if (attemptCap === 'over') return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);
+    if (attemptCap === 'over') {
+      // Jedina iznimka iznad opceg stropa: isti autentificirani korisnik moze pokusati vratiti
+      // vec naplacen rezultat koji je ostao `completed_unstored`. Najprije se ogranicava status-RPC,
+      // zatim se stanje cita bez promjene; fingerprint i recovery lease i dalje provjerava claim
+      // nakon bounded citanja tijela. Iznimka ima vlastiti manji dnevni cap po useru i IP-u.
+      if (!requestId || !requestFingerprint) return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);
+      const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
+      const statusLimit = await claimRepairRateSlots(
+        admin, user.id, ipHash, 'repair_status', REPAIR_STATUS_USER_DAILY_CAP, REPAIR_STATUS_IP_DAILY_CAP,
+      );
+      if (statusLimit === 'error') return json({ error: 'unavailable' }, 503);
+      if (statusLimit !== 'ok') return json({ error: 'rate_limited', reason: `status_${statusLimit}` }, 429);
+      const { data: priorRequest, error: statusError } = await admin.rpc('repair_request_status', {
+        p_user_id: user.id,
+        p_request_id: requestId,
+      });
+      if (statusError || !priorRequest || typeof priorRequest.status !== 'string') {
+        return json({ error: 'unavailable' }, 503);
+      }
+      if (priorRequest.status !== 'completed_unstored') {
+        return json({ error: 'rate_limited', reason: 'attempts_daily' }, 429);
+      }
+      // Recovery kvotu ne uzimamo ovdje: više istodobnih ponovnih zahtjeva ne smije je potrošiti
+      // prije nego što idempotency claim potvrdi da je ovaj zahtjev jedini koji stvarno oporavlja.
+    }
     // Rezervacija PRIJE tijela (Codex R3 na #294): skupi rad ispod uvijek ima zapis koji strop broji,
     // pa ni neuspjelo dopisivanje ishoda na kraju ne ostavlja ga nezabiljezenog.
     const attempt = await reserveAttempt(admin, user.id, REPAIR_UNCOUNTED_DAILY_CAP);
@@ -371,6 +572,25 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     if (!meta || !isBillableWorkType(meta.workType)) return json({ error: 'bad_request' }, 400);
     const workType = meta.workType;
     const now = new Date().toISOString();
+    let actualRequestFingerprint: string;
+    try {
+      actualRequestFingerprint = await repairRequestFingerprint(docxBytes, meta);
+    } catch {
+      return json({ error: 'unavailable' }, 503);
+    }
+    if (requestId && requestFingerprint) {
+      if (actualRequestFingerprint !== requestFingerprint) return requestStateResponse('conflict', null, requestId);
+    } else {
+      // Older cached clients do not send idempotency headers. Derive the same stable identity on
+      // the server after bounded parsing and validation so they cannot bypass duplicate protection.
+      requestFingerprint = actualRequestFingerprint;
+      try {
+        requestId = await repairRequestId(actualRequestFingerprint);
+      } catch {
+        return json({ error: 'unavailable' }, 503);
+      }
+      if (!requestId) return json({ error: 'unavailable' }, 503);
+    }
 
     // 2a. WS-6.3 consent gate: dokument se NE uploada ni pohranjuje bez privole na TRENUTNE uvjete.
     //     Server je izvor istine (klijent zigose consentVersion=TERMS_VERSION); odbijamo ako privola
@@ -428,6 +648,76 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
 
+    if (requestId && requestFingerprint) {
+      const { data: claim, error } = await admin.rpc('claim_repair_request', {
+        p_user_id: user.id,
+        p_request_id: requestId,
+        p_request_fingerprint: requestFingerprint,
+      });
+      if (error || !claim || typeof claim.status !== 'string') {
+        await dropAttempt(admin, attempt);
+        return json({ error: 'unavailable' }, 503);
+      }
+      if (claim.claimed !== true) {
+        await dropAttempt(admin, attempt);
+        return requestStateResponse(claim.status, typeof claim.jobId === 'string' ? claim.jobId : null, requestId);
+      }
+      requestRecovery = claim.recovery === true;
+    }
+
+    // The prior worker may have durably stored the documents but failed its final status RPC.
+    // Restore the completed request from that row before we run fixers or create another job.
+    if (requestRecovery && requestId && requestFingerprint) {
+      let recoveryLookupFailed = false;
+      try {
+        const existing = await findRepairJobByRequestFingerprint(admin, user.id, requestFingerprint);
+        if (existing) {
+          const markedCompleted = await safeFinishRequest('completed', existing.id);
+          await dropAttempt(admin, attempt);
+          if (!markedCompleted) return requestStateResponse('processing', existing.id, requestId);
+          return requestStateResponse('completed', existing.id, requestId);
+        }
+      } catch (error) {
+        console.error('[repair-docx] recovery job lookup failed', error instanceof Error ? error.message : error);
+        recoveryLookupFailed = true;
+      }
+      if (recoveryLookupFailed) {
+        // The job may already exist, so do not spend recovery quota or rerun fixers on an uncertain
+        // lookup. Restore the safe retry state; if even that write fails, keep the client on status.
+        const reset = await resetRecoveryRequest();
+        await dropAttempt(admin, attempt);
+        if (!reset) return requestStateResponse('processing', null, requestId);
+        return json({ error: 'unavailable' }, 503);
+      }
+    }
+
+    // Kvotu troši samo pobjednik recovery claim-a, nakon što provjerimo postoji li rezultat koji
+    // možemo jednostavno ponovno povezati. Duplikati koji čekaju processing i već spremljeni
+    // rezultati ne troše dnevnu kvotu oporavka. Kod odbijanja se lease vrati u completed_unstored,
+    // a rezervacija pokušaja ukloni kako korisnik može sigurno pokušati kasnije.
+    if (requestRecovery) {
+      let recoveryIpHash: string;
+      try {
+        recoveryIpHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
+      } catch (error) {
+        console.error('[repair-docx] recovery rate-limit IP hash unavailable', error instanceof Error ? error.message : error);
+        const reset = await resetRecoveryRequest();
+        await dropAttempt(admin, attempt);
+        if (!reset) return requestStateResponse('processing', null, requestId);
+        return json({ error: 'unavailable' }, 503);
+      }
+      const recoveryLimit = await claimRepairRateSlots(
+        admin, user.id, recoveryIpHash, 'repair_recovery', REPAIR_RECOVERY_USER_DAILY_CAP, REPAIR_RECOVERY_IP_DAILY_CAP,
+      );
+      if (recoveryLimit !== 'ok') {
+        const reset = await resetRecoveryRequest();
+        await dropAttempt(admin, attempt);
+        if (!reset) return requestStateResponse('processing', null, requestId);
+        if (recoveryLimit === 'error') return json({ error: 'unavailable' }, 503);
+        return json({ error: 'rate_limited', reason: 'recovery_daily' }, 429);
+      }
+    }
+
     // 5. otisak IZ STVARNIH bajtova (RE-18): document.xml/styles.xml se citaju direktno iz
     //    uploadanog zipa, NIKAD iz klijentske meta.parsedStructure. Prije je otisak dolazio iz
     //    klijentskog JSON-a pa je jedan potroseni slot mogao "posuditi" identitet za popravak
@@ -439,29 +729,43 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       const decoder = new TextDecoder();
       const documentEntry = entries.find((e) => e.name === 'word/document.xml');
       const stylesEntry = entries.find((e) => e.name === 'word/styles.xml');
-      if (!documentEntry) return json({ error: 'invalid_docx' }, 422);
+      if (!documentEntry) {
+        await finishRetryableRequest();
+        return json({ error: 'invalid_docx' }, 422);
+      }
       fingerprint = computeFingerprint(extractFingerprintInputFromDocx(
         decoder.decode(documentEntry.data),
         stylesEntry ? decoder.decode(stylesEntry.data) : '',
       ));
     } catch (_e) {
+      await finishRetryableRequest();
       return json({ error: 'invalid_docx' }, 422);
     }
     const ipHash = await hashClientIpSalted(req.headers, IP_HASH_SALT, SERVICE_ROLE);
-    // Svaki zapis u report_generations broji drugi strop (besplatna kvota ili placeni dnevni), pa se
-    // rezervacija u repair_attempt_log tada brise da se isti pokusaj ne broji dvaput (T84 RD-2).
-    const log = async (status: string, sId: string | null) => {
-      const written = await admin.from('report_generations')
-        .insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
-      if (!written.error) await dropAttempt(admin, attempt);
-      return written;
+    // report_generations broji besplatnu/placenu dnevnu kvotu. Obicna obrada zadrzava rezervaciju
+    // dok Storage potvrdi isporuku; neuspjelo spremanje ostaje u repair_attempt_log da oporavak ima strop.
+    const log = async (status: string, sId: string | null, retainAttempt = false) => {
+      try {
+        const written = await admin.from('report_generations')
+          .insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
+        if (!written.error && !retainAttempt) await dropAttempt(admin, attempt);
+        return { ok: !written.error };
+      } catch (error) {
+        console.error('[repair-docx] report generation log failed', error instanceof Error ? error.message : error);
+        return { ok: false };
+      }
     };
 
     // Naplatni gate ILI besplatna beta (FREE_MODE): ODLUCI ovdje (rate_limited/payment_required
     // vracaju odmah, ne trose nista), ali STVARNU potrosnju (RPC/log upis) odgodi u `commit` do
     // koraka 7a: RE-17/RE-32, pao popravak (422) ili uspjeh s 0 izmjena vise NE smiju trositi
     // placeni slot ni besplatnu dnevnu kvotu bez ijedne stvarne izmjene.
-    let commit: () => Promise<{ slotId: string | null; entitlementFailed?: boolean }>;
+    let commit: () => Promise<{
+      slotId: string | null;
+      entitlementFailed?: boolean;
+      requestStateFailed?: boolean;
+      usageLogged?: boolean;
+    }>;
     if (FREE_MODE) {
       // Besplatna beta: bez naplate i bez slota (slot_id null), ali rate-limit OSTAJE, i to DVOSTRUK.
       //
@@ -489,9 +793,14 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       ]);
       // RE-33: 429 nosi razlog, da klijent ne mora tvrditi "besplatnih" i kad je posrijedi
       // dijeljeni IP-cap (korisnik osobno nije potrosio nista) ili placeni dnevni strop.
-      if ((recentUser ?? 0) >= FREE_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'free_user' }, 429); }
-      if ((recentIp ?? 0) >= FREE_IP_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'free_ip' }, 429); }
-      commit = async () => { await log('free', null); return { slotId: null }; };
+      if (!requestRecovery && (recentUser ?? 0) >= FREE_DAILY_CAP) { await log('rate_limited', null); await finishRetryableRequest(); return json({ error: 'rate_limited', reason: 'free_user' }, 429); }
+      if (!requestRecovery && (recentIp ?? 0) >= FREE_IP_DAILY_CAP) { await log('rate_limited', null); await finishRetryableRequest(); return json({ error: 'rate_limited', reason: 'free_ip' }, 429); }
+      commit = async () => {
+        if (requestRecovery) return { slotId: null, usageLogged: true };
+        if (!(await markRequestDeliveryPending())) return { slotId: null, requestStateFailed: true };
+        const usage = await log('free', null, true);
+        return { slotId: null, usageLogged: usage.ok };
+      };
     } else {
       const { data: partner } = await admin
         .from('partner_accounts').select('status, daily_cap').eq('user_id', user.id).maybeSingle();
@@ -511,6 +820,7 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       // Nista jos nije potroseno, pa se odgovara 500 bez biljezenja pokusaja.
       if (!access.ok) {
         console.error('[repair-docx] entitlement_lookup_failed', access.error);
+        await finishRetryableRequest();
         return json({ error: 'internal' }, 500);
       }
 
@@ -518,27 +828,48 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
         now, workType, fingerprint,
         activeSlots: access.activeSlots,
         entitlements: access.entitlements,
-        recentGenerationCount: recent ?? 0,
+        recentGenerationCount: requestRecovery ? 0 : recent ?? 0,
       }, { dailyCap });
 
-      if (decision.decision === 'rate_limited') { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'paid_daily' }, 429); }
-      if (decision.decision === 'payment_required') { await log('denied', null); return json({ error: 'payment_required', workType: decision.workType }, 402); }
+      if (requestRecovery && decision.decision !== 'recheck') {
+        await finishRequest('completed_unstored');
+        await finishAttempt(admin, attempt, 'delivery_failed');
+        return json({ error: 'request_recovery_unavailable', status: 'recovery_unavailable', requestId }, 409);
+      }
+
+      if (decision.decision === 'rate_limited') { await log('rate_limited', null); await finishRetryableRequest(); return json({ error: 'rate_limited', reason: 'paid_daily' }, 429); }
+      if (decision.decision === 'payment_required') { await log('denied', null); await finishRetryableRequest(); return json({ error: 'payment_required', workType: decision.workType }, 402); }
 
       if (decision.decision === 'recheck') {
         const slotId = decision.slotId;
-        commit = async () => { await log('recheck', slotId); return { slotId }; };
+        commit = async () => {
+          if (requestRecovery) return { slotId, usageLogged: true };
+          if (!(await markRequestDeliveryPending())) return { slotId: null, requestStateFailed: true };
+          const usage = await log('recheck', slotId, true);
+          return { slotId, usageLogged: usage.ok };
+        };
       } else {
         const label = (fingerprint.titleNorm || 'rad').slice(0, 60);
         const coverageTier = coverageTierForStatus(meta.profileStatus);
         const profileRef = meta.profileRef ?? null;
         commit = async () => {
-          const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
+          const hasRequestIdentity = Boolean(requestId && requestFingerprint);
+          const rpcName = hasRequestIdentity ? 'consume_repair_slot_and_bind' : 'consume_slot_and_bind';
+          const { data: slot, error } = await admin.rpc(rpcName, {
             p_entitlement_id: decision.entitlementId, p_user_id: user.id, p_work_type: workType,
             p_fingerprint: fingerprint, p_label: label, p_slot_expires_at: decision.newSlot.slotExpiresAt,
             p_profile_ref: profileRef, p_coverage_tier: coverageTier,
+            ...(hasRequestIdentity ? { p_request_id: requestId, p_request_fingerprint: requestFingerprint } : {}),
           });
-          if (error || !slot) { await log('denied', null); return { slotId: null, entitlementFailed: true }; }
-          const sId = (slot as any).id; await log('new_slot', sId); return { slotId: sId };
+          if (error || !slot) {
+            await log('denied', null);
+            const slotUnavailable = typeof error?.message === 'string' && error.message.includes('no_slot_available');
+            if (hasRequestIdentity && !slotUnavailable) return { slotId: null, requestStateFailed: true };
+            return { slotId: null, entitlementFailed: true };
+          }
+          const sId = (slot as any).id;
+          const usage = await log('new_slot', sId, true);
+          return { slotId: sId, usageLogged: usage.ok };
         };
       }
     }
@@ -560,10 +891,16 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     try {
       result = await applyFixers(docxBytes, requests);
     } catch (_e) {
+      if (requestRecovery) {
+        await finishAttempt(admin, attempt, 'delivery_failed');
+        await finishRequest('completed_unstored');
+        return json({ error: 'request_recovery_unavailable', status: 'recovery_unavailable', requestId }, 409);
+      }
       // RE-17: nijedan slot/kvota nije jos potrosen (commit se zove tek ispod), pa pao popravak
       // vise ne kosta nista. 'repair_failed' se ipak biljezi (slotId uvijek null) da FREE_MODE
       // racuna neuspjeli pokusaj kao jedan slot, ne dva (isti razlog kao ranije).
       await log('repair_failed', null);
+      await finishRetryableRequest();
       return json({ error: 'invalid_docx' }, 422);
     }
 
@@ -583,6 +920,11 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       );
       // T84 RD-2: ne trosi kvotu, ali ostaje u stropu pokusaja (rezervacija je vec upisana).
       await finishAttempt(admin, attempt, 'integrity_failed');
+      if (requestRecovery) {
+        await finishRequest('completed_unstored');
+        return json({ error: 'request_recovery_unavailable', status: 'recovery_unavailable', requestId }, 409);
+      }
+      await finishRetryableRequest();
       return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
     }
 
@@ -593,6 +935,11 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
       // T84 RD-2: ne trosi kvotu, ali ostaje u stropu pokusaja (rezervacija je vec upisana).
       await finishAttempt(admin, attempt, 'no_change');
+      if (requestRecovery) {
+        await finishRequest('completed_unstored');
+        return json({ error: 'request_recovery_unavailable', status: 'recovery_unavailable', requestId }, 409);
+      }
+      await finishRequest('no_change');
       return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,
@@ -603,8 +950,17 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // RE-17: popravak je STVARNO nesto promijenio - tek sada trosimo slot/kvotu.
     const msRepair = ms(tRepair);
     const committed = await commit();
-    if (committed.entitlementFailed) return json({ error: 'payment_required', workType }, 402);
+    if (committed.requestStateFailed) {
+      await finishRetryableRequest();
+      await finishAttempt(admin, attempt, 'delivery_failed');
+      return json({ error: 'unavailable' }, 503);
+    }
+    if (committed.entitlementFailed) {
+      await finishRetryableRequest();
+      return json({ error: 'payment_required', workType }, 402);
+    }
     const slotId = committed.slotId;
+    const usageLogged = committed.usageLogged === true;
 
     // 8. WS-6: pohrana originala + rezultata (retencija do brisanja).
     //
@@ -612,10 +968,17 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // ijednog Storage uploada. Prekoracenje NIKAD ne kvari sam popravak (docx se svejedno
     // vraca korisniku), samo se preskace pohrana - isto fail-open ponasanje kao vec postojeci
     // slucajevi gdje storeRepairJob vrati null (Storage/DB pad).
-    const { count: recentJobCount, error: quotaErr } = await admin
-      .from('repair_jobs')
-      .select('id', { count: 'exact', head: true })
-      .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+    let recentJobCount: number | null = null;
+    let quotaErr: unknown = null;
+    try {
+      const quota = await admin.from('repair_jobs')
+        .select('id', { count: 'exact', head: true })
+        .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+      recentJobCount = typeof quota.count === 'number' ? quota.count : null;
+      quotaErr = quota.error;
+    } catch (error) {
+      quotaErr = error;
+    }
     // NEUSPJEH UPITA NIJE ISTO STO I "NULA POSLOVA" (audit DOCX-12). Prije se `count` samo
     // defaultirao na 0, pa je pad upita znacio "kvota je prazna, samo naprijed": globalni dnevni
     // strop tada nije stitio nista upravo kad je baza u problemu.
@@ -624,9 +987,12 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // docx se svejedno vraca u odgovoru, gubi se samo zapis u "Moji popravci", a sucelje o tome
     // posteno izvijesti (jobId: null). Cijena pogresne procjene u drugom smjeru je neogranicen
     // rast Storagea bez ijednog dokaza da kapacitet postoji.
+    // Ponovno spremanje tocno istog vec naplacenog zahtjeva smije prijeći dnevni broj NOVIH poslova:
+    // inace bi kvota Storagea mogla trajno blokirati korisnika kojem je prva kopija izgubljena.
+    // Nepoznata kvota i dalje zatvara Storage i vraca rezultat izravno, bez tvrdnje da je spremljen.
     const storageAllowed = quotaErr
       ? false
-      : !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
+      : requestRecovery || !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
     if (quotaErr) {
       console.error('[repair-docx] storage-kvota NEPOZNATA (upit pao), preskacem pohranu', quotaErr);
     } else if (!storageAllowed) {
@@ -641,6 +1007,10 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // FALLBACK je namjeran: ako runtime nema waitUntil (lokalni serve, starija verzija), pohrana se
     // ceka kao dosad. Radije sporije nego izgubljen dokument.
     const jobId = storageAllowed ? crypto.randomUUID() : null;
+    if (!jobId) {
+      await finishRequest('completed_unstored');
+      await finishAttempt(admin, attempt, 'delivery_failed');
+    }
     const sourceFileName = String(meta.fileName || filePart.name || 'rad.docx');
     const targetFileName = `${sourceFileName.replace(/\.docx$/i, '')}-popravljeno.docx`;
     let issuedLocalRepair: IssuedLocalRepairJob | null = null;
@@ -686,13 +1056,18 @@ Deno.serve(requireTrustedClientIp(async (req: Request) => {
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
     const storeTask = jobId ? (async () => {
       try {
-        const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true, ...(issuedLocalRepair ? { localRepairRecord: issuedLocalRepair.record } : {}) });
-        console.log(`[repair-docx] store job=${jobId} ok=${stored ? 1 : 0} ms=${ms(tStore)}`);
+        const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, requestFingerprint: requestFingerprint!, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true, ...(issuedLocalRepair ? { localRepairRecord: issuedLocalRepair.record } : {}) });
+        await finishRequest(stored ? 'completed' : 'completed_unstored', stored?.jobId ?? null);
+        if (stored && usageLogged) await dropAttempt(admin, attempt);
+        else if (!stored) await finishAttempt(admin, attempt, 'delivery_failed');
+        console.log(`[repair-docx] store job=${stored?.jobId ?? jobId} ok=${stored ? 1 : 0} ms=${ms(tStore)}`);
         return stored;
       } catch (e) {
         // Tiho je bilo pogresno: klijentu obecavamo "Moji popravci", pa pad pohrane mora ostaviti trag.
         // U pozadinskom zadatku je ovaj log JEDINI trag: korisnik je odgovor vec dobio.
         console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
+        await finishRequest('completed_unstored');
+        await finishAttempt(admin, attempt, 'delivery_failed');
       }
         return null;
     })() : null;
