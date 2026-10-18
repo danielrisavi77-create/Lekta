@@ -9,7 +9,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
 import { cijenaProblems, plusBodIzvorProblems } from './helpers/result-live-guard';
-import { fxTipIzPredloska, fxTipProblems, tockeLomaProblems } from './helpers/facsimile-live-guard';
+import { fxTipIzPredloska, fxTipProblems, rutaFaksimilaProblems, tockeLomaProblems } from './helpers/facsimile-live-guard';
 import { SIRINA_BILJESKI, SIRINA_KARTICE } from '../src/ui/facsimile-live/facsimile-live-model';
 
 const citaj = (rel: string): string => readFileSync(resolve(__dirname, '..', rel), 'utf8').split('\r\n').join('\n');
@@ -20,9 +20,11 @@ describe('Z35 faksimil: gardovi grizu', () => {
   const predlozak = citaj('design/templates/facsimile-live/FacsimileLive.dc.html');
   const STOL = 'src/ui/result-live/result-live.ts';
   const MODUL = '../facsimile-live/facsimile-live';
+  const KOKPIT = 'src/ui/results/results-cockpit.ts';
+  const SAMOSTALNO = '../facsimile-live/samostalno';
   const izvori = {
     [STOL]: citaj(STOL),
-    'src/ui/results/results-cockpit.ts': citaj('src/ui/results/results-cockpit.ts'),
+    [KOKPIT]: citaj(KOKPIT),
     'src/ui/app.ts': citaj('src/ui/app.ts'),
   };
   const tocke = [SIRINA_BILJESKI, SIRINA_KARTICE];
@@ -36,6 +38,30 @@ describe('Z35 faksimil: gardovi grizu', () => {
     expect(tockeLomaProblems(css, tocke)).toEqual([]);
     expect(cijenaProblems({ 'src/ui/facsimile-live/facsimile-live.ts': modul, 'src/ui/facsimile-live/facsimile-live.css': css })).toEqual([]);
     expect(plusBodIzvorProblems({ 'src/ui/facsimile-live/facsimile-live.ts': modul })).toEqual([]);
+    expect(liveBoundaryProblems(izvori, KOKPIT, SAMOSTALNO)).toEqual([]);
+    expect(rutaFaksimilaProblems(izvori['src/ui/app.ts'])).toEqual([]);
+  });
+
+  it('MUTACIJA: kartica Faksimil bez rute, ili drugi ulaz u Z9, obara gard rute', () => {
+    const app = izvori['src/ui/app.ts'];
+    const ruta = "otvoriRutuFaksimila($('#resultCockpit'))?closePreview():setPreviewMode('faksimil')";
+    expect(app).toContain(ruta);
+    expect(rutaFaksimilaProblems(app.replace(ruta, "setPreviewMode('faksimil')"))).toEqual(['kartica Faksimil ne ide kroz rutu Z35']);
+    const drugi = app.replace('function closePreview(){', "function closePreview(){setPreviewMode('faksimil');");
+    expect(drugi).not.toBe(app);
+    expect(rutaFaksimilaProblems(drugi)).toEqual(['Z9 ima 1 ulaz mimo rute']);
+    expect(rutaFaksimilaProblems('bez kartice')).toEqual(['kartica Faksimil nema rukovatelja']);
+  });
+
+  it('MUTACIJA: staticki uvoz samostalnog faksimila u ljusku rezultata obara gard lijene granice', () => {
+    const dinamicki = `import('${SAMOSTALNO}')`;
+    const src = izvori[KOKPIT];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, [KOKPIT]: `import { otvoriSamostalno } from '${SAMOSTALNO}';\n` + src.replaceAll(dinamicki, 'Promise.resolve({ otvoriSamostalno })') };
+    expect(liveBoundaryProblems(mutant, KOKPIT, SAMOSTALNO)).toEqual([
+      `${KOKPIT}: staticki uvoz ${SAMOSTALNO}`,
+      `${KOKPIT}: nema dinamickog uvoza ${SAMOSTALNO}`,
+    ]);
   });
 
   it('MUTACIJA: prijelaz visine na biljesci obara gard pokreta', () => {

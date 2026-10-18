@@ -249,3 +249,86 @@ test('Z35 smanjen pokret: listanje i objasnjenje bez animacije; bez prigusenja l
   expect(svojstva.length).toBeGreaterThan(0);
   expect([...new Set(svojstva)].every((s) => ['transform', 'opacity'].includes(s))).toBe(true);
 });
+
+/**
+ * Rad s nalazom sa sidrom (isti kao `desktop-flow.spec.ts`), jer vodic nudi "Otvori označeno mjesto
+ * u dokumentu" (`#guideOpenPreview`, ulaz u pregled) samo uz takav nalaz. `legacy` je postojeci
+ * prekidac `?resultRenderer=legacy`.
+ */
+const FIXTURE_SIDRO = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
+
+async function doPresude(page: Page, legacy: boolean): Promise<void> {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(legacy ? '/rad/?resultRenderer=legacy' : '/rad/');
+  await cekajApp(page);
+  await page.locator('#analyticsDecline').click({ timeout: 3_000 }).catch(() => {});
+  await page.locator('#fileInput').setInputFiles(FIXTURE_SIDRO);
+  await potvrdiProfil(page);
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
+}
+
+test('Z35 ruta: kartica "Faksimil" u pregledu otvara Z35 (plan presude Z34), ne stari Z9', async ({ page }, info) => {
+  test.setTimeout(240_000);
+  await doPresude(page, false);
+  const kokpit = page.locator('#resultCockpit');
+  await expect(kokpit).toHaveAttribute('data-rl-ready', 'true', { timeout: 30_000 });
+  // Ulaz stola Z8 se ne vidi uz presudu Z34; Z34 nosi vlastiti.
+  await expect(page.locator('[data-cockpit-fax]')).toBeHidden();
+  await expect(page.locator('[data-rl-fax]')).toBeVisible();
+  await kokpit.locator('[data-cockpit-action="open-findings"]').click();
+  const pregled = page.locator('#guideOpenPreview');
+  await pregled.scrollIntoViewIfNeeded();
+  await pregled.click();
+  await expect(page.locator('#previewModal')).toBeVisible();
+  const kartica = page.locator('#previewModeFaksimil');
+  const mjera = await kartica.boundingBox();
+  expect(mjera?.height ?? 0, 'kartica Faksimil je meta').toBeGreaterThan(0);
+  await kartica.click();
+  const fl = page.locator('[data-fl]');
+  await expect(fl).toHaveAttribute('data-fl-ready', 'true', { timeout: 30_000 });
+  await expect(page.locator('#previewModal')).toBeHidden();
+  await expect(page.locator('#previewZoomBar')).toHaveCount(0);
+  await expect(page.locator('.lekta-fac, .is-facsimile')).toHaveCount(0);
+  await page.screenshot({ path: snimka(info, 'ruta-iz-pregleda'), fullPage: false });
+  // Stanje je presude Z34, ne kopija: "Napravit ću sam" oznacen u faksimilu iz pregleda ostaje i
+  // kad se faksimil ponovno otvori gumbom presude (samostalni faksimil bi krenuo od nule).
+  const res = fl.locator('[data-fl-res]');
+  const red = fl.locator('[data-fl-q]');
+  const brojac = fl.locator('[data-fl-count]');
+  let rucni = false;
+  for (let i = 0; i < await red.count() && !rucni; i += 1) {
+    await red.nth(i).click();
+    rucni = (await res.count()) > 0 && (await res.textContent()) === 'Napravit ću sam';
+  }
+  expect(rucni, 'fixture ima nalaz koji radis sam').toBe(true);
+  const prije = await brojac.textContent();
+  await res.click();
+  await expect(brojac).not.toHaveText(prije ?? '');
+  const poslije = await brojac.textContent();
+  await fl.locator('[data-fl-back]').click();
+  await expect(fl).toHaveCount(0);
+  const ulaz = page.locator('[data-rl-fax]');
+  await ulaz.scrollIntoViewIfNeeded();
+  await ulaz.click();
+  await expect(fl).toHaveAttribute('data-fl-ready', 'true', { timeout: 30_000 });
+  await expect(brojac).toHaveText(poslije ?? '');
+});
+
+test('Z35 ruta: iza ?resultRenderer=legacy kartica "Faksimil" crta stari Z9 s alatnim redom', async ({ page }) => {
+  test.setTimeout(240_000);
+  await doPresude(page, true);
+  const pregled = page.locator('#guideOpenPreview');
+  await pregled.scrollIntoViewIfNeeded();
+  await pregled.click();
+  await page.locator('#previewModeFaksimil').click();
+  const alati = page.locator('#previewZoomBar');
+  await expect(alati).toBeVisible();
+  await expect(alati).toContainText('Prilagodi širini');
+  await expect(alati).toContainText('Cijela stranica');
+  const prije = await alati.locator('.lekta-fac-zoomval').textContent();
+  await alati.getByRole('button', { name: 'Povećaj' }).click();
+  await expect(alati.locator('.lekta-fac-zoomval')).not.toHaveText(prije ?? '');
+  await expect(page.locator('[data-fl]')).toHaveCount(0);
+  await page.locator('#previewModeCitljivo').click();
+  await expect(page.locator('#previewZoomBar')).toHaveCount(0);
+});

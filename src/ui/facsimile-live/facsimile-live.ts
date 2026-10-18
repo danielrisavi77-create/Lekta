@@ -1,8 +1,9 @@
 /**
  * FAKSIMIL: SVE U JEDNOM (ALIGNMENT Z35): PRIKAZ. Lijeni modul; otvara ga stol Z34
  * (`result-live.ts`) dinamickim uvozom tek na klik "Otvori faksimil", pa ni graf rute `/rad/` ni
- * lijeni Z34 ne nose ovaj kod ni njegov CSS. Stari prikaz (stol Z8 s faksimilom Z9) ostaje iza
- * postojeceg prekidaca `?resultRenderer=legacy`.
+ * lijeni Z34 ne nose ovaj kod ni njegov CSS. Ista ruta vodi ovamo i iz kartice "Faksimil" u
+ * pregledu i sa stola Z8 (`otvoriRutuFaksimila`, `samostalno.ts`). Stari faksimil Z9 na toj ruti
+ * ostaje samo iza postojeceg prekidaca `?resultRenderer=legacy`.
  *
  * Sloj preko cijelog prozora (`role="dialog"`), jer predlozak je zasebna stranica s povratkom "←
  * Natrag na presudu". Plan je ZAJEDNICKI sa Z34: ukljucivanje zahvata ovdje mijenja odabir na

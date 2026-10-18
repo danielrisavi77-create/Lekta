@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
-import { renderResultsCockpit } from '../src/ui/results/results-cockpit';
+import { otvoriRutuFaksimila, renderResultsCockpit } from '../src/ui/results/results-cockpit';
 import { deskItems } from '../src/ui/results/desk-model';
 import type { RepairOutlookModel } from '../src/ui/results/repair-outlook';
 import { izgledSada, trakaStranica, zahvatiPlana, type LiveStavka } from '../src/ui/result-live/result-live-model';
@@ -111,6 +111,7 @@ afterEach(() => {
   document.body.innerHTML = '';
   document.documentElement.removeAttribute('data-fl-open');
   delete document.documentElement.dataset.motion;
+  delete document.documentElement.dataset.resultRenderer;
 });
 
 /* ------------------------------------------------------------------ generator ulaza */
@@ -392,6 +393,117 @@ describe('Z35 montaza: stvarni nalazi, dijeljeni plan, pecat', () => {
   it('Escape zatvara faksimil', async () => {
     const { fl } = await presudaIFaksimil();
     fl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(document.querySelector('[data-fl]')).toBeNull();
+  });
+});
+
+/* ------------------------------------------------------------------ ruta faksimila: Z35 umjesto Z9 */
+
+/** Presuda nad istim rezultatom; `clear` je stol Z8 (Z34 zamjenjuje samo presudu s blokatorima). */
+function kokpit(opcije: { ton?: 'clear'; preview?: unknown } = {}) {
+  const { model: m, items } = nalaziFixture();
+  const model = opcije.ton === 'clear' ? { ...m, readiness: { ...m.readiness, kind: 'clear' as const } } : m;
+  const mount = document.createElement('section');
+  document.body.append(mount);
+  const akcije: unknown[] = [];
+  renderResultsCockpit(mount, model, {
+    repairAvailable: true,
+    repairOutlook: OUTLOOK,
+    onAction: (a) => akcije.push(a),
+    desk: {
+      items, planItems: [STAVKA_MARGINE, STAVKA_PRORED], mountDocument: async () => null,
+      live: { preview: opcije.preview ?? pregled(), storedPages: 4 },
+    },
+  });
+  return { mount, akcije };
+}
+
+/** Ono sto faksimil tvrdi o radu: red cekanja, brojac, natpis lista, biljeske i tocke. */
+function sadrzajFaksimila(fl: HTMLElement) {
+  const tekst = (sel: string): string[] => [...fl.querySelectorAll(sel)].map((e) => e.textContent ?? '');
+  return {
+    red: tekst('[data-fl-q]'),
+    brojac: fl.querySelector('[data-fl-count]')?.textContent,
+    natpis: fl.querySelector('[data-fl-natpis]')?.textContent,
+    kartica: fl.querySelector('.fl-card__t')?.textContent ?? null,
+    biljeske: tekst('[data-fl-note]'),
+    tocke: fl.querySelectorAll('[data-fl-dot]').length,
+    zaglavlje: fl.querySelector('.fl-doc')?.textContent,
+  };
+}
+
+describe('Z35 ruta faksimila: kartica "Faksimil" i stol Z8 vode u Z35, Z9 samo iza legacy', () => {
+  it('stol Z8 (presuda bez blokatora) nudi "Otvori faksimil"; Z35 nosi iste nalaze kao s presude Z34', async () => {
+    const z8 = kokpit({ ton: 'clear' });
+    expect(z8.mount.dataset.rlReady, 'presuda bez blokatora ostaje stol Z8').toBeUndefined();
+    expect(z8.mount.querySelector('[data-desk]')).not.toBeNull();
+    const gumb = z8.mount.querySelector<HTMLButtonElement>('[data-cockpit-fax]');
+    expect(gumb?.textContent).toBe('Otvori faksimil');
+    gumb!.click();
+    await vi.waitFor(() => expect(document.querySelector('[data-fl]')?.getAttribute('data-fl-ready')).toBe('true'));
+    const izZ8 = sadrzajFaksimila(document.querySelector<HTMLElement>('[data-fl]')!);
+    expect(izZ8.red).toHaveLength(6);
+    expect(izZ8.brojac).toBe('RED ČEKANJA · 2 / 6');
+    expect(izZ8.natpis).toBe('Oko str. 2 od 4');
+    document.querySelector<HTMLElement>('[data-fl-back]')!.click();
+    expect(document.querySelector('[data-fl]')).toBeNull();
+    expect(z8.mount.querySelector('[data-desk]'), 'povratak je na isti stol Z8').not.toBeNull();
+    z8.mount.remove();
+
+    const { fl } = await presudaIFaksimil();
+    expect(sadrzajFaksimila(fl), 'isti rezultat, ista prica u faksimilu bez obzira na ulaz').toEqual(izZ8);
+  });
+
+  it('kartica "Faksimil" sa stola Z8 otvara Z35; plan vrijedi dok je faksimil otvoren i ide u popravak', async () => {
+    const { mount, akcije } = kokpit({ ton: 'clear' });
+    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    // Dvostruki klik prije nego lijeni modul stigne ne otvara dva sloja.
+    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
+    expect(document.querySelectorAll('[data-fl]')).toHaveLength(1);
+    const fl = document.querySelector<HTMLElement>('[data-fl]')!;
+    for (const i of [1, 2, 4, 5]) {
+      fl.querySelector<HTMLElement>(`[data-fl-q="${i}"]`)!.click();
+      fl.querySelector<HTMLElement>('[data-fl-res]')!.click();
+    }
+    expect(fl.querySelector('[data-fl-stamp]')?.textContent).toBe('Plan spreman');
+    fl.querySelector<HTMLElement>('[data-fl-go]')!.click();
+    expect(document.querySelector('[data-fl]')).toBeNull();
+    expect(akcije.at(-1)).toEqual({ kind: 'repair-safe', ruleIds: ['margine', 'prored'] });
+  });
+
+  it('kartica "Faksimil" uz presudu Z34 otvara faksimil TOG stola: plan je zajednicki', async () => {
+    const { mount } = kokpit();
+    await vi.waitFor(() => expect(mount.dataset.rlReady).toBe('true'));
+    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
+    const ladica = (): string => document.querySelector('[data-rl-tray] [data-rl-tray-n]')?.getAttribute('data-rl-tray-n') ?? '';
+    expect(ladica()).toBe('2');
+    document.querySelector<HTMLElement>('[data-fl-res]')!.click();
+    expect(ladica(), 'iskljucen zahvat u faksimilu mijenja ladicu presude Z34').toBe('1');
+  });
+
+  it('ponovno crtanje presude zatvara faksimil otvoren sa stola Z8', async () => {
+    const { mount } = kokpit({ ton: 'clear' });
+    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
+    const { model: m } = nalaziFixture();
+    renderResultsCockpit(mount, { ...m, readiness: { ...m.readiness, kind: 'clear' as const } }, { repairAvailable: false });
+    expect(document.querySelector('[data-fl]')).toBeNull();
+    expect(otvoriRutuFaksimila(mount), 'presuda bez stola nema rutu u Z35').toBe(false);
+  });
+
+  it('legacy, pregled bez teksta i nepostojeca presuda: ruta odbija, pregled crta stari Z9', async () => {
+    expect(otvoriRutuFaksimila(null)).toBe(false);
+    const prazan = pregled();
+    const bezTeksta = { ...prazan, paragraphs: prazan.paragraphs.map((p) => ({ ...p, text: ' ' })) };
+    const prazno = kokpit({ ton: 'clear', preview: bezTeksta });
+    expect(prazno.mount.querySelector('[data-cockpit-fax]')).toBeNull();
+    expect(otvoriRutuFaksimila(prazno.mount)).toBe(false);
+    const z8 = kokpit({ ton: 'clear' });
+    document.documentElement.dataset.resultRenderer = 'legacy';
+    expect(otvoriRutuFaksimila(z8.mount)).toBe(false);
+    await Promise.resolve();
     expect(document.querySelector('[data-fl]')).toBeNull();
   });
 });

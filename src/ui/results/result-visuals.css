@@ -704,6 +704,27 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .cockpit-allchecks:hover { color: var(--ck-ink); }
 .cockpit-allchecks:focus-visible { outline: none; box-shadow: var(--focus); }
 
+/* Ulaz u faksimil Z35 sa stola Z8 (Z35 zamjenjuje Z9 na ruti faksimila). Ista tiha poveznica kao
+   na presudi Z34, meta 44 px. Kad Z34 preuzme stol, on nosi vlastiti ulaz, pa se ovaj skriva. */
+.cockpit-fax {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ck-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: .8rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.cockpit-fax:hover { color: var(--ck-red-text); }
+.cockpit-fax:focus-visible { outline: none; box-shadow: var(--focus); }
+.result-cockpit[data-rl-ready] .cockpit-fax { display: none; }
+
 /* ---- Detalji provjere (zatecen ekran, sklopljen) ---------------------------- */
 
 .result-cockpit-advanced-shell { display: grid; gap: .75rem; margin-top: 1.75rem; }

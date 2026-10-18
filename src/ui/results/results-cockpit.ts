@@ -314,6 +314,16 @@ export function resultRendererFor(doc: Document): ResultsRenderer {
   return root === 'legacy' ? 'legacy' : 'cockpit';
 }
 
+/**
+ * Kartica "Faksimil" u pregledu dokumenta. `true` znaci da se otvara faksimil Z35 (pozivatelj
+ * zatvara pregled); `false` znaci da pregled crta stari Z9: prekidac `?resultRenderer=legacy`,
+ * rezultat bez stola ili pregled bez teksta koji bi se mogao nacrtati.
+ */
+export function otvoriRutuFaksimila(mount: HTMLElement | null): boolean {
+  if (!mount || resultRendererFor(mount.ownerDocument) !== 'cockpit') return false;
+  return (mount as HTMLElement & { _faksimil?: () => boolean })._faksimil?.() === true;
+}
+
 export function renderResultsCockpit(mount: HTMLElement, model: VisualResultModel, options: ResultsCockpitOptions): void {
   // Stari stol se odbacuje PRIJE nego `innerHTML` odnese njegov DOM: inace bi mu kasni
   // `mountDocument` mogao razapeti slusace po elementima kojih vise nema.
@@ -323,7 +333,13 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     _desk?: DeskHandle | null; _live?: LiveHandle | null; _rlStanje?: LiveStanje; _rlToken?: number;
     _rlPao?: { readonly kljuc: string; readonly razlog: 'rok' | 'uvoz' | 'montaza' };
     _rlUvoz?: { readonly kljuc: string; readonly rok: number; timer: number };
+    _faksimil?: () => boolean; _fx?: { zatvori(): void } | 'otvara' | null;
   };
+  // Faksimil Z35 otvoren sa stola Z8 pripada ovom crtanju; nova montaza ga zatvara kao i stol.
+  const stariFx = drzac._fx;
+  drzac._fx = null;
+  if (stariFx && stariFx !== 'otvara') stariFx.zatvori();
+  delete drzac._faksimil;
   // POLOZAJ PREZIVLJAVA ponovnu montazu; vidi `startIndex` u `desk-mount.ts`.
   const prethodniIndex = drzac._desk?.index ?? 0;
   drzac._desk?.dispose();
@@ -361,6 +377,10 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // STROP SE UZIMA SAMO KAD JE POZNAT. `unavailable` model (profil bez bodovanih provjera) nema
   // sto obecati, pa se druga polovica recenice izostavlja umjesto da se izmisli brojka.
   const strop = options.repairOutlook?.kind === 'available' ? options.repairOutlook.ceilingScore : null;
+  // Ruta faksimila vodi u Z35 samo kad pregled ima tekst koji se moze nacrtati (isti uvjet kao Z34).
+  const odlomci = (stol?.live?.preview as { paragraphs?: ReadonlyArray<{ text?: unknown } | null> } | null | undefined)?.paragraphs;
+  const fxLive = stol?.live && Array.isArray(odlomci)
+    && odlomci.some((p) => typeof p?.text === 'string' && p.text.trim() !== '') ? stol.live : null;
   // OCJENA IDE I U TRAKU (Z15). Kokpit je jedino mjesto koje je vec zna, pa je ovo uzak izlaz
   // prema traki; bez montirane trake je no-op, pa kokpit ne mora znati na kojoj je ruti.
   // NEBODOVAN MODEL NEMA STO POKAZATI U TRAKI: `unscored` (profil bez bodovanih provjera) daje
@@ -429,6 +449,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     // Z34 dobiva isti domacin (`data-desk-host`), da ulaz "ima li stola" ostane jedan ugovor.
     stol
       ? `<div data-desk-host${live ? ' data-rl-host' : ''}></div>`
+        // Stol Z8 nosi isti ulaz u faksimil Z35 kao presuda Z34 (Z35 zamjenjuje Z9 na ruti faksimila).
+        + (fxLive && !live ? '<button type="button" class="cockpit-fax" data-cockpit-fax>Otvori faksimil</button>' : '')
       : priorityFindingsHtml(model.findings.top, options.repairAvailable),
     '</section>',
     // SEKUNDARNI LISTOVI: DNA i kategorije u JEDNOM redu ispod stola, prigusenim tonom. Oba su
@@ -537,6 +559,46 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // Sinkrona montaza Z34 koja je pala vec je nacrtala potpun Z8 (ugnijezdeni poziv) i povezala ga;
   // vezati slusace i ovdje znacilo bi da svaki klik salje radnju dvaput.
   if (drzac._rlToken !== rlToken) return;
+
+  // RUTA FAKSIMILA (Z35 zamjenjuje Z9): gumb stola Z8 i kartica "Faksimil" u pregledu (`app.ts`,
+  // kroz `otvoriRutuFaksimila`) otvaraju Z35. Kad je Z34 montiran, otvara SVOJ faksimil (plan je
+  // zajednicki); inace Z35 dobiva isti ulaz kao Z34 iz lijenog modula `samostalno.ts`.
+  if (stol && fxLive) {
+    const otvori = (opener: HTMLElement | null): boolean => {
+      if (drzac._live) return drzac._live.faksimil();
+      if (drzac._fx) return true;
+      drzac._fx = 'otvara';
+      void import('../facsimile-live/samostalno').then(({ otvoriSamostalno }) => {
+        if (drzac._fx !== 'otvara' || drzac._rlToken !== rlToken) return;
+        const h = otvoriSamostalno(mount.ownerDocument, {
+          items: stol.items,
+          planItems: stol.planItems ?? [],
+          repairAvailable: options.repairAvailable,
+          authoritative: model.readiness.authoritative,
+          score: model.score.kind === 'scored' ? model.score.value : null,
+          ceiling: strop,
+          preview: fxLive.preview,
+          storedPages: fxLive.storedPages,
+          naslov: [model.header.documentName, model.header.profile].filter(Boolean).join(' · ') || null,
+          pocetni: drzac._desk?.index ?? prethodniIndex,
+          esc: escapeHtml,
+          onAction: (a) => (opener ? options.onAction?.(a, opener) : options.onAction?.(a)),
+          naZatvori: (i) => {
+            if (drzac._fx !== h) return;
+            drzac._fx = null;
+            drzac._desk?.goTo(i);
+          },
+        });
+        drzac._fx = h;
+      }, () => {
+        if (drzac._fx === 'otvara') drzac._fx = null;
+        console.warn('Faksimil se nije ucitao; presuda ostaje otvorena.');
+      });
+      return true;
+    };
+    drzac._faksimil = () => otvori(null);
+    mount.querySelector<HTMLButtonElement>('[data-cockpit-fax]')?.addEventListener('click', (e) => { otvori(e.currentTarget as HTMLElement); });
+  }
 
   // DNA salje iste akcije kao kartice nalaza, pa ljuska ne mora znati odakle je klik dosao.
   bindDocumentDna(mount, (action) => options.onAction?.(action));

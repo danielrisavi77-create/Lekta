@@ -18,7 +18,7 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * Izuzece je zato STRUKTURNO (po datoteci i projektu), ne `test.skip()` u tijelu: runtime skip je
  * audit P1-17 prijavio kao nacin da suite bude zelena a da nista ne vrti.
  */
-test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', async ({ page }) => {
+test('desktop zadržava brz prijelaz, rezultat i ulaz u faksimil Z35', async ({ page }) => {
   /**
    * ROK JE VECI OD ZADANIH 120 s, jer ovaj spec radi PUNI put: analiza stvarnog .docx-a, rezultat,
    * kartice, modal pregleda, faksimil i zoom. To je najduzi scenarij u matrici, a WebKit najsporiji
@@ -131,17 +131,14 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   const preview = page.locator('#guideOpenPreview');
   await expect(preview).toBeVisible();
   await preview.click();
-  await page.locator('#previewModeFaksimil').click();
-  const controls = page.locator('#previewZoomBar');
-  await expect(controls).toBeVisible();
-  await expect(controls).toContainText('Prilagodi širini');
-  await expect(controls).toContainText('Cijela stranica');
   await expect(page.locator('.preview-modes')).toBeVisible();
-  await expect(page.locator('#previewModeCitljivo')).toBeVisible();
-  const zoomBefore = await controls.locator('.lekta-fac-zoomval').textContent();
-  await controls.getByRole('button', { name: 'Povećaj' }).click();
-  await expect(controls.locator('.lekta-fac-zoomval')).not.toHaveText(zoomBefore ?? '');
-  await page.locator('#previewModeCitljivo').click();
-  await expect(page.locator('#previewZoomBar')).toHaveCount(0);
   await expect(page.locator('#previewModeCitljivo')).toHaveAttribute('aria-selected', 'true');
+  // Z35 zamjenjuje Z9 na ruti faksimila: kartica "Faksimil" zatvara pregled i otvara faksimil Z35.
+  // Alatni red starog faksimila (zoom) mjeri `facsimile-live.spec.ts` iza `?resultRenderer=legacy`.
+  await page.locator('#previewModeFaksimil').click();
+  await expect(page.locator('[data-fl]')).toHaveAttribute('data-fl-ready', 'true', { timeout: 30_000 });
+  await expect(page.locator('#previewModal')).toBeHidden();
+  await expect(page.locator('#previewZoomBar')).toHaveCount(0);
+  await page.locator('[data-fl-back]').click();
+  await expect(page.locator('[data-fl]')).toHaveCount(0);
 });

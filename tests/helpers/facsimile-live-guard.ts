@@ -6,8 +6,28 @@
  *    preformuliran opis u kodu obara gard;
  *  - `tockeLomaProblems`: CSS faksimila koristi SAMO tocke loma iz Z37 (600, 760, 900, 1024, 1180,
  *    1440) i tocno one koje model rasporeda koristi (`raspored` u `facsimile-live-model.ts`), da se
- *    CSS i ponasanje (lampa, nit, sticky) ne raziđu.
+ *    CSS i ponasanje (lampa, nit, sticky) ne raziđu;
+ *  - `rutaFaksimilaProblems`: kartica "Faksimil" u pregledu (`app.ts`) prvo pita rutu Z35
+ *    (`otvoriRutuFaksimila`), a stari Z9 crta samo kad ruta odbije (legacy, bez stola). Drugi ulaz
+ *    u Z9 mimo rute bi vratio stari prikaz na rutu faksimila bez ijednog crvenog testa, jer `app.ts`
+ *    nema jedinicni test montaze.
  */
+
+export function rutaFaksimilaProblems(appSirov: string): string[] {
+  const kod = appSirov.replace(/\r/g, '');
+  const Z9 = "setPreviewMode('faksimil')";
+  const pocetak = kod.indexOf("ctl('#previewModeFaksimil').onclick=");
+  if (pocetak < 0) return ['kartica Faksimil nema rukovatelja'];
+  const rukovatelj = kod.slice(pocetak, kod.indexOf(';', pocetak));
+  const ruta = rukovatelj.indexOf('otvoriRutuFaksimila(');
+  const z9 = rukovatelj.indexOf(Z9);
+  const problemi: string[] = [];
+  if (ruta < 0) problemi.push('kartica Faksimil ne ide kroz rutu Z35');
+  else if (z9 >= 0 && z9 < ruta) problemi.push('Z9 se crta prije rute Z35');
+  const mimo = kod.split(Z9).length - 1 - (z9 >= 0 ? 1 : 0);
+  if (mimo > 0) problemi.push(`Z9 ima ${mimo} ulaz mimo rute`);
+  return problemi;
+}
 
 const bezKomentaraCss = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, '');
 

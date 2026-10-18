@@ -64,6 +64,11 @@ export interface LiveHandle {
   stanje(): LiveStanje;
   /** Odabir za ulaz u popravak, samo kad ga je korisnik promijenio; inace `null` (tok bira sam). */
   odabir(): string[] | null;
+  /**
+   * Ruta faksimila (kartica "Faksimil" u pregledu) otvara faksimil Z35 OVOG stola, da plan i
+   * "Napravit ću sam" ostanu zajednicki. `false` kad pregled nema teksta koji se moze nacrtati.
+   */
+  faksimil(): boolean;
   dispose(): void;
 }
 
@@ -588,7 +593,7 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   /* ---------------------------------------------------------------- faksimil Z35 */
 
   let otvara = false;
-  const otvoriFaksimil = (gumb: HTMLElement): void => {
+  const otvoriFaksimil = (gumb: HTMLElement | null): void => {
     if (faksimil || otvara) return;
     otvara = true;
     void import('../facsimile-live/facsimile-live').then(({ otvoriFaksimil: otvori }) => {
@@ -602,7 +607,7 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
         odabir: () => odabir,
         postaviOdabir: (novi) => { odabir = novi; dirty = true; crtajKarticu(); crtajStranicu(); crtajLadicu(); },
         // Isti ulaz u popravak kao ladica: odabir koji pise u planu je odabir koji ide u popravak.
-        naPlan: () => o.onAction?.({ kind: 'repair-safe', ruleIds: [...odabir] }, gumb),
+        naPlan: () => o.onAction?.({ kind: 'repair-safe', ruleIds: [...odabir] }, gumb ?? undefined),
         naZatvori: (i) => {
           faksimil = null;
           if (odbacen) return;
@@ -732,6 +737,11 @@ function postavi(mount: HTMLElement, host: HTMLElement, o: LiveOptions, ciscenja
   return {
     stanje: () => ({ kljuc: o.kljuc, selId: nalazi[indeksOdabranog()]?.id ?? null, cat, odabir: dirty ? [...odabir] : null, mode, odigrano: true, rucno: [...rucno] }),
     odabir: () => (dirty ? [...odabir] : null),
+    faksimil: () => {
+      if (!imaFaksimil || odbacen) return false;
+      otvoriFaksimil(q<HTMLElement>('[data-rl-fax]'));
+      return true;
+    },
     dispose() {
       odbacen = true;
       ciscenja.forEach((c) => c());
