@@ -432,6 +432,21 @@ function sadrzajFaksimila(fl: HTMLElement) {
   };
 }
 
+/** Ishod kartice "Faksimil" kroz povratne pozive rute: Z35 zatvara pregled, Z9 samo iza legacy, inace poruka. */
+function ruta(mount: HTMLElement | null): { zatvori: number; z9: number; poruke: string[] } {
+  const r = { zatvori: 0, z9: 0, poruke: [] as string[] };
+  otvoriRutuFaksimila(mount, () => { r.zatvori += 1; }, () => { r.z9 += 1; }, (p) => { r.poruke.push(p); });
+  return r;
+}
+const Z35 = { zatvori: 1, z9: 0, poruke: [] };
+const BEZ_TEKSTA = { zatvori: 0, z9: 0, poruke: ['Faksimil nije dostupan: pregled nema teksta rada.'] };
+
+/** Rezultat bez ijednog nalaza (F51 a): isti rad, prazni `issues` i trijaza. */
+function bezNalaza() {
+  const r = rezultat() as unknown as { issues: unknown[]; details: { triage: { counts: unknown; findings: unknown[] } } };
+  return { ...r, issues: [], details: { ...r.details, triage: { counts: { auto: 0, assisted: 0, manual: 0, total: 0 }, findings: [] } } } as never;
+}
+
 describe('Z35 ruta faksimila: kartica "Faksimil" i stol Z8 vode u Z35, Z9 samo iza legacy', () => {
   it('stol Z8 (presuda bez blokatora) nudi "Otvori faksimil"; Z35 nosi iste nalaze kao s presude Z34', async () => {
     const z8 = kokpit({ ton: 'clear' });
@@ -456,9 +471,9 @@ describe('Z35 ruta faksimila: kartica "Faksimil" i stol Z8 vode u Z35, Z9 samo i
 
   it('kartica "Faksimil" sa stola Z8 otvara Z35; plan vrijedi dok je faksimil otvoren i ide u popravak', async () => {
     const { mount, akcije } = kokpit({ ton: 'clear' });
-    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    expect(ruta(mount)).toEqual(Z35);
     // Dvostruki klik prije nego lijeni modul stigne ne otvara dva sloja.
-    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    expect(ruta(mount)).toEqual(Z35);
     await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
     expect(document.querySelectorAll('[data-fl]')).toHaveLength(1);
     const fl = document.querySelector<HTMLElement>('[data-fl]')!;
@@ -475,7 +490,7 @@ describe('Z35 ruta faksimila: kartica "Faksimil" i stol Z8 vode u Z35, Z9 samo i
   it('kartica "Faksimil" uz presudu Z34 otvara faksimil TOG stola: plan je zajednicki', async () => {
     const { mount } = kokpit();
     await vi.waitFor(() => expect(mount.dataset.rlReady).toBe('true'));
-    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    expect(ruta(mount)).toEqual(Z35);
     await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
     const ladica = (): string => document.querySelector('[data-rl-tray] [data-rl-tray-n]')?.getAttribute('data-rl-tray-n') ?? '';
     expect(ladica()).toBe('2');
@@ -485,26 +500,94 @@ describe('Z35 ruta faksimila: kartica "Faksimil" i stol Z8 vode u Z35, Z9 samo i
 
   it('ponovno crtanje presude zatvara faksimil otvoren sa stola Z8', async () => {
     const { mount } = kokpit({ ton: 'clear' });
-    expect(otvoriRutuFaksimila(mount)).toBe(true);
+    expect(ruta(mount)).toEqual(Z35);
     await vi.waitFor(() => expect(document.querySelector('[data-fl-ready]')).not.toBeNull());
     const { model: m } = nalaziFixture();
     renderResultsCockpit(mount, { ...m, readiness: { ...m.readiness, kind: 'clear' as const } }, { repairAvailable: false });
     expect(document.querySelector('[data-fl]')).toBeNull();
-    expect(otvoriRutuFaksimila(mount), 'presuda bez stola nema rutu u Z35').toBe(false);
+    expect(ruta(mount), 'presuda bez pregleda nema sto nacrtati, i ne pada na Z9').toEqual(BEZ_TEKSTA);
   });
 
-  it('legacy, pregled bez teksta i nepostojeca presuda: ruta odbija, pregled crta stari Z9', async () => {
-    expect(otvoriRutuFaksimila(null)).toBe(false);
+  it('pregled bez teksta i nepostojeca presuda: poruka, nikad Z9; Z9 SAMO iza legacy', async () => {
+    expect(ruta(null)).toEqual(BEZ_TEKSTA);
     const prazan = pregled();
     const bezTeksta = { ...prazan, paragraphs: prazan.paragraphs.map((p) => ({ ...p, text: ' ' })) };
     const prazno = kokpit({ ton: 'clear', preview: bezTeksta });
     expect(prazno.mount.querySelector('[data-cockpit-fax]')).toBeNull();
-    expect(otvoriRutuFaksimila(prazno.mount)).toBe(false);
+    expect(ruta(prazno.mount)).toEqual(BEZ_TEKSTA);
     const z8 = kokpit({ ton: 'clear' });
     document.documentElement.dataset.resultRenderer = 'legacy';
-    expect(otvoriRutuFaksimila(z8.mount)).toBe(false);
+    expect(ruta(z8.mount)).toEqual({ zatvori: 0, z9: 1, poruke: [] });
+    expect(ruta(null), 'legacy i bez presude crta Z9').toEqual({ zatvori: 0, z9: 1, poruke: [] });
     await Promise.resolve();
     expect(document.querySelector('[data-fl]')).toBeNull();
+  });
+
+  it('rezultat bez ijednog nalaza: nema stola, a kartica "Faksimil" otvara Z35 s istinitim praznim redom', async () => {
+    const model = buildVisualResultModel(bezNalaza());
+    expect(model.findings.document, 'generator: rezultat bez nalaza').toHaveLength(0);
+    const mount = document.createElement('section');
+    document.body.append(mount);
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: { items: [], planItems: [], live: { preview: pregled(), storedPages: 4 } },
+    });
+    expect(mount.querySelector('[data-desk]'), 'bez nalaza nema stola').toBeNull();
+    expect(ruta(mount)).toEqual(Z35);
+    await vi.waitFor(() => expect(document.querySelector('[data-fl]')?.getAttribute('data-fl-ready')).toBe('true'));
+    const fl = document.querySelector<HTMLElement>('[data-fl]')!;
+    expect(fl.querySelector('[data-fl-prazno]')?.textContent).toBe('Nema otvorenih nalaza.');
+    expect(fl.querySelectorAll('[data-fl-q], [data-fl-note], [data-fl-dot], [data-fl-count], [data-fl-stamp]')).toHaveLength(0);
+    expect(fl.querySelector<HTMLElement>('[data-fl-card]')?.hidden).toBe(true);
+    expect(fl.textContent).not.toContain('Prekriži svaki nalaz');
+    // Stranica rada je ista kao uz nalaze: pocetak tijela, s tekstom iz pregleda.
+    expect(fl.querySelector('[data-fl-natpis]')?.textContent).toBe('Oko str. 2 od 4');
+    expect(fl.querySelectorAll('[data-fl-text="now"] [data-fl-p]').length).toBeGreaterThan(0);
+    fl.querySelector<HTMLElement>('[data-fl-back]')!.click();
+    expect(document.querySelector('[data-fl]')).toBeNull();
+  });
+});
+
+describe('Z35 na stolu Z8: lijevi pano crta stranice Z35, ne stari Z9 (F51 a)', () => {
+  it('listovi Z35, oznaka samo uz odlomke nalaza, klik u oba smjera, fusnota bez izmisljene oznake', async () => {
+    // happy-dom ne racuna raspored; stol montira dokument tek kad pano ima sirinu.
+    const prije = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth');
+    Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, get: () => 800 });
+    try {
+      const { model: m } = nalaziFixture();
+      const model = { ...m, readiness: { ...m.readiness, kind: 'clear' as const } };
+      // Zastavica 12 nema svoj nalaz (npr. tipografska napomena): meta da, oznaka ne.
+      const flags = [{ paragraphIndex: 23 }, { paragraphIndex: 30 }, { paragraphIndex: 45 }, { paragraphIndex: 0, footnoteId: 3 }, { paragraphIndex: 12 }];
+      const items = deskItems(model.findings.document, flags);
+      expect(items.filter((it) => it.flagIndex !== null).map((it) => it.flagIndex), 'generator: tri sidra u tijelu i fusnota').toEqual([0, 1, 2, 3]);
+      const mount = document.createElement('section');
+      document.body.append(mount);
+      renderResultsCockpit(mount, model, { repairAvailable: true, desk: { items, flags, planItems: [], live: { preview: pregled(), storedPages: 4 } } });
+      expect(mount.dataset.rlReady, 'presuda bez blokatora ostaje stol Z8').toBeUndefined();
+      await vi.waitFor(() => expect(mount.querySelector('[data-desk-doc] [data-fl-stol]')).not.toBeNull());
+      const pano = mount.querySelector<HTMLElement>('[data-desk-doc]')!;
+      expect(pano.querySelectorAll('.lekta-fac-page, .lekta-facsimile, .lekta-fac-zoombar')).toHaveLength(0);
+      expect([...pano.querySelectorAll('.fl-stol__natpis')].map((e) => e.textContent)).toEqual(['Oko str. 1 od 4', 'Oko str. 2 od 4', 'Oko str. 3 od 4', 'Oko str. 4 od 4']);
+      expect([...pano.querySelectorAll<HTMLElement>('[data-fl-hit="nalaz"]')].map((e) => Number(e.dataset.flP))).toEqual([23, 30, 45]);
+      // Mjesto aktivira nalaz.
+      const i30 = items.findIndex((it) => it.flagIndex === 1);
+      pano.querySelector<HTMLElement>('[data-fl-p="30"]')!.click();
+      expect(mount.querySelector('[data-desk-count]')?.textContent).toBe(`${i30 + 1} od ${items.length}`);
+      expect(pano.querySelector('[data-desk-active]')?.getAttribute('data-fl-p')).toBe('30');
+      // Nalaz pomice dokument: odabir drugog nalaza premjesta oznaku.
+      const i45 = items.findIndex((it) => it.flagIndex === 2);
+      mount.querySelector<HTMLElement>(`[data-desk-go="${i45}"]`)!.click();
+      expect(pano.querySelector('[data-desk-active]')?.getAttribute('data-fl-p')).toBe('45');
+      // Fusnota se na listu ne crta: stol to kaze trakom, bez oznake na krivom mjestu.
+      const iFus = items.findIndex((it) => it.flagIndex === 3);
+      mount.querySelector<HTMLElement>(`[data-desk-go="${iFus}"]`)!.click();
+      expect(pano.querySelector('[data-desk-active]')).toBeNull();
+      // Gumb ispod stola i dalje otvara puni faksimil Z35.
+      expect(mount.querySelector('[data-cockpit-fax]')?.textContent).toBe('Otvori faksimil');
+    } finally {
+      if (prije) Object.defineProperty(HTMLElement.prototype, 'clientWidth', prije);
+      else delete (HTMLElement.prototype as { clientWidth?: number }).clientWidth;
+    }
   });
 });
 

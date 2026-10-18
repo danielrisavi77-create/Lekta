@@ -1,27 +1,25 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { mountFacsimileInto } from '../src/ui/results/desk-document';
-const mocks = vi.hoisted(() => ({ render: vi.fn(), zoom: vi.fn() }));
-vi.mock('../src/preview/render-facsimile', () => ({ renderFacsimile: mocks.render }));
-vi.mock('../src/preview/facsimile-zoom', () => ({ attachFacsimileZoom: mocks.zoom }));
+import { montirajDokumentStola } from '../src/ui/results/desk-document';
+const mocks = vi.hoisted(() => ({ stranice: vi.fn() }));
+vi.mock('../src/ui/facsimile-live/stol-stranice', () => ({ montirajStranice: mocks.stranice }));
 afterEach(() => vi.clearAllMocks());
-it('dispose during lazy import prevents renderer DOM writes and zoom attachment', async () => {
+const opcije = { preview: null, storedPages: null, items: [], flags: [], esc: (v: string) => v };
+it('dispose during lazy import prevents page DOM writes', async () => {
   const host = document.createElement('div');
   host.textContent = 'preserved';
   const controller = new AbortController();
-  mocks.render.mockImplementation(() => ({ root: document.createElement('article'), flagTargets: new Map() }));
-  const pending = mountFacsimileInto(host, {} as never, [] as never, controller.signal);
+  mocks.stranice.mockImplementation(() => ({ flagTargets: new Map() }));
+  const pending = montirajDokumentStola(host, opcije, controller.signal);
   controller.abort();
   expect(await pending).toBeNull();
   expect(host.textContent).toBe('preserved');
-  expect(mocks.render).not.toHaveBeenCalled();
-  expect(mocks.zoom).not.toHaveBeenCalled();
+  expect(mocks.stranice).not.toHaveBeenCalled();
 });
-it('disposing a mounted document destroys zoom listeners exactly once', async () => {
-  const destroy = vi.fn();
-  mocks.render.mockReturnValue({ root: document.createElement('article'), flagTargets: new Map() });
-  mocks.zoom.mockReturnValue({ destroy, remeasure: vi.fn(), fitWidth: vi.fn() });
-  const result = await mountFacsimileInto(document.createElement('div'), {} as never, [] as never);
-  result?.dispose?.();
-  result?.dispose?.();
-  expect(destroy).toHaveBeenCalledTimes(1);
+it('mounted pane is the Z35 page module, not the old Z9 renderer', async () => {
+  const host = document.createElement('div');
+  const mete = new Map([[0, document.createElement('p')]]);
+  mocks.stranice.mockReturnValue({ flagTargets: mete });
+  const result = await montirajDokumentStola(host, opcije);
+  expect(mocks.stranice).toHaveBeenCalledWith(host, opcije);
+  expect(result?.flagTargets).toBe(mete);
 });

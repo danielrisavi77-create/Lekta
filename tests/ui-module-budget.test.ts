@@ -148,7 +148,11 @@ function bajtova(rel: string): number {
 //   (skrijNapomenu umjesto skrivanja znacke), C4 preskace detekciju samo bez brave, "Prebaci"
 //   ponovi detekciju umjesto slanja change obrascu                                  +154 -> 357398
 // Logika (brava, odluka uz sesiju, tekst napomene) zivi u confirmed-faculty.ts i intake-choice.ts.
-const BUDZET_APP = 357398;
+// Z35 KRUG 2, F51 a (2026-10-18): 357398 -> 357222, dakle -176 B, izmjereno (bajtovi bez CR).
+// Montaza lijevog panoa stola (zatvorenje nad starim Z9) izasla je u `results-cockpit.ts` i
+// `desk-document.ts`; `app.ts` predaje samo zastavice i stol i bez nalaza, a kartica "Faksimil" daje
+// ruti tri povratna poziva (zatvori, stari Z9 samo uz legacy, poruka). Spusteno na izmjereno.
+const BUDZET_APP = 357222;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

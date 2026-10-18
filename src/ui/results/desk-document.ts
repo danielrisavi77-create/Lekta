@@ -1,55 +1,24 @@
 /**
- * DOKUMENT NA KOREKTORSKOM STOLU: montaza faksimila u lijevi pano.
+ * DOKUMENT NA KOREKTORSKOM STOLU: montaza stranica Z35 u lijevi pano stola Z8.
  *
- * Izdvojeno iz `app.ts` 2026-09-08, iz DVA razloga odjednom.
+ * Do 2026-10-18 je ovdje stajao stari faksimil Z9 (`render-facsimile.ts` uz zoom "prilagodi
+ * sirini"). Odluka vlasnika (F51 a, "Broj 2"): Z9 ostaje samo iza `?resultRenderer=legacy`, a stol
+ * Z8 se crta samo na ruti kokpita, pa pano crta listove Z35 (`stol-stranice.ts`). Listovi su u `cqw`
+ * jedinicama lista, pa prate sirinu panoa bez zooma i bez vodoravnog skrola.
  *
- * 1. UKLAPANJE PO SIRINI NIJE UKRAS NEGO CITLJIVOST. Faksimil je pravi A4 (21 cm), pano je uzi, pa
- *    se bez skaliranja stranica REZE po desnom rubu i rijeci se lome nasred retka. Uklapanje je
- *    zato DIO MONTAZE, a ne nesto sto pozivatelj mora zapamtiti.
- *
- *    Kvar je prosao sve testove (faksimil vidljiv, omjer stupaca tocan) i vidio se tek na snimci;
- *    sada ga cuva tvrdnja o prelijevanju u `tests/ux/korektorski-stol.spec.ts`.
- *
- * 2. `app.ts` je na svom budzetu, pa je zatvorenje iz poziva kokpita preselilo ovamo.
- *
- * OBA TESKA MODULA SE UCITAVAJU LIJENO. Renderer faksimila i zoom nisu u grafu ekrana rezultata;
- * dovlace se tek kad je pano stvarno vidljiv, sto ljuska provjerava prije poziva.
+ * MODUL SE UCITAVA LIJENO. Stranice i njihov CSS nisu u grafu ekrana rezultata; dovlace se tek kad
+ * je pano stvarno vidljiv, sto `mountDesk` provjerava prije poziva.
  */
+import type { DeskDocument } from './desk-mount';
+import type { StolStraniceOpcije } from '../facsimile-live/stol-stranice';
 
-/** Ono sto stol treba natrag: mjesta koja se mogu oznaciti. */
-export interface DeskDocumentMount {
-  readonly flagTargets: ReadonlyMap<number, HTMLElement>;
-  readonly dispose: () => void;
-}
-
-type PreviewModel = Parameters<typeof import('../../preview/render-facsimile')['renderFacsimile']>[0];
-type PreviewFlags = Parameters<typeof import('../../preview/render-facsimile')['renderFacsimile']>[1];
-
-export async function mountFacsimileInto(
+export async function montirajDokumentStola(
   host: HTMLElement,
-  preview: PreviewModel,
-  flags: PreviewFlags,
+  o: StolStraniceOpcije,
   signal?: AbortSignal,
-): Promise<DeskDocumentMount | null> {
-  const { renderFacsimile } = await import('../../preview/render-facsimile');
+): Promise<DeskDocument | null> {
+  const { montirajStranice } = await import('../facsimile-live/stol-stranice');
+  // Rezultat je mogao biti zamijenjen dok je modul stizao; tada se pano ne dira.
   if (signal?.aborted) return null;
-  const iscrtano = renderFacsimile(preview, flags);
-  host.textContent = '';
-  host.appendChild(iscrtano.root);
-
-  let destroy: (() => void) | undefined;
-  try {
-    const { attachFacsimileZoom } = await import('../../preview/facsimile-zoom');
-    if (signal?.aborted) return null;
-    const zoom = attachFacsimileZoom(host, iscrtano.root);
-    destroy = () => zoom.destroy();
-    zoom.remeasure();
-    zoom.fitWidth();
-  } catch (e) {
-    // Uklapanje je POBOLJSANJE, ne uvjet: bez njega dokument je sirok i trazi vodoravni skrol,
-    // ali i dalje postoji i oznake i dalje rade. Pad ovdje ne smije odnijeti cijeli stol.
-    console.warn('Uklapanje faksimila po sirini nije uspjelo; dokument ostaje u punoj velicini.', e);
-  }
-
-  return { flagTargets: iscrtano.flagTargets, dispose: () => { destroy?.(); destroy = undefined; } };
+  return montirajStranice(host, o);
 }

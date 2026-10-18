@@ -4,7 +4,7 @@
  * (pokret, lijena granica, copy, cijena, bodovi po zahvatu). Svaki ima cisti BASELINE nad stvarnim
  * datotekama i MUTACIJU koja ga obara, pa gard koji tiho prestane mjeriti ne prolazi.
  */
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { copyProblems, liveBoundaryProblems, motionCssProblems } from './helpers/analysis-live-guard';
@@ -28,6 +28,15 @@ describe('Z35 faksimil: gardovi grizu', () => {
     'src/ui/app.ts': citaj('src/ui/app.ts'),
   };
   const tocke = [SIRINA_BILJESKI, SIRINA_KARTICE];
+  // Gard rute cita CIJELI `src/`: ulaz u Z9 moze se pojaviti u bilo kojem modulu, ne samo u poznatima.
+  const svi: Record<string, string> = Object.fromEntries(
+    (readdirSync(resolve(__dirname, '..', 'src'), { recursive: true }) as string[])
+      .filter((f) => f.endsWith('.ts'))
+      .map((f) => `src/${f.split('\\').join('/')}`)
+      .map((ime) => [ime, citaj(ime)]),
+  );
+  const backlog = citaj('docs/agents/orchestrator-backlog.md');
+  const DOKUMENT = 'src/ui/results/desk-document.ts';
 
   it('BASELINE: stvarni list, ulaz, kostur, objasnjenja i tocke loma su cisti', () => {
     expect(motionCssProblems(css)).toEqual([]);
@@ -39,18 +48,76 @@ describe('Z35 faksimil: gardovi grizu', () => {
     expect(cijenaProblems({ 'src/ui/facsimile-live/facsimile-live.ts': modul, 'src/ui/facsimile-live/facsimile-live.css': css })).toEqual([]);
     expect(plusBodIzvorProblems({ 'src/ui/facsimile-live/facsimile-live.ts': modul })).toEqual([]);
     expect(liveBoundaryProblems(izvori, KOKPIT, SAMOSTALNO)).toEqual([]);
-    expect(rutaFaksimilaProblems(izvori['src/ui/app.ts'])).toEqual([]);
+    expect(rutaFaksimilaProblems(svi, backlog)).toEqual([]);
+    expect(Object.keys(svi).length, 'gard rute cita cijeli src/').toBeGreaterThan(300);
+    expect(liveBoundaryProblems(izvori, KOKPIT, './desk-document')).toEqual([]);
   });
 
-  it('MUTACIJA: kartica Faksimil bez rute, ili drugi ulaz u Z9, obara gard rute', () => {
-    const app = izvori['src/ui/app.ts'];
-    const ruta = "otvoriRutuFaksimila($('#resultCockpit'))?closePreview():setPreviewMode('faksimil')";
+  it('MUTACIJA kartice: Z9 mimo rute ili prije nje obara gard rute', () => {
+    const app = svi['src/ui/app.ts'];
+    const ruta = "otvoriRutuFaksimila($('#resultCockpit'),closePreview,()=>setPreviewMode('faksimil'),toast)";
     expect(app).toContain(ruta);
-    expect(rutaFaksimilaProblems(app.replace(ruta, "setPreviewMode('faksimil')"))).toEqual(['kartica Faksimil ne ide kroz rutu Z35']);
+    const s = (novi: string) => rutaFaksimilaProblems({ ...svi, 'src/ui/app.ts': novi }, backlog);
+    expect(s(app.replace(ruta, "setPreviewMode('faksimil')"))).toEqual(['kartica Faksimil ne ide kroz rutu Z35', 'kartica crta Z9 mimo rute']);
+    // Stari oblik prije odluke vlasnika: Z9 kad ruta odbije (rezultat bez nalaza, pregled bez teksta).
+    const stari = "otvoriRutuFaksimila($('#resultCockpit'),closePreview,()=>{},toast)||setPreviewMode('faksimil')";
+    expect(s(app.replace(ruta, stari))).toEqual(['ruta ne dobiva Z9 kao povratni poziv za legacy', 'kartica crta Z9 mimo rute']);
     const drugi = app.replace('function closePreview(){', "function closePreview(){setPreviewMode('faksimil');");
     expect(drugi).not.toBe(app);
-    expect(rutaFaksimilaProblems(drugi)).toEqual(['Z9 ima 1 ulaz mimo rute']);
-    expect(rutaFaksimilaProblems('bez kartice')).toEqual(['kartica Faksimil nema rukovatelja']);
+    expect(s(drugi)).toEqual(['Z9 ima 1 ulaz mimo rute']);
+    expect(s('bez kartice const _desk={items:')).toEqual(['kartica Faksimil nema rukovatelja']);
+    const drugiUvoz = app.replace('function closePreview(){', "function closePreview(){void import('../preview/render-facsimile');");
+    expect(s(drugiUvoz)).toEqual(['src/ui/app.ts: 2 uvoza renderera Z9']);
+  });
+
+  it('MUTACIJA mjesta 2 (rezultat bez nalaza): ruta pada na Z9 ili app.ts ne preda pregled', () => {
+    const kokpit = svi[KOKPIT];
+    const poruka = "else javi('Faksimil nije dostupan: pregled nema teksta rada.');";
+    expect(kokpit).toContain(poruka);
+    const s = (izmjena: Record<string, string>) => rutaFaksimilaProblems({ ...svi, ...izmjena }, backlog);
+    expect(s({ [KOKPIT]: kokpit.replace(poruka, 'else staroZ9();') })).toEqual(['ruta crta Z9 izvan legacy prekidaca: else staroZ9();']);
+    const legacy = "if (resultRendererFor(mount?.ownerDocument ?? document) === 'legacy') { staroZ9(); return; }";
+    expect(kokpit).toContain(legacy);
+    expect(s({ [KOKPIT]: kokpit.replace(legacy, '') })).toEqual(['ruta ne crta Z9 ni iza legacy']);
+    const app = svi['src/ui/app.ts'];
+    expect(app).toContain('const _desk={items:_deskItems,');
+    expect(s({ 'src/ui/app.ts': app.replace('const _desk={items:_deskItems,', 'const _desk=_deskItems.length?{items:_deskItems,') }))
+      .toEqual(['app.ts ne predaje pregled ruti Z35 kad rezultat nema nalaza']);
+  });
+
+  it('MUTACIJA mjesta 1 (stol Z8): pano koji opet montira Z9 obara gard rute', () => {
+    const z9 = "const { renderFacsimile } = await import('../../preview/render-facsimile');\n";
+    const mutant = svi[DOKUMENT].replace("  const { montirajStranice } = await import('../facsimile-live/stol-stranice');\n", z9);
+    expect(mutant).not.toBe(svi[DOKUMENT]);
+    expect(rutaFaksimilaProblems({ ...svi, [DOKUMENT]: mutant }, backlog))
+      .toEqual([`${DOKUMENT}: ulaz u Z9 (render-facsimile) mimo legacy prekidaca`]);
+    const kokpit = svi[KOKPIT].replace("import('./desk-document')", "import('../../preview/render-facsimile.ts')");
+    expect(kokpit).not.toBe(svi[KOKPIT]);
+    expect(rutaFaksimilaProblems({ ...svi, [KOKPIT]: kokpit }, backlog))
+      .toEqual([`${KOKPIT}: ulaz u Z9 (render-facsimile) mimo legacy prekidaca`]);
+    // Komentar koji imenuje renderer nije ulaz.
+    expect(rutaFaksimilaProblems({ ...svi, [DOKUMENT]: `// import('../../preview/render-facsimile')\n${svi[DOKUMENT]}` }, backlog)).toEqual([]);
+  });
+
+  it('MUTACIJA mjesta 3 (usporedba popravka): Z9 bez F stavke u backlogu obara gard rute', () => {
+    const red = backlog.split('\n').find((r) => r.startsWith('| F55 |'));
+    expect(red, 'F55 zapisuje zasto usporedba ostaje na Z9').toBeDefined();
+    expect(rutaFaksimilaProblems(svi, backlog.replace(red!, ''))).toEqual(['src/ui/repair-diff.ts: Z9 bez F stavke u backlogu']);
+    // Usporedba bez renderera Z9 ne treba iznimku.
+    const bez = svi['src/ui/repair-diff.ts'].replace("import { renderFacsimile } from '../preview/render-facsimile.ts';", '');
+    expect(bez).not.toBe(svi['src/ui/repair-diff.ts']);
+    expect(rutaFaksimilaProblems({ ...svi, 'src/ui/repair-diff.ts': bez }, backlog.replace(red!, ''))).toEqual([]);
+  });
+
+  it('MUTACIJA: staticki uvoz dokumenta stola u ljusku rezultata obara gard lijene granice', () => {
+    const dinamicki = "import('./desk-document')";
+    const src = izvori[KOKPIT];
+    expect(src).toContain(dinamicki);
+    const mutant = { ...izvori, [KOKPIT]: "import { montirajDokumentStola } from './desk-document';\n" + src.replaceAll(dinamicki, 'Promise.resolve({ montirajDokumentStola })') };
+    expect(liveBoundaryProblems(mutant, KOKPIT, './desk-document')).toEqual([
+      `${KOKPIT}: staticki uvoz ./desk-document`,
+      `${KOKPIT}: nema dinamickog uvoza ./desk-document`,
+    ]);
   });
 
   it('MUTACIJA: staticki uvoz samostalnog faksimila u ljusku rezultata obara gard lijene granice', () => {

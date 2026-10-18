@@ -9,23 +9,18 @@
  * koje bi Z35 dijelio, a odabir koji pise u planu je odabir koji ide u popravak (`repair-safe`).
  */
 import type { ResultsCockpitAction } from '../results/results-cockpit';
-import type { DeskItem } from '../results/desk-model';
-import type { VisualFindingModel } from '../results/visual-result-model';
+import type { mountResultLive } from '../result-live/result-live';
 import {
   izgledSada, pocetniOdabir, trakaStranica, ulogaNalaza, zahvatiPlana,
-  type LivePreview, type LiveStavka,
+  type LivePreview,
 } from '../result-live/result-live-model';
 import { otvoriFaksimil, type FaksimilHandle } from './facsimile-live';
 
-interface SamostalnoOpcije {
-  readonly items: readonly DeskItem<VisualFindingModel>[];
-  readonly planItems: readonly LiveStavka[];
-  readonly repairAvailable: boolean;
-  readonly authoritative: boolean;
-  readonly score: number | null;
-  readonly ceiling: number | null;
-  readonly preview: unknown;
-  readonly storedPages: unknown;
+/** Ulaz stola Z34 (isti nalazi, plan, pregled i strop), da faksimil bez stola ne vidi nista drugo. */
+type UlazZ34 = Pick<Parameters<typeof mountResultLive>[2],
+  'items' | 'planItems' | 'repairAvailable' | 'authoritative' | 'score' | 'ceiling' | 'preview' | 'storedPages'>;
+
+interface SamostalnoOpcije extends UlazZ34 {
   readonly naslov: string | null;
   /** Nalaz koji je bio otvoren na stolu Z8. */
   readonly pocetni: number;

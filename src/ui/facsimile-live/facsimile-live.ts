@@ -21,10 +21,11 @@ import {
   prebaci, vidljiviZahvati,
   type IzgledStranice, type LiveStavka, type TrakaStranica, type UlogaNalaza, type ZahvatPlana,
 } from '../result-live/result-live-model';
+import { mjeraLista, PT_PO_CM, tekstHtml as listHtml, zaokruzi } from './facsimile-live-list';
 import {
   biljeske, duhPravilnika, isjecak, listNalaza, mjernaOznaka, natpisLista, ocitanje, odlomakNakon, ozbiljnostFx,
   planOblika, planRedak, popravakVidljiv, proredOznaka, raspored, redCekanja, sidro, stranice,
-  type FxOdlomak, type FxPreview, type PlanOblika, type Raspored,
+  type FxPreview, type PlanOblika, type Raspored,
 } from './facsimile-live-model';
 
 export interface FaksimilOpcije {
@@ -69,34 +70,16 @@ const FX_TIP: Readonly<Record<Objasnjenje, { readonly icon: string; readonly t: 
   slider: { icon: '⇆', t: 'Prije / poslije', d: 'Ručka preko stranice: lijevo je rad nakon plana popravka, desno kakav je sada. Vuci ručku ili je pomiči strelicama. Jantarno ostaje ono što radiš sam.' },
 };
 
-const PT_PO_CM = 72 / 2.54;
-const ZADANA_STRANICA = { w: 21, h: 29.7 };
 const MIRUJE_MS = 500;
 const TIP_DODIR_MS = 3500;
 const LIST_MS = 560;
-const CSS_PORAVNANJE: Readonly<Record<string, string>> = { lijevo: 'left', desno: 'right', 'u sredini': 'center', obostrano: 'justify' };
-const SERIFNO = ['times', 'serif', 'georgia', 'garamond', 'minion', 'cambria', 'book antiqua', 'palatino'];
-
-/** CSS stog pisma; ime koje nije cisto ime pisma pada na pismo dokumenta. */
-function pismoCss(ime: string | null): string {
-  if (!ime || !/^[\p{L}\p{N} .-]{1,40}$/u.test(ime)) return 'var(--font-doc)';
-  const serif = SERIFNO.some((h) => ime.toLowerCase().includes(h));
-  return `'${ime}', ${serif ? "'Liberation Serif', Georgia, 'Times New Roman', serif" : "Carlito, 'Liberation Sans', Arial, sans-serif"}`;
-}
-
-const zaokruzi = (n: number): string => (Math.round(n * 1000) / 1000).toString();
-
 export function otvoriFaksimil(doc: Document, o: FaksimilOpcije): FaksimilHandle {
   const win = doc.defaultView;
   const esc = o.esc;
   const nalazi = o.nalazi;
   const st = stranice(o.preview, o.traka);
-  const velicina = o.preview?.page && typeof o.preview.page.size === 'object' && o.preview.page.size !== null
-    ? o.preview.page.size as { w?: unknown; h?: unknown } : null;
-  const W = typeof velicina?.w === 'number' && velicina.w > 5 && velicina.w < 60 ? velicina.w : ZADANA_STRANICA.w;
-  const H = typeof velicina?.h === 'number' && velicina.h > 5 && velicina.h < 90 ? velicina.h : ZADANA_STRANICA.h;
-  const cqw = (cm: number): string => `${zaokruzi((cm / W) * 100)}cqw`;
-  const ptu = `${zaokruzi((100 / (W * PT_PO_CM)))}cqw`;
+  const mjera = mjeraLista(o.preview);
+  const { W, H, cqw } = mjera;
   const duh = duhPravilnika(o.stavke, o.zahvati);
   // Prije / poslije samo kad plan nudi vidljivu promjenu (isto pravilo kao "Sada / Nakon plana" u Z34).
   const imaKlizac = o.repairAvailable && vidljiviZahvati(o.stavke, o.zahvati).length > 0;
@@ -180,35 +163,10 @@ export function otvoriFaksimil(doc: Document, o: FaksimilOpcije): FaksimilHandle
     return u.kind === 'zahvat' ? planOblika(stavkeNalaza(pokazan), new Set(u.ruleIds)) : null;
   };
 
-  const stilOdlomka = (p: FxOdlomak): string => [
-    p.pt !== null ? `--fl-pt:${zaokruzi(p.pt)}` : '',
-    p.prored !== null ? `--fl-lh:${zaokruzi(p.prored * 1.15)}` : '',
-    p.poravnanje ? `text-align:${CSS_PORAVNANJE[p.poravnanje]}` : '',
-    p.prije !== null ? `margin-top:calc(${zaokruzi(p.prije)} * var(--fl-ptu))` : '',
-    p.poslije !== null ? `margin-bottom:calc(${zaokruzi(p.poslije)} * var(--fl-ptu))` : '',
-    p.podebljano ? 'font-weight:700' : '',
-    p.kurziv ? 'font-style:italic' : '',
-    p.font ? `font-family:${pismoCss(p.font)}` : '',
-  ].filter(Boolean).join(';');
-
-  const tekstHtml = (
-    odlomci: readonly FxOdlomak[],
-    margine: IzgledStranice['margine'],
-    oznake: ReadonlyMap<number, string>,
-    sloj: 'now' | 'after',
-  ): string => {
-    const m = margine;
-    const pad = m ? `padding:${cqw(m.top)} ${cqw(m.right)} ${cqw(m.bottom)} ${cqw(m.left)}` : '';
-    const font = `font-family:${pismoCss(o.sada.font)}`;
-    const base = o.sada.velicinaPt ?? 12;
-    return `<div class="fl-text${sloj === 'after' ? ' fl-text--after' : ''}" data-fl-text="${sloj}" lang="hr" style="--fl-ptu:${ptu};--fl-pt:${zaokruzi(base)};${font};${pad}">`
-      + odlomci.map((p) => {
-        const hit = oznake.get(p.index);
-        return `<p data-fx-par="${p.razina !== null ? 'h' : 'p'}"${sloj === 'now' ? ` data-fl-p="${p.index}"` : ''}`
-          + `${hit ? ` data-fl-hit="${hit}"` : ''} style="${stilOdlomka(p)}">${esc(p.text)}</p>`;
-      }).join('')
-      + '</div>';
-  };
+  // List je zajednicki s panoom stola Z8 (`facsimile-live-list.ts`); ovdje se dodaju samo stil i mjera rada.
+  type Lista = Parameters<typeof listHtml>;
+  const tekstHtml = (odlomci: Lista[0], margine: Lista[1], oznake: Lista[2], sloj: Lista[3]): string =>
+    listHtml(odlomci, margine, oznake, sloj, o.sada, mjera, esc);
 
   /* ---------------------------------------------------------------- slojevi i objasnjenje */
 
@@ -471,6 +429,8 @@ export function otvoriFaksimil(doc: Document, o: FaksimilOpcije): FaksimilHandle
   const crtajKarticu = (): void => {
     const card = q('[data-fl-card]');
     const f = nalazi[sel];
+    // Rezultat bez ijednog nalaza (F51 a) nema karticu: prazna ploha bi izgledala kao nalaz koji nije stigao.
+    if (card) card.hidden = !f;
     if (!card || !f) { if (card) card.innerHTML = ''; return; }
     const oz = ozbiljnostFx(f, o.autoritativno);
     const u = ulogaOd(sel);
@@ -542,8 +502,11 @@ export function otvoriFaksimil(doc: Document, o: FaksimilOpcije): FaksimilHandle
       ? 'Sve je pregledano. Automatski zahvati su u planu, ručne radiš sam u Wordu.'
       : 'Prekriži svaki nalaz: automatske uključi u plan, ručne označi "Napravit ću sam".'
         + (celije ? ' Jantarna stranica ima nalaz na jednom mjestu.' : '');
+    const karta = celije ? `<div class="fl-tiles" style="--fl-n:${st.ukupno}"${mis ? '' : ' aria-hidden="true"'}>${celije}</div>` : '';
+    // Bez nalaza nema reda cekanja ni upute o prekrizivanju; ostaju stranica i karta stranica.
+    if (!nalazi.length) { sek.innerHTML = '<p class="fl-hint" data-fl-prazno>Nema otvorenih nalaza.</p>' + karta; return; }
     sek.innerHTML = `<div class="fl-qrow"><span class="fl-k" data-fl-count>RED ČEKANJA · ${rc.n} / ${nalazi.length}</span>${stavke}${pecat}</div>`
-      + (celije ? `<div class="fl-tiles" style="--fl-n:${st.ukupno}"${mis ? '' : ' aria-hidden="true"'}>${celije}</div>` : '')
+      + karta
       + `<p class="fl-hint">${esc(uputa)}</p>`
       + nastavi;
   };

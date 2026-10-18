@@ -15,6 +15,7 @@ import { renderResultsCockpit } from '../src/ui/results/results-cockpit';
 import { deskItems } from '../src/ui/results/desk-model';
 import { renderFacsimile } from '../src/preview/render-facsimile';
 import { collectAllPreviewFlags, type PreviewModel } from '../src/preview/preview-anchors';
+import { montirajStranice } from '../src/ui/facsimile-live/stol-stranice';
 
 /** Namjerne razlike Z35 prema Z9. Kljuc je ono sto test mjeri; tekst je razlog. */
 const NAMJERNE_RAZLIKE = {
@@ -144,6 +145,25 @@ async function z35() {
   return { fl, listovi, tocke };
 }
 
+/** Lijevi pano stola Z8 (F51 a): isti listovi Z35, svi jedan ispod drugoga. */
+function stolZ8() {
+  const model = buildVisualResultModel(rezultat() as never);
+  const flags = collectAllPreviewFlags(rezultat());
+  const host = document.createElement('div');
+  const d = montirajStranice(host, { preview: pregled(), storedPages: 3, items: deskItems(model.findings.document, flags), flags, esc: (v) => v });
+  const listovi = [...host.querySelectorAll<HTMLElement>('.fl-page')].map((page) =>
+    [...page.querySelectorAll<HTMLElement>('[data-fl-p]')].map((el): Odlomak => {
+      const st = el.getAttribute('style') ?? '';
+      const calc = (svojstvo: string): string => st.match(new RegExp(`${svojstvo}:calc\\(([\\d.]+) \\* var\\(--fl-ptu\\)\\)`))?.[1] ?? '';
+      return {
+        index: Number(el.dataset.flP), text: el.textContent ?? '', pt: el.style.getPropertyValue('--fl-pt'), align: el.style.textAlign,
+        mt: calc('margin-top'), mb: calc('margin-bottom'), lh: el.style.getPropertyValue('--fl-lh'),
+      };
+    }));
+  const oznaceni = new Set([...host.querySelectorAll<HTMLElement>('[data-fl-hit="nalaz"]')].map((el) => Number(el.dataset.flP)));
+  return { host, listovi, oznaceni, mete: d?.flagTargets };
+}
+
 afterEach(() => { document.body.innerHTML = ''; document.documentElement.removeAttribute('data-fl-open'); });
 
 describe('Z35 prema Z9 nad istim rezultatom', () => {
@@ -177,6 +197,19 @@ describe('Z35 prema Z9 nad istim rezultatom', () => {
     const { tocke } = await z35();
     expect([...tocke].sort((x, y) => x - y)).toEqual([11, 14]);
     for (const t of tocke) expect(oznaceni.has(t), `odlomak ${t}`).toBe(true);
+  });
+
+  it('stol Z8 crta ISTE listove kao Z35 (svi odjednom), a oznake samo na odlomcima koje i Z9 oznacava', async () => {
+    const z35Listovi = (await z35()).listovi;
+    const stol = stolZ8();
+    expect(stol.listovi).toEqual(z35Listovi);
+    expect(stol.host.querySelectorAll('.lekta-fac-page, table, img, sup, [data-fn-id]')).toHaveLength(0);
+    const { oznaceni: z9Oznaceni } = z9();
+    expect([...stol.oznaceni].sort((x, y) => x - y)).toEqual([11, 14]);
+    for (const t of stol.oznaceni) expect(z9Oznaceni.has(t), `odlomak ${t}`).toBe(true);
+    // Tipografska napomena bez nalaza (odlomak 4) dobiva metu za klik, ali ne i oznaku (`samo-nalazi`).
+    expect([...(stol.mete?.values() ?? [])].map((el) => Number(el.dataset.flP))).toContain(4);
+    expect(stol.oznaceni.has(4)).toBe(false);
   });
 
   it('NAMJERNE RAZLIKE se stvarno dogadaju (popis nije tiha iznimka)', async () => {

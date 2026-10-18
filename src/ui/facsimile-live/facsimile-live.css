@@ -151,7 +151,7 @@ html[data-fl-open] { overflow: hidden }
 /* ---------------- raspored ---------------- */
 
 .fl-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 22px; align-items: start }
-.fl-pagecol { display: grid; gap: 10px; min-width: 0 }
+.fl-pagecol { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-width: 0 }
 .fl-notes { display: none }
 .fl-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none }
 .fl-list:empty { display: none }
@@ -199,8 +199,13 @@ html[data-fl-open] { overflow: hidden }
 .fl-nav__b:hover:not([disabled]) { background: color-mix(in srgb, var(--desk-ink) 8%, transparent) }
 .fl-nav__b[disabled] { cursor: default; opacity: .4 }
 
-/* List raste s tekstom umjesto da ga reze: prikaz je priblizan, a sakriven tekst bio bi tiha laz. */
+/* List raste s tekstom umjesto da ga reze: prikaz je priblizan, a sakriven tekst bio bi tiha laz.
+ * SIRINA JE STUPAC, ne omjer: `aspect-ratio` prenosi visinu sadrzaja u min-content sirinu, pa bi
+ * dug list (bez karte, 12 dugih odlomaka) rastegnuo `auto` stupac grida i izasao iz ekrana (48 px na
+ * 360, 435 px u panou stola; tests/ux/facsimile-live.spec.ts). Zato stupci `minmax(0, 1fr)` i sirina
+ * 100 %. Visina i dalje raste s tekstom. */
 .fl-page {
+  width: 100%;
   position: relative;
   container-type: inline-size;
   background: var(--paper);
@@ -504,6 +509,20 @@ button.fl-tile:hover { background: var(--paper) }
   cursor: pointer;
 }
 .fl-go:hover { background: var(--red-on-soft) }
+
+/* Rezultat bez ijednog nalaza nema karticu (F51 a). */
+.fl-card[hidden] { display: none }
+
+/* ---------------- lijevi pano stola Z8 (F51 a) ----------------
+ * Isti listovi kao faksimil, jedan ispod drugoga u panou stola. Pano se ispod 900 px ne crta
+ * (`result-visuals.css`), pa ovdje nema vlastitih tocaka loma. Oznaka nosi samo odlomak nalaza;
+ * aktivno mjesto je ispuna kao `data-fl-hit='sel'` u faksimilu. */
+.fl-stol { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; font-family: var(--mono, monospace) }
+.fl-stol__list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0 }
+.fl-stol__natpis { color: var(--ck-muted, var(--paper-muted)); font-size: 11px; letter-spacing: .08em }
+.fl-stol .fl-page { box-shadow: var(--paper-sh-sm) }
+.fl-stol [data-fl-hit='nalaz'] { background: color-mix(in srgb, var(--red-soft) 40%, transparent); cursor: pointer }
+.fl-stol [data-desk-active] { background: var(--red-soft); box-shadow: 0 0 0 .6cqw var(--red-soft); scroll-margin: 2rem }
 
 /* Dodir (Z37): sve mete najmanje 44 px, i na tabletu. */
 @media (hover: none) {

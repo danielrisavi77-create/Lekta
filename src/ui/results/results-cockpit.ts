@@ -10,7 +10,7 @@ import type { DocumentDnaModel } from '../../results/document-dna-model';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
 import { setSiteChromeScore } from '../../shared/site-chrome';
-import type { DeskItem } from './desk-model';
+import type { DeskFlag, DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
 import { repairPlanHtml } from './repair-plan-view';
@@ -54,13 +54,18 @@ export function isGeneralRepairEntry(action: ResultsCockpitAction): boolean {
 }
 
 /**
- * KOREKTORSKI STOL kao izvor. Ljuska NE zna kako se crta dokument: `mountDocument` joj se
- * predaje, jer je faksimil tezak modul koji se ucitava lijeno, a ovaj bi ga uvoz povukao u
- * graf ekrana rezultata.
+ * KOREKTORSKI STOL kao izvor. `app.ts` ga predaje i kad rezultat nema nijedan nalaz (`items`
+ * prazan): stola tada nema, ali ruta faksimila Z35 i dalje treba pregled (F51 a).
  */
 export interface ResultsCockpitDesk {
   readonly items: readonly DeskItem<VisualFindingModel>[];
-  readonly mountDocument: (host: HTMLElement, signal: AbortSignal) => Promise<DeskDocument | null>;
+  /**
+   * Lijevi pano stola Z8. Bez njega pano crta stranice Z35 iz `live.preview` (lijeni
+   * `desk-document.ts`); testovi ubacuju vlastite mete. Stari Z9 se ovdje vise ne crta (F51 a).
+   */
+  readonly mountDocument?: (host: HTMLElement, signal: AbortSignal) => Promise<DeskDocument | null>;
+  /** Zastavice pregleda kojima `items[].flagIndex` pokazuje mjesto u dokumentu. */
+  readonly flags?: readonly DeskFlag[];
   /**
    * Stavke popravka, u sirovom obliku. Plan se gradi OVDJE, a ne u `app.ts`, iz dva razloga:
    * `app.ts` je na svom budzetu, i klasifikacija pripada sloju rezultata koji vec drzi nalaze.
@@ -315,13 +320,16 @@ export function resultRendererFor(doc: Document): ResultsRenderer {
 }
 
 /**
- * Kartica "Faksimil" u pregledu dokumenta. `true` znaci da se otvara faksimil Z35 (pozivatelj
- * zatvara pregled); `false` znaci da pregled crta stari Z9: prekidac `?resultRenderer=legacy`,
- * rezultat bez stola ili pregled bez teksta koji bi se mogao nacrtati.
+ * Kartica "Faksimil" u pregledu dokumenta. Odluka vlasnika 2026-10-18 (F51 a, "Broj 2"): stari Z9
+ * (`staroZ9`) crta se SAMO iza prekidaca `?resultRenderer=legacy`. Inace kartica otvara faksimil Z35
+ * (uz presudu Z34, stol Z8 ili rezultat bez ijednog nalaza) i pozivatelj zatvara pregled; kad Z35
+ * nema sto nacrtati (pregled bez teksta), kartica to kaze porukom umjesto da padne na Z9.
+ * Gard: `rutaFaksimilaProblems` (`tests/helpers/facsimile-live-guard.ts`).
  */
-export function otvoriRutuFaksimila(mount: HTMLElement | null): boolean {
-  if (!mount || resultRendererFor(mount.ownerDocument) !== 'cockpit') return false;
-  return (mount as HTMLElement & { _faksimil?: () => boolean })._faksimil?.() === true;
+export function otvoriRutuFaksimila(mount: HTMLElement | null, zatvori: () => void, staroZ9: () => void, javi: (poruka: string) => void): void {
+  if (resultRendererFor(mount?.ownerDocument ?? document) === 'legacy') { staroZ9(); return; }
+  if ((mount as (HTMLElement & { _faksimil?: () => boolean }) | null)?._faksimil?.() === true) zatvori();
+  else javi('Faksimil nije dostupan: pregled nema teksta rada.');
 }
 
 export function renderResultsCockpit(mount: HTMLElement, model: VisualResultModel, options: ResultsCockpitOptions): void {
@@ -378,9 +386,11 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // sto obecati, pa se druga polovica recenice izostavlja umjesto da se izmisli brojka.
   const strop = options.repairOutlook?.kind === 'available' ? options.repairOutlook.ceilingScore : null;
   // Ruta faksimila vodi u Z35 samo kad pregled ima tekst koji se moze nacrtati (isti uvjet kao Z34).
-  const odlomci = (stol?.live?.preview as { paragraphs?: ReadonlyArray<{ text?: unknown } | null> } | null | undefined)?.paragraphs;
-  const fxLive = stol?.live && Array.isArray(odlomci)
-    && odlomci.some((p) => typeof p?.text === 'string' && p.text.trim() !== '') ? stol.live : null;
+  // Izvor je `options.desk`, ne `stol`: rezultat bez ijednog nalaza nema stola, a Z35 i dalje ima sto pokazati.
+  const ulaz = options.desk;
+  const odlomci = (ulaz?.live?.preview as { paragraphs?: ReadonlyArray<{ text?: unknown } | null> } | null | undefined)?.paragraphs;
+  const fxLive = ulaz?.live && Array.isArray(odlomci)
+    && odlomci.some((p) => typeof p?.text === 'string' && p.text.trim() !== '') ? ulaz.live : null;
   // OCJENA IDE I U TRAKU (Z15). Kokpit je jedino mjesto koje je vec zna, pa je ovo uzak izlaz
   // prema traki; bez montirane trake je no-op, pa kokpit ne mora znati na kojoj je ruti.
   // NEBODOVAN MODEL NEMA STO POKAZATI U TRAKI: `unscored` (profil bez bodovanih provjera) daje
@@ -488,7 +498,10 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
         planHtml: plan.prazan ? null : repairPlanHtml(plan, escapeHtml),
         plan: plan.prazan ? null : plan,
         // mountDesk odgadja prikaz dok host ne postane vidljiv, ukljucujuci kasniji resize.
-        mountDocument: (host, signal) => stol.mountDocument(host, signal),
+        mountDocument: (host, signal) => stol.mountDocument?.(host, signal)
+          ?? import('./desk-document').then(({ montirajDokumentStola }) => montirajDokumentStola(host, {
+            preview: stol.live?.preview, storedPages: stol.live?.storedPages, items: stol.items, flags: stol.flags ?? [], esc: escapeHtml,
+          }, signal)),
         onAction: (action, opener) => opener ? options.onAction?.(action, opener) : options.onAction?.(action),
       });
     };
@@ -562,8 +575,9 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
 
   // RUTA FAKSIMILA (Z35 zamjenjuje Z9): gumb stola Z8 i kartica "Faksimil" u pregledu (`app.ts`,
   // kroz `otvoriRutuFaksimila`) otvaraju Z35. Kad je Z34 montiran, otvara SVOJ faksimil (plan je
-  // zajednicki); inace Z35 dobiva isti ulaz kao Z34 iz lijenog modula `samostalno.ts`.
-  if (stol && fxLive) {
+  // zajednicki); inace Z35 dobiva isti ulaz kao Z34 iz lijenog modula `samostalno.ts`. Rezultat bez
+  // ijednog nalaza (nema stola) otvara Z35 s praznim redom cekanja (F51 a).
+  if (ulaz && fxLive) {
     const otvori = (opener: HTMLElement | null): boolean => {
       if (drzac._live) return drzac._live.faksimil();
       if (drzac._fx) return true;
@@ -571,8 +585,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
       void import('../facsimile-live/samostalno').then(({ otvoriSamostalno }) => {
         if (drzac._fx !== 'otvara' || drzac._rlToken !== rlToken) return;
         const h = otvoriSamostalno(mount.ownerDocument, {
-          items: stol.items,
-          planItems: stol.planItems ?? [],
+          items: ulaz.items,
+          planItems: ulaz.planItems ?? [],
           repairAvailable: options.repairAvailable,
           authoritative: model.readiness.authoritative,
           score: model.score.kind === 'scored' ? model.score.value : null,
