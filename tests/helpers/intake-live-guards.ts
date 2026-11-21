@@ -237,16 +237,13 @@ export function detekcijaFakultetaProblemi(appIzvor: string, fakultetIzvor: stri
 }
 
 /**
- * PRIGUSEN POKRET I POKRET IZVAN POGLEDA (Z31 za Z32): tragovi olovke se pod OBA oblika
- * prigusenja (sustavni upit i rucni `data-motion="reduce"`) ne prikazuju, linija skeniranja nosi
- * `data-motion-offscreen`, a ui-boot taj atribut stvarno promatra.
+ * POKRET I POKRET IZVAN POGLEDA (redizajn prije bete): stari pokretni tragovi ne smiju se vratiti,
+ * linija skeniranja ima konacan broj prolaza i nosi `data-motion-offscreen` koji ui-boot promatra.
  */
 export function pokretProblemi(css: string, html: string, uiBoot: string): string[] {
   const problemi: string[] = [];
   const cist = css.replace(/\/\*[\s\S]*?\*\//g, ' ');
-  const upit = /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*?)\n\}/.exec(cist)?.[1] ?? '';
-  if (!/\.intake-tragovi\{display:none\}/.test(upit)) problemi.push('tragovi olovke se prikazuju pod prefers-reduced-motion');
-  if (!/:root\[data-motion="reduce"\] \.intake-tragovi\{display:none\}/.test(cist)) problemi.push('tragovi olovke se prikazuju pod rucnim prigusenjem pokreta');
+  if (html.includes('class="intake-tragovi"') || /\.intake-trag(?:ovi)?\b/.test(cist)) problemi.push('pokretni tragovi su se vratili na ulaz');
   if (/animation[^;{}]*infinite/i.test(cist)) problemi.push('beskonacna animacija na ulazu');
   if (!/class="intake-sken"[^>]*data-motion-offscreen/.test(html)) problemi.push('linija skeniranja ne nosi data-motion-offscreen');
   if (!/MOTION_OFFSCREEN_SELECTOR\s*=\s*'[^']*\[data-motion-offscreen\]/.test(uiBoot)) problemi.push('ui-boot ne promatra [data-motion-offscreen]');

@@ -33,7 +33,7 @@ import {
   predodabirFakulteta, procitajIzborUlaza, procitajPostavke, rokZaPovratak, spremnostUlaza,
   veziPotvrduZaSesiju, veziRokZaSesiju, zapisiPotvrdu, zapisiRok, type Predodabir,
 } from '../../shared/intake-choice';
-import { pecatRoka, type RokStanje } from './deadline-stamp';
+import { danaDoRoka, daniRijecju, pecatRoka, type RokStanje } from './deadline-stamp';
 
 /** Stanja kontrolera (`data-intake-state`) u kojima ulaz stvarno cita dokument. */
 const STANJA_CITANJA = new Set(['checking', 'saving', 'ready']);
@@ -99,14 +99,23 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   const potvrdi = el<HTMLButtonElement>(doc, '[data-intake-potvrdi]');
   const promijeni = el<HTMLAnchorElement>(doc, '[data-intake-promijeni]');
   const rokPolje = el<HTMLInputElement>(doc, '[data-intake-rok]');
-  const neznam = el<HTMLInputElement>(doc, '[data-intake-rok-neznam]');
+  const ukloniRok = el<HTMLButtonElement>(doc, '[data-intake-rok-clear]');
+  const sazetakRoka = el<HTMLElement>(doc, '[data-intake-deadline-summary]');
+  const temeKartoteke = [...doc.querySelectorAll<HTMLButtonElement>('[data-intake-topic]')];
+  const paneliKartoteke = [...doc.querySelectorAll<HTMLElement>('[data-intake-topic-panel]')];
   const prigusen = (): boolean => pokretPrigusen(doc);
 
-  const predodabir = predodabirFakulteta(options.search, procitajPostavke());
+  let predodabir = predodabirFakulteta(options.search, procitajPostavke());
   let potvrden = false;
   // Istekao rok iz proslog posjeta se ne vraca: rok je neobavezan kontekst i ne smije se
   // tiho prenijeti na novi dokument.
   let rok: RokStanje = rokZaPovratak(procitajIzborUlaza().rok, danas());
+  // Starija verzija spremala je "Još ne znam" kao zasebno stanje. U novom prikazu prazan datum
+  // znači da rok nije zadan, pa uklanjamo zastarjelu kvačicu iz lokalnog izbora.
+  if (rok.neznam) {
+    rok = { datum: null, neznam: false };
+  }
+  zapisiRok(rok);
   let odabir: ((file: File) => void) | null = null;
   // Zadnja spremljena sesija: rok zadan NAKON spremanja (promjena u debounce prozoru ili dok se
   // cita) mora ici i u mapu `rokSesije` te sesije, ne samo u globalni slot.
@@ -155,6 +164,20 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     if (listFakultet) listFakultet.textContent = potvrden && predodabir ? predodabir.kratko : '';
   };
 
+  const onProfileSaved = (): void => {
+    predodabir = predodabirFakulteta(doc.defaultView?.location.search ?? options.search, procitajPostavke());
+    potvrden = Boolean(predodabir);
+    if (potvrden && predodabir) {
+      zapisiPotvrdu({
+        unit: predodabir.unit, program: predodabir.program, workType: predodabir.workType, sesija: null, at: Date.now(),
+      });
+    } else {
+      zapisiPotvrdu(null);
+    }
+    osvjeziFakultet();
+    osvjeziVrata();
+  };
+
   const onPotvrdi = (): void => {
     if (!predodabir) return;
     potvrden = !potvrden;
@@ -169,10 +192,18 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   let zadnjiPecatRoka: string | null = null;
   const osvjeziRok = (animiraj: boolean): void => {
     if (rokPolje) {
-      rokPolje.disabled = rok.neznam;
+      rokPolje.disabled = false;
       if (rokPolje.value !== (rok.datum ?? '')) rokPolje.value = rok.datum ?? '';
     }
-    if (neznam) neznam.checked = rok.neznam;
+    if (ukloniRok) ukloniRok.hidden = !rok.datum;
+    if (sazetakRoka) {
+      const dana = rok.datum ? danaDoRoka(rok.datum, danas()) : null;
+      sazetakRoka.textContent = dana === null
+        ? 'Rok još nije unesen'
+        : dana < 0
+          ? `Rok je prošao prije ${daniRijecju(Math.abs(dana))}`
+          : dana === 0 ? 'Rok je danas' : `${daniRijecju(dana)} do roka`;
+    }
     const tekst = pecatRoka(rok, danas());
     if (rokPecat) {
       rokPecat.textContent = tekst ?? '';
@@ -197,13 +228,40 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     osvjeziVrata();
   };
 
-  const onNeznam = (): void => {
-    const oznaceno = Boolean(neznam?.checked);
-    rok = oznaceno ? { datum: null, neznam: true } : { datum: rokPolje?.value || null, neznam: false };
+  const onUkloniRok = (): void => {
+    rok = { datum: null, neznam: false };
     zapisiRok(rok);
     if (spremljenaSesija) veziRokZaSesiju(spremljenaSesija, rok);
     osvjeziRok(true);
     osvjeziVrata();
+    rokPolje?.focus();
+  };
+
+  const odaberiTemu = (tema: string, fokusiraj = false): void => {
+    for (const tab of temeKartoteke) {
+      const aktivan = tab.dataset.intakeTopic === tema;
+      tab.setAttribute('aria-selected', aktivan ? 'true' : 'false');
+      tab.tabIndex = aktivan ? 0 : -1;
+      if (aktivan && fokusiraj) tab.focus();
+    }
+    for (const panel of paneliKartoteke) panel.hidden = panel.dataset.intakeTopicPanel !== tema;
+  };
+  const onTemaKlik = (event: Event): void => {
+    const tab = (event.currentTarget as HTMLButtonElement | null);
+    if (tab?.dataset.intakeTopic) odaberiTemu(tab.dataset.intakeTopic);
+  };
+  const onTemaTipka = (event: KeyboardEvent): void => {
+    const index = temeKartoteke.indexOf(event.currentTarget as HTMLButtonElement);
+    if (index < 0 || temeKartoteke.length < 2) return;
+    let next = index;
+    if (event.key === 'ArrowRight') next = (index + 1) % temeKartoteke.length;
+    else if (event.key === 'ArrowLeft') next = (index - 1 + temeKartoteke.length) % temeKartoteke.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = temeKartoteke.length - 1;
+    else return;
+    event.preventDefault();
+    const tema = temeKartoteke[next]?.dataset.intakeTopic;
+    if (tema) odaberiTemu(tema, true);
   };
 
   // --- pecat provjere --------------------------------------------------------------------
@@ -274,9 +332,14 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   }
 
   potvrdi?.addEventListener('click', onPotvrdi);
+  doc.addEventListener('lekta:profile-saved', onProfileSaved);
   rokPolje?.addEventListener('change', onRok);
   rokPolje?.addEventListener('input', onRok);
-  neznam?.addEventListener('change', onNeznam);
+  ukloniRok?.addEventListener('click', onUkloniRok);
+  for (const tab of temeKartoteke) {
+    tab.addEventListener('click', onTemaKlik);
+    tab.addEventListener('keydown', onTemaTipka);
+  }
   doc.addEventListener('dragenter', onDragEnter);
   doc.addEventListener('dragleave', onDragLeave);
   doc.addEventListener('dragover', onDragOver);
@@ -303,9 +366,14 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
       stani();
       promatrac?.disconnect();
       potvrdi?.removeEventListener('click', onPotvrdi);
+      doc.removeEventListener('lekta:profile-saved', onProfileSaved);
       rokPolje?.removeEventListener('change', onRok);
       rokPolje?.removeEventListener('input', onRok);
-      neznam?.removeEventListener('change', onNeznam);
+      ukloniRok?.removeEventListener('click', onUkloniRok);
+      for (const tab of temeKartoteke) {
+        tab.removeEventListener('click', onTemaKlik);
+        tab.removeEventListener('keydown', onTemaTipka);
+      }
       doc.removeEventListener('dragenter', onDragEnter);
       doc.removeEventListener('dragleave', onDragLeave);
       doc.removeEventListener('dragover', onDragOver);

@@ -114,13 +114,13 @@ function decodeHtmlEntities(value) {
 export const PRIMARY_ORIGIN = 'https://lekta.hr';
 
 /**
- * public/sitemap.xml i public/robots.txt nose PRIMARY_ORIGIN (ili stari token RETIRED_ORIGIN).
+ * publicni sitemap indeks, njegova stranica i robots.txt nose PRIMARY_ORIGIN (ili stari token RETIRED_ORIGIN).
  * Vite ih kopira nepromijenjene, pa ih build uskladjuje sa stvarnim originom builda: staging
  * build (LEKTA_SITE_ORIGIN=https://lekta-staging.netlify.app) inace oglasava produkciju i pada
  * na gardu #7 u verify-deploy-dist. Origin koji nije javni (staging, preview) uz to dobiva
  * `Disallow: /`, da ga trazilice ne indeksiraju (Codex nalaz 1 na #273).
  *
- * @param {string} name ime datoteke u dist/ (`sitemap.xml` ili `robots.txt`)
+ * @param {string} name ime SEO datoteke u dist/ (`sitemap*.xml` ili `robots.txt`)
  * @param {string} source sadrzaj
  * @param {string} siteOrigin origin builda, bez zavrsne kose crte
  * @returns {string}

@@ -19,17 +19,45 @@ import { expect, type Locator, type Page } from '@playwright/test';
  * protokol, mimo CSS-a.
  *
  * LIJEK NIJE CEKANJE NA SAT nego uklanjanje potrebe za tudjim skrolom: metu sami dovedemo u vidno
- * polje `behavior: 'instant'` (izricito gazi `scroll-behavior`), pa pricekamo da se polozaj skrola
- * ne mijenja kroz dva uzastopna kadra. Playwright tada zatekne metu vec u vidnom polju i ne
- * pokrece vlastiti skrol.
+ * polje `behavior: 'instant'` (izricito gazi `scroll-behavior`), pricekamo miran pravokutnik i
+ * stvarni hit-target kroz dva kadra, pa koristimo misji klik koji ne pokrece dodatno automatsko
+ * skrolanje.
  */
 export async function klikniBezSkrolUtrke(page: Page, meta: Locator): Promise<void> {
   await expect(meta).toBeVisible();
+  await expect(meta).toBeEnabled();
   await meta.evaluate((el) => {
-    el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' as ScrollBehavior });
+    el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' as ScrollBehavior });
   });
   await cekajMirovanjeSkrola(page);
-  await meta.click();
+  // `locator.click()` automatski skrola i kad je meta vec vidljiva. U WebKitu je taj drugi skrol
+  // znao pomaknuti stranicu izmedju pritiska i otpustanja: klik je zavrsio nad sticky zaglavljem,
+  // a potvrda profila ili kartica nisu reagirali. Provjeri stvarni hit-target kroz dva kadra pa
+  // posalji obican misji klik na stabilnu tocku; ovo nije `force` ni DOM `dispatchEvent`.
+  const tocka = await meta.evaluate(async (el) => {
+    const rok = performance.now() + 10_000;
+    let prethodno = '';
+    let mirniKadrovi = 0;
+    while (performance.now() < rok) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      if (!el.isConnected) throw new Error('Meta klika je uklonjena prije klika.');
+      const pravokutnik = el.getBoundingClientRect();
+      const x = pravokutnik.left + pravokutnik.width / 2;
+      const y = pravokutnik.top + pravokutnik.height / 2;
+      const vidljiva = pravokutnik.width > 0 && pravokutnik.height > 0
+        && x >= 0 && x < window.innerWidth && y >= 0 && y < window.innerHeight;
+      const pogodak = document.elementFromPoint(x, y);
+      const primaKlik = Boolean(pogodak && (pogodak === el || el.contains(pogodak)));
+      const stanje = [pravokutnik.left, pravokutnik.top, pravokutnik.width, pravokutnik.height,
+        window.scrollX, window.scrollY, vidljiva, primaKlik].map((vrijednost) => Math.round(Number(vrijednost) * 100) / 100).join(':');
+      if (vidljiva && primaKlik && stanje === prethodno) mirniKadrovi += 1;
+      else mirniKadrovi = 0;
+      if (mirniKadrovi >= 1) return { x, y };
+      prethodno = stanje;
+    }
+    throw new Error('Meta klika nije ostala mirna i dostupna za stvarni misji klik.');
+  });
+  await page.mouse.click(tocka.x, tocka.y);
 }
 
 /**

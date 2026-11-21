@@ -2,7 +2,7 @@
 
 Web aplikacija (Vite + TypeScript) koja analizira `.docx` akademske radove i provjerava
 oblikovanje, strukturu, opseg i citiranje prema sluzbenim profilima hrvatskih visokih
-ucilista.
+ucilista. Službena stranica: [lekta.hr](https://lekta.hr).
 
 ## Sto je lokalno, a sto nije
 

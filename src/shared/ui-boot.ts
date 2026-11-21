@@ -39,7 +39,7 @@ import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from './display-prefs';
 import { setupPremiumVisuals } from './premium-visuals';
 import { createFrameCoalescer } from './frame-coalescer';
 import { shouldDeferReveal } from './reveal-policy';
-import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, HelpCircle, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 } from 'lucide';
 
 // Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
 // nema spremljenu temu, postavi data-theme="dark" prije boota, pa #themeBtn preklopnik radi
@@ -80,7 +80,7 @@ function motionReady(): Promise<any> {
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, HelpCircle, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {

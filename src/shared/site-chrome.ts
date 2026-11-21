@@ -146,8 +146,8 @@ export function siteChromeProfileNote(): string {
   return `${n.toLocaleString('hr-HR')} ${hrPlural(n, 'profil', 'profila', 'profila')}`;
 }
 
-/** Bez potvrđenog profila traka je status, ne lažni aktivni CTA; profil se otkriva iz rada. */
-export const SITE_CHROME_PLATE_EMPTY = 'Profil: automatski';
+/** Bez odabira profila traka ostaje jasan poziv za odabir. */
+export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
 
 /**
  * NATPIS MJEDENE PLOCICE (F8, odluka 2026-09-23): "FPZG · Dipl.".
@@ -214,12 +214,13 @@ export function siteChromeNote(kind: string): string | null {
 /**
  * Upise natpis plocice nad POSTOJECIM markupom. Staticki natpis je "Odaberi profil", pa stranica
  * bez JavaScripta ne tvrdi profil koji ne moze procitati; s JS-om se natpis zamijeni kraticom.
- * `aria-disabled` i `title="Uskoro"` ostaju NETAKNUTI (odluka F8: ladica Z13 ne postoji).
  */
 function fillPlate(root: ParentNode): void {
   const slot = root.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
   if (!slot) return;
-  slot.textContent = siteChromePlateFromStorage();
+  const label = siteChromePlateFromStorage();
+  slot.textContent = label;
+  slot.closest<HTMLElement>('[data-site-chrome-profile]')?.toggleAttribute('data-profile-selected', label !== SITE_CHROME_PLATE_EMPTY);
 }
 
 function fillNotes(root: ParentNode): void {
@@ -417,6 +418,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
   const btn = doc.getElementById('mobileMenuBtn');
   const sheet = doc.getElementById('mobileNav');
   if (!btn || !sheet) return;
+  doc.querySelector<HTMLElement>('[data-site-chrome]')?.setAttribute('data-site-menu-wired', '');
   btn.setAttribute('aria-expanded', 'false');
   btn.setAttribute('aria-controls', 'mobileNav');
   const zatvori = (vratiFokus: boolean): void => {
@@ -435,7 +437,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
     if (sheet.classList.contains('open')) zatvori(true); else otvori();
   }, { signal });
   sheet.addEventListener('click', (event) => {
-    const meta = (event.target as HTMLElement | null)?.closest('a, [data-display-open]');
+    const meta = (event.target as HTMLElement | null)?.closest('a, [data-display-open], [data-site-command]');
     if (meta) zatvori(false);
   }, { signal });
   doc.addEventListener('keydown', (event) => {
@@ -446,6 +448,46 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
     const target = event.target as HTMLElement | null;
     if (target && (sheet.contains(target) || btn.contains(target))) return;
     zatvori(false);
+  }, { signal });
+}
+
+/** Kazalo otvara samo javne rute koje su u izdanju; upit pretražuje njihov stvarni naziv i opis. */
+function wireSiteCommand(doc: Document, signal: AbortSignal): void {
+  const triggers = [...doc.querySelectorAll<HTMLButtonElement>('[data-site-command]')];
+  if (!triggers.length) return;
+  const open = (trigger: HTMLButtonElement): void => {
+    void import('./site-command-dialog').then(({ openSiteCommandDialog }) => {
+      if (!signal.aborted) openSiteCommandDialog(doc, trigger);
+    });
+  };
+  triggers.forEach((trigger) => trigger.addEventListener('click', () => open(trigger), { signal }));
+  doc.addEventListener('keydown', (event) => {
+    const key = event as KeyboardEvent;
+    if ((key.ctrlKey || key.metaKey) && key.key.toLowerCase() === 'k') { key.preventDefault(); open(triggers[0]!); }
+  }, { signal });
+}
+
+/** Profilska pločica otvara lagani, lijeno učitani izbor; `/rad/` koristi postojeći birač. */
+function wireSiteProfile(doc: Document, chrome: HTMLElement, signal: AbortSignal): void {
+  const trigger = chrome.querySelector<HTMLElement>('[data-site-chrome-profile]');
+  if (!trigger || chrome.dataset.siteChrome === 'workspace') return;
+  trigger.removeAttribute('aria-disabled');
+  trigger.removeAttribute('title');
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.addEventListener('click', () => {
+    void import('./site-profile-drawer')
+      .then(({ openSiteProfileDrawer }) => {
+        if (signal.aborted) return;
+        openSiteProfileDrawer(doc, trigger, (selection) => {
+          setSiteChromePlate(doc);
+          doc.dispatchEvent(new CustomEvent('lekta:profile-saved', { detail: selection }));
+        });
+      })
+      .catch(() => {
+        // Nedostupan picker ne smije prekinuti upload ni navesti da je profil spremljen.
+        trigger.setAttribute('aria-expanded', 'false');
+      });
   }, { signal });
 }
 
@@ -536,6 +578,8 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
 
   wireSiteLamp(doc, signal);
   wireSiteMenu(doc, signal);
+  wireSiteCommand(doc, signal);
+  wireSiteProfile(doc, chrome, signal);
 
   return {
     refresh,
@@ -574,7 +618,9 @@ export function setSiteChromePlate(doc: Document): void {
   const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]');
   const slot = chrome?.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
   if (!slot) return;
-  slot.textContent = siteChromePlateFromStorage();
+  const label = siteChromePlateFromStorage();
+  slot.textContent = label;
+  slot.closest<HTMLElement>('[data-site-chrome-profile]')?.toggleAttribute('data-profile-selected', label !== SITE_CHROME_PLATE_EMPTY);
 }
 
 /**

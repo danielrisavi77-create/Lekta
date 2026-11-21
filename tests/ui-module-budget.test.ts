@@ -148,7 +148,10 @@ function bajtova(rel: string): number {
 //   (skrijNapomenu umjesto skrivanja znacke), C4 preskace detekciju samo bez brave, "Prebaci"
 //   ponovi detekciju umjesto slanja change obrascu                                  +154 -> 357398
 // Logika (brava, odluka uz sesiju, tekst napomene) zivi u confirmed-faculty.ts i intake-choice.ts.
-const BUDZET_APP = 357398;
+// PR #368 NAKON SPAJANJA S MASTEROM (2026-11-21): 357398 -> 356940, dakle -458 B, izmjereno (bez CR).
+//   spojeni app.ts (master + redizajn ulaza, aria-expanded okidaca profila)          357560
+//   list profila i okidac iz app.ts u src/ui/profile-sheet.ts                        -620 -> 356940
+const BUDZET_APP = 356940;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

@@ -574,7 +574,7 @@ describe('Z15 mobilni list: otvaranje, Esc i fokus', () => {
     // Posrednik je UKLONJEN iz modula, ne ostavljen kao rezerva (Z15 pravilo).
     const modul = read('src/shared/site-chrome.ts');
     expect(modul).not.toContain('function wireDisplayProxy');
-    expect(modul).toContain("'a, [data-display-open]'");
+    expect(modul).toContain("'a, [data-display-open], [data-site-command]'");
   });
 });
 
@@ -985,15 +985,16 @@ describe('F8 plocica profila: kratica iz pecenog indeksa', () => {
     expect(siteChromePlateLabel({ unit: 'fpzg', workType: 'nepoznato' })).toBe('FPZG');
   });
 
-  it('montaza upise natpis iz pohrane, a aria-disabled i "Uskoro" ostaju do Z13', () => {
+  it('montaza upise natpis iz pohrane, a odabir profila je dostupna kontrola', () => {
     localStorage.setItem('lekta.preferences.v2', JSON.stringify({ unit: 'fpzg', workType: 'graduate' }));
     const doc = dom(zaglavlje(read('alati.html')));
     mountSiteChrome(doc);
     const plate = doc.querySelector<HTMLElement>('[data-site-chrome-profile]')!;
     expect(plate.textContent).toContain('FPZG · Dipl.');
-    // Klik ostaje bez ucinka do ladice Z13; odluka F8 to izricito cuva.
-    expect(plate.getAttribute('aria-disabled')).toBe('true');
-    expect(plate.getAttribute('title')).toBe('Uskoro');
+    expect(plate.getAttribute('aria-disabled')).toBeNull();
+    expect(plate.getAttribute('title')).toBeNull();
+    expect(plate.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(plate.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('bez pohrane montaza ostavlja zamjenski natpis, ne prazan gumb', () => {

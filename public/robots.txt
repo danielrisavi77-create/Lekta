@@ -2,6 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://lekta.hr/sitemap.xml
-Sitemap: https://lekta.hr/alati/sitemap-alati.xml
-Sitemap: https://lekta.hr/alati/sitemap-naslovnica.xml
-Sitemap: https://lekta.hr/sitemap-fakulteti.xml
