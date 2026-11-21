@@ -95,4 +95,4 @@ popravak vraca ulazne bajtove i prazan changelog.
 - `tests/composed-profile.test.ts`
 - `tests/conformance/composed.test.ts`
 
-Netrivijalna promjena trazi adversarijalni pregled drugog alata prije commita.
+Adversarijalni pregled drugog alata je opcionalan (odluka vlasnika 2026-11-21); nalaz je advisory.

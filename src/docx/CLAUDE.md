@@ -46,4 +46,4 @@ npm run verify:word:worst
 Za TOC promjene obvezan je `npm run verify:word:toc`. `OpenAndRepair=false` je dio
 ugovora. Preskocena Word provjera nije prolaz.
 
-Netrivijalna promjena trazi adversarijalni pregled drugog alata prije commita.
+Adversarijalni pregled drugog alata je opcionalan (odluka vlasnika 2026-11-21); nalaz je advisory.

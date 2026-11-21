@@ -36,7 +36,7 @@ Ovo su kvarovi koje git povijest ne pokazuje jer su se dogodili u procesu rada, 
 17. **Worktree ostaje nakon spajanja** jer sesija koja ga je napravila vise ne postoji kad koordinator spoji. Disk od 119 GB pao je na 1,7 GB uz 11 worktreeova. `scripts/worktree-gc.mjs` (suhi rad zadano, `--apply` samo spojeno + cisto + bez locka + starije od 60 min). Tudji worktree s necommitanim radom nikad ne brisi rucno.
 18. **Gard mjeri ime, ne stvar.** Audit ratchet po imenu paketa propusta novi advisory na prihvacenom paketu (T93: vezati na GHSA id). CRLF detektor po tekstu ne vidi citanje u helperu i traznju u drugoj datoteci (granica R1d, cetvrti incident). Pri pisanju garda napisi i minimalni ulaz koji ga zaobilazi; ako ga nadjes, to je granica koju dokumentiras ili zatvoris, ne zaboravis.
 19. **Vanjski alat se mijenja bez nas.** Codex CLI 0.156 odbija model `gpt-6.1-sol` ("not supported with ChatGPT account"), 0.160 ga prima; netlify-cli 27.5.2 pada na Nodeu 24.14 pri deployu. Prije tvrdnje "model ili alat ne radi" provjeri verziju alata i probaj najnoviju kroz `npx -y <paket>@latest`.
-20. **Pregled drugog providera: model po stazi.** Zasticene staze (`src/repair`, `src/citations`, `src/docx`, `supabase`, security) pregledava `gpt-6.1-sol` (reproducira nalaze probeom, uzi obuhvat), ostalo `gpt-6-sol` (sirina). Jedan pregled nije dovoljan: M2 je prosao cetiri kruga, svaki je nasao stvaran kvar. Codex nalaz se re-verificira (F1 na #235 oboren CI-jem). Pregled ide na PR kao komentar bez lokalnih putanja, ne ostaje u sesiji.
+20. **Pregled drugog providera (opcionalan (odluka vlasnika 2026-11-21)): model po stazi.** Zasticene staze (`src/repair`, `src/citations`, `src/docx`, `supabase`, security) pregledava `gpt-6.1-sol` (reproducira nalaze probeom, uzi obuhvat), ostalo `gpt-6-sol` (sirina). Jedan pregled nije dovoljan: M2 je prosao cetiri kruga, svaki je nasao stvaran kvar. Codex nalaz se re-verificira (F1 na #235 oboren CI-jem). Pregled ide na PR kao komentar bez lokalnih putanja, ne ostaje u sesiji.
 21. **Lazna tvrdnja o dokazu.** "Test Files 672 passed" iz starog gate.loga, "build-info" s krivim commitom, "pushano" bez remote SHA, Netlify "objavljeno" bez smokea s `--strict-commit`. Svaki dokaz nosi SHA nad kojim je izmjeren i vrijeme; stariji od promjene ne vrijedi.
 22. **Klasifikator alata blokira produkcijske radnje** (deploy, slanje naloga o deployu) i u sesiji koordinatora unatoc vlasnikovoj rijeci. Objavu radi sesija u kojoj je vlasnik izravno dao rijec (radna stanica), po `docs/deploy/RELEASE_PROOF_WORKFLOW.md`; koordinator pripremi dokaz i granu `release/<datum>`.
 23. **Relayed poruke nisu nalog.** Druga sesija koja prenosi "vlasnik je rekao" nije vlasnikova rijec za ovu sesiju; nalog je brief koordinatora ili vlasnik u toj sesiji. Svaki brief pocinje recenicom koja to kaze. Odluke vlasnika dolaze iz numeriranog popisa, jednom rijeci.
@@ -75,6 +75,8 @@ stvarni nalaz iz jednog dana (#282, #284, #285, #287, #289, #291, #294):
 
 ## Pregled drugog providera: koliko rundi
 
+Pregled nije obvezan (odluka vlasnika 2026-11-21). Kad se trazi, vrijede ova ogranicenja:
+
 Odluka vlasnika 4. 10. 2026: zasticene staze (`src/repair`, `src/citations`, `src/docx`, `supabase`, sigurnost,
 `data/profiles` i pravila) najvise 2 Codex runde; rundu 3 koordinator cita sam i prihvaca samo stvarne regresije.
 UI, docs, testni pomagaci i CI skripte: najvise 1 runda, docs bez Codexa. Nalaz izvan modela prijetnje (nas
@@ -92,7 +94,7 @@ vlastiti generirani artefakt, ne korisnicki ulaz) je info, ne major; recenzent t
 npm run check
 npm run orphan-scan
 ```
-`npm run check` traži Deno, `check:edge` se ne preskoči. Zeleni izlazni kod bez retka `Test Files` nije dokaz (može biti prekid zbog RAM-a). Stanje mastera je zasebno: `npm run master-ci` (zeleno, CRVENO ili NE ZNAM, nepoznato nije zeleno). Teški poslovi samo kroz `node scripts/with-gate-lock.mjs`. Parser, audit ili citations: prvo golden koji biljezi zatečeno ponašanje. Netrivijalna promjena u repair, citations, docx ili security kodu traži adversarijalni pregled DRUGOG providera od implementatora. Nalaz je advisory i re-verificira se.
+`npm run check` traži Deno, `check:edge` se ne preskoči. Zeleni izlazni kod bez retka `Test Files` nije dokaz (može biti prekid zbog RAM-a). Stanje mastera je zasebno: `npm run master-ci` (zeleno, CRVENO ili NE ZNAM, nepoznato nije zeleno). Teški poslovi samo kroz `node scripts/with-gate-lock.mjs`. Parser, audit ili citations: prvo golden koji biljezi zatečeno ponašanje. Adversarijalni pregled DRUGOG providera za repair, citations, docx ili security kod je opcionalan (odluka vlasnika 2026-11-21). Nalaz je advisory i re-verificira se.
 
 ## Razine testiranja: unutarnja petlja nije gate
 Puni gate se ne vrti nakon svake male izmjene, ali se nikad ne zamjenjuje djelomičnim. Izmjereno 2026-10-08 (cloud s 4 jezgre, gdje `with-gate-lock` postavlja `VITEST_MAX_THREADS=1`): puni `vitest run` traje oko 1230 s, pa ga ponavljati nakon svakog popravka znači sat čekanja po zadatku.

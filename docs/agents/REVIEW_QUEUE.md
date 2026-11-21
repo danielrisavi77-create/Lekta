@@ -11,7 +11,7 @@ test: `tests/review-queue.test.ts`.
 | `grok-review` | Grok CLI | `grok-4.6`, samo alati `read_file,list_dir,grep`, sandbox read-only |
 | `codex-review` | Codex CLI | `gpt-6-sol`; `gpt-6.1-sol` ako delta dira `protectedPaths` |
 
-Oznake moraju postojati u repozitoriju. Pregled mora doci od drugog providera od implementatora
+Oznake moraju postojati u repozitoriju. Pregled je opcionalan (odluka vlasnika 2026-11-21); kad se trazi, mora doci od drugog providera od implementatora
 (Grok za Codex/Claude kod, Codex za Claudeov kod). Na zasticenoj delti Grok je samo trece misljenje
 uz Codex (`config/agent-routing.json`, `protectedReviewNote`); komentar to navodi.
 

@@ -33,10 +33,10 @@ radnje koje CLAUDE.md, "Implementatorske sesije", navodi kao samo vlasnikove. Na
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
-Pregled treba drugi provider (razlicit CLI `command`): Astra za Opus/Sonnet, Fable za Sol,
+Pregled je opcionalan (odluka vlasnika 2026-11-21); kad se trazi, treba drugi provider (razlicit CLI `command`): Astra za Opus/Sonnet, Fable za Sol,
 Grok za Codex/Claude implementacije, a Codex/Claude za Build. Isti provider (npr. Grok pregleda
-Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a ostaje obavezan
-adversarijalni pregled prema AGENTS.md.
+Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a adversarijalni pregled je
+preporucen, ali nije obvezan.
 
 ## Pocetak
 

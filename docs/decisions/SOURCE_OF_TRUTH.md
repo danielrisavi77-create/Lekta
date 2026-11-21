@@ -65,8 +65,8 @@ vezani uz snimku i nikad nisu dokaz.
 Granica povjerenja registra (odluka 2026-10-04): `ocrTranscript` upisuje samo vlasnik ili
 covjek kojeg vlasnik imenuje, nakon sto je prijepis usporedio sa snimkom. `verifiedBy` je ime
 te osobe, nikad ime modela ili sesije. Agenti `ocrTranscript` ne upisuju i ne mijenjaju; zapis
-ulazi samo kroz PR u kojem je vidljiv u diffu registra i prolazi pregled drugog providera. Gard
-provjerava samo da potvrda postoji i da hash tijela odgovara; tko ju je dao, provjerava pregled.
+ulazi samo kroz PR u kojem je vidljiv u diffu registra. Gard
+provjerava samo da potvrda postoji i da hash tijela odgovara; tko ju je dao, provjerava vlasnik pri spajanju.
 
 Neregistrirani URL-ovi ostaju u
 `data/programs/upisnik-evidence-snapshot-ratchet.json`; strop je 380 zapisa

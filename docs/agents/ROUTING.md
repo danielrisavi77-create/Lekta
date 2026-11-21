@@ -38,7 +38,7 @@ legacy zadatke bez scopea.
   na `claude-fable-5-1` u `config/agent-routing.json`.
 - **Implementator** (Opus, Sonnet, Sol, Build): dodijeljena implementacija u vlastitom
   worktreeu i dokazi (testovi, gate ishod).
-- **Recenzent**: uvijek drugi provider od implementatora (vidi "Pravilo drugog providera"
+- **Recenzent** (opcionalan (odluka vlasnika 2026-11-21)): kad se pokrene, uvijek drugi provider od implementatora (vidi "Pravilo drugog providera"
   nize).
 - **Gate**: automatska provjera (lint, testovi, build); polje `gate.provider` u routingu je
   `"none"` jer gate ne zove model.
@@ -97,7 +97,7 @@ vrijede samo kad config ne postoji ili nema ulogu. B1 ih ne mijenja, jer je conf
 
 ## Pravilo drugog providera
 
-Recenzent nikad nije isti provider kao implementator (`review.provider !== implement.provider`
+Pregled sam po sebi nije obvezan (odluka vlasnika 2026-11-21). Kad se pokrene, recenzent nikad nije isti provider kao implementator (`review.provider !== implement.provider`
 za svaku kombinaciju velicine i zasticenosti u `routing`). Kad Codex nije dostupan (Windows
 sandbox lokalno je read-only/review, Codex implementacija ide u cloud), routing pad-bekira na
 Claude, ali s DRUGIM modelom od implementatora; to je eksplicitno polje `reviewFallback` uz
@@ -139,9 +139,8 @@ datoteke), a lean skripta nosi doslovnu kopiju bloka `DIJELJENO:select-route`;
 ## Zasticena podrucja
 
 `src/repair`, `src/citations`, `src/docx`, `supabase` i security kod uvijek voze u `mode:
-"full"` routing, bez obzira na velicinu zadatka (S/M/L). To je odraz CLAUDE.md pravila da
-netrivijalne promjene u tim podrucjima traze adversarijalni pregled drugog providera prije
-commita; routing config to modelira eksplicitnim `protectedPaths` popisom.
+"full"` routing, bez obzira na velicinu zadatka (S/M/L). Adversarijalni pregled drugog providera
+za ta podrucja je opcionalan (odluka vlasnika 2026-11-21); routing config to modelira eksplicitnim `protectedPaths` popisom.
 
 ## Grok botovi
 

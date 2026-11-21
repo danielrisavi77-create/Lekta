@@ -75,7 +75,7 @@ odjeljke `PROJECT_RULES.md`/scoped uputa. Rucni runner sprema usage u
   zadatak u ISTOM ticku i prosljedjuje to `scripts/agents/cli.mjs prepare` kroz nove, strogo opcionalne
   opcije `--override-status in_review --override-implementer <agent>`. `prepareJob` ih primjenjuje samo u
   `review` grani; `implement` i dalje cita sirovi status iz reda, pa override nije put kojim bi se zaobisla
-  provjera spremnosti. Pravilo "pregled trazi drugog providera" i dalje vrijedi. Bez tih opcija je rucni tok
+  provjera spremnosti. Kad se pregled trazi, i dalje ga radi drugi provider (pregled je opcionalan od 2026-11-21). Bez tih opcija je rucni tok
   `npm run agents prepare/run` nepromijenjen. Kad kontroler nema zapis o implementatoru (npr. tick koji nije
   sam odradio implementaciju), pregled je `blocked` uz `implementer_unknown`; implementator se ne pogadja,
   jer bi pogodak mogao biti isti provider kao recenzent i tiho ugasiti pravilo o drugom provideru.
