@@ -79,6 +79,15 @@ describe('fetchRepairJobs', () => {
     expect(jobs).toHaveLength(1);
     expect(jobs[0].workType).toBe('zavrsni');
   });
+  it('prosljeđuje signal prekida na PostgREST zahtjev', async () => {
+    const controller = new AbortController();
+    let seenSignal: AbortSignal | null = null;
+    await fetchRepairJobs(config, 'user-jwt', async (_url, init) => {
+      seenSignal = init?.signal as AbortSignal;
+      return res(200, []);
+    }, controller.signal);
+    expect(seenSignal).toBe(controller.signal);
+  });
   it('ne-200 -> baca', async () => {
     await expect(fetchRepairJobs(config, 'jwt', async () => res(401, {}))).rejects.toThrow();
   });
