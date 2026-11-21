@@ -1,9 +1,10 @@
 {
   "businessName": "Lekta",
+  "providerRegistered": false,
   "contactEmail": "support@lekta.hr",
-  "phone": "",
+  "phone": "097 6570 399",
   "privacyController": "Daniel Rišavi",
-  "oib": "",
+  "oib": "74684415764",
   "address": "Čakovečka ulica 15, Sesvete",
   "retentionDaysOrders": 30,
   "retentionDaysLogs": 90

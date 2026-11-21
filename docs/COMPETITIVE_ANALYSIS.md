@@ -191,4 +191,4 @@ je vec priznato u samoj analizi (provjera `Zahtjevi za rucnu zavrsnu provjeru`).
   klijent": ako vrata integriteta opale, stari klijent ne poznaje `integrity_failed` pa padne na
   genericnu granu i ispise "nedostaje docxBase64". Nijedan pokvaren dokument se pritom ne isporucuje
   i nista se ne naplacuje, ali je poruka korisniku besmislena. Vrijedi samo za rijedak put; uklanja
-  se prvim objavljivanjem klijenta (korak E runbooka, Netlify objava je rucna).
+  se prvim objavljivanjem klijenta kroz vlasnikov kontrolirani GitHub Actions release workflow.

@@ -14,7 +14,7 @@ popravak za svakog novog korisnika.
 | --- | --- | --- |
 | Supabase projekt | `bnyemcnsphlitjradrst` | `zrrjttizjyfcxmcpgzml` |
 | Netlify site | `lekta-staging.netlify.app` | `lektahr.netlify.app` (kasnije i `lekta.hr`, `www.lekta.hr`, T49) |
-| Netlify kontekst za varijablu | onaj koji gradi staging site | Production |
+| Izvor build varijable | GitHub Actions `staging` environment | GitHub Actions `production` environment |
 | Turnstile hostnameovi | `lekta-staging.netlify.app`, `localhost` | `lektahr.netlify.app`, `lekta.hr`, `www.lekta.hr` |
 
 `lekta.hr` i `www.lekta.hr` upisuju se u widget odmah, iako domena jos nije spojena (T49). Inace bi
@@ -37,15 +37,15 @@ Cloudflare dashboard > Turnstile > Add widget:
 **Dokaz:** snimka zaslona popisa hostnameova widgeta; site key zapisan (javan), secret key spremljen
 u upravitelj lozinki.
 
-### 2. Netlify: site key u build (vlasnik)
+### 2. GitHub Actions: site key u staging build (vlasnik)
 
-Netlify > site > Site configuration > Environment variables > Add variable:
-- kljuc: `VITE_TURNSTILE_SITE_KEY`;
-- vrijednost: site key iz koraka 1;
-- scope: Builds; kontekst: samo onaj koji se ukljucuje (staging prvo).
+GitHub repozitorij > Settings > Environments > `staging` > Variables > Add variable:
+- kljuc: `TURNSTILE_SITE_KEY`;
+- vrijednost: staging site key iz koraka 1.
 
-Zatim Deploys > Trigger deploy > Clear cache and deploy site. Varijabla se ugradjuje PRI BUILDU:
-bez novog deploya nema ucinka.
+Workflow `.github/workflows/release.yml` cita varijablu iz `staging` environmenta i prosljedjuje je
+buildu kao `VITE_TURNSTILE_SITE_KEY`. Promjena vrijedi tek nakon sljedece staging objave kroz
+release workflow; rucni Netlify deploy ne koristi ovu varijablu.
 
 **Dokaz:**
 ```bash
@@ -53,32 +53,39 @@ curl -s https://<site>/build-info.json
 ```
 mora vratiti commit ocekivanog deploya i `"captchaSiteKey": true`. `false` ili bez polja: STANI.
 
-**Produkcija je drukcija.** Produkcijska objava je zakljucana i ide rucno iz lokalne gradnje
-([`RELEASE_PROOF_WORKFLOW.md`](RELEASE_PROOF_WORKFLOW.md), korak 6), pa Netlify varijabla na nju ne
-djeluje. `VITE_TURNSTILE_SITE_KEY` mora biti postavljen u okolini lokalne gradnje (ista ljuska kao
-`DEPLOY=1` i ostale varijable koraka 6) prije `node scripts/build-production.mjs`. Prvi dokaz je nad
-lokalnim artefaktom, prije objave:
+**Staging i produkcijska objava idu kroz GitHub Actions.** Workflow
+`.github/workflows/release.yml` gradi klijent i objavljuje ga preko Netlify CLI-ja. Za staging i
+produkciju workflow cita `TURNSTILE_SITE_KEY` iz odgovarajuceg GitHub Actions environmenta te ga
+prosljedjuje buildu kao `VITE_TURNSTILE_SITE_KEY`; Netlify build varijabla nije izvor za te release
+buildove. Run 38430199081 objavio je SHA f758ba2bde00c7f2d37daa789a39ed1e4168db99, ali javni
+build-info.json nakon objave prijavio je captchaSiteKey=false. Stoga se Auth zaštita još ne smije
+uključiti. Vlasnik najprije postavlja site key u GitHub production environment, zatim kroz release
+workflow objavljuje build i provjerava javni rezultat:
 ```bash
-node -e "console.log(JSON.parse(require('fs').readFileSync('dist/build-info.json','utf8')).captchaSiteKey)"
+curl -s https://lekta.hr/build-info.json
 ```
-mora ispisati `true`. Nakon objave isti `curl` na `https://lektahr.netlify.app/build-info.json` mora
-vratiti commit objavljenog izdanja i `"captchaSiteKey": true`. `false`: STANI, ne ukljucuj korak 4
-na produkciji.
+Polje captchaSiteKey mora biti true, a commit mora biti SHA novog builda. false ili nedostajuće polje:
+stani i ne uključuj korak 4 na produkciji.
 
 ### 3. Frontend salje token (vlasnik, preglednik)
 
-Novi privatni prozor, `https://<site>`, ucitaj `.docx` i pokreni automatski popravak (on trazi
-anonimnu prijavu). DevTools > Network:
-- `POST .../auth/v1/signup`: tijelo sadrzi `gotrue_meta_security.captcha_token` s nepraznom
-  vrijednoscu;
+Novi privatni prozor, otvori aplikaciju na `https://<site>/rad/`, ucitaj `.docx` i pokreni
+automatski popravak (on trazi anonimnu prijavu). DevTools > Network:
+- `POST https://<ref>.supabase.co/auth/v1/signup`: tijelo sadrzi
+  `gotrue_meta_security.captcha_token` s nepraznom vrijednoscu;
 - Console: nema CSP greske za `challenges.cloudflare.com`.
+
+Za e-mail tok klikni `Prijava` na istoj stranici `/rad/`, upisi testnu adresu i odaberi gumb
+`Pošalji kod`. Zahtjev `POST https://<ref>.supabase.co/auth/v1/otp` također mora sadržavati
+neprazan `gotrue_meta_security.captcha_token`. Ove su putanje Supabase Auth API pozivi, ne Lekta
+URL-ovi.
 
 **Dokaz:** snimka zaslona zahtjeva (vrijednost tokena smije biti zamagljena). Bez tokena: STANI, jer
 bi korak 4 zakljucao prijave.
 
 ### 4. Supabase: captcha na Authu (vlasnik)
 
-Supabase dashboard > projekt > Authentication > Attack Protection > Enable Captcha protection:
+Supabase Dashboard > projekt > Project Settings > Authentication > Bot and Abuse Protection > Enable CAPTCHA protection:
 - provider: Turnstile (Cloudflare);
 - Captcha secret: secret key iz koraka 1;
 - Save.
@@ -105,9 +112,9 @@ ukljucen, STANI i provjeri korak 4.
 
 ### 6. Pozitivni slucaj: stvarni tok prolazi (vlasnik, preglednik)
 
-Novi privatni prozor: automatski popravak krece (anonimna prijava uspjela), a prijava e-mailom salje
-kod. Pogresan ili istekao token mora dati poruku za ponovni pokusaj (ne "e-mail ili lozinka nisu
-tocni").
+Na `/rad/` u novom privatnom prozoru: automatski popravak krece (anonimna prijava uspjela), a gumb
+`Prijava` salje e-mail kod. Pogresan ili istekao token mora dati poruku za ponovni pokusaj (ne
+"e-mail ili lozinka nisu tocni").
 
 **Dokaz:** vrijeme, projekt, ishod oba toka.
 
@@ -122,20 +129,24 @@ se korak 4 radi tek nakon dokaza 2 i 3 na produkciji.
 | --- | --- | --- | --- | --- |
 | 1 Widget | | | | |
 | 2 `captchaSiteKey: true` | staging | | | |
-| 3 token u `/signup` | staging | | | |
+| 3 token u Supabase Auth `/signup` | staging | | | |
+| 3 token u Supabase Auth `/otp` | staging | | | |
 | 4 captcha ukljucen | staging | | | |
-| 5 `/signup` bez tokena = 400 `captcha_failed` | staging | | | |
-| 5 `/otp` bez tokena = 400 `captcha_failed` | staging | | | |
+| 5 Supabase Auth `/signup` bez tokena = 400 `captcha_failed` | staging | | | |
+| 5 Supabase Auth `/otp` bez tokena = 400 `captcha_failed` | staging | | | |
 | 6 popravak i e-mail prijava prolaze | staging | | | |
 | 2 `captchaSiteKey: true` u lokalnom `dist` i na objavi | produkcija | | | |
 | 3 do 6 | produkcija | | | |
 
 ## Ako nesto podje krivo
 
-Najbrzi povrat: Supabase > Authentication > Attack Protection > iskljuci captchu. Djeluje odmah, bez
-deploya. Site key u Netlifyju smije ostati (server token koji ne trazi ignorira). Detalji u
+Najbrži povrat: Supabase Dashboard > projekt > Project Settings > Authentication > Bot and Abuse Protection > isključi CAPTCHA zaštitu. Djeluje odmah, bez
+deploya. Site key u GitHub Actions environmentu smije ostati (bez ukljucene serverske CAPTCHA
+zastite Auth ne zahtijeva token). Detalji u
 [`AUTH_CAPTCHA.md`](AUTH_CAPTCHA.md#povrat).
 
 Tekst privatnosti (odjeljak 1d i popis izvrsitelja u `src/legal/legal-content.ts`) vec navodi
-Cloudflare Turnstile, pa uvjet iz `AUTH_CAPTCHA.md` "Otvoreno" za produkciju je ispunjen u kodu;
-vlasnik potvrduje da je objavljena verzija ona koju je odobrio.
+Cloudflare Turnstile i opisuje obradu nakon ukljucivanja zastite. To ispunjava dokumentacijski
+uvjet za kod, ali ne dokazuje da je Turnstile aktivan u produkciji; provjeri `captchaSiteKey` u
+`build-info.json` i stanje Supabase Autha. Vlasnik je 2026-10-15 potvrdio objavljenu formulaciju;
+to ne potvrduje da je Turnstile ukljucen ili testiran u produkciji.

@@ -131,10 +131,10 @@ Node-forge iznimka zadrzava svoj rok 2026-10-09; ova odluka ga ne produljuje.
 
 ## Popravak A 2026-10-04: netlify-cli izlazi iz ovisnosti
 
-Odluka vlasnika (2026-10-03): `netlify-cli` vise nije `devDependency`. Rucna objava ide kroz
-tocno pinanu verziju `npx --yes netlify-cli@27.10.2` (release skripta `NETLIFY_CLI_PIN` i
-`docs/deploy/RELEASE_PROOF_WORKFLOW.md`, gard `tests/netlify-cli-pin.test.ts`). Netlify build
-i dalje koristi vlastiti CLI.
+Odluka vlasnika (2026-10-03): `netlify-cli` vise nije `devDependency`. GitHub Actions release
+workflow i lokalna release skripta koriste tocno pinanu verziju `npx --yes netlify-cli@27.10.2`
+(release skripta `NETLIFY_CLI_PIN` i `docs/deploy/RELEASE_PROOF_WORKFLOW.md`, gard
+`tests/netlify-cli-pin.test.ts`). CLI se instalira izvan lockfilea, prije upotrebe release tokena.
 
 - Lockfile regeneriran (`npm install --package-lock-only`, dokaz `npm ci`): 1377 -> 274 zapisa u
   `packages`, ukljucujuci korijenski zapis (1376 -> 273 paketa bez korijena).
@@ -155,7 +155,7 @@ graf od onoga koji je pregledan.
 | polje | vrijednost |
 | --- | --- |
 | vlasnik | Daniel Risavi |
-| sto je izvan audita | `netlify-cli` i njegov tranzitivni graf; koristi se samo na vlasnikovom racunalu za rucnu objavu |
+| sto je izvan audita | `netlify-cli` i njegov tranzitivni graf; workflow i lokalna release skripta ga preuzimaju izvan projektnog lockfilea |
 | sto ostaje pokriveno | produkcijski bundle i projektni dev graf (`npm audit`, ratchet na 0, lockfile-sources) |
 | nacin pregleda | prije podizanja pina i najmanje jednom mjesecno: u praznoj privremenoj mapi `npm init -y`, `npm install --package-lock-only netlify-cli@<pin>`, zatim `npm audit --audit-level=high`; nalaz se biljezi ovdje |
 | sljedeci pregled | 2026-11-04 |

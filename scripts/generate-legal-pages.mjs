@@ -10,8 +10,8 @@
 // samo FOUC skriptu glavnih stranica); inline <style> je dopusten (style-src
 // 'unsafe-inline'). Bez teme/JS-a: cisti staticni dokumenti.
 //
-// Identitet pruzatelja dolazi iz data/legal/provider.json; prazna polja (oib,
-// adresa) se ne renderiraju, a dokumenti nose napomenu o dopuni registracije.
+// Identitet i status registracije dolaze iz data/legal/provider.json; providerRegistered je
+// eksplicitan i ne izvodi se iz OIB-a, adrese ili telefona.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -168,12 +168,14 @@ const legal = await loadLegal();
 const provider = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/legal/provider.json'), 'utf-8'));
 const docs = legal.legalDocuments({
   org: provider.businessName,
+  providerRegistered: provider.providerRegistered,
   contact: provider.contactEmail,
   controller: provider.privacyController,
   days: provider.retentionDaysOrders,
   logDays: provider.retentionDaysLogs,
   oib: provider.oib,
   address: provider.address,
+  phone: provider.phone,
   googleSignIn,
 });
 

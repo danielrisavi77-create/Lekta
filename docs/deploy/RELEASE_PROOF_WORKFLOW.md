@@ -5,9 +5,9 @@ izmjereno. Izvor je odjeljak 8 dokumenta `docs/agents/plan-do-live-2026-09-12.md
 bez stalnog samoponistavanja"); ovdje je usaglasen s onim sto skripte STVARNO rade nakon reza T19
 (2026-09-13).
 
-Javna objava je zakljucana i radi se rucno iz cistog worktreea (vidi
-`netlify-auto-publishing-locked` u biljeskama). Ovaj dokument opisuje samo dokazni lanac, ne
-Netlify konfiguraciju.
+Produkcijska objava pokreće se kroz GitHub Actions release workflow, koji gradi artefakt i objavljuje
+ga preko Netlify CLI-ja. Run 38430199081 od 13.10.2026. potvrdio je da taj put objavljuje produkciju.
+Ovo je postupak dokaznog lanca; ne potvrđuje zasebnu Netlify postavku za objavu na Git push.
 
 ## Zasto postoji koka i jaje
 
@@ -125,8 +125,8 @@ Mekoca je odluka o strogosti, ne potvrda dokaza; uz nalaz zavrsni redak glasi `N
    Tri zastavice, tri razlicite tvrdnje, i nijedna ne zamjenjuje drugu:
 
    - `--expect-commit <sha>` sam po sebi je PERIODICKI NADZOR (cron salje `github.sha` mastera).
-     Neslaganje je upozorenje, izlaz 0. Tako je namjerno: zakljucana objava zaostaje za masterom, a
-     stalna crvena bi se naucila ignorirati.
+    Neslaganje je upozorenje, izlaz 0. Produkcija se objavljuje kontroliranim release workflowom, pa
+    master može biti noviji od trenutno objavljenog kandidata između planiranih objava.
    - `--require-build-info` cini 404 na `build-info.json` padom. Hvata objavu stariju od
      `write-build-info`, ali NIKAD krivi sha.
    - `--strict-commit` je provjera KONKRETNE objave: drukciji sha je pad, i nepoznat identitet je pad.
@@ -148,11 +148,12 @@ Mekoca je odluka o strogosti, ne potvrda dokaza; uz nalaz zavrsni redak glasi `N
 | `node scripts/build-production.mjs` | Stvarni produkcijski lanac (korak 6). |
 | `npm run post-deploy-smoke -- ...` | Provjera zive instalacije (korak 7). |
 
-## Netlify CLI za rucnu objavu
+## Pinani Netlify CLI u release workflowu
 
-`netlify-cli` nije ovisnost projekta (Popravak A, odluka vlasnika 2026-10-03): sluzi samo rucnoj objavi,
-a u `devDependencies` je vukao node-forge, braces i sharp lanac u puni `npm audit` graf. Objava i
-provjera povezanog sitea idu kroz pinanu verziju, nikad kroz globalnu instalaciju ni `@latest`:
+`netlify-cli` nije ovisnost projekta (Popravak A, odluka vlasnika 2026-10-03): release workflow
+i lokalna release skripta preuzimaju pinanu verziju, a paket nije dio projektnog `npm audit` grafa.
+Workflow instalira CLI prije koraka s Netlify tokenom. Objava i provjera povezanog sitea koriste tu
+pinanu verziju, nikad globalnu instalaciju ni `@latest`:
 
 ```bash
 npx --yes netlify-cli@27.10.2 status --json
@@ -180,7 +181,8 @@ ishod objave je **NEPOZNAT** dok se ne provjeri u Netlify sucelju (Deploys) ili 
 - **`extraction` probe.** Ostaje posebno imenovan sigurnosni dokaz, `required: false` od 2026-09-06
   (staging Supabase se na besplatnom planu sam pauzira). Ne smije se presutno vratiti u obavezni
   svaki-build gate; obrazlozenje i put natrag stoje uz razinu u `scripts/release-tiers.mjs`.
-- **Netlify konfiguracija i sama promocija.** Objava je zakljucana i radi se rucno.
+- **Netlify postavke stranice.** Ovaj dokument ne provjerava automatsku Git objavu u Netlifyju.
+  Produkcijska promocija koju ovdje koristi projekt ide preko GitHub Actions release workflowa.
 
 Kad se bilo koja od te tri stavke promijeni, ovaj dokument se mijenja s njom: koraci 3, 5 i 7 tada
 vise ne opisuju stvarno ponasanje skripti.
