@@ -27,6 +27,11 @@
   # mogao tiho raziti; tests/build-production.test.ts sada tvrdi da oba potrosaca zovu skriptu.
   command = "node scripts/build-production.mjs"
   publish = "dist"
+  # DEPLOY PREVIEW SE PRESKACE (odluka vlasnika 2026-11-21). Javna objava ide rucno kroz
+  # release.yml (`netlify deploy --no-build`), a PR preview je padao na svakom PR-u: zahtijeva
+  # svjez RELEASE_PROOF.json (LEKTA_REQUIRE_RELEASE_PROOF), koji PR po definiciji nema. Isti build
+  # na svakom PR-u vec provjerava `dist-gate` u check.yml. Izlaz 0 = Netlify preskace build.
+  ignore = '[ "$CONTEXT" = "deploy-preview" ]'
 
 [build.environment]
   # ISTA VERZIJA KAO CI, i to je uvjet a ne uskladjivanje radi urednosti.
