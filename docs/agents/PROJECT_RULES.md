@@ -60,8 +60,8 @@ Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u i
 
 - Fan-out agenata je dopusten SAMO za citanje. Paralelno PISANJE u isto stablo nije dopusteno.
 - NE postoji pravilo koje na svaki prompt trosi jos agenata: vise prolaza ISTIM alatom nije
-  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG alata (Codex ili Claude Code, ovisno o implementatoru), a netrivijalna
-  promjena u src/repair, src/citations i src/docx trazi adversarijalni prolaz prije commita.
+  provjera nego slaganje. Drugo misljenje, kad se trazi, mora doci od DRUGOG alata (Codex ili Claude Code, ovisno o implementatoru);
+  nije obvezno ni za src/repair, src/citations i src/docx (odluka vlasnika 2026-11-21).
 - Dodatni pisci mnoze klasu kvara koja je 2026-08-30 kostala 24 h: commitan artefakt (golden
   snimka) opisivao je ponasanje ciji izvor u repou nikad nije bio commitan.
 

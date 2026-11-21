@@ -99,8 +99,8 @@ pregled ostavi male, lokalne nalaze, prije svakog popravnog kruga:
 3. Mehanicke izmjene radi implementator nizim naporom; pregledavac srednjim naporom i samo nad
    pogodjenim testovima. Dizajn (novi podatkovni zapis, ozicenje, mutacije) nije mehanicki i
    trazi barem srednji napor.
-4. Puni gate (`npm run check`, `npm run orphan-scan`) i jedan pregled drugog providera ostaju
-   obvezni jednom prije commita i nikad se ne preskacu.
+4. Puni gate (`npm run check`, `npm run orphan-scan`) ostaje obvezan jednom prije commita i
+   nikad se ne preskace. Pregled drugog providera je opcionalan (odluka vlasnika 2026-11-21).
 5. Ako mali krug otvori nesto izvan svojih stavki, ne pokreci novi krug: stani i predlozi
    zaseban zadatak nakon commita.
 6. Premise briefa (koji programi, vrijednosti, doslovni citati) mjere se parsiranjem ili iz

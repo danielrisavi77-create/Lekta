@@ -41,4 +41,4 @@ Promjena migracije ili Edge funkcije nije gotova samo zato sto lokalni build pro
 Provjeri identitet migracija, deploy drift, relevantni DB smoke i produkcijski smoke.
 Ne tvrdi da je dashboard postavka ukljucena bez izravnog dokaza iz ciljanog projekta.
 
-Netrivijalna promjena sigurnosne granice trazi adversarijalni pregled drugog alata.
+Za netrivijalnu promjenu sigurnosne granice adversarijalni pregled drugog alata je opcionalan (odluka vlasnika 2026-11-21).

@@ -44,4 +44,4 @@ profile kroz `node scripts/with-gate-lock.mjs`. Prije commita puni `npm run chec
 - Po profilu: stara vrijednost, nova vrijednost ili degradacija, citat, snimka i opseg.
 - Koliko je jedinica izmjereno prije i poslije (manji nazivnik znaci djelomican pad, ne popravak).
 - Sto ceka vlasnika: proturjecja, `verified` potpisi, OCR potvrde.
-- Pregled drugog providera je obvezan (zasticena staza).
+- Pregled drugog providera je opcionalan (odluka vlasnika 2026-11-21).

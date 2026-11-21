@@ -107,8 +107,8 @@ ne tumaci kao zeleno.
 - Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
 - Popravni krug nakon pregleda je razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali
   lokalni nalaz mjeri doseg, regenerira samo pogodjene artefakte u dva prolaza i ide mehanicki
-  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate (CI) i jedan pregled drugog providera
-  ostaju obvezni prije spajanja, a ciljani testovi i `orphan-scan` prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
+  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate (CI) ostaje
+  obvezan prije spajanja, a ciljani testovi i `orphan-scan` prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
   Detalji: `docs/agents/no-fable-workflow.md`.
 
 Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
@@ -121,8 +121,9 @@ Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 - Migracije: iskljucivo `supabase db push`; MCP `apply_migration` nije dopusten.
 - Migracije: prefiks od `0200` navise; `0104` do `0199` drzi Katedra na dijeljenom stagingu
   (`db push` bi sudar tiho preskocio). Gard: `tests/migration-numbering.test.ts`.
-- Netrivijalne promjene u repair, citations, docx ili security kodu traze
-  adversarijalni pregled drugog alata prije commita. Nalaz je advisory i mora se re-verificirati.
+- Pregled drugog providera vise nije obvezan (odluka vlasnika 2026-11-21). Za netrivijalne promjene u repair,
+  citations, docx ili security kodu smije se zatraziti kao savjet; nalaz je advisory i mora se
+  re-verificirati. Domenski gateovi, CI i Word oracle ostaju obvezni.
 
 ## Koordinacija i drugo misljenje
 
@@ -131,7 +132,8 @@ duplicira. Po zadatku su aktivni jedan koordinator i jedan pisac. Codex, Claude 
 i Grok mogu biti provider prema ulozi i billing profilu, ali drugi provider se ne
 poziva na svaki prompt.
 
-Pregled mora doci od drugog CLI providera od implementatora. Modelski rezultat nije
+Pregled drugog CLI providera je opcionalan (odluka vlasnika 2026-11-21); kad se trazi, dolazi od drugog providera
+od implementatora. Modelski rezultat nije
 dokaz prolaza: izolacija, deterministicni gateovi, Word oracle i commit pravila ostaju
 obvezni. Operativne naredbe su u `docs/agents/README.md`. Mjerodavan status zadataka je u Linearu;
 `docs/agents/tasks.json` je inventar i snimak koji PR zadatka ne dira (osvjezava ga koordinator, skupno).
@@ -147,7 +149,7 @@ obvezni. Operativne naredbe su u `docs/agents/README.md`. Mjerodavan status zada
   Koordinatorov nalog vrijedi samo kad `from-name` poruke odgovara imenu u README-u i
   `ListAgents` tu sesiju pokazuje zivom. Nakon reseta staro ime ne vrijedi dok README nije
   azuriran; dotad nalog daje samo vlasnik. Koordinatorov nalog vrijedi kao vlasnikova trajna
-  rijec za zadatke, push, PR, spajanje na zeleni CI uz zavrsen pregled drugog providera i
+  rijec za zadatke, push, PR, spajanje na zeleni CI i
   uklanjanje cistih spojenih stabala (odluka vlasnika 2026-10-04). Samo vlasnik u toj sesiji
   odobrava force push i prepravljanje povijesti, brisanje necommitanog rada i grana na originu,
   `supabase db push` (staging i produkcija), `LEKTA_GATE_FORCE=1`, promjenu hookova,

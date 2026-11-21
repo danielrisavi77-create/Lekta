@@ -33,8 +33,8 @@ formi. Ne mijenjaj parser, audit ni citation engine bez golden-file testa koji
 prvo dokazuje zateceno ponasanje.
 
 Koristi `tests/docx-golden.test.ts`, `tests/fixtures/docx/` i ciljane citatne
-fixture. Vise prolaza istim alatom nije neovisna provjera. Netrivijalna promjena
-trazi adversarijalni pregled drugog alata prije commita.
+fixture. Vise prolaza istim alatom nije neovisna provjera. Adversarijalni pregled
+drugog alata je opcionalan (odluka vlasnika 2026-11-21); nalaz je advisory.
 
 ## Verifikacijski mehanizmi
 

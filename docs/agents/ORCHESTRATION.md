@@ -5,8 +5,8 @@ i `CLAUDE.md` ne smiju definirati drukciji routing, billing ili review ugovor.
 
 ## Pravilo potrosnje
 
-Jedan zadatak ima jednog primarnog providera. Drugi provider se ukljucuje samo za obvezan
-cross-provider review, eksplicitno dopusten fallback ili izricit zahtjev. Ne pozivaj sva tri
+Jedan zadatak ima jednog primarnog providera. Drugi provider se ukljucuje samo za trazeni
+(opcionalni) cross-provider review, eksplicitno dopusten fallback ili izricit zahtjev. Ne pozivaj sva tri
 modela na svaki prompt.
 
 ## Provideri
@@ -49,7 +49,7 @@ Minimalni context:
 
 - plan: read-only; primarno `astra`.
 - implement: jedan pisac u izoliranom stablu; primarno `sonnet`.
-- review: read-only i mora biti drugi CLI provider od implementatora.
+- review: opcionalan (odluka vlasnika 2026-11-21); kad se pokrene, read-only i drugi CLI provider od implementatora.
 - verify/publish: deterministicki gateovi, ne modelska presuda.
 
 `providerFallback=wait` je zadano: ako primarni auto-provider nije autoriziran, posao se blokira

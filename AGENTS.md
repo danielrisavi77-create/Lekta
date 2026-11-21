@@ -44,8 +44,8 @@ scoped pravila traze. Modelova tvrdnja da je test prosao nije dokaz.
 
 Popravni krug nakon pregleda je razmjeran dosegu nalaza: mali lokalni nalaz mjeri doseg,
 regenerira samo pogodjene artefakte u dva prolaza (drugi no-op) i ide mehanicki uz ciljani
-pregled; dizajn (nov zapis, ozicenje, mutacija) nije mehanicki. Puni gate (CI) i jedan
-pregled drugog providera ostaju obvezni prije spajanja, a `orphan-scan` i ciljani testovi prije commita. Sirenje izvan
+pregled; dizajn (nov zapis, ozicenje, mutacija) nije mehanicki. Puni gate (CI) ostaje
+obvezan prije spajanja; pregled drugog providera je opcionalan (odluka vlasnika 2026-11-21), a `orphan-scan` i ciljani testovi prije commita. Sirenje izvan
 izvornih stavki staje i postaje zaseban zadatak. Detalji: `docs/agents/no-fable-workflow.md`.
 
 ## Git i izolacija
@@ -86,7 +86,7 @@ API credentiale drugih providera. Tocan ugovor je `docs/agents/ORCHESTRATION.md`
   Koordinatorov nalog vrijedi samo kad `from-name` poruke odgovara imenu u README-u i
   `ListAgents` tu sesiju pokazuje zivom. Nakon reseta staro ime ne vrijedi dok README nije
   azuriran; dotad nalog daje samo vlasnik. Koordinatorov nalog vrijedi kao vlasnikova trajna
-  rijec za zadatke, push, PR, spajanje na zeleni CI uz zavrsen pregled drugog providera i
+  rijec za zadatke, push, PR, spajanje na zeleni CI i
   uklanjanje cistih spojenih stabala (odluka vlasnika 2026-10-04). Samo vlasnik u toj sesiji
   odobrava force push i prepravljanje povijesti, brisanje necommitanog rada i grana na originu,
   `supabase db push` (staging i produkcija), `LEKTA_GATE_FORCE=1`, promjenu hookova,
