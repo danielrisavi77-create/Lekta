@@ -34,9 +34,6 @@ function loadWorkflows(): NamedWorkflow[] {
 
 // Workflowi kojima je "push bez branches:[master]" NAMJERNO ispravan, s razlogom:
 const PUSH_EXCEPTIONS = new Set<string>([
-  'foundation-check.yml',
-  // push je vezan iskljucivo uz gransku spike-granu
-  // (architecture/lekta-katedra-foundation-v0.1), ne uz master; pull_request grana pokriva master.
   'word-proof.yml',
   // push na master i release/** (T80): Word dokaz na self-hosted runneru nema pull_request
   // trigera, pa nema ni dvostrukog runa; dopustene grane provjerava zaseban test ispod.
@@ -122,12 +119,5 @@ describe('uredjivanje opisa PR-a (edited) pokrece SAMO provjeru opisa', () => {
     expect(on.push).toBeUndefined();
     expect(on.pull_request?.types).toEqual(['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review']);
     expect(on.pull_request?.branches).toEqual(['master']);
-  });
-
-  it('foundation-check.yml vise nema pr-opis job ni edited', () => {
-    const wf = workflows.find((w) => w.file === 'foundation-check.yml');
-    expect(Object.keys(wf!.doc.jobs ?? {})).toEqual(['check']);
-    const on = wf!.doc.on as Record<string, { types?: string[] } | null>;
-    expect(on.pull_request?.types ?? []).not.toContain('edited');
   });
 });
