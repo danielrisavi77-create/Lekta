@@ -502,8 +502,6 @@ export const CRLF_READ_ALLOWLIST: Readonly<Record<string, string>> = {
     'check.yml; tvrdnje i dalje prolaze ali gledaju siri blok. Popravak je zaseban zadatak',
   'tests/release-env-documented.test.ts':
     'split po \\n pa po retku regexi bez sidra na kraj retka (required:\\s*true, requiresEnv); \\r na kraju ne smeta',
-  'tests/repair-local-client-inert.test.ts':
-    'split po \\n pa join po \\n vraca isti izvor; \\r ostaje na svom retku, a ubaceni redak je sinteticki',
 };
 
 /**

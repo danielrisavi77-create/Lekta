@@ -77,32 +77,25 @@ describe('app.ts: ponuda lokalnog runnera iza grane if(out.localRepair)', () => 
     );
   });
 
-  /**
-   * Nalaz pregleda 2026-09-23: obezbojivac je navodnik unutar REGEX literala citao kao pocetak
-   * niske, pa se parsiranje desinkroniziralo i u app.ts je nastalo 109 slijepih kod-linija (medju
-   * njima cijeli blok "Moji popravci"). Ova kontrola gadja bas taj redak: ponuda umetnuta odmah iza
-   * regexa s navodnikom mora biti uhvacena.
-   */
+  /** REGEX s navodnikom ne smije sakriti sintetski umetnut poziv ponude u kopiji izvora. */
   it('navodnik u regex literalu ne stvara slijepu zonu', () => {
-    const source = appSource();
-    const lines = source.split('\n');
-    const at = lines.findIndex((line) => line.includes('replace(/[\\\\/:*?"<>|]+/g'));
-    expect(at).toBeGreaterThan(-1);
-    lines.splice(at + 1, 0, '   renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig());');
-    expect(localRepairOfferProblems(lines.join('\n'))).toContain(
+    const mutated = appSource().replace(
+      'if(out.localRepair){',
+      `const quotedRegex = /["']/;
+renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig());
+if(out.localRepair){`,
+    );
+    expect(mutated).not.toEqual(appSource());
+    expect(localRepairOfferProblems(mutated)).toContain(
       'ponuda lokalnog runnera se poziva izvan grane if(out.localRepair)',
     );
   });
 
-  /**
-   * Drugi dio istog nalaza: cijeli predlozak s povratnim navodnikom bio je "niz", pa je i kod u
-   * supstituciji `${...}` ispadao iz pregleda. app.ts HTML gradi bas tako, dakle to je bila
-   * najveca slijepa zona (izmjereno 389 kod-linija).
-   */
+  /** Kod unutar `${...}` predloška mora ostati vidljiv pregledu, iako je poziv izvan grane. */
   it('kod u supstituciji predloska nije slijepa zona', () => {
     const mutated = appSource().replace(
-      "<h4>${escapeHtml(j.label||'Popravljeni rad')}</h4>",
-      "<h4>${(renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig()),escapeHtml(j.label||'Popravljeni rad'))}</h4>",
+      'if(out.localRepair){',
+      "`<p>${renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig())}</p>`;\nif(out.localRepair){",
     );
     expect(mutated).not.toEqual(appSource());
     expect(localRepairOfferProblems(mutated)).toContain(
@@ -113,13 +106,16 @@ describe('app.ts: ponuda lokalnog runnera iza grane if(out.localRepair)', () => 
   /** Kontrola u drugom smjeru: spominjanje u komentaru i u nizu NIJE problem. */
   it('spomen u komentaru i u nizu ne rusi gard', () => {
     const inComment = appSource().replace(
-      '// Ime preuzete datoteke iz naslova rada',
-      '// renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig()) bi ovdje bila greska\n// Ime preuzete datoteke iz naslova rada',
+      'if(out.localRepair){',
+      '// renderLocalRepairRunnerOffer(a,b,localRepairRunnerConfig()) je samo komentar\nif(out.localRepair){',
     );
     expect(inComment).not.toEqual(appSource());
     expect(localRepairOfferProblems(inComment)).toEqual([]);
 
-    const inString = appSource().replace("'Popravljeni rad'", "'Popravljeni rad renderLocalRepairRunnerOffer'");
+    const inString = appSource().replace(
+      "'Ipak preuzmi popravljeni dokument'",
+      "'Ipak preuzmi popravljeni dokument renderLocalRepairRunnerOffer'",
+    );
     expect(inString).not.toEqual(appSource());
     expect(localRepairOfferProblems(inString)).toEqual([]);
   });
@@ -159,7 +155,7 @@ describe('app.ts: ponuda lokalnog runnera iza grane if(out.localRepair)', () => 
 
     /** Lazno crveno: tekst sucelja smije spominjati ime modula. */
     it('tekst koji spominje ime modula NE rusi gard', () => {
-      const mutated = appSource().replace("'Popravljeni rad'", '`Preuzmi: local-repair-runner-download`');
+      const mutated = appSource().replace("'Ipak preuzmi popravljeni dokument'", '`Preuzmi: local-repair-runner-download`');
       expect(mutated).not.toEqual(appSource());
       expect(localRepairOfferProblems(mutated)).toEqual([]);
     });
@@ -167,8 +163,8 @@ describe('app.ts: ponuda lokalnog runnera iza grane if(out.localRepair)', () => 
     /** Lazno crveno: regex odmah iza glave `if (...)` nije dijeljenje, pa se mora obezbojiti. */
     it('regex iza glave if(...) NE rusi gard', () => {
       const mutated = appSource().replace(
-        'if(!jobs.length)',
-        'if(jobs.length) /local-repair-runner-download/.test(String(jobs[0]));\nif(!jobs.length)',
+        'if(out.localRepair){',
+        'if(out.localRepair) /local-repair-runner-download/.test(String(out));\nif(out.localRepair){',
       );
       expect(mutated).not.toEqual(appSource());
       expect(localRepairOfferProblems(mutated)).toEqual([]);

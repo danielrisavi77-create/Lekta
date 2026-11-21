@@ -62,12 +62,14 @@ export async function fetchRepairJobs(
   config: RepairHistoryConfig,
   accessToken: string,
   fetchImpl: typeof fetch = fetch,
+  signal?: AbortSignal,
 ): Promise<RepairJob[]> {
   if (!config.supabaseUrl || !config.anonKey) throw new Error('repair history nije konfiguriran');
   if (!accessToken) throw new Error('prijava je potrebna');
   const url = `${baseUrl(config)}/rest/v1/repair_jobs?select=${JOB_SELECT}&order=created_at.desc`;
   const res = await fetchImpl(url, {
     headers: { apikey: config.anonKey, Authorization: `Bearer ${accessToken}` },
+    ...(signal ? { signal } : {}),
   });
   if (!res.ok) throw new Error(`repair jobs ${res.status}`);
   const rows = (await res.json()) as unknown;
