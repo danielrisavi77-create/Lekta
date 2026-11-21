@@ -54,11 +54,14 @@
 # zelenih prolaza; tada se ovaj posao spaja u check.yml ili dodaje u required checks.
 name: browser-matrix
 
+# Nije na pull requestu (odluka vlasnika 2026-11-21): najsporiji workflow (oko 16 min po PR pushu),
+# a svaki pregledani pad bio je flaky retry (failOnFlakyTests), ne kvar u proizvodu. Vrti se na
+# master, tjedno i rucno, pa nalaz ostaje vidljiv bez blokiranja PR-ova.
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
+  schedule:
+    - cron: '17 3 * * 1'
   workflow_dispatch:
 
 permissions:
